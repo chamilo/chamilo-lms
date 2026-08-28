@@ -2179,7 +2179,7 @@ HOTSPOT;
             SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
             FROM $TBL_TRACK_EXERCISES ttte
             LEFT JOIN $tblTrackAttemptQualify tr
-            ON (ttte.exe_id = tr.exe_id) AND tr.author > 0
+            ON (ttte.exe_id = tr.exe_id) AND tr.author > 0 AND tr.final = 1
             WHERE
                 c_id = $courseId AND
                 exe_exo_id = $exercise_id
@@ -2945,7 +2945,7 @@ HOTSPOT;
         $sql = "
             SELECT DISTINCT t.exe_id
             FROM $trackTable t
-            INNER JOIN $qualifyTable q ON (t.exe_id = q.exe_id AND q.author > 0)
+            INNER JOIN $qualifyTable q ON (t.exe_id = q.exe_id AND q.author > 0 AND q.final = 1)
             WHERE
                 t.c_id = $courseId AND
                 t.exe_exo_id = $exerciseId

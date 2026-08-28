@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula lagina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulen adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -9269,6 +9269,15 @@ msgstr "%s saiorako denbora txostena"
 msgid "Error"
 msgstr "Errorea"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Erabiltzailea sortu da, baina profilaren eremu gehigarrietako bat ezin izan da gorde."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Erabiltzailea eguneratu da, baina profilaren eremu gehigarrietako bat ezin izan da gorde."
+
+msgid "One or more fields contain invalid values."
+msgstr "Eremu batek edo gehiagok balio baliogabeak dituzte."
+
 msgid "Anonymous"
 msgstr "Anonimoa"
 
@@ -15308,6 +15317,30 @@ msgstr "Azken astean emandako denbora"
 msgid "System status"
 msgstr "Sistemaren egoera"
 
+msgid "Courses space"
+msgstr "Ikastaroen espazioa"
+
+msgid "Database server configuration and metadata"
+msgstr "Datu-base zerbitzariaren konfigurazioa eta metadatuak"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Disko-erabilera ikastaroka vs disko-kuota"
+
+msgid "Information about your webserver configuration"
+msgstr "Zure web-zerbitzariaren konfigurazioari buruzko informazioa"
+
+msgid "Paths"
+msgstr "Bideak"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamiloren eskakizunen egoera"
+
+msgid "State of PHP settings on the server"
+msgstr "Zerbitzariko PHP ezarpenen egoera"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path() konstanteak atari honetan ebatzita"
+
 msgid "Is writable"
 msgstr "Idatzi daiteke"
 
@@ -20679,6 +20712,9 @@ msgstr "Gaitasun gurpilean, gaitasun izena erakusten du kode laburra duenean."
 
 msgid "Created by"
 msgstr "Egilearen egina"
+
+msgid "Created by %s on %s"
+msgstr "%s-k sortua %s-n"
 
 msgid "Hide general coach in dropbox"
 msgstr "Ezkutatu entrenatzaile orokorra dropboxean"
@@ -31883,6 +31919,9 @@ msgstr "Idatzi zerbait %s(r)en"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Gomendatua: SVG. PNG gomendatutako zabalera: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG gomendatutako zabalera: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Kargatu PNG logoa e-postetarako (~%spx zabalera)"
 
@@ -31918,6 +31957,9 @@ msgstr "Klik egin txertatzeko"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Lehena: SVG. PNG gehienezko tamaina: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG gehienezko tamaina: %spx."
 
 msgid "View badge"
 msgstr "Ikusi domina"
@@ -38069,6 +38111,9 @@ msgstr "Amaitzen"
 msgid "Draft saved"
 msgstr "Zirriborroa gorde da"
 
+msgid "Save as draft"
+msgstr "Gorde zirriborro gisa"
+
 msgid "Statement"
 msgstr "Adierazpena"
 
@@ -39490,4 +39535,265 @@ msgstr "Erabiltzaile hau dagoeneko saioan harpidetuta dago."
 
 msgid "This user is already subscribed to the course."
 msgstr "Erabiltzaile hau dagoeneko ikastaroan harpidetuta dago."
+
+msgid "Multi URLs"
+msgstr "URL anitzak"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Erabiltzaileak eta ikastaroak bezalako entitateak URL bat baino gehiagotan egon daitezke aldi berean aktibo, beraz, beheko balioen batura ez da bat etorriko guztizkoarekin."
+
+msgid "User directory"
+msgstr "Erabiltzaileen direktorioa"
+
+msgid "Course directory"
+msgstr "Ikastaroen direktorioa"
+
+msgid "URLs"
+msgstr "URLak"
+
+msgid "User details"
+msgstr "Erabiltzailearen xehetasunak"
+
+msgid "Course details"
+msgstr "Ikastaroaren xehetasunak"
+
+msgid "View details"
+msgstr "Ikusi xehetasunak"
+
+msgid "Average progress"
+msgstr "Batez besteko aurrerapena"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Zuzeneko izen-ematea ikastaro osoari dagokio, ez URL zehatz bati, beraz, 'Zuzeneko' zifra berdinak errepikatzen dira behean ikastaro hau lotuta dagoen URL bakoitzerako. Saioak dira ikastaro bat URLen artean partekatzeko modu egokia, URL bakoitzeko benetan desberdinak diren metrikekin."
+
+msgid "Logins (all URLs combined)"
+msgstr "Saio-hasierak (URL guztiak batera)"
+
+msgid "Unique logins"
+msgstr "Saio-hasiera bakarrak"
+
+msgid "Parent URL"
+msgstr "URL gurasoa"
+
+msgid "Logins (your URLs)"
+msgstr "Saio-hasierak (zure URLak)"
+
+msgid "The picture could not be uploaded"
+msgstr "Ezin izan da irudia igo"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Eremu mota hau oraindik ez dago erabat onartuta — balio gordina soilik."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Ikastaro hau erabiltzaileen harpidetza-mugatik gertu dago (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Espazioa mugatuta dago zure ikastaroaren propietateen bidez. Muga handitzeko, lortu"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Erabiltzaileen harpidetzak mugatuta daude zure ikastaroaren propietateen bidez. Muga handitzeko, lortu"
+
+msgid "pro plan"
+msgstr "pro plana"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "eta inportatu ikastaro honen babeskopia Ikastaroaren mantentzea atalean zure ikastaro ordaindu berrira, edo ireki txartel bat ikastaroa pro ikastaro bihurtzeko, plana eskuratu ondoren."
+
+msgid "Tired of writing questions?"
+msgstr "Galderak idazteaz nekatuta?"
+
+msgid "Upgrade your plan"
+msgstr "Eguneratu zure plana"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "pro plan batera, AIren laguntza jasotzeko kalitatezko galderak sortzeko."
+
+msgid "Student Success AI Coach"
+msgstr "Ikaslearen arrakastarako AI entrenatzailea"
+
+msgid "No AI text provider is configured."
+msgstr "Ez dago AI testu-hornitzaile konfiguraturik."
+
+msgid "Additional instructions for the AI coach"
+msgstr "AI entrenatzailearentzako argibide gehigarriak"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Adibidea: Ikasle honek arreta mantentzeko zailtasunak ditu. Iradoki jarduera laburragoak eta ulermena egiaztatzeko maiztasun handiagoa."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Mantendu leiho hau irekita Chamilok gomendioa prestatzen duen bitartean."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Gomendioa zure Chamilo sarrerako ontzian ere gorde da."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Gomendioa sortu eta gorde da ikasle honentzat, baina ezin izan da sarrerako ontziko kopia sortu."
+
+msgid "Student success recommendation"
+msgstr "Ikaslearen arrakastarako gomendioa"
+
+msgid "Generated"
+msgstr "Sortua"
+
+msgid "Priority actions"
+msgstr "Lehentasunezko ekintzak"
+
+msgid "Evidence"
+msgstr "Frogak"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Eginbide honek ikastaro honen edukia aztertuko du eta ikaskuntza-jokabidearen informazioa bidaliko dio konfiguratutako AI ereduari. Identifikagarriak diren datu pertsonalak zuzenean bidali ez arren, bidalitako datu batzuek zeharka erabiltzaileari buruzko informazio identifikagarria eman dezakete. Zalantzarik izanez gero, egiaztatu beti zure AIko erreferentzia-pertsonarekin eginbide hau erabili aurretik."
+
+msgid "Additional activities"
+msgstr "Jarduera gehigarriak"
+
+msgid "Rhythm"
+msgstr "Erritmoa"
+
+msgid "Learning methodologies"
+msgstr "Ikaskuntza-metodologiak"
+
+msgid "Other recommendations"
+msgstr "Beste gomendio batzuk"
+
+msgid "Analyzing course..."
+msgstr "Ikastaroa aztertzen..."
+
+msgid "Analyzing student's learning..."
+msgstr "Ikaslearen ikaskuntza aztertzen..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Gonbidapen hau onartuz gero, eskatzailearekin lotuta geratuko zara, eta zure profilaren datu batzuk edo guztiak irakurtzeko eskuragarri egongo dira eskatzailearentzat. Ziurtatu gehiegi ez partekatzen, dagoeneko fidatzen zaren erabiltzaileekin zure profila egiaztatuz."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Mikrofonoa erabiltzeko baimena ez dago gaituta; gaitu nabigatzailean audioa grabatzeko"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Chamiloren bertsio honek hizkuntza anitzeko ikastaro bat (edo gehiago) aurrez instalatuta dakar. Berrikusi ikastaroen zerrendan eta erabaki publikoak izan behar duten ala ez."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Une honetan ez duzu URLrik atzitzeko baimenik. Eskatu administratzaileari dagokizun URLra sarbidea emateko."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Hautatutako AI hornitzailea zerbitzu subiranoa ez bada, hautatutako dokumentuaren edukia kanpoko zerbitzu batera bidal daiteke. Ez jarraitu informazio konfidentzialarekin, zure erakundeak hori onartzen ez badu."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Egin klik Bateratu geratu behar den kontuan. Sistemak bikoiztutako talde bereko gainerako kontuak horrekin bateratuko ditu. Bateratutako kontuak behin betiko ezabatuko dira eta txosten honetatik desagertuko dira. Ekintza hau ezin da desegin."
+
+msgid "Permanent deletion"
+msgstr "Behin betiko ezabatzea"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Bateratu-k dagoeneko behin betiko ezabatzen ditu bateratutako kontuak. Erabili Erabiltzaileen zerrenda soilik kontu gehigarriak eskuz ezabatu nahi badituzu."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Lehenetsitako «chamilo» itxura-gaiko logotipoak aldatzen ari zara. Kontuan hartu itxura-gai pertsonalizatua sortzea/erabiltzea lehenetsiak gainidaztea saihesteko."
+
+msgid "This exercise has no questions."
+msgstr "Ariketak ez du galderarik."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Nola erakutsi behar dugu galdera bakoitzaren feedbacka/iruzkina? Aukera honek ikasleari proba egiten duenean nola erakutsiko zaion zehazten du."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Aplikazio hauek Chamilora sar daitezke zure izenean, zure kontuaren baimen existitzenekin eta ez gehiagorekin. Ezeztatu jada erabiltzen ez dituzun edo ezagutzen ez dituzunak."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Azaldu zergatik nahi duzun zure baimen legalaren atzera-egitea eskatu, eskaera behar bezala prozesatu ahal izateko"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Erabili gako pertsonal hau urruneko MCP bezero bat Chamilora zure kontu eta baimenekin konektatzeko."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Gako osoa behin bakarrik erakusten da. Gorde segurtasunez. Gako berri bat sortzeak aurrekoa berehala baliogabetzen du."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Gakoak bezeroa zure Chamilo kontu gisa autentifikatzen du. Ez du ematen zure kontuak jada ez dituen baimenik."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Erakutsi Baldintzak eta baldintzak adierazpena erregistro-orrian; eska iezaiozu bisitariari T&C onartzea erregistratzeko"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Baldintzen edukia AI hizkuntza-eredu batera bidaliko da. Berrikusi proposatutako itzulpena gorde aurretik."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Helburuko hizkuntzarako gordetako bertsio bat dago jada. Proposamen hau gordetzeak bertsio berri bat sortuko du."
+
+msgid "Acquired"
+msgstr "Eskuratua"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Ikastaroaren irudi gomendatua: 1600 × 900 px (16:9). Erabili gutxienez 1280 × 720 px pantaila handiagoetan edo dentsitate handikoetan bistaratze zorrotza lortzeko."
+
+msgid "Courses of the selected URL"
+msgstr "Hautatutako URLko ikastaroak"
+
+msgid "Course categories in selected URL"
+msgstr "Hautatutako URLko ikastaro-kategoriak"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Zure kontua aktibo dago; saioa hasi eta ikastaroak ikus ditzakezu orain."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Lehenik zuzenketak deskargatu behar dituzu <a href='%s'> hemen </a>.\nOndoren, deskonprimitu fitxategia eta editatu nahi dituzun fitxategiak izenak aldatu gabe.\nGero, sortu zip fitxategi bat aldatutako fitxategiekin eta igo ezazu inprimaki honetan."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Ikasleak gehitzen %s saiotik %s saiora"
+
+msgid "Show all attempts by exercise"
+msgstr "Erakutsi ariketa bakoitzeko saiakera guztiak"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Eragiketa honek hautatutako ikastarorako baimendutako erabiltzaile-muga gaindituko luke."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Harpidetza batzuk ezin izan dira gauzatu, eragindako ikastarorako baimendutako erabiltzaile-mugara iritsi direlako. Erabiltzaileak/Ikastaroak eragindakoak: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Erregistro honek ezagunak diren txosten-orriak zerrendatzen ditu, haien kategoria, URL kanonikoa, URL zaharra eta espero den rol-audientzia. URL kanonikoek uneko txostenaren inplementaziora bideratzen dute eta dokumentatutako txosten-rolen matrizea betearazten dute."
+
+msgid "E-mail notification subscription"
+msgstr "E-posta jakinarazpenen harpidetza"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Eragiketa honek administratzaileek ezarritako ikastaroko %s erabiltzaileko muga gaindituko luke. Harpidetza bertan behera utzi da."
+
+msgid "Language the document is in"
+msgstr "Dokumentuaren hizkuntza"
+
+msgid "There is no session still"
+msgstr "Oraindik ez dago saiorik"
+
+msgid "Origin courses from session"
+msgstr "Jatorrizko ikastaroak saiotik"
+
+msgid "Destination courses from session"
+msgstr "Helmuga-ikastaroak saiotik"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Sarbide publikoa (ikastaroko edozein kideri baimentzen zaio sarrera)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Sortu %d glosario-terminoa '%s' ikastarorako, termino bakoitza lerro bakarrean, definizioa hurrengo lerroan eta lerro hutsa termino bakoitzaren artean. Ez gehitu beste formaturik ez izenbururako ez definiziorako."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Hau '%s' ikastaroaren deskribapen laburra da."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Chamilo Windows plataforma batean erabiltzen ari zara. Dokumentuak bihurtzeko laguntzaileak ez daude erabilgarri testu osoko indexaziorako."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Probaren abiarazte automatikoaren ezarpena AKTIBATUTA dago. Ikasleak proben zerrendara birbideratuko dira."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Probaren abiarazte automatikoaren ezarpena AKTIBATUTA dago. Ikasleak proba zehatz batera birbideratuko dira."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Ikastaro honetarako harpidetza-mugara iritsi da (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Zenbatu ikastaroak hizkuntzaren arabera"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Azken sarbidea hautatutako data baino zaharragoa duten erabiltzaileak."
 

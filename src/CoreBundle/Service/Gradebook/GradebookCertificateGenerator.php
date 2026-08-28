@@ -254,7 +254,13 @@ final readonly class GradebookCertificateGenerator
     private function getTemplateHtml(GradebookCategory $category): string
     {
         $document = $category->getDocument();
-        if ($document instanceof CDocument && null !== $document->getResourceNode()) {
+        $resourceNode = $document?->getResourceNode();
+        if ($document instanceof CDocument && null !== $resourceNode) {
+            $editableHtml = trim((string) ($resourceNode->getContent() ?? ''));
+            if ('' !== $editableHtml) {
+                return $editableHtml;
+            }
+
             try {
                 $html = $this->documentRepository->getResourceFileContent($document);
                 if ('' !== trim($html)) {

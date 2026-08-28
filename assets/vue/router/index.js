@@ -461,6 +461,21 @@ const router = createRouter({
       beforeEnter: courseHomeBeforeEnter,
     },
     {
+      path: "/ai/course/:id/analyzer",
+      name: "AiCourseAnalyzer",
+      // The page body is rendered by Symfony/Twig and moved into the DashboardLayout slot by App.vue.
+      // This empty route component only registers the URL in Vue Router so the shared course context
+      // and breadcrumb mechanisms can treat it like the other course tools.
+      component: { render: () => null },
+      meta: {
+        requiresAuth: true,
+        requiresCourseContext: true,
+        showBreadcrumb: true,
+        preserveLegacyContent: true,
+        breadcrumb: "AI analyzer",
+      },
+    },
+    {
       path: "/courses",
       component: MyCoursesLayout,
       children: [

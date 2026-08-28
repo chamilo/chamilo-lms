@@ -9268,6 +9268,15 @@ msgstr "Raport kohor për sesionin %s"
 msgid "Error"
 msgstr "Gabim"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Përdoruesi u krijua, por një nga fushat shtesë të profilit nuk mund të ruhej."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Përdoruesi u përditësua, por një nga fushat shtesë të profilit nuk mund të ruhej."
+
+msgid "One or more fields contain invalid values."
+msgstr "Një ose më shumë fusha përmbajnë vlera të pavlefshme."
+
 msgid "Anonymous"
 msgstr "Anonim"
 
@@ -15307,6 +15316,30 @@ msgstr "Koha e shpenzuar javën e kaluar"
 msgid "System status"
 msgstr "Gjendja e sistemit"
 
+msgid "Courses space"
+msgstr "Hapësira e kurseve"
+
+msgid "Database server configuration and metadata"
+msgstr "Konfigurimi i serverit të bazës së të dhënave dhe metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Përdorimi i diskut për kurs kundrejt kuotës së diskut"
+
+msgid "Information about your webserver configuration"
+msgstr "Informacion rreth konfigurimit të serverit tuaj web"
+
+msgid "Paths"
+msgstr "Shtigjet"
+
+msgid "State of Chamilo requirements"
+msgstr "Gjendja e kërkesave të Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Gjendja e cilësimeve PHP në server"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Konstantet e api_get_path() të zgjidhura në këtë portal"
+
 msgid "Is writable"
 msgstr "Është i shkruajtshëm"
 
@@ -20673,6 +20706,9 @@ msgstr "Në rrotën e aftësive, shfaq emrin e aftësisë kur ajo ka kod të shk
 
 msgid "Created by"
 msgstr "Krijuar nga"
+
+msgid "Created by %s on %s"
+msgstr "Krijuar nga %s më %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Fsheh trajnerin e përgjithshëm në dropbox"
@@ -28205,7 +28241,7 @@ msgid "Session expired. Redirecting to login…"
 msgstr "Sesioni ka skaduar. Ridrejtim te hyrja…"
 
 msgid "Super admin"
-msgstr "Super admin"
+msgstr "Super administrator"
 
 msgid "Global admin"
 msgstr "Admin global"
@@ -30080,7 +30116,7 @@ msgid "Save diagnostic changes"
 msgstr "Ruaj ndryshimet diagnostike"
 
 msgid "Domain %s"
-msgstr "Domain %s"
+msgstr "Domeni %s"
 
 msgid "Topic %s"
 msgstr "Temë %s"
@@ -31876,6 +31912,9 @@ msgstr "Shkruaj diçka te %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "E preferuara: SVG. Gjerësia e rekomanduar PNG: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Gjerësia e rekomanduar e PNG: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Ngarko logo PNG për email-et (~%spx gjerësi)"
 
@@ -31911,6 +31950,9 @@ msgstr "Kliko për të futur"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "I preferuari: SVG. Madhësia maksimale PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Madhësia maksimale e PNG: %spx."
 
 msgid "View badge"
 msgstr "Shih badge"
@@ -35441,7 +35483,7 @@ msgid "No documents available."
 msgstr "Asnjë dokument i disponueshëm."
 
 msgid "yperbolic arctangent:\\t\\tarctanh(x)"
-msgstr "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Arktangjenti hiperbolik:\\t\\tarctanh(x)"
 
 msgid "Exercise"
 msgstr "Ushtrim"
@@ -38062,6 +38104,9 @@ msgstr "Duke përfunduar"
 msgid "Draft saved"
 msgstr "Drafti u ruajt"
 
+msgid "Save as draft"
+msgstr "Ruaj si skicë"
+
 msgid "Statement"
 msgstr "Deklarata"
 
@@ -39221,7 +39266,7 @@ msgid "Delete failed"
 msgstr "Fshirja dështoi"
 
 msgid "PHP cache"
-msgstr "PHP cache"
+msgstr "Cache PHP"
 
 msgid "Live OPcache and APCu diagnostics"
 msgstr "Diagnostikimi i OPcache dhe APCu live"
@@ -39383,104 +39428,365 @@ msgid "The course title is required"
 msgstr "Titulli i kursit është i detyrueshëm"
 
 msgid "Unexpected error"
-msgstr ""
+msgstr "Gabim i papritur"
 
 msgid "Separate tags with commas"
-msgstr ""
+msgstr "Ndarini etiketat me presje"
 
 msgid "Open link"
-msgstr ""
+msgstr "Hap lidhjen"
 
 msgid "Describe the course picture to generate"
-msgstr ""
+msgstr "Përshkruani foton e kursit që do të gjenerohet"
 
 msgid "Generate picture"
-msgstr ""
+msgstr "Gjenero foton"
 
 msgid "PDF watermark"
-msgstr ""
+msgstr "Filigran PDF"
 
 msgid "No watermark image"
-msgstr ""
+msgstr "Nuk ka imazh filigrani"
 
 msgid "Upload watermark"
-msgstr ""
+msgstr "Ngarko filigranin"
 
 msgid "Delete watermark"
-msgstr ""
+msgstr "Fshi filigranin"
 
 msgid "Course legal agreement file"
-msgstr ""
+msgstr "Skedari i marrëveshjes ligjore të kursit"
 
 msgid "Upload agreement file"
-msgstr ""
+msgstr "Ngarko skedarin e marrëveshjes"
 
 msgid "Download agreement file"
-msgstr ""
+msgstr "Shkarko skedarin e marrëveshjes"
 
 msgid "Delete agreement file"
-msgstr ""
+msgstr "Fshi skedarin e marrëveshjes"
 
 msgid "Custom certificate images"
-msgstr ""
+msgstr "Imazhe të personalizuara të certifikatës"
 
 msgid "Course picture updated"
-msgstr ""
+msgstr "Fotoja e kursit u përditësua"
 
 msgid "The course picture could not be uploaded"
-msgstr ""
+msgstr "Fotoja e kursit nuk mund të ngarkohej"
 
 msgid "Course picture deleted"
-msgstr ""
+msgstr "Fotoja e kursit u fshi"
 
 msgid "Enter a description for the image"
-msgstr ""
+msgstr "Jepni një përshkrim për imazhin"
 
 msgid "The image generator returned an empty response"
-msgstr ""
+msgstr "Gjeneruesi i imazheve ktheu një përgjigje bosh"
 
 msgid "Course picture generated"
-msgstr ""
+msgstr "Fotoja e kursit u gjenerua"
 
 msgid "Watermark updated"
-msgstr ""
+msgstr "Filigrana u përditësua"
 
 msgid "Watermark deleted"
-msgstr ""
+msgstr "Filigrana u fshi"
 
 msgid "Agreement file updated"
-msgstr ""
+msgstr "Skedari i marrëveshjes u përditësua"
 
 msgid "Agreement file deleted"
-msgstr ""
+msgstr "Skedari i marrëveshjes u fshi"
 
 msgid "Certificate image updated"
-msgstr ""
+msgstr "Imazhi i certifikatës u përditësua"
 
 msgid "Certificate image deleted"
-msgstr ""
+msgstr "Imazhi i certifikatës u fshi"
 
 msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
-msgstr ""
+msgstr "Përdorni redaktorin e imazheve para ngarkimit për të prerë, rrotulluar ose ndryshuar madhësinë e fotos së kursit."
 
 msgid "This invitation link is invalid or has expired."
-msgstr ""
+msgstr "Ky lidhje ftese është e pavlefshme ose ka skaduar."
 
 msgid "This invitation was sent to a different user. Please log in with the invited account."
-msgstr ""
+msgstr "Kjo ftesë u dërgua një përdoruesi tjetër. Ju lutemi hyni me llogarinë e ftuar."
 
 msgid "The invitation could not be accepted."
-msgstr ""
+msgstr "Ftesa nuk mund të pranohej."
 
 msgid "You have been subscribed successfully."
-msgstr ""
+msgstr "Jeni regjistruar me sukses."
 
 msgid "This email address cannot be invited."
-msgstr ""
+msgstr "Kjo adresë email-i nuk mund të ftohet."
 
 msgid "This user is already subscribed to the session."
-msgstr ""
+msgstr "Ky përdorues është tashmë i regjistruar në sesion."
 
 msgid "This user is already subscribed to the course."
-msgstr ""
+msgstr "Ky përdorues është tashmë i regjistruar në kurs."
+
+msgid "Multi URLs"
+msgstr "URL të shumta"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entitetet si përdoruesit dhe kurset mund të jenë aktive në më shumë se një URL në të njëjtën kohë, prandaj shuma e vlerave më poshtë nuk do të përputhet me totalin."
+
+msgid "User directory"
+msgstr "Direktoria e përdoruesve"
+
+msgid "Course directory"
+msgstr "Direktoria e kurseve"
+
+msgid "URLs"
+msgstr "URL-të"
+
+msgid "User details"
+msgstr "Detajet e përdoruesit"
+
+msgid "Course details"
+msgstr "Detajet e kursit"
+
+msgid "View details"
+msgstr "Shiko detajet"
+
+msgid "Average progress"
+msgstr "Progresi mesatar"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Regjistrimi i drejtpërdrejtë i përket kursit si të tërë, jo një URL-je specifike, prandaj të njëjtat shifra «Direct» përsëriten më poshtë për çdo URL me të cilën është lidhur ky kurs. Sesionet janë mënyra e synuar për të ndarë një kurs ndërmjet URL-ve me metrika që në të vërtetë ndryshojnë për çdo URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Hyrjet (të gjitha URL-të së bashku)"
+
+msgid "Unique logins"
+msgstr "Hyrje unike"
+
+msgid "Parent URL"
+msgstr "URL prind"
+
+msgid "Logins (your URLs)"
+msgstr "Hyrjet (URL-të tuaja)"
+
+msgid "The picture could not be uploaded"
+msgstr "Fotoja nuk mund të ngarkohej"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Ky lloj fushe nuk mbështetet ende plotësisht — vetëm vlera e papërpunuar."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Ky kurs është afër kufirit të regjistrimit të përdoruesve (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Hapësira është e kufizuar përmes vetive të kursit tuaj. Për të rritur kufirin, merrni një"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Regjistrimet e përdoruesve janë të kufizuara përmes vetive të kursit tuaj. Për të rritur kufirin, merrni një"
+
+msgid "pro plan"
+msgstr "plan pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "dhe importoni kopjen rezervë të këtij kursi përmes Mirëmbajtjes së kursit në kursin tuaj të ri me pagesë, ose hapni një biletë për ta kthyer kursin tuaj në kurs pro pasi ta keni blerë këtë plan."
+
+msgid "Tired of writing questions?"
+msgstr "Të lodhur nga shkrimi i pyetjeve?"
+
+msgid "Upgrade your plan"
+msgstr "Përmirësoni planin tuaj"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "në një plan pro për të marrë ndihmë nga një IA për të gjeneruar pyetje cilësore për ju."
+
+msgid "Student Success AI Coach"
+msgstr "Trajneri IA i suksesit të studentit"
+
+msgid "No AI text provider is configured."
+msgstr "Nuk është konfiguruar asnjë ofrues teksti IA."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Udhëzime shtesë për trajnerin IA"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Shembull: Ky nxënës ka vështirësi të mbajë vëmendjen. Sugjeroni aktivitete më të shkurtra dhe kontrolle më të shpeshta të kuptimit."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Mbajeni këtë dritare hapur ndërsa Chamilo përgatit rekomandimin."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Rekomandimi u ruajt gjithashtu në kutinë tuaj hyrëse të Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Rekomandimi u gjenerua dhe u ruajt për këtë nxënës, por kopja në kutinë hyrëse nuk mund të krijohej."
+
+msgid "Student success recommendation"
+msgstr "Rekomandim për suksesin e studentit"
+
+msgid "Generated"
+msgstr "Gjeneruar"
+
+msgid "Priority actions"
+msgstr "Veprime me prioritet"
+
+msgid "Evidence"
+msgstr "Dëshmi"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Kjo veçori do të analizojë përmbajtjen e këtij kursi dhe do t’i dërgojë informacion mbi sjelljen e të nxënit modelit të konfiguruar të IA. Edhe pse nuk dërgohen të dhëna personale drejtpërdrejt të identifikueshme te modeli i IA, disa nga të dhënat e dërguara mund të japin tërthorazi informacion identifikues për përdoruesin. Nëse keni dyshime, kontrolloni gjithmonë me personin tuaj të referencës për IA para se ta përdorni këtë veçori."
+
+msgid "Additional activities"
+msgstr "Aktivitete shtesë"
+
+msgid "Rhythm"
+msgstr "Ritëm"
+
+msgid "Learning methodologies"
+msgstr "Metodologji të të nxënit"
+
+msgid "Other recommendations"
+msgstr "Rekomandime të tjera"
+
+msgid "Analyzing course..."
+msgstr "Duke analizuar kursin..."
+
+msgid "Analyzing student's learning..."
+msgstr "Duke analizuar të nxënit e studentit..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Duke pranuar këtë ftesë, do të lidheni me përdoruesin kërkues në një mënyrë që do t’i bëjë disa ose të gjitha të dhënat e profilit tuaj të lexueshme nga përdoruesi kërkues. Sigurohuni që të mos ndani shumë, duke kontrolluar profilin tuaj me përdoruesit që tashmë i besoni."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Leja për të përdorur mikrofonin nuk është e aktivizuar; ju lutemi aktivizojeni në shfletuesin tuaj për të regjistruar audio"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Kjo version i Chamilo vjen me një (ose më shumë) kurs(e) shumëgjuhëshe të parainstaluara. Mund t’i shqyrtoni në listën e kurseve dhe të vendosni nëse duhet të jenë publike apo jo."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Aktualisht nuk keni qasje në asnjë URL. Ju lutemi kërkojini administratorit t’ju japë qasje te URL-ja së cilës i përkisni."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Nëse ofruesi i zgjedhur i IA nuk është një shërbim sovran, përmbajtja e dokumentit të zgjedhur mund të dërgohet te një shërbim i jashtëm. Mos vazhdoni me informacion konfidencial nëse kjo nuk lejohet nga organizata juaj."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Klikoni Unify te llogaria që duhet të mbetet. Sistemi do t’i bashkojë të gjitha llogaritë e tjera të së njëjtës grup dublikatash në të. Llogaritë e bashkuara do të fshihen përgjithmonë dhe do të zhduken nga ky raport. Ky veprim nuk mund të zhbëhet."
+
+msgid "Permanent deletion"
+msgstr "Fshirje e përhershme"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify tashmë i fshin përgjithmonë llogaritë e bashkuara. Përdorni listën e përdoruesve vetëm nëse dëshironi të fshini llogari shtesë manualisht."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Po ndryshoni logot për temën vizuale të paracaktuar “chamilo”. Konsideroni krijimin/përdorimin e një teme vizuale të personalizuar për të shmangur mbishkrimin e parazgjedhjeve."
+
+msgid "This exercise has no questions."
+msgstr "Ky ushtrim nuk ka pyetje."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Si duhet t’i shfaqim komentet/reagimet për çdo pyetje? Kjo mundësi përcakton se si do t’i shfaqen nxënësit gjatë testit."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Këto aplikacione mund të hyjnë në Chamilo si ju, duke përdorur lejet ekzistuese të llogarisë suaj dhe asgjë më shumë. Revokoni çdo aplikacion që nuk e përdorni më ose që nuk e njihni."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Ju lutemi shpjegoni pse dëshironi të kërkoni tërheqjen e pëlqimit tuaj ligjor, që të mund ta përpunojmë kërkesën tuaj si duhet"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Përdorni këtë çelës personal për të lidhur një klient të largët MCP me Chamilo me llogarinë dhe lejet tuaja."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Çelësi i plotë shfaqet vetëm një herë. Ruajeni në mënyrë të sigurt. Gjenerimi i një çelësi të ri e bën menjëherë të pavlefshëm atë të mëparshmin."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Çelësi e autentifikon klientin si llogarinë tuaj Chamilo. Nuk jep leje që llogaria juaj nuk i ka tashmë."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Shfaq një deklaratë të Termave dhe Kushteve në faqen e regjistrimit; kërko që vizitori t’i pranojë T&K për t’u regjistruar"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Përmbajtja e termave dhe kushteve do t’i dërgohet një modeli gjuhësor të IA. Rishikoni përkthimin e propozuar para se ta ruani."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Një version i ruajtur ekziston tashmë për gjuhën e synuar. Ruajtja e këtij propozimi do të krijojë një version të ri."
+
+msgid "Acquired"
+msgstr "I fituar"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Foto e rekomanduar e kursit: 1600 × 900 px (16:9). Përdorni të paktën 1280 × 720 px për shfaqje të qartë në ekrane më të mëdha ose me densitet të lartë."
+
+msgid "Courses of the selected URL"
+msgstr "Kurset e URL-së së zgjedhur"
+
+msgid "Course categories in selected URL"
+msgstr "Kategoritë e kurseve në URL-në e zgjedhur"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Llogaria juaj është aktive; tani mund të hyni dhe të kontrolloni kurset tuaja."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Së pari duhet t’i shkarkoni korrigjimet <a href='%s'> këtu </a>.\nPas kësaj duhet ta çziponi atë skedar dhe t’i redaktoni skedarët si dëshironi pa ndryshuar emrat e skedarëve.\nPastaj krijoni një skedar zip me ato skedarë të ndryshuar dhe ngarkojeni në këtë formular."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Duke shtuar studentët nga sesioni %s te sesioni %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Shfaq të gjitha tentativat sipas ushtrimit"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Ky veprim do ta tejkalonte kufirin e lejuar të përdoruesve për kursin e zgjedhur."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Disa abonime nuk mund të ekzekutoheshin sepse arritën kufirin e lejuar të përdoruesve për kursin e prekur. Përdorues/Kurset e prekura: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Ky regjistër liston faqet e njohura të raporteve, kategorinë e tyre, URL-në kanonike, URL-në e vjetër dhe audiencën e pritur të rolit. URL-të kanonike drejtojnë te implementimi aktual i raportit dhe zbatojnë matricën e dokumentuar të roleve të raporteve."
+
+msgid "E-mail notification subscription"
+msgstr "Abonim për njoftime me e-mail"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Ky veprim do ta tejkalonte kufirin e %s përdoruesve për kurs, të vendosur nga administratorët. Abonimi është anuluar."
+
+msgid "Language the document is in"
+msgstr "Gjuha në të cilën është dokumenti"
+
+msgid "There is no session still"
+msgstr "Nuk ka ende asnjë sesion"
+
+msgid "Origin courses from session"
+msgstr "Kurset origjinë nga sesioni"
+
+msgid "Destination courses from session"
+msgstr "Kurset destinacion nga sesioni"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Qasje publike (qasje e autorizuar për çdo anëtar të kursit)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Gjenero %d terma fjalori për një kurs mbi '%s', çdo term në një rresht të vetëm, me përkufizimin e tij në rreshtin tjetër dhe një rresht bosh ndërmjet çdo termi. Mos shto asnjë formatim tjetër për titullin as për përkufizimin."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Kjo është një përshkrim i shkurtër i kursit '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Po përdorni Chamilo në një platformë Windows. Ndihmësit e konvertimit të dokumenteve nuk janë të disponueshëm për indeksimin e tekstit të plotë."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Cilësimi i nisjes automatike të testit është I AKTIVIZUAR. Studentët do të ridrejtohen te lista e testeve."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Cilësimi i nisjes automatike të testit është I AKTIVIZUAR. Studentët do të ridrejtohen te një test specifik."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Kufiri i abonimit për këtë kurs është arritur (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Numëro kurset sipas gjuhës"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Përdoruesit, qasja e fundit e të cilëve është më e vjetër se data e zgjedhur."
 

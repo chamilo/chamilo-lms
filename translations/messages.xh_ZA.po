@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Ngobubele"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Isampulu yefomula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Umzekelo wefomula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Ulawulo lweguqu"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:akukho copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Ifolda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:umsebenzi,,      simulation:ukwenza okufana,,      questionnaire:ufuzo,,      diagram:umzobo,,      figure:umfanekiso,,      graph:grafu,,      index:isazisi,,      slide:isilayidi,,      table:thebhule,,      narrative text:umbhalo obalasele,,      exam:oviwo,,      experiment:uphando,,      problem statement:ingxelo yengxaki,,      self assessment:ukuzivavanya,,      lecture:intetho"
@@ -4135,10 +4135,10 @@ msgid "works"
 msgstr "iyasebenza"
 
 msgid "MySql Client"
-msgstr "MySql Client"
+msgstr "Iklayenti ye-MySql"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "Iseva ye-MySql"
 
 msgid "Owner"
 msgstr "Umnini"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Isalathiso somzimba</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -7936,7 +7936,7 @@ msgid "This answer has not yet been corrected. Meanwhile, your score for this qu
 msgstr "Esi simpendulo asikahlolwanga. Okwangoku, amanqaku akho kulo mbuzo abekwa ku-0, echaphazela amanqaku apheleleyo."
 
 msgid "Hot Potatoes Admin"
-msgstr "Hot Potatoes Admin"
+msgstr "Ulawulo lwe-Hot Potatoes"
 
 msgid "New question"
 msgstr "Umbuzo omtsha"
@@ -9263,6 +9263,15 @@ msgstr "Ingxelo yexesha yeseshini %s"
 
 msgid "Error"
 msgstr "Impazamo"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Umsebenzisi udaliwe, kodwa enye yeendawo ezongezelelweyo zeprofayile ayikwazanga ukugcinwa."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Umsebenzisi uhlaziyiwe, kodwa enye yeendawo ezongezelelweyo zeprofayile ayikwazanga ukugcinwa."
+
+msgid "One or more fields contain invalid values."
+msgstr "Indawo enye okanye ezininzi zinamaxabiso angasebenziyo."
 
 msgid "Anonymous"
 msgstr "Ongaziwayo"
@@ -14443,7 +14452,7 @@ msgid "Baby Orange"
 msgstr "I-Orange encinci"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Ilagoon eluhlaza"
 
 msgid "Cool blue"
 msgstr "Blue epholileyo"
@@ -14452,13 +14461,13 @@ msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Ikhampasi ye-cosmic"
 
 msgid "Delicious Bordeaux"
 msgstr "I-Bordeaux emnandi"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Eluhlaza kobukumkani"
 
 msgid "Fruity orange"
 msgstr "I-orange yeziphumo"
@@ -14470,13 +14479,13 @@ msgid "Royal purple"
 msgstr "Purple yasebukhosini"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Umgca wesilivere"
 
 msgid "Sober brown"
 msgstr "Brown sober"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Ingwevu yentsimbi"
 
 msgid "Tasty olive"
 msgstr "Ioli enencasa"
@@ -15302,6 +15311,30 @@ msgstr "Ixesha elichithwe kwiveki ephelileyo"
 
 msgid "System status"
 msgstr "Imeko yesistim"
+
+msgid "Courses space"
+msgstr "Indawo yezifundo"
+
+msgid "Database server configuration and metadata"
+msgstr "Uqwalaselo lweseva yedatabase kunye ne-metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Ukusetyenziswa kwediski ngesifundo xa kuthelekiswa nekhota yediski"
+
+msgid "Information about your webserver configuration"
+msgstr "Ulwazi malunga noqwalaselo lweseva yewebhu yakho"
+
+msgid "Paths"
+msgstr "Iindlela"
+
+msgid "State of Chamilo requirements"
+msgstr "Imeko yeemfuno ze-Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Imeko weesetingi ze-PHP kwiseva"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "ii-constants ze-api_get_path() ezisombululiweyo kule portal"
 
 msgid "Is writable"
 msgstr "Inokubhalwa"
@@ -17182,10 +17215,10 @@ msgid "Courses on the platform"
 msgstr "Izifundo kwiqonga"
 
 msgid "%s courses"
-msgstr "%s courses"
+msgstr "Iikhosi ezingama-%s"
 
 msgid "%s sessions"
-msgstr "%s sessions"
+msgstr "Iiseshoni ezingama-%s"
 
 msgid "Search by title or code"
 msgstr "Khangela ngesihloko okanye ikhowudi"
@@ -20669,6 +20702,9 @@ msgstr "Kwi-vili yezakhono, ibonisa igama lesakhono xa linokod short."
 
 msgid "Created by"
 msgstr "Yenziwe ngu"
+
+msgid "Created by %s on %s"
+msgstr "Yenziwe ngu-%s ngo-%s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Fihla umqeqeshi jikelele kwi-dropbox"
@@ -30754,7 +30790,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (ID yangaphakathi)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "I-Azure ID (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Imeyile yombutho"
@@ -31486,10 +31522,10 @@ msgid "Reply to all"
 msgstr "Phendula kubo bonke"
 
 msgid "SCIM external ID"
-msgstr "SCIM external ID"
+msgstr "I-ID yangaphandle ye-SCIM"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "I-OAuth2 ID"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Nceda uamkele uhlobo lwamva nje lwezifundela nezigqibo."
@@ -31872,6 +31908,9 @@ msgstr "Bhala into ku %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Okukhethekileyo: SVG. Ububanzi be-PNG obucetywayo: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Ububanzi obucetywayo be-PNG: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Faka ilogo yePNG kwi-imeyile (~%spx ububanzi)"
 
@@ -31908,11 +31947,14 @@ msgstr "Cofa ukuze ufake"
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Okhethiweyo: SVG. Ubungakanani obuphezulu bePNG: %spx."
 
+msgid "PNG max size: %spx."
+msgstr "Ubungakanani obuphezulu be-PNG: %spx."
+
 msgid "View badge"
 msgstr "Jonga ibheji"
 
 msgid "%d min"
-msgstr "%d min"
+msgstr "imizuzu engama-%d"
 
 msgid "Duration in minutes"
 msgstr "Uxhobo lwemizuzu"
@@ -33259,7 +33301,7 @@ msgid "Received"
 msgstr "Efunyanweyo"
 
 msgid "%s min"
-msgstr "%s min"
+msgstr "imizuzu ye-%s"
 
 msgid "Unlock column"
 msgstr "Vula ikholamu"
@@ -33703,10 +33745,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "I-EntraID ID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "I-EntraID UID"
 
 msgid "Required fields"
 msgstr "Iindawo ezifunwayo"
@@ -34654,7 +34696,7 @@ msgid "mobile_phone_number"
 msgstr "mobile_phone_number"
 
 msgid "Allowed template syntax"
-msgstr "Allowed template syntax"
+msgstr "I-syntax yetemplate evumelekileyo"
 
 msgid "Functions"
 msgstr "Imisebenzi"
@@ -35491,7 +35533,7 @@ msgid "%s results"
 msgstr "%s iziphumo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Isalathiso somzimba</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Kususiwe"
@@ -35743,10 +35785,10 @@ msgid "Choose the type of question you want to add."
 msgstr "Khetha uhlobo lombuzo ofuna ukuwufaka."
 
 msgid "The free text option is added automatically."
-msgstr "The free text option is added automatically."
+msgstr "Ukhetho lombhalo okhululekileyo longezwa ngokuzenzekelayo."
 
 msgid "No questions found"
-msgstr "No questions found"
+msgstr "Akukho mibuzo ifunyenweyo"
 
 msgid "Mandatory"
 msgstr "Kunyanzeliswe"
@@ -36349,13 +36391,13 @@ msgid "Forum created"
 msgstr "Ifowamu yenziwe"
 
 msgid "Could not save forum"
-msgstr "Could not save forum"
+msgstr "Ayikwazanga ukugcina iforam"
 
 msgid "Are you sure you want to delete this forum category?"
 msgstr "Uqinisekile ufuna ukucima eli candelo leforum?"
 
 msgid "Could not delete forum category"
-msgstr "Could not delete forum category"
+msgstr "Ayikwazanga ukucima udidi lweforam"
 
 msgid "Are you sure you want to delete this forum?"
 msgstr "Uqinisekile ufuna ukucima le forum?"
@@ -36958,7 +37000,7 @@ msgid "Waiting for update progress events..."
 msgstr "Kulindelwe iziganeko zenkqubela phambili yohlaziyo..."
 
 msgid "Yarn build"
-msgstr "Yarn build"
+msgstr "Ukwakhiwa kwe-Yarn"
 
 msgid "Yarn install"
 msgstr "Faka i-yarn"
@@ -37501,7 +37543,7 @@ msgid "Back to account"
 msgstr "Buyela kwi-akhawunti"
 
 msgid "Your feedback will help us improve future training sessions."
-msgstr "Your feedback will help us improve future training sessions."
+msgstr "Ingxelo yakho iya kusinceda ukuphucula iiseshoni zoqeqesho ezizayo."
 
 msgid "Thank you for sharing your feedback."
 msgstr "Enkosi ngokwabelana ngengxelo yakho."
@@ -37696,10 +37738,10 @@ msgid "Do you want to continue your session?"
 msgstr "Ufuna ukuqhubeka neseshoni yakho?"
 
 msgid "Your session details have been lost, please login again."
-msgstr ""
+msgstr "Iinkcukacha zeseshoni yakho zilahlekile, nceda ungene kwakhona."
 
 msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
-msgstr ""
+msgstr "Ukufikelela kulo mthombo kwaliwe. Kubonakala ngathi awunazo iimvume eziyimfuneko zokufikelela kuwo."
 
 msgid "Stay connected"
 msgstr "Hlala uqhagamshelene"
@@ -38057,6 +38099,9 @@ msgstr "Ukugqibezela"
 
 msgid "Draft saved"
 msgstr "Uyilo lugciniwe"
+
+msgid "Save as draft"
+msgstr "Gcina njengoyilo"
 
 msgid "Statement"
 msgstr "Isitatimende"
@@ -39097,7 +39142,7 @@ msgid "Graceful workers"
 msgstr "Abasebenzi abanobubele"
 
 msgid "Server MPM"
-msgstr "Server MPM"
+msgstr "I-MPM yeseva"
 
 msgid "Requests per second (live)"
 msgstr "Izicelo ngesekhondi (ngoku)"
@@ -39169,145 +39214,145 @@ msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /ser
 msgstr "Apache: vumela i-mod_status (ExtendedStatus On) kwaye uvumele i-localhost ukuya ku-/server-status. Nginx: vumela i-stub_status kwindawo ye-localhost kuphela njenge-/nginx_status okanye i-/stub_status."
 
 msgid "Grade percentage distribution"
-msgstr ""
+msgstr "Ukwabiwa ngepesenti yamanqaku"
 
 msgid "Top learners"
-msgstr ""
+msgstr "Abafundi abaphambili"
 
 msgid "This progress combines learning path progress and the learner's average exercise result"
-msgstr ""
+msgstr "Le nkqubela idibanisa inkqubela yendlela yokufunda kunye nesiphumo esiphakathi somthambo womfundi"
 
 msgid "Additional profile fields"
-msgstr ""
+msgstr "Imimandla eyongezelelweyo yeprofayili"
 
 msgid "Visible columns"
-msgstr ""
+msgstr "Iikholam ezibonakalayo"
 
 msgid "Learning path completion"
-msgstr ""
+msgstr "Ukugqitywa kwendlela yokufunda"
 
 msgid "Number of certificates"
-msgstr ""
+msgstr "Inani lezatifiketi"
 
 msgid "Could not export the report"
-msgstr ""
+msgstr "Ayikwazanga ukuthumela ingxelo ngaphandle"
 
 msgid "Second learner"
-msgstr ""
+msgstr "Umfundi wesibini"
 
 msgid "Results by learner"
-msgstr ""
+msgstr "Iziphumo ngomfundi"
 
 msgid "Use filters to narrow down questions."
-msgstr ""
+msgstr "Sebenzisa izihluzo ukunciphisa imibuzo."
 
 msgid "Try adjusting your filters and search again."
-msgstr ""
+msgstr "Zama ukulungisa izihluzo zakho uze uphinde ukhangele."
 
 msgid "Results per page"
-msgstr ""
+msgstr "Iziphumo ngephepha"
 
 msgid "No answers"
-msgstr ""
+msgstr "Akukho mpendulo"
 
 msgid "Tests using this question"
-msgstr ""
+msgstr "Iimviwo ezisebenzisa lo mbuzo"
 
 msgid "Delete failed"
-msgstr ""
+msgstr "Ukucima akuphumelelanga"
 
 msgid "PHP cache"
-msgstr ""
+msgstr "I-cache ye-PHP"
 
 msgid "Live OPcache and APCu diagnostics"
-msgstr ""
+msgstr "Uhlolo lwe-OPcache ne-APCu olubonakalayo"
 
 msgid "Click to show OPcache and APCu diagnostics"
-msgstr ""
+msgstr "Cofa ukubonisa uhlolo lwe-OPcache ne-APCu"
 
 msgid "Memory used"
-msgstr ""
+msgstr "Imemori esetyenzisiweyo"
 
 msgid "OPcache is installed but not enabled."
-msgstr ""
+msgstr "I-OPcache ifakiwe kodwa ayivulwanga."
 
 msgid "OPcache extension is not available on this server."
-msgstr ""
+msgstr "Isolulo se-OPcache asikho kule seva."
 
 msgid "APCu is installed but not enabled."
-msgstr ""
+msgstr "I-APCu ifakiwe kodwa ayivulwanga."
 
 msgid "APCu extension is not available on this server."
-msgstr ""
+msgstr "Isolulo se-APCu asikho kule seva."
 
 msgid "Constant"
-msgstr ""
+msgstr "Ungatshintshiyo"
 
 msgid "Space used on disk (MB)"
-msgstr ""
+msgstr "Isithuba esisetyenzisiweyo kwidiski (MB)"
 
 msgid "Set max course space (MB)"
-msgstr ""
+msgstr "Misela isithuba esiphezulu sekhosi (MB)"
 
 msgid "Memory free"
-msgstr ""
+msgstr "Imemori ekhululekileyo"
 
 msgid "Memory wasted"
-msgstr ""
+msgstr "Imemori elahlekileyo"
 
 msgid "Memory used %"
-msgstr ""
+msgstr "Imemori esetyenzisiweyo %"
 
 msgid "Cached scripts"
-msgstr ""
+msgstr "Izikripthi ezikwi-cache"
 
 msgid "Cached keys"
-msgstr ""
+msgstr "Izitshixo ezikwi-cache"
 
 msgid "Misses"
-msgstr ""
+msgstr "Ukuphoswa"
 
 msgid "Cache full"
-msgstr ""
+msgstr "I-cache izele"
 
 msgid "OOM restarts"
-msgstr ""
+msgstr "Ukuqaliswa kwakhona kwe-OOM"
 
 msgid "Hash restarts"
-msgstr ""
+msgstr "Ukuqaliswa kwakhona kwe-hash"
 
 msgid "Manual restarts"
-msgstr ""
+msgstr "Ukuqaliswa kwakhona ngesandla"
 
 msgid "Interned strings used"
-msgstr ""
+msgstr "Imitya e-interned esetyenzisiweyo"
 
 msgid "Interned strings free"
-msgstr ""
+msgstr "Imitya e-interned ekhululekileyo"
 
 msgid "Interned strings count"
-msgstr ""
+msgstr "Inani leemitya e-interned"
 
 msgid "Memory available"
-msgstr ""
+msgstr "Imemori ekhoyo"
 
 msgid "Memory size"
-msgstr ""
+msgstr "Ubungakanani bememori"
 
 msgid "Entries"
-msgstr ""
+msgstr "Amafakelo"
 
 msgid "Slots"
-msgstr ""
+msgstr "Izikhala"
 
 msgid "Expunges"
-msgstr ""
+msgstr "Ukucinywa"
 
 msgid "Cache start time"
-msgstr ""
+msgstr "Ixesha lokuqala kwekhishi"
 
 msgid "Time zone"
-msgstr ""
+msgstr "Umda wexesha"
 
 msgid "Not registered"
 msgstr "Ayibhaliswanga"
@@ -39479,4 +39524,265 @@ msgstr "Lo msebenzisi sele ebhalisile kwiseshoni."
 
 msgid "This user is already subscribed to the course."
 msgstr "Lo msebenzisi sele ebhalisile kwikhosi."
+
+msgid "Multi URLs"
+msgstr "Ii-URL ezininzi"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Izinto ezifana nabasebenzisi nezifundo zinokusebenza kwi-URL engaphezu kwesinye ngaxeshanye, ngoko ke isixa samaxabiso angezantsi asiyi kuhambelana nesixa sisonke."
+
+msgid "User directory"
+msgstr "Isikhokelo somsebenzisi"
+
+msgid "Course directory"
+msgstr "Isikhokelo sesifundo"
+
+msgid "URLs"
+msgstr "Ii-URL"
+
+msgid "User details"
+msgstr "Iinkcukacha zomsebenzisi"
+
+msgid "Course details"
+msgstr "Iinkcukacha zesifundo"
+
+msgid "View details"
+msgstr "Jonga iinkcukacha"
+
+msgid "Average progress"
+msgstr "Inkqubela ephakathi"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Ukubhaliswa ngokuthe ngqo kuyinxalenye yesifundo siphela, hayi i-URL ethile, ngoko ke amanani 'Ngokuthe ngqo' afanayo aphindwa ngezantsi kuyo yonke i-URL le khosi idityaniswe kuyo. Iiseshoni yindlela ekujongwe ukuba kwabelwane ngesifundo kwi-URL ezahlukeneyo ngemilinganiselo eyahlukileyo ngenene kwi-URL nganye."
+
+msgid "Logins (all URLs combined)"
+msgstr "Ukungena (zonke ii-URL zidityanisiwe)"
+
+msgid "Unique logins"
+msgstr "Ukungena okukhethekileyo"
+
+msgid "Parent URL"
+msgstr "I-URL yomzali"
+
+msgid "Logins (your URLs)"
+msgstr "Ukungena (ii-URL zakho)"
+
+msgid "The picture could not be uploaded"
+msgstr "Umfanekiso awukwazanga ukulayishwa"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Olu hlobo lwentsimi alukaxhaswa ngokupheleleyo — ixabiso elikrwada kuphela."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Esi sifundo sisondele kumda wokubhaliswa kwabasebenzisi (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Isithuba silinganiselwe ngeempawu zesifundo sakho. Ukwandisa umda wakho, fumana i-"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Ukubhaliswa kwabasebenzisi kulinganiselwe ngeempawu zesifundo sakho. Ukwandisa umda wakho, fumana i-"
+
+msgid "pro plan"
+msgstr "icebo le-pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "uze ungenise i-backup yesi sifundo nge-Course Maintenance kwisifundo sakho esitsha esihlawulwayo, okanye uvule ithikithi ukuze isifundo sakho siguqulwe sibe yikhosi ye-pro xa sele ufumenye eli cebo."
+
+msgid "Tired of writing questions?"
+msgstr "Udiniwe kukubhala imibuzo?"
+
+msgid "Upgrade your plan"
+msgstr "Nyusa icebo lakho"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "ube licebo le-pro ukuze ufumane uncedo lwe-AI ukuze ivelise imibuzo esemgangathweni kuwe."
+
+msgid "Student Success AI Coach"
+msgstr "Umqeqeshi we-AI wempumelelo yomfundi"
+
+msgid "No AI text provider is configured."
+msgstr "Akukho mboneleli wombhalo we-AI umiselweyo."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Imiyalelo eyongezelelweyo yomqeqeshi we-AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Umzekelo: Lo mfundi unobunzima bokugcina ingqalelo. Cebisa imisebenzi emifutshane kunye nokuhlola okuqhelekileyo ukuqonda."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Gcina le festile ivuliwe ngelixa i-Chamilo ilungisa ingcebiso."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Ingcebiso ikwagcinwe kwibhokisi yakho ye-Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Ingcebiso yaveliswa yagcinelwa lo mfundi, kodwa ikopi yebhokisi ayikwazanga ukudalwa."
+
+msgid "Student success recommendation"
+msgstr "Ingcebiso yempumelelo yomfundi"
+
+msgid "Generated"
+msgstr "Yaveliswa"
+
+msgid "Priority actions"
+msgstr "Izenzo eziphambili"
+
+msgid "Evidence"
+msgstr "Ubungqina"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Olu phawu luza kuhlalutya umxholo wesi sifundo kwaye luthumele ulwazi lokuziphatha kokufunda kwimodeli ye-AI emiselweyo. Nangona kungathunyelwa ngokuthe ngqo idatha yobuqu echongakalayo kwimodeli ye-AI, enye yedatha ethunyelwayo inokunika ngokungathanga ngqo ulwazi oluchongakalayo ngomsebenzisi. Ukuba unokungathandabuzi, soloko uqwalasela nomntu wakho we-AI Reference ngaphambi kokusebenzisa olu phawu."
+
+msgid "Additional activities"
+msgstr "Imisebenzi eyongezelelweyo"
+
+msgid "Rhythm"
+msgstr "Isingqisho"
+
+msgid "Learning methodologies"
+msgstr "Iindlela zokufunda"
+
+msgid "Other recommendations"
+msgstr "Ezinye iingcebiso"
+
+msgid "Analyzing course..."
+msgstr "Kuhlalutywa isifundo..."
+
+msgid "Analyzing student's learning..."
+msgstr "Kuhlalutywa ukufunda komfundi..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Ngokwamkela esi simemo, uya kudityaniswa nomsebenzisi ocebileyo ngendlela eya kwenza enye okanye yonke idatha yeprofayile yakho ifumaneke ukuze ifundwe ngumsebenzisi ocebileyo. Nceda uqinisekise ukuba awabelani ngokugqithisileyo ngokujonga iprofayile yakho nabantu osel'ubathenbayo."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Imvume yokusebenzisa imayikrofoni ayivulwanga, nceda uyivule kwibhrawuza yakho ukuze urekhode isandi"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Le nguqulelo ye-Chamilo iza nekhosi enye (okanye ezininzi) ezineelwimi ezininzi ezifakwe kwangaphambili. Zihlole kuluhlu lweekhosi uze uthathe isigqibo sokuba zingabikho esidlangalaleni okanye hayi."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Okwangoku awunayo imvume yokufikelela kuyo nayiphi na i-URL. Nceda ucele umlawuli ukuba akunike imvume yokufikelela kwi-URL oyinxalenye yayo."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Ukuba umboneleli we-AI okhethiweyo ayiyonkonzo ezimeleyo, umxholo woxwebhu olukhethiweyo unokuthunyelwa kwinkonzo yangaphandle. Ungaqhubeki ngolwazi oluyimfihlo ngaphandle kokuba oku kuvunyelwe ngumbutho wakho."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Cofa uManyanisa kwiakhawunti ekufuneka ihlale. Inkqubo iya kudibanisa zonke ezinye iiakhawunti kwiqela elifanayo lokuphindaphinda kuyo. Iiakhawunti ezidityanisiweyo ziya kucinywa ngokusisigxina kwaye ziya kunyamalala kule ngxelo. Esi senzo asinakuhlehliswa."
+
+msgid "Permanent deletion"
+msgstr "Ukucima ngokusisigxina"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "UManyanisa sele ucima ngokusisigxina iiakhawunti ezidityanisiweyo. Sebenzisa uluhlu lwaBasebenzisi kuphela ukuba ufuna ukucima ezinye iiakhawunti ngesandla."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Uhlengahlengisa iilogo zomxholo wombono omisselweyo “chamilo”. Cinga ngokudala/ukusebenzisa umxholo wombono osisiko ukunqanda ukugqitha izimiselweyo."
+
+msgid "This exercise has no questions."
+msgstr "Lo mzilisi awunayo imibuzo."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Kufuneka sibonise njani ingxelo/izimvo zombuzo ngamnye? Olu khetho luchaza indlela eza kuboniswa ngayo kumfundi xa ethatha uvavanyo."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Ezi zicelo zinokufikelela kwi-Chamilo njengawe, zisebenzisa iimvume zeakhawunti yakho ekhoyo kwaye kungaphezulu. Rhoxisa naziphi na ongasazisebenzisiyo okanye ongazaziyo."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Nceda ucacise ukuba kutheni ufuna ukucela ukurhoxiswa kwemvume yakho yomthetho, ukuze sikwazi ukuqhubela phambili isicelo sakho ngokufanelekileyo"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Sebenzisa esi sitshixo sobuqu ukudibanisa umthengi we-MCP okude ne-Chamilo ngeakhawunti yakho neemvume zakho."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Isitshixo esipheleleyo siboniswa kube kanye kuphela. Sigcine ngokukhuselekileyo. Ukuvelisa isitshixo esitsha kungoko kwenza esangaphambili singasebenzi."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Isitshixo siqinisekisa umthengi njengeakhawunti yakho ye-Chamilo. Asiniki iimvume iakhawunti yakho engenazo."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Bonisa ingxelo yeMiqathango neMigaqo kwiphepha lokubhalisa, funa undwendwe lwamkele iT&C ukuze lubhalise"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Umxholo wemiqathango nemigaqo uza kuthunyelwa kwimodeli yolwimi ye-AI. Hlola uguqulelo olucetywayo phambi kokuba ulugcine."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Inguqulelo egciniweyo sele ikhona kulwimi ekujoliswe kulo. Ukugcina esi siphakamiso kuza kudala inguqulelo entsha."
+
+msgid "Acquired"
+msgstr "Ifunyenwe"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Umfanekiso wekhosi ocetywayo: 1600 × 900 px (16:9). Sebenzisa ubuncinane 1280 × 720 px ukuze kubonakale ngokucacileyo kwizikrini ezikhulu okanye ezinobuninzi obuphezulu."
+
+msgid "Courses of the selected URL"
+msgstr "Iikhosi ze-URL ekhethiweyo"
+
+msgid "Course categories in selected URL"
+msgstr "Iindidi zeekhosi kwi-URL ekhethiweyo"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Iakhawunti yakho iyasebenza, unokungena uhlolisise iikhosi zakho ngoku."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Kuqala kufuneka udawunilode izilungiso <a href='%s'> apha </a>.\nEmva koko kufuneka uvule loo fayile uze uhlele iifayile njengoko ufuna ungaziguquli amagama eefayile.\nEmva koko yenza ifayile ye-zip ngezo fayile zihlengahlengisiweyo uze uyilayishe kule fomu."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Ukongeza abafundi ukusuka kwiseshoni %s ukuya kwiseshoni %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Bonisa zonke iinzame ngomzilisi"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Lo msebenzi unokugqitha umda ovumelekileyo wabasebenzisi wekhosi ekhethiweyo."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Ezinye iimrhaliso azikwazanga ukwenziwa kuba zifikelele kumda wabasebenzisi ovunyelweyo wekhosi echaphazelekayo. Abasebenzisi/Iikhosi ezichaphazelekayo: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Le rejista idwelisa amaphepha engxelo aziwayo, udidi lwawo, i-URL yomgaqo, i-URL yakudala kunye nabaphulaphuli bendima elindelekileyo. Ii-URL zomgaqo zihambisa kwindlela yangoku yengxelo kwaye zinyanzelisa imatrix yendima yengxelo ebhaliweyo."
+
+msgid "E-mail notification subscription"
+msgstr "Umrhaliso wesaziso se-imeyile"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Lo msebenzi unokugqitha umda we-%s wabasebenzisi ngekhosi nganye omiselwe ngabalawuli. Umrhaliso urhoxisiwe."
+
+msgid "Language the document is in"
+msgstr "Ulwimi oxwebhu lukulo"
+
+msgid "There is no session still"
+msgstr "Akukho seshoni okwangoku"
+
+msgid "Origin courses from session"
+msgstr "Iikhosi zentsusa ezivela kwiseshoni"
+
+msgid "Destination courses from session"
+msgstr "Iikhosi zendawo ekuyiwa kuyo ezivela kwiseshoni"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Ukufikelela esidlangalaleni (ukungena kuvumelekile kulo naliphi na ilungu lesifundo)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Yenza amagama eglosari angama-%d ekhosi malunga ne-'%s', igama ngalinye kumgca omnye, nenkcazo yalo kumgca olandelayo nomgca omnye ongenanto phakathi kwegama ngalinye. Ungongezi naluphi na olunye uhlelo lwesihloko okanye lwenkcazo."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Le yinkcazo emfutshane yekhosi '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Usebenzisa i-Chamilo kwiqonga le-Windows. Abancedisi bokuguqula uxwebhu abafumaneki kwi-indexing yombhalo opheleleyo."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Useto lokuziqalisa uvavanyo luvuliwe. Abafundi baya kuthunyelwa kuluhlu lovavanyo."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Useto lokuziqalisa uvavanyo luvuliwe. Abafundi baya kuthunyelwa kuvavanyo oluthile."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Umda womrhaliso wale khosi ufikelelwe (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Bala ikhosi ngolwimi"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Abasebenzisi abofikelelo lwabo lokugqibela ludala kunomhla okhethiweyo."
 

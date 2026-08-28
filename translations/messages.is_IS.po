@@ -231,7 +231,7 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "Lengd lotu gerir þér kleift að stilla fjölda daga aðgangs frá fyrsta aðgangsdegi notanda að lotunni. Þannig geturðu stillt lotu á að 'standa í 15 daga' í stað þess að byrja á föstum degi fyrir alla nemendur."
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr "Hyperbolic arctangent:\t\tarctanh(x)"
+msgstr "Hýperbólísk arkustangens:\t\tarctanh(x)"
 
 msgid "Session duration"
 msgstr "Lengd lotu"
@@ -240,7 +240,7 @@ msgid "Arctangent:\t\t\tarctan(x)"
 msgstr "Arctangent:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr "Hyperbolic tangent:\t\ttanh(x)"
+msgstr "Hýperbólísk tangens:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
 msgstr "Tangent:\t\t\ttan(x)"
@@ -252,13 +252,13 @@ msgid "Series"
 msgstr "Röð"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr "Hyperbolic arccosine:\t\tarccosh(x)"
+msgstr "Hýperbólísk arkuskósínus:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
 msgstr "Arccosine:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr "Hyperbolic cosine:\t\tcosh(x)"
+msgstr "Hýperbólísk kósínus:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
 msgstr "Cosine:\t\t\t\tcos(x)"
@@ -267,7 +267,7 @@ msgid "Teachers time report"
 msgstr "Tímafrétt kennara"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr "Hyperbolic arcsine:\t\tarcsinh(x)"
+msgstr "Hýperbólísk arkussínus:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "Finnurðu ekki tungumálið þitt á listanum? Hafðu samband við okkur á info@chamilo.org til að leggja þitt af mörkum sem þýðandi."
@@ -276,7 +276,7 @@ msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr "Hyperbolic sine:\t\tsinh(x)"
+msgstr "Hýperbólísk sínus:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr "Sine:\t\t\t\tsin(x)"
@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Með kveðju"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Dæmi um formúlu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Breytusvið"
@@ -9269,6 +9269,15 @@ msgstr "Tímaskýrsla fyrir lotu %s"
 msgid "Error"
 msgstr "Villa"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Notandinn var stofnaður, en ekki tókst að vista eitt af viðbótarprófílsreitunum."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Notandinn var uppfærður, en ekki tókst að vista eitt af viðbótarprófílsreitunum."
+
+msgid "One or more fields contain invalid values."
+msgstr "Einn eða fleiri reitir innihalda ógild gildi."
+
 msgid "Anonymous"
 msgstr "Nafnlaus"
 
@@ -14148,118 +14157,118 @@ msgid "Filter assignments"
 msgstr "Sía verkefni"
 
 msgid "Minimum score expected"
-msgstr ""
+msgstr "Lágmarkseinkunn sem búist er við"
 
 msgid "Expiry date already passed"
-msgstr ""
+msgstr "Gildistími er þegar liðinn"
 
 msgid "End date already passed"
-msgstr ""
+msgstr "Lokadagsetning er þegar liðin"
 
 msgid "Move %s to"
-msgstr ""
+msgstr "Færa %s í"
 
 msgid "The mark cannot exceed maximum score"
-msgstr ""
+msgstr "Einkunnin má ekki fara yfir hámarkseinkunn"
 
 msgid "Delete all papers"
-msgstr ""
+msgstr "Eyða öllum verkefnum"
 
 msgid "Edit and mark paper"
-msgstr ""
+msgstr "Breyta og merkja verkefni"
 
 msgid "All papers are now invisible"
-msgstr ""
+msgstr "Öll verkefni eru nú ósýnileg"
 
 msgid "The file is now invisible"
-msgstr ""
+msgstr "Skráin er nú ósýnileg"
 
 msgid "All papers are now visible"
-msgstr ""
+msgstr "Öll verkefni eru nú sýnileg"
 
 msgid "The file is now visible"
-msgstr ""
+msgstr "Skráin er nú sýnileg"
 
 msgid "Create assignment"
-msgstr ""
+msgstr "Búa til verkefni"
 
 msgid "Assignment name"
-msgstr ""
+msgstr "Heiti verkefnis"
 
 msgid "Folder edited"
-msgstr ""
+msgstr "Möppu breytt"
 
 msgid "Update this task"
-msgstr ""
+msgstr "Uppfæra þetta verkefni"
 
 msgid "Make all papers invisible"
-msgstr ""
+msgstr "Gera öll verkefni ósýnileg"
 
 msgid "Make all papers visible"
-msgstr ""
+msgstr "Gera öll verkefni sýnileg"
 
 msgid "Administrator first name"
-msgstr ""
+msgstr "Fornafn kerfisstjóra"
 
 msgid "URL of this company"
-msgstr ""
+msgstr "Vefslóð þessa fyrirtækis"
 
 msgid "User DB"
-msgstr ""
+msgstr "Notandagagnagrunnur"
 
 msgid "Please check these values"
-msgstr ""
+msgstr "Vinsamlegast athugið þessi gildi"
 
 msgid "Please go back to step 1"
-msgstr ""
+msgstr "Vinsamlegast farið til baka í skref 1"
 
 msgid "<p><b>Adding users</b></p> <p>You can subscribe existing learners one by one to your course, by clicking on the link 'Subscribe users to this course'. Usually however it's better to open your course to self-registration and let learners register themselves. </p> <p><b>Description</b></p> <p>The description has no computer related function and does not indicate any particular rights or privileges within the system. It simply indicates who is who, in human terms. You can therefore modify this by clicking on the pencil, then typing whatever you want: professor, assistant, student, visitor, expert etc.</p><p><b>Admin rights</b></p><p>Admin rights, on the other hand, provide technical authorization to modify the content and organization of this course area. You can choose between allowing full admin rights or none.</p><p>To allow an assistant, for instance, to co-admin the area, you need to be sure he/she is already registered, then click on the pencil, then check 'Teacher', then 'Ok'.</p><p><b>Co-Trainers</b></p><p>To mention the name of a co-teacher in the heading (co-chairman, etc.), use the 'Course settings' tool. This modification does not automatically register your co-Trainer as a course member. The 'Teachers' field is completely independent of the 'Users' list.</p> <p><b>Tracking and Personal Home Pages</b></p> <p>In addition to showing the users list and modifying their rights, the Users tool also shows individual tracking and allows the teacher to define headings for personal home pages to be completed by users.</p>"
-msgstr ""
+msgstr "<p><b>Bæta við notendum</b></p> <p>Þú getur skráð núverandi nemendur einn af öðrum á námskeiðið með því að smella á tengilinn „Skrá notendur á þetta námskeið“. Venjulega er þó betra að opna námskeiðið fyrir sjálfsskráningu og láta nemendur skrá sig sjálfir. </p> <p><b>Lýsing</b></p> <p>Lýsingin hefur enga tæknilega virkni og veitir engin sérstök réttindi eða forréttindi í kerfinu. Hún gefur einfaldlega til kynna hver er hver, á mannlegum forsendum. Þú getur því breytt þessu með því að smella á blýantinn og skrifa það sem þú vilt: prófessor, aðstoðarmaður, nemandi, gestur, sérfræðingur o.s.frv.</p><p><b>Stjórnendaréttindi</b></p><p>Stjórnendaréttindi veita hins vegar tæknilega heimild til að breyta efni og skipulagi þessa námskeiðssvæðis. Þú getur valið á milli fullra stjórnendaréttinda eða engra.</p><p>Til að leyfa aðstoðarmanni, til dæmis, að vera meðstjórnandi svæðisins, þarftu að ganga úr skugga um að hann/hún sé þegar skráð(ur), smella síðan á blýantinn, haka við „Kennari“ og síðan „Í lagi“.</p><p><b>Meðkennendur</b></p><p>Til að nefna nafn meðkennara í fyrirsögn (meðstjórnandi o.s.frv.) skaltu nota tólið „Námskeiðsstillingar“. Þessi breyting skráir meðkennarann ekki sjálfkrafa sem námskeiðsmeðlim. Reiturinn „Kennarar“ er algjörlega óháður listanum „Notendur“. </p> <p><b>Eftirfylgni og persónulegar heimasíður</b></p> <p>Auk þess að sýna notendalistann og breyta réttindum þeirra sýnir Notendatólið einnig einstaklingsbundna eftirfylgni og gerir kennaranum kleift að skilgreina fyrirsagnir fyrir persónulegar heimasíður sem notendur fylla út.</p>"
 
 msgid "<p><b>Introduction</b></p><p>This tool allows you to create and manage workgroups. On first creation (Create groups), groups are 'empty'. There are many ways to fill them:<ul><li>automatically ('Fill groups (random)'),</li><li>manually ('Edit'),</li><li>self-registration by users (Groups settings: 'Self registration allowed...').</li></ul>These three ways can be combined. You can, for instance, first ask users to self-register.Then if you find some of them didn't register, decide to fill groups automatically (random) in order to complete them. You can also edit each group to determine membership, user by user, after or before self-registration and/or automatically on registration.</p><p>Filling groups, whether automatically or manually, is possible only for users registered on the course. The users list is visible in <b>Users</b> tool. </p><hr noshade size=1><p><b>Create groups</b></p><p>To create new groups, click on 'Create new group(s)' and decide the number of groups to create.</p><hr noshade size=1><p><b>Group settings</b></p><p>You can determine Group settings globally (for all groups).<b>Users may self-register in groups</b>:<p>You create empty groups, users self-register.If you have defined a maximum number, full groups do not accept new members.This method is handy for trainers unfamiliar with the users list when creating groups.</p><b>Tools</b>:</p><p>Every group is assigned either a forum (private or public) or a Documents area(a shared file manager) or (in most cases) both.</p><hr noshade size=1><p><b>Manual editing</b></p><p>Once groups have been created (Create groups), you will see, at the bottom of the page, a list of groups along with with several options:<ul><li><b>Edit</b>Manually modify group name, description, tutor, members list.</li><li><b>Delete</b> Delete a group.</li></ul><hr noshade size=1>"
-msgstr ""
+msgstr "<p><b>Inngangur</b></p><p>Þetta tól gerir þér kleift að búa til og stjórna vinnuhópum. Við fyrstu stofnun (Búa til hópa) eru hóparnir „tómir“. Það eru margar leiðir til að fylla þá:<ul><li>sjálfkrafa („Fylla hópa (af handahófi)“),</li><li>handvirkt („Breyta“),</li><li>sjálfsskráning notenda (Hópstillingar: „Sjálfsskráning leyfð...“).</li></ul>Þessar þrjár leiðir má sameina. Þú getur til dæmis fyrst beðið notendur um að skrá sig sjálfir. Ef þú kemst að því að sumir skráðu sig ekki geturðu ákveðið að fylla hópa sjálfkrafa (af handahófi) til að ljúka þeim. Þú getur einnig breytt hverjum hópi til að ákvarða aðild, notanda fyrir notanda, eftir eða áður en sjálfsskráning og/eða sjálfvirk skráning fer fram.</p><p>Að fylla hópa, hvort sem er sjálfkrafa eða handvirkt, er aðeins mögulegt fyrir notendur sem eru skráðir á námskeiðið. Notendalistinn er sýnilegur í tólínu <b>Notendur</b>. </p><hr noshade size=1><p><b>Búa til hópa</b></p><p>Til að búa til nýja hópa skaltu smella á „Búa til nýjan hóp(a)“ og ákveða fjölda hópa sem á að stofna.</p><hr noshade size=1><p><b>Hópstillingar</b></p><p>Þú getur ákvarðað hópstillingar almennt (fyrir alla hópa).<b>Notendur mega skrá sig sjálfir í hópa</b>:<p>Þú býrð til tóma hópa, notendur skrá sig sjálfir. Ef þú hefur skilgreint hámarksfjölda taka fullir hópar ekki við nýjum meðlimum. Þessi aðferð er hentug fyrir kennara sem þekkja ekki notendalistann þegar hópar eru stofnaðir.</p><b>Tól</b>:</p><p>Hverjum hópi er úthlutað annaðhvort spjallborði (einkaréttu eða opnu) eða skjalasvæði (sameiginlegur skráastjóri) eða (í flestum tilvikum) báðu.</p><hr noshade size=1><p><b>Handvirk breyting</b></p><p>Þegar hópar hafa verið stofnaðir (Búa til hópa) sérðu neðst á síðunni lista yfir hópa ásamt nokkrum valkostum:<ul><li><b>Breyta</b> Breyttu handvirkt heiti hóps, lýsingu, leiðbeinanda, meðlimalista.</li><li><b>Eyða</b> Eyða hópi.</li></ul><hr noshade size=1>"
 
 msgid "<p>The tests tool allows you to create tests containing as many questions as you like.<br><br> You can choose from a range of question formats clearly displayed at the top of the page when you create a test including (for example):<br><br><ul>  <li>Multiple choice (single or multiple answers)</li>  <li>Matching</li>  <li>Fill in the blanks etc.</li></ul>A test can include any number and combination of questions and question formats.</p><hr><b>Test creation</b><p>To create a test, click on the \"New test\" link.<br><br>Type a name for the test, as well as an optional description.<br><br>You can add various elements to this, including audio or video files, e.g. for listening comprehension, but take care to make such files as small as possible to optimise download time (e.g. use mp3 rather than wav files - they're far smaller but perfectly good quality). <br><br>You can also choose between two modes of presentation:<br><br><ul>  <li>Questions on an single page</li>  <li>One question per page (sequentially)</li></ul>and opt for questions to be randomly organised when the test is run.<br><br>Finally, save your test. You will be taken to the question administration.</p><hr><b>Adding a question</b><p>You can now add a question to the newly created test. You can if you wish include a description and/or an image. To create the test types mentioned above, follow the following steps: </p><hr><b>Multiple choice</b><p>In order to create a MAQ / MCQ :<br><br><ul>  <li>Define the answers for your question. You can add or delete an answer by clicking on the right-hand button</li>  <li>Check the left box for the correct answer(s)</li>  <li>Add an optional comment. This comment won't be seen by the user until he/she has answered the question</li>  <li>Give a weighting to each answer. The weighting can be any positive or negative integer (or zero)</li>  <li>Save your answers</li></ul></p><hr><b>Fill in the blanks</b><p>This allows you to create a cloze passage. The purpose is to prompt the user to find words that you have removed from the text.<br><br>To remove a word from the text, and thus create a blank, put brackets [like this] around it.<br><br>Once the text has been typed and blanks defined, you can add a comment that will be seen by the learner depending on the reply to the question.<br><br>Save your text, and you will be taken to the next step allowing you to assign a weighting to each blank. For example, if the question is worth 10 points and you have 5 blanks, you can give a weighting of 2 points to each blank.</p><hr><b>Matching</b><p>This answer type can be chosen so as to create a question where the user will have to connect elements from list A with elements from list B.<br><br>It can also be used to ask the user to arrange elements in a given order.<br><br>First, define the options from which the user will be able to choose the best answer. Then, define the questions which will have to be linked to one of the options previously defined. Finally, connect elements from the first list with those of the second list via the drop-down menu.<br><br>Note: Several elements from the first unit might point to the same element in the second unit.<br><br>Assign a weighting to each correct match, and save your answer.</p><hr><b>Modifying a test</b><p>In order to modify a test, the principle is the same as for creating a test. Just click on the picture <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the test to modify, and follow the instructions above.</p><hr><b>Deleting a test</b><p>In order to delete a test, click on the picture <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> beside the test to delete it.</p><hr><b>Enabling a test</b><p>For a test can be used, you have to enable it by clicking on the picture <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the test name.</p><hr><b>Running the test</b><p>You can try out your test by clicking on its name in the tests list.</p><hr><b>Random questions</b><p>Whenever you create/modify a test, you can decide if you want questions to be drawn in a random order from amongst all test questions.<br><br>By enabling this option, questions will be drawn in a different order every time a user runs the test.<br><br>If you have got a large number of questions, you can opt to randomly draw only x-number of questions from the questions available.</p><hr><b>Questions pool</b><p>When you delete a test, its questions are not removed from the database, so they can be recycled back into another test via the questions pool.<br><br>The questions pool also allows you to re-use the same question in several tests.<br><br>By default, all the questions pertaining to your course are hidden. You can display the questions related to a test, by chosing 'filter' in the drop-down menu.<br><br>Orphan questions are questions that don not belong to any test.</p><hr><b>HotPotatoes Tests</b><p>You can import HotPotatoes tests into a Chamilo portal, to use in the Tests tool. The results of these tests are stored the same way as the results of Chamilo tests and as such can be readily monitored using the Reporting tool. In the case of simple tests, we recommend you use html or htm format; if your test contains pictures, a zip file upload is the most convenient way.</p><p>Note: You can also include HotPotatoes Tests as a step in the Learning Path.</p><b>Method of import</b><ul>  <li>Select the file on your computer using the Browse button <input type=submit value=Browse name=submit2>\ton the right of your screen.</li>\t\t<li>\t\t\tLaunch the upload with the Upload Button <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tYou can open the test by clicking onto its name.\t\t</li>\t</ul>\t<br><b>Useful link</b><br><ul><li>Hot Potatoes home page :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
-msgstr ""
+msgstr "<p>Prófatólið gerir þér kleift að búa til próf sem innihalda eins margar spurningar og þú vilt.<br><br> Þú getur valið úr ýmsum spurningaformum sem birtast greinilega efst á síðunni þegar þú býrð til próf, þar á meðal (til dæmis):<br><br><ul>  <li>Fjölval (eitt eða mörg svör)</li>  <li>Pörun</li>  <li>Fylla í eyður o.s.frv.</li></ul>Próf getur innihaldið hvaða fjölda og samsetningu spurninga og spurningaforma sem er.</p><hr><b>Stofnun prófs</b><p>Til að búa til próf skaltu smella á tengilinn \"Nýtt próf\".<br><br>Skrifaðu heiti prófsins og valfrjálsa lýsingu.<br><br>Þú getur bætt við ýmsum þáttum, þar á meðal hljóð- eða myndskrám, t.d. fyrir hlustunarskilning, en gættu þess að halda slíkum skrám sem minnstum til að hámarka niðurhalstíma (t.d. nota mp3 fremur en wav-skrár – þær eru miklu minni en samt góð gæði). <br><br>Þú getur einnig valið á milli tveggja framsetningarhátta:<br><br><ul>  <li>Spurningar á einni síðu</li>  <li>Ein spurning á síðu (í röð)</li></ul>og valið að spurningum sé raðað af handahófi þegar prófið er tekið.<br><br>Að lokum skaltu vista prófið. Þú verður færð(ur) í spurningastjórnun.</p><hr><b>Bæta við spurningu</b><p>Þú getur nú bætt spurningu við nýstofnaða prófið. Þú getur, ef þú vilt, bætt við lýsingu og/eða mynd. Til að búa til prófategundirnar sem nefndar eru hér að ofan skaltu fylgja eftirfarandi skrefum: </p><hr><b>Fjölval</b><p>Til að búa til MAQ / MCQ :<br><br><ul>  <li>Skilgreindu svörin við spurningunni. Þú getur bætt við eða eytt svari með því að smella á hnappinn til hægri</li>  <li>Hakaðu við reitinn til vinstri fyrir rétt svar(svör)</li>  <li>Bættu við valfrjálsri athugasemd. Notandinn sér þessa athugasemd ekki fyrr en hann/hún hefur svarað spurningunni</li>  <li>Gefðu hverju svari vægi. Vægið getur verið hvaða jákvæða eða neikvæða heiltala sem er (eða núll)</li>  <li>Vistaðu svörin</li></ul></p><hr><b>Fylla í eyður</b><p>Þetta gerir þér kleift að búa til eyðufyllingartexta. Tilgangurinn er að fá notandann til að finna orð sem þú hefur fjarlægt úr textanum.<br><br>Til að fjarlægja orð úr textanum og þannig búa til eyðu skaltu setja sviga [svona] utan um það.<br><br>Þegar textinn hefur verið skrifaður og eyður skilgreindar geturðu bætt við athugasemd sem nemandinn sér eftir svari við spurningunni.<br><br>Vistaðu textann og þú verður færð(ur) í næsta skref þar sem þú getur úthlutað vægi hverri eyðu. Til dæmis, ef spurningin er 10 stig og þú hefur 5 eyður, geturðu gefið hverri eyðu 2 stig.</p><hr><b>Pörun</b><p>Þessa svartegund má velja til að búa til spurningu þar sem notandinn þarf að tengja atriði úr lista A við atriði úr lista B.<br><br>Hún má einnig nota til að biðja notandann um að raða atriðum í tiltekinni röð.<br><br>Fyrst skaltu skilgreina valkostina sem notandinn getur valið besta svarið úr. Síðan skaltu skilgreina spurningarnar sem eiga að tengjast einum af valkostunum sem áður voru skilgreindir. Að lokum skaltu tengja atriði úr fyrsta listanum við atriði úr öðrum listanum með fellivalmyndinni.<br><br>Athugið: Nokkur atriði úr fyrsta einingunni geta bent á sama atriði í annarri einingunni.<br><br>Úthlutaðu vægi hverri réttri pörun og vistaðu svarið.</p><hr><b>Breyta prófi</b><p>Til að breyta prófi er meginreglan sú sama og við stofnun prófs. Smelltu bara á myndina <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> við hlið prófsins sem á að breyta og fylgdu leiðbeiningunum hér að ofan.</p><hr><b>Eyða prófi</b><p>Til að eyða prófi skaltu smella á myndina <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> við hlið prófsins til að eyða því.</p><hr><b>Virkja próf</b><p>Til að hægt sé að nota próf verður þú að virkja það með því að smella á myndina <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> við hlið heitis prófsins.</p><hr><b>Að taka prófið</b><p>Þú getur prófað prófið með því að smella á heiti þess á prófalistanum.</p><hr><b>Spurningar af handahófi</b><p>Alltaf þegar þú býrð til/breytir prófi geturðu ákveðið hvort spurningum eigi að vera dregnar af handahófi úr öllum spurningum prófsins.<br><br>Með því að virkja þennan valkost verða spurningar dregnar í annarri röð í hvert skipti sem notandi tekur prófið.<br><br>Ef þú hefur mikinn fjölda spurninga geturðu valið að draga af handahófi aðeins x-fjölda spurninga úr tiltækum spurningum.</p><hr><b>Spurningasafn</b><p>Þegar þú eyðir prófi eru spurningarnar ekki fjarlægðar úr gagnagrunninum, svo hægt er að endurnýta þær í öðru prófi í gegnum spurningasafnið.<br><br>Spurningasafnið gerir þér einnig kleift að endurnýta sömu spurningu í nokkrum prófum.<br><br>Sjálfgefið eru allar spurningar sem tengjast námskeiðinu þínu faldar. Þú getur birt spurningar sem tengjast prófi með því að velja „sía“ í fellivalmyndinni.<br><br>Munaðarspurningar eru spurningar sem tilheyra engu prófi.</p><hr><b>HotPotatoes-próf</b><p>Þú getur flutt inn HotPotatoes-próf inn á Chamilo-gátt til notkunar í Prófatólinu. Niðurstöður þessara prófa eru vistaðar á sama hátt og niðurstöður Chamilo-prófa og má því auðveldlega fylgjast með þeim með Skýrslutólinu. Ef um einföld próf er að ræða mælum við með html- eða htm-sniði; ef prófið inniheldur myndir er þægilegast að hlaða upp zip-skrá.</p><p>Athugið: Þú getur einnig sett HotPotatoes-próf inn sem skref í námsleið.</p><b>Innflutningsaðferð</b><ul>  <li>Veldu skrána á tölvunni þinni með Browse-hnappinum <input type=submit value=Browse name=submit2>\thægra megin á skjánum.</li>\t\t<li>\t\t\tRæstu upphleðsluna með Upload-hnappinum <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tÞú getur opnað prófið með því að smella á heiti þess.\t\t</li>\t</ul>\t<br><b>Gagnlegur tengill</b><br><ul><li>Heimasíða Hot Potatoes :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
 
 msgid "The Course tool supports two approaches :<ul><li>Create a new course (allowing you to author your own content)</li><li>Import SCORM course</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path?</b></p><p>A Learning Path allows for the presentation of a sequence of learning experiences or activities arranged in distinct sections (in this sense, the Learning Path is what distinguishes a 'course' from a mere repository of random documents). It can be content-based (serving as a table of contents) or activities-based, serving as an agenda or program of action necessary to understand and apply a particular area of knowledge or skill.</p><p>In addition to being  structured, a Learning Path can also be <i>sequential</i>, meaning that the completion of certain steps constitute pre-requisites for accessing others (i.e. 'you cannot go to learning object 2 before learning object 1'). Your sequence can be <i>suggestive</i> (simply displaying steps one after the other) or <i>prescriptive</i> (involving pre-requisites so that learners are required to follow steps in a particular order).</p><p><b>How do I create my own Learning Path (Course)?</b></p><p>Proceed to the 'Learning Path' section.  There you can create as many courses/paths as you wish by clicking the <i>Create a new course</i> tool. You will need to choose a name for the course/path (e.g. <i>Unit 1</i> if you plan to create several units within the overall course). To begin with, the course is empty, waiting for you to add sections and learning objects to it.<br>If you set a course to Visible, it will appear as a new tool on the course homepage. This makes it easier and clearer for students to access.</p><p><b>What learning objects can I add?</b></p><p>All Chamilo tools, activities and content that you consider useful and relevant to your course can be added :<br><ul><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Forums as a whole</li><li>Topics</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note :tests made invisible on the homepage, but included in a path, become visible for learners only as they work through the course.)</li><li>Assignments</li><li>External links</li></ul></p><p><b>Other features</b></p><p>Learners can be asked to follow your course in a given order, as you can set <u>pre-requisites</u>. This means for example that learners cannot go to e.g. Quiz 2 until they have read e.g. Document 1. All learning objects have a status:<i>completed</i> or <i>incomplete</i>, so the progress of learners is clearly reported.</p><p>If you alter the original title of a learning object, the new name will appear in the course, but the original title will not be deleted. So if you want test8.doc to appear as 'Final Exam' in the path, you do not have to rename the file, you can use the new title in the path. It is also useful to give new titles to links which are too long.</p><p>When you're finished, don't forget to check Display mode, (showing, as in learner view, the table of contents on the left and the learning objects on the right,one at a time.)</p><br><p><b>What is a SCORM course and how do I import one?</b></p><p>The learning path tool allows you to upload SCORM-compliant courses.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning companies like NETg, Macromedia, Microsoft, Skillsoft, etc. They act at three levels:</p><ul><li><b>Economy</b> : SCORM renders whole courses or small content units reusable on different Learning Management Systems (LMS) through the separation of content and context,</li><li><b>Pedagogy</b> : SCORM integrates the notion of pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You cannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : SCORM generates a table of contents as an abstraction layer located outside the content and the LMS. It helps both communicate with each other. Mainly communicated are <i>bookmarks</i>(\"Where is John in the course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much time did John spent in chapter 1?\").</li></ul><b>How can I create a SCORM-compliant Learning Path?</b><br><br>The obvious way is to use the Chamilo Authoring tool. However, you may prefer to create complete SCORM compliant websites locally on your own computer before uploading it onto your Chamilo platform. In this case, we recommend the use of a sophisticated tool such as Lectora®, eXe Learning® or Reload®<br></p><p>"
-msgstr ""
+msgstr "<p>Námskeiðstólið styður tvær nálganir :<ul><li>Búa til nýtt námskeið (sem gerir þér kleift að semja eigið efni)</li><li>Flytja inn SCORM-námskeið</li></ul><img src=\"../img/path_help.gif\"><p><b>Hvað er námsleið?</b></p><p>Námsleið gerir kleift að setja fram röð námsreynslu eða athafna sem raðað er í aðskildar einingar (í þessum skilningi er námsleiðin það sem greinir „námskeið“ frá einföldu safn tilviljanakenndra skjala). Hún getur verið efnismiðuð (sem efnisyfirlit) eða athafnamiðuð, sem dagskrá eða aðgerðaáætlun sem nauðsynleg er til að skilja og beita tilteknu þekkingar- eða færnisviði.</p><p>Auk þess að vera skipulögð getur námsleið einnig verið <i>raðbundin</i>, sem þýðir að lokun tiltekinna skrefa eru forsendur fyrir aðgangi að öðrum (þ.e. „þú getur ekki farið í námsaðgerð 2 áður en námsaðgerð 1“). Röðin þín getur verið <i>leiðbeinandi</i> (einfaldlega sýnt skref hvert á eftir öðru) eða <i>fyrirmælandi</i> (með forsendum svo nemendur þurfi að fylgja skrefum í tiltekinni röð).</p><p><b>Hvernig bý ég til mína eigin námsleið (námskeið)?</b></p><p>Farðu í hlutann „Námsleið“. Þar geturðu búið til eins mörg námskeið/leiðir og þú vilt með því að smella á tólið <i>Búa til nýtt námskeið</i>. Þú þarft að velja heiti fyrir námskeiðið/leiðina (t.d. <i>Eining 1</i> ef þú ætlar að búa til nokkrar einingar innan heildarnámskeiðsins). Til að byrja með er námskeiðið tómt og bíður þess að þú bætir við köflum og námsaðgerðum.<br>Ef þú stillir námskeið á Sýnilegt birtist það sem nýtt tól á heimasíðu námskeiðsins. Þetta gerir nemendum auðveldara og skýrara að nálgast það.</p><p><b>Hvaða námsaðgerðum get ég bætt við?</b></p><p>Öll Chamilo-tól, athafnir og efni sem þú telur gagnlegt og viðeigandi fyrir námskeiðið má bæta við :<br><ul><li>Aðskilin skjöl (textar, myndir, Office-skjöl, ...)</li><li>Spjallborð í heild</li><li>Umræðuefni</li><li>Tenglar</li><li>Chamilo-próf</li><li>HotPotatoes-próf<br />(athugið :próf sem eru ósýnileg á heimasíðunni en innifalin í leið verða sýnileg nemendum aðeins þegar þeir vinna sig í gegnum námskeiðið.)</li><li>Verkefni</li><li>Ytri tenglar</li></ul></p><p><b>Aðrir eiginleikar</b></p><p>Nemendur má biðja um að fylgja námskeiðinu í tiltekinni röð, þar sem þú getur sett <u>forsendur</u>. Þetta þýðir til dæmis að nemendur geta ekki farið í t.d. Próf 2 fyrr en þeir hafa lesið t.d. Skjal 1. Allar námsaðgerðir hafa stöðu:<i>lokið</i> eða <i>ólokið</i>, svo framvinda nemenda er greinilega skráð.</p><p>Ef þú breytir upprunalegu heiti námsaðgerðar birtist nýja nafnið í námskeiðinu, en upprunalega heitið er ekki eytt. Þannig að ef þú vilt að test8.doc birtist sem „Lokapróf“ í leiðinni þarftu ekki að endurnefna skrána, þú getur notað nýja heitið í leiðinni. Það er einnig gagnlegt að gefa ný heiti tenglum sem eru of langir.</p><p>Þegar þú ert búin(n) skaltu ekki gleyma að athuga Birtingarham (sem sýnir, eins og í nemendayfirliti, efnisyfirlit til vinstri og námsaðgerðir til hægri, eina í einu.)</p><br><p><b>Hvað er SCORM-námskeið og hvernig flyt ég það inn?</b></p><p>Námsleiðartólið gerir þér kleift að hlaða upp SCORM-samhæfðum námskeiðum.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) er opinn staðall sem helstu e-námsfyrirtæki eins og NETg, Macromedia, Microsoft, Skillsoft o.fl. fylgja. Þau starfa á þremur stigum:</p><ul><li><b>Hagkvæmni</b> : SCORM gerir heilu námskeiðum eða litlum efniseiningum endurnýtanleg á mismunandi námsstjórnunarkerfum (LMS) með því að aðskilja efni og samhengi,</li><li><b>Kennslufræði</b> : SCORM samþættir hugmyndina um forsendu eða <i>röðun</i> (<i>t.d. </i>\"Þú getur ekki farið í kafla 2 áður en þú stendst Próf 1\"),</li><li><b>Tækni</b> : SCORM býr til efnisyfirlit sem útdráttarlag sem er utan efnisins og LMS. Það hjálpar báðum að eiga samskipti. Aðallega er miðlað <i>bókamerkjum</i>(\"Hvar er Jón í námskeiðinu?\"), <i>einkunnum</i> (\"Hvernig stóðst Jón prófið?\") og <i>tíma</i> (\"Hversu miklum tíma eyddi Jón í kafla 1?\").</li></ul><b>Hvernig get ég búið til SCORM-samhæfða námsleið?</b><br><br>Augljósa leiðin er að nota höfundartól Chamilo. Þú gætir þó kosið að búa til heilar SCORM-samhæfðar vefsíður staðbundið á eigin tölvu áður en þú hleður þeim upp á Chamilo-kerfið. Í því tilviki mælum við með notkun háþróaðs tól eins og Lectora®, eXe Learning® eða Reload®<br></p><p>"
 
 msgid "<p>The Course Description tool prompts you to comprehensively describe your course in a systematic way. This description can be used to provide learners with an overview of what awaits them, and can be helpful when you review and evaluate your course. </p> The items merely offer suggestions. If you want to write your own course description, simply create your own headings and descriptions by selecting the  'Other' tool. </p> Otherwise, to complete a description of the course, click on each image, fill it with your text/content and submit. </p>"
-msgstr ""
+msgstr "<p>Námskeiðslýsingartólið hvetur þig til að lýsa námskeiðinu þínu ítarlega á kerfisbundinn hátt. Þessa lýsingu má nota til að veita nemendum yfirlit yfir það sem bíður þeirra og getur verið gagnleg þegar þú ferð yfir og metur námskeiðið. </p> Atriðin eru aðeins tillögur. Ef þú vilt skrifa þína eigin námskeiðslýsingu skaltu einfaldlega búa til þínar eigin fyrirsagnir og lýsingar með því að velja tólið „Annað“. </p> Annars, til að ljúka lýsingu námskeiðsins, smelltu á hverja mynd, fylltu hana með texta/efni og sendu inn. </p>"
 
 msgid "<p>The Links tool allows you to create a library of resources for your students, particularly of resources that you have not created yourself.</p><p>As the list grows, it might prove useful to organise it into categories to help your students find the right information at the right place. You can edit every link to re-assign it to a new category (you will need to create this category first).</p><p>The Description field can be used to provide advance-information on the target web pages but also to describe what you expect the student to do with the link. If, for instance, you point to a website on Aristotle, the description field may ask the student to study the difference between synthesis and analysis."
-msgstr ""
+msgstr "<p>Tenglatólið gerir þér kleift að búa til safn auðlinda fyrir nemendur þína, einkum auðlinda sem þú hefur ekki búið til sjálf(ur).</p><p>Eftir því sem listinn stækkar getur verið gagnlegt að skipuleggja hann í flokka til að hjálpa nemendum að finna réttar upplýsingar á réttum stað. Þú getur breytt hverjum tengli til að úthluta honum nýjum flokki (þú þarft að búa til þennan flokk fyrst).</p><p>Lýsingarreitinn má nota til að veita fyrirframupplýsingar um markvefsíðurnar en einnig til að lýsa því sem þú væntir að nemandinn geri við tengilinn. Ef þú vísar til dæmis á vefsíðu um Aristóteles getur lýsingarreiturinn beðið nemandann um að rannsaka muninn á samþættingu og greiningu."
 
 msgid "<p> As soon as you log in to the system, you will be taken to your own main  page. Here you will see the following: <li> <b> My Courses </b> in the centre of the page, lists the courses in which you are enrolled, with an option for you to create new courses (using the button in the right menu) </li> In the header section, <b> My Profile </b> allows you to change your password, upload your photo to the system or change your username, </li> <b> My Calendar </b>: contains the events within the courses for which you are registered, </li> in the right menu: <b> Edit my list of courses </b> allows you to enroll in courses as learner, (provided the trainer/teacher has authorized entry. here you can also unsubscribe from a course, </li> Links <b> Support Forum </b> and <b> Documentation </b> refer you to the main Chamilo site, where you can ask questions or find up to date information about Chamilo. </li> </ ul> To enter a course (left side of the screen), click on its title. Your profile may vary from course to course. It could be that you are a teacher in one course and a learner in another. In courses for which you are responsible, you have access to the editing tools designed for authoring and managing students, while in courses where you learn, you access a more limited range of tools appropriate for undertaking the course.</p> The form  your own main page takes can vary from one platform to another depending on the options enabled by the system administrator. Thus, for example, there may be some cases where you do not have access to course creation even as a teacher, because this particular function is managed by others within your institution. </p>"
-msgstr ""
+msgstr "<p> Um leið og þú skráir þig inn í kerfið ferðu á þína eigin aðalsíðu. Þar sérðu eftirfarandi: <li> <b> Námskeiðin mín </b> í miðju síðunnar, sem sýnir námskeiðin sem þú ert skráð(ur) á, með möguleika á að búa til ný námskeið (með hnappinum í hægri valmynd) </li> Í haushlutanum gerir <b> Prófíllinn minn </b> þér kleift að breyta lykilorði, hlaða upp mynd af þér í kerfið eða breyta notendanafni, </li> <b> Dagatalið mitt </b>: inniheldur atburði í námskeiðunum sem þú ert skráð(ur) á, </li> í hægri valmynd: <b> Breyta námskeiðslista mínum </b> gerir þér kleift að skrá þig á námskeið sem nemandi (að því gefnu að leiðbeinandi/kennari hafi heimilað aðgang. hér geturðu einnig afskráð þig af námskeiði, </li> Tenglar <b> Þjónustuvettvangur </b> og <b> Leiðbeiningar </b> vísa þér á aðalsíðu Chamilo, þar sem þú getur spurt spurninga eða fundið nýjustu upplýsingar um Chamilo. </li> </ ul> Til að fara inn á námskeið (vinstra megin á skjánum) smellirðu á titil þess. Prófíllinn þinn getur verið mismunandi eftir námskeiðum. Þú gætir verið kennari á einu námskeiði og nemandi á öðru. Á námskeiðum sem þú berð ábyrgð á hefurðu aðgang að ritunarverkfærum til að semja efni og stjórna nemendum, en á námskeiðum þar sem þú lærir hefurðu aðgang að takmarkaðri úrvali verkfæra sem henta náminu.</p> Útlit eigin aðalsíðu getur verið mismunandi milli kerfa eftir því hvaða valkostir kerfisstjóri hefur virkjað. Þannig getur til dæmis verið að þú hafir ekki aðgang að því að búa til námskeið, jafnvel sem kennari, vegna þess að sú aðgerð er í höndum annarra innan stofnunarinnar. </p>"
 
 msgid "<p> The Agenda tool appears both as a calendar within each course and as a personal diary tool for each student providing an overview of events in the courses in which they are enrolled. (Groups can also have their own Agenda.) </ p> Users can use the Agenda, which displays course content and activites, as a reference tool to organise their day to day or week to week learning.<p>In addition to being visible in the agenda, new events are indicated to the learner whenever he/she logs in. The system sees what has been added since his/her last visit and icons appear on the portal home page beside the courses indicating new events and announcements.</p> </p> If you want to organize students' work in a time-related way, it is best to use the Learning Paths tool as a way of charting a logical progression through various activites and content through the presentation of a formal table of contents.</p>"
-msgstr ""
+msgstr "<p> Dagskráarverkfærið birtist bæði sem dagatal innan hvers námskeiðs og sem persónulegt dagbókarverkfæri fyrir hvern nemanda sem veitir yfirlit yfir atburði á námskeiðunum sem hann er skráður á. (Hópar geta einnig haft sína eigin dagskrá.) </ p> Notendur geta notað dagskrána, sem sýnir námskeiðsefni og virkni, sem viðmiðunarverkfæri til að skipuleggja nám frá degi til dags eða viku til viku.<p>Auk þess að vera sýnilegir í dagskránni eru nýir atburðir merktir nemandanum í hvert sinn sem hann/hún skráir sig inn. Kerfið sér hvað hefur bæst við síðan síðasta heimsókn og tákn birtast á forsíðu gáttarinnar við hlið námskeiða sem gefa til kynna nýja atburði og tilkynningar.</p> </p> Ef þú vilt skipuleggja vinnu nemenda eftir tíma er best að nota námsleiðarverkfærið til að kortleggja rökrétt framvindu í gegnum ýmsa virkni og efni með formlegu efnisyfirliti.</p>"
 
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
-msgstr ""
+msgstr "<p> Tilkynningaverkfærið gerir þér kleift að senda tölvupóst til sumra eða allra nemenda þinna, eða til tiltekinna hópa.  þú gætir viljað láta þá vita um nýtt skjal, minna þá á skilafrest verkefnis eða draga fram og deila sérstaklega góðu verki. Að senda slíkar tölvupósttilkynningar getur einnig verið gagnleg áminning til að virkja nemendur sem hafa ekki heimsótt síðuna um tíma (svo framarlega sem það er ekki ofnotað!). </p> <b> Að hafa samband við tiltekna notendur </b> <p> Auk þess að senda almenna tilkynningu til allra þátttakenda námskeiðsins geturðu sent tölvupóst til eins eða fleiri einstaklinga/hópa. Þegar þú býrð til nýja tilkynningu smellirðu bara á <i>Sýnilegt fyrir</i> og velur notendur úr listunum til vinstri og bætir þeim við sem viðtakendum með örvunum.</p>"
 
 msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
-msgstr ""
+msgstr "<p>Spjallverkfærið gerir þér kleift að spjalla „í beinni“ við nemendur þína í rauntíma. </p> Ólíkt flestum viðskiptalegum spjallforritum er spjallið í Chamilo vefbundið og krefst engrar viðbótaruppsetningar (t.d. MSN® Yahoo Messenger®. Skype® o.s.frv.) Lykilkostur þessarar lausnar er því að hún er strax aðgengileg nemendum og auðvelt er að fella spjall inn í námskeiðið. Auk þess vista spjallverkfæri Chamilo umræður sjálfkrafa og geyma þær til auðvelds aðgangs síðar í gegnum skjalaverkfærið. (Athugið að skilaboðin geta tekið 1 til 5 sekúndur að endurnýjast við hvert skipti – það þýðir ekki að eitthvað sé að!!). </p> Ef nemendur hafa hlaðið upp prófílmynd birtist hún (minnkuð) í vinstri dálki –  annars birtist sjálfgefin mynd. </p> Það er á ábyrgð kennarans að eyða þráðum þegar hann/hún telur það viðeigandi. </p> <b>Kennslufræðileg notkun</b> <p>Að bæta spjalli við námskeiðið er ekki alltaf góð hugmynd. Til að nýta þetta verkfæri sem best þarftu að tryggja að umræður haldist við námskeiðsefnið. Þú gætir til dæmis ákveðið að halda spjallinu faldu þar til kemur að „formlegum“ tímasettri lotu. Þannig, þótt frelsi umræðna sé vissulega takmarkað, geturðu betur tryggt að slíkir fundir í beinni verði gagnlegir.</p>"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
-msgstr ""
+msgstr "<p>Verkefnaverkfærið er mjög einfalt verkfæri sem gerir nemendum kleift að hlaða skjölum upp á námskeiðið. Það má nota til að taka við svörum við opnum spurningum frá einstaklingum eða hópum, eða til að hlaða upp hvaða öðru formi skjala sem er</p><p>Þú getur gert skrár sýnilegar öllum nemendum sjálfgefið, eða aðeins sýnilegar þér, eftir kröfum námskeiðsins. Að gera allar skrár sýnilegar er gagnlegt þegar þú vilt til dæmis biðja nemendur um að deila skoðunum á ritgerðum hvers annars, eða þegar þú vilt gefa þeim reynslu af því að birta texta almennt. Haltu skrám ósýnilegum ef þú vilt til dæmis spyrja alla sömu spurningar en forðast „svindl“. Að gera skjöl ósýnileg gerir þér einnig kleift að stjórna því hvenær skjal verður aðgengilegt öllum öðrum nemendum. </p><p>Ef þú vilt að nemendur skili skjali til einkunnagjafar er best, innan verkfærisins, að úthluta innsendingum í möppu.</p> <p>Þú getur notað verkfærið til að setja skilafresti og leiðbeiningar um afhendingu, auk hámarkseinkunnar/stiga.</p>"
 
 msgid "<p>The Reporting tool helps you track your students' attendance and progress: Did they connect to the system, When? How many times? How much do they score in tests? Did they already upload their assignment paper? When? If you use SCORM courses, you can even track how much time a student spent on a particular module or chapter. Reporting provides two levels of information:<ul><li><b>Global</b>: How many students have accessed the course? What are the most frequently visited pages and links?</i><li><b>Specific</b>: What pages has John Doe visited? What score does he get in tests? When did he last connect to the platform?</li></ul>"
-msgstr ""
+msgstr "<p>Skýrsluverkfærið hjálpar þér að fylgjast með mætingu og framvindu nemenda: Tengdustu þeir kerfinu, hvenær? Hversu oft? Hversu mörg stig fá þeir á prófum? Hafa þeir þegar hlaðið upp verkefninu? Hvenær? Ef þú notar SCORM-námskeið geturðu jafnvel fylgst með hversu miklum tíma nemandi eyddi í tiltekna einingu eða kafla. Skýrslur veita tvö upplýsingastig:<ul><li><b>Almennt</b>: Hversu margir nemendur hafa farið inn á námskeiðið? Hverjar eru mest heimsóttu síðurnar og tenglar?</i><li><b>Sértækt</b>: Hvaða síður hefur Jón Jónsson heimsótt? Hvaða einkunn fær hann á prófum? Hvenær tengdist hann síðast kerfinu?</li></ul>"
 
 msgid "Course settings Help"
-msgstr ""
+msgstr "Hjálp við námskeiðsstillingar"
 
 msgid "<p>The Course Settings allows you to manage the global parameters of your course: Title, code, language, name of trainer etc.</p><p>The options situated in the centre of the page deal with confidentiality settings : is the course public or private? Can users register to it? You can use these settings dynamically e.g. allow self-registration for one week > ask your students to register > close access to self-registration > remove possible intruders through the Users list. This way you keep control of who is registered while avoiding the administrative hassle of registering them yourself.</p>(Note - some organizations prefer not to use this method and opt to centralise registration. In this case, participants cannot enrol in your course at all, even if you, as a trainer / teacher, wish to give them access. To check this, look at the home page of your campus (as opposed to your course homepage) to see if the 'Register' link is present.) </p> <p>At the bottom of the page, you can back up the course and delete it. Backup will create a file on the server and allow you to copy it on your own Hard Disk locally so that there will be two backups each in different places. If you back up a course and then delete it you will not be be able to restore it yourself, but the system administrator can do this for you if you give him/her the code of your course. Backing up a course is also a good way to get all your documents transferred to your own computer. You will need a tool, like Winzip® to UNZIP the archive. Note that backing up a course does not automatically remove it.</p>"
-msgstr ""
+msgstr "<p>Námskeiðsstillingar gera þér kleift að stjórna almennum færibreytum námskeiðsins: Titill, kóði, tungumál, nafn leiðbeinanda o.s.frv.</p><p>Valkostirnir í miðju síðunnar snúast um trúnaðarstillingar: er námskeiðið opið eða lokað? Getur notendur skráð sig? Þú getur notað þessar stillingar á sveigjanlegan hátt t.d. leyfa sjálfskráningu í eina viku > biðja nemendur um að skrá sig > loka fyrir sjálfskráningu > fjarlægja mögulega óboðna gesti í gegnum notendalistann. Þannig heldurðu stjórn á því hverjir eru skráðir án þess að þurfa að skrá þá sjálf(ur).</p>(Athugið – sumar stofnanir kjósa að nota ekki þessa aðferð og velja miðlæga skráningu. Í því tilviki geta þátttakendur alls ekki skráð sig á námskeiðið þitt, jafnvel þótt þú, sem leiðbeinandi / kennari, viljir veita þeim aðgang. Til að kanna þetta skaltu skoða forsíðu háskólasvæðisins (ekki forsíðu námskeiðsins) og sjá hvort tengillinn „Skrá“ sé til staðar.) </p> <p>Neðst á síðunni geturðu tekið öryggisafrit af námskeiðinu og eytt því. Öryggisafrit býr til skrá á þjóninum og gerir þér kleift að afrita hana á þinn eigin harða disk svo að tvö afrit séu á ólíkum stöðum. Ef þú tekur afrit af námskeiði og eyðir því síðan geturðu ekki endurheimt það sjálf(ur), en kerfisstjóri getur gert það fyrir þig ef þú gefur honum/henni kóða námskeiðsins. Að taka afrit af námskeiði er einnig góð leið til að fá öll skjöl yfir á þína tölvu. Þú þarft forrit, eins og Winzip®, til að AFÞJAPPA safnskránni. Athugaðu að afritun námskeiðs fjarlægir það ekki sjálfkrafa.</p>"
 
 msgid "Add a Link help"
-msgstr ""
+msgstr "Hjálp við að bæta við tengli"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr ""
+msgstr "<p>Chamilo er einingakerfi. Þú getur falið og sýnt verkfæri hvenær sem þú vilt, eftir kröfum verkefnisins eða tilteknum tímalegum hluta þess. En þú getur einnig bætt við verkfærum eða síðum á forsíðuna sem þú hefur búið til sjálf(ur) eða sem koma utan frá Chamilo-gáttinni. Þannig geturðu sérsniðið forsíðu námskeiðsins og gert hana að þinni.</p><p>Við það viltu eflaust bæta við eigin tenglum á síðuna. Tenglar geta verið af tveimur gerðum:<ul><li><b>Ytri tengill</b>: þú býrð til tengil á forsíðunni á vefsíðu utan námskeiðssvæðisins. Í því tilviki velurðu „Markmið= Í nýjum glugga“ vegna þess að þú vilt ekki að sú vefsíða komi í stað Chamilo-umhverfisins.</li><li><b>Innri tengill</b>: þú tengir við síðu eða verkfæri innan Chamilo-námskeiðsins. Til að gera það ferðu fyrst á viðkomandi síðu (eða skjal, eða verkfæri), afritar slóðina úr veffangastikunni (CTRL+C), ferð síðan í „Bæta við tengli“ og límir slóðina í slóðareitinn og gefur henni það nafn sem þú vilt. Í því tilviki velurðu „Markmið=Sami gluggi“ vegna þess að þú vilt halda Chamilo-hausnum efst og tenglasíðunni í sama umhverfi.</li></ul>Þegar tenglar hafa verið búnir til er ekki hægt að breyta þeim. Til að breyta þeim er eina lausnin að óvirkja og eyða þeim og byrja upp á nýtt.</p>"
 
 msgid "Clear content"
 msgstr "Hreinsa efni"
@@ -15307,6 +15316,30 @@ msgstr "Tími síðustu viku"
 
 msgid "System status"
 msgstr "Staða kerfis"
+
+msgid "Courses space"
+msgstr "Námskeiðarými"
+
+msgid "Database server configuration and metadata"
+msgstr "Stillingar gagnagrunnsþjóns og lýsigögn"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Disknotkun eftir námskeiði á móti diskkvóta"
+
+msgid "Information about your webserver configuration"
+msgstr "Upplýsingar um stillingar vefþjónsins"
+
+msgid "Paths"
+msgstr "Slóðir"
+
+msgid "State of Chamilo requirements"
+msgstr "Staða krafna Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Staða PHP-stillinga á þjóninum"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path() fastar leystir á þessari gátt"
 
 msgid "Is writable"
 msgstr "Er skrifanlegt"
@@ -20674,6 +20707,9 @@ msgstr "Á hæfnishjólinu sýnir það nafn hæfni þegar hún hefur stuttan k�
 
 msgid "Created by"
 msgstr "Búið til af"
+
+msgid "Created by %s on %s"
+msgstr "Búið til af %s þann %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Fela aðalleiðbeinanda í skeytaskiptum"
@@ -26898,7 +26934,7 @@ msgid "Content Security Policy is an effective measure to protect your site from
 msgstr "Content Security Policy er áhrifarík ráðstöfun til að vernda vefsvæðið þitt gegn XSS árásum. Með því að leyfa aðeins heimildir fyrir samþykkt efni geturðu komið í veg fyrir að vafrinn hlaði inn skaðlegum eignum. Þessi stilling er sérstaklega flókin að setja upp með WYSIWYG ritlum, en ef þú bætir við öllum lénum sem þú vilt leyfa fyrir iframes í child-src setningunni ætti þetta dæmi að virka fyrir þig. Þú getur komið í veg fyrir að JavaScript keyri frá utanaðkomandi aðilum (þar á meðal innan SVG mynda) með því að nota stranga lista í 'script-src' breytunni. Skildu eftir autt til að slökkva á. Dæmi um stillingu: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 
 msgid "Content Security Policy report only"
-msgstr "Content Security Policy report only"
+msgstr "Content Security Policy, aðeins skýrsla"
 
 msgid "This setting allows you to experiment by reporting but not enforcing some Content Security Policy."
 msgstr "Þessi stilling gerir þér kleift að prófa með því að tilkynna en ekki framfylgja einhverri Content Security Policy."
@@ -26946,7 +26982,7 @@ msgid "Immediately block users who have been disabled by the admin through users
 msgstr "Loka strax á notendur sem stjórnandi hefur gert óvirka í gegnum notendastjórnun. Annars halda notendur sem hafa verið gerðir óvirkir fyrri réttindum sínum þar til þeir skrá sig út."
 
 msgid "Session cookie samesite"
-msgstr "Session cookie samesite"
+msgstr "SameSite fyrir lotuköku"
 
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr "Virkja samesite:None breytu fyrir session cookie. Frekari upplýsingar: https://www.chromium.org/updates/same-site og https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
@@ -31877,6 +31913,9 @@ msgstr "Skrifa eitthvað til %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Æskilegt: SVG. Mælt með breidd PNG: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Mælt með PNG-breidd: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Hlaða inn PNG merki fyrir tölvupóst (~%spx breidd)"
 
@@ -31912,6 +31951,9 @@ msgstr "Smelltu til að setja inn"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Æskilegt: SVG. Hámarksstærð PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Hámarksstærð PNG: %spx."
 
 msgid "View badge"
 msgstr "Skoða skírteini"
@@ -37638,67 +37680,67 @@ msgid "Use these fields to classify the exercise independently from its display 
 msgstr "Notaðu þessi reiti til að flokka æfinguna óháð birtingarvalkostum hennar."
 
 msgid "Invite by email"
-msgstr ""
+msgstr "Bjóða með tölvupósti"
 
 msgid "Invitation has been sent"
-msgstr ""
+msgstr "Boð hefur verið sent"
 
 msgid "Sent on"
-msgstr ""
+msgstr "Sent þann"
 
 msgid "Accepted on"
-msgstr ""
+msgstr "Samþykkt þann"
 
 msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
-msgstr ""
+msgstr "Þetta námskeið er opið í lotu. Að senda boð hér skráir viðtakandann á alla lotuna %s, ekki aðeins þetta námskeið."
 
 msgid "Revoke"
-msgstr ""
+msgstr "Afturkalla"
 
 msgid "Revoked"
-msgstr ""
+msgstr "Afturkallað"
 
 msgid "Invitation has been revoked"
-msgstr ""
+msgstr "Boð hefur verið afturkallað"
 
 msgid "Are you sure you want to revoke the invitation sent to %s?"
-msgstr ""
+msgstr "Ertu viss um að þú viljir afturkalla boðið sem sent var til %s?"
 
 msgid "No default room"
-msgstr ""
+msgstr "Ekkert sjálfgefið herbergi"
 
 msgid "Floor"
-msgstr ""
+msgstr "Hæð"
 
 msgid "Capacity"
-msgstr ""
+msgstr "Rými"
 
 msgid "Use attendance default room"
-msgstr ""
+msgstr "Nota sjálfgefið mætingarherbergi"
 
 msgid "Floor number"
-msgstr ""
+msgstr "Hæðarnúmer"
 
 msgid "Copy to students"
-msgstr ""
+msgstr "Afrita til nemenda"
 
 msgid "Generate a quick test on this topic"
-msgstr ""
+msgstr "Búa til stutt próf um þetta efni"
 
 msgid "The saved document content will be sent to an AI model for processing."
-msgstr ""
+msgstr "Innihald vistaða skjalsins verður sent til gervigreindarlíkans til vinnslu."
 
 msgid "MCP API key"
-msgstr ""
+msgstr "MCP API-lykill"
 
 msgid "Authorized applications"
-msgstr ""
+msgstr "Heimilaðar forrit"
 
 msgid "Your session is about to expire"
-msgstr ""
+msgstr "Lotan þín er að renna út"
 
 msgid "Do you want to continue your session?"
-msgstr ""
+msgstr "Viltu halda lotunni áfram?"
 
 msgid "Your session details have been lost, please login again."
 msgstr "Upplýsingar um setuna þína hafa glatast, vinsamlegast skráðu þig inn aftur."
@@ -38062,6 +38104,9 @@ msgstr "Ljúka"
 
 msgid "Draft saved"
 msgstr "Drög vistuð"
+
+msgid "Save as draft"
+msgstr "Vista sem drög"
 
 msgid "Statement"
 msgstr "Yfirlýsing"
@@ -39484,4 +39529,265 @@ msgstr "Þessi notandi er þegar skráður í lotuna."
 
 msgid "This user is already subscribed to the course."
 msgstr "Þessi notandi er þegar skráður í námskeiðið."
+
+msgid "Multi URLs"
+msgstr "Margar slóðir"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Einingar eins og notendur og námskeið geta verið virkar á fleiri en einni slóð á sama tíma, svo summa gildanna hér að neðan passar ekki við heildarfjöldann."
+
+msgid "User directory"
+msgstr "Notendaskrá"
+
+msgid "Course directory"
+msgstr "Námskeiðaskrá"
+
+msgid "URLs"
+msgstr "Slóðir"
+
+msgid "User details"
+msgstr "Notendaupplýsingar"
+
+msgid "Course details"
+msgstr "Námskeiðsupplýsingar"
+
+msgid "View details"
+msgstr "Skoða nánar"
+
+msgid "Average progress"
+msgstr "Meðalframvinda"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Bein skráning tilheyrir námskeiðinu í heild, ekki tiltekinni slóð, svo sömu „Bein“ tölur eru endurteknar hér að neðan fyrir hverja slóð sem þetta námskeið er tengt við. Lotur eru ætlaðar leiðin til að deila námskeiði milli slóða með mælingum sem raunverulega eru ólíkar eftir slóð."
+
+msgid "Logins (all URLs combined)"
+msgstr "Innskráningar (allar slóðir samanlagt)"
+
+msgid "Unique logins"
+msgstr "Einstakar innskráningar"
+
+msgid "Parent URL"
+msgstr "Yfirslóð"
+
+msgid "Logins (your URLs)"
+msgstr "Innskráningar (þínar slóðir)"
+
+msgid "The picture could not be uploaded"
+msgstr "Ekki tókst að hlaða upp myndinni"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Þessi reitategund er enn ekki að fullu studd — aðeins hrátt gildi."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Þetta námskeið er nálægt hámarki notendaskráninga (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Pláss er takmarkað í eiginleikum námskeiðsins. Til að auka hámarkið skaltu fá"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Notendaskráningar eru takmarkaðar í eiginleikum námskeiðsins. Til að auka hámarkið skaltu fá"
+
+msgid "pro plan"
+msgstr "pro-áskrift"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "og flytja öryggisafrit þessa námskeiðs inn í nýja greidda námskeiðið þitt í gegnum Námskeiðsviðhald, eða opna beiðni til að fá námskeiðið umbreytt í pro-námskeið þegar þú hefur keypt þessa áskrift."
+
+msgid "Tired of writing questions?"
+msgstr "Leiður á að skrifa spurningar?"
+
+msgid "Upgrade your plan"
+msgstr "Uppfærðu áskriftina"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "í pro-áskrift til að fá aðstoð gervigreindar við að búa til gæðaspurningar fyrir þig."
+
+msgid "Student Success AI Coach"
+msgstr "Gervigreindarþjálfari fyrir námsárangur nemenda"
+
+msgid "No AI text provider is configured."
+msgstr "Enginn gervigreindartextaveitandi er stilltur."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Viðbótarleiðbeiningar fyrir gervigreindarþjálfarann"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Dæmi: Þessi nemandi á erfitt með að halda athygli. Stingdu upp á styttri verkefnum og tíðari skilningsathugunum."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Hafðu þennan glugga opinn á meðan Chamilo undirbýr tillöguna."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Tillagan var einnig vistuð í pósthólfi þínu í Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Tillagan var búin til og vistuð fyrir þennan nemanda, en ekki tókst að búa til afrit í pósthólfinu."
+
+msgid "Student success recommendation"
+msgstr "Tillaga um námsárangur nemanda"
+
+msgid "Generated"
+msgstr "Búið til"
+
+msgid "Priority actions"
+msgstr "Forgangsverkefni"
+
+msgid "Evidence"
+msgstr "Sönnunargögn"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Þessi eiginleiki greinir innihald þessa námskeiðs og sendir upplýsingar um námshegðun til stillta gervigreindarlíkansins. Þó að auðkennanleg persónuupplýsingar séu ekki sendar beint til líkansins gætu sum gögn óbeint veitt auðkennanlegar upplýsingar um notandann. Ef þú ert í vafa skaltu alltaf ráðfæra þig við gervigreindartengiliðinn þinn áður en þú notar þennan eiginleika."
+
+msgid "Additional activities"
+msgstr "Viðbótarverkefni"
+
+msgid "Rhythm"
+msgstr "Hraði"
+
+msgid "Learning methodologies"
+msgstr "Námsaðferðir"
+
+msgid "Other recommendations"
+msgstr "Aðrar tillögur"
+
+msgid "Analyzing course..."
+msgstr "Greini námskeið..."
+
+msgid "Analyzing student's learning..."
+msgstr "Greini nám nemanda..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Með því að samþykkja þessa boðun verður þú tengd(ur) beiðandanum þannig að hluti eða allar prófílgögn þín verða aðgengileg til lesturs. Gakktu úr skugga um að þú deilir ekki of miklu með því að skoða prófílinn þinn með notendum sem þú treystir nú þegar."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Leyfi til að nota hljóðnema er ekki virkt, vinsamlegast virkjaðu það í vafranum til að taka upp hljóð"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Þessi útgáfa af Chamilo kemur með einu (eða fleiri) fjöltyngdu námskeiði foruppsettu. Þú getur skoðað þau á námskeiðslistanum og ákveðið hvort þau eigi að vera opinber eða ekki."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Þú hefur ekki aðgang að neinni vefslóð sem stendur. Vinsamlegast biddu kerfisstjórann um að veita þér aðgang að þeirri vefslóð sem þú tilheyrir."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Ef valinn gervigreindarveitandi er ekki fullvalda þjónusta getur innihald valins skjals verið sent til ytri þjónustu. Ekki halda áfram með trúnaðarupplýsingar nema stofnunin leyfi það."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Smelltu á Sameina á þeim reikningi sem á að halda. Kerfið sameinar alla aðra reikninga í sama tvítekningahópi við hann. Sameinaðir reikningar verða eytt varanlega og hverfa af þessari skýrslu. Þessa aðgerð er ekki hægt að afturkalla."
+
+msgid "Permanent deletion"
+msgstr "Varanleg eyðing"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Sameina eyðir þegar sameinuðum reikningum varanlega. Notaðu notendalistann aðeins ef þú vilt eyða öðrum reikningum handvirkt."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Þú ert að breyta merki fyrir sjálfgefna sjónræna þemað „chamilo“. Íhugaðu að búa til/nota sérsniðið sjónrænt þema til að forðast að yfirskrifa sjálfgefin gildi."
+
+msgid "This exercise has no questions."
+msgstr "Þessi æfing hefur engar spurningar."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Hvernig á að sýna endurgjöf/athugasemd við hverja spurningu? Þessi valkostur skilgreinir hvernig hún birtist nemandanum þegar hann tekur prófið."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Þessi forrit geta nálgast Chamilo sem þú, með núverandi heimildum reikningsins og engu meira. Afturkallaðu þau sem þú notar ekki lengur eða þekkir ekki."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Vinsamlegast útskýrðu hvers vegna þú vilt biðja um afturköllun á löglegu samþykki þínu, svo við getum afgreitt beiðnina rétt"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Notaðu þennan persónulega lykil til að tengja fjarlægan MCP-biðlara við Chamilo með þínum eigin reikningi og heimildum."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Heildarlykillinn birtist aðeins einu sinni. Geymdu hann örugglega. Nýr lykill ógildir þann fyrri strax."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Lykillinn auðkennir biðlarann sem Chamilo-reikninginn þinn. Hann veitir ekki heimildir sem reikningurinn hefur ekki nú þegar."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Birta yfirlýsingu um skilmála og skilyrði á skráningarsíðunni og krefjast þess að gestur samþykki þau til að skrá sig"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Innihald skilmála og skilyrða verður sent til gervigreindarmáls. Farðu yfir tillögðu þýðinguna áður en þú vistar."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Vistað útgáfa er þegar til fyrir markmálið. Ef þessi tillaga er vistuð verður ný útgáfa búin til."
+
+msgid "Acquired"
+msgstr "Öðlast"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Ráðlögð námskeiðsmynd: 1600 × 900 px (16:9). Notaðu að minnsta kosti 1280 × 720 px fyrir skarpa birtingu á stærri eða háþéttniskjám."
+
+msgid "Courses of the selected URL"
+msgstr "Námskeið valinnar vefslóðar"
+
+msgid "Course categories in selected URL"
+msgstr "Námskeiðsflokkar á valinni vefslóð"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Reikningurinn þinn er virkur, þú getur skráð þig inn og skoðað námskeiðin þín núna."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Fyrst þarftu að sækja leiðréttingarnar <a href='%s'> hér </a>.\nSíðan þarftu að afþjappa skránni og breyta skránum eins og þú vilt án þess að breyta skráarheitum.\nSíðan búðu til zip-skrá með þeim breyttu skrám og hlaðið henni upp í þetta eyðublað."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Bæta nemendum frá lotu %s við lotu %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Sýna allar tilraunir eftir æfingu"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Þessi aðgerð myndi fara yfir leyfilegt notendahámark fyrir valið námskeið."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Ekki tókst að framkvæma sumar áskriftir vegna þess að þær náðu leyfilegu notendahámarki fyrir viðkomandi námskeið. Notendur/námskeið sem urðu fyrir áhrifum: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Þessi skrá listar þekktar skýrslusíður, flokk þeirra, kanóníska vefslóð, eldri vefslóð og væntanlegt hlutverkasvið. Kanónískar vefslóðir leiða á núverandi útfærslu skýrslu og framfylgja skjalfestri hlutverkafylki skýrslunnar."
+
+msgid "E-mail notification subscription"
+msgstr "Áskrift að tölvupósttilkynningum"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Þessi aðgerð myndi fara yfir hámarkið %s notendur á námskeið sem stjórnendur hafa sett. Áskriftinni hefur verið hætt."
+
+msgid "Language the document is in"
+msgstr "Tungumál skjalsins"
+
+msgid "There is no session still"
+msgstr "Engin lota er enn til"
+
+msgid "Origin courses from session"
+msgstr "Upprunanámskeið úr lotu"
+
+msgid "Destination courses from session"
+msgstr "Áfanganámskeið úr lotu"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Opinber aðgangur (aðgangur fyrir alla meðlimi námskeiðsins)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Búðu til %d orðasafnshugtök fyrir námskeið um '%s', hvert hugtak á einni línu, með skilgreiningu á næstu línu og einni auðri línu á milli hvers hugtaks. Bættu ekki við neinni annarri sniðsetningu fyrir titil né skilgreiningu."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Þetta er stutt lýsing á námskeiðinu '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Þú notar Chamilo á Windows-kerfi. Hjálpartæki fyrir skjalabreytingu eru ekki tiltæk fyrir fulltextaleit."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Sjálfvirk ræsing prófs er KVEIKT. Nemendur verða endurbeint á prófalistann."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Sjálfvirk ræsing prófs er KVEIKT. Nemendur verða endurbeint á tiltekið próf."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Áskriftarhámarki þessa námskeiðs hefur verið náð (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Telja námskeið eftir tungumáli"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Notendur sem síðast höfðu aðgang eldri en valin dagsetning."
 

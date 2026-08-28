@@ -4144,7 +4144,7 @@ msgid "MySql Client"
 msgstr "MySql klijent"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL server"
 
 msgid "Owner"
 msgstr "Vlasnik"
@@ -4351,7 +4351,7 @@ msgid "Production Server"
 msgstr "Produkcioni server"
 
 msgid "Test Server"
-msgstr "Test Server"
+msgstr "Test server"
 
 msgid "Who's Online"
 msgstr "Ko je Online"
@@ -9269,6 +9269,15 @@ msgstr "Извештај о времену за сесију %s"
 
 msgid "Error"
 msgstr "Грешка"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Korisnik je kreiran, ali jedno od dodatnih polja profila nije moglo biti sačuvano."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Korisnik je ažuriran, ali jedno od dodatnih polja profila nije moglo biti sačuvano."
+
+msgid "One or more fields contain invalid values."
+msgstr "Jedno ili više polja sadrži nevažeće vrednosti."
 
 msgid "Anonymous"
 msgstr "Анонимно"
@@ -15309,6 +15318,30 @@ msgstr "Vreme provedeno prošle nedelje"
 msgid "System status"
 msgstr "Status sistema"
 
+msgid "Courses space"
+msgstr "Prostor kurseva"
+
+msgid "Database server configuration and metadata"
+msgstr "Konfiguracija servera baze podataka i metapodaci"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Korišćenje diska po kursu u odnosu na kvotu diska"
+
+msgid "Information about your webserver configuration"
+msgstr "Informacije o konfiguraciji vašeg veb-servera"
+
+msgid "Paths"
+msgstr "Putanje"
+
+msgid "State of Chamilo requirements"
+msgstr "Stanje zahteva Chamilo-a"
+
+msgid "State of PHP settings on the server"
+msgstr "Stanje PHP podešavanja na serveru"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "konstante api_get_path() razrešene na ovom portalu"
+
 msgid "Is writable"
 msgstr "Može se pisati"
 
@@ -15382,7 +15415,7 @@ msgid "MySQL protocol"
 msgstr "MySQL protokol"
 
 msgid "MySQL server host"
-msgstr "MySQL server host"
+msgstr "Host MySQL servera"
 
 msgid "MySQL server information"
 msgstr "MySQL informacije o serveru"
@@ -16423,7 +16456,7 @@ msgid "Off"
 msgstr "Isključeno"
 
 msgid "Web server"
-msgstr "Web server"
+msgstr "Veb server"
 
 msgid "Not inserted"
 msgstr "Nije ubačeno"
@@ -20323,7 +20356,7 @@ msgid "Start video call"
 msgstr "Pokreni video poziv"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL videa"
 
 msgid "Insert a valid URL"
 msgstr "Unesite validan URL"
@@ -20675,6 +20708,9 @@ msgstr "Na točku veština prikazuje ime veštine kada ima kratki kod."
 
 msgid "Created by"
 msgstr "Kreirao"
+
+msgid "Created by %s on %s"
+msgstr "Kreirao/la %s dana %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Sakrij glavnog trenera u dropbox-u"
@@ -26623,7 +26659,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfiguracija LDAP konekcije"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Postavi datum isteka pri prvoj prijavi"
@@ -26947,7 +26983,7 @@ msgid "Immediately block users who have been disabled by the admin through users
 msgstr "Odmah blokiraj korisnike koje je admin onemogućio preko upravljanja korisnicima. Inače, korisnici koji su onemogućeni zadržavaju prethodne privilegije dok se ne odjave."
 
 msgid "Session cookie samesite"
-msgstr "Session cookie samesite"
+msgstr "SameSite kolačića sesije"
 
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr "Omogući samesite:None parametar za session cookie. Više info: https://www.chromium.org/updates/same-site i https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
@@ -30902,7 +30938,7 @@ msgid "Account locked until"
 msgstr "Nalog zaključan do"
 
 msgid "Google Calendar URL"
-msgstr "Google Calendar URL"
+msgstr "URL Google kalendara"
 
 msgid "User chat status"
 msgstr "Status četa korisnika"
@@ -31583,7 +31619,7 @@ msgid "In case you need to define the charset to use when sending those e-mails.
 msgstr "U slučaju da treba da definišete charset za slanje tih e-pošta. Ostavite prazno ako niste sigurni."
 
 msgid "Mail: Debug"
-msgstr "Mail: Debug"
+msgstr "Pošta: otklanjanje grešaka"
 
 msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
 msgstr "Izaberite da li želite da omogućite debug logove za slanje e-pošte. Ovi će vam dati više informacija o tome šta se dešava prilikom povezivanja na mail servis, ali nisu elegantni i mogu pokvariti dizajn stranice. Koristite samo kada nema korisničke aktivnosti."
@@ -31879,6 +31915,9 @@ msgstr "Napiši nešto na %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Preporučeno: SVG. PNG preporučena širina: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Preporučena širina PNG: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Otpremi PNG logo za e-poruke (~%spx širine)"
 
@@ -31914,6 +31953,9 @@ msgstr "Kliknite za umetanje"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Preferirano: SVG. PNG maksimalna veličina: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Maksimalna veličina PNG: %spx."
 
 msgid "View badge"
 msgstr "Pogledaj značku"
@@ -32420,7 +32462,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Brisanje nije uspelo: nedostaje kontekst kursa ili nevažeći ID pitanja."
 
 msgid "AI Tutor"
-msgstr "AI Tutor"
+msgstr "AI tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "APCu ekstenzija mora biti instalirana i omogućena kako bi platforma mogla da je koristi."
@@ -37397,7 +37439,7 @@ msgid "The scan stopped early because a subdirectory could not be read (check fi
 msgstr "Skeniranje je rano prekinuto jer se poddirektorijum nije mogao pročitati (proverite dozvole datoteka). Rezultati ispod mogu biti delimični."
 
 msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Previše izmena da bi se prikazale u celosti; ispod su prikazani samo prvi unosi svake kategorije. Potpunu listu potražite u CEF dnevniku."
 
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% datoteka se nije moglo pročitati (dozvole) i preskočene su."
@@ -37484,19 +37526,19 @@ msgid "Git remote changed"
 msgstr "Git udaljeni repozitorijum promenjen"
 
 msgid "Press enter to select"
-msgstr "Press enter to select"
+msgstr "Pritisnite Enter da izaberete"
 
 msgid "Press enter to remove"
-msgstr "Press enter to remove"
+msgstr "Pritisnite Enter da uklonite"
 
 msgid "No elements found. Consider changing the search query."
-msgstr "No elements found. Consider changing the search query."
+msgstr "Nema pronađenih elemenata. Razmislite o promeni upita za pretragu."
 
 msgid "List is empty."
-msgstr "List is empty."
+msgstr "Lista je prazna."
 
 msgid "Your session has expired. Please try again."
-msgstr "Your session has expired. Please try again."
+msgstr "Vaša sesija je istekla. Pokušajte ponovo."
 
 msgid "Generate with AI"
 msgstr "Generiši pomoću veštačke inteligencije"
@@ -37508,7 +37550,7 @@ msgid "Back to account"
 msgstr "Nazad na nalog"
 
 msgid "Your feedback will help us improve future training sessions."
-msgstr "Your feedback will help us improve future training sessions."
+msgstr "Vaše povratne informacije pomoći će nam da unapredimo buduće obuke."
 
 msgid "Thank you for sharing your feedback."
 msgstr "Hvala što ste podelili svoje mišljenje."
@@ -38064,6 +38106,9 @@ msgstr "Završavanje"
 
 msgid "Draft saved"
 msgstr "Nacrt sačuvan"
+
+msgid "Save as draft"
+msgstr "Sačuvaj kao nacrt"
 
 msgid "Statement"
 msgstr "Izjava"
@@ -39146,7 +39191,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard čitanje"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Održavanje veze tabele rezultata"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard čekanje"
@@ -39486,4 +39531,265 @@ msgstr "Ovaj korisnik je već prijavljen na sesiju."
 
 msgid "This user is already subscribed to the course."
 msgstr "Ovaj korisnik je već prijavljen na kurs."
+
+msgid "Multi URLs"
+msgstr "Više URL-ova"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entiteti kao što su korisnici i kursevi mogu biti aktivni na više od jednog URL-a istovremeno, tako da zbir vrednosti ispod neće odgovarati ukupnom broju."
+
+msgid "User directory"
+msgstr "Direktorijum korisnika"
+
+msgid "Course directory"
+msgstr "Direktorijum kurseva"
+
+msgid "URLs"
+msgstr "URL-ovi"
+
+msgid "User details"
+msgstr "Detalji korisnika"
+
+msgid "Course details"
+msgstr "Detalji kursa"
+
+msgid "View details"
+msgstr "Prikaži detalje"
+
+msgid "Average progress"
+msgstr "Prosečan napredak"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Direktna upisivanja pripadaju kursu kao celini, a ne određenom URL-u, pa se iste vrednosti za „Direktno“ ponavljaju ispod za svaki URL sa kojim je ovaj kurs povezan. Sesije su predviđeni način deljenja kursa između URL-ova sa metrikama koje se zaista razlikuju po URL-u."
+
+msgid "Logins (all URLs combined)"
+msgstr "Prijave (svi URL-ovi zajedno)"
+
+msgid "Unique logins"
+msgstr "Jedinstvene prijave"
+
+msgid "Parent URL"
+msgstr "Nadređeni URL"
+
+msgid "Logins (your URLs)"
+msgstr "Prijave (vaši URL-ovi)"
+
+msgid "The picture could not be uploaded"
+msgstr "Sliku nije moguće otpremiti"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Ovaj tip polja još nije u potpunosti podržan — samo sirova vrednost."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Ovaj kurs se približava ograničenju pretplate korisnika (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Prostor je ograničen kroz svojstva vašeg kursa. Da biste povećali ograničenje, nabavite"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Pretplate korisnika su ograničene kroz svojstva vašeg kursa. Da biste povećali ograničenje, nabavite"
+
+msgid "pro plan"
+msgstr "pro plan"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "i uvezite rezervnu kopiju ovog kursa putem Održavanja kursa u svoj novi plaćeni kurs, ili otvorite tiket da se kurs pretvori u pro kurs kada nabavite ovaj plan."
+
+msgid "Tired of writing questions?"
+msgstr "Umorni ste od pisanja pitanja?"
+
+msgid "Upgrade your plan"
+msgstr "Nadogradite svoj plan"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "na pro plan da biste dobili pomoć veštačke inteligencije u generisanju kvalitetnih pitanja."
+
+msgid "Student Success AI Coach"
+msgstr "AI trener za uspeh studenata"
+
+msgid "No AI text provider is configured."
+msgstr "Nije konfigurisan nijedan AI provajder teksta."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Dodatna uputstva za AI trenera"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Primer: Ovaj polaznik ima poteškoće sa održavanjem pažnje. Predložite kraće aktivnosti i češće provere razumevanja."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Držite ovaj prozor otvorenim dok Chamilo priprema preporuku."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Preporuka je takođe sačuvana u vašem Chamilo sandučetu."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Preporuka je generisana i sačuvana za ovog polaznika, ali kopija u sandučetu nije mogla da se kreira."
+
+msgid "Student success recommendation"
+msgstr "Preporuka za uspeh studenta"
+
+msgid "Generated"
+msgstr "Generisano"
+
+msgid "Priority actions"
+msgstr "Prioritetne akcije"
+
+msgid "Evidence"
+msgstr "Dokazi"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Ova funkcija će analizirati sadržaj ovog kursa i poslati informacije o ponašanju u učenju konfigurisanom AI modelu. Iako se AI modelu ne šalju direktno identifikovani lični podaci, neki poslati podaci mogu indirektno pružiti identifikujuće informacije o korisniku. Ako niste sigurni, uvek se konsultujte sa osobom zaduženom za AI pre korišćenja ove funkcije."
+
+msgid "Additional activities"
+msgstr "Dodatne aktivnosti"
+
+msgid "Rhythm"
+msgstr "Ritam"
+
+msgid "Learning methodologies"
+msgstr "Metodologije učenja"
+
+msgid "Other recommendations"
+msgstr "Ostale preporuke"
+
+msgid "Analyzing course..."
+msgstr "Analiza kursa..."
+
+msgid "Analyzing student's learning..."
+msgstr "Analiza učenja studenta..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Prihvatanjem ovog poziva bićete povezani sa korisnikom koji je poslao zahtev na način koji će omogućiti da deo ili svi podaci vašeg profila budu dostupni za čitanje tom korisniku. Proverite da ne delite previše tako što ćete pregledati svoj profil sa korisnicima kojima već verujete."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Dozvola za korišćenje mikrofona nije omogućena, omogućite je u pregledaču da biste snimali zvuk"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Ova verzija Chamiloa dolazi sa jednim (ili više) unapred instaliranih višejezičnih kurseva. Pregledajte ih na listi kurseva i odlučite da li treba da budu javni."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Trenutno nemate pristup nijednom URL-u. Zamolite administratora da vam odobri pristup URL-u kojem pripadate."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Ako izabrani AI provajder nije suverena usluga, sadržaj izabranog dokumenta može biti poslat spoljnoj usluzi. Ne nastavljajte sa poverljivim informacijama osim ako to nije dozvoljeno u vašoj organizaciji."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Kliknite na Ujedini na nalogu koji treba da ostane. Sistem će spojiti sve ostale naloge iz iste grupe duplikata u njega. Spojeni nalozi biće trajno obrisani i nestaju iz ovog izveštaja. Ova radnja se ne može opozvati."
+
+msgid "Permanent deletion"
+msgstr "Trajno brisanje"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Ujedinjavanje već trajno briše spojene naloge. Koristite listu korisnika samo ako želite ručno da obrišete dodatne naloge."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Menjate logotipe za podrazumevanu vizuelnu temu „chamilo“. Razmislite o kreiranju/korišćenju prilagođene vizuelne teme da ne biste prepisali podrazumevane vrednosti."
+
+msgid "This exercise has no questions."
+msgstr "Ova vežba nema pitanja."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Kako treba prikazati povratnu informaciju/komentar za svako pitanje? Ova opcija određuje kako će se prikazati polazniku tokom testa."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Ove aplikacije mogu pristupiti Chamilou u vaše ime, koristeći dozvole vašeg postojećeg naloga i ništa više. Opozovite sve koje više ne koristite ili ne prepoznajete."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Objasnite zašto želite da zatražite povlačenje pravnog pristanka, kako bismo pravilno obradili vaš zahtev"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Koristite ovaj lični ključ da povežete udaljeni MCP klijent sa Chamiloom sa vašim nalogom i dozvolama."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Kompletan ključ se prikazuje samo jednom. Čuvajte ga bezbedno. Generisanje novog ključa odmah poništava prethodni."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Ključ autentifikuje klijenta kao vaš Chamilo nalog. Ne daje dozvole koje vaš nalog već nema."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Prikaži izjavu o uslovima korišćenja na stranici za registraciju; zahtevaj od posetioca da prihvati uslove da bi se registrovao"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Sadržaj uslova korišćenja biće poslat AI jezičkom modelu. Pregledajte predloženi prevod pre čuvanja."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Sačuvana verzija već postoji za ciljni jezik. Čuvanjem ovog predloga kreira se nova verzija."
+
+msgid "Acquired"
+msgstr "Stečeno"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Preporučena slika kursa: 1600 × 900 px (16:9). Koristite najmanje 1280 × 720 px za oštar prikaz na većim ili ekranima visoke gustine."
+
+msgid "Courses of the selected URL"
+msgstr "Kursevi izabranog URL-a"
+
+msgid "Course categories in selected URL"
+msgstr "Kategorije kurseva na izabranom URL-u"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Vaš nalog je aktivan, sada možete da se prijavite i pregledate kurseve."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Prvo preuzmite ispravke <a href='%s'> ovde </a>.\nZatim raspakujte tu datoteku i uredite datoteke po želji, bez menjanja imena datoteka.\nZatim napravite zip datoteku sa tim izmenjenim datotekama i otpremite je u ovom obrascu."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Dodavanje studenata iz sesije %s u sesiju %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Prikaži sve pokušaje po vežbi"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Ova operacija bi premašila dozvoljeni limit korisnika za izabrani kurs."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Neke pretplate nisu mogle da se izvrše jer je dostignut dozvoljeni limit korisnika za pogođeni kurs. Pogođeni korisnici/kursevi: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Ovaj registar navodi poznate stranice izveštaja, njihovu kategoriju, kanonski URL, stari URL i očekivanu ulogu publike. Kanonski URL-ovi vode do trenutne implementacije izveštaja i primenjuju dokumentovanu matricu uloga izveštaja."
+
+msgid "E-mail notification subscription"
+msgstr "Pretplata na obaveštenja e-poštom"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Ova operacija bi premašila limit od %s korisnika po kursu koji su postavili administratori. Pretplata je otkazana."
+
+msgid "Language the document is in"
+msgstr "Jezik na kojem je dokument"
+
+msgid "There is no session still"
+msgstr "Još uvek nema sesije"
+
+msgid "Origin courses from session"
+msgstr "Izvorni kursevi iz sesije"
+
+msgid "Destination courses from session"
+msgstr "Odredišni kursevi iz sesije"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Javni pristup sa portala početne stranice čak i bez prijavljivanja"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Generiši %d pojmova rečnika za kurs o '%s', svaki pojam u jednom redu, sa definicijom u sledećem redu i jednim praznim redom između svakog pojma. Ne dodavaj nikakvo drugo formatiranje za naslov ni za definiciju."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Ovo je kratak opis kursa '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Koristite Chamilo na Windows platformi. Pomoćnici za konverziju dokumenata nisu dostupni za indeksiranje punog teksta."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Podešavanje automatskog pokretanja testa je UKLJUČENO. Studenti će biti preusmereni na listu testova."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Podešavanje automatskog pokretanja testa je UKLJUČENO. Studenti će biti preusmereni na određeni test."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Dostignut je limit pretplate za ovaj kurs (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Broj kurseva po jeziku"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Korisnici čiji je poslednji pristup stariji od izabranog datuma."
 

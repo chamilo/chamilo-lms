@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Helsingar"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formelprøve: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel-døme: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -9267,6 +9267,15 @@ msgstr "Tidsrapport for samling %s"
 msgid "Error"
 msgstr "Feil"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Brukaren vart oppretta, men eitt av dei ekstra profilfelta kunne ikkje lagrast."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Brukaren vart oppdatert, men eitt av dei ekstra profilfelta kunne ikkje lagrast."
+
+msgid "One or more fields contain invalid values."
+msgstr "Eitt eller fleire felt inneheld ugyldige verdiar."
+
 msgid "Anonymous"
 msgstr "Anonym"
 
@@ -15306,6 +15315,30 @@ msgstr "Tid brukt forrige veke"
 msgid "System status"
 msgstr "Systemstatus"
 
+msgid "Courses space"
+msgstr "Kursområde"
+
+msgid "Database server configuration and metadata"
+msgstr "Konfigurasjon og metadata for databaseserver"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Diskbruk per kurs mot diskkvote"
+
+msgid "Information about your webserver configuration"
+msgstr "Informasjon om konfigurasjonen av vevtenaren din"
+
+msgid "Paths"
+msgstr "Stiar"
+
+msgid "State of Chamilo requirements"
+msgstr "Status for Chamilo-krav"
+
+msgid "State of PHP settings on the server"
+msgstr "Status for PHP-innstillingar på tenaren"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path()-konstantar løyste på denne portalen"
+
 msgid "Is writable"
 msgstr "Er skrivbar"
 
@@ -20672,6 +20705,9 @@ msgstr "På kompetansehjulet viser det namnet på kompetansen når den har kort 
 
 msgid "Created by"
 msgstr "Oppretta av"
+
+msgid "Created by %s on %s"
+msgstr "Oppretta av %s den %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Skjul generell trenar i dropbox"
@@ -31876,6 +31912,9 @@ msgstr "Skriv noko til %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Føretrekne: SVG. PNG anbefalt breidde: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Tilrådd PNG-breidd: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Last opp PNG-logo for e-post (~%spx breidde)"
 
@@ -31911,6 +31950,9 @@ msgstr "Klikk for å setja inn"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Føretrek SVG. PNG maks storleik: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Maks PNG-storleik: %spx."
 
 msgid "View badge"
 msgstr "Vis merke"
@@ -37394,7 +37436,7 @@ msgid "The scan stopped early because a subdirectory could not be read (check fi
 msgstr "Skanninga stoppa tidleg fordi ei undermappe ikkje kunne lesast (sjekk filrettar). Resultata nedanfor kan vere ufullstendige."
 
 msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
-msgstr "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "For mange endringar til å lista alle; berre dei første oppføringane i kvar kategori er viste nedanfor. Sjå CEF-loggen for den fullstendige lista."
 
 msgid "%count% file(s) could not be read (permissions) and were skipped."
 msgstr "%count% fil(er) kunne ikkje lesast (rettar) og vart hoppa over."
@@ -37499,40 +37541,40 @@ msgid "Generate with AI"
 msgstr "Generer med AI"
 
 msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
-msgstr "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Ei moderne, innbydande illustrasjon som representerer emnet for dette kurset, i ein rein flat-designstil, med fargane til plattforma mi som aksentar."
 
 msgid "Back to account"
 msgstr "Tilbake til konto"
 
 msgid "Your feedback will help us improve future training sessions."
-msgstr "Your feedback will help us improve future training sessions."
+msgstr "Tilbakemeldinga di vil hjelpa oss å forbetra framtidige opplæringsøkter."
 
 msgid "Thank you for sharing your feedback."
-msgstr "Thank you for sharing your feedback."
+msgstr "Takk for at du deler tilbakemeldinga di."
 
 msgid "How satisfied are you with the overall quality of the training?"
-msgstr "How satisfied are you with the overall quality of the training?"
+msgstr "Kor nøgd er du med den samla kvaliteten på opplæringa?"
 
 msgid "How satisfied are you with the relevance of the content?"
-msgstr "How satisfied are you with the relevance of the content?"
+msgstr "Kor nøgd er du med relevansen av innhaldet?"
 
 msgid "How satisfied are you with the clarity of the explanations?"
-msgstr "How satisfied are you with the clarity of the explanations?"
+msgstr "Kor nøgd er du med klårleiken i forklaringane?"
 
 msgid "How satisfied are you with the organization and pace of the training?"
-msgstr "How satisfied are you with the organization and pace of the training?"
+msgstr "Kor nøgd er du med organiseringa og tempoet i opplæringa?"
 
 msgid "How satisfied are you with the practical usefulness of what you learned?"
-msgstr "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Kor nøgd er du med den praktiske nytta av det du lærte?"
 
 msgid "Would you recommend this training to other people?"
-msgstr "Would you recommend this training to other people?"
+msgstr "Ville du tilrådd denne opplæringa til andre?"
 
 msgid "What should we improve in future editions?"
-msgstr "What should we improve in future editions?"
+msgstr "Kva bør vi forbetra i framtidige utgåver?"
 
 msgid "Very satisfied"
-msgstr "Very satisfied"
+msgstr "Svært nøgd"
 
 msgid "Satisfied"
 msgstr "Satisfied"
@@ -37544,25 +37586,25 @@ msgid "Dissatisfied"
 msgstr "Dissatisfied"
 
 msgid "Very dissatisfied"
-msgstr "Very dissatisfied"
+msgstr "Svært misnøgd"
 
 msgid "Add destination"
-msgstr "Add destination"
+msgstr "Legg til destinasjon"
 
 msgid "Add this test to the assessment tool"
-msgstr "Add this test to the assessment tool"
+msgstr "Legg til denne testen i vurderingsverktøyet"
 
 msgid "Attempts and timing"
-msgstr "Attempts and timing"
+msgstr "Forsøk og tidsbruk"
 
 msgid "Available questions"
-msgstr "Available questions"
+msgstr "Tilgjengelege spørsmål"
 
 msgid "Cancel and return to learning path"
-msgstr "Cancel and return to learning path"
+msgstr "Avbryt og gå tilbake til læringsstien"
 
 msgid "Category destinations"
-msgstr "Category destinations"
+msgstr "Kategori-destinasjonar"
 
 msgid "Classification"
 msgstr "Classification"
@@ -37637,7 +37679,7 @@ msgid "Use these fields to classify the exercise independently from its display 
 msgstr "Bruk desse felta til å klassifisere øvinga uavhengig av visingsvala."
 
 msgid "Invite by email"
-msgstr "Invite by email"
+msgstr "Inviter via e-post"
 
 msgid "Invitation has been sent"
 msgstr "Invitasjonen er sendt"
@@ -38061,6 +38103,9 @@ msgstr "Avsluttar"
 
 msgid "Draft saved"
 msgstr "Utkast lagra"
+
+msgid "Save as draft"
+msgstr "Lagra som utkast"
 
 msgid "Statement"
 msgstr "Påstand"
@@ -39483,4 +39528,265 @@ msgstr "Denne brukaren er allereie meld på økta."
 
 msgid "This user is already subscribed to the course."
 msgstr "Denne brukaren er allereie meld på kurset."
+
+msgid "Multi URLs"
+msgstr "Fleire URL-ar"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Einingar som brukarar og kurs kan vere aktive i meir enn éin URL samstundes, så summen av verdiane under vil ikkje stemme med totalen."
+
+msgid "User directory"
+msgstr "Brukarkatalog"
+
+msgid "Course directory"
+msgstr "Kurskatalog"
+
+msgid "URLs"
+msgstr "URL-ar"
+
+msgid "User details"
+msgstr "Brukardetaljar"
+
+msgid "Course details"
+msgstr "Kursdetaljar"
+
+msgid "View details"
+msgstr "Vis detaljar"
+
+msgid "Average progress"
+msgstr "Gjennomsnittleg framgang"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Direkte innmelding gjeld for kurset som heilskap, ikkje for ein spesifikk URL, så dei same «Direkte»-tala blir gjentekne under for kvar URL dette kurset er kopla til. Økter er den tiltenkte måten å dele eit kurs på tvers av URL-ar med målingar som faktisk skil seg per URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Innloggingar (alle URL-ar samanlagt)"
+
+msgid "Unique logins"
+msgstr "Unike innloggingar"
+
+msgid "Parent URL"
+msgstr "Foreldre-URL"
+
+msgid "Logins (your URLs)"
+msgstr "Innloggingar (dine URL-ar)"
+
+msgid "The picture could not be uploaded"
+msgstr "Biletet kunne ikkje lastast opp"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Denne felttypen er ikkje fullt støtta enno — berre råverdi."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Dette kurset nærmar seg grensa for brukarinnmeldingar (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Plassen er avgrensa gjennom kurseigenskapane dine. For å auke grensa, skaff ein"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Brukarinnmeldingar er avgrensa gjennom kurseigenskapane dine. For å auke grensa, skaff ein"
+
+msgid "pro plan"
+msgstr "pro-plan"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "og importer sikkerheitskopien av dette kurset via kursvedlikehald til det nye betalte kurset ditt, eller opne ein sak for å få kurset konvertert til eit pro-kurs når du har skaffa denne planen."
+
+msgid "Tired of writing questions?"
+msgstr "Lei av å skrive spørsmål?"
+
+msgid "Upgrade your plan"
+msgstr "Oppgrader planen din"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "til ein pro-plan for å få hjelp frå ei KI til å lage kvalitetsfråsmål for deg."
+
+msgid "Student Success AI Coach"
+msgstr "KI-rettleiar for studentframgang"
+
+msgid "No AI text provider is configured."
+msgstr "Ingen KI-tekstleverandør er konfigurert."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Tilleggsinstruksjonar for KI-rettleiaren"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Døme: Denne eleven har vanskeleg for å halde merksemda. Føreslå kortare aktivitetar og meir hyppige sjekkar av forståing."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Hald dette vindauget ope medan Chamilo førebur tilrådinga."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Tilrådinga vart òg lagra i Chamilo-innboksen din."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Tilrådinga vart generert og lagra for denne eleven, men kopien til innboksen kunne ikkje opprettast."
+
+msgid "Student success recommendation"
+msgstr "Tilråding om studentframgang"
+
+msgid "Generated"
+msgstr "Generert"
+
+msgid "Priority actions"
+msgstr "Prioriterte tiltak"
+
+msgid "Evidence"
+msgstr "Bevis"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Denne funksjonen vil analysere innhaldet i dette kurset og sende informasjon om læringsåtferd til den konfigurerte KI-modellen. Sjølv om det ikkje blir sendt direkte identifiserbare personopplysningar til KI-modellen, kan noko av dataa indirekte gje identifiserbar informasjon om brukaren. Ved tvil, sjekk alltid med KI-referansepersonen din før du brukar denne funksjonen."
+
+msgid "Additional activities"
+msgstr "Tilleggsaktivitetar"
+
+msgid "Rhythm"
+msgstr "Rytme"
+
+msgid "Learning methodologies"
+msgstr "Læringsmetodar"
+
+msgid "Other recommendations"
+msgstr "Andre tilrådingar"
+
+msgid "Analyzing course..."
+msgstr "Analyserer kurs..."
+
+msgid "Analyzing student's learning..."
+msgstr "Analyserer studentens læring..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Ved å godta denne invitasjonen blir du kopla til den førespurnande brukaren slik at noko eller all profilinformasjonen din blir tilgjengeleg for lesing av den førespurnande brukaren. Pass på at du ikkje deler for mykje ved å sjekke profilen din med brukarar du allereie stolar på."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Tillating til å bruke mikrofonen er ikkje slått på. Slå ho på i nettlesaren for å ta opp lyd"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Denne versjonen av Chamilo kjem med eitt (eller fleire) fleirspråklege kurs førehandsinstallert. Du kan sjå gjennom dei i kurslista og avgjere om dei skal vere offentlege eller ikkje."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Du har for tida ikkje tilgang til nokon URL. Be administratoren om å gje deg tilgang til URL-en du høyrer til."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Dersom den valde KI-leverandøren ikkje er ei suveren teneste, kan innhaldet i det valde dokumentet bli sendt til ei ekstern teneste. Ikkje fortset med konfidensiell informasjon med mindre organisasjonen din tillèt det."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Klikk Samle på kontoen som skal vere att. Systemet slår saman alle andre kontoar i same duplikatgruppe inn i den. Samanlagde kontoar blir sletta for godt og forsvinn frå denne rapporten. Denne handlinga kan ikkje angrast."
+
+msgid "Permanent deletion"
+msgstr "Permanent sletting"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Samle slettar allereie samanlagde kontoar for godt. Bruk brukarlista berre om du vil slette fleire kontoar manuelt."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Du endrar logoar for standard visuell tema «chamilo». Vurder å opprette/bruke eit eige visuelt tema for å unngå å overskrive standardane."
+
+msgid "This exercise has no questions."
+msgstr "Denne øvinga har ingen spørsmål."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Korleis skal tilbakemelding/kommentar for kvart spørsmål visast? Dette valet definerer korleis det blir vist for eleven når hen tek testen."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Desse programma kan få tilgang til Chamilo som deg, med dei eksisterande konto-rettane dine og ikkje meir. Trekk tilbake alle du ikkje lenger brukar eller kjenner att."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Forklar kvifor du vil be om tilbaketrekking av det juridiske samtykket ditt, slik at vi kan handsame førespurnaden skikkeleg"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Bruk denne personlege nøkkelen til å kople ein ekstern MCP-klient til Chamilo med di eiga konto og dine rettar."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Den fullstendige nøkkelen blir vist berre éin gong. Lagre han trygt. Å generere ein ny nøkkel gjer den førre ugyldig med ein gong."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Nøkkelen autentiserer klienten som Chamilo-kontoen din. Han gjev ikkje rettar som kontoen din ikkje allereie har."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Vis ei vilkår og vilkårsfråsegn på registreringssida, krev at besøkande godtek vilkåra for å registrere seg"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Innhaldet i vilkåra og vilkåra blir sendt til ein KI-språkmodell. Gå gjennom den føreslegne omsetjinga før du lagrar ho."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Det finst allereie ein lagra versjon for målspråket. Å lagre dette forslaget opprettar ein ny versjon."
+
+msgid "Acquired"
+msgstr "Oppnådd"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Tilrådd kursbilete: 1600 × 900 px (16:9). Bruk minst 1280 × 720 px for skarp vising på større eller høgtettheitsskjermar."
+
+msgid "Courses of the selected URL"
+msgstr "Kurs for den valde URL-en"
+
+msgid "Course categories in selected URL"
+msgstr "Kurskategoriar i vald URL"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Kontoen din er aktiv; du kan logge inn og sjå kursa dine no."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Først må du laste ned rettingane <a href='%s'> her </a>.\nDeretter må du pakke ut fila og redigere filene slik du vil, utan å endre filnamna.\nLag deretter ei zip-fil med dei endra filene og last ho opp i dette skjemaet."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Legg til studentar frå økt %s til økt %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Vis alle forsøk per øving"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Denne operasjonen ville overstige den tillatne brukargrensa for det valde kurset."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Nokre abonnement kunne ikkje utførast fordi dei nådde den tillatne brukargrensa for det ramma kurset. Brukarar/kurs ramma: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Dette registeret listar kjende rapportsider, kategori, kanonisk URL, eldre URL og forventa rollepublikum. Kanoniske URL-ar rutar til den gjeldande rapportimplementeringa og handhevar den dokumenterte rapportrollematrisen."
+
+msgid "E-mail notification subscription"
+msgstr "Abonnement på e-postvarsling"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Denne operasjonen ville overstige grensa på %s brukarar per kurs sett av administratorane. Abonnementet er avbrote."
+
+msgid "Language the document is in"
+msgstr "Språket dokumentet er på"
+
+msgid "There is no session still"
+msgstr "Det finst enno inga økt"
+
+msgid "Origin courses from session"
+msgstr "Opphavskurs frå økt"
+
+msgid "Destination courses from session"
+msgstr "Mål kurs frå økt"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Offentleg tilgang (tilgang autorisert for alle kursmedlemmer)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Generer %d glossarterm for eit kurs om '%s', kvar term på ei eiga linje, med definisjonen på neste linje og ei blank linje mellom kvar term. Ikkje legg til anna formatering for tittelen eller definisjonen."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Dette er ei kort skildring av kurset '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Du brukar Chamilo på ein Windows-plattform. Hjelparar for dokumentkonvertering er ikkje tilgjengelege for fulltekstindeksering."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Innstillinga for automatisk oppstart av test er PÅ. Studentane blir omdirigerte til testlista."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Innstillinga for automatisk oppstart av test er PÅ. Studentane blir omdirigerte til ein bestemt test."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Abonnementsgrensa for dette kurset er nådd (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Tel kurs etter språk"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Brukarar der siste tilgang er eldre enn den valde datoen."
 

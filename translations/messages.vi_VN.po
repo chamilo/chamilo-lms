@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mẫu công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -4140,10 +4140,10 @@ msgid "works"
 msgstr "work"
 
 msgid "MySql Client"
-msgstr "MySql Client"
+msgstr "Máy khách MySQL"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "Máy chủ MySQL"
 
 msgid "Owner"
 msgstr "Chủ sở hữu"
@@ -9268,6 +9268,15 @@ msgstr "Báo cáo thời gian cho buổi %s"
 
 msgid "Error"
 msgstr "Lỗi"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Người dùng đã được tạo, nhưng một trong các trường hồ sơ bổ sung không thể lưu."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Người dùng đã được cập nhật, nhưng một trong các trường hồ sơ bổ sung không thể lưu."
+
+msgid "One or more fields contain invalid values."
+msgstr "Một hoặc nhiều trường chứa giá trị không hợp lệ."
 
 msgid "Anonymous"
 msgstr "Ẩn danh"
@@ -15308,6 +15317,30 @@ msgstr "Thời gian dành tuần trước"
 msgid "System status"
 msgstr "Trạng thái hệ thống"
 
+msgid "Courses space"
+msgstr "Không gian khóa học"
+
+msgid "Database server configuration and metadata"
+msgstr "Cấu hình máy chủ cơ sở dữ liệu và siêu dữ liệu"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Dung lượng đĩa theo khóa học so với hạn mức đĩa"
+
+msgid "Information about your webserver configuration"
+msgstr "Thông tin về cấu hình máy chủ web của bạn"
+
+msgid "Paths"
+msgstr "Đường dẫn"
+
+msgid "State of Chamilo requirements"
+msgstr "Trạng thái các yêu cầu của Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Trạng thái cài đặt PHP trên máy chủ"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Hằng số api_get_path() được phân giải trên cổng này"
+
 msgid "Is writable"
 msgstr "Có thể ghi"
 
@@ -15387,7 +15420,7 @@ msgid "MySQL server information"
 msgstr "Thông tin máy chủ MySQL"
 
 msgid "MySQL client"
-msgstr "MySQL client"
+msgstr "Máy khách MySQL"
 
 msgid "Protocol used by this server"
 msgstr "Giao thức được sử dụng bởi máy chủ này"
@@ -20674,6 +20707,9 @@ msgstr "Trên bánh xe kỹ năng, hiển thị tên kỹ năng khi nó có mã 
 
 msgid "Created by"
 msgstr "Tạo bởi"
+
+msgid "Created by %s on %s"
+msgstr "Tạo bởi %s vào %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Ẩn giảng viên chung trong hộp thả"
@@ -31878,6 +31914,9 @@ msgstr "Viết gì đó đến %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Ưu tiên: SVG. Chiều rộng PNG khuyến nghị: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG khuyến nghị chiều rộng: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Tải lên logo PNG cho email (~%spx chiều rộng)"
 
@@ -31913,6 +31952,9 @@ msgstr "Nhấp để chèn"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Ưu tiên: SVG. Kích thước tối đa PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG kích thước tối đa: %spx."
 
 msgid "View badge"
 msgstr "Xem huy hiệu"
@@ -38064,6 +38106,9 @@ msgstr "Đang hoàn tất"
 msgid "Draft saved"
 msgstr "Bản nháp đã lưu"
 
+msgid "Save as draft"
+msgstr "Lưu dưới dạng bản nháp"
+
 msgid "Statement"
 msgstr "Đề bài"
 
@@ -39485,4 +39530,265 @@ msgstr "Người dùng này đã đăng ký vào phiên học."
 
 msgid "This user is already subscribed to the course."
 msgstr "Người dùng này đã đăng ký vào khóa học."
+
+msgid "Multi URLs"
+msgstr "Nhiều URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Các thực thể như người dùng và khóa học có thể hoạt động trên nhiều URL cùng lúc, nên tổng các giá trị bên dưới sẽ không khớp với tổng số."
+
+msgid "User directory"
+msgstr "Thư mục người dùng"
+
+msgid "Course directory"
+msgstr "Thư mục khóa học"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "Chi tiết người dùng"
+
+msgid "Course details"
+msgstr "Chi tiết khóa học"
+
+msgid "View details"
+msgstr "Xem chi tiết"
+
+msgid "Average progress"
+msgstr "Tiến độ trung bình"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Đăng ký trực tiếp thuộc về khóa học nói chung, không thuộc một URL cụ thể, nên cùng số liệu 'Trực tiếp' được lặp lại bên dưới cho mọi URL mà khóa học này được liên kết. Khóa học theo phiên là cách dự kiến để chia sẻ khóa học giữa các URL với số liệu thực sự khác nhau theo từng URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Đăng nhập (tất cả URL gộp lại)"
+
+msgid "Unique logins"
+msgstr "Đăng nhập duy nhất"
+
+msgid "Parent URL"
+msgstr "URL cha"
+
+msgid "Logins (your URLs)"
+msgstr "Đăng nhập (URL của bạn)"
+
+msgid "The picture could not be uploaded"
+msgstr "Không thể tải ảnh lên"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Loại trường này chưa được hỗ trợ đầy đủ — chỉ giá trị thô."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Khóa học này sắp đạt giới hạn đăng ký người dùng (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Dung lượng bị giới hạn theo thuộc tính khóa học của bạn. Để tăng giới hạn, hãy chọn"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Đăng ký người dùng bị giới hạn theo thuộc tính khóa học của bạn. Để tăng giới hạn, hãy chọn"
+
+msgid "pro plan"
+msgstr "gói pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "và nhập bản sao lưu khóa học này qua Bảo trì khóa học vào khóa học trả phí mới, hoặc mở phiếu hỗ trợ để chuyển khóa học thành khóa học pro sau khi bạn đã mua gói này."
+
+msgid "Tired of writing questions?"
+msgstr "Mệt mỏi vì phải viết câu hỏi?"
+
+msgid "Upgrade your plan"
+msgstr "Nâng cấp gói của bạn"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "lên gói pro để được AI hỗ trợ tạo câu hỏi chất lượng cho bạn."
+
+msgid "Student Success AI Coach"
+msgstr "Huấn luyện viên AI thành công học viên"
+
+msgid "No AI text provider is configured."
+msgstr "Chưa cấu hình nhà cung cấp văn bản AI."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Hướng dẫn bổ sung cho huấn luyện viên AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Ví dụ: Người học này gặp khó khăn trong việc duy trì sự chú ý. Đề xuất các hoạt động ngắn hơn và kiểm tra mức độ hiểu thường xuyên hơn."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Giữ cửa sổ này mở trong khi Chamilo chuẩn bị khuyến nghị."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Khuyến nghị cũng đã được lưu trong hộp thư đến Chamilo của bạn."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Khuyến nghị đã được tạo và lưu cho người học này, nhưng không thể tạo bản sao trong hộp thư đến."
+
+msgid "Student success recommendation"
+msgstr "Khuyến nghị thành công của học viên"
+
+msgid "Generated"
+msgstr "Đã tạo"
+
+msgid "Priority actions"
+msgstr "Hành động ưu tiên"
+
+msgid "Evidence"
+msgstr "Bằng chứng"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Tính năng này sẽ phân tích nội dung khóa học và gửi thông tin hành vi học tập tới mô hình AI đã cấu hình. Mặc dù không gửi trực tiếp dữ liệu cá nhân có thể nhận dạng tới mô hình AI, một số dữ liệu được gửi có thể gián tiếp cung cấp thông tin nhận dạng về người dùng. Nếu nghi ngờ, hãy luôn kiểm tra với người phụ trách AI của bạn trước khi sử dụng tính năng này."
+
+msgid "Additional activities"
+msgstr "Hoạt động bổ sung"
+
+msgid "Rhythm"
+msgstr "Nhịp độ"
+
+msgid "Learning methodologies"
+msgstr "Phương pháp học tập"
+
+msgid "Other recommendations"
+msgstr "Khuyến nghị khác"
+
+msgid "Analyzing course..."
+msgstr "Đang phân tích khóa học..."
+
+msgid "Analyzing student's learning..."
+msgstr "Đang phân tích việc học của học viên..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Bằng cách chấp nhận lời mời này, bạn sẽ được liên kết với người dùng yêu cầu theo cách khiến một phần hoặc toàn bộ dữ liệu hồ sơ của bạn có thể được người dùng đó đọc. Hãy đảm bảo bạn không chia sẻ quá nhiều bằng cách kiểm tra hồ sơ của mình với những người dùng bạn đã tin tưởng."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Quyền sử dụng microphone chưa được bật, vui lòng bật trong trình duyệt để ghi âm"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Phiên bản Chamilo này đi kèm một (hoặc nhiều) khóa học đa ngôn ngữ được cài sẵn. Hãy xem lại chúng trong danh sách khóa học và quyết định chúng có nên công khai hay không."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Hiện bạn không có quyền truy cập bất kỳ URL nào. Vui lòng yêu cầu quản trị viên cấp quyền truy cập URL mà bạn thuộc về."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Nếu nhà cung cấp AI được chọn không phải dịch vụ chủ quyền, nội dung tài liệu đã chọn có thể được gửi tới dịch vụ bên ngoài. Không tiếp tục với thông tin mật trừ khi tổ chức của bạn cho phép."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Nhấp Unify trên tài khoản cần giữ lại. Hệ thống sẽ gộp tất cả tài khoản khác trong cùng nhóm trùng vào tài khoản đó. Các tài khoản đã gộp sẽ bị xóa vĩnh viễn và biến mất khỏi báo cáo này. Hành động này không thể hoàn tác."
+
+msgid "Permanent deletion"
+msgstr "Xóa vĩnh viễn"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify đã xóa vĩnh viễn các tài khoản đã gộp. Chỉ dùng danh sách Người dùng nếu bạn muốn xóa thêm tài khoản thủ công."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Bạn đang sửa logo cho giao diện mặc định “chamilo”. Hãy cân nhắc tạo/sử dụng giao diện tùy chỉnh để tránh ghi đè mặc định."
+
+msgid "This exercise has no questions."
+msgstr "Bài tập này không có câu hỏi."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Nên hiển thị phản hồi/nhận xét cho mỗi câu hỏi như thế nào? Tùy chọn này xác định cách hiển thị cho người học khi làm bài kiểm tra."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Các ứng dụng này có thể truy cập Chamilo với tư cách bạn, dùng quyền tài khoản hiện có và không hơn. Thu hồi những ứng dụng bạn không còn dùng hoặc không nhận ra."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Vui lòng giải thích lý do bạn muốn rút lại sự đồng ý pháp lý, để chúng tôi xử lý yêu cầu đúng cách"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Dùng khóa cá nhân này để kết nối máy khách MCP từ xa với Chamilo bằng tài khoản và quyền của bạn."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Khóa đầy đủ chỉ hiển thị một lần. Hãy lưu trữ an toàn. Tạo khóa mới sẽ vô hiệu hóa ngay khóa trước."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Khóa xác thực máy khách với tư cách tài khoản Chamilo của bạn. Nó không cấp quyền mà tài khoản của bạn chưa có."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Hiển thị tuyên bố Điều khoản & Điều kiện trên trang đăng ký, yêu cầu khách truy cập chấp nhận T&C để đăng ký"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Nội dung điều khoản và điều kiện sẽ được gửi tới mô hình ngôn ngữ AI. Hãy xem lại bản dịch đề xuất trước khi lưu."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Đã có phiên bản đã lưu cho ngôn ngữ đích. Lưu đề xuất này sẽ tạo phiên bản mới."
+
+msgid "Acquired"
+msgstr "Đã đạt được"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Ảnh khóa học khuyến nghị: 1600 × 900 px (16:9). Dùng ít nhất 1280 × 720 px để hiển thị sắc nét trên màn hình lớn hoặc mật độ cao."
+
+msgid "Courses of the selected URL"
+msgstr "Khóa học của URL đã chọn"
+
+msgid "Course categories in selected URL"
+msgstr "Danh mục khóa học trong URL đã chọn"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Tài khoản của bạn đã kích hoạt, bạn có thể đăng nhập và xem khóa học ngay."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Trước tiên bạn phải tải các bản sửa <a href='%s'> tại đây </a>.\nSau đó giải nén tệp đó và chỉnh sửa các tệp theo ý muốn mà không đổi tên tệp.\nRồi tạo tệp zip với các tệp đã sửa và tải lên biểu mẫu này."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Thêm học viên từ phiên %s vào phiên %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Hiện tất cả lần thử theo bài tập"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Thao tác này sẽ vượt quá giới hạn người dùng cho phép của khóa học đã chọn."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Một số đăng ký không thể thực hiện vì đã đạt giới hạn người dùng cho khóa học liên quan. Người dùng/Khóa học bị ảnh hưởng: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Sổ đăng ký này liệt kê các trang báo cáo đã biết, danh mục, URL chuẩn, URL cũ và đối tượng vai trò dự kiến. URL chuẩn dẫn tới triển khai báo cáo hiện tại và áp dụng ma trận vai trò báo cáo đã ghi."
+
+msgid "E-mail notification subscription"
+msgstr "Đăng ký thông báo e-mail"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Thao tác này sẽ vượt quá giới hạn %s người dùng mỗi khóa học do quản trị viên đặt. Đăng ký đã bị hủy."
+
+msgid "Language the document is in"
+msgstr "Ngôn ngữ của tài liệu"
+
+msgid "There is no session still"
+msgstr "Vẫn chưa có phiên nào"
+
+msgid "Origin courses from session"
+msgstr "Khóa học nguồn từ phiên"
+
+msgid "Destination courses from session"
+msgstr "Khóa học đích từ phiên"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Truy cập không cần đăng nhập"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Tạo %d thuật ngữ bảng chú giải cho khóa học về '%s', mỗi thuật ngữ trên một dòng, định nghĩa ở dòng tiếp theo và một dòng trống giữa mỗi thuật ngữ. Không thêm định dạng nào khác cho tiêu đề cũng như định nghĩa."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Đây là mô tả ngắn về khóa học '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Bạn đang sử dụng Chamilo trên nền tảng Windows. Các công cụ hỗ trợ chuyển đổi tài liệu không khả dụng cho lập chỉ mục toàn văn."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Cài đặt tự động khởi chạy bài kiểm tra đang BẬT. Học viên sẽ được chuyển hướng đến danh sách bài kiểm tra."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Cài đặt tự động khởi chạy bài kiểm tra đang BẬT. Học viên sẽ được chuyển hướng đến một bài kiểm tra cụ thể."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Đã đạt giới hạn đăng ký cho khóa học này (%current%\/%limit%)."
+
+msgid "Count course by language"
+msgstr "Đếm khóa học theo ngôn ngữ"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Người dùng có lần truy cập gần nhất cũ hơn ngày đã chọn."
 

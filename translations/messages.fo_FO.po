@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Við kærleika"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel dæmi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formuludømi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablumørk"
@@ -9264,6 +9264,15 @@ msgstr "Tíðarrapports fyri seinar %s"
 msgid "Error"
 msgstr "Feilur"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Brúkarin varð stovnaður, men eitt av teimum eyka profilfelti kundi ikki goymast."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Brúkarin varð dagførdur, men eitt av teimum eyka profilfelti kundi ikki goymast."
+
+msgid "One or more fields contain invalid values."
+msgstr "Eitt ella fleiri felt innihalda ógildig virði."
+
 msgid "Anonymous"
 msgstr "Dulnevndur"
 
@@ -9535,7 +9544,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Skjalaloftur miseyknaðist: hetta skjalendingu ella skjalategundin er forboðin"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID-URL"
 
 msgid "The file is too big to upload."
 msgstr "Skjalið er ov stórt at lofta upp."
@@ -15064,7 +15073,7 @@ msgid "Install Chamilo"
 msgstr "Íset Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo-URL"
 
 msgid "You have no session in your sessions history"
 msgstr "Tú hevur ongul sessión í tíni sessiónshøvund"
@@ -15302,6 +15311,30 @@ msgstr "Tíð brúkt síðstu vikuna"
 
 msgid "System status"
 msgstr "Systemstøða"
+
+msgid "Courses space"
+msgstr "Skeiðsrúm"
+
+msgid "Database server configuration and metadata"
+msgstr "Gagnagrunnsservarauppseting og metadáta"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Disknýtsla per skeið móti diskkvota"
+
+msgid "Information about your webserver configuration"
+msgstr "Upplýsingar um vevservarauppsetingina tína"
+
+msgid "Paths"
+msgstr "Leiðir"
+
+msgid "State of Chamilo requirements"
+msgstr "Støða á Chamilo-krøvum"
+
+msgid "State of PHP settings on the server"
+msgstr "Støða á PHP-stillingum á servaranum"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path()-konstantar loystir á hesum portalinum"
 
 msgid "Is writable"
 msgstr "Er skrivligur"
@@ -20669,6 +20702,9 @@ msgstr "Á hjólunum fyri førleika, vísir navnið á førleikanum tá ið tað
 
 msgid "Created by"
 msgstr "Upprunað av"
+
+msgid "Created by %s on %s"
+msgstr "Stovnað av %s tann %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Fjal generella læraran í droppa kassa"
@@ -26941,7 +26977,7 @@ msgid "Immediately block users who have been disabled by the admin through users
 msgstr "Blockera brúkarar, sum admaturin hevur óvirkað í brúkaramálstýring, óiva. Annars halda óvirknaðir brúkarar sínar fyrrverandi rættindi, til teir lógúta."
 
 msgid "Session cookie samesite"
-msgstr "Session cookie samesite"
+msgstr "Session-kaka samesite"
 
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr "Vísleið samesite:None parametar fyri session cookie. Meira info: https://www.chromium.org/updates/same-site og https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
@@ -30754,7 +30790,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (innanhýsis ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure-ID (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Støðus e-post"
@@ -31489,7 +31525,7 @@ msgid "SCIM external ID"
 msgstr "SCIM ytri ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "OAuth2-ID"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Vinarliga góðtaka nýggjastu útgávuna av reglugreinum og viðkomandi skilmálum."
@@ -31872,6 +31908,9 @@ msgstr "Skriva nakað til %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Foðast: SVG. PNG ráðfylt breidd: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG tilmælt breidd: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Legg PNG logo upp fyri t-post (~%spx breidd)"
 
@@ -31907,6 +31946,9 @@ msgstr "Klikk til at seta inn"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Foðast: SVG. PNG mest møguleiki: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG hámarksstødd: %spx."
 
 msgid "View badge"
 msgstr "Vís merki"
@@ -33703,10 +33745,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "EntraID-ID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "EntraID-UID"
 
 msgid "Required fields"
 msgstr "Krav til fíldir"
@@ -37804,7 +37846,7 @@ msgid "No answer"
 msgstr "Einki svar"
 
 msgid "Blank %s"
-msgstr "Blank %s"
+msgstr "Tómt %s"
 
 msgid "Your order"
 msgstr "Tín raðfylgja"
@@ -38057,6 +38099,9 @@ msgstr "Endar"
 
 msgid "Draft saved"
 msgstr "Drøg goymd"
+
+msgid "Save as draft"
+msgstr "Goym sum uppkast"
 
 msgid "Statement"
 msgstr "Frásagn"
@@ -39052,7 +39097,7 @@ msgid "Inserts"
 msgstr "Innsetingar"
 
 msgid "Hit rate"
-msgstr "Hit rate"
+msgstr "Trefflutfall"
 
 msgid "Auto-refresh every 5 seconds"
 msgstr "Sjálvvirkandi endurnýggjan hvør 5 sekund"
@@ -39479,4 +39524,265 @@ msgstr "Hesin brúkarin er longu skrásettur í sessiónini."
 
 msgid "This user is already subscribed to the course."
 msgstr "Hesin brúkarin er longu skrásettur í kursinum."
+
+msgid "Multi URLs"
+msgstr "Fleiri URL-ar"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Eindir sum brúkarar og skeið kunnu vera virknar á meira enn einum URL samstundis, so summan av virðunum niðanfyri samsvarar ikki við heildina."
+
+msgid "User directory"
+msgstr "Brúkaraskrá"
+
+msgid "Course directory"
+msgstr "Skeiðsskrá"
+
+msgid "URLs"
+msgstr "URL-ar"
+
+msgid "User details"
+msgstr "Brúkaraupplýsingar"
+
+msgid "Course details"
+msgstr "Skeiðsupplýsingar"
+
+msgid "View details"
+msgstr "Vís upplýsingar"
+
+msgid "Average progress"
+msgstr "Miðal framgongd"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Beinleiðis innskriving hoyrir til skeiðið sum heild, ikki til eina ávísa URL, so somu «Beinleiðis» tøl verða endurtikin niðanfyri fyri hvørja URL hetta skeið er knýtt at. Setur eru ætlaði hátturin at deila eitt skeið tvørtur um URL-ar við mátingum, ið veruliga eru ymiskar fyri hvørja URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Innritanir (allar URL samanlagt)"
+
+msgid "Unique logins"
+msgstr "Eindir innritanir"
+
+msgid "Parent URL"
+msgstr "Foreldra-URL"
+
+msgid "Logins (your URLs)"
+msgstr "Innritanir (tínar URL)"
+
+msgid "The picture could not be uploaded"
+msgstr "Myndin kundi ikki verða løgd upp"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Hesin feltaslag er ikki fullstøðugt stuðlaður enn — bert rátt virði."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Hetta skeið er tætt við sítt nýtarainnskrivingarmark (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Pláss er avmarkað gjøgnum skeiðseginleikar tínar. Fyri at økja markið, fá eina"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Nýtarainnskrivingar eru avmarkaðar gjøgnum skeiðseginleikar tínar. Fyri at økja markið, fá eina"
+
+msgid "pro plan"
+msgstr "pro-ætlan"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "og innflyt trygdaravritið av hesum skeiði gjøgnum Skeiðsviðlíkahald til titt nýggja goldna skeið, ella opna eitt mál fyri at fáa skeiðið umgjørt til eitt pro-skeið tá tú hevur fingið hesa ætlan."
+
+msgid "Tired of writing questions?"
+msgstr "Trettur av at skriva spurningar?"
+
+msgid "Upgrade your plan"
+msgstr "Uppstiga ætlanina tína"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "til eina pro-ætlan fyri at fáa hjálp frá AI at skapa góðar spurningar til tín."
+
+msgid "Student Success AI Coach"
+msgstr "Næmingasuksess AI-venjari"
+
+msgid "No AI text provider is configured."
+msgstr "Ongin AI-tekstveitari er stillaður."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Eyka leiðbeiningar til AI-venjaran"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Dømi: Hesin næmingur hevur trupulleikar við at varðveita ans. Legg upp styttri virksemi og oftari kanningar av fatan."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Halt hetta vindeygað opið meðan Chamilo fyrireikar tilmælið."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Tilmælið varð eisini goymt í Chamilo-innbakkanum tínum."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Tilmælið varð skapað og goymt fyri henda næming, men avritið í innbakkanum kundi ikki verða skapað."
+
+msgid "Student success recommendation"
+msgstr "Tilmæli um næmingasuksess"
+
+msgid "Generated"
+msgstr "Skapað"
+
+msgid "Priority actions"
+msgstr "Raðfestingarátøk"
+
+msgid "Evidence"
+msgstr "Prógv"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Hesin eginleiki fer at greina innihaldið á hesum skeiði og senda upplýsingar um læringaratferð til stillaða AI-modell. Hóast ikki beinleiðis eyðkennilig persónlig dáta verða send til AI-modell, kunnu onkrar av sendu dáta óbeinleiðis geva eyðkenniligar upplýsingar um nýtaran. Um tú ivast, kanna altíð við AI-referensupersoninum tínum áðrenn tú nýtir henda eginleika."
+
+msgid "Additional activities"
+msgstr "Eyka virksemi"
+
+msgid "Rhythm"
+msgstr "Rytmi"
+
+msgid "Learning methodologies"
+msgstr "Lærimetodar"
+
+msgid "Other recommendations"
+msgstr "Onnur tilmæli"
+
+msgid "Analyzing course..."
+msgstr "Greinar skeið..."
+
+msgid "Analyzing student's learning..."
+msgstr "Greinar læring hjá næmingi..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Við at góðtaka hesa innbjóðing verður tú knýttur at umbiðjandi nýtaranum á ein hátt, ið ger nakað ella alt av profilsdátum tínum tøkt at lesa hjá umbiðjandi nýtaranum. Ver vís í at tú ikki deilir ov nógv við at kanna profilin tín við nýtarum, tú longu treystar."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Loyvi at nýta mikrofonina er ikki virkjað, vinarliga virkja tað í kaganum tínum fyri at taka ljóð upp"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Henda útgávan av Chamilo kemur við einum (ella fleiri) fleirmálsskeiði(um) forinnlagt. Kanna tey í skeiðslistanum og avgerð um tey skulu vera almenn ella ikki."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Tú hevur ikki atgongd til nakra URL í løtuni. Bidja umsitaran um at geva tær atgongd til URL-ina, tú hoyrir til."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Um valdi AI-veitarin ikki er ein sjálvstøðug tænasta, kann valda skjalainnihaldið verða sent til eina uttanhýsis tænastu. Halt ikki fram við trúnaðarupplýsingum, um hetta ikki er loyvt av felagsskapinum tínum."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Trýst Sameina á kontuni, ið skal verða verandi. Skipanin fer at sameina allar aðrar kontur í somu dupultbólki inn í hana. Sameindar kontur verða varandi strikaðar og hvørva úr hesi frágreiðing. Hetta átak kann ikki angrast."
+
+msgid "Permanent deletion"
+msgstr "Varandi striking"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Sameina strikar longu varandi sameindar kontur. Nýt Nýtaralistan bert um tú vilt strika eyka kontur manuelt."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Tú broytir logo fyri sjálvvalda sjónliga temaið “chamilo”. Umhugsa at skapa/nýta eitt serstakt sjónligt tema fyri at sleppa undan at yvirskriva sjálvval."
+
+msgid "This exercise has no questions."
+msgstr "Henda venjing hevur ongar spurningar."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Hvussu skulu vit vísa afturboðanina/viðmerkingina fyri hvønn spurning? Hesin møguleiki ásetur, hvussu tað verður víst næminginum, tá hann tekur royndina."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Hesar appir kunnu fáa atgongd til Chamilo sum tú, við verandi kontuloyvum tínum og einki meira. Afturkalla tær, tú ikki longur nýtir ella kennir."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Vinarliga greið frá, hví tú vilt biðja um at taka lógarliga samtykkið titt aftur, so vit kunnu viðgera umbønina rætt"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Nýt henda persónliga lykilin at knýta eina fjar-MCP-klient til Chamilo við egnari kontu og loyvum."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Fulli lykilin verður bert vístur eina ferð. Goym hann trygt. At skapa ein nýggjan lykil ger tann fyrra ógyldigan beinanvegin."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Lykilin vátta klientin sum Chamilo-kontuna tína. Hann gevur ikki loyvi, ið kontan tín ikki longu hevur."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Vís eina yvirlýsing um treytir og treytir á skrásetingarsíðuni, krev at vitjandi góðtekur treytirnar fyri at skráseta"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Innihaldið av treytum og treytum verður sent til eitt AI-málmodell. Endurskoða tillagaða týðingina áðrenn tú goymir hana."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Ein goymd útgáva finst longu fyri málmálið. At goyma hetta uppskot skapar eina nýggja útgávu."
+
+msgid "Acquired"
+msgstr "Nátt"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Tilmælt skeiðsmynd: 1600 × 900 px (16:9). Brúka í minsta lagi 1280 × 720 px fyri skarpt sýni á størri ella háuppløystum skíggjum."
+
+msgid "Courses of the selected URL"
+msgstr "Skeið á valda URL"
+
+msgid "Course categories in selected URL"
+msgstr "Skeiðsbólkar í valda URL"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Konta tín er virkin, tú kanst innrita og hyggja at skeiðunum nú."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Fyrst skalt tú taka rættingarnar niður <a href='%s'> her </a>.\nSíðani skalt tú pakka fíluna upp og rætta fílurnar sum tú vilt, uttan at broyta fílunøvnini.\nSíðani skalt tú gera eina zip-fílu við teimum broyttu fílunum og senda hana inn í hesum formulari."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Leggja næmingar frá lotu %s til lotu %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Vís allar royndir eftir uppgávu"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Henda gerðin fór at fara um loyvda brúkaramarkið fyri valda skeiðið."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Nakrar áskrivingar kundu ikki fremjast, tí tær náðu loyvda brúkaramarkið fyri ávirkaða skeiðið. Brúkarar/skeið ávirkað: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Hesin skráin listar kendar frágreiðingarsíður, teirra bólk, kanoniska URL, eldri URL og væntaðan leiklut. Kanoniskar URL-ar leiða til núverandi frágreiðingarútføring og handhevja skrásetta leiklutamatrisuna."
+
+msgid "E-mail notification subscription"
+msgstr "Áskrift til teldupostboðan"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Henda gerðin fór at fara um markið á %s brúkarum per skeið, sum umsitarnir hava sett. Áskrivingin er avlýst."
+
+msgid "Language the document is in"
+msgstr "Málið skjalið er á"
+
+msgid "There is no session still"
+msgstr "Tað er enn ongin lota"
+
+msgid "Origin courses from session"
+msgstr "Upprunaskeið frá lotu"
+
+msgid "Destination courses from session"
+msgstr "Málskeið frá lotu"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Almen atgongd (atgongd loyvd øllum limum í kursi)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Framleið %d orðalistasorð til eitt skeið um '%s', hvørt orð á einari linju, við skilgreiningini á næstu linju og einari tómari linju millum hvørt orð. Legg ikki aðra sniðgeving til heitið ella skilgreiningina."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Hetta er ein stutt lýsing av skeiðinum '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Tú brúkar Chamilo á einum Windows-pall. Hjálpartól til skjalumbroyting eru ikki tøk til fulltekstindeksering."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Stillingin fyri sjálvvirkandi royndarstart er TEND. Næmingar verða sendir víðari til royndarlistan."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Stillingin fyri sjálvvirkandi royndarstart er TEND. Næmingar verða sendir víðari til eina ávísa roynd."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Áskrivingarmarkið fyri hetta skeiðið er nátt (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Tel skeið eftir máli"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Brúkarar, hvørs seinasta atgongd er eldri enn valda dagfestingin."
 

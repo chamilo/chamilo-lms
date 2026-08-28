@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulo-ekzemplo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ekzemplo de formulo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:kopirajto,, no:ne kopirajto"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:dosiero,, application/msword:MsWord,, application/octet-stream:okteta fluo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosierujo,, application/msword:MsWord,, application/octet-stream:Okteta fluo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(rekomendata)"
 
 msgid "SCORM DB"
-msgstr "SCORM DB"
+msgstr "SCORM-datumbazo"
 
 msgid "Administrator last name"
 msgstr "Administranta nomo"
@@ -9269,6 +9269,15 @@ msgstr "Temp-raporto por sesio %s"
 msgid "Error"
 msgstr "Eraro"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "La uzanto estis kreita, sed unu el la kromaj profilkampoj ne povis esti konservita."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "La uzanto estis ĝisdatigita, sed unu el la kromaj profilkampoj ne povis esti konservita."
+
+msgid "One or more fields contain invalid values."
+msgstr "Unu aŭ pluraj kampoj enhavas nevalidajn valorojn."
+
 msgid "Anonymous"
 msgstr "Anonima"
 
@@ -9540,7 +9549,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Eraro de alŝuto de dosiero: tiu dosierfinaĵo aŭ dosiertipo estas malpermesita"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID-URL"
 
 msgid "The file is too big to upload."
 msgstr "La dosiero estas tro granda por alŝuti."
@@ -15069,7 +15078,7 @@ msgid "Install Chamilo"
 msgstr "Instali Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo-URL"
 
 msgid "You have no session in your sessions history"
 msgstr "Vi ne havas seancojn en via historio de seancoj"
@@ -15307,6 +15316,30 @@ msgstr "Tempo pasigita pasinta semajno"
 
 msgid "System status"
 msgstr "Stato de la sistemo"
+
+msgid "Courses space"
+msgstr "Kursoj-spaco"
+
+msgid "Database server configuration and metadata"
+msgstr "Agordo de datumbaza servilo kaj metadatumoj"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Diskuzado po kurso kontraŭ diskokvoto"
+
+msgid "Information about your webserver configuration"
+msgstr "Informoj pri la agordo de via retservilo"
+
+msgid "Paths"
+msgstr "Vojoj"
+
+msgid "State of Chamilo requirements"
+msgstr "Stato de postuloj de Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Stato de PHP-agordoj sur la servilo"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Konstantoj de api_get_path() solvita sur ĉi tiu portalo"
 
 msgid "Is writable"
 msgstr "Estas skribebla"
@@ -20674,6 +20707,9 @@ msgstr "Sur la rado de kompetencoj, ĝi montras la nomon de la kompetenco kiam �
 
 msgid "Created by"
 msgstr "Kreita de"
+
+msgid "Created by %s on %s"
+msgstr "Kreita de %s je %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Kaŝu ĝeneralan trejnanton en disigilo"
@@ -30760,7 +30796,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (interna ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure-ID (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Organiza retpoŝto"
@@ -31495,7 +31531,7 @@ msgid "SCIM external ID"
 msgstr "SCIM eksterna ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "OAuth2-ID"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Bonvolu akcepti la plej novan version de la kondiĉoj."
@@ -31878,6 +31914,9 @@ msgstr "Skribu ion al %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Preferata: SVG. PNG rekomendit larĝo: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG rekomendata larĝo: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Alŝuti PNG logotipon por retpoŝtoj (~%spx larĝo)"
 
@@ -31913,6 +31952,9 @@ msgstr "Klaku por enmeti"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Preferata: SVG. PNG maksimuma grandeco: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG maksimuma grandeco: %spx."
 
 msgid "View badge"
 msgstr "Vidi insignon"
@@ -32137,7 +32179,7 @@ msgid "Moodle version"
 msgstr "Moodle-versio"
 
 msgid "Admin ID"
-msgstr "Admin ID"
+msgstr "Admin-ID"
 
 msgid "Internal integer user id"
 msgstr "Interna entjera uzanto ID"
@@ -33709,10 +33751,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "EntraID-ID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "EntraID-UID"
 
 msgid "Required fields"
 msgstr "Devigaj kampoj"
@@ -38064,6 +38106,9 @@ msgstr "Finante"
 msgid "Draft saved"
 msgstr "Malneto konservita"
 
+msgid "Save as draft"
+msgstr "Konservi kiel malneton"
+
 msgid "Statement"
 msgstr "Deklaro"
 
@@ -39485,4 +39530,265 @@ msgstr "Ĉi tiu uzanto jam estas abonita al la sesio."
 
 msgid "This user is already subscribed to the course."
 msgstr "Ĉi tiu uzanto jam estas abonita al la kurso."
+
+msgid "Multi URLs"
+msgstr "Pluraj URL-oj"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entoj kiel uzantoj kaj kursoj povas esti aktivaj en pli ol unu URL samtempe, do la sumo de la valoroj sube ne kongruos kun la totalo."
+
+msgid "User directory"
+msgstr "Uzantodosierujo"
+
+msgid "Course directory"
+msgstr "Kursodosierujo"
+
+msgid "URLs"
+msgstr "URL-oj"
+
+msgid "User details"
+msgstr "Uzantodetaloj"
+
+msgid "Course details"
+msgstr "Kursodetaloj"
+
+msgid "View details"
+msgstr "Vidi detalojn"
+
+msgid "Average progress"
+msgstr "Meza progreso"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Rekta aliĝo apartenas al la kurso kiel tuto, ne al specifa URL, do la samaj 'Direktaj' ciferoj ripetiĝas sube por ĉiu URL al kiu ĉi tiu kurso estas ligita. Seancoj estas la intencita maniero dividi kurson inter URL-oj kun metrikoj kiuj efektive diferencas laŭ URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Ensalutoj (ĉiuj URL-oj kombinite)"
+
+msgid "Unique logins"
+msgstr "Unikaj ensalutoj"
+
+msgid "Parent URL"
+msgstr "Gepatra URL"
+
+msgid "Logins (your URLs)"
+msgstr "Ensalutoj (viaj URL-oj)"
+
+msgid "The picture could not be uploaded"
+msgstr "La bildo ne povis esti alŝutita"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Ĉi tiu kampotipo ankoraŭ ne estas plene subtenata — nur kruda valoro."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Ĉi tiu kurso estas proksima al sia limo de uzant-abono (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "La spaco estas limigita per viaj kursaj ecoj. Por pliigi vian limon, akiru"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Uzant-abonoj estas limigitaj per viaj kursaj ecoj. Por pliigi vian limon, akiru"
+
+msgid "pro plan"
+msgstr "pro-plano"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "kaj importu la sekurkopion de ĉi tiu kurso per Kurs-prizorgado al via nova pagita kurso, aŭ malfermu bileton por konverti vian kurson en pro-kurson post kiam vi akiris ĉi tiun planon."
+
+msgid "Tired of writing questions?"
+msgstr "Ĉu vi laciĝis verki demandojn?"
+
+msgid "Upgrade your plan"
+msgstr "Altgradigu vian planon"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "al pro-plano por ricevi helpon de AI por generi kvalitajn demandojn por vi."
+
+msgid "Student Success AI Coach"
+msgstr "AI-trejnisto pri studenta sukceso"
+
+msgid "No AI text provider is configured."
+msgstr "Neniu AI-tekstprovizanto estas agordita."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Pliaj instrukcioj por la AI-trejnisto"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Ekzemplo: Ĉi tiu lernanto malfacile tenas atenton. Proponu pli mallongajn agadojn kaj pli oftajn kontrolojn de kompreno."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Lasu ĉi tiun fenestron malfermita dum Chamilo pretigas la rekomendon."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "La rekomendo ankaŭ estis konservita en via Chamilo-enirkesto."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "La rekomendo estis generita kaj konservita por ĉi tiu lernanto, sed la kopio en la enirkesto ne povis esti kreita."
+
+msgid "Student success recommendation"
+msgstr "Rekomendo pri studenta sukceso"
+
+msgid "Generated"
+msgstr "Generita"
+
+msgid "Priority actions"
+msgstr "Prioritataj agoj"
+
+msgid "Evidence"
+msgstr "Pruvo"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Ĉi tiu funkcio analizos la enhavon de ĉi tiu kurso kaj sendos informojn pri lerna konduto al la agordita AI-modelo. Kvankam neniuj rekte identigeblaj personaj datumoj estas senditaj al la AI-modelo, iuj el la senditaj datumoj eble nerekte donos identigeblajn informojn pri la uzanto. Se vi dubas, ĉiam kontrolu kun via AI-referenca persono antaŭ ol uzi ĉi tiun funkcion."
+
+msgid "Additional activities"
+msgstr "Pliaj agadoj"
+
+msgid "Rhythm"
+msgstr "Ritmo"
+
+msgid "Learning methodologies"
+msgstr "Lernaj metodologioj"
+
+msgid "Other recommendations"
+msgstr "Aliaj rekomendoj"
+
+msgid "Analyzing course..."
+msgstr "Analizas la kurson..."
+
+msgid "Analyzing student's learning..."
+msgstr "Analizas la lernadon de la studento..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Akceptante ĉi tiun inviton, vi ligiĝos al la petanta uzanto tiel, ke iuj aŭ ĉiuj viaj profilaj datumoj fariĝos legeblaj por la petanta uzanto. Bonvolu certigi, ke vi ne kunhavigas tro multe, kontrolante vian profilon kun uzantoj, kiujn vi jam fidas."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Permeso uzi la mikrofonon ne estas ŝaltita; bonvolu ŝalti ĝin en via retumilo por registri sonon"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Ĉi tiu versio de Chamilo venas kun unu (aŭ pluraj) antaŭinstalitaj plurlingvaj kursoj. Bonvolu revizii ilin en la kursolisto kaj decidi ĉu ili estu publikaj aŭ ne."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Vi nuntempe ne havas aliron al iu URL. Bonvolu peti la administranton doni al vi aliron al la URL, al kiu vi apartenas."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Se la elektita AI-provizanto ne estas suverena servo, la enhavo de la elektita dokumento eble estos sendita al ekstera servo. Ne daŭrigu kun konfidencaj informoj krom se via organizo tion permesas."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Alklaku Unuigi ĉe la konto, kiu devas resti. La sistemo kunigos ĉiujn aliajn kontojn en la sama duobla grupo en ĝin. Kunigitaj kontoj estos porĉiame forigitaj kaj malaperos el ĉi tiu raporto. Ĉi tiu ago ne povas esti malfarita."
+
+msgid "Permanent deletion"
+msgstr "Porĉiama forigo"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unuigi jam porĉiame forigas kunigitajn kontojn. Uzu la uzantoliston nur se vi volas permane forigi pliajn kontojn."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Vi ŝanĝas emblemojn por la defaŭlta vida temo “chamilo”. Konsideru krei/uzi propran vidan temon por eviti anstataŭigi defaŭltojn."
+
+msgid "This exercise has no questions."
+msgstr "Ĉi tiu ekzerco ne havas demandojn."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Kiel ni montru la reagon/komenton por ĉiu demando? Ĉi tiu opcio difinas kiel ĝi estos montrita al la lernanto dum la testo."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Ĉi tiuj aplikaĵoj povas aliri Chamilon kiel vi, uzante viajn ekzistantajn kontopermesojn kaj nenion pli. Revoku tiujn, kiujn vi ne plu uzas aŭ ne rekonas."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Bonvolu klarigi kial vi volas peti la retiron de via jura konsento, por ke ni povu prilabori vian peton ĝuste"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Uzu ĉi tiun personan ŝlosilon por konekti foran MCP-klienton al Chamilo per via propra konto kaj permesoj."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "La kompleta ŝlosilo estas montrata nur unufoje. Konservu ĝin sekure. Generado de nova ŝlosilo tuj senvalidigas la antaŭan."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "La ŝlosilo aŭtentigas la klienton kiel vian Chamilo-konton. Ĝi ne donas permesojn, kiujn via konto jam ne havas."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Montri deklaron pri Kondiĉoj kaj Kondiĉoj sur la registriĝa paĝo; postuli ke vizitanto akceptu la K&K por registriĝi"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "La enhavo de la kondiĉoj kaj kondiĉoj estos sendita al AI-lingvomodelo. Reviziu la proponitan tradukon antaŭ ol konservi ĝin."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Konservita versio jam ekzistas por la cellingvo. Konservi ĉi tiun proponon kreos novan version."
+
+msgid "Acquired"
+msgstr "Akirita"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Rekomendita kursobildo: 1600 × 900 px (16:9). Uzu almenaŭ 1280 × 720 px por akra montrado sur pli grandaj aŭ alt-denseca ekranoj."
+
+msgid "Courses of the selected URL"
+msgstr "Kursoj de la elektita URL"
+
+msgid "Course categories in selected URL"
+msgstr "Kurskategorioj en elektita URL"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Via konto estas aktiva; vi povas ensaluti kaj kontroli viajn kursojn nun."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Unue vi devas elŝuti la korektojn <a href='%s'> ĉi tie </a>.\nPoste vi devas malzipi tiun dosieron kaj redakti la dosierojn kiel vi volis sen ŝanĝi la dosiernomojn.\nPoste kreu zip-dosieron kun tiuj modifitaj dosieroj kaj alŝutu ĝin en ĉi tiu formularo."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Aldono de studentoj de sesio %s al sesio %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Montri ĉiujn provojn laŭ ekzerco"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Ĉi tiu operacio superus la permesitan uzantlimon por la elektita kurso."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Kelkaj abonoj ne povis esti efektivigitaj ĉar ili atingis la permesitan uzantlimon por la tuŝita kurso. Uzantoj/Kursoj tuŝitaj: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Ĉi tiu registro listigas konatajn raportpaĝojn, ilian kategorion, kanonan URL, malnovan URL kaj atendatan rolaŭdiencon. Kanonaj URL-oj direktas al la nuna raportimplementado kaj devigas la dokumentitan raportrolan matricon."
+
+msgid "E-mail notification subscription"
+msgstr "Abono al retpoŝtaj sciigoj"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Ĉi tiu operacio superus la limon de %s uzantoj po kurso fiksitan de la administrantoj. La abono estis nuligita."
+
+msgid "Language the document is in"
+msgstr "Lingvo de la dokumento"
+
+msgid "There is no session still"
+msgstr "Ankoraŭ ne estas sesio"
+
+msgid "Origin courses from session"
+msgstr "Originkursoj de sesio"
+
+msgid "Destination courses from session"
+msgstr "Celkursoj de sesio"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Libera aliro (ekde la startpaĝo, sen identiga kodo)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Generu %d glosartermojn por kurso pri '%s', ĉiu termino en unu linio, kun ĝia difino en la sekva linio kaj unu malplena linio inter ĉiu termino. Ne aldonu alian formatadon por la titolo nek por la difino."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Ĉi tio estas mallonga priskribo de la kurso '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Vi uzas Chamilo sur Windows-platformo. Dokumentkonvertaj helpiloj ne estas haveblaj por plen-teksta indekso."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "La aŭtomata lanĉo de testoj estas ŜALTITA. Studentoj estos redirektitaj al la testlisto."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "La aŭtomata lanĉo de testoj estas ŜALTITA. Studentoj estos redirektitaj al specifa testo."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "La abonlimo por ĉi tiu kurso estas atingita (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Nombri kursojn laŭ lingvo"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Uzantoj kies lasta aliro estas pli malnova ol la elektita dato."
 

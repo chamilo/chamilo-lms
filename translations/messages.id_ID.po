@@ -2254,7 +2254,7 @@ msgid "Already in"
 msgstr "Sudah masuk"
 
 msgid "Check in"
-msgstr "Check in"
+msgstr "Check-in"
 
 msgid "The Moderator of this Conference has left the room."
 msgstr "Moderator Konferensi ini telah meninggalkan ruangan."
@@ -3061,7 +3061,7 @@ msgid "Create forum"
 msgstr "Buat forum"
 
 msgid "Edit forum"
-msgstr "Edit forum"
+msgstr "Sunting forum"
 
 msgid "Edit thread"
 msgstr "Edit utas"
@@ -9267,6 +9267,15 @@ msgstr "Laporan waktu untuk sesi %s"
 msgid "Error"
 msgstr "Kesalahan"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Pengguna telah dibuat, tetapi salah satu bidang profil tambahan tidak dapat disimpan."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Pengguna telah diperbarui, tetapi salah satu bidang profil tambahan tidak dapat disimpan."
+
+msgid "One or more fields contain invalid values."
+msgstr "Satu atau lebih bidang berisi nilai yang tidak valid."
+
 msgid "Anonymous"
 msgstr "Anonim"
 
@@ -14443,37 +14452,37 @@ msgid "Compose"
 msgstr "Tulis"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Oranye muda"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Laguna biru"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Biru sejuk"
 
 msgid "Corporate"
 msgstr "Korporat"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Kampus kosmik"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Bordeaux lezat"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Hijau kekaisaran"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Oranye buah"
 
 msgid "Medical"
 msgstr "Medis"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Ungu kerajaan"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Garis perak"
 
 msgid "Sober brown"
 msgstr "Coklat tenang"
@@ -15305,6 +15314,30 @@ msgstr "Waktu yang dihabiskan minggu lalu"
 
 msgid "System status"
 msgstr "Status sistem"
+
+msgid "Courses space"
+msgstr "Ruang kursus"
+
+msgid "Database server configuration and metadata"
+msgstr "Konfigurasi server basis data dan metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Penggunaan disk per kursus vs kuota disk"
+
+msgid "Information about your webserver configuration"
+msgstr "Informasi tentang konfigurasi server web Anda"
+
+msgid "Paths"
+msgstr "Jalur"
+
+msgid "State of Chamilo requirements"
+msgstr "Status persyaratan Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Status pengaturan PHP di server"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Konstanta api_get_path() yang diselesaikan di portal ini"
 
 msgid "Is writable"
 msgstr "Dapat ditulis"
@@ -16780,7 +16813,7 @@ msgid "Fill with demo content"
 msgstr "Isi dengan konten demo"
 
 msgid "Single Sign On"
-msgstr "Single Sign On"
+msgstr "Single Sign-On"
 
 msgid "Enabling Single Sign On allows you to connect this platform as a slave of an authentication master, for example a Drupal website with the Drupal-Chamilo plugin or any other similar master setup."
 msgstr "Mengaktifkan Single Sign On memungkinkan Anda menghubungkan platform ini sebagai budak dari master autentikasi, misalnya situs web Drupal dengan plugin Drupal-Chamilo atau pengaturan master serupa lainnya."
@@ -20672,6 +20705,9 @@ msgstr "Di roda keterampilan, menampilkan nama keterampilan ketika memiliki kode
 
 msgid "Created by"
 msgstr "Dibuat oleh"
+
+msgid "Created by %s on %s"
+msgstr "Dibuat oleh %s pada %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Sembunyikan pelatih umum di dropbox"
@@ -26620,7 +26656,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurasi koneksi LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array yang mendefinisikan host dan port untuk server LDAP.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Atur tanggal kedaluwarsa pada login pertama"
@@ -26632,7 +26668,7 @@ msgid "Selective display of roles"
 msgstr "Tampilan selektif peran"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Array peran => true/false yang menentukan apakah peran tersebut ditampilkan atau disembunyikan.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Opsi tampilan peran"
@@ -30182,7 +30218,7 @@ msgid "Invalid access URL or course"
 msgstr "URL akses atau mata kuliah tidak valid"
 
 msgid "Edit URL"
-msgstr "Edit URL"
+msgstr "Sunting URL"
 
 msgid "Back to %s"
 msgstr "Kembali ke %s"
@@ -31876,6 +31912,9 @@ msgstr "Tulis sesuatu ke %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Disarankan: SVG. Lebar PNG yang direkomendasikan: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Lebar PNG yang disarankan: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Unggah logo PNG untuk email (~%spx lebar)"
 
@@ -31911,6 +31950,9 @@ msgstr "Klik untuk menyisipkan"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Disarankan: SVG. Ukuran maks PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Ukuran maks. PNG: %spx."
 
 msgid "View badge"
 msgstr "Lihat lencana"
@@ -32198,7 +32240,7 @@ msgid "Allowed file formats: %s"
 msgstr "Format file yang diizinkan: %s"
 
 msgid "File manager"
-msgstr "File manager"
+msgstr "Pengelola berkas"
 
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Jenis file tidak diizinkan. Ekstensi yang diizinkan: %s"
@@ -33113,7 +33155,7 @@ msgid "Create link"
 msgstr "Buat tautan"
 
 msgid "Edit template"
-msgstr "Edit template"
+msgstr "Sunting templat"
 
 msgid "Shared files"
 msgstr "Berkas bersama"
@@ -33602,7 +33644,7 @@ msgid "Final item"
 msgstr "Item akhir"
 
 msgid "Edit item"
-msgstr "Edit item"
+msgstr "Sunting item"
 
 msgid "No AI text providers configured."
 msgstr "Tidak ada penyedia teks AI yang dikonfigurasi."
@@ -33914,7 +33956,7 @@ msgid "Welcome to Chamilo"
 msgstr "Selamat datang di Chamilo"
 
 msgid "Check all unanswered questions below"
-msgstr "Check all unanswered questions below"
+msgstr "Periksa semua pertanyaan yang belum dijawab di bawah ini"
 
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Jika ini pertama kali Anda menggunakan Chamilo, pastikan Anda memeriksa menu samping untuk menemukan jalan melalui banyak fiturnya. Jika Anda membutuhkan bantuan, Anda akan menemukan <a href=\"https://docs.chamilo.org\">dokumentasi resmi kami</a> dapat membantu untuk dokumentasi standar, sementara <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">forum online kami</a> dapat membantu berbagi ide dan menemukan jawaban dari pengguna Chamilo lainnya."
@@ -36497,22 +36539,22 @@ msgid "No auth source"
 msgstr "Tidak ada sumber autentikasi"
 
 msgid "You must add at least one question"
-msgstr "You must add at least one question"
+msgstr "Anda harus menambahkan setidaknya satu pertanyaan"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "Tindakan lanjutan"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "Jalur aplikasi"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "Terapkan detail berkas"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "Terapkan detail paket"
 
 msgid "Apply plan failed"
-msgstr "Apply plan failed"
+msgstr "Penerapan paket gagal"
 
 msgid "Apply plan ready"
 msgstr "Terapkan rencana yang siap"
@@ -37505,7 +37547,7 @@ msgid "Back to account"
 msgstr "Kembali ke akun"
 
 msgid "Your feedback will help us improve future training sessions."
-msgstr "Your feedback will help us improve future training sessions."
+msgstr "Masukan Anda akan membantu kami meningkatkan sesi pelatihan di masa mendatang."
 
 msgid "Thank you for sharing your feedback."
 msgstr "Terima kasih telah membagikan umpan balik Anda."
@@ -38061,6 +38103,9 @@ msgstr "Menyelesaikan"
 
 msgid "Draft saved"
 msgstr "Draf disimpan"
+
+msgid "Save as draft"
+msgstr "Simpan sebagai draf"
 
 msgid "Statement"
 msgstr "Pernyataan"
@@ -39101,7 +39146,7 @@ msgid "Graceful workers"
 msgstr "Pekerja graceful"
 
 msgid "Server MPM"
-msgstr "Server MPM"
+msgstr "MPM server"
 
 msgid "Requests per second (live)"
 msgstr "Permintaan per detik (langsung)"
@@ -39143,7 +39188,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard membaca"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Keepalive papan skor"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard menunggu"
@@ -39483,4 +39528,265 @@ msgstr "Pengguna ini sudah berlangganan sesi."
 
 msgid "This user is already subscribed to the course."
 msgstr "Pengguna ini sudah berlangganan kursus."
+
+msgid "Multi URLs"
+msgstr "Multi URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entitas seperti pengguna dan kursus dapat aktif di lebih dari satu URL sekaligus, sehingga jumlah nilai di bawah ini tidak akan sama dengan total."
+
+msgid "User directory"
+msgstr "Direktori pengguna"
+
+msgid "Course directory"
+msgstr "Direktori kursus"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "Detail pengguna"
+
+msgid "Course details"
+msgstr "Detail kursus"
+
+msgid "View details"
+msgstr "Lihat detail"
+
+msgid "Average progress"
+msgstr "Kemajuan rata-rata"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Pendaftaran langsung berlaku untuk kursus secara keseluruhan, bukan untuk URL tertentu, sehingga angka 'Langsung' yang sama diulang di bawah ini untuk setiap URL yang terhubung dengan kursus ini. Sesi adalah cara yang dimaksudkan untuk berbagi kursus antar URL dengan metrik yang benar-benar berbeda per URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Login (semua URL digabung)"
+
+msgid "Unique logins"
+msgstr "Login unik"
+
+msgid "Parent URL"
+msgstr "URL induk"
+
+msgid "Logins (your URLs)"
+msgstr "Login (URL Anda)"
+
+msgid "The picture could not be uploaded"
+msgstr "Gambar tidak dapat diunggah"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Jenis bidang ini belum didukung sepenuhnya — hanya nilai mentah."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Kursus ini mendekati batas langganan pengguna (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Ruang dibatasi melalui properti kursus Anda. Untuk meningkatkan batas, dapatkan"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Langganan pengguna dibatasi melalui properti kursus Anda. Untuk meningkatkan batas, dapatkan"
+
+msgid "pro plan"
+msgstr "paket pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "dan impor cadangan kursus ini melalui Pemeliharaan Kursus ke kursus berbayar baru Anda, atau buka tiket agar kursus Anda dikonversi menjadi kursus pro setelah Anda memperoleh paket ini."
+
+msgid "Tired of writing questions?"
+msgstr "Lelah menulis pertanyaan?"
+
+msgid "Upgrade your plan"
+msgstr "Tingkatkan paket Anda"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "ke paket pro untuk mendapatkan bantuan AI dalam menghasilkan pertanyaan berkualitas untuk Anda."
+
+msgid "Student Success AI Coach"
+msgstr "Pelatih AI Keberhasilan Siswa"
+
+msgid "No AI text provider is configured."
+msgstr "Penyedia teks AI belum dikonfigurasi."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Instruksi tambahan untuk pelatih AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Contoh: Pembelajar ini kesulitan mempertahankan perhatian. Sarankan aktivitas yang lebih singkat dan pemeriksaan pemahaman yang lebih sering."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Biarkan jendela ini tetap terbuka sementara Chamilo menyiapkan rekomendasi."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Rekomendasi juga disimpan di kotak masuk Chamilo Anda."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Rekomendasi telah dibuat dan disimpan untuk pembelajar ini, tetapi salinan kotak masuk tidak dapat dibuat."
+
+msgid "Student success recommendation"
+msgstr "Rekomendasi keberhasilan siswa"
+
+msgid "Generated"
+msgstr "Dibuat"
+
+msgid "Priority actions"
+msgstr "Tindakan prioritas"
+
+msgid "Evidence"
+msgstr "Bukti"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Fitur ini akan menganalisis konten kursus ini dan mengirim informasi perilaku belajar ke model AI yang dikonfigurasi. Meskipun tidak mengirim data pribadi yang dapat diidentifikasi secara langsung ke model AI, sebagian data yang dikirim mungkin secara tidak langsung memberikan informasi yang dapat mengidentifikasi pengguna. Jika ragu, selalu periksa dengan penanggung jawab referensi AI Anda sebelum menggunakan fitur ini."
+
+msgid "Additional activities"
+msgstr "Aktivitas tambahan"
+
+msgid "Rhythm"
+msgstr "Irama"
+
+msgid "Learning methodologies"
+msgstr "Metodologi pembelajaran"
+
+msgid "Other recommendations"
+msgstr "Rekomendasi lain"
+
+msgid "Analyzing course..."
+msgstr "Menganalisis kursus..."
+
+msgid "Analyzing student's learning..."
+msgstr "Menganalisis pembelajaran siswa..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Dengan menerima undangan ini, Anda akan terhubung dengan pengguna yang meminta sehingga sebagian atau seluruh data profil Anda dapat dibaca oleh pengguna tersebut. Pastikan Anda tidak membagikan terlalu banyak dengan memeriksa profil Anda bersama pengguna yang sudah Anda percayai."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Izin penggunaan mikrofon belum diaktifkan, harap aktifkan di peramban Anda untuk merekam audio"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Versi Chamilo ini dilengkapi dengan satu (atau lebih) kursus multibahasa yang sudah terpasang. Silakan tinjau di daftar kursus dan tentukan apakah kursus tersebut harus bersifat publik atau tidak."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Saat ini Anda tidak memiliki akses ke URL mana pun. Harap minta administrator untuk memberikan akses ke URL tempat Anda berada."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Jika penyedia AI yang dipilih bukan layanan berdaulat, konten dokumen yang dipilih dapat dikirim ke layanan eksternal. Jangan lanjutkan dengan informasi rahasia kecuali hal ini diizinkan oleh organisasi Anda."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Klik Satukan pada akun yang harus tetap ada. Sistem akan menggabungkan semua akun lain dalam kelompok duplikat yang sama ke dalamnya. Akun yang digabungkan akan dihapus secara permanen dan hilang dari laporan ini. Tindakan ini tidak dapat dibatalkan."
+
+msgid "Permanent deletion"
+msgstr "Penghapusan permanen"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Satukan sudah menghapus akun yang digabungkan secara permanen. Gunakan daftar Pengguna hanya jika Anda ingin menghapus akun tambahan secara manual."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Anda sedang mengubah logo untuk tema visual default “chamilo”. Pertimbangkan untuk membuat/menggunakan tema visual kustom agar tidak menimpa pengaturan default."
+
+msgid "This exercise has no questions."
+msgstr "Latihan ini tidak memiliki pertanyaan."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Bagaimana umpan balik/komentar untuk setiap pertanyaan ditampilkan? Opsi ini menentukan cara tampilannya kepada peserta didik saat mengerjakan tes."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Aplikasi ini dapat mengakses Chamilo sebagai Anda, menggunakan izin akun yang sudah ada dan tidak lebih. Cabut yang tidak lagi Anda gunakan atau kenali."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Jelaskan mengapa Anda ingin meminta pencabutan persetujuan hukum Anda, agar kami dapat memproses permintaan Anda dengan benar"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Gunakan kunci pribadi ini untuk menghubungkan klien MCP jarak jauh ke Chamilo dengan akun dan izin Anda sendiri."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Kunci lengkap ditampilkan hanya sekali. Simpan dengan aman. Membuat kunci baru segera membatalkan kunci sebelumnya."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Kunci mengautentikasi klien sebagai akun Chamilo Anda. Kunci tidak memberikan izin yang tidak dimiliki akun Anda."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Tampilkan pernyataan Syarat & Ketentuan di halaman pendaftaran, wajibkan pengunjung menerima S&K untuk mendaftar"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Konten syarat dan ketentuan akan dikirim ke model bahasa AI. Tinjau terjemahan yang diusulkan sebelum menyimpannya."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Versi tersimpan sudah ada untuk bahasa tujuan. Menyimpan usulan ini akan membuat versi baru."
+
+msgid "Acquired"
+msgstr "Diperoleh"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Gambar kursus yang disarankan: 1600 × 900 px (16:9). Gunakan setidaknya 1280 × 720 px agar tampilan tajam di layar yang lebih besar atau berdensitas tinggi."
+
+msgid "Courses of the selected URL"
+msgstr "Kursus dari URL yang dipilih"
+
+msgid "Course categories in selected URL"
+msgstr "Kategori kursus di URL yang dipilih"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Akun Anda aktif, Anda dapat masuk dan memeriksa kursus Anda sekarang."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Pertama unduh koreksi <a href='%s'> di sini </a>.\nSetelah itu unzip berkas tersebut dan sunting berkas sesuai keinginan tanpa mengubah nama berkas.\nKemudian buat berkas zip dari berkas yang telah diubah dan unggah di formulir ini."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Menambahkan siswa dari sesi %s ke sesi %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Tampilkan semua percobaan per latihan"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Operasi ini akan melebihi batas pengguna yang diizinkan untuk kursus yang dipilih."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Beberapa langganan tidak dapat dijalankan karena mencapai batas pengguna yang diizinkan untuk kursus terkait. Pengguna/Kursus yang terpengaruh: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Registri ini mencantumkan halaman pelaporan yang diketahui, kategorinya, URL kanonis, URL lama, dan audiens peran yang diharapkan. URL kanonis mengarahkan ke implementasi laporan saat ini dan menerapkan matriks peran laporan yang didokumentasikan."
+
+msgid "E-mail notification subscription"
+msgstr "Langganan notifikasi e-mail"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Operasi ini akan melebihi batas %s pengguna per kursus yang ditetapkan administrator. Langganan telah dibatalkan."
+
+msgid "Language the document is in"
+msgstr "Bahasa dokumen"
+
+msgid "There is no session still"
+msgstr "Belum ada sesi"
+
+msgid "Origin courses from session"
+msgstr "Kursus asal dari sesi"
+
+msgid "Destination courses from session"
+msgstr "Kursus tujuan dari sesi"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Akses umum dari situs kampus tanpa login"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Buat %d istilah glosarium untuk kursus tentang '%s', setiap istilah pada satu baris, dengan definisinya pada baris berikutnya dan satu baris kosong di antara setiap istilah. Jangan menambahkan format lain untuk judul maupun definisi."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Ini adalah deskripsi singkat kursus '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Anda menggunakan Chamilo di platform Windows. Pembantu konversi dokumen tidak tersedia untuk pengindeksan teks lengkap."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Pengaturan peluncuran otomatis tes AKTIF. Siswa akan diarahkan ke daftar tes."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Pengaturan peluncuran otomatis tes AKTIF. Siswa akan diarahkan ke tes tertentu."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Batas langganan untuk kursus ini telah tercapai (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Hitung kursus menurut bahasa"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Pengguna yang akses terakhirnya lebih lama dari tanggal yang dipilih."
 

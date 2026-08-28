@@ -9278,6 +9278,15 @@ msgstr "Rapporto orario per la sessione %s"
 msgid "Error"
 msgstr "Errore"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "L'utente è stato creato, ma uno dei campi aggiuntivi del profilo non è stato salvato."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "L'utente è stato aggiornato, ma uno dei campi aggiuntivi del profilo non è stato salvato."
+
+msgid "One or more fields contain invalid values."
+msgstr "Uno o più campi contengono valori non validi."
+
 msgid "Anonymous"
 msgstr "Anonimo"
 
@@ -15317,6 +15326,30 @@ msgstr "Tempo di accesso nell'ultima settimana"
 msgid "System status"
 msgstr "Stato del sistema"
 
+msgid "Courses space"
+msgstr "Spazio corsi"
+
+msgid "Database server configuration and metadata"
+msgstr "Configurazione del server database e metadati"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Utilizzo disco per corso rispetto alla quota disco"
+
+msgid "Information about your webserver configuration"
+msgstr "Informazioni sulla configurazione del server web"
+
+msgid "Paths"
+msgstr "Percorsi"
+
+msgid "State of Chamilo requirements"
+msgstr "Stato dei requisiti di Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Stato delle impostazioni PHP sul server"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Costanti di api_get_path() risolte su questo portale"
+
 msgid "Is writable"
 msgstr "è abilitato alla scrittura"
 
@@ -20688,6 +20721,9 @@ msgstr "Sulla ruota delle competenze, mostra il nome della competenza quando ha 
 
 msgid "Created by"
 msgstr "Creato da"
+
+msgid "Created by %s on %s"
+msgstr "Creato da %s il %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Nascondi tutor generale nella condivisione dei documenti"
@@ -26960,7 +26996,7 @@ msgid "Immediately block users who have been disabled by the admin through users
 msgstr "Blocca immediatamente gli utenti disabilitati dall'amministratore tramite gestione utenti. Altrimenti, gli utenti disabilitati mantengono i loro privilegi precedenti fino al logout."
 
 msgid "Session cookie samesite"
-msgstr "Session cookie samesite"
+msgstr "SameSite del cookie di sessione"
 
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr "Abilita parametro samesite:None per cookie sessione. Più info: https://www.chromium.org/updates/same-site e https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
@@ -31892,6 +31928,9 @@ msgstr "Scrivi qualcosa a %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Preferito: SVG. Larghezza PNG consigliata: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Larghezza PNG consigliata: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Carica logo PNG per le e-mail (~%spx di larghezza)"
 
@@ -31927,6 +31966,9 @@ msgstr "Clicca per inserire"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Preferito: SVG. Dimensione max PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Dimensione massima PNG: %spx."
 
 msgid "View badge"
 msgstr "Visualizza badge"
@@ -38078,6 +38120,9 @@ msgstr "Completamento"
 msgid "Draft saved"
 msgstr "Bozza salvata"
 
+msgid "Save as draft"
+msgstr "Salva come bozza"
+
 msgid "Statement"
 msgstr "Enunciato"
 
@@ -39159,7 +39204,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard lettura"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Keepalive della classifica"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard attesa"
@@ -39499,4 +39544,265 @@ msgstr "Questo utente è già iscritto alla sessione."
 
 msgid "This user is already subscribed to the course."
 msgstr "Questo utente è già iscritto al corso."
+
+msgid "Multi URLs"
+msgstr "URL multipli"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entità come utenti e corsi possono essere attive in più di un URL contemporaneamente, quindi la somma dei valori sottostanti non corrisponderà al totale."
+
+msgid "User directory"
+msgstr "Directory utenti"
+
+msgid "Course directory"
+msgstr "Directory corsi"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "Dettagli utente"
+
+msgid "Course details"
+msgstr "Dettagli corso"
+
+msgid "View details"
+msgstr "Visualizza dettagli"
+
+msgid "Average progress"
+msgstr "Progresso medio"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "L'iscrizione diretta appartiene al corso nel suo insieme, non a un URL specifico, quindi le stesse cifre «Diretto» sono ripetute di seguito per ogni URL a cui questo corso è collegato. Le sessioni sono il modo previsto per condividere un corso tra URL con metriche che differiscono effettivamente per URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Accessi (tutti gli URL combinati)"
+
+msgid "Unique logins"
+msgstr "Accessi unici"
+
+msgid "Parent URL"
+msgstr "URL padre"
+
+msgid "Logins (your URLs)"
+msgstr "Accessi (i tuoi URL)"
+
+msgid "The picture could not be uploaded"
+msgstr "Impossibile caricare l'immagine"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Questo tipo di campo non è ancora completamente supportato — solo valore grezzo."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Questo corso è vicino al limite di iscrizione utenti (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Lo spazio è limitato dalle proprietà del corso. Per aumentare il limite, ottieni un"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Le iscrizioni degli utenti sono limitate dalle proprietà del corso. Per aumentare il limite, ottieni un"
+
+msgid "pro plan"
+msgstr "piano pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "e importa il backup di questo corso tramite Manutenzione del corso nel nuovo corso a pagamento, oppure apri un ticket per convertire il corso in un corso pro dopo aver acquisito questo piano."
+
+msgid "Tired of writing questions?"
+msgstr "Stanco di scrivere domande?"
+
+msgid "Upgrade your plan"
+msgstr "Aggiorna il piano"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "a un piano pro per ricevere aiuto da un'IA nella generazione di domande di qualità."
+
+msgid "Student Success AI Coach"
+msgstr "Coach IA per il successo dello studente"
+
+msgid "No AI text provider is configured."
+msgstr "Nessun fornitore di testo IA è configurato."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Istruzioni aggiuntive per il coach IA"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Esempio: questo studente ha difficoltà a mantenere l'attenzione. Suggerisci attività più brevi e verifiche della comprensione più frequenti."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Tieni aperta questa finestra mentre Chamilo prepara la raccomandazione."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "La raccomandazione è stata anche salvata nella tua casella di posta Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "La raccomandazione è stata generata e salvata per questo studente, ma non è stato possibile creare la copia nella casella di posta."
+
+msgid "Student success recommendation"
+msgstr "Raccomandazione per il successo dello studente"
+
+msgid "Generated"
+msgstr "Generata"
+
+msgid "Priority actions"
+msgstr "Azioni prioritarie"
+
+msgid "Evidence"
+msgstr "Evidenze"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Questa funzione analizzerà i contenuti di questo corso e invierà informazioni sul comportamento di apprendimento al modello IA configurato. Pur non inviando dati personali direttamente identificabili al modello IA, alcuni dei dati inviati potrebbero fornire indirettamente informazioni identificabili sull'utente. In caso di dubbi, consulta sempre il referente IA prima di usare questa funzione."
+
+msgid "Additional activities"
+msgstr "Attività aggiuntive"
+
+msgid "Rhythm"
+msgstr "Ritmo"
+
+msgid "Learning methodologies"
+msgstr "Metodologie di apprendimento"
+
+msgid "Other recommendations"
+msgstr "Altre raccomandazioni"
+
+msgid "Analyzing course..."
+msgstr "Analisi del corso..."
+
+msgid "Analyzing student's learning..."
+msgstr "Analisi dell'apprendimento dello studente..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Accettando questo invito, verrai collegato all'utente richiedente in modo che alcuni o tutti i dati del tuo profilo siano disponibili in lettura per l'utente richiedente. Assicurati di non condividere troppo, controllando il profilo con utenti di cui ti fidi già."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "L'autorizzazione all'uso del microfono non è abilitata; abilitala nel browser per registrare l'audio"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Questa versione di Chamilo include uno o più corsi multilingue preinstallati. Puoi esaminarli nell'elenco dei corsi e decidere se debbano essere pubblici o meno."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Al momento non hai accesso ad alcun URL. Chiedi all'amministratore di concederti l'accesso all'URL a cui appartieni."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Se il fornitore IA selezionato non è un servizio sovrano, il contenuto del documento selezionato potrebbe essere inviato a un servizio esterno. Non continuare con informazioni riservate a meno che non sia consentito dalla tua organizzazione."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Fai clic su Unifica sull'account che deve rimanere. Il sistema unirà tutti gli altri account dello stesso gruppo di duplicati. Gli account uniti verranno eliminati in modo permanente e scompariranno da questo report. Questa azione non può essere annullata."
+
+msgid "Permanent deletion"
+msgstr "Eliminazione permanente"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unifica elimina già in modo permanente gli account uniti. Usa l'elenco Utenti solo se vuoi eliminare manualmente altri account."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Stai modificando i loghi del tema visivo predefinito “chamilo”. Valuta di creare/usare un tema visivo personalizzato per evitare di sovrascrivere i valori predefiniti."
+
+msgid "This exercise has no questions."
+msgstr "Questo esercizio non ha domande."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Come mostrare il feedback/commento per ogni domanda? Questa opzione definisce come verrà mostrato allo studente durante il test."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Queste applicazioni possono accedere a Chamilo come te, usando i permessi del tuo account esistente e nient'altro. Revoca quelle che non usi più o che non riconosci."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Spiega perché vuoi richiedere il ritiro del consenso legale, così possiamo elaborare correttamente la richiesta"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Usa questa chiave personale per collegare un client MCP remoto a Chamilo con il tuo account e i tuoi permessi."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "La chiave completa viene mostrata una sola volta. Conservala in modo sicuro. Generare una nuova chiave invalida immediatamente quella precedente."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "La chiave autentica il client come il tuo account Chamilo. Non concede permessi che il tuo account non possiede già."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Mostra una dichiarazione di Termini e condizioni nella pagina di registrazione e richiedi al visitatore di accettarli per registrarsi"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Il contenuto dei termini e condizioni verrà inviato a un modello linguistico IA. Rivedi la traduzione proposta prima di salvarla."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Esiste già una versione salvata per la lingua di destinazione. Salvare questa proposta creerà una nuova versione."
+
+msgid "Acquired"
+msgstr "Acquisito"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Immagine del corso consigliata: 1600 × 900 px (16:9). Usa almeno 1280 × 720 px per una visualizzazione nitida su schermi più grandi o ad alta densità."
+
+msgid "Courses of the selected URL"
+msgstr "Corsi dell'URL selezionato"
+
+msgid "Course categories in selected URL"
+msgstr "Categorie di corsi nell'URL selezionato"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Il tuo account è attivo: ora puoi accedere e controllare i tuoi corsi."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Prima devi scaricare le correzioni <a href='%s'> qui </a>.\nDopodiché devi decomprimere il file e modificare i file come desideri senza cambiare i nomi dei file.\nPoi crea un file zip con i file modificati e caricalo in questo modulo."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Aggiunta degli studenti dalla sessione %s alla sessione %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Mostra tutti i tentativi per esercizio"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Questa operazione supererebbe il limite di utenti consentito per il corso selezionato."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Alcune iscrizioni non sono state eseguite perché è stato raggiunto il limite di utenti consentito per il corso interessato. Utenti/Corsi interessati: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Questo registro elenca le pagine di report conosciute, la loro categoria, l'URL canonico, l'URL legacy e il pubblico di ruoli previsto. Gli URL canonici reindirizzano all'implementazione attuale del report e applicano la matrice dei ruoli documentata."
+
+msgid "E-mail notification subscription"
+msgstr "Iscrizione alle notifiche e-mail"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Questa operazione supererebbe il limite di %s utenti per corso impostato dagli amministratori. L'iscrizione è stata annullata."
+
+msgid "Language the document is in"
+msgstr "Lingua del documento"
+
+msgid "There is no session still"
+msgstr "Non c'è ancora nessuna sessione"
+
+msgid "Origin courses from session"
+msgstr "Corsi di origine della sessione"
+
+msgid "Destination courses from session"
+msgstr "Corsi di destinazione della sessione"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Accesso pubblico dalla pagina principale del campus anche senza login"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Genera %d termini di glossario per un corso su '%s', ogni termine su una riga, con la definizione sulla riga successiva e una riga vuota tra ciascun termine. Non aggiungere altra formattazione né per il titolo né per la definizione."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Questa è una breve descrizione del corso '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Stai utilizzando Chamilo su una piattaforma Windows. Gli strumenti di conversione dei documenti non sono disponibili per l'indicizzazione full-text."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "L'impostazione di avvio automatico del test è ATTIVA. Gli studenti verranno reindirizzati all'elenco dei test."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "L'impostazione di avvio automatico del test è ATTIVA. Gli studenti verranno reindirizzati a un test specifico."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Il limite di iscrizioni per questo corso è stato raggiunto (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Conteggio corsi per lingua"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Utenti il cui ultimo accesso è precedente alla data selezionata."
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vänliga hälsningar,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-exempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formelprov: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(rekommenderad)"
 
 msgid "SCORM DB"
-msgstr "SCORM DB"
+msgstr "SCORM-DB"
 
 msgid "Administrator last name"
 msgstr "Administratörens efternamn"
@@ -9269,6 +9269,15 @@ msgstr "Tidsrapport för session %s"
 msgid "Error"
 msgstr "Fel"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Användaren skapades, men ett av de extra profilfälten kunde inte sparas."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Användaren uppdaterades, men ett av de extra profilfälten kunde inte sparas."
+
+msgid "One or more fields contain invalid values."
+msgstr "Ett eller flera fält innehåller ogiltiga värden."
+
 msgid "Anonymous"
 msgstr "Anonym"
 
@@ -14445,7 +14454,7 @@ msgid "Compose"
 msgstr "Skriv"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Babyorange"
 
 msgid "Blue lagoon"
 msgstr "Blå lagun"
@@ -15307,6 +15316,30 @@ msgstr "Tid spenderad förra veckan"
 
 msgid "System status"
 msgstr "Systemstatus"
+
+msgid "Courses space"
+msgstr "Kursutrymme"
+
+msgid "Database server configuration and metadata"
+msgstr "Databasserverkonfiguration och metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Diskanvändning per kurs jämfört med diskkvot"
+
+msgid "Information about your webserver configuration"
+msgstr "Information om din webbserverkonfiguration"
+
+msgid "Paths"
+msgstr "Sökvägar"
+
+msgid "State of Chamilo requirements"
+msgstr "Status för Chamilo-krav"
+
+msgid "State of PHP settings on the server"
+msgstr "Status för PHP-inställningar på servern"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path()-konstanter som löses på denna portal"
 
 msgid "Is writable"
 msgstr "Är skrivbar"
@@ -20675,6 +20708,9 @@ msgstr "På färdighetsratten visas namnet på färdigheten när den har kort ko
 msgid "Created by"
 msgstr "Skapad av"
 
+msgid "Created by %s on %s"
+msgstr "Skapad av %s den %s"
+
 msgid "Hide general coach in dropbox"
 msgstr "Dölj generell handledare i dropbox"
 
@@ -25092,7 +25128,7 @@ msgid "The update failed for the following courses"
 msgstr "Uppdateringen misslyckades för följande kurser"
 
 msgid "%02d h %02d m %02d s"
-msgstr "%02d h %02d m %02d s"
+msgstr "%02d t %02d m %02d s"
 
 msgid "User management"
 msgstr "Användarhantering"
@@ -31495,7 +31531,7 @@ msgid "SCIM external ID"
 msgstr "SCIM extern ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "OAuth2-ID"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Vänligen acceptera den senaste versionen av villkoren och avtalen."
@@ -31878,6 +31914,9 @@ msgstr "Skriv något till %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Föredraget: SVG. PNG rekommenderad bredd: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Rekommenderad PNG-bredd: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Ladda upp PNG-logo för e-post (~%spx bredd)"
 
@@ -31913,6 +31952,9 @@ msgstr "Klicka för att infoga"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Föredraget: SVG. PNG max storlek: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Maximal PNG-storlek: %spx."
 
 msgid "View badge"
 msgstr "Visa märke"
@@ -33709,10 +33751,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "EntraID-ID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "EntraID-UID"
 
 msgid "Required fields"
 msgstr "Obligatoriska fält"
@@ -35497,7 +35539,7 @@ msgid "%s results"
 msgstr "%s resultat"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsaktivitet: beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://sv.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel: fyll i formuläraktiviteten: beräkna kroppsmasseindex</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Kroppsmasseindex</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = vikt/längd<sup>2</sup> (jfr <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Borttagen"
@@ -38064,6 +38106,9 @@ msgstr "Avslutar"
 msgid "Draft saved"
 msgstr "Utkast sparat"
 
+msgid "Save as draft"
+msgstr "Spara som utkast"
+
 msgid "Statement"
 msgstr "Uppgift"
 
@@ -39145,7 +39190,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard läser"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Resultattavla keepalive"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard väntar"
@@ -39274,7 +39319,7 @@ msgid "Misses"
 msgstr "Missar"
 
 msgid "Cache full"
-msgstr "Cache full"
+msgstr "Cachen är full"
 
 msgid "OOM restarts"
 msgstr "OOM-omstarter"
@@ -39485,4 +39530,265 @@ msgstr "Denna användare är redan registrerad på sessionen."
 
 msgid "This user is already subscribed to the course."
 msgstr "Denna användare är redan registrerad på kursen."
+
+msgid "Multi URLs"
+msgstr "Flera URL:er"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entiteter som användare och kurser kan vara aktiva i mer än en URL samtidigt, så summan av värdena nedan kommer inte att stämma med totalen."
+
+msgid "User directory"
+msgstr "Användarkatalog"
+
+msgid "Course directory"
+msgstr "Kurskatalog"
+
+msgid "URLs"
+msgstr "URL:er"
+
+msgid "User details"
+msgstr "Användaruppgifter"
+
+msgid "Course details"
+msgstr "Kursuppgifter"
+
+msgid "View details"
+msgstr "Visa detaljer"
+
+msgid "Average progress"
+msgstr "Genomsnittlig framsteg"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Direktinskrivning tillhör kursen som helhet, inte en specifik URL, så samma siffror för \"Direkt\" upprepas nedan för varje URL som kursen är kopplad till. Sessioner är det avsedda sättet att dela en kurs mellan URL:er med mätvärden som faktiskt skiljer sig per URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Inloggningar (alla URL:er tillsammans)"
+
+msgid "Unique logins"
+msgstr "Unika inloggningar"
+
+msgid "Parent URL"
+msgstr "Överordnad URL"
+
+msgid "Logins (your URLs)"
+msgstr "Inloggningar (dina URL:er)"
+
+msgid "The picture could not be uploaded"
+msgstr "Bilden kunde inte laddas upp"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Denna fälttyp stöds inte fullt ut ännu — endast råvärde."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Denna kurs närmar sig gränsen för användarregistreringar (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Utrymmet är begränsat via dina kursegenskaper. För att höja gränsen, skaffa en"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Användarregistreringar är begränsade via dina kursegenskaper. För att höja gränsen, skaffa en"
+
+msgid "pro plan"
+msgstr "pro-plan"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "och importera den här kursens säkerhetskopia via Kursunderhåll till din nya betalda kurs, eller öppna ett ärende för att konvertera kursen till en pro-kurs när du har skaffat den här planen."
+
+msgid "Tired of writing questions?"
+msgstr "Trött på att skriva frågor?"
+
+msgid "Upgrade your plan"
+msgstr "Uppgradera din plan"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "till en pro-plan för att få hjälp av en AI att generera kvalitetsfrågor åt dig."
+
+msgid "Student Success AI Coach"
+msgstr "AI-coach för studentframgång"
+
+msgid "No AI text provider is configured."
+msgstr "Ingen AI-textleverantör är konfigurerad."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Ytterligare instruktioner för AI-coachen"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Exempel: Den här eleven har svårt att hålla uppmärksamheten. Föreslå kortare aktiviteter och mer frekventa kontrollfrågor."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Håll det här fönstret öppet medan Chamilo förbereder rekommendationen."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Rekommendationen sparades också i din Chamilo-inkorg."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Rekommendationen genererades och sparades för den här eleven, men en kopia i inkorgen kunde inte skapas."
+
+msgid "Student success recommendation"
+msgstr "Rekommendation för studentframgång"
+
+msgid "Generated"
+msgstr "Genererad"
+
+msgid "Priority actions"
+msgstr "Prioriterade åtgärder"
+
+msgid "Evidence"
+msgstr "Underlag"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Den här funktionen analyserar kursens innehåll och skickar information om lärandebeteende till den konfigurerade AI-modellen. Även om direkt identifierbara personuppgifter inte skickas till AI-modellen kan en del av de skickade uppgifterna indirekt ge identifierbar information om användaren. Vid osäkerhet, kontrollera alltid med din AI-referensperson innan du använder funktionen."
+
+msgid "Additional activities"
+msgstr "Ytterligare aktiviteter"
+
+msgid "Rhythm"
+msgstr "Tempo"
+
+msgid "Learning methodologies"
+msgstr "Lärandemetoder"
+
+msgid "Other recommendations"
+msgstr "Övriga rekommendationer"
+
+msgid "Analyzing course..."
+msgstr "Analyserar kurs..."
+
+msgid "Analyzing student's learning..."
+msgstr "Analyserar studentens lärande..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Genom att acceptera den här inbjudan kopplas du till den begärande användaren på ett sätt som gör att en del av eller all din profilinformation blir läsbar för den begärande användaren. Se till att du inte delar för mycket genom att kontrollera din profil med användare du redan litar på."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Behörighet att använda mikrofonen är inte aktiverad. Aktivera den i webbläsaren för att spela in ljud"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Den här versionen av Chamilo levereras med en (eller flera) flerspråkiga kurser förinstallerade. Granska dem gärna i kurslistan och avgör om de ska vara publika eller inte."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Du har för närvarande inte åtkomst till någon URL. Be administratören att ge dig åtkomst till den URL du tillhör."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Om den valda AI-leverantören inte är en suverän tjänst kan det valda dokumentinnehållet skickas till en extern tjänst. Fortsätt inte med konfidentiell information om det inte är tillåtet av din organisation."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Klicka på Förenkla på det konto som ska behållas. Systemet slår ihop alla andra konton i samma dubblettgrupp med det. Sammanslagna konton raderas permanent och försvinner från den här rapporten. Åtgärden kan inte ångras."
+
+msgid "Permanent deletion"
+msgstr "Permanent radering"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Förenkla raderar redan sammanslagna konton permanent. Använd användarlistan endast om du vill radera ytterligare konton manuellt."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Du ändrar logotyper för det förvalda visuella temat “chamilo”. Överväg att skapa/använda ett eget visuellt tema för att undvika att skriva över standardvärden."
+
+msgid "This exercise has no questions."
+msgstr "Den här övningen har inga frågor."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Hur ska återkoppling/kommentar för varje fråga visas? Det här alternativet styr hur det visas för eleven när testet görs."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Dessa program kan komma åt Chamilo som du, med dina befintliga kontorättigheter och inget mer. Återkalla dem du inte längre använder eller känner igen."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Förklara varför du vill begära återkallelse av ditt rättsliga samtycke, så att vi kan hantera din begäran korrekt"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Använd den här personliga nyckeln för att ansluta en fjärr-MCP-klient till Chamilo med ditt eget konto och dina behörigheter."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Den fullständiga nyckeln visas bara en gång. Förvara den säkert. Att generera en ny nyckel ogiltigförklarar omedelbart den föregående."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Nyckeln autentiserar klienten som ditt Chamilo-konto. Den ger inte behörigheter som ditt konto inte redan har."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Visa ett uttalande om villkor på registreringssidan och kräv att besökaren godkänner villkoren för att registrera sig"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Innehållet i villkoren skickas till en AI-språkmodell. Granska den föreslagna översättningen innan du sparar den."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "En sparad version finns redan för målspråket. Att spara det här förslaget skapar en ny version."
+
+msgid "Acquired"
+msgstr "Förvärvad"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Rekommenderad kursbild: 1600 × 900 px (16:9). Använd minst 1280 × 720 px för skarp visning på större eller högupplösta skärmar."
+
+msgid "Courses of the selected URL"
+msgstr "Kurser för den valda URL:en"
+
+msgid "Course categories in selected URL"
+msgstr "Kurskategorier i vald URL"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Ditt konto är aktivt, du kan logga in och se dina kurser nu."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Först måste du ladda ner rättningarna <a href='%s'> här </a>.\nDärefter måste du packa upp filen och redigera filerna som du vill utan att ändra filnamnen.\nSkapa sedan en zip-fil med de ändrade filerna och ladda upp den i det här formuläret."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Lägger till studenter från session %s till session %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Visa alla försök per övning"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Denna åtgärd skulle överskrida den tillåtna användargränsen för den valda kursen."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Vissa prenumerationer kunde inte genomföras eftersom de nådde den tillåtna användargränsen för den berörda kursen. Användare/Kurser som berörs: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Detta register listar kända rapportsidor, deras kategori, kanonisk URL, äldre URL och förväntad rollmålgrupp. Kanoniska URL:er dirigerar till den aktuella rapportimplementeringen och tillämpar den dokumenterade rollmatrisen för rapporter."
+
+msgid "E-mail notification subscription"
+msgstr "Prenumeration på e-postaviseringar"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Denna åtgärd skulle överskrida gränsen på %s användare per kurs som administratörerna har satt. Prenumerationen har avbrutits."
+
+msgid "Language the document is in"
+msgstr "Språk som dokumentet är på"
+
+msgid "There is no session still"
+msgstr "Det finns ännu ingen session"
+
+msgid "Origin courses from session"
+msgstr "Ursprungskurser från session"
+
+msgid "Destination courses from session"
+msgstr "Destinationskurser från session"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Publik åtkomst från campus hemsida även utan inloggning"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Generera %d ordlistetermer för en kurs om '%s', varje term på en egen rad, med dess definition på nästa rad och en tom rad mellan varje term. Lägg inte till någon annan formatering för titeln eller definitionen."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Detta är en kort beskrivning av kursen '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Du använder Chamilo på en Windows-plattform. Hjälpverktyg för dokumentkonvertering är inte tillgängliga för fulltextindexering."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Inställningen för automatisk start av testet är PÅ. Studenter omdirigeras till testlistan."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Inställningen för automatisk start av testet är PÅ. Studenter omdirigeras till ett specifikt test."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Prenumerationsgränsen för den här kursen har nåtts (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Räkna kurser per språk"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Användare vars senaste åtkomst är äldre än det valda datumet."
 

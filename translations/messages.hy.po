@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Բանաձևի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Բանաձևի օրինակ՝ sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -9268,6 +9268,15 @@ msgstr "Ժամանակային հաշվետվություն %s սեանսի հա
 msgid "Error"
 msgstr "Սխալ"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Օգտատերը ստեղծվել է, սակայն լրացուցիչ պրոֆիլի դաշտերից մեկը չհաջողվեց պահպանել։"
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Օգտատերը թարմացվել է, սակայն լրացուցիչ պրոֆիլի դաշտերից մեկը չհաջողվեց պահպանել։"
+
+msgid "One or more fields contain invalid values."
+msgstr "Մեկ կամ մի քանի դաշտեր պարունակում են անվավեր արժեքներ։"
+
 msgid "Anonymous"
 msgstr "Անանուն"
 
@@ -15307,6 +15316,30 @@ msgstr "Անցկացրած ժամանակ անցյալ շաբաթ"
 msgid "System status"
 msgstr "Համակարգի կարգավիճակ"
 
+msgid "Courses space"
+msgstr "Դասընթացների տարածք"
+
+msgid "Database server configuration and metadata"
+msgstr "Տվյալների բազայի սերվերի կարգավորում և մետատվյալներ"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Սկավառակի օգտագործում ըստ դասընթացի՝ համեմատած սկավառակի քվոտայի հետ"
+
+msgid "Information about your webserver configuration"
+msgstr "Տեղեկություններ ձեր վեբսերվերի կարգավորման մասին"
+
+msgid "Paths"
+msgstr "Ուղիներ"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo-ի պահանջների վիճակը"
+
+msgid "State of PHP settings on the server"
+msgstr "PHP կարգավորումների վիճակը սերվերում"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path() հաստատունները՝ լուծված այս պորտալում"
+
 msgid "Is writable"
 msgstr "Գրելի է"
 
@@ -20673,6 +20706,9 @@ msgstr "Վերջինությունների անիվի վրա ցույց է տա�
 
 msgid "Created by"
 msgstr "Ստեղծել է"
+
+msgid "Created by %s on %s"
+msgstr "Ստեղծել է %s՝ %s-ին"
 
 msgid "Hide general coach in dropbox"
 msgstr "Թաքցնել ընդհանուր մարզիչը dropbox-ում"
@@ -31876,6 +31912,9 @@ msgstr "Գրեք ինչ-որ բան %s-ին"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Նախընտրելի՝ SVG. PNG-ի խորհուրդ տրվող լայնություն՝ %spx:"
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG խորհուրդ տրվող լայնություն՝ %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Վերբեռնել PNG լոգո էլ. փոստերի համար (~%spx լայնություն)"
 
@@ -31911,6 +31950,9 @@ msgstr "Սեղմեք տեղադրելու համար"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Նախընտրելի՝ SVG։ PNG առավելագույն չափ՝ %spx:"
+
+msgid "PNG max size: %spx."
+msgstr "PNG առավելագույն չափ՝ %spx."
 
 msgid "View badge"
 msgstr "Դիտել նշանը"
@@ -38062,6 +38104,9 @@ msgstr "Ավարտվում է"
 msgid "Draft saved"
 msgstr "Նախագիծը պահպանվել է"
 
+msgid "Save as draft"
+msgstr "Պահել որպես սևագիր"
+
 msgid "Statement"
 msgstr "Հայտարարություն"
 
@@ -39143,7 +39188,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard ընթերցում"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Արդյունքների աղյուսակի keepalive"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard սպասում"
@@ -39221,7 +39266,7 @@ msgid "Delete failed"
 msgstr "Ջնջումը ձախողվեց"
 
 msgid "PHP cache"
-msgstr "PHP cache"
+msgstr "PHP քեշ"
 
 msgid "Live OPcache and APCu diagnostics"
 msgstr "Live OPcache և APCu ախտորոշում"
@@ -39483,4 +39528,265 @@ msgstr "Այս օգտատերը արդեն գրանցված է սեսիայու�
 
 msgid "This user is already subscribed to the course."
 msgstr "Այս օգտատերը արդեն գրանցված է դասընթացում:"
+
+msgid "Multi URLs"
+msgstr "Բազմակի URL-ներ"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Օգտատերերի և դասընթացների նման միավորները կարող են միաժամանակ ակտիվ լինել մեկից ավելի URL-ում, ուստի ստորև նշված արժեքների գումարը չի համընկնի ընդհանուրի հետ։"
+
+msgid "User directory"
+msgstr "Օգտատերերի գրացուցակ"
+
+msgid "Course directory"
+msgstr "Դասընթացների գրացուցակ"
+
+msgid "URLs"
+msgstr "URL-ներ"
+
+msgid "User details"
+msgstr "Օգտատիրոջ տվյալներ"
+
+msgid "Course details"
+msgstr "Դասընթացի տվյալներ"
+
+msgid "View details"
+msgstr "Դիտել մանրամասները"
+
+msgid "Average progress"
+msgstr "Միջին առաջընթաց"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Ուղղակի գրանցումը վերաբերում է դասընթացին որպես ամբողջություն, ոչ թե կոնկրետ URL-ին, ուստի նույն «Ուղղակի» թվերը կրկնվում են ստորև յուրաքանչյուր URL-ի համար, որին կապված է այս դասընթացը։ Նիստերը նախատեսված եղանակն են դասընթացը URL-ների միջև կիսելու համար՝ ցուցանիշներով, որոնք իրականում տարբերվում են ըստ URL-ի։"
+
+msgid "Logins (all URLs combined)"
+msgstr "Մուտքեր (բոլոր URL-ները միասին)"
+
+msgid "Unique logins"
+msgstr "Եզակի մուտքեր"
+
+msgid "Parent URL"
+msgstr "Ծնող URL"
+
+msgid "Logins (your URLs)"
+msgstr "Մուտքեր (ձեր URL-ները)"
+
+msgid "The picture could not be uploaded"
+msgstr "Նկարը չհաջողվեց վերբեռնել"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Այս դաշտի տեսակը դեռ լիովին չի աջակցվում — միայն հում արժեք։"
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Այս դասընթացը մոտ է օգտատերերի գրանցման սահմանին (%d/%d)։"
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Տարածքը սահմանափակված է ձեր դասընթացի հատկություններով։ Սահմանը մեծացնելու համար ստացեք"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Օգտատերերի գրանցումները սահմանափակված են ձեր դասընթացի հատկություններով։ Սահմանը մեծացնելու համար ստացեք"
+
+msgid "pro plan"
+msgstr "pro պլան"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "և այս դասընթացի պահուստը ներմուծեք Դասընթացի սպասարկման միջոցով ձեր նոր վճարովի դասընթաց, կամ բացեք տոմս՝ դասընթացը pro դասընթացի վերածելու համար, երբ ձեռք բերեք այս պլանը։"
+
+msgid "Tired of writing questions?"
+msgstr "Հոգնել եք հարցեր գրելուց։"
+
+msgid "Upgrade your plan"
+msgstr "Թարմացրեք ձեր պլանը"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "pro պլանի՝ AI-ի օգնությամբ որակյալ հարցեր ստեղծելու համար։"
+
+msgid "Student Success AI Coach"
+msgstr "Ուսանողի հաջողության AI մարզիչ"
+
+msgid "No AI text provider is configured."
+msgstr "AI տեքստի մատակարար կարգավորված չէ։"
+
+msgid "Additional instructions for the AI coach"
+msgstr "Լրացուցիչ հրահանգներ AI մարզչի համար"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Օրինակ՝ Այս սովորողը դժվարանում է պահպանել ուշադրությունը։ Առաջարկեք ավելի կարճ գործունեություն և ավելի հաճախակի ստուգումներ ըմբռնման համար։"
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Թողեք այս պատուհանը բաց, մինչ Chamilo-ն պատրաստում է առաջարկությունը։"
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Առաջարկությունը նաև պահպանվել է ձեր Chamilo մուտքի արկղում։"
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Առաջարկությունը ստեղծվել և պահպանվել է այս սովորողի համար, բայց մուտքի արկղի պատճենը չհաջողվեց ստեղծել։"
+
+msgid "Student success recommendation"
+msgstr "Ուսանողի հաջողության առաջարկություն"
+
+msgid "Generated"
+msgstr "Ստեղծված"
+
+msgid "Priority actions"
+msgstr "Առաջնահերթ գործողություններ"
+
+msgid "Evidence"
+msgstr "Ապացույց"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Այս գործառույթը կվերլուծի այս դասընթացի բովանդակությունը և ուսումնական վարքի տեղեկություն կուղարկի կարգավորված AI մոդելին։ Չնայած ուղղակիորեն նույնականացվող անձնական տվյալներ AI մոդելին չեն ուղարկվում, ուղարկված որոշ տվյալներ կարող են անուղղակիորեն նույնականացնող տեղեկություն տալ օգտատիրոջ մասին։ Կասկածի դեպքում միշտ ստուգեք ձեր AI պատասխանատուի հետ՝ նախքան այս գործառույթն օգտագործելը։"
+
+msgid "Additional activities"
+msgstr "Լրացուցիչ գործունեություններ"
+
+msgid "Rhythm"
+msgstr "Ռիթմ"
+
+msgid "Learning methodologies"
+msgstr "Ուսումնական մեթոդաբանություններ"
+
+msgid "Other recommendations"
+msgstr "Այլ առաջարկություններ"
+
+msgid "Analyzing course..."
+msgstr "Դասընթացի վերլուծություն..."
+
+msgid "Analyzing student's learning..."
+msgstr "Ուսանողի ուսուցման վերլուծություն..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Ընդունելով այս հրավերը՝ դուք կկապվեք հարցնող օգտատիրոջ հետ այնպես, որ ձեր պրոֆիլի տվյալների մի մասը կամ բոլորը հասանելի կլինեն նրան կարդալու համար։ Խնդրում ենք համոզվել, որ չափից շատ չեք կիսում՝ ստուգելով ձեր պրոֆիլը արդեն վստահելի օգտատերերի հետ։"
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Խոսափողի թույլտվությունը միացված չէ, խնդրում ենք միացնել այն ձեր դիտարկիչում՝ ձայն գրանցելու համար"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Chamilo-ի այս տարբերակը գալիս է նախապես տեղադրված մեկ (կամ ավելի) բազմալեզու դասընթաց(ներ)ով։ Դիտեք դրանք դասընթացների ցանկում և որոշեք՝ հանրային լինեն, թե ոչ։"
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Ներկայումս որևէ URL-ի մուտք չունեք։ Խնդրում ենք խնդրել ադմինիստրատորին տրամադրել մուտք այն URL-ին, որին պատկանում եք։"
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Եթե ընտրված AI մատակարարը ինքնիշխան ծառայություն չէ, ընտրված փաստաթղթի բովանդակությունը կարող է ուղարկվել արտաքին ծառայության։ Մի շարունակեք գաղտնի տեղեկատվությամբ, եթե դա թույլատրված չէ ձեր կազմակերպության կողմից։"
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Սեղմեք Միավորել այն հաշվի վրա, որը պետք է մնա։ Համակարգը կմիավորի նույն կրկնօրինակ խմբի մյուս բոլոր հաշիվները դրան։ Միավորված հաշիվները մշտապես կջնջվեն և կանհետանան այս զեկույցից։ Այս գործողությունը չի կարող հետարկվել։"
+
+msgid "Permanent deletion"
+msgstr "Մշտական ջնջում"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Միավորելն արդեն մշտապես ջնջում է միավորված հաշիվները։ Օգտատերերի ցանկն օգտագործեք միայն լրացուցիչ հաշիվներ ձեռքով ջնջելու համար։"
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Դուք փոխում եք լոգոները լռելյայն տեսողական թեմայի «chamilo» համար։ Խորհուրդ է տրվում ստեղծել/օգտագործել հատուկ տեսողական թեմա՝ լռելյայնները չվերագրելու համար։"
+
+msgid "This exercise has no questions."
+msgstr "Այս վարժությունում հարցեր չկան։"
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Ինչպե՞ս ցուցադրել հետադարձ կապը/մեկնաբանությունը յուրաքանչյուր հարցի համար։ Այս տարբերակը սահմանում է, թե ինչպես այն կցուցադրվի սովորողին թեստը կատարելիս։"
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Այս հավելվածները կարող են մուտք գործել Chamilo որպես դուք՝ օգտագործելով ձեր առկա հաշվի թույլտվությունները և ոչ ավելին։ Հետ կանչեք ցանկացածը, որն այլևս չեք օգտագործում կամ չեք ճանաչում։"
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Խնդրում ենք բացատրել, թե ինչու եք խնդրում ձեր իրավական համաձայնության հետ կանչումը, որպեսզի կարողանանք պատշաճ մշակել ձեր հայցը"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Օգտագործեք այս անձնական բանալին՝ հեռակա MCP հաճախորդը Chamilo-ին միացնելու համար ձեր հաշվով և թույլտվություններով։"
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Ամբողջական բանալին ցուցադրվում է միայն մեկ անգամ։ Պահեք այն ապահով։ Նոր բանալի ստեղծելը անմիջապես անվավեր է դարձնում նախորդը։"
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Բանալին նույնականացնում է հաճախորդը որպես ձեր Chamilo հաշիվ։ Այն չի տալիս թույլտվություններ, որոնք ձեր հաշիվն արդեն չունի։"
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Ցուցադրել Պայմաններ և դրույթներ հայտարարություն գրանցման էջում, պահանջել այցելուից ընդունել Պայմանները գրանցվելու համար"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Պայմանների և դրույթների բովանդակությունը կուղարկվի AI լեզվական մոդելին։ Պահպանելուց առաջ վերանայեք առաջարկված թարգմանությունը։"
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Նպատակային լեզվի համար արդեն գոյություն ունի պահպանված տարբերակ։ Այս առաջարկը պահպանելը կստեղծի նոր տարբերակ։"
+
+msgid "Acquired"
+msgstr "Ձեռք բերված"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Դասընթացի առաջարկվող նկար՝ 1600 × 900 px (16:9)։ Օգտագործեք առնվազն 1280 × 720 px՝ մեծ կամ բարձր խտության էկրաններին սուր ցուցադրման համար։"
+
+msgid "Courses of the selected URL"
+msgstr "Ընտրված URL-ի դասընթացներ"
+
+msgid "Course categories in selected URL"
+msgstr "Դասընթացների կատեգորիաներ ընտրված URL-ում"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Ձեր հաշիվը ակտիվ է, կարող եք մուտք գործել և ստուգել ձեր դասընթացները հիմա։"
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Նախ պետք է ներբեռնեք ուղղումները <a href='%s'> այստեղ </a>։\nԴրանից հետո պետք է ապասեղմեք այդ ֆայլը և խմբագրեք ֆայլերը ըստ ցանկության՝ առանց փոխելու ֆայլերի անունները։\nԱյնուհետև ստեղծեք zip ֆայլ այդ փոփոխված ֆայլերով և վերբեռնեք այն այս ձևում։"
+
+msgid "Adding students from session %s to session %s"
+msgstr "Ուսանողների ավելացում %s նիստից %s նիստ"
+
+msgid "Show all attempts by exercise"
+msgstr "Ցույց տալ բոլոր փորձերը ըստ վարժության"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Այս գործողությունը կգերազանցի ընտրված դասընթացի թույլատրելի օգտատերերի սահմանը։"
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Որոշ բաժանորդագրություններ չկարողացան կատարվել, քանի որ հասել են ազդված դասընթացի թույլատրելի օգտատերերի սահմանին։ Ազդված օգտատերեր/դասընթացներ. %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Այս գրանցամատյանը թվարկում է հայտնի հաշվետվության էջերը, դրանց կատեգորիան, կանոնական URL-ը, հին URL-ը և սպասվող դերի լսարանը։ Կանոնական URL-ները ուղղորդում են հաշվետվության ընթացիկ իրականացմանը և կիրառում են փաստաթղթավորված հաշվետվության դերերի մատրիցը։"
+
+msgid "E-mail notification subscription"
+msgstr "Էլ. փոստի ծանուցման բաժանորդագրություն"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Այս գործողությունը կգերազանցի ադմինիստրատորների կողմից սահմանված %s օգտատեր մեկ դասընթացի սահմանը։ Բաժանորդագրությունը չեղարկվել է։"
+
+msgid "Language the document is in"
+msgstr "Փաստաթղթի լեզուն"
+
+msgid "There is no session still"
+msgstr "Դեռևս նիստ չկա"
+
+msgid "Origin courses from session"
+msgstr "Նիստի սկզբնական դասընթացներ"
+
+msgid "Destination courses from session"
+msgstr "Նիստի նպատակային դասընթացներ"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Հանրային մուտք (մուտք թույլատրված է դասընթացի ցանկացած անդամին)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Ստեղծել %d բառարանային տերմիններ '%s' դասընթացի համար, յուրաքանչյուր տերմին առանձին տողում, սահմանումը հաջորդ տողում և մեկ դատարկ տող յուրաքանչյուր տերմինի միջև։ Մի ավելացրեք որևէ այլ ձևաչափում վերնագրի կամ սահմանման համար։"
+
+msgid "This is a short description of the course '%s'."
+msgstr "Սա '%s' դասընթացի կարճ նկարագրությունն է։"
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Դուք օգտագործում եք Chamilo Windows հարթակում։ Փաստաթղթերի փոխակերպման օգնականները հասանելի չեն լրիվ տեքստի ինդեքսավորման համար։"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Թեստի ավտոմատ գործարկման կարգավորումը միացված է։ Ուսանողները կուղղորդվեն թեստերի ցանկ։"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Թեստի ավտոմատ գործարկման կարգավորումը միացված է։ Ուսանողները կուղղորդվեն կոնկրետ թեստ։"
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Այս դասընթացի բաժանորդագրության սահմանը հասել է (%current%/%limit%)։"
+
+msgid "Count course by language"
+msgstr "Դասընթացների քանակ ըստ լեզվի"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Օգտատերեր, որոնց վերջին մուտքը ավելի հին է, քան ընտրված ամսաթիվը։"
 

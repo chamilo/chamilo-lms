@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Ειλικρινά"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Δείγμα τύπου: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Δείγμα τύπου: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Μεταβλητά όρια"
@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ναι:πνευματικά δικαιώματα,, όχι:χωρίς πνευματικά δικαιώματα"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Φάκελος,, application/msword:MsWord,, application/octet-stream:Δυαδική ροή,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Φάκελος,, application\/msword:MsWord,, application\/octet-stream:Ροή οκτάδων,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":άσκηση:άσκηση,, προσομοίωση:προσομοίωση,, ερωτηματολόγιο:ερωτηματολόγιο,, διάγραμμα:διάγραμμα,, σχήμα:σχήμα,, γράφημα:γράφημα,, ευρετήριο:ευρετήριο,, διαφάνεια:διαφάνεια,, πίνακας:πίνακας,, αφηγηματικό κείμενο:αφηγηματικό κείμενο,, εξέταση:εξέταση,, πείραμα:πείραμα,, διατύπωση προβλήματος:διατύπωση προβλήματος,, αυτοαξιολόγηση:αυτοαξιολόγηση,, διάλεξη:διάλεξη"
@@ -3317,7 +3317,7 @@ msgid "(recommended)"
 msgstr "(προτείνεται)"
 
 msgid "SCORM DB"
-msgstr "SCORM DB"
+msgstr "ΒΔ SCORM"
 
 msgid "Administrator last name"
 msgstr "Επώνυμο Διαχειριστή"
@@ -9276,6 +9276,15 @@ msgstr "Χρονοδιάγραμμα συνεδρίας %s"
 
 msgid "Error"
 msgstr "Σφάλμα"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Ο χρήστης δημιουργήθηκε, αλλά ένα από τα πρόσθετα πεδία προφίλ δεν μπόρεσε να αποθηκευτεί."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Ο χρήστης ενημερώθηκε, αλλά ένα από τα πρόσθετα πεδία προφίλ δεν μπόρεσε να αποθηκευτεί."
+
+msgid "One or more fields contain invalid values."
+msgstr "Ένα ή περισσότερα πεδία περιέχουν μη έγκυρες τιμές."
 
 msgid "Anonymous"
 msgstr "Ανώνυμος"
@@ -15316,6 +15325,30 @@ msgstr "Χρόνος που δαπανήθηκε την τελευταία εβ�
 msgid "System status"
 msgstr "Κατάσταση συστήματος"
 
+msgid "Courses space"
+msgstr "Χώρος μαθημάτων"
+
+msgid "Database server configuration and metadata"
+msgstr "Διαμόρφωση διακομιστή βάσης δεδομένων και μεταδεδομένα"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Χρήση δίσκου ανά μάθημα έναντι ποσοστώσεως δίσκου"
+
+msgid "Information about your webserver configuration"
+msgstr "Πληροφορίες για τη διαμόρφωση του διακομιστή ιστού σας"
+
+msgid "Paths"
+msgstr "Διαδρομές"
+
+msgid "State of Chamilo requirements"
+msgstr "Κατάσταση απαιτήσεων του Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Κατάσταση ρυθμίσεων PHP στον διακομιστή"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Σταθερές api_get_path() που επιλύονται σε αυτή την πύλη"
+
 msgid "Is writable"
 msgstr "Με δυνατότητα εγγραφής"
 
@@ -20687,6 +20720,9 @@ msgstr "Στον τροχό δεξιοτήτων, εμφανίζει το όνο
 
 msgid "Created by"
 msgstr "Δημιουργήθηκε από"
+
+msgid "Created by %s on %s"
+msgstr "Δημιουργήθηκε από %s στις %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Απόκρυψη γενικού προπονητή στο dropbox"
@@ -30773,7 +30809,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (εσωτερικό ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Αναγνωριστικό Azure (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Οργανωτικό email"
@@ -31508,7 +31544,7 @@ msgid "SCIM external ID"
 msgstr "SCIM εξωτερικό ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "Αναγνωριστικό OAuth2"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Παρακαλούμε αποδεχθείτε την τελευταία έκδοση των όρων και προϋποθέσεων."
@@ -31891,6 +31927,9 @@ msgstr "Γράψτε κάτι στο %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Προτιμώμενο: SVG. Συνιστώμενο πλάτος PNG: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Συνιστώμενο πλάτος PNG: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Ανέβασμα PNG λογότυπου για email (~%spx πλάτος)"
 
@@ -31926,6 +31965,9 @@ msgstr "Κάντε κλικ για εισαγωγή"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Προτιμώμενο: SVG. Μέγιστο μέγεθος PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Μέγιστο μέγεθος PNG: %spx."
 
 msgid "View badge"
 msgstr "Προβολή διακριτικού"
@@ -33722,10 +33764,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "Αναγνωριστικό EntraID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "UID EntraID"
 
 msgid "Required fields"
 msgstr "Υποχρεωτικά πεδία"
@@ -38077,6 +38119,9 @@ msgstr "Ολοκλήρωση"
 msgid "Draft saved"
 msgstr "Πρόχειρο αποθηκεύτηκε"
 
+msgid "Save as draft"
+msgstr "Αποθήκευση ως πρόχειρο"
+
 msgid "Statement"
 msgstr "Δήλωση"
 
@@ -39236,7 +39281,7 @@ msgid "Delete failed"
 msgstr "Η διαγραφή απέτυχε"
 
 msgid "PHP cache"
-msgstr "PHP cache"
+msgstr "Προσωρινή μνήμη PHP"
 
 msgid "Live OPcache and APCu diagnostics"
 msgstr "Διαγνωστικά Live OPcache και APCu"
@@ -39498,4 +39543,265 @@ msgstr "Αυτός ο χρήστης είναι ήδη εγγεγραμμένο�
 
 msgid "This user is already subscribed to the course."
 msgstr "Αυτός ο χρήστης είναι ήδη εγγεγραμμένος στο μάθημα."
+
+msgid "Multi URLs"
+msgstr "Πολλαπλά URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Οντότητες όπως χρήστες και μαθήματα μπορούν να είναι ενεργές σε περισσότερα από ένα URL ταυτόχρονα, επομένως το άθροισμα των παρακάτω τιμών δεν θα ταιριάζει με το σύνολο."
+
+msgid "User directory"
+msgstr "Κατάλογος χρηστών"
+
+msgid "Course directory"
+msgstr "Κατάλογος μαθημάτων"
+
+msgid "URLs"
+msgstr "URLs"
+
+msgid "User details"
+msgstr "Λεπτομέρειες χρήστη"
+
+msgid "Course details"
+msgstr "Λεπτομέρειες μαθήματος"
+
+msgid "View details"
+msgstr "Προβολή λεπτομερειών"
+
+msgid "Average progress"
+msgstr "Μέση πρόοδος"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Η άμεση εγγραφή ανήκει στο μάθημα συνολικά, όχι σε συγκεκριμένο URL, επομένως τα ίδια στοιχεία «Άμεση» επαναλαμβάνονται παρακάτω για κάθε URL με το οποίο συνδέεται αυτό το μάθημα. Οι συνεδρίες είναι ο ενδεδειγμένος τρόπος κοινής χρήσης ενός μαθήματος σε πολλά URL με μετρήσεις που διαφέρουν πραγματικά ανά URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Συνδέσεις (όλα τα URL μαζί)"
+
+msgid "Unique logins"
+msgstr "Μοναδικές συνδέσεις"
+
+msgid "Parent URL"
+msgstr "Γονικό URL"
+
+msgid "Logins (your URLs)"
+msgstr "Συνδέσεις (τα URL σας)"
+
+msgid "The picture could not be uploaded"
+msgstr "Η εικόνα δεν μπόρεσε να μεταφορτωθεί"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Αυτός ο τύπος πεδίου δεν υποστηρίζεται πλήρως ακόμη — μόνο ακατέργαστη τιμή."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Αυτό το μάθημα πλησιάζει το όριο εγγραφών χρηστών (%d\/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Ο χώρος περιορίζεται από τις ιδιότητες του μαθήματός σας. Για να αυξήσετε το όριο, αποκτήστε ένα"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Οι εγγραφές χρηστών περιορίζονται από τις ιδιότητες του μαθήματός σας. Για να αυξήσετε το όριο, αποκτήστε ένα"
+
+msgid "pro plan"
+msgstr "πρόγραμμα pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "και εισαγάγετε το αντίγραφο ασφαλείας αυτού του μαθήματος μέσω της Συντήρησης μαθήματος στο νέο σας επί πληρωμή μάθημα, ή ανοίξτε ένα αίτημα υποστήριξης για να μετατραπεί το μάθημά σας σε pro μόλις αποκτήσετε αυτό το πρόγραμμα."
+
+msgid "Tired of writing questions?"
+msgstr "Κουραστήκατε να γράφετε ερωτήσεις;"
+
+msgid "Upgrade your plan"
+msgstr "Αναβαθμίστε το πρόγραμμά σας"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "σε πρόγραμμα pro για να λάβετε βοήθεια από τεχνητή νοημοσύνη για τη δημιουργία ποιοτικών ερωτήσεων."
+
+msgid "Student Success AI Coach"
+msgstr "Προπονητής ΤΝ επιτυχίας μαθητή"
+
+msgid "No AI text provider is configured."
+msgstr "Δεν έχει ρυθμιστεί πάροχος κειμένου ΤΝ."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Πρόσθετες οδηγίες για τον προπονητή ΤΝ"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Παράδειγμα: Αυτός ο εκπαιδευόμενος δυσκολεύεται να διατηρήσει την προσοχή του. Προτείνετε συντομότερες δραστηριότητες και συχνότερους ελέγχους κατανόησης."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Κρατήστε αυτό το παράθυρο ανοιχτό όσο το Chamilo προετοιμάζει τη σύσταση."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Η σύσταση αποθηκεύτηκε επίσης στα εισερχόμενά σας στο Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Η σύσταση δημιουργήθηκε και αποθηκεύτηκε για αυτόν τον εκπαιδευόμενο, αλλά δεν ήταν δυνατή η δημιουργία αντιγράφου στα εισερχόμενα."
+
+msgid "Student success recommendation"
+msgstr "Σύσταση επιτυχίας μαθητή"
+
+msgid "Generated"
+msgstr "Δημιουργήθηκε"
+
+msgid "Priority actions"
+msgstr "Ενέργειες προτεραιότητας"
+
+msgid "Evidence"
+msgstr "Τεκμήρια"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Αυτή η λειτουργία θα αναλύσει το περιεχόμενο αυτού του μαθήματος και θα στείλει πληροφορίες μαθησιακής συμπεριφοράς στο ρυθμισμένο μοντέλο ΤΝ. Παρόλο που δεν αποστέλλονται άμεσα αναγνωρίσιμα προσωπικά δεδομένα στο μοντέλο ΤΝ, ορισμένα από τα δεδομένα που αποστέλλονται ενδέχεται έμμεσα να παρέχουν αναγνωρίσιμες πληροφορίες για τον χρήστη. Σε περίπτωση αμφιβολίας, συμβουλευτείτε πάντα τον υπεύθυνο αναφοράς ΤΝ πριν χρησιμοποιήσετε αυτή τη λειτουργία."
+
+msgid "Additional activities"
+msgstr "Πρόσθετες δραστηριότητες"
+
+msgid "Rhythm"
+msgstr "Ρυθμός"
+
+msgid "Learning methodologies"
+msgstr "Μεθοδολογίες μάθησης"
+
+msgid "Other recommendations"
+msgstr "Άλλες συστάσεις"
+
+msgid "Analyzing course..."
+msgstr "Ανάλυση μαθήματος..."
+
+msgid "Analyzing student's learning..."
+msgstr "Ανάλυση μάθησης μαθητή..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Αποδεχόμενοι αυτή την πρόσκληση, θα συνδεθείτε με τον αιτούντα χρήστη με τρόπο που θα καθιστά ορισμένα ή όλα τα δεδομένα του προφίλ σας διαθέσιμα για ανάγνωση από τον αιτούντα χρήστη. Βεβαιωθείτε ότι δεν μοιράζεστε υπερβολικά πολλά, ελέγχοντας το προφίλ σας με χρήστες που ήδη εμπιστεύεστε."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Η άδεια χρήσης του μικροφώνου δεν είναι ενεργοποιημένη· ενεργοποιήστε την στο πρόγραμμα περιήγησής σας για εγγραφή ήχου"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Αυτή η έκδοση του Chamilo περιλαμβάνει ένα (ή περισσότερα) προεγκατεστημένα πολύγλωσσα μαθήματα. Μπορείτε να τα ελέγξετε στη λίστα μαθημάτων και να αποφασίσετε αν θα είναι δημόσια ή όχι."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Προς το παρόν δεν έχετε πρόσβαση σε κανένα URL. Ζητήστε από τον διαχειριστή να σας χορηγήσει πρόσβαση στο URL στο οποίο ανήκετε."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Εάν ο επιλεγμένος πάροχος ΤΝ δεν είναι κυρίαρχη υπηρεσία, το περιεχόμενο του επιλεγμένου εγγράφου ενδέχεται να σταλεί σε εξωτερική υπηρεσία. Μην συνεχίσετε με εμπιστευτικές πληροφορίες εκτός εάν αυτό επιτρέπεται από τον οργανισμό σας."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Κάντε κλικ στην Ενοποίηση στον λογαριασμό που πρέπει να παραμείνει. Το σύστημα θα συγχωνεύσει όλους τους άλλους λογαριασμούς της ίδιας ομάδας διπλοτύπων σε αυτόν. Οι συγχωνευμένοι λογαριασμοί θα διαγραφούν οριστικά και θα εξαφανιστούν από αυτή την αναφορά. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+msgid "Permanent deletion"
+msgstr "Οριστική διαγραφή"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Η Ενοποίηση ήδη διαγράφει οριστικά τους συγχωνευμένους λογαριασμούς. Χρησιμοποιήστε τη λίστα Χρηστών μόνο εάν θέλετε να διαγράψετε επιπλέον λογαριασμούς χειροκίνητα."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Τροποποιείτε λογότυπα για το προεπιλεγμένο οπτικό θέμα «chamilo». Σκεφτείτε να δημιουργήσετε/χρησιμοποιήσετε προσαρμοσμένο οπτικό θέμα ώστε να μην αντικαθιστάτε τις προεπιλογές."
+
+msgid "This exercise has no questions."
+msgstr "Αυτή η άσκηση δεν έχει ερωτήσεις."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Πώς να εμφανίζεται η ανατροφοδότηση/σχόλιο για κάθε ερώτηση; Αυτή η επιλογή ορίζει πώς θα εμφανίζεται στον εκπαιδευόμενο κατά τη διάρκεια του τεστ."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Αυτές οι εφαρμογές μπορούν να έχουν πρόσβαση στο Chamilo ως εσείς, χρησιμοποιώντας τα υπάρχοντα δικαιώματα του λογαριασμού σας και τίποτα περισσότερο. Ανακαλέστε όσες δεν χρησιμοποιείτε πλέον ή δεν αναγνωρίζετε."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Εξηγήστε γιατί θέλετε να ζητήσετε την ανάκληση της νομικής σας συγκατάθεσης, ώστε να μπορέσουμε να επεξεργαστούμε σωστά το αίτημά σας"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Χρησιμοποιήστε αυτό το προσωπικό κλειδί για να συνδέσετε έναν απομακρυσμένο πελάτη MCP στο Chamilo με τον δικό σας λογαριασμό και δικαιώματα."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Το πλήρες κλειδί εμφανίζεται μόνο μία φορά. Αποθηκεύστε το με ασφάλεια. Η δημιουργία νέου κλειδιού ακυρώνει αμέσως το προηγούμενο."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Το κλειδί πιστοποιεί τον πελάτη ως τον λογαριασμό σας στο Chamilo. Δεν χορηγεί δικαιώματα που ο λογαριασμός σας δεν έχει ήδη."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Εμφάνιση δήλωσης Όρων και Προϋποθέσεων στη σελίδα εγγραφής· απαίτηση αποδοχής των Όρων και Προϋποθέσεων από τον επισκέπτη για εγγραφή"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Το περιεχόμενο των όρων και προϋποθέσεων θα σταλεί σε μοντέλο γλώσσας ΤΝ. Ελέγξτε την προτεινόμενη μετάφραση πριν την αποθηκεύσετε."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Υπάρχει ήδη αποθηκευμένη έκδοση για τη γλώσσα προορισμού. Η αποθήκευση αυτής της πρότασης θα δημιουργήσει νέα έκδοση."
+
+msgid "Acquired"
+msgstr "Αποκτηθέν"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Προτεινόμενη εικόνα μαθήματος: 1600 × 900 px (16:9). Χρησιμοποιήστε τουλάχιστον 1280 × 720 px για ευκρινή εμφάνιση σε μεγαλύτερες ή υψηλής πυκνότητας οθόνες."
+
+msgid "Courses of the selected URL"
+msgstr "Μαθήματα του επιλεγμένου URL"
+
+msgid "Course categories in selected URL"
+msgstr "Κατηγορίες μαθημάτων στο επιλεγμένο URL"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Ο λογαριασμός σας είναι ενεργός· μπορείτε να συνδεθείτε και να ελέγξετε τα μαθήματά σας τώρα."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Πρώτα πρέπει να κατεβάσετε τις διορθώσεις <a href='%s'> εδώ </a>.\nΣτη συνέχεια πρέπει να αποσυμπιέσετε αυτό το αρχείο και να επεξεργαστείτε τα αρχεία όπως θέλετε χωρίς να αλλάξετε τα ονόματα αρχείων.\nΈπειτα δημιουργήστε ένα αρχείο zip με αυτά τα τροποποιημένα αρχεία και ανεβάστε το σε αυτή τη φόρμα."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Προσθήκη μαθητών από τη συνεδρία %s στη συνεδρία %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Εμφάνιση όλων των προσπαθειών ανά άσκηση"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Αυτή η ενέργεια θα υπερβεί το επιτρεπόμενο όριο χρηστών για το επιλεγμένο μάθημα."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Ορισμένες εγγραφές δεν μπόρεσαν να εκτελεστούν επειδή έφτασαν το επιτρεπόμενο όριο χρηστών για το επηρεαζόμενο μάθημα. Επηρεαζόμενοι χρήστες/μαθήματα: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Αυτό το μητρώο καταγράφει γνωστές σελίδες αναφορών, την κατηγορία τους, την κανονική διεύθυνση URL, την παλαιά διεύθυνση URL και το αναμενόμενο κοινό ρόλων. Οι κανονικές διευθύνσεις URL οδηγούν στην τρέχουσα υλοποίηση αναφοράς και εφαρμόζουν τον τεκμηριωμένο πίνακα ρόλων αναφορών."
+
+msgid "E-mail notification subscription"
+msgstr "Συνδρομή ειδοποιήσεων ηλεκτρονικού ταχυδρομείου"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Αυτή η ενέργεια θα υπερβεί το όριο των %s χρηστών ανά μάθημα που έχουν ορίσει οι διαχειριστές. Η εγγραφή ακυρώθηκε."
+
+msgid "Language the document is in"
+msgstr "Γλώσσα του εγγράφου"
+
+msgid "There is no session still"
+msgstr "Δεν υπάρχει ακόμη συνεδρία"
+
+msgid "Origin courses from session"
+msgstr "Μαθήματα προέλευσης από συνεδρία"
+
+msgid "Destination courses from session"
+msgstr "Μαθήματα προορισμού από συνεδρία"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Ελεύθερη Πρόσβαση (για οποιοδήποτε μέλος αυτής της σειράς μαθημάτων)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Δημιουργήστε %d όρους γλωσσαρίου για ένα μάθημα σχετικά με '%s', κάθε όρος σε μία γραμμή, με τον ορισμό του στην επόμενη γραμμή και μία κενή γραμμή μεταξύ κάθε όρου. Μην προσθέσετε άλλη μορφοποίηση για τον τίτλο ούτε για τον ορισμό."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Αυτή είναι μια σύντομη περιγραφή του μαθήματος '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Χρησιμοποιείτε το Chamilo σε πλατφόρμα Windows. Οι βοηθοί μετατροπής εγγράφων δεν είναι διαθέσιμοι για ευρετηρίαση πλήρους κειμένου."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Η ρύθμιση αυτόματης εκκίνησης τεστ είναι ΕΝΕΡΓΗ. Οι μαθητές θα ανακατευθυνθούν στη λίστα τεστ."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Η ρύθμιση αυτόματης εκκίνησης τεστ είναι ΕΝΕΡΓΗ. Οι μαθητές θα ανακατευθυνθούν σε συγκεκριμένο τεστ."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Το όριο εγγραφών για αυτό το μάθημα έχει συμπληρωθεί (%current%\/%limit%)."
+
+msgid "Count course by language"
+msgstr "Αριθμός μαθημάτων ανά γλώσσα"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Χρήστες των οποίων η τελευταία πρόσβαση είναι παλαιότερη από την επιλεγμένη ημερομηνία."
 

@@ -78,6 +78,12 @@ Review **every** new and modified file (controller, Vue component, updated legac
 - **Open redirects.** If a controller builds a redirect URL using user-supplied or database values (e.g., a username), always `urlencode()` those values before embedding them in the URL. Verify that the Vue component does not use `window.location.href` with unsanitized query param values.
 - **Mass parameter manipulation.** Verify that array parameters from the client (e.g., `sessionIds[]`) are cast to safe types (`array_map('intval', ...)`) before use. Verify that a non-admin user cannot supply IDs of entities they do not own/manage.
 
+### Rule 14 — Documentation for new/modified features
+
+Any new feature, and any substantially modified feature, must be documented in English in Chamilo's **docs** repository (branch `3.x`). That repository is usually checked out at the same level as this one, under a `docs` or `chamilo-docs` folder (e.g. `../docs` or `../chamilo-docs`). Before writing anything, **read that repository's own `CLAUDE.md`** — it defines the docs repo's own structure and conventions, and takes precedence over guessing.
+
+If the docs repository is not accessible locally, write the documentation locally instead, as a `.md` file formatted as if it were being added to the docs repository. Write it to a temporary directory outside this repository (e.g. the scratchpad) so it is never included in any commit — it must not be part of the code. As a final note once the feature is finished, tell the developer about the generated file's location and ask that it be uploaded manually on GitHub together with the PR (not committed as part of the code), so maintainers can merge it into the docs repository manually.
+
 ## Project Overview
 
 Chamilo LMS — an open-source e-learning platform built on **Symfony 7.4** (PHP 8.3/8.4/8.5) with a **Vue 3.5** frontend. Uses **API Platform 4.2** for REST/GraphQL APIs, **Doctrine ORM 3.3** for persistence, and **Webpack Encore 5** for asset compilation.

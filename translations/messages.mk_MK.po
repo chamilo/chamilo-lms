@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример за формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -9267,6 +9267,15 @@ msgstr "Извештај за време за сесија %s"
 msgid "Error"
 msgstr "Грешка"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Корисникот беше создаден, но едно од дополнителните полиња на профилот не можеше да се зачува."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Корисникот беше ажуриран, но едно од дополнителните полиња на профилот не можеше да се зачува."
+
+msgid "One or more fields contain invalid values."
+msgstr "Едно или повеќе полиња содржат неважечки вредности."
+
 msgid "Anonymous"
 msgstr "Анонимус"
 
@@ -15306,6 +15315,30 @@ msgstr "Време поминато минатата недела"
 msgid "System status"
 msgstr "Статус на системот"
 
+msgid "Courses space"
+msgstr "Простор за курсеви"
+
+msgid "Database server configuration and metadata"
+msgstr "Конфигурација на серверот за база на податоци и метаподатоци"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Користење на диск по курс наспроти квота за диск"
+
+msgid "Information about your webserver configuration"
+msgstr "Информации за конфигурацијата на вашиот веб-сервер"
+
+msgid "Paths"
+msgstr "Патеки"
+
+msgid "State of Chamilo requirements"
+msgstr "Состојба на барањата на Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Состојба на PHP поставките на серверот"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Константи на api_get_path() разрешени на овој портал"
+
 msgid "Is writable"
 msgstr "Е запишлив"
 
@@ -20672,6 +20705,9 @@ msgstr "На тркалото на компетенции, прикажува и
 
 msgid "Created by"
 msgstr "Создадено од"
+
+msgid "Created by %s on %s"
+msgstr "Создадено од %s на %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Скриј генералниот тренер во dropbox"
@@ -30899,7 +30935,7 @@ msgid "Account locked until"
 msgstr "Налогот е заклучен до"
 
 msgid "Google Calendar URL"
-msgstr "Google Calendar URL"
+msgstr "URL на Google Calendar"
 
 msgid "User chat status"
 msgstr "Статус на разговор на корисник"
@@ -31876,6 +31912,9 @@ msgstr "Напиши нешто до %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Пожелно: SVG. Препорачана ширина за PNG: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Препорачана ширина за PNG: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Подигни PNG лого за е-пошти (~%spx ширина)"
 
@@ -31911,6 +31950,9 @@ msgstr "Кликни за вметни"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Претпочитано: SVG. Максимална големина PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Максимална големина за PNG: %spx."
 
 msgid "View badge"
 msgstr "Преглед на значка"
@@ -36566,7 +36608,7 @@ msgid "Checking..."
 msgstr "Се проверува..."
 
 msgid "Composer install"
-msgstr "Composer install"
+msgstr "Инсталација на Composer"
 
 msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
 msgstr "Дејствата на Composer, Yarn и миграцијата на базата на податоци можат да ги изменат зависностите, генерираните ресурси или базата на податоци. Изберете ги само откако ќе ги потврдите резервните копии и дозволите."
@@ -38062,6 +38104,9 @@ msgstr "Завршување"
 msgid "Draft saved"
 msgstr "Нацртот е зачуван"
 
+msgid "Save as draft"
+msgstr "Зачувај како нацрт"
+
 msgid "Statement"
 msgstr "Изјава"
 
@@ -39143,7 +39188,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard читање"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Одржување на табелата со резултати"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard чекање"
@@ -39483,4 +39528,265 @@ msgstr "Овој корисник е веќе пријавен на сесија
 
 msgid "This user is already subscribed to the course."
 msgstr "Овој корисник е веќе пријавен на курсот."
+
+msgid "Multi URLs"
+msgstr "Повеќе URL-а"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Ентитети како корисници и курсеви можат да бидат активни на повеќе од еден URL истовремено, па збирот на вредностите подолу нема да се совпадне со вкупниот број."
+
+msgid "User directory"
+msgstr "Директориум на корисници"
+
+msgid "Course directory"
+msgstr "Директориум на курсеви"
+
+msgid "URLs"
+msgstr "URL-а"
+
+msgid "User details"
+msgstr "Детали за корисник"
+
+msgid "Course details"
+msgstr "Детали за курс"
+
+msgid "View details"
+msgstr "Преглед на детали"
+
+msgid "Average progress"
+msgstr "Просечен напредок"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Директното запишување припаѓа на курсот како целина, а не на одреден URL, па истите бројки за „Директно“ се повторуваат подолу за секој URL со кој е поврзан овој курс. Сесиите се предвидениот начин за споделување на курс низ URL-а со метрики што навистина се разликуваат по URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Најави (сите URL-а заедно)"
+
+msgid "Unique logins"
+msgstr "Уникатни најави"
+
+msgid "Parent URL"
+msgstr "Родителски URL"
+
+msgid "Logins (your URLs)"
+msgstr "Најави (вашите URL-а)"
+
+msgid "The picture could not be uploaded"
+msgstr "Сликата не можеше да се прикачи"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Овој тип на поле сè уште не е целосно поддржан — само сурова вредност."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Овој курс е блиску до ограничувањето за претплата на корисници (%d\/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Просторот е ограничен преку својствата на вашиот курс. За да го зголемите лимитот, набавете"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Претплатите на корисници се ограничени преку својствата на вашиот курс. За да го зголемите лимитот, набавете"
+
+msgid "pro plan"
+msgstr "про план"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "и увезете ја резервната копија на овој курс преку Одржување на курс во вашиот нов платен курс, или отворете тикет за да се претвори курсот во про курс откако ќе го набавите овој план."
+
+msgid "Tired of writing questions?"
+msgstr "Уморни сте од пишување прашања?"
+
+msgid "Upgrade your plan"
+msgstr "Надградете го вашиот план"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "на про план за да добиете помош од вештачка интелигенција за генерирање квалитетни прашања за вас."
+
+msgid "Student Success AI Coach"
+msgstr "ВИ-тренер за успех на студентот"
+
+msgid "No AI text provider is configured."
+msgstr "Не е конфигуриран давател на ВИ-текст."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Дополнителни инструкции за ВИ-тренерот"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Пример: Овој ученик има тешкотии да ја одржи вниманието. Предложете пократки активности и почести проверки на разбирањето."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Оставете го овој прозорец отворен додека Chamilo ја подготвува препораката."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Препораката е зачувана и во вашето сандаче во Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Препораката е генерирана и зачувана за овој ученик, но копијата во сандачето не можеше да се создаде."
+
+msgid "Student success recommendation"
+msgstr "Препорака за успех на студентот"
+
+msgid "Generated"
+msgstr "Генерирано"
+
+msgid "Priority actions"
+msgstr "Приоритетни дејства"
+
+msgid "Evidence"
+msgstr "Докази"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Оваа функција ќе ја анализира содржината на овој курс и ќе испрати информации за однесувањето при учење до конфигурираниот ВИ-модел. Иако не се испраќаат директно препознатливи лични податоци до ВИ-моделот, дел од испратените податоци може индиректно да дадат препознатливи информации за корисникот. Ако се сомневате, секогаш проверете со вашето лице за ВИ-референца пред да ја користите оваа функција."
+
+msgid "Additional activities"
+msgstr "Дополнителни активности"
+
+msgid "Rhythm"
+msgstr "Ритам"
+
+msgid "Learning methodologies"
+msgstr "Методологии на учење"
+
+msgid "Other recommendations"
+msgstr "Други препораки"
+
+msgid "Analyzing course..."
+msgstr "Се анализира курсот..."
+
+msgid "Analyzing student's learning..."
+msgstr "Се анализира учењето на студентот..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Со прифаќање на оваа покана ќе бидете поврзани со корисникот што бара, така што дел или сите податоци од вашиот профил ќе бидат достапни за читање од тој корисник. Проверете дали не споделувате премногу со преглед на профилот кај корисници на кои веќе им верувате."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Дозволата за користење на микрофонот не е овозможена; овозможете ја во прелистувачот за да снимате аудио"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Оваа верзија на Chamilo доаѓа со еден (или повеќе) однапред инсталирани повеќејазични курсеви. Прегледајте ги во списокот на курсеви и одлучете дали треба да бидат јавни или не."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Моментално немате пристап до ниедна URL. Побарајте од администраторот да ви даде пристап до URL-то на кое припаѓате."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Ако избраниот давател на ВИ не е суверен сервис, содржината на избраниот документ може да се испрати до надворешен сервис. Не продолжувајте со доверливи информации освен ако тоа е дозволено од вашата организација."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Кликнете Унифицирај на сметката што треба да остане. Системот ќе ги спои сите други сметки од истата група дупликати во неа. Споените сметки ќе бидат трајно избришани и ќе исчезнат од овој извештај. Ова дејство не може да се поништи."
+
+msgid "Permanent deletion"
+msgstr "Трајно бришење"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Унифицирањето веќе трајно ги брише споените сметки. Користете го списокот Корисници само ако сакате дополнително рачно да избришете сметки."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Ги менувате логоата за стандардната визуелна тема „chamilo“. Размислете да создадете/користите сопствена визуелна тема за да не ги презапишете стандардните."
+
+msgid "This exercise has no questions."
+msgstr "Оваа вежба нема прашања."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Како да се прикаже повратната информација/коментарот за секое прашање? Оваа опција дефинира како ќе се прикаже на ученикот при полагање на тестот."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Овие апликации можат да пристапат до Chamilo како вас, користејќи ги постојните дозволи на вашата сметка и ништо повеќе. Отповикајте ги оние што повеќе не ги користите или не ги препознавате."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Објаснете зошто сакате да побарате повлекување на вашата правна согласност, за да можеме правилно да го обработиме барањето"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Користете го овој личен клуч за да поврзете оддалечен MCP-клиент со Chamilo со вашата сметка и дозволи."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Целиот клуч се прикажува само еднаш. Чувајте го безбедно. Генерирањето нов клуч веднаш го поништува претходниот."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Клучот го автентицира клиентот како ваша Chamilo-сметка. Не дава дозволи што вашата сметка веќе ги нема."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Прикажи изјава за Услови и одредби на страницата за регистрација; посетителот мора да ги прифати Условите и одредбите за да се регистрира"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Содржината на условите и одредбите ќе се испрати до јазичен модел со ВИ. Прегледајте го предложениот превод пред да го зачувате."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Веќе постои зачувана верзија за целниот јазик. Зачувувањето на овој предлог ќе создаде нова верзија."
+
+msgid "Acquired"
+msgstr "Стекнато"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Препорачана слика за курс: 1600 × 900 px (16:9). Користете најмалку 1280 × 720 px за остар приказ на поголеми или екрани со висока густина."
+
+msgid "Courses of the selected URL"
+msgstr "Курсеви на избраната URL"
+
+msgid "Course categories in selected URL"
+msgstr "Категории на курсеви во избраната URL"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Вашата сметка е активна; сега можете да се најавите и да ги проверите вашите курсеви."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Прво мора да ги преземете исправките <a href='%s'> овде </a>.\nПотоа распакувајте ја таа датотека и уредете ги датотеките како што сакате без да ги менувате имињата.\nПотоа создајте zip-датотека со тие изменети датотеки и поставете ја во овој формулар."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Додавање студенти од сесија %s во сесија %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Прикажи ги сите обиди по вежба"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Оваа операција би го надминала дозволениот лимит на корисници за избраниот курс."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Некои претплати не можеа да се извршат бидејќи го достигнаа дозволениот лимит на корисници за засегнатиот курс. Засегнати корисници/курсеви: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Овој регистар ги наведува познатите страници за извештаи, нивната категорија, канонски URL, наследен URL и очекуваната улога на публиката. Канонските URL-а водат до тековната имплементација на извештајот и ја спроведуваат документираната матрица на улоги за извештаи."
+
+msgid "E-mail notification subscription"
+msgstr "Претплата на известувања по е-пошта"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Оваа операција би го надминала лимитот од %s корисници по курс поставен од администраторите. Претплатата е откажана."
+
+msgid "Language the document is in"
+msgstr "Јазик на документот"
+
+msgid "There is no session still"
+msgstr "Сè уште нема сесија"
+
+msgid "Origin courses from session"
+msgstr "Изворни курсеви од сесија"
+
+msgid "Destination courses from session"
+msgstr "Целни курсеви од сесија"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Јавен пристап од почетната страница на порталот дури и без пријавување"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Генерирај %d термини за речник за курс на '%s', секој термин во посебен ред, со дефиницијата во следниот ред и еден празен ред помеѓу секој термин. Не додавај друго форматирање ниту за насловот ниту за дефиницијата."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Ова е краток опис на курсот '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Користите Chamilo на Windows платформа. Помошниците за конверзија на документи не се достапни за индексирање на целосен текст."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Поставката за автоматско стартување на тестот е ВКЛУЧЕНА. Студентите ќе бидат пренасочени кон листата на тестови."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Поставката за автоматско стартување на тестот е ВКЛУЧЕНА. Студентите ќе бидат пренасочени кон конкретен тест."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Лимитот за претплата за овој курс е достигнат (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Број на курсеви по јазик"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Корисници чиј последен пристап е постари од избраниот датум."
 

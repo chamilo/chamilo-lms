@@ -27,6 +27,24 @@
       />
       <BaseButton
         v-if="certificates?.canManage && certificates?.settings?.customCertificateFallback"
+        :label="t('Attach certificate')"
+        :to-url="certificates.customCertificateTemplateUrl"
+        icon="gradebook"
+        only-icon
+        size="normal"
+        type="secondary-text"
+      />
+      <BaseButton
+        v-else-if="certificates?.canManage"
+        :label="t('Attach certificate')"
+        :route="certificateTemplatesRoute"
+        icon="gradebook"
+        only-icon
+        size="normal"
+        type="secondary-text"
+      />
+      <BaseButton
+        v-if="certificates?.canManage && certificates?.settings?.customCertificateFallback"
         :label="t('Generate')"
         :to-url="certificates.customCertificateFallbackUrl"
         icon="gradebook"
@@ -92,6 +110,13 @@
             class="mt-1 text-sm text-gray-600"
           >
             {{ categorySubtitle }}
+          </p>
+          <p
+            v-if="certificates?.canManage && !certificates?.settings?.customCertificateFallback"
+            class="mt-1 text-sm text-gray-600"
+          >
+            <span class="font-semibold">{{ t("Default certificate") }}:</span>
+            {{ certificates?.category?.certificateTemplate?.title || t("No data available") }}
           </p>
         </div>
 
@@ -167,11 +192,11 @@
             <BaseButton
               v-if="data.certificate?.viewUrl"
               :label="t('View')"
-              :to-url="data.certificate.viewUrl"
               icon="eye-on"
               only-icon
               size="small"
               type="primary-text"
+              @click="openCertificatePreview(data)"
             />
             <BaseButton
               v-if="data.certificate?.downloadUrl"
@@ -198,6 +223,23 @@
     </BaseTable>
 
     <BaseDialog
+      v-model:is-visible="isPreviewDialogVisible"
+      :title="previewDialogTitle"
+      header-icon="eye-on"
+    >
+      <div class="overflow-hidden rounded-lg border border-gray-20 bg-white">
+        <iframe
+          v-if="previewFrameUrl"
+          :src="previewFrameUrl"
+          :title="previewDialogTitle"
+          class="h-[75vh] w-[80vw] max-w-[1200px]"
+          referrerpolicy="same-origin"
+          sandbox="allow-same-origin"
+        />
+      </div>
+    </BaseDialog>
+
+    <BaseDialog
       v-model:is-visible="isNotificationDialogVisible"
       :title="t('Certificate notification')"
       header-icon="send"
@@ -213,7 +255,11 @@
         <div class="rounded-lg bg-gray-10 p-3 text-xs text-gray-600">
           <div class="mb-1 font-semibold">{{ t("Tags") }}</div>
           <div class="flex flex-wrap gap-x-3 gap-y-1">
-            <code v-for="tag in notificationTags" :key="tag">{{ tag }}</code>
+            <code
+              v-for="tag in notificationTags"
+              :key="tag"
+              >{{ tag }}</code
+            >
           </div>
         </div>
       </div>
@@ -255,6 +301,10 @@ const currentAction = ref("")
 const errorMessage = ref("")
 const infoMessage = ref("")
 const isNotificationDialogVisible = ref(false)
+const isPreviewDialogVisible = ref(false)
+const previewUrl = ref("")
+const previewLearnerName = ref("")
+const previewCacheKey = ref(0)
 const notificationMessage = ref("((user_first_name)),")
 const notificationTags = [
   "((course_title))",
@@ -274,6 +324,18 @@ const learners = computed(() =>
   })),
 )
 const hasGeneratedCertificates = computed(() => learners.value.some((row) => Boolean(row.certificate)))
+const previewDialogTitle = computed(() => {
+  const learnerName = previewLearnerName.value.trim()
+
+  return learnerName ? `${t("Certificate")} - ${learnerName}` : t("Certificate")
+})
+const previewFrameUrl = computed(() => {
+  if (!previewUrl.value) {
+    return ""
+  }
+
+  return `${previewUrl.value}?preview=${previewCacheKey.value}`
+})
 const categorySubtitle = computed(() => {
   const categoryId = Number(getQueryValue(route.query.categoryId) || 0)
   if (categoryId <= 0) {
@@ -292,6 +354,27 @@ const gradebookRoute = computed(() => ({
   params: { node: route.params.node },
   query: cleanQuery(route.query),
 }))
+
+const certificateTemplatesRoute = computed(() => {
+  const query = {
+    ...cleanQuery(route.query),
+    returnGid: Number(getQueryValue(route.query.gid) || 0),
+    gid: 0,
+    filetype: "certificate",
+    gradebook: 1,
+    returnTo: "GradebookCertificates",
+  }
+  const categoryId = Number(certificates.value?.category?.id || getQueryValue(route.query.categoryId) || 0)
+  if (categoryId > 0) {
+    query.categoryId = categoryId
+  }
+
+  return {
+    name: "DocumentsList",
+    params: { node: route.params.node },
+    query,
+  }
+})
 
 const exportContextParams = computed(() => getContextParams())
 
@@ -369,6 +452,25 @@ async function runAction(action, userId = null) {
   }
 }
 
+function isSafeCertificatePreviewUrl(value) {
+  return /^\/certificates\/[A-Za-z0-9_-]+\.html$/.test(value)
+}
+
+function openCertificatePreview(row) {
+  const url = String(row?.certificate?.viewUrl || "").trim()
+
+  if (!isSafeCertificatePreviewUrl(url)) {
+    errorMessage.value = t("An error occurred")
+    return
+  }
+
+  errorMessage.value = ""
+  previewUrl.value = url
+  previewLearnerName.value = String(row?.user?.fullName || "").trim()
+  previewCacheKey.value = Date.now()
+  isPreviewDialogVisible.value = true
+}
+
 function openNotificationDialog() {
   notificationMessage.value = notificationMessage.value || "((user_first_name)),"
   isNotificationDialogVisible.value = true
@@ -433,13 +535,18 @@ function formatDate(value) {
 }
 
 function getErrorMessage(error) {
-  return (
-    error?.response?.data?.detail ||
-    error?.response?.data?.message ||
-    error?.message ||
-    t("An error occurred")
-  )
+  return error?.response?.data?.detail || error?.response?.data?.message || error?.message || t("An error occurred")
 }
+
+watch(isPreviewDialogVisible, (isVisible) => {
+  if (isVisible) {
+    return
+  }
+
+  previewUrl.value = ""
+  previewLearnerName.value = ""
+  previewCacheKey.value = 0
+})
 
 watch(officialCode, async () => {
   if (!certificates.value?.canManage || !certificates.value?.settings?.filterByOfficialCode) {

@@ -613,7 +613,7 @@ switch ($action) {
                         api_get_setting('siteName')
                     );
                     $content_to_modify = get_lang(
-                        'YourAccountIsActiveYouCanLoginAndCheckYourCourses'
+                        'Your account is active, you can login and check your courses now.'
                     );
                 }
             }

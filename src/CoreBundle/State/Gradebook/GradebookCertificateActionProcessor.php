@@ -16,6 +16,8 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
 use Chamilo\CoreBundle\Service\Gradebook\LegacyGradebookCertificateBridge;
+use Chamilo\CourseBundle\Entity\CDocument;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -38,6 +40,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
     private const ACTION_DELETE = 'delete';
     private const ACTION_DELETE_ALL = 'delete_all';
     private const ACTION_NOTIFY_ALL = 'notify_all';
+    private const ACTION_SET_TEMPLATE = 'set_template';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -45,6 +48,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         private GradebookCertificateGenerator $certificateGenerator,
         private GradebookCertificateRepository $certificateRepository,
         private LegacyGradebookCertificateBridge $legacyCertificateBridge,
+        private EntityManagerInterface $entityManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private TranslatorInterface $translator,
         private LoggerInterface $logger,
@@ -88,6 +92,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             self::ACTION_DELETE => $this->deleteOne($data, $category, $resolved),
             self::ACTION_DELETE_ALL => $this->deleteAll($data, $category, $resolved),
             self::ACTION_NOTIFY_ALL => $this->notifyAll($data, $category, $resolved),
+            self::ACTION_SET_TEMPLATE => $this->setTemplate($data, $resolved),
             default => throw new BadRequestHttpException('Unsupported Gradebook certificate action.'),
         };
 
@@ -229,6 +234,83 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
     /**
      * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
      */
+    private function setTemplate(GradebookCertificateAction $data, array $resolved): int
+    {
+        if ($this->certificateGenerator->usesCustomCertificate($resolved['course'])) {
+            throw new BadRequestHttpException('CustomCertificate templates must use the existing plugin workflow.');
+        }
+
+        $documentId = (int) ($data->documentId ?? 0);
+        if ($documentId <= 0) {
+            throw new BadRequestHttpException('A valid certificate template document id is required.');
+        }
+
+        $document = $this->entityManager->getRepository(CDocument::class)->find($documentId);
+        if (!$document instanceof CDocument || 'certificate' !== $document->getFiletype()) {
+            throw new NotFoundHttpException('The requested certificate template was not found.');
+        }
+
+        $resourceNode = $document->getResourceNode();
+        if (null === $resourceNode) {
+            throw new AccessDeniedHttpException('The certificate template has no resource context.');
+        }
+
+        $currentCourseId = (int) $resolved['course']->getId();
+        $currentSessionId = (int) ($resolved['session']?->getId() ?? 0);
+        $belongsToContext = false;
+
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            $linkedCourseId = (int) ($resourceLink->getCourse()?->getId() ?? 0);
+            if ($linkedCourseId !== $currentCourseId || null !== $resourceLink->getGroup()) {
+                continue;
+            }
+
+            $linkedSessionId = (int) ($resourceLink->getSession()?->getId() ?? 0);
+
+            // Session Gradebooks may deliberately reuse a base-course certificate template,
+            // but base-course Gradebooks must never attach a session-specific document.
+            $matchesSessionContext = 0 === $currentSessionId
+                ? 0 === $linkedSessionId
+                : 0 === $linkedSessionId || $linkedSessionId === $currentSessionId;
+
+            if ($matchesSessionContext) {
+                $belongsToContext = true;
+                break;
+            }
+        }
+
+        if (!$belongsToContext) {
+            throw new AccessDeniedHttpException('The requested certificate template is outside the current course context.');
+        }
+
+        $rootCategory = $resolved['rootCategory'];
+        if (!$rootCategory instanceof GradebookCategory) {
+            throw new NotFoundHttpException('The Gradebook was not found.');
+        }
+
+        $affected = $this->applyTemplateToCategoryTree($rootCategory, $document);
+        $this->entityManager->flush();
+
+        return $affected;
+    }
+
+    private function applyTemplateToCategoryTree(GradebookCategory $category, CDocument $document): int
+    {
+        $category->setDocument($document);
+        $affected = 1;
+
+        foreach ($category->getSubCategories() as $subCategory) {
+            if ($subCategory instanceof GradebookCategory) {
+                $affected += $this->applyTemplateToCategoryTree($subCategory, $document);
+            }
+        }
+
+        return $affected;
+    }
+
+    /**
+     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
+     */
     private function requireLearner(GradebookCertificateAction $data, array $resolved): User
     {
         $userId = (int) ($data->userId ?? 0);
@@ -278,6 +360,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             self::ACTION_DELETE => 'Certificate deleted.',
             self::ACTION_DELETE_ALL => 'Certificates deleted: '.$affected.'.',
             self::ACTION_NOTIFY_ALL => 'Certificate notifications sent: '.$affected.'.',
+            self::ACTION_SET_TEMPLATE => 'Default certificate template updated.',
             default => '',
         };
     }

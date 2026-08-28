@@ -371,7 +371,7 @@ msgid "Sincerely"
 msgstr "敬具"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "数式サンプル: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "数式の例: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "変数範囲"
@@ -2086,7 +2086,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:著作権あり,, no:著作権なし"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:フォルダ,, application/msword:MsWord,, application/octet-stream:オクテットストリーム,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:フォルダ,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:演習,,      simulation:シミュレーション,,      questionnaire:アンケート,,      diagram:図表,,      figure:図,,      graph:グラフ,,      index:索引,,      slide:スライド,,      table:表,,      narrative text:叙述テキスト,,      exam:試験,,      experiment:実験,,      problem statement:問題文,,      self assessment:自己評価,,      lecture:講義"
@@ -9333,6 +9333,15 @@ msgstr "セッション %s の時間レポート"
 msgid "Error"
 msgstr "エラー"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "ユーザーは作成されましたが、追加のプロフィール項目の一部を保存できませんでした。"
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "ユーザーは更新されましたが、追加のプロフィール項目の一部を保存できませんでした。"
+
+msgid "One or more fields contain invalid values."
+msgstr "1つ以上の項目に無効な値が含まれています。"
+
 msgid "Anonymous"
 msgstr "匿名"
 
@@ -15372,6 +15381,30 @@ msgstr "過去 1 週間に費やされた時間"
 msgid "System status"
 msgstr "システムの状態"
 
+msgid "Courses space"
+msgstr "コース領域"
+
+msgid "Database server configuration and metadata"
+msgstr "データベースサーバーの設定とメタデータ"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "コースごとのディスク使用量とディスククォータ"
+
+msgid "Information about your webserver configuration"
+msgstr "Webサーバー設定に関する情報"
+
+msgid "Paths"
+msgstr "パス"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo要件の状態"
+
+msgid "State of PHP settings on the server"
+msgstr "サーバー上のPHP設定の状態"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "このポータルで解決された api_get_path() 定数"
+
 msgid "Is writable"
 msgstr "書き込み可能"
 
@@ -20738,6 +20771,9 @@ msgstr "スキルホイールで、短縮コードがある場合にスキルの
 
 msgid "Created by"
 msgstr "作成者"
+
+msgid "Created by %s on %s"
+msgstr "%s が %s に作成"
 
 msgid "Hide general coach in dropbox"
 msgstr "ドロップボックスで一般コーチを非表示"
@@ -31942,6 +31978,9 @@ msgstr "%s に何かを書く"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "推奨: SVG。PNG推奨幅: %spx。"
 
+msgid "PNG recommended width: %spx."
+msgstr "PNGの推奨幅: %spx。"
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "メール用PNGロゴをアップロード (~%spx 幅)"
 
@@ -31977,6 +32016,9 @@ msgstr "クリックして挿入"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "推奨: SVG。PNG 最大サイズ: %spx。"
+
+msgid "PNG max size: %spx."
+msgstr "PNGの最大サイズ: %spx。"
 
 msgid "View badge"
 msgstr "バッジを表示"
@@ -38128,6 +38170,9 @@ msgstr "終了中"
 msgid "Draft saved"
 msgstr "下書きを保存しました"
 
+msgid "Save as draft"
+msgstr "下書きとして保存"
+
 msgid "Statement"
 msgstr "設問文"
 
@@ -39549,4 +39594,265 @@ msgstr "このユーザーは既にセッションに登録されています。
 
 msgid "This user is already subscribed to the course."
 msgstr "このユーザーは既にコースに登録されています。"
+
+msgid "Multi URLs"
+msgstr "複数URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "ユーザーやコースなどのエンティティは同時に複数のURLで有効にできるため、以下の値の合計は総数と一致しません。"
+
+msgid "User directory"
+msgstr "ユーザディレクトリ"
+
+msgid "Course directory"
+msgstr "コースディレクトリ"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "ユーザー詳細"
+
+msgid "Course details"
+msgstr "コース詳細"
+
+msgid "View details"
+msgstr "詳細を表示"
+
+msgid "Average progress"
+msgstr "平均進捗"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "直接登録はコース全体に属し、特定のURLには属しません。そのため、このコースがリンクされている各URLで同じ「直接」の数値が繰り返されます。URLごとに実際に異なる指標でコースを共有するには、セッションを使用してください。"
+
+msgid "Logins (all URLs combined)"
+msgstr "ログイン（全URL合計）"
+
+msgid "Unique logins"
+msgstr "ユニークログイン"
+
+msgid "Parent URL"
+msgstr "親URL"
+
+msgid "Logins (your URLs)"
+msgstr "ログイン（ご利用のURL）"
+
+msgid "The picture could not be uploaded"
+msgstr "画像をアップロードできませんでした"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "このフィールドタイプはまだ完全には対応していません — 生の値のみです。"
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "このコースはユーザー登録上限に近づいています（%d/%d）。"
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "容量はコースの設定により制限されています。上限を上げるには、"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "ユーザー登録数はコースの設定により制限されています。上限を上げるには、"
+
+msgid "pro plan"
+msgstr "プロプラン"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "を取得し、コースメンテナンスからこのコースのバックアップを新しい有料コースにインポートするか、プラン購入後にチケットを開いてプロコースへ変換してください。"
+
+msgid "Tired of writing questions?"
+msgstr "問題を書くのに疲れましたか？"
+
+msgid "Upgrade your plan"
+msgstr "プランをアップグレード"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "プロプランにすると、AIが質の高い問題を生成するサポートを受けられます。"
+
+msgid "Student Success AI Coach"
+msgstr "学習成功AIコーチ"
+
+msgid "No AI text provider is configured."
+msgstr "AIテキストプロバイダーが設定されていません。"
+
+msgid "Additional instructions for the AI coach"
+msgstr "AIコーチへの追加指示"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "例：この学習者は注意を維持するのが難しいです。より短い活動と、理解度の確認をより頻繁に提案してください。"
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Chamiloが推奨を準備している間、このウィンドウを開いたままにしてください。"
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "推奨はChamiloの受信箱にも保存されました。"
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "推奨はこの学習者向けに生成・保存されましたが、受信箱へのコピーは作成できませんでした。"
+
+msgid "Student success recommendation"
+msgstr "学習成功の推奨"
+
+msgid "Generated"
+msgstr "生成済み"
+
+msgid "Priority actions"
+msgstr "優先アクション"
+
+msgid "Evidence"
+msgstr "根拠"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "この機能は本コースの内容を分析し、学習行動に関する情報を設定済みのAIモデルに送信します。直接識別可能な個人データはAIモデルに送信しませんが、送信データが間接的に利用者を特定できる場合があります。不明な場合は、この機能を使う前に必ずAI担当者に確認してください。"
+
+msgid "Additional activities"
+msgstr "追加の活動"
+
+msgid "Rhythm"
+msgstr "リズム"
+
+msgid "Learning methodologies"
+msgstr "学習方法"
+
+msgid "Other recommendations"
+msgstr "その他の推奨"
+
+msgid "Analyzing course..."
+msgstr "コースを分析中..."
+
+msgid "Analyzing student's learning..."
+msgstr "学習者の学習を分析中..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "この招待を承諾すると、依頼者のユーザーと紐付けられ、プロフィールデータの一部または全部がそのユーザーに閲覧可能になります。すでに信頼しているユーザー向けのプロフィール設定を確認し、過度に共有しないようご注意ください。"
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "マイクの使用許可が有効になっていません。音声を録音するには、ブラウザーで許可を有効にしてください"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "このバージョンのChamiloには、1つ以上の多言語コースが事前インストールされています。コース一覧で内容を確認し、公開するかどうかを判断してください。"
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "現在、どのURLにもアクセスできません。所属するURLへのアクセスを管理者に依頼してください。"
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "選択したAIプロバイダーが主権的なサービスでない場合、選択した文書の内容が外部サービスに送信されることがあります。組織で許可されていない限り、機密情報では続行しないでください。"
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "残すアカウントで「統合」をクリックしてください。同じ重複グループ内の他のアカウントはすべてそれに統合されます。統合されたアカウントは完全に削除され、このレポートから消えます。この操作は元に戻せません。"
+
+msgid "Permanent deletion"
+msgstr "完全削除"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "統合では、マージされたアカウントはすでに完全削除されます。追加のアカウントを手動で削除する場合のみ、ユーザー一覧を使用してください。"
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "デフォルトのビジュアルテーマ「chamilo」のロゴを変更しています。デフォルトの上書きを避けるため、カスタムビジュアルテーマの作成／使用を検討してください。"
+
+msgid "This exercise has no questions."
+msgstr "この演習には問題がありません。"
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "各問題のフィードバック／コメントをどのように表示しますか？このオプションは、学習者がテスト受験時にどのように表示されるかを定義します。"
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "これらのアプリケーションは、既存のアカウント権限のみであなたとしてChamiloにアクセスできます。使っていない、または見覚えのないものは取り消してください。"
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "法的同意の撤回を申請する理由を説明してください。適切に処理するために必要です"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "この個人キーを使って、リモートMCPクライアントを自分のアカウントと権限でChamiloに接続できます。"
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "完全なキーは一度だけ表示されます。安全に保管してください。新しいキーを生成すると、直前のキーは直ちに無効になります。"
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "このキーはクライアントをあなたのChamiloアカウントとして認証します。アカウントが持っていない権限は付与しません。"
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "登録ページに利用規約を表示し、登録するには訪問者が利用規約に同意することを必須にする"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "利用規約の内容はAI言語モデルに送信されます。保存する前に提案された翻訳を確認してください。"
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "対象言語の保存済みバージョンが既にあります。この提案を保存すると新しいバージョンが作成されます。"
+
+msgid "Acquired"
+msgstr "習得済み"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "推奨コース画像：1600 × 900 px（16:9）。大型または高密度画面で鮮明に表示するには、少なくとも1280 × 720 pxを使用してください。"
+
+msgid "Courses of the selected URL"
+msgstr "選択したURLのコース"
+
+msgid "Course categories in selected URL"
+msgstr "選択したURLのコースカテゴリ"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "アカウントは有効です。ログインしてコースを確認できます。"
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "まず訂正を<a href='%s'>こちら</a>からダウンロードしてください。\nその後ファイルを解凍し、ファイル名を変えずに必要な編集を行ってください。\n編集したファイルでZIPを作成し、このフォームからアップロードしてください。"
+
+msgid "Adding students from session %s to session %s"
+msgstr "セッション %s の学生をセッション %s に追加しています"
+
+msgid "Show all attempts by exercise"
+msgstr "演習ごとの全受験を表示"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "この操作は、選択したコースの許可ユーザー上限を超えます。"
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "対象コースの許可ユーザー上限に達したため、一部の登録を実行できませんでした。影響を受けたユーザー／コース：%s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "このレジストリは既知のレポートページ、カテゴリ、正規URL、旧URL、想定ロール対象を一覧します。正規URLは現行のレポート実装にルーティングし、文書化されたレポートロール行列を適用します。"
+
+msgid "E-mail notification subscription"
+msgstr "メール通知の購読"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "この操作は、管理者が設定したコースあたりのユーザー数上限（%s人）を超えるため、登録はキャンセルされました。"
+
+msgid "Language the document is in"
+msgstr "ドキュメントの言語"
+
+msgid "There is no session still"
+msgstr "まだセッションがありません"
+
+msgid "Origin courses from session"
+msgstr "セッションの元コース"
+
+msgid "Destination courses from session"
+msgstr "セッションの先コース"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "パブリックアクセス（コースメンバーは誰でもアクセス可能）"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "コース「%s」用の用語集用語を%d件生成してください。各用語は1行、その定義は次の行に書き、用語ごとに1行空けてください。タイトルや定義にそれ以外の書式は付けないでください。"
+
+msgid "This is a short description of the course '%s'."
+msgstr "これはコース「%s」の短い説明です。"
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Windows環境でChamiloを使用しています。全文検索用のドキュメント変換ヘルパーは利用できません。"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "テストの自動起動設定がオンです。学習者はテスト一覧にリダイレクトされます。"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "テストの自動起動設定がオンです。学習者は特定のテストにリダイレクトされます。"
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "このコースの登録上限に達しました（%current%/%limit%）。"
+
+msgid "Count course by language"
+msgstr "言語別コース数"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "最終アクセスが選択した日付より古いユーザー。"
 

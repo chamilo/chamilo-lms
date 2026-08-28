@@ -445,7 +445,7 @@ function forumForm(CForum $forum = null, int $lp_id = null): string
         $group,
         'public_private_group_forum_group',
         get_lang(
-            'Public access (access authorized to any member of the course)Private access (access authorized to group members only)GroupForum'
+            'Public access (access authorized to any member of the course)'
         )
     );
 

@@ -213,6 +213,16 @@ class GradebookCertificateRepository extends ResourceRepository
 
         $em->flush();
 
+        // ResourceFile::file is a transient Vich/Symfony File object. Keep it out of
+        // the managed resource graph after persistence because the current request
+        // session may serialize Doctrine entities that can reach this certificate.
+        $resourceNode = $cert->getResourceNode();
+        if ($resourceNode instanceof ResourceNode) {
+            foreach ($resourceNode->getResourceFiles() as $resourceFile) {
+                $resourceFile->setFile(null);
+            }
+        }
+
         return $cert;
     }
 

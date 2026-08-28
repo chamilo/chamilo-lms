@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":òc:dret d'autor,, non:sens dret d'autor"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dorsièr,, application/msword:MsWord,, application/octet-stream:Flux octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dorsièr,, application/msword:MsWord,, application/octet-stream:Flux d'octets,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercici:exercici,,      simulacion:simulacion,,      questionari:questionari,,      diagrama:diagrama,,      figura:figura,,      grafic:grafic,,      indèx:indèx,,      diapositiva:diapositiva,,      taula:taula,,      tèxte narratiu:tèxte narratiu,,      examen:examen,,      experiment:experiment,,      enunciat de problèma:enunciat de problèma,,      autoevaluacion:autoevaluacion,,      leçon:leçon"
@@ -4804,7 +4804,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats vos permet de consultar las estadisticas de vòstra plataforma : visitaires, vistas de paginas, referidors..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo BIBLIOTECA"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY es un motor de recèrca que offers l'indexacion e la recèrca multi-criteris. Es part de las foncionalitats Chamilo Medical."
@@ -9263,6 +9263,15 @@ msgstr "Rapòrt d'òras per la session %s"
 
 msgid "Error"
 msgstr "Error"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "L'utilizaire es estat creat, mas un dels camps de perfil addicionals s'es pas pogut enregistrar."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "L'utilizaire es estat mes a jorn, mas un dels camps de perfil addicionals s'es pas pogut enregistrar."
+
+msgid "One or more fields contain invalid values."
+msgstr "Un o mai camps contenon de valors invalidas."
 
 msgid "Anonymous"
 msgstr "Anònim"
@@ -15303,6 +15312,30 @@ msgstr "Temps passat la setmana passada"
 msgid "System status"
 msgstr "Estat del sistèma"
 
+msgid "Courses space"
+msgstr "Espaci dels corses"
+
+msgid "Database server configuration and metadata"
+msgstr "Configuracion del servidor de basa de donadas e metadadas"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Utilizacion del disc per cors vs quota de disc"
+
+msgid "Information about your webserver configuration"
+msgstr "Informacions sus la configuracion de vòstre servidor web"
+
+msgid "Paths"
+msgstr "Camins"
+
+msgid "State of Chamilo requirements"
+msgstr "Estat dels requisits de Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Estat dels paramètres PHP sul servidor"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Constantas api_get_path() resolgudas sus aqueste portal"
+
 msgid "Is writable"
 msgstr "Escritible"
 
@@ -20669,6 +20702,9 @@ msgstr "Sus la ròda de competéncias, aficha lo nom de la competéncia quand aq
 
 msgid "Created by"
 msgstr "Creat per"
+
+msgid "Created by %s on %s"
+msgstr "Creat per %s lo %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Amagar lo formador general dins la bóstia de rècepcion"
@@ -31872,6 +31908,9 @@ msgstr "Escrivètz quicòm a %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Preferit : SVG. Largor PNG recomandada : %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Largor PNG recomandada: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Teichar lo logotipe PNG pels corrièls (~%spx de largor)"
 
@@ -31907,6 +31946,9 @@ msgstr "Clicatz per inserir"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Preferit : SVG. Talha max PNG : %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Talha max PNG: %spx."
 
 msgid "View badge"
 msgstr "Veire lo badge"
@@ -38058,6 +38100,9 @@ msgstr "Finalizacion"
 msgid "Draft saved"
 msgstr "Borrador enregistrat"
 
+msgid "Save as draft"
+msgstr "Enregistrar coma borrolhon"
+
 msgid "Statement"
 msgstr "Enonciat"
 
@@ -39479,4 +39524,265 @@ msgstr "Aqueste utilizaire es ja inscrich a la session."
 
 msgid "This user is already subscribed to the course."
 msgstr "Aqueste utilizaire es ja inscrich al cors."
+
+msgid "Multi URLs"
+msgstr "URLs multiplas"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Las entitats coma los utilizaires e los corses pòdon èsser actius sus mai d'una URL al meteis temps, doncas la soma de las valors çai-jos correspondrà pas al total."
+
+msgid "User directory"
+msgstr "Repertòri d'utilizaires"
+
+msgid "Course directory"
+msgstr "Repertòri de corses"
+
+msgid "URLs"
+msgstr "URLs"
+
+msgid "User details"
+msgstr "Detalhs de l'utilizaire"
+
+msgid "Course details"
+msgstr "Detalhs del corse"
+
+msgid "View details"
+msgstr "Veire los detalhs"
+
+msgid "Average progress"
+msgstr "Progrés mejan"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "L'inscripcion dirècta aparten al cors entièr, pas a una URL precisa, doncas las meteissas chifras « Dirècte » son repetidas çai jos per cada URL a la quala aqueste cors es ligat. Las sessions son lo biais previst de partejar un cors entre URLs amb de métricas que diferisson vertadièrament per URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Connexions (totas las URLs combinadas)"
+
+msgid "Unique logins"
+msgstr "Connexions unicas"
+
+msgid "Parent URL"
+msgstr "URL parenta"
+
+msgid "Logins (your URLs)"
+msgstr "Connexions (vòstras URLs)"
+
+msgid "The picture could not be uploaded"
+msgstr "L'imatge s'es pas pogut mandar"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Aqueste tipe de camp es pas encara totalament pres en carga — valor bruta solament."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Aqueste cors s'apròcha de sa limita d'inscripcion d'utilizaires (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "L'espaci es limitat per las proprietats de vòstre cors. Per aumentar vòstra limita, obtengètz un"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Las inscripcions d'utilizaires son limitadas per las proprietats de vòstre cors. Per aumentar vòstra limita, obtengètz un"
+
+msgid "pro plan"
+msgstr "plan pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "e importatz la salvagarda d'aqueste cors via Manteniment del cors cap a vòstre cors pagat nòu, o dobrissètz un ticket per far convertir vòstre cors en cors pro un còp aqueste plan aquesit."
+
+msgid "Tired of writing questions?"
+msgstr "Fatigat d'escriure de questions ?"
+
+msgid "Upgrade your plan"
+msgstr "Melhoratz vòstre plan"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "cap a un plan pro per obténer l'ajuda d'una IA per generar de questions de qualitat per vos."
+
+msgid "Student Success AI Coach"
+msgstr "Entraïnador IA de succès estudiant"
+
+msgid "No AI text provider is configured."
+msgstr "Cap de provesidor de tèxt IA es pas configurat."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Instruccions suplementàrias per l'entraïnador IA"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Exemple : Aqueste aprendís a de dificultats a manténer l'atencion. Prepausatz d'activitats mai cortas e de verificacions de compreneson mai frequentas."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Gardatz aquesta fenèstra dobèrta pendent que Chamilo prepara la recomandacion."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "La recomandacion es tanben estada enregistrada dins vòstra bóstia de recepcion Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "La recomandacion es estada generada e enregistrada per aqueste aprendís, mas la còpia de la bóstia de recepcion s'es pas poguda crear."
+
+msgid "Student success recommendation"
+msgstr "Recomandacion de succès estudiant"
+
+msgid "Generated"
+msgstr "Generat"
+
+msgid "Priority actions"
+msgstr "Accions prioritàrias"
+
+msgid "Evidence"
+msgstr "Pròvas"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Aquesta foncionalitat analisarà lo contengut d'aqueste cors e mandarà d'informacions sul comportament d'aprendissatge al modèl IA configurat. Malgrat que se mande pas de donadas personalas dirèctament identificablas al modèl IA, una partida de las donadas mandadas poiriá provesir indirèctament d'informacions identificablas sus l'utilizaire. En cas de dobte, verificatz totjorn amb vòstra persona de referéncia IA abans d'utilizar aquesta foncionalitat."
+
+msgid "Additional activities"
+msgstr "Activitats suplementàrias"
+
+msgid "Rhythm"
+msgstr "Ritme"
+
+msgid "Learning methodologies"
+msgstr "Metodologias d'aprendissatge"
+
+msgid "Other recommendations"
+msgstr "Autras recomandacions"
+
+msgid "Analyzing course..."
+msgstr "Analisi del cors..."
+
+msgid "Analyzing student's learning..."
+msgstr "Analisi de l'aprendissatge de l'estudiant..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "En acceptant aquesta invitacion, seretz ligat a l'utilizaire demandant d'un biais que farà tot o una partida de las donadas de vòstre perfil disponiblas en lectura per l'utilizaire demandant. Asseguratz-vos de partejar pas tròp en verificatz vòstre perfil amb d'utilizaires que ja fisatz."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "L'autorizacion d'utilizar lo microfòn es pas activada, activatz-la dins vòstre navigador per enregistrar l'àudio"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Aquesta version de Chamilo ven amb un (o mai) cors multilenga preïnstallat. Sentissètz-vos liure de los revisar dins la lista dels corses e de decidir se devon èsser publics o non."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Avètz pas actualament accès a cap d'URL. Demandatz a l'administrator de vos acordar l'accès a l'URL a la quala apartenètz."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Se lo provesidor IA seleccionat es pas un servici sobeiran, lo contengut del document seleccionat poiriá èsser mandat a un servici extèrne. Contunhetz pas amb d'informacions confidencialas levat se vòstra organizacion l'autoriza."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Clicatz Unificar sul compte que deu demorar. Lo sistèma fusionarà totes los autres comptes del meteis grop de duplicats dedins. Los comptes fusionats seràn suprimits de biais permanent e desapareisseràn d'aqueste rapòrt. Aquesta accion se pòt pas anullar."
+
+msgid "Permanent deletion"
+msgstr "Supression permanenta"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unificar suprimit ja de biais permanent los comptes fusionats. Utilizatz la lista d'utilizaires solament se volètz suprimir d'autres comptes manualament."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Modificatz los lògos pel tèma visual per defaut « chamilo ». Pensatz a crear/utilizar un tèma visual personalizat per evitar d'espotir las valors per defaut."
+
+msgid "This exercise has no questions."
+msgstr "Aqueste exercici a pas de questions."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Cossí mostrar lo retorn/comentari per cada question ? Aquesta opcion definís cossí serà mostrat a l'aprendís pendent lo tèst."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Aquestas aplicacions pòdon accedir a Chamilo coma vos, en utilizant las permissions de vòstre compte existent e pas mai. Revocatz totas aquelas que utilizatz pas mai o reconeissètz pas."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Explicatz perqué volètz demandar lo retirament de vòstre consentiment legal, per que poscam tractar vòstra demanda corrèctament"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Utilizatz aquesta clau personala per connectar un client MCP distant a Chamilo amb vòstre compte e vòstras permissions."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "La clau completa s'aficha sonque un còp. Conservatz-la de biais segur. Generar una clau nòva invalidarà immediatament la precedenta."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "La clau autentifica lo client coma vòstre compte Chamilo. Accòrda pas de permissions que vòstre compte a pas ja."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Afichar una declaracion de Condicions generalas sus la pagina d'inscripcion, exigir que lo visitaire accèpte las CG per s'inscriure"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Lo contengut de las condicions generalas serà mandat a un modèl de lengatge IA. Revisatz la traduccion prepausada abans de la salvar."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Una version salvadada existís ja per la lenga cibla. Salvar aquesta proposicion crearà una nòva version."
+
+msgid "Acquired"
+msgstr "Aquesit"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Imatge de cors recomandat : 1600 × 900 px (16:9). Utilizatz al mens 1280 × 720 px per un afichatge net sus d'ecrans mai grands o de nauta densitat."
+
+msgid "Courses of the selected URL"
+msgstr "Corses de l'URL seleccionada"
+
+msgid "Course categories in selected URL"
+msgstr "Categorias de corses dins l'URL seleccionada"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Vòstre compte es actiu, podètz vos connectar e verificar vòstres corses ara."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "D'en primièr, vos cal telecargar las correccions <a href='%s'> aicí </a>.\nPuèi, vos cal descompressar aquel fichièr e modificar los fichièrs coma volètz sens cambiar los noms de fichièrs.\nPuèi creatz un fichièr zip amb aqueles fichièrs modificats e mandatz-lo dins aqueste formulari."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Apondon d'estudiants de la session %s a la session %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Afichar totas las ensajas per exercici"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Aquesta operacion depassariá lo limit d'utilizaires autorizat pel cors seleccionat."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Qualques inscripcions an pas pogut èsser executadas perque an atench lo limit d'utilizaires autorizat pel cors afectat. Utilizaires/Corses afectats : %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Aqueste registre lista las paginas de rapòrt conegudas, lor categoria, l'URL canonica, l'URL eritada e lo public de ròtle esperat. Las URLs canonicas menan a l'implementacion actuala del rapòrt e aplican la matritz de ròtles documentada."
+
+msgid "E-mail notification subscription"
+msgstr "Inscripcion a las notificacions per corrièl"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Aquesta operacion depassariá lo limit de %s utilizaires per cors definit pels administrators. L'inscripcion es estada anullada."
+
+msgid "Language the document is in"
+msgstr "Lenga del document"
+
+msgid "There is no session still"
+msgstr "I a pas encara de session"
+
+msgid "Origin courses from session"
+msgstr "Corses d'origina de la session"
+
+msgid "Destination courses from session"
+msgstr "Corses de destinacion de la session"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Accès public (accès autorizat a tot membre del curs)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Generar %d tèrmes de glossari per un cors sus '%s', cada tèrme sus una sola linha, amb sa definicion sus la linha seguenta e una linha voida entre cada tèrme. Apondètz pas cap d'autre formatatge pel títol ni per la definicion."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Aquò es una descripcion corta del cors '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Utilizatz Chamilo sus una plataforma Windows. Los ajudants de conversion de documents son pas disponibles per l'indexacion de tèxte integral."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Lo paramètre de lançament automatic del tèst es ACTIU. Los estudiants seràn redirigits cap a la lista de tèsts."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Lo paramètre de lançament automatic del tèst es ACTIU. Los estudiants seràn redirigits cap a un tèst especific."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Lo limit d'inscripcion per aqueste cors es estat atench (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Comptar los corses per lenga"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Utilizaires dont lo darrièr accès es mai ancian que la data seleccionada."
 

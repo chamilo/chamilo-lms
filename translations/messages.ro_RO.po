@@ -9278,6 +9278,15 @@ msgstr "Raport timp sesiuni %s"
 msgid "Error"
 msgstr "Greseala"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Utilizatorul a fost creat, dar unul dintre câmpurile suplimentare de profil nu a putut fi salvat."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Utilizatorul a fost actualizat, dar unul dintre câmpurile suplimentare de profil nu a putut fi salvat."
+
+msgid "One or more fields contain invalid values."
+msgstr "Unul sau mai multe câmpuri conțin valori nevalide."
+
 msgid "Anonymous"
 msgstr "Anonim"
 
@@ -15317,6 +15326,30 @@ msgstr "Timpul petrecut ultima săptămână"
 msgid "System status"
 msgstr "Informatie a sistemului"
 
+msgid "Courses space"
+msgstr "Spațiu cursuri"
+
+msgid "Database server configuration and metadata"
+msgstr "Configurarea serverului de baze de date și metadate"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Utilizarea discului per curs vs cota de disc"
+
+msgid "Information about your webserver configuration"
+msgstr "Informații despre configurația serverului web"
+
+msgid "Paths"
+msgstr "Căi"
+
+msgid "State of Chamilo requirements"
+msgstr "Starea cerințelor Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Starea setărilor PHP pe server"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Constantele api_get_path() rezolvate pe acest portal"
+
 msgid "Is writable"
 msgstr "Scrierea este posibila în"
 
@@ -20688,6 +20721,9 @@ msgstr "Pe roata competențelor, arată numele competenței când are cod scurt.
 
 msgid "Created by"
 msgstr "Creat de"
+
+msgid "Created by %s on %s"
+msgstr "Creat de %s pe %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Ascunde trainerul general în dropbox"
@@ -31892,6 +31928,9 @@ msgstr "Scrie ceva către %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Preferat: SVG. Lățime PNG recomandată: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Lățime PNG recomandată: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Încarcă logo PNG pentru e-mailuri (~%spx lățime)"
 
@@ -31927,6 +31966,9 @@ msgstr "Click pentru a insera"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Preferat: SVG. Dimensiune max. PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Dimensiune maximă PNG: %spx."
 
 msgid "View badge"
 msgstr "Vezi insigna"
@@ -38078,6 +38120,9 @@ msgstr "Se finalizează"
 msgid "Draft saved"
 msgstr "Ciornă salvată"
 
+msgid "Save as draft"
+msgstr "Salvează ca ciornă"
+
 msgid "Statement"
 msgstr "Enunț"
 
@@ -39159,7 +39204,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard citire"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Menținere activă a clasamentului"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard așteptare"
@@ -39499,4 +39544,265 @@ msgstr "Acest utilizator este deja înscris la sesiune."
 
 msgid "This user is already subscribed to the course."
 msgstr "Acest utilizator este deja înscris la curs."
+
+msgid "Multi URLs"
+msgstr "URL-uri multiple"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entitățile precum utilizatorii și cursurile pot fi active pe mai multe URL-uri în același timp, deci suma valorilor de mai jos nu va corespunde totalului."
+
+msgid "User directory"
+msgstr "Director utilizatori"
+
+msgid "Course directory"
+msgstr "Director cursuri"
+
+msgid "URLs"
+msgstr "URL-uri"
+
+msgid "User details"
+msgstr "Detalii utilizator"
+
+msgid "Course details"
+msgstr "Detalii curs"
+
+msgid "View details"
+msgstr "Vizualizare detalii"
+
+msgid "Average progress"
+msgstr "Progres mediu"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Înscrierea directă aparține cursului ca întreg, nu unui URL specific, deci aceleași cifre „Direct” sunt repetate mai jos pentru fiecare URL la care este legat acest curs. Sesiunile sunt modul destinat de a partaja un curs între URL-uri cu metrici care diferă efectiv pe URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Autentificări (toate URL-urile combinate)"
+
+msgid "Unique logins"
+msgstr "Autentificări unice"
+
+msgid "Parent URL"
+msgstr "URL părinte"
+
+msgid "Logins (your URLs)"
+msgstr "Autentificări (URL-urile dvs.)"
+
+msgid "The picture could not be uploaded"
+msgstr "Imaginea nu a putut fi încărcată"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Acest tip de câmp nu este încă pe deplin suportat — doar valoarea brută."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Acest curs se apropie de limita de înscrieri a utilizatorilor (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Spațiul este limitat prin proprietățile cursului. Pentru a crește limita, obțineți un"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Înscrierile utilizatorilor sunt limitate prin proprietățile cursului. Pentru a crește limita, obțineți un"
+
+msgid "pro plan"
+msgstr "plan pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "și importați copia de rezervă a acestui curs prin Mentenanța cursului în noul curs plătit sau deschideți un tichet pentru a converti cursul într-un curs pro după ce ați achiziționat acest plan."
+
+msgid "Tired of writing questions?"
+msgstr "Obosit de a scrie întrebări?"
+
+msgid "Upgrade your plan"
+msgstr "Actualizați planul"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "la un plan pro pentru a primi ajutor de la un AI care generează întrebări de calitate pentru dvs."
+
+msgid "Student Success AI Coach"
+msgstr "Antrenor AI pentru succesul studentului"
+
+msgid "No AI text provider is configured."
+msgstr "Nu este configurat niciun furnizor de text AI."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Instrucțiuni suplimentare pentru antrenorul AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Exemplu: Acest cursant are dificultăți în menținerea atenției. Sugerați activități mai scurte și verificări mai frecvente ale înțelegerii."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Păstrați această fereastră deschisă în timp ce Chamilo pregătește recomandarea."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Recomandarea a fost salvată și în inbox-ul dvs. Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Recomandarea a fost generată și salvată pentru acest cursant, dar copia din inbox nu a putut fi creată."
+
+msgid "Student success recommendation"
+msgstr "Recomandare pentru succesul studentului"
+
+msgid "Generated"
+msgstr "Generat"
+
+msgid "Priority actions"
+msgstr "Acțiuni prioritare"
+
+msgid "Evidence"
+msgstr "Dovezi"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Această funcție va analiza conținutul acestui curs și va trimite informații despre comportamentul de învățare către modelul AI configurat. Deși nu se trimit date personale direct identificabile către modelul AI, unele date trimise ar putea oferi indirect informații identificabile despre utilizator. Dacă aveți îndoieli, consultați întotdeauna persoana de referință AI înainte de a folosi această funcție."
+
+msgid "Additional activities"
+msgstr "Activități suplimentare"
+
+msgid "Rhythm"
+msgstr "Ritm"
+
+msgid "Learning methodologies"
+msgstr "Metodologii de învățare"
+
+msgid "Other recommendations"
+msgstr "Alte recomandări"
+
+msgid "Analyzing course..."
+msgstr "Se analizează cursul..."
+
+msgid "Analyzing student's learning..."
+msgstr "Se analizează învățarea studentului..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Prin acceptarea acestei invitații, veți fi asociat cu utilizatorul solicitant astfel încât o parte sau toate datele din profilul dvs. vor putea fi citite de acesta. Asigurați-vă că nu partajați prea multe, verificându-vă profilul cu utilizatori în care aveți deja încredere."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Permisiunea de a folosi microfonul nu este activată; activați-o în browser pentru a înregistra audio"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Această versiune de Chamilo vine cu unul (sau mai multe) curs(uri) multilingv(e) preinstalate. Puteți să le examinați în lista de cursuri și să decideți dacă ar trebui să fie publice sau nu."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Momentan nu aveți acces la nicio adresă URL. Cereți administratorului să vă acorde acces la URL-ul căruia îi aparțineți."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Dacă furnizorul AI selectat nu este un serviciu suveran, conținutul documentului selectat poate fi trimis către un serviciu extern. Nu continuați cu informații confidențiale decât dacă acest lucru este permis de organizația dvs."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Faceți clic pe Unifică pe contul care trebuie să rămână. Sistemul va îmbina toate celelalte conturi din același grup de duplicate în acesta. Conturile îmbinate vor fi șterse definitiv și vor dispărea din acest raport. Această acțiune nu poate fi anulată."
+
+msgid "Permanent deletion"
+msgstr "Ștergere definitivă"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unificarea șterge deja definitiv conturile îmbinate. Folosiți lista Utilizatori doar dacă doriți să ștergeți manual conturi suplimentare."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Modificați logo-urile pentru tema vizuală implicită „chamilo”. Luați în considerare crearea/utilizarea unei teme vizuale personalizate pentru a evita suprascrierea valorilor implicite."
+
+msgid "This exercise has no questions."
+msgstr "Acest exercițiu nu are întrebări."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Cum ar trebui să afișăm feedback-ul/comentariul pentru fiecare întrebare? Această opțiune definește modul în care va fi arătat cursantului în timpul testului."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Aceste aplicații pot accesa Chamilo în numele dvs., folosind permisiunile contului existent și nimic mai mult. Revocați-le pe cele pe care nu le mai folosiți sau nu le recunoașteți."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Explicați de ce doriți retragerea consimțământului legal, pentru a putea procesa corect cererea"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Folosiți această cheie personală pentru a conecta un client MCP la distanță la Chamilo cu propriul cont și permisiuni."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Cheia completă este afișată o singură dată. Păstrați-o în siguranță. Generarea unei chei noi invalidează imediat pe cea anterioară."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Cheia autentifică clientul ca fiind contul dvs. Chamilo. Nu acordă permisiuni pe care contul dvs. nu le are deja."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Afișați o declarație de Termeni și condiții pe pagina de înregistrare; solicitați vizitatorului să accepte T&C pentru a se înregistra"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Conținutul termenilor și condițiilor va fi trimis unui model de limbaj AI. Revizuiți traducerea propusă înainte de a o salva."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Există deja o versiune salvată pentru limba țintă. Salvarea acestei propuneri va crea o versiune nouă."
+
+msgid "Acquired"
+msgstr "Dobândit"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Imagine recomandată pentru curs: 1600 × 900 px (16:9). Folosiți cel puțin 1280 × 720 px pentru un afișaj clar pe ecrane mai mari sau cu densitate ridicată."
+
+msgid "Courses of the selected URL"
+msgstr "Cursurile URL-ului selectat"
+
+msgid "Course categories in selected URL"
+msgstr "Categoriile de cursuri din URL-ul selectat"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Contul dumneavoastră este activ, vă puteți autentifica și verifica cursurile acum."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Mai întâi trebuie să descărcați corecțiile <a href='%s'> aici </a>.\nDupă aceea trebuie să dezarhivați fișierul și să editați fișierele după cum doriți, fără a schimba numele fișierelor.\nApoi creați un fișier zip cu acele fișiere modificate și încărcați-l în acest formular."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Adăugarea studenților din sesiunea %s în sesiunea %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Afișează toate încercările pe exercițiu"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Această operațiune ar depăși limita de utilizatori permisă pentru cursul selectat."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Unele înscrieri nu au putut fi efectuate deoarece s-a atins limita de utilizatori permisă pentru cursul afectat. Utilizatori/Cursuri afectate: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Acest registru listează paginile de raportare cunoscute, categoria lor, URL-ul canonic, URL-ul vechi și audiența de rol așteptată. URL-urile canonice direcționează către implementarea actuală a raportului și aplică matricea de roluri documentată pentru rapoarte."
+
+msgid "E-mail notification subscription"
+msgstr "Abonament la notificări prin e-mail"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Această operațiune ar depăși limita de %s utilizatori per curs stabilită de administratori. Înscrierea a fost anulată."
+
+msgid "Language the document is in"
+msgstr "Limba în care este documentul"
+
+msgid "There is no session still"
+msgstr "Nu există încă nicio sesiune"
+
+msgid "Origin courses from session"
+msgstr "Cursuri de origine din sesiune"
+
+msgid "Destination courses from session"
+msgstr "Cursuri destinație din sesiune"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Pentru toti membrii cursului"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Generați %d termeni de glosar pentru un curs despre '%s', fiecare termen pe o singură linie, cu definiția pe linia următoare și o linie goală între fiecare termen. Nu adăugați nicio altă formatare pentru titlu sau pentru definiție."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Aceasta este o scurtă descriere a cursului '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Folosiți Chamilo pe o platformă Windows. Ajutoarele de conversie a documentelor nu sunt disponibile pentru indexarea textului integral."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Setarea de lansare automată a testului este ACTIVATĂ. Studenții vor fi redirecționați către lista de teste."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Setarea de lansare automată a testului este ACTIVATĂ. Studenții vor fi redirecționați către un test specific."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Limita de înscriere pentru acest curs a fost atinsă (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Număr de cursuri pe limbă"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Utilizatori a căror ultimă accesare este mai veche decât data selectată."
 

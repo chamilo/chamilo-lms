@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Sekiranya ini"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Julat pembolehubah"
@@ -9267,6 +9267,15 @@ msgstr "Laporan masa untuk sesi %s"
 msgid "Error"
 msgstr "Ralat"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Pengguna telah dicipta, tetapi salah satu medan profil tambahan tidak dapat disimpan."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Pengguna telah dikemas kini, tetapi salah satu medan profil tambahan tidak dapat disimpan."
+
+msgid "One or more fields contain invalid values."
+msgstr "Satu atau lebih medan mengandungi nilai yang tidak sah."
+
 msgid "Anonymous"
 msgstr "Tanpa nama"
 
@@ -15306,6 +15315,30 @@ msgstr "Masa yang dihabiskan minggu lalu"
 msgid "System status"
 msgstr "Status sistem"
 
+msgid "Courses space"
+msgstr "Ruang kursus"
+
+msgid "Database server configuration and metadata"
+msgstr "Konfigurasi pelayan pangkalan data dan metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Penggunaan cakera setiap kursus vs kuota cakera"
+
+msgid "Information about your webserver configuration"
+msgstr "Maklumat tentang konfigurasi pelayan web anda"
+
+msgid "Paths"
+msgstr "Laluan"
+
+msgid "State of Chamilo requirements"
+msgstr "Status keperluan Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Status tetapan PHP pada pelayan"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Pemalar api_get_path() yang diselesaikan pada portal ini"
+
 msgid "Is writable"
 msgstr "Boleh ditulis"
 
@@ -20672,6 +20705,9 @@ msgstr "Pada roda kemahiran, ia menunjukkan nama kemahiran apabila ia mempunyai 
 
 msgid "Created by"
 msgstr "Dicipta oleh"
+
+msgid "Created by %s on %s"
+msgstr "Dicipta oleh %s pada %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Sembunyikan jurulatih umum dalam dropbox"
@@ -31876,6 +31912,9 @@ msgstr "Tulis sesuatu kepada %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Lebih digemari: SVG. Lebar PNG disyorkan: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Lebar PNG disyorkan: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Muat naik logo PNG untuk e-mel (~%spx lebar)"
 
@@ -31911,6 +31950,9 @@ msgstr "Klik untuk sisip"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Disuci: SVG. Saiz PNG maks: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Saiz maksimum PNG: %spx."
 
 msgid "View badge"
 msgstr "Lihat lencana"
@@ -33602,7 +33644,7 @@ msgid "Final item"
 msgstr "Item akhir"
 
 msgid "Edit item"
-msgstr "Edit item"
+msgstr "Sunting item"
 
 msgid "No AI text providers configured."
 msgstr "Tiada penyedia teks AI yang dikonfigurasi."
@@ -35441,7 +35483,7 @@ msgid "No documents available."
 msgstr "Tiada dokumen tersedia."
 
 msgid "yperbolic arctangent:\\t\\tarctanh(x)"
-msgstr "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Arctangen hiperbolik:\\t\\tarctanh(x)"
 
 msgid "Exercise"
 msgstr "Latihan"
@@ -35675,13 +35717,13 @@ msgid "[%s] Please change your password"
 msgstr "[%s] Sila tukar kata laluan anda"
 
 msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
-msgstr "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Yang dihormati %s,\n\nProses penguatkuasaan keselamatan kami menunjukkan anda menggunakan kata laluan yang biasa digunakan di internet, yang bermaksud akaun anda mudah dicuri. Ia mungkin urutan mudah atau perkataan yang sangat biasa; kami tidak benar-benar tahu (kami tidak dapat melihat kata laluan anda), tetapi kami meminta anda untuk log masuk ke platform dan memohon penukaran kata laluan. Anda boleh mengikuti pautan di sini: %s untuk berbuat demikian sekarang.\n\nSila ambil perhatian bahawa kami tidak akan meminta kata laluan anda dalam proses ini. Anda hanya masukkan nama pengguna atau e-mel anda dan kami hantar pautan. Jika anda diminta memasukkan kata laluan sedia ada untuk berbuat demikian, seseorang mungkin sedang cuba melakukan pancingan data (phishing) terhadap akaun anda. Kekal selamat, tukar kata laluan anda sekarang!\n\n%s\n%s"
 
 msgid "[%s] Your password has been reset"
 msgstr "[%s] Kata laluan anda telah ditetapkan semula"
 
 msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
-msgstr "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Yang dihormati %s,\n\nProses penguatkuasaan keselamatan kami menandakan anda sebagai menggunakan kata laluan yang biasa digunakan di internet, yang bermaksud akaun anda mudah dicuri. Sebagai langkah pencegahan, kami telah memulakan proses tetapan semula kata laluan. Kata laluan baharu anda yang dijana secara automatik kini ialah:\n\n%s\n\nSila log masuk ke platform secepat mungkin (menggunakan kata laluan baharu ini) untuk menetapkan kata laluan peribadi dan selamat anda sendiri.\n\nKekal selamat.\n\n%s\n%s"
 
 msgid "Signature saved successfully"
 msgstr "Tandatangan berjaya disimpan"
@@ -36539,10 +36581,10 @@ msgid "Baseline warnings"
 msgstr "Amaran baseline"
 
 msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
-msgstr "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Bina pelan aplikasi yang selamat daripada pakej berperingkat. Ini hanya menyemak fail, kebenaran, laluan sandaran dan status kunci. Ia tidak menggantikan fail."
 
 msgid "Build production frontend assets."
-msgstr "Build production frontend assets."
+msgstr "Bina aset bahagian hadapan pengeluaran."
 
 msgid "Building plan..."
 msgstr "Membina pelan..."
@@ -37505,34 +37547,34 @@ msgid "Back to account"
 msgstr "Kembali ke akaun"
 
 msgid "Your feedback will help us improve future training sessions."
-msgstr "Your feedback will help us improve future training sessions."
+msgstr "Maklum balas anda akan membantu kami menambah baik sesi latihan akan datang."
 
 msgid "Thank you for sharing your feedback."
-msgstr "Thank you for sharing your feedback."
+msgstr "Terima kasih kerana berkongsi maklum balas anda."
 
 msgid "How satisfied are you with the overall quality of the training?"
-msgstr "How satisfied are you with the overall quality of the training?"
+msgstr "Sejauh manakah anda berpuas hati dengan kualiti keseluruhan latihan?"
 
 msgid "How satisfied are you with the relevance of the content?"
-msgstr "How satisfied are you with the relevance of the content?"
+msgstr "Sejauh manakah anda berpuas hati dengan kerelevanan kandungan?"
 
 msgid "How satisfied are you with the clarity of the explanations?"
-msgstr "How satisfied are you with the clarity of the explanations?"
+msgstr "Sejauh manakah anda berpuas hati dengan kejelasan penjelasan?"
 
 msgid "How satisfied are you with the organization and pace of the training?"
-msgstr "How satisfied are you with the organization and pace of the training?"
+msgstr "Sejauh manakah anda berpuas hati dengan organisasi dan rentak latihan?"
 
 msgid "How satisfied are you with the practical usefulness of what you learned?"
-msgstr "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Sejauh manakah anda berpuas hati dengan kegunaan praktikal apa yang anda pelajari?"
 
 msgid "Would you recommend this training to other people?"
-msgstr "Would you recommend this training to other people?"
+msgstr "Adakah anda akan mengesyorkan latihan ini kepada orang lain?"
 
 msgid "What should we improve in future editions?"
-msgstr "What should we improve in future editions?"
+msgstr "Apakah yang perlu kami perbaiki dalam edisi akan datang?"
 
 msgid "Very satisfied"
-msgstr "Very satisfied"
+msgstr "Sangat berpuas hati"
 
 msgid "Satisfied"
 msgstr "Satisfied"
@@ -37544,25 +37586,25 @@ msgid "Dissatisfied"
 msgstr "Dissatisfied"
 
 msgid "Very dissatisfied"
-msgstr "Very dissatisfied"
+msgstr "Sangat tidak berpuas hati"
 
 msgid "Add destination"
-msgstr "Add destination"
+msgstr "Tambah destinasi"
 
 msgid "Add this test to the assessment tool"
-msgstr "Add this test to the assessment tool"
+msgstr "Tambah ujian ini ke alat penilaian"
 
 msgid "Attempts and timing"
-msgstr "Attempts and timing"
+msgstr "Percubaan dan masa"
 
 msgid "Available questions"
-msgstr "Available questions"
+msgstr "Soalan tersedia"
 
 msgid "Cancel and return to learning path"
-msgstr "Cancel and return to learning path"
+msgstr "Batal dan kembali ke laluan pembelajaran"
 
 msgid "Category destinations"
-msgstr "Category destinations"
+msgstr "Destinasi kategori"
 
 msgid "Classification"
 msgstr "Classification"
@@ -37637,7 +37679,7 @@ msgid "Use these fields to classify the exercise independently from its display 
 msgstr "Gunakan medan ini untuk mengklasifikasikan latihan secara bebas daripada pilihan paparannya."
 
 msgid "Invite by email"
-msgstr "Invite by email"
+msgstr "Jemput melalui e-mel"
 
 msgid "Invitation has been sent"
 msgstr "Jemputan telah dihantar"
@@ -38061,6 +38103,9 @@ msgstr "Menamatkan"
 
 msgid "Draft saved"
 msgstr "Draf disimpan"
+
+msgid "Save as draft"
+msgstr "Simpan sebagai draf"
 
 msgid "Statement"
 msgstr "Pernyataan"
@@ -39101,7 +39146,7 @@ msgid "Graceful workers"
 msgstr "Pekerja anggun"
 
 msgid "Server MPM"
-msgstr "Server MPM"
+msgstr "MPM pelayan"
 
 msgid "Requests per second (live)"
 msgstr "Permintaan sesaat (langsung)"
@@ -39483,4 +39528,265 @@ msgstr "Pengguna ini telah melanggan sesi tersebut."
 
 msgid "This user is already subscribed to the course."
 msgstr "Pengguna ini telah melanggan kursus tersebut."
+
+msgid "Multi URLs"
+msgstr "Berbilang URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entiti seperti pengguna dan kursus boleh aktif dalam lebih daripada satu URL pada masa yang sama, jadi jumlah nilai di bawah tidak akan sepadan dengan jumlah keseluruhan."
+
+msgid "User directory"
+msgstr "Direktori pengguna"
+
+msgid "Course directory"
+msgstr "Direktori kursus"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "Butiran pengguna"
+
+msgid "Course details"
+msgstr "Butiran kursus"
+
+msgid "View details"
+msgstr "Lihat butiran"
+
+msgid "Average progress"
+msgstr "Kemajuan purata"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Pendaftaran langsung milik kursus secara keseluruhan, bukan URL tertentu, jadi angka 'Langsung' yang sama diulang di bawah untuk setiap URL yang dikaitkan dengan kursus ini. Sesi ialah cara yang dimaksudkan untuk berkongsi kursus merentas URL dengan metrik yang benar-benar berbeza bagi setiap URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Log masuk (semua URL digabungkan)"
+
+msgid "Unique logins"
+msgstr "Log masuk unik"
+
+msgid "Parent URL"
+msgstr "URL induk"
+
+msgid "Logins (your URLs)"
+msgstr "Log masuk (URL anda)"
+
+msgid "The picture could not be uploaded"
+msgstr "Gambar tidak dapat dimuat naik"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Jenis medan ini belum disokong sepenuhnya — nilai mentah sahaja."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Kursus ini hampir mencapai had langganan pengguna (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Ruang terhad melalui sifat kursus anda. Untuk meningkatkan had anda, dapatkan"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Langganan pengguna terhad melalui sifat kursus anda. Untuk meningkatkan had anda, dapatkan"
+
+msgid "pro plan"
+msgstr "pelan pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "dan import sandaran kursus ini melalui Penyelenggaraan Kursus ke kursus berbayar baharu anda, atau buka tiket untuk menukar kursus anda kepada kursus pro selepas anda memperoleh pelan ini."
+
+msgid "Tired of writing questions?"
+msgstr "Penat menulis soalan?"
+
+msgid "Upgrade your plan"
+msgstr "Naik taraf pelan anda"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "kepada pelan pro untuk mendapat bantuan AI menjana soalan berkualiti untuk anda."
+
+msgid "Student Success AI Coach"
+msgstr "Jurulatih AI Kejayaan Pelajar"
+
+msgid "No AI text provider is configured."
+msgstr "Tiada pembekal teks AI dikonfigurasikan."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Arahan tambahan untuk jurulatih AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Contoh: Pelajar ini sukar mengekalkan perhatian. Cadangkan aktiviti yang lebih pendek dan semakan pemahaman yang lebih kerap."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Biarkan tetingkap ini terbuka sementara Chamilo menyediakan cadangan."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Cadangan juga disimpan dalam peti masuk Chamilo anda."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Cadangan telah dijana dan disimpan untuk pelajar ini, tetapi salinan peti masuk tidak dapat dicipta."
+
+msgid "Student success recommendation"
+msgstr "Cadangan kejayaan pelajar"
+
+msgid "Generated"
+msgstr "Dijana"
+
+msgid "Priority actions"
+msgstr "Tindakan keutamaan"
+
+msgid "Evidence"
+msgstr "Bukti"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Ciri ini akan menganalisis kandungan kursus ini dan menghantar maklumat tingkah laku pembelajaran kepada model AI yang dikonfigurasikan. Walaupun data peribadi yang boleh dikenal pasti secara langsung tidak dihantar kepada model AI, sebahagian data yang dihantar mungkin secara tidak langsung memberikan maklumat yang boleh dikenal pasti tentang pengguna. Jika ragu-ragu, sentiasa semak dengan rujukan AI anda sebelum menggunakan ciri ini."
+
+msgid "Additional activities"
+msgstr "Aktiviti tambahan"
+
+msgid "Rhythm"
+msgstr "Irama"
+
+msgid "Learning methodologies"
+msgstr "Metodologi pembelajaran"
+
+msgid "Other recommendations"
+msgstr "Cadangan lain"
+
+msgid "Analyzing course..."
+msgstr "Menganalisis kursus..."
+
+msgid "Analyzing student's learning..."
+msgstr "Menganalisis pembelajaran pelajar..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Dengan menerima jemputan ini, anda akan dikaitkan dengan pengguna yang meminta dengan cara yang menjadikan sebahagian atau semua data profil anda tersedia untuk dibaca oleh pengguna tersebut. Sila pastikan anda tidak berkongsi terlalu banyak dengan menyemak profil anda bersama pengguna yang sudah anda percayai."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Kebenaran menggunakan mikrofon tidak diaktifkan, sila aktifkannya dalam pelayar anda untuk merakam audio"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Versi Chamilo ini disertakan dengan satu (atau lebih) kursus berbilang bahasa yang dipasang terlebih dahulu. Sila semak dalam senarai kursus dan tentukan sama ada ia harus dijadikan umum atau tidak."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Anda pada masa ini tidak mempunyai akses kepada sebarang URL. Sila minta pentadbir memberikan anda akses kepada URL yang anda milik."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Jika pembekal AI yang dipilih bukan perkhidmatan berdaulat, kandungan dokumen yang dipilih mungkin dihantar ke perkhidmatan luaran. Jangan teruskan dengan maklumat sulit melainkan dibenarkan oleh organisasi anda."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Klik Satukan pada akaun yang harus kekal. Sistem akan menggabungkan semua akaun lain dalam kumpulan pendua yang sama ke dalamnya. Akaun yang digabungkan akan dipadam secara kekal dan hilang daripada laporan ini. Tindakan ini tidak boleh dibuat asal."
+
+msgid "Permanent deletion"
+msgstr "Pemadaman kekal"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Satukan sudah memadam akaun yang digabungkan secara kekal. Gunakan senarai Pengguna hanya jika anda ingin memadam akaun tambahan secara manual."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Anda sedang mengubah suai logo untuk tema visual lalai “chamilo”. Pertimbangkan untuk mencipta/menggunakan tema visual tersuai bagi mengelakkan penimpaan tetapan lalai."
+
+msgid "This exercise has no questions."
+msgstr "Latihan ini tiada soalan."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Bagaimanakah maklum balas/komen bagi setiap soalan harus dipaparkan? Pilihan ini menentukan cara ia ditunjukkan kepada pelajar semasa menduduki ujian."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Aplikasi ini boleh mengakses Chamilo sebagai anda, menggunakan kebenaran akaun sedia ada anda dan tiada yang lain. Batalkan mana-mana yang anda tidak lagi gunakan atau kenali."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Sila jelaskan sebab anda ingin meminta penarikan balik persetujuan undang-undang anda, supaya kami dapat memproses permintaan anda dengan betul"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Gunakan kunci peribadi ini untuk menyambungkan klien MCP jauh ke Chamilo dengan akaun dan kebenaran anda sendiri."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Kunci lengkap dipaparkan sekali sahaja. Simpan dengan selamat. Menjana kunci baharu akan membatalkan kunci sebelumnya dengan serta-merta."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Kunci ini mengesahkan klien sebagai akaun Chamilo anda. Ia tidak memberikan kebenaran yang akaun anda belum miliki."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Paparkan pernyataan Terma & Syarat pada halaman pendaftaran, mewajibkan pelawat menerima T&S untuk mendaftar"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Kandungan terma dan syarat akan dihantar ke model bahasa AI. Semak terjemahan yang dicadangkan sebelum menyimpannya."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Versi tersimpan sudah wujud untuk bahasa sasaran. Menyimpan cadangan ini akan mencipta versi baharu."
+
+msgid "Acquired"
+msgstr "Diperoleh"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Gambar kursus yang disyorkan: 1600 × 900 px (16:9). Gunakan sekurang-kurangnya 1280 × 720 px untuk paparan tajam pada skrin yang lebih besar atau berketumpatan tinggi."
+
+msgid "Courses of the selected URL"
+msgstr "Kursus URL yang dipilih"
+
+msgid "Course categories in selected URL"
+msgstr "Kategori kursus dalam URL yang dipilih"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Akaun anda aktif, anda boleh log masuk dan semak kursus anda sekarang."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Mula-mula anda perlu memuat turun pembetulan <a href='%s'> di sini </a>.\nSelepas itu anda perlu menyahzip fail tersebut dan sunting fail seperti yang dikehendaki tanpa menukar nama fail.\nKemudian cipta fail zip dengan fail yang diubah suai itu dan muat naiknya dalam borang ini."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Menambah pelajar dari sesi %s ke sesi %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Tunjukkan semua percubaan mengikut latihan"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Operasi ini akan melebihi had pengguna yang dibenarkan untuk kursus yang dipilih."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Sesetengah langganan tidak dapat dilaksanakan kerana telah mencapai had pengguna yang dibenarkan untuk kursus terjejas. Pengguna/Kursus terjejas: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Daftar ini menyenaraikan halaman pelaporan yang diketahui, kategorinya, URL kanonik, URL lama dan khalayak peranan yang dijangka. URL kanonik menghala ke pelaksanaan laporan semasa dan menguatkuasakan matriks peranan laporan yang didokumenkan."
+
+msgid "E-mail notification subscription"
+msgstr "Langganan pemberitahuan e-mel"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Operasi ini akan melebihi had %s pengguna setiap kursus yang ditetapkan oleh pentadbir. Langganan telah dibatalkan."
+
+msgid "Language the document is in"
+msgstr "Bahasa dokumen"
+
+msgid "There is no session still"
+msgstr "Masih tiada sesi"
+
+msgid "Origin courses from session"
+msgstr "Kursus asal daripada sesi"
+
+msgid "Destination courses from session"
+msgstr "Kursus destinasi daripada sesi"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Capaian Umum (Subjek boleh dicapai tanpa proses <i>login</i>)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Jana %d istilah glosari untuk kursus tentang '%s', setiap istilah pada satu baris, dengan definisinya pada baris seterusnya dan satu baris kosong antara setiap istilah. Jangan tambah sebarang pemformatan lain untuk tajuk mahupun definisi."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Ini ialah penerangan ringkas kursus '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Anda menggunakan Chamilo pada platform Windows. Pembantu penukaran dokumen tidak tersedia untuk pengindeksan teks penuh."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Tetapan pelancaran automatik ujian DIHIDUPKAN. Pelajar akan dialihkan ke senarai ujian."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Tetapan pelancaran automatik ujian DIHIDUPKAN. Pelajar akan dialihkan ke ujian tertentu."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Had langganan untuk kursus ini telah dicapai (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Kira kursus mengikut bahasa"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Pengguna yang akses terkininya lebih lama daripada tarikh yang dipilih."
 

@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Le meas"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Sampla foirmle: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Sampla foirmle: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raonta athróg"
@@ -9268,6 +9268,15 @@ msgstr "Tuairisc ama don seisiún %s"
 msgid "Error"
 msgstr "Earráid"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Cruthaíodh an t-úsáideoir, ach níorbh fhéidir ceann de na réimsí próifíle breise a shábháil."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Nuashonraíodh an t-úsáideoir, ach níorbh fhéidir ceann de na réimsí próifíle breise a shábháil."
+
+msgid "One or more fields contain invalid values."
+msgstr "Tá luachanna neamhbhailí i réimse amháin nó níos mó."
+
 msgid "Anonymous"
 msgstr "Gan ainm"
 
@@ -15307,6 +15316,30 @@ msgstr "Am caite an tseachtain seo caite"
 msgid "System status"
 msgstr "Stádas an chórais"
 
+msgid "Courses space"
+msgstr "Spás cúrsaí"
+
+msgid "Database server configuration and metadata"
+msgstr "Cumraíocht agus meiteashonraí an fhreastalaí bunachar sonraí"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Úsáid diosca in aghaidh an chúrsa vs cuóta diosca"
+
+msgid "Information about your webserver configuration"
+msgstr "Eolas faoi chumraíocht do fhreastalaí gréasáin"
+
+msgid "Paths"
+msgstr "Cosáin"
+
+msgid "State of Chamilo requirements"
+msgstr "Staid riachtanas Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Staid socruithe PHP ar an bhfreastalaí"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Tairisigh api_get_path() réitithe ar an tairseach seo"
+
 msgid "Is writable"
 msgstr "Inscríobha"
 
@@ -20673,6 +20706,9 @@ msgstr "Ar roth na scileanna, taispeánann sé ainm na scile nuair a bhfuil cód
 
 msgid "Created by"
 msgstr "Cruthaithe ag"
+
+msgid "Created by %s on %s"
+msgstr "Cruthaithe ag %s ar %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Folaigh cóitseálaí ginearálta sa bhosca braite"
@@ -31876,6 +31912,9 @@ msgstr "Scríbh rud éigin chuig %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Favoraithe: SVG. Leithead PNG molta: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Leithead molta PNG: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Uaslódaigh lógó PNG le haghaidh r-phoist (~%spx leithead)"
 
@@ -31911,6 +31950,9 @@ msgstr "Cliceáil le cur isteach"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Is fearr: SVG. Uasmhéid PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Uasmhéid PNG: %spx."
 
 msgid "View badge"
 msgstr "Féach ar an suaitheantas"
@@ -38062,6 +38104,9 @@ msgstr "Ag críochnú"
 msgid "Draft saved"
 msgstr "Dréacht sábháilte"
 
+msgid "Save as draft"
+msgstr "Sábháil mar dhréacht"
+
 msgid "Statement"
 msgstr "Ráiteas"
 
@@ -39483,4 +39528,265 @@ msgstr "Tá an t-úsáideoir seo cláraithe cheana féin sa seisiún."
 
 msgid "This user is already subscribed to the course."
 msgstr "Tá an t-úsáideoir seo cláraithe cheana féin sa chúrsa."
+
+msgid "Multi URLs"
+msgstr "Il-URLanna"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Is féidir le heintitis mar úsáideoirí agus cúrsaí a bheith gníomhach i níos mó ná URL amháin ag an am céanna, mar sin ní bheidh suim na luachanna thíos ag teacht leis an iomlán."
+
+msgid "User directory"
+msgstr "Eolaire úsáideoirí"
+
+msgid "Course directory"
+msgstr "Eolaire cúrsaí"
+
+msgid "URLs"
+msgstr "URLanna"
+
+msgid "User details"
+msgstr "Sonraí úsáideora"
+
+msgid "Course details"
+msgstr "Sonraí cúrsa"
+
+msgid "View details"
+msgstr "Féach sonraí"
+
+msgid "Average progress"
+msgstr "Meán-dul chun cinn"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Baineann clárú díreach leis an gcúrsa ina iomláine, ní le URL ar leith, mar sin déantar na figiúirí céanna ‘Díreach’ a athrá thíos do gach URL a bhfuil an cúrsa seo nasctha leis. Is iad seisiúin an bealach atá beartaithe chun cúrsa a roinnt thar URLanna le méadrachtaí a bhíonn difriúil i ndáiríre in aghaidh an URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Logálacha isteach (gach URL le chéile)"
+
+msgid "Unique logins"
+msgstr "Logálacha isteach uathúla"
+
+msgid "Parent URL"
+msgstr "URL tuismitheora"
+
+msgid "Logins (your URLs)"
+msgstr "Logálacha isteach (do URLanna)"
+
+msgid "The picture could not be uploaded"
+msgstr "Níorbh fhéidir an pictiúr a uaslódáil"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Níl tacaíocht iomlán ag an gcineál réimse seo fós — luach amh amháin."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Tá an cúrsa seo gar dá theorainn síntiúis úsáideoirí (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Tá an spás teoranta trí airíonna do chúrsa. Chun do theorainn a mhéadú, faigh"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Tá síntiúis úsáideoirí teoranta trí airíonna do chúrsa. Chun do theorainn a mhéadú, faigh"
+
+msgid "pro plan"
+msgstr "plean pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "agus iompórtáil cúltaca an chúrsa seo trí Chothabháil Cúrsa chuig do chúrsa nua íoctha, nó oscail ticéad chun do chúrsa a thiontú ina chúrsa pro nuair a bheidh an plean seo faighte agat."
+
+msgid "Tired of writing questions?"
+msgstr "Tuirseach de cheisteanna a scríobh?"
+
+msgid "Upgrade your plan"
+msgstr "Uasghrádaigh do phlean"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "go plean pro chun cabhair a fháil ó AI chun ceisteanna ardchaighdeáin a ghiniúint duit."
+
+msgid "Student Success AI Coach"
+msgstr "Cóitseálaí Rath Mic Léinn AI"
+
+msgid "No AI text provider is configured."
+msgstr "Níl soláthraí téacs AI cumraithe."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Treoracha breise don chóitseálaí AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Sampla: Tá deacracht ag an bhfoghlaimeoir seo aird a choinneáil. Mol gníomhaíochtaí níos giorra agus seiceálacha níos minice ar thuiscint."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Coinnigh an fhuinneog seo ar oscailt agus Chamilo ag ullmhú an mholta."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Sábháladh an moladh i do bhosca isteach Chamilo freisin."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Gineadh agus sábháladh an moladh don fhoghlaimeoir seo, ach níorbh fhéidir an chóip sa bhosca isteach a chruthú."
+
+msgid "Student success recommendation"
+msgstr "Moladh ratha don mhac léinn"
+
+msgid "Generated"
+msgstr "Ginte"
+
+msgid "Priority actions"
+msgstr "Gníomhartha tosaíochta"
+
+msgid "Evidence"
+msgstr "Fianaise"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Déanfaidh an ghné seo anailís ar ábhar an chúrsa seo agus seolfaidh sí faisnéis faoi iompar foghlama chuig an tsamhail AI atá cumraithe. Cé nach seoltar sonraí pearsanta inaitheanta go díreach chuig an tsamhail AI, d’fhéadfadh cuid de na sonraí a sheoltar faisnéis inaitheanta faoin úsáideoir a sholáthar go hindíreach. Má tá amhras ort, seiceáil i gcónaí le do dhuine tagartha AI sula n-úsáideann tú an ghné seo."
+
+msgid "Additional activities"
+msgstr "Gníomhaíochtaí breise"
+
+msgid "Rhythm"
+msgstr "Rithim"
+
+msgid "Learning methodologies"
+msgstr "Modheolaíochtaí foghlama"
+
+msgid "Other recommendations"
+msgstr "Moltaí eile"
+
+msgid "Analyzing course..."
+msgstr "Cúrsa á anailísiú..."
+
+msgid "Analyzing student's learning..."
+msgstr "Foghlaim an mhic léinn á hanailísiú..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Má ghlacann tú leis an gcuireadh seo, nascfar thú leis an úsáideoir atá ag iarraidh é ar bhealach a fhágfaidh go mbeidh cuid de do shonraí próifíle, nó iad uile, ar fáil le léamh ag an úsáideoir sin. Cinntigh nach roinneann tú an iomarca trí do phróifíl a sheiceáil le húsáideoirí a bhfuil muinín agat astu cheana."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Níl cead an micreafóin cumasaithe; cumasaigh é i do bhrabhsálaí chun fuaim a thaifeadadh"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Tagann an leagan seo de Chamilo le cúrsa (nó cúrsaí) ilteangach réamhshuiteáilte. Breathnaigh orthu i liosta na gcúrsaí agus cinntigh an chóir iad a bheith poiblí nó nach cóir."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Níl rochtain agat ar aon URL faoi láthair. Iarr ar an riarthóir rochtain a thabhairt duit ar an URL lena mbaineann tú."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Mura seirbhís cheannasach é an soláthraí AI roghnaithe, féadfar ábhar an doiciméid roghnaithe a sheoladh chuig seirbhís sheachtrach. Ná lean ar aghaidh le faisnéis rúnda mura gceadaíonn d’eagraíocht é."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Cliceáil Aontaigh ar an gcuntas ba chóir a fhanacht. Comhcheanglóidh an córas na cuntais eile go léir sa ghrúpa dúblach céanna leis. Scriosfar na cuntais chomhcheangailte go buan agus imeoidh siad ón tuairisc seo. Ní féidir an gníomh seo a chealú."
+
+msgid "Permanent deletion"
+msgstr "Scriosadh buan"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Scriosann Aontaigh cuntais chomhcheangailte go buan cheana féin. Úsáid liosta na nÚsáideoirí amháin más mian leat cuntais bhreise a scriosadh de láimh."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Tá tú ag athrú lógónna don téama amhairc réamhshocraithe “chamilo”. Smaoinigh ar théama amhairc saincheaptha a chruthú/úsáid chun nach sárófar na réamhshocruithe."
+
+msgid "This exercise has no questions."
+msgstr "Níl aon cheisteanna ag an gcleachtadh seo."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Conas ba chóir an t-aiseolas/trácht do gach ceist a thaispeáint? Sainmhíníonn an rogha seo conas a thaispeánfar é don fhoghlaimeoir agus an tástáil á déanamh."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Is féidir leis na feidhmchláir seo rochtain a fháil ar Chamilo mar tusa, ag úsáid ceadanna do chuntais atá ann cheana agus rud ar bith eile. Cúlghair aon cheann nach n-úsáideann tú a thuilleadh nó nach n-aithníonn tú."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Mínigh, le do thoil, cén fáth ar mhaith leat tarraingt siar do thoiliú dlíthiúil a iarraidh, ionas gur féidir linn d’iarratas a phróiseáil i gceart"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Úsáid an eochair phearsanta seo chun cliant MCP cianda a nascadh le Chamilo le do chuntas agus do cheadanna féin."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Taispeántar an eochair iomlán uair amháin. Stóráil í go slán. Má ghineann tú eochair nua, cuirtear an ceann roimhe as feidhm láithreach."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Fíordheimhníonn an eochair an cliant mar do chuntas Chamilo. Ní thugann sí ceadanna nach bhfuil ag do chuntas cheana."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Taispeáin ráiteas Téarmaí & Coinníollacha ar an leathanach clárúcháin; éiligh ar chuairteoir glacadh leis na T&C chun clárú"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Seolfar ábhar na dtéarmaí agus coinníollacha chuig samhail teanga AI. Athbhreithnigh an t-aistriúchán molta sula sábhálann tú é."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Tá leagan sábháilte ann cheana don sprioctheanga. Cruthóidh sábháil an mholta seo leagan nua."
+
+msgid "Acquired"
+msgstr "Faighte"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Pictiúr cúrsa molta: 1600 × 900 px (16:9). Úsáid 1280 × 720 px ar a laghad le haghaidh taispeána géar ar scáileáin níos mó nó ardlúis."
+
+msgid "Courses of the selected URL"
+msgstr "Cúrsaí an URL roghnaithe"
+
+msgid "Course categories in selected URL"
+msgstr "Catagóirí cúrsa sa URL roghnaithe"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Tá do chuntas gníomhach; is féidir leat logáil isteach agus do chúrsaí a sheiceáil anois."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Ar dtús caithfidh tú na ceartúcháin a íoslódáil <a href='%s'> anseo </a>.\nIna dhiaidh sin caithfidh tú an comhad sin a dhízipeáil agus na comhaid a chur in eagar mar is mian leat gan na hainmneacha comhaid a athrú.\nAnsin cruthaigh comhad zip leis na comhaid mhodhnaithe sin agus uaslódáil é sa fhoirm seo."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Mic léinn á gcur ón seisiún %s leis an seisiún %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Taispeáin gach iarracht de réir cleachtaidh"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Sháródh an oibríocht seo an teorainn úsáideoirí ceadaithe don chúrsa roghnaithe."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Níorbh fhéidir roinnt síntiús a chur i gcrích toisc gur shroich siad an teorainn úsáideoirí ceadaithe don chúrsa lena mbaineann. Úsáideoirí/Cúrsaí lena mbaineann: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Liostaíonn an clár seo leathanaigh tuairiscithe aitheanta, a gcatagóir, URL canónach, URL oidhreachta agus lucht féachana ról ionchais. Treoraíonn URLanna canónacha chuig an gcur i bhfeidhm tuairisce reatha agus cuireann siad maitrís ról na dtuairiscí doiciméadaithe i bhfeidhm."
+
+msgid "E-mail notification subscription"
+msgstr "Síntiús fógra ríomhphoist"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Sháródh an oibríocht seo an teorainn de %s úsáideoir in aghaidh an chúrsa atá socraithe ag na riarthóirí. Cuireadh an síntiús ar ceal."
+
+msgid "Language the document is in"
+msgstr "Teanga an doiciméid"
+
+msgid "There is no session still"
+msgstr "Níl aon seisiún fós"
+
+msgid "Origin courses from session"
+msgstr "Cúrsaí foinse ón seisiún"
+
+msgid "Destination courses from session"
+msgstr "Cúrsaí sprice ón seisiún"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Rochtain phoiblí (rochtana údaraithe d'aon bhall den chúrsa)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Gin %d téarma gluaise do chúrsa ar '%s', gach téarma ar líne amháin, lena shainmhíniú ar an gcéad líne eile agus líne bhán amháin idir gach téarma. Ná cuir aon fhormáidiú eile leis an teideal ná leis an sainmhíniú."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Seo cur síos gairid ar an gcúrsa '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Tá tú ag úsáid Chamilo ar ardán Windows. Níl cúntóirí comhshó doiciméad ar fáil le haghaidh innéacsú téacs iomlán."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Tá socrú uathsheolta na tástála AR SIÚL. Atreorófar mic léinn chuig liosta na dtástálacha."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Tá socrú uathsheolta na tástála AR SIÚL. Atreorófar mic léinn chuig tástáil shonrach."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Tá teorainn na síntiús don chúrsa seo sroichte (%current%\/%limit%)."
+
+msgid "Count course by language"
+msgstr "Líon cúrsaí de réir teanga"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Úsáideoirí a bhfuil a rochtain is déanaí níos sine ná an dáta roghnaithe."
 

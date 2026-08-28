@@ -140,7 +140,7 @@ if ('true' === api_get_setting('search_enabled')) {
     $form->addElement(
         'html',
         get_lang(
-            'SearchFeatureDocumentumentLanguage'
+            'Language the document is in'
         ).': &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.api_get_languages_combo()
     );
     $form->addElement('html', '<div class="sub-form">');

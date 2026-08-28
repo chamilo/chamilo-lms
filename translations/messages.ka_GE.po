@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "პატივისცემით"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ფორმულის მაგალითი: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ფორმულის ნიმუში: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ცვლადის დიაპაზონები"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:საავტორო უფლება,, no:საავტორო უფლება არა"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Folder,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ვარჯიში,,      simulation:სიმულაცია,,      questionnaire:ანკეტა,,      diagram:დიაგრამა,,      figure:ფიგურა,,      graph:გრაფიკი,,      index:ინდექსი,,      slide:სლაიდი,,      table:ცხრილი,,      narrative text:ნარატიული ტექსტი,,      exam:გამოცდა,,      experiment:ექსპერიმენტი,,      problem statement:პრობლემის ჩამონათვალი,,      self assessment:თვითშეფასება,,      lecture:ლექცია"
@@ -9264,6 +9264,15 @@ msgstr "დროის ანგარიში სესიისთვის 
 msgid "Error"
 msgstr "შეცდომა"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "მომხმარებელი შეიქმნა, მაგრამ დამატებითი პროფილის ერთ-ერთი ველი ვერ შეინახა."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "მომხმარებელი განახლდა, მაგრამ დამატებითი პროფილის ერთ-ერთი ველი ვერ შეინახა."
+
+msgid "One or more fields contain invalid values."
+msgstr "ერთი ან მეტი ველი შეიცავს არასწორ მნიშვნელობებს."
+
 msgid "Anonymous"
 msgstr "ანონიმური"
 
@@ -15303,6 +15312,30 @@ msgstr "გასულ კვირას გატარებული დრ
 msgid "System status"
 msgstr "სისტემის სტატუსი"
 
+msgid "Courses space"
+msgstr "კურსების სივრცე"
+
+msgid "Database server configuration and metadata"
+msgstr "მონაცემთა ბაზის სერვერის კონფიგურაცია და მეტამონაცემები"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "დისკის გამოყენება კურსზე დისკის კვოტასთან შედარებით"
+
+msgid "Information about your webserver configuration"
+msgstr "ინფორმაცია თქვენი ვებსერვერის კონფიგურაციის შესახებ"
+
+msgid "Paths"
+msgstr "ბილიკები"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo-ს მოთხოვნების მდგომარეობა"
+
+msgid "State of PHP settings on the server"
+msgstr "PHP პარამეტრების მდგომარეობა სერვერზე"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path() კონსტანტები ამ პორტალზე"
+
 msgid "Is writable"
 msgstr "წერადია"
 
@@ -20669,6 +20702,9 @@ msgstr "უნარების როტაციაზე აჩვენე�
 
 msgid "Created by"
 msgstr "შექმნილია მიერ"
+
+msgid "Created by %s on %s"
+msgstr "შექმნილია %s-ის მიერ %s-ზე"
 
 msgid "Hide general coach in dropbox"
 msgstr "დამალე ზოგადი ტრენერი dropbox-ში"
@@ -31872,6 +31908,9 @@ msgstr "დაწერე რამე %s-ში"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "რჩეული: SVG. PNG რეკომენდებული სიგანე: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG რეკომენდებული სიგანე: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "PNG ლოგოს ატვირთვა ელფოსტებისთვის (~%spx სიგანე)"
 
@@ -31907,6 +31946,9 @@ msgstr "დააწკაპუნე ჩასაყენებლად"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "საკვანძო: SVG. PNG მაქს. ზომა: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG მაქსიმალური ზომა: %spx."
 
 msgid "View badge"
 msgstr "ბეჯის ნახვა"
@@ -38058,6 +38100,9 @@ msgstr "დასრულება"
 msgid "Draft saved"
 msgstr "შავი შენახულია"
 
+msgid "Save as draft"
+msgstr "შენახვა როგორც მონახაზი"
+
 msgid "Statement"
 msgstr "განცხადება"
 
@@ -39139,7 +39184,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard კითხვა"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "შედეგების ტაბლოს keepalive"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard მოლოდინი"
@@ -39479,4 +39524,265 @@ msgstr "ეს მომხმარებელი უკვე რეგის
 
 msgid "This user is already subscribed to the course."
 msgstr "ეს მომხმარებელი უკვე რეგისტრირებულია კურსზე."
+
+msgid "Multi URLs"
+msgstr "მრავალი URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "ერთეულები, როგორიცაა მომხმარებლები და კურსები, შეიძლება იყოს აქტიური ერთზე მეტ URL-ზე ერთდროულად, ამიტომ ქვემოთ მოცემული მნიშვნელობების ჯამი არ დაემთხვევა საერთო რაოდენობას."
+
+msgid "User directory"
+msgstr "მომხმარებელთა დირექტორია"
+
+msgid "Course directory"
+msgstr "კურსების დირექტორია"
+
+msgid "URLs"
+msgstr "URL-ები"
+
+msgid "User details"
+msgstr "მომხმარებლის დეტალები"
+
+msgid "Course details"
+msgstr "კურსის დეტალები"
+
+msgid "View details"
+msgstr "დეტალების ნახვა"
+
+msgid "Average progress"
+msgstr "საშუალო პროგრესი"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "პირდაპირი ჩარიცხვა ეკუთვნის კურსს მთლიანად და არა კონკრეტულ URL-ს, ამიტომ იგივე „პირდაპირი“ მაჩვენებლები მეორდება ქვემოთ თითოეული URL-ისთვის, რომელთანაც ეს კურსი არის დაკავშირებული. სესიები არის განკუთვნილი გზა კურსის გასაზიარებლად URL-ებს შორის მეტრიკებით, რომლებიც რეალურად განსხვავდება თითოეული URL-ისთვის."
+
+msgid "Logins (all URLs combined)"
+msgstr "შესვლები (ყველა URL ერთად)"
+
+msgid "Unique logins"
+msgstr "უნიკალური შესვლები"
+
+msgid "Parent URL"
+msgstr "მშობელი URL"
+
+msgid "Logins (your URLs)"
+msgstr "შესვლები (თქვენი URL-ები)"
+
+msgid "The picture could not be uploaded"
+msgstr "სურათის ატვირთვა ვერ მოხერხდა"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "ამ ველის ტიპი ჯერ სრულად არ არის მხარდაჭერილი — მხოლოდ ნედლი მნიშვნელობა."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "ეს კურსი ახლოსაა მომხმარებელთა გამოწერის ლიმიტთან (%d\/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "სივრცე შეზღუდულია თქვენი კურსის თვისებებით. ლიმიტის გასაზრდელად მიიღეთ"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "მომხმარებელთა გამოწერები შეზღუდულია თქვენი კურსის თვისებებით. ლიმიტის გასაზრდელად მიიღეთ"
+
+msgid "pro plan"
+msgstr "pro გეგმა"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "და ამ კურსის სარეზერვო ასლი შემოიტანეთ კურსის მოვლის მეშვეობით თქვენს ახალ ფასიან კურსში, ან გახსენით ბილეთი, რომ კურსი გადაიქცეს pro კურსად ამ გეგმის შეძენის შემდეგ."
+
+msgid "Tired of writing questions?"
+msgstr "დაგღალათ კითხვების წერამ?"
+
+msgid "Upgrade your plan"
+msgstr "განაახლეთ გეგმა"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "pro გეგმამდე, რათა AI დაგეხმაროთ ხარისხიანი კითხვების გენერირებაში."
+
+msgid "Student Success AI Coach"
+msgstr "სტუდენტის წარმატების AI მწვრთნელი"
+
+msgid "No AI text provider is configured."
+msgstr "AI ტექსტის პროვაიდერი არ არის კონფიგურირებული."
+
+msgid "Additional instructions for the AI coach"
+msgstr "დამატებითი ინსტრუქციები AI მწვრთნელისთვის"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "მაგალითი: ამ მოსწავლეს უჭირს ყურადღების შენარჩუნება. შესთავაზეთ უფრო მოკლე აქტივობები და გაგების უფრო ხშირი შემოწმება."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "დატოვეთ ეს ფანჯარა გახსნილი, სანამ Chamilo ამზადებს რეკომენდაციას."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "რეკომენდაცია ასევე შეინახა თქვენს Chamilo საფოსტო ყუთში."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "რეკომენდაცია გენერირდა და შეინახა ამ მოსწავლისთვის, მაგრამ საფოსტო ყუთის ასლი ვერ შეიქმნა."
+
+msgid "Student success recommendation"
+msgstr "სტუდენტის წარმატების რეკომენდაცია"
+
+msgid "Generated"
+msgstr "გენერირებული"
+
+msgid "Priority actions"
+msgstr "პრიორიტეტული ქმედებები"
+
+msgid "Evidence"
+msgstr "მტკიცებულება"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "ეს ფუნქცია გააანალიზებს ამ კურსის შინაარსს და გაგზავნის სწავლის ქცევის ინფორმაციას კონფიგურირებულ AI მოდელში. მიუხედავად იმისა, რომ პირდაპირ იდენტიფიცირებადი პერსონალური მონაცემები AI მოდელს არ ეგზავნება, გაგზავნილი მონაცემების ნაწილმა შეიძლება ირიბად მისცეს იდენტიფიცირებადი ინფორმაცია მომხმარებლის შესახებ. ეჭვის შემთხვევაში, ყოველთვის შეამოწმეთ თქვენს AI საკონტაქტო პირთან ამ ფუნქციის გამოყენებამდე."
+
+msgid "Additional activities"
+msgstr "დამატებითი აქტივობები"
+
+msgid "Rhythm"
+msgstr "რიტმი"
+
+msgid "Learning methodologies"
+msgstr "სწავლის მეთოდოლოგიები"
+
+msgid "Other recommendations"
+msgstr "სხვა რეკომენდაციები"
+
+msgid "Analyzing course..."
+msgstr "კურსის ანალიზი..."
+
+msgid "Analyzing student's learning..."
+msgstr "სტუდენტის სწავლის ანალიზი..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "ამ მოწვევის მიღებით დაუკავშირდებით მომთხოვნ მომხმარებელს ისე, რომ თქვენი პროფილის მონაცემების ნაწილი ან ყველა ხელმისაწვდომი გახდება წასაკითხად მომთხოვნი მომხმარებლისთვის. დარწმუნდით, რომ ზედმეტს არ გააზიარებთ — შეამოწმეთ პროფილი იმ მომხმარებლებთან, რომლებსაც უკვე ენდობით."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "მიკროფონის გამოყენების ნებართვა არ არის ჩართული; ჩართეთ იგი ბრაუზერში აუდიოს ჩასაწერად"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Chamilo-ს ამ ვერსიასთან ერთად წინასწარ დაინსტალირებულია ერთი (ან მეტი) მრავალენოვანი კურსი. გადახედეთ მათ კურსების სიაში და გადაწყვიტეთ, უნდა იყოს თუ არა ისინი საჯარო."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "ამჟამად არცერთ URL-ზე არ გაქვთ წვდომა. სთხოვეთ ადმინისტრატორს მოგცეთ წვდომა იმ URL-ზე, რომელსაც ეკუთვნით."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "თუ არჩეული AI პროვაიდერი არ არის სუვერენული სერვისი, არჩეული დოკუმენტის შინაარსი შეიძლება გაიგზავნოს გარე სერვისში. არ გააგრძელოთ კონფიდენციალური ინფორმაციით, თუ ეს თქვენს ორგანიზაციას არ აქვს ნებადართული."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "დააჭირეთ „გაერთიანებას“ იმ ანგარიშზე, რომელიც უნდა დარჩეს. სისტემა იმავე დუბლიკატების ჯგუფის ყველა სხვა ანგარიშს მასში გააერთიანებს. გაერთიანებული ანგარიშები სამუდამოდ წაიშლება და ამ ანგარიშიდან გაქრება. ეს ქმედება შეუქცევადია."
+
+msgid "Permanent deletion"
+msgstr "სამუდამო წაშლა"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "გაერთიანება უკვე სამუდამოდ შლის გაერთიანებულ ანგარიშებს. მომხმარებელთა სია გამოიყენეთ მხოლოდ იმ შემთხვევაში, თუ დამატებითი ანგარიშების ხელით წაშლა გსურთ."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "ცვლით ლოგოებს ნაგულისხმევი ვიზუალური თემისთვის „chamilo“. განიხილეთ მორგებული ვიზუალური თემის შექმნა/გამოყენება, რათა ნაგულისხმევი პარამეტრები არ გადააწეროთ."
+
+msgid "This exercise has no questions."
+msgstr "ამ სავარჯიშოს კითხვები არ აქვს."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "როგორ უნდა გამოჩნდეს უკუკავშირი/კომენტარი თითოეულ კითხვაზე? ეს პარამეტრი განსაზღვრავს, როგორ დაინახავს მას მოსწავლე ტესტის გავლისას."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "ამ აპლიკაციებს შეუძლიათ Chamilo-ზე წვდომა თქვენს სახელით, თქვენი არსებული ანგარიშის უფლებებით და არა მეტით. გააუქმეთ ნებისმიერი, რომელსაც აღარ იყენებთ ან არ ცნობთ."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "გთხოვთ, ახსნათ, რატომ ითხოვთ იურიდიული თანხმობის გაუქმებას, რათა მოთხოვნა სწორად დავამუშავოთ"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "გამოიყენეთ ეს პირადი გასაღები დისტანციური MCP კლიენტის Chamilo-სთან დასაკავშირებლად თქვენი ანგარიშითა და უფლებებით."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "სრული გასაღები მხოლოდ ერთხელ ჩანს. შეინახეთ უსაფრთხოდ. ახალი გასაღების გენერირება მყისიერად აუქმებს წინას."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "გასაღები კლიენტს ავთენტიფიცირებს როგორც თქვენს Chamilo ანგარიშს. ის არ ანიჭებს უფლებებს, რომლებიც თქვენს ანგარიშს უკვე არ აქვს."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "რეგისტრაციის გვერდზე აჩვენეთ წესებისა და პირობების განცხადება და მოითხოვეთ ვიზიტორის თანხმობა რეგისტრაციისთვის"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "წესებისა და პირობების შინაარსი გაიგზავნება AI ენობრივ მოდელში. შემოთავაზებული თარგმანი გადახედეთ შენახვამდე."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "სამიზნე ენისთვის უკვე არსებობს შენახული ვერსია. ამ წინადადების შენახვა შექმნის ახალ ვერსიას."
+
+msgid "Acquired"
+msgstr "შეძენილი"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "რეკომენდებული კურსის სურათი: 1600 × 900 px (16:9). მკვეთრი ჩვენებისთვის დიდ ან მაღალი სიმკვრივის ეკრანებზე გამოიყენეთ მინიმუმ 1280 × 720 px."
+
+msgid "Courses of the selected URL"
+msgstr "არჩეული URL-ის კურსები"
+
+msgid "Course categories in selected URL"
+msgstr "კურსის კატეგორიები არჩეულ URL-ში"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "თქვენი ანგარიში აქტიურია; შეგიძლიათ შეხვიდეთ და ახლავე ნახოთ კურსები."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "ჯერ ჩამოტვირთეთ შესწორებები <a href='%s'> აქ </a>.\nშემდეგ გახსენით zip და დაარედაქტირეთ ფაილები სასურველად, სახელების შეცვლის გარეშე.\nშემდეგ შექმენით zip შეცვლილი ფაილებით და ატვირთეთ ამ ფორმაში."
+
+msgid "Adding students from session %s to session %s"
+msgstr "სტუდენტების დამატება სესიიდან %s სესიაში %s"
+
+msgid "Show all attempts by exercise"
+msgstr "ყველა მცდელობის ჩვენება სავარჯიშოს მიხედვით"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "ეს ოპერაცია გადააჭარბებდა არჩეული კურსისთვის დაშვებულ მომხმარებელთა ლიმიტს."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "ზოგიერთი გამოწერა ვერ შესრულდა, რადგან მიღწეულია დაზარალებული კურსისთვის დაშვებული მომხმარებელთა ლიმიტი. დაზარალებული მომხმარებლები/კურსები: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "ეს რეესტრი ჩამოთვლის ცნობილ ანგარიშგების გვერდებს, მათ კატეგორიას, კანონიკურ URL-ს, ძველ URL-ს და მოსალოდნელ როლურ აუდიტორიას. კანონიკური URL-ები მიმართავს ანგარიშის მიმდინარე რეალიზაციას და აღასრულებს დოკუმენტირებულ ანგარიშის როლების მატრიცას."
+
+msgid "E-mail notification subscription"
+msgstr "ელფოსტის შეტყობინების გამოწერა"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "ეს ოპერაცია გადააჭარბებდა ადმინისტრატორების მიერ დადგენილ ლიმიტს — %s მომხმარებელი კურსზე. გამოწერა გაუქმდა."
+
+msgid "Language the document is in"
+msgstr "დოკუმენტის ენა"
+
+msgid "There is no session still"
+msgstr "ჯერ სესია არ არის"
+
+msgid "Origin courses from session"
+msgstr "საწყისი კურსები სესიიდან"
+
+msgid "Destination courses from session"
+msgstr "სამიზნე კურსები სესიიდან"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "საჯარო წვდომა (წვდომა კურსის ნებისმიერი წევრისთვის)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "დააგენერირე %d ტერმინი გლოსარისთვის კურსზე „%s“, თითოეული ტერმინი ცალკე სტრიქონზე, მისი განმარტება შემდეგ სტრიქონზე და ერთი ცარიელი სტრიქონი ტერმინებს შორის. არ დაამატო სხვა ფორმატირება არც სათაურისთვის და არც განმარტებისთვის."
+
+msgid "This is a short description of the course '%s'."
+msgstr "ეს არის კურსის „%s“ მოკლე აღწერა."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "თქვენ იყენებთ Chamilo-ს Windows პლატფორმაზე. დოკუმენტების კონვერტაციის დამხმარეები სრული ტექსტის ინდექსაციისთვის ხელმისაწვდომი არ არის."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "ტესტის ავტოგაშვების პარამეტრი ჩართულია. სტუდენტები გადამისამართდებიან ტესტების სიაზე."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "ტესტის ავტოგაშვების პარამეტრი ჩართულია. სტუდენტები გადამისამართდებიან კონკრეტულ ტესტზე."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "ამ კურსის გამოწერის ლიმიტი მიღწეულია (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "კურსების რაოდენობა ენის მიხედვით"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "მომხმარებლები, რომელთა ბოლო წვდომა უფრო ძველია, ვიდრე არჩეული თარიღი."
 

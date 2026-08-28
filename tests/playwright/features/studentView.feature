@@ -103,7 +103,14 @@ Feature: Student view
     And I wait for the page to be loaded
     And I follow the course tool "Users"
     And I wait for the page to be loaded
-    Then the URL should contain "type=5"
+    # No URL assertion here, deliberately. A first version of this checked for
+    # "type=5" and failed: the default Learners view carries NO type parameter at
+    # all (measured — the URL is /resources/course-users/231/?cid=3&gid=0), because
+    # CourseUserListView.vue only puts one in the URL when changeType() runs from
+    # an explicit tab press. userType then defaults to STUDENT, so arriving fresh
+    # from the tool card already IS the Learners list, and there is nothing to
+    # assert. Note the "type=1" check in the teacher scenario above is valid for
+    # the opposite reason: that one follows a real tab press.
     And I should see "Costea"
 
   Scenario: The administrator loses the course description actions in the student view

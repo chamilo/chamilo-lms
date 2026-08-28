@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Qillqaypi ruwana: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Fórmula qhawarina: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpet,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Carpeta,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -9269,6 +9269,15 @@ msgstr "%s sessionpa pacha riwichikuyna"
 msgid "Error"
 msgstr "Pantasqa"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Ruraqqa kamasqa, ichaqa huk yapasqa perfil k'iti mana waqaychasqa kanchu."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Ruraqqa musuqchasqa, ichaqa huk yapasqa perfil k'iti mana waqaychasqa kanchu."
+
+msgid "One or more fields contain invalid values."
+msgstr "Huk utaq aswan k'itikuna mana allin chanikunata hap'in."
+
 msgid "Anonymous"
 msgstr "Mana sutiyuq"
 
@@ -15308,6 +15317,30 @@ msgstr "Paqarimpasqan p'unchaykunawan"
 msgid "System status"
 msgstr "Sistemapa hallp'api"
 
+msgid "Courses space"
+msgstr "Kursukunaq pampa"
+
+msgid "Database server configuration and metadata"
+msgstr "Willakuy wasi sirwiqpa allichakuynin chaymanta metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Sapa kursupi disco llamk'achiy vs disco saqisqa"
+
+msgid "Information about your webserver configuration"
+msgstr "Web sirwiqniykipaq allichakuymanta willakuykuna"
+
+msgid "Paths"
+msgstr "Ñankuna"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo necesitakuykunapa kaynin"
+
+msgid "State of PHP settings on the server"
+msgstr "PHP allichaykunapa kaynin sirwiqpi"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path() constantes kay portalpi allichasqa"
+
 msgid "Is writable"
 msgstr "Kamachisqa"
 
@@ -20674,6 +20707,9 @@ msgstr "Yachay ruykupi, yachaypa qutuy kodyuq kani."
 
 msgid "Created by"
 msgstr "Kamariqan"
+
+msgid "Created by %s on %s"
+msgstr "%s ruraqpa kamasqan %s p'unchawpi"
 
 msgid "Hide general coach in dropbox"
 msgstr "Pukyum dropboxpi pacha yachachiq huch'ay"
@@ -31878,6 +31914,9 @@ msgstr "%s-man imatapis willakuy"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Munay: SVG. PNG paqarichisqa: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG yuyaychasqa kinray: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "PNG logo e-mailspaq watukuq (~%spx paqari)"
 
@@ -31913,6 +31952,9 @@ msgstr "Klikiy insertar"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Munaykuna: SVG. PNG huchalla kama: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG aswan hatun: %spx."
 
 msgid "View badge"
 msgstr "Wakin insignia qhawachin"
@@ -38064,6 +38106,9 @@ msgstr "Tukuchay"
 msgid "Draft saved"
 msgstr "Waqaychasqa"
 
+msgid "Save as draft"
+msgstr "Borrador hina waqaychay"
+
 msgid "Statement"
 msgstr "Willay"
 
@@ -39058,7 +39103,7 @@ msgid "Inserts"
 msgstr "Inserciones"
 
 msgid "Hit rate"
-msgstr "Hit rate"
+msgstr "T'uqsiy tasa"
 
 msgid "Auto-refresh every 5 seconds"
 msgstr "Auto-refresh sapa 5 segundos"
@@ -39485,4 +39530,265 @@ msgstr "Kay ruraqqa sesiónmanña qillqasqa kachkan."
 
 msgid "This user is already subscribed to the course."
 msgstr "Kay ruraqqa yachachinamanña qillqasqa kachkan."
+
+msgid "Multi URLs"
+msgstr "Achka URLkuna"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Ruraqkuna hinaspa yachachiykuna hina entidatkunaqa hukmanta aswan URLpi kawsachisqa kankuman, chayrayku urapi chanikunapaq huñusqanqa llapanwan mana tupananmanchu."
+
+msgid "User directory"
+msgstr "Ruraqpa directorion"
+
+msgid "Course directory"
+msgstr "Yachachiypa directorion"
+
+msgid "URLs"
+msgstr "URLkuna"
+
+msgid "User details"
+msgstr "Ruraqpa willakuykuna"
+
+msgid "Course details"
+msgstr "Yachachiypa willakuykuna"
+
+msgid "View details"
+msgstr "Willakuykunata qhaway"
+
+msgid "Average progress"
+msgstr "Chawpi ñawpaqman riy"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Chiqa qillqakuyqa yachachiy llapanman kapun, mana huk URL sapaqmanchu, chayrayku kikin 'Chiqa' yupaykunaqa urapi sapa URLpaq kutichisqa kanku kay yachachiy t'inkisqa kachkaptin. Sessionkunaqa yachachiytam URLkuna chawpipi rakinapaq allin ñan, sapa URLpi hukniray métricaswan."
+
+msgid "Logins (all URLs combined)"
+msgstr "Yaykuykuna (llapan URLkuna huñusqa)"
+
+msgid "Unique logins"
+msgstr "Sapaq yaykuykuna"
+
+msgid "Parent URL"
+msgstr "Tayta URL"
+
+msgid "Logins (your URLs)"
+msgstr "Yaykuykuna (qampa URLykikuna)"
+
+msgid "The picture could not be uploaded"
+msgstr "Rikch'ayqa mana kargayta atikunchu"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Kay k'iti layaqa manaraq hunt'asqa yanapasqachu — chawa chaniylla."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Kay yachay wasiqa qillqakuqkunapa haykunan pisiyachkan (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Espaciqa yachay wasiyki kamachikuyninkunawan pisiyachkan. Límiteyta hatunyachinaykipaq, huk"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Qillqakuqkuna haykunanqa yachay wasiyki kamachikuyninkunawan pisiyachkan. Límiteyta hatunyachinaykipaq, huk"
+
+msgid "pro plan"
+msgstr "pro plan"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "chaskispa kay yachay wasipa backupninta Course Maintenance nisqawan musuq pagasqa yachay wasiman apamuy, utaq ticket kichay kay plan chaskisqaykiman yachay wasiykita pro yachay wasiman tikranankupaq."
+
+msgid "Tired of writing questions?"
+msgstr "Tapukuykuna qillqaymanta sayk’usqachu kanki?"
+
+msgid "Upgrade your plan"
+msgstr "Planykita hatunyachiy"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "pro planman, IA yanapananpaq allin tapukuykuna ruwananpaq."
+
+msgid "Student Success AI Coach"
+msgstr "Yachaqpa allin kaynin IA Coach"
+
+msgid "No AI text provider is configured."
+msgstr "Mana IA qillqa qusqaqa kamachisqachu kachkan."
+
+msgid "Additional instructions for the AI coach"
+msgstr "IA coachpaq yapasqa kamachikuykuna"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Ejemplo: Kay yachaqqa atencionta hap’inampi sasachakuyta qhawachin. Aswan pisi ruwaykunata, aswan sapa kuti entiendenanpaq qhawaykunata yuyaychay."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Kay ventanata kichasqa hap’iy Chamilo recomendacionta allichachkaptin."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Recomendacionqa Chamilo bandejaykimanpas waqaychasqam karqan."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Recomendacionqa kay yachaqpaq ruwasqa waqaychasqam karqan, ichaqa bandejaman copianqa mana ruwakuyta atirqanchu."
+
+msgid "Student success recommendation"
+msgstr "Yachaqpa allin kaynin recomendacion"
+
+msgid "Generated"
+msgstr "Ruwasqa"
+
+msgid "Priority actions"
+msgstr "Ñawpaq ruwaykuna"
+
+msgid "Evidence"
+msgstr "Rikuchiy"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Kay ruwayqa kay yachay wasipa contenidonta analizanqa, yachay ruway willakuykunatataq kamachisqa IA modeloman apachinqa. Mana chiqapta riqsisqa personal datukunata chiqapta IA modeloman apachinchu, ichaqa wakin apachisqa datukunaqa ruwaqta riqsinapaq yanapayta atinman. Iskayrayaspaqa, kay ruwayta manaraq llamk’achispa, IA Referencia runaykiwan tapukuy."
+
+msgid "Additional activities"
+msgstr "Yapasqa ruwaykuna"
+
+msgid "Rhythm"
+msgstr "Ritmo"
+
+msgid "Learning methodologies"
+msgstr "Yachay metodologiakuna"
+
+msgid "Other recommendations"
+msgstr "Huk recomendacionkuna"
+
+msgid "Analyzing course..."
+msgstr "Yachay wasita analizachkan..."
+
+msgid "Analyzing student's learning..."
+msgstr "Yachaqpa yachayninta analizachkan..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Kay invitacionta chaskispaqa, mañakuq ruwaqwan t’inkisqa kanki, perfilniykipa wakin utaq llapan datunkuna mañakuq ruwaqman ñawirinapaq. Ama nisyuta rakinaykipaq, perfilniykitaña confiasqa ruwaqkunawan qhaway."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Micrófono llamk’achinapaq permisoqa mana kichasqachu; audio grabanaykipaq navegadorniykipi kichay"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Kay Chamilo versionqa huk (utaq aswan) achka simi yachay wasikunawan preinstalasqa hamun. Cursos listapi qhaway, lliwpaqchu icha manachu kanankuta akllay."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Kunanqa mana ima URLmanpas haykuyta atinkichu. Administradorman mañakuy, kapusqayki URLman haykunaykipaq permiso qunanpaq."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Akllasqa IA qusqaqa mana soberano serviciochu kaptinqa, akllasqa documentopa contenidonqa hawa servicioman apachisqa kanman. Ama confidencial willakuywan ñawpaqman riy, organizacionniyki saqisqan kaptinlla."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Unify nisqata ñit’iy qhipanan cuenta patapi. Sistemaqa chay kikin duplicado grupopi huk cuentakunata chayman hukllachanqa. Hukllachasqa cuentakunaqa wiñaypaq qichusqa kanqa, kay reportemantapas chinkaq. Kay ruwayqa mana kutichiy atikunchu."
+
+msgid "Permanent deletion"
+msgstr "Wiñaypaq qichuy"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unifyqa hukllachasqa cuentakunataña wiñaypaq qichun. Users listata llamk’achiy, yapasqa cuentakunata makillawan qichunaykipaqlla."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Default visual tema “chamilo” nisqapaq logoskunata tikrachkanki. Custom visual tema ruway/llamk’achiy, defaultkunata ama qhawachinaykipaq."
+
+msgid "This exercise has no questions."
+msgstr "Kay ejercicioqa mana tapukuykunayuqchu."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "¿Imaynataq sapa tapukuypa feedback/comentariota rikuchisunman? Kay opcionqa yachaq prueba ruwachkaqtin imaynata rikuchisqanta ninan."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Kay aplicacionkunaqa qan hina Chamiloman haykuyta atinku, kachkaq cuenta permisoykiwan, mana aswanta. Amaña llamk’achisqaykita icha mana riqsisqaykita qichuy."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Willaway ima rayku legal consentimiento qichuyta mañakunki, mañakuyniykita allinta procesanaykupaq"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Kay personal llaveta llamk’achiy karu MCP clienteta Chamiloman t’inkinanpaq, kikillayki cuenta y permisoykiwan."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Llapan llaveqa huk kuti rikuchisqalla. Allinta waqaychay. Musuq llave ruwayqa ñawpaqta chaylla mana valenñachu."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Llaveqa clienteta Chamilo cuentaykihina autenticachin. Mana qusqayki permiso aswanta qunchu."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Registro paginapi Términos y Condiciones nisqata rikuchiy, visitanteqa T&C chaskinanmi registrakunanpaq"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Términos y condiciones contenidonqa IA simi modeloman apachisqa kanqa. Propuesta traduccionta qhaway manaraq waqaychaspa."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Waqaychasqa versionqa tarisqa simipaqña kachkan. Kay propuestata waqaychayqa musuq versionta ruwanqa."
+
+msgid "Acquired"
+msgstr "Chaskisqa"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Yachay wasipaq recomendado foto: 1600 × 900 px (16:9). Aswan hatun utaq alta densidad pantallakunapi allin rikunanpaq, 1280 × 720 px hina utaq aswan hatunta llamk’achiy."
+
+msgid "Courses of the selected URL"
+msgstr "Akllasqa URLpa yachay wasikuna"
+
+msgid "Course categories in selected URL"
+msgstr "Akllasqa URLpi yachay wasi categorias"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Cuentaykiqa kachkan, kunan haykuyta atinki, yachay wasiykikunatapas qhawayta atinki."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Ñawpaqta allinchaykunata uraykachiy <a href='%s'> kaypi </a>.\nChaymanta chay willañiqita kichaspa (unzip) willañiqikunata munayniykiman hina allinchay, sutinmanta mana tikraspa.\nChaymanta huk zip willañiqita ruway chay allinchasqa willañiqikunawan hinaspa kay formapi kachay."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Yachakuqkunata yapay %s sesiónmanta %s sesiónman"
+
+msgid "Show all attempts by exercise"
+msgstr "Tukuy pretensiones qawachiy ejercicio sapaqpi"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Kay ruwayqa akllasqa yachay wasipaq saqisqa ruraqkunap sayanmanta aswan kanman."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Wakin qillqachikuykuna mana ruwakunchu, t'ukrisqa yachay wasipaq saqisqa ruraqkunap sayanman chayasqanrayku. Ruraqkuna/Yachay wasikuna t'ukrisqa: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Kay qillqanaqa riqsisqa willakuy p'anqakunata, kategoríanta, kanónico URL, ñaupa URL hinaspa suyasqa rol uyariqkunata qillqan. Kanónico URLkuna kunan willakuy ruwayman pusachin hinaspa qillqasqa rol matrizta hunt'achin."
+
+msgid "E-mail notification subscription"
+msgstr "Correo electrónico willakuy qillqachikuy"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Kay ruwayqa kamachiqkuna churasqan %s ruraqkuna yachay wasi sapaqpi sayanmanta aswan kanman. Qillqachikuyqa sayachisqam."
+
+msgid "Language the document is in"
+msgstr "Willañiqip simin"
+
+msgid "There is no session still"
+msgstr "Manaraqmi sesión kanchu"
+
+msgid "Origin courses from session"
+msgstr "Qallariy yachay wasikuna sesiónmanta"
+
+msgid "Destination courses from session"
+msgstr "Chayanay yachay wasikuna sesiónmanta"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Llapankunapaq haykuna mana reqsipachikuspa (raphi qallariymanta haykuna)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Ruway %d simi qillqakunata huk yachay wasipaq '%s' nisqapi, sapa simi huk siq'ipi, sut'inchaynin qatiq siq'ipi hinaspa huk ch'usaq siq'i sapa simi chawpipi. Ama huk ima formato yapaychu sutipaq nitaq sut'inchaypaqpas."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Kayqa '%s' yachay wasip pisilla willakuyninmi."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Chamilota Windows plataforma nisqapi llamk'achichkanki. Willañiqi tikray yanapaqkuna mana kanchu hunt'a qillqa indexaciónpaq."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Prueba kikin-qallariy churayqa KANMI. Yachakuqkuna prueba listaman pusasqa kanqaku."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Prueba kikin-qallariy churayqa KANMI. Yachakuqkuna huk sapaq pruebaman pusasqa kanqaku."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Kay yachay wasipaq qillqachikuy sayanman chayasqaña (%current%\/%limit%)."
+
+msgid "Count course by language"
+msgstr "Yachay wasikunata yupay simi sapaqpi"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Ruraqkuna qhipa yaykuyninku akllasqa p'unchawmanta aswan ñaupa kaq."
 

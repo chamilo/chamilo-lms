@@ -9269,6 +9269,15 @@ msgstr "Ajaraport sessioonile %s"
 msgid "Error"
 msgstr "Viga"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr ""
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr ""
+
+msgid "One or more fields contain invalid values."
+msgstr ""
+
 msgid "Anonymous"
 msgstr "Anonüümne"
 
@@ -15308,6 +15317,30 @@ msgstr "Eelmisel nädalal veedetud aeg"
 msgid "System status"
 msgstr "Süsteemi olek"
 
+msgid "Courses space"
+msgstr ""
+
+msgid "Database server configuration and metadata"
+msgstr ""
+
+msgid "Disk usage per course vs disk quota"
+msgstr ""
+
+msgid "Information about your webserver configuration"
+msgstr ""
+
+msgid "Paths"
+msgstr ""
+
+msgid "State of Chamilo requirements"
+msgstr ""
+
+msgid "State of PHP settings on the server"
+msgstr ""
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Sellel portaalil lahendatud api_get_path() konstandid"
+
 msgid "Is writable"
 msgstr "On kirjutatav"
 
@@ -16215,7 +16248,7 @@ msgid "Quarterly report"
 msgstr "Kvartaliaruanne"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%d. %B %Y"
 
 msgid "%A"
 msgstr "%A"
@@ -19002,7 +19035,7 @@ msgid "%b %d, %Y at %I:%M %p"
 msgstr "%b %d, %Y kell %I:%M %p"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%H:%M, %d. %b %Y"
 
 msgid "Login to vote"
 msgstr "Logi sisse hääletamiseks"
@@ -20571,7 +20604,7 @@ msgid "Input size of box to fill"
 msgstr "Sisesta täidetava kasti suurus"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "dd.MM.yy"
 
 msgid "HH:mm"
 msgstr "HH:mm"
@@ -20674,6 +20707,9 @@ msgstr "Oskuste rattal kuvatakse oskuse nimi, kui sellel on lühikood."
 
 msgid "Created by"
 msgstr "Loodud"
+
+msgid "Created by %s on %s"
+msgstr "Loodud kasutaja %s poolt %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Peida üldtreener dropboxis"
@@ -24729,7 +24765,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: Praegune kvartal, mittetäielikud andmed"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "K%s %s"
 
 msgid "YoY"
 msgstr "YoY"
@@ -25092,7 +25128,7 @@ msgid "The update failed for the following courses"
 msgstr "Järgmiste kursuste uuendamine ebaõnnestus"
 
 msgid "%02d h %02d m %02d s"
-msgstr "%02d h %02d m %02d s"
+msgstr "%02d t %02d min %02d s"
 
 msgid "User management"
 msgstr "Kasutajate haldus"
@@ -31877,6 +31913,9 @@ msgstr "Kirjuta midagi %s kohta"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Eelistatud: SVG. PNG soovitatav laius: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG soovitatav laius: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Laadi üles PNG-logo e-kirjade jaoks (~%spx laius)"
 
@@ -31912,6 +31951,9 @@ msgstr "Klõpsa lisamiseks"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Eelistatud: SVG. PNG maksimaalne suurus: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG max suurus: %spx."
 
 msgid "View badge"
 msgstr "Vaata märki"
@@ -32691,7 +32733,7 @@ msgid "IPv4 or IPv6"
 msgstr "IPv4 või IPv6"
 
 msgid "IP mask"
-msgstr "IP mask"
+msgstr "IP-mask"
 
 msgid "e.g. /24"
 msgstr "nt /24"
@@ -38063,6 +38105,9 @@ msgstr "Lõpetamine"
 msgid "Draft saved"
 msgstr "Mustand salvestatud"
 
+msgid "Save as draft"
+msgstr "Salvesta mustandina"
+
 msgid "Statement"
 msgstr "Väide"
 
@@ -39484,4 +39529,265 @@ msgstr "See kasutaja on juba sessiooniga liitunud."
 
 msgid "This user is already subscribed to the course."
 msgstr "See kasutaja on juba kursusega liitunud."
+
+msgid "Multi URLs"
+msgstr "Mitu URL-i"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Olemiid nagu kasutajad ja kursused saab olla aktiivne mitmes URL-is korraga, seega allpool olevate väärtuste summa ei ühti koguarvuga."
+
+msgid "User directory"
+msgstr "Kasutajate kataloog"
+
+msgid "Course directory"
+msgstr "Kursuste kataloog"
+
+msgid "URLs"
+msgstr "URL-id"
+
+msgid "User details"
+msgstr "Kasutaja andmed"
+
+msgid "Course details"
+msgstr "Kursuse andmed"
+
+msgid "View details"
+msgstr "Vaata üksikasju"
+
+msgid "Average progress"
+msgstr "Keskmine edenemine"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Otsene registreerimine kuulub kursusele tervikuna, mitte konkreetsele URL-ile, seega samad „Otsene“ arvud korduvad allpool iga URL-i jaoks, millega see kursus on seotud. Sessioonid on mõeldud kursuse jagamiseks URL-ide vahel mõõdikutega, mis tegelikult URL-iti erinevad."
+
+msgid "Logins (all URLs combined)"
+msgstr "Sisselogimised (kõik URL-id kokku)"
+
+msgid "Unique logins"
+msgstr "Unikaalsed sisselogimised"
+
+msgid "Parent URL"
+msgstr "Vanem-URL"
+
+msgid "Logins (your URLs)"
+msgstr "Sisselogimised (teie URL-id)"
+
+msgid "The picture could not be uploaded"
+msgstr "Pilti ei õnnestunud üles laadida"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Seda välja tüüpi ei toetata veel täielikult — ainult toorväärtus."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "See kursus on lähedal kasutajate registreerimise limiidile (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Ruum on piiratud teie kursuse omadustega. Limiidi suurendamiseks hankige"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Kasutajate registreerimised on piiratud teie kursuse omadustega. Limiidi suurendamiseks hankige"
+
+msgid "pro plan"
+msgstr "pro-pakett"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "ja importige selle kursuse varukoopia kursuse hoolduse kaudu oma uude tasulisse kursusesse või avage pilet, et kursus pro-kursuseks teisendada, kui olete selle paketi soetanud."
+
+msgid "Tired of writing questions?"
+msgstr "Väsinud küsimuste kirjutamisest?"
+
+msgid "Upgrade your plan"
+msgstr "Uuendage oma paketti"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "pro-paketile, et saada tehisintellektilt abi kvaliteetsete küsimuste loomisel."
+
+msgid "Student Success AI Coach"
+msgstr "Õppija edu tehisintellekti treener"
+
+msgid "No AI text provider is configured."
+msgstr "Tehisintellekti tekstiteenuse pakkujat pole seadistatud."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Lisajuhised tehisintellekti treenerile"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Näide: Sellel õppijal on raskusi tähelepanu hoidmisega. Soovitage lühemaid tegevusi ja sagedasemaid arusaamise kontrollimisi."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Hoidke see aken avatud, kuni Chamilo soovitust valmistab."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Soovitus salvestati ka teie Chamilo postkasti."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Soovitus loodi ja salvestati selle õppija jaoks, kuid postkasti koopiat ei õnnestunud luua."
+
+msgid "Student success recommendation"
+msgstr "Õppija edu soovitus"
+
+msgid "Generated"
+msgstr "Genereeritud"
+
+msgid "Priority actions"
+msgstr "Prioriteetsed tegevused"
+
+msgid "Evidence"
+msgstr "Tõendid"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "See funktsioon analüüsib selle kursuse sisu ja saadab õppimiskäitumise teabe konfigureeritud tehisintellekti mudelile. Kuigi tehisintellekti mudelile ei saadeta otseselt tuvastatavaid isikuandmeid, võib osa saadetud andmetest anda kasutaja kohta kaudselt tuvastatavat teavet. Kahtluse korral kontrollige alati oma tehisintellekti kontaktisikuga enne selle funktsiooni kasutamist."
+
+msgid "Additional activities"
+msgstr "Lisategevused"
+
+msgid "Rhythm"
+msgstr "Rütm"
+
+msgid "Learning methodologies"
+msgstr "Õppimismetoodikad"
+
+msgid "Other recommendations"
+msgstr "Muud soovitused"
+
+msgid "Analyzing course..."
+msgstr "Kursuse analüüsimine..."
+
+msgid "Analyzing student's learning..."
+msgstr "Õppija õppimise analüüsimine..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Selle kutse vastuvõtmisel seotakse teid taotleva kasutajaga nii, et osa või kogu teie profiiliandmetest muutub talle loetavaks. Palun veenduge, et te ei jaga liiga palju, kontrollides oma profiili kasutajate juures, keda te juba usaldate."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Mikrofoni kasutamise luba pole lubatud, palun lubage see oma brauseris heli salvestamiseks"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Selles Chamilo versioonis on eelinstallitud üks (või mitu) mitmekeelset kursust. Vaadake need kursuste loendis üle ja otsustage, kas need peaksid olema avalikud või mitte."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Teil ei ole praegu juurdepääsu ühelegi URL-ile. Paluge administraatoril anda teile juurdepääs URL-ile, kuhu te kuulute."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Kui valitud tehisintellekti teenusepakkuja ei ole suveräänne teenus, võidakse valitud dokumendi sisu saata välisesse teenusesse. Ärge jätkake konfidentsiaalse teabega, kui teie organisatsioon seda ei luba."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Klõpsake nuppu Ühenda kontol, mis peab jääma. Süsteem liidab kõik teised samas duplikaatide rühmas olevad kontod sellega. Liidetud kontod kustutatakse jäädavalt ja need kaovad sellest aruandest. Seda toimingut ei saa tagasi võtta."
+
+msgid "Permanent deletion"
+msgstr "Jäädav kustutamine"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Ühendamine kustutab liidetud kontod juba jäädavalt. Kasutage kasutajate loendit ainult siis, kui soovite täiendavaid kontosid käsitsi kustutada."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Muudate vaikimisi visuaalse teema „chamilo“ logosid. Kaaluge kohandatud visuaalse teema loomist/kasutamist, et vältida vaikeseadete ülekirjutamist."
+
+msgid "This exercise has no questions."
+msgstr "Selles harjutuses pole küsimusi."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Kuidas peaksime iga küsimuse tagasisidet/kommentaari kuvama? See valik määrab, kuidas see õppijale testi sooritamisel näidatakse."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Need rakendused saavad Chamilole juurde pääseda teie nimel, kasutades teie olemasoleva konto õigusi ja mitte midagi enamat. Tühistage kõik, mida te enam ei kasuta või ei tunne ära."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Palun selgitage, miks soovite taotleda oma õigusliku nõusoleku tagasivõtmist, et saaksime teie taotlust nõuetekohaselt töödelda"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Kasutage seda isiklikku võtit, et ühendada kaug-MCP-klient Chamiloga oma konto ja õigustega."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Täielikku võtit kuvatakse ainult üks kord. Hoidke see turvaliselt. Uue võtme genereerimine tühistab eelmise kohe."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Võti autentib kliendi teie Chamilo kontona. See ei anna õigusi, mida teie kontol juba ei ole."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Kuva registreerimislehel kasutustingimuste avaldus, nõua külastajalt registreerumiseks kasutustingimuste aktsepteerimist"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Kasutustingimuste sisu saadetakse tehisintellekti keelemudelile. Vaadake pakutud tõlge enne salvestamist üle."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Sihtkeele jaoks on juba salvestatud versioon. Selle ettepaneku salvestamine loob uue versiooni."
+
+msgid "Acquired"
+msgstr "Omandatud"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Soovitatav kursuse pilt: 1600 × 900 px (16:9). Terava kuvamise jaoks suurematel või kõrge tihedusega ekraanidel kasutage vähemalt 1280 × 720 px."
+
+msgid "Courses of the selected URL"
+msgstr "Valitud URL-i kursused"
+
+msgid "Course categories in selected URL"
+msgstr "Kursuste kategooriad valitud URL-is"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Teie konto on aktiivne, saate nüüd sisse logida ja oma kursuseid vaadata."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Esmalt peate parandused alla laadima <a href='%s'> siit </a>.\nPärast seda peate selle faili lahti pakkima ja faile soovitud viisil muutma, ilma failinimesid muutmata.\nSeejärel looge muudetud failidest zip-fail ja laadige see selles vormis üles."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Õppijate lisamine sessioonist %s sessiooni %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Näita kõiki katseid harjutuse kaupa"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "See toiming ületaks valitud kursuse lubatud kasutajate limiidi."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Mõnda registreerimist ei saanud teostada, sest need jõudsid mõjutatud kursuse lubatud kasutajate limiidini. Mõjutatud kasutajad/kursused: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "See register loetleb teadaolevad aruandelehed, nende kategooria, kanoonilise URL-i, pärand-URL-i ja oodatava rolli sihtrühma. Kanoonilised URL-id suunavad praegusele aruande teostusele ja rakendavad dokumenteeritud aruanderollide maatriksit."
+
+msgid "E-mail notification subscription"
+msgstr "E-posti teavituste tellimus"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "See toiming ületaks administraatorite määratud limiidi %s kasutajat kursuse kohta. Registreerimine on tühistatud."
+
+msgid "Language the document is in"
+msgstr "Keel, milles dokument on"
+
+msgid "There is no session still"
+msgstr "Sessiooni veel ei ole"
+
+msgid "Origin courses from session"
+msgstr "Lähtekursused sessioonist"
+
+msgid "Destination courses from session"
+msgstr "Sihtkursused sessioonist"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Avalik juurdepääs (lubatud kõigile kursuse liikmetele)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Genereeri %d sõnastikuterminit kursusele teemal '%s', iga termin eraldi real, selle definitsioon järgmisel real ja üks tühi rida iga termini vahel. Ära lisa pealkirjale ega definitsioonile muud vormindust."
+
+msgid "This is a short description of the course '%s'."
+msgstr "See on lühike kirjeldus kursusest '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Kasutate Chamilot Windowsi platvormil. Dokumentide teisendamise abivahendid ei ole täisteksti indekseerimiseks saadaval."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Testi automaatkäivituse seade on SEES. Õppijad suunatakse testide loendisse."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Testi automaatkäivituse seade on SEES. Õpilased suunatakse konkreetsele testile."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Selle kursuse registreerimislimiit on saavutatud (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Kursuste arv keele järgi"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Kasutajad, kelle viimane juurdepääs on vanem kui valitud kuupäev."
 

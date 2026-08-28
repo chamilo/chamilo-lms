@@ -296,6 +296,22 @@ Feature: Users management as admin
     And I wait up to 10 seconds for the element "tr:has-text('student lastname')" to appear
     And I click the "[title='Edit']" icon in the row for "student lastname"
     And I wait up to 10 seconds for the element "text=Edit user information" to appear
+    # Proof the async load has FINISHED before anything is typed.
+    #
+    # "Edit user information" is the static page heading — UserEdit.vue renders it
+    # on mount, BEFORE loadUser()'s fetch resolves — so waiting for it establishes
+    # nothing about the form's data. `username` is populated by the very same
+    # handler that sets the phone field (`form.username = user.username` next to
+    # `form.phone = user.phone || ""`), which makes its value direct evidence that
+    # the handler has run.
+    #
+    # Without this, the scenario passed while saving nothing: the phone fill landed
+    # first, loadUser()'s .then() then reset form.phone to "", and the POST carried
+    # an empty value. No validation error, so "I should not see an error" was
+    # satisfied — and the damage surfaced only in the NEXT scenario, reading the
+    # field back as "". It failed that way on both attempts of two consecutive CI
+    # runs, so on CI the fetch reliably wins this race rather than occasionally.
+    And the field "username" should have value "student"
     And I press "Advanced settings"
     And I fill in "phone" with "0123456789"
     And I press "Save"

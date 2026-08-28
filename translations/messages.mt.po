@@ -36,7 +36,7 @@ msgid "Design a new badge"
 msgstr "Fassal badge ġdid"
 
 msgid "Total: %s"
-msgstr "Total: %s"
+msgstr "Totali: %s"
 
 msgid "Download badges"
 msgstr "Niżżel badges"
@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Sinċerament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kampjun tal-formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Firxiet tal-varjabbli"
@@ -3201,7 +3201,7 @@ msgid "Select the \"target\" which shows the link on the homepage of the course"
 msgstr "Agħżel il-\"target\" li juri l-link fuq il-homepage tal-kors"
 
 msgid "Tracking DB."
-msgstr "Tracking DB."
+msgstr "DB ta' traċċar."
 
 msgid "Enable Tracking"
 msgstr "Attiva t-Tracking"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(rakkomandat)"
 
 msgid "SCORM DB"
-msgstr "SCORM DB"
+msgstr "DB SCORM"
 
 msgid "Administrator last name"
 msgstr "Kunjom tal-amministratur"
@@ -3984,7 +3984,7 @@ msgid "You can't import more than 500 users at once !"
 msgstr "Ma tistax timporta aktar minn 500 utent f'daqqa!"
 
 msgid "Databases (phpMyAdmin)"
-msgstr "Databases (phpMyAdmin)"
+msgstr "Bażijiet tad-data (phpMyAdmin)"
 
 msgid "Users"
 msgstr "Utenti"
@@ -5232,10 +5232,10 @@ msgid "Whitelist"
 msgstr "Whitelist"
 
 msgid "Blacklist - setting"
-msgstr "Blacklist - setting"
+msgstr "Lista s-sewda - setting"
 
 msgid "Whitelist - setting"
-msgstr "Whitelist - setting"
+msgstr "Lista bajda - setting"
 
 msgid "The blacklist is used to filter the files extensions by removing (or renaming) any file which extension figures in the blacklist below. The extensions should figure without the leading dot (.) and separated by semi-column (;) like the following:  exe;com;bat;scr;php. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter."
 msgstr "Il-blacklist tintuża biex tiffiltra l-estensjonijiet tal-fajls billi tneħħi (jew tbiddel l-isem) kwalunkwe fajl li l-estensjoni tiegħu tidher fil-blacklist hawn taħt. L-estensjonijiet għandhom jidhru mingħajr il-punt (.) u separati b'semi-colon (;) bħal: exe;com;bat;scr;php. Fajls mingħajr estensjoni huma aċċettati. Il-kapitalizzazzjoni (maġġusku/minuskula) ma tagħmilx differenza."
@@ -9269,6 +9269,15 @@ msgstr "Rapport tal-ħin għas-sessjoni %s"
 msgid "Error"
 msgstr "Żball"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "L-utent inħoloq, imma wieħed mill-oqsma addizzjonali tal-profil ma setax jiġi ssejvjat."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "L-utent ġie aġġornat, imma wieħed mill-oqsma addizzjonali tal-profil ma setax jiġi ssejvjat."
+
+msgid "One or more fields contain invalid values."
+msgstr "Wieħed jew aktar oqsma fihom valuri invalidi."
+
 msgid "Anonymous"
 msgstr "Anonimu"
 
@@ -12984,82 +12993,82 @@ msgid "Term"
 msgstr "Term"
 
 msgid "Term definition"
-msgstr "Term definition"
+msgstr "Definizzjoni tat-terminu"
 
 msgid "Term removed"
-msgstr "Term removed"
+msgstr "Terminu mneħħi"
 
 msgid "Term updated"
-msgstr "Term updated"
+msgstr "Terminu aġġornat"
 
 msgid "Do you really want to delete this term"
-msgstr "Do you really want to delete this term"
+msgstr "Tassew trid tħassar dan it-terminu"
 
 msgid "Save term"
-msgstr "Save term"
+msgstr "Issejvja t-terminu"
 
 msgid "Update term"
-msgstr "Update term"
+msgstr "Aġġorna t-terminu"
 
 msgid "Edit term"
-msgstr "Edit term"
+msgstr "Editja t-terminu"
 
 msgid "Delete term"
-msgstr "Delete term"
+msgstr "Ħassar it-terminu"
 
 msgid "Pre-defined"
 msgstr "Pre-defined"
 
 msgid "Term added"
-msgstr "Term added"
+msgstr "Terminu miżjud"
 
 msgid "You must enter a term"
-msgstr "You must enter a term"
+msgstr "Trid iddaħħal terminu"
 
 msgid "You must enter a term definition"
-msgstr "You must enter a term definition"
+msgstr "Trid iddaħħal definizzjoni tat-terminu"
 
 msgid "This glossary term already exists. Please change the term name."
-msgstr "This glossary term already exists. Please change the term name."
+msgstr "Dan it-terminu tal-glossarju diġà jeżisti. Jekk jogħġbok ibdel l-isem tat-terminu."
 
 msgid "Glossary management"
-msgstr "Glossary management"
+msgstr "Ġestjoni tal-glossarju"
 
 msgid "The term has moved"
-msgstr "The term has moved"
+msgstr "It-terminu tmexxa"
 
 msgid "Forums Help"
-msgstr "Forums Help"
+msgstr "Għajnuna dwar il-Forums"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
+msgstr "<p> Il-forum huwa għodda ta' diskussjoni għal xogħol miktub asinkroniku.  B'kuntrast mal-e-mail, forum huwa għal diskussjoni pubblika, jew semi-pubblika, fi grupp. </p>Biex tuża l-forum ta' Chamilo, il-membri jistgħu sempliċement jużaw il-browser tagħhom - m'għandhomx bżonn xi software klijent distint. </p>Biex torganizza l-forums, ikklikkja fuq l-għodda Forums. Id-diskussjonijiet huma organizzati ġerarkikament skont din l-istruttura: </ p><b> Kategorija> Forum> Suġġett> Post</ b> </ p> Biex il-membri jkunu jistgħu jipparteċipaw fil-forum b'mod pulit u effettiv, huwa essenzjali l-ewwel li jinħolqu kategoriji u forums; imbagħad ikun f'idejn il-parteċipanti li joħolqu suġġetti u posts. B'mod awtomatiku, il-forum fih kategorija waħda (pubblika), suġġett eżempju u post eżempju. Tista' żżid forums mal-kategorija,  tibdel it-titlu tagħha jew toħloq kategoriji oħra li fihom tista' mbagħad toħloq forums ġodda. (Tħawwadx kategoriji u forums, u ftakar li kategorija li ma fiha l-ebda forum hija inutli u ma tintweriex.)</p>\n<p>Id-deskrizzjoni tal-forum tista' tinkludi lista tal-membri tiegħu, definizzjoni tal-għan tiegħu, mira, kompitu, tema eċċ.</p><p>Forums tal-gruppi m'għandhomx jinħolqu mill-għodda Forum iżda mill-għodda Gruppi, fejn tista' tiddetermina jekk il-forums tal-grupp tiegħek għandhomx ikunu privati jew pubbliċi, fl-istess ħin billi tipprovdi post biex taqsam gruppi ta' dokumenti.</p><b> Pariri didattiċi</ b></ p> Forum ta' tagħlim mhuwiex eżattament l-istess bħall-forums li drajt tara fuq l-internet. Għal ħaġa, mhuwiex possibbli li l-istudenti jibdlu l-posts tagħhom ladarba jkunu ppubblikati peress li l-kors huwa arkivjat b'mod loġiku biex jippermetti t-traċċar ta' dak li ntqal fil-passat. Barra minn hekk, il-forums ta' Chamilo jippermettu użi speċifiċi  rilevanti għat-tagħlim. Pereżempju, xi għalliema/trainers jippubblikaw korrezzjonijiet direttament fil-forums b'dan il-mod: <li> L-istudent jintalab jippubblika rapport direttament fil-forum, </ li> L-għalliem jikkoreġih billi jikklikkja Editja (lapes isfar) u jimmarkah bl-editur grafiku (kulur, sottolinear, eċċ.) </ li> Fl-aħħar, studenti oħra jibbenefikaw milli jaraw il-korrezzjonijiet magħmula fuq il-produzzjoni ta' wieħed minnhom, </ li> Innota li l-istess prinċipju jista' jiġi applikat bejn l-istudenti, imma jeħtieġ li jikkopja/jippejstja l-messaġġ ta' sħabu għax l-istudenti / trainees ma jistgħux jeditjaw il-posts ta' xulxin. <. li> </ ul>"
 
 msgid "Dropbox Help"
-msgstr "Dropbox Help"
+msgstr "Għajnuna dwar id-Dropbox"
 
 msgid "<p>The dropbox tool is a Content Management Tool facilitating peer-to-peer data exchange. It accepts any filetype (Word, Excel, PDF etc.) It will overwrite existing files with the same name only if directed to do so.<br /> <br /> Learners can can only send a file to their teacher, unless the system administrator has enabled sharing between users. A course manager, however, can opt to to send a file to all course users. <br /> <br />The system administrator can configure the dropbox so that a user can receive but not send files.<br /> <br /> If the file list gets too long, some or all files can be deleted from the list, although the  file itself remaims available to other users until all users have deleted  it.<br /> </p><p>In the received folder, the dropbox tool displays files that have been sent to you and in the sent folder it shows files sent to other course members.</p><p>To send a document to more than one person, you need to hold CTRLand check the multiple select box(i.e.the  field showing the list of members).</p>"
-msgstr "<p>The dropbox tool is a Content Management Tool facilitating peer-to-peer data exchange. It accepts any filetype (Word, Excel, PDF etc.) It will overwrite existing files with the same name only if directed to do so.<br /> <br /> Learners can can only send a file to their teacher, unless the system administrator has enabled sharing between users. A course manager, however, can opt to to send a file to all course users. <br /> <br />The system administrator can configure the dropbox so that a user can receive but not send files.<br /> <br /> If the file list gets too long, some or all files can be deleted from the list, although the  file itself remaims available to other users until all users have deleted  it.<br /> </p><p>In the received folder, the dropbox tool displays files that have been sent to you and in the sent folder it shows files sent to other course members.</p><p>To send a document to more than one person, you need to hold CTRLand check the multiple select box(i.e.the  field showing the list of members).</p>"
+msgstr "<p>L-għodda dropbox hija Għodda tal-Ġestjoni tal-Kontenut li tiffaċilita l-iskambju ta' data bejn il-pari. Taċċetta kwalunkwe tip ta' fajl (Word, Excel, PDF eċċ.) Teħod lok ta' fajls eżistenti bl-istess isem biss jekk tkun diretta biex tagħmel hekk.<br /> <br /> L-istudenti jistgħu jibagħtu fajl biss lill-għalliem tagħhom, sakemm l-amministratur tas-sistema ma jkunx ippermetta l-qsim bejn l-utenti. Maniġer tal-kors, madankollu, jista' jagħżel li jibgħat fajl lill-utenti kollha tal-kors. <br /> <br />L-amministratur tas-sistema jista' jikkonfigura d-dropbox biex utent ikun jista' jirċievi imma mhux jibgħat fajls.<br /> <br /> Jekk il-lista tal-fajls issir twila wisq, xi wħud jew il-fajls kollha jistgħu jitħassru mil-lista, għalkemm il-fajl innifsu jibqa' disponibbli għal utenti oħra sakemm l-utenti kollha jkunu ħassruh.<br /> </p><p>Fil-folder riċevut, l-għodda dropbox turi fajls li ntbagħtulek u fil-folder mibgħut turi fajls mibgħuta lil membri oħra tal-kors.</p><p>Biex tibgħat dokument lil aktar minn persuna waħda, trid iżżomm CTRL u timmarka l-kaxxa ta' selezzjoni multipla (jiġifieri l-qasam li juri l-lista tal-membri).</p>"
 
 msgid "Homepage Help"
-msgstr "Homepage Help"
+msgstr "Għajnuna dwar il-Paġna Ewlenija"
 
 msgid "<p>The Course Homepage displays a range of tools (introductory text,  description, documents manager etc.) This page is modular in the sense that you can hide or show any of the tools in learner view with a single click on the 'eye' icon (hidden tools can be reactivated any time. </p><b>Navigation</b><p>In order to browse the course, you can simply click on the icons; a 'breadcrumb' navigation tool at the top of the page allows you to retrace your steps back to the course homepage.</p><b>Best practice</b><p>To help motivate learners, it is helpful to make you course appear 'alive' by suggesting that there is always someone present 'behind the screen'. An effective way to make this impression is to update the introductory text (just click on the yellow pencil) at least once a week with the latest news, deadlines etc.</p><p>When you construct your course, try the following steps:<ol><li>In the Course Settings, make course acccess private and subscription available only to trainers. That way, nobody can enter your course area during construction,</li><li>Use whatever tools you need to 'fill' your area with content, activities, guidelines, tests etc.,</li><li>Now hide all tools so your home page is empty in learner view by clicking on the eyes to make the icons grey. </li><li>Use the Learning Path tool to create a learning path to structure the way learners will follow it and learn within it. That way, although you will be using the other tools, you don't initially need to show them on the homepage. </li><li>Click on the eye icon beside the path you created to show it on your home page.</li><li>your course is ready to view. Its homepage will display an introductory text followed by a single link to lead learners into and through the course. Click on the Learner View button (top right) to see the course from the learner's point of view.<I></I></li></ol>"
-msgstr "<p>The Course Homepage displays a range of tools (introductory text,  description, documents manager etc.) This page is modular in the sense that you can hide or show any of the tools in learner view with a single click on the 'eye' icon (hidden tools can be reactivated any time. </p><b>Navigation</b><p>In order to browse the course, you can simply click on the icons; a 'breadcrumb' navigation tool at the top of the page allows you to retrace your steps back to the course homepage.</p><b>Best practice</b><p>To help motivate learners, it is helpful to make you course appear 'alive' by suggesting that there is always someone present 'behind the screen'. An effective way to make this impression is to update the introductory text (just click on the yellow pencil) at least once a week with the latest news, deadlines etc.</p><p>When you construct your course, try the following steps:<ol><li>In the Course Settings, make course acccess private and subscription available only to trainers. That way, nobody can enter your course area during construction,</li><li>Use whatever tools you need to 'fill' your area with content, activities, guidelines, tests etc.,</li><li>Now hide all tools so your home page is empty in learner view by clicking on the eyes to make the icons grey. </li><li>Use the Learning Path tool to create a learning path to structure the way learners will follow it and learn within it. That way, although you will be using the other tools, you don't initially need to show them on the homepage. </li><li>Click on the eye icon beside the path you created to show it on your home page.</li><li>your course is ready to view. Its homepage will display an introductory text followed by a single link to lead learners into and through the course. Click on the Learner View button (top right) to see the course from the learner's point of view.<I></I></li></ol>"
+msgstr "<p>Il-Paġna Ewlenija tal-Kors turi firxa ta' għodod (test introduttorju,  deskrizzjoni, maniġer tad-dokumenti eċċ.) Din il-paġna hija modulari fis-sens li tista' taħbi jew turi kwalunkwe waħda mill-għodod fil-veduta tal-istudent b'klikks waħda fuq l-ikona tal-'għajn' (għodod moħbija jistgħu jiġu riattivati fi kwalunkwe ħin. </p><b>Navigazzjoni</b><p>Biex tinnaviga l-kors, tista' sempliċement tikklikkja fuq l-ikoni; għodda ta' navigazzjoni 'breadcrumb' fil-quċċata tal-paġna tħallik terġa' lura lejn il-paġna ewlenija tal-kors.</p><b>Prattika tajba</b><p>Biex tgħin timmotiva lill-istudenti, huwa utli li l-kors tiegħek jidher 'ħaj' billi tissuġġerixxi li dejjem hemm xi ħadd preżenti 'wara l-iskrin'. Mod effettiv biex toħloq din l-impressjoni huwa li taġġorna t-test introduttorju (ikklikkja fuq il-lapes isfar) mill-inqas darba fil-ġimgħa bl-aħħar aħbarijiet, skadenzi eċċ.</p><p>Meta tibni l-kors tiegħek, ipprova dawn il-passi:<ol><li>Fis-Settings tal-Kors, agħmel l-aċċess tal-kors privat u s-sottoskrizzjoni disponibbli biss għat-trainers. B'hekk, ħadd ma jista' jidħol fiż-żona tal-kors tiegħek waqt il-kostruzzjoni,</li><li>Uża l-għodod li għandek bżonn biex 'timla' ż-żona tiegħek b'kontenut, attivitajiet, linji gwida, testijiet eċċ.,</li><li>Issa aħbi l-għodod kollha biex il-paġna ewlenija tiegħek tkun vojta fil-veduta tal-istudent billi tikklikkja fuq l-għajnejn biex l-ikoni jsiru griżi. </li><li>Uża l-għodda Learning Path biex toħloq mogħdija ta' tagħlim biex tistruttura l-mod kif l-istudenti jsegwuha u jitgħallmu fiha. B'hekk, għalkemm tkun qed tuża l-għodod l-oħra, inizjalment m'għandekx bżonn turihom fuq il-paġna ewlenija. </li><li>Ikklikkja fuq l-ikona tal-għajn ħdejn il-mogħdija li ħloqt biex turih fuq il-paġna ewlenija tiegħek.</li><li>il-kors tiegħek huwa lest biex jidher. Il-paġna ewlenija tiegħu turi test introduttorju segwit minn link waħda biex twassal lill-istudenti ġewwa u tul il-kors. Ikklikkja fuq il-buttuna Veduta tal-Istudent (fuq il-lemin fuq) biex tara l-kors mill-perspettiva tal-istudent.<I></I></li></ol>"
 
 msgid "Chamilo LIVE Help"
-msgstr "Chamilo LIVE Help"
+msgstr "Għajnuna ta' Chamilo LIVE"
 
 msgid "The GoogleMaps plugin needs to be enabled by the platform administrator in order to show the map."
-msgstr "The GoogleMaps plugin needs to be enabled by the platform administrator in order to show the map."
+msgstr "Il-plugin GoogleMaps jeħtieġ li jkun attiv mill-amministratur tal-pjattaforma biex tintwera l-mappa."
 
 msgid "Chamilo Help"
-msgstr "Chamilo Help"
+msgstr "Għajnuna ta' Chamilo"
 
 msgid "Documents Help"
-msgstr "Documents Help"
+msgstr "Għajnuna dwar id-Dokumenti"
 
 msgid "Users Help"
-msgstr "Users Help"
+msgstr "Għajnuna dwar l-Utenti"
 
 msgid "Tests Help"
 msgstr "Għajnuna għat-Testijiet"
@@ -14112,112 +14121,112 @@ msgid "Add to gradebook"
 msgstr "Żid mal-gradebook"
 
 msgid "Weight inside assessment"
-msgstr "Weight inside assessment"
+msgstr "Piż ġewwa l-valutazzjoni"
 
 msgid "Date limits"
-msgstr "Date limits"
+msgstr "Limiti tad-dati"
 
 msgid "Posted sending deadline"
-msgstr "Posted sending deadline"
+msgstr "Skadenza tal-pubblikazzjoni"
 
 msgid "Directory created"
-msgstr "Directory created"
+msgstr "Direttorju maħluq"
 
 msgid "Deadline for assignments"
-msgstr "Deadline for assignments"
+msgstr "Skadenza għall-assenji"
 
 msgid "Enable handing over deadline (visible to learners)"
-msgstr ""
+msgstr "Attiva l-iskadenza tal-konsenja (viżibbli għall-istudenti)"
 
 msgid "Enable final acceptance date (invisible to learners)"
-msgstr ""
+msgstr "Attiva d-data finali ta' aċċettazzjoni (inviżibbli għall-istudenti)"
 
 msgid "Impossible to save the document"
-msgstr ""
+msgstr "Impossibbli li jiġi salvat id-dokument"
 
 msgid "End date cannot be before the expiry date"
-msgstr ""
+msgstr "Id-data tat-tmiem ma tistax tkun qabel id-data tal-iskadenza"
 
 msgid "Select a filter"
-msgstr ""
+msgstr "Agħżel filtru"
 
 msgid "Filter by not expired"
-msgstr ""
+msgstr "Iffiltra dawk mhux skaduti"
 
 msgid "Filter assignments"
-msgstr ""
+msgstr "Iffiltra l-assenji"
 
 msgid "Minimum score expected"
-msgstr ""
+msgstr "Punteġġ minimu mistenni"
 
 msgid "Expiry date already passed"
-msgstr ""
+msgstr "Id-data tal-iskadenza diġà għaddiet"
 
 msgid "End date already passed"
-msgstr ""
+msgstr "Id-data tat-tmiem diġà għaddiet"
 
 msgid "Move %s to"
-msgstr ""
+msgstr "Mexxi %s lejn"
 
 msgid "The mark cannot exceed maximum score"
-msgstr ""
+msgstr "Il-marka ma tistax taqbeż il-punteġġ massimu"
 
 msgid "Delete all papers"
-msgstr ""
+msgstr "Ħassar il-karti kollha"
 
 msgid "Edit and mark paper"
-msgstr ""
+msgstr "Editja u mmarka l-karta"
 
 msgid "All papers are now invisible"
-msgstr ""
+msgstr "Il-karti kollha issa huma inviżibbli"
 
 msgid "The file is now invisible"
-msgstr ""
+msgstr "Il-fajl issa huwa inviżibbli"
 
 msgid "All papers are now visible"
-msgstr ""
+msgstr "Il-karti kollha issa huma viżibbli"
 
 msgid "The file is now visible"
-msgstr ""
+msgstr "Il-fajl issa huwa viżibbli"
 
 msgid "Create assignment"
-msgstr ""
+msgstr "Oħloq assenjament"
 
 msgid "Assignment name"
-msgstr ""
+msgstr "Isem l-assenjament"
 
 msgid "Folder edited"
-msgstr ""
+msgstr "Folder editjat"
 
 msgid "Update this task"
-msgstr ""
+msgstr "Aġġorna din il-kompitu"
 
 msgid "Make all papers invisible"
-msgstr ""
+msgstr "Agħmel il-karti kollha inviżibbli"
 
 msgid "Make all papers visible"
-msgstr ""
+msgstr "Agħmel il-karti kollha viżibbli"
 
 msgid "Administrator first name"
-msgstr ""
+msgstr "L-isem tal-amministratur"
 
 msgid "URL of this company"
-msgstr ""
+msgstr "URL ta' din il-kumpanija"
 
 msgid "User DB"
-msgstr ""
+msgstr "DB tal-utenti"
 
 msgid "Please check these values"
-msgstr ""
+msgstr "Jekk jogħġbok iċċekkja dawn il-valuri"
 
 msgid "Please go back to step 1"
-msgstr ""
+msgstr "Jekk jogħġbok erġa' mur għall-pass 1"
 
 msgid "<p><b>Adding users</b></p> <p>You can subscribe existing learners one by one to your course, by clicking on the link 'Subscribe users to this course'. Usually however it's better to open your course to self-registration and let learners register themselves. </p> <p><b>Description</b></p> <p>The description has no computer related function and does not indicate any particular rights or privileges within the system. It simply indicates who is who, in human terms. You can therefore modify this by clicking on the pencil, then typing whatever you want: professor, assistant, student, visitor, expert etc.</p><p><b>Admin rights</b></p><p>Admin rights, on the other hand, provide technical authorization to modify the content and organization of this course area. You can choose between allowing full admin rights or none.</p><p>To allow an assistant, for instance, to co-admin the area, you need to be sure he/she is already registered, then click on the pencil, then check 'Teacher', then 'Ok'.</p><p><b>Co-Trainers</b></p><p>To mention the name of a co-teacher in the heading (co-chairman, etc.), use the 'Course settings' tool. This modification does not automatically register your co-Trainer as a course member. The 'Teachers' field is completely independent of the 'Users' list.</p> <p><b>Tracking and Personal Home Pages</b></p> <p>In addition to showing the users list and modifying their rights, the Users tool also shows individual tracking and allows the teacher to define headings for personal home pages to be completed by users.</p>"
-msgstr ""
+msgstr "<p><b>Żieda ta' utenti</b></p> <p>Tista' tissottoskrivi studenti eżistenti wieħed wieħed għall-kors tiegħek, billi tikklikkja fuq il-link 'Issottoskrivi utenti għal dan il-kors'. Normalment, madankollu, huwa aħjar li tiftaħ il-kors tiegħek għar-reġistrazzjoni waħedha u tħalli lill-istudenti jirreġistraw ruħhom. </p> <p><b>Deskrizzjoni</b></p> <p>Id-deskrizzjoni m'għandha l-ebda funzjoni relatata mal-kompjuter u ma tindikax drittijiet jew privileġġi partikolari fis-sistema. Semplicement tindika min hu min, f'termini umani. Għalhekk tista' timmodifikaha billi tikklikkja fuq il-lapes, imbagħad tikteb dak li trid: professur, assistent, student, viżitatur, espert eċċ.</p><p><b>Drittijiet ta' amministratur</b></p><p>Id-drittijiet ta' amministratur, min-naħa l-oħra, jipprovdu awtorizzazzjoni teknika biex timmodifika l-kontenut u l-organizzazzjoni ta' din iż-żona tal-kors. Tista' tagħżel bejn li tagħti drittijiet sħaħ ta' amministratur jew xejn.</p><p>Biex tħalli assistent, pereżempju, jikko-amministra ż-żona, trid tkun ċert li hu/hi diġà rreġistrat, imbagħad ikklikkja fuq il-lapes, imbagħad iċċekkja 'Għalliem', imbagħad 'Ok'.</p><p><b>Ko-Trainers</b></p><p>Biex issemmi l-isem ta' ko-għalliem fl-intestatura (ko-chairman, eċċ.), uża l-għodda 'Settings tal-kors'. Din il-modifika ma tirreġistrax awtomatikament il-ko-Trainer tiegħek bħala membru tal-kors. Il-qasam 'Għalliema' huwa kompletament indipendenti mil-lista 'Utenti'.</p> <p><b>Traċċar u Paġni Personali</b></p> <p>Minbarra li turi l-lista tal-utenti u timmodifika d-drittijiet tagħhom, l-għodda Utenti turi wkoll traċċar individwali u tippermetti lill-għalliem jiddefinixxi intestaturi għal paġni personali li għandhom jitlestew mill-utenti.</p>"
 
 msgid "<p><b>Introduction</b></p><p>This tool allows you to create and manage workgroups. On first creation (Create groups), groups are 'empty'. There are many ways to fill them:<ul><li>automatically ('Fill groups (random)'),</li><li>manually ('Edit'),</li><li>self-registration by users (Groups settings: 'Self registration allowed...').</li></ul>These three ways can be combined. You can, for instance, first ask users to self-register.Then if you find some of them didn't register, decide to fill groups automatically (random) in order to complete them. You can also edit each group to determine membership, user by user, after or before self-registration and/or automatically on registration.</p><p>Filling groups, whether automatically or manually, is possible only for users registered on the course. The users list is visible in <b>Users</b> tool. </p><hr noshade size=1><p><b>Create groups</b></p><p>To create new groups, click on 'Create new group(s)' and decide the number of groups to create.</p><hr noshade size=1><p><b>Group settings</b></p><p>You can determine Group settings globally (for all groups).<b>Users may self-register in groups</b>:<p>You create empty groups, users self-register.If you have defined a maximum number, full groups do not accept new members.This method is handy for trainers unfamiliar with the users list when creating groups.</p><b>Tools</b>:</p><p>Every group is assigned either a forum (private or public) or a Documents area(a shared file manager) or (in most cases) both.</p><hr noshade size=1><p><b>Manual editing</b></p><p>Once groups have been created (Create groups), you will see, at the bottom of the page, a list of groups along with with several options:<ul><li><b>Edit</b>Manually modify group name, description, tutor, members list.</li><li><b>Delete</b> Delete a group.</li></ul><hr noshade size=1>"
-msgstr ""
+msgstr "<p><b>Introduzzjoni</b></p><p>Din l-għodda tippermettilek toħloq u timmaniġġja gruppi ta' xogħol. Fl-ewwel ħolqien (Oħloq gruppi), il-gruppi jkunu 'vojta'. Hemm ħafna modi biex timliehom:<ul><li>awtomatikament ('Imla l-gruppi (random)'),</li><li>manwalment ('Editja'),</li><li>awto-reġistrazzjoni mill-utenti (Settings tal-gruppi: 'Awto-reġistrazzjoni permessa...').</li></ul>Dawn it-tliet modi jistgħu jiġu kkombinati. Tista', pereżempju, l-ewwel tistaqsi lill-utenti biex jirreġistraw ruħhom. Imbagħad jekk issib li xi wħud minnhom ma rreġistrawx, tiddeċiedi li timla l-gruppi awtomatikament (random) biex tlestihom. Tista' wkoll teditja kull grupp biex tiddetermina s-sħubija, utent b'utent, wara jew qabel l-awto-reġistrazzjoni u/jew awtomatikament fir-reġistrazzjoni.</p><p>Il-mili tal-gruppi, kemm awtomatikament kif ukoll manwalment, huwa possibbli biss għall-utenti rreġistrati fuq il-kors. Il-lista tal-utenti hija viżibbli fl-għodda <b>Utenti</b>. </p><hr noshade size=1><p><b>Oħloq gruppi</b></p><p>Biex toħloq gruppi ġodda, ikklikkja fuq 'Oħloq grupp(i) ġdid(a)' u ddeċiedi n-numru ta' gruppi li trid toħloq.</p><hr noshade size=1><p><b>Settings tal-gruppi</b></p><p>Tista' tiddetermina s-settings tal-gruppi globalment (għall-gruppi kollha).<b>L-utenti jistgħu jirreġistraw ruħhom fil-gruppi</b>:<p>Toħloq gruppi vojta, l-utenti jirreġistraw ruħhom. Jekk iddefinixxejt numru massimu, il-gruppi sħaħ ma jaċċettawx membri ġodda. Dan il-metodu huwa utli għal trainers li mhumiex familjari mal-lista tal-utenti meta joħolqu gruppi.</p><b>Għodod</b>:</p><p>Kull grupp jingħata jew forum (privat jew pubbliku) jew żona tad-Dokumenti (file manager kondiviż) jew (fil-biċċa l-kbira tal-każijiet) it-tnejn.</p><hr noshade size=1><p><b>Editjar manwali</b></p><p>Ladarba l-gruppi jkunu nħolqu (Oħloq gruppi), tara, fil-qiegħ tal-paġna, lista ta' gruppi flimkien ma' diversi opzjonijiet:<ul><li><b>Editja</b> Immodifika manwalment l-isem tal-grupp, id-deskrizzjoni, it-tutor, il-lista tal-membri.</li><li><b>Ħassar</b> Ħassar grupp.</li></ul><hr noshade size=1>"
 
 msgid "<p>The tests tool allows you to create tests containing as many questions as you like.<br><br> You can choose from a range of question formats clearly displayed at the top of the page when you create a test including (for example):<br><br><ul>  <li>Multiple choice (single or multiple answers)</li>  <li>Matching</li>  <li>Fill in the blanks etc.</li></ul>A test can include any number and combination of questions and question formats.</p><hr><b>Test creation</b><p>To create a test, click on the \"New test\" link.<br><br>Type a name for the test, as well as an optional description.<br><br>You can add various elements to this, including audio or video files, e.g. for listening comprehension, but take care to make such files as small as possible to optimise download time (e.g. use mp3 rather than wav files - they're far smaller but perfectly good quality). <br><br>You can also choose between two modes of presentation:<br><br><ul>  <li>Questions on an single page</li>  <li>One question per page (sequentially)</li></ul>and opt for questions to be randomly organised when the test is run.<br><br>Finally, save your test. You will be taken to the question administration.</p><hr><b>Adding a question</b><p>You can now add a question to the newly created test. You can if you wish include a description and/or an image. To create the test types mentioned above, follow the following steps: </p><hr><b>Multiple choice</b><p>In order to create a MAQ / MCQ :<br><br><ul>  <li>Define the answers for your question. You can add or delete an answer by clicking on the right-hand button</li>  <li>Check the left box for the correct answer(s)</li>  <li>Add an optional comment. This comment won't be seen by the user until he/she has answered the question</li>  <li>Give a weighting to each answer. The weighting can be any positive or negative integer (or zero)</li>  <li>Save your answers</li></ul></p><hr><b>Fill in the blanks</b><p>This allows you to create a cloze passage. The purpose is to prompt the user to find words that you have removed from the text.<br><br>To remove a word from the text, and thus create a blank, put brackets [like this] around it.<br><br>Once the text has been typed and blanks defined, you can add a comment that will be seen by the learner depending on the reply to the question.<br><br>Save your text, and you will be taken to the next step allowing you to assign a weighting to each blank. For example, if the question is worth 10 points and you have 5 blanks, you can give a weighting of 2 points to each blank.</p><hr><b>Matching</b><p>This answer type can be chosen so as to create a question where the user will have to connect elements from list A with elements from list B.<br><br>It can also be used to ask the user to arrange elements in a given order.<br><br>First, define the options from which the user will be able to choose the best answer. Then, define the questions which will have to be linked to one of the options previously defined. Finally, connect elements from the first list with those of the second list via the drop-down menu.<br><br>Note: Several elements from the first unit might point to the same element in the second unit.<br><br>Assign a weighting to each correct match, and save your answer.</p><hr><b>Modifying a test</b><p>In order to modify a test, the principle is the same as for creating a test. Just click on the picture <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the test to modify, and follow the instructions above.</p><hr><b>Deleting a test</b><p>In order to delete a test, click on the picture <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> beside the test to delete it.</p><hr><b>Enabling a test</b><p>For a test can be used, you have to enable it by clicking on the picture <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the test name.</p><hr><b>Running the test</b><p>You can try out your test by clicking on its name in the tests list.</p><hr><b>Random questions</b><p>Whenever you create/modify a test, you can decide if you want questions to be drawn in a random order from amongst all test questions.<br><br>By enabling this option, questions will be drawn in a different order every time a user runs the test.<br><br>If you have got a large number of questions, you can opt to randomly draw only x-number of questions from the questions available.</p><hr><b>Questions pool</b><p>When you delete a test, its questions are not removed from the database, so they can be recycled back into another test via the questions pool.<br><br>The questions pool also allows you to re-use the same question in several tests.<br><br>By default, all the questions pertaining to your course are hidden. You can display the questions related to a test, by chosing 'filter' in the drop-down menu.<br><br>Orphan questions are questions that don not belong to any test.</p><hr><b>HotPotatoes Tests</b><p>You can import HotPotatoes tests into a Chamilo portal, to use in the Tests tool. The results of these tests are stored the same way as the results of Chamilo tests and as such can be readily monitored using the Reporting tool. In the case of simple tests, we recommend you use html or htm format; if your test contains pictures, a zip file upload is the most convenient way.</p><p>Note: You can also include HotPotatoes Tests as a step in the Learning Path.</p><b>Method of import</b><ul>  <li>Select the file on your computer using the Browse button <input type=submit value=Browse name=submit2>\ton the right of your screen.</li>\t\t<li>\t\t\tLaunch the upload with the Upload Button <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tYou can open the test by clicking onto its name.\t\t</li>\t</ul>\t<br><b>Useful link</b><br><ul><li>Hot Potatoes home page :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
 msgstr ""
@@ -14451,16 +14460,16 @@ msgid "Blue lagoon"
 msgstr "Blue lagoon"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Blu kiesaħ"
 
 msgid "Corporate"
 msgstr "Corporate"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Kampus kożmiku"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Bordeaux delizzjuż"
 
 msgid "Empire green"
 msgstr "Aħdar imperjali"
@@ -15307,6 +15316,30 @@ msgstr "Ħin mgħoddi l-ġimgħa li għaddiet"
 
 msgid "System status"
 msgstr "Status tas-sistema"
+
+msgid "Courses space"
+msgstr ""
+
+msgid "Database server configuration and metadata"
+msgstr ""
+
+msgid "Disk usage per course vs disk quota"
+msgstr ""
+
+msgid "Information about your webserver configuration"
+msgstr ""
+
+msgid "Paths"
+msgstr ""
+
+msgid "State of Chamilo requirements"
+msgstr ""
+
+msgid "State of PHP settings on the server"
+msgstr ""
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr ""
 
 msgid "Is writable"
 msgstr "Jista' jinkiteb"
@@ -20675,6 +20708,9 @@ msgstr "Fuq ir-rota tal-ħiliet, turi l-isem tal-ħila meta jkollha kodiċi qasi
 msgid "Created by"
 msgstr "Maħluq minn"
 
+msgid "Created by %s on %s"
+msgstr "Maħluq minn %s fi %s"
+
 msgid "Hide general coach in dropbox"
 msgstr "Aħbi l-kowċ ġenerali fid-dropbox"
 
@@ -24483,7 +24519,7 @@ msgid "Reminder number %s for the course %s"
 msgstr "Numru ta' tifkira %s għall-kors %s"
 
 msgid "Hello %s"
-msgstr "Hello %s"
+msgstr "Bonġu %s"
 
 msgid "You are registered in the training %s since the %s"
 msgstr "Int irreġistrat fit-taħriġ %s mill-%s"
@@ -24810,7 +24846,7 @@ msgid "Invitation to the ((course_title)) course"
 msgstr "Stedina għall-kors ((course_title))"
 
 msgid "<p>Hello ((user_complete_name)).</p>"
-msgstr "<p>Hello ((user_complete_name)).</p>"
+msgstr "<p>Bonġu ((user_complete_name)).</p>"
 
 msgid "%s's portfolio items"
 msgstr "Oġġetti tal-portafoll ta' %s"
@@ -24894,7 +24930,7 @@ msgid "Use one (or more) of the following proposed tags to automatically generat
 msgstr "Uża wieħed (jew aktar) mit-tags proposti li ġejjin biex tiġġenera awtomatikament ċertifikat jew ħila u uriha hawn meta l-istudent jasal għal dan il-pass, li jirrikjedi li l-passi l-oħra kollha jkunu lestew l-ewwel."
 
 msgid "Hi ((user_complete_name))."
-msgstr "Hi ((user_complete_name))."
+msgstr "Bonġu ((user_complete_name))."
 
 msgid "Invitation to session ((session_name))"
 msgstr "Stedina għas-sessjoni ((session_name))"
@@ -25962,40 +25998,40 @@ msgid "When exporting a course, do not export the questions that are not part of
 msgstr "Meta tesporta kors, ma tesportax il-mistoqsijiet li mhumiex parti minn ebda test."
 
 msgid "Bypass HTML filtering in test end messages"
-msgstr "Bypass HTML filtering in test end messages"
+msgstr "Aqbeż il-filtrazzjoni HTML fil-messaġġi tat-tmiem tat-test"
 
 msgid "Consider messages at the end of tests are always safe. Removing the filter makes it possible to use JavaScript there."
-msgstr "Consider messages at the end of tests are always safe. Removing the filter makes it possible to use JavaScript there."
+msgstr "Ikkunsidra li l-messaġġi fit-tmiem tat-testijiet huma dejjem sikuri. It-tneħħija tal-filtru tagħmilha possibbli li tuża JavaScript hemmhekk."
 
 msgid "Bypass HTML filtering in test questions"
-msgstr "Bypass HTML filtering in test questions"
+msgstr "Aqbeż il-filtrazzjoni HTML fil-mistoqsijiet tat-test"
 
 msgid "Consider questions text in tests are always safe. Removing the filter makes it possible to use JavaScript there."
-msgstr "Consider questions text in tests are always safe. Removing the filter makes it possible to use JavaScript there."
+msgstr "Ikkunsidra li t-test tal-mistoqsijiet fit-testijiet huwa dejjem sikur. It-tneħħija tal-filtru tagħmilha possibbli li tuża JavaScript hemmhekk."
 
 msgid "Automatically delete questions when deleting test"
-msgstr "Automatically delete questions when deleting test"
+msgstr "Ħassar awtomatikament il-mistoqsijiet meta tħassar it-test"
 
 msgid "The default behaviour is to make questions orphan when the only test using them is deleted. When enabled, this option ensure that all questions that would otherwise end up orphan are deleted as well."
-msgstr "The default behaviour is to make questions orphan when the only test using them is deleted. When enabled, this option ensure that all questions that would otherwise end up orphan are deleted as well."
+msgstr "L-imġiba default hija li l-mistoqsijiet isiru orfni meta t-test uniku li jużahom jitħassar. Meta tkun attivata, din l-għażla tiżgura li l-mistoqsijiet kollha li kieku jispiċċaw orfni jitħassru wkoll."
 
 msgid "Hide test attempts table on test start page"
-msgstr "Hide test attempts table on test start page"
+msgstr "Aħbi t-tabella tal-attentati tat-test fuq il-paġna tal-bidu tat-test"
 
 msgid "Hide the table showing all previous attempts on the test start page."
-msgstr "Hide the table showing all previous attempts on the test start page."
+msgstr "Aħbi t-tabella li turi l-attentati preċedenti kollha fuq il-paġna tal-bidu tat-test."
 
 msgid "Hide the question incremental numbering when taking a test."
-msgstr "Hide the question incremental numbering when taking a test."
+msgstr "Aħbi n-numerazzjoni inkrementali tal-mistoqsijiet waqt li tkun qed tieħu test."
 
 msgid "Keep session active in tests"
-msgstr "Keep session active in tests"
+msgstr "Żomm is-sessjoni attiva fit-testijiet"
 
 msgid "Keep session active by maintaining a regular ping signal to the server every x seconds, define here. We recommend once every 300 seconds."
-msgstr "Keep session active by maintaining a regular ping signal to the server every x seconds, define here. We recommend once every 300 seconds."
+msgstr "Żomm is-sessjoni attiva billi żżomm sinjal ping regolari lis-server kull x sekondi, iddefinixxi hawn. Nirrakkomandaw darba kull 300 sekonda."
 
 msgid "Embeddable question types"
-msgstr "Embeddable question types"
+msgstr "Tipi ta' mistoqsijiet li jistgħu jiġu inkorporati"
 
 msgid "By default, only single answer and multiple answer questions are considered when deciding whether a test can be embedded in a video or not. With this option, you can decide that more question types are available. Be aware that not all question types fit nicely in the space assigned to videos. Questions types are availalble in the code in question.class.php."
 msgstr "B'mod awtomatiku, biss mistoqsijiet b'risposta waħda u b'risposti multipli jitqiesu meta jiġi deċiż jekk test jistax jiġi inkorporat f'vidjo jew le. B'din l-għażla, tista' tiddeċiedi li aktar tipi ta' mistoqsijiet ikunu disponibbli. Kun konxju li mhux it-tipi kollha ta' mistoqsijiet jidħlu sew fl-ispazju assenjat għall-vidjows. It-tipi ta' mistoqsijiet huma disponibbli fil-kodiċi f'question.class.php."
@@ -26634,7 +26670,7 @@ msgid "Selective display of roles"
 msgstr "Wirja selettiva tar-rwoli"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Array ta' role => true/false li jiddefinixxi jekk dak ir-rwol għandux jintwera jew jinħeba.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Għażliet tal-wiri tar-rwoli"
@@ -31877,6 +31913,9 @@ msgstr "Ikteb xi ħaġa lil %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Preferut: SVG. Wisa' rakkomandata għall-PNG: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Wisa' rakkomandat tal-PNG: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Tella' logo PNG għall-emails (~%spx wisa')"
 
@@ -31912,6 +31951,9 @@ msgstr "Ikklikkja biex tiddaħħal"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Preferut: SVG. Daqs massimu tal-PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Daqs massimu tal-PNG: %spx."
 
 msgid "View badge"
 msgstr "Ara l-badge"
@@ -37506,25 +37548,25 @@ msgid "Back to account"
 msgstr "Lura għall-kont"
 
 msgid "Your feedback will help us improve future training sessions."
-msgstr "Your feedback will help us improve future training sessions."
+msgstr "Il-feedback tiegħek jgħinna ntejbu s-sessjonijiet ta' taħriġ futuri."
 
 msgid "Thank you for sharing your feedback."
-msgstr "Thank you for sharing your feedback."
+msgstr "Grazzi talli qsamt il-feedback tiegħek."
 
 msgid "How satisfied are you with the overall quality of the training?"
-msgstr "How satisfied are you with the overall quality of the training?"
+msgstr "Kemm int sodisfatt/a bil-kwalità ġenerali tat-taħriġ?"
 
 msgid "How satisfied are you with the relevance of the content?"
-msgstr "How satisfied are you with the relevance of the content?"
+msgstr "Kemm int sodisfatt/a bir-rilevanza tal-kontenut?"
 
 msgid "How satisfied are you with the clarity of the explanations?"
-msgstr "How satisfied are you with the clarity of the explanations?"
+msgstr "Kemm int sodisfatt/a biċ-ċarezza tal-ispjegazzjonijiet?"
 
 msgid "How satisfied are you with the organization and pace of the training?"
-msgstr "How satisfied are you with the organization and pace of the training?"
+msgstr "Kemm int sodisfatt/a bl-organizzazzjoni u r-ritmu tat-taħriġ?"
 
 msgid "How satisfied are you with the practical usefulness of what you learned?"
-msgstr "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Kemm int sodisfatt/a bl-utilità prattika ta’ dak li tgħallimt?"
 
 msgid "Would you recommend this training to other people?"
 msgstr "Tirrakkomanda din it-taħriġ lil persuni oħra?"
@@ -37701,7 +37743,7 @@ msgid "Do you want to continue your session?"
 msgstr "Trid tkompli s-sessjoni tiegħek?"
 
 msgid "Your session details have been lost, please login again."
-msgstr "Your session details have been lost, please login again."
+msgstr "Id-dettalji tas-sessjoni tiegħek intilfu, jekk jogħġbok illoggja mill-ġdid."
 
 msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
 msgstr "L-aċċess għal din ir-riżorsa ġie miċħud. Jidher li m'għandekx il-permessi meħtieġa biex taċċessaha."
@@ -38062,6 +38104,9 @@ msgstr "Qed jintemm"
 
 msgid "Draft saved"
 msgstr "Abbozz issejvjat"
+
+msgid "Save as draft"
+msgstr "Aħżen bħala abbozz"
 
 msgid "Statement"
 msgstr "Dikjarazzjoni"
@@ -39484,4 +39529,265 @@ msgstr "Dan l-utent diġà huwa abbonat għas-sessjoni."
 
 msgid "This user is already subscribed to the course."
 msgstr "Dan l-utent diġà huwa abbonat għall-kors."
+
+msgid "Multi URLs"
+msgstr "URLs multipli"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entitajiet bħal utenti u korsijiet jistgħu jkunu attivi f’aktar minn URL wieħed fl-istess ħin, għalhekk is-somma tal-valuri hawn taħt mhux se taqbel mat-total."
+
+msgid "User directory"
+msgstr "Direttorju tal-utenti"
+
+msgid "Course directory"
+msgstr "Direttorju tal-korsijiet"
+
+msgid "URLs"
+msgstr "URLs"
+
+msgid "User details"
+msgstr "Dettalji tal-utent"
+
+msgid "Course details"
+msgstr "Dettalji tal-kors"
+
+msgid "View details"
+msgstr "Ara d-dettalji"
+
+msgid "Average progress"
+msgstr "Progress medju"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Ir-reġistrazzjoni diretta tappartjeni għall-kors kollu, mhux għal URL speċifiku, għalhekk l-istess ċifri ‘Diretti’ jiġu ripetuti hawn taħt għal kull URL li dan il-kors hu marbut miegħu. Is-sessjonijiet huma l-mod maħsub biex jinqasam kors bejn URLs b’metriċi li tassew ivarjaw skont l-URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Logins (l-URLs kollha flimkien)"
+
+msgid "Unique logins"
+msgstr "Logins uniċi"
+
+msgid "Parent URL"
+msgstr "URL ġenitur"
+
+msgid "Logins (your URLs)"
+msgstr "Logins (l-URLs tiegħek)"
+
+msgid "The picture could not be uploaded"
+msgstr "L-istampa ma setgħetx tittella’"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Dan it-tip ta’ qasam għadu mhux appoġġjat kompletament — valur mhux ipproċessat biss."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Dan il-kors qed jersaq lejn il-limitu ta’ abbonament tal-utenti (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "L-ispazju hu limitat permezz tal-proprjetajiet tal-kors tiegħek. Biex iżżid il-limitu tiegħek, ikseb"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "L-abbonamenti tal-utenti huma limitati permezz tal-proprjetajiet tal-kors tiegħek. Biex iżżid il-limitu tiegħek, ikseb"
+
+msgid "pro plan"
+msgstr "pjan pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "u importà l-backup ta’ dan il-kors permezz tal-Manutenzjoni tal-Kors lejn il-kors imħallas il-ġdid tiegħek, jew iftaħ ticket biex il-kors tiegħek jiġi kkonvertit f’kors pro ladarba tkun ksibt dan il-pjan."
+
+msgid "Tired of writing questions?"
+msgstr "Għejjien/a milli tikteb mistoqsijiet?"
+
+msgid "Upgrade your plan"
+msgstr "Aġġorna l-pjan tiegħek"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "għal pjan pro biex tikseb għajnuna minn AI biex tiġġenera mistoqsijiet ta’ kwalità għalik."
+
+msgid "Student Success AI Coach"
+msgstr "Kowċ AI għas-Suċċess tal-Istudenti"
+
+msgid "No AI text provider is configured."
+msgstr "Ebda fornitur ta’ test AI mhu kkonfigurat."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Istruzzjonijiet addizzjonali għall-kowċ AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Eżempju: Dan l-istudent għandu diffikultà biex iżomm l-attenzjoni. Issuġġerixxi attivitajiet iqsar u kontrolli aktar frekwenti tal-fehim."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Żomm din it-tieqa miftuħa waqt li Chamilo jħejji r-rakkomandazzjoni."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Ir-rakkomandazzjoni ġiet ukoll salvata fil-inbox tiegħek ta’ Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Ir-rakkomandazzjoni ġiet iġġenerata u salvata għal dan l-istudent, iżda l-kopja tal-inbox ma setgħetx tinħoloq."
+
+msgid "Student success recommendation"
+msgstr "Rakkomandazzjoni għas-suċċess tal-istudent"
+
+msgid "Generated"
+msgstr "Iġġenerat"
+
+msgid "Priority actions"
+msgstr "Azzjonijiet ta’ prijorità"
+
+msgid "Evidence"
+msgstr "Evidenza"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Din il-funzjoni se tanalizza l-kontenut ta’ dan il-kors u tibgħat informazzjoni dwar l-imġiba tat-tagħlim lill-mudell AI ikkonfigurat. Minkejja li ma jintbagħatx data personali identifikabbli direttament lill-mudell AI, xi data mibgħuta tista’ indirettament tipprovdi informazzjoni identifikabbli dwar l-utent. Jekk għandek dubju, iċċekkja dejjem mal-persuna ta’ referenza tal-AI tiegħek qabel tuża din il-funzjoni."
+
+msgid "Additional activities"
+msgstr "Attivitajiet addizzjonali"
+
+msgid "Rhythm"
+msgstr "Ritmu"
+
+msgid "Learning methodologies"
+msgstr "Metodoloġiji tat-tagħlim"
+
+msgid "Other recommendations"
+msgstr "Rakkomandazzjonijiet oħra"
+
+msgid "Analyzing course..."
+msgstr "Qed janalizza l-kors..."
+
+msgid "Analyzing student's learning..."
+msgstr "Qed janalizza t-tagħlim tal-istudent..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Billi taċċetta din l-istedina, se tkun marbut mal-utent li talabha b’tali mod li xi data jew id-data kollha tal-profil tiegħek tkun tista’ tinqara minn dak l-utent. Jekk jogħġbok kun ċert li ma taqsamx wisq billi tiċċekkja l-profil tiegħek ma’ utenti li diġà tafdahom."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Il-permess biex tuża l-mikrofonu mhuwiex attiv, jekk jogħġbok attivalu fil-browser tiegħek biex tirrekordja awdjo"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Din il-verżjoni ta’ Chamilo tiġi b’kors wieħed (jew aktar) multilingwi installat minn qabel. Tista’ tirrevedihom fil-lista tal-korsijiet u tiddeċiedi jekk għandhomx ikunu pubbliċi jew le."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Bħalissa m’għandekx aċċess għal ebda URL. Jekk jogħġbok itlob lill-amministratur biex jagħtik aċċess għall-URL li tappartjeni għalih."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Jekk il-fornitur tal-IA magħżul mhuwiex servizz sovran, il-kontenut tad-dokument magħżul jista’ jintbagħat lil servizz estern. Tkomplix b’informazzjoni kunfidenzjali sakemm dan ma jkunx permess mill-organizzazzjoni tiegħek."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Ikklikkja Unify fuq il-kont li għandu jibqa’. Is-sistema se tgħaqqad il-kontijiet l-oħra kollha fl-istess grupp ta’ duplikati fih. Il-kontijiet magħquda se jitħassru b’mod permanenti u jisparixxu minn dan ir-rapport. Din l-azzjoni ma tistax tiġi mħassra."
+
+msgid "Permanent deletion"
+msgstr "Tħassir permanenti"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify diġà tħassar b’mod permanenti l-kontijiet magħquda. Uża l-lista tal-Utenti biss jekk trid tħassar kontijiet addizzjonali manwalment."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Qed timmodifika l-logos għat-tema viżiva default “chamilo”. Ikkunsidra li toħloq/tuża tema viżiva personalizzata biex tevita li tissostitwixxi d-defaults."
+
+msgid "This exercise has no questions."
+msgstr "Dan l-eżerċizzju m’għandux mistoqsijiet."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Kif għandna nuru l-feedback/kumment għal kull mistoqsija? Din l-għażla tiddefinixxi kif se jintwera lill-istudent waqt li jagħmel it-test."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Dawn l-applikazzjonijiet jistgħu jaċċessaw Chamilo bħalek, bl-użu tal-permessi tal-kont eżistenti tiegħek u xejn aktar. Irrevoka dawk li m’għadekx tuża jew ma tirrikonoxxix."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Jekk jogħġbok spjega għaliex trid titlob l-irtirar tal-kunsens legali tiegħek, biex nistgħu nipproċessaw it-talba tiegħek kif suppost"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Uża din iċ-ċavetta personali biex tgħaqqad klijent MCP remot ma’ Chamilo bil-kont u l-permessi tiegħek stess."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Iċ-ċavetta sħiħa tintwera darba biss. Aħżinha b’mod sigur. Il-ġenerazzjoni ta’ ċavetta ġdida tħassar mill-ewwel dik ta’ qabel."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Iċ-ċavetta tawtentika lill-klijent bħala l-kont Chamilo tiegħek. Ma tagħtix permessi li l-kont tiegħek diġà m’għandux."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Uri dikjarazzjoni ta’ Termini u Kundizzjonijiet fuq il-paġna tar-reġistrazzjoni, u titlob lill-viżitatur jaċċetta t-T&K biex jirreġistra"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Il-kontenut tat-termini u l-kundizzjonijiet se jintbagħat lil mudell lingwistiku tal-IA. Irrevedi t-traduzzjoni proposta qabel ma ssalva."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Diġà teżisti verżjoni salvata għal-lingwa fil-mira. Is-salvataġġ ta’ din il-proposta se joħloq verżjoni ġdida."
+
+msgid "Acquired"
+msgstr "Miksub"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Ritratt rakkomandat tal-kors: 1600 × 900 px (16:9). Uża mill-inqas 1280 × 720 px għal wiri ċar fuq skrins akbar jew ta’ densità għolja."
+
+msgid "Courses of the selected URL"
+msgstr "Korsijiet tal-URL magħżul"
+
+msgid "Course categories in selected URL"
+msgstr "Kategoriji tal-korsijiet fl-URL magħżul"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Il-kont tiegħek huwa attiv; tista’ tidħol u tiċċekkja l-korsijiet tiegħek issa."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "L-ewwel trid tniżżel il-korrezzjonijiet <a href='%s'> hawn </a>.\nWara dan trid tiftaħ dak il-fajl zip u teditja l-fajls kif trid mingħajr ma tbiddel l-ismijiet tal-fajls.\nImbagħad oħloq fajl zip b’dawk il-fajls modifikati u ttellgħu f’din il-formola."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Żieda ta’ studenti mis-sessjoni %s għas-sessjoni %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Uri l-attentati kollha skont l-eżerċizzju"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Din l-operazzjoni taqbeż il-limitu ta’ utenti permess għall-kors magħżul."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Xi abbonamenti ma setgħux jitwettqu għax laħqu l-limitu ta’ utenti permess għall-kors milqut. Utenti/Korsijiet milquta: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Dan ir-reġistru jelenka paġni ta’ rapportar magħrufa, il-kategorija tagħhom, l-URL kanoniku, l-URL legacy u l-udjenza tar-rwol mistennija. L-URLs kanoniċi jidderieġu lejn l-implimentazzjoni attwali tar-rapport u jinfurzaw il-matriċi dokumentata tar-rwoli tar-rapport."
+
+msgid "E-mail notification subscription"
+msgstr "Abbonament għan-notifika bl-e-mail"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Din l-operazzjoni taqbeż il-limitu ta’ %s utenti għal kull kors stabbilit mill-amministraturi. L-abbonament ġie kkanċellat."
+
+msgid "Language the document is in"
+msgstr "Lingwa li fiha jinsab id-dokument"
+
+msgid "There is no session still"
+msgstr "Għad m’hemm l-ebda sessjoni"
+
+msgid "Origin courses from session"
+msgstr "Korsijiet tal-oriġini mis-sessjoni"
+
+msgid "Destination courses from session"
+msgstr "Korsijiet tad-destinazzjoni mis-sessjoni"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Aċċess pubbliku (aċċess awtorizzat għal kwalunkwe membru tal-kors)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Iġġenera %d termini tal-glossarju għal kors dwar '%s', kull terminu fuq linja waħda, bid-definizzjoni tiegħu fuq il-linja ta’ wara u linja vojta waħda bejn kull terminu. Tużax format ieħor għat-titlu u lanqas għad-definizzjoni."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Din hija deskrizzjoni qasira tal-kors '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Qed tuża Chamilo fuq pjattaforma Windows. L-għodod ta’ konverżjoni tad-dokumenti mhumiex disponibbli għall-indiċjar tat-test sħiħ."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Is-setting tal-awto-tnedija tat-test huwa MIXGĦUL. L-istudenti se jiġu ridiretti lejn il-lista tat-testijiet."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Is-setting tal-awto-tnedija tat-test huwa MIXGĦUL. L-istudenti se jiġu ridiretti lejn test speċifiku."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Il-limitu tal-abbonament għal dan il-kors intlaħaq (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Għadd tal-korsijiet skont il-lingwa"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Utenti li l-aħħar aċċess tagħhom huwa qabel id-data magħżula."
 

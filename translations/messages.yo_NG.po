@@ -67,37 +67,37 @@ msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Cosecant:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr "Hyperbolic cosecant:\t\tcsch(x)"
+msgstr "Kosekanti haipabọliki:\t\tcsch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
 msgstr "Arccosecant:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr "Hyperbolic arccosecant:\t\tarccsch(x)"
+msgstr "Akosekanti haipabọliki:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
 msgstr "Secant:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr "Hyperbolic secant:\t\tsech(x)"
+msgstr "Sekanti haipabọliki:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
 msgstr "Arcsecant:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr "Hyperbolic arcsecant:\t\tarcsech(x)"
+msgstr "Asekanti haipabọliki:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
 msgstr "Cotangent:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr "Hyperbolic cotangent:\t\tcoth(x)"
+msgstr "Kotanjenti haipabọliki:\t\tcoth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
 msgstr "Arccotangent:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr "Hyperbolic arccotangent:\t\tarccoth(x)"
+msgstr "Akotanjenti haipabọliki:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "Kí aaye yìí lè ṣiṣẹ́ kí o sì lè wọ̀n ìlò àkíì, pẹpẹ yìí ń lo awọn kuki.<br /><br />\nTi o ba nilo, apakan Iranlọwọ ti ẹrẹ̀ rẹ tọkasi bii o ṣe le ṣeto awọn kuki.<br /><br />\nFun alaye diẹ sii lori awọn kuki, o le ṣayẹwo oju opo wẹẹbu <a href=\"http://www.aboutcookies.org/\">About Cookies</a>."
@@ -226,7 +226,7 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "Ìgbà akoko ìpàdé yìí jẹ́ kí o ṣètò nọ́mba àwọn ọjọ́ ìwọlé tí ó bẹ̀rẹ̀ láti ìpàdé ìwọlé àkọ́kọ́ ti olùwò. Lọ́nà yìí, o le ṣètò ìpàdé kan láti 'ṣẹ́ fún ọjọ́ mẹ́ẹ̀gún mẹ́ẹ̀dógun' dípò bẹ̀rẹ̀ ní ìpàdé ìdúróṣinṣin fún gbogbo àwọn akẹ́kọ̀ọ́."
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr "Hyperbolic arctangent:\t\tarctanh(x)"
+msgstr "Atanjenti haipabọliki:\t\tarctanh(x)"
 
 msgid "Session duration"
 msgstr "Ìgbà akoko ìpàdé"
@@ -235,7 +235,7 @@ msgid "Arctangent:\t\t\tarctan(x)"
 msgstr "Arctangent:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr "Hyperbolic tangent:\t\ttanh(x)"
+msgstr "Tanjenti haipabọliki:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
 msgstr "Tangent:\t\t\ttan(x)"
@@ -247,13 +247,13 @@ msgid "Series"
 msgstr "Ẹ̀ka"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr "Hyperbolic arccosine:\t\tarccosh(x)"
+msgstr "Akosaini haipabọliki:\t\tarccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
 msgstr "Arccosine:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr "Hyperbolic cosine:\t\tcosh(x)"
+msgstr "Kosaini haipabọliki:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
 msgstr "Cosine:\t\t\t\tcos(x)"
@@ -262,7 +262,7 @@ msgid "Teachers time report"
 msgstr "Ìròyìn àkókò olùkọ́"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr "Hyperbolic arcsine:\t\tarcsinh(x)"
+msgstr "Asaini haipabọliki:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "Kò ṣe ìrírí èdè rẹ nínú akoole? Kan si wa ni info@chamilo.org lati ṣe ìdàsílẹ̀ gẹgẹ́bi olùtumọ."
@@ -271,7 +271,7 @@ msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr "Hyperbolic sine:\t\tsinh(x)"
+msgstr "Saini haipabọliki:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr "Sine:\t\t\t\tsin(x)"
@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -9264,6 +9264,15 @@ msgstr "Ijabọ akoko fun igba %s"
 msgid "Error"
 msgstr "Aṣiṣe"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "A ṣẹ̀dá olùmúlò náà, ṣùgbọ́n kò ṣeé fi ọ̀kan nínú àwọn pápá profaili àfikún pamọ́."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "A ṣe ìmúdójúìwọ̀n olùmúlò náà, ṣùgbọ́n kò ṣeé fi ọ̀kan nínú àwọn pápá profaili àfikún pamọ́."
+
+msgid "One or more fields contain invalid values."
+msgstr "Ọ̀kan tàbí jù bẹ́ẹ̀ lọ nínú àwọn pápá ní àwọn iye tí kò tọ́."
+
 msgid "Anonymous"
 msgstr "Àìdárúkọ"
 
@@ -15303,6 +15312,30 @@ msgstr "Akoko ti a lo ni ọsẹ́ to kọja"
 msgid "System status"
 msgstr "Ipo eto"
 
+msgid "Courses space"
+msgstr "Àyè àwọn ìkẹ́kọ̀ọ́"
+
+msgid "Database server configuration and metadata"
+msgstr "Ìṣètò olùpèsè ìkànnì dátà àti metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Lílo díìskì fún kọ́ọ̀sì kọ̀ọ̀kan sí ìwọ̀n díìskì"
+
+msgid "Information about your webserver configuration"
+msgstr "Àlàyé nípa ìṣètò olùpèsè wẹ́ẹ̀bù rẹ"
+
+msgid "Paths"
+msgstr "Àwọn ọ̀nà"
+
+msgid "State of Chamilo requirements"
+msgstr "Ipò àwọn ìbéèrè Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Ipò àwọn ìṣètò PHP lórí olùpèsè"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Àwọn ìwọ̀n-ìdúró api_get_path() tí a yanjú lórí póòtù yìí"
+
 msgid "Is writable"
 msgstr "Ṣe le kọ"
 
@@ -20131,7 +20164,7 @@ msgid "When enabled, and when using the WSCertificatesList webservice, this opti
 msgstr "Nigbati a ba ṣiṣẹ, ati nigbati lilo iṣẹ WSCertificatesList webservice, aṣayan yii yoo rii daju pe gbogbo awọn iwe-ẹri ti ipilẹṣẹ nipasẹ awọn olumulo ti wọn ba de ami ti o to ni gbogbo awọn ohun kan ti a ṣalaye ni awọn iwe-igbakọ fun gbogbo awọn akoko ati awọn akoko (eyini le gba awọn orisun ṣiṣe pataki lori olupin rẹ)."
 
 msgid "OpenBadges backpack URL"
-msgstr "OpenBadges backpack URL"
+msgstr "URL àpò ẹ̀yìn OpenBadges"
 
 msgid "The URL of the OpenBadges backpack server that will be used by default for all users wanting to export their badges. This defaults to the open and free Mozilla Foundation backpack repository: https://backpack.openbadges.org/"
 msgstr "URL ti olupin OpenBadges backpack server ti yoo ṣe lilo nipasẹ aiyipada fun gbogbo awọn olumulo ti o fẹ lati ṣe agbejade awọn baaji wọn. Eyi ṣe aiyipada si ibi ipamọ backpack ti ipilẹ Mozilla ti o ṣii ati ọfẹ: https://backpack.openbadges.org/"
@@ -20669,6 +20702,9 @@ msgstr "Lori kẹkẹ awọn ogiri, o ṣafihan orukọ ogiri nigbati o ba ni ko
 
 msgid "Created by"
 msgstr "Ṣẹda nipasẹ"
+
+msgid "Created by %s on %s"
+msgstr "Ẹni tí ó ṣẹ̀dá ni %s ní %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Fi olukọ gbogbogbo pamọ ni apoti idinku"
@@ -30754,7 +30790,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (ID ìnkà)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "ID Azure (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Ìmeèlì àjọ"
@@ -31489,7 +31525,7 @@ msgid "SCIM external ID"
 msgstr "SCIM ID ìtàpá"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "ID OAuth2"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Jọ̀wọ́ gbà ìtumọ̀ ìlànà ìdásílẹ̀ tuntun."
@@ -31872,6 +31908,9 @@ msgstr "Kọ nkankan si %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Ti o fẹ julọ: SVG. PNG ti a fọwesi fun ibú: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Ìwọ̀n PNG tí a ṣeduro: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Gbe logo PNG fun awọn imeeli (~%spx ibú)"
 
@@ -31907,6 +31946,9 @@ msgstr "Tẹ lati fi sii"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Ti o fẹ: SVG. Iwọn PNG ti o pọ julọ: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Ìwọ̀n PNG tó pọ̀ jù: %spx."
 
 msgid "View badge"
 msgstr "Wo baaji"
@@ -33703,10 +33745,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "ID EntraID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "UID EntraID"
 
 msgid "Required fields"
 msgstr "Awọn aaye ti o nilo"
@@ -35476,7 +35518,7 @@ msgid "List of pending test attempts across your courses."
 msgstr "Àtòjọ àwọn ìgbìyànjú ìdárayá tí ó wà ní ìdúró ní gbogbo àwọn ẹ̀kọ́ rẹ."
 
 msgid "User ID"
-msgstr "User ID"
+msgstr "ID olùmúlò"
 
 msgid "QuestionType"
 msgstr "QuestionType"
@@ -36703,10 +36745,10 @@ msgid "Official Chamilo update channel"
 msgstr "Ìkànnì ìsọdọ̀mọ Chamilo"
 
 msgid "Package SHA-256"
-msgstr "Package SHA-256"
+msgstr "SHA-256 ìdìpọ̀"
 
 msgid "Package URL"
-msgstr "Package URL"
+msgstr "URL ìdìpọ̀"
 
 msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
 msgstr "Àwọn fáìlì package àti ìbùdó yóò jẹ́ gbígbà láti inú ìtàn. Àwọn ọ̀nà agbègbè ti dí ní àyíká yìí."
@@ -37543,22 +37585,22 @@ msgid "Very dissatisfied"
 msgstr "Inú mi kò dùn rárá"
 
 msgid "Add destination"
-msgstr "Add destination"
+msgstr "Fi ibi-ìlọ kún un"
 
 msgid "Add this test to the assessment tool"
-msgstr "Add this test to the assessment tool"
+msgstr "Fi ìdánwò yìí kún irinṣẹ́ ìṣàyẹ̀wò"
 
 msgid "Attempts and timing"
-msgstr "Attempts and timing"
+msgstr "Àwọn ìgbìyànjú àti àkókò"
 
 msgid "Available questions"
-msgstr "Available questions"
+msgstr "Àwọn ìbéèrè tó wà"
 
 msgid "Cancel and return to learning path"
-msgstr "Cancel and return to learning path"
+msgstr "Fagilé kí o padà sí ọ̀nà ẹ̀kọ́"
 
 msgid "Category destinations"
-msgstr "Category destinations"
+msgstr "Àwọn ibi-ìlọ ẹ̀ka"
 
 msgid "Classification"
 msgstr "Ìsọ̀rí"
@@ -37696,10 +37738,10 @@ msgid "Do you want to continue your session?"
 msgstr "Ṣé o fẹ́ tẹ̀síwájú ní abala rẹ?"
 
 msgid "Your session details have been lost, please login again."
-msgstr ""
+msgstr "Àwọn àlàyé ìgbà ìṣiṣẹ́ rẹ ti sọnù, jọ̀wọ́ wọlé lẹ́ẹ̀kan sí i."
 
 msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
-msgstr ""
+msgstr "Wọ́n kọ̀ ìwọlé sí ohun-èlò yìí. Ó dà bíi pé o kò ní àwọn ìyọ̀ǹda tó yẹ láti wọlé sí i."
 
 msgid "Stay connected"
 msgstr "Dúró ní ìsopọ̀"
@@ -38057,6 +38099,9 @@ msgstr "Ó ń parí"
 
 msgid "Draft saved"
 msgstr "Àkọsílẹ̀ ti pamọ́"
+
+msgid "Save as draft"
+msgstr "Fi pamọ́ gẹ́gẹ́ bí àkọsílẹ̀"
 
 msgid "Statement"
 msgstr "Ìkéde"
@@ -39097,7 +39142,7 @@ msgid "Graceful workers"
 msgstr "Àwọn òṣìṣẹ́ oníwàpẹ̀lẹ́"
 
 msgid "Server MPM"
-msgstr "Server MPM"
+msgstr "MPM ẹ̀rọ-ìpèsè"
 
 msgid "Requests per second (live)"
 msgstr "Àwọn ìbéèrè ní ìṣẹ́jú kan (lọ́wọ́lọ́wọ́)"
@@ -39169,145 +39214,145 @@ msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /ser
 msgstr "Apache: ṣe ìdàgbàsókè mod_status (ExtendedStatus On) kí o sì gba localhost láàyè sí /server-status. Nginx: ṣe ìdàgbàsókè stub_status ní ààyè localhost nìkan bíi /nginx_status tàbí /stub_status."
 
 msgid "Grade percentage distribution"
-msgstr ""
+msgstr "Pínpín ìdá ọgọ́rùn-ún ìwọ̀n"
 
 msgid "Top learners"
-msgstr ""
+msgstr "Àwọn akẹ́kọ̀ọ́ tó ga jù"
 
 msgid "This progress combines learning path progress and the learner's average exercise result"
-msgstr ""
+msgstr "Ìtẹ̀síwájú yìí darapọ̀ ìtẹ̀síwájú ọ̀nà ẹ̀kọ́ àti àpapọ̀ èsì ìdánwò akẹ́kọ̀ọ́"
 
 msgid "Additional profile fields"
-msgstr ""
+msgstr "Àwọn pápá ìwé-ìdánimọ̀ àfikún"
 
 msgid "Visible columns"
-msgstr ""
+msgstr "Àwọn òpó tó ń hàn"
 
 msgid "Learning path completion"
-msgstr ""
+msgstr "Ìparí ọ̀nà ẹ̀kọ́"
 
 msgid "Number of certificates"
-msgstr ""
+msgstr "Iye àwọn ìwé-ẹ̀rí"
 
 msgid "Could not export the report"
-msgstr ""
+msgstr "Kò le gbé ìròyìn jáde"
 
 msgid "Second learner"
-msgstr ""
+msgstr "Akẹ́kọ̀ọ́ kejì"
 
 msgid "Results by learner"
-msgstr ""
+msgstr "Àwọn èsì nípa akẹ́kọ̀ọ́"
 
 msgid "Use filters to narrow down questions."
-msgstr ""
+msgstr "Lo àwọn àṣẹ̀yàn láti dín àwọn ìbéèrè kù."
 
 msgid "Try adjusting your filters and search again."
-msgstr ""
+msgstr "Gbìyànjú láti tún àwọn àṣẹ̀yàn rẹ ṣe kí o sì wá lẹ́ẹ̀kan sí i."
 
 msgid "Results per page"
-msgstr ""
+msgstr "Àwọn èsì nínú ojú-ìwé kan"
 
 msgid "No answers"
-msgstr ""
+msgstr "Kò sí àwọn ìdáhùn"
 
 msgid "Tests using this question"
-msgstr ""
+msgstr "Àwọn ìdánwò tó ń lo ìbéèrè yìí"
 
 msgid "Delete failed"
-msgstr ""
+msgstr "Ìparẹ́ kùnà"
 
 msgid "PHP cache"
-msgstr ""
+msgstr "Ìfipamọ́ PHP"
 
 msgid "Live OPcache and APCu diagnostics"
-msgstr ""
+msgstr "Àyẹ̀wò OPcache àti APCu lọ́wọ́lọ́wọ́"
 
 msgid "Click to show OPcache and APCu diagnostics"
-msgstr ""
+msgstr "Tẹ̀ ẹ́ láti fi àyẹ̀wò OPcache àti APCu hàn"
 
 msgid "Memory used"
-msgstr ""
+msgstr "Ìrántí tí a lò"
 
 msgid "OPcache is installed but not enabled."
-msgstr ""
+msgstr "OPcache ti wà níbẹ̀ ṣùgbọ́n kò ṣiṣẹ́."
 
 msgid "OPcache extension is not available on this server."
-msgstr ""
+msgstr "Àfikún OPcache kò sí lórí ẹ̀rọ-ìpèsè yìí."
 
 msgid "APCu is installed but not enabled."
-msgstr ""
+msgstr "APCu ti wà níbẹ̀ ṣùgbọ́n kò ṣiṣẹ́."
 
 msgid "APCu extension is not available on this server."
-msgstr ""
+msgstr "Àfikún APCu kò sí lórí ẹ̀rọ-ìpèsè yìí."
 
 msgid "Constant"
-msgstr ""
+msgstr "Ìdúróṣinṣin"
 
 msgid "Space used on disk (MB)"
-msgstr ""
+msgstr "Àyè tí a lò lórí díìskì (MB)"
 
 msgid "Set max course space (MB)"
-msgstr ""
+msgstr "Ṣètò àyè ìkẹ́kọ̀ọ́ tó pọ̀ jù (MB)"
 
 msgid "Memory free"
-msgstr ""
+msgstr "Ìrántí tó ṣofo"
 
 msgid "Memory wasted"
-msgstr ""
+msgstr "Ìrántí tí a ná lásán"
 
 msgid "Memory used %"
-msgstr ""
+msgstr "Ìrántí tí a lò %"
 
 msgid "Cached scripts"
-msgstr ""
+msgstr "Àwọn ìwé-àṣẹ tí a fipamọ́"
 
 msgid "Cached keys"
-msgstr ""
+msgstr "Àwọn kọ́kọ́rọ́ tí a fipamọ́"
 
 msgid "Misses"
-msgstr ""
+msgstr "Àwọn àìkó"
 
 msgid "Cache full"
-msgstr ""
+msgstr "Ìfipamọ́ kún"
 
 msgid "OOM restarts"
-msgstr ""
+msgstr "Àwọn àtúnbẹ̀rẹ̀ OOM"
 
 msgid "Hash restarts"
-msgstr ""
+msgstr "Àwọn àtúnbẹ̀rẹ̀ hash"
 
 msgid "Manual restarts"
-msgstr ""
+msgstr "Àwọn àtúnbẹ̀rẹ̀ ọwọ́"
 
 msgid "Interned strings used"
-msgstr ""
+msgstr "Àwọn ọ̀rọ̀ interned tí a lò"
 
 msgid "Interned strings free"
-msgstr ""
+msgstr "Àwọn ọ̀rọ̀ interned tó ṣofo"
 
 msgid "Interned strings count"
-msgstr ""
+msgstr "Iye àwọn ọ̀rọ̀ interned"
 
 msgid "Memory available"
-msgstr ""
+msgstr "Ìrántí tó wà"
 
 msgid "Memory size"
-msgstr ""
+msgstr "Iwọn ìrántí"
 
 msgid "Entries"
-msgstr ""
+msgstr "Àwọn ìtẹ̀sí"
 
 msgid "Slots"
-msgstr ""
+msgstr "Àwọn iho"
 
 msgid "Expunges"
-msgstr ""
+msgstr "Àwọn ìparẹ́"
 
 msgid "Cache start time"
-msgstr ""
+msgstr "Àkókò ìbẹ̀rẹ̀ cache"
 
 msgid "Time zone"
-msgstr ""
+msgstr "Agbègbè àkókò"
 
 msgid "Not registered"
 msgstr "Kò forúkọsílẹ̀"
@@ -39479,4 +39524,265 @@ msgstr "Olùlò yìí ti forúkọsílẹ̀ sínú ìpàdé náà tẹ́lẹ̀."
 
 msgid "This user is already subscribed to the course."
 msgstr "Olùlò yìí ti forúkọsílẹ̀ sínú ẹ̀kọ́ náà tẹ́lẹ̀."
+
+msgid "Multi URLs"
+msgstr "Ọ̀pọ̀ URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Àwọn ẹ̀dá bíi àwọn olùmúlò àti àwọn ìkẹ́kọ̀ọ́ lè ṣiṣẹ́ nínú URL ju ọ̀kan lọ ní àkókò kan náà, nítorí náà àpapọ̀ àwọn iye ní ìsàlẹ̀ kì yóò bá iye gbogbo mu."
+
+msgid "User directory"
+msgstr "Àtòjọ olùmúlò"
+
+msgid "Course directory"
+msgstr "Àtòjọ ìkẹ́kọ̀ọ́"
+
+msgid "URLs"
+msgstr "Àwọn URL"
+
+msgid "User details"
+msgstr "Àwọn àlàyé olùmúlò"
+
+msgid "Course details"
+msgstr "Àwọn àlàyé ìkẹ́kọ̀ọ́"
+
+msgid "View details"
+msgstr "Wo àwọn àlàyé"
+
+msgid "Average progress"
+msgstr "Ìtẹ̀síwájú àpapọ̀"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Ìforúkọsílẹ̀ tààrà jẹ́ ti ìkẹ́kọ̀ọ́ náà lápapọ̀, kì í ṣe ti URL kan pàtó, nítorí náà àwọn iye ‘Tààrà’ kannáà ni a tún ṣe ní ìsàlẹ̀ fún gbogbo URL tí ìkẹ́kọ̀ọ́ yìí so mọ́. Àwọn ìpèjọ́ ni ọ̀nà tí a pinnu láti pín ìkẹ́kọ̀ọ́ kọjá àwọn URL pẹ̀lú àwọn ìwọ̀n tí ó yàtọ̀ gangan fún URL kọ̀ọ̀kan."
+
+msgid "Logins (all URLs combined)"
+msgstr "Àwọn ìwọlé (gbogbo URL papọ̀)"
+
+msgid "Unique logins"
+msgstr "Àwọn ìwọlé ọtọ̀ọtọ̀"
+
+msgid "Parent URL"
+msgstr "URL òbí"
+
+msgid "Logins (your URLs)"
+msgstr "Àwọn ìwọlé (àwọn URL rẹ)"
+
+msgid "The picture could not be uploaded"
+msgstr "A kò le gbé àwòrán náà sórí ẹ̀rọ"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Irú pápá yìí kò tíì ní àtìlẹ́yìn kíkún — iye àìṣe-ẹ̀dá nìkan."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Ìkẹ́kọ̀ọ́ yìí sún mọ́ òpin ìforúkọsílẹ̀ olùmúlò rẹ̀ (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Àyè kò tó nítorí àwọn àbùdá ìkẹ́kọ̀ọ́ rẹ. Láti pọ̀ sí i òpin rẹ, gba"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Àwọn ìforúkọsílẹ̀ olùmúlò ní òpin nítorí àwọn àbùdá ìkẹ́kọ̀ọ́ rẹ. Láti pọ̀ sí i òpin rẹ, gba"
+
+msgid "pro plan"
+msgstr "ètò pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "kí o sì gbé ẹ̀dà ààbò ìkẹ́kọ̀ọ́ yìí wọlé nípasẹ̀ Ìtọ́jú Ìkẹ́kọ̀ọ́ sí ìkẹ́kọ̀ọ́ tuntun tí o sanwó, tàbí ṣí tíkẹ́ẹ̀tì kan kí a yí ìkẹ́kọ̀ọ́ rẹ padà sí ìkẹ́kọ̀ọ́ pro lẹ́yìn tí o ti gba ètò yìí."
+
+msgid "Tired of writing questions?"
+msgstr "Ǹjẹ́ o rẹ̀ ẹ́ láti kọ àwọn ìbéèrè?"
+
+msgid "Upgrade your plan"
+msgstr "Gbé ètò rẹ sókè"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "sí ètò pro láti gba ìrànlọ́wọ́ AI láti ṣẹ̀dá àwọn ìbéèrè dídára fún ọ."
+
+msgid "Student Success AI Coach"
+msgstr "Olùkọ́ AI Ìṣẹ́gun Akẹ́kọ̀ọ́"
+
+msgid "No AI text provider is configured."
+msgstr "Kò sí olùpèsè ọ̀rọ̀ AI tí a ṣètò."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Àwọn ìtọ́nisọ́nà àfikún fún olùkọ́ AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Àpẹẹrẹ: Akẹ́kọ̀ọ́ yìí ní ìṣòro láti mú àfiyèsí dúró. Dábàá àwọn ìṣe kúkúrú àti àyẹ̀wò òye lọ́pọ̀ ìgbà."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Jẹ́ kí fèrèsé yìí ṣí sílẹ̀ nígbà tí Chamilo ń múra ìmọ̀ràn náà."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "A tún fi ìmọ̀ràn náà pamọ́ sínú àpótí ìwífún Chamilo rẹ."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "A ṣẹ̀dá ìmọ̀ràn náà, a sì fi pamọ́ fún akẹ́kọ̀ọ́ yìí, ṣùgbọ́n a kò le ṣẹ̀dá ẹ̀dà àpótí ìwífún."
+
+msgid "Student success recommendation"
+msgstr "Ìmọ̀ràn ìṣẹ́gun akẹ́kọ̀ọ́"
+
+msgid "Generated"
+msgstr "A ṣẹ̀dá"
+
+msgid "Priority actions"
+msgstr "Àwọn ìgbésẹ̀ pàtàkì"
+
+msgid "Evidence"
+msgstr "Ẹ̀rí"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Ẹ̀yà yìí yóò ṣàyẹ̀wò àkóónú ìkẹ́kọ̀ọ́ yìí, yóò sì fi àlàyé ìwà ìkẹ́kọ̀ọ́ ránṣẹ́ sí àwòṣe AI tí a ṣètò. Bí ó tilẹ̀ jẹ́ pé a kò fi data ẹni tí a lè dá mọ̀ tààrà ránṣẹ́ sí àwòṣe AI, díẹ̀ nínú data tí a ránṣẹ́ lè pèsè àlàyé ẹni ní ọ̀nà àìtààrà. Bí o bá ṣiyèméjì, máa ṣàyẹ̀wò pẹ̀lú ẹni ìtọ́kasí AI rẹ kí o tó lo ẹ̀yà yìí."
+
+msgid "Additional activities"
+msgstr "Àwọn ìṣe àfikún"
+
+msgid "Rhythm"
+msgstr "Ìṣàn"
+
+msgid "Learning methodologies"
+msgstr "Àwọn ọ̀nà ìkẹ́kọ̀ọ́"
+
+msgid "Other recommendations"
+msgstr "Àwọn ìmọ̀ràn mìíràn"
+
+msgid "Analyzing course..."
+msgstr "Ń ṣàyẹ̀wò ìkẹ́kọ̀ọ́..."
+
+msgid "Analyzing student's learning..."
+msgstr "Ń ṣàyẹ̀wò ìkẹ́kọ̀ọ́ akẹ́kọ̀ọ́..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Nípa gbígbà ìpè yìí, o máa so mọ́ olùmúlò tó ń béèrè ní ọ̀nà tí yóò jẹ́ kí díẹ̀ tàbí gbogbo data profaili rẹ wà fún kíkà fún olùmúlò náà. Jọ̀wọ́ rí i dájú pé o kò pín púpọ̀ jù nípa ṣíṣàyẹ̀wò profaili rẹ pẹ̀lú àwọn olùmúlò tí o ti gbẹ́kẹ̀lé."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "A kò ṣí ìyọ̀ǹda láti lo maíkúrófóònù, jọ̀wọ́ ṣí i nínú ẹ̀rọ aṣàwákiri rẹ láti gba ohùn sílẹ̀"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Ẹ̀dà Chamilo yìí wá pẹ̀lú ìkẹ́kọ̀ọ́ (tàbí àwọn ìkẹ́kọ̀ọ́) oní-èdè-púpọ̀ tí a ti fi sínú rẹ̀ tẹ́lẹ̀. Ẹ lè wo wọn nínú àtòkọ ìkẹ́kọ̀ọ́ kí ẹ pinnu bóyá wọn yẹ kí ó jẹ́ gbangba tàbí kò yẹ."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Lọ́wọ́lọ́wọ́ ẹ kò ní ààyè sí URL kankan. Ẹ jọ̀wọ́ bẹ̀rẹ̀ lọ́wọ́ olùṣàkóso kí ó fún yín ní ààyè sí URL tí ẹ jẹ́ tiẹ̀."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Tí olùpèsè AI tí a yàn kì í ṣe iṣẹ́ ìjọba-aláìgbọ̀kan, àkóónú ìwé tí a yàn lè lọ sí iṣẹ́ ìta. Ẹ má ṣe tẹ̀síwájú pẹ̀lú àlàyé àṣírí àyàfi tí àjọ yín bá fàyè gba."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Ẹ tẹ Unify lórí àkántì tí ó yẹ kí ó kù. Ètò náà yóò darapọ̀ gbogbo àkántì mìíràn nínú ẹgbẹ́ ẹ̀dà kannáà sínú rẹ̀. Àwọn àkántì tí a darapọ̀ yóò parẹ́ títí láé, wọn yóò sì pòórá kúrò nínú ìjábọ̀ yìí. Iṣẹ́ yìí kò lè ṣe àtúnṣe."
+
+msgid "Permanent deletion"
+msgstr "Ìparẹ́ títí láé"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify ti ń parẹ́ àwọn àkántì tí a darapọ̀ títí láé. Ẹ lo àtòkọ Àwọn olùmúlò nìkan tí ẹ bá fẹ́ parẹ́ àwọn àkántì mìíràn pẹ̀lú ọwọ́."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Ẹ ń ṣàtúnṣe àwọn àmì fún àwòrán àkọ́kọ́ “chamilo”. Ẹ ronú láti ṣẹ̀dá/lo àwòrán àkànṣe kí ẹ má ba àwọn àkọ́kọ́ jẹ́."
+
+msgid "This exercise has no questions."
+msgstr "Ìdánwò yìí kò ní ìbéèrè kankan."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Báwo ni kí a ṣe fi èsì/àwòyí hàn fún ìbéèrè kọ̀ọ̀kan? Àṣàyàn yìí ṣàlàyé bí a ó ṣe fi hàn fún akẹ́kọ̀ọ́ nígbà tí ó ń ṣe ìdánwò."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Àwọn ohun èlò wọ̀nyí lè wọ Chamilo gẹ́gẹ́ bí ẹ, pẹ̀lú àwọn ẹ̀tọ́ àkántì yín tí ó wà tẹ́lẹ̀, kò sí ohun mìíràn. Ẹ fagilé èyíkéyìí tí ẹ kò lo mọ́ tàbí tí ẹ kò mọ̀."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Ẹ jọ̀wọ́ ṣàlàyé ìdí tí ẹ fi fẹ́ béèrè ìyọkúrò ìfọwọ́sí òfin yín, kí a lè ṣe ìbéèrè yín dáadáa"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Ẹ lo kọ́kọ́rọ́ àdáni yìí láti so MCP oníjìnnà pọ̀ mọ́ Chamilo pẹ̀lú àkántì àti àwọn ẹ̀tọ́ yín."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Kọ́kọ́rọ́ kíkún náà hàn lẹ́ẹ̀kan ṣoṣo. Ẹ fi pamọ́ dáadáa. Ìṣẹ̀dá kọ́kọ́rọ́ tuntun yóò fagilé èyí tẹ́lẹ̀ lẹ́sẹ̀kẹsẹ̀."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Kọ́kọ́rọ́ náà ṣe ìjẹ́rìí oníbàárà gẹ́gẹ́ bí àkántì Chamilo yín. Kò fún ni ní ẹ̀tọ́ tí àkántì yín kò ní tẹ́lẹ̀."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Fi ìkéde Àwọn òfin àti ipò hàn lórí ojú ìforúkọsílẹ̀, béèrè kí àlejò gba T&C kí ó tó forúkọsílẹ̀"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Àkóónú àwọn òfin àti ipò yóò lọ sí àwòṣe èdè AI. Ẹ ṣàyẹ̀wò ìtumọ̀ tí a dábàá kí ẹ tó fi pamọ́."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Ẹ̀dà tí a fi pamọ́ ti wà tẹ́lẹ̀ fún èdè ibi-ìlọ. Fífi ìdábàá yìí pamọ́ yóò ṣẹ̀dá ẹ̀dà tuntun."
+
+msgid "Acquired"
+msgstr "Ti gba"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Àwòrán ìkẹ́kọ̀ọ́ tí a dábàá: 1600 × 900 px (16:9). Ẹ lo ó kéré tán 1280 × 720 px fún ìfihàn tó mọ́ lórí àwọn ìbòjú ńlá tàbí ìwọ̀n-gíga."
+
+msgid "Courses of the selected URL"
+msgstr "Àwọn ìkẹ́kọ̀ọ́ URL tí a yàn"
+
+msgid "Course categories in selected URL"
+msgstr "Àwọn ẹ̀ka ìkẹ́kọ̀ọ́ nínú URL tí a yàn"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Àkántì yín ṣiṣẹ́, ẹ lè wọlé kí ẹ wo àwọn ìkẹ́kọ̀ọ́ yín nísinsin yìí."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Ní àkọ́kọ́ ẹ gbọdọ̀ ṣe ìgbàsílẹ̀ àwọn àtúnṣe <a href='%s'> níbí </a>.\nLẹ́yìn náà ẹ tú fáìlì náà kí ẹ ṣàtúnṣe àwọn fáìlì bí ẹ ṣe fẹ́ láì yí orúkọ fáìlì padà.\nLẹ́yìn náà ẹ ṣẹ̀dá fáìlì zip pẹ̀lú àwọn fáìlì tí a ṣàtúnṣe kí ẹ gbé e sórí fọ́ọ̀mù yìí."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Fífi àwọn akẹ́kọ̀ọ́ kún láti ìpàdé %s sí ìpàdé %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Fi gbogbo ìgbìyànjú hàn nípasẹ̀ ìdánwò"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Iṣẹ́ yìí yóò kọjá òpin olùmúlò tí a fàyè gba fún ìkẹ́kọ̀ọ́ tí a yàn."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Àwọn ìforúkọsílẹ̀ kan kò ṣe é ṣe nítorí wọ́n dé òpin olùmúlò fún ìkẹ́kọ̀ọ́ tí ó kan. Àwọn olùmúlò/ìkẹ́kọ̀ọ́ tí ó kan: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Ìwé-ìforúkọsílẹ̀ yìí ṣe àtòkọ àwọn ojú-ìwé ìjábọ̀ tí a mọ̀, ẹ̀ka wọn, URL àkànṣe, URL àtijọ́ àti ẹgbẹ́ ipa tí a nírètí. Àwọn URL àkànṣe ń tọ́ka sí ìmúṣe ìjábọ̀ lọ́wọ́lọ́wọ́, wọ́n sì ń mú matrix ipa ìjábọ̀ tí a kọ sílẹ̀ ṣiṣẹ́."
+
+msgid "E-mail notification subscription"
+msgstr "Ìforúkọsílẹ̀ ìfitónilétí e-meèlì"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Iṣẹ́ yìí yóò kọjá òpin %s olùmúlò fún ìkẹ́kọ̀ọ́ kọ̀ọ̀kan tí àwọn olùṣàkóso ṣètò. A ti fagilé ìforúkọsílẹ̀ náà."
+
+msgid "Language the document is in"
+msgstr "Èdè tí ìwé náà wà nínú rẹ̀"
+
+msgid "There is no session still"
+msgstr "Kò sí ìpàdé síbẹ̀"
+
+msgid "Origin courses from session"
+msgstr "Àwọn ìkẹ́kọ̀ọ́ orísun láti ìpàdé"
+
+msgid "Destination courses from session"
+msgstr "Àwọn ìkẹ́kọ̀ọ́ ibi-ìlọ láti ìpàdé"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Wọ́n ṣe ìkọ́ni fún gbogbo ènìyàn (ìwọ̀nyìí fún ọmọ ẹkọ́ kọ̀ọ̀kan nínú kọlẹji)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Ṣẹ̀dá àwọn ọ̀rọ̀ ìwé-àlàyé %d fún ìkẹ́kọ̀ọ́ lórí '%s', ọ̀rọ̀ kọ̀ọ̀kan lórí ìlà kan, pẹ̀lú ìtumọ̀ rẹ̀ lórí ìlà tó tẹ̀lé àti ìlà òfo kan láàárín ọ̀rọ̀ kọ̀ọ̀kan. Má ṣe fi ìṣètò mìíràn kún fún àkọlé tàbí ìtumọ̀."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Èyí jẹ́ àpèjúwe kúkúrú ti ìkẹ́kọ̀ọ́ '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Ẹ ń lo Chamilo lórí pẹpẹ Windows. Àwọn olùrànlọ́wọ́ ìyípadà ìwé kò sí fún ìwé-àtòkọ ọ̀rọ̀-kíkún."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Ètò ìfilọ́lẹ̀-ara-ẹni ìdánwò wà ní ON. A ó darí àwọn akẹ́kọ̀ọ́ sí àtòkọ ìdánwò."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Ètò ìfilọ́lẹ̀-ara-ẹni ìdánwò wà ní ON. A ó darí àwọn akẹ́kọ̀ọ́ sí ìdánwò kan pàtó."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "A ti dé òpin ìforúkọsílẹ̀ fún ìkẹ́kọ̀ọ́ yìí (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Ka ìkẹ́kọ̀ọ́ nípasẹ̀ èdè"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Àwọn olùmúlò tí ìwọlé wọn tó kẹ́yìn pẹ́ ju ọjọ́ tí a yàn lọ."
 

@@ -278,6 +278,13 @@ const legacyContainer = ref(null)
 watch(
   () => route.name,
   () => {
+    // Hybrid Symfony/Twig pages can register a Vue route only to reuse the
+    // shared layout, course context and breadcrumb. Their server-rendered body
+    // already lives in #sectionMainContent, so do not remove it on initial route resolution.
+    if (route.meta?.preserveLegacyContent) {
+      return
+    }
+
     if (legacyContainer.value) legacyContainer.value.innerHTML = ""
   },
 )

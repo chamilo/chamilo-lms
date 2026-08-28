@@ -358,6 +358,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
             ->from(TrackEAttemptQualify::class, 'qualify')
             ->andWhere('IDENTITY(qualify.trackExercise) = :attemptId')
             ->andWhere('qualify.author > 0')
+            ->andWhere('qualify.final = true')
             ->setParameter('attemptId', $attemptId, Types::INTEGER)
             ->getQuery()
             ->getSingleScalarResult()

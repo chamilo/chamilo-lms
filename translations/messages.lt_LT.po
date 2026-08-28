@@ -9269,6 +9269,15 @@ msgstr "Laiko ataskaita sesijai %s"
 msgid "Error"
 msgstr "Klaida"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Vartotojas sukurtas, bet vieno papildomo profilio lauko nepavyko išsaugoti."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Vartotojas atnaujintas, bet vieno papildomo profilio lauko nepavyko išsaugoti."
+
+msgid "One or more fields contain invalid values."
+msgstr "Viename ar keliuose laukuose yra neteisingos reikšmės."
+
 msgid "Anonymous"
 msgstr "Anoniminis"
 
@@ -15308,6 +15317,30 @@ msgstr "Laikas, praleistas praėjusią savaitę"
 msgid "System status"
 msgstr "Sistemos būsena"
 
+msgid "Courses space"
+msgstr "Kursų erdvė"
+
+msgid "Database server configuration and metadata"
+msgstr "Duomenų bazės serverio konfigūracija ir metaduomenys"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Disko naudojimas pagal kursą ir disko kvota"
+
+msgid "Information about your webserver configuration"
+msgstr "Informacija apie jūsų žiniatinklio serverio konfigūraciją"
+
+msgid "Paths"
+msgstr "Keliai"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo reikalavimų būsena"
+
+msgid "State of PHP settings on the server"
+msgstr "PHP nustatymų būsena serveryje"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path() konstantos, išspręstos šiame portale"
+
 msgid "Is writable"
 msgstr "Yra rašomas"
 
@@ -20674,6 +20707,9 @@ msgstr "Įgūdžių rate rodomas įgūdžio pavadinimas, kai jis turi trumpą ko
 
 msgid "Created by"
 msgstr "Sukūrė"
+
+msgid "Created by %s on %s"
+msgstr "Sukūrė %s %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Slėpti bendrą dėstytoją failų dalinimosi įrankyje"
@@ -31877,6 +31913,9 @@ msgstr "Parašykite ką nors į %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Rekomenduojama: SVG. PNG rekomenduojamas plotis: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG rekomenduojamas plotis: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Įkelti PNG logotipą el. laiškams (~%spx plotis)"
 
@@ -31912,6 +31951,9 @@ msgstr "Spustelėkite įterpti"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Rekomenduojama: SVG. PNG maks. dydis: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG maks. dydis: %spx."
 
 msgid "View badge"
 msgstr "Peržiūrėti ženklelį"
@@ -38063,6 +38105,9 @@ msgstr "Baigiama"
 msgid "Draft saved"
 msgstr "Juodraštis išsaugotas"
 
+msgid "Save as draft"
+msgstr "Išsaugoti kaip juodraštį"
+
 msgid "Statement"
 msgstr "Teiginys"
 
@@ -39484,4 +39529,265 @@ msgstr "Šis naudotojas jau užsiregistravęs į sesiją."
 
 msgid "This user is already subscribed to the course."
 msgstr "Šis naudotojas jau užsiregistravęs į kursą."
+
+msgid "Multi URLs"
+msgstr "Keli URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Objektai, tokie kaip vartotojai ir kursai, gali būti aktyvūs keliuose URL vienu metu, todėl žemiau pateiktų reikšmių suma nesutaps su visuma."
+
+msgid "User directory"
+msgstr "Vartotojų katalogas"
+
+msgid "Course directory"
+msgstr "Kursų katalogas"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "Vartotojo duomenys"
+
+msgid "Course details"
+msgstr "Kurso duomenys"
+
+msgid "View details"
+msgstr "Peržiūrėti detales"
+
+msgid "Average progress"
+msgstr "Vidutinė pažanga"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Tiesioginė registracija priklauso visam kursui, o ne konkrečiam URL, todėl tie patys „Tiesioginiai“ skaičiai kartojami žemiau kiekvienam URL, su kuriuo susietas šis kursas. Sesijos yra numatytas būdas dalytis kursu tarp URL su metrikos, kurios iš tikrųjų skiriasi pagal URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Prisijungimai (visi URL kartu)"
+
+msgid "Unique logins"
+msgstr "Unikalūs prisijungimai"
+
+msgid "Parent URL"
+msgstr "Tėvinis URL"
+
+msgid "Logins (your URLs)"
+msgstr "Prisijungimai (jūsų URL)"
+
+msgid "The picture could not be uploaded"
+msgstr "Nuotraukos nepavyko įkelti"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Šis lauko tipas dar nėra visiškai palaikomas — tik neapdorota reikšmė."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Šis kursas artėja prie vartotojų prenumeratos limito (%d\/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Vieta ribojama pagal kurso savybes. Norėdami padidinti limitą, gaukite"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Vartotojų prenumeratos ribojamos pagal kurso savybes. Norėdami padidinti limitą, gaukite"
+
+msgid "pro plan"
+msgstr "pro planą"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "ir importuokite šio kurso atsarginę kopiją per Kurso priežiūrą į naują mokamą kursą arba atidarykite užklausą, kad kursas būtų konvertuotas į pro kursą, kai įsigysite šį planą."
+
+msgid "Tired of writing questions?"
+msgstr "Pavargote rašyti klausimus?"
+
+msgid "Upgrade your plan"
+msgstr "Atnaujinkite planą"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "į profesionalų planą, kad dirbtinis intelektas padėtų jums kurti kokybiškus klausimus."
+
+msgid "Student Success AI Coach"
+msgstr "Mokinio sėkmės DI treneris"
+
+msgid "No AI text provider is configured."
+msgstr "Nėra sukonfigūruoto DI teksto teikėjo."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Papildomos instrukcijos DI treneriui"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Pavyzdys: Šiam mokiniui sunku išlaikyti dėmesį. Siūlykite trumpesnes veiklas ir dažnesnius supratimo patikrinimus."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Palikite šį langą atidarytą, kol Chamilo rengia rekomendaciją."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Rekomendacija taip pat išsaugota jūsų Chamilo gautųjų dėžutėje."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Rekomendacija sugeneruota ir išsaugota šiam mokiniui, tačiau gautųjų kopijos sukurti nepavyko."
+
+msgid "Student success recommendation"
+msgstr "Mokinio sėkmės rekomendacija"
+
+msgid "Generated"
+msgstr "Sugeneruota"
+
+msgid "Priority actions"
+msgstr "Prioritetiniai veiksmai"
+
+msgid "Evidence"
+msgstr "Įrodymai"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Ši funkcija analizuos šio kurso turinį ir siųs mokymosi elgsenos informaciją sukonfigūruotam DI modeliui. Nors tiesiogiai identifikuojami asmens duomenys DI modeliui nesiunčiami, dalis siunčiamų duomenų gali netiesiogiai suteikti identifikuojančios informacijos apie naudotoją. Jei abejojate, prieš naudodami šią funkciją visada pasitarkite su savo DI atsakingu asmeniu."
+
+msgid "Additional activities"
+msgstr "Papildomos veiklos"
+
+msgid "Rhythm"
+msgstr "Ritmas"
+
+msgid "Learning methodologies"
+msgstr "Mokymosi metodikos"
+
+msgid "Other recommendations"
+msgstr "Kitos rekomendacijos"
+
+msgid "Analyzing course..."
+msgstr "Analizuojamas kursas..."
+
+msgid "Analyzing student's learning..."
+msgstr "Analizuojamas mokinio mokymasis..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Priėmę šį kvietimą būsite susieti su prašančiuoju naudotoju taip, kad dalis arba visi jūsų profilio duomenys taps jam prieinami skaityti. Įsitikinkite, kad nesidalijate per daug, peržiūrėdami profilį su jau patikimais naudotojais."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Leidimas naudoti mikrofoną neįjungtas; įjunkite jį naršyklėje, kad galėtumėte įrašyti garsą"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Šioje Chamilo versijoje iš anksto įdiegtas vienas (ar daugiau) daugiakalbių kursų. Peržiūrėkite juos kursų sąraše ir nuspręskite, ar jie turi būti vieši."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Šiuo metu neturite prieigos prie jokio URL. Paprašykite administratoriaus suteikti prieigą prie URL, kuriam priklausote."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Jei pasirinktas DI teikėjas nėra suverenioji paslauga, pasirinkto dokumento turinys gali būti siunčiamas išorinei paslaugai. Nestęskite su konfidencialia informacija, nebent tai leidžia jūsų organizacija."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Spustelėkite „Sujungti“ prie paskyros, kuri turi likti. Sistema sujungs visas kitas tos pačios dublikatų grupės paskyras į ją. Sujungtos paskyros bus visam laikui ištrintos ir išnyks iš šios ataskaitos. Šio veiksmo atšaukti negalima."
+
+msgid "Permanent deletion"
+msgstr "Nuolatinis ištrynimas"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Sujungimas jau visam laikui ištrina sujungtas paskyras. Naudotojų sąrašą naudokite tik tada, jei norite papildomas paskyras ištrinti rankiniu būdu."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Keičiate numatytojo vaizdinio temos „chamilo“ logotipus. Apsvarstykite galimybę sukurti/naudoti pasirinktinę vaizdinę temą, kad neperrašytumėte numatytųjų."
+
+msgid "This exercise has no questions."
+msgstr "Šiame pratime nėra klausimų."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Kaip rodyti grįžtamąjį ryšį/komentarą kiekvienam klausimui? Ši parinktis nustato, kaip tai bus rodoma mokiniui atliekant testą."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Šios programos gali pasiekti Chamilo jūsų vardu, naudodamos esamas paskyros teises ir nieko daugiau. Atšaukite tas, kurių nebenaudojate arba nepažįstate."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Paaiškinkite, kodėl norite atšaukti teisinį sutikimą, kad galėtume tinkamai apdoroti jūsų prašymą"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Naudokite šį asmeninį raktą, kad nuotolinį MCP klientą prijungtumėte prie Chamilo su savo paskyra ir teisėmis."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Visas raktas rodomas tik vieną kartą. Saugokite jį saugiai. Sugeneravus naują raktą, ankstesnis iš karto tampa negaliojantis."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Raktas autentifikuoja klientą kaip jūsų Chamilo paskyrą. Jis nesuteikia teisių, kurių jūsų paskyra jau neturi."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Rodyti naudojimo sąlygų tekstą registracijos puslapyje ir reikalauti, kad lankytojas sutiktų su sąlygomis, kad galėtų registruotis"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Naudojimo sąlygų turinys bus siunčiamas DI kalbos modeliui. Prieš išsaugodami peržiūrėkite siūlomą vertimą."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Tikslinės kalbos išsaugota versija jau egzistuoja. Išsaugojus šį pasiūlymą bus sukurta nauja versija."
+
+msgid "Acquired"
+msgstr "Įgyta"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Rekomenduojamas kurso paveikslėlis: 1600 × 900 px (16:9). Ryškiam rodymui didesniuose ar didelio tankio ekranuose naudokite bent 1280 × 720 px."
+
+msgid "Courses of the selected URL"
+msgstr "Pasirinkto URL kursai"
+
+msgid "Course categories in selected URL"
+msgstr "Pasirinkto URL kursų kategorijos"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Jūsų paskyra aktyvi – dabar galite prisijungti ir peržiūrėti kursus."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Pirmiausia atsisiųskite pataisymus <a href='%s'> čia </a>.\nTada išpakuokite failą ir redaguokite failus kaip norite, nekeisdami failų pavadinimų.\nTada sukurkite zip failą su tais pakeistais failais ir įkelkite jį šia forma."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Mokinių pridėjimas iš sesijos %s į sesiją %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Rodyti visus bandymus pagal pratimą"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Ši operacija viršytų leistiną naudotojų limitą pasirinktame kurse."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Kai kurių prenumeratų nepavyko įvykdyti, nes pasiektas leistinas naudotojų limitas paveiktame kurse. Paveikti naudotojai/kursai: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Šis registras išvardija žinomus ataskaitų puslapius, jų kategoriją, kanoninį URL, senąjį URL ir numatytą vaidmenų auditoriją. Kanoniniai URL nukreipia į dabartinę ataskaitos įgyvendinimą ir taiko dokumentuotą ataskaitų vaidmenų matricą."
+
+msgid "E-mail notification subscription"
+msgstr "El. pašto pranešimų prenumerata"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Ši operacija viršytų administratorių nustatytą %s naudotojų kurse limitą. Prenumerata atšaukta."
+
+msgid "Language the document is in"
+msgstr "Dokumento kalba"
+
+msgid "There is no session still"
+msgstr "Dar nėra sesijos"
+
+msgid "Origin courses from session"
+msgstr "Pradiniai kursai iš sesijos"
+
+msgid "Destination courses from session"
+msgstr "Paskirties kursai iš sesijos"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Viešas priėjimas iš portalo titulinio netgi neprisijungus prie sistemos"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Sugeneruokite %d žodyno terminus kursui „%s“, kiekvieną terminą atskiroje eilutėje, jo apibrėžimą kitoje eilutėje ir tuščią eilutę tarp terminų. Nepridėkite jokio kito formatavimo pavadinimui ar apibrėžimui."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Tai trumpas kurso „%s“ aprašymas."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Naudojate Chamilo Windows platformoje. Dokumentų konvertavimo pagalbininkai nėra prieinami viso teksto indeksavimui."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Testo automatinio paleidimo nustatymas ĮJUNGTAS. Studentai bus nukreipti į testų sąrašą."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Testo automatinio paleidimo nustatymas ĮJUNGTAS. Studentai bus nukreipti į konkretų testą."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Šio kurso prenumeratos limitas pasiektas (%current%\/%limit%)."
+
+msgid "Count course by language"
+msgstr "Kursų skaičius pagal kalbą"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Naudotojai, kurių paskutinė prieiga senesnė nei pasirinkta data."
 

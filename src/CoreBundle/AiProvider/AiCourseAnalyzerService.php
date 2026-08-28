@@ -685,74 +685,95 @@ final class AiCourseAnalyzerService
     /**
      * @param array<string, string|int> $parameters
      */
-    private function buildLegacyCourseUrl(string $path, Course $course, ?Session $session, array $parameters = []): string
+    private function buildModernCourseUrl(string $path, Course $course, ?Session $session, array $parameters = []): string
     {
         $baseParameters = [
             'cid' => (int) $course->getId(),
             'sid' => $session instanceof Session ? (int) $session->getId() : 0,
             'gid' => 0,
-            'gradebook' => 0,
-            'origin' => '',
         ];
 
         return $path.'?'.http_build_query(array_merge($baseParameters, $parameters));
     }
 
-    private function buildLearningPathEditUrl(CLp $learningPath, Course $course, ?Session $session): string
-    {
-        return $this->buildLegacyCourseUrl('/main/lp/lp_controller.php', $course, $session, [
-            'action' => 'admin_view',
-            'lp_id' => (int) $learningPath->getIid(),
-            'isStudentView' => 'false',
-        ]);
-    }
-
-    private function buildLearningPathItemEditUrl(CLp $learningPath, CLpItem $item, Course $course, ?Session $session): string
-    {
-        return $this->buildLegacyCourseUrl('/main/lp/lp_controller.php', $course, $session, [
-            'action' => 'edit_item',
-            'view' => 'build',
-            'id' => (int) $item->getIid(),
-            'lp_id' => (int) $learningPath->getIid(),
-            'path_item' => $item->getRef(),
-        ]);
-    }
-
-    private function buildDocumentEditUrl(CDocument $document, Course $course, ?Session $session): string
+    private function getCourseResourceNodeId(Course $course): ?int
     {
         $courseResourceNode = $course->getResourceNode();
-        if (!$courseResourceNode instanceof ResourceNode || null === $courseResourceNode->getId()) {
-            return $this->buildLegacyCourseUrl('/main/document/document.php', $course, $session);
+        if (!$courseResourceNode instanceof ResourceNode) {
+            return null;
         }
 
-        $query = [
-            'cid' => (int) $course->getId(),
-            'sid' => $session instanceof Session ? (int) $session->getId() : 0,
-            'id' => '/api/documents/'.(int) $document->getIid(),
-            'filetype' => $document->getFiletype(),
-        ];
+        $resourceNodeId = (int) ($courseResourceNode->getId() ?? 0);
 
-        return '/resources/document/'.(int) $courseResourceNode->getId().'/edit_file?'.http_build_query($query);
+        return $resourceNodeId > 0 ? $resourceNodeId : null;
     }
 
-    private function buildExerciseEditUrl(CQuiz $quiz, Course $course, ?Session $session): string
+    private function buildLearningPathEditUrl(CLp $learningPath, Course $course, ?Session $session): ?string
     {
-        $courseResourceNode = $course->getResourceNode();
-        if (!$courseResourceNode instanceof ResourceNode || null === $courseResourceNode->getId()) {
-            return $this->buildLegacyCourseUrl('/main/exercise/exercise_admin.php', $course, $session, [
-                'exerciseId' => (int) $quiz->getIid(),
-            ]);
+        $courseResourceNodeId = $this->getCourseResourceNodeId($course);
+        if (null === $courseResourceNodeId) {
+            return null;
         }
 
-        $query = [
-            'cid' => (int) $course->getId(),
-            'sid' => $session instanceof Session ? (int) $session->getId() : 0,
-            'gid' => 0,
-            'gradebook' => 0,
-            'origin' => '',
-        ];
+        return $this->buildModernCourseUrl(
+            '/resources/lp/'.$courseResourceNodeId.'/'.(int) $learningPath->getIid().'/builder',
+            $course,
+            $session,
+        );
+    }
 
-        return '/resources/exercise/'.(int) $courseResourceNode->getId().'/'.(int) $quiz->getIid().'/edit?'.http_build_query($query);
+    private function buildLearningPathItemEditUrl(CLp $learningPath, CLpItem $item, Course $course, ?Session $session): ?string
+    {
+        $courseResourceNodeId = $this->getCourseResourceNodeId($course);
+        if (null === $courseResourceNodeId) {
+            return null;
+        }
+
+        return $this->buildModernCourseUrl(
+            '/resources/lp/'.$courseResourceNodeId.'/'.(int) $learningPath->getIid().'/builder',
+            $course,
+            $session,
+            [
+                'item_id' => (int) $item->getIid(),
+                'panel' => 'edit',
+            ],
+        );
+    }
+
+    private function buildDocumentEditUrl(CDocument $document, Course $course, ?Session $session): ?string
+    {
+        $courseResourceNodeId = $this->getCourseResourceNodeId($course);
+        if (null === $courseResourceNodeId) {
+            return null;
+        }
+
+        return $this->buildModernCourseUrl(
+            '/resources/document/'.$courseResourceNodeId.'/edit_file',
+            $course,
+            $session,
+            [
+                'id' => '/api/documents/'.(int) $document->getIid(),
+                'filetype' => $document->getFiletype(),
+            ],
+        );
+    }
+
+    private function buildExerciseEditUrl(CQuiz $quiz, Course $course, ?Session $session): ?string
+    {
+        $courseResourceNodeId = $this->getCourseResourceNodeId($course);
+        if (null === $courseResourceNodeId) {
+            return null;
+        }
+
+        return $this->buildModernCourseUrl(
+            '/resources/exercise/'.$courseResourceNodeId.'/'.(int) $quiz->getIid().'/edit',
+            $course,
+            $session,
+            [
+                'gradebook' => 0,
+                'origin' => '',
+            ],
+        );
     }
 
     /**

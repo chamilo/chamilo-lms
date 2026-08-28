@@ -284,7 +284,7 @@ jobs:
                     yarn test:playwright || echo "::warning::playwright exited non-zero — deferring to the result check below"
                     node tests/playwright/scripts/check-results.mjs \
                       --report var/test-results/playwright/results.json \
-                      --min-tests 439 \
+                      --min-tests 440 \
                       --label "main batch"
 
             # MUST come before the SpecialCase1 step below, not at the end of

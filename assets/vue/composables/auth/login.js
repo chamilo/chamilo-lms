@@ -406,10 +406,15 @@ export function useLogin() {
     const safeRedirect = rawRedirect ? normalizeRedirectUrl(rawRedirect) : null
 
     if (safeRedirect) {
-      await router.push(safeRedirect)
-    } else {
-      await router.replace({ name: "Home" })
+      // The login redirect can target a server-side Symfony route (notably
+      // /oauth/authorize) or a legacy PHP page. Force a real HTTP navigation so
+      // Vue Router cannot swallow the redirect as an unmatched SPA route.
+      window.location.assign(safeRedirect)
+
+      return
     }
+
+    await router.replace({ name: "Home" })
   }
 
   return {

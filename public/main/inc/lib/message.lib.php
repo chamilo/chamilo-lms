@@ -810,7 +810,7 @@ class MessageManager
                 if ($topic['send_date'] != $topic['update_date']) {
                     if (!empty($topic['update_date'])) {
                         $date .= '<i class="fa fa-calendar"></i> '.get_lang(
-                                'LastUpdate'
+                                'Last update'
                             ).' '.Display::dateToStringAgoAndLongDate($topic['update_date']);
                     }
                 } else {

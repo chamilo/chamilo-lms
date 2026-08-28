@@ -7045,7 +7045,7 @@ class SessionManager
                             $messages[] = Display::return_message(
                                 sprintf(
                                     get_lang(
-                                        'AddingStudentsFromSessionXToSessionY'
+                                        'Adding students from session %s to session %s'
                                     ),
                                     $sessionInfo['title'],
                                     $sessionDestinationInfo['title']

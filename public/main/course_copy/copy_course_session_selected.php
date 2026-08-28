@@ -73,11 +73,11 @@ function make_select_session_list($name, $sessions, $attr = [])
 
     if (0 == count($sessions)) {
         $output .= '<option value = "0">'.get_lang(
-                'ThereIsNotStillASession'
+                'There is no session still'
             ).'</option>';
     } else {
         $output .= '<option value = "0">'.get_lang(
-                'SelectASession'
+                'Select a session'
             ).'</option>';
     }
 
@@ -133,7 +133,7 @@ function displayForm()
 
     // Source
     $html .= '<tr><td width="15%"><b>'.get_lang(
-            'OriginCoursesFromSession'
+            'Origin courses from session'
         ).':</b></td>';
     $html .= '<td width="10%" align="left">'.api_get_session_name(
             $sessionId
@@ -143,17 +143,17 @@ function displayForm()
 
     // Destination
     $html .= '<tr><td width="15%"><b>'.get_lang(
-            'DestinationCoursesFromSession'
+            'Destination courses from session'
         ).':</b></td>';
     $html .= '<td width="10%" align="left"><div id="ajax_sessions_list_destination">';
     $html .= '<select name="sessions_list_destination" onchange="javascript: xajax_searchCourses(this.value,\'destination\');">';
     if (empty($sessions)) {
         $html .= '<option value = "0">'.get_lang(
-                'ThereIsNotStillASession'
+                'There is no session still'
             ).'</option>';
     } else {
         $html .= '<option value = "0">'.get_lang(
-                'SelectASession'
+                'Select a session'
             ).'</option>';
         foreach ($sessions as $session) {
             if ($session['id'] == $sessionId) {

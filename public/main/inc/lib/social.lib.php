@@ -1208,7 +1208,7 @@ class SocialManager extends UserManager
         );
 
         $socialWallPlaceholder = isset($_GET['u']) ? get_lang('Write something on your friend\'s wall') : get_lang(
-            'Social wallWhatAreYouThinkingAbout'
+            'What are you thinking about?'
         );
 
         $form->addTextarea(

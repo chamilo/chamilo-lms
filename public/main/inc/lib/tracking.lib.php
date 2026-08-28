@@ -992,7 +992,7 @@ class Tracking
                                             null,
                                             ICON_SIZE_SMALL,
                                             get_lang(
-                                                'Show all attemptsByExercise'
+                                                'Show all attempts by exercise'
                                             )
                                         ),
                                         api_get_self().'?action=stats&extend_attempt=1'.$my_url_suffix.'&sid='.$sessionId.'&lp_item_id='.$my_id.'#'.$linkId,

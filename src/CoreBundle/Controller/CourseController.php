@@ -1918,7 +1918,7 @@ class CourseController extends ToolBaseController
             if ($allowAutoLaunchForCourseAdmins) {
                 if (empty($autoLaunchWarning)) {
                     $autoLaunchWarning = get_lang(
-                        'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList'
+                        'The test auto-launch setting is ON. Students will be redirected to the test list.'
                     );
                 }
             } else {
@@ -1935,7 +1935,7 @@ class CourseController extends ToolBaseController
             if ($allowAutoLaunchForCourseAdmins) {
                 if (empty($autoLaunchWarning)) {
                     $autoLaunchWarning = get_lang(
-                        'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'
+                        'The test auto-launch setting is ON. Students will be redirected to a specific test.'
                     );
                 }
             } else {

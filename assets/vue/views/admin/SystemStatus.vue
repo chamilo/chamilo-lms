@@ -42,7 +42,7 @@
                 class="truncate text-sm font-semibold"
                 :class="section.key === currentSection ? 'text-primary' : 'text-gray-90'"
               >
-                {{ section.label }}
+                {{ t(section.label) }}
               </h3>
               <span
                 v-if="section.key === currentSection"
@@ -52,7 +52,7 @@
               </span>
             </div>
             <p class="mt-0.5 line-clamp-2 text-xs text-gray-50">
-              {{ section.info }}
+              {{ t(section.info) }}
             </p>
           </div>
         </div>
@@ -890,7 +890,7 @@ let wsRefreshTimer = null
 const activeSectionInfo = computed(() => {
   const match = sections.value.find((s) => s.key === currentSection.value)
 
-  return match?.info || ""
+  return match?.info ? t(match.info) : ""
 })
 
 const opcacheMemoryBar = computed(() => {

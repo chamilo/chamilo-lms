@@ -220,6 +220,9 @@ sort($jsonFiles);
 $grandFixed = 0;
 $grandChanged = 0;
 $grandFilesTouched = 0;
+$processedLangs = 0;
+/** @var array<string, list<string>> $leftEnglishByKey key => isos still using the English value */
+$leftEnglishByKey = [];
 
 printf("Mode: %s\n\n", $apply ? 'APPLY (writing files)' : 'DRY-RUN (no files written)');
 printf("%-10s %8s %8s %8s %8s %8s\n", 'iso', 'fixed', 'changed', 'left-en', 'po-miss', 'orphans');
@@ -241,6 +244,7 @@ foreach ($jsonFiles as $jsonFile) {
         continue;
     }
 
+    $processedLangs++;
     $po = parsePo($poFile);
     $existing = json_decode((string) file_get_contents($jsonFile), true);
     if (!\is_array($existing)) {
@@ -268,6 +272,7 @@ foreach ($jsonFiles as $jsonFile) {
             }
             if ($hadKey && $oldVal === $key) {
                 $leftEnglish++;
+                $leftEnglishByKey[$key][] = $iso;
             }
 
             continue;
@@ -303,6 +308,21 @@ foreach ($jsonFiles as $jsonFile) {
 printf("%s\n", str_repeat('-', 60));
 printf("Totals: fixed=%d changed=%d%s\n", $grandFixed, $grandChanged, $apply ? " filesWritten={$grandFilesTouched}" : '');
 if (!$apply) {
+    if ([] !== $leftEnglishByKey) {
+        ksort($leftEnglishByKey, \SORT_NATURAL | \SORT_FLAG_CASE);
+        printf(
+            "\nTerms left in English (%d unique; no real .po translation, JSON still the English key):\n",
+            \count($leftEnglishByKey)
+        );
+        foreach ($leftEnglishByKey as $term => $isos) {
+            $suffix = '';
+            if ($processedLangs > 1 && \count($isos) < $processedLangs) {
+                $suffix = '  ['.implode(', ', $isos).']';
+            }
+            echo '  '.$term.$suffix."\n";
+        }
+    }
+
     echo "\nThis was a DRY-RUN. Re-run with --apply to write the changes.\n";
     echo "After applying, do NOT run chamilo:update_vue_translations without first\n";
     echo "running 'php bin/console cache:clear', or it will overwrite these fixes.\n";

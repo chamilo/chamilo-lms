@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -9264,6 +9264,15 @@ msgstr "Ripoti ya muda kwa kipindi %s"
 msgid "Error"
 msgstr "Hitilafu"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Mtumiaji aliundwa, lakini moja ya sehemu za ziada za wasifu haikuweza kuhifadhiwa."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Mtumiaji alisasishwa, lakini moja ya sehemu za ziada za wasifu haikuweza kuhifadhiwa."
+
+msgid "One or more fields contain invalid values."
+msgstr "Sehemu moja au zaidi zina thamani batili."
+
 msgid "Anonymous"
 msgstr "Isiyojulikana"
 
@@ -14440,46 +14449,46 @@ msgid "Compose"
 msgstr "Andika"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Chungwa la mtoto"
 
 msgid "Blue lagoon"
-msgstr "Blue lagoon"
+msgstr "Ziwa la bluu"
 
 msgid "Cool blue"
-msgstr "Cool blue"
+msgstr "Bluu baridi"
 
 msgid "Corporate"
 msgstr "Shirika"
 
 msgid "Cosmic campus"
-msgstr "Cosmic campus"
+msgstr "Kampasi ya angani"
 
 msgid "Delicious Bordeaux"
-msgstr "Delicious Bordeaux"
+msgstr "Bordeaux tamu"
 
 msgid "Empire green"
-msgstr "Empire green"
+msgstr "Kijani cha ufalme"
 
 msgid "Fruity orange"
-msgstr "Fruity orange"
+msgstr "Chungwa la matunda"
 
 msgid "Medical"
 msgstr "Tiba"
 
 msgid "Royal purple"
-msgstr "Royal purple"
+msgstr "Zambarau ya kifalme"
 
 msgid "Silver line"
-msgstr "Silver line"
+msgstr "Mstari wa fedha"
 
 msgid "Sober brown"
-msgstr "Sober brown"
+msgstr "Kahawia tulivu"
 
 msgid "Steel grey"
-msgstr "Steel grey"
+msgstr "Kijivu cha chuma"
 
 msgid "Tasty olive"
-msgstr "Tasty olive"
+msgstr "Zeituni tamu"
 
 msgid "In this report you see the results of all questions"
 msgstr "Katika ripoti hii unaona matokeo ya maswali yote"
@@ -14497,7 +14506,7 @@ msgid "dari"
 msgstr "dari"
 
 msgid "dutch corporate"
-msgstr "dutch corporate"
+msgstr "kampuni ya Kiholanzi"
 
 msgid "english for organisations"
 msgstr "kiingereza kwa mashirika"
@@ -14704,10 +14713,10 @@ msgid "Chamilo extensions"
 msgstr "Upanuzi wa Chamilo"
 
 msgid "Chamilo Green"
-msgstr "Chamilo Green"
+msgstr "Chamilo Kijani"
 
 msgid "Chamilo red"
-msgstr "Chamilo red"
+msgstr "Chamilo nyekundu"
 
 msgid "Number of messages sent"
 msgstr "Idadi ya ujumbe uliotumwa"
@@ -15302,6 +15311,30 @@ msgstr "Muda uliotumika wiki iliyopita"
 
 msgid "System status"
 msgstr "Hali ya mfumo"
+
+msgid "Courses space"
+msgstr "Nafasi ya kozi"
+
+msgid "Database server configuration and metadata"
+msgstr "Usanidi wa seva ya hifadhidata na metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Matumizi ya diski kwa kila kozi dhidi ya kiasi cha diski"
+
+msgid "Information about your webserver configuration"
+msgstr "Maelezo kuhusu usanidi wa seva yako ya wavuti"
+
+msgid "Paths"
+msgstr "Njia"
+
+msgid "State of Chamilo requirements"
+msgstr "Hali ya mahitaji ya Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Hali ya mipangilio ya PHP kwenye seva"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path() constants zilizotatuliwa kwenye portal hii"
 
 msgid "Is writable"
 msgstr "Inaweza kuandikwa"
@@ -20669,6 +20702,9 @@ msgstr "Kwenye gurura ya ustadi, inaonyesha jina la ustadi ikiwa lina nambari fu
 
 msgid "Created by"
 msgstr "Iliyoundwa na"
+
+msgid "Created by %s on %s"
+msgstr "Imeundwa na %s mnamo %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Ficha makocha mkuu katika dropbox"
@@ -31872,6 +31908,9 @@ msgstr "Andika kitu kwa %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Inapendekezwa: SVG. Upana unaopendekezwa wa PNG: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Upana unaopendekezwa wa PNG: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Pakia nembo PNG kwa barua pepe (~%spx upana)"
 
@@ -31907,6 +31946,9 @@ msgstr "Bonyeza kuingiza"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Inapendekezwa: SVG. PNG saizi kubwa zaidi: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Ukubwa wa juu wa PNG: %spx."
 
 msgid "View badge"
 msgstr "Tazama badge"
@@ -37696,10 +37738,10 @@ msgid "Do you want to continue your session?"
 msgstr "Je, ungependa kuendelea na kipindi chako?"
 
 msgid "Your session details have been lost, please login again."
-msgstr ""
+msgstr "Maelezo ya kipindi chako yamepotea, tafadhali ingia tena."
 
 msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
-msgstr ""
+msgstr "Ufikiaji wa rasilimali hii umekataliwa. Inaonekana huna ruhusa zinazohitajika kuifikia."
 
 msgid "Stay connected"
 msgstr "Endelea kuunganishwa"
@@ -38057,6 +38099,9 @@ msgstr "Inamaliza"
 
 msgid "Draft saved"
 msgstr "Rasimu imehifadhiwa"
+
+msgid "Save as draft"
+msgstr "Hifadhi kama rasimu"
 
 msgid "Statement"
 msgstr "Taarifa"
@@ -38935,19 +38980,19 @@ msgid "No users"
 msgstr "Hakuna watumiaji"
 
 msgid "Calculation mode"
-msgstr "Calculation mode"
+msgstr "Hali ya hesabu"
 
 msgid "Weighted average"
-msgstr "Weighted average"
+msgstr "Wastani uliopimwa"
 
 msgid "Points sum"
-msgstr "Points sum"
+msgstr "Jumla ya alama"
 
 msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
-msgstr "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Wastani uliopimwa hurekebisha kwa jumla ya uzito; jumla ya alama inachukulia kila uzito kama alama za juu na kuziongeza bila kurekebisha."
 
 msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
-msgstr "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Uzito wa kila kipengee unachukuliwa kama alama zake za juu; daraja ni jumla ya alama, bila kurekebisha."
 
 msgid "The grade is the weighted average of items, normalized by the sum of weights."
 msgstr "Alama ni wastani wa uzito wa vipengee, uliorekebishwa kulingana na jumla ya uzito."
@@ -39463,20 +39508,281 @@ msgid "This invitation link is invalid or has expired."
 msgstr "Kiungo hiki cha mwaliko si halali au kimekwisha muda wake."
 
 msgid "This invitation was sent to a different user. Please log in with the invited account."
-msgstr ""
+msgstr "Mwaliko huu ulitumwa kwa mtumiaji mwingine. Tafadhali ingia kwa akaunti iliyoalikwa."
 
 msgid "The invitation could not be accepted."
-msgstr ""
+msgstr "Mwaliko haukuweza kukubaliwa."
 
 msgid "You have been subscribed successfully."
-msgstr ""
+msgstr "Umejiandikisha kwa mafanikio."
 
 msgid "This email address cannot be invited."
-msgstr ""
+msgstr "Anwani hii ya barua pepe haiwezi kualikwa."
 
 msgid "This user is already subscribed to the session."
-msgstr ""
+msgstr "Mtumiaji huyu tayari amejiandikisha kwenye kipindi."
 
 msgid "This user is already subscribed to the course."
-msgstr ""
+msgstr "Mtumiaji huyu tayari amejiandikisha kwenye kozi."
+
+msgid "Multi URLs"
+msgstr "URL nyingi"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Vipengee kama watumiaji na kozi vinaweza kuwa hai katika URL zaidi ya moja kwa wakati mmoja, kwa hivyo jumla ya thamani zilizo hapa chini haitalingana na jumla."
+
+msgid "User directory"
+msgstr "Orodha ya watumiaji"
+
+msgid "Course directory"
+msgstr "Orodha ya kozi"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "Maelezo ya mtumiaji"
+
+msgid "Course details"
+msgstr "Maelezo ya kozi"
+
+msgid "View details"
+msgstr "Tazama maelezo"
+
+msgid "Average progress"
+msgstr "Wastani wa maendeleo"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Usajili wa moja kwa moja unahusiana na kozi kwa ujumla, si URL mahususi, kwa hivyo takwimu zile zile za 'Moja kwa moja' zinarudiwa hapa chini kwa kila URL ambayo kozi hii imeunganishwa nayo. Vipindi ndiyo njia inayokusudiwa kushiriki kozi katika URL zenye vipimo vinavyotofautiana kwa kila URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Kuingia (URL zote pamoja)"
+
+msgid "Unique logins"
+msgstr "Kuingia pekee"
+
+msgid "Parent URL"
+msgstr "URL mzazi"
+
+msgid "Logins (your URLs)"
+msgstr "Kuingia (URL zako)"
+
+msgid "The picture could not be uploaded"
+msgstr "Picha haikuweza kupakiwa"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Aina hii ya uga bado haijaungwa mkono kikamilifu — thamani ghafi tu."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Kozi hii inakaribia kikomo cha usajili wa watumiaji (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Nafasi imepunguzwa kupitia sifa za kozi yako. Ili kuongeza kikomo chako, pata"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Usajili wa watumiaji umepunguzwa kupitia sifa za kozi yako. Ili kuongeza kikomo chako, pata"
+
+msgid "pro plan"
+msgstr "mpango wa pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "na uingize nakala rudufu ya kozi hii kupitia Matengenezo ya Kozi kwenye kozi yako mpya iliyolipiwa, au fungua tiketi ili kozi yako ibadilishwe kuwa kozi ya pro baada ya kununua mpango huu."
+
+msgid "Tired of writing questions?"
+msgstr "Umechoka kuandika maswali?"
+
+msgid "Upgrade your plan"
+msgstr "Boresha mpango wako"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "hadi mpango wa pro ili upate msaada kutoka kwa AI kutengeneza maswali bora kwa ajili yako."
+
+msgid "Student Success AI Coach"
+msgstr "Kocha wa AI wa Mafanikio ya Mwanafunzi"
+
+msgid "No AI text provider is configured."
+msgstr "Hakuna mtoa huduma wa maandishi ya AI aliyewekwa."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Maelekezo ya ziada kwa kocha wa AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Mfano: Mwanafunzi huyu ana ugumu kudumisha umakini. Pendekeza shughuli fupi na ukaguzi wa mara nyingi wa uelewa."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Weka dirisha hili wazi Chamilo inapoandaa pendekezo."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Pendekezo pia lilihifadhiwa kwenye kisanduku cha barua cha Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Pendekezo lilitengenezwa na kuhifadhiwa kwa mwanafunzi huyu, lakini nakala ya kisanduku cha barua haikuweza kuundwa."
+
+msgid "Student success recommendation"
+msgstr "Pendekezo la mafanikio ya mwanafunzi"
+
+msgid "Generated"
+msgstr "Imetengenezwa"
+
+msgid "Priority actions"
+msgstr "Hatua za kipaumbele"
+
+msgid "Evidence"
+msgstr "Ushahidi"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Kipengele hiki kitachambua maudhui ya kozi hii na kutuma taarifa za tabia ya kujifunza kwa modeli ya AI iliyowekwa. Ingawa haitumi data ya kibinafsi inayotambulika moja kwa moja kwa modeli ya AI, baadhi ya data inayotumwa inaweza kutoa taarifa zinazoweza kutambulisha mtumiaji kwa njia isiyo ya moja kwa moja. Ukiwa na shaka, daima wasiliana na mtu wako wa marejeleo wa AI kabla ya kutumia kipengele hiki."
+
+msgid "Additional activities"
+msgstr "Shughuli za ziada"
+
+msgid "Rhythm"
+msgstr "Mdundo"
+
+msgid "Learning methodologies"
+msgstr "Mbinu za kujifunza"
+
+msgid "Other recommendations"
+msgstr "Mapendekezo mengine"
+
+msgid "Analyzing course..."
+msgstr "Inachambua kozi..."
+
+msgid "Analyzing student's learning..."
+msgstr "Inachambua kujifunza kwa mwanafunzi..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Kwa kukubali mwaliko huu, utaunganishwa na mtumiaji anayeomba kwa njia itakayofanya baadhi au data yote ya wasifu wako ipatikane kwa kusomwa na mtumiaji anayeomba. Tafadhali hakikisha hutoa mengi kupita kiasi kwa kukagua wasifu wako na watumiaji unaowaamini tayari."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Ruhusa ya kutumia maikrofoni haijawashwa, tafadhali iwashe kwenye kivinjari chako ili kurekodi sauti"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Toleo hili la Chamilo linakuja na kozi moja (au zaidi) ya lugha nyingi iliyosakinishwa awali. Jisikie huru kuzikagua katika orodha ya kozi na uamue kama zinapaswa kuwa za umma au la."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Kwa sasa huna ufikiaji wa URL yoyote. Tafadhali muombe msimamizi akupe ufikiaji wa URL unayohusiana nayo."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Ikiwa mtoa huduma wa AI aliyechaguliwa si huduma huru, maudhui ya hati yaliyochaguliwa yanaweza kutumwa kwa huduma ya nje. Usiendelee na taarifa za siri isipokuwa hii inaruhusiwa na shirika lako."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Bofya Unganisha kwenye akaunti inayopaswa kubaki. Mfumo utaunganisha akaunti zote nyingine katika kundi lile lile la nakala ndani yake. Akaunti zilizounganishwa zitafutwa kabisa na zitatoweka kutoka kwa ripoti hii. Kitendo hiki hakiwezi kutenduliwa."
+
+msgid "Permanent deletion"
+msgstr "Kufuta kabisa"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unganisha tayari hufuta kabisa akaunti zilizounganishwa. Tumia orodha ya Watumiaji tu ikiwa unataka kufuta akaunti za ziada kwa mkono."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Unabadilisha nembo za mandhari chaguomsingi ya kuona “chamilo”. Fikiria kuunda/kutumia mandhari maalum ya kuona ili kuepuka kubatilisha chaguomsingi."
+
+msgid "This exercise has no questions."
+msgstr "Zoezi hili halina maswali."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Tufanyeje kuonyesha maoni/maelezo kwa kila swali? Chaguo hili linafafanua jinsi litakavyoonyeshwa kwa mwanafunzi anapofanya jaribio."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Programu hizi zinaweza kufikia Chamilo kama wewe, kwa kutumia ruhusa za akaunti yako iliyopo na si zaidi. Batilisha yoyote usiyotumia tena au usiyoitambua."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Tafadhali eleza kwa nini unataka kuomba kuondolewa kwa idhini yako ya kisheria, ili tuweze kushughulikia ombi lako ipasavyo"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Tumia ufunguo huu wa kibinafsi kuunganisha mteja wa MCP wa mbali na Chamilo kwa akaunti na ruhusa zako."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Ufunguo kamili huonyeshwa mara moja tu. Uhifadhi kwa usalama. Kuzalisha ufunguo mpya kunabatilisha mara moja ule wa awali."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Ufunguo unathibitisha mteja kama akaunti yako ya Chamilo. Hautoi ruhusa ambazo akaunti yako haina tayari."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Onyesha taarifa ya Masharti na Vigezo kwenye ukurasa wa usajili, mhimize mgeni kukubali Masharti na Vigezo ili kusajili"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Maudhui ya masharti na vigezo yatatumwa kwa modeli ya lugha ya AI. Kagua tafsiri iliyopendekezwa kabla ya kuihifadhi."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Toleo lililohifadhiwa tayari lipo kwa lugha lengwa. Kuhifadhi pendekezo hili kutaunda toleo jipya."
+
+msgid "Acquired"
+msgstr "Imepatikana"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Picha inayopendekezwa ya kozi: 1600 × 900 px (16:9). Tumia angalau 1280 × 720 px kwa onyesho kali kwenye skrini kubwa au zenye msongamano mkubwa."
+
+msgid "Courses of the selected URL"
+msgstr "Kozi za URL iliyochaguliwa"
+
+msgid "Course categories in selected URL"
+msgstr "Kategoria za kozi katika URL iliyochaguliwa"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Akaunti yako inatumika, unaweza kuingia na kuangalia kozi zako sasa."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Kwanza unapaswa kupakua marekebisho <a href='%s'> hapa </a>.\nBaada ya hapo unapaswa kufungua faili hiyo na kuhariri faili kama unavyotaka bila kubadilisha majina ya faili.\nKisha unda faili ya zip yenye faili hizo zilizobadilishwa na uipakie katika fomu hii."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Inaongeza wanafunzi kutoka kipindi %s hadi kipindi %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Onyesha majaribio yote kwa zoezi"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Operesheni hii ingezidi kikomo cha watumiaji kinachoruhusiwa kwa kozi iliyochaguliwa."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Baadhi ya usajili haukuweza kutekelezwa kwa sababu walifikia kikomo cha watumiaji kinachoruhusiwa kwa kozi husika. Watumiaji/Kozi walioathirika: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Rejesta hii inaorodhesha kurasa zinazojulikana za ripoti, kategoria yao, URL rasmi, URL ya zamani na hadhira inayotarajiwa ya jukumu. URL rasmi huelekeza kwenye utekelezaji wa sasa wa ripoti na kutekeleza matrixi ya majukumu ya ripoti iliyoandikwa."
+
+msgid "E-mail notification subscription"
+msgstr "Usajili wa arifa za barua pepe"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Operesheni hii ingezidi kikomo cha watumiaji %s kwa kila kozi kilichowekwa na wasimamizi. Usajili umeghairiwa."
+
+msgid "Language the document is in"
+msgstr "Lugha ambayo hati iko"
+
+msgid "There is no session still"
+msgstr "Bado hakuna kipindi"
+
+msgid "Origin courses from session"
+msgstr "Kozi za asili kutoka kipindi"
+
+msgid "Destination courses from session"
+msgstr "Kozi za marudio kutoka kipindi"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Ufikiaji wa umma (ufikiaji ulioruhusiwa kwa mwanachama yeyote wa kozi)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Zalisha maneno %d ya kamusi kwa kozi kuhusu '%s', kila neno kwenye mstari mmoja, pamoja na ufafanuzi wake kwenye mstari unaofuata na mstari mmoja tupu kati ya kila neno. Usiongeze umbizo lingine lolote kwa kichwa wala kwa ufafanuzi."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Hii ni maelezo mafupi ya kozi '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Unatumia Chamilo kwenye jukwaa la Windows. Visaidizi vya kubadilisha hati havipatikani kwa kuorodhesha maandishi kamili."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Mpangilio wa kuzindua jaribio kiotomatiki umewashwa. Wanafunzi wataelekezwa kwenye orodha ya majaribio."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Mpangilio wa kuzindua jaribio kiotomatiki umewashwa. Wanafunzi wataelekezwa kwenye jaribio mahususi."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Kikomo cha usajili wa kozi hii kimefikiwa (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Hesabu kozi kwa lugha"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Watumiaji ambao ufikiaji wao wa hivi karibuni ni wa zamani kuliko tarehe iliyochaguliwa."
 

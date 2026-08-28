@@ -2048,7 +2048,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:geen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octetstream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:oefening,,      simulation:simulatie,,      questionnaire:enquête,,      diagram:diagram,,      figure:figuur,,      graph:grafiek,,      index:index,,      slide:dia,,      table:tabel,,      narrative text:vertellende tekst,,      exam:examen,,      experiment:experiment,,      problem statement:probleemstelling,,      self assessment:zelftest,,      lecture:voordracht"
@@ -9310,6 +9310,15 @@ msgstr "Tijdrapport voor sessie %s"
 msgid "Error"
 msgstr "Fout"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "De gebruiker is aangemaakt, maar een van de extra profielvelden kon niet worden opgeslagen."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "De gebruiker is bijgewerkt, maar een van de extra profielvelden kon niet worden opgeslagen."
+
+msgid "One or more fields contain invalid values."
+msgstr "Een of meer velden bevatten ongeldige waarden."
+
 msgid "Anonymous"
 msgstr "Anoniem"
 
@@ -15353,6 +15362,30 @@ msgstr "gespendeerde tijd afgelopen week"
 msgid "System status"
 msgstr "Systeemstatus"
 
+msgid "Courses space"
+msgstr "Cursusruimte"
+
+msgid "Database server configuration and metadata"
+msgstr "Databaseserverconfiguratie en metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Schijfgebruik per cursus vs. schijfquota"
+
+msgid "Information about your webserver configuration"
+msgstr "Informatie over de configuratie van uw webserver"
+
+msgid "Paths"
+msgstr "Paden"
+
+msgid "State of Chamilo requirements"
+msgstr "Status van Chamilo-vereisten"
+
+msgid "State of PHP settings on the server"
+msgstr "Status van PHP-instellingen op de server"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path()-constanten opgelost op dit portaal"
+
 msgid "Is writable"
 msgstr "Is beschrijfbaar"
 
@@ -20870,7 +20903,7 @@ msgid "The default document visibility for all courses"
 msgstr "De standaard documentzichtbaarheid voor alle cursussen"
 
 msgid "HTMLPurifier in Wiki"
-msgstr "HTMLPurifier in Wiki"
+msgstr "HTMLPurifier in wiki"
 
 msgid "Enable HTML purifier in the wiki tool (will increase security but reduce style features)"
 msgstr ""
@@ -20997,7 +21030,7 @@ msgid "Thanks for your subscription"
 msgstr "Bedankt voor uw inschrijving"
 
 msgid "%s team."
-msgstr "%s team."
+msgstr "%s-team."
 
 msgid "You can start subscribing to courses entering to %s"
 msgstr "U kunt zich inschrijven voor cursussen door te gaan naar %s"
@@ -21151,6 +21184,9 @@ msgstr ""
 
 msgid "Created by"
 msgstr "Gemaakt door"
+
+msgid "Created by %s on %s"
+msgstr "Aangemaakt door %s op %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Verberg algemene coach in dropbox"
@@ -31083,10 +31119,10 @@ msgid "Value 3"
 msgstr "Waarde 3"
 
 msgid "Checkbox 1"
-msgstr "Checkbox 1"
+msgstr "Selectievakje 1"
 
 msgid "Checkbox 2"
-msgstr "Checkbox 2"
+msgstr "Selectievakje 2"
 
 msgid "Forms"
 msgstr "Formulieren"
@@ -32838,7 +32874,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (intern ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure-ID (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Organisatie-e-mail"
@@ -33573,7 +33609,7 @@ msgid "SCIM external ID"
 msgstr "SCIM externe ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "OAuth2-ID"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Accepteer de nieuwste versie van de algemene voorwaarden."
@@ -33956,6 +33992,9 @@ msgstr "Schrijf iets naar %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Voorkeur: SVG. Aanbevolen PNG-breedte: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG aanbevolen breedte: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "PNG-logo voor e-mails uploaden (~%spx breedte)"
 
@@ -33991,6 +34030,9 @@ msgstr "Klik om in te voegen"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Voorkeur: SVG. PNG max. grootte: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG max. grootte: %spx."
 
 msgid "View badge"
 msgstr "Badge bekijken"
@@ -34590,7 +34632,7 @@ msgid "Save to Documents"
 msgstr "Opslaan in Documenten"
 
 msgid "Document IRI"
-msgstr "Document IRI"
+msgstr "Document-IRI"
 
 msgid "Go to folder"
 msgstr "Naar map gaan"
@@ -35787,10 +35829,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "EntraID-ID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "EntraID-UID"
 
 msgid "Required fields"
 msgstr "Verplichte velden"
@@ -37575,7 +37617,7 @@ msgid "%s results"
 msgstr "%s resultaten"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Voorbeeld invulformulieractiviteit: bereken de body mass index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Leeftijd</strong></td>            <td width=\"75%\" style=\"\">[25] jaar</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Geslacht</strong></td>            <td style=\"\" text-align:=\"\">[M] (M of V)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Gewicht</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Lengte</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body mass index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = gewicht/lengte<sup>2</sup> (zie <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Verwijderd"
@@ -37815,31 +37857,31 @@ msgid "The gradebook evaluation could not be linked"
 msgstr "De cijferboekevaluatie kon niet worden gekoppeld"
 
 msgid "Survey questions"
-msgstr "Survey questions"
+msgstr "Enquêtevragen"
 
 msgid "Back to survey list"
-msgstr "Back to survey list"
+msgstr "Terug naar enquêtelijst"
 
 msgid "This survey already has answers. Question editing is disabled by configuration."
-msgstr "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Deze enquête heeft al antwoorden. Het bewerken van vragen is uitgeschakeld via de configuratie."
 
 msgid "Choose the type of question you want to add."
-msgstr "Choose the type of question you want to add."
+msgstr "Kies het type vraag dat u wilt toevoegen."
 
 msgid "The free text option is added automatically."
-msgstr "The free text option is added automatically."
+msgstr "De optie vrije tekst wordt automatisch toegevoegd."
 
 msgid "No questions found"
-msgstr "No questions found"
+msgstr "Geen vragen gevonden"
 
 msgid "Mandatory"
 msgstr "Mandatory"
 
 msgid "Unsupported question type"
-msgstr "Unsupported question type"
+msgstr "Niet-ondersteund vraagtype"
 
 msgid "You can use the tags {%s} and {%s} in the question."
-msgstr "You can use the tags {%s} and {%s} in the question."
+msgstr "U kunt de tags {%s} en {%s} in de vraag gebruiken."
 
 msgid "This question is shown conditionally while answering the survey."
 msgstr "Deze vraag wordt voorwaardelijk getoond tijdens het invullen van de enquête."
@@ -39780,10 +39822,10 @@ msgid "Do you want to continue your session?"
 msgstr "Wilt u uw sessie voortzetten?"
 
 msgid "Your session details have been lost, please login again."
-msgstr ""
+msgstr "Uw sessiegegevens zijn verloren gegaan, log opnieuw in."
 
 msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
-msgstr ""
+msgstr "Toegang tot deze bron is geweigerd. U lijkt niet over de benodigde rechten te beschikken."
 
 msgid "Stay connected"
 msgstr "Verbonden blijven"
@@ -40141,6 +40183,9 @@ msgstr "Afronden"
 
 msgid "Draft saved"
 msgstr "Concept opgeslagen"
+
+msgid "Save as draft"
+msgstr "Opslaan als concept"
 
 msgid "Statement"
 msgstr "Stelling"
@@ -41253,142 +41298,142 @@ msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /ser
 msgstr "Apache: activeer mod_status (ExtendedStatus On) en sta localhost toe op /server-status. Nginx: activeer stub_status op een alleen-localhost-locatie zoals /nginx_status of /stub_status."
 
 msgid "Grade percentage distribution"
-msgstr ""
+msgstr "Verdeling van cijferpercentages"
 
 msgid "Top learners"
-msgstr ""
+msgstr "Topcursisten"
 
 msgid "This progress combines learning path progress and the learner's average exercise result"
-msgstr ""
+msgstr "Deze voortgang combineert de voortgang van het leerpad en het gemiddelde oefenresultaat van de cursist"
 
 msgid "Additional profile fields"
-msgstr ""
+msgstr "Extra profielvelden"
 
 msgid "Visible columns"
-msgstr ""
+msgstr "Zichtbare kolommen"
 
 msgid "Learning path completion"
-msgstr ""
+msgstr "Voltooiing van het leerpad"
 
 msgid "Number of certificates"
-msgstr ""
+msgstr "Aantal certificaten"
 
 msgid "Could not export the report"
-msgstr ""
+msgstr "Het rapport kon niet worden geëxporteerd"
 
 msgid "Second learner"
-msgstr ""
+msgstr "Tweede cursist"
 
 msgid "Results by learner"
-msgstr ""
+msgstr "Resultaten per cursist"
 
 msgid "Use filters to narrow down questions."
-msgstr ""
+msgstr "Gebruik filters om vragen te verfijnen."
 
 msgid "Try adjusting your filters and search again."
-msgstr ""
+msgstr "Pas uw filters aan en zoek opnieuw."
 
 msgid "Results per page"
-msgstr ""
+msgstr "Resultaten per pagina"
 
 msgid "No answers"
-msgstr ""
+msgstr "Geen antwoorden"
 
 msgid "Tests using this question"
-msgstr ""
+msgstr "Toetsen die deze vraag gebruiken"
 
 msgid "Delete failed"
-msgstr ""
+msgstr "Verwijderen mislukt"
 
 msgid "PHP cache"
-msgstr ""
+msgstr "PHP-cache"
 
 msgid "Live OPcache and APCu diagnostics"
-msgstr ""
+msgstr "Live OPcache- en APCu-diagnostiek"
 
 msgid "Click to show OPcache and APCu diagnostics"
-msgstr ""
+msgstr "Klik om OPcache- en APCu-diagnostiek te tonen"
 
 msgid "Memory used"
-msgstr ""
+msgstr "Gebruikt geheugen"
 
 msgid "OPcache is installed but not enabled."
-msgstr ""
+msgstr "OPcache is geïnstalleerd maar niet ingeschakeld."
 
 msgid "OPcache extension is not available on this server."
-msgstr ""
+msgstr "De OPcache-extensie is niet beschikbaar op deze server."
 
 msgid "APCu is installed but not enabled."
-msgstr ""
+msgstr "APCu is geïnstalleerd maar niet ingeschakeld."
 
 msgid "APCu extension is not available on this server."
-msgstr ""
+msgstr "De APCu-extensie is niet beschikbaar op deze server."
 
 msgid "Constant"
-msgstr ""
+msgstr "Constante"
 
 msgid "Space used on disk (MB)"
-msgstr ""
+msgstr "Gebruikte schijfruimte (MB)"
 
 msgid "Set max course space (MB)"
-msgstr ""
+msgstr "Maximale cursusruimte instellen (MB)"
 
 msgid "Memory free"
-msgstr ""
+msgstr "Vrij geheugen"
 
 msgid "Memory wasted"
-msgstr ""
+msgstr "Verspild geheugen"
 
 msgid "Memory used %"
-msgstr ""
+msgstr "Gebruikt geheugen %"
 
 msgid "Cached scripts"
-msgstr ""
+msgstr "Gecachte scripts"
 
 msgid "Cached keys"
-msgstr ""
+msgstr "Gecachte sleutels"
 
 msgid "Misses"
-msgstr ""
+msgstr "Missers"
 
 msgid "Cache full"
-msgstr ""
+msgstr "Cache vol"
 
 msgid "OOM restarts"
-msgstr ""
+msgstr "OOM-herstarts"
 
 msgid "Hash restarts"
-msgstr ""
+msgstr "Hash-herstarts"
 
 msgid "Manual restarts"
-msgstr ""
+msgstr "Handmatige herstarts"
 
 msgid "Interned strings used"
-msgstr ""
+msgstr "Gebruikte interned strings"
 
 msgid "Interned strings free"
-msgstr ""
+msgstr "Vrije interned strings"
 
 msgid "Interned strings count"
-msgstr ""
+msgstr "Aantal interned strings"
 
 msgid "Memory available"
-msgstr ""
+msgstr "Beschikbaar geheugen"
 
 msgid "Memory size"
-msgstr ""
+msgstr "Geheugengrootte"
 
 msgid "Entries"
-msgstr ""
+msgstr "Items"
 
 msgid "Slots"
-msgstr ""
+msgstr "Slots"
 
 msgid "Expunges"
-msgstr ""
+msgstr "Verwijderingen"
 
 msgid "Cache start time"
-msgstr ""
+msgstr "Starttijd cache"
 
 msgid "Time zone"
 msgstr "Tijdzone"
@@ -41563,4 +41608,265 @@ msgstr "Deze gebruiker is al ingeschreven voor de sessie."
 
 msgid "This user is already subscribed to the course."
 msgstr "Deze gebruiker is al ingeschreven voor de cursus."
+
+msgid "Multi URLs"
+msgstr "Meerdere URL's"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entiteiten zoals gebruikers en cursussen kunnen tegelijkertijd actief zijn in meer dan één URL, dus de som van de onderstaande waarden komt niet overeen met het totaal."
+
+msgid "User directory"
+msgstr "Gebruikersoverzicht"
+
+msgid "Course directory"
+msgstr "Cursusoverzicht"
+
+msgid "URLs"
+msgstr "URL's"
+
+msgid "User details"
+msgstr "Gebruikersgegevens"
+
+msgid "Course details"
+msgstr "Cursusgegevens"
+
+msgid "View details"
+msgstr "Details bekijken"
+
+msgid "Average progress"
+msgstr "Gemiddelde voortgang"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Directe inschrijving hoort bij de cursus als geheel, niet bij een specifieke URL, dus dezelfde cijfers voor 'Direct' worden hieronder herhaald voor elke URL waaraan deze cursus is gekoppeld. Sessies zijn de bedoelde manier om een cursus over URL's te delen met statistieken die per URL daadwerkelijk verschillen."
+
+msgid "Logins (all URLs combined)"
+msgstr "Aanmeldingen (alle URL's samen)"
+
+msgid "Unique logins"
+msgstr "Unieke aanmeldingen"
+
+msgid "Parent URL"
+msgstr "Bovenliggende URL"
+
+msgid "Logins (your URLs)"
+msgstr "Aanmeldingen (uw URL's)"
+
+msgid "The picture could not be uploaded"
+msgstr "De afbeelding kon niet worden geüpload"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Dit veldtype wordt nog niet volledig ondersteund — alleen ruwe waarde."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Deze cursus nadert de limiet voor gebruikersinschrijvingen (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "De ruimte is beperkt via uw cursuseigenschappen. Om uw limiet te verhogen, neemt u een"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Gebruikersinschrijvingen zijn beperkt via uw cursuseigenschappen. Om uw limiet te verhogen, neemt u een"
+
+msgid "pro plan"
+msgstr "pro-abonnement"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "en importeer de back-up van deze cursus via Cursusonderhoud in uw nieuwe betaalde cursus, of open een ticket om uw cursus om te zetten naar een pro-cursus zodra u dit abonnement hebt aangeschaft."
+
+msgid "Tired of writing questions?"
+msgstr "Moe van het schrijven van vragen?"
+
+msgid "Upgrade your plan"
+msgstr "Upgrade uw abonnement"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "naar een pro-abonnement om hulp van een AI te krijgen bij het genereren van kwaliteitsvragen."
+
+msgid "Student Success AI Coach"
+msgstr "AI-coach voor studiesucces"
+
+msgid "No AI text provider is configured."
+msgstr "Er is geen AI-tekstprovider geconfigureerd."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Aanvullende instructies voor de AI-coach"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Voorbeeld: Deze leerling heeft moeite om de aandacht vast te houden. Stel kortere activiteiten voor en vaker controleer begrip."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Houd dit venster open terwijl Chamilo de aanbeveling voorbereidt."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "De aanbeveling is ook opgeslagen in uw Chamilo-inbox."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "De aanbeveling is gegenereerd en opgeslagen voor deze leerling, maar de kopie in de inbox kon niet worden aangemaakt."
+
+msgid "Student success recommendation"
+msgstr "Aanbeveling studiesucces"
+
+msgid "Generated"
+msgstr "Gegenereerd"
+
+msgid "Priority actions"
+msgstr "Prioritaire acties"
+
+msgid "Evidence"
+msgstr "Bewijs"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Deze functie analyseert de inhoud van deze cursus en stuurt informatie over leer gedrag naar het geconfigureerde AI-model. Hoewel er geen direct identificeerbare persoonsgegevens naar het AI-model worden gestuurd, kan een deel van de verzonden gegevens indirect identificeerbare informatie over de gebruiker bevatten. Bij twijfel altijd overleggen met uw AI-aanspreekpunt voordat u deze functie gebruikt."
+
+msgid "Additional activities"
+msgstr "Aanvullende activiteiten"
+
+msgid "Rhythm"
+msgstr "Ritme"
+
+msgid "Learning methodologies"
+msgstr "Leermethodieken"
+
+msgid "Other recommendations"
+msgstr "Overige aanbevelingen"
+
+msgid "Analyzing course..."
+msgstr "Cursus analyseren..."
+
+msgid "Analyzing student's learning..."
+msgstr "Leergedrag van de student analyseren..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Door deze uitnodiging te accepteren, wordt u gekoppeld aan de verzoekende gebruiker, waardoor sommige of alle gegevens van uw profiel leesbaar worden voor die gebruiker. Zorg dat u niet te veel deelt door uw profiel te controleren bij gebruikers die u al vertrouwt."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Toestemming voor de microfoon is niet ingeschakeld; schakel deze in uw browser in om audio op te nemen"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Deze versie van Chamilo wordt geleverd met één (of meer) vooraf geïnstalleerde meertalige cursus(sen). Bekijk ze gerust in de cursuslijst en bepaal of ze openbaar moeten zijn of niet."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "U hebt momenteel geen toegang tot een URL. Vraag de beheerder om u toegang te geven tot de URL waartoe u behoort."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Als de geselecteerde AI-provider geen soevereine dienst is, kan de geselecteerde documentinhoud naar een externe dienst worden verzonden. Ga niet verder met vertrouwelijke informatie tenzij dit door uw organisatie is toegestaan."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Klik op Samenvoegen bij het account dat moet blijven. Het systeem voegt alle andere accounts in dezelfde duplicaatgroep daarin samen. Samengevoegde accounts worden definitief verwijderd en verdwijnen uit dit rapport. Deze actie kan niet ongedaan worden gemaakt."
+
+msgid "Permanent deletion"
+msgstr "Definitieve verwijdering"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Samenvoegen verwijdert samengevoegde accounts al definitief. Gebruik de gebruikerslijst alleen als u extra accounts handmatig wilt verwijderen."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "U wijzigt logo’s voor het standaard visuele thema “chamilo”. Overweeg een aangepast visueel thema te maken/gebruiken om te voorkomen dat standaardwaarden worden overschreven."
+
+msgid "This exercise has no questions."
+msgstr "Deze oefening bevat geen vragen."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Hoe moeten we de feedback/opmerking voor elke vraag tonen? Deze optie bepaalt hoe dit aan de cursist wordt getoond tijdens de toets."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Deze toepassingen kunnen Chamilo gebruiken alsof u het zelf bent, met de bestaande rechten van uw account en niets meer. Trek de toegang in van toepassingen die u niet meer gebruikt of niet herkent."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Licht toe waarom u de intrekking van uw wettelijke toestemming wilt aanvragen, zodat we uw verzoek correct kunnen verwerken"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Gebruik deze persoonlijke sleutel om een externe MCP-client met uw eigen account en rechten op Chamilo aan te sluiten."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "De volledige sleutel wordt slechts één keer getoond. Bewaar hem veilig. Het genereren van een nieuwe sleutel maakt de vorige onmiddellijk ongeldig."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "De sleutel authenticeert de client als uw Chamilo-account. Hij verleent geen rechten die uw account nog niet heeft."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Toon een verklaring Algemene voorwaarden op de registratiepagina; de bezoeker moet de AV accepteren om zich te registreren"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "De inhoud van de algemene voorwaarden wordt naar een AI-taalmodel verzonden. Controleer de voorgestelde vertaling voordat u deze opslaat."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Er bestaat al een opgeslagen versie voor de doeltaal. Als u dit voorstel opslaat, wordt een nieuwe versie aangemaakt."
+
+msgid "Acquired"
+msgstr "Verworven"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Aanbevolen cursusafbeelding: 1600 × 900 px (16:9). Gebruik minstens 1280 × 720 px voor een scherpe weergave op grotere of hoge-dichtheidsschermen."
+
+msgid "Courses of the selected URL"
+msgstr "Cursussen van de geselecteerde URL"
+
+msgid "Course categories in selected URL"
+msgstr "Cursuscategorieën in geselecteerde URL"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Uw account is actief; u kunt nu inloggen en uw cursussen bekijken."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Eerst moet u de correcties <a href='%s'> hier </a> downloaden.\nDaarna moet u dat bestand uitpakken en de bestanden bewerken zoals gewenst zonder de bestandsnamen te wijzigen.\nMaak vervolgens een zip-bestand met die gewijzigde bestanden en upload het in dit formulier."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Studenten van sessie %s toevoegen aan sessie %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Alle pogingen per oefening tonen"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Deze bewerking zou de toegestane gebruikerslimiet voor de geselecteerde cursus overschrijden."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Sommige inschrijvingen konden niet worden uitgevoerd omdat de toegestane gebruikerslimiet voor de betreffende cursus is bereikt. Betrokken gebruikers/cursussen: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Dit register vermeldt bekende rapportagepagina’s, hun categorie, canonieke URL, verouderde URL en verwachte rolgroep. Canonieke URL’s leiden naar de huidige rapportimplementatie en handhaven de gedocumenteerde rapportrolmatrix."
+
+msgid "E-mail notification subscription"
+msgstr "Abonnement op e-mailmeldingen"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Deze bewerking zou de limiet van %s gebruikers per cursus overschrijden die door de beheerders is ingesteld. De inschrijving is geannuleerd."
+
+msgid "Language the document is in"
+msgstr "Taal van het document"
+
+msgid "There is no session still"
+msgstr "Er is nog geen sessie"
+
+msgid "Origin courses from session"
+msgstr "Broncursussen van sessie"
+
+msgid "Destination courses from session"
+msgstr "Doelcursussen van sessie"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Vrije toegang (vanaf de startpagina, zonder identificatiecode)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Genereer %d glossariumtermen voor een cursus over '%s', elke term op één regel, met de definitie op de volgende regel en één lege regel tussen elke term. Voeg geen andere opmaak toe voor de titel noch voor de definitie."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Dit is een korte beschrijving van de cursus '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "U gebruikt Chamilo op een Windows-platform. Hulpmiddelen voor documentconversie zijn niet beschikbaar voor volledige-tekstindexering."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "De instelling voor automatisch starten van de toets staat AAN. Studenten worden omgeleid naar de toetsenlijst."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "De instelling voor automatisch starten van de toets staat AAN. Studenten worden omgeleid naar een specifieke toets."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "De inschrijvingslimiet voor deze cursus is bereikt (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Aantal cursussen per taal"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Gebruikers van wie de laatste toegang ouder is dan de geselecteerde datum."
 

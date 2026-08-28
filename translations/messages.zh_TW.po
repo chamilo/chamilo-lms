@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "敬上"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式範例：sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式範例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "變數範圍"
@@ -9269,6 +9269,15 @@ msgstr "課程 %s 的時間報告"
 msgid "Error"
 msgstr "錯誤"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "使用者已建立，但其中一個額外個人資料欄位無法儲存。"
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "使用者已更新，但其中一個額外個人資料欄位無法儲存。"
+
+msgid "One or more fields contain invalid values."
+msgstr "一個或多個欄位包含無效值。"
+
 msgid "Anonymous"
 msgstr "匿名"
 
@@ -15308,6 +15317,30 @@ msgstr "上週花費的時間"
 msgid "System status"
 msgstr "系統狀態"
 
+msgid "Courses space"
+msgstr "課程空間"
+
+msgid "Database server configuration and metadata"
+msgstr "資料庫伺服器設定與中繼資料"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "各課程磁碟使用量與磁碟配額"
+
+msgid "Information about your webserver configuration"
+msgstr "網頁伺服器設定資訊"
+
+msgid "Paths"
+msgstr "路徑"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo 需求狀態"
+
+msgid "State of PHP settings on the server"
+msgstr "伺服器 PHP 設定狀態"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "此入口網站解析的 api_get_path() 常數"
+
 msgid "Is writable"
 msgstr "可寫入"
 
@@ -20674,6 +20707,9 @@ msgstr "在技能輪上，當技能有簡短代碼時顯示技能名稱。"
 
 msgid "Created by"
 msgstr "建立者"
+
+msgid "Created by %s on %s"
+msgstr "由 %s 於 %s 建立"
 
 msgid "Hide general coach in dropbox"
 msgstr "在 Dropbox 中隱藏一般導師"
@@ -31878,6 +31914,9 @@ msgstr "寫點東西給 %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "優先：SVG。PNG 建議寬度：%spx。"
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG 建議寬度：%spx。"
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "上傳 PNG 標誌用於電子郵件 (~%spx 寬度)"
 
@@ -31913,6 +31952,9 @@ msgstr "點擊插入"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "優先：SVG。PNG 最大尺寸：%spx。"
+
+msgid "PNG max size: %spx."
+msgstr "PNG 最大尺寸：%spx。"
 
 msgid "View badge"
 msgstr "檢視徽章"
@@ -38064,6 +38106,9 @@ msgstr "正在結束"
 msgid "Draft saved"
 msgstr "草稿已儲存"
 
+msgid "Save as draft"
+msgstr "儲存為草稿"
+
 msgid "Statement"
 msgstr "題目敘述"
 
@@ -39485,4 +39530,265 @@ msgstr "此使用者已註冊此場次。"
 
 msgid "This user is already subscribed to the course."
 msgstr "此使用者已註冊此課程。"
+
+msgid "Multi URLs"
+msgstr "多重網址"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "使用者與課程等實體可同時在多個網址中啟用，因此下列數值加總不會等於總數。"
+
+msgid "User directory"
+msgstr "使用者目錄"
+
+msgid "Course directory"
+msgstr "課程目錄"
+
+msgid "URLs"
+msgstr "網址"
+
+msgid "User details"
+msgstr "使用者詳細資料"
+
+msgid "Course details"
+msgstr "課程詳細資料"
+
+msgid "View details"
+msgstr "檢視詳細資料"
+
+msgid "Average progress"
+msgstr "平均進度"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "直接註冊屬於整個課程，而非特定網址，因此下方每個與此課程連結的網址都會重複顯示相同的「直接」數字。若要在各網址間共用課程並取得實際依網址不同的指標，應使用課程期別。"
+
+msgid "Logins (all URLs combined)"
+msgstr "登入次數（所有網址合計）"
+
+msgid "Unique logins"
+msgstr "不重複登入次數"
+
+msgid "Parent URL"
+msgstr "上層網址"
+
+msgid "Logins (your URLs)"
+msgstr "登入次數（您的網址）"
+
+msgid "The picture could not be uploaded"
+msgstr "圖片無法上傳"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "此欄位類型尚未完全支援 — 僅顯示原始值。"
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "此課程已接近使用者註冊上限（%d/%d）。"
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "空間受限於您的課程屬性。若要提高上限，請取得"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "使用者註冊受限於您的課程屬性。若要提高上限，請取得"
+
+msgid "pro plan"
+msgstr "專業方案"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "並透過課程維護將此課程的備份匯入您的新付費課程，或在取得此方案後開立工單，將您的課程轉換為專業課程。"
+
+msgid "Tired of writing questions?"
+msgstr "厭倦撰寫題目了嗎？"
+
+msgid "Upgrade your plan"
+msgstr "升級您的方案"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "至專業方案，即可由 AI 協助為您產生優質題目。"
+
+msgid "Student Success AI Coach"
+msgstr "學生成就 AI 教練"
+
+msgid "No AI text provider is configured."
+msgstr "尚未設定 AI 文字服務提供者。"
+
+msgid "Additional instructions for the AI coach"
+msgstr "給 AI 教練的額外指示"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "例如：此學習者難以維持注意力。建議較短的活動，並更頻繁地檢查理解程度。"
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "請保持此視窗開啟，直到 Chamilo 完成建議準備。"
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "建議亦已儲存至您的 Chamilo 收件匣。"
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "建議已為此學習者產生並儲存，但無法建立收件匣副本。"
+
+msgid "Student success recommendation"
+msgstr "學生成就建議"
+
+msgid "Generated"
+msgstr "已產生"
+
+msgid "Priority actions"
+msgstr "優先行動"
+
+msgid "Evidence"
+msgstr "依據"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "此功能會分析本課程內容，並將學習行為資訊傳送至已設定的 AI 模型。雖然不會直接傳送可識別個人資料，但部分資料仍可能間接提供可識別使用者的資訊。如有疑慮，使用前請務必向貴機構的 AI 負責人確認。"
+
+msgid "Additional activities"
+msgstr "額外活動"
+
+msgid "Rhythm"
+msgstr "節奏"
+
+msgid "Learning methodologies"
+msgstr "學習方法"
+
+msgid "Other recommendations"
+msgstr "其他建議"
+
+msgid "Analyzing course..."
+msgstr "正在分析課程…"
+
+msgid "Analyzing student's learning..."
+msgstr "正在分析學生的學習情況…"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "接受此邀請後，您將與提出請求的使用者建立連結，使其可讀取您部分或全部的個人資料。請先檢視您的個人資料，並確認不會對已信任的使用者分享過多資訊。"
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "尚未啟用麥克風權限，請在瀏覽器中啟用以便錄製音訊"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "此版本的 Chamilo 預先安裝了一門（或多門）多語課程。請至課程清單檢視，並決定是否應設為公開。"
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "您目前無法存取任何網址。請向管理員申請您所屬網址的存取權限。"
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "若所選 AI 提供者並非主權服務，所選文件內容可能會傳送至外部服務。除非貴機構允許，否則請勿繼續處理機密資訊。"
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "請在應保留的帳號上按「合併」。系統會將同一重複群組中的其他帳號併入該帳號。被合併的帳號將永久刪除，並從此報表中消失。此操作無法復原。"
+
+msgid "Permanent deletion"
+msgstr "永久刪除"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "合併功能已會永久刪除被合併的帳號。僅在您要另外手動刪除帳號時，才使用使用者清單。"
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "您正在修改預設視覺主題「chamilo」的標誌。建議建立／使用自訂視覺主題，以免覆寫預設值。"
+
+msgid "This exercise has no questions."
+msgstr "此測驗沒有題目。"
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "每題的回饋／註解應如何顯示？此選項決定學習者作答時的顯示方式。"
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "這些應用程式可以您的身分存取 Chamilo，僅使用您現有帳號權限。請撤銷不再使用或不認識的應用程式。"
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "請說明您為何要撤回法律同意，以便我們妥善處理您的申請"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "使用此個人金鑰，將遠端 MCP 用戶端以您自己的帳號與權限連線至 Chamilo。"
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "完整金鑰僅顯示一次。請妥善保存。產生新金鑰會立即使舊金鑰失效。"
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "此金鑰會將用戶端驗證為您的 Chamilo 帳號，不會授予您帳號原本沒有的權限。"
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "在註冊頁顯示服務條款聲明，訪客須接受條款才能註冊"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "服務條款內容將傳送至 AI 語言模型。儲存前請先審閱建議譯文。"
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "目標語言已有儲存版本。儲存此建議將建立新版本。"
+
+msgid "Acquired"
+msgstr "已取得"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "建議課程圖片：1600 × 900 px（16:9）。較大或高密度螢幕請至少使用 1280 × 720 px，以保持清晰。"
+
+msgid "Courses of the selected URL"
+msgstr "所選網址的課程"
+
+msgid "Course categories in selected URL"
+msgstr "所選網址中的課程類別"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "您的帳號已啟用，現在可以登入並查看課程。"
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "請先<a href='%s'>由此</a>下載批改檔。\n接著解壓縮該檔案，依需求編輯內容但勿更改檔名。\n然後將修改後的檔案壓縮成 zip，並在此表單上傳。"
+
+msgid "Adding students from session %s to session %s"
+msgstr "將學生從期程 %s 加入期程 %s"
+
+msgid "Show all attempts by exercise"
+msgstr "顯示各測驗的所有作答紀錄"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "此操作將超過所選課程允許的使用者上限。"
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "部分訂閱未能完成，因為已達受影響課程的使用者上限。受影響的使用者／課程：%s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "此登錄列出已知報表頁面、其類別、標準網址、舊版網址及預期角色對象。標準網址會導向目前的報表實作，並套用文件中的報表角色矩陣。"
+
+msgid "E-mail notification subscription"
+msgstr "電子郵件通知訂閱"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "此操作將超過管理員設定的每課程 %s 位使用者上限。訂閱已取消。"
+
+msgid "Language the document is in"
+msgstr "文件所使用的語言"
+
+msgid "There is no session still"
+msgstr "尚無課程期"
+
+msgid "Origin courses from session"
+msgstr "來自課程期的原始課程"
+
+msgid "Destination courses from session"
+msgstr "來自課程期的目標課程"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "公共訪問-用戶不從登錄也可訪問。"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "產生 %d 個關於「%s」課程的詞彙表詞條，每個詞條單獨一行，定義在下一行，詞條之間空一行。請勿為標題或定義添加任何其他格式。"
+
+msgid "This is a short description of the course '%s'."
+msgstr "這是課程「%s」的簡短說明。"
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "您正在 Windows 平台上使用 Chamilo。文件轉換輔助程式無法用於全文索引。"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "測驗自動啟動設定已開啟。學生將被重新導向至測驗清單。"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "測驗自動啟動設定已開啟。學生將被重新導向至特定測驗。"
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "此課程的報名上限已達（%current%\/%limit%）。"
+
+msgid "Count course by language"
+msgstr "依語言統計課程數量"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "最近一次存取早於所選日期的使用者。"
 

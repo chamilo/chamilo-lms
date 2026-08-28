@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "शुभकामना"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र नमुना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चलहरूको दायरा"
@@ -9268,6 +9268,15 @@ msgstr "सत्र %s को लागि समय प्रतिवेद�
 msgid "Error"
 msgstr "त्रुटि"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "प्रयोगकर्ता सिर्जना गरियो, तर थप प्रोफाइल फिल्डहरू मध्ये एउटा सुरक्षित गर्न सकिएन।"
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "प्रयोगकर्ता अद्यावधिक गरियो, तर थप प्रोफाइल फिल्डहरू मध्ये एउटा सुरक्षित गर्न सकिएन।"
+
+msgid "One or more fields contain invalid values."
+msgstr "एक वा बढी फिल्डहरूमा अमान्य मानहरू छन्।"
+
 msgid "Anonymous"
 msgstr "अज्ञात"
 
@@ -15307,6 +15316,30 @@ msgstr "गत हप्ता खर्च गरिएको समय"
 msgid "System status"
 msgstr "प्रणाली स्थिति"
 
+msgid "Courses space"
+msgstr "पाठ्यक्रम स्थान"
+
+msgid "Database server configuration and metadata"
+msgstr "डाटाबेस सर्भर कन्फिगरेसन र मेटाडेटा"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "पाठ्यक्रमअनुसार डिस्क प्रयोग बनाम डिस्क कोटा"
+
+msgid "Information about your webserver configuration"
+msgstr "तपाईंको वेबसर्भर कन्फिगरेसनसम्बन्धी जानकारी"
+
+msgid "Paths"
+msgstr "पथहरू"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo आवश्यकताहरूको अवस्था"
+
+msgid "State of PHP settings on the server"
+msgstr "सर्भरमा PHP सेटिङहरूको अवस्था"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "यो पोर्टलमा समाधान गरिएका api_get_path() स्थिरांकहरू"
+
 msgid "Is writable"
 msgstr "लेख्न सकिन्छ"
 
@@ -20673,6 +20706,9 @@ msgstr "दक्षताहरूको चक्रमा, जब यसम�
 
 msgid "Created by"
 msgstr "निर्माणकर्ता"
+
+msgid "Created by %s on %s"
+msgstr "%s द्वारा %s मा सिर्जना गरिएको"
 
 msgid "Hide general coach in dropbox"
 msgstr "ड्रपबक्समा सामान्य प्रशिक्षक लुकाउनुहोस्"
@@ -31876,6 +31912,9 @@ msgstr "%s मा केही लेख्नुहोस्"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "उत्तम: SVG। PNG सिफारिस गरिएको चौडाइ: %spx।"
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG सिफारिस गरिएको चौडाइ: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "ईमेलका लागि PNG लोगो अपलोड गर्नुहोस् (~%spx चौडाइ)"
 
@@ -31911,6 +31950,9 @@ msgstr "प्रविष्ट गर्न क्लिक गर्नुह
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "उत्कृष्ट: SVG। PNG अधिकतम आकार: %spx।"
+
+msgid "PNG max size: %spx."
+msgstr "PNG अधिकतम आकार: %spx."
 
 msgid "View badge"
 msgstr "बेज हेर्नुहोस्"
@@ -37700,10 +37742,10 @@ msgid "Do you want to continue your session?"
 msgstr "के तपाईं आफ्नो सत्र जारी राख्न चाहनुहुन्छ?"
 
 msgid "Your session details have been lost, please login again."
-msgstr ""
+msgstr "तपाईंको सत्र विवरण हराएको छ, कृपया फेरि लगइन गर्नुहोस्।"
 
 msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
-msgstr ""
+msgstr "यस स्रोतमा पहुँच अस्वीकृत गरिएको छ। यसमा पहुँच गर्न आवश्यक अनुमति तपाईंसँग नभएको जस्तो देखिन्छ।"
 
 msgid "Stay connected"
 msgstr "जडान रहनुहोस्"
@@ -38061,6 +38103,9 @@ msgstr "समाप्त गर्दै"
 
 msgid "Draft saved"
 msgstr "मस्यौदा बचत गरियो"
+
+msgid "Save as draft"
+msgstr "मस्यौदाको रूपमा बचत गर्नुहोस्"
 
 msgid "Statement"
 msgstr "कथन"
@@ -39173,232 +39218,232 @@ msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /ser
 msgstr "Apache: mod_status सक्षम गर्नुहोस् (ExtendedStatus On) र localhost लाई /server-status मा अनुमति दिनुहोस्। Nginx: localhost-मात्र स्थान जस्तै /nginx_status वा /stub_status मा stub_status सक्षम गर्नुहोस्।"
 
 msgid "Grade percentage distribution"
-msgstr ""
+msgstr "ग्रेड प्रतिशत वितरण"
 
 msgid "Top learners"
-msgstr ""
+msgstr "शीर्ष सिकारुहरू"
 
 msgid "This progress combines learning path progress and the learner's average exercise result"
-msgstr ""
+msgstr "यो प्रगति सिकाइ पथको प्रगति र सिकारुको औसत अभ्यास परिणामलाई संयोजन गर्छ"
 
 msgid "Additional profile fields"
-msgstr ""
+msgstr "थप प्रोफाइल फिल्डहरू"
 
 msgid "Visible columns"
-msgstr ""
+msgstr "देखिने स्तम्भहरू"
 
 msgid "Learning path completion"
-msgstr ""
+msgstr "सिकाइ पथ पूरा हुनु"
 
 msgid "Number of certificates"
-msgstr ""
+msgstr "प्रमाणपत्रहरूको संख्या"
 
 msgid "Could not export the report"
-msgstr ""
+msgstr "प्रतिवेदन निर्यात गर्न सकिएन"
 
 msgid "Second learner"
-msgstr ""
+msgstr "दोस्रो सिकारु"
 
 msgid "Results by learner"
-msgstr ""
+msgstr "सिकारु अनुसार परिणामहरू"
 
 msgid "Use filters to narrow down questions."
-msgstr ""
+msgstr "प्रश्नहरू सीमित गर्न फिल्टरहरू प्रयोग गर्नुहोस्।"
 
 msgid "Try adjusting your filters and search again."
-msgstr ""
+msgstr "आफ्ना फिल्टरहरू समायोजन गरी फेरि खोज्नुहोस्।"
 
 msgid "Results per page"
-msgstr ""
+msgstr "प्रति पृष्ठ परिणामहरू"
 
 msgid "No answers"
-msgstr ""
+msgstr "कुनै उत्तर छैन"
 
 msgid "Tests using this question"
-msgstr ""
+msgstr "यो प्रश्न प्रयोग गर्ने परीक्षणहरू"
 
 msgid "Delete failed"
-msgstr ""
+msgstr "मेटाउन असफल"
 
 msgid "PHP cache"
-msgstr ""
+msgstr "PHP क्यास"
 
 msgid "Live OPcache and APCu diagnostics"
-msgstr ""
+msgstr "लाइभ OPcache र APCu निदान"
 
 msgid "Click to show OPcache and APCu diagnostics"
-msgstr ""
+msgstr "OPcache र APCu निदान देखाउन क्लिक गर्नुहोस्"
 
 msgid "Memory used"
-msgstr ""
+msgstr "प्रयोग भएको मेमोरी"
 
 msgid "OPcache is installed but not enabled."
-msgstr ""
+msgstr "OPcache स्थापना गरिएको छ तर सक्षम छैन।"
 
 msgid "OPcache extension is not available on this server."
-msgstr ""
+msgstr "यस सर्भरमा OPcache एक्सटेन्सन उपलब्ध छैन।"
 
 msgid "APCu is installed but not enabled."
-msgstr ""
+msgstr "APCu स्थापना गरिएको छ तर सक्षम छैन।"
 
 msgid "APCu extension is not available on this server."
-msgstr ""
+msgstr "यस सर्भरमा APCu एक्सटेन्सन उपलब्ध छैन।"
 
 msgid "Constant"
-msgstr ""
+msgstr "कन्स्टेन्ट"
 
 msgid "Space used on disk (MB)"
-msgstr ""
+msgstr "डिस्कमा प्रयोग भएको स्थान (MB)"
 
 msgid "Set max course space (MB)"
-msgstr ""
+msgstr "अधिकतम पाठ्यक्रम स्थान सेट गर्नुहोस् (MB)"
 
 msgid "Memory free"
-msgstr ""
+msgstr "खाली मेमोरी"
 
 msgid "Memory wasted"
-msgstr ""
+msgstr "खेर गएको मेमोरी"
 
 msgid "Memory used %"
-msgstr ""
+msgstr "प्रयोग भएको मेमोरी %"
 
 msgid "Cached scripts"
-msgstr ""
+msgstr "क्यास गरिएका स्क्रिप्टहरू"
 
 msgid "Cached keys"
-msgstr ""
+msgstr "क्यास गरिएका कुञ्जीहरू"
 
 msgid "Misses"
-msgstr ""
+msgstr "मिसहरू"
 
 msgid "Cache full"
-msgstr ""
+msgstr "क्यास भरिएको"
 
 msgid "OOM restarts"
-msgstr ""
+msgstr "OOM पुनःसुरु"
 
 msgid "Hash restarts"
-msgstr ""
+msgstr "ह्यास पुनःसुरु"
 
 msgid "Manual restarts"
-msgstr ""
+msgstr "म्यानुअल पुनःसुरु"
 
 msgid "Interned strings used"
-msgstr ""
+msgstr "प्रयोग भएका इन्टर्न स्ट्रिङहरू"
 
 msgid "Interned strings free"
-msgstr ""
+msgstr "खाली इन्टर्न स्ट्रिङहरू"
 
 msgid "Interned strings count"
-msgstr ""
+msgstr "इन्टर्न स्ट्रिङहरूको संख्या"
 
 msgid "Memory available"
-msgstr ""
+msgstr "उपलब्ध मेमोरी"
 
 msgid "Memory size"
-msgstr ""
+msgstr "मेमोरी आकार"
 
 msgid "Entries"
-msgstr ""
+msgstr "प्रविष्टिहरू"
 
 msgid "Slots"
-msgstr ""
+msgstr "स्लटहरू"
 
 msgid "Expunges"
-msgstr ""
+msgstr "मेटाइएका"
 
 msgid "Cache start time"
-msgstr ""
+msgstr "क्यास सुरु समय"
 
 msgid "Time zone"
-msgstr ""
+msgstr "समय क्षेत्र"
 
 msgid "Not registered"
-msgstr ""
+msgstr "दर्ता नभएको"
 
 msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
-msgstr ""
+msgstr "सत्र, पाठ्यक्रम, मिति वा सिकारु अनुसार सिकारु प्रमाणपत्रहरू फिल्टर र सूचीबद्ध गर्नुहोस्, त्यसपछि आवश्यक पर्दा निर्यात गर्नुहोस्।"
 
 msgid "Filter by session and course"
-msgstr ""
+msgstr "सत्र र पाठ्यक्रम अनुसार फिल्टर गर्नुहोस्"
 
 msgid "Choose a session, course and optional date to list the generated certificates."
-msgstr ""
+msgstr "उत्पन्न प्रमाणपत्रहरू सूचीबद्ध गर्न सत्र, पाठ्यक्रम र वैकल्पिक मिति छान्नुहोस्।"
 
 msgid "Filter by learner"
-msgstr ""
+msgstr "सिकारु अनुसार फिल्टर गर्नुहोस्"
 
 msgid "Find certificates for a specific learner across sessions and courses."
-msgstr ""
+msgstr "सत्र र पाठ्यक्रमहरूमा विशिष्ट सिकारुका प्रमाणपत्रहरू खोज्नुहोस्।"
 
 msgid "Certificates found"
-msgstr ""
+msgstr "प्रमाणपत्रहरू फेला परे"
 
 msgid "Open certificate"
-msgstr ""
+msgstr "प्रमाणपत्र खोल्नुहोस्"
 
 msgid "Certificate file not available"
-msgstr ""
+msgstr "प्रमाणपत्र फाइल उपलब्ध छैन"
 
 msgid "Export to CSV"
-msgstr ""
+msgstr "CSV मा निर्यात गर्नुहोस्"
 
 msgid "Acquired skills"
-msgstr ""
+msgstr "हासिल गरिएका सीपहरू"
 
 msgid "No acquired skill"
-msgstr ""
+msgstr "हासिल गरिएको सीप छैन"
 
 msgid "Absences"
-msgstr ""
+msgstr "अनुपस्थितिहरू"
 
 msgid "No courses"
-msgstr ""
+msgstr "पाठ्यक्रम छैनन्"
 
 msgid "No session matched"
-msgstr ""
+msgstr "कुनै सत्र मिलेन"
 
 msgid "Unable to load the report"
-msgstr ""
+msgstr "प्रतिवेदन लोड गर्न सकिएन"
 
 msgid "Please select a profile"
-msgstr ""
+msgstr "कृपया प्रोफाइल चयन गर्नुहोस्"
 
 msgid "Please select a session"
-msgstr ""
+msgstr "कृपया सत्र चयन गर्नुहोस्"
 
 msgid "Please select a user"
-msgstr ""
+msgstr "कृपया प्रयोगकर्ता चयन गर्नुहोस्"
 
 msgid "Unable to export the report"
-msgstr ""
+msgstr "प्रतिवेदन निर्यात गर्न सकिएन"
 
 msgid "Accepted on web"
-msgstr ""
+msgstr "वेबमा स्वीकृत"
 
 msgid "Accepted by e-mail"
-msgstr ""
+msgstr "इमेलद्वारा स्वीकृत"
 
 msgid "The course title is required"
-msgstr ""
+msgstr "पाठ्यक्रमको शीर्षक आवश्यक छ"
 
 msgid "Unexpected error"
-msgstr ""
+msgstr "अप्रत्याशित त्रुटि"
 
 msgid "Separate tags with commas"
-msgstr ""
+msgstr "ट्यागहरूलाई अल्पविरामले छुट्याउनुहोस्"
 
 msgid "Open link"
-msgstr ""
+msgstr "लिङ्क खोल्नुहोस्"
 
 msgid "Describe the course picture to generate"
-msgstr ""
+msgstr "उत्पन्न गर्नुपर्ने पाठ्यक्रमको तस्बिर वर्णन गर्नुहोस्"
 
 msgid "Generate picture"
-msgstr ""
+msgstr "तस्बिर उत्पन्न गर्नुहोस्"
 
 msgid "PDF watermark"
-msgstr ""
+msgstr "PDF वाटरमार्क"
 
 msgid "No watermark image"
 msgstr "वाटरमार्क छवि छैन"
@@ -39483,4 +39528,265 @@ msgstr "यो प्रयोगकर्ता पहिले नै सत�
 
 msgid "This user is already subscribed to the course."
 msgstr "यो प्रयोगकर्ता पहिले नै पाठ्यक्रममा सदस्यता लिइसकेको छ।"
+
+msgid "Multi URLs"
+msgstr "बहु URL हरू"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "प्रयोगकर्ता र पाठ्यक्रम जस्ता इकाईहरू एकै समयमा एकभन्दा बढी URL मा सक्रिय हुन सक्छन्, त्यसैले तलका मानहरूको योगफल कुल सङ्ख्यासँग मेल खाँदैन।"
+
+msgid "User directory"
+msgstr "प्रयोगकर्ता निर्देशिका"
+
+msgid "Course directory"
+msgstr "पाठ्यक्रम निर्देशिका"
+
+msgid "URLs"
+msgstr "URL हरू"
+
+msgid "User details"
+msgstr "प्रयोगकर्ता विवरण"
+
+msgid "Course details"
+msgstr "पाठ्यक्रम विवरण"
+
+msgid "View details"
+msgstr "विवरण हेर्नुहोस्"
+
+msgid "Average progress"
+msgstr "औसत प्रगति"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "प्रत्यक्ष नामांकन सम्पूर्ण पाठ्यक्रमसँग सम्बन्धित हुन्छ, कुनै खास URL सँग होइन, त्यसैले यो पाठ्यक्रम जोडिएका हरेक URL का लागि तल एउटै ‘Direct’ आँकडा दोहोरिन्छन्। सत्रहरू नै URL हरूमा पाठ्यक्रम साझा गर्ने र URL अनुसार फरक मेट्रिक्स राख्ने अपेक्षित तरिका हुन्।"
+
+msgid "Logins (all URLs combined)"
+msgstr "लगइनहरू (सबै URL हरू मिलाएर)"
+
+msgid "Unique logins"
+msgstr "अद्वितीय लगइनहरू"
+
+msgid "Parent URL"
+msgstr "अभिभावक URL"
+
+msgid "Logins (your URLs)"
+msgstr "लगइनहरू (तपाईंका URL हरू)"
+
+msgid "The picture could not be uploaded"
+msgstr "तस्बिर अपलोड गर्न सकिएन"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "यो फिल्ड प्रकार अझै पूर्ण रूपमा समर्थित छैन — कच्चा मान मात्र।"
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "यो पाठ्यक्रम आफ्नो प्रयोगकर्ता सदस्यता सीमा (%d/%d) नजिक छ।"
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "तपाईंका पाठ्यक्रम गुणहरूबाट स्थान सीमित छ। सीमा बढाउन, प्राप्त गर्नुहोस्"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "तपाईंका पाठ्यक्रम गुणहरूबाट प्रयोगकर्ता सदस्यता सीमित छन्। सीमा बढाउन, प्राप्त गर्नुहोस्"
+
+msgid "pro plan"
+msgstr "प्रो योजना"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "र यो योजना प्राप्त गरेपछि पाठ्यक्रम मर्मतबाट यस पाठ्यक्रमको ब्याकअप नयाँ भुक्तानी गरिएको पाठ्यक्रममा आयात गर्नुहोस्, वा आफ्नो पाठ्यक्रमलाई प्रो पाठ्यक्रममा रूपान्तरण गर्न टिकट खोल्नुहोस्।"
+
+msgid "Tired of writing questions?"
+msgstr "प्रश्न लेख्न थाकिसक्नुभयो?"
+
+msgid "Upgrade your plan"
+msgstr "आफ्नो योजना स्तरोन्नति गर्नुहोस्"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "प्रो योजनामा गएर तपाईंका लागि गुणस्तरीय प्रश्न उत्पन्न गर्न AI बाट सहयोग पाउनुहोस्।"
+
+msgid "Student Success AI Coach"
+msgstr "विद्यार्थी सफलता AI प्रशिक्षक"
+
+msgid "No AI text provider is configured."
+msgstr "कुनै AI पाठ प्रदायक कन्फिगर गरिएको छैन।"
+
+msgid "Additional instructions for the AI coach"
+msgstr "AI प्रशिक्षकका लागि थप निर्देशनहरू"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "उदाहरण: यो सिकारुलाई ध्यान कायम राख्न कठिनाइ छ। छोटा गतिविधि र बुझाइ जाँचका लागि बारम्बार जाँच सुझाव दिनुहोस्।"
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Chamilo सिफारिस तयार गर्दा यो विन्डो खुला राख्नुहोस्।"
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "सिफारिस तपाईंको Chamilo इनबक्समा पनि सुरक्षित गरियो।"
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "सिफारिस उत्पन्न गरी यस सिकारुका लागि सुरक्षित गरियो, तर इनबक्स प्रतिलिपि सिर्जना गर्न सकिएन।"
+
+msgid "Student success recommendation"
+msgstr "विद्यार्थी सफलता सिफारिस"
+
+msgid "Generated"
+msgstr "उत्पन्न गरिएको"
+
+msgid "Priority actions"
+msgstr "प्राथमिकता कार्यहरू"
+
+msgid "Evidence"
+msgstr "प्रमाण"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "यो सुविधा यस पाठ्यक्रमको सामग्री विश्लेषण गर्नेछ र सिकाइ व्यवहारसम्बन्धी जानकारी कन्फिगर गरिएको AI मोडेलमा पठाउनेछ। AI मोडेलमा प्रत्यक्ष पहिचानयोग्य व्यक्तिगत डाटा नपठाए पनि, पठाइएको केही डाटाले प्रयोगकर्ताबारे अप्रत्यक्ष पहिचानयोग्य जानकारी दिन सक्छ। शङ्का भए यो सुविधा प्रयोग गर्नुअघि सधैं आफ्नो AI सन्दर्भ व्यक्तिसँग जाँच गर्नुहोस्।"
+
+msgid "Additional activities"
+msgstr "थप गतिविधिहरू"
+
+msgid "Rhythm"
+msgstr "ताल"
+
+msgid "Learning methodologies"
+msgstr "सिकाइ विधिहरू"
+
+msgid "Other recommendations"
+msgstr "अन्य सिफारिसहरू"
+
+msgid "Analyzing course..."
+msgstr "पाठ्यक्रम विश्लेषण गर्दै..."
+
+msgid "Analyzing student's learning..."
+msgstr "विद्यार्थीको सिकाइ विश्लेषण गर्दै..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "यो निमन्त्रणा स्वीकार गर्दा तपाईं अनुरोध गर्ने प्रयोगकर्तासँग यसरी जोडिनेछौ कि तपाईंको प्रोफाइल डाटाको केही वा सबै भाग उनीहरूले पढ्न सक्नेछन्। पहिले नै विश्वास गर्ने प्रयोगकर्ताहरूसँग आफ्नो प्रोफाइल जाँच गरी धेरै जानकारी नबाँड्नुहोस्।"
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "माइक्रोफोन प्रयोग गर्ने अनुमति सक्षम छैन, अडियो रेकर्ड गर्न ब्राउजरमा यसलाई सक्षम गर्नुहोस्"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "चामिलोको यो संस्करणमा एक (वा बढी) बहुभाषिक पाठ्यक्रम पूर्वस्थापित छन्। पाठ्यक्रम सूचीमा तिनीहरू हेर्नुहोस् र सार्वजनिक राख्ने वा नराख्ने निर्णय गर्नुहोस्।"
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "तपाईंलाई हाल कुनै URL मा पहुँच छैन। आफू सम्बन्धित URL मा पहुँच दिन प्रशासकलाई अनुरोध गर्नुहोस्।"
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "चयन गरिएको AI प्रदायक सार्वभौम सेवा होइन भने चयन गरिएको कागजातको सामग्री बाह्य सेवामा पठाइन सक्छ। तपाईंको संस्थाले अनुमति नदिएसम्म गोप्य जानकारीसहित अगाडि नबढ्नुहोस्।"
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "बाँकी रहनुपर्ने खातामा Unify क्लिक गर्नुहोस्। प्रणालीले सोही दोहोरिएको समूहका अन्य सबै खाताहरू त्यसमा मर्ज गर्नेछ। मर्ज भएका खाताहरू स्थायी रूपमा मेटिनेछन् र यो प्रतिवेदनबाट हराउनेछन्। यो कार्य उल्ट्याउन सकिँदैन।"
+
+msgid "Permanent deletion"
+msgstr "स्थायी मेटाउने"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify ले मर्ज भएका खाताहरू पहिले नै स्थायी रूपमा मेटाउँछ। थप खाताहरू म्यानुअल रूपमा मेटाउन चाहनुहुन्छ भने मात्र प्रयोगकर्ता सूची प्रयोग गर्नुहोस्।"
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "तपाईं पूर्वनिर्धारित दृश्य थिम “chamilo” का लोगोहरू परिवर्तन गर्दै हुनुहुन्छ। पूर्वनिर्धारितहरू अधिलेखन नगर्न अनुकूल दृश्य थिम सिर्जना/प्रयोग गर्ने विचार गर्नुहोस्।"
+
+msgid "This exercise has no questions."
+msgstr "यो अभ्यासमा कुनै प्रश्न छैनन्।"
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "प्रत्येक प्रश्नको प्रतिक्रिया/टिप्पणी कसरी देखाउने? यो विकल्पले परीक्षा दिँदा सिकारुलाई कसरी देखाइनेछ भन्ने निर्धारण गर्छ।"
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "यी अनुप्रयोगहरूले तपाईंको विद्यमान खाता अनुमति मात्र प्रयोग गरी तपाईंको रूपमा चामिलोमा पहुँच गर्न सक्छन्। प्रयोग नगर्ने वा नचिनेका कुनै पनि रद्द गर्नुहोस्।"
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "कानुनी सहमति फिर्ता लिन चाहनुको कारण व्याख्या गर्नुहोस् ताकि हामी तपाईंको अनुरोध सही रूपमा प्रक्रिया गर्न सकौं"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "दूरस्थ MCP क्लाइन्टलाई तपाईंको आफ्नै खाता र अनुमतिसहित चामिलोसँग जोड्न यो व्यक्तिगत कुञ्जी प्रयोग गर्नुहोस्।"
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "पूर्ण कुञ्जी एक पटक मात्र देखाइन्छ। यसलाई सुरक्षित रूपमा भण्डारण गर्नुहोस्। नयाँ कुञ्जी उत्पन्न गर्नासाथ अघिल्लो कुञ्जी अमान्य हुन्छ।"
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "कुञ्जीले क्लाइन्टलाई तपाईंको चामिलो खाताको रूपमा प्रमाणित गर्छ। तपाईंको खातामा नभएका अनुमति दिँदैन।"
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "दर्ता पृष्ठमा नियम तथा सर्तहरूको कथन देखाउनुहोस्, दर्ता गर्न आगन्तुकले T&C स्वीकार गर्नुपर्ने बनाउनुहोस्"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "नियम तथा सर्तहरूको सामग्री AI भाषा मोडेलमा पठाइनेछ। बचत गर्नुअघि प्रस्तावित अनुवाद समीक्षा गर्नुहोस्।"
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "लक्ष्य भाषाका लागि बचत गरिएको संस्करण पहिले नै छ। यो प्रस्ताव बचत गर्दा नयाँ संस्करण सिर्जना हुनेछ।"
+
+msgid "Acquired"
+msgstr "प्राप्त"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "सिफारिस गरिएको पाठ्यक्रम तस्बिर: १६०० × ९०० px (१६:९)। ठूला वा उच्च-घनत्व स्क्रिनमा स्पष्ट देखाउन कम्तीमा १२८० × ७२० px प्रयोग गर्नुहोस्।"
+
+msgid "Courses of the selected URL"
+msgstr "चयन गरिएको URL का पाठ्यक्रमहरू"
+
+msgid "Course categories in selected URL"
+msgstr "चयन गरिएको URL का पाठ्यक्रम श्रेणीहरू"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "तपाईंको खाता सक्रिय छ, अब लगइन गरी आफ्ना पाठ्यक्रमहरू जाँच्न सक्नुहुन्छ।"
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "पहिले सुधारहरू <a href='%s'> यहाँ </a> डाउनलोड गर्नुहोस्।\nत्यसपछि त्यो फाइल अनजिप गरी फाइल नाम नबदली आवश्यक सम्पादन गर्नुहोस्।\nत्यसपछि ती परिमार्जित फाइलहरूको जिप बनाई यस फारममा अपलोड गर्नुहोस्।"
+
+msgid "Adding students from session %s to session %s"
+msgstr "सत्र %s बाट विद्यार्थीहरू सत्र %s मा थप्दै"
+
+msgid "Show all attempts by exercise"
+msgstr "अभ्यासअनुसार सबै प्रयास देखाउनुहोस्"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "यो कार्यले चयन गरिएको पाठ्यक्रमको अनुमति दिइएको प्रयोगकर्ता सीमा नाघ्नेछ।"
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "केही सदस्यता प्रभावित पाठ्यक्रमको प्रयोगकर्ता सीमा पुगेकाले पूरा हुन सकेनन्। प्रभावित प्रयोगकर्ता/पाठ्यक्रम: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "यो रजिस्ट्रीले ज्ञात प्रतिवेदन पृष्ठहरू, तिनीहरूको श्रेणी, क्यानोनिकल URL, पुरानो URL र अपेक्षित भूमिका दर्शक सूचीबद्ध गर्छ। क्यानोनिकल URL हरू हालको प्रतिवेदन कार्यान्वयनमा रूट गर्छन् र दस्तावेजीकृत प्रतिवेदन भूमिका म्याट्रिक्स लागू गर्छन्।"
+
+msgid "E-mail notification subscription"
+msgstr "इमेल सूचना सदस्यता"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "यो कार्यले प्रशासकले तोकेको प्रति पाठ्यक्रम %s प्रयोगकर्ताको सीमा नाघ्नेछ। सदस्यता रद्द गरिएको छ।"
+
+msgid "Language the document is in"
+msgstr "कागजात रहेको भाषा"
+
+msgid "There is no session still"
+msgstr "अहिलेसम्म कुनै सत्र छैन"
+
+msgid "Origin courses from session"
+msgstr "सत्रबाट स्रोत पाठ्यक्रमहरू"
+
+msgid "Destination courses from session"
+msgstr "सत्रबाट गन्तव्य पाठ्यक्रमहरू"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "सार्वजनिक पहुँच (पाठ्यक्रमका कुनै पनि सदस्यलाई पहुँच अनुमति)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "'%s' विषयको पाठ्यक्रमका लागि %d शब्दावली शब्द उत्पन्न गर्नुहोस्, प्रत्येक शब्द एक पङ्क्तिमा, अर्को पङ्क्तिमा परिभाषा र प्रत्येक शब्दबीच एक खाली पङ्क्ति। शीर्षक वा परिभाषाका लागि अन्य कुनै ढाँचा नथप्नुहोस्।"
+
+msgid "This is a short description of the course '%s'."
+msgstr "यो पाठ्यक्रम '%s' को छोटो विवरण हो।"
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "तपाईं विन्डोज प्लेटफर्ममा चामिलो प्रयोग गर्दै हुनुहुन्छ। पूर्ण-पाठ अनुक्रमणिकाका लागि कागजात रूपान्तरण सहायक उपलब्ध छैनन्।"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "परीक्षा स्वतः-सुरु सेटिङ चालु छ। विद्यार्थीहरू परीक्षा सूचीमा पुनर्निर्देशित हुनेछन्।"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "परीक्षा स्वतः-सुरु सेटिङ चालु छ। विद्यार्थीहरू विशिष्ट परीक्षामा पुनर्निर्देशित हुनेछन्।"
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "यो पाठ्यक्रमको सदस्यता सीमा पुगेको छ (%current%/%limit%)।"
+
+msgid "Count course by language"
+msgstr "भाषाअनुसार पाठ्यक्रम गणना"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "पछिल्लो पहुँच चयन गरिएको मितिभन्दा पुरानो भएका प्रयोगकर्ताहरू।"
 

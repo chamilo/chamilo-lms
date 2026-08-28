@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "בכנות"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "דוגמה לנוסחה: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "דוגמת נוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "טווחים משתנים"
@@ -9276,6 +9276,15 @@ msgstr "דוח זמן עבור הפגישה %s"
 msgid "Error"
 msgstr "שגיאה"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "המשתמש נוצר, אך לא ניתן היה לשמור אחד משדות הפרופיל הנוספים."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "המשתמש עודכן, אך לא ניתן היה לשמור אחד משדות הפרופיל הנוספים."
+
+msgid "One or more fields contain invalid values."
+msgstr "שדה אחד או יותר מכיל ערכים לא חוקיים."
+
 msgid "Anonymous"
 msgstr "אנונימי"
 
@@ -15315,6 +15324,30 @@ msgstr "הזמן שבילה בשבוע שעבר"
 msgid "System status"
 msgstr "סטטוס מערכת"
 
+msgid "Courses space"
+msgstr "מרחב קורסים"
+
+msgid "Database server configuration and metadata"
+msgstr "תצורת שרת מסד הנתונים ומטא-נתונים"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "שימוש בדיסק לפי קורס מול מכסת דיסק"
+
+msgid "Information about your webserver configuration"
+msgstr "מידע על תצורת שרת האינטרנט שלך"
+
+msgid "Paths"
+msgstr "נתיבים"
+
+msgid "State of Chamilo requirements"
+msgstr "מצב דרישות Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "מצב הגדרות PHP בשרת"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "קבועי api_get_path() כפי שנפתרו בפורטל זה"
+
 msgid "Is writable"
 msgstr "ניתן לכתיבה"
 
@@ -20685,6 +20718,9 @@ msgstr "על גלגל המיומנויות, הוא מראה את שם המיומ
 
 msgid "Created by"
 msgstr "נוצר על ידי"
+
+msgid "Created by %s on %s"
+msgstr "נוצר על ידי %s ב־%s"
 
 msgid "Hide general coach in dropbox"
 msgstr "הסתר מאמן כללי בדרופבוקס"
@@ -31889,6 +31925,9 @@ msgstr "כתוב משהו ל־%s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "מועדף: SVG. רוחב PNG מומלץ: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "רוחב PNG מומלץ: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "העלאת לוגו PNG עבור דוא\"ל (~%spx רוחב)"
 
@@ -31924,6 +31963,9 @@ msgstr "לחץ להכנסה"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "מועדף: SVG. גודל מקסימלי PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "גודל PNG מרבי: %spx."
 
 msgid "View badge"
 msgstr "הצג תג"
@@ -38075,6 +38117,9 @@ msgstr "מסיים"
 msgid "Draft saved"
 msgstr "טיוטה נשמרה"
 
+msgid "Save as draft"
+msgstr "שמירה כטיוטה"
+
 msgid "Statement"
 msgstr "הצהרה"
 
@@ -39496,4 +39541,265 @@ msgstr "משתמש זה כבר רשום לסשן."
 
 msgid "This user is already subscribed to the course."
 msgstr "משתמש זה כבר רשום לקורס."
+
+msgid "Multi URLs"
+msgstr "כתובות URL מרובות"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "ישויות כמו משתמשים וקורסים יכולות להיות פעילות ביותר מכתובת URL אחת בו־זמנית, ולכן סכום הערכים למטה לא יתאים לסך הכול."
+
+msgid "User directory"
+msgstr "ספריית משתמשים"
+
+msgid "Course directory"
+msgstr "ספריית קורסים"
+
+msgid "URLs"
+msgstr "כתובות URL"
+
+msgid "User details"
+msgstr "פרטי משתמש"
+
+msgid "Course details"
+msgstr "פרטי קורס"
+
+msgid "View details"
+msgstr "הצגת פרטים"
+
+msgid "Average progress"
+msgstr "התקדמות ממוצעת"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "הרשמה ישירה שייכת לקורס כולו, ולא לכתובת URL ספציפית, ולכן אותם נתוני 'ישיר' חוזרים למטה עבור כל כתובת URL שאליה הקורס מקושר. מפגשים הם הדרך המיועדת לשיתוף קורס בין כתובות URL עם מדדים השונים בפועל לכל כתובת URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "כניסות (כל כתובות ה-URL יחד)"
+
+msgid "Unique logins"
+msgstr "כניסות ייחודיות"
+
+msgid "Parent URL"
+msgstr "כתובת URL הורה"
+
+msgid "Logins (your URLs)"
+msgstr "כניסות (כתובות ה-URL שלך)"
+
+msgid "The picture could not be uploaded"
+msgstr "לא ניתן היה להעלות את התמונה"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "סוג שדה זה אינו נתמך במלואו עדיין — ערך גולמי בלבד."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "קורס זה קרוב למגבלת הרשמת המשתמשים שלו (%d\/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "השטח מוגבל באמצעות מאפייני הקורס שלך. כדי להגדיל את המגבלה, רכוש"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "הרשמות משתמשים מוגבלות באמצעות מאפייני הקורס שלך. כדי להגדיל את המגבלה, רכוש"
+
+msgid "pro plan"
+msgstr "תוכנית מקצועית"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "וייבא את גיבוי הקורס הזה דרך תחזוקת הקורס לקורס בתשלום החדש שלך, או פתח כרטיס כדי להמיר את הקורס לקורס מקצועי לאחר רכישת התוכנית."
+
+msgid "Tired of writing questions?"
+msgstr "נמאס לך לכתוב שאלות?"
+
+msgid "Upgrade your plan"
+msgstr "שדרג את התוכנית שלך"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "לתוכנית מקצועית כדי לקבל עזרה מבינה מלאכותית ביצירת שאלות איכותיות עבורך."
+
+msgid "Student Success AI Coach"
+msgstr "מאמן הצלחה לסטודנטים מבוסס בינה מלאכותית"
+
+msgid "No AI text provider is configured."
+msgstr "לא הוגדר ספק טקסט של בינה מלאכותית."
+
+msgid "Additional instructions for the AI coach"
+msgstr "הנחיות נוספות למאמן הבינה המלאכותית"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "דוגמה: ללומד זה יש קושי בשמירה על קשב. הצע פעילויות קצרות יותר ובדיקות הבנה תכופות יותר."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "השאירו חלון זה פתוח בזמן ש-Chamilo מכין את ההמלצה."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "ההמלצה נשמרה גם בתיבת הדואר הנכנס שלכם ב-Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "ההמלצה נוצרה ונשמרה עבור הלומד הזה, אך לא ניתן היה ליצור עותק בתיבת הדואר הנכנס."
+
+msgid "Student success recommendation"
+msgstr "המלצה להצלחת הסטודנט"
+
+msgid "Generated"
+msgstr "נוצר"
+
+msgid "Priority actions"
+msgstr "פעולות עדיפות"
+
+msgid "Evidence"
+msgstr "ראיות"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "תכונה זו תנתח את תוכן הקורס ותשלח מידע על התנהגות למידה למודל הבינה המלאכותית שהוגדר. אף שלא נשלחים למודל נתונים אישיים מזהים באופן ישיר, חלק מהנתונים הנשלחים עלולים לספק באופן עקיף מידע מזהה על המשתמש. במקרה של ספק, בדקו תמיד עם איש הקשר שלכם לנושא בינה מלאכותית לפני השימוש בתכונה זו."
+
+msgid "Additional activities"
+msgstr "פעילויות נוספות"
+
+msgid "Rhythm"
+msgstr "קצב"
+
+msgid "Learning methodologies"
+msgstr "מתודולוגיות למידה"
+
+msgid "Other recommendations"
+msgstr "המלצות אחרות"
+
+msgid "Analyzing course..."
+msgstr "מנתח את הקורס..."
+
+msgid "Analyzing student's learning..."
+msgstr "מנתח את הלמידה של הסטודנט..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "בקבלת הזמנה זו תקושרו למשתמש המבקש באופן שיאפשר לו לקרוא חלק מנתוני הפרופיל שלכם או את כולם. ודאו שאינכם משתפים יותר מדי על ידי בדיקת הפרופיל שלכם מול משתמשים שאתם כבר סומכים עליהם."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "ההרשאה לשימוש במיקרופון אינה מופעלת. הפעילו אותה בדפדפן כדי להקליט שמע"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "גרסה זו של Chamilo מגיעה עם קורס רב-לשוני אחד (או יותר) מותקן מראש. מומלץ לעיין בהם ברשימת הקורסים ולהחליט אם הם צריכים להיות ציבוריים."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "אין לכם כרגע גישה לאף כתובת URL. בקשו מהמנהל להעניק לכם גישה לכתובת ה-URL שאליה אתם שייכים."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "אם ספק הבינה המלאכותית שנבחר אינו שירות ריבוני, תוכן המסמך שנבחר עלול להישלח לשירות חיצוני. אל תמשיכו עם מידע סודי אלא אם הארגון שלכם מתיר זאת."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "לחצו על איחוד בחשבון שצריך להישאר. המערכת תמזג אליו את כל החשבונות האחרים באותה קבוצת כפילויות. חשבונות שמוזגו יימחקו לצמיתות וייעלמו מדוח זה. לא ניתן לבטל פעולה זו."
+
+msgid "Permanent deletion"
+msgstr "מחיקה לצמיתות"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "איחוד כבר מוחק לצמיתות חשבונות שמוזגו. השתמשו ברשימת המשתמשים רק אם ברצונכם למחוק חשבונות נוספים באופן ידני."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "אתם משנים לוגו עבור ערכת הנושא החזותית ברירת המחדל “chamilo”. שקלו ליצור/להשתמש בערכת נושא חזותית מותאמת כדי להימנע מדריסת ברירות המחדל."
+
+msgid "This exercise has no questions."
+msgstr "לתרגיל זה אין שאלות."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "כיצד להציג את המשוב/ההערה לכל שאלה? אפשרות זו מגדירה כיצד זה יוצג ללומד בעת ביצוע המבחן."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "יישומים אלה יכולים לגשת ל-Chamilo בשמכם, תוך שימוש בהרשאות החשבון הקיימות שלכם ולא מעבר לכך. בטלו כל יישום שאינכם משתמשים בו עוד או שאינכם מזהים."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "נא להסביר מדוע ברצונכם לבקש את משיכת הסכמתכם המשפטית, כדי שנוכל לטפל בבקשה כראוי"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "השתמשו במפתח אישי זה כדי לחבר לקוח MCP מרוחק ל-Chamilo עם החשבון וההרשאות שלכם."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "המפתח המלא מוצג פעם אחת בלבד. שמרו אותו באופן מאובטח. יצירת מפתח חדש מבטלת מיד את הקודם."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "המפתח מאמת את הלקוח כחשבון Chamilo שלכם. הוא אינו מעניק הרשאות שאין לחשבון שלכם כבר."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "הצגת הצהרת תנאים והגבלות בדף ההרשמה, ודרישה מהמבקר לקבל את התנאים וההגבלות כדי להירשם"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "תוכן התנאים וההגבלות יישלח למודל שפה של בינה מלאכותית. עיינו בתרגום המוצע לפני השמירה."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "כבר קיימת גרסה שמורה לשפת היעד. שמירת הצעה זו תיצור גרסה חדשה."
+
+msgid "Acquired"
+msgstr "נרכש"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "תמונת קורס מומלצת: 1600 × 900 פיקסלים (16:9). השתמשו בלפחות 1280 × 720 פיקסלים לתצוגה חדה במסכים גדולים או בצפיפות גבוהה."
+
+msgid "Courses of the selected URL"
+msgstr "קורסים של כתובת ה-URL שנבחרה"
+
+msgid "Course categories in selected URL"
+msgstr "קטגוריות קורסים בכתובת ה-URL שנבחרה"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "החשבון שלכם פעיל. ניתן להתחבר ולבדוק את הקורסים כעת."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "תחילה עליכם להוריד את התיקונים <a href='%s'> כאן </a>.\nלאחר מכן עליכם לחלץ את הקובץ ולערוך את הקבצים כרצונכם בלי לשנות את שמות הקבצים.\nלאחר מכן צרו קובץ zip עם הקבצים המעודכנים והעלו אותו בטופס זה."
+
+msgid "Adding students from session %s to session %s"
+msgstr "הוספת סטודנטים מהסשן %s לסשן %s"
+
+msgid "Show all attempts by exercise"
+msgstr "הצגת כל הניסיונות לפי תרגיל"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "פעולה זו תחרוג ממגבלת המשתמשים המותרת לקורס שנבחר."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "חלק מההרשמות לא בוצעו כי הגיעו למגבלת המשתמשים המותרת לקורס המושפע. משתמשים/קורסים מושפעים: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "רישום זה מפרט דפי דיווח ידועים, את הקטגוריה שלהם, כתובת URL קנונית, כתובת URL ישנה וקהל התפקידים הצפוי. כתובות URL קנוניות מפנות ליישום הדוח הנוכחי ואוכפות את מטריצת תפקידי הדוח המתועדת."
+
+msgid "E-mail notification subscription"
+msgstr "הרשמה להודעות בדוא\"ל"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "פעולה זו תחרוג ממגבלת %s משתמשים לקורס שנקבעה על ידי המנהלים. ההרשמה בוטלה."
+
+msgid "Language the document is in"
+msgstr "השפה שבה כתוב המסמך"
+
+msgid "There is no session still"
+msgstr "עדיין אין סשן"
+
+msgid "Origin courses from session"
+msgstr "קורסי מקור מהסשן"
+
+msgid "Destination courses from session"
+msgstr "קורסי יעד מהסשן"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "גישה ציבורית (גישה מורשית לכל חבר בקורס)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "צור %d מונחי מילון מונחים לקורס בנושא '%s', כל מונח בשורה נפרדת, עם ההגדרה בשורה הבאה ושורה ריקה אחת בין כל מונח. אל תוסיף עיצוב אחר לכותרת או להגדרה."
+
+msgid "This is a short description of the course '%s'."
+msgstr "זהו תיאור קצר של הקורס '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "אתה משתמש ב-Chamilo בפלטפורמת Windows. כלי עזר להמרת מסמכים אינם זמינים לאינדוקס טקסט מלא."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "הגדרת ההפעלה האוטומטית של המבחן מופעלת. התלמידים יופנו לרשימת המבחנים."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "הגדרת ההפעלה האוטומטית של המבחן מופעלת. התלמידים יופנו למבחן ספציפי."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "מגבלת ההרשמה לקורס זה הושגה (%current%\/%limit%)."
+
+msgid "Count course by language"
+msgstr "ספירת קורסים לפי שפה"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "משתמשים שהגישה האחרונה שלהם קודמת לתאריך שנבחר."
 

@@ -39,7 +39,7 @@ msgid "Total: %s"
 msgstr "I alt: %s"
 
 msgid "Download badges"
-msgstr "Download badges"
+msgstr "Hent badges"
 
 msgid "Badges issuer details"
 msgstr "Badges-udstederdetaljer"
@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med venlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel eksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formelprøve: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervaller"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ja:Copyright,, nej:ingen Copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappe,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Mappe,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":øvelse:øvelse,,      simulation:simulation,,      spørgeskema:spørgeskema,,      diagram:diagram,,      figur:figur,,      graf:graf,,      indeks:indeks,,      slide:slide,,      tabel:tabel,,      narrativ tekst:narrativ tekst,,      eksamen:eksamen,,      eksperiment:eksperiment,,      problemformulering:problemformulering,,      selvvurdering:selvvurdering,,      forelæsning:forelæsning"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(anbefales)"
 
 msgid "SCORM DB"
-msgstr "SCORM DB"
+msgstr "SCORM-DB"
 
 msgid "Administrator last name"
 msgstr "Administrators efternavn"
@@ -7941,7 +7941,7 @@ msgid "This answer has not yet been corrected. Meanwhile, your score for this qu
 msgstr "Dette svar er endnu ikke blevet rettet. Imidlertid er din score i forbindelse med dette spørgsmål sat til 0, hvilket påvirker din totale score."
 
 msgid "Hot Potatoes Admin"
-msgstr "Hot Potatoes Admin"
+msgstr "Hot Potatoes-admin"
 
 msgid "New question"
 msgstr "Nyt spørgsmål"
@@ -9268,6 +9268,15 @@ msgstr "Tidsrapport for session %s"
 
 msgid "Error"
 msgstr "Fejl"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Brugeren blev oprettet, men et af de ekstra profilfelter kunne ikke gemmes."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Brugeren blev opdateret, men et af de ekstra profilfelter kunne ikke gemmes."
+
+msgid "One or more fields contain invalid values."
+msgstr "Et eller flere felter indeholder ugyldige værdier."
 
 msgid "Anonymous"
 msgstr "Anonym"
@@ -15308,6 +15317,30 @@ msgstr "Tid brugt sidste uge"
 msgid "System status"
 msgstr "Systemstatus"
 
+msgid "Courses space"
+msgstr "Kursusområde"
+
+msgid "Database server configuration and metadata"
+msgstr "Database-serverkonfiguration og metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Diskforbrug pr. kursus vs. diskkvote"
+
+msgid "Information about your webserver configuration"
+msgstr "Oplysninger om din webserverkonfiguration"
+
+msgid "Paths"
+msgstr "Stier"
+
+msgid "State of Chamilo requirements"
+msgstr "Status for Chamilo-krav"
+
+msgid "State of PHP settings on the server"
+msgstr "Status for PHP-indstillinger på serveren"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path()-konstanter opløst på denne portal"
+
 msgid "Is writable"
 msgstr "Er skrivbar"
 
@@ -16341,7 +16374,7 @@ msgid "Preferred contact language"
 msgstr "Foretrukket kontaktsprog"
 
 msgid "Send information"
-msgstr "Send information"
+msgstr "Send oplysninger"
 
 msgid "You must accept the licence"
 msgstr "Du skal acceptere licensen"
@@ -20675,6 +20708,9 @@ msgstr "På færdighedshjulet vises navnet på færdigheden, når den har kort k
 msgid "Created by"
 msgstr "Oprettet af"
 
+msgid "Created by %s on %s"
+msgstr "Oprettet af %s den %s"
+
 msgid "Hide general coach in dropbox"
 msgstr "Skjul generel underviser i dropbox"
 
@@ -20937,7 +20973,7 @@ msgid "Crop your picture"
 msgstr "Besklip dit billede"
 
 msgid "Download badge"
-msgstr "Download badge"
+msgstr "Hent badge"
 
 msgid "No XML file found in the zip archive. This is a requirement for this type of import."
 msgstr "Ingen XML-fil fundet i zip-arkivet. Dette er et krav for denne type import."
@@ -24543,7 +24579,7 @@ msgid "It allows the acquisition of skills by sub categories independently."
 msgstr "Det tillader opkvalificering af kompetencer efter underkategorier uafhængigt."
 
 msgid "Minimum score"
-msgstr "Minimum score"
+msgstr "Minimumscore"
 
 msgid "In LP"
 msgstr "I LP"
@@ -26946,7 +26982,7 @@ msgid "Immediately block users who have been disabled by the admin through users
 msgstr "Blokér øjeblikkeligt brugere, der er blevet deaktiveret af admin gennem brugerhåndtering. Ellers beholder deaktiverede brugere deres tidligere privilegier, indtil de logger ud."
 
 msgid "Session cookie samesite"
-msgstr "Session cookie samesite"
+msgstr "Session-cookie samesite"
 
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr "Aktivér samesite:None-parameter for session cookie. Mere info: https://www.chromium.org/updates/same-site og https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
@@ -28210,7 +28246,7 @@ msgid "Super admin"
 msgstr "Superadmin"
 
 msgid "Global admin"
-msgstr "Global admin"
+msgstr "Global administrator"
 
 msgid "Question manager"
 msgstr "Spørgsmålsadministrator"
@@ -28807,7 +28843,7 @@ msgid "Diagnosis of user %s (language: %s) with link %s. Contact at %s"
 msgstr "Diagnose for bruger %s (sprog: %s) med link %s. Kontakt på %s"
 
 msgid "%s support"
-msgstr "%s support"
+msgstr "%s-support"
 
 msgid "This option is not available because this activity is contained by an assessment."
 msgstr "Denne mulighed er ikke tilgængelig, fordi denne aktivitet er indeholdt i en vurdering."
@@ -31878,6 +31914,9 @@ msgstr "Skriv noget til %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Foretrukket: SVG. PNG anbefalet bredde: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Anbefalet PNG-bredde: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Upload PNG-logo til e-mails (~%spx bredde)"
 
@@ -31913,6 +31952,9 @@ msgstr "Klik for at indsætte"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Foretrukket: SVG. PNG maks. størrelse: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Maks. PNG-størrelse: %spx."
 
 msgid "View badge"
 msgstr "Vis mærke"
@@ -34675,7 +34717,7 @@ msgid "Global administrator"
 msgstr "Global administrator"
 
 msgid "Session manager"
-msgstr "Session manager"
+msgstr "Sessionsansvarlig"
 
 msgid "Human resources manager"
 msgstr "HR-manager"
@@ -35497,7 +35539,7 @@ msgid "%s results"
 msgstr "%s resultater"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Eksempel: udfyld formularaktiviteten: beregn kropsmasseindeks (BMI)</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Alder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Køn</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vægt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Højde</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Kropsmasseindeks</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vægt/Højde<sup>2</sup> (jf. <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Fjernet"
@@ -36502,22 +36544,22 @@ msgid "You must add at least one question"
 msgstr "Du skal tilføje mindst ét spørgsmål"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "Avancerede handlinger"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "Applikationssti"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "Anvend fildetaljer"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "Anvend plandetaljer"
 
 msgid "Apply plan failed"
-msgstr "Apply plan failed"
+msgstr "Anvendelse af plan mislykkedes"
 
 msgid "Apply plan ready"
-msgstr "Apply plan ready"
+msgstr "Plan klar til anvendelse"
 
 msgid "Apply preparation"
 msgstr "Anvend forberedelse"
@@ -38064,6 +38106,9 @@ msgstr "Afslutter"
 msgid "Draft saved"
 msgstr "Udkast gemt"
 
+msgid "Save as draft"
+msgstr "Gem som kladde"
+
 msgid "Statement"
 msgstr "Opgavetekst"
 
@@ -38437,7 +38482,7 @@ msgid "Total score is calculated as the sum of hotspot scores."
 msgstr "Samlet score beregnes som summen af hotspot-scorer."
 
 msgid "Global score"
-msgstr "Global score"
+msgstr "Samlet score"
 
 msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
 msgstr "Vælg en hotspot-række, vælg dens form, og tegn derefter på billedet. For polygoner klikkes på hvert punkt, og polygonen afsluttes, eller dobbeltklik for at afslutte."
@@ -39485,4 +39530,265 @@ msgstr "Denne bruger er allerede tilmeldt sessionen."
 
 msgid "This user is already subscribed to the course."
 msgstr "Denne bruger er allerede tilmeldt kurset."
+
+msgid "Multi URLs"
+msgstr "Flere URL'er"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Enheder som brugere og kurser kan være aktive på mere end én URL ad gangen, så summen af værdierne nedenfor matcher ikke totalen."
+
+msgid "User directory"
+msgstr "Brugerkatalog"
+
+msgid "Course directory"
+msgstr "Kursuskatalog"
+
+msgid "URLs"
+msgstr "URL'er"
+
+msgid "User details"
+msgstr "Brugeroplysninger"
+
+msgid "Course details"
+msgstr "Kursusoplysninger"
+
+msgid "View details"
+msgstr "Vis detaljer"
+
+msgid "Average progress"
+msgstr "Gennemsnitlig fremgang"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Direkte tilmelding hører til kurset som helhed, ikke til en specifik URL, så de samme 'Direkte'-tal gentages nedenfor for hver URL, dette kursus er knyttet til. Sessioner er den tiltænkte måde at dele et kursus på tværs af URL'er med målinger, der faktisk adskiller sig pr. URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Logins (alle URL'er samlet)"
+
+msgid "Unique logins"
+msgstr "Unikke logins"
+
+msgid "Parent URL"
+msgstr "Overordnet URL"
+
+msgid "Logins (your URLs)"
+msgstr "Logins (dine URL'er)"
+
+msgid "The picture could not be uploaded"
+msgstr "Billedet kunne ikke uploades"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Denne felttype understøttes endnu ikke fuldt ud — kun rå værdi."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Dette kursus er tæt på sin grænse for brugerabonnementer (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Pladsen er begrænset via dine kursusegenskaber. For at øge din grænse skal du få en"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Brugerabonnementer er begrænset via dine kursusegenskaber. For at øge din grænse skal du få en"
+
+msgid "pro plan"
+msgstr "pro-plan"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "og importere dette kursus' sikkerhedskopi via Kursusvedligeholdelse til dit nye betalte kursus, eller oprette en sag for at få kurset konverteret til et pro-kursus, når du har anskaffet denne plan."
+
+msgid "Tired of writing questions?"
+msgstr "Træt af at skrive spørgsmål?"
+
+msgid "Upgrade your plan"
+msgstr "Opgrader din plan"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "til en pro-plan for at få hjælp fra en AI til at generere kvalitets spørgsmål til dig."
+
+msgid "Student Success AI Coach"
+msgstr "AI-coach til studerendes succes"
+
+msgid "No AI text provider is configured."
+msgstr "Ingen AI-tekstudbyder er konfigureret."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Yderligere instruktioner til AI-coachen"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Eksempel: Denne lærende har svært ved at holde opmærksomheden. Foreslå kortere aktiviteter og hyppigere tjek af forståelse."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Hold dette vindue åbent, mens Chamilo forbereder anbefalingen."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Anbefalingen blev også gemt i din Chamilo-indbakke."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Anbefalingen blev genereret og gemt for denne lærende, men kopien til indbakken kunne ikke oprettes."
+
+msgid "Student success recommendation"
+msgstr "Anbefaling om studerendes succes"
+
+msgid "Generated"
+msgstr "Genereret"
+
+msgid "Priority actions"
+msgstr "Prioriterede handlinger"
+
+msgid "Evidence"
+msgstr "Dokumentation"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Denne funktion analyserer indholdet i dette kursus og sender oplysninger om læringsadfærd til den konfigurerede AI-model. Selvom der ikke sendes direkte identificerbare personoplysninger til AI-modellen, kan noget af de sendte data indirekte give identificerbare oplysninger om brugeren. Er du i tvivl, så tjek altid med din AI-referenceperson, før du bruger denne funktion."
+
+msgid "Additional activities"
+msgstr "Yderligere aktiviteter"
+
+msgid "Rhythm"
+msgstr "Rytme"
+
+msgid "Learning methodologies"
+msgstr "Læringsmetoder"
+
+msgid "Other recommendations"
+msgstr "Andre anbefalinger"
+
+msgid "Analyzing course..."
+msgstr "Analyserer kursus..."
+
+msgid "Analyzing student's learning..."
+msgstr "Analyserer den studerendes læring..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Ved at acceptere denne invitation bliver du knyttet til den anmodende bruger, så noget eller alt af dine profildata kan læses af den anmodende bruger. Sørg for, at du ikke deler for meget ved at tjekke din profil hos brugere, du allerede stoler på."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Tilladelse til at bruge mikrofonen er ikke aktiveret. Aktivér den i din browser for at optage lyd"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Denne version af Chamilo leveres med ét (eller flere) flersprogede kursus(er) forudinstalleret. Gennemgå dem gerne på kursuslisten, og beslut om de skal være offentlige eller ej."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Du har i øjeblikket ikke adgang til nogen URL. Bed administratoren om at give dig adgang til den URL, du tilhører."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Hvis den valgte AI-udbyder ikke er en suveræn tjeneste, kan det valgte dokumentindhold blive sendt til en ekstern tjeneste. Fortsæt ikke med fortrolige oplysninger, medmindre din organisation tillader det."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Klik på Forén på den konto, der skal beholdes. Systemet fletter alle andre konti i samme dubletgruppe ind i den. Flettede konti slettes permanent og forsvinder fra denne rapport. Denne handling kan ikke fortrydes."
+
+msgid "Permanent deletion"
+msgstr "Permanent sletning"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Forén sletter allerede flettede konti permanent. Brug kun brugerlisten, hvis du vil slette yderligere konti manuelt."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Du ændrer logoer for det standard visuelle tema “chamilo”. Overvej at oprette/bruge et brugerdefineret visuelt tema for at undgå at overskrive standarderne."
+
+msgid "This exercise has no questions."
+msgstr "Denne øvelse har ingen spørgsmål."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Hvordan skal feedback/kommentar vises for hvert spørgsmål? Denne indstilling definerer, hvordan den vises for den studerende under testen."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Disse applikationer kan tilgå Chamilo som dig med dine eksisterende kontotilladelser og intet mere. Tilbagekald dem, du ikke længere bruger eller genkender."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Forklar venligst, hvorfor du vil anmode om tilbagetrækning af dit juridiske samtykke, så vi kan behandle din anmodning korrekt"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Brug denne personlige nøgle til at forbinde en fjern MCP-klient til Chamilo med din egen konto og dine tilladelser."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Den fulde nøgle vises kun én gang. Gem den sikkert. Generering af en ny nøgle ugyldiggør straks den forrige."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Nøglen autentificerer klienten som din Chamilo-konto. Den giver ikke tilladelser, som din konto ikke allerede har."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Vis en erklæring om vilkår og betingelser på registreringssiden, og kræv at besøgende accepterer vilkårene for at registrere sig"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Indholdet af vilkår og betingelser sendes til en AI-sprogmodel. Gennemgå den foreslåede oversættelse, før du gemmer den."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Der findes allerede en gemt version for målsproget. Hvis du gemmer dette forslag, oprettes en ny version."
+
+msgid "Acquired"
+msgstr "Erhvervet"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Anbefalet kursusbillede: 1600 × 900 px (16:9). Brug mindst 1280 × 720 px for skarp visning på større eller højtopløselige skærme."
+
+msgid "Courses of the selected URL"
+msgstr "Kurser på den valgte URL"
+
+msgid "Course categories in selected URL"
+msgstr "Kursuskategorier på den valgte URL"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Din konto er aktiv. Du kan logge ind og se dine kurser nu."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Først skal du downloade rettelserne <a href='%s'> her </a>.\nDerefter skal du udpakke filen og redigere filerne som ønsket uden at ændre filnavnene.\nOpret derefter en zip-fil med de ændrede filer, og upload den i denne formular."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Tilføjer studerende fra session %s til session %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Vis alle forsøg pr. øvelse"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Denne handling ville overskride den tilladte brugergrænse for det valgte kursus."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Nogle tilmeldinger kunne ikke udføres, fordi de nåede den tilladte brugergrænse for det berørte kursus. Berørte brugere/kurser: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Dette register viser kendte rapportsider, deres kategori, kanonisk URL, ældre URL og forventet rollepublikum. Kanoniske URL'er leder til den aktuelle rapportimplementering og håndhæver den dokumenterede rapportrollematrix."
+
+msgid "E-mail notification subscription"
+msgstr "Abonnement på e-mailnotifikation"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Denne handling ville overskride grænsen på %s brugere pr. kursus, som administratorerne har fastsat. Tilmeldingen er annulleret."
+
+msgid "Language the document is in"
+msgstr "Sprog dokumentet er på"
+
+msgid "There is no session still"
+msgstr "Der er endnu ingen session"
+
+msgid "Origin courses from session"
+msgstr "Oprindelseskurser fra session"
+
+msgid "Destination courses from session"
+msgstr "Destinationskurser fra session"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Åben adgang til kurset fra systemets forside selv uden login."
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Generer %d glossarudtryk til et kursus om '%s', hvert udtryk på en enkelt linje, med definitionen på næste linje og én tom linje mellem hvert udtryk. Tilføj ingen anden formatering til titlen eller definitionen."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Dette er en kort beskrivelse af kurset '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Du bruger Chamilo på en Windows-platform. Hjælpeværktøjer til dokumentkonvertering er ikke tilgængelige til fuldtekstindeksering."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Indstillingen for automatisk start af test er TIL. Studerende omdirigeres til testlisten."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Indstillingen for automatisk start af test er TIL. Studerende omdirigeres til en specifik test."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Tilmeldingsgrænsen for dette kursus er nået (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Tæl kurser efter sprog"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Brugere, hvis seneste adgang er ældre end den valgte dato."
 

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول بېلګه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول بېلګه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:کاپي راټ,, no:کاپي راټ نشته"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوښۍ,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:فولډر,, application\/msword:MsWord,, application\/octet-stream:اکټیټ سټریم,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:مشق,,      simulation:سيموليشن,,      questionnaire: پوښتنليک,,      diagram: ډايګرام,,      figure: انځور,,      graph:ګراف,,      index:اشاره,,      slide:سلایډ,,      table:جدول,,      narrative text:روايتي متن,,      exam: امتحان,,      experiment: تجربې,,      problem statement: ستونزې بيان,,      self assessment: ځان ارزونه,,      lecture: درس"
@@ -4636,7 +4636,7 @@ msgid "Invalid end date was given."
 msgstr "ناسم پای نېټه ورکړل شوې."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d\/m\/y h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "د کور پاڼې فایلونه لیکل کېدی نشي!"
@@ -9263,6 +9263,15 @@ msgstr "د %s د غونډې وخت راپور"
 
 msgid "Error"
 msgstr "خطا"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "کارن جوړ شو، خو یوه له اضافي پروفایل ساحو نه شوه خوندي کېدای."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "کارن تازه شو، خو یوه له اضافي پروفایل ساحو نه شوه خوندي کېدای."
+
+msgid "One or more fields contain invalid values."
+msgstr "یوه یا څو ساحې ناسم ارزښتونه لري."
 
 msgid "Anonymous"
 msgstr "ناسم نوم"
@@ -15303,6 +15312,30 @@ msgstr "تېره اونې تېر شوی وخت"
 msgid "System status"
 msgstr "سيستم حالت"
 
+msgid "Courses space"
+msgstr "د کورسونو ځای"
+
+msgid "Database server configuration and metadata"
+msgstr "د ډیټابیس سرور تنظیمات او میټاډاټا"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "د هر کورس د ډیسک کارونه د ډیسک سهم په مقابل کې"
+
+msgid "Information about your webserver configuration"
+msgstr "ستاسو د ویب‌سرور د تنظیماتو په اړه معلومات"
+
+msgid "Paths"
+msgstr "لارې"
+
+msgid "State of Chamilo requirements"
+msgstr "د چامیلو د اړتیاوو حالت"
+
+msgid "State of PHP settings on the server"
+msgstr "په سرور کې د PHP تنظیماتو حالت"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "په دې پورټل کې حل شوي api_get_path() ثابتونه"
+
 msgid "Is writable"
 msgstr "ليکلو وړ دی"
 
@@ -20669,6 +20702,9 @@ msgstr "په مهارتونو چرخ کې، کله چې لنډ کوډ ولري �
 
 msgid "Created by"
 msgstr "جوړ کړی شوی له"
+
+msgid "Created by %s on %s"
+msgstr "د %s لخوا په %s جوړ شوی"
 
 msgid "Hide general coach in dropbox"
 msgstr "په ډراپ باکس کې عمومي مدرس پټ کړئ"
@@ -31872,6 +31908,9 @@ msgstr "څه لیکلي %s ته"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "غوره: SVG. د PNG وړاندیز شوی عرض: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "د PNG وړاندیز شوې پلنوالی: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "PNG لوګو د بریښنالیکو لپاره اپلوډ کړئ (~%spx عرض)"
 
@@ -31907,6 +31946,9 @@ msgstr "د داخل کولو لپاره کلیک وکړئ"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "غوره: SVG. PNG اعظمي اندازې: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "د PNG اعظمي اندازه: %spx."
 
 msgid "View badge"
 msgstr "د نښې لیدل"
@@ -37696,10 +37738,10 @@ msgid "Do you want to continue your session?"
 msgstr "آیا غواړئ خپل سیشن ته دوام ورکړئ؟"
 
 msgid "Your session details have been lost, please login again."
-msgstr ""
+msgstr "ستاسو د ناستې جزئیات له لاسه تللي، مهرباني وکړئ بیا ننوتل وکړئ."
 
 msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
-msgstr ""
+msgstr "دې سرچینې ته لاسرسی رد شوی. داسې ښکاري چې تاسو اړینې اجازې نلرئ."
 
 msgid "Stay connected"
 msgstr "نښلېدل پاتې شئ"
@@ -38057,6 +38099,9 @@ msgstr "پای ته رسول"
 
 msgid "Draft saved"
 msgstr "مسوده خوندي شوه"
+
+msgid "Save as draft"
+msgstr "د مسودې په توګه خوندي کړئ"
 
 msgid "Statement"
 msgstr "بیان"
@@ -39169,109 +39214,109 @@ msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /ser
 msgstr "Apache: mod_status فعال کړئ (ExtendedStatus On) او localhost ته /server-status ته اجازه ورکړئ. Nginx: stub_status په localhost-only ځای کې فعال کړئ لکه /nginx_status یا /stub_status."
 
 msgid "Grade percentage distribution"
-msgstr ""
+msgstr "د نمرې سلنې ویش"
 
 msgid "Top learners"
-msgstr ""
+msgstr "غوره زده‌کوونکي"
 
 msgid "This progress combines learning path progress and the learner's average exercise result"
-msgstr ""
+msgstr "دا پرمختګ د زده‌کړې لارې پرمختګ او د زده‌کوونکي د تمرین اوسط پایله سره یوځای کوي"
 
 msgid "Additional profile fields"
-msgstr ""
+msgstr "اضافي پروفایل ساحې"
 
 msgid "Visible columns"
-msgstr ""
+msgstr "ښکاره کالمونه"
 
 msgid "Learning path completion"
-msgstr ""
+msgstr "د زده‌کړې لارې بشپړتیا"
 
 msgid "Number of certificates"
-msgstr ""
+msgstr "د سندونو شمېر"
 
 msgid "Could not export the report"
-msgstr ""
+msgstr "راپور صادر نه شو"
 
 msgid "Second learner"
-msgstr ""
+msgstr "دوهم زده‌کوونکی"
 
 msgid "Results by learner"
-msgstr ""
+msgstr "پایلې د زده‌کوونکي له مخې"
 
 msgid "Use filters to narrow down questions."
-msgstr ""
+msgstr "د پوښتنو محدودولو لپاره فلټرونه وکاروئ."
 
 msgid "Try adjusting your filters and search again."
-msgstr ""
+msgstr "خپل فلټرونه تنظیم کړئ او بیا لټون وکړئ."
 
 msgid "Results per page"
-msgstr ""
+msgstr "پایلې په هره پاڼه کې"
 
 msgid "No answers"
-msgstr ""
+msgstr "ځوابونه نشته"
 
 msgid "Tests using this question"
-msgstr ""
+msgstr "ازموینې چې دا پوښتنه کاروي"
 
 msgid "Delete failed"
-msgstr ""
+msgstr "ړنګول ناکام شو"
 
 msgid "PHP cache"
-msgstr ""
+msgstr "PHP کیش"
 
 msgid "Live OPcache and APCu diagnostics"
-msgstr ""
+msgstr "د ژوندي OPcache او APCu تشخیصونه"
 
 msgid "Click to show OPcache and APCu diagnostics"
-msgstr ""
+msgstr "د OPcache او APCu تشخیصونو ښودلو لپاره کلیک وکړئ"
 
 msgid "Memory used"
-msgstr ""
+msgstr "کارول شوې حافظه"
 
 msgid "OPcache is installed but not enabled."
-msgstr ""
+msgstr "OPcache نصب دی خو فعال نه دی."
 
 msgid "OPcache extension is not available on this server."
-msgstr ""
+msgstr "د OPcache پراختیا په دې سرور کې شتون نلري."
 
 msgid "APCu is installed but not enabled."
-msgstr ""
+msgstr "APCu نصب دی خو فعال نه دی."
 
 msgid "APCu extension is not available on this server."
-msgstr ""
+msgstr "د APCu پراختیا په دې سرور کې شتون نلري."
 
 msgid "Constant"
-msgstr ""
+msgstr "ثابت"
 
 msgid "Space used on disk (MB)"
-msgstr ""
+msgstr "په ډیسک کارول شوې فضا (MB)"
 
 msgid "Set max course space (MB)"
-msgstr ""
+msgstr "د کورس اعظمي فضا وټاکئ (MB)"
 
 msgid "Memory free"
-msgstr ""
+msgstr "ازاده حافظه"
 
 msgid "Memory wasted"
-msgstr ""
+msgstr "ضایع شوې حافظه"
 
 msgid "Memory used %"
-msgstr ""
+msgstr "کارېدلې حافظه %"
 
 msgid "Cached scripts"
-msgstr ""
+msgstr "کیش شوي سکریپټونه"
 
 msgid "Cached keys"
-msgstr ""
+msgstr "کیش شوې کیلي"
 
 msgid "Misses"
-msgstr ""
+msgstr "له لاسه تللې"
 
 msgid "Cache full"
-msgstr ""
+msgstr "کیش ډک دی"
 
 msgid "OOM restarts"
-msgstr ""
+msgstr "د حافظې د نشتوالي بیا پیلونه"
 
 msgid "Hash restarts"
 msgstr "هش بیا پیلونه"
@@ -39479,4 +39524,265 @@ msgstr "دا کاروونکی دمخکې له سیشن سره ثبت شوی دی
 
 msgid "This user is already subscribed to the course."
 msgstr "دا کاروونکی دمخکې له کورس سره ثبت شوی دی."
+
+msgid "Multi URLs"
+msgstr "څو URLs"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "هستۍ لکه کارنان او کورسونه په ورته وخت کې په له یو څخه زیات URL کې فعالې کېدای شي، نو د لاندې ارزښتونو مجموعه به له ټولیز سره سمون ونه لري."
+
+msgid "User directory"
+msgstr "د کارن لارښود"
+
+msgid "Course directory"
+msgstr "د کورس لارښود"
+
+msgid "URLs"
+msgstr "URLs"
+
+msgid "User details"
+msgstr "د کارن جزئیات"
+
+msgid "Course details"
+msgstr "د کورس جزئیات"
+
+msgid "View details"
+msgstr "جزئیات وګورئ"
+
+msgid "Average progress"
+msgstr "اوسط پرمختګ"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "مستقیم نوم‌لیکنه ټول کورس ته اړه لري، نه یوه ځانګړي URL ته، نو ورته «مستقیم» ارقام لاندې د هر هغه URL لپاره تکرارېږي چې دا کورس ورسره تړلی دی. غونډې هغه لاره ده چې کورس په URLs کې شریک شي او معیارونه په حقیقت کې د هر URL لپاره توپیر ولري."
+
+msgid "Logins (all URLs combined)"
+msgstr "ننوتنې (ټول URLs یوځای)"
+
+msgid "Unique logins"
+msgstr "ځانګړې ننوتنې"
+
+msgid "Parent URL"
+msgstr "اصلي URL"
+
+msgid "Logins (your URLs)"
+msgstr "ننوتنې (ستاسو URLs)"
+
+msgid "The picture could not be uploaded"
+msgstr "انځور پورته نه شو"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "دا ډول ساحه لا بشپړه نه ده ملاتړ شوې — یوازې خام ارزښت."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "دا کورس د کارن ګډون حد ته نږدې دی (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "ځای ستاسو د کورس ځانګړتیاوو له لارې محدود دی. د حد زیاتولو لپاره، ترلاسه کړئ"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "د کارنانو ګډون ستاسو د کورس ځانګړتیاوو له لارې محدود دی. د حد زیاتولو لپاره، ترلاسه کړئ"
+
+msgid "pro plan"
+msgstr "مسلکي پلان"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "او د دې کورس بیک‌اپ د کورس ساتنې له لارې خپل نوي تادیه شوي کورس ته وارد کړئ، یا یو ټکټ پرانیزئ ترڅو ستاسو کورس په مسلکي کورس بدل شي کله چې دا پلان ترلاسه کړئ."
+
+msgid "Tired of writing questions?"
+msgstr "د پوښتنو لیکلو څخه ستړی یاست؟"
+
+msgid "Upgrade your plan"
+msgstr "خپل پلان لوړ کړئ"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "مسلکي پلان ته ترڅو د AI مرسته ترلاسه کړئ چې تاسو ته د کیفیت پوښتنې تولید کړي."
+
+msgid "Student Success AI Coach"
+msgstr "د زده‌کوونکي بریالیتوب AI روزونکی"
+
+msgid "No AI text provider is configured."
+msgstr "د AI متن چمتو کوونکی نه دی تنظیم شوی."
+
+msgid "Additional instructions for the AI coach"
+msgstr "د AI روزونکي لپاره اضافي لارښوونې"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "بېلګه: دا زده‌کوونکی د پام ساتلو کې ستونزه لري. لنډ فعالیتونه او د پوهې ډېرې پرله‌پسې ارزونې وړاندیز کړئ."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "دا کړکۍ پرانستې وساتئ ترڅو چې چامیلو سپارښتنه چمتو کوي."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "سپارښتنه ستاسو د چامیلو اینباکس کې هم خوندي شوه."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "سپارښتنه د دې زده‌کوونکي لپاره تولید او خوندي شوه، خو د اینباکس کاپي جوړه نه شوه."
+
+msgid "Student success recommendation"
+msgstr "د زده‌کوونکي بریالیتوب سپارښتنه"
+
+msgid "Generated"
+msgstr "تولید شوی"
+
+msgid "Priority actions"
+msgstr "لومړیتوب لرونکي اقدامات"
+
+msgid "Evidence"
+msgstr "شواهد"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "دا ځانګړتیا به د دې کورس محتوا تحلیل کړي او د زده‌کړې چلند معلومات به تنظیم شوي AI ماډل ته ولېږي. که څه هم مستقیم پېژندونکي شخصي معلومات AI ماډل ته نه لېږل کېږي، ځینې لېږل شوي معلومات ممکن په غیرمستقیم ډول د کارن په اړه پېژندونکي معلومات ورکړي. که شک لرئ، تل د دې ځانګړتیا کارولو دمخه له خپل AI مرجع کس سره وګورئ."
+
+msgid "Additional activities"
+msgstr "اضافي فعالیتونه"
+
+msgid "Rhythm"
+msgstr "ریتم"
+
+msgid "Learning methodologies"
+msgstr "د زده‌کړې میتودونه"
+
+msgid "Other recommendations"
+msgstr "نورې سپارښتنې"
+
+msgid "Analyzing course..."
+msgstr "کورس تحلیل کېږي..."
+
+msgid "Analyzing student's learning..."
+msgstr "د زده‌کوونکي زده‌کړه تحلیل کېږي..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "د دې بلنې په منلو سره به تاسو د غوښتونکي کارن سره په داسې ډول وتړل شئ چې ستاسو د پروفایل ځینې یا ټول معلومات د هغه لوستلو لپاره شته شي. مهرباني وکړئ ډاډ ترلاسه کړئ چې ډېر معلومات نه شریکوي، د هغو کارنانو سره چې ورته باور لرئ خپل پروفایل وګورئ."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "د مایکروفون کارولو اجازه فعاله نه ده، مهرباني وکړئ په خپل براوزر کې یې فعال کړئ ترڅو غږ ثبت کړئ"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "د چامیلو دا نسخه له یو (یا څو) مخکې نصب شوي څوژبني کورس(ونو) سره راځي. په کورسونو لړلیک کې یې وګورئ او پریکړه وکړئ چې عامه وي که نه."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "تاسو اوس مهال هیڅ URL ته لاسرسی نلرئ. له مدیر څخه وغواړئ چې تاسو ته د هغه URL لاسرسی درکړي چې تاسو ورپورې اړه لرئ."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "که ټاکل شوی AI چمتوکوونکی خپلواک خدمت نه وي، د ټاکل شوي سند منځپانګه ممکن بهرني خدمت ته واستول شي. پرته له دې چې ستاسو سازمان اجازه ورکړي، د محرم معلوماتو سره دوام مه کوئ."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "په هغه حساب باندې Unify کلیک وکړئ چې پاتې کېږي. سیسټم به د ورته نقل ډلې نور ټول حسابونه په دې کې یوځای کړي. یوځای شوي حسابونه به د تل لپاره حذف شي او له دې راپور څخه به ورک شي. دا عمل بیرته نشي اخیستل کېدای."
+
+msgid "Permanent deletion"
+msgstr "د تل لپاره حذف"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify لا دمخه یوځای شوي حسابونه د تل لپاره حذف کوي. د کاروونکو لړلیک یوازې هغه وخت وکاروئ چې غواړئ نور حسابونه په لاسي ډول حذف کړئ."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "تاسو د ډیفالټ لیدیزې موضوع «chamilo» لوګوګانې بدلوی. د ډیفالټونو له بدلولو څخه د مخنیوي لپاره د دودیزې لیدیزې موضوع جوړول/کارول په پام کې ونیسئ."
+
+msgid "This exercise has no questions."
+msgstr "دا تمرین هیڅ پوښتنې نلري."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "د هرې پوښتنې لپاره فیډبک/تبصره څنګه وښیو؟ دا اختیار ټاکي چې زده‌کوونکي ته د ازموینې په وخت کې څنګه ښکاره شي."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "دا غوښتنلیکونه کولی شي د تاسو په توګه چامیلو ته لاسرسی وکړي، یوازې ستاسو د موجوده حساب اجازو سره. هغه لغوه کړئ چې نور یې نه کاروئ یا نه پېژنئ."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "مهرباني وکړئ تشریح کړئ چې ولې د خپل قانوني رضایت د بیرته اخیستلو غوښتنه کوئ، ترڅو موږ ستاسو غوښتنه په سمه توګه پروسس کړو"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "دا شخصي کیلي وکاروئ ترڅو لرې MCP پیرودونکی له چامیلو سره ستاسو د حساب او اجازو سره وصل کړئ."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "بشپړه کیلي یوازې یو ځل ښکاره کېږي. په خوندي ډول یې وساتئ. د نوې کیلي جوړول سمدستي پخوانۍ باطلوي."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "کیلي پیرودونکی ستاسو د چامیلو حساب په توګه تصدیقوي. هغه اجازې نه ورکوي چې ستاسو حساب لا دمخه نلري."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "په ثبت پاڼه کې د شرایطو او مقرراتو بیان وښایئ، لیدونکی باید د ثبت لپاره T&C ومني"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "د شرایطو او مقرراتو منځپانګه به AI ژبني ماډل ته واستول شي. وړاندیز شوې ژباړه د خوندي کولو دمخه وګورئ."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "د هدف ژبې لپاره خوندي شوې نسخه لا دمخه شته. د دې وړاندیز خوندي کول به نوې نسخه جوړه کړي."
+
+msgid "Acquired"
+msgstr "ترلاسه شوی"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "د کورس وړاندیز شوې انځور: ۱۶۰۰ × ۹۰۰ px (۱۶:۹). په لویو یا لوړ کثافت سکرینونو کې د تیز ښودلو لپاره لږترلږه ۱۲۸۰ × ۷۲۰ px وکاروئ."
+
+msgid "Courses of the selected URL"
+msgstr "د ټاکل شوي URL کورسونه"
+
+msgid "Course categories in selected URL"
+msgstr "په ټاکل شوي URL کې د کورسونو کټګورۍ"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "ستاسو حساب فعال دی، اوس کولی شئ ننوځئ او خپل کورسونه وګورئ."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "لومړی باید سمونې <a href='%s'> دلته </a> ډاونلوډ کړئ.\nوروسته هغه فایل خلاص کړئ او فایلونه د خپلې خوښې سره سمبدل کړئ پرته له دې چې د فایل نومونه بدل کړئ.\nبیا له هغو بدل شویو فایلونو څخه یو zip فایل جوړ کړئ او په دې فورم کې یې پورته کړئ."
+
+msgid "Adding students from session %s to session %s"
+msgstr "له سیشن %s څخه سیشن %s ته د زده‌کوونکو اضافه کول"
+
+msgid "Show all attempts by exercise"
+msgstr "د هر تمرین ټولې هڅې وښایئ"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "دا عملیات به د ټاکل شوي کورس لپاره د اجازه ورکړل شوي کاروونکو حد څخه زیات شي."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "ځینې ګډونونه نشي ترسره کېدای ځکه چې د اغېزمن کورس لپاره د کاروونکو حد ته رسېدلي دي. اغېزمن کاروونکي/کورسونه: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "دا ثبت پېژندل شوې راپور پاڼې، د هغوی کټګوري، معیاري URL، پخوانی URL او تمه شوې رول لیدونکي لیست کوي. معیاري URLونه اوسني راپور پلي کولو ته لارښوونه کوي او د راپور رول میټریکس پلي کوي."
+
+msgid "E-mail notification subscription"
+msgstr "د برېښنالیک خبرتیا ګډون"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "دا عملیات به د مدیرانو لخوا د هر کورس لپاره د %s کاروونکو حد څخه زیات شي. ګډون لغوه شوی دی."
+
+msgid "Language the document is in"
+msgstr "هغه ژبه چې سند په کې دی"
+
+msgid "There is no session still"
+msgstr "تر اوسه هیڅ سیشن نشته"
+
+msgid "Origin courses from session"
+msgstr "د سیشن اصلي کورسونه"
+
+msgid "Destination courses from session"
+msgstr "د سیشن منزل کورسونه"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "عامه لاسرسی (لاسرسی د کورس هر غړي ته اجازه شوې)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "د '%s' په اړه د کورس لپاره %d د لغت اصطلاحات جوړ کړئ، هره اصطلاح په یوه کرښه، تعریف یې په راتلونکې کرښه او د هرې اصطلاح ترمنځ یوه تشه کرښه. د سرلیک یا تعریف لپاره نور بڼه مه اضافه کوئ."
+
+msgid "This is a short description of the course '%s'."
+msgstr "دا د کورس '%s' لنډه تشریح ده."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "تاسو چامیلو په وینډوز پلیټفارم کاروئ. د سند بدلولو مرستندویان د بشپړ متن شاخص لپاره شتون نلري."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "د ازموینې اتومات پیل تنظیم فعال دی. زده‌کوونکي به د ازموینو لړلیک ته واستول شي."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "د ازموینې اتومات پیل تنظیم فعال دی. زده‌کوونکي به ځانګړې ازموینې ته واستول شي."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "د دې کورس د ګډون حد ته رسېدلی دی (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "د ژبې له مخې د کورسونو شمېر"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "هغه کاروونکي چې وروستی لاسرسی یې د ټاکل شوې نېټې څخه زوړ دی."
 

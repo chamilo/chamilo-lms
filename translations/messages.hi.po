@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "सादर"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र उदाहरण: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चर सीमाएं"
@@ -9264,6 +9264,15 @@ msgstr "सत्र %s के लिए समय रिपोर्ट"
 msgid "Error"
 msgstr "त्रुटि"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "उपयोगकर्ता बनाया गया, लेकिन अतिरिक्त प्रोफ़ाइल फ़ील्ड में से एक सहेजा नहीं जा सका।"
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "उपयोगकर्ता अपडेट किया गया, लेकिन अतिरिक्त प्रोफ़ाइल फ़ील्ड में से एक सहेजा नहीं जा सका।"
+
+msgid "One or more fields contain invalid values."
+msgstr "एक या अधिक फ़ील्ड में अमान्य मान हैं।"
+
 msgid "Anonymous"
 msgstr "अनाम"
 
@@ -15303,6 +15312,30 @@ msgstr "पिछले सप्ताह बिताया गया सम�
 msgid "System status"
 msgstr "सिस्टम स्थिति"
 
+msgid "Courses space"
+msgstr "पाठ्यक्रम स्थान"
+
+msgid "Database server configuration and metadata"
+msgstr "डेटाबेस सर्वर कॉन्फ़िगरेशन और मेटाडेटा"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "प्रति पाठ्यक्रम डिस्क उपयोग बनाम डिस्क कोटा"
+
+msgid "Information about your webserver configuration"
+msgstr "आपके वेबसर्वर कॉन्फ़िगरेशन की जानकारी"
+
+msgid "Paths"
+msgstr "पथ"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo आवश्यकताओं की स्थिति"
+
+msgid "State of PHP settings on the server"
+msgstr "सर्वर पर PHP सेटिंग्स की स्थिति"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "इस पोर्टल पर हल किए गए api_get_path() स्थिरांक"
+
 msgid "Is writable"
 msgstr "लिखने योग्य है"
 
@@ -20669,6 +20702,9 @@ msgstr "कौशल चक्र पर, जब छोटा कोड हो �
 
 msgid "Created by"
 msgstr "द्वारा बनाया गया"
+
+msgid "Created by %s on %s"
+msgstr "%s द्वारा %s को बनाया गया"
 
 msgid "Hide general coach in dropbox"
 msgstr "ड्रॉपबॉक्स में सामान्य कोच छिपाएँ"
@@ -31872,6 +31908,9 @@ msgstr "%s में कुछ लिखें"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "अनुशंसित: SVG। PNG अनुशंसित चौड़ाई: %spx।"
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG अनुशंसित चौड़ाई: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "ईमेल के लिए PNG लोगो अपलोड करें (~%spx चौड़ाई)"
 
@@ -31907,6 +31946,9 @@ msgstr "डालने के लिए क्लिक करें"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "अनुशंसित: SVG। PNG अधिकतम आकार: %spx।"
+
+msgid "PNG max size: %spx."
+msgstr "PNG अधिकतम आकार: %spx."
 
 msgid "View badge"
 msgstr "बैज देखें"
@@ -38058,6 +38100,9 @@ msgstr "समाप्त किया जा रहा है"
 msgid "Draft saved"
 msgstr "ड्राफ्ट सहेजा गया"
 
+msgid "Save as draft"
+msgstr "ड्राफ्ट के रूप में सहेजें"
+
 msgid "Statement"
 msgstr "कथन"
 
@@ -39479,4 +39524,265 @@ msgstr "यह उपयोगकर्ता पहले से ही सत�
 
 msgid "This user is already subscribed to the course."
 msgstr "यह उपयोगकर्ता पहले से ही पाठ्यक्रम में सदस्य है।"
+
+msgid "Multi URLs"
+msgstr "मल्टी URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "उपयोगकर्ता और पाठ्यक्रम जैसी इकाइयाँ एक ही समय में एक से अधिक URL पर सक्रिय हो सकती हैं, इसलिए नीचे दिए गए मानों का योग कुल से मेल नहीं खाएगा।"
+
+msgid "User directory"
+msgstr "उपयोगकर्ता निर्देशिका"
+
+msgid "Course directory"
+msgstr "पाठ्यक्रम निर्देशिका"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "उपयोगकर्ता विवरण"
+
+msgid "Course details"
+msgstr "पाठ्यक्रम विवरण"
+
+msgid "View details"
+msgstr "विवरण देखें"
+
+msgid "Average progress"
+msgstr "औसत प्रगति"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "प्रत्यक्ष नामांकन पूरे पाठ्यक्रम से संबंधित है, किसी विशिष्ट URL से नहीं, इसलिए इसी पाठ्यक्रम से जुड़े प्रत्येक URL के लिए नीचे वही 'प्रत्यक्ष' आँकड़े दोहराए जाते हैं। सत्र ही वह तरीका है जिससे पाठ्यक्रम को URL के बीच साझा किया जा सकता है और मापदंड वास्तव में प्रत्येक URL के लिए भिन्न होते हैं।"
+
+msgid "Logins (all URLs combined)"
+msgstr "लॉगिन (सभी URL संयुक्त)"
+
+msgid "Unique logins"
+msgstr "अद्वितीय लॉगिन"
+
+msgid "Parent URL"
+msgstr "पैरेंट URL"
+
+msgid "Logins (your URLs)"
+msgstr "लॉगिन (आपके URL)"
+
+msgid "The picture could not be uploaded"
+msgstr "चित्र अपलोड नहीं किया जा सका"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "यह फ़ील्ड प्रकार अभी पूरी तरह समर्थित नहीं है — केवल कच्चा मान।"
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "यह पाठ्यक्रम अपनी उपयोगकर्ता सदस्यता सीमा (%d/%d) के निकट है।"
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "आपके पाठ्यक्रम गुणों के कारण स्थान सीमित है। सीमा बढ़ाने के लिए, प्राप्त करें"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "आपके पाठ्यक्रम गुणों के कारण उपयोगकर्ता सदस्यताएँ सीमित हैं। सीमा बढ़ाने के लिए, प्राप्त करें"
+
+msgid "pro plan"
+msgstr "प्रो प्लान"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "और इस पाठ्यक्रम का बैकअप पाठ्यक्रम रखरखाव के माध्यम से अपने नए भुगतान वाले पाठ्यक्रम में आयात करें, या यह प्लान लेने के बाद पाठ्यक्रम को प्रो पाठ्यक्रम में बदलने के लिए टिकट खोलें।"
+
+msgid "Tired of writing questions?"
+msgstr "प्रश्न लिखते-लिखते थक गए?"
+
+msgid "Upgrade your plan"
+msgstr "अपनी योजना अपग्रेड करें"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "प्रो योजना पर जाकर AI से गुणवत्तापूर्ण प्रश्न बनवाने में सहायता पाएँ।"
+
+msgid "Student Success AI Coach"
+msgstr "छात्र सफलता AI कोच"
+
+msgid "No AI text provider is configured."
+msgstr "कोई AI टेक्स्ट प्रदाता कॉन्फ़िगर नहीं है।"
+
+msgid "Additional instructions for the AI coach"
+msgstr "AI कोच के लिए अतिरिक्त निर्देश"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "उदाहरण: इस शिक्षार्थी को ध्यान बनाए रखने में कठिनाई होती है। छोटी गतिविधियाँ और समझ की अधिक बार जाँच सुझाएँ।"
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "जब तक Chamilo अनुशंसा तैयार करता है, यह विंडो खुली रखें।"
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "अनुशंसा आपके Chamilo इनबॉक्स में भी सहेजी गई।"
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "अनुशंसा बनाकर इस शिक्षार्थी के लिए सहेज दी गई, लेकिन इनबॉक्स प्रतिलिपि नहीं बनाई जा सकी।"
+
+msgid "Student success recommendation"
+msgstr "छात्र सफलता अनुशंसा"
+
+msgid "Generated"
+msgstr "उत्पन्न"
+
+msgid "Priority actions"
+msgstr "प्राथमिकता क्रियाएँ"
+
+msgid "Evidence"
+msgstr "साक्ष्य"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "यह सुविधा इस पाठ्यक्रम की सामग्री का विश्लेषण करेगी और सीखने के व्यवहार की जानकारी कॉन्फ़िगर किए गए AI मॉडल को भेजेगी। AI मॉडल को सीधे पहचान योग्य व्यक्तिगत डेटा नहीं भेजा जाता, फिर भी कुछ डेटा अप्रत्यक्ष रूप से उपयोगकर्ता की पहचान दे सकता है। संदेह होने पर इस सुविधा का उपयोग करने से पहले हमेशा अपने AI संदर्भ व्यक्ति से जाँच करें।"
+
+msgid "Additional activities"
+msgstr "अतिरिक्त गतिविधियाँ"
+
+msgid "Rhythm"
+msgstr "लय"
+
+msgid "Learning methodologies"
+msgstr "अधिगम पद्धतियाँ"
+
+msgid "Other recommendations"
+msgstr "अन्य अनुशंसाएँ"
+
+msgid "Analyzing course..."
+msgstr "पाठ्यक्रम का विश्लेषण हो रहा है..."
+
+msgid "Analyzing student's learning..."
+msgstr "छात्र के अधिगम का विश्लेषण हो रहा है..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "इस आमंत्रण को स्वीकार करने पर आप अनुरोध करने वाले उपयोगकर्ता से इस तरह जुड़ जाएँगे कि आपकी प्रोफ़ाइल का कुछ या सारा डेटा उनके पढ़ने के लिए उपलब्ध हो सकता है। पहले से विश्वसनीय उपयोगकर्ताओं के साथ अपनी प्रोफ़ाइल जाँचकर सुनिश्चित करें कि आप बहुत अधिक साझा न करें।"
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "माइक्रोफ़ोन की अनुमति सक्षम नहीं है, ऑडियो रिकॉर्ड करने के लिए कृपया इसे अपने ब्राउज़र में सक्षम करें"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Chamilo के इस संस्करण के साथ एक (या अधिक) बहु-भाषी पाठ्यक्रम पूर्व-स्थापित हैं। पाठ्यक्रम सूची में उन्हें देखें और तय करें कि वे सार्वजनिक होने चाहिए या नहीं।"
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "आपके पास वर्तमान में किसी URL तक पहुँच नहीं है। कृपया व्यवस्थापक से उस URL तक पहुँच देने का अनुरोध करें जिससे आप संबंधित हैं।"
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "यदि चयनित AI प्रदाता संप्रभु सेवा नहीं है, तो चयनित दस्तावेज़ सामग्री बाहरी सेवा को भेजी जा सकती है। जब तक आपके संगठन द्वारा अनुमति न हो, गोपनीय जानकारी के साथ आगे न बढ़ें।"
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "उस खाते पर एकीकृत करें जिसे रखना है। सिस्टम उसी डुप्लिकेट समूह के अन्य सभी खातों को उसमें मिला देगा। मिलाए गए खाते स्थायी रूप से हटा दिए जाएँगे और इस रिपोर्ट से गायब हो जाएँगे। यह क्रिया पूर्ववत नहीं की जा सकती।"
+
+msgid "Permanent deletion"
+msgstr "स्थायी विलोपन"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "एकीकृत करना मिलाए गए खातों को पहले से स्थायी रूप से हटा देता है। अतिरिक्त खाते मैन्युअल रूप से हटाने के लिए ही उपयोगकर्ता सूची का उपयोग करें।"
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "आप डिफ़ॉल्ट दृश्य थीम “chamilo” के लोगो संशोधित कर रहे हैं। डिफ़ॉल्ट को अधिलेखित करने से बचने के लिए कस्टम दृश्य थीम बनाने/उपयोग करने पर विचार करें।"
+
+msgid "This exercise has no questions."
+msgstr "इस अभ्यास में कोई प्रश्न नहीं हैं।"
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "प्रत्येक प्रश्न के लिए प्रतिक्रिया/टिप्पणी कैसे दिखाई जाए? यह विकल्प तय करता है कि परीक्षा देते समय शिक्षार्थी को यह कैसे दिखेगी।"
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "ये अनुप्रयोग आपके मौजूदा खाता अनुमतियों से Chamilo तक आपकी तरह पहुँच सकते हैं, इससे अधिक नहीं। जिनका आप उपयोग नहीं करते या जिन्हें नहीं पहचानते, उन्हें रद्द करें।"
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "कृपया बताएँ कि आप अपनी कानूनी सहमति वापस क्यों लेना चाहते हैं, ताकि हम आपका अनुरोध सही ढंग से संसाधित कर सकें"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "दूरस्थ MCP क्लाइंट को अपने खाते और अनुमतियों के साथ Chamilo से जोड़ने के लिए इस व्यक्तिगत कुंजी का उपयोग करें।"
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "पूर्ण कुंजी केवल एक बार दिखाई जाती है। इसे सुरक्षित रूप से संग्रहित करें। नई कुंजी बनाने से पिछली कुंजी तुरंत अमान्य हो जाती है।"
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "कुंजी क्लाइंट को आपके Chamilo खाते के रूप में प्रमाणित करती है। यह आपके खाते में पहले से न होने वाली अनुमतियाँ नहीं देती।"
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "पंजीकरण पृष्ठ पर नियम एवं शर्तें कथन दिखाएँ, पंजीकरण के लिए आगंतुक से T&C स्वीकार करवाना आवश्यक करें"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "नियम एवं शर्तों की सामग्री AI भाषा मॉडल को भेजी जाएगी। सहेजने से पहले प्रस्तावित अनुवाद की समीक्षा करें।"
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "लक्ष्य भाषा के लिए सहेजा गया संस्करण पहले से मौजूद है। इस प्रस्ताव को सहेजने से नया संस्करण बनेगा।"
+
+msgid "Acquired"
+msgstr "अर्जित"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "अनुशंसित पाठ्यक्रम चित्र: 1600 × 900 px (16:9)। बड़े या उच्च-घनत्व स्क्रीन पर स्पष्ट प्रदर्शन के लिए कम से कम 1280 × 720 px उपयोग करें।"
+
+msgid "Courses of the selected URL"
+msgstr "चयनित URL के पाठ्यक्रम"
+
+msgid "Course categories in selected URL"
+msgstr "चयनित URL में पाठ्यक्रम श्रेणियाँ"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "आपका खाता सक्रिय है, अब आप लॉगिन करके अपने पाठ्यक्रम देख सकते हैं।"
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "पहले आपको सुधार <a href='%s'> यहाँ </a> डाउनलोड करने होंगे।\nउसके बाद उस फ़ाइल को अनज़िप करें और फ़ाइल नाम बदले बिना फ़ाइलें संपादित करें।\nफिर उन संशोधित फ़ाइलों की ज़िप बनाकर इस फ़ॉर्म में अपलोड करें।"
+
+msgid "Adding students from session %s to session %s"
+msgstr "सत्र %s से छात्रों को सत्र %s में जोड़ा जा रहा है"
+
+msgid "Show all attempts by exercise"
+msgstr "अभ्यास के अनुसार सभी प्रयास दिखाएँ"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "यह क्रिया चयनित पाठ्यक्रम की अनुमत उपयोगकर्ता सीमा से अधिक हो जाएगी।"
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "कुछ सदस्यताएँ निष्पादित नहीं हो सकीं क्योंकि प्रभावित पाठ्यक्रम की अनुमत उपयोगकर्ता सीमा पूरी हो गई। प्रभावित उपयोगकर्ता/पाठ्यक्रम: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "यह रजिस्ट्री ज्ञात रिपोर्टिंग पृष्ठों, उनकी श्रेणी, कैनोनिकल URL, लेगेसी URL और अपेक्षित भूमिका दर्शकों को सूचीबद्ध करती है। कैनोनिकल URL वर्तमान रिपोर्ट कार्यान्वयन तक मार्ग बनाते हैं और दस्तावेज़ीकृत रिपोर्ट भूमिका मैट्रिक्स को लागू करते हैं।"
+
+msgid "E-mail notification subscription"
+msgstr "ई-मेल अधिसूचना सदस्यता"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "यह संचालन प्रशासकों द्वारा निर्धारित प्रति पाठ्यक्रम %s उपयोगकर्ताओं की सीमा से अधिक हो जाएगा। सदस्यता रद्द कर दी गई है।"
+
+msgid "Language the document is in"
+msgstr "वह भाषा जिसमें दस्तावेज़ है"
+
+msgid "There is no session still"
+msgstr "अभी कोई सत्र नहीं है"
+
+msgid "Origin courses from session"
+msgstr "सत्र से मूल पाठ्यक्रम"
+
+msgid "Destination courses from session"
+msgstr "सत्र से गंतव्य पाठ्यक्रम"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "सार्वजनिक पहुँच (कोर्स के किसी भी सदस्य को अधिकृत पहुँच)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "'%s' पर एक पाठ्यक्रम के लिए %d शब्दावली शब्द उत्पन्न करें, प्रत्येक शब्द एक पंक्ति पर, उसकी परिभाषा अगली पंक्ति पर और प्रत्येक शब्द के बीच एक खाली पंक्ति। शीर्षक या परिभाषा के लिए कोई अन्य स्वरूपण न जोड़ें।"
+
+msgid "This is a short description of the course '%s'."
+msgstr "यह पाठ्यक्रम '%s' का संक्षिप्त विवरण है।"
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "आप Windows प्लेटफ़ॉर्म पर Chamilo का उपयोग कर रहे हैं। पूर्ण-पाठ अनुक्रमण के लिए दस्तावेज़ रूपांतरण सहायक उपलब्ध नहीं हैं।"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "परीक्षण स्वतः-लॉन्च सेटिंग चालू है। छात्रों को परीक्षण सूची पर पुनर्निर्देशित किया जाएगा।"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "परीक्षण स्वतः-लॉन्च सेटिंग चालू है। छात्रों को एक विशिष्ट परीक्षण पर पुनर्निर्देशित किया जाएगा।"
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "इस पाठ्यक्रम की सदस्यता सीमा पूरी हो गई है (%current%\/%limit%)।"
+
+msgid "Count course by language"
+msgstr "भाषा के अनुसार पाठ्यक्रम गिनें"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "वे उपयोगकर्ता जिनकी नवीनतम पहुँच चयनित तिथि से पुरानी है।"
 

@@ -9267,6 +9267,15 @@ msgstr "Időjelentés a foglalkozás %s számára"
 msgid "Error"
 msgstr "Hiba"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "A felhasználó létrejött, de az egyik további profilmezőt nem sikerült menteni."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "A felhasználó frissült, de az egyik további profilmezőt nem sikerült menteni."
+
+msgid "One or more fields contain invalid values."
+msgstr "Egy vagy több mező érvénytelen értéket tartalmaz."
+
 msgid "Anonymous"
 msgstr "Névtelen"
 
@@ -14443,7 +14452,7 @@ msgid "Compose"
 msgstr "Új üzenet"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Bébi narancs"
 
 msgid "Blue lagoon"
 msgstr "Kék lagúna"
@@ -15305,6 +15314,30 @@ msgstr "Eltöltött idő a múlt héten"
 
 msgid "System status"
 msgstr "Rendszer állapota"
+
+msgid "Courses space"
+msgstr "Kurzusok tárhelye"
+
+msgid "Database server configuration and metadata"
+msgstr "Adatbázis-kiszolgáló konfigurációja és metaadatok"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Lemezhasználat kurzusonként a kvótához képest"
+
+msgid "Information about your webserver configuration"
+msgstr "Információk a webszerver konfigurációjáról"
+
+msgid "Paths"
+msgstr "Útvonalak"
+
+msgid "State of Chamilo requirements"
+msgstr "A Chamilo követelményeinek állapota"
+
+msgid "State of PHP settings on the server"
+msgstr "A PHP-beállítások állapota a szerveren"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path() konstansok feloldva ezen a portálon"
 
 msgid "Is writable"
 msgstr "Írható"
@@ -20672,6 +20705,9 @@ msgstr "A készségkeréken megjeleníti a készség nevét, ha rövid kódja va
 
 msgid "Created by"
 msgstr "Létrehozta"
+
+msgid "Created by %s on %s"
+msgstr "Létrehozta: %s, dátum: %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Általános tréner elrejtése a dropboxban"
@@ -31876,6 +31912,9 @@ msgstr "Írjon valamit ide: %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Ajánlott: SVG. PNG ajánlott szélesség: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Ajánlott PNG-szélesség: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "PNG logó feltöltése e-mailekhez (~%spx szélesség)"
 
@@ -31911,6 +31950,9 @@ msgstr "Kattintson a beillesztéshez"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Kedvelt: SVG. PNG max mérete: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG maximális méret: %spx."
 
 msgid "View badge"
 msgstr "Jelvény megtekintése"
@@ -38062,6 +38104,9 @@ msgstr "Befejezés"
 msgid "Draft saved"
 msgstr "Vázlat mentve"
 
+msgid "Save as draft"
+msgstr "Mentés piszkozatként"
+
 msgid "Statement"
 msgstr "Állítás"
 
@@ -39143,7 +39188,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard olvasás"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Eredménytábla keepalive"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard várakozás"
@@ -39483,4 +39528,265 @@ msgstr "Ez a felhasználó már fel van iratkozva a munkamenetre."
 
 msgid "This user is already subscribed to the course."
 msgstr "Ez a felhasználó már fel van iratkozva a kurzushoz."
+
+msgid "Multi URLs"
+msgstr "Több URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Az entitások, például a felhasználók és a kurzusok egyszerre több URL-en is aktívak lehetnek, ezért az alábbi értékek összege nem egyezik a teljes összeggel."
+
+msgid "User directory"
+msgstr "Felhasználói könyvtár"
+
+msgid "Course directory"
+msgstr "Kurzuskönyvtár"
+
+msgid "URLs"
+msgstr "URL-ek"
+
+msgid "User details"
+msgstr "Felhasználó adatai"
+
+msgid "Course details"
+msgstr "Kurzus adatai"
+
+msgid "View details"
+msgstr "Részletek megtekintése"
+
+msgid "Average progress"
+msgstr "Átlagos haladás"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "A közvetlen feliratkozás a kurzus egészére vonatkozik, nem egy adott URL-re, ezért ugyanazok a „Közvetlen” adatok ismétlődnek alább minden URL-nél, amelyhez a kurzus kapcsolódik. A kurzus URL-ek közötti megosztására a munkamenetek szolgálnak, amelyeknél a mutatók URL-enként ténylegesen eltérhetnek."
+
+msgid "Logins (all URLs combined)"
+msgstr "Bejelentkezések (összes URL együtt)"
+
+msgid "Unique logins"
+msgstr "Egyedi bejelentkezések"
+
+msgid "Parent URL"
+msgstr "Szülő URL"
+
+msgid "Logins (your URLs)"
+msgstr "Bejelentkezések (az Ön URL-jei)"
+
+msgid "The picture could not be uploaded"
+msgstr "A képet nem sikerült feltölteni"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Ez a mezőtípus még nincs teljesen támogatva — csak nyers érték."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Ez a kurzus közel van a felhasználói feliratkozási korlátjához (%d\/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "A tárhely a kurzus tulajdonságain keresztül korlátozott. A korlát növeléséhez szerezzen"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "A felhasználói feliratkozások a kurzus tulajdonságain keresztül korlátozottak. A korlát növeléséhez szerezzen"
+
+msgid "pro plan"
+msgstr "pro csomagot"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "és importálja a kurzus biztonsági mentését a Kurzus karbantartása funkcióval az új fizetős kurzusába, vagy nyisson jegyet, hogy a kurzust pro kurzussá alakítsuk, miután megszerezte ezt a csomagot."
+
+msgid "Tired of writing questions?"
+msgstr "Elegük van a kérdések írásából?"
+
+msgid "Upgrade your plan"
+msgstr "Frissítse a csomagját"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "pro csomagra, hogy mesterséges intelligencia segítsen minőségi kérdéseket generálni."
+
+msgid "Student Success AI Coach"
+msgstr "Tanulói siker MI-edző"
+
+msgid "No AI text provider is configured."
+msgstr "Nincs konfigurálva MI-szövegszolgáltató."
+
+msgid "Additional instructions for the AI coach"
+msgstr "További utasítások az MI-edzőnek"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Példa: Ennek a tanulónak nehézséget okoz a figyelem fenntartása. Javasoljon rövidebb tevékenységeket és gyakoribb megértésellenőrzést."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Hagyja nyitva ezt az ablakot, amíg a Chamilo előkészíti az ajánlást."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Az ajánlás a Chamilo postafiókjába is el lett mentve."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Az ajánlás elkészült és el lett mentve ehhez a tanulóhoz, de a postafiók-másolatot nem sikerült létrehozni."
+
+msgid "Student success recommendation"
+msgstr "Tanulói siker ajánlás"
+
+msgid "Generated"
+msgstr "Létrehozva"
+
+msgid "Priority actions"
+msgstr "Prioritási intézkedések"
+
+msgid "Evidence"
+msgstr "Bizonyíték"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Ez a funkció elemzi a kurzus tartalmát, és tanulási viselkedési információkat küld a konfigurált MI-modellnek. Bár közvetlenül azonosítható személyes adatokat nem küld az MI-modellnek, a küldött adatok egy része közvetetten azonosítható információt adhat a felhasználóról. Kétség esetén mindig egyeztessen az MI-referensével, mielőtt használná ezt a funkciót."
+
+msgid "Additional activities"
+msgstr "További tevékenységek"
+
+msgid "Rhythm"
+msgstr "Ritmus"
+
+msgid "Learning methodologies"
+msgstr "Tanulási módszertanok"
+
+msgid "Other recommendations"
+msgstr "Egyéb ajánlások"
+
+msgid "Analyzing course..."
+msgstr "Kurzus elemzése..."
+
+msgid "Analyzing student's learning..."
+msgstr "A tanuló tanulásának elemzése..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "A meghívás elfogadásával összekapcsolódik a kérelmező felhasználóval, így profiladatai egy része vagy egésze olvashatóvá válik számára. Győződjön meg róla, hogy nem oszt meg túl sokat: ellenőrizze profilját azoknál a felhasználóknál, akikben már megbízik."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "A mikrofon használatának engedélyezése nincs bekapcsolva; engedélyezze a böngészőben a hangfelvételhez"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "A Chamilo ezen verziója egy (vagy több) előre telepített többnyelvű kurzussal érkezik. Tekintse át őket a kurzuslistában, és döntse el, nyilvánosak legyenek-e vagy sem."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Jelenleg nincs hozzáférése egyetlen URL-hez sem. Kérje meg a rendszergazdát, hogy adjon hozzáférést ahhoz az URL-hez, amelyhez tartozik."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Ha a kiválasztott MI-szolgáltató nem szuverén szolgáltatás, a kiválasztott dokumentum tartalma külső szolgáltatásnak küldhető. Ne folytassa bizalmas információkkal, hacsak szervezete ezt nem engedélyezi."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Kattintson az Egyesítés gombra azon a fiókon, amelynek meg kell maradnia. A rendszer a duplikátumcsoport összes többi fiókját ebbe egyesíti. Az egyesített fiókok véglegesen törlődnek, és eltűnnek ebből a jelentésből. Ez a művelet nem vonható vissza."
+
+msgid "Permanent deletion"
+msgstr "Végleges törlés"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Az Egyesítés már véglegesen törli az egyesített fiókokat. A Felhasználók listát csak akkor használja, ha további fiókokat szeretne manuálisan törölni."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "A „chamilo” alapértelmezett vizuális téma logóit módosítja. Fontolja meg egyedi vizuális téma létrehozását/használatát, hogy ne írja felül az alapértelmezéseket."
+
+msgid "This exercise has no questions."
+msgstr "Ennek a gyakorlatnak nincsenek kérdései."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Hogyan jelenítsük meg a visszajelzést/megjegyzést minden kérdéshez? Ez az opció határozza meg, hogyan jelenik meg a tanulónak a teszt kitöltésekor."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Ezek az alkalmazások Önt képviselve férhetnek hozzá a Chamilóhoz, a meglévő fiókjogosultságaival, és semmi többel. Vonja vissza azokat, amelyeket már nem használ vagy nem ismer fel."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Kérjük, indokolja, miért kéri a jogi hozzájárulás visszavonását, hogy megfelelően feldolgozhassuk a kérést"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Használja ezt a személyes kulcsot távoli MCP-kliens Chamilóhoz csatlakoztatásához a saját fiókjával és jogosultságaival."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "A teljes kulcs csak egyszer jelenik meg. Tárolja biztonságosan. Új kulcs generálása azonnal érvényteleníti az előzőt."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "A kulcs a klienst az Ön Chamilo-fiókjaként hitelesíti. Nem ad olyan jogosultságokat, amelyekkel a fiókja egyébként nem rendelkezik."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Általános szerződési feltételek megjelenítése a regisztrációs oldalon; a látogatónak el kell fogadnia a feltételeket a regisztrációhoz"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Az általános szerződési feltételek tartalma MI nyelvi modellnek lesz elküldve. Mentés előtt ellenőrizze a javasolt fordítást."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "A célnyelvhez már létezik mentett verzió. A javaslat mentése új verziót hoz létre."
+
+msgid "Acquired"
+msgstr "Megszerezve"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Ajánlott kurzusképek: 1600 × 900 px (16:9). Éles megjelenítéshez nagyobb vagy nagy felbontású képernyőkön használjon legalább 1280 × 720 px méretet."
+
+msgid "Courses of the selected URL"
+msgstr "A kiválasztott URL kurzusai"
+
+msgid "Course categories in selected URL"
+msgstr "Kurzuskategóriák a kiválasztott URL-en"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Fiókja aktív, most bejelentkezhet és ellenőrizheti a kurzusait."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Először töltse le a javításokat <a href='%s'> itt </a>.\nEzután csomagolja ki a fájlt, és szerkessze a fájlokat tetszés szerint, a fájlnevek megváltoztatása nélkül.\nEzután készítsen zip-fájlt a módosított fájlokból, és töltse fel ezen az űrlapon."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Tanulók hozzáadása a(z) %s munkamenetből a(z) %s munkamenethez"
+
+msgid "Show all attempts by exercise"
+msgstr "Minden kísérlet megjelenítése gyakorlatonként"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Ez a művelet túllépné a kiválasztott kurzusra engedélyezett felhasználói korlátot."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Néhány feliratkozást nem lehetett végrehajtani, mert elérték az érintett kurzus engedélyezett felhasználói limitjét. Érintett felhasználók/kurzusok: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Ez a nyilvántartás az ismert jelentési oldalakat, kategóriájukat, kanonikus URL-jüket, örökölt URL-jüket és a várt szerepkör-közönséget listázza. A kanonikus URL-ek az aktuális jelentésimplementációhoz irányítanak, és érvényesítik a dokumentált jelentési szerepkör-mátrixot."
+
+msgid "E-mail notification subscription"
+msgstr "E-mail értesítési feliratkozás"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Ez a művelet túllépné a rendszergazdák által beállított, kurzusonkénti %s felhasználós limitet. A feliratkozás törölve lett."
+
+msgid "Language the document is in"
+msgstr "A dokumentum nyelve"
+
+msgid "There is no session still"
+msgstr "Még nincs session"
+
+msgid "Origin courses from session"
+msgstr "Forrás kurzusok a sessionből"
+
+msgid "Destination courses from session"
+msgstr "Célkurzusok a sessionből"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Nyilvános elérhetőség a portál főoldaláról bejelentkezés nélkül"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Generáljon %d szójegyzék-kifejezést egy '%s' kurzushoz, minden kifejezést külön sorba, a definícióját a következő sorba, és egy üres sort a kifejezések között. Ne adjon hozzá semmilyen más formázást a címhez vagy a definícióhoz."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Ez a(z) '%s' kurzus rövid leírása."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "A Chamilót Windows platformon használja. A dokumentumkonverziós segédeszközök nem érhetők el a teljes szöveges indexeléshez."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "A teszt automatikus indítása be van kapcsolva. A hallgatók a tesztlistára lesznek átirányítva."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "A teszt automatikus indítása be van kapcsolva. A hallgatók egy adott tesztre lesznek átirányítva."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Elérte a kurzus feliratkozási limitjét (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Kurzusok száma nyelv szerint"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Felhasználók, akiknek a legutóbbi belépése régebbi a kiválasztott dátumnál."
 

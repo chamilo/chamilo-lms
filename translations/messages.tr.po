@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Saygılarımızla"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formül örneği: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formül örneği: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Değişken aralıkları"
@@ -3309,7 +3309,7 @@ msgid "(recommended)"
 msgstr "(tavsiye edilen)"
 
 msgid "SCORM DB"
-msgstr "SCORM DB"
+msgstr "SCORM VT"
 
 msgid "Administrator last name"
 msgstr "Yönetici soyadı"
@@ -9268,6 +9268,15 @@ msgstr "%s oturumu için zaman raporu"
 
 msgid "Error"
 msgstr "Hata"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Kullanıcı oluşturuldu, ancak ek profil alanlarından biri kaydedilemedi."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Kullanıcı güncellendi, ancak ek profil alanlarından biri kaydedilemedi."
+
+msgid "One or more fields contain invalid values."
+msgstr "Bir veya daha fazla alan geçersiz değerler içeriyor."
 
 msgid "Anonymous"
 msgstr "Anonim"
@@ -15308,6 +15317,30 @@ msgstr "Geçen hafta harcanan süre"
 msgid "System status"
 msgstr "Sistem durumu"
 
+msgid "Courses space"
+msgstr "Kurs alanı"
+
+msgid "Database server configuration and metadata"
+msgstr "Veritabanı sunucusu yapılandırması ve meta veriler"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Kurs başına disk kullanımı ve disk kotası"
+
+msgid "Information about your webserver configuration"
+msgstr "Web sunucusu yapılandırmanız hakkında bilgi"
+
+msgid "Paths"
+msgstr "Yollar"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo gereksinimlerinin durumu"
+
+msgid "State of PHP settings on the server"
+msgstr "Sunucudaki PHP ayarlarının durumu"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Bu portalda çözümlenen api_get_path() sabitleri"
+
 msgid "Is writable"
 msgstr "Yazılabilir"
 
@@ -20674,6 +20707,9 @@ msgstr "Beceri çarkında, becerinin kısa kodu varsa adını gösterir."
 
 msgid "Created by"
 msgstr "Oluşturan"
+
+msgid "Created by %s on %s"
+msgstr "%s tarafından %s tarihinde oluşturuldu"
 
 msgid "Hide general coach in dropbox"
 msgstr "Dropbox'ta genel antrenörü gizle"
@@ -31878,6 +31914,9 @@ msgstr "%s'ya bir şeyler yaz"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Tercih edilen: SVG. PNG önerilen genişlik: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG önerilen genişlik: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "E-postalar için PNG logo yükle (~%spx genişlik)"
 
@@ -31913,6 +31952,9 @@ msgstr "Ekleme için tıklayın"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Tercih edilen: SVG. PNG maks. boyut: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG maksimum boyut: %spx."
 
 msgid "View badge"
 msgstr "Rozeti görüntüle"
@@ -38064,6 +38106,9 @@ msgstr "Sonlandırılıyor"
 msgid "Draft saved"
 msgstr "Taslak kaydedildi"
 
+msgid "Save as draft"
+msgstr "Taslak olarak kaydet"
+
 msgid "Statement"
 msgstr "Açıklama"
 
@@ -39427,62 +39472,323 @@ msgid "Custom certificate images"
 msgstr "Özel sertifika resimleri"
 
 msgid "Course picture updated"
-msgstr ""
+msgstr "Ders resmi güncellendi"
 
 msgid "The course picture could not be uploaded"
-msgstr ""
+msgstr "Ders resmi yüklenemedi"
 
 msgid "Course picture deleted"
-msgstr ""
+msgstr "Ders resmi silindi"
 
 msgid "Enter a description for the image"
-msgstr ""
+msgstr "Görsel için bir açıklama girin"
 
 msgid "The image generator returned an empty response"
-msgstr ""
+msgstr "Görsel oluşturucu boş bir yanıt döndürdü"
 
 msgid "Course picture generated"
-msgstr ""
+msgstr "Ders resmi oluşturuldu"
 
 msgid "Watermark updated"
-msgstr ""
+msgstr "Filigran güncellendi"
 
 msgid "Watermark deleted"
-msgstr ""
+msgstr "Filigran silindi"
 
 msgid "Agreement file updated"
-msgstr ""
+msgstr "Sözleşme dosyası güncellendi"
 
 msgid "Agreement file deleted"
-msgstr ""
+msgstr "Sözleşme dosyası silindi"
 
 msgid "Certificate image updated"
-msgstr ""
+msgstr "Sertifika görseli güncellendi"
 
 msgid "Certificate image deleted"
-msgstr ""
+msgstr "Sertifika görseli silindi"
 
 msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
-msgstr ""
+msgstr "Ders resmini kırpmak, döndürmek veya yeniden boyutlandırmak için yüklemeden önce görsel düzenleyiciyi kullanın."
 
 msgid "This invitation link is invalid or has expired."
-msgstr ""
+msgstr "Bu davet bağlantısı geçersiz veya süresi dolmuş."
 
 msgid "This invitation was sent to a different user. Please log in with the invited account."
-msgstr ""
+msgstr "Bu davet farklı bir kullanıcıya gönderildi. Lütfen davet edilen hesapla oturum açın."
 
 msgid "The invitation could not be accepted."
-msgstr ""
+msgstr "Davet kabul edilemedi."
 
 msgid "You have been subscribed successfully."
-msgstr ""
+msgstr "Başarıyla kaydoldunuz."
 
 msgid "This email address cannot be invited."
-msgstr ""
+msgstr "Bu e-posta adresi davet edilemez."
 
 msgid "This user is already subscribed to the session."
-msgstr ""
+msgstr "Bu kullanıcı zaten oturuma kayıtlı."
 
 msgid "This user is already subscribed to the course."
-msgstr ""
+msgstr "Bu kullanıcı zaten derse kayıtlı."
+
+msgid "Multi URLs"
+msgstr "Çoklu URL'ler"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Kullanıcılar ve dersler gibi varlıklar aynı anda birden fazla URL'de etkin olabilir, bu nedenle aşağıdaki değerlerin toplamı genel toplamla eşleşmez."
+
+msgid "User directory"
+msgstr "Kullanıcı dizini"
+
+msgid "Course directory"
+msgstr "Ders dizini"
+
+msgid "URLs"
+msgstr "URL'ler"
+
+msgid "User details"
+msgstr "Kullanıcı ayrıntıları"
+
+msgid "Course details"
+msgstr "Ders ayrıntıları"
+
+msgid "View details"
+msgstr "Ayrıntıları görüntüle"
+
+msgid "Average progress"
+msgstr "Ortalama ilerleme"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Doğrudan kayıt, belirli bir URL'ye değil dersin bütününe aittir, bu nedenle aynı 'Doğrudan' rakamları bu dersin bağlı olduğu her URL için aşağıda tekrarlanır. Oturumlar, gerçekten URL başına farklılık gösteren ölçümlerle bir dersi URL'ler arasında paylaşmanın amaçlanan yoludur."
+
+msgid "Logins (all URLs combined)"
+msgstr "Girişler (tüm URL'ler birleşik)"
+
+msgid "Unique logins"
+msgstr "Benzersiz girişler"
+
+msgid "Parent URL"
+msgstr "Üst URL"
+
+msgid "Logins (your URLs)"
+msgstr "Girişler (URL'leriniz)"
+
+msgid "The picture could not be uploaded"
+msgstr "Resim yüklenemedi"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Bu alan türü henüz tam olarak desteklenmiyor — yalnızca ham değer."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Bu kurs, kullanıcı kayıt limitine yaklaşıyor (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Alan, kurs özelliklerinizle sınırlıdır. Limitinizi artırmak için bir"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Kullanıcı kayıtları, kurs özelliklerinizle sınırlıdır. Limitinizi artırmak için bir"
+
+msgid "pro plan"
+msgstr "pro plan"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "alın ve bu kursun yedeğini Kurs Bakımı üzerinden yeni ücretli kursunuza aktarın veya bu planı edindikten sonra kursunuzun pro kursa dönüştürülmesi için bir destek kaydı açın."
+
+msgid "Tired of writing questions?"
+msgstr "Soru yazmaktan yoruldunuz mu?"
+
+msgid "Upgrade your plan"
+msgstr "Planınızı yükseltin"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "sizin için kaliteli sorular üretecek bir yapay zekadan yardım almak üzere pro plana."
+
+msgid "Student Success AI Coach"
+msgstr "Öğrenci Başarısı YZ Koçu"
+
+msgid "No AI text provider is configured."
+msgstr "YZ metin sağlayıcısı yapılandırılmamış."
+
+msgid "Additional instructions for the AI coach"
+msgstr "YZ koçu için ek yönergeler"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Örnek: Bu öğrenenin dikkati sürdürmekte zorluğu var. Daha kısa etkinlikler ve daha sık anlama kontrolleri önerin."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Chamilo öneriyi hazırlarken bu pencereyi açık tutun."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Öneri ayrıca Chamilo gelen kutunuza kaydedildi."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Öneri bu öğrenen için oluşturulup kaydedildi, ancak gelen kutusu kopyası oluşturulamadı."
+
+msgid "Student success recommendation"
+msgstr "Öğrenci başarısı önerisi"
+
+msgid "Generated"
+msgstr "Oluşturulma"
+
+msgid "Priority actions"
+msgstr "Öncelikli eylemler"
+
+msgid "Evidence"
+msgstr "Kanıt"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Bu özellik, bu kursun içeriğini analiz eder ve öğrenme davranışı bilgilerini yapılandırılmış YZ modeline gönderir. YZ modeline doğrudan tanımlayıcı kişisel veri gönderilmese de, gönderilen verilerin bir kısmı kullanıcı hakkında dolaylı olarak tanımlayıcı bilgi sağlayabilir. Şüpheniz varsa, bu özelliği kullanmadan önce her zaman YZ referans kişinizle kontrol edin."
+
+msgid "Additional activities"
+msgstr "Ek etkinlikler"
+
+msgid "Rhythm"
+msgstr "Ritim"
+
+msgid "Learning methodologies"
+msgstr "Öğrenme yöntemleri"
+
+msgid "Other recommendations"
+msgstr "Diğer öneriler"
+
+msgid "Analyzing course..."
+msgstr "Kurs analiz ediliyor..."
+
+msgid "Analyzing student's learning..."
+msgstr "Öğrencinin öğrenmesi analiz ediliyor..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Bu daveti kabul ederek, talep eden kullanıcıyla bağlantılı hale gelirsiniz; böylece profil verilerinizin bir kısmı veya tamamı talep eden kullanıcı tarafından okunabilir. Zaten güvendiğiniz kullanıcılarla profilinizi kontrol ederek fazla bilgi paylaşmadığınızdan emin olun."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Mikrofon izni etkin değil; ses kaydı için lütfen tarayıcınızda etkinleştirin"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Bu Chamilo sürümü, önceden yüklenmiş bir (veya daha fazla) çok dilli kursla gelir. Bunları kurs listesinde inceleyebilir ve herkese açık olup olmayacağına karar verebilirsiniz."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Şu anda hiçbir URL'ye erişiminiz yok. Lütfen yöneticiden ait olduğunuz URL'ye erişim vermesini isteyin."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Seçilen YZ sağlayıcısı egemen bir hizmet değilse, seçilen belge içeriği harici bir hizmete gönderilebilir. Kuruluşunuz izin vermedikçe gizli bilgilerle devam etmeyin."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Kalması gereken hesapta Birleştir'e tıklayın. Sistem, aynı yinelenen gruptaki diğer tüm hesapları buna birleştirir. Birleştirilen hesaplar kalıcı olarak silinir ve bu rapordan kaybolur. Bu işlem geri alınamaz."
+
+msgid "Permanent deletion"
+msgstr "Kalıcı silme"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Birleştir, birleştirilen hesapları zaten kalıcı olarak siler. Ek hesapları elle silmek istiyorsanız yalnızca Kullanıcılar listesini kullanın."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Varsayılan görsel tema “chamilo” için logoları değiştiriyorsunuz. Varsayılanların üzerine yazmamak için özel bir görsel tema oluşturmayı/kullanmayı düşünün."
+
+msgid "This exercise has no questions."
+msgstr "Bu alıştırmada soru yok."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Her soru için geri bildirim/yorum nasıl gösterilsin? Bu seçenek, sınav sırasında öğrenene nasıl gösterileceğini tanımlar."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Bu uygulamalar, mevcut hesap izinlerinizle ve daha fazlası olmadan Chamilo'ya sizin adınıza erişebilir. Artık kullanmadığınız veya tanımadığınız uygulamaların yetkisini iptal edin."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Yasal onayınızın geri çekilmesini neden talep ettiğinizi açıklayın; böylece talebinizi düzgün işleyebiliriz"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Uzak bir MCP istemcisini kendi hesabınız ve izinlerinizle Chamilo'ya bağlamak için bu kişisel anahtarı kullanın."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Tam anahtar yalnızca bir kez gösterilir. Güvenli şekilde saklayın. Yeni bir anahtar oluşturmak, önceki anahtarı hemen geçersiz kılar."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Anahtar, istemciyi Chamilo hesabınız olarak kimlik doğrular. Hesabınızın zaten sahip olmadığı izinleri vermez."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Kayıt sayfasında bir Şartlar ve Koşullar metni göster; kaydolmak için ziyaretçinin Ş&K'yı kabul etmesini zorunlu kıl"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Şartlar ve koşullar içeriği bir YZ dil modeline gönderilecek. Kaydetmeden önce önerilen çeviriyi inceleyin."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Hedef dil için kaydedilmiş bir sürüm zaten var. Bu öneriyi kaydetmek yeni bir sürüm oluşturacaktır."
+
+msgid "Acquired"
+msgstr "Kazanıldı"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Önerilen kurs resmi: 1600 × 900 px (16:9). Daha büyük veya yüksek yoğunluklu ekranlarda net görüntü için en az 1280 × 720 px kullanın."
+
+msgid "Courses of the selected URL"
+msgstr "Seçilen URL'nin kursları"
+
+msgid "Course categories in selected URL"
+msgstr "Seçilen URL'deki kurs kategorileri"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Hesabınız aktif; şimdi giriş yapıp kurslarınızı kontrol edebilirsiniz."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Önce düzeltmeleri <a href='%s'> buradan </a> indirmeniz gerekir.\nArdından dosyayı açın ve dosya adlarını değiştirmeden dosyaları istediğiniz gibi düzenleyin.\nSonra bu değiştirilmiş dosyalarla bir zip dosyası oluşturun ve bu forma yükleyin."
+
+msgid "Adding students from session %s to session %s"
+msgstr "%s oturumundaki öğrenciler %s oturumuna ekleniyor"
+
+msgid "Show all attempts by exercise"
+msgstr "Alıştırmaya göre tüm denemeleri göster"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Bu işlem, seçilen kurs için izin verilen kullanıcı sınırını aşacaktır."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Bazı kayıtlar, etkilenen kurs için izin verilen kullanıcı sınırına ulaşıldığı için gerçekleştirilemedi. Etkilenen kullanıcılar/kurslar: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Bu kayıt, bilinen raporlama sayfalarını, kategorilerini, kanonik URL'lerini, eski URL'lerini ve beklenen rol kitlesini listeler. Kanonik URL'ler mevcut rapor uygulamasına yönlendirir ve belgelenmiş rapor rol matrisini uygular."
+
+msgid "E-mail notification subscription"
+msgstr "E-posta bildirimi aboneliği"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Bu işlem, yöneticiler tarafından belirlenen kurs başına %s kullanıcı sınırını aşacaktır. Kayıt iptal edildi."
+
+msgid "Language the document is in"
+msgstr "Belgenin dili"
+
+msgid "There is no session still"
+msgstr "Henüz oturum yok"
+
+msgid "Origin courses from session"
+msgstr "Oturumdaki kaynak kurslar"
+
+msgid "Destination courses from session"
+msgstr "Oturumdaki hedef kurslar"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Kayıtlı olmadan da Ana Sayfadan giriş yapılabilir"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "'%s' konusundaki bir kurs için %d sözlük terimi oluşturun; her terim tek satırda, tanımı bir sonraki satırda ve her terim arasında bir boş satır olsun. Başlık veya tanım için başka biçimlendirme eklemeyin."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Bu, '%s' kursunun kısa bir açıklamasıdır."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Chamilo'yu Windows platformunda kullanıyorsunuz. Belge dönüştürme yardımcıları tam metin dizinleme için kullanılamaz."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Test otomatik başlatma ayarı AÇIK. Öğrenciler test listesine yönlendirilecektir."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Test otomatik başlatma ayarı AÇIK. Öğrenciler belirli bir teste yönlendirilecektir."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Bu kurs için kayıt sınırına ulaşıldı (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Dile göre kurs sayısı"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Son erişimi seçilen tarihten daha eski olan kullanıcılar."
 

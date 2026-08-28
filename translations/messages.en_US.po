@@ -15317,6 +15317,30 @@ msgstr "Time spent last week"
 msgid "System status"
 msgstr "System status"
 
+msgid "Courses space"
+msgstr "Courses space"
+
+msgid "Database server configuration and metadata"
+msgstr "Database server configuration and metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Disk usage per course vs disk quota"
+
+msgid "Information about your webserver configuration"
+msgstr "Information about your webserver configuration"
+
+msgid "Paths"
+msgstr "Paths"
+
+msgid "State of Chamilo requirements"
+msgstr "State of Chamilo requirements"
+
+msgid "State of PHP settings on the server"
+msgstr "State of PHP settings on the server"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path() constants resolved on this portal"
+
 msgid "Is writable"
 msgstr "Is writable"
 

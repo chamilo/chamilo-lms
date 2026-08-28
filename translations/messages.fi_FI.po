@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavaesimerkki: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -9269,6 +9269,15 @@ msgstr "Aikaraportti istunnolle %s"
 msgid "Error"
 msgstr "Virhe"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Käyttäjä luotiin, mutta yhtä lisäprofiilikenttää ei voitu tallentaa."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Käyttäjä päivitettiin, mutta yhtä lisäprofiilikenttää ei voitu tallentaa."
+
+msgid "One or more fields contain invalid values."
+msgstr "Yhdessä tai useammassa kentässä on virheellisiä arvoja."
+
 msgid "Anonymous"
 msgstr "Anonyymi"
 
@@ -15308,6 +15317,30 @@ msgstr "Viime viikolla vietetty aika"
 msgid "System status"
 msgstr "Järjestelmän tila"
 
+msgid "Courses space"
+msgstr "Kurssitila"
+
+msgid "Database server configuration and metadata"
+msgstr "Tietokantapalvelimen määritykset ja metatiedot"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Levykäyttö kurssia kohden vs. levykiintiö"
+
+msgid "Information about your webserver configuration"
+msgstr "Tietoja WWW-palvelimesi määrityksistä"
+
+msgid "Paths"
+msgstr "Polut"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilon vaatimusten tila"
+
+msgid "State of PHP settings on the server"
+msgstr "PHP-asetusten tila palvelimella"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path()-vakiot ratkaistuna tällä portaalilla"
+
 msgid "Is writable"
 msgstr "Kirjoitettavissa"
 
@@ -20674,6 +20707,9 @@ msgstr "Taitopyörässä näytetään taitotason nimi, jos sillä on lyhyt koodi
 
 msgid "Created by"
 msgstr "Luonut"
+
+msgid "Created by %s on %s"
+msgstr "Luonut %s %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Piilota yleinen ohjaaja Dropboxissa"
@@ -31878,6 +31914,9 @@ msgstr "Kirjoita jotain kohteeseen %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Suositeltu: SVG. PNG-suositeltu leveys: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG:n suositeltu leveys: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Lataa PNG-logo sähköposteja varten (~%spx leveys)"
 
@@ -31913,6 +31952,9 @@ msgstr "Napsauta lisätäksesi"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Suositeltu: SVG. PNG max koko: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG:n enimmäiskoko: %spx."
 
 msgid "View badge"
 msgstr "Näytä merkki"
@@ -38064,6 +38106,9 @@ msgstr "Päätetään"
 msgid "Draft saved"
 msgstr "Luonnos tallennettu"
 
+msgid "Save as draft"
+msgstr "Tallenna luonnoksena"
+
 msgid "Statement"
 msgstr "Ohjeistus"
 
@@ -39485,4 +39530,265 @@ msgstr "Tämä käyttäjä on jo tilattu istuntoon."
 
 msgid "This user is already subscribed to the course."
 msgstr "Tämä käyttäjä on jo tilattu kurssille."
+
+msgid "Multi URLs"
+msgstr "Useita URL-osoitteita"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entiteetit, kuten käyttäjät ja kurssit, voivat olla aktiivisia useammassa kuin yhdessä URL-osoitteessa samanaikaisesti, joten alla olevien arvojen summa ei vastaa kokonaismäärää."
+
+msgid "User directory"
+msgstr "Käyttäjähakemisto"
+
+msgid "Course directory"
+msgstr "Kurssihakemisto"
+
+msgid "URLs"
+msgstr "URL-osoitteet"
+
+msgid "User details"
+msgstr "Käyttäjän tiedot"
+
+msgid "Course details"
+msgstr "Kurssin tiedot"
+
+msgid "View details"
+msgstr "Näytä tiedot"
+
+msgid "Average progress"
+msgstr "Keskimääräinen edistyminen"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Suora ilmoittautuminen kuuluu koko kurssille, ei tietylle URL-osoitteelle, joten samat ”Suora”-luvut toistuvat alla jokaiselle URL-osoitteelle, johon tämä kurssi on liitetty. Istunnot ovat tarkoitettu tapa jakaa kurssi URL-osoitteiden kesken mittareilla, jotka todella eroavat URL-osoitteittain."
+
+msgid "Logins (all URLs combined)"
+msgstr "Kirjautumiset (kaikki URL-osoitteet yhteensä)"
+
+msgid "Unique logins"
+msgstr "Yksilölliset kirjautumiset"
+
+msgid "Parent URL"
+msgstr "Ylä-URL"
+
+msgid "Logins (your URLs)"
+msgstr "Kirjautumiset (omat URL-osoitteesi)"
+
+msgid "The picture could not be uploaded"
+msgstr "Kuvaa ei voitu ladata"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Tätä kenttätyyppiä ei vielä tueta täysin — vain raaka-arvo."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Tämä kurssi on lähellä käyttäjäilmoittautumisrajaansa (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Tila on rajoitettu kurssin asetuksilla. Nostaaksesi rajaa hanki"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Käyttäjäilmoittautumiset on rajoitettu kurssin asetuksilla. Nostaaksesi rajaa hanki"
+
+msgid "pro plan"
+msgstr "pro-tilaus"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "ja tuo tämän kurssin varmuuskopio Kurssin ylläpito -toiminnolla uuteen maksulliseen kurssiisi, tai avaa tukipyyntö kurssin muuntamiseksi pro-kurssiksi, kun olet hankkinut tämän tilauksen."
+
+msgid "Tired of writing questions?"
+msgstr "Väsyttääkö kysymysten kirjoittaminen?"
+
+msgid "Upgrade your plan"
+msgstr "Päivitä tilauksesi"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "pro-tilaukseen saadaksesi tekoälyn apua laadukkaiden kysymysten luomiseen."
+
+msgid "Student Success AI Coach"
+msgstr "Opiskelijan menestyksen tekoälyvalmentaja"
+
+msgid "No AI text provider is configured."
+msgstr "Tekoälytekstipalvelua ei ole määritetty."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Lisäohjeet tekoälyvalmentajalle"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Esimerkki: Tällä oppijalla on vaikeuksia ylläpitää tarkkaavaisuutta. Ehdota lyhyempiä aktiviteetteja ja tiheämpiä ymmärryksen tarkistuksia."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Pidä tämä ikkuna auki, kun Chamilo valmistelee suositusta."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Suositus tallennettiin myös Chamilo-saapuneisiin."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Suositus luotiin ja tallennettiin tälle oppijalle, mutta saapuneiden kopiota ei voitu luoda."
+
+msgid "Student success recommendation"
+msgstr "Opiskelijan menestyssuositus"
+
+msgid "Generated"
+msgstr "Luotu"
+
+msgid "Priority actions"
+msgstr "Ensisijaiset toimet"
+
+msgid "Evidence"
+msgstr "Näyttö"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Tämä ominaisuus analysoi kurssin sisällön ja lähettää oppimiskäyttäytymistietoja määritettyyn tekoälymalliin. Vaikka tekoälymallille ei lähetetä suoraan tunnistettavia henkilötietoja, osa lähetetyistä tiedoista voi epäsuorasti paljastaa käyttäjän identiteetin. Jos olet epävarma, tarkista aina tekoälyvastaavaltasi ennen tämän ominaisuuden käyttöä."
+
+msgid "Additional activities"
+msgstr "Lisäaktiviteetit"
+
+msgid "Rhythm"
+msgstr "Rytmi"
+
+msgid "Learning methodologies"
+msgstr "Oppimismenetelmät"
+
+msgid "Other recommendations"
+msgstr "Muut suositukset"
+
+msgid "Analyzing course..."
+msgstr "Analysoidaan kurssia..."
+
+msgid "Analyzing student's learning..."
+msgstr "Analysoidaan opiskelijan oppimista..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Hyväksymällä tämän kutsun sinut yhdistetään pyytäjään niin, että osa tai kaikki profiilitietosi ovat pyytäjän luettavissa. Varmista, ettet jaa liikaa tarkistamalla profiilisi jo luottamiesi käyttäjien kanssa."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Mikrofonin käyttöoikeutta ei ole otettu käyttöön. Ota se käyttöön selaimessasi äänitallennusta varten"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Tässä Chamilo-versiossa on valmiiksi asennettuna yksi (tai useampi) monikielinen kurssi. Tarkista ne kurssilistasta ja päätä, pitäisikö niiden olla julkisia."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Sinulla ei ole tällä hetkellä pääsyä mihinkään URL-osoitteeseen. Pyydä ylläpitäjää myöntämään pääsy siihen URL-osoitteeseen, johon kuulut."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Jos valittu tekoälypalveluntarjoaja ei ole suvereeni palvelu, valitun asiakirjan sisältö voidaan lähettää ulkoiseen palveluun. Älä jatka luottamuksellisilla tiedoilla, ellei organisaatiosi salli sitä."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Napsauta Yhdistä sen tilin kohdalla, jonka haluat säilyttää. Järjestelmä yhdistää kaikki muut saman kaksoiskappaleryhmän tilit siihen. Yhdistetyt tilit poistetaan pysyvästi ja ne katoavat tästä raportista. Tätä toimintoa ei voi perua."
+
+msgid "Permanent deletion"
+msgstr "Pysyvä poisto"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Yhdistä poistaa yhdistetyt tilit jo pysyvästi. Käytä käyttäjälistaa vain, jos haluat poistaa muita tilejä manuaalisesti."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Muokkaat oletusvisuaaliteeman ”chamilo” logoja. Harkitse mukautetun visuaaliteeman luomista/käyttöä, jotta oletuksia ei ylikirjoiteta."
+
+msgid "This exercise has no questions."
+msgstr "Tässä harjoituksessa ei ole kysymyksiä."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Miten kunkin kysymyksen palaute/kommentti näytetään? Tämä asetus määrittää, miten se näytetään oppijalle testin aikana."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Nämä sovellukset voivat käyttää Chamiloa sinuna, olemassa olevilla tilioikeuksillasi eikä muulla. Peruuta ne, joita et enää käytä tai tunnista."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Selitä, miksi haluat peruuttaa oikeudellisen suostumuksesi, jotta voimme käsitellä pyyntösi asianmukaisesti"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Käytä tätä henkilökohtaista avainta yhdistääksesi etä-MCP-asiakasohjelman Chamiloon omalla tililläsi ja oikeuksillasi."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Täydellinen avain näytetään vain kerran. Säilytä se turvallisesti. Uuden avaimen luominen mitätöi edellisen heti."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Avain todentaa asiakkaan Chamilo-tilinäsi. Se ei myönnä oikeuksia, joita tililläsi ei jo ole."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Näytä käyttöehdot rekisteröintisivulla ja vaadi vierailijaa hyväksymään ne rekisteröityäkseen"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Käyttöehtojen sisältö lähetetään tekoälyn kielimallille. Tarkista ehdotettu käännös ennen tallennusta."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Kohdekielelle on jo tallennettu versio. Tämän ehdotuksen tallentaminen luo uuden version."
+
+msgid "Acquired"
+msgstr "Saavutettu"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Suositeltu kurssikuva: 1600 × 900 px (16:9). Käytä vähintään 1280 × 720 px terävään näyttöön suuremmilla tai tiheillä näytöillä."
+
+msgid "Courses of the selected URL"
+msgstr "Valitun URL-osoitteen kurssit"
+
+msgid "Course categories in selected URL"
+msgstr "Kurssikategoriat valitussa URL-osoitteessa"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Tilisi on aktiivinen. Voit kirjautua sisään ja tarkistaa kurssisi nyt."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Lataa ensin korjaukset <a href='%s'>täältä</a>.\nPura sen jälkeen tiedosto ja muokkaa tiedostoja haluamallasi tavalla muuttamatta tiedostonimiä.\nLuo sitten zip-tiedosto muokatuista tiedostoista ja lataa se tähän lomakkeeseen."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Lisätään opiskelijoita sessiosta %s sessioon %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Näytä kaikki yritykset harjoituksen mukaan"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Tämä toiminto ylittäisi valitun kurssin sallitun käyttäjärajan."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Joitakin tilauksia ei voitu suorittaa, koska ne saavuttivat kyseisen kurssin sallitun käyttäjärajan. Vaikutetut käyttäjät/kurssit: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Tämä rekisteri luettelee tunnetut raportointisivut, niiden kategorian, kanonisen URL-osoitteen, vanhan URL-osoitteen ja odotetun rooliyleisön. Kanoniset URL-osoitteet ohjaavat nykyiseen raporttitoteutukseen ja noudattavat dokumentoitua raporttiroolimatriisia."
+
+msgid "E-mail notification subscription"
+msgstr "Sähköposti-ilmoitusten tilaus"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Tämä toiminto ylittäisi ylläpitäjien asettaman rajan %s käyttäjää per kurssi. Tilaus on peruttu."
+
+msgid "Language the document is in"
+msgstr "Asiakirjan kieli"
+
+msgid "There is no session still"
+msgstr "Sessioita ei vielä ole"
+
+msgid "Origin courses from session"
+msgstr "Alkuperäkurssit sessiosta"
+
+msgid "Destination courses from session"
+msgstr "Kohdekurssit istunnosta"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Avoin pääsy sivuston omalta sivulta ilman sisäänkirjautumista"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Luo %d sanastotermiä kurssille aiheesta '%s'. Jokainen termi omalle rivilleen, määritelmä seuraavalle riville ja tyhjä rivi termien välillä. Älä lisää muuta muotoilua otsikkoon tai määritelmään."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Tämä on lyhyt kuvaus kurssista '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Käytät Chamiloa Windows-alustalla. Asiakirjojen muunnosapuohjelmat eivät ole käytettävissä kokotekstihakemistointia varten."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Testin automaattikäynnistys on päällä. Opiskelijat ohjataan testiluetteloon."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Testin automaattikäynnistys on päällä. Opiskelijat ohjataan tiettyyn testiin."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Tämän kurssin ilmoittautumisraja on saavutettu (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Laske kurssit kielen mukaan"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Käyttäjät, joiden viimeisin käyttö on vanhempi kuin valittu päivämäärä."
 

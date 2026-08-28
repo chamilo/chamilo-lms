@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "S pozdravem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukázka vzorce: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy proměnných"
@@ -4138,7 +4138,7 @@ msgid "MySql Client"
 msgstr "MySql Klient"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL server"
 
 msgid "Owner"
 msgstr "Vlastník"
@@ -9263,6 +9263,15 @@ msgstr "Časová zpráva pro relaci %s"
 
 msgid "Error"
 msgstr "Chyba"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Uživatel byl vytvořen, ale jedno z dodatečných polí profilu se nepodařilo uložit."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Uživatel byl aktualizován, ale jedno z dodatečných polí profilu se nepodařilo uložit."
+
+msgid "One or more fields contain invalid values."
+msgstr "Jedno nebo více polí obsahuje neplatné hodnoty."
 
 msgid "Anonymous"
 msgstr "Anonymní"
@@ -14662,7 +14671,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Povolit rozšířené panely nástrojů, když je WYSIWYG editor maximalizován"
 
 msgid "HTML Editor"
-msgstr "HTML Editor"
+msgstr "HTML editor"
 
 msgid "Go directly to the course after login"
 msgstr "Přejít přímo do kurzu po přihlášení"
@@ -15302,6 +15311,30 @@ msgstr "Čas strávený minulý týden"
 
 msgid "System status"
 msgstr "Stav systému"
+
+msgid "Courses space"
+msgstr "Prostor kurzů"
+
+msgid "Database server configuration and metadata"
+msgstr "Konfigurace databázového serveru a metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Využití disku na kurz vs. kvóta disku"
+
+msgid "Information about your webserver configuration"
+msgstr "Informace o konfiguraci webového serveru"
+
+msgid "Paths"
+msgstr "Cesty"
+
+msgid "State of Chamilo requirements"
+msgstr "Stav požadavků Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Stav nastavení PHP na serveru"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Konstanty api_get_path() přeložené na tomto portálu"
 
 msgid "Is writable"
 msgstr "Je zapisovatelný"
@@ -20669,6 +20702,9 @@ msgstr "Na kole dovedností se zobrazí název dovednosti, pokud má krátký k�
 
 msgid "Created by"
 msgstr "Vytvořeno"
+
+msgid "Created by %s on %s"
+msgstr "Vytvořil(a) %s dne %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Skrýt hlavního trenéra v dropboxu"
@@ -26617,7 +26653,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurace připojení LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Pole definující hostitele a port serveru LDAP.<br><pre> ['host' => '', 'port' => ''] <\/pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Nastavit datum expirace při prvním přihlášení"
@@ -26941,7 +26977,7 @@ msgid "Immediately block users who have been disabled by the admin through users
 msgstr "Okamžitě blokovat uživatele, kteří byli vypnuti administrátorem prostřednictvím správy uživatelů. Jinak uživatelé, kteří byli vypnuti, si ponechají svá předchozí oprávnění až do odhlášení."
 
 msgid "Session cookie samesite"
-msgstr "Session cookie samesite"
+msgstr "SameSite relace cookie"
 
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr "Povolit parametr samesite:None pro session cookie. Více info: https://www.chromium.org/updates/same-site a https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
@@ -31872,6 +31908,9 @@ msgstr "Napište něco k %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Preferováno: SVG. Doporučená šířka PNG: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Doporučená šířka PNG: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Nahrát PNG logo pro e-maily (~%spx šířka)"
 
@@ -31907,6 +31946,9 @@ msgstr "Klikněte pro vložení"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Preferováno: SVG. Maximální velikost PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Maximální velikost PNG: %spx."
 
 msgid "View badge"
 msgstr "Zobrazit odznak"
@@ -32413,7 +32455,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Smazání selhalo: chybí kontext kurzu nebo neplatné ID otázky."
 
 msgid "AI Tutor"
-msgstr "AI Tutor"
+msgstr "AI tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "Rozšíření APCu musí být nainstalováno a povoleno, aby platforma mohla být použita."
@@ -38058,6 +38100,9 @@ msgstr "Ukončování"
 msgid "Draft saved"
 msgstr "Návrh uložen"
 
+msgid "Save as draft"
+msgstr "Uložit jako koncept"
+
 msgid "Statement"
 msgstr "Prohlášení"
 
@@ -39217,7 +39262,7 @@ msgid "Delete failed"
 msgstr "Smazání se nezdařilo"
 
 msgid "PHP cache"
-msgstr "PHP cache"
+msgstr "Mezipaměť PHP"
 
 msgid "Live OPcache and APCu diagnostics"
 msgstr "Diagnostika OPcache a APCu v reálném čase"
@@ -39479,4 +39524,265 @@ msgstr "Tento uživatel je již přihlášen do relace."
 
 msgid "This user is already subscribed to the course."
 msgstr "Tento uživatel je již přihlášen do kurzu."
+
+msgid "Multi URLs"
+msgstr "Více URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entity jako uživatelé a kurzy mohou být aktivní na více URL současně, proto součet hodnot níže nebude odpovídat celkovému počtu."
+
+msgid "User directory"
+msgstr "Adresář uživatelů"
+
+msgid "Course directory"
+msgstr "Adresář kurzů"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "Podrobnosti uživatele"
+
+msgid "Course details"
+msgstr "Podrobnosti kurzu"
+
+msgid "View details"
+msgstr "Zobrazit podrobnosti"
+
+msgid "Average progress"
+msgstr "Průměrný pokrok"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Přímý zápis patří ke kurzu jako celku, nikoli ke konkrétní URL, proto se stejné údaje „Přímé“ níže opakují u každé URL, s níž je kurz propojen. Relace jsou určeným způsobem sdílení kurzu napříč URL s metrikami, které se u jednotlivých URL skutečně liší."
+
+msgid "Logins (all URLs combined)"
+msgstr "Přihlášení (všechny URL dohromady)"
+
+msgid "Unique logins"
+msgstr "Unikátní přihlášení"
+
+msgid "Parent URL"
+msgstr "Nadřazená URL"
+
+msgid "Logins (your URLs)"
+msgstr "Přihlášení (vaše URL)"
+
+msgid "The picture could not be uploaded"
+msgstr "Obrázek se nepodařilo nahrát"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Tento typ pole zatím není plně podporován — pouze surová hodnota."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Tento kurz se blíží limitu přihlášení uživatelů (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Prostor je omezen vlastnostmi kurzu. Pro zvýšení limitu získejte"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Přihlášení uživatelů jsou omezena vlastnostmi kurzu. Pro zvýšení limitu získejte"
+
+msgid "pro plan"
+msgstr "pro tarif"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "a importujte zálohu tohoto kurzu přes Údržbu kurzu do nového placeného kurzu, nebo otevřete tiket a nechte kurz převést na pro kurz, jakmile tarif získáte."
+
+msgid "Tired of writing questions?"
+msgstr "Už vás unavuje psát otázky?"
+
+msgid "Upgrade your plan"
+msgstr "Upgradujte tarif"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "na pro tarif a získejte pomoc AI při tvorbě kvalitních otázek."
+
+msgid "Student Success AI Coach"
+msgstr "AI kouč úspěchu studenta"
+
+msgid "No AI text provider is configured."
+msgstr "Není nakonfigurován žádný poskytovatel AI textu."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Další pokyny pro AI kouče"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Příklad: Tento student má potíže s udržením pozornosti. Navrhněte kratší aktivity a častější ověřování porozumění."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Ponechte toto okno otevřené, zatímco Chamilo připravuje doporučení."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Doporučení bylo také uloženo do vaší schránky v Chamilu."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Doporučení bylo vygenerováno a uloženo pro tohoto studenta, ale kopii do schránky se nepodařilo vytvořit."
+
+msgid "Student success recommendation"
+msgstr "Doporučení k úspěchu studenta"
+
+msgid "Generated"
+msgstr "Vygenerováno"
+
+msgid "Priority actions"
+msgstr "Prioritní opatření"
+
+msgid "Evidence"
+msgstr "Důkazy"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Tato funkce analyzuje obsah kurzu a odešle informace o učebním chování nakonfigurovanému AI modelu. Přestože se modelu neposílají přímo identifikovatelné osobní údaje, některé odeslané údaje mohou nepřímo poskytnout identifikovatelné informace o uživateli. V případě pochybností se před použitím této funkce vždy poraďte s osobou odpovědnou za AI."
+
+msgid "Additional activities"
+msgstr "Další aktivity"
+
+msgid "Rhythm"
+msgstr "Rytmus"
+
+msgid "Learning methodologies"
+msgstr "Metody učení"
+
+msgid "Other recommendations"
+msgstr "Další doporučení"
+
+msgid "Analyzing course..."
+msgstr "Analýza kurzu…"
+
+msgid "Analyzing student's learning..."
+msgstr "Analýza učení studenta…"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Přijetím této pozvánky budete propojeni s žadatelem tak, že některé nebo všechny údaje vašeho profilu budou pro něj čitelné. Ujistěte se, že nesdílíte příliš mnoho, a zkontrolujte svůj profil u uživatelů, kterým již důvěřujete."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Oprávnění k použití mikrofonu není povoleno, povolte je v prohlížeči pro nahrávání zvuku"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Tato verze Chamilo obsahuje jeden (nebo více) předinstalovaných vícejazyčných kurzů. Prohlédněte si je v seznamu kurzů a rozhodněte, zda mají být veřejné."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Momentálně nemáte přístup k žádné URL. Požádejte administrátora, aby vám udělil přístup k URL, ke které patříte."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Pokud vybraný poskytovatel AI není suverénní služba, obsah vybraného dokumentu může být odeslán externí službě. S důvěrnými informacemi nepokračujte, pokud to vaše organizace nepovoluje."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Klikněte na Sjednotit u účtu, který má zůstat. Systém do něj sloučí všechny ostatní účty ve stejné skupině duplicit. Sloučené účty budou trvale smazány a zmizí z tohoto přehledu. Tuto akci nelze vrátit zpět."
+
+msgid "Permanent deletion"
+msgstr "Trvalé smazání"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Sjednocení již trvale maže sloučené účty. Seznam uživatelů použijte pouze tehdy, chcete-li další účty smazat ručně."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Upravujete loga výchozího vizuálního tématu „chamilo“. Zvažte vytvoření/použití vlastního vizuálního tématu, abyste nepřepsali výchozí nastavení."
+
+msgid "This exercise has no questions."
+msgstr "Toto cvičení neobsahuje žádné otázky."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Jak máme zobrazit zpětnou vazbu/komentář u každé otázky? Tato volba určuje, jak se to studentovi zobrazí při vyplňování testu."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Tyto aplikace mohou přistupovat k Chamilu vaším jménem s oprávněními vašeho stávajícího účtu a ničím víc. Odvolejte ty, které již nepoužíváte nebo nepoznáváte."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Vysvětlete, proč chcete odvolat svůj právní souhlas, abychom mohli vaši žádost správně zpracovat"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Tento osobní klíč použijte k připojení vzdáleného MCP klienta k Chamilu s vaším účtem a oprávněními."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Úplný klíč se zobrazí pouze jednou. Uložte jej bezpečně. Vygenerování nového klíče okamžitě zneplatní předchozí."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Klíč autentizuje klienta jako váš účet v Chamilu. Neuděluje oprávnění, která váš účet již nemá."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Zobrazit prohlášení o podmínkách na registrační stránce a vyžadovat, aby návštěvník podmínky přijal, aby se mohl zaregistrovat"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Obsah podmínek bude odeslán jazykovému modelu AI. Před uložením zkontrolujte navržený překlad."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Pro cílový jazyk již existuje uložená verze. Uložením tohoto návrhu vznikne nová verze."
+
+msgid "Acquired"
+msgstr "Získáno"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Doporučený obrázek kurzu: 1600 × 900 px (16:9). Pro ostré zobrazení na větších nebo vysokohustotních obrazovkách použijte alespoň 1280 × 720 px."
+
+msgid "Courses of the selected URL"
+msgstr "Kurzy vybrané URL"
+
+msgid "Course categories in selected URL"
+msgstr "Kategorie kurzů ve vybrané URL"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Váš účet je aktivní, nyní se můžete přihlásit a zkontrolovat své kurzy."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Nejprve si stáhněte opravy <a href='%s'> zde </a>.\nPoté soubor rozbalte a upravte soubory podle potřeby, aniž byste měnili názvy souborů.\nPoté vytvořte zip soubor s těmito upravenými soubory a nahrajte jej v tomto formuláři."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Přidávání studentů z relace %s do relace %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Zobrazit všechny pokusy podle cvičení"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Tato operace by překročila povolený limit uživatelů pro vybraný kurz."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Některé zápisy nebylo možné provést, protože byl dosažen povolený limit uživatelů pro dotčený kurz. Dotčení uživatelé/kurzy: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Tento registr uvádí známé stránky přehledů, jejich kategorii, kanonickou URL, starší URL a očekávané role publika. Kanonické URL směřují k aktuální implementaci přehledu a uplatňují dokumentovanou matici rolí přehledů."
+
+msgid "E-mail notification subscription"
+msgstr "Přihlášení k e-mailovým oznámením"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Tato operace by překročila limit %s uživatelů na kurz nastavený administrátory. Zápis byl zrušen."
+
+msgid "Language the document is in"
+msgstr "Jazyk dokumentu"
+
+msgid "There is no session still"
+msgstr "Zatím neexistuje žádná relace"
+
+msgid "Origin courses from session"
+msgstr "Výchozí kurzy z relace"
+
+msgid "Destination courses from session"
+msgstr "Cílové kurzy z relace"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Veřejný přístup (přístup povolen všem členům kurzu)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Vygenerujte %d termínů slovníčku pro kurz na téma '%s', každý termín na samostatném řádku, s definicí na následujícím řádku a jedním prázdným řádkem mezi termíny. Nepřidávejte žádné další formátování názvu ani definice."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Toto je krátký popis kurzu '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Používáte Chamilo na platformě Windows. Pomocné nástroje pro převod dokumentů nejsou k dispozici pro fulltextové indexování."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Nastavení automatického spuštění testu je ZAPNUTO. Studenti budou přesměrováni na seznam testů."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Nastavení automatického spuštění testu je ZAPNUTO. Studenti budou přesměrováni na konkrétní test."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Byl dosažen limit zápisů do tohoto kurzu (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Počet kurzů podle jazyka"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Uživatelé, jejichž poslední přístup je starší než vybrané datum."
 

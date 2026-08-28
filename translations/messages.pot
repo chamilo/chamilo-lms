@@ -15313,6 +15313,30 @@ msgstr ""
 msgid "System status"
 msgstr ""
 
+msgid "Courses space"
+msgstr ""
+
+msgid "Database server configuration and metadata"
+msgstr ""
+
+msgid "Disk usage per course vs disk quota"
+msgstr ""
+
+msgid "Information about your webserver configuration"
+msgstr ""
+
+msgid "Paths"
+msgstr ""
+
+msgid "State of Chamilo requirements"
+msgstr ""
+
+msgid "State of PHP settings on the server"
+msgstr ""
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr ""
+
 msgid "Is writable"
 msgstr ""
 

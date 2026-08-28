@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "감사합니다"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "수식 예시: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "수식 예제: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "변수 범위"
@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:저작권,, no:저작권 없음"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:폴더,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:폴더,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:연습,,      simulation:시뮬레이션,,      questionnaire:설문조사,,      diagram:다이어그램,,      figure:그림,,      graph:그래프,,      index:색인,,      slide:슬라이드,,      table:표,,      narrative text:서술 텍스트,,      exam:시험,,      experiment:실험,,      problem statement:문제 설명,,      self assessment:자기 평가,,      lecture:강의"
@@ -9267,6 +9267,15 @@ msgstr "세션 %s의 시간 보고서"
 msgid "Error"
 msgstr "오류"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "사용자는 생성되었지만 추가 프로필 필드 중 하나를 저장할 수 없습니다."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "사용자는 업데이트되었지만 추가 프로필 필드 중 하나를 저장할 수 없습니다."
+
+msgid "One or more fields contain invalid values."
+msgstr "하나 이상의 필드에 잘못된 값이 있습니다."
+
 msgid "Anonymous"
 msgstr "익명"
 
@@ -15306,6 +15315,30 @@ msgstr "지난 주 소요 시간"
 msgid "System status"
 msgstr "시스템 상태"
 
+msgid "Courses space"
+msgstr "강좌 공간"
+
+msgid "Database server configuration and metadata"
+msgstr "데이터베이스 서버 구성 및 메타데이터"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "강좌별 디스크 사용량 대 디스크 할당량"
+
+msgid "Information about your webserver configuration"
+msgstr "웹 서버 구성 정보"
+
+msgid "Paths"
+msgstr "경로"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo 요구 사항 상태"
+
+msgid "State of PHP settings on the server"
+msgstr "서버의 PHP 설정 상태"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "이 포털에서 해석된 api_get_path() 상수"
+
 msgid "Is writable"
 msgstr "쓰기 가능"
 
@@ -20672,6 +20705,9 @@ msgstr "스킬 휠에서 짧은 코드가 있는 스킬 이름을 표시."
 
 msgid "Created by"
 msgstr "작성자"
+
+msgid "Created by %s on %s"
+msgstr "%s님이 %s에 생성함"
 
 msgid "Hide general coach in dropbox"
 msgstr "드롭박스에서 일반 코치 숨기기"
@@ -31876,6 +31912,9 @@ msgstr "%s에 내용을 작성하세요"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "권장: SVG. PNG 권장 너비: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG 권장 너비: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "이메일용 PNG 로고 업로드 (~%spx 너비)"
 
@@ -31911,6 +31950,9 @@ msgstr "삽입하려면 클릭"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "우선: SVG. PNG 최대 크기: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG 최대 크기: %spx."
 
 msgid "View badge"
 msgstr "배지 보기"
@@ -38062,6 +38104,9 @@ msgstr "종료 중"
 msgid "Draft saved"
 msgstr "임시 저장됨"
 
+msgid "Save as draft"
+msgstr "초안으로 저장"
+
 msgid "Statement"
 msgstr "문제"
 
@@ -39483,4 +39528,265 @@ msgstr "이 사용자는 이미 세션에 구독되어 있습니다."
 
 msgid "This user is already subscribed to the course."
 msgstr "이 사용자는 이미 강의에 구독되어 있습니다."
+
+msgid "Multi URLs"
+msgstr "다중 URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "사용자 및 강좌와 같은 엔터티는 동시에 둘 이상의 URL에서 활성일 수 있으므로, 아래 값의 합계는 전체와 일치하지 않습니다."
+
+msgid "User directory"
+msgstr "사용자 디렉터리"
+
+msgid "Course directory"
+msgstr "강좌 디렉터리"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "사용자 상세"
+
+msgid "Course details"
+msgstr "강좌 상세"
+
+msgid "View details"
+msgstr "상세 보기"
+
+msgid "Average progress"
+msgstr "평균 진도"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "직접 등록은 특정 URL이 아니라 강좌 전체에 속하므로, 이 강좌가 연결된 모든 URL에 대해 동일한 '직접' 수치가 아래에 반복됩니다. 세션은 URL별로 실제로 다른 지표로 강좌를 공유하는 권장 방법입니다."
+
+msgid "Logins (all URLs combined)"
+msgstr "로그인(모든 URL 합산)"
+
+msgid "Unique logins"
+msgstr "고유 로그인"
+
+msgid "Parent URL"
+msgstr "상위 URL"
+
+msgid "Logins (your URLs)"
+msgstr "로그인(내 URL)"
+
+msgid "The picture could not be uploaded"
+msgstr "사진을 업로드할 수 없습니다"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "이 필드 유형은 아직 완전히 지원되지 않습니다 — 원시 값만 표시됩니다."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "이 강좌는 사용자 등록 한도에 근접했습니다(%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "강좌 속성으로 공간이 제한되어 있습니다. 한도를 높이려면"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "강좌 속성으로 사용자 등록이 제한되어 있습니다. 한도를 높이려면"
+
+msgid "pro plan"
+msgstr "프로 플랜"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "을 이용하고 강좌 유지보수를 통해 이 강좌의 백업을 새 유료 강좌로 가져오거나, 플랜을 구매한 후 티켓을 열어 강좌를 프로 강좌로 전환하세요."
+
+msgid "Tired of writing questions?"
+msgstr "문제 작성이 지겹습니까?"
+
+msgid "Upgrade your plan"
+msgstr "플랜 업그레이드"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "프로 플랜으로 업그레이드하면 AI가 양질의 문제를 생성하도록 도움을 받을 수 있습니다."
+
+msgid "Student Success AI Coach"
+msgstr "학습 성공 AI 코치"
+
+msgid "No AI text provider is configured."
+msgstr "구성된 AI 텍스트 제공자가 없습니다."
+
+msgid "Additional instructions for the AI coach"
+msgstr "AI 코치를 위한 추가 지침"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "예: 이 학습자는 주의 집중을 유지하는 데 어려움이 있습니다. 더 짧은 활동과 더 잦은 이해 확인을 제안하세요."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Chamilo가 추천을 준비하는 동안 이 창을 열어 두세요."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "추천이 Chamilo 받은편지함에도 저장되었습니다."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "추천이 생성되어 이 학습자를 위해 저장되었지만, 받은편지함 사본은 만들 수 없었습니다."
+
+msgid "Student success recommendation"
+msgstr "학습 성공 추천"
+
+msgid "Generated"
+msgstr "생성됨"
+
+msgid "Priority actions"
+msgstr "우선 조치"
+
+msgid "Evidence"
+msgstr "근거"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "이 기능은 이 강좌의 내용을 분석하고 학습 행동 정보를 구성된 AI 모델로 보냅니다. 직접 식별 가능한 개인 데이터를 AI 모델로 보내지는 않지만, 전송되는 일부 데이터가 사용자에 대한 식별 정보를 간접적으로 제공할 수 있습니다. 확신이 없으면 이 기능을 사용하기 전에 항상 AI 담당자와 확인하세요."
+
+msgid "Additional activities"
+msgstr "추가 활동"
+
+msgid "Rhythm"
+msgstr "리듬"
+
+msgid "Learning methodologies"
+msgstr "학습 방법론"
+
+msgid "Other recommendations"
+msgstr "기타 추천"
+
+msgid "Analyzing course..."
+msgstr "강좌 분석 중..."
+
+msgid "Analyzing student's learning..."
+msgstr "학습자의 학습 분석 중..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "이 초대를 수락하면 요청한 사용자와 연결되어, 프로필 데이터의 일부 또는 전부가 해당 사용자에게 읽힐 수 있습니다. 이미 신뢰하는 사용자와 프로필을 확인하여 너무 많은 정보를 공유하지 않도록 하세요."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "마이크 사용 권한이 활성화되어 있지 않습니다. 오디오를 녹음하려면 브라우저에서 권한을 활성화하세요."
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "이 버전의 Chamilo에는 하나 이상의 다국어 강좌가 미리 설치되어 있습니다. 강좌 목록에서 검토한 뒤 공개 여부를 결정하세요."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "현재 접근할 수 있는 URL이 없습니다. 소속 URL에 대한 접근 권한을 관리자에게 요청하세요."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "선택한 AI 제공자가 주권 서비스가 아닌 경우, 선택한 문서 내용이 외부 서비스로 전송될 수 있습니다. 조직에서 허용하지 않는 한 기밀 정보로 계속하지 마세요."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "유지할 계정에서 통합을 클릭하세요. 시스템이 같은 중복 그룹의 다른 모든 계정을 해당 계정으로 병합합니다. 병합된 계정은 영구 삭제되며 이 보고서에서 사라집니다. 이 작업은 되돌릴 수 없습니다."
+
+msgid "Permanent deletion"
+msgstr "영구 삭제"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "통합은 이미 병합된 계정을 영구 삭제합니다. 추가 계정을 수동으로 삭제하려면 사용자 목록만 사용하세요."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "기본 시각 테마 “chamilo”의 로고를 수정하고 있습니다. 기본값을 덮어쓰지 않으려면 사용자 지정 시각 테마를 만들거나 사용하는 것을 고려하세요."
+
+msgid "This exercise has no questions."
+msgstr "이 연습에는 문제가 없습니다."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "각 문제에 대한 피드백/설명을 어떻게 표시할까요? 이 옵션은 학습자가 시험을 볼 때 표시되는 방식을 정의합니다."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "이 애플리케이션은 기존 계정 권한만으로 사용자를 대신해 Chamilo에 접근할 수 있습니다. 더 이상 사용하지 않거나 인식하지 못하는 항목은 취소하세요."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "법적 동의 철회를 요청하는 이유를 설명해 주시면 요청을 적절히 처리할 수 있습니다."
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "이 개인 키를 사용하여 원격 MCP 클라이언트를 본인 계정과 권한으로 Chamilo에 연결하세요."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "전체 키는 한 번만 표시됩니다. 안전하게 보관하세요. 새 키를 생성하면 이전 키는 즉시 무효화됩니다."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "이 키는 클라이언트를 본인의 Chamilo 계정으로 인증합니다. 계정에 없는 권한은 부여하지 않습니다."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "등록 페이지에 이용 약관 문구를 표시하고, 방문자가 등록하려면 약관에 동의하도록 요구합니다."
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "이용 약관 내용이 AI 언어 모델로 전송됩니다. 저장하기 전에 제안된 번역을 검토하세요."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "대상 언어에 저장된 버전이 이미 있습니다. 이 제안을 저장하면 새 버전이 만들어집니다."
+
+msgid "Acquired"
+msgstr "취득함"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "권장 강좌 이미지: 1600 × 900 px (16:9). 더 크거나 고밀도 화면에서 선명하게 표시하려면 최소 1280 × 720 px를 사용하세요."
+
+msgid "Courses of the selected URL"
+msgstr "선택한 URL의 강좌"
+
+msgid "Course categories in selected URL"
+msgstr "선택한 URL의 강좌 범주"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "계정이 활성화되었습니다. 이제 로그인하여 강좌를 확인할 수 있습니다."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "먼저 수정본을 <a href='%s'>여기</a>에서 다운로드하세요.\n그런 다음 해당 파일의 압축을 풀고 파일 이름을 바꾸지 않은 채 원하는 대로 파일을 편집하세요.\n수정한 파일로 zip 파일을 만든 뒤 이 양식에 업로드하세요."
+
+msgid "Adding students from session %s to session %s"
+msgstr "세션 %s의 학습자를 세션 %s에 추가 중"
+
+msgid "Show all attempts by exercise"
+msgstr "연습별 모든 시도 표시"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "이 작업은 선택한 강좌의 허용 사용자 한도를 초과합니다."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "일부 구독은 해당 강좌의 허용 사용자 한도에 도달하여 실행할 수 없었습니다. 영향받은 사용자/강좌: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "이 레지스트리는 알려진 보고 페이지, 범주, 정규 URL, 레거시 URL 및 예상 역할 대상을 나열합니다. 정규 URL은 현재 보고서 구현으로 라우팅되며 문서화된 보고서 역할 매트릭스를 적용합니다."
+
+msgid "E-mail notification subscription"
+msgstr "이메일 알림 구독"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "이 작업은 관리자가 설정한 강좌당 사용자 수 제한(%s명)을 초과합니다. 등록이 취소되었습니다."
+
+msgid "Language the document is in"
+msgstr "문서의 언어"
+
+msgid "There is no session still"
+msgstr "아직 세션이 없습니다"
+
+msgid "Origin courses from session"
+msgstr "세션의 원본 강좌"
+
+msgid "Destination courses from session"
+msgstr "세션의 대상 강좌"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "로그인 없이도 포털 홈페이지로부터 누구나 접근 가능"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "'%s' 강좌에 대한 용어집 항목 %d개를 생성하세요. 각 용어는 한 줄에, 정의는 다음 줄에 쓰고, 항목 사이에는 빈 줄을 하나 넣으세요. 제목이나 정의에 다른 서식을 추가하지 마세요."
+
+msgid "This is a short description of the course '%s'."
+msgstr "이것은 강좌 '%s'의 짧은 설명입니다."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Windows 플랫폼에서 Chamilo를 사용하고 있습니다. 전체 텍스트 색인을 위한 문서 변환 도우미를 사용할 수 없습니다."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "시험 자동 실행 설정이 켜져 있습니다. 학생들은 시험 목록으로 리디렉션됩니다."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "시험 자동 실행 설정이 켜져 있습니다. 학생들은 특정 시험으로 리디렉션됩니다."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "이 강좌의 등록 한도에 도달했습니다 (%current%\/%limit%)."
+
+msgid "Count course by language"
+msgstr "언어별 강좌 수"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "최근 접속이 선택한 날짜보다 이전인 사용자."
 

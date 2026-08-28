@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vennlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formelprøve: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelområder"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:opphavsrett,, no:ingen opphavsrett"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappe,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappe,, application/msword:MsWord,, application/octet-stream:Oktettstrøm,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:øvelse,,      simulation:simulering,,      questionnaire:spørreskjema,,      diagram:diagram,,      figure:figur,,      graph:graf,,      index:indeks,,      slide:lysbilde,,      table:tabell,,      narrative text:fortellende tekst,,      exam:eksamen,,      experiment:eksperiment,,      problem statement:problemstilling,,      self assessment:selvvurdering,,      lecture:forelesning"
@@ -8631,16 +8631,16 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d. %b %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A %d. %B %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
-msgstr "%B %d, %Y at %I:%M %p"
+msgstr "%d. %B %Y kl. %H:%M"
 
 msgid "%I:%M %p"
-msgstr "%I:%M %p"
+msgstr "%H:%M"
 
 msgid "Yes"
 msgstr "Ja"
@@ -9269,6 +9269,15 @@ msgstr "Tidsrapport for økt %s"
 msgid "Error"
 msgstr "Feil"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Brukeren ble opprettet, men ett av de ekstra profilfeltene kunne ikke lagres."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Brukeren ble oppdatert, men ett av de ekstra profilfeltene kunne ikke lagres."
+
+msgid "One or more fields contain invalid values."
+msgstr "Ett eller flere felt inneholder ugyldige verdier."
+
 msgid "Anonymous"
 msgstr "Anonym"
 
@@ -9477,7 +9486,7 @@ msgid "Not yet begun"
 msgstr "Ikke startet"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d. %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Ugyldig mappe: Vennligst opprett en mappe med navnet images i dokumentverktøyet slik at bildene kan lastes opp i denne mappen"
@@ -14217,49 +14226,49 @@ msgid "<p><b>Adding users</b></p> <p>You can subscribe existing learners one by 
 msgstr "<p><b>Legge til brukere</b></p> <p>Du kan melde på eksisterende deltakere én etter én til kurset ditt ved å klikke på lenken 'Meld på brukere til dette kurset'. Vanligvis er det imidlertid bedre å åpne kurset for selvregistrering og la deltakerne registrere seg selv. </p> <p><b>Beskrivelse</b></p> <p>Beskrivelsen har ingen datamaskinrelatert funksjon og indikerer ingen spesielle rettigheter eller privilegier i systemet. Den indikerer bare hvem som er hvem, i menneskelige termer. Du kan derfor endre dette ved å klikke på blyanten, deretter skrive det du vil: professor, assistent, student, besøkende, ekspert osv.</p><p><b>Administratorrettigheter</b></p><p>Administratorrettigheter gir derimot teknisk autorisasjon til å endre innholdet og organiseringen av dette kursområdet. Du kan velge mellom å tillate fullstendige administratorrettigheter eller ingen.</p><p>For å tillate en assistent, for eksempel, å være medadministrator for området, må du være sikker på at han/hun allerede er registrert, deretter klikke på blyanten, deretter merke av for 'Lærer', deretter 'Ok'.</p><p><b>Medlærere</b></p><p>For å nevne navnet på en medlærer i overskriften (medformann, osv.), bruk verktøyet 'Kursinnstillinger'. Denne endringen registrerer ikke automatisk din medlærer som kursmedlem. 'Lærere'-feltet er helt uavhengig av 'Brukere'-listen.</p> <p><b>Sporing og personlige hjemmesider</b></p> <p>I tillegg til å vise brukerlisten og endre deres rettigheter, viser Brukere-verktøyet også individuell sporing og lar læreren definere overskrifter for personlige hjemmesider som skal fylles ut av brukerne.</p>"
 
 msgid "<p><b>Introduction</b></p><p>This tool allows you to create and manage workgroups. On first creation (Create groups), groups are 'empty'. There are many ways to fill them:<ul><li>automatically ('Fill groups (random)'),</li><li>manually ('Edit'),</li><li>self-registration by users (Groups settings: 'Self registration allowed...').</li></ul>These three ways can be combined. You can, for instance, first ask users to self-register.Then if you find some of them didn't register, decide to fill groups automatically (random) in order to complete them. You can also edit each group to determine membership, user by user, after or before self-registration and/or automatically on registration.</p><p>Filling groups, whether automatically or manually, is possible only for users registered on the course. The users list is visible in <b>Users</b> tool. </p><hr noshade size=1><p><b>Create groups</b></p><p>To create new groups, click on 'Create new group(s)' and decide the number of groups to create.</p><hr noshade size=1><p><b>Group settings</b></p><p>You can determine Group settings globally (for all groups).<b>Users may self-register in groups</b>:<p>You create empty groups, users self-register.If you have defined a maximum number, full groups do not accept new members.This method is handy for trainers unfamiliar with the users list when creating groups.</p><b>Tools</b>:</p><p>Every group is assigned either a forum (private or public) or a Documents area(a shared file manager) or (in most cases) both.</p><hr noshade size=1><p><b>Manual editing</b></p><p>Once groups have been created (Create groups), you will see, at the bottom of the page, a list of groups along with with several options:<ul><li><b>Edit</b>Manually modify group name, description, tutor, members list.</li><li><b>Delete</b> Delete a group.</li></ul><hr noshade size=1>"
-msgstr ""
+msgstr "<p><b>Innledning</b></p><p>Dette verktøyet lar deg opprette og administrere arbeidsgrupper. Ved første opprettelse (Opprett grupper) er gruppene «tomme». Det finnes flere måter å fylle dem på:<ul><li>automatisk («Fyll grupper (tilfeldig)»),</li><li>manuelt («Rediger»),</li><li>selvregistrering av brukere (Gruppeinnstillinger: «Selvregistrering tillatt...»).</li></ul>Disse tre måtene kan kombineres. Du kan for eksempel først be brukerne om å registrere seg selv. Hvis noen ikke har registrert seg, kan du deretter fylle gruppene automatisk (tilfeldig) for å fullføre dem. Du kan også redigere hver gruppe for å fastsette medlemskap, bruker for bruker, etter eller før selvregistrering og/eller automatisk ved registrering.</p><p>Fylling av grupper, enten automatisk eller manuelt, er bare mulig for brukere som er registrert på kurset. Brukeroversikten vises i verktøyet <b>Brukere</b>. </p><hr noshade size=1><p><b>Opprett grupper</b></p><p>For å opprette nye grupper klikker du på «Opprett ny(e) gruppe(r)» og velger antall grupper som skal opprettes.</p><hr noshade size=1><p><b>Gruppeinnstillinger</b></p><p>Du kan fastsette gruppeinnstillinger globalt (for alle grupper).<b>Brukere kan registrere seg selv i grupper</b>:<p>Du oppretter tomme grupper, og brukerne registrerer seg selv. Hvis du har definert et maksimalt antall, tar fulle grupper ikke imot nye medlemmer. Denne metoden er praktisk for lærere som ikke kjenner brukeroversikten når gruppene opprettes.</p><b>Verktøy</b>:</p><p>Hver gruppe tildeles enten et forum (privat eller offentlig) eller et dokumentområde (en delt filbehandler) eller (i de fleste tilfeller) begge deler.</p><hr noshade size=1><p><b>Manuell redigering</b></p><p>Når gruppene er opprettet (Opprett grupper), vises nederst på siden en liste over grupper med flere valg:<ul><li><b>Rediger</b> Endre gruppenavn, beskrivelse, veileder og medlemsliste manuelt.</li><li><b>Slett</b> Slett en gruppe.</li></ul><hr noshade size=1>"
 
 msgid "<p>The tests tool allows you to create tests containing as many questions as you like.<br><br> You can choose from a range of question formats clearly displayed at the top of the page when you create a test including (for example):<br><br><ul>  <li>Multiple choice (single or multiple answers)</li>  <li>Matching</li>  <li>Fill in the blanks etc.</li></ul>A test can include any number and combination of questions and question formats.</p><hr><b>Test creation</b><p>To create a test, click on the \"New test\" link.<br><br>Type a name for the test, as well as an optional description.<br><br>You can add various elements to this, including audio or video files, e.g. for listening comprehension, but take care to make such files as small as possible to optimise download time (e.g. use mp3 rather than wav files - they're far smaller but perfectly good quality). <br><br>You can also choose between two modes of presentation:<br><br><ul>  <li>Questions on an single page</li>  <li>One question per page (sequentially)</li></ul>and opt for questions to be randomly organised when the test is run.<br><br>Finally, save your test. You will be taken to the question administration.</p><hr><b>Adding a question</b><p>You can now add a question to the newly created test. You can if you wish include a description and/or an image. To create the test types mentioned above, follow the following steps: </p><hr><b>Multiple choice</b><p>In order to create a MAQ / MCQ :<br><br><ul>  <li>Define the answers for your question. You can add or delete an answer by clicking on the right-hand button</li>  <li>Check the left box for the correct answer(s)</li>  <li>Add an optional comment. This comment won't be seen by the user until he/she has answered the question</li>  <li>Give a weighting to each answer. The weighting can be any positive or negative integer (or zero)</li>  <li>Save your answers</li></ul></p><hr><b>Fill in the blanks</b><p>This allows you to create a cloze passage. The purpose is to prompt the user to find words that you have removed from the text.<br><br>To remove a word from the text, and thus create a blank, put brackets [like this] around it.<br><br>Once the text has been typed and blanks defined, you can add a comment that will be seen by the learner depending on the reply to the question.<br><br>Save your text, and you will be taken to the next step allowing you to assign a weighting to each blank. For example, if the question is worth 10 points and you have 5 blanks, you can give a weighting of 2 points to each blank.</p><hr><b>Matching</b><p>This answer type can be chosen so as to create a question where the user will have to connect elements from list A with elements from list B.<br><br>It can also be used to ask the user to arrange elements in a given order.<br><br>First, define the options from which the user will be able to choose the best answer. Then, define the questions which will have to be linked to one of the options previously defined. Finally, connect elements from the first list with those of the second list via the drop-down menu.<br><br>Note: Several elements from the first unit might point to the same element in the second unit.<br><br>Assign a weighting to each correct match, and save your answer.</p><hr><b>Modifying a test</b><p>In order to modify a test, the principle is the same as for creating a test. Just click on the picture <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the test to modify, and follow the instructions above.</p><hr><b>Deleting a test</b><p>In order to delete a test, click on the picture <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> beside the test to delete it.</p><hr><b>Enabling a test</b><p>For a test can be used, you have to enable it by clicking on the picture <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the test name.</p><hr><b>Running the test</b><p>You can try out your test by clicking on its name in the tests list.</p><hr><b>Random questions</b><p>Whenever you create/modify a test, you can decide if you want questions to be drawn in a random order from amongst all test questions.<br><br>By enabling this option, questions will be drawn in a different order every time a user runs the test.<br><br>If you have got a large number of questions, you can opt to randomly draw only x-number of questions from the questions available.</p><hr><b>Questions pool</b><p>When you delete a test, its questions are not removed from the database, so they can be recycled back into another test via the questions pool.<br><br>The questions pool also allows you to re-use the same question in several tests.<br><br>By default, all the questions pertaining to your course are hidden. You can display the questions related to a test, by chosing 'filter' in the drop-down menu.<br><br>Orphan questions are questions that don not belong to any test.</p><hr><b>HotPotatoes Tests</b><p>You can import HotPotatoes tests into a Chamilo portal, to use in the Tests tool. The results of these tests are stored the same way as the results of Chamilo tests and as such can be readily monitored using the Reporting tool. In the case of simple tests, we recommend you use html or htm format; if your test contains pictures, a zip file upload is the most convenient way.</p><p>Note: You can also include HotPotatoes Tests as a step in the Learning Path.</p><b>Method of import</b><ul>  <li>Select the file on your computer using the Browse button <input type=submit value=Browse name=submit2>\ton the right of your screen.</li>\t\t<li>\t\t\tLaunch the upload with the Upload Button <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tYou can open the test by clicking onto its name.\t\t</li>\t</ul>\t<br><b>Useful link</b><br><ul><li>Hot Potatoes home page :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
-msgstr ""
+msgstr "<p>Testverktøyet lar deg opprette tester med så mange spørsmål du ønsker.<br><br> Du kan velge blant flere spørsmålsformater som vises tydelig øverst på siden når du oppretter en test, for eksempel:<br><br><ul>  <li>Flervalg (ett eller flere svar)</li>  <li>Sammenkobling</li>  <li>Fyll inn i hullene osv.</li></ul>En test kan inneholde et hvilket som helst antall og kombinasjon av spørsmål og spørsmålsformater.</p><hr><b>Opprette test</b><p>For å opprette en test klikker du på lenken \"Ny test\".<br><br>Skriv inn et navn på testen og eventuelt en beskrivelse.<br><br>Du kan legge til ulike elementer, inkludert lyd- eller videofiler, f.eks. til lytting, men sørg for at filene er så små som mulig for å optimalisere nedlastingstiden (f.eks. bruk mp3 i stedet for wav – de er mye mindre, men har god kvalitet). <br><br>Du kan også velge mellom to visningsmoduser:<br><br><ul>  <li>Spørsmål på én side</li>  <li>Ett spørsmål per side (sekvensielt)</li></ul>og velge at spørsmålene skal vises i tilfeldig rekkefølge når testen kjøres.<br><br>Lagre til slutt testen. Du kommer da til spørsmålsadministrasjonen.</p><hr><b>Legge til et spørsmål</b><p>Du kan nå legge til et spørsmål i den nylig opprettede testen. Du kan om ønskelig inkludere en beskrivelse og/eller et bilde. For å opprette testtypene nevnt over, følg disse trinnene: </p><hr><b>Flervalg</b><p>For å opprette MAQ / MCQ :<br><br><ul>  <li>Definer svarene på spørsmålet. Du kan legge til eller slette et svar ved å klikke på knappen til høyre</li>  <li>Merk av i boksen til venstre for riktig(e) svar</li>  <li>Legg til en valgfri kommentar. Denne kommentaren vises ikke for brukeren før hen har svart på spørsmålet</li>  <li>Gi en vekting til hvert svar. Vektingen kan være et hvilket som helst positivt eller negativt heltall (eller null)</li>  <li>Lagre svarene</li></ul></p><hr><b>Fyll inn i hullene</b><p>Dette lar deg opprette en cloze-tekst. Formålet er å be brukeren finne ord du har fjernet fra teksten.<br><br>For å fjerne et ord fra teksten og dermed lage et hull, sett klammer [slik] rundt det.<br><br>Når teksten er skrevet og hullene definert, kan du legge til en kommentar som vises for eleven avhengig av svaret på spørsmålet.<br><br>Lagre teksten, så kommer du til neste trinn der du kan tildele vekting til hvert hull. Hvis spørsmålet for eksempel er verdt 10 poeng og du har 5 hull, kan du gi 2 poeng til hvert hull.</p><hr><b>Sammenkobling</b><p>Denne svartypen kan velges for å lage et spørsmål der brukeren må koble elementer fra liste A med elementer fra liste B.<br><br>Den kan også brukes til å be brukeren ordne elementer i en gitt rekkefølge.<br><br>Definer først alternativene brukeren kan velge blant. Definer deretter spørsmålene som skal knyttes til ett av de tidligere definerte alternativene. Koble til slutt elementer fra den første listen med den andre via rullegardinmenyen.<br><br>Merk: Flere elementer fra den første enheten kan peke til samme element i den andre enheten.<br><br>Tildel vekting til hver korrekt sammenkobling, og lagre svaret.</p><hr><b>Endre en test</b><p>For å endre en test er prinsippet det samme som ved opprettelse. Klikk på bildet <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> ved siden av testen du vil endre, og følg instruksjonene over.</p><hr><b>Slette en test</b><p>For å slette en test klikker du på bildet <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> ved siden av testen.</p><hr><b>Aktivere en test</b><p>For at en test skal kunne brukes, må du aktivere den ved å klikke på bildet <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> ved siden av testnavnet.</p><hr><b>Kjøre testen</b><p>Du kan prøve testen ved å klikke på navnet i testlisten.</p><hr><b>Tilfeldige spørsmål</b><p>Når du oppretter/endrer en test, kan du velge om spørsmålene skal trekkes i tilfeldig rekkefølge blant alle testspørsmålene.<br><br>Hvis du aktiverer dette, trekkes spørsmålene i en annen rekkefølge hver gang en bruker tar testen.<br><br>Hvis du har mange spørsmål, kan du velge å trekke bare et visst antall spørsmål tilfeldig blant de tilgjengelige.</p><hr><b>Spørsmålspool</b><p>Når du sletter en test, fjernes ikke spørsmålene fra databasen, så de kan gjenbrukes i en annen test via spørsmålspoolen.<br><br>Spørsmålspoolen lar deg også gjenbruke samme spørsmål i flere tester.<br><br>Som standard er alle spørsmål knyttet til kurset skjult. Du kan vise spørsmål knyttet til en test ved å velge «filter» i rullegardinmenyen.<br><br>Foreldreløse spørsmål er spørsmål som ikke tilhører noen test.</p><hr><b>HotPotatoes-tester</b><p>Du kan importere HotPotatoes-tester til en Chamilo-portal for bruk i testverktøyet. Resultatene lagres på samme måte som Chamilo-tester og kan derfor overvåkes i rapporteringsverktøyet. For enkle tester anbefaler vi html- eller htm-format; hvis testen inneholder bilder, er opplasting av en zip-fil mest praktisk.</p><p>Merk: Du kan også inkludere HotPotatoes-tester som et trinn i læringsstien.</p><b>Importmetode</b><ul>  <li>Velg filen på datamaskinen med knappen Bla gjennom <input type=submit value=Browse name=submit2>\ttil høyre på skjermen.</li>\t\t<li>\t\t\tStart opplastingen med knappen Last opp <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tDu kan åpne testen ved å klikke på navnet.\t\t</li>\t</ul>\t<br><b>Nyttig lenke</b><br><ul><li>Hot Potatoes hjemmeside :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
 
 msgid "The Course tool supports two approaches :<ul><li>Create a new course (allowing you to author your own content)</li><li>Import SCORM course</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path?</b></p><p>A Learning Path allows for the presentation of a sequence of learning experiences or activities arranged in distinct sections (in this sense, the Learning Path is what distinguishes a 'course' from a mere repository of random documents). It can be content-based (serving as a table of contents) or activities-based, serving as an agenda or program of action necessary to understand and apply a particular area of knowledge or skill.</p><p>In addition to being  structured, a Learning Path can also be <i>sequential</i>, meaning that the completion of certain steps constitute pre-requisites for accessing others (i.e. 'you cannot go to learning object 2 before learning object 1'). Your sequence can be <i>suggestive</i> (simply displaying steps one after the other) or <i>prescriptive</i> (involving pre-requisites so that learners are required to follow steps in a particular order).</p><p><b>How do I create my own Learning Path (Course)?</b></p><p>Proceed to the 'Learning Path' section.  There you can create as many courses/paths as you wish by clicking the <i>Create a new course</i> tool. You will need to choose a name for the course/path (e.g. <i>Unit 1</i> if you plan to create several units within the overall course). To begin with, the course is empty, waiting for you to add sections and learning objects to it.<br>If you set a course to Visible, it will appear as a new tool on the course homepage. This makes it easier and clearer for students to access.</p><p><b>What learning objects can I add?</b></p><p>All Chamilo tools, activities and content that you consider useful and relevant to your course can be added :<br><ul><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Forums as a whole</li><li>Topics</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note :tests made invisible on the homepage, but included in a path, become visible for learners only as they work through the course.)</li><li>Assignments</li><li>External links</li></ul></p><p><b>Other features</b></p><p>Learners can be asked to follow your course in a given order, as you can set <u>pre-requisites</u>. This means for example that learners cannot go to e.g. Quiz 2 until they have read e.g. Document 1. All learning objects have a status:<i>completed</i> or <i>incomplete</i>, so the progress of learners is clearly reported.</p><p>If you alter the original title of a learning object, the new name will appear in the course, but the original title will not be deleted. So if you want test8.doc to appear as 'Final Exam' in the path, you do not have to rename the file, you can use the new title in the path. It is also useful to give new titles to links which are too long.</p><p>When you're finished, don't forget to check Display mode, (showing, as in learner view, the table of contents on the left and the learning objects on the right,one at a time.)</p><br><p><b>What is a SCORM course and how do I import one?</b></p><p>The learning path tool allows you to upload SCORM-compliant courses.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning companies like NETg, Macromedia, Microsoft, Skillsoft, etc. They act at three levels:</p><ul><li><b>Economy</b> : SCORM renders whole courses or small content units reusable on different Learning Management Systems (LMS) through the separation of content and context,</li><li><b>Pedagogy</b> : SCORM integrates the notion of pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You cannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : SCORM generates a table of contents as an abstraction layer located outside the content and the LMS. It helps both communicate with each other. Mainly communicated are <i>bookmarks</i>(\"Where is John in the course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much time did John spent in chapter 1?\").</li></ul><b>How can I create a SCORM-compliant Learning Path?</b><br><br>The obvious way is to use the Chamilo Authoring tool. However, you may prefer to create complete SCORM compliant websites locally on your own computer before uploading it onto your Chamilo platform. In this case, we recommend the use of a sophisticated tool such as Lectora®, eXe Learning® or Reload®<br></p><p>"
-msgstr ""
+msgstr "<p>Kursverktøyet støtter to tilnærminger :<ul><li>Opprett et nytt kurs (slik at du kan lage eget innhold)</li><li>Importer SCORM-kurs</li></ul><img src=\"../img/path_help.gif\"><p><b>Hva er en læringssti?</b></p><p>En læringssti gjør det mulig å presentere en sekvens av læringsopplevelser eller aktiviteter delt inn i distinkte seksjoner (i denne forstand er læringsstien det som skiller et «kurs» fra et rent lager av tilfeldige dokumenter). Den kan være innholdsbasert (som en innholdsfortegnelse) eller aktivitetsbasert, som en agenda eller et handlingsprogram som er nødvendig for å forstå og anvende et gitt kunnskaps- eller ferdighetsområde.</p><p>I tillegg til å være strukturert kan en læringssti også være <i>sekvensiell</i>, noe som betyr at fullføring av visse trinn er forutsetninger for å få tilgang til andre (dvs. «du kan ikke gå til læringsobjekt 2 før læringsobjekt 1»). Sekvensen kan være <i>foreslått</i> (bare vise trinn etter hverandre) eller <i>foreskrivende</i> (med forutsetninger slik at elevene må følge trinnene i en bestemt rekkefølge).</p><p><b>Hvordan oppretter jeg min egen læringssti (kurs)?</b></p><p>Gå til delen «Læringssti». Der kan du opprette så mange kurs/stier du ønsker ved å klikke på verktøyet <i>Opprett et nytt kurs</i>. Du må velge et navn på kurset/stien (f.eks. <i>Enhet 1</i> hvis du planlegger flere enheter i det overordnede kurset). Til å begynne med er kurset tomt, og venter på at du legger til seksjoner og læringsobjekter.<br>Hvis du setter et kurs til Synlig, vises det som et nytt verktøy på kursets hjemmeside. Dette gjør det enklere og tydeligere for studentene å få tilgang.</p><p><b>Hvilke læringsobjekter kan jeg legge til?</b></p><p>Alle Chamilo-verktøy, aktiviteter og innhold du anser som nyttige og relevante for kurset, kan legges til :<br><ul><li>Separate dokumenter (tekster, bilder, Office-dokumenter, ...)</li><li>Forum som helhet</li><li>Emner</li><li>Lenker</li><li>Chamilo-tester</li><li>HotPotatoes-tester<br />(merk: tester som er usynlige på hjemmesiden, men inkludert i en sti, blir synlige for elevene først når de arbeider gjennom kurset.)</li><li>Oppgaver</li><li>Eksterne lenker</li></ul></p><p><b>Andre funksjoner</b></p><p>Elevene kan bli bedt om å følge kurset i en gitt rekkefølge, siden du kan sette <u>forutsetninger</u>. Dette betyr for eksempel at elevene ikke kan gå til f.eks. Quiz 2 før de har lest f.eks. Dokument 1. Alle læringsobjekter har en status: <i>fullført</i> eller <i>ufullstendig</i>, slik at elevenes fremgang rapporteres tydelig.</p><p>Hvis du endrer den opprinnelige tittelen på et læringsobjekt, vises det nye navnet i kurset, men den opprinnelige tittelen slettes ikke. Hvis du vil at test8.doc skal vises som «Avsluttende eksamen» i stien, trenger du ikke å gi filen nytt navn; du kan bruke den nye tittelen i stien. Det er også nyttig å gi nye titler til lenker som er for lange.</p><p>Når du er ferdig, ikke glem å sjekke visningsmodus (som i elevvisning viser innholdsfortegnelsen til venstre og læringsobjektene til høyre, ett om gangen.)</p><br><p><b>Hva er et SCORM-kurs, og hvordan importerer jeg ett?</b></p><p>Læringsstiverktøyet lar deg laste opp SCORM-kompatible kurs.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) er en offentlig standard fulgt av store e-læringsaktører som NETg, Macromedia, Microsoft, Skillsoft osv. De virker på tre nivåer:</p><ul><li><b>Økonomi</b> : SCORM gjør hele kurs eller små innholdsenheter gjenbrukbare på ulike læringsplattformer (LMS) ved å skille innhold og kontekst,</li><li><b>Pedagogikk</b> : SCORM integrerer begrepet forutsetning eller <i>sekvensering</i> (<i>f.eks. </i>\"Du kan ikke gå til kapittel 2 før du har bestått Quiz 1\"),</li><li><b>Teknologi</b> : SCORM genererer en innholdsfortegnelse som et abstraksjonslag utenfor innholdet og LMS-et. Det hjelper de to med å kommunisere. Det som hovedsakelig kommuniseres er <i>bokmerker</i>(\"Hvor er John i kurset?\"), <i>poeng</i> (\"Hvordan klarte John testen?\") og <i>tid</i> (\"Hvor mye tid brukte John på kapittel 1?\").</li></ul><b>Hvordan kan jeg opprette en SCORM-kompatibel læringssti?</b><br><br>Den åpenbare måten er å bruke Chamilo-forfatterverktøyet. Du kan imidlertid foretrekke å lage komplette SCORM-kompatible nettsteder lokalt på din egen datamaskin før du laster dem opp til Chamilo-plattformen. I så fall anbefaler vi et avansert verktøy som Lectora®, eXe Learning® eller Reload®<br></p><p>"
 
 msgid "<p>The Course Description tool prompts you to comprehensively describe your course in a systematic way. This description can be used to provide learners with an overview of what awaits them, and can be helpful when you review and evaluate your course. </p> The items merely offer suggestions. If you want to write your own course description, simply create your own headings and descriptions by selecting the  'Other' tool. </p> Otherwise, to complete a description of the course, click on each image, fill it with your text/content and submit. </p>"
-msgstr ""
+msgstr "<p>Verktøyet Kursbeskrivelse ber deg beskrive kurset ditt grundig og systematisk. Beskrivelsen kan gi elevene en oversikt over hva som venter dem, og kan være nyttig når du gjennomgår og evaluerer kurset. </p> Elementene er bare forslag. Hvis du vil skrive din egen kursbeskrivelse, lager du egne overskrifter og beskrivelser ved å velge verktøyet «Annet». </p> Ellers, for å fullføre en kursbeskrivelse, klikker du på hvert bilde, fyller inn tekst/innhold og sender inn. </p>"
 
 msgid "<p>The Links tool allows you to create a library of resources for your students, particularly of resources that you have not created yourself.</p><p>As the list grows, it might prove useful to organise it into categories to help your students find the right information at the right place. You can edit every link to re-assign it to a new category (you will need to create this category first).</p><p>The Description field can be used to provide advance-information on the target web pages but also to describe what you expect the student to do with the link. If, for instance, you point to a website on Aristotle, the description field may ask the student to study the difference between synthesis and analysis."
-msgstr ""
+msgstr "<p>Lenkeverktøyet lar deg opprette et bibliotek av ressurser for studentene, særlig ressurser du ikke har laget selv.</p><p>Etter hvert som listen vokser, kan det være nyttig å organisere den i kategorier slik at studentene finner riktig informasjon på riktig sted. Du kan redigere hver lenke for å tilordne den til en ny kategori (du må opprette kategorien først).</p><p>Beskrivelsesfeltet kan brukes til å gi forhåndsinformasjon om målnettsidene, men også til å beskrive hva du forventer at studenten skal gjøre med lenken. Hvis du for eksempel peker til et nettsted om Aristoteles, kan beskrivelsesfeltet be studenten studere forskjellen mellom syntese og analyse."
 
 msgid "<p> As soon as you log in to the system, you will be taken to your own main  page. Here you will see the following: <li> <b> My Courses </b> in the centre of the page, lists the courses in which you are enrolled, with an option for you to create new courses (using the button in the right menu) </li> In the header section, <b> My Profile </b> allows you to change your password, upload your photo to the system or change your username, </li> <b> My Calendar </b>: contains the events within the courses for which you are registered, </li> in the right menu: <b> Edit my list of courses </b> allows you to enroll in courses as learner, (provided the trainer/teacher has authorized entry. here you can also unsubscribe from a course, </li> Links <b> Support Forum </b> and <b> Documentation </b> refer you to the main Chamilo site, where you can ask questions or find up to date information about Chamilo. </li> </ ul> To enter a course (left side of the screen), click on its title. Your profile may vary from course to course. It could be that you are a teacher in one course and a learner in another. In courses for which you are responsible, you have access to the editing tools designed for authoring and managing students, while in courses where you learn, you access a more limited range of tools appropriate for undertaking the course.</p> The form  your own main page takes can vary from one platform to another depending on the options enabled by the system administrator. Thus, for example, there may be some cases where you do not have access to course creation even as a teacher, because this particular function is managed by others within your institution. </p>"
-msgstr ""
+msgstr "<p> Så snart du logger inn i systemet, kommer du til din egen hovedside. Her ser du følgende: <li> <b> Mine kurs </b> midt på siden viser kursene du er påmeldt, med mulighet til å opprette nye kurs (med knappen i høyre meny) </li> I toppseksjonen lar <b> Min profil </b> deg endre passord, laste opp bilde til systemet eller endre brukernavn, </li> <b> Min kalender </b>: inneholder hendelser i kursene du er registrert på, </li> i høyre meny: <b> Rediger min kursliste </b> lar deg melde deg på kurs som elev (forutsatt at lærer har gitt tilgang). her kan du også melde deg av et kurs, </li> Lenkene <b> Brukerstøtteforum </b> og <b> Dokumentasjon </b> tar deg til Chamilos hovednettsted, der du kan stille spørsmål eller finne oppdatert informasjon om Chamilo. </li> </ ul> For å gå inn i et kurs (venstre side av skjermen) klikker du på tittelen. Profilen din kan variere fra kurs til kurs. Du kan være lærer i ett kurs og elev i et annet. I kurs du er ansvarlig for, har du tilgang til redigeringsverktøy for forfatterskap og studentadministrasjon, mens du i kurs der du lærer, har tilgang til et mer begrenset sett verktøy som passer for å gjennomføre kurset.</p> Utseendet på din egen hovedside kan variere fra plattform til plattform avhengig av alternativene systemadministratoren har aktivert. Det kan for eksempel hende at du ikke har tilgang til kursoppretting selv som lærer, fordi denne funksjonen administreres av andre i institusjonen. </p>"
 
 msgid "<p> The Agenda tool appears both as a calendar within each course and as a personal diary tool for each student providing an overview of events in the courses in which they are enrolled. (Groups can also have their own Agenda.) </ p> Users can use the Agenda, which displays course content and activites, as a reference tool to organise their day to day or week to week learning.<p>In addition to being visible in the agenda, new events are indicated to the learner whenever he/she logs in. The system sees what has been added since his/her last visit and icons appear on the portal home page beside the courses indicating new events and announcements.</p> </p> If you want to organize students' work in a time-related way, it is best to use the Learning Paths tool as a way of charting a logical progression through various activites and content through the presentation of a formal table of contents.</p>"
-msgstr ""
+msgstr "<p> Agendaverktøyet vises både som en kalender i hvert kurs og som et personlig dagbokverktøy for hver student, med oversikt over hendelser i kursene de er påmeldt. (Grupper kan også ha sin egen agenda.) </ p> Brukere kan bruke agendaen, som viser kursinnhold og aktiviteter, som et referanseverktøy for å organisere læringen fra dag til dag eller uke til uke.<p>I tillegg til å vises i agendaen, varsles eleven om nye hendelser hver gang hen logger inn. Systemet ser hva som er lagt til siden forrige besøk, og ikoner vises på portalens hjemmeside ved siden av kursene som indikerer nye hendelser og kunngjøringer.</p> </p> Hvis du vil organisere studentenes arbeid tidsmessig, er det best å bruke læringsstiverktøyet for å vise en logisk progresjon gjennom ulike aktiviteter og innhold via en formell innholdsfortegnelse.</p>"
 
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
-msgstr ""
+msgstr "<p> Kunngjøringsverktøyet lar deg sende e-post til noen eller alle studentene, eller til bestemte grupper. Du kan varsle dem om et nytt dokument, minne om en innleveringsfrist eller fremheve og dele et særlig godt arbeid. Slike e-postkunngjøringer kan også minne studenter som ikke har besøkt nettstedet på en stund (så lenge det ikke overdrives!). </p> <b> Kontakte bestemte brukere </b> <p> I tillegg til å sende en generell melding til alle kursmedlemmer kan du sende e-post til én eller flere personer/grupper. Når du oppretter en ny kunngjøring, klikker du <i>Synlig for</i> og velger brukere fra listene til venstre og legger dem til som mottakere med pilene.</p>"
 
 msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
-msgstr ""
+msgstr "<p>Chatverktøyet lar deg chatte «live» med studentene i sanntid. </p> I motsetning til de fleste kommersielle chatverktøy er chatten i Chamilo nettbasert og krever ingen ekstra installasjon (f.eks. MSN® Yahoo Messenger®. Skype® osv.) En viktig fordel er derfor umiddelbar tilgjengelighet for studentene, slik at chat enkelt kan integreres i kurset. Dessuten arkiverer Chamilo-chatten automatisk diskusjoner og lagrer dem for senere tilgang via dokumentverktøyet. (Vær oppmerksom på at meldingen kan ta 1 til 5 sekunder å oppdatere ved hver utveksling – det betyr ikke at noe er galt!!). </p> Hvis elevene har lastet opp et profilbilde, vises det (redusert) i venstre kolonne – ellers vises et standardbilde. </p> Det er lærerens ansvar å slette tråder når hen anser det relevant. </p> <b>Pedagogisk bruk</b> <p>Å legge chat til kurset er ikke alltid en god idé. For å bruke verktøyet best mulig må du sørge for at diskusjonene holder seg til kursinnholdet. Du kan for eksempel holde chatfunksjonen skjult til det er tid for en «formell» planlagt økt. Da kan diskusjonsfriheten riktignok begrenses, men du kan bedre sikre at slike møter blir nyttige.</p>"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
-msgstr ""
+msgstr "<p>Oppgaveverktøyet er et svært enkelt verktøy som lar studentene laste opp dokumenter til kurset. Det kan brukes til å ta imot svar på åpne spørsmål fra enkeltpersoner eller grupper, eller til opplasting av andre dokumenttyper</p><p>Du kan gjøre filer synlige for alle studenter som standard, eller bare synlige for deg, avhengig av kursets behov. Å gjøre alle filer synlige er nyttig når du for eksempel vil at studentene skal kommentere hverandres tekster, eller når du vil gi dem erfaring med å publisere tekster globalt. Hold filer usynlige hvis du for eksempel stiller alle det samme spørsmålet og vil unngå «juks». Usynlige dokumenter gir deg også kontroll over når et dokument blir tilgjengelig for de andre studentene. </p><p>Hvis studentene skal levere et dokument til vurdering, er det best å tilordne innleveringer til en mappe i verktøyet.</p> <p>Du kan bruke verktøyet til å sette frister og instruksjoner for innlevering, samt en maksimal karakter/poengsum.</p>"
 
 msgid "<p>The Reporting tool helps you track your students' attendance and progress: Did they connect to the system, When? How many times? How much do they score in tests? Did they already upload their assignment paper? When? If you use SCORM courses, you can even track how much time a student spent on a particular module or chapter. Reporting provides two levels of information:<ul><li><b>Global</b>: How many students have accessed the course? What are the most frequently visited pages and links?</i><li><b>Specific</b>: What pages has John Doe visited? What score does he get in tests? When did he last connect to the platform?</li></ul>"
-msgstr ""
+msgstr "<p>Rapporteringsverktøyet hjelper deg å følge studentenes oppmøte og fremgang: Har de koblet seg til systemet, når? Hvor mange ganger? Hva scorer de på tester? Har de lastet opp oppgaven? Når? Hvis du bruker SCORM-kurs, kan du også spore hvor mye tid en student har brukt på en bestemt modul eller et kapittel. Rapportering gir to informasjonsnivåer:<ul><li><b>Globalt</b>: Hvor mange studenter har hatt tilgang til kurset? Hva er de mest besøkte sidene og lenkene?</i><li><b>Spesifikt</b>: Hvilke sider har Ola Nordmann besøkt? Hvilken poengsum får hen på tester? Når koblet hen sist til plattformen?</li></ul>"
 
 msgid "Course settings Help"
-msgstr ""
+msgstr "Hjelp til kursinnstillinger"
 
 msgid "<p>The Course Settings allows you to manage the global parameters of your course: Title, code, language, name of trainer etc.</p><p>The options situated in the centre of the page deal with confidentiality settings : is the course public or private? Can users register to it? You can use these settings dynamically e.g. allow self-registration for one week > ask your students to register > close access to self-registration > remove possible intruders through the Users list. This way you keep control of who is registered while avoiding the administrative hassle of registering them yourself.</p>(Note - some organizations prefer not to use this method and opt to centralise registration. In this case, participants cannot enrol in your course at all, even if you, as a trainer / teacher, wish to give them access. To check this, look at the home page of your campus (as opposed to your course homepage) to see if the 'Register' link is present.) </p> <p>At the bottom of the page, you can back up the course and delete it. Backup will create a file on the server and allow you to copy it on your own Hard Disk locally so that there will be two backups each in different places. If you back up a course and then delete it you will not be be able to restore it yourself, but the system administrator can do this for you if you give him/her the code of your course. Backing up a course is also a good way to get all your documents transferred to your own computer. You will need a tool, like Winzip® to UNZIP the archive. Note that backing up a course does not automatically remove it.</p>"
-msgstr ""
+msgstr "<p>Kursinnstillinger lar deg administrere de globale parametrene for kurset: Tittel, kode, språk, lærerens navn osv.</p><p>Valgene midt på siden gjelder konfidensialitet: er kurset offentlig eller privat? Kan brukere registrere seg? Du kan bruke innstillingene dynamisk, f.eks. tillate selvregistrering i én uke > be studentene registrere seg > stenge selvregistrering > fjerne mulige inntrengere via brukeroversikten. Slik beholder du kontroll over hvem som er registrert uten å måtte registrere dem selv.</p>(Merk – noen organisasjoner foretrekker ikke denne metoden og velger sentralisert registrering. Da kan deltakere ikke melde seg på kurset i det hele tatt, selv om du som lærer ønsker å gi dem tilgang. Sjekk dette på campusens hjemmeside (ikke kursets hjemmeside) for å se om lenken «Registrer» er til stede.) </p> <p>Nederst på siden kan du sikkerhetskopiere kurset og slette det. Sikkerhetskopi oppretter en fil på serveren og lar deg kopiere den til din egen harddisk, slik at det finnes to sikkerhetskopier på ulike steder. Hvis du sikkerhetskopierer et kurs og deretter sletter det, kan du ikke gjenopprette det selv, men systemadministratoren kan gjøre det hvis du gir hen kurskoden. Sikkerhetskopiering er også en god måte å overføre alle dokumentene til din egen datamaskin. Du trenger et verktøy som Winzip® for å pakke ut arkivet. Merk at sikkerhetskopiering ikke fjerner kurset automatisk.</p>"
 
 msgid "Add a Link help"
-msgstr ""
+msgstr "Hjelp til å legge til en lenke"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr ""
+msgstr "<p>Chamilo er et modulært verktøy. Du kan skjule og vise verktøy når du vil, etter prosjektets behov eller en bestemt kronologisk del av det. Du kan også legge til verktøy eller sider på hjemmesiden som du har laget selv eller som kommer utenfor Chamilo-portalen. Slik kan du tilpasse kursets hjemmeside.</p><p>Da vil du uten tvil legge til egne lenker på siden. Lenker kan være av to typer:<ul><li><b>Ekstern lenke</b>: du oppretter en lenke på hjemmesiden til et nettsted utenfor kursområdet. I så fall velger du «Mål = I et nytt vindu» fordi du ikke vil at nettstedet skal erstatte Chamilo-miljøet.</li><li><b>Intern lenke</b>: du lenker til en side eller et verktøy inne i Chamilo-kurset. Gå først til den aktuelle siden (eller dokumentet eller verktøyet), kopier URL-en fra nettleserens adresselinje (CTRL+C), gå deretter til «Legg til lenke» og lim inn URL-en i URL-feltet, og gi den ønsket navn. I så fall velger du «Mål = Samme vindu» fordi du vil beholde Chamilo-banneret øverst og lenkesiden i samme miljø.</li></ul>Når lenker er opprettet, kan de ikke redigeres. For å endre dem er den eneste løsningen å deaktivere og slette dem, og deretter starte på nytt.</p>"
 
 msgid "Clear content"
 msgstr "Tøm innhold"
@@ -14445,7 +14454,7 @@ msgid "Compose"
 msgstr "Skriv"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Babyoransje"
 
 msgid "Blue lagoon"
 msgstr "Blå lagune"
@@ -15069,7 +15078,7 @@ msgid "Install Chamilo"
 msgstr "Installer Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo-URL"
 
 msgid "You have no session in your sessions history"
 msgstr "Du har ingen økt i økt-historikken din"
@@ -15307,6 +15316,30 @@ msgstr "Tid brukt forrige uke"
 
 msgid "System status"
 msgstr "Systemstatus"
+
+msgid "Courses space"
+msgstr "Kursområde"
+
+msgid "Database server configuration and metadata"
+msgstr "Database-serverkonfigurasjon og metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Diskbruk per kurs vs. diskkvote"
+
+msgid "Information about your webserver configuration"
+msgstr "Informasjon om webserverkonfigurasjonen din"
+
+msgid "Paths"
+msgstr "Stier"
+
+msgid "State of Chamilo requirements"
+msgstr "Status for Chamilo-krav"
+
+msgid "State of PHP settings on the server"
+msgstr "Status for PHP-innstillinger på serveren"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path()-konstanter løst på denne portalen"
 
 msgid "Is writable"
 msgstr "Er skrivbar"
@@ -16215,7 +16248,7 @@ msgid "Quarterly report"
 msgstr "Kvartalsrapport"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%d. %B %Y"
 
 msgid "%A"
 msgstr "%A"
@@ -16782,7 +16815,7 @@ msgid "Fill with demo content"
 msgstr "Fyll med demo-innhold"
 
 msgid "Single Sign On"
-msgstr "Single Sign On"
+msgstr "Single Sign-On"
 
 msgid "Enabling Single Sign On allows you to connect this platform as a slave of an authentication master, for example a Drupal website with the Drupal-Chamilo plugin or any other similar master setup."
 msgstr "Aktivering av Single Sign On lar deg koble denne plattformen som slave til en autentiseringsmaster, for eksempel et Drupal-nettsted med Drupal-Chamilo-plugin eller en annen lignende masteroppsett."
@@ -19002,7 +19035,7 @@ msgid "%b %d, %Y at %I:%M %p"
 msgstr "%b %d, %Y kl. %I:%M %p"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%H:%M, %d. %b %Y"
 
 msgid "Login to vote"
 msgstr "Logg inn for å stemme"
@@ -20571,7 +20604,7 @@ msgid "Input size of box to fill"
 msgstr "Størrelse på boks som skal fylles"
 
 msgid "MM dd, yy"
-msgstr "MM dd, yy"
+msgstr "dd.MM.yy"
 
 msgid "HH:mm"
 msgstr "TT:mm"
@@ -20674,6 +20707,9 @@ msgstr "På ferdighetshjulet vises ferdighetens navn når den har en kortkode."
 
 msgid "Created by"
 msgstr "Opprettet av"
+
+msgid "Created by %s on %s"
+msgstr "Opprettet av %s den %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Skjul hovedveileder i dropbox"
@@ -26622,7 +26658,7 @@ msgid "LDAP connection configuration"
 msgstr "LDAP-tilkoblingskonfigurasjon"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array som definerer vert og port for LDAP-serveren.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Tabell som definerer vert og port for LDAP-serveren.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Angi utløpsdato ved første pålogging"
@@ -26634,7 +26670,7 @@ msgid "Selective display of roles"
 msgstr "Selektiv visning av roller"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "En array med role => true/false som definerer om rollen skal vises eller skjules.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "En tabell av rolle => true/false som definerer om rollen skal vises eller skjules.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Alternativer for rollevisning"
@@ -26892,13 +26928,13 @@ msgid "HTTP Strict Transport Security is an excellent feature to support on your
 msgstr "HTTP Strict Transport Security er en utmerket funksjon å støtte på nettstedet ditt og styrker implementeringen av TLS ved å få User Agent til å håndheve bruk av HTTPS. Anbefalt verdi: 'strict-transport-security: max-age=63072000; includeSubDomains'. Se https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. Du kan inkludere suffikset 'preload', men dette har konsekvenser for toppnivådomenet (TLD), så det bør sannsynligvis ikke gjøres lettvint. Se https://hstspreload.org/. La stå tomt for å deaktivere."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Innholdssikkerhetspolicy"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy er et effektivt tiltak for å beskytte nettstedet ditt mot XSS-angrep. Ved å godkjenne kilder for godkjent innhold, kan du forhindre at nettleseren laster inn skadelige ressurser. Denne innstillingen er spesielt komplisert å sette med WYSIWYG-redigerere, men hvis du legger til alle domener du vil autorisere for iframes-inkludering i child-src-setningen, bør dette eksempelet fungere for deg. Du kan forhindre at JavaScript kjøres fra eksterne kilder (inkludert inne i SVG-bilder) ved å bruke en streng liste i 'script-src'-argumentet. La stå tomt for å deaktivere. Eksempelinnstilling: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 
 msgid "Content Security Policy report only"
-msgstr "Content Security Policy report only"
+msgstr "Innholdssikkerhetspolicy kun rapport"
 
 msgid "This setting allows you to experiment by reporting but not enforcing some Content Security Policy."
 msgstr "Denne innstillingen lar deg eksperimentere ved å rapportere, men ikke håndheve, noen Content Security Policy."
@@ -26910,7 +26946,7 @@ msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue 
 msgstr "HTTP Public Key Pinning beskytter nettstedet ditt mot MiTM-angrep ved hjelp av falske X.509-sertifikater. Ved å godkjenne bare identitetene som nettleseren skal stole på, er brukerne dine beskyttet i tilfelle en sertifiseringsmyndighet blir kompromittert."
 
 msgid "HTTP Public Key Pinning report only"
-msgstr "HTTP Public Key Pinning report only"
+msgstr "HTTP Public Key Pinning kun rapport"
 
 msgid "This setting allows you to experiment by reporting but not enforcing some HTTP Public Key Pinning."
 msgstr "Denne innstillingen lar deg eksperimentere ved å rapportere, men ikke håndheve, noen HTTP Public Key Pinning."
@@ -30759,7 +30795,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (intern ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure-ID (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Organisasjonens e-post"
@@ -31494,7 +31530,7 @@ msgid "SCIM external ID"
 msgstr "SCIM ekstern ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "OAuth2-ID"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Vennligst godta den nyeste versjonen av vilkårene og betingelsene."
@@ -31877,6 +31913,9 @@ msgstr "Skriv noe til %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Foretrukket: SVG. Anbefalt bredde for PNG: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "Anbefalt PNG-bredde: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Last opp PNG-logo for e-poster (~%spx bredde)"
 
@@ -31912,6 +31951,9 @@ msgstr "Klikk for å sette inn"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Foretrukket: SVG. Maks størrelse for PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "Maks PNG-størrelse: %spx."
 
 msgid "View badge"
 msgstr "Vis merke"
@@ -33708,10 +33750,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "EntraID-ID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "EntraID-UID"
 
 msgid "Required fields"
 msgstr "Obligatoriske felt"
@@ -37701,10 +37743,10 @@ msgid "Do you want to continue your session?"
 msgstr "Vil du fortsette økten?"
 
 msgid "Your session details have been lost, please login again."
-msgstr "Your session details have been lost, please login again."
+msgstr "Øktdetaljene dine er tapt, vennligst logg inn på nytt."
 
 msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
-msgstr "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Tilgang til denne ressursen er nektet. Du ser ikke ut til å ha de nødvendige tillatelsene for å få tilgang."
 
 msgid "Stay connected"
 msgstr "Forbli tilkoblet"
@@ -38062,6 +38104,9 @@ msgstr "Avslutter"
 
 msgid "Draft saved"
 msgstr "Utkast lagret"
+
+msgid "Save as draft"
+msgstr "Lagre som utkast"
 
 msgid "Statement"
 msgstr "Uttalelse"
@@ -39144,7 +39189,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard leser"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Resultattavle keepalive"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard venter"
@@ -39174,112 +39219,112 @@ msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /ser
 msgstr "Apache: aktiver mod_status (ExtendedStatus On) og tillat localhost til /server-status. Nginx: aktiver stub_status på en kun-localhost-plassering som /nginx_status eller /stub_status."
 
 msgid "Grade percentage distribution"
-msgstr "Grade percentage distribution"
+msgstr "Fordeling av karakterprosent"
 
 msgid "Top learners"
-msgstr "Top learners"
+msgstr "Beste deltakere"
 
 msgid "This progress combines learning path progress and the learner's average exercise result"
-msgstr "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Denne fremgangen kombinerer fremgang i læringssti og deltakerens gjennomsnittlige øvelsesresultat"
 
 msgid "Additional profile fields"
-msgstr "Additional profile fields"
+msgstr "Tilleggsfelt for profil"
 
 msgid "Visible columns"
-msgstr "Visible columns"
+msgstr "Synlige kolonner"
 
 msgid "Learning path completion"
-msgstr "Learning path completion"
+msgstr "Fullføring av læringssti"
 
 msgid "Number of certificates"
-msgstr "Number of certificates"
+msgstr "Antall sertifikater"
 
 msgid "Could not export the report"
-msgstr "Could not export the report"
+msgstr "Kunne ikke eksportere rapporten"
 
 msgid "Second learner"
-msgstr "Second learner"
+msgstr "Andre deltaker"
 
 msgid "Results by learner"
-msgstr "Results by learner"
+msgstr "Resultater per deltaker"
 
 msgid "Use filters to narrow down questions."
-msgstr "Use filters to narrow down questions."
+msgstr "Bruk filtre for å avgrense spørsmål."
 
 msgid "Try adjusting your filters and search again."
-msgstr "Try adjusting your filters and search again."
+msgstr "Prøv å justere filtrene og søk på nytt."
 
 msgid "Results per page"
-msgstr "Results per page"
+msgstr "Resultater per side"
 
 msgid "No answers"
-msgstr "No answers"
+msgstr "Ingen svar"
 
 msgid "Tests using this question"
-msgstr "Tests using this question"
+msgstr "Tester som bruker dette spørsmålet"
 
 msgid "Delete failed"
-msgstr "Delete failed"
+msgstr "Sletting mislyktes"
 
 msgid "PHP cache"
-msgstr "PHP cache"
+msgstr "PHP-hurtigbuffer"
 
 msgid "Live OPcache and APCu diagnostics"
-msgstr "Live OPcache and APCu diagnostics"
+msgstr "Live OPcache- og APCu-diagnostikk"
 
 msgid "Click to show OPcache and APCu diagnostics"
-msgstr "Click to show OPcache and APCu diagnostics"
+msgstr "Klikk for å vise OPcache- og APCu-diagnostikk"
 
 msgid "Memory used"
-msgstr "Memory used"
+msgstr "Brukt minne"
 
 msgid "OPcache is installed but not enabled."
-msgstr "OPcache is installed but not enabled."
+msgstr "OPcache er installert, men ikke aktivert."
 
 msgid "OPcache extension is not available on this server."
-msgstr "OPcache extension is not available on this server."
+msgstr "OPcache-utvidelsen er ikke tilgjengelig på denne serveren."
 
 msgid "APCu is installed but not enabled."
-msgstr "APCu is installed but not enabled."
+msgstr "APCu er installert, men ikke aktivert."
 
 msgid "APCu extension is not available on this server."
-msgstr "APCu extension is not available on this server."
+msgstr "APCu-utvidelsen er ikke tilgjengelig på denne serveren."
 
 msgid "Constant"
 msgstr "Constant"
 
 msgid "Space used on disk (MB)"
-msgstr "Space used on disk (MB)"
+msgstr "Brukt diskplass (MB)"
 
 msgid "Set max course space (MB)"
-msgstr "Set max course space (MB)"
+msgstr "Angi maks kursplass (MB)"
 
 msgid "Memory free"
-msgstr "Memory free"
+msgstr "Ledig minne"
 
 msgid "Memory wasted"
-msgstr "Memory wasted"
+msgstr "Bortkastet minne"
 
 msgid "Memory used %"
-msgstr "Memory used %"
+msgstr "Brukt minne %"
 
 msgid "Cached scripts"
-msgstr "Cached scripts"
+msgstr "Bufrede skript"
 
 msgid "Cached keys"
-msgstr "Cached keys"
+msgstr "Bufrede nøkler"
 
 msgid "Misses"
 msgstr "Misses"
 
 msgid "Cache full"
-msgstr "Cache full"
+msgstr "Buffer full"
 
 msgid "OOM restarts"
-msgstr "OOM restarts"
+msgstr "OOM-omstarter"
 
 msgid "Hash restarts"
-msgstr "Hash restarts"
+msgstr "Hash-omstarter"
 
 msgid "Manual restarts"
 msgstr "Manuelle omstarter"
@@ -39484,4 +39529,265 @@ msgstr "Denne brukeren er allerede påmeldt økten."
 
 msgid "This user is already subscribed to the course."
 msgstr "Denne brukeren er allerede påmeldt kurset."
+
+msgid "Multi URLs"
+msgstr "Flere URL-er"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Enheter som brukere og kurs kan være aktive i mer enn én URL samtidig, så summen av verdiene nedenfor vil ikke stemme med totalen."
+
+msgid "User directory"
+msgstr "Brukerkatalog"
+
+msgid "Course directory"
+msgstr "Kurskatalog"
+
+msgid "URLs"
+msgstr "URL-er"
+
+msgid "User details"
+msgstr "Brukerdetaljer"
+
+msgid "Course details"
+msgstr "Kursdetaljer"
+
+msgid "View details"
+msgstr "Vis detaljer"
+
+msgid "Average progress"
+msgstr "Gjennomsnittlig fremgang"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Direkte påmelding tilhører kurset som helhet, ikke en spesifikk URL, så de samme «Direkte»-tallene gjentas nedenfor for hver URL dette kurset er knyttet til. Økter er den tiltenkte måten å dele et kurs på tvers av URL-er med målinger som faktisk varierer per URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Innlogginger (alle URL-er samlet)"
+
+msgid "Unique logins"
+msgstr "Unike innlogginger"
+
+msgid "Parent URL"
+msgstr "Overordnet URL"
+
+msgid "Logins (your URLs)"
+msgstr "Innlogginger (dine URL-er)"
+
+msgid "The picture could not be uploaded"
+msgstr "Bildet kunne ikke lastes opp"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Denne felttypen støttes ikke fullt ut ennå — kun råverdi."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Dette kurset nærmer seg grensen for brukerabonnement (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Plassen er begrenset gjennom kursegenskapene dine. For å øke grensen, skaff en"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Brukerabonnementer er begrenset gjennom kursegenskapene dine. For å øke grensen, skaff en"
+
+msgid "pro plan"
+msgstr "pro-plan"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "og importer sikkerhetskopien av dette kurset via Kursvedlikehold til det nye betalte kurset ditt, eller åpne en sak for å få kurset konvertert til et pro-kurs når du har skaffet denne planen."
+
+msgid "Tired of writing questions?"
+msgstr "Lei av å skrive spørsmål?"
+
+msgid "Upgrade your plan"
+msgstr "Oppgrader planen din"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "til en pro-plan for å få hjelp fra en KI til å lage spørsmål av høy kvalitet for deg."
+
+msgid "Student Success AI Coach"
+msgstr "KI-veileder for studenters suksess"
+
+msgid "No AI text provider is configured."
+msgstr "Ingen KI-tekstleverandør er konfigurert."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Tilleggsinstruksjoner for KI-veilederen"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Eksempel: Denne eleven har vansker med å opprettholde oppmerksomheten. Foreslå kortere aktiviteter og hyppigere sjekk av forståelse."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Hold dette vinduet åpent mens Chamilo forbereder anbefalingen."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Anbefalingen ble også lagret i Chamilo-innboksen din."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Anbefalingen ble generert og lagret for denne eleven, men kopien i innboksen kunne ikke opprettes."
+
+msgid "Student success recommendation"
+msgstr "Anbefaling for studentsuksess"
+
+msgid "Generated"
+msgstr "Generert"
+
+msgid "Priority actions"
+msgstr "Prioriterte tiltak"
+
+msgid "Evidence"
+msgstr "Bevis"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Denne funksjonen vil analysere innholdet i dette kurset og sende informasjon om læringsatferd til den konfigurerte KI-modellen. Selv om det ikke sendes direkte identifiserbare personopplysninger til KI-modellen, kan noe av dataene som sendes indirekte gi identifiserbar informasjon om brukeren. Ved tvil, sjekk alltid med din KI-referanseperson før du bruker denne funksjonen."
+
+msgid "Additional activities"
+msgstr "Tilleggsaktiviteter"
+
+msgid "Rhythm"
+msgstr "Rytme"
+
+msgid "Learning methodologies"
+msgstr "Læringsmetodikker"
+
+msgid "Other recommendations"
+msgstr "Andre anbefalinger"
+
+msgid "Analyzing course..."
+msgstr "Analyserer kurs..."
+
+msgid "Analyzing student's learning..."
+msgstr "Analyserer studentens læring..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Ved å godta denne invitasjonen blir du knyttet til den forespørrende brukeren på en måte som gjør at noe eller all profildataene dine blir tilgjengelige for lesing av den forespørrende brukeren. Sørg for at du ikke deler for mye ved å sjekke profilen din med brukere du allerede stoler på."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Tillatelse til å bruke mikrofonen er ikke aktivert, vennligst aktiver den i nettleseren for å ta opp lyd"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Denne versjonen av Chamilo kommer med ett (eller flere) flerspråklige kurs forhåndsinstallert. Du kan gjerne se gjennom dem i kurslisten og avgjøre om de skal være offentlige eller ikke."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Du har for øyeblikket ikke tilgang til noen URL. Be administratoren om å gi deg tilgang til URL-en du tilhører."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Hvis den valgte KI-leverandøren ikke er en suveren tjeneste, kan innholdet i det valgte dokumentet bli sendt til en ekstern tjeneste. Ikke fortsett med konfidensiell informasjon med mindre dette er tillatt av organisasjonen din."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Klikk Foren på kontoen som skal beholdes. Systemet slår sammen alle andre kontoer i samme duplikatgruppe inn i den. Sammenslåtte kontoer slettes permanent og forsvinner fra denne rapporten. Denne handlingen kan ikke angres."
+
+msgid "Permanent deletion"
+msgstr "Permanent sletting"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Foren sletter allerede sammenslåtte kontoer permanent. Bruk brukerlisten bare hvis du vil slette flere kontoer manuelt."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Du endrer logoer for standard visuell mal «chamilo». Vurder å opprette/bruke en egendefinert visuell mal for å unngå å overstyre standardene."
+
+msgid "This exercise has no questions."
+msgstr "Denne øvelsen har ingen spørsmål."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Hvordan skal tilbakemelding/kommentar vises for hvert spørsmål? Dette valget definerer hvordan det vises for eleven når testen tas."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Disse programmene kan få tilgang til Chamilo som deg, med de eksisterende kontotillatelsene dine og ingenting mer. Trekk tilbake alle du ikke lenger bruker eller kjenner igjen."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Forklar hvorfor du ønsker å be om tilbaketrekking av ditt juridiske samtykke, slik at vi kan behandle forespørselen din på riktig måte"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Bruk denne personlige nøkkelen til å koble en ekstern MCP-klient til Chamilo med din egen konto og dine tillatelser."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Den komplette nøkkelen vises bare én gang. Oppbevar den sikkert. Generering av en ny nøkkel ugyldiggjør umiddelbart den forrige."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Nøkkelen autentiserer klienten som din Chamilo-konto. Den gir ikke tillatelser som kontoen din ikke allerede har."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Vis en vilkårserklæring på registreringssiden, krev at besøkende godtar vilkårene for å registrere seg"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Innholdet i vilkårene sendes til en KI-språkmodell. Gå gjennom den foreslåtte oversettelsen før du lagrer den."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "En lagret versjon finnes allerede for målspråket. Lagring av dette forslaget oppretter en ny versjon."
+
+msgid "Acquired"
+msgstr "Oppnådd"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Anbefalt kursbilde: 1600 × 900 px (16:9). Bruk minst 1280 × 720 px for skarp visning på større eller høyoppløselige skjermer."
+
+msgid "Courses of the selected URL"
+msgstr "Kurs for den valgte URL-en"
+
+msgid "Course categories in selected URL"
+msgstr "Kurskategorier i valgt URL"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Kontoen din er aktiv, du kan logge inn og se kursene dine nå."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Først må du laste ned rettelsene <a href='%s'> her </a>.\nDeretter må du pakke ut filen og redigere filene som du vil uten å endre filnavnene.\nDeretter lager du en zip-fil med de endrede filene og laster den opp i dette skjemaet."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Legger til studenter fra økt %s til økt %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Vis alle forsøk per øvelse"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Denne operasjonen ville overskride den tillatte brukergrensen for det valgte kurset."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Noen påmeldinger kunne ikke utføres fordi de nådde den tillatte brukergrensen for det berørte kurset. Berørte brukere/kurs: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Dette registeret lister kjente rapportsider, deres kategori, kanonisk URL, eldre URL og forventet rollepublikum. Kanoniske URL-er ruter til gjeldende rapportimplementering og håndhever den dokumenterte rapportrollematrisen."
+
+msgid "E-mail notification subscription"
+msgstr "Abonnement på e-postvarsling"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Denne operasjonen ville overskride grensen på %s brukere per kurs satt av administratorene. Påmeldingen er avbrutt."
+
+msgid "Language the document is in"
+msgstr "Språket dokumentet er på"
+
+msgid "There is no session still"
+msgstr "Det finnes ennå ingen økt"
+
+msgid "Origin courses from session"
+msgstr "Opprinnelseskurs fra økt"
+
+msgid "Destination courses from session"
+msgstr "Destinasjonskurs fra økt"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Offentlig tilgang (tilgang for alle kursdeltakere)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Generer %d ordlisteord for et kurs om '%s', hvert ord på én linje, med definisjonen på neste linje og én tom linje mellom hvert ord. Ikke legg til annen formatering for tittelen eller definisjonen."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Dette er en kort beskrivelse av kurset '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Du bruker Chamilo på en Windows-plattform. Hjelpere for dokumentkonvertering er ikke tilgjengelige for fulltekstindeksering."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Innstillingen for automatisk start av test er PÅ. Studenter vil bli omdirigert til testlisten."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Innstillingen for automatisk start av test er PÅ. Studenter vil bli omdirigert til en spesifikk test."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Påmeldingsgrensen for dette kurset er nådd (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Tell kurs etter språk"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Brukere hvis siste tilgang er eldre enn den valgte datoen."
 

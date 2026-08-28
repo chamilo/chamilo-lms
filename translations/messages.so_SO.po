@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Tusaale qaacido: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaale foomula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -9264,6 +9264,15 @@ msgstr "War-bixinta waqtiga ee kalfadhiga %s"
 msgid "Error"
 msgstr "Khalad"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Isticmaalaha waa la abuuray, laakiin mid ka mid ah goobaha dheeraadka ah ee profile-ka lama kaydin karin."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Isticmaalaha waa la cusboonaysiiyay, laakiin mid ka mid ah goobaha dheeraadka ah ee profile-ka lama kaydin karin."
+
+msgid "One or more fields contain invalid values."
+msgstr "Hal ama in ka badan oo goobo ah waxay leeyihiin qiimayaal aan sax ahayn."
+
 msgid "Anonymous"
 msgstr "Anonymous"
 
@@ -15303,6 +15312,30 @@ msgstr "Waqtkii la qaatay usbuucii hore"
 msgid "System status"
 msgstr "Xaaladda nidaamka"
 
+msgid "Courses space"
+msgstr "Meelaha koorsooyinka"
+
+msgid "Database server configuration and metadata"
+msgstr "Qaabaynta serverka kaydka xogta iyo metadata"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Isticmaalka disk-ka koorso kasta vs xadka disk-ka"
+
+msgid "Information about your webserver configuration"
+msgstr "Macluumaadka ku saabsan qaabaynta serverkaaga webka"
+
+msgid "Paths"
+msgstr "Waddooyin"
+
+msgid "State of Chamilo requirements"
+msgstr "Xaaladda shuruudaha Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Xaaladda dejimaha PHP ee serverka"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "api_get_path() constants resolved on this portal"
+
 msgid "Is writable"
 msgstr "Waa la qori karaa"
 
@@ -20669,6 +20702,9 @@ msgstr "Giraanta xirfadaha, waxay muujisaa magaca xirfadda marka ay leedahay cod
 
 msgid "Created by"
 msgstr "Waxa sameeyay"
+
+msgid "Created by %s on %s"
+msgstr "Waxaa sameeyay %s %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Qari macallinka guud ee dropbox"
@@ -28852,7 +28888,7 @@ msgid "groups"
 msgstr "kooxo"
 
 msgid "AI Aiken generator"
-msgstr "AI Aiken generator"
+msgstr "Abuuraha AI Aiken"
 
 msgid "Apply suggestion"
 msgstr "Dalban soo jeedinta"
@@ -31872,6 +31908,9 @@ msgstr "Qor wax ku saabsan %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "La doorbiday: SVG. PNG la soo rundiyay ballac: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG ballaca lagu taliyay: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Raru PNG logo-ga iimaylka (~%spx ballac)"
 
@@ -31907,6 +31946,9 @@ msgstr "Riix si aad u geliso"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Favored: SVG. PNG max size: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG cabbirka ugu badan: %spx."
 
 msgid "View badge"
 msgstr "Eeg calaamadda"
@@ -32779,7 +32821,7 @@ msgid "URI"
 msgstr "URI"
 
 msgid "%s (current)"
-msgstr "%s (current)"
+msgstr "%s (hadda)"
 
 msgid "Upload an image or create one with Badge Studio."
 msgstr "Raru sawir ama mid ku abuuro Badge Studio."
@@ -35491,7 +35533,7 @@ msgid "%s results"
 msgstr "%s natiijo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Tusaale buuxi foomka dhaqdhaqaaqa : xisaabi Tusaha Cufka Jirka</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Da'da</strong></td>            <td width=\"75%\" style=\"\">[25] sano jir</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Jinsi</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ama F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Miisaanka</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Dhererka</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tusaha Cufka Jirka</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Maqaalka Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Laga saaray"
@@ -36490,37 +36532,37 @@ msgid "View threads"
 msgstr "Eeg mawduucyada"
 
 msgid "No auth source"
-msgstr "No auth source"
+msgstr "Ma jiro isha xaqiijinta"
 
 msgid "You must add at least one question"
-msgstr "You must add at least one question"
+msgstr "Waa inaad ku darto ugu yaraan hal su'aal"
 
 msgid "Advanced actions"
-msgstr "Advanced actions"
+msgstr "Ficillada horumarsan"
 
 msgid "Application path"
-msgstr "Application path"
+msgstr "Jidka barnaamijka"
 
 msgid "Apply files details"
-msgstr "Apply files details"
+msgstr "Codso faahfaahinta faylasha"
 
 msgid "Apply plan details"
-msgstr "Apply plan details"
+msgstr "Codso faahfaahinta qorshaha"
 
 msgid "Apply plan failed"
-msgstr "Apply plan failed"
+msgstr "Codsiga qorshaha wuu fashilmay"
 
 msgid "Apply plan ready"
-msgstr "Apply plan ready"
+msgstr "Codsiga qorshaha wuu diyaar yahay"
 
 msgid "Apply preparation"
-msgstr "Apply preparation"
+msgstr "Codso diyaarinta"
 
 msgid "Apply staged files"
-msgstr "Apply staged files"
+msgstr "Codso faylasha la dhigay"
 
 msgid "Applying files..."
-msgstr "Applying files..."
+msgstr "Faylasha ayaa la dabaqayaa..."
 
 msgid "Audit file"
 msgstr "Faylka xog-ururinta"
@@ -37501,7 +37543,7 @@ msgid "Back to account"
 msgstr "Ku noqo akoonka"
 
 msgid "Your feedback will help us improve future training sessions."
-msgstr "Your feedback will help us improve future training sessions."
+msgstr "Ra'yigaagu wuxuu naga caawin doonaa inaan horumarino kalfadhiyada tababarka mustaqbalka."
 
 msgid "Thank you for sharing your feedback."
 msgstr "Waxaad ku mahadsantahay inaad nala wadaagtay ra'yigaaga."
@@ -38057,6 +38099,9 @@ msgstr "Dhamaystirka"
 
 msgid "Draft saved"
 msgstr "Qabyo waa la kaydiyay"
+
+msgid "Save as draft"
+msgstr "Kaydi sidii qoraal"
 
 msgid "Statement"
 msgstr "Bayaan"
@@ -39217,7 +39262,7 @@ msgid "Delete failed"
 msgstr "Tirtiridda waa lagu guulaysan waayay"
 
 msgid "PHP cache"
-msgstr "PHP cache"
+msgstr "Kaydka PHP"
 
 msgid "Live OPcache and APCu diagnostics"
 msgstr "Baaritaanka tooska ah ee OPcache iyo APCu"
@@ -39479,4 +39524,265 @@ msgstr "Isticmaalahan hore ayuu uga diiwaan gashan yahay kalfadhiga."
 
 msgid "This user is already subscribed to the course."
 msgstr "Isticmaalahan hore ayuu uga diiwaan gashan yahay koorsada."
+
+msgid "Multi URLs"
+msgstr "URLs badan"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Hay'adaha sida isticmaalayaasha iyo koorsooyinka waxay ku firfircoonaan karaan in ka badan hal URL isla mar ahaantaana, sidaas darteed wadarta qiimaha hoose kuma dhigmi doonto wadarta guud."
+
+msgid "User directory"
+msgstr "Tusaha isticmaalaha"
+
+msgid "Course directory"
+msgstr "Tusaha koorsada"
+
+msgid "URLs"
+msgstr "URLs"
+
+msgid "User details"
+msgstr "Faahfaahinta isticmaalaha"
+
+msgid "Course details"
+msgstr "Faahfaahinta koorsada"
+
+msgid "View details"
+msgstr "Eeg faahfaahinta"
+
+msgid "Average progress"
+msgstr "Celceliska horumarka"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Isdiiwaangelinta tooska ah waxay ku jirtaa koorsada oo dhan, ma aha URL gaar ah, sidaas darteed tirooyinka 'Direct' ee isku midka ah ayaa hoos loogu soo celiyaa URL kasta oo koorsadan ku xiran tahay. Kalfadhiyadu waa habka loogu talagalay in koorso lagu wadaago URLs iyadoo cabbirro dhab ahaantii ku kala duwan yihiin URL kasta."
+
+msgid "Logins (all URLs combined)"
+msgstr "Soo galitaannada (dhammaan URLs la isku daray)"
+
+msgid "Unique logins"
+msgstr "Soo galitaanno keli ah"
+
+msgid "Parent URL"
+msgstr "URL-ka waalidka"
+
+msgid "Logins (your URLs)"
+msgstr "Soo galitaannada (URLs-kaaga)"
+
+msgid "The picture could not be uploaded"
+msgstr "Sawirka lama soo gelin karin"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Nooca goobtan weli si buuxda looma taageerin — qiimaha ceyriinka oo keliya."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Koorsadani waxay ku dhowdahay xadka isdiiwaangelinta isticmaalayaasha (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Booska waa xaddidan yahay sifooyinka koorsadaada. Si aad u kordhiso xadkaaga, hel"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Isdiiwaangelinta isticmaalayaasha waa xaddidan tahay sifooyinka koorsadaada. Si aad u kordhiso xadkaaga, hel"
+
+msgid "pro plan"
+msgstr "qorshe pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "oo soo deji kaydka koorsadan iyada oo loo marayo Dayactirka Koorsada koorsadaada cusub ee lacagta lagu bixiyo, ama fur tigid si koorsadaada loogu beddelo koorso pro mar aad qorshahan hesho."
+
+msgid "Tired of writing questions?"
+msgstr "Ma ka daashay qorista su'aalaha?"
+
+msgid "Upgrade your plan"
+msgstr "Kor u qaad qorshahaaga"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "una beddel qorshe pro si aad uga hesho caawimaad AI si ay kuu soo saarto su'aalo tayo leh."
+
+msgid "Student Success AI Coach"
+msgstr "Tababare AI ee Guusha Ardayga"
+
+msgid "No AI text provider is configured."
+msgstr "Bixiyaha qoraalka AI lama habeeyin."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Tilmaamo dheeraad ah oo loogu talagalay tababaraha AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Tusaale: Ardaygani wuxuu dhib ku qabaa inuu fiiro gaar ah sii hayo. Soo jeedi hawlaha gaagaaban iyo hubinno isfaham oo soo noqnoqda."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Daarishkan furan ka dhig inta Chamilo uu diyaarinayo talada."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Talada ayaa sidoo kale lagu keydiyay sanduuqaaga Chamilo."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Talada waa la soo saaray oo loo keydiyay ardaygan, laakiin nuqulka sanduuqa lama abuuri karin."
+
+msgid "Student success recommendation"
+msgstr "Talo guusha ardayga"
+
+msgid "Generated"
+msgstr "La soo saaray"
+
+msgid "Priority actions"
+msgstr "Tallaabooyinka mudnaanta leh"
+
+msgid "Evidence"
+msgstr "Caddayn"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Astaantan waxay falanqeyn doontaa nuxurka koorsadan oo waxay u diri doontaa macluumaadka dhaqanka barashada moodelka AI ee la habeeyay. In kasta oo aan si toos ah loo dirin xog shakhsiyeed oo la aqoonsan karo moodelka AI, qaar ka mid ah xogta la diro waxay si dadban u bixin karaan macluumaad la aqoonsan karo oo ku saabsan isticmaalaha. Haddii aad shaki qabto, mar walba la xiriir qofkaaga Tixraaca AI ka hor intaadan isticmaalin astaantan."
+
+msgid "Additional activities"
+msgstr "Hawlo dheeraad ah"
+
+msgid "Rhythm"
+msgstr "Qaafiyad"
+
+msgid "Learning methodologies"
+msgstr "Hababka barashada"
+
+msgid "Other recommendations"
+msgstr "Talooyin kale"
+
+msgid "Analyzing course..."
+msgstr "Koorsada ayaa la falanqeynayaa..."
+
+msgid "Analyzing student's learning..."
+msgstr "Falanqaynaya barashada ardayga..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Markaad aqbasho martiqaadkan, waxaad ku xidhmi doontaa isticmaalaha codsaday si qayb ama dhammaan xogta astaantaada loogu oggolaado inuu akhriyo. Fadlan hubi inaadan wax badan wadaagin adigoo eegaya astaantaada isticmaalayaasha aad horay u aamintay."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Ogolaanshaha isticmaalka makarafoonka lama dhaqaajin, fadlan ku dhaqaaji biraawsarkaaga si aad u duubto maqal"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Noocan Chamilo wuxuu la yimaadaa koorso(yo) luqado badan oo horay loo rakibay. Xor u noqo inaad dib u eegto liiska koorsooyinka oo aad go'aansato inay dadweynaha u furan yihiin iyo in kale."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Hadda ma haysatid gelitaan URL kasta. Fadlan weydiiso maamulaha inuu ku siiyo gelitaan URL-ka aad ka tirsan tahay."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Haddii bixiyaha AI ee la doortay uusan ahayn adeeg madax-bannaan, nuxurka dukumeentiga la doortay waxaa loo diri karaa adeeg dibadda ah. Ha sii wadin macluumaad sir ah haddii ururkaagu uusan oggolayn."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Guji Middee akoonka inuu sii jiro. Nidaamku wuxuu ku dari doonaa dhammaan akoonnada kale ee kooxda isku midka ah. Akoonnada la mideeyay si joogto ah ayaa loo tirtiri doonaa oo warbixintan way ka bixi doonaan. Tallaabadan lagama noqon karo."
+
+msgid "Permanent deletion"
+msgstr "Tirtirid joogto ah"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Middee horay ayay si joogto ah u tirtirtaa akoonnada la mideeyay. Isticmaal liiska Isticmaalayaasha kaliya haddii aad rabto inaad gacanta ku tirtirto akoonno dheeraad ah."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Waxaad wax ka beddelaysaa astaanaha mawduuca muuqaalka caadiga ah “chamilo”. Tixgeli inaad abuurto/isticmaasho mawduuc muuqaal ah oo gaar ah si aadan u beddelin kuwa caadiga ah."
+
+msgid "This exercise has no questions."
+msgstr "Layligan su'aalo ma laha."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Sidee u muujinaynaa jawaab-celinta/faallooyinka su'aal kasta? Doorashadani waxay qeexaysaa sida loo tusi doono ardayga marka uu imtixaanka qaadanayo."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Codsiyadani waxay u geli karaan Chamilo sida adiga, iyagoo isticmaalaya ogolaanshaha akoonkaaga oo kaliya. Ka noqo kuwa aadan mar dambe isticmaalin ama aadan aqoonsan."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Fadlan sharax sababta aad u rabto inaad codsato ka-noqoshada oggolaanshahaaga sharciga ah, si aan si habboon u habaynno codsigaaga"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Isticmaal furahan shakhsi ahaaneed si aad ugu xidhid macmiil MCP fog Chamilo akoonkaaga iyo ogolaanshahaaga."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Furaha dhammaystiran mar kaliya ayaa la muujiyaa. Si ammaan ah u kaydi. Abuurista furaha cusub isla markiiba waxay burinaysaa kii hore."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Furuhu wuxuu u xaqiijiyaa macmiilka inuu yahay akoonkaaga Chamilo. Ma siinayo ogolaansho akoonkaagu aanu horay u lahayn."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Muuji bayaanka Shuruudaha & Xaaladaha bogga diiwaangelinta, ka dalbo booqdeha inuu aqbalo T&C si uu u diiwaangeliyo"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Nuxurka shuruudaha iyo xaaladaha waxaa loo diri doonaa moodel luqadeed AI. Dib u eeg tarjumaadda la soo jeediyay ka hor intaadan kaydin."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Nooc la kaydiyay ayaa horay u jira luqadda bartilmaameedka. Kaydinta soo jeedintan waxay abuuri doontaa nooc cusub."
+
+msgid "Acquired"
+msgstr "La helay"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Sawirka koorsada ee la taliyay: 1600 × 900 px (16:9). Isticmaal ugu yaraan 1280 × 720 px si muuqaal cad ugu muuqdo shaashadaha waaweyn ama cufnaanta sare."
+
+msgid "Courses of the selected URL"
+msgstr "Koorsooyinka URL-ka la doortay"
+
+msgid "Course categories in selected URL"
+msgstr "Qaybaha koorsooyinka ee URL-ka la doortay"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Akoonkaaga waa firfircoon yahay, hadda waad geli kartaa oo koorsooyinkaaga eegi kartaa."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Marka hore waa inaad soo dejisaa sixitaannada <a href='%s'> halkan </a>.\nKadib waa inaad kala furtaa faylkaas oo aad u tafirtaa faylasha sidii aad rabtay adigoon beddelin magacyada faylasha.\nKadib samee fayl zip ah oo ku jira faylashaas la beddelay oo ku soo rar foomkan."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Ku darista ardayda kalfadhiga %s kalfadhiga %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Tus dhammaan isku dayada layliga"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Hawlgalkan wuxuu dhaafi lahaa xadka isticmaalayaasha ee loo oggol yahay koorsada la doortay."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Qaar ka mid ah diiwaangelinta lama fulin karin maxaa yeelay waxay gaareen xadka isticmaalayaasha ee koorsada saameysan. Isticmaalayaasha/Koorsooyinka saameeyay: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Diiwaankan wuxuu taxayaa bogagga warbixinta ee la yaqaan, qaybtooda, URL-ka rasmiga ah, URL-ka hore iyo dhagaystaha doorka la filayo. URL-yada rasmiga ah waxay u hagaan hirgelinta warbixinta hadda jirta oo waxay dhaqan geliyaan jaantuska doorka warbixinta ee la diiwaangeliyay."
+
+msgid "E-mail notification subscription"
+msgstr "Diiwaangelinta ogeysiiska e-maylka"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Hawlgalkan wuxuu dhaafi lahaa xadka %s isticmaale koorso kasta ee maamulayaashu dejiyeen. Diiwaangelinta waa la joojiyay."
+
+msgid "Language the document is in"
+msgstr "Luqadda dukumeentigu ku qoran yahay"
+
+msgid "There is no session still"
+msgstr "Weli kalfadhi ma jiro"
+
+msgid "Origin courses from session"
+msgstr "Koorsooyinka asalka ah ee kalfadhiga"
+
+msgid "Destination courses from session"
+msgstr "Koorsooyinka meesha loo dirayo ee kalfadhiga"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Helmo furan (ogolaanshaha helmo furan xubka kasta ee koorska)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Soo saar %d erey qaamuus ah oo koorso ku saabsan '%s', erey kasta sadar keliya, qeexiddiisuna sadarka xiga, iyo sadar madhan oo u dhexeeya erey kasta. Ha ku darin qaab kale cinwaanka iyo qeexidda."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Tani waa sharaxaad gaaban oo ku saabsan koorsada '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Waxaad Chamilo ku isticmaalaysaa madal Windows. Caawiyeyaasha beddelka dukumeentiga lama heli karo tusmaynta qoraalka buuxa."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Dejinta si toos ah u furitaanka imtixaanka waa SHIDAN. Ardayda waxaa loo jiheyn doonaa liiska imtixaannada."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Dejinta si toos ah u furitaanka imtixaanka waa SHIDAN. Ardayda waxaa loo jiheyn doonaa imtixaan gaar ah."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Xadka diiwaangelinta koorsadan waa la gaaray (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "Tirinta koorsooyinka luqad ahaan"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Isticmaalayaasha gelitaankooda ugu dambeeyay ka da' weyn taariikhda la doortay."
 

@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "با احترام"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نمونه فرمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نمونه فرمول: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "محدوده متغیرها"
@@ -9267,6 +9267,15 @@ msgstr "گزارش زمان برای جلسه %s"
 msgid "Error"
 msgstr "خطا"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "کاربر ایجاد شد، اما یکی از فیلدهای اضافی نمایه ذخیره نشد."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "کاربر به‌روزرسانی شد، اما یکی از فیلدهای اضافی نمایه ذخیره نشد."
+
+msgid "One or more fields contain invalid values."
+msgstr "یک یا چند فیلد حاوی مقادیر نامعتبر هستند."
+
 msgid "Anonymous"
 msgstr "بی نام"
 
@@ -15306,6 +15315,30 @@ msgstr "زمان صرف‌شده هفته گذشته"
 msgid "System status"
 msgstr "وضعیت سیستم"
 
+msgid "Courses space"
+msgstr "فضای دوره‌ها"
+
+msgid "Database server configuration and metadata"
+msgstr "پیکربندی سرور پایگاه‌داده و فراداده"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "میزان استفاده از دیسک در هر دوره در برابر سهمیه دیسک"
+
+msgid "Information about your webserver configuration"
+msgstr "اطلاعات پیکربندی وب‌سرور شما"
+
+msgid "Paths"
+msgstr "مسیرها"
+
+msgid "State of Chamilo requirements"
+msgstr "وضعیت پیش‌نیازهای چامیلو"
+
+msgid "State of PHP settings on the server"
+msgstr "وضعیت تنظیمات PHP روی سرور"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "ثابت‌های api_get_path() حل‌شده در این پورتال"
+
 msgid "Is writable"
 msgstr "قابل نوشتن"
 
@@ -20672,6 +20705,9 @@ msgstr "در چرخه مهارت‌ها، نام مهارت را زمانی که
 
 msgid "Created by"
 msgstr "ایجاد شده توسط"
+
+msgid "Created by %s on %s"
+msgstr "ایجادشده توسط %s در %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "پنهان کردن مربی عمومی در جعبه انداختن"
@@ -31876,6 +31912,9 @@ msgstr "چیزی به %s بنویسید"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "ترجیحی: SVG. عرض PNG پیشنهادی: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "عرض پیشنهادی PNG: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "آپلود لوگوی PNG برای ایمیل‌ها (~%spx عرض)"
 
@@ -31911,6 +31950,9 @@ msgstr "کلیک برای درج"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "ترجیحی: SVG. حداکثر اندازه PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "حداکثر اندازه PNG: %spx."
 
 msgid "View badge"
 msgstr "مشاهده نشان"
@@ -38062,6 +38104,9 @@ msgstr "در حال پایان"
 msgid "Draft saved"
 msgstr "پیش‌نویس ذخیره شد"
 
+msgid "Save as draft"
+msgstr "ذخیره به‌عنوان پیش‌نویس"
+
 msgid "Statement"
 msgstr "بیانیه"
 
@@ -39483,4 +39528,265 @@ msgstr "این کاربر پیش‌تر در جلسه مشترک شده است."
 
 msgid "This user is already subscribed to the course."
 msgstr "این کاربر پیش‌تر در دوره مشترک شده است."
+
+msgid "Multi URLs"
+msgstr "چند URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "موجودیت‌هایی مانند کاربران و دوره‌ها می‌توانند هم‌زمان در بیش از یک URL فعال باشند؛ بنابراین مجموع مقادیر زیر با کل مطابقت نخواهد داشت."
+
+msgid "User directory"
+msgstr "فهرست کاربران"
+
+msgid "Course directory"
+msgstr "فهرست دوره‌ها"
+
+msgid "URLs"
+msgstr "URLها"
+
+msgid "User details"
+msgstr "جزئیات کاربر"
+
+msgid "Course details"
+msgstr "جزئیات دوره"
+
+msgid "View details"
+msgstr "مشاهده جزئیات"
+
+msgid "Average progress"
+msgstr "میانگین پیشرفت"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "ثبت‌نام مستقیم متعلق به کل دوره است، نه یک URL خاص؛ بنابراین ارقام «مستقیم» یکسان در زیر برای هر URL که این دوره به آن پیوند دارد تکرار می‌شود. جلسه‌ها روش مورد نظر برای اشتراک‌گذاری یک دوره در چند URL با معیارهایی هستند که واقعاً برای هر URL متفاوت‌اند."
+
+msgid "Logins (all URLs combined)"
+msgstr "ورودها (همه URLها با هم)"
+
+msgid "Unique logins"
+msgstr "ورودهای یکتا"
+
+msgid "Parent URL"
+msgstr "URL والد"
+
+msgid "Logins (your URLs)"
+msgstr "ورودها (URLهای شما)"
+
+msgid "The picture could not be uploaded"
+msgstr "تصویر بارگذاری نشد"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "این نوع فیلد هنوز به‌طور کامل پشتیبانی نمی‌شود — فقط مقدار خام."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "این دوره به حد ثبت‌نام کاربران نزدیک است (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "فضا از طریق ویژگی‌های دوره محدود است. برای افزایش حد، یک"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "ثبت‌نام کاربران از طریق ویژگی‌های دوره محدود است. برای افزایش حد، یک"
+
+msgid "pro plan"
+msgstr "طرح حرفه‌ای"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "تهیه کنید و نسخه پشتیبان این دوره را از طریق نگهداری دوره به دوره پولی جدید خود وارد کنید، یا پس از تهیه این طرح تیکتی باز کنید تا دوره شما به دوره حرفه‌ای تبدیل شود."
+
+msgid "Tired of writing questions?"
+msgstr "از نوشتن سؤال خسته شده‌اید؟"
+
+msgid "Upgrade your plan"
+msgstr "طرح خود را ارتقا دهید"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "به طرح حرفه‌ای تا از هوش مصنوعی برای تولید سؤال‌های باکیفیت کمک بگیرید."
+
+msgid "Student Success AI Coach"
+msgstr "مربی هوش مصنوعی موفقیت دانشجو"
+
+msgid "No AI text provider is configured."
+msgstr "هیچ ارائه‌دهنده متن هوش مصنوعی پیکربندی نشده است."
+
+msgid "Additional instructions for the AI coach"
+msgstr "دستورالعمل‌های اضافی برای مربی هوش مصنوعی"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "مثال: این یادگیرنده در حفظ توجه مشکل دارد. فعالیت‌های کوتاه‌تر و بررسی‌های مکرر درک مطلب پیشنهاد کنید."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "این پنجره را باز نگه دارید تا چامیلو توصیه را آماده کند."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "توصیه همچنین در صندوق ورودی چامیلو شما ذخیره شد."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "توصیه تولید و برای این یادگیرنده ذخیره شد، اما نسخه صندوق ورودی ایجاد نشد."
+
+msgid "Student success recommendation"
+msgstr "توصیه موفقیت دانشجو"
+
+msgid "Generated"
+msgstr "تولیدشده"
+
+msgid "Priority actions"
+msgstr "اقدامات اولویت‌دار"
+
+msgid "Evidence"
+msgstr "شواهد"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "این قابلیت محتوای این دوره را تحلیل می‌کند و اطلاعات رفتار یادگیری را به مدل هوش مصنوعی پیکربندی‌شده می‌فرستد. با وجود ارسال نشدن مستقیم داده‌های شخصی قابل شناسایی به مدل، برخی داده‌های ارسالی ممکن است به‌طور غیرمستقیم اطلاعات قابل شناسایی درباره کاربر فراهم کنند. در صورت تردید، پیش از استفاده از این قابلیت همیشه با مسئول مرجع هوش مصنوعی خود مشورت کنید."
+
+msgid "Additional activities"
+msgstr "فعالیت‌های اضافی"
+
+msgid "Rhythm"
+msgstr "ریتم"
+
+msgid "Learning methodologies"
+msgstr "روش‌های یادگیری"
+
+msgid "Other recommendations"
+msgstr "سایر توصیه‌ها"
+
+msgid "Analyzing course..."
+msgstr "در حال تحلیل درس..."
+
+msgid "Analyzing student's learning..."
+msgstr "در حال تحلیل یادگیری دانشجو..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "با پذیرش این دعوت، به کاربر درخواست‌کننده متصل می‌شوید به‌گونه‌ای که بخشی یا تمام داده‌های نمایه شما برای خواندن در دسترس او قرار می‌گیرد. لطفاً با بررسی نمایه خود نزد کاربرانی که به آن‌ها اعتماد دارید، مطمئن شوید اطلاعات بیش از حد به اشتراک نمی‌گذارید."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "مجوز استفاده از میکروفون فعال نیست؛ لطفاً آن را در مرورگر خود فعال کنید تا بتوانید صدا ضبط کنید"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "این نسخه از چامیلو با یک (یا چند) درس چندزبانه از پیش نصب‌شده ارائه می‌شود. می‌توانید آن‌ها را در فهرست درس‌ها بررسی کنید و تصمیم بگیرید عمومی باشند یا نه."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "در حال حاضر به هیچ نشانی اینترنتی دسترسی ندارید. لطفاً از مدیر بخواهید دسترسی به نشانی متعلق به شما را برایتان فراهم کند."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "اگر ارائه‌دهنده هوش مصنوعی انتخاب‌شده یک خدمت حاکمیتی نباشد، محتوای سند انتخاب‌شده ممکن است به یک خدمت خارجی ارسال شود. در صورت محرمانه بودن اطلاعات، ادامه ندهید مگر اینکه سازمان شما اجازه دهد."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "روی «یکپارچه‌سازی» حسابی که باید باقی بماند کلیک کنید. سامانه همه حساب‌های دیگر همان گروه تکراری را در آن ادغام می‌کند. حساب‌های ادغام‌شده برای همیشه حذف می‌شوند و از این گزارش ناپدید می‌گردند. این عمل قابل بازگشت نیست."
+
+msgid "Permanent deletion"
+msgstr "حذف دائمی"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "یکپارچه‌سازی حساب‌های ادغام‌شده را از قبل برای همیشه حذف می‌کند. فهرست کاربران را فقط در صورتی استفاده کنید که بخواهید حساب‌های بیشتری را دستی حذف کنید."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "در حال تغییر لوگوهای پوسته دیداری پیش‌فرض «chamilo» هستید. برای جلوگیری از بازنویسی پیش‌فرض‌ها، ایجاد/استفاده از یک پوسته دیداری سفارشی را در نظر بگیرید."
+
+msgid "This exercise has no questions."
+msgstr "این تمرین پرسشی ندارد."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "بازخورد/توضیح هر پرسش چگونه نمایش داده شود؟ این گزینه نحوه نمایش آن به یادگیرنده هنگام انجام آزمون را تعیین می‌کند."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "این برنامه‌ها می‌توانند با حساب موجود شما و فقط با همان مجوزها به چامیلو دسترسی داشته باشند. هر موردی را که دیگر استفاده نمی‌کنید یا نمی‌شناسید لغو کنید."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "لطفاً توضیح دهید چرا می‌خواهید رضایت قانونی خود را پس بگیرید تا بتوانیم درخواست شما را به‌درستی پردازش کنیم"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "از این کلید شخصی برای اتصال یک کلاینت MCP راه دور به چامیلو با حساب و مجوزهای خودتان استفاده کنید."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "کلید کامل فقط یک بار نمایش داده می‌شود. آن را به‌صورت امن ذخیره کنید. تولید کلید جدید بلافاصله کلید قبلی را نامعتبر می‌کند."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "این کلید کلاینت را به‌عنوان حساب چامیلو شما احراز هویت می‌کند. مجوزی فراتر از آنچه حساب شما از قبل دارد اعطا نمی‌کند."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "نمایش بیانیه شرایط و ضوابط در صفحه ثبت‌نام و الزام بازدیدکننده به پذیرش آن برای ثبت‌نام"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "محتوای شرایط و ضوابط به یک مدل زبانی هوش مصنوعی ارسال می‌شود. پیش از ذخیره، ترجمه پیشنهادی را بررسی کنید."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "نسخه ذخیره‌شده‌ای برای زبان مقصد از قبل وجود دارد. ذخیره این پیشنهاد نسخه جدیدی ایجاد می‌کند."
+
+msgid "Acquired"
+msgstr "کسب‌شده"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "تصویر پیشنهادی درس: ۱۶۰۰ × ۹۰۰ پیکسل (۱۶:۹). برای نمایش واضح در صفحه‌های بزرگ‌تر یا با تراکم بالا حداقل ۱۲۸۰ × ۷۲۰ پیکسل استفاده کنید."
+
+msgid "Courses of the selected URL"
+msgstr "درس‌های نشانی انتخاب‌شده"
+
+msgid "Course categories in selected URL"
+msgstr "دسته‌های درس در نشانی انتخاب‌شده"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "حساب شما فعال است؛ اکنون می‌توانید وارد شوید و درس‌های خود را بررسی کنید."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "ابتدا باید اصلاحات را <a href='%s'> اینجا </a> بارگیری کنید.\nسپس آن پرونده را از حالت فشرده خارج کنید و پرونده‌ها را بدون تغییر نام ویرایش کنید.\nسپس یک پرونده فشرده از پرونده‌های اصلاح‌شده بسازید و در این فرم بارگذاری کنید."
+
+msgid "Adding students from session %s to session %s"
+msgstr "افزودن دانشجویان از نشست %s به نشست %s"
+
+msgid "Show all attempts by exercise"
+msgstr "نمایش همه تلاش‌ها بر اساس تمرین"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "این عملیات از حد مجاز کاربران برای درس انتخاب‌شده فراتر می‌رود."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "برخی اشتراک‌ها اجرا نشدند زیرا به حد مجاز کاربران درس مربوط رسیدند. کاربران/درس‌های متأثر: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "این فهرست صفحات گزارش شناخته‌شده، دسته، نشانی متعارف، نشانی قدیمی و مخاطب نقش مورد انتظار را ثبت می‌کند. نشانی‌های متعارف به پیاده‌سازی فعلی گزارش هدایت می‌شوند و ماتریس نقش مستند گزارش را اعمال می‌کنند."
+
+msgid "E-mail notification subscription"
+msgstr "اشتراک اعلان رایانامه"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "این عملیات از حد %s کاربر در هر درس که مدیران تعیین کرده‌اند فراتر می‌رود. اشتراک لغو شد."
+
+msgid "Language the document is in"
+msgstr "زبان سند"
+
+msgid "There is no session still"
+msgstr "هنوز نشستی وجود ندارد"
+
+msgid "Origin courses from session"
+msgstr "درس‌های مبدأ از نشست"
+
+msgid "Destination courses from session"
+msgstr "درس‌های مقصد از نشست"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "دسترسی عمومی از صفحه آغازین محیط آموزشی حتی بدون رمز ورود"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "تولید %d اصطلاح واژه‌نامه برای درسی درباره «%s»، هر اصطلاح در یک خط، تعریف در خط بعد و یک خط خالی بین هر اصطلاح. هیچ قالب‌بندی دیگری برای عنوان یا تعریف اضافه نکنید."
+
+msgid "This is a short description of the course '%s'."
+msgstr "این توضیح کوتاهی از درس «%s» است."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "چامیلو را روی بستر ویندوز اجرا می‌کنید. ابزارهای تبدیل سند برای نمایه‌سازی متن کامل در دسترس نیستند."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "تنظیم راه‌اندازی خودکار آزمون روشن است. دانشجویان به فهرست آزمون‌ها هدایت می‌شوند."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "تنظیم راه‌اندازی خودکار آزمون روشن است. دانشجویان به یک آزمون مشخص هدایت می‌شوند."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "حد اشتراک این درس رسیده است (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "شمارش درس بر اساس زبان"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "کاربرانی که آخرین دسترسی آن‌ها قدیمی‌تر از تاریخ انتخاب‌شده است."
 

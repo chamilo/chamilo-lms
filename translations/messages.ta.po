@@ -9268,6 +9268,15 @@ msgstr "அமர்வு %s க்கான நேர அறிக்கை"
 msgid "Error"
 msgstr "பிழை"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "பயனர் உருவாக்கப்பட்டார், ஆனால் கூடுதல் சுயவிவரப் புலங்களில் ஒன்றைச் சேமிக்க முடியவில்லை."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "பயனர் புதுப்பிக்கப்பட்டார், ஆனால் கூடுதல் சுயவிவரப் புலங்களில் ஒன்றைச் சேமிக்க முடியவில்லை."
+
+msgid "One or more fields contain invalid values."
+msgstr "ஒன்று அல்லது அதற்கு மேற்பட்ட புலங்களில் தவறான மதிப்புகள் உள்ளன."
+
 msgid "Anonymous"
 msgstr "அநாமதேய"
 
@@ -15307,6 +15316,30 @@ msgstr "கடந்த வாரம் செலவழித்த நேரம
 msgid "System status"
 msgstr "அமைப்பு நிலை"
 
+msgid "Courses space"
+msgstr "பாடநெறிகள் இடம்"
+
+msgid "Database server configuration and metadata"
+msgstr "தரவுத்தள சேவையக அமைப்பு மற்றும் மெட்டாடேட்டா"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "பாடநெறிக்கு வட்டு பயன்பாடு vs வட்டு ஒதுக்கீடு"
+
+msgid "Information about your webserver configuration"
+msgstr "உங்கள் வலை சேவையக அமைப்பு பற்றிய தகவல்"
+
+msgid "Paths"
+msgstr "பாதைகள்"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo தேவைகளின் நிலை"
+
+msgid "State of PHP settings on the server"
+msgstr "சேவையகத்தில் PHP அமைப்புகளின் நிலை"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "இந்த போர்ட்டலில் தீர்க்கப்பட்ட api_get_path() மாறிலிகள்"
+
 msgid "Is writable"
 msgstr "எழுதக்கூடியது"
 
@@ -20673,6 +20706,9 @@ msgstr "திறன்கள் சக்கரத்தில், குறு
 
 msgid "Created by"
 msgstr "உருவாக்கியவர்"
+
+msgid "Created by %s on %s"
+msgstr "%s ஆல் %s அன்று உருவாக்கப்பட்டது"
 
 msgid "Hide general coach in dropbox"
 msgstr "டிராப்பாக்ஸில் பொது பயிற்றுவியை மறைக்கவும்"
@@ -31876,6 +31912,9 @@ msgstr "%s க்கு ஏதாவது எழுதவும்"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "விரும்பியது: SVG. PNG பரிந்துரைக்கப்பட்ட அகலம்: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG பரிந்துரைக்கப்படும் அகலம்: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "இ-மெயில்களுக்கான PNG லோகோ பதிவேற்று (~%spx அகலம்)"
 
@@ -31911,6 +31950,9 @@ msgstr "சேர்க்க கிளிக் செய்யவும்"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "விரும்பியது: SVG. PNG அதிகபட்ச அளவு: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG அதிகபட்ச அளவு: %spx."
 
 msgid "View badge"
 msgstr "ஜீவை பார்"
@@ -38062,6 +38104,9 @@ msgstr "முடிக்கிறது"
 msgid "Draft saved"
 msgstr "வரைவு சேமிக்கப்பட்டது"
 
+msgid "Save as draft"
+msgstr "வரைவாக சேமி"
+
 msgid "Statement"
 msgstr "கூற்று"
 
@@ -39483,4 +39528,265 @@ msgstr "இந்த பயனர் ஏற்கனவே அமர்வில
 
 msgid "This user is already subscribed to the course."
 msgstr "இந்த பயனர் ஏற்கனவே பாடத்தில் பதிவு செய்யப்பட்டுள்ளார்."
+
+msgid "Multi URLs"
+msgstr "பல URLகள்"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "பயனர்கள் மற்றும் பாடநெறிகள் போன்ற அமைப்புகள் ஒரே நேரத்தில் ஒன்றுக்கு மேற்பட்ட URLகளில் செயலில் இருக்கலாம், எனவே கீழே உள்ள மதிப்புகளின் கூட்டுத்தொகை மொத்தத்துடன் பொருந்தாது."
+
+msgid "User directory"
+msgstr "பயனர் அடைவு"
+
+msgid "Course directory"
+msgstr "பாடநெறி அடைவு"
+
+msgid "URLs"
+msgstr "URLகள்"
+
+msgid "User details"
+msgstr "பயனர் விவரங்கள்"
+
+msgid "Course details"
+msgstr "பாடநெறி விவரங்கள்"
+
+msgid "View details"
+msgstr "விவரங்களைக் காண்க"
+
+msgid "Average progress"
+msgstr "சராசரி முன்னேற்றம்"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "நேரடி சேர்க்கை பாடநெறி முழுமைக்கும் உரியது, குறிப்பிட்ட URLக்கு அல்ல; எனவே இந்தப் பாடநெறி இணைக்கப்பட்டுள்ள ஒவ்வொரு URLக்கும் கீழே அதே ‘நேரடி’ எண்கள் மீண்டும் காட்டப்படும். URLகளுக்கு இடையே பாடநெறியைப் பகிர்ந்து, URLக்கு ஏற்ப வேறுபடும் அளவீடுகளைப் பெற அமர்வுகளே உத்தேசிக்கப்பட்ட வழி."
+
+msgid "Logins (all URLs combined)"
+msgstr "உள்நுழைவுகள் (அனைத்து URLகளும் இணைத்து)"
+
+msgid "Unique logins"
+msgstr "தனித்துவ உள்நுழைவுகள்"
+
+msgid "Parent URL"
+msgstr "பெற்றோர் URL"
+
+msgid "Logins (your URLs)"
+msgstr "உள்நுழைவுகள் (உங்கள் URLகள்)"
+
+msgid "The picture could not be uploaded"
+msgstr "படத்தைப் பதிவேற்ற முடியவில்லை"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "இந்தப் புல வகை இன்னும் முழுமையாக ஆதரிக்கப்படவில்லை — மூல மதிப்பு மட்டும்."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "இந்தப் பாடநெறி அதன் பயனர் சந்தா வரம்புக்கு அருகில் உள்ளது (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "உங்கள் பாடநெறி பண்புகள் மூலம் இடம் வரையறுக்கப்பட்டுள்ளது. உங்கள் வரம்பை அதிகரிக்க,"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "உங்கள் பாடநெறி பண்புகள் மூலம் பயனர் சந்தாக்கள் வரையறுக்கப்பட்டுள்ளன. உங்கள் வரம்பை அதிகரிக்க,"
+
+msgid "pro plan"
+msgstr "ப்ரோ திட்டம்"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "பெற்று, இந்தப் பாடநெறியின் காப்புப்பிரதியை பாடநெறி பராமரிப்பு வழியாக உங்கள் புதிய கட்டணப் பாடநெறிக்கு இறக்குமதி செய்யவும், அல்லது இந்தத் திட்டத்தைப் பெற்ற பிறகு உங்கள் பாடநெறியைப் ப்ரோ பாடநெறியாக மாற்ற டிக்கெட் திறக்கவும்."
+
+msgid "Tired of writing questions?"
+msgstr "கேள்விகள் எழுதுவதில் சோர்வாக உள்ளீர்களா?"
+
+msgid "Upgrade your plan"
+msgstr "உங்கள் திட்டத்தை மேம்படுத்தவும்"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "தரமான கேள்விகளை உருவாக்க AI உதவி பெற ப்ரோ திட்டத்திற்கு."
+
+msgid "Student Success AI Coach"
+msgstr "மாணவர் வெற்றி செயற்கை நுண்ணறிவு பயிற்சியாளர்"
+
+msgid "No AI text provider is configured."
+msgstr "செயற்கை நுண்ணறிவு உரை வழங்குநர் எதுவும் அமைக்கப்படவில்லை."
+
+msgid "Additional instructions for the AI coach"
+msgstr "செயற்கை நுண்ணறிவு பயிற்சியாளருக்கான கூடுதல் அறிவுறுத்தல்கள்"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "எடுத்துக்காட்டு: இந்தக் கற்றவருக்கு கவனத்தைத் தக்கவைப்பதில் சிரமம் உள்ளது. குறுகிய செயல்பாடுகளையும் புரிதலைச் சரிபார்க்க அடிக்கடி சோதனைகளையும் பரிந்துரைக்கவும்."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Chamilo பரிந்துரையைத் தயாரிக்கும் வரை இந்தச் சாளரத்தைத் திறந்தே வைத்திருக்கவும்."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "பரிந்துரை உங்கள் Chamilo இன்பாக்ஸிலும் சேமிக்கப்பட்டது."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "பரிந்துரை உருவாக்கப்பட்டு இந்தக் கற்றவருக்காகச் சேமிக்கப்பட்டது, ஆனால் இன்பாக்ஸ் நகலை உருவாக்க முடியவில்லை."
+
+msgid "Student success recommendation"
+msgstr "மாணவர் வெற்றிப் பரிந்துரை"
+
+msgid "Generated"
+msgstr "உருவாக்கப்பட்டது"
+
+msgid "Priority actions"
+msgstr "முன்னுரிமை நடவடிக்கைகள்"
+
+msgid "Evidence"
+msgstr "சான்றுகள்"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "இந்த அம்சம் இந்தப் பாடத்தின் உள்ளடக்கத்தைப் பகுப்பாய்வு செய்து, கற்றல் நடத்தைத் தகவலை அமைக்கப்பட்ட செயற்கை நுண்ணறிவு மாதிரிக்கு அனுப்பும். நேரடியாக அடையாளம் காணக்கூடிய தனிப்பட்ட தரவை செயற்கை நுண்ணறிவு மாதிரிக்கு அனுப்பாவிட்டாலும், அனுப்பப்படும் சில தரவு பயனரைப் பற்றிய அடையாளத் தகவலை மறைமுகமாக வழங்கலாம். சந்தேகம் இருந்தால், இந்த அம்சத்தைப் பயன்படுத்துவதற்கு முன் உங்கள் செயற்கை நுண்ணறிவு குறிப்பு நபரிடம் எப்போதும் சரிபார்க்கவும்."
+
+msgid "Additional activities"
+msgstr "கூடுதல் செயல்பாடுகள்"
+
+msgid "Rhythm"
+msgstr "தாளம்"
+
+msgid "Learning methodologies"
+msgstr "கற்றல் முறைகள்"
+
+msgid "Other recommendations"
+msgstr "பிற பரிந்துரைகள்"
+
+msgid "Analyzing course..."
+msgstr "பாடத்தைப் பகுப்பாய்வு செய்கிறது..."
+
+msgid "Analyzing student's learning..."
+msgstr "மாணவரின் கற்றலைப் பகுப்பாய்வு செய்கிறது..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "இந்த அழைப்பை ஏற்றுக்கொண்டால், கோரும் பயனருடன் நீங்கள் இணைக்கப்படுவீர்கள்; அதனால் உங்கள் சுயவிவரத் தரவில் சில அல்லது அனைத்தும் அந்தப் பயனர் படிக்கக் கிடைக்கும். ஏற்கனவே நம்பும் பயனர்களுடன் உங்கள் சுயவிவரத்தைச் சரிபார்த்து, அதிகமாகப் பகிராமல் இருப்பதை உறுதிசெய்யவும்."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "மைக்ரோஃபோனைப் பயன்படுத்த அனுமதி இயக்கப்படவில்லை; ஒலியைப் பதிவுசெய்ய உங்கள் உலாவியில் அதை இயக்கவும்"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "இந்த Chamilo பதிப்பில் ஒன்று (அல்லது அதற்கு மேற்பட்ட) பன்மொழிப் பாடங்கள் முன்பே நிறுவப்பட்டுள்ளன. பாடப் பட்டியலில் அவற்றைப் பார்த்து, பொதுவாக இருக்க வேண்டுமா என்பதை முடிவுசெய்யலாம்."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "தற்போது உங்களுக்கு எந்த URL-க்கும் அணுகல் இல்லை. நீங்கள் சேர்ந்த URL-க்கு அணுகல் வழங்க நிர்வாகியிடம் கேளுங்கள்."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "தேர்ந்தெடுக்கப்பட்ட செயற்கை நுண்ணறிவு வழங்குநர் இறையாண்மை சேவை இல்லையெனில், தேர்ந்தெடுக்கப்பட்ட ஆவண உள்ளடக்கம் வெளிச் சேவைக்கு அனுப்பப்படலாம். உங்கள் நிறுவனம் அனுமதிக்காவிட்டால் இரகசியத் தகவலுடன் தொடர வேண்டாம்."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "தக்கவைக்க வேண்டிய கணக்கில் Unify என்பதைக் கிளிக் செய்யவும். அதே நகல் குழுவில் உள்ள மற்ற அனைத்துக் கணக்குகளையும் அமைப்பு அதனுடன் இணைக்கும். இணைக்கப்பட்ட கணக்குகள் நிரந்தரமாக நீக்கப்பட்டு இந்த அறிக்கையிலிருந்து மறைந்துவிடும். இந்தச் செயலை மீளமைக்க முடியாது."
+
+msgid "Permanent deletion"
+msgstr "நிரந்தர நீக்கம்"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify ஏற்கனவே இணைக்கப்பட்ட கணக்குகளை நிரந்தரமாக நீக்குகிறது. கூடுதல் கணக்குகளை கைமுறையாக நீக்க விரும்பினால் மட்டுமே பயனர்கள் பட்டியலைப் பயன்படுத்தவும்."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "இயல்புநிலை காட்சித் தீம் “chamilo”-க்கான சின்னங்களை மாற்றுகிறீர்கள். இயல்புநிலைகளை மேலெழுதாமல் இருக்க தனிப்பயன் காட்சித் தீமை உருவாக்குவது/பயன்படுத்துவது பற்றி பரிசீலிக்கவும்."
+
+msgid "This exercise has no questions."
+msgstr "இந்தப் பயிற்சியில் கேள்விகள் இல்லை."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "ஒவ்வொரு கேள்விக்கும் கருத்து/பின்னூட்டத்தை எவ்வாறு காட்ட வேண்டும்? தேர்வை எடுக்கும்போது கற்றவருக்கு அது எப்படிக் காட்டப்படும் என்பதை இந்த விருப்பம் வரையறுக்கிறது."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "இந்தப் பயன்பாடுகள் உங்கள் தற்போதைய கணக்கு அனுமதிகளுடன் உங்களாகவே Chamilo-வை அணுகலாம்; அதற்கு மேல் எதுவும் இல்லை. இனி பயன்படுத்தாத அல்லது அறியாதவற்றை ரத்துசெய்யவும்."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "உங்கள் சட்ட ஒப்புதலைத் திரும்பப் பெறக் கோருவதற்கான காரணத்தை விளக்கவும்; உங்கள் கோரிக்கையை முறையாகச் செயல்படுத்த இது உதவும்"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "தொலை MCP கிளையண்டை உங்கள் சொந்தக் கணக்கு மற்றும் அனுமதிகளுடன் Chamilo-வுடன் இணைக்க இந்தத் தனிப்பட்ட விசையைப் பயன்படுத்தவும்."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "முழு விசையும் ஒருமுறை மட்டுமே காட்டப்படும். அதைப் பாதுகாப்பாகச் சேமிக்கவும். புதிய விசையை உருவாக்கினால் முந்தையது உடனடியாக செல்லாதாகும்."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "விசை கிளையண்டை உங்கள் Chamilo கணக்காக அங்கீகரிக்கிறது. உங்கள் கணக்கில் ஏற்கனவே இல்லாத அனுமதிகளை அது வழங்காது."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "பதிவுப் பக்கத்தில் விதிமுறைகள் மற்றும் நிபந்தனைகள் அறிக்கையைக் காட்டி, பதிவுசெய்ய பார்வையாளர் T&C-ஐ ஏற்க வேண்டும்"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "விதிமுறைகள் மற்றும் நிபந்தனைகள் உள்ளடக்கம் ஒரு செயற்கை நுண்ணறிவு மொழி மாதிரிக்கு அனுப்பப்படும். சேமிப்பதற்கு முன் முன்மொழியப்பட்ட மொழிபெயர்ப்பை மதிப்பாய்வு செய்யவும்."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "இலக்கு மொழிக்கு ஏற்கனவே சேமிக்கப்பட்ட பதிப்பு உள்ளது. இந்த முன்மொழிவைச் சேமித்தால் புதிய பதிப்பு உருவாகும்."
+
+msgid "Acquired"
+msgstr "பெறப்பட்டது"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "பரிந்துரைக்கப்படும் பாடப் படம்: 1600 × 900 px (16:9). பெரிய அல்லது உயர் அடர்த்தித் திரைகளில் தெளிவாகக் காட்ட குறைந்தது 1280 × 720 px பயன்படுத்தவும்."
+
+msgid "Courses of the selected URL"
+msgstr "தேர்ந்தெடுக்கப்பட்ட URL-இன் பாடங்கள்"
+
+msgid "Course categories in selected URL"
+msgstr "தேர்ந்தெடுக்கப்பட்ட URL-இல் பாட வகைகள்"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "உங்கள் கணக்கு செயலில் உள்ளது; இப்போது உள்நுழைந்து உங்கள் பாடங்களைப் பார்க்கலாம்."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "முதலில் திருத்தங்களை <a href='%s'> இங்கே </a> பதிவிறக்க வேண்டும்.\nஅதன் பிறகு அந்தக் கோப்பை அன்சிப் செய்து, கோப்புப் பெயர்களை மாற்றாமல் விரும்பியபடி கோப்புகளைத் திருத்தவும்.\nபின்னர் அந்த மாற்றிய கோப்புகளுடன் ஒரு ஜிப் கோப்பை உருவாக்கி இந்தப் படிவத்தில் பதிவேற்றவும்."
+
+msgid "Adding students from session %s to session %s"
+msgstr "அமர்வு %s இலிருந்து அமர்வு %s-க்கு மாணவர்களைச் சேர்த்தல்"
+
+msgid "Show all attempts by exercise"
+msgstr "பயிற்சி வாரியாக அனைத்து முயற்சிகளையும் காட்டு"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "இந்தச் செயல் தேர்ந்தெடுக்கப்பட்ட பாடத்திற்கான அனுமதிக்கப்பட்ட பயனர் வரம்பை மீறும்."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "பாதிக்கப்பட்ட பாடத்திற்கான அனுமதிக்கப்பட்ட பயனர் வரம்பை அடைந்ததால் சில சந்தாக்களைச் செயல்படுத்த முடியவில்லை. பாதிக்கப்பட்ட பயனர்கள்/பாடங்கள்: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "இந்தப் பதிவேடு அறியப்பட்ட அறிக்கைப் பக்கங்கள், அவற்றின் வகை, நியமன URL, பழைய URL மற்றும் எதிர்பார்க்கப்படும் பங்கு பார்வையாளர்களைப் பட்டியலிடுகிறது. நியமன URL-கள் தற்போதைய அறிக்கை செயலாக்கத்திற்கு வழிநடத்தி, ஆவணப்படுத்தப்பட்ட அறிக்கைப் பங்கு அணியை அமல்படுத்துகின்றன."
+
+msgid "E-mail notification subscription"
+msgstr "மின்னஞ்சல் அறிவிப்பு சந்தா"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "இந்தச் செயல் நிர்வாகிகள் அமைத்த பாடத்திற்கு %s பயனர்கள் என்ற வரம்பை மீறும். சந்தா ரத்துசெய்யப்பட்டது."
+
+msgid "Language the document is in"
+msgstr "ஆவணம் உள்ள மொழி"
+
+msgid "There is no session still"
+msgstr "இன்னும் அமர்வு இல்லை"
+
+msgid "Origin courses from session"
+msgstr "அமர்விலிருந்து மூலப் பாடநெறிகள்"
+
+msgid "Destination courses from session"
+msgstr "அமர்விலிருந்து இலக்குப் பாடநெறிகள்"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "பொது அணுகல் (பாடநூலின் எந்த உறுப்பினருக்கும் அனுமதி)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "'%s' பாடநெறிக்கான %d சொற்களஞ்சிய சொற்களை உருவாக்குக; ஒவ்வொரு சொல்லும் தனி வரியில், அடுத்த வரியில் அதன் வரையறை, ஒவ்வொரு சொல்லுக்கும் இடையே ஒரு வெற்று வரி. தலைப்புக்கோ வரையறைக்கோ வேறு எந்த வடிவமைப்பையும் சேர்க்க வேண்டாம்."
+
+msgid "This is a short description of the course '%s'."
+msgstr "இது '%s' பாடநெறியின் சுருக்கமான விளக்கம்."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "நீங்கள் விண்டோஸ் தளத்தில் சாமிலோவைப் பயன்படுத்துகிறீர்கள். முழு உரை அட்டவணைப்படுத்தலுக்கு ஆவண மாற்று உதவிகள் கிடைக்கவில்லை."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "தேர்வு தானியங்கி தொடக்க அமைப்பு இயக்கத்தில் உள்ளது. மாணவர்கள் தேர்வுப் பட்டியலுக்குத் திருப்பி விடப்படுவார்கள்."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "தேர்வு தானியங்கி தொடக்க அமைப்பு இயக்கத்தில் உள்ளது. மாணவர்கள் ஒரு குறிப்பிட்ட தேர்வுக்குத் திருப்பி விடப்படுவார்கள்."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "இந்தப் பாடநெறிக்கான சந்தா வரம்பு எட்டப்பட்டுள்ளது (%current%\/%limit%)."
+
+msgid "Count course by language"
+msgstr "மொழி வாரியாக பாடநெறி எண்ணிக்கை"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "தேர்ந்தெடுக்கப்பட்ட தேதியை விட பழைய கடைசி அணுகல் கொண்ட பயனர்கள்."
 

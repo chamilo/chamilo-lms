@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "ရိုးသားစွာ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ဖော်မြူလာနမူနာ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ဖော်မြူလာ နမူနာ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ပြောင်းလဲနိုင်သော အကွာအဝေးများ"
@@ -800,7 +800,7 @@ msgid "This tool allows you to create glossary terms for this course, which can 
 msgstr "ဤကိရိယာသည် ဤသင်တန်းအတွက် ဝေါဟာရစာရင်းဝေါဟာရများကို ဖန်တီးခွင့်ပြုပြီး၊ ၎င်းတို့ကို စာရွက်စာတမ်းကိရိယာမှ အသုံးပြုနိုင်သည်"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr ""
+msgstr "<p> ဖိုရမ်သည် အချိန်မတူညီသော ရေးသားလုပ်ငန်းအတွက် ဆွေးနွေးကိရိယာတစ်ခုဖြစ်သည်။  အီးမေးလ်နှင့် မတူဘဲ ဖိုရမ်သည် အများပြည်သူ သို့မဟုတ် တစ်စိတ်တစ်ပိုင်း အများပြည်သူ အုပ်စုဆွေးနွေးမှုအတွက်ဖြစ်သည်။ </p>Chamilo ဖိုရမ်ကို အသုံးပြုရန် အဖွဲ့ဝင်များသည် ဘရောက်ဇာကိုသာ အသုံးပြုနိုင်သည် - သီးခြား ကလိုင်းယင့်ဆော့ဖ်ဝဲ မလိုအပ်ပါ။ </p>ဖိုရမ်များကို စီစဉ်ရန် Forums ကိရိယာကို နှိပ်ပါ။ ဆွေးနွေးမှုများကို အောက်ပါ ဖွဲ့စည်းပုံအတိုင်း အဆင့်လိုက် စီစဉ်ထားသည်: </ p><b> အမျိုးအစား> ဖိုရမ်> ခေါင်းစဉ်> ပို့စ်</ b> </ p> အဖွဲ့ဝင်များ ဖိုရမ်တွင် သပ်ရပ်ထိရောက်စွာ ပါဝင်နိုင်ရန် ပထမဦးစွာ အမျိုးအစားများနှင့် ဖိုရမ်များကို ဖန်တီးရန် မရှိမဖြစ်လိုအပ်သည်။ ထို့နောက် ပါဝင်သူများက ခေါင်းစဉ်များနှင့် ပို့စ်များကို ဖန်တီးရမည်။ ပုံမှန်အားဖြင့် ဖိုရမ်တွင် (အများပြည်သူ) အမျိုးအစားတစ်ခု၊ နမူနာခေါင်းစဉ်နှင့် နမူနာပို့စ်တစ်ခု ပါရှိသည်။ အမျိုးအစားတွင် ဖိုရမ်များ ထည့်နိုင်သည်၊ ခေါင်းစဉ်ပြောင်းနိုင်သည် သို့မဟုတ် အခြားအမျိုးအစားများ ဖန်တီးပြီး ထိုအထဲတွင် ဖိုရမ်အသစ်များ ဖန်တီးနိုင်သည်။ (အမျိုးအစားနှင့် ဖိုရမ်ကို မရောထွေးပါနှင့်၊ ဖိုရမ်မပါသော အမျိုးအစားသည် အသုံးမဝင်သဖြင့် မပြသပါ။)</p>\n<p>ဖိုရမ်ဖော်ပြချက်တွင် အဖွဲ့ဝင်စာရင်း၊ ရည်ရွယ်ချက် အဓိပ္ပာယ်ဖွင့်ဆိုချက်၊ ပစ်မှတ်လုပ်ငန်း၊ အကြောင်းအရာ စသည်တို့ ပါဝင်နိုင်သည်။</p><p>အုပ်စုဖိုရမ်များကို Forum ကိရိယာမှ မဖန်တီးသင့်ဘဲ Groups ကိရိယာမှသာ ဖန်တီးသင့်သည်။ ထိုနေရာတွင် အုပ်စုဖိုရမ်များကို သီးသန့် သို့မဟုတ် အများပြည်သူ ဖြစ်စေမည်ကို သတ်မှတ်နိုင်ပြီး စာရွက်စာတမ်းအုပ်စုများ မျှဝေရန် နေရာလည်း ပေးနိုင်သည်။</p><b> သင်ကြားရေး အကြံပြုချက်များ</ b></ p> သင်ယူမှုဖိုရမ်သည် အင်တာနက်ပေါ်တွင် တွေ့ရသော ဖိုရမ်များနှင့် တူညီမည်မဟုတ်ပါ။ တစ်ခုမှာ သင်ယူသူများသည် ပို့စ်များကို ထုတ်ဝေပြီးနောက် ပြင်ဆင်၍မရပါ၊ သင်တန်းကို ယုတ္တိကျကျ သိမ်းဆည်းထားသောကြောင့် အတိတ်က ပြောခဲ့သည်များကို ခြေရာခံနိုင်သည်။ ထို့အပြင် Chamilo ဖိုရမ်များသည် သင်ကြားရေးနှင့် သက်ဆိုင်သော အသုံးပြုမှုများကို ခွင့်ပြုသည်။ ဥပမာ၊ ဆရာ/သင်တန်းပေးသူအချို့သည် ပြင်ဆင်ချက်များကို ဖိုရမ်အတွင်း တိုက်ရိုက် ထုတ်ဝေသည်: <li> သင်ယူသူအား အစီရင်ခံစာကို ဖိုရမ်တွင် တိုက်ရိုက် ပို့ရန် တောင်းဆိုသည်၊ </ li> ဆရာက Edit (အဝါရောင် ခဲတံ) ကို နှိပ်ပြီး ဂရပ်ဖစ်တည်းဖြတ်ကိရိယာ (အရောင်၊ မျဉ်းသားခြင်း စသည်) ဖြင့် မှတ်သားပြင်ဆင်သည် </ li> နောက်ဆုံးတွင် အခြားသင်ယူသူများသည် တစ်ဦး၏ ထုတ်လုပ်မှုအပေါ် ပြုလုပ်ထားသော ပြင်ဆင်ချက်များကို ကြည့်ရှု အကျိုးရှိသည်၊ </ li> သင်ယူသူများအကြား တူညီသော စည်းမျဉ်းကို အသုံးပြုနိုင်သော်လည်း ကျောင်းသား/သင်တန်းသားများသည် တစ်ဦးနှင့်တစ်ဦး ပို့စ်များကို တည်းဖြတ်၍မရသောကြောင့် ရဲဘော်၏ မက်ဆေ့ချ်ကို ကူးယူ/ကပ်ရမည်။ <. li> </ ul>"
 
 msgid "Forum help"
 msgstr "ဖိုရမ်အကူအညီ"
@@ -1886,7 +1886,7 @@ msgid "Closed - the course is only accessible to the teachers"
 msgstr "ပိတ်ထားသည် - သင်တန်းသည် ဆရာများသာ ဝင်ရောက်နိုင်သည်"
 
 msgid "Modified (more detailed settings specified through roles-rights system)"
-msgstr ""
+msgstr "ပြင်ဆင်ပြီး (အခန်းကဏ္ဍ-အခွင့်အရေး စနစ်မှတစ်ဆင့် ပိုမိုအသေးစိတ် ဆက်တင်များ သတ်မှတ်ထားသည်)"
 
 msgid "E-mail on assignments submission by students"
 msgstr "ကျောင်းသားများမှ တာဝန်ပေးအပ်မှုတင်သွင်းခြင်းအတွက် အီးမေးလ်"
@@ -3578,10 +3578,10 @@ msgid "Publish"
 msgstr "ထုတ်ဝေပါ"
 
 msgid "This is a SCORM course. To play it, click here : <input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
-msgstr ""
+msgstr "ဤသည်မှာ SCORM သင်တန်းဖြစ်သည်။ ဖွင့်ရန် ဤနေရာကို နှိပ်ပါ : <input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
-msgstr ""
+msgstr "ဤသည်မှာ SCORM အကြောင်းအရာဖြစ်သည်<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 
 msgid "The zip file can not contain .PHP files"
 msgstr "ဇစ်ဖိုင်တွင် .PHP ဖိုင်များ ပါဝင်မထားရပါ"
@@ -4130,7 +4130,7 @@ msgid "Login list"
 msgstr "အကောင့်ဝင်စာရင်း"
 
 msgid "Status of MySQL server :"
-msgstr ""
+msgstr "MySQL ဆာဗာ အခြေအနေ :"
 
 msgid "Database"
 msgstr "ဒေတာဘေ့စ်"
@@ -5042,7 +5042,7 @@ msgid "Choose news language"
 msgstr "သတင်းဘာသာစကားကို ရွေးပါ"
 
 msgid "Total time spent in a course"
-msgstr ""
+msgstr "သင်တန်းတစ်ခုတွင် ကုန်ဆုံးခဲ့သော စုစုပေါင်းအချိန်"
 
 msgid "This option is used to calculate in real time the time that a user spend in a course. The value in the field is the refresh interval in seconds. To disable this option, let the default value 0 in the field."
 msgstr "ဤရွေးချယ်မှုသည် အသုံးပြုသူတစ်ဦး သင်တန်းတစ်ခုတွင် အချိန်ဖြုန်းသည့်အချိန်ကို အချိန်နှင့်တပြေးညီ တွက်ချက်ရန် အသုံးပြုသည်။ ကွက်လပ်ရှိ တန်ဖိုးသည် စက္ကန့်ဖြင့် ပြန်လည်ဆန်းသစ်မှုအကြာအတွင်းဖြစ်သည်။ ဤရွေးချယ်မှုကို ပိတ်ရန်၊ ကွက်လပ်တွင် မူလတန်ဖိုး ၀ ကို ထားခဲ့ပါ။"
@@ -5261,7 +5261,7 @@ msgid "Start using the Ephorus anti plagiarism service in Chamilo.<br /> \t\t\t\
 msgstr "Chamilo တွင် Ephorus ခိုးယူမှုဆန့်ကျင်ရေးဝန်ဆောင်မှုကို စတင်အသုံးပြုပါ။<br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>Ephorus ဖြင့်၊ သင်သည် အင်တာနက်ခိုးယူမှုကို အပိုကြိုးစားမှုမရှိဘဲ ကာကွယ်နိုင်သည်။</strong><br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t သင်သည် ကျွန်ုပ်တို့၏ ထူးခြားသော ဖွင့်လှစ်စံနှုန်းဝဘ်ဝန်ဆောင်မှုကို အသုံးပြု၍ သင့်ကိုယ်ပိုင်ပေါင်းစည်းမှုကို တည်ဆောက်နိုင်သည် သို့မဟုတ် ကျွန်ုပ်တို့၏ Chamilo-ပေါင်းစည်းမှုမော်ဂျူးများထဲမှ တစ်ခုကို အသုံးပြုနိုင်သည်။"
 
 msgid "<strong>Leaders in <br />anti plagiarism </strong>\t\t\t\t"
-msgstr ""
+msgstr "<strong>ခိုးကူးမှု တိုက်ဖျက်ရေးတွင် <br />ဦးဆောင်သူများ </strong>\t\t\t\t"
 
 msgid "Click here for more information and prices\t\t\t"
 msgstr "ပိုမိုသိရှိရန်နှင့် စျေးနှုန်းများအတွက် ဤနေရာကို နှိပ်ပါ\t\t\t"
@@ -5846,7 +5846,7 @@ msgid "Yes (the files will be deleted permanently and will not be recoverable)"
 msgstr "ဟုတ်ကဲ့ (ဖိုင်များကို အပြီးသတ်ဖျက်မည်ဖြစ်ပြီး ပြန်လည်ရယူ၍မရပါ)"
 
 msgid "No (the files will be deleted from the application but will be manually recoverable  by your server administrator)"
-msgstr ""
+msgstr "မဟုတ်ပါ (ဖိုင်များကို အပလီကေးရှင်းမှ ဖျက်မည်ဖြစ်သော်လည်း သင့်ဆာဗာ စီမံခန့်ခွဲသူက လက်ဖြင့် ပြန်လည်ရယူနိုင်သည်)"
 
 msgid "Select a manager"
 msgstr "မန်နေဂျာတစ်ဦးကို ရွေးချယ်ပါ"
@@ -6866,7 +6866,7 @@ msgid "A user can be member of maximum"
 msgstr "အသုံးပြုသူတစ်ဦးသည် အများဆုံး အဖွဲ့ဝင်ဖြစ်နိုင်သည်"
 
 msgid " groups"
-msgstr ""
+msgstr " အုပ်စုများ"
 
 msgid "Limit"
 msgstr "ကန့်သတ်ချက်"
@@ -7382,7 +7382,7 @@ msgid "Show audio recorder"
 msgstr "အသံဖမ်းစက်ကို ပြသပါ"
 
 msgid "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     This will show all the results for the word 'car' tagged as 'truck', not     including the word 'ferrari' but including the word 'ford' and the exact  phrase 'high consumption'."
-msgstr ""
+msgstr "သင်တန်းဒေတာဘေ့စ်ကို ရှာဖွေရန် အောက်ပါ စာလုံးပုံစံကို အသုံးပြုပါ:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     ဥပမာ:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     ဤသည်မှာ 'car' စကားလုံးအတွက် 'truck' တဂ်ပါသော ရလဒ်အားလုံးကို ပြမည်၊ 'ferrari' စကားလုံး မပါဝင်ဘဲ 'ford' စကားလုံးနှင့် 'high consumption' တိကျသော စကားစုကို ပါဝင်စေမည်။"
 
 msgid "View course"
 msgstr "သင်တန်းကို ကြည့်ပါ"
@@ -7673,7 +7673,7 @@ msgid "Please type your text below"
 msgstr "သင့်စာသားကို အောက်တွင် ရိုက်ထည့်ပါ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr ""
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ဖောင်ဖြည့် လှုပ်ရှားမှု နမူနာ : ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း တွက်ချက်ရန်</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ဝီကီပီးဒီးယား ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "လိပ်စာကို မှတ်သားပါ"
@@ -8006,7 +8006,7 @@ msgid "Description and scoring are required for each hotspot. Feedback is option
 msgstr "ဟော့စပေါ့တစ်ခုစီအတွက် ဖော်ပြချက်နှင့် အမှတ်ပေးမှုလိုအပ်သည်။ တုံ့ပြန်ချက်သည် ရွေးချယ်နိုင်သည်။"
 
 msgid "To create a hotspot: select a shape next to the colour, and draw the hotspot. To move a hotspot, select the colour, click another spot in the image, and draw the hotspot. To add a hotspot: click the Add hotspot button. To close a polygon shape: right click and select Close polygon."
-msgstr ""
+msgstr "ဟော့စပေါ့ ဖန်တီးရန်: အရောင်ဘေးရှိ ပုံသဏ္ဍာန်ကို ရွေးပြီး ဟော့စပေါ့ကို ဆွဲပါ။ ဟော့စပေါ့ ရွှေ့ရန် အရောင်ကို ရွေး၊ ပုံတွင် အခြားနေရာကို နှိပ်ပြီး ဟော့စပေါ့ကို ဆွဲပါ။ ဟော့စပေါ့ ထည့်ရန်: Add hotspot ခလုတ်ကို နှိပ်ပါ။ ပိုလီဂွန်ပုံသဏ္ဍာန် ပိတ်ရန်: ညာကလစ်နှိပ်ပြီး Close polygon ကို ရွေးပါ။"
 
 msgid "Incorrect"
 msgstr "မမှန်ကန်ပါ"
@@ -8120,13 +8120,13 @@ msgid "Your following attempt has been viewed/commented/corrected by the trainer
 msgstr "သင်၏အောက်ပါကြိုးစားမှုကို နည်းပြဆရာမှ ကြည့်ရှု/မှတ်ချက်ပေး/ပြင်ဆင်ပြီးဖြစ်သည်"
 
 msgid "Click the link below to access  your account and view your commented Examsheet."
-msgstr ""
+msgstr "သင့်အကောင့်သို့ ဝင်ရောက်ပြီး မှတ်ချက်ပေးထားသော စာမေးပွဲစာရွက်ကို ကြည့်ရန် အောက်ပါ လင့်ခ်ကို နှိပ်ပါ။"
 
 msgid "Regards"
 msgstr "လေးစားစွာဖြင့်"
 
 msgid "You attempt for the test %s has been viewed/commented/corrected by the trainer. Click the link below to access  your account and view your Examsheet."
-msgstr ""
+msgstr "စမ်းသပ်မှု %s အတွက် သင့်ကြိုးစားမှုကို သင်တန်းပေးသူက ကြည့်ရှု/မှတ်ချက်ပေး/ပြင်ဆင်ပြီးဖြစ်သည်။ သင့်အကောင့်သို့ ဝင်ရောက်ပြီး စာမေးပွဲစာရွက်ကို ကြည့်ရန် အောက်ပါ လင့်ခ်ကို နှိပ်ပါ။"
 
 msgid "Dear learner,"
 msgstr "လေးစားအပ်သော သင်ယူသူ၊"
@@ -8552,7 +8552,7 @@ msgid "Reporting"
 msgstr "အစီရင်ခံခြင်း"
 
 msgid "Analytics"
-msgstr ""
+msgstr "ခွဲခြမ်းစိတ်ဖြာမှု"
 
 msgid "Update"
 msgstr "အဆင့်မြှင့်တင်ပါ"
@@ -9268,6 +9268,15 @@ msgstr "အစည်းအဝေး %s အတွက် အချိန်အစ�
 msgid "Error"
 msgstr "အမှား"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "အသုံးပြုသူကို ဖန်တီးပြီးသော်လည်း ထပ်ဆောင်း ပရိုဖိုင်အကွက်တစ်ခုကို သိမ်း၍မရခဲ့ပါ။"
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "အသုံးပြုသူကို အပ်ဒိတ်လုပ်ပြီးသော်လည်း ထပ်ဆောင်း ပရိုဖိုင်အကွက်တစ်ခုကို သိမ်း၍မရခဲ့ပါ။"
+
+msgid "One or more fields contain invalid values."
+msgstr "အကွက်တစ်ခု သို့မဟုတ် တစ်ခုထက်ပို၍ မမှန်ကန်သော တန်ဖိုးများ ပါရှိသည်။"
+
 msgid "Anonymous"
 msgstr "အမည်မဖော်ပြသူ"
 
@@ -9743,7 +9752,7 @@ msgid "Select a file"
 msgstr "ဖိုင်တစ်ခုကို ရွေးချယ်ပါ"
 
 msgid "Select a file to insert into the editor."
-msgstr ""
+msgstr "တည်းဖြတ်ကိရိယာထဲ ထည့်သွင်းရန် ဖိုင်တစ်ခု ရွေးပါ။"
 
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "သတိပေးချက် - သင့်ဝဘ်ပေါ်တယ်၏ /home/ ဖိုင်တွဲတွင်ရှိသော FAQ ဖိုင်သည် ရေးသားခွင့်မရှိပါ။ ဖိုင်ခွင့်ပြုချက်များကို ပြောင်းလဲမထားသမျှ သင့်စာသားကို သိမ်းဆည်း၍မရပါ။"
@@ -9758,7 +9767,7 @@ msgid "Result"
 msgstr "ရလဒ်"
 
 msgid "Attempting to login as %s (id %d)"
-msgstr ""
+msgstr "%s (id %d) အဖြစ် ဝင်ရောက်ရန် ကြိုးစားနေသည်"
 
 msgid "Login successful. Go to %s"
 msgstr "အကောင့်ဝင်မှု အောင်မြင်ပါသည်။ %s သို့သွားပါ"
@@ -10826,7 +10835,7 @@ msgid "Confirm user unsubscription"
 msgstr "အသုံးပြုသူ မှတ်ပုံတင်ဖျက်သိမ်းမှုကို အတည်ပြုပါ"
 
 msgid "Go to"
-msgstr ""
+msgstr "သွားရန် "
 
 msgid "My latest visits"
 msgstr "ကျွန်ုပ်၏နောက်ဆုံးလည်ပတ်မှုများ"
@@ -10835,7 +10844,7 @@ msgid "If you want to add a list of users in your course, please contact your we
 msgstr "သင့်သင်တန်းတွင် အသုံးပြုသူစာရင်းထည့်သွင်းလိုပါက၊ သင့်ဝဘ်စီမံခန့်ခွဲသူထံ ဆက်သွယ်ပါ။"
 
 msgid "this password  is too simple. Use a pass like this"
-msgstr ""
+msgstr "ဤစကားဝှက်သည် ရိုးလွန်းသည်။ ဤကဲ့သို့သော စကားဝှက်ကို အသုံးပြုပါ"
 
 msgid "has been registered to your course"
 msgstr "သင့်သင်တန်းတွင် မှတ်ပုံတင်ပြီးဖြစ်သည်"
@@ -10862,7 +10871,7 @@ msgid "Upload the list"
 msgstr "စာရင်းကို တင်သွင်းပါ"
 
 msgid "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   E-mail</b> tab-separated and in this order. Users will receive an e-mail confirmation with their login/password."
-msgstr ""
+msgstr "ပို့ရန် ဖိုင်၏ စာကြောင်းတိုင်းတွင် မဖြစ်မနေ ၅ ခုသာ ပါရမည်: <b>First name   LastName   Login   Password   E-mail</b> တက်ဘ်ဖြင့် ခွဲပြီး ဤအစဉ်အတိုင်း။ အသုံးပြုသူများသည် ၎င်းတို့၏ လော့ဂ်အင်/စကားဝှက်ပါ အီးမေးလ် အတည်ပြုချက် ရရှိမည်။"
 
 msgid "Import a users list"
 msgstr "အသုံးပြုသူစာရင်းတင်သွင်းပါ"
@@ -12314,7 +12323,7 @@ msgid "delete"
 msgstr "ဖျက်ပါ"
 
 msgid "Space Available"
-msgstr ""
+msgstr "ရရှိနိုင်သော နေရာလွတ်"
 
 msgid "This course currently uses"
 msgstr "ဤသင်တန်းသည် လက်ရှိအသုံးပြုနေသည်"
@@ -13625,7 +13634,7 @@ msgid "Methodology"
 msgstr "နည်းစနစ်"
 
 msgid "What methods and activities help achieve the objectives of the course?  What would the schedule be?"
-msgstr ""
+msgstr "သင်တန်း၏ ရည်မှန်းချက်များ ရောက်ရှိရန် မည်သည့် နည်းလမ်းများနှင့် လုပ်ငန်းများက ကူညီသနည်း။  အချိန်ဇယားက မည်သို့ ဖြစ်မည်နည်း။"
 
 msgid "Presentation of the activities (conference, papers, group research, labs...)."
 msgstr "လှုပ်ရှားမှုများ၏ တင်ဆက်မှု (ညီလာခံ၊ စာတမ်းများ၊ အုပ်စုသုတေသန၊ ဓာတ်ခွဲခန်းများ...)။"
@@ -14228,7 +14237,7 @@ msgid "<p>The Course Description tool prompts you to comprehensively describe yo
 msgstr "<p>သင်တန်းဖော်ပြချက်ကိရိယာသည် သင့်သင်တန်းကို စနစ်တကျ ပြည့်စုံစွာ ဖော်ပြရန် တိုက်တွန်းသည်။ ဤဖော်ပြချက်သည် သင်ယူသူများအား ၎င်းတို့ကို စောင့်ဆိုင်းနေသော အရာများ၏ ခြုံငုံသုံးသပ်ချက်ကို ပေးရန်အတွက် အသုံးပြုနိုင်ပြီး၊ သင်တန်းကို သုံးသပ်ပြီး အကဲဖြတ်သည့်အခါ အထောက်အကူဖြစ်စေနိုင်သည်။ </p> အချက်များသည် အကြံပြုချက်မျှသာဖြစ်သည်။ သင်ကိုယ်တိုင် သင်တန်းဖော်ပြချက်ကို ရေးသားလိုပါက၊ 'အခြား' ကိရိယာကို ရွေးချယ်ခြင်းဖြင့် သင့်ကိုယ်ပိုင် ခေါင်းစဉ်များနှင့် ဖော်ပြချက်များကို ဖန်တီးပါ။ </p> မဟုတ်ပါက၊ သင်တန်းဖော်ပြချက်ကို ပြီးမြောက်ရန်၊ ပုံတစ်ခုစီကို နှိပ်ပြီး၊ သင့်စာသား/အကြောင်းအရာဖြင့် ဖြည့်စွမ်းပြီး တင်သွင်းပါ။ </p>"
 
 msgid "<p>The Links tool allows you to create a library of resources for your students, particularly of resources that you have not created yourself.</p><p>As the list grows, it might prove useful to organise it into categories to help your students find the right information at the right place. You can edit every link to re-assign it to a new category (you will need to create this category first).</p><p>The Description field can be used to provide advance-information on the target web pages but also to describe what you expect the student to do with the link. If, for instance, you point to a website on Aristotle, the description field may ask the student to study the difference between synthesis and analysis."
-msgstr ""
+msgstr "<p>Links ကိရိယာသည် သင့်ကျောင်းသားများအတွက် အရင်းအမြစ် စာကြည့်တိုက် ဖန်တီးခွင့်ပေးသည်၊ အထူးသဖြင့် သင်ကိုယ်တိုင် မဖန်တီးထားသော အရင်းအမြစ်များ။</p><p>စာရင်း ကြီးလာသောအခါ ကျောင်းသားများ မှန်ကန်သော အချက်အလက်ကို မှန်ကန်သော နေရာတွင် ရှာတွေ့ရန် အမျိုးအစားများအဖြစ် စီစဉ်ရန် အသုံးဝင်နိုင်သည်။ လင့်ခ်တိုင်းကို တည်းဖြတ်၍ အမျိုးအစားအသစ်သို့ ပြန်သတ်မှတ်နိုင်သည် (ထိုအမျိုးအစားကို ဦးစွာ ဖန်တီးရမည်)။</p><p>Description အကွက်ကို ပစ်မှတ် ဝဘ်စာမျက်နှာများအကြောင်း ကြိုတင်အချက်အလက် ပေးရန်သာမက ကျောင်းသားအား လင့်ခ်ဖြင့် မည်သို့လုပ်ရန် မျှော်လင့်သည်ကို ဖော်ပြရန်လည်း အသုံးပြုနိုင်သည်။ ဥပမာ Aristotle ဝဘ်ဆိုက်သို့ ညွှန်ပါက ဖော်ပြချက်အကွက်တွင် ကျောင်းသားအား synthesis နှင့် analysis ကွာခြားချက်ကို လေ့လာရန် တောင်းဆိုနိုင်သည်။"
 
 msgid "<p> As soon as you log in to the system, you will be taken to your own main  page. Here you will see the following: <li> <b> My Courses </b> in the centre of the page, lists the courses in which you are enrolled, with an option for you to create new courses (using the button in the right menu) </li> In the header section, <b> My Profile </b> allows you to change your password, upload your photo to the system or change your username, </li> <b> My Calendar </b>: contains the events within the courses for which you are registered, </li> in the right menu: <b> Edit my list of courses </b> allows you to enroll in courses as learner, (provided the trainer/teacher has authorized entry. here you can also unsubscribe from a course, </li> Links <b> Support Forum </b> and <b> Documentation </b> refer you to the main Chamilo site, where you can ask questions or find up to date information about Chamilo. </li> </ ul> To enter a course (left side of the screen), click on its title. Your profile may vary from course to course. It could be that you are a teacher in one course and a learner in another. In courses for which you are responsible, you have access to the editing tools designed for authoring and managing students, while in courses where you learn, you access a more limited range of tools appropriate for undertaking the course.</p> The form  your own main page takes can vary from one platform to another depending on the options enabled by the system administrator. Thus, for example, there may be some cases where you do not have access to course creation even as a teacher, because this particular function is managed by others within your institution. </p>"
 msgstr "<p>စနစ်သို့ ဝင်ရောက်သည်နှင့်၊ သင့်ကိုယ်ပိုင်ပင်မစာမျက်နှာသို့ ပို့ဆောင်ခံရမည်ဖြစ်သည်။ ဤနေရာတွင် အောက်ပါအရာများကို တွေ့မြင်ရမည်- <li> <b>ကျွန်ုပ်၏သင်တန်းများ</b> စာမျက်နှာအလယ်တွင်၊ သင်စာရင်းသွင်းထားသော သင်တန်းများကို စာရင်းပြုစုထားပြီး၊ သင်တန်းအသစ်များဖန်တီးရန် ရွေးချယ်စရာ (ညာဘက်မီနူးရှိ ခလုတ်ကို အသုံးပြု၍) </li> ခေါင်းစီးအပိုင်းတွင်၊ <b>ကျွန်ုပ်၏ပရိုဖိုင်</b> သည် သင့်စကားဝှက်ကို ပြောင်းလဲရန်၊ စနစ်သို့ သင့်ဓာတ်ပုံတင်သွင်းရန် သို့မဟုတ် သင့်အသုံးပြုသူအမည်ကို ပြောင်းလဲရန် ခွင့်ပြုသည်၊ </li> <b>ကျွန်ုပ်၏ပြက္ခဒိန်</b>- သင်မှတ်ပုံတင်ထားသော သင်တန်းများအတွင်းရှိ ဖြစ်ရပ်များပါဝင်သည်၊ </li> ညာဘက်မီနူးတွင်- <b>ကျွန်ုပ်၏သင်တန်းစာရင်းကို တည်းဖြတ်ပါ</b> သည် သင်ယူသူအဖြစ် သင်တန်းများတွင် စာရင်းသွင်းရန် ခွင့်ပြုသည် (သင်တန်းဆရာ/ဆရာမှ ဝင်ရောက်ခွင့်ပြုထားသည်ဆိုပါက၊ ဤနေရာတွင် သင်တန်းတစ်ခုမှ စာရင်းပေးပို့မှုကို ဖျက်သိမ်းနိုင်သည်၊ </li> <b>ထောက်ပံ့ဖိုရမ်</b> နှင့် <b>စာရွက်စာတမ်း</b> လင့်ခ်များသည် Chamilo ၏ ပင်မဆိုဒ်သို့ ညွှန်ပြပြီး၊ ထိုနေရာတွင် သင်မေးခွန်းများမေးမြန်းနိုင်သည် သို့မဟုတ် Chamilo နှင့်ပတ်သက်သော နောက်ဆုံးပေါ်သတင်းအချက်အလက်များကို ရှာဖွေနိုင်သည်။ </li> </ul> သင်တန်းတစ်ခုသို့ ဝင်ရောက်ရန် (မျက်နှာပြင်၏ ဘယ်ဘက်ခြမ်း)၊ ၎င်း၏ခေါင်းစဉ်ကို နှိပ်ပါ။ သင့်ပရိုဖိုင်သည် သင်တန်းတစ်ခုမှ တစ်ခုသို့ ကွဲပြားနိုင်သည်။ သင်သည် သင်တန်းတစ်ခုတွင် ဆရာဖြစ်နိုင်ပြီး အခြားတစ်ခုတွင် သင်ယူသူဖြစ်နိုင်သည်။ သင်တာဝန်ယူထားသော သင်တန်းများတွင်၊ သင်သည် ရေးသားမှုနှင့် ကျောင်းသားများကို စီမံခန့်ခွဲရန် ဒီဇိုင်းထုတ်ထားသော တည်းဖြတ်ရေးကိရိယာများကို ဝင်ရောက်အသုံးပြုနိုင်သည်၊ သင်ယူသည့် သင်တန်းများတွင်မူ၊ သင်တန်းလုပ်ဆောင်ရန် သင့်လျော်သော ကိရိယာများအကန့်အသတ်ဖြင့်သာ ဝင်ရောက်အသုံးပြုနိုင်သည်။</p> သင့်ကိုယ်ပိုင်ပင်မစာမျက်နှာသည် စနစ်စီမံခန့်ခွဲသူမှ ဖွင့်ထားသော ရွေးချယ်စရာများပေါ်မူတည်၍ ပလပ်ဖောင်းတစ်ခုမှ တစ်ခုသို့ ကွဲပြားနိုင်သည်။ ဥပမာ၊ သင်ဆရာဖြစ်နေရင်တောင်၊ ဤသတ်မှတ်ထားသော လုပ်ဆောင်ချက်ကို သင့်အဖွဲ့အစည်းအတွင်းရှိ အခြားသူများမှ စီမံခန့်ခွဲထားသောကြောင့် သင်တန်းဖန်တီးမှုကို ဝင်ရောက်ခွင့်မရှိသည့် ကိစ္စများလည်း ရှိနိုင်သည်။ </p>"
@@ -15307,6 +15316,30 @@ msgstr "ပြီးခဲ့သောအပတ်တွင် အသုံး�
 msgid "System status"
 msgstr "စနစ်အခြေအနေ"
 
+msgid "Courses space"
+msgstr "သင်တန်းများ နေရာ"
+
+msgid "Database server configuration and metadata"
+msgstr "ဒေတာဘေ့စ် ဆာဗာ ပြင်ဆင်မှုနှင့် မက်တာဒေတာ"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "သင်တန်းတစ်ခုချင်းစီ၏ ဒစ်ခ်အသုံးပြုမှုနှင့် ဒစ်ခ်ခွင့်ပြုချက်"
+
+msgid "Information about your webserver configuration"
+msgstr "သင့်ဝဘ်ဆာဗာ ပြင်ဆင်မှုအကြောင်း အချက်အလက်"
+
+msgid "Paths"
+msgstr "လမ်းကြောင်းများ"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo လိုအပ်ချက်များ၏ အခြေအနေ"
+
+msgid "State of PHP settings on the server"
+msgstr "ဆာဗာပေါ်ရှိ PHP ဆက်တင်များ၏ အခြေအနေ"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "ဤပေါ်တယ်တွင် ဖြေရှင်းထားသော api_get_path() ကိန်းသေများ"
+
 msgid "Is writable"
 msgstr "ရေးသားနိုင်သည်"
 
@@ -15626,7 +15659,7 @@ msgid "Details of topics and their respective plan and progress. To indicate a t
 msgstr "အကြောင်းအရာများနှင့် ၎င်းတို့၏ သက်ဆိုင်ရာအစီအစဉ်နှင့် တိုးတက်မှုများ၏ အသေးစိတ်အချက်အလက်များ။ အကြောင်းအရာတစ်ခုကို ပြီးစီးသည်ဟု ညွှန်ပြရန်၊ ရက်စွဲအစဉ်အလာအတိုင်း ၎င်း၏ရက်စွဲကို ရွေးချယ်ပါ၊ ထို့နောက် စနစ်သည် ယခင်ရက်စွဲအားလုံးကို ပြီးစီးသည်ဟု ပြသမည်ဖြစ်သည်။"
 
 msgid "What skills are to be acquired bu the end of this thematic section?"
-msgstr ""
+msgstr "ဤအကြောင်းအရာအပိုင်း အဆုံးတွင် မည်သည့် ကျွမ်းကျင်မှုများ ရရှိရမည်နည်း။"
 
 msgid "Skills to acquire"
 msgstr "ရရှိရမည့် အရည်အချင်းများ"
@@ -15926,7 +15959,7 @@ msgid "Item"
 msgstr "အရာ"
 
 msgid "Items"
-msgstr ""
+msgstr "အချက်များ"
 
 msgid "Configure Dashboard Plugin"
 msgstr "ဒက်ရှ်ဘုတ်ပလပ်အင်ကို ဖွဲ့စည်းပုံပြင်ဆင်ပါ"
@@ -16091,13 +16124,13 @@ msgid "Create child skill"
 msgstr "သားအရည်အချင်းဖန်တီးပါ"
 
 msgid "This skill can be obtained through:"
-msgstr ""
+msgstr "ဤကျွမ်းကျင်မှုကို ရရှိနိုင်သည်မှာ:"
 
 msgid "No course currently allows you to obtain this skill."
-msgstr ""
+msgstr "ဤကျွမ်းကျင်မှု ရရှိရန် လက်ရှိ ခွင့်ပြုသော သင်တန်း မရှိပါ။"
 
 msgid "Add skill to search profile"
-msgstr ""
+msgstr "ရှာဖွေ ပရိုဖိုင်သို့ ကျွမ်းကျင်မှု ထည့်ရန်"
 
 msgid "Search profile matches"
 msgstr "ပရိုဖိုင်ကိုက်ညီမှုများကို ရှာဖွေပါ"
@@ -16208,7 +16241,7 @@ msgid "There are users using this language. Do you want to disable this language
 msgstr "ဤဘာသာစကားကို အသုံးပြုနေသော အသုံးပြုသူများရှိသည်။ ဤဘာသာစကားကို ပိတ်ပြီး ဤအသုံးပြုသူအားလုံးကို မူလပေါ်တယ်ဘာသာစကားဖြင့် သတ်မှတ်လိုပါသလား?"
 
 msgid "Click to show graphics"
-msgstr ""
+msgstr "ဂရပ်ဖစ်များ ပြရန် နှိပ်ပါ"
 
 msgid "Quarterly report"
 msgstr "သုံးလတစ်ကြိမ်အစီရင်ခံစာ"
@@ -16721,7 +16754,7 @@ msgid "This course request can be approved on the following page:"
 msgstr "ဤသင်တန်းတောင်းဆိုမှုကို အောက်ပါစာမျက်နှာတွင် အတည်ပြုနိုင်သည်-"
 
 msgid "The \"Course validation\" feature is not enabled at the moment. In order to use this feature, please, enable it by using the  %s setting."
-msgstr ""
+msgstr "\"Course validation\" လုပ်ဆောင်ချက်ကို လက်ရှိ မဖွင့်ထားပါ။ ဤလုပ်ဆောင်ချက် အသုံးပြုရန် %s ဆက်တင်ဖြင့် ဖွင့်ပါ။"
 
 msgid "The information about this course request is considered protected; it can be used only to open a new course within our e-learning portal; it should not be revealed to third parties."
 msgstr "ဤသင်တန်းတောင်းဆိုမှုအကြောင်း သတင်းအချက်အလက်ကို ကာကွယ်ထားသည်ဟု ယူဆသည်၊ ၎င်းကို ကျွန်ုပ်တို့၏ အီလရန်းနင်းပေါ်တယ်အတွင်း သင်တန်းအသစ်ဖွင့်ရန်သာ အသုံးပြုနိုင်သည်၊ ၎င်းကို တတိယပုဂ္ဂိုလ်များထံ ထုတ်ဖော်မထားသင့်ပါ။"
@@ -17018,7 +17051,7 @@ msgid "Supports up to 100 characters in a wide variety of languages. The files a
 msgstr "ဘာသာစကားအမျိုးမျိုးတွင် စာလုံးရေ ၁၀၀ အထိ ပံ့ပိုးသည်။ ဖိုင်များကို ထုတ်လုပ်ပြီး သင်လက်ရှိရှိနေသည့် Chamilo ဖိုင်တွဲတွင် အလိုအလျောက် သိမ်းဆည်းသည်။"
 
 msgid "Supports text of several thousands characters, you can also select the type of voice, male or female. It works with fewer languages, however, and the audio quality is lower. Finally,  you'll have to download the files manually from a new window."
-msgstr ""
+msgstr "စာလုံး ထောင်ပေါင်းများစွာ ပါသော စာသားကို ပံ့ပိုးသည်၊ အသံအမျိုးအစား အမျိုးသား သို့မဟုတ် အမျိုးသမီး ရွေးနိုင်သည်။ သို့သော် ဘာသာစကား နည်းပါးပြီး အသံအရည်အသွေး နိမ့်သည်။ နောက်ဆုံးတွင် ဖိုင်များကို ဝင်းဒိုးအသစ်မှ လက်ဖြင့် ဒေါင်းလုဒ်လုပ်ရမည်။"
 
 msgid "Save mp3"
 msgstr "mp3 သိမ်းဆည်းပါ"
@@ -17183,16 +17216,16 @@ msgid "Courses in group"
 msgstr "အုပ်စုထဲရှိ သင်တန်းများ"
 
 msgid "Courses on the platform"
-msgstr ""
+msgstr "ပလက်ဖောင်းပေါ်ရှိ သင်တန်းများ"
 
 msgid "%s courses"
-msgstr ""
+msgstr "သင်တန်း %s ခု"
 
 msgid "%s sessions"
-msgstr ""
+msgstr "ဆက်ရှင် %s ခု"
 
 msgid "Search by title or code"
-msgstr ""
+msgstr "ခေါင်းစဉ် သို့မဟုတ် ကုဒ်ဖြင့် ရှာဖွေရန်"
 
 msgid "Users in group"
 msgstr "အုပ်စုထဲရှိ အသုံးပြုသူများ"
@@ -17597,7 +17630,7 @@ msgid "There was a problem uploading your document: the received file had a 0 by
 msgstr "သင့်စာရွက်စာတမ်းကို တင်သွင်းရာတွင် ပြဿနာရှိခဲ့သည်- ဆာဗာပေါ်တွင် လက်ခံရရှိသော ဖိုင်သည် ၀ ဘိုက်အရွယ်အစားရှိသည်။ ကျေးဇူးပြု၍ သင့်ဒေသတွင်းဖိုင်ကို ပျက်စီးမှု သို့မဟုတ် ထိခိုက်မှုရှိမရှိ စစ်ဆေးပြီး ထပ်မံကြိုးစားပါ။"
 
 msgid "You have to  choose a relation type"
-msgstr ""
+msgstr "ဆက်စပ်မှုအမျိုးအစားတစ်ခုကို ရွေးချယ်ရပါမည်"
 
 msgid "Relation type selection"
 msgstr "ဆက်နွယ်မှုအမျိုးအစားရွေးချယ်မှု"
@@ -19049,7 +19082,7 @@ msgid "Show to admins and teachers"
 msgstr "စီမံခန့်ခွဲသူများနှင့် ဆရာများသို့ ပြသပါ"
 
 msgid "Show to all  users"
-msgstr ""
+msgstr "အသုံးပြုသူအားလုံးကို ပြသရန်"
 
 msgid "Import glossary"
 msgstr "အဘိဓာန်ကို တင်သွင်းပါ"
@@ -20673,6 +20706,9 @@ msgstr "အရည်အချင်းဘီးတွင်၊ ၎င်းသ�
 
 msgid "Created by"
 msgstr "ဖန်တီးသူ"
+
+msgid "Created by %s on %s"
+msgstr "%s က %s တွင် ဖန်တီးခဲ့သည်"
 
 msgid "Hide general coach in dropbox"
 msgstr "ဒရော့ဘောက်စ်တွင် အထွေထွေနည်းပြဆရာကို ဖုံးကွယ်ပါ"
@@ -31876,6 +31912,9 @@ msgstr "%s သို့ တစ်စုံတစ်ရာ ရေးပါ"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "အကြံပြုချက်။ SVG။ PNG အကြံပြုချက် အကျယ်အဝန်း။ %spx။"
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG အကြံပြုအကျယ်: %spx။"
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "အီးမေးလ်များအတွက် PNG လိုဂို တင်ပါ (~%spx အကျယ်အဝန်း)"
 
@@ -31911,6 +31950,9 @@ msgstr "ထည့်ရန် နှိပ်ပါ"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "ကြိုက်တာ: SVG။ PNG အများဆုံး အရွယ်အစား: %spx။"
+
+msgid "PNG max size: %spx."
+msgstr "PNG အများဆုံးအရွယ်အစား: %spx။"
 
 msgid "View badge"
 msgstr "မှတ်ပုံကြည့်ရန်"
@@ -35495,7 +35537,7 @@ msgid "%s results"
 msgstr "%s ရလဒ်များ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ဖောင်ဖြည့် လှုပ်ရှားမှု နမူနာ : ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း တွက်ချက်ရန်</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ဝီကီပီးဒီးယား ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "ဖယ်ရှားပြီး"
@@ -37700,10 +37742,10 @@ msgid "Do you want to continue your session?"
 msgstr "သင့်အစည်းအဝေးကို ဆက်လက်လုပ်ဆောင်လိုပါသလား။"
 
 msgid "Your session details have been lost, please login again."
-msgstr ""
+msgstr "သင့်ဆက်ရှင်အသေးစိတ်များ ပျောက်ဆုံးသွားပါပြီ၊ ထပ်မံ ဝင်ရောက်ပါ။"
 
 msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
-msgstr ""
+msgstr "ဤအရင်းအမြစ်ကို ဝင်ရောက်ခွင့် ငြင်းပယ်ထားသည်။ လိုအပ်သော ခွင့်ပြုချက်များ မရှိဟု ထင်ရသည်။"
 
 msgid "Stay connected"
 msgstr "ဆက်သွယ်နေပါ"
@@ -38062,6 +38104,9 @@ msgstr "အဆုံးသတ်နေသည်"
 msgid "Draft saved"
 msgstr "မူကြမ်း သိမ်းဆည်းပြီးပါပြီ"
 
+msgid "Save as draft"
+msgstr "မူကြမ်းအဖြစ် သိမ်းရန်"
+
 msgid "Statement"
 msgstr "ထုတ်ပြန်ချက်"
 
@@ -38369,154 +38414,154 @@ msgid "Could not load categories"
 msgstr "အမျိုးအစားများကို တင်မရပါ"
 
 msgid "Imported categories: %s. Skipped rows: %s."
-msgstr "Imported categories: %s. Skipped rows: %s."
+msgstr "တင်သွင်းထားသော အမျိုးအစားများ: %s။ ကျော်သွားသော အတန်းများ: %s။"
 
 msgid "Imported categories: %s."
-msgstr "Imported categories: %s."
+msgstr "တင်သွင်းထားသော အမျိုးအစားများ: %s။"
 
 msgid "Could not import categories"
-msgstr "Could not import categories"
+msgstr "အမျိုးအစားများကို တင်သွင်း၍ မရပါ"
 
 msgid "Could not save category"
-msgstr "Could not save category"
+msgstr "အမျိုးအစားကို သိမ်း၍ မရပါ"
 
 msgid "Answer distribution"
-msgstr "Answer distribution"
+msgstr "အဖြေ ဖြန့်ဝေမှု"
 
 msgid "Configured answers"
-msgstr "Configured answers"
+msgstr "ပြင်ဆင်ထားသော အဖြေများ"
 
 msgid "Detailed answer counting for some question types is not available in the migrated report yet."
-msgstr "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "မေးခွန်းအမျိုးအစားအချို့အတွက် အသေးစိတ် အဖြေရေတွက်မှုကို ရွှေ့ပြောင်းထားသော အစီရင်ခံစာတွင် မရရှိသေးပါ။"
 
 msgid "No report by question data found"
-msgstr "No report by question data found"
+msgstr "မေးခွန်းအလိုက် အစီရင်ခံစာ ဒေတာ မတွေ့ပါ"
 
 msgid "Detailed answer counting for this question type is not available in the migrated report yet."
-msgstr "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "ဤမေးခွန်းအမျိုးအစားအတွက် အသေးစိတ် အဖြေရေတွက်မှုကို ရွှေ့ပြောင်းထားသော အစီရင်ခံစာတွင် မရရှိသေးပါ။"
 
 msgid "No answer distribution found"
-msgstr "No answer distribution found"
+msgstr "အဖြေ ဖြန့်ဝေမှု မတွေ့ပါ"
 
 msgid "Could not load report by question"
-msgstr "Could not load report by question"
+msgstr "မေးခွန်းအလိုက် အစီရင်ခံစာကို ဖွင့်၍ မရပါ"
 
 msgid "Question settings"
-msgstr "Question settings"
+msgstr "မေးခွန်း ဆက်တင်များ"
 
 msgid "Leave empty or 0 for no time limit."
-msgstr "Leave empty or 0 for no time limit."
+msgstr "အချိန်ကန့်သတ်မထားလိုပါက ဗလာ သို့မဟုတ် 0 ထားပါ။"
 
 msgid "Time limit in seconds"
-msgstr "Time limit in seconds"
+msgstr "အချိန်ကန့်သတ်ချက် (စက္ကန့်)"
 
 msgid "Attached questions"
-msgstr "Attached questions"
+msgstr "ချိတ်ထားသော မေးခွန်းများ"
 
 msgid "Only questions attached to this media question inside the current exercise are listed here."
-msgstr "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "လက်ရှိ လေ့ကျင့်ခန်းအတွင်း ဤမီဒီယာမေးခွန်းနှင့် ချိတ်ထားသော မေးခွန်းများသာ ဤနေရာတွင် ဖော်ပြသည်။"
 
 msgid "No questions are attached to this media question in the current exercise."
-msgstr "No questions are attached to this media question in the current exercise."
+msgstr "လက်ရှိ လေ့ကျင့်ခန်းတွင် ဤမီဒီယာမေးခွန်းနှင့် ချိတ်ထားသော မေးခွန်း မရှိပါ။"
 
 msgid "Upload the Office document template that learners will edit with OnlyOffice."
-msgstr "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "သင်ယူသူများ OnlyOffice ဖြင့် တည်းဖြတ်မည့် Office စာရွက်စာတမ်း ပုံစံကို တင်ပါ။"
 
 msgid "Replace Office document"
-msgstr "Replace Office document"
+msgstr "Office စာရွက်စာတမ်း အစားထိုးရန်"
 
 msgid "Current Office document"
-msgstr "Current Office document"
+msgstr "လက်ရှိ Office စာရွက်စာတမ်း"
 
 msgid "This question is corrected manually after the learner submits the edited document."
-msgstr "This question is corrected manually after the learner submits the edited document."
+msgstr "သင်ယူသူက တည်းဖြတ်ထားသော စာရွက်စာတမ်း တင်သွင်းပြီးနောက် ဤမေးခွန်းကို လက်ဖြင့် မှတ်ပေးသည်။"
 
 msgid "Total score is calculated as the sum of hotspot scores."
-msgstr "Total score is calculated as the sum of hotspot scores."
+msgstr "စုစုပေါင်း ရမှတ်ကို ဟော့စပေါ့ ရမှတ်များ ပေါင်းလဒ်အဖြစ် တွက်သည်။"
 
 msgid "Global score"
-msgstr "Global score"
+msgstr "စုစုပေါင်း ရမှတ်"
 
 msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
-msgstr "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "ဟော့စပေါ့ အတန်းတစ်ခု ရွေးပါ၊ ပုံသဏ္ဌာန် ရွေးပါ၊ ထို့နောက် ပုံပေါ်တွင် ဆွဲပါ။ ဗဟုဂံများအတွက် အမှတ်တစ်ခုချင်း နှိပ်ပြီး ဗဟုဂံပြီးအောင် လုပ်ပါ၊ သို့မဟုတ် နှစ်ချက်နှိပ်၍ ပြီးပါ။"
 
 msgid "Finish polygon"
-msgstr "Finish polygon"
+msgstr "ဗဟုဂံ ပြီးဆုံးရန်"
 
 msgid "Calculated answer"
-msgstr "Calculated answer"
+msgstr "တွက်ချက်ထားသော အဖြေ"
 
 msgid "Please type your text below and use square brackets [...] to define one or more blanks."
-msgstr "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "အောက်တွင် စာသားရိုက်ပြီး ကွက်လပ်တစ်ခု သို့မဟုတ် အများအပြား သတ်မှတ်ရန် စတုရန်းကွင်း [...] ကို အသုံးပြုပါ။"
 
 msgid "Lowest value"
-msgstr "Lowest value"
+msgstr "အနိမ့်ဆုံး တန်ဖိုး"
 
 msgid "Highest value"
-msgstr "Highest value"
+msgstr "အမြင့်ဆုံး တန်ဖိုး"
 
 msgid "Fill in blanks"
-msgstr "Fill in blanks"
+msgstr "ကွက်လပ်ဖြည့်ရန်"
 
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
-msgstr "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "ကွက်လပ်များ သတ်မှတ်ရန် ရွေးထားသော အမှတ်အသားများကို အသုံးပြုပါ။ ဥပမာ: ပီရူး၏ မြို့တော်မှာ [Lima] ဖြစ်သည်။"
 
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
-msgstr "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "ဆွဲချ ရွေးစရာများကို တစ်ကြောင်းလျှင် အဖြေတစ်ခု ထည့်ပါ။ ထို့နောက် အောက်တွင် မျှော်မှန်းအဖြေများကို အမှတ်အသားပြုပါ၊ အဟောင်းကိရိယာကဲ့သို့။"
 
 msgid "Refresh answers"
-msgstr "Refresh answers"
+msgstr "အဖြေများ ပြန်လည်ဖွင့်ရန်"
 
 msgid "This dropdown combination question uses one global score, like legacy."
-msgstr "This dropdown combination question uses one global score, like legacy."
+msgstr "ဤဆွဲချ ပေါင်းစပ်မေးခွန်းသည် အဟောင်းကဲ့သို့ စုစုပေါင်း ရမှတ်တစ်ခုသာ သုံးသည်။"
 
 msgid "Please enter at least two dropdown options."
-msgstr "Please enter at least two dropdown options."
+msgstr "ကျေးဇူးပြု၍ ဆွဲချရွေးချယ်စရာ အနည်းဆုံး နှစ်ခု ထည့်ပါ။"
 
 msgid "Create destination options first, then link each item to the correct option."
-msgstr "Create destination options first, then link each item to the correct option."
+msgstr "ဦးစွာ ဦးတည်ရာ ရွေးချယ်စရာများကို ဖန်တီးပြီးနောက် အကြောင်းအရာတစ်ခုချင်းစီကို မှန်ကန်သော ရွေးချယ်စရာနှင့် ချိတ်ဆက်ပါ။"
 
 msgid "This matching combination question uses one global score, like legacy."
-msgstr "This matching combination question uses one global score, like legacy."
+msgstr "ဤ တွဲဖက်ပေါင်းစပ် မေးခွန်းသည် အမွေအနှစ်ကဲ့သို့ ကမ္ဘာလုံးဆိုင်ရာ ရမှတ်တစ်ခုကို အသုံးပြုသည်။"
 
 msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
-msgstr "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "အဆင့်များကို ဖန်တီးပြီး တစ်ခုချင်းစီအတွက် မျှော်မှန်းထားသော တည်နေရာကို ရွေးချယ်ပါ၊ အမွေအနှစ် Draggable ကဲ့သို့။"
 
 msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
-msgstr "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "သင်ယူသူများသည် ကြိုးစားစဉ်အတွင်း မှန်/မှား ရွေးပြီးနောက် ၎င်းတို့၏ သေချာမှုအဆင့်ကို ရွေးချယ်မည်။ တည်းဖြတ်သူသည် အမွေအနှစ်ကဲ့သို့ တူညီသော မှန်/မှား ရမှတ်များနှင့် သေချာမှုအဆင့်များကို သိမ်းဆည်းသည်။"
 
 msgid "Hotspot combination"
-msgstr "Hotspot combination"
+msgstr "ဟော့စပေါ့ ပေါင်းစပ်မှု"
 
 msgid "Add delineation"
-msgstr "Add delineation"
+msgstr "ပုံသဏ္ဌာန် ပိုင်းခြားမှု ထည့်ပါ"
 
 msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
-msgstr "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "ဤ Office စာရွက်စာတမ်း မေးခွန်းတွင် အဖြေရွေးချယ်စရာ မရှိပါ။ ၎င်း၏ ရမှတ်ကို ပြင်ဆင်ခြင်း/ရလဒ် ပြန်လည်သုံးသပ်စဉ် သတ်မှတ်သည်။"
 
 msgid "This upload question has no answer options. Its score is assigned during correction/results review."
-msgstr ""
+msgstr "ဤ အပ်လုဒ် မေးခွန်းတွင် အဖြေရွေးချယ်စရာ မရှိပါ။ ၎င်း၏ ရမှတ်ကို ပြင်ဆင်ခြင်း/ရလဒ် ပြန်လည်သုံးသပ်စဉ် သတ်မှတ်သည်။"
 
 msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
-msgstr ""
+msgstr "ဤ နှုတ်ဖြင့် ဖော်ပြချက် မေးခွန်းတွင် အဖြေရွေးချယ်စရာ မရှိပါ။ ၎င်း၏ ရမှတ်ကို ပြင်ဆင်ခြင်း/ရလဒ် ပြန်လည်သုံးသပ်စဉ် သတ်မှတ်သည်။"
 
 msgid "This open question has no answer options. Its score is assigned during correction/results review."
-msgstr ""
+msgstr "ဤ ပွင့်လင်း မေးခွန်းတွင် အဖြေရွေးချယ်စရာ မရှိပါ။ ၎င်း၏ ရမှတ်ကို ပြင်ဆင်ခြင်း/ရလဒ် ပြန်လည်သုံးသပ်စဉ် သတ်မှတ်သည်။"
 
 msgid "Add a reading text with scrolling speed settings."
-msgstr ""
+msgstr "လှိမ့်နှုန်း ဆက်တင်များပါသော ဖတ်ရှုစာသား ထည့်ပါ။"
 
 msgid "Add content, media or reading context without adding score."
-msgstr ""
+msgstr "ရမှတ် မထည့်ဘဲ အကြောင်းအရာ၊ မီဒီယာ သို့မဟုတ် ဖတ်ရှုအကြောင်းအရာ ထည့်ပါ။"
 
 msgid "Insert a page break without adding score."
-msgstr ""
+msgstr "ရမှတ် မထည့်ဘဲ စာမျက်နှာခွဲ ထည့်ပါ။"
 
 msgid "Could not save question"
-msgstr ""
+msgstr "မေးခွန်းကို သိမ်းဆည်း၍ မရပါ"
 
 msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
-msgstr ""
+msgstr "DOC, DOCX, XLS သို့မဟုတ် XLSX စာရွက်စာတမ်းများသာ ခွင့်ပြုသည်။"
 
 msgid "Please select an Office document."
 msgstr "ရုံးသုံးစာရွက်စာတမ်းတစ်ခုကို ရွေးချယ်ပါ။"
@@ -38642,7 +38687,7 @@ msgid "Could not copy the MCP endpoint"
 msgstr "MCP endpoint ကို ကူးယူမရနိုင်ပါ"
 
 msgid "MCP endpoint"
-msgstr "MCP endpoint"
+msgstr "MCP အဆုံးမှတ်"
 
 msgid "API key"
 msgstr "API သော့"
@@ -38669,127 +38714,127 @@ msgid "The current key will stop working immediately. Continue?"
 msgstr "လက်ရှိသော့သည် ချက်ချင်း အလုပ်လုပ်တော့မည် မဟုတ်ပါ။ ဆက်လက်လုပ်ဆောင်မည်လား။"
 
 msgid "A new personal MCP API key will be generated. Continue?"
-msgstr ""
+msgstr "ကိုယ်ပိုင် MCP API သော့အသစ်ကို ထုတ်ပေးမည်။ ဆက်လုပ်မလား။"
 
 msgid "MCP API key generated"
-msgstr ""
+msgstr "MCP API သော့ ထုတ်ပေးပြီး"
 
 msgid "Connected MCP clients using this key will stop working immediately. Continue?"
-msgstr ""
+msgstr "ဤသော့ကို အသုံးပြုနေသော ချိတ်ဆက်ထားသည့် MCP ဖောက်သည်များသည် ချက်ချင်း ရပ်တန့်သွားမည်။ ဆက်လုပ်မလား။"
 
 msgid "MCP API key revoked"
-msgstr ""
+msgstr "MCP API သော့ ပယ်ဖျက်ပြီး"
 
 msgid "Could not copy the API key"
-msgstr ""
+msgstr "API သော့ကို ကူးယူ၍ မရပါ"
 
 msgid "Project"
-msgstr ""
+msgstr "ပရောဂျက်"
 
 msgid "Close old tickets"
-msgstr ""
+msgstr "ဟောင်းသော လက်မှတ်များကို ပိတ်ပါ"
 
 msgid "Close tickets older than seven days?"
-msgstr ""
+msgstr "ခုနစ်ရက်ထက် ဟောင်းသော လက်မှတ်များကို ပိတ်မလား။"
 
 msgid "Assignment history"
-msgstr ""
+msgstr "တာဝန်ပေးမှု မှတ်တမ်း"
 
 msgid "Translate with AI"
-msgstr ""
+msgstr "AI ဖြင့် ဘာသာပြန်ပါ"
 
 msgid "Target language"
-msgstr ""
+msgstr "ပစ်မှတ် ဘာသာစကား"
 
 msgid "Please select a provider"
-msgstr ""
+msgstr "ကျေးဇူးပြု၍ ပံ့ပိုးသူတစ်ဦး ရွေးချယ်ပါ"
 
 msgid "Generate translation"
-msgstr ""
+msgstr "ဘာသာပြန်ချက် ထုတ်လုပ်ပါ"
 
 msgid "At least one terms and conditions section must contain text."
-msgstr ""
+msgstr "စည်းကမ်းနှင့် သတ်မှတ်ချက် အပိုင်း အနည်းဆုံး တစ်ခုတွင် စာသား ပါရှိရမည်။"
 
 msgid "No active target languages are available."
-msgstr ""
+msgstr "အသက်ဝင်သော ပစ်မှတ် ဘာသာစကားများ မရှိပါ။"
 
 msgid "Tutor"
-msgstr ""
+msgstr "နည်းပြ"
 
 msgid "Access dates"
-msgstr ""
+msgstr "ဝင်ရောက်ခွင့် ရက်စွဲများ"
 
 msgid "Coach access dates"
-msgstr ""
+msgstr "နည်းပြ ဝင်ရောက်ခွင့် ရက်စွဲများ"
 
 msgid "No sessions found"
-msgstr ""
+msgstr "သင်တန်းကာလများ မတွေ့ပါ"
 
 msgid "Select the courses that this user must not be able to access in this session."
-msgstr ""
+msgstr "ဤသင်တန်းကာလတွင် ဤအသုံးပြုသူ ဝင်ရောက်ခွင့် မရသင့်သော သင်တန်းများကို ရွေးချယ်ပါ။"
 
 msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
-msgstr ""
+msgstr "အသုံးပြုသူကို သင်တန်းကာလရှိ သင်တန်းအားလုံးမှ ပိတ်ပင်၍ မရပါ။ အသုံးပြုသူကို စာရင်းမှ ဖြုတ်ပါ။"
 
 msgid "Users subscribed to this session"
-msgstr ""
+msgstr "ဤသင်တန်းကာလသို့ စာရင်းသွင်းထားသော အသုံးပြုသူများ"
 
 msgid "No available users found"
-msgstr ""
+msgstr "ရရှိနိုင်သော အသုံးပြုသူများ မတွေ့ပါ"
 
 msgid "Subscribe this user to the session?"
-msgstr ""
+msgstr "ဤအသုံးပြုသူကို သင်တန်းကာလသို့ စာရင်းသွင်းမလား။"
 
 msgid "Subscribe the selected users to the session?"
-msgstr ""
+msgstr "ရွေးချယ်ထားသော အသုံးပြုသူများကို သင်တန်းကာလသို့ စာရင်းသွင်းမလား။"
 
 msgid "General tutor planning"
-msgstr ""
+msgstr "အထွေထွေ နည်းပြ စီမံကိန်း"
 
 msgid "User is already registered by another tutor."
-msgstr ""
+msgstr "အသုံးပြုသူကို အခြားနည်းပြက စာရင်းသွင်းပြီးသားဖြစ်သည်။"
 
 msgid "You're receiving a copy because you're a course tutor"
-msgstr ""
+msgstr "သင်သည် သင်တန်းနည်းပြဖြစ်သောကြောင့် မိတ္တူတစ်စောင် ရရှိနေသည်"
 
 msgid "General tutor"
-msgstr ""
+msgstr "အထွေထွေ နည်းပြ"
 
 msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
-msgstr ""
+msgstr "ရရှိနိုင်သော သင်တန်းများ၊ နည်းပြများ၊ နည်းပညာ အကူအညီဌာန၊ ဆရာများနှင့်/သို့မဟုတ် ပစ္စည်းများကို ထည့်သွင်းစဉ်းစားပါ။"
 
 msgid "Tutors subscribed as teachers in course %s"
-msgstr ""
+msgstr "သင်တန်း %s တွင် ဆရာအဖြစ် စာရင်းသွင်းထားသော နည်းပြများ"
 
 msgid "Tutor name"
-msgstr ""
+msgstr "နည်းပြအမည်"
 
 msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
-msgstr ""
+msgstr "သင်တန်းကာလ နည်းပြများသည် သင်တန်းကာလအတွက် ညှိနှိုင်းသူများဖြစ်ပြီး သင်တန်းကာလရှိ သင်တန်းတစ်ခုချင်းစီအတွက် နည်းပြအဖြစ် ဆောင်ရွက်နိုင်သည်။ ဆရာအခန်းကဏ္ဍရှိ အသုံးပြုသူများကိုသာ သင်တန်းကာလ နည်းပြအဖြစ် ရွေးချယ်နိုင်သည်။"
 
 msgid "Access start date for tutors"
-msgstr ""
+msgstr "ဆရာများအတွက် ဝင်ရောက်ခွင့် စတင်ရက်စွဲ"
 
 msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
-msgstr ""
+msgstr "ကျောင်းသားများ မချိတ်ဆက်မီ ဆရာများ ပြင်ဆင်နိုင်ရန် စက်ရှင်ကို ဆရာများအား ရရှိစေသည့် ရက်စွဲ"
 
 msgid "Access end date for tutors"
-msgstr ""
+msgstr "ဆရာများအတွက် ဝင်ရောက်ခွင့် ပြီးဆုံးရက်စွဲ"
 
 msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
-msgstr ""
+msgstr "ဆရာများအတွက် စက်ရှင် ပိတ်သည့် ရက်စွဲ။ ထပ်ဆောင်း နှောင့်နှေးချိန်က သက်ဆိုင်ရာ ခြေရာခံ အချက်အလက်အားလုံးကို တင်ပို့နိုင်စေသည်"
 
 msgid "Tutor and student"
-msgstr ""
+msgstr "ဆရာနှင့် ကျောင်းသား"
 
 msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
-msgstr ""
+msgstr "ဤအစီရင်ခံစာသည် ရွေးချယ်ထားသော ရက်စွဲအပိုင်းအခြားအတွင်း အထွေထွေဆရာတစ်ဦးချင်းစီ၏ စက်ရှင်များ အပတ်စဉ် ဖြန့်ဝေမှုကို ပြသသည်။"
 
 msgid "User is general tutor in some sessions"
-msgstr ""
+msgstr "အသုံးပြုသူသည် စက်ရှင်အချို့တွင် အထွေထွေဆရာဖြစ်သည်"
 
 msgid "Teachers will be added as tutors in all course sessions."
-msgstr ""
+msgstr "ဆရာများကို သင်တန်းစက်ရှင်အားလုံးတွင် ဆရာများအဖြစ် ထည့်သွင်းမည်။"
 
 msgid "Delete failed: invalid question id."
 msgstr "ဖျက်ရန် မအောင်မြင်ပါ။ မေးခွန်း ID မမှန်ပါ။"
@@ -39173,298 +39218,298 @@ msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /ser
 msgstr "Apache: mod_status ကို ဖွင့်ပါ (ExtendedStatus On) နှင့် localhost ကို /server-status သို့ ခွင့်ပြုပါ။ Nginx: stub_status ကို localhost တွင်သာ တည်နေရာတစ်ခုဖြစ်သော /nginx_status သို့မဟုတ် /stub_status တွင် ဖွင့်ပါ။"
 
 msgid "Grade percentage distribution"
-msgstr ""
+msgstr "အဆင့် ရာခိုင်နှုန်း ဖြန့်ဝေမှု"
 
 msgid "Top learners"
-msgstr ""
+msgstr "ထိပ်တန်း သင်ယူသူများ"
 
 msgid "This progress combines learning path progress and the learner's average exercise result"
-msgstr ""
+msgstr "ဤတိုးတက်မှုသည် သင်ယူမှုလမ်းကြောင်း တိုးတက်မှုနှင့် သင်ယူသူ၏ ပျမ်းမျှ လေ့ကျင့်ခန်း ရလဒ်ကို ပေါင်းစပ်ထားသည်"
 
 msgid "Additional profile fields"
-msgstr ""
+msgstr "ထပ်ဆောင်း ပရိုဖိုင် အကွက်များ"
 
 msgid "Visible columns"
-msgstr ""
+msgstr "မြင်နိုင်သော ကော်လံများ"
 
 msgid "Learning path completion"
-msgstr ""
+msgstr "သင်ယူမှုလမ်းကြောင်း ပြီးစီးမှု"
 
 msgid "Number of certificates"
-msgstr ""
+msgstr "လက်မှတ် အရေအတွက်"
 
 msgid "Could not export the report"
-msgstr ""
+msgstr "အစီရင်ခံစာကို တင်ပို့၍ မရပါ"
 
 msgid "Second learner"
-msgstr ""
+msgstr "ဒုတိယ သင်ယူသူ"
 
 msgid "Results by learner"
-msgstr ""
+msgstr "သင်ယူသူအလိုက် ရလဒ်များ"
 
 msgid "Use filters to narrow down questions."
-msgstr ""
+msgstr "မေးခွန်းများကို ကျဉ်းမြောင်းစေရန် စစ်ထုတ်မှုများ အသုံးပြုပါ။"
 
 msgid "Try adjusting your filters and search again."
-msgstr ""
+msgstr "စစ်ထုတ်မှုများကို ချိန်ညှိပြီး ထပ်မံ ရှာဖွေကြည့်ပါ။"
 
 msgid "Results per page"
-msgstr ""
+msgstr "တစ်မျက်နှာလျှင် ရလဒ်များ"
 
 msgid "No answers"
-msgstr ""
+msgstr "အဖြေများ မရှိပါ"
 
 msgid "Tests using this question"
-msgstr ""
+msgstr "ဤမေးခွန်းကို အသုံးပြုသော စမ်းသပ်မှုများ"
 
 msgid "Delete failed"
-msgstr ""
+msgstr "ဖျက်ခြင်း မအောင်မြင်ပါ"
 
 msgid "PHP cache"
-msgstr ""
+msgstr "PHP ကက်ရှ်"
 
 msgid "Live OPcache and APCu diagnostics"
-msgstr ""
+msgstr "တိုက်ရိုက် OPcache နှင့် APCu ရောဂါရှာဖွေမှုများ"
 
 msgid "Click to show OPcache and APCu diagnostics"
-msgstr ""
+msgstr "OPcache နှင့် APCu ရောဂါရှာဖွေမှုများ ပြရန် နှိပ်ပါ"
 
 msgid "Memory used"
-msgstr ""
+msgstr "အသုံးပြုထားသော မှတ်ဉာဏ်"
 
 msgid "OPcache is installed but not enabled."
-msgstr ""
+msgstr "OPcache တပ်ဆင်ထားသော်လည်း ဖွင့်မထားပါ။"
 
 msgid "OPcache extension is not available on this server."
-msgstr ""
+msgstr "ဤဆာဗာတွင် OPcache တိုးချဲ့မှု မရရှိနိုင်ပါ။"
 
 msgid "APCu is installed but not enabled."
-msgstr ""
+msgstr "APCu တပ်ဆင်ထားသော်လည်း ဖွင့်မထားပါ။"
 
 msgid "APCu extension is not available on this server."
-msgstr ""
+msgstr "ဤဆာဗာတွင် APCu တိုးချဲ့မှု မရရှိနိုင်ပါ။"
 
 msgid "Constant"
-msgstr ""
+msgstr "ကိန်းသေ"
 
 msgid "Space used on disk (MB)"
-msgstr ""
+msgstr "ဒစ်ခ်ပေါ် အသုံးပြုထားသော နေရာ (MB)"
 
 msgid "Set max course space (MB)"
-msgstr ""
+msgstr "အများဆုံး သင်တန်းနေရာ သတ်မှတ်ရန် (MB)"
 
 msgid "Memory free"
-msgstr ""
+msgstr "လွတ်နေသော မှတ်ဉာဏ်"
 
 msgid "Memory wasted"
-msgstr ""
+msgstr "ဖြုန်းတီးသော မှတ်ဉာဏ်"
 
 msgid "Memory used %"
-msgstr ""
+msgstr "အသုံးပြုထားသော မှတ်ဉာဏ် %"
 
 msgid "Cached scripts"
-msgstr ""
+msgstr "ကက်ရှ်လုပ်ထားသော စခရစ်များ"
 
 msgid "Cached keys"
-msgstr ""
+msgstr "ကက်ရှ်လုပ်ထားသော သော့များ"
 
 msgid "Misses"
-msgstr ""
+msgstr "လွဲချော်မှုများ"
 
 msgid "Cache full"
-msgstr ""
+msgstr "ကက်ရှ် ပြည့်နေသည်"
 
 msgid "OOM restarts"
-msgstr ""
+msgstr "OOM ပြန်စတင်မှုများ"
 
 msgid "Hash restarts"
-msgstr ""
+msgstr "ဟက်ရှ် ပြန်စတင်မှုများ"
 
 msgid "Manual restarts"
-msgstr ""
+msgstr "လက်ဖြင့် ပြန်စတင်မှုများ"
 
 msgid "Interned strings used"
-msgstr ""
+msgstr "အသုံးပြုထားသော interned စာကြောင်းများ"
 
 msgid "Interned strings free"
-msgstr ""
+msgstr "လွတ်နေသော interned စာကြောင်းများ"
 
 msgid "Interned strings count"
-msgstr ""
+msgstr "interned စာကြောင်း အရေအတွက်"
 
 msgid "Memory available"
-msgstr ""
+msgstr "ရရှိနိုင်သော မှတ်ဉာဏ်"
 
 msgid "Memory size"
-msgstr ""
+msgstr "မှတ်ဉာဏ် အရွယ်အစား"
 
 msgid "Entries"
-msgstr ""
+msgstr "ထည့်သွင်းချက်များ"
 
 msgid "Slots"
-msgstr ""
+msgstr "အကွက်များ"
 
 msgid "Expunges"
-msgstr ""
+msgstr "ဖယ်ရှားမှုများ"
 
 msgid "Cache start time"
-msgstr ""
+msgstr "ကက်ရှ် စတင်ချိန်"
 
 msgid "Time zone"
-msgstr ""
+msgstr "အချိန်ဇုန်"
 
 msgid "Not registered"
-msgstr ""
+msgstr "မှတ်ပုံတင်မထားပါ"
 
 msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
-msgstr ""
+msgstr "ဆက်ရှင်၊ သင်တန်း၊ ရက်စွဲ သို့မဟုတ် သင်ယူသူအလိုက် သင်ယူသူလက်မှတ်များကို စစ်ထုတ်၍ စာရင်းပြပြီး လိုအပ်သည့်အခါ တင်ပို့ပါ။"
 
 msgid "Filter by session and course"
-msgstr ""
+msgstr "ဆက်ရှင်နှင့် သင်တန်းအလိုက် စစ်ထုတ်ရန်"
 
 msgid "Choose a session, course and optional date to list the generated certificates."
-msgstr ""
+msgstr "ထုတ်ပေးပြီးသော လက်မှတ်များကို စာရင်းပြရန် ဆက်ရှင်၊ သင်တန်းနှင့် ရွေးချယ်နိုင်သော ရက်စွဲကို ရွေးပါ။"
 
 msgid "Filter by learner"
-msgstr ""
+msgstr "သင်ယူသူအလိုက် စစ်ထုတ်ရန်"
 
 msgid "Find certificates for a specific learner across sessions and courses."
-msgstr ""
+msgstr "ဆက်ရှင်များနှင့် သင်တန်းများတစ်လျှောက် သတ်မှတ်သင်ယူသူအတွက် လက်မှတ်များကို ရှာပါ။"
 
 msgid "Certificates found"
-msgstr ""
+msgstr "တွေ့ရှိသော လက်မှတ်များ"
 
 msgid "Open certificate"
-msgstr ""
+msgstr "လက်မှတ်ဖွင့်ရန်"
 
 msgid "Certificate file not available"
-msgstr ""
+msgstr "လက်မှတ်ဖိုင် မရရှိနိုင်ပါ"
 
 msgid "Export to CSV"
-msgstr ""
+msgstr "CSV သို့ တင်ပို့ရန်"
 
 msgid "Acquired skills"
-msgstr ""
+msgstr "ရရှိထားသော ကျွမ်းကျင်မှုများ"
 
 msgid "No acquired skill"
-msgstr ""
+msgstr "ရရှိထားသော ကျွမ်းကျင်မှု မရှိပါ"
 
 msgid "Absences"
-msgstr ""
+msgstr "ပျက်ကွက်မှုများ"
 
 msgid "No courses"
-msgstr ""
+msgstr "သင်တန်းမရှိပါ"
 
 msgid "No session matched"
-msgstr ""
+msgstr "ကိုက်ညီသော ဆက်ရှင် မရှိပါ"
 
 msgid "Unable to load the report"
-msgstr ""
+msgstr "အစီရင်ခံစာကို ဖွင့်၍မရပါ"
 
 msgid "Please select a profile"
-msgstr ""
+msgstr "ပရိုဖိုင်တစ်ခု ရွေးပါ"
 
 msgid "Please select a session"
-msgstr ""
+msgstr "ဆက်ရှင်တစ်ခု ရွေးပါ"
 
 msgid "Please select a user"
-msgstr ""
+msgstr "အသုံးပြုသူတစ်ဦး ရွေးပါ"
 
 msgid "Unable to export the report"
-msgstr ""
+msgstr "အစီရင်ခံစာကို တင်ပို့၍မရပါ"
 
 msgid "Accepted on web"
-msgstr ""
+msgstr "ဝဘ်တွင် လက်ခံပြီး"
 
 msgid "Accepted by e-mail"
-msgstr ""
+msgstr "အီးမေးလ်ဖြင့် လက်ခံပြီး"
 
 msgid "The course title is required"
-msgstr ""
+msgstr "သင်တန်းခေါင်းစဉ် လိုအပ်ပါသည်"
 
 msgid "Unexpected error"
-msgstr ""
+msgstr "မမျှော်လင့်သော အမှား"
 
 msgid "Separate tags with commas"
-msgstr ""
+msgstr "တဂ်များကို ကော်မာဖြင့် ခွဲပါ"
 
 msgid "Open link"
-msgstr ""
+msgstr "လင့်ခ်ဖွင့်ရန်"
 
 msgid "Describe the course picture to generate"
-msgstr ""
+msgstr "ထုတ်လုပ်မည့် သင်တန်းပုံကို ဖော်ပြပါ"
 
 msgid "Generate picture"
-msgstr ""
+msgstr "ပုံထုတ်လုပ်ရန်"
 
 msgid "PDF watermark"
-msgstr ""
+msgstr "PDF ရေစာ"
 
 msgid "No watermark image"
-msgstr ""
+msgstr "ရေစာပုံ မရှိပါ"
 
 msgid "Upload watermark"
-msgstr ""
+msgstr "ရေစာ တင်ရန်"
 
 msgid "Delete watermark"
-msgstr ""
+msgstr "ရေစာ ဖျက်ရန်"
 
 msgid "Course legal agreement file"
-msgstr ""
+msgstr "သင်တန်း ဥပဒေသဘောတူညီချက် ဖိုင်"
 
 msgid "Upload agreement file"
-msgstr ""
+msgstr "သဘောတူညီချက်ဖိုင် တင်ရန်"
 
 msgid "Download agreement file"
-msgstr ""
+msgstr "သဘောတူညီချက်ဖိုင် ဒေါင်းလုဒ်လုပ်ရန်"
 
 msgid "Delete agreement file"
-msgstr ""
+msgstr "သဘောတူညီချက်ဖိုင် ဖျက်ရန်"
 
 msgid "Custom certificate images"
-msgstr ""
+msgstr "စိတ်ကြိုက် လက်မှတ်ပုံများ"
 
 msgid "Course picture updated"
-msgstr ""
+msgstr "သင်တန်းပုံကို အပ်ဒိတ်လုပ်ပြီး"
 
 msgid "The course picture could not be uploaded"
-msgstr ""
+msgstr "သင်တန်းပုံကို တင်၍မရပါ"
 
 msgid "Course picture deleted"
-msgstr ""
+msgstr "သင်တန်းပုံကို ဖျက်ပြီး"
 
 msgid "Enter a description for the image"
-msgstr ""
+msgstr "ပုံအတွက် ဖော်ပြချက် ထည့်ပါ"
 
 msgid "The image generator returned an empty response"
-msgstr ""
+msgstr "ပုံထုတ်လုပ်ကိရိယာက ဗလာတုံ့ပြန်ချက် ပြန်ပေးခဲ့သည်"
 
 msgid "Course picture generated"
-msgstr ""
+msgstr "သင်တန်းပုံကို ထုတ်လုပ်ပြီး"
 
 msgid "Watermark updated"
-msgstr ""
+msgstr "ရေစာကို အပ်ဒိတ်လုပ်ပြီး"
 
 msgid "Watermark deleted"
-msgstr ""
+msgstr "ရေစာကို ဖျက်ပြီး"
 
 msgid "Agreement file updated"
-msgstr ""
+msgstr "သဘောတူညီချက်ဖိုင်ကို အပ်ဒိတ်လုပ်ပြီးပါပြီ"
 
 msgid "Agreement file deleted"
-msgstr ""
+msgstr "သဘောတူညီချက်ဖိုင်ကို ဖျက်ပြီးပါပြီ"
 
 msgid "Certificate image updated"
-msgstr ""
+msgstr "လက်မှတ်ပုံကို အပ်ဒိတ်လုပ်ပြီးပါပြီ"
 
 msgid "Certificate image deleted"
-msgstr ""
+msgstr "လက်မှတ်ပုံကို ဖျက်ပြီးပါပြီ"
 
 msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
-msgstr ""
+msgstr "သင်တန်းပုံကို အပ်လုဒ်မလုပ်မီ ပုံတည်းဖြတ်ကိရိယာဖြင့် ဖြတ်၊ လှည့် သို့မဟုတ် အရွယ်အစားပြောင်းပါ။"
 
 msgid "This invitation link is invalid or has expired."
-msgstr ""
+msgstr "ဤဖိတ်ကြားချက်လင့်ခ်သည် မမှန်ကန်ပါ သို့မဟုတ် သက်တမ်းကုန်သွားပါပြီ။"
 
 msgid "This invitation was sent to a different user. Please log in with the invited account."
 msgstr "ဤဖိတ်ကြားချက်ကို အခြားအသုံးပြုသူတစ်ဦးထံ ပေးပို့ခဲ့ပါသည်။ ဖိတ်ကြားခံထားသော အကောင့်ဖြင့် ဝင်ရောက်ပါ။"
@@ -39483,4 +39528,265 @@ msgstr "ဤအသုံးပြုသူသည် အစည်းအဝေး�
 
 msgid "This user is already subscribed to the course."
 msgstr "ဤအသုံးပြုသူသည် သင်တန်းတွင် စာရင်းသွင်းပြီးဖြစ်ပါသည်။"
+
+msgid "Multi URLs"
+msgstr "URL များစွာ"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "အသုံးပြုသူနှင့် သင်တန်းကဲ့သို့သော အရာများသည် တစ်ချိန်တည်းတွင် URL တစ်ခုထက်ပို၍ တက်ကြွနိုင်သောကြောင့် အောက်ပါတန်ဖိုးများ၏ ပေါင်းလဒ်သည် စုစုပေါင်းနှင့် မကိုက်ညီပါ။"
+
+msgid "User directory"
+msgstr "အသုံးပြုသူလမ်းညွှန်"
+
+msgid "Course directory"
+msgstr "သင်တန်းလမ်းညွှန်"
+
+msgid "URLs"
+msgstr "URL များ"
+
+msgid "User details"
+msgstr "အသုံးပြုသူအသေးစိတ်"
+
+msgid "Course details"
+msgstr "သင်တန်းအသေးစိတ်"
+
+msgid "View details"
+msgstr "အသေးစိတ်ကြည့်ရန်"
+
+msgid "Average progress"
+msgstr "ပျမ်းမျှတိုးတက်မှု"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "တိုက်ရိုက်စာရင်းသွင်းခြင်းသည် သင်တန်းတစ်ခုလုံးနှင့် သက်ဆိုင်ပြီး သီးခြား URL တစ်ခုနှင့် မသက်ဆိုင်သောကြောင့် ဤသင်တန်းချိတ်ဆက်ထားသော URL တိုင်းအတွက် အောက်တွင် တူညီသော 'တိုက်ရိုက်' ကိန်းဂဏန်းများကို ထပ်ပြသည်။ URL တစ်ခုချင်းစီတွင် ကွဲပြားသော တိုင်းတာချက်များဖြင့် သင်တန်းကို မျှဝေရန် ရည်ရွယ်သည့်နည်းလမ်းမှာ ဆက်ရှင်များဖြစ်သည်။"
+
+msgid "Logins (all URLs combined)"
+msgstr "လော့ဂ်အင်များ (URL အားလုံးပေါင်းစပ်)"
+
+msgid "Unique logins"
+msgstr "ထူးခြားသော လော့ဂ်အင်များ"
+
+msgid "Parent URL"
+msgstr "မိဘ URL"
+
+msgid "Logins (your URLs)"
+msgstr "လော့ဂ်အင်များ (သင့် URL များ)"
+
+msgid "The picture could not be uploaded"
+msgstr "ပုံကို အပ်လုဒ်လုပ်၍ မရပါ"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "ဤအကွက်အမျိုးအစားကို ယခုအချိန်တွင် အပြည့်အဝ မပံ့ပိုးသေးပါ — ကုန်ကြမ်းတန်ဖိုးသာ။"
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "ဤသင်တန်းသည် အသုံးပြုသူစာရင်းသွင်းမှု ကန့်သတ်ချက် (%d/%d) နှင့် နီးကပ်နေပါပြီ။"
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "နေရာသည် သင့်သင်တန်းဂုဏ်သတ္တိများဖြင့် ကန့်သတ်ထားသည်။ ကန့်သတ်ချက်တိုးရန် ရယူပါ"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "အသုံးပြုသူစာရင်းသွင်းမှုများကို သင့်သင်တန်းဂုဏ်သတ္တိများဖြင့် ကန့်သတ်ထားသည်။ ကန့်သတ်ချက်တိုးရန် ရယူပါ"
+
+msgid "pro plan"
+msgstr "ပရိုအစီအစဉ်"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "ပြီးလျှင် ဤသင်တန်း၏ အရန်သိမ်းကို သင်တန်းထိန်းသိမ်းမှုမှတစ်ဆင့် သင့်အသစ်သော ငွေပေးသင်တန်းသို့ တင်သွင်းပါ၊ သို့မဟုတ် ဤအစီအစဉ်ကို ရရှိပြီးနောက် သင်တန်းကို ပရိုသင်တန်းအဖြစ် ပြောင်းရန် လက်မှတ်ဖွင့်ပါ။"
+
+msgid "Tired of writing questions?"
+msgstr "မေးခွန်းများရေးသားခြင်းကို ပင်ပန်းနေပါသလား။"
+
+msgid "Upgrade your plan"
+msgstr "သင့်အစီအစဉ်ကို အဆင့်မြှင့်ပါ"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "ပရိုအစီအစဉ်သို့ အဆင့်မြှင့်ပြီး AI က အရည်အသွေးမြင့် မေးခွန်းများ ထုတ်ပေးရန် အကူအညီရယူပါ။"
+
+msgid "Student Success AI Coach"
+msgstr "ကျောင်းသားအောင်မြင်မှု AI နည်းပြ"
+
+msgid "No AI text provider is configured."
+msgstr "AI စာသားပံ့ပိုးသူကို ပြင်ဆင်မထားပါ။"
+
+msgid "Additional instructions for the AI coach"
+msgstr "AI နည်းပြအတွက် ထပ်ဆောင်းညွှန်ကြားချက်များ"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "ဥပမာ- ဤသင်ယူသူသည် အာရုံစိုက်မှု ထိန်းထားရန် ခက်ခဲသည်။ ပိုတိုသော လှုပ်ရှားမှုများနှင့် နားလည်မှု စစ်ဆေးမှု ပိုမကြာခဏ အကြံပြုပါ။"
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Chamilo က အကြံပြုချက် ပြင်ဆင်နေစဉ် ဤဝင်းဒိုးကို ဖွင့်ထားပါ။"
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "အကြံပြုချက်ကို သင့် Chamilo အဝင်စာပုံးတွင်လည်း သိမ်းဆည်းပြီးပါပြီ။"
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "အကြံပြုချက်ကို ဤသင်ယူသူအတွက် ထုတ်လုပ်သိမ်းဆည်းပြီးသော်လည်း အဝင်စာပုံးမိတ္တူကို ဖန်တီး၍ မရပါ။"
+
+msgid "Student success recommendation"
+msgstr "ကျောင်းသားအောင်မြင်မှု အကြံပြုချက်"
+
+msgid "Generated"
+msgstr "ထုတ်လုပ်ပြီး"
+
+msgid "Priority actions"
+msgstr "ဦးစားပေးလုပ်ဆောင်ချက်များ"
+
+msgid "Evidence"
+msgstr "အထောက်အထား"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "ဤလုပ်ဆောင်ချက်သည် ဤသင်တန်း၏ အကြောင်းအရာကို ခွဲခြမ်းစိတ်ဖြာပြီး သင်ယူမှုအပြုအမူ အချက်အလက်ကို ပြင်ဆင်ထားသော AI မော်ဒယ်သို့ ပို့မည်။ ကိုယ်ရေးအချက်အလက်ကို AI မော်ဒယ်သို့ တိုက်ရိုက်မပို့သော်လည်း ပို့သောအချက်အလက်အချို့သည် အသုံးပြုသူအကြောင်း သွယ်ဝိုက်သိရှိနိုင်သော အချက်အလက် ပေးနိုင်သည်။ သံသယရှိပါက ဤလုပ်ဆောင်ချက်မသုံးမီ သင့် AI ကိုးကားသူနှင့် အမြဲစစ်ဆေးပါ။"
+
+msgid "Additional activities"
+msgstr "ထပ်ဆောင်းလှုပ်ရှားမှုများ"
+
+msgid "Rhythm"
+msgstr "စည်းချက်"
+
+msgid "Learning methodologies"
+msgstr "သင်ယူမှုနည်းလမ်းများ"
+
+msgid "Other recommendations"
+msgstr "အခြားအကြံပြုချက်များ"
+
+msgid "Analyzing course..."
+msgstr "သင်တန်းကို ခွဲခြမ်းစိတ်ဖြာနေသည်..."
+
+msgid "Analyzing student's learning..."
+msgstr "ကျောင်းသား၏ သင်ယူမှုကို ခွဲခြမ်းစိတ်ဖြာနေသည်..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "ဤဖိတ်ကြားချက်ကို လက်ခံခြင်းဖြင့် တောင်းဆိုသူနှင့် ချိတ်ဆက်မည်ဖြစ်ပြီး သင့်ပရိုဖိုင်အချက်အလက် အချို့ သို့မဟုတ် အားလုံးကို တောင်းဆိုသူက ဖတ်နိုင်မည်။ ယုံကြည်ပြီးသား အသုံးပြုသူများနှင့် သင့်ပရိုဖိုင်ကို စစ်ဆေးပြီး အလွန်အကျွံ မမျှဝေမိစေရန် သေချာပါစေ။"
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "မိုက်ခရိုဖုန်းအသုံးပြုခွင့် မဖွင့်ထားပါ၊ အသံမှတ်တမ်းတင်ရန် သင့်ဘရောက်ဇာတွင် ဖွင့်ပါ"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "ဤ Chamilo ဗားရှင်းတွင် ဘာသာစကားများစွာပါသော သင်တန်းတစ်ခု (သို့မဟုတ် တစ်ခုထက်ပို) ကြိုတင်ထည့်သွင်းထားပါသည်။ သင်တန်းစာရင်းတွင် ပြန်လည်ကြည့်ရှုပြီး အများပြည်သူသို့ ဖွင့်သင့်မသင့် ဆုံးဖြတ်နိုင်ပါသည်။"
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "သင့်တွင် လက်ရှိ URL တစ်ခုခုသို့ ဝင်ရောက်ခွင့် မရှိပါ။ သင်ပိုင်ဆိုင်သော URL သို့ ဝင်ရောက်ခွင့်ပေးရန် စီမံခန့်ခွဲသူအား တောင်းဆိုပါ။"
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "ရွေးချယ်ထားသော AI ပံ့ပိုးသူသည် အချုပ်အခြာအာဏာပိုင် ဝန်ဆောင်မှုမဟုတ်ပါက ရွေးချယ်ထားသော စာရွက်စာတမ်းအကြောင်းအရာကို ပြင်ပဝန်ဆောင်မှုသို့ ပို့နိုင်ပါသည်။ သင့်အဖွဲ့အစည်းက ခွင့်ပြုမှသာ လျှို့ဝှက်အချက်အလက်ဖြင့် ဆက်လုပ်ပါ။"
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "ဆက်လက်ထားရှိမည့် အကောင့်တွင် Unify ကို နှိပ်ပါ။ စနစ်က ထပ်နေသောအုပ်စုရှိ အခြားအကောင့်အားလုံးကို ထိုအကောင့်ထဲသို့ ပေါင်းစည်းပါမည်။ ပေါင်းစည်းထားသော အကောင့်များကို အပြီးဖျက်မည်ဖြစ်ပြီး ဤအစီရင်ခံစာမှ ပျောက်သွားပါမည်။ ဤလုပ်ဆောင်ချက်ကို ပြန်ပြင်၍မရပါ။"
+
+msgid "Permanent deletion"
+msgstr "အပြီးဖျက်ခြင်း"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify က ပေါင်းစည်းထားသော အကောင့်များကို အပြီးဖျက်ပြီးသားဖြစ်သည်။ ထပ်မံဖျက်လိုသော အကောင့်များရှိမှသာ အသုံးပြုသူစာရင်းကို သုံးပါ။"
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "ပုံသေအမြင်အပြင်အဆင် “chamilo” အတွက် လိုဂိုများကို ပြင်နေပါသည်။ ပုံသေများကို မထပ်မံရေးမီ စိတ်ကြိုက်အမြင်အပြင်အဆင် ဖန်တီး/အသုံးပြုရန် စဉ်းစားပါ။"
+
+msgid "This exercise has no questions."
+msgstr "ဤလေ့ကျင့်ခန်းတွင် မေးခွန်းမရှိပါ။"
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "မေးခွန်းတစ်ခုချင်းစီအတွက် တုံ့ပြန်ချက်/မှတ်ချက်ကို မည်သို့ပြမည်နည်း။ စာမေးပွဲဖြေစဉ် သင်ယူသူအား မည်သို့ပြမည်ကို ဤရွေးချယ်မှုက သတ်မှတ်သည်။"
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "ဤအက်ပလီကေးရှင်းများသည် သင့်အကောင့်ခွင့်ပြုချက်များဖြင့် သင့်အနေဖြင့် Chamilo သို့ ဝင်ရောက်နိုင်သည်။ မသုံးတော့သော သို့မဟုတ် မမှတ်မိသောအရာများကို ရုပ်သိမ်းပါ။"
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "ဥပဒေဆိုင်ရာ သဘောတူညီချက် ရုပ်သိမ်းရန် တောင်းဆိုရသည့် အကြောင်းရင်းကို ရှင်းပြပါ၊ သင့်တောင်းဆိုချက်ကို မှန်ကန်စွာ ဆောင်ရွက်နိုင်ရန်ဖြစ်သည်"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "အဝေးမှ MCP ကလိုင်းယင့်ကို သင့်အကောင့်နှင့် ခွင့်ပြုချက်များဖြင့် Chamilo သို့ ချိတ်ဆက်ရန် ဤကိုယ်ပိုင်သော့ကို အသုံးပြုပါ။"
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "သော့အပြည့်အစုံကို တစ်ကြိမ်သာ ပြသသည်။ လုံခြုံစွာ သိမ်းဆည်းပါ။ သော့အသစ်ထုတ်လျှင် ယခင်သော့သည် ချက်ချင်းပျက်သွားသည်။"
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "သော့သည် ကလိုင်းယင့်ကို သင့် Chamilo အကောင့်အဖြစ် အတည်ပြုသည်။ သင့်အကောင့်တွင် မရှိသော ခွင့်ပြုချက်များကို မပေးပါ။"
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "မှတ်ပုံတင်စာမျက်နှာတွင် စည်းကမ်းနှင့် သတ်မှတ်ချက်များ ဖော်ပြပြီး မှတ်ပုံတင်ရန် ဧည့်သည်က T&C ကို လက်ခံရန် လိုအပ်သည်"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "စည်းကမ်းနှင့် သတ်မှတ်ချက်များ အကြောင်းအရာကို AI ဘာသာစကားမော်ဒယ်သို့ ပို့မည်။ သိမ်းဆည်းမီ အဆိုပြုဘာသာပြန်ကို စစ်ဆေးပါ။"
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "ပစ်မှတ်ဘာသာစကားအတွက် သိမ်းထားပြီးသော ဗားရှင်းရှိပြီးဖြစ်သည်။ ဤအဆိုပြုချက်ကို သိမ်းလျှင် ဗားရှင်းအသစ် ဖန်တီးမည်။"
+
+msgid "Acquired"
+msgstr "ရရှိပြီး"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "အကြံပြုသင်တန်းပုံ- ၁၆၀၀ × ၉၀၀ px (၁၆:၉)။ မျက်နှာပြင်ကြီး သို့မဟုတ် သိပ်သည်းဆမြင့်တွင် ကြည်လင်စေရန် အနည်းဆုံး ၁၂၈၀ × ၇၂၀ px သုံးပါ။"
+
+msgid "Courses of the selected URL"
+msgstr "ရွေးချယ်ထားသော URL ၏ သင်တန်းများ"
+
+msgid "Course categories in selected URL"
+msgstr "ရွေးချယ်ထားသော URL ရှိ သင်တန်းအမျိုးအစားများ"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "သင့်အကောင့် အသက်ဝင်နေပါပြီ၊ ယခု ဝင်ရောက်ပြီး သင်တန်းများကို စစ်ဆေးနိုင်ပါသည်။"
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "ဦးစွာ ပြင်ဆင်ချက်များကို <a href='%s'> ဤနေရာ </a> တွင် ဒေါင်းလုဒ်လုပ်ပါ။\nထို့နောက် ဖိုင်ကို ဖြည်ပြီး ဖိုင်အမည်များ မပြောင်းဘဲ လိုသလို တည်းဖြတ်ပါ။\nထို့နောက် ပြင်ထားသောဖိုင်များဖြင့် zip ဖိုင်ဖန်တီးပြီး ဤဖောင်တွင် တင်ပါ။"
+
+msgid "Adding students from session %s to session %s"
+msgstr "ဆက်ရှင် %s မှ ကျောင်းသားများကို ဆက်ရှင် %s သို့ ထည့်သွင်းခြင်း"
+
+msgid "Show all attempts by exercise"
+msgstr "လေ့ကျင့်ခန်းအလိုက် ကြိုးစားမှုအားလုံး ပြပါ"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "ဤလုပ်ဆောင်ချက်သည် ရွေးချယ်ထားသော သင်တန်းအတွက် ခွင့်ပြုအသုံးပြုသူအရေအတွက်ကို ကျော်လွန်မည်။"
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "သက်ဆိုင်ရာ သင်တန်း၏ ခွင့်ပြုအသုံးပြုသူကန့်သတ်ချက် ရောက်သောကြောင့် အချို့စာရင်းသွင်းမှုများ မလုပ်နိုင်ပါ။ ထိခိုက်သော အသုံးပြုသူများ/သင်တန်းများ- %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "ဤမှတ်တမ်းသည် သိရှိပြီးသော အစီရင်ခံစာစာမျက်နှာများ၊ အမျိုးအစား၊ တရားဝင် URL၊ အဟောင်း URL နှင့် မျှော်မှန်းအခန်းကဏ္ဍ ပရိသတ်ကို စာရင်းပြုသည်။ တရားဝင် URL များသည် လက်ရှိအစီရင်ခံစာ အကောင်အထည်ဖော်မှုသို့ လမ်းညွှန်ပြီး မှတ်တမ်းတင်ထားသော အစီရင်ခံစာ အခန်းကဏ္ဍဇယားကို ကျင့်သုံးသည်။"
+
+msgid "E-mail notification subscription"
+msgstr "အီးမေးလ် အကြောင်းကြားချက် စာရင်းသွင်းခြင်း"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "ဤလုပ်ဆောင်ချက်သည် စီမံခန့်ခွဲသူများ သတ်မှတ်ထားသော သင်တန်းတစ်ခုလျှင် အသုံးပြုသူ %s ဦး ကန့်သတ်ချက်ကို ကျော်လွန်မည်။ စာရင်းသွင်းမှုကို ပယ်ဖျက်လိုက်ပါသည်။"
+
+msgid "Language the document is in"
+msgstr "စာရွက်စာတမ်းရှိသော ဘာသာစကား"
+
+msgid "There is no session still"
+msgstr "ဆက်ရှင် မရှိသေးပါ"
+
+msgid "Origin courses from session"
+msgstr "ဆက်ရှင်မှ မူလသင်တန်းများ"
+
+msgid "Destination courses from session"
+msgstr "ဆက်ရှင်မှ ဦးတည်သင်တန်းများ"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "အများပြည်သူဝင်ရောက်ခွင့် (သင်တန်းအဖွဲ့ဝင်မည်သူမဆိုသို့ ဝင်ရောက်ခွင့်ပြုသည်)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "'%s' သင်တန်းအတွက် ဝေါဟာရ %d ခု ထုတ်ပါ၊ ဝေါဟာရတစ်ခုစီကို တစ်ကြောင်း၊ အဓိပ္ပာယ်ကို နောက်ကြောင်းတွင် ထားပြီး ဝေါဟာရတစ်ခုနှင့်တစ်ခုကြား ဗလာကြောင်းတစ်ကြောင်း ထားပါ။ ခေါင်းစဉ်နှင့် အဓိပ္ပာယ်အတွက် အခြားပုံစံမထည့်ပါနှင့်။"
+
+msgid "This is a short description of the course '%s'."
+msgstr "ဤသည်မှာ သင်တန်း '%s' ၏ အတိုချုံးဖော်ပြချက်ဖြစ်သည်။"
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Windows ပလက်ဖောင်းပေါ်တွင် Chamilo ကို အသုံးပြုနေပါသည်။ စာသားအပြည့် အညွှန်းပြုရန် စာရွက်စာတမ်းပြောင်းလဲမှု အကူအညီများ မရရှိပါ။"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "စာမေးပွဲ အလိုအလျောက်ဖွင့်ခြင်း ဖွင့်ထားသည်။ ကျောင်းသားများကို စာမေးပွဲစာရင်းသို့ လမ်းညွှန်မည်။"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "စာမေးပွဲ အလိုအလျောက်ဖွင့်ခြင်း ဖွင့်ထားသည်။ ကျောင်းသားများကို သတ်မှတ်စာမေးပွဲတစ်ခုသို့ လမ်းညွှန်မည်။"
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "ဤသင်တန်းအတွက် စာရင်းသွင်းကန့်သတ်ချက် ရောက်ရှိပါပြီ (%current%/%limit%)။"
+
+msgid "Count course by language"
+msgstr "ဘာသာစကားအလိုက် သင်တန်းအရေအတွက်"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "နောက်ဆုံးဝင်ရောက်မှုသည် ရွေးချယ်ထားသော ရက်စွဲထက် ဟောင်းသော အသုံးပြုသူများ။"
 

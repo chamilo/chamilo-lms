@@ -83,7 +83,8 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
         if ($exerciseId > 0) {
-            $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
+            $quiz = $this->quizRepository->findInCourseContext($exerciseId, $course, $session)
+        ?? throw new NotFoundHttpException('The requested exercise was not found.');
 
             return $this->buildEditConfiguration($quiz, $course, $session);
         }
@@ -191,20 +192,6 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->questionsUrl = $this->buildLegacyQuestionsUrl($quiz, $course, $session);
 
         return $configuration;
-    }
-
-    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
-    {
-        $quiz = $this->quizRepository->find($exerciseId);
-        if (!$quiz instanceof CQuiz) {
-            throw new NotFoundHttpException('The requested exercise was not found.');
-        }
-
-        if ($this->quizRepository->isInCourseContext($exerciseId, $course, $session)) {
-            return $quiz;
-        }
-
-        throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
     }
 
     /**

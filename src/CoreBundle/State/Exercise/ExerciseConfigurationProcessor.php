@@ -126,7 +126,8 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
 
     private function updateExercise(int $exerciseId, ExerciseConfiguration $data, Course $course, ?Session $session): CQuiz
     {
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
+        $quiz = $this->quizRepository->findInCourseContext($exerciseId, $course, $session)
+        ?? throw new NotFoundHttpException('The requested exercise was not found.');
         $this->validatePayload($data);
         $this->applyCommonFields($quiz, $data, $course);
         $this->entityManager->persist($quiz);
@@ -375,20 +376,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         }
 
         return $category;
-    }
-
-    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
-    {
-        $quiz = $this->quizRepository->find($exerciseId);
-        if (!$quiz instanceof CQuiz) {
-            throw new NotFoundHttpException('The requested exercise was not found.');
-        }
-
-        if ($this->quizRepository->isInCourseContext($exerciseId, $course, $session)) {
-            return $quiz;
-        }
-
-        throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
     }
 
     private function parseOptionalDate(?string $value, string $field): ?DateTime

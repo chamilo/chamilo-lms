@@ -63,7 +63,10 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
-        $quiz = $exerciseId > 0 ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
+        $quiz = $exerciseId > 0
+            ? ($this->quizRepository->findInCourseContext($exerciseId, $course, $session)
+                ?? throw new NotFoundHttpException('The requested exercise was not found.'))
+            : null;
         if ($quiz instanceof CQuiz && $this->isAdaptiveFeedbackExercise($quiz)) {
             throw new AccessDeniedHttpException('Question recycling is not available in adaptive/direct feedback exercises.');
         }
@@ -93,41 +96,6 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         $response->canDelete = $this->canRunRestrictedAction();
 
         return $response;
-    }
-
-    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
-    {
-        $quiz = $this->quizRepository->find($exerciseId);
-        if (!$quiz instanceof CQuiz) {
-            throw new NotFoundHttpException('The requested exercise was not found.');
-        }
-
-        if ($this->isExerciseInContext($exerciseId, $course, $session)) {
-            return $quiz;
-        }
-
-        throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
-    }
-
-    private function isExerciseInContext(int $exerciseId, Course $course, ?Session $session): bool
-    {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('quiz.iid')
-            ->from(CQuiz::class, 'quiz')
-            ->innerJoin('quiz.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->andWhere('quiz.iid = :exerciseId')
-            ->andWhere('IDENTITY(links.course) = :courseId')
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        $this->applySessionFilter($queryBuilder, 'links', $session);
-
-        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

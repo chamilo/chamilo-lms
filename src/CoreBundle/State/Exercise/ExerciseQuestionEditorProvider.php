@@ -116,7 +116,10 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
         $questionId = isset($uriVariables['questionId']) ? (int) $uriVariables['questionId'] : 0;
-        $quiz = $exerciseId > 0 ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
+        $quiz = $exerciseId > 0
+            ? ($this->quizRepository->findInCourseContext($exerciseId, $course, $session)
+                ?? throw new NotFoundHttpException('The requested exercise was not found.'))
+            : null;
 
         if ($questionId > 0) {
             if ($quiz instanceof CQuiz) {
@@ -477,20 +480,6 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         } catch (Throwable) {
             return false;
         }
-    }
-
-    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
-    {
-        $quiz = $this->quizRepository->find($exerciseId);
-        if (!$quiz instanceof CQuiz) {
-            throw new NotFoundHttpException('The requested exercise was not found.');
-        }
-
-        if ($this->quizRepository->isInCourseContext($exerciseId, $course, $session)) {
-            return $quiz;
-        }
-
-        throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
     }
 
     private function getQuestionFromExercise(CQuiz $quiz, int $questionId): CQuizQuestion

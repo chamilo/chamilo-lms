@@ -118,7 +118,10 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
-        $quiz = $exerciseId > 0 ? $this->getExerciseFromCurrentContext($exerciseId, $course, $session) : null;
+        $quiz = $exerciseId > 0
+            ? ($this->quizRepository->findInCourseContext($exerciseId, $course, $session)
+                ?? throw new NotFoundHttpException('The requested exercise was not found.'))
+            : null;
         if ($quiz instanceof CQuiz && $this->isExerciseReadOnlyFromLearningPath((int) $quiz->getIid())) {
             throw new AccessDeniedHttpException('This exercise is read-only because it is included in a learning path.');
         }
@@ -789,20 +792,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             'image/gif' => 'gif',
             default => 'png',
         };
-    }
-
-    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
-    {
-        $quiz = $this->quizRepository->find($exerciseId);
-        if (!$quiz instanceof CQuiz) {
-            throw new NotFoundHttpException('The requested exercise was not found.');
-        }
-
-        if ($this->quizRepository->isInCourseContext($exerciseId, $course, $session)) {
-            return $quiz;
-        }
-
-        throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
     }
 
     private function getQuestionFromExercise(CQuiz $quiz, int $questionId): CQuizQuestion

@@ -93,37 +93,41 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
     }
 
     /**
-     * Whether the exercise is linked to this course — and, when there is one, to this session or
+     * The exercise, if it is linked to this course — and, when there is one, to this session or
      * to the base course. Deleted and expired links do not count.
      *
      * Says nothing about visibility: an unpublished exercise still belongs to its course, and
-     * the caller decides what to do about that.
+     * the caller decides what to do about that. Returning null for both "no such exercise" and
+     * "not in this context" is deliberate, so a caller cannot disclose the difference.
+     *
+     * The course and session terms come from ResourceRepository, which also treats a link with
+     * session 0 as base course content — something the legacy tables do write. The group term of
+     * addCourseSessionGroupQueryBuilder() is left out on purpose: it would reject an exercise
+     * linked to a group, which still belongs to the course.
      */
-    public function isInCourseContext(int $exerciseId, Course $course, ?Session $session): bool
+    public function findInCourseContext(int $exerciseId, Course $course, ?Session $session): ?CQuiz
     {
         $queryBuilder = $this->createQueryBuilder('quiz')
-            ->select('quiz.iid')
             ->innerJoin('quiz.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->andWhere('quiz.iid = :exerciseId')
-            ->andWhere('IDENTITY(links.course) = :courseId')
             ->andWhere('links.deletedAt IS NULL')
             ->andWhere('links.endVisibilityAt IS NULL')
             ->setParameter('exerciseId', $exerciseId)
-            ->setParameter('courseId', (int) $course->getId())
             ->setMaxResults(1)
         ;
 
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
-                ->setParameter('sessionId', (int) $session->getId())
-            ;
+        $this->addCourseQueryBuilder($course, $queryBuilder);
+
+        if (null === $session) {
+            $this->addSessionNullQueryBuilder($queryBuilder);
         } else {
-            $queryBuilder->andWhere('links.session IS NULL');
+            $this->addSessionAndBaseContentQueryBuilder($session, $queryBuilder);
         }
 
-        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+        $quiz = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        return $quiz instanceof CQuiz ? $quiz : null;
     }
 
     public function findQuizzesUsingQuestion(int $questionId, int $excludeQuizId = 0): array

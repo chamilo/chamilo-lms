@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                 ],
             ),
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_SESSION_MANAGER')",
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_SESSION_MANAGER')",
             name: 'post_gradebook_evaluation_action',
             processor: GradebookEvaluationActionProcessor::class,
             parameters: [

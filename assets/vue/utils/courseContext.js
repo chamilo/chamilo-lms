@@ -1,8 +1,9 @@
 // Single source of truth for reading the course/session/group context
 // (cid/sid/gid) from a URL — the current browser URL or a target route location.
 //
-// On the CourseHome route the course id lives in the path (/course/:id/home)
-// instead of the query string. Centralizing that rule here guarantees these
+// On some course-scoped routes the course id lives in the path (for example
+// /course/:id/home and /ai/course/:id/analyzer) instead of the query string.
+// Centralizing that rule here guarantees these
 // values stay consistent everywhere: the router guards (which resolve the cid
 // of the *target* route via resolveCourseIdFromRoute, since window.location
 // still points to the previous route during navigation), the cidReq store
@@ -12,8 +13,11 @@
 // the API request interceptor, plain services and components alike — without
 // circular-import or setup()-context constraints.
 
-// Matches the CourseHome route path "/course/:id/home".
-const COURSE_HOME_PATH = /^\/course\/(\d+)\/home/
+// Matches routes where the course id is carried in the path instead of `?cid=`.
+const COURSE_ID_PATHS = [
+  /^\/course\/(\d+)\/home/,
+  /^\/ai\/course\/(\d+)\/analyzer/,
+]
 
 /**
  * Resolves the raw course id from a pathname and the cid query value:
@@ -24,9 +28,15 @@ const COURSE_HOME_PATH = /^\/course\/(\d+)\/home/
  * @returns {string|null}
  */
 function resolveRawCid(pathname, queryCid) {
-  const pathMatch = pathname.match(COURSE_HOME_PATH)
+  for (const pathPattern of COURSE_ID_PATHS) {
+    const pathMatch = pathname.match(pathPattern)
 
-  return pathMatch ? pathMatch[1] : queryCid
+    if (pathMatch) {
+      return pathMatch[1]
+    }
+  }
+
+  return queryCid
 }
 
 /**

@@ -556,7 +556,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'terms_villedustage',
-                'display_text' => "City of internship's terms",
+                'display_text' => 'City of internship',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => \defined(ExtraField::class.'::FIELD_TYPE_GEOLOCALIZATION')
                     ? ExtraField::FIELD_TYPE_GEOLOCALIZATION
@@ -589,7 +589,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'terms_ville',
-                'display_text' => "City's terms",
+                'display_text' => 'City',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => \defined(ExtraField::class.'::FIELD_TYPE_GEOLOCALIZATION')
                     ? ExtraField::FIELD_TYPE_GEOLOCALIZATION

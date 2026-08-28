@@ -275,6 +275,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
 
             if ($matchesSessionContext) {
                 $belongsToContext = true;
+
                 break;
             }
         }

@@ -57,5 +57,4 @@ class GradebookController extends AbstractController
 
         return new JsonResponse($formatted);
     }
-
 }

@@ -412,8 +412,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         string $prompt,
         string $toolName,
         float $timeout,
-    ): ?string
-    {
+    ): ?string {
         $this->lastTextError = null;
 
         $userId = $this->getUserId();
@@ -1218,4 +1217,3 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         return $timeout > 0.0 ? $timeout : $fallback;
     }
 }
-

@@ -140,15 +140,21 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
             $this->recordQuestionScoreUpdateEvent($attempt, $questionId, $previousMarks, $marks);
         }
 
+        $final = (bool) $data->final;
+
         $notificationSent = false;
-        if ($correctionChanged && $data->sendNotification) {
+        if ($final && $correctionChanged && $data->sendNotification) {
             $notificationSent = $this->sendCorrectionNotification($attempt, $teacherComment, (string) $data->notificationContent);
         }
 
-        $this->recordCorrectionHistory($attempt, $questionId, $marks, $teacherComment, (int) ($session?->getId() ?? 0));
-        $this->removeQuestionToCheck($attempt, $questionId);
-        $this->recalculateAttemptScore($attempt, $quiz);
-        $this->synchronizeLearnpathTrackingAfterCorrection($attempt, $quiz, $course, $session);
+        $this->recordCorrectionHistory($attempt, $questionId, $marks, $teacherComment, (int) ($session?->getId() ?? 0), $final);
+
+        if ($final) {
+            $this->removeQuestionToCheck($attempt, $questionId);
+            $this->recalculateAttemptScore($attempt, $quiz);
+            $this->synchronizeLearnpathTrackingAfterCorrection($attempt, $quiz, $course, $session);
+        }
+
         $this->entityManager->flush();
 
         $response = new ExerciseRuntimeCorrection();
@@ -159,7 +165,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         $response->teacherComment = $teacherComment;
         $response->success = true;
         $response->notificationSent = $notificationSent;
-        $response->message = 'Correction saved';
+        $response->message = $final ? 'Correction saved' : 'Draft saved';
         $response->score = (float) $attempt->getScore();
         $response->maxScore = (float) $attempt->getMaxScore();
         $response->questionsToCheck = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
@@ -322,10 +328,10 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         );
     }
 
-    private function recordCorrectionHistory(TrackEExercise $attempt, int $questionId, float $marks, string $teacherComment, int $sessionId): void
+    private function recordCorrectionHistory(TrackEExercise $attempt, int $questionId, float $marks, string $teacherComment, int $sessionId, bool $final): void
     {
         $user = $this->security->getUser();
-        $authorId = $user instanceof User ? (int) $user->getId() : 0;
+        $authorId = $final && $user instanceof User ? (int) $user->getId() : 0;
 
         $recording = (new TrackEAttemptQualify())
             ->setTrackExercise($attempt)

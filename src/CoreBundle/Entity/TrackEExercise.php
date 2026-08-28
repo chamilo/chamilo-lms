@@ -505,6 +505,12 @@ class TrackEExercise
     #[Groups(['track_e_exercise:read'])]
     public function isRevised(): bool
     {
-        return $this->revisedAttempts->count() > 0;
+        foreach ($this->revisedAttempts as $revisedAttempt) {
+            if ($revisedAttempt->getAuthor() > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

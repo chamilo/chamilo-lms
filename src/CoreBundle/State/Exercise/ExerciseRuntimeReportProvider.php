@@ -79,7 +79,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-        $lockedByGradebook = $this->isGradebookLocked((int) $quiz->getIid(), $course, $session);
+        $lockedByGradebook = $this->gradebookLinkManager->isResourceLocked($course, $session, GradebookLinkResourceResolver::LINK_EXERCISE, (int) $quiz->getIid());
         $showUsername = $this->shouldShowUsername();
         $showIp = $this->shouldShowIp();
         $attempts = $this->getAttempts($request, $quiz, $course, $session, $lockedByGradebook, $showUsername, $showIp);
@@ -500,16 +500,6 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
 
         return !$this->isSettingEnabled('exercise.limit_exercise_teacher_access')
             && !$this->isSettingEnabled('exercise.disable_clean_exercise_results_for_teachers');
-    }
-
-    private function isGradebookLocked(int $exerciseId, Course $course, ?Session $session): bool
-    {
-        return $this->gradebookLinkManager->isResourceLocked(
-            $course,
-            $session,
-            GradebookLinkResourceResolver::LINK_EXERCISE,
-            $exerciseId,
-        );
     }
 
     private function isSettingEnabled(string $name): bool

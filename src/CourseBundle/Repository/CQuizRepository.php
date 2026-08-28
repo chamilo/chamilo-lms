@@ -92,6 +92,40 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         return $result ? $result['iid'] : null;
     }
 
+    /**
+     * Whether the exercise is linked to this course — and, when there is one, to this session or
+     * to the base course. Deleted and expired links do not count.
+     *
+     * Says nothing about visibility: an unpublished exercise still belongs to its course, and
+     * the caller decides what to do about that.
+     */
+    public function isInCourseContext(int $exerciseId, Course $course, ?Session $session): bool
+    {
+        $queryBuilder = $this->createQueryBuilder('quiz')
+            ->select('quiz.iid')
+            ->innerJoin('quiz.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('quiz.iid = :exerciseId')
+            ->andWhere('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('exerciseId', $exerciseId)
+            ->setParameter('courseId', (int) $course->getId())
+            ->setMaxResults(1)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
+                ->setParameter('sessionId', (int) $session->getId())
+            ;
+        } else {
+            $queryBuilder->andWhere('links.session IS NULL');
+        }
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
     public function findQuizzesUsingQuestion(int $questionId, int $excludeQuizId = 0): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();

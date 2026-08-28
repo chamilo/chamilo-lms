@@ -393,7 +393,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         }
 
         $exerciseId = (int) $quiz->getIid();
-        if ($this->isGradebookLocked($exerciseId, $course, $session)) {
+        if ($this->gradebookLinkManager->isResourceLocked($course, $session, GradebookLinkResourceResolver::LINK_EXERCISE, $exerciseId)) {
             throw new AccessDeniedHttpException('This exercise is locked by the gradebook.');
         }
 
@@ -456,7 +456,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         }
 
         $exerciseId = (int) $quiz->getIid();
-        if ($this->isGradebookLocked($exerciseId, $course, $session)) {
+        if ($this->gradebookLinkManager->isResourceLocked($course, $session, GradebookLinkResourceResolver::LINK_EXERCISE, $exerciseId)) {
             throw new AccessDeniedHttpException('This exercise is locked by the gradebook.');
         }
 
@@ -504,7 +504,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
 
         $exerciseIds = array_values(array_filter(
             $this->getExerciseIdsFromCurrentContext($course, $session),
-            fn (int $exerciseId): bool => !$this->isGradebookLocked($exerciseId, $course, $session),
+            fn (int $exerciseId): bool => !$this->gradebookLinkManager->isResourceLocked($course, $session, GradebookLinkResourceResolver::LINK_EXERCISE, $exerciseId),
         ));
 
         if ([] === $exerciseIds) {
@@ -610,16 +610,6 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
             $queryBuilder->getQuery()->getResult(),
             static fn (mixed $attempt): bool => $attempt instanceof TrackEExercise,
         ));
-    }
-
-    private function isGradebookLocked(int $exerciseId, Course $course, ?Session $session): bool
-    {
-        return $this->gradebookLinkManager->isResourceLocked(
-            $course,
-            $session,
-            GradebookLinkResourceResolver::LINK_EXERCISE,
-            $exerciseId,
-        );
     }
 
     private function duplicateQuestion(CQuizQuestion $sourceQuestion, Course $course, ?Session $session, int $position): CQuizQuestion

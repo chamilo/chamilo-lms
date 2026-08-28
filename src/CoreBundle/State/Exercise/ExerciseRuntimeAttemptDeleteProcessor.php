@@ -73,7 +73,7 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-        if ($this->isGradebookLocked((int) $quiz->getIid(), $course, $session)) {
+        if ($this->gradebookLinkManager->isResourceLocked($course, $session, GradebookLinkResourceResolver::LINK_EXERCISE, (int) $quiz->getIid())) {
             throw new BadRequestHttpException('This exercise is locked by gradebook.');
         }
         if (!$this->canDeleteResults()) {
@@ -138,16 +138,6 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
         }
 
         return !$this->isSettingEnabled('exercise.limit_exercise_teacher_access');
-    }
-
-    private function isGradebookLocked(int $exerciseId, Course $course, ?Session $session): bool
-    {
-        return $this->gradebookLinkManager->isResourceLocked(
-            $course,
-            $session,
-            GradebookLinkResourceResolver::LINK_EXERCISE,
-            $exerciseId,
-        );
     }
 
     private function isSettingEnabled(string $name): bool

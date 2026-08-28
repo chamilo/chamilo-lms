@@ -39496,3 +39496,192 @@ msgstr ""
 
 msgid "to a pro plan to get help from an AI to generate quality questions for you."
 msgstr ""
+
+msgid "Student Success AI Coach"
+msgstr ""
+
+msgid "No AI text provider is configured."
+msgstr ""
+
+msgid "Additional instructions for the AI coach"
+msgstr ""
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr ""
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr ""
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr ""
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr ""
+
+msgid "Student success recommendation"
+msgstr ""
+
+msgid "Generated"
+msgstr ""
+
+msgid "Priority actions"
+msgstr ""
+
+msgid "Evidence"
+msgstr ""
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr ""
+
+msgid "Additional activities"
+msgstr ""
+
+msgid "Rhythm"
+msgstr ""
+
+msgid "Learning methodologies"
+msgstr ""
+
+msgid "Other recommendations"
+msgstr ""
+
+msgid "Analyzing course..."
+msgstr ""
+
+msgid "Analyzing student's learning..."
+msgstr ""
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr ""
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr ""
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr ""
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr ""
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr ""
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr ""
+
+msgid "Permanent deletion"
+msgstr ""
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr ""
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr ""
+
+msgid "This exercise has no questions."
+msgstr ""
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr ""
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr ""
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr ""
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr ""
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr ""
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr ""
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr ""
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr ""
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr ""
+
+msgid "Acquired"
+msgstr ""
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr ""
+
+msgid "Courses of the selected URL"
+msgstr ""
+
+msgid "Course categories in selected URL"
+msgstr ""
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr ""
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr ""
+
+msgid "Adding students from session %s to session %s"
+msgstr ""
+
+msgid "Show all attempts by exercise"
+msgstr ""
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr ""
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr ""
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr ""
+
+msgid "E-mail notification subscription"
+msgstr ""
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr ""
+
+msgid "Language the document is in"
+msgstr ""
+
+msgid "There is no session still"
+msgstr ""
+
+msgid "Origin courses from session"
+msgstr ""
+
+msgid "Destination courses from session"
+msgstr ""
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr ""
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr ""
+
+msgid "This is a short description of the course '%s'."
+msgstr ""
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr ""
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr ""
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr ""
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr ""
+
+msgid "Count course by language"
+msgstr ""
+
+msgid "Users whose latest access is older than the selected date."
+msgstr ""

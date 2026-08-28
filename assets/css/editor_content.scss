@@ -33,6 +33,10 @@
   @apply block mx-auto;
 }
 
+.tiny-content mjx-container svg {
+  display: inline;
+}
+
 .tiny-content table,
 .tiny-content td,
 .tiny-content th {

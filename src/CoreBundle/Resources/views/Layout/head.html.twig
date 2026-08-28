@@ -167,6 +167,10 @@
     {# <script src="{{ asset('libs/readmore-js/readmore.js') }}"></script> #}
     {# <script src="{{ url('index') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script> #}
 
+    {# Typesets stored LaTeX (span.math-latex from the "latex" TinyMCE plugin);
+       lazy-loads the actual MathJax library only when such content is on the page #}
+    <script src="{{ asset('libs/mathjax/mathjax-render.js') }}"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 {% if chamilo_plugin_is_enabled('NoSearchIndex') %}

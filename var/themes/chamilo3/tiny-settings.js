@@ -535,8 +535,15 @@
       "advlist anchor autolink charmap code codesample directionality",
       "fullscreen emoticons image insertdatetime link lists media",
       "paste preview print pagebreak save searchreplace table template",
-      "visualblocks wordcount",
+      "visualblocks wordcount latex",
     ].join(" "),
+
+    // "latex" isn't self-hosted under base_url/plugins/<name>/ like the others,
+    // so it needs an explicit entry — ensureExternalPluginsMap() below only
+    // fills in names that aren't already mapped.
+    external_plugins: {
+      latex: "/libs/editor/tinymce_plugins/latex/plugin.js",
+    },
 
     // Keep font selectors visible so users can see/select Arial 12pt.
     toolbar: [
@@ -544,7 +551,7 @@
       "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |",
       "fontselect fontsizeselect forecolor backcolor removeformat |",
       "link image media table | pagebreak charmap emoticons |",
-      "preview save print | code fullscreen | ltr rtl",
+      "preview save print | code fullscreen | ltr rtl | latex",
     ].join(" "),
 
     // 1) Fonts menu: put Arial first to make it the natural default.

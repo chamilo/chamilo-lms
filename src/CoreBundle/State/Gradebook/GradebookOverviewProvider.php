@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -52,6 +53,7 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         private GradebookScoreCalculator $scoreCalculator,
         private GradebookContextResolver $contextResolver,
         private GradebookLearnerStatisticsCalculator $statisticsCalculator,
+        private GradebookCertificateGenerator $certificateGenerator,
         private PluginHelper $pluginHelper,
         private StudentViewHelper $studentViewHelper,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
@@ -176,6 +178,15 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
                 'cid' => $overview->context['cid'],
                 'sid' => $overview->context['sid'],
                 'gid' => $overview->context['gid'],
+                'selectcat' => (int) $currentCategory->getId(),
+            ]);
+        }
+        if ($canManage && $this->certificateGenerator->usesCustomCertificate($course)) {
+            $overview->controlledFallbacks['customCertificateAttach'] = '/plugin/CustomCertificate/src/index.php?'.http_build_query([
+                'cid' => $overview->context['cid'],
+                'sid' => $overview->context['sid'],
+                'gid' => $overview->context['gid'],
+                'origin' => 'gradebook',
                 'selectcat' => (int) $currentCategory->getId(),
             ]);
         }
@@ -566,6 +577,8 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
             }
         }
 
+        $templateDocument = $category->getDocument();
+
         return [
             'id' => (int) $category->getId(),
             'parentId' => null !== $parent ? (int) $parent->getId() : null,
@@ -579,6 +592,12 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
                 ? (int) $category->getCertifMinScore()
                 : null,
             'generateCertificates' => (bool) $category->getGenerateCertificates(),
+            'certificateTemplate' => null !== $templateDocument
+                ? [
+                    'id' => (int) $templateDocument->getIid(),
+                    'title' => $templateDocument->getTitle(),
+                ]
+                : null,
             'isRequirement' => (bool) $category->getIsRequirement(),
             'allowSkillsBySubcategory' => 1 === (int) $category->getAllowSkillsBySubcategory(),
             'hasGradeModel' => null !== $category->getGradeModel(),

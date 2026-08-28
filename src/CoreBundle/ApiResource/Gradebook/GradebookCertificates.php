@@ -96,6 +96,9 @@ final class GradebookCertificates
     #[Groups(['gradebook_certificates:read'])]
     public string $customCertificateFallbackUrl = '';
 
+    #[Groups(['gradebook_certificates:read'])]
+    public string $customCertificateTemplateUrl = '';
+
     public function getId(): string
     {
         return $this->id;

@@ -1,8 +1,16 @@
 <template>
   <SectionHeader
     v-if="securityStore.isAuthenticated"
-    :title="t('Documents')"
+    :title="isCertificateMode ? t('Certificate') : t('Documents')"
   >
+    <BaseButton
+      v-if="isCertificateMode"
+      :label="t('Back')"
+      :route="gradebookReturnRoute"
+      icon="back"
+      only-icon
+      type="primary-text"
+    />
     <BaseButton
       v-if="showNewCertificateButton"
       :label="t('Create certificate')"
@@ -118,6 +126,14 @@
       @click="goToGenerateMedia"
     />
   </SectionHeader>
+
+  <div
+    v-if="isCertificateMode"
+    class="mb-4 rounded-xl border border-gray-20 bg-white px-4 py-3 text-sm shadow-sm"
+  >
+    <span class="font-semibold">{{ t("Default certificate") }}:</span>
+    <span class="ml-1">{{ defaultCertificateTitle || t("No data available") }}</span>
+  </div>
 
   <BaseTable
     :key="tableRenderKey"
@@ -299,7 +315,12 @@
             v-if="isCertificateMode && canEdit(slotProps.data)"
             :class="{ selected: slotProps.data.iid === defaultCertificateId }"
             :icon="slotProps.data.iid === defaultCertificateId ? 'certificate-selected' : 'certificate-not-selected'"
-            :title="t('Set as default certificate')"
+            :disabled="isSettingDefaultCertificate"
+            :title="
+              slotProps.data.iid === defaultCertificateId
+                ? t('Default certificate')
+                : t('Set as default certificate')
+            "
             size="small"
             type="slotProps.data.iid === defaultCertificateId ? 'success' : 'black'"
             @click="selectAsDefaultCertificate(slotProps.data)"
@@ -891,7 +912,33 @@ const isCertificateMode = computed(() => {
   return route.query.filetype === "certificate"
 })
 
+const gradebookReturnRoute = computed(() => {
+  const requestedRouteName = String(route.query.returnTo || "")
+  const routeName = ["GradebookList", "GradebookCertificates"].includes(requestedRouteName)
+    ? requestedRouteName
+    : "GradebookList"
+  const query = {
+    cid: unref(cid),
+    sid: unref(sid),
+    gid: Number(route.query.returnGid ?? unref(gid) ?? 0),
+  }
+  const categoryId = Number(route.query.categoryId || 0)
+  if (categoryId > 0) {
+    query.categoryId = categoryId
+  }
+
+  return {
+    name: routeName,
+    params: { node: route.params.node },
+    query,
+  }
+})
+
 const defaultCertificateId = ref(null)
+const defaultCertificateTitle = ref("")
+const certificateCategoryId = ref(null)
+const certificateCsrfToken = ref("")
+const isSettingDefaultCertificate = ref(false)
 
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher && !platformConfigStore.isStudentViewActive)
 
@@ -1117,8 +1164,18 @@ const aiDocProcessProviders = ref([])
 
 onMounted(async () => {
   tableLoading.value = true
-  filters.value.loadNode = 1
-  filters.value.filetype = ["file", "folder", "video"]
+
+  if (isCertificateMode.value) {
+    // Certificate templates are intentionally stored outside the normal visible
+    // Documents hierarchy. Gradebook mode must list every certificate document
+    // in the current course/session context instead of only direct children.
+    filters.value.loadNode = 0
+    filters.value.filetype = "certificate"
+    filters.value.gradebook = 1
+  } else {
+    filters.value.loadNode = 1
+    filters.value.filetype = ["file", "folder", "video"]
+  }
 
   let nodeId = route.params.node
   if (isEmpty(nodeId)) {
@@ -1130,7 +1187,11 @@ onMounted(async () => {
   options.value.itemsPerPage = resolveDefaultRows(0)
   options.value.page = 1
   triggerTableLoad()
-  void loadDefaultCertificate()
+
+  if (isCertificateMode.value) {
+    void loadCertificateManagement()
+  }
+
   // loadAllFolders() is intentionally deferred: it recursively fetches all
   // course folders and is only needed when the move dialog is opened.
   // openMoveDialog() calls it on demand.
@@ -1442,9 +1503,18 @@ function goToNewDocument() {
 }
 
 function goToUploadFile() {
+  const query = { ...route.query }
+
+  // In certificate-manager mode, returnTo belongs to the manager's Back button.
+  // Do not pass it to the generic upload page, which would otherwise leave the
+  // manager immediately after uploading and before a template can be selected.
+  if (isCertificateMode.value) {
+    delete query.returnTo
+  }
+
   router.push({
     name: "DocumentsUploadFile",
-    query: route.query,
+    query,
   })
 }
 
@@ -1759,28 +1829,70 @@ async function replaceDocument() {
  * CERTIFICATES
  * -----------------------------------------
  */
-async function selectAsDefaultCertificate(certificate) {
+function getGradebookCertificateContextParams() {
+  const params = {
+    cid: Number(unref(cid) || 0),
+    sid: Number(unref(sid) || 0),
+    gid: Number(unref(gid) || 0),
+    node: Number(route.params.node || route.query.node || 0),
+  }
+  const requestedCategoryId = Number(route.query.categoryId || 0)
+  if (requestedCategoryId > 0) {
+    params.categoryId = requestedCategoryId
+  }
+
+  return params
+}
+
+async function loadCertificateManagement() {
   try {
-    await gradebookService.setDefaultCertificate(cid, certificate.iid)
-    loadDefaultCertificate()
-    triggerTableLoad()
-    notification.showSuccessNotification(t("Certificate set as default successfully"))
-  } catch {
-    notification.showErrorNotification(t("Error setting certificate as default"))
+    const data = await gradebookService.getCertificates(getGradebookCertificateContextParams())
+    const template = data?.category?.certificateTemplate || null
+
+    certificateCategoryId.value = Number(data?.category?.id || 0) || null
+    certificateCsrfToken.value = String(data?.csrfToken || "")
+    defaultCertificateId.value = Number(template?.id || 0) || null
+    defaultCertificateTitle.value = String(template?.title || "")
+  } catch (error) {
+    console.error("[Documents] Error loading Gradebook certificate settings:", error)
+    certificateCategoryId.value = null
+    certificateCsrfToken.value = ""
+    defaultCertificateId.value = null
+    defaultCertificateTitle.value = ""
   }
 }
 
-async function loadDefaultCertificate() {
+async function selectAsDefaultCertificate(certificate) {
+  if (
+    !isCertificateMode.value ||
+    isSettingDefaultCertificate.value ||
+    !certificate?.iid ||
+    !certificateCategoryId.value ||
+    !certificateCsrfToken.value
+  ) {
+    return
+  }
+
+  isSettingDefaultCertificate.value = true
+
   try {
-    const data = await gradebookService.getDefaultCertificate(cid)
-    defaultCertificateId.value = data.certificateId
+    await gradebookService.runCertificateAction(
+      {
+        action: "set_template",
+        categoryId: Number(certificateCategoryId.value),
+        documentId: Number(certificate.iid),
+        submittedCsrfToken: certificateCsrfToken.value,
+      },
+      getGradebookCertificateContextParams(),
+    )
+    await loadCertificateManagement()
+    triggerTableLoad()
+    notification.showSuccessNotification(t("Certificate set as default successfully"))
   } catch (error) {
-    if (error.response?.status === 404) {
-      console.error("[Documents] Default certificate not found.")
-      defaultCertificateId.value = null
-    } else {
-      console.error("[Documents] Error loading the certificate:", error)
-    }
+    console.error("[Documents] Error setting Gradebook certificate template:", error)
+    notification.showErrorNotification(t("Error setting certificate as default"))
+  } finally {
+    isSettingDefaultCertificate.value = false
   }
 }
 

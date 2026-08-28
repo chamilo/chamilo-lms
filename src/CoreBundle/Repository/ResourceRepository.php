@@ -760,16 +760,37 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function updateResourceFileContent(AbstractResource $resource, string $content): bool
     {
         $resourceNode = $resource->getResourceNode();
-        if ($resourceNode->hasResourceFile()) {
-            $resourceNode->setContent($content);
-            foreach ($resourceNode->getResourceFiles() as $resourceFile) {
-                $resourceFile->setSize(\strlen($content));
-            }
-
-            return true;
+        if (null === $resourceNode || !$resourceNode->hasResourceFile()) {
+            return false;
         }
 
-        return false;
+        $resourceFile = $resourceNode->getFirstResourceFile();
+        if (!$resourceFile instanceof ResourceFile) {
+            return false;
+        }
+
+        $fileName = trim((string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle()));
+        if ('' === $fileName) {
+            $fileName = trim($resource->getResourceName());
+        }
+        if ('' === $fileName) {
+            $fileName = 'resource.html';
+        }
+
+        $extension = strtolower((string) pathinfo($fileName, PATHINFO_EXTENSION));
+        $mimeType = match ($extension) {
+            'htm', 'html' => 'text/html',
+            'svg' => 'image/svg+xml',
+            default => trim((string) $resourceFile->getMimeType()) ?: 'text/plain',
+        };
+
+        $resourceFile
+            ->setFile(CreateUploadedFileHelper::fromString($fileName, $mimeType, $content))
+            ->setSize(\strlen($content))
+        ;
+        $resourceNode->setContent($content);
+
+        return true;
     }
 
     public function setResourceName(AbstractResource $resource, $title): void

@@ -111,6 +111,24 @@
               @click="startEditCategory(overview.currentCategory)"
             />
             <BaseButton
+              v-if="isCurrentRootCategory && overview.controlledFallbacks?.customCertificateAttach"
+              :label="t('Attach certificate')"
+              :to-url="overview.controlledFallbacks.customCertificateAttach"
+              icon="gradebook"
+              only-icon
+              size="normal"
+              type="secondary-text"
+            />
+            <BaseButton
+              v-else-if="isCurrentRootCategory"
+              :label="t('Attach certificate')"
+              :route="buildCertificateTemplatesRoute('GradebookList')"
+              icon="gradebook"
+              only-icon
+              size="normal"
+              type="secondary-text"
+            />
+            <BaseButton
               v-if="overview.currentCategory?.generateCertificates"
               :label="t('Certificate')"
               :route="buildReportRoute('GradebookCertificates')"
@@ -235,6 +253,13 @@
               {{ t("Minimum certification score") }} :
               {{ formatNumber(overview.currentCategory?.certificateMinScore ?? 0) }}
             </span>
+            <template v-if="isCurrentRootCategory && !overview.controlledFallbacks?.customCertificateAttach">
+              <span aria-hidden="true">-</span>
+              <span>
+                {{ t("Default certificate") }} :
+                {{ overview.currentCategory?.certificateTemplate?.title || t("No data available") }}
+              </span>
+            </template>
             <BaseButton
               v-if="canManage"
               :disabled="currentCategoryLockedForTeacher"
@@ -1299,6 +1324,9 @@ const isEditingRootCategory = computed(
   () => Number(editingCategoryId.value || 0) === Number(overview.value?.rootCategoryId || 0),
 )
 const currentCategoryLockedForTeacher = computed(() => categoryLockedForTeacher(overview.value?.currentCategory))
+const isCurrentRootCategory = computed(
+  () => Number(overview.value?.currentCategory?.id || 0) === Number(overview.value?.rootCategoryId || 0),
+)
 const showSubcategorySkillMinimumField = computed(
   () =>
     !isEditingRootCategory.value &&
@@ -1463,6 +1491,29 @@ function buildReportRoute(name) {
 
   return {
     name,
+    params: { node: route.params.node },
+    query,
+  }
+}
+
+function buildCertificateTemplatesRoute(returnTo = "GradebookList") {
+  const currentGroupId = Number(getQueryValue(route.query.gid) || 0)
+  const query = {
+    cid: getQueryValue(route.query.cid),
+    sid: getQueryValue(route.query.sid),
+    gid: 0,
+    returnGid: currentGroupId,
+    filetype: "certificate",
+    gradebook: 1,
+    returnTo,
+  }
+  const currentCategoryId = Number(overview.value?.currentCategory?.id || 0)
+  if (currentCategoryId > 0) {
+    query.categoryId = currentCategoryId
+  }
+
+  return {
+    name: "DocumentsList",
     params: { node: route.params.node },
     query,
   }

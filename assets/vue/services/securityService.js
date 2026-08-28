@@ -127,6 +127,15 @@ async function keepSessionAlive() {
 }
 
 /**
+ * Refreshes the authenticated user's online presence.
+ *
+ * @returns {Promise<Object>}
+ */
+async function updateOnlinePresence() {
+  return await baseService.post("/session/online-presence", {})
+}
+
+/**
  * Fetches the contextual ROLE_CURRENT_COURSE_* roles the current user holds for
  * the given course context, as resolved authoritatively by the backend.
  * @param {Object} context
@@ -185,6 +194,7 @@ export default {
   checkSession,
   getSessionExpiration,
   keepSessionAlive,
+  updateOnlinePresence,
   getCourseContextRoles,
   loginTokenRequest,
   loginTokenCheck,

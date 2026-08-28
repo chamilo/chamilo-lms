@@ -4,10 +4,16 @@ import { usePlatformConfig } from "../store/platformConfig"
 import { filterTranslatedHtml } from "../../js/translatehtml.js"
 
 /**
- * Applies translatehtml language filtering when editor.translate_html is on,
+ * Applies translatehtml language filtering to stored multilingual content,
  * falling back from the viewer's own locale to the course language, then to
  * the platform default language, instead of rendering blank when no block
  * matches the viewer's locale.
+ *
+ * Rendering is intentionally independent from editor.translate_html. That
+ * setting controls whether the TinyMCE translatehtml authoring plugin is
+ * available; it must not make already-stored multilingual content unreadable.
+ * Legacy pages follow the same rule because translateHtml() runs regardless
+ * of the editor setting.
  *
  * Note: this deliberately does not honor the per-course
  * "show_course_in_user_language" setting. When that setting is on, the course
@@ -26,10 +32,6 @@ export function useTranslatedHtml(courseLanguageSource = null) {
   function displayTranslatedHtml(html) {
     if (!html) {
       return ""
-    }
-
-    if (![true, "true", 1, "1"].includes(platformConfigStore.getSetting("editor.translate_html"))) {
-      return html
     }
 
     const fallbackLocales = [

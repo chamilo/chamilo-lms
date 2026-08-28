@@ -701,13 +701,9 @@ class BaseResourceFileAction
 
         $hasFile = $resourceNode->hasResourceFile();
 
-        if ($hasFile && !empty($content)) {
+        if ($hasFile && null !== $content) {
             $content = $this->sanitizeContentFileForUpdate((string) $content, $request, $resourceNode);
-
-            $resourceNode->setContent($content);
-            foreach ($resourceNode->getResourceFiles() as $resourceFile) {
-                $resourceFile->setSize(\strlen($content));
-            }
+            $repo->updateResourceFileContent($resource, $content);
             $resource->setResourceNode($resourceNode);
         }
 

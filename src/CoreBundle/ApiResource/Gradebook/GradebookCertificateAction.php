@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             uriTemplate: '/gradebook/certificates/action',
             openapi: new Operation(
-                summary: 'Generate or delete Gradebook certificates in the current course context',
+                summary: 'Manage Gradebook certificates and their template in the current course context',
                 parameters: [
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                 ],
@@ -62,6 +62,9 @@ final class GradebookCertificateAction
 
     #[Groups(['gradebook_certificate_action:write'])]
     public ?int $userId = null;
+
+    #[Groups(['gradebook_certificate_action:write'])]
+    public ?int $documentId = null;
 
     #[Groups(['gradebook_certificate_action:write'])]
     public string $officialCode = '';

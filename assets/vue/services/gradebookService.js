@@ -312,24 +312,6 @@ export default {
     }
   },
 
-  /**
-   * Sets a document as the default certificate for a course.
-   * @param {number|string} courseId
-   * @param {number|string} certificateId
-   * @returns {Promise<Object>}
-   */
-  async setDefaultCertificate(courseId, certificateId) {
-    return await baseService.patch(`${API_BASE}/set_default_certificate/${courseId}/${certificateId}`, {})
-  },
-
-  /**
-   * Fetches the default certificate for a course.
-   * @param {number|string} courseId
-   * @returns {Promise<Object>}
-   */
-  async getDefaultCertificate(courseId) {
-    return await baseService.get(`${API_BASE}/default_certificate/${courseId}`)
-  },
 
   /**
    * Updates the calculation mode (weighted_average | points_sum) of a gradebook category.

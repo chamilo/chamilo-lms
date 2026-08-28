@@ -125,12 +125,19 @@ final readonly class GradebookCertificatesProvider implements ProviderInterface
         ];
         $resourceWeight = $this->getResourceWeight($category);
         $categoryWeight = (float) $category->getWeight();
+        $templateDocument = $category->getDocument();
         $resource->category = [
             'id' => (int) $category->getId(),
             'title' => $category->getTitle(),
             'weight' => $categoryWeight,
             'resourceWeight' => $resourceWeight,
             'weightWarning' => abs($resourceWeight - $categoryWeight) > 0.00001,
+            'certificateTemplate' => null !== $templateDocument
+                ? [
+                    'id' => (int) $templateDocument->getIid(),
+                    'title' => $templateDocument->getTitle(),
+                ]
+                : null,
         ];
         $resource->canManage = $resolved['canManage'];
         $resource->settings = [
@@ -155,6 +162,13 @@ final readonly class GradebookCertificatesProvider implements ProviderInterface
                 'gid' => $resolved['groupId'],
                 'cat_id' => (int) $category->getId(),
                 'filter' => '' !== $officialCode ? $officialCode : 'all',
+            ]);
+            $resource->customCertificateTemplateUrl = '/plugin/CustomCertificate/src/index.php?'.http_build_query([
+                'cid' => (int) $resolved['course']->getId(),
+                'sid' => (int) ($resolved['session']?->getId() ?? 0),
+                'gid' => $resolved['groupId'],
+                'origin' => 'gradebook',
+                'selectcat' => (int) $category->getId(),
             ]);
         }
 

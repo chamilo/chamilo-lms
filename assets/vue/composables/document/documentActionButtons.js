@@ -16,11 +16,11 @@ export function useDocumentActionButtons() {
   const showRecordAudioButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
   const showNewCloudFileButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
 
-  const showSlideshowButton = computed(() => true)
+  const showSlideshowButton = computed(() => !isCertificateMode.value)
 
-  const showUsageButton = computed(() => isTeacherUI.value)
+  const showUsageButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
 
-  const showDownloadAllButton = computed(() => securityStore.isAuthenticated)
+  const showDownloadAllButton = computed(() => securityStore.isAuthenticated && !isCertificateMode.value)
 
   const showNewCertificateButton = computed(() => isTeacherUI.value && isCertificateMode.value)
   const showUploadCertificateButton = computed(() => isTeacherUI.value && isCertificateMode.value)

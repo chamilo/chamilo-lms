@@ -23,13 +23,22 @@ if (!is_file(__DIR__ . '/config.php')) {
 }
 require_once __DIR__ . '/config.php';
 $apiKey = $translationAPIKey ?? '';
-$model = $translationModel ?? 'grok-4.6'; 
+$model = $translationModel ?? 'grok-4.6';
+$reasoningEffort = $translationReasoningEffort ?? 'low';
+$timeoutSeconds = (int) ($translationTimeoutSeconds ?? 180);
+if ($timeoutSeconds < 30) {
+    $timeoutSeconds = 30;
+} 
 
 /**
- * Chamilo Gettext auto-translator using Grok (grok-4-1-fast-non-reasoning)
+ * Chamilo Gettext auto-translator using the Grok chat-completions API.
+ *
+ * grok-4.6 defaults to reasoning_effort=high (~30–45s time-to-first-token).
+ * This script therefore sends reasoning_effort=low (overridable in config.php)
+ * and uses a much longer cURL timeout than PHP's 30s default.
  *
  * Usage:
- *   php translate.php [--test] [--backup] [fr_FR es de]
+ *   php ai_translate.php [--test] [--backup] [fr_FR es de]
  *
  * - messages.en.po is used as the source of truth for terms and ordering.
  * - For each requested language (e.g. "fr_FR"), messages.fr_FR.po will be updated. If no language requested, all except English are processed.
@@ -61,9 +70,12 @@ $basePoFile = $translationsDir . "messages.{$sourceLanguageCode}.po";
 // Log file
 $logFile = __DIR__ . "/grok_translate.log";
 
-// Batch size for API calls
-$batchSize = 50;
-$batchSizeInTestMode = 20;
+// Batch size for API calls (10 was a workaround for grok-4.6 high-reasoning timeouts)
+$batchSize = (int) ($translationBatchSize ?? 50);
+if ($batchSize < 1) {
+    $batchSize = 50;
+}
+$batchSizeInTestMode = min(20, $batchSize);
 
 // ===================== HELPER FUNCTIONS =====================
 
@@ -531,14 +543,59 @@ function logAction(string $logFile, string $lang, string $msgid, string $action)
 }
 
 /**
+ * Parse translated items out of a Grok message body.
+ *
+ * Accepts either {"translations":[...]} (structured output) or a bare JSON array.
+ *
+ * @return array<int, string>
+ */
+function parseTranslationItems(string $content): array {
+    $content = trim($content);
+    if ($content === '') {
+        return [];
+    }
+
+    $decoded = json_decode($content, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        if (preg_match('/```(?:json)?\s*(.*?)```/s', $content, $m)) {
+            $decoded = json_decode(trim($m[1]), true);
+        }
+    }
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+        $start = strpos($content, '[');
+        $end = strrpos($content, ']');
+        if ($start === false || $end === false || $end <= $start) {
+            return [];
+        }
+        $decoded = json_decode(substr($content, $start, $end - $start + 1), true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+            return [];
+        }
+    }
+
+    if (isset($decoded['translations']) && is_array($decoded['translations'])) {
+        $decoded = $decoded['translations'];
+    }
+
+    $result = [];
+    foreach ($decoded as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        if (isset($item['id'], $item['translation']) && is_scalar($item['translation'])) {
+            $result[(int) $item['id']] = (string) $item['translation'];
+        }
+    }
+
+    return $result;
+}
+
+/**
  * Call Grok API to translate a batch of strings.
- * → Only malformed JSON is gracefully ignored (batch skipped).
- * → All other errors (cURL, HTTP 5xx, timeout, invalid structure) still throw exceptions.
- * @param string $apiUrl
- * @param string $apiKey
- * @param string $targetLangCode
- * @param string $targetLangName
- * @param array  $batchItems [ ['id'=>int, 'source'=>string], ... ]
+ * Transient errors (timeout, 429, 5xx) are retried. Malformed JSON after
+ * retries is skipped. Other errors still throw.
+ *
+ * @param array $batchItems [ ['id'=>int, 'source'=>string], ... ]
  *
  * @return array [id => translation]
  */
@@ -548,7 +605,9 @@ function callGrokTranslateBatch(
     string $model,
     string $targetLangCode,
     string $targetLangName,
-    array $batchItems
+    array $batchItems,
+    int $timeoutSeconds = 180,
+    string $reasoningEffort = 'low'
 ): array {
     if (empty($batchItems)) {
         return [];
@@ -565,24 +624,22 @@ Requirements:
 - Preserve all placeholders (like %s, %d, {name}), HTML tags, and punctuation.
 - Do not reorder placeholders or change their format.
 - When in doubt, prefer neutral, academic-language style.
+- Return translations only; no commentary.
 EOT;
 
     $inputList = [];
     foreach ($batchItems as $item) {
         $inputList[] = [
-            'id'     => $item['id'],
+            'id'     => (int) $item['id'],
             'source' => $item['source'],
         ];
     }
 
     $userPrompt = "Translate the following Chamilo LMS interface strings from English (source_language: en) "
-        . "into {$targetLangName} (target_language code: {$targetLangCode}).\n"
-        . "Return ONLY a valid JSON array, no extra text. Each array item MUST be an object with:\n"
-        . "  - \"id\": the same integer id as in the input\n"
-        . "  - \"translation\": the translated string\n\n"
-        . "Do not change or remove any placeholders (e.g., %s, %d, {name}) or HTML tags.\n\n"
-        . "Input:\n"
-        . json_encode($inputList, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        ."into {$targetLangName} (target_language code: {$targetLangCode}).\n"
+        ."Do not change or remove any placeholders (e.g., %s, %d, {name}) or HTML tags.\n\n"
+        ."Input:\n"
+        .json_encode($inputList, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
     $payload = [
         'model'    => $model,
@@ -591,88 +648,134 @@ EOT;
             ['role' => 'user',   'content' => $userPrompt],
         ],
         'temperature' => 0.2,
+        'response_format' => [
+            'type' => 'json_schema',
+            'json_schema' => [
+                'name' => 'chamilo_translations',
+                'strict' => true,
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'translations' => [
+                            'type' => 'array',
+                            'items' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'id' => ['type' => 'integer'],
+                                    'translation' => ['type' => 'string'],
+                                ],
+                                'required' => ['id', 'translation'],
+                                'additionalProperties' => false,
+                            ],
+                        ],
+                    ],
+                    'required' => ['translations'],
+                    'additionalProperties' => false,
+                ],
+            ],
+        ],
     ];
-
-    $ch = curl_init($apiUrl);
-    if ($ch === false) {
-        throw new RuntimeException("Failed to initialize cURL.");
+    if ($reasoningEffort !== '') {
+        $payload['reasoning_effort'] = $reasoningEffort;
     }
 
     $payloadJson = json_encode($payload, JSON_UNESCAPED_UNICODE);
-    curl_setopt_array($ch, [
-        CURLOPT_POST           => true,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER     => [
-            'Content-Type: application/json',
-            'Accept: application/json',
-            'Authorization: Bearer ' . $apiKey,
-        ],
-        CURLOPT_POSTFIELDS     => $payloadJson,
-        CURLOPT_TIMEOUT        => 30,
-    ]);
-
-    $responseBody = curl_exec($ch);
-    if ($responseBody === false) {
-        $err   = curl_error($ch);
-        $errno = curl_errno($ch);
-        curl_close($ch);
-        throw new RuntimeException("cURL error ({$errno}): {$err}");
+    if ($payloadJson === false) {
+        throw new RuntimeException('Failed to encode Grok request payload as JSON.');
     }
 
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    $maxAttempts = 3;
+    $lastError = null;
 
-    if ($httpCode < 200 || $httpCode >= 300) {
-        throw new RuntimeException("Grok API HTTP error {$httpCode}: {$responseBody}");
-    }
-
-    // ——— SAFE JSON PARSING STARTS HERE ———
-    $data = json_decode($responseBody, true);
-
-    // Case 1: Full response is not valid JSON → treat as malformed, skip batch
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        eprintln("[Grok] Invalid JSON in full response (" . json_last_error_msg() . ") – skipping batch.", true);
-        return [];
-    }
-
-    // Case 2: Valid JSON, but missing expected structure
-    if (!is_array($data) || !isset($data['choices'][0]['message']['content'])) {
-        throw new RuntimeException("Unexpected Grok API response structure (missing choices/content).");
-    }
-
-    $content = $data['choices'][0]['message']['content'];
-
-    // Extract the JSON array part
-    $start = strpos($content, '[');
-    $end   = strrpos($content, ']');
-    if ($start === false || $end === false || $end <= $start) {
-        eprintln("[Grok] No JSON array found in response content – skipping batch.", true);
-        return [];
-    }
-
-    $jsonPart = substr($content, $start, $end - $start + 1);
-    $translationsArray = json_decode($jsonPart, true);
-
-    // Case 3: The extracted part is not valid JSON → ignore and continue
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        eprintln("[Grok] Invalid JSON in extracted array (" . json_last_error_msg() . ") – skipping batch.", true);
-        return [];
-    }
-
-    if (!is_array($translationsArray)) {
-        eprintln("[Grok] Extracted JSON is not an array – skipping batch.", true);
-        return [];
-    }
-
-    // ——— SUCCESS: Valid translations ———
-    $result = [];
-    foreach ($translationsArray as $item) {
-        if (isset($item['id'], $item['translation']) && is_scalar($item['translation'])) {
-            $result[(int)$item['id']] = (string)$item['translation'];
+    for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+        $ch = curl_init($apiUrl);
+        if ($ch === false) {
+            throw new RuntimeException('Failed to initialize cURL.');
         }
+
+        curl_setopt_array($ch, [
+            CURLOPT_POST           => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'Accept: application/json',
+                'Authorization: Bearer '.$apiKey,
+                'x-grok-conv-id: chamilo-po-translate-v1',
+            ],
+            CURLOPT_POSTFIELDS     => $payloadJson,
+            CURLOPT_CONNECTTIMEOUT => 15,
+            CURLOPT_TIMEOUT        => $timeoutSeconds,
+        ]);
+
+        $startedAt = microtime(true);
+        $responseBody = curl_exec($ch);
+        $elapsed = round(microtime(true) - $startedAt, 1);
+        $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if ($responseBody === false) {
+            $err = curl_error($ch);
+            $errno = curl_errno($ch);
+            curl_close($ch);
+            $lastError = "cURL error ({$errno}): {$err} after {$elapsed}s";
+            if ($attempt < $maxAttempts && in_array($errno, [CURLE_OPERATION_TIMEDOUT, CURLE_COULDNT_CONNECT, CURLE_RECV_ERROR], true)) {
+                $sleep = $attempt * 2;
+                eprintln("[Grok] {$lastError} – retrying in {$sleep}s (attempt {$attempt}/{$maxAttempts}).", true);
+                sleep($sleep);
+                continue;
+            }
+            throw new RuntimeException($lastError);
+        }
+
+        curl_close($ch);
+
+        if ($httpCode === 429 || $httpCode >= 500) {
+            $snippet = mb_substr($responseBody, 0, 300);
+            $lastError = "Grok API HTTP error {$httpCode} after {$elapsed}s: {$snippet}";
+            if ($attempt < $maxAttempts) {
+                $sleep = $attempt * 3;
+                eprintln("[Grok] {$lastError} – retrying in {$sleep}s (attempt {$attempt}/{$maxAttempts}).", true);
+                sleep($sleep);
+                continue;
+            }
+            throw new RuntimeException($lastError);
+        }
+
+        if ($httpCode < 200 || $httpCode >= 300) {
+            throw new RuntimeException("Grok API HTTP error {$httpCode} after {$elapsed}s: {$responseBody}");
+        }
+
+        $data = json_decode($responseBody, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            eprintln('[Grok] Invalid JSON in full response ('.json_last_error_msg().") after {$elapsed}s – skipping batch.", true);
+            return [];
+        }
+
+        if (!is_array($data) || !isset($data['choices'][0]['message']['content'])) {
+            throw new RuntimeException('Unexpected Grok API response structure (missing choices/content).');
+        }
+
+        $usage = $data['usage'] ?? [];
+        $promptTokens = $usage['prompt_tokens'] ?? '?';
+        $completionTokens = $usage['completion_tokens'] ?? '?';
+        $reasoningTokens = $usage['completion_tokens_details']['reasoning_tokens']
+            ?? $usage['reasoning_tokens']
+            ?? '?';
+        eprintln(
+            "[Grok] Batch HTTP {$httpCode} in {$elapsed}s"
+            ." (prompt={$promptTokens}, completion={$completionTokens}, reasoning={$reasoningTokens}).",
+            true
+        );
+
+        $content = (string) $data['choices'][0]['message']['content'];
+        $result = parseTranslationItems($content);
+        if ($result === []) {
+            eprintln('[Grok] No translations parsed from response content – skipping batch.', true);
+        }
+
+        return $result;
     }
 
-    return $result;
+    throw new RuntimeException($lastError ?? 'Grok API request failed after retries.');
 }
 
 /**
@@ -824,6 +927,12 @@ if ($apiKey === '' || $apiKey === 'YOUR_GROK_API_KEY_HERE') {
     eprintln("Please edit this script and set \$apiKey at the top.");
 }
 
+eprintln(
+    "Grok client: model={$model} reasoning_effort={$reasoningEffort}"
+    ." timeout={$timeoutSeconds}s batch_size={$batchSize}.",
+    true
+);
+
 // Parse base messages.en.po
 eprintln("Loading base file: {$basePoFile}", true);
 $baseEntries = parseBasePoFile($basePoFile);
@@ -908,6 +1017,91 @@ foreach ($langCodes as $lang) {
         }
     };
 
+    $flushBatch = function (bool $isFinal = false) use (
+        &$pendingBatch,
+        &$pendingMap,
+        &$apiBatchCount,
+        &$targetTranslations,
+        &$keepRawSingular,
+        $existingSingular,
+        $logFile,
+        $lang,
+        $targetLangName,
+        $apiUrl,
+        $apiKey,
+        $model,
+        $timeoutSeconds,
+        $reasoningEffort,
+        $logProgress
+    ): void {
+        if (empty($pendingBatch)) {
+            return;
+        }
+
+        $apiBatchCount++;
+        $logProgress();
+        $label = $isFinal ? 'final batch' : 'batch';
+        eprintln("[{$lang}] Sending {$label} {$apiBatchCount} to Grok API ("
+            .count($pendingBatch).' terms, model='.$model
+            .', reasoning_effort='.$reasoningEffort
+            .', timeout='.$timeoutSeconds.'s).', true);
+
+        $batchSuccess = false;
+        $translations = [];
+        try {
+            $translations = callGrokTranslateBatch(
+                $apiUrl,
+                $apiKey,
+                $model,
+                $lang,
+                $targetLangName,
+                $pendingBatch,
+                $timeoutSeconds,
+                $reasoningEffort
+            );
+            eprintln("[{$lang}] Grok API {$label} {$apiBatchCount} completed, "
+                .count($translations).' translations received.', true);
+            $batchSuccess = true;
+        } catch (Throwable $ex) {
+            eprintln("[{$lang}] API ERROR in {$label} {$apiBatchCount}: ".$ex->getMessage(), true);
+            eprintln("[{$lang}] Skipping this batch. All previous batches are preserved.", true);
+        }
+
+        if ($batchSuccess) {
+            foreach ($pendingBatch as $item) {
+                $id = $item['id'];
+                $msgidBatch = $pendingMap[$id]['msgid'];
+                $actionBatch = $pendingMap[$id]['action'];
+                $translated = $translations[$id] ?? '';
+
+                if ($translated === '') {
+                    $translated = $existingSingular[$msgidBatch] ?? '';
+                    if (isset($existingSingular[$msgidBatch])) {
+                        $keepRawSingular[$msgidBatch] = true;
+                    }
+                }
+
+                $targetTranslations[$msgidBatch] = $translated;
+                logAction($logFile, $lang, $msgidBatch, $actionBatch);
+            }
+            sleep(1);
+        } else {
+            foreach ($pendingBatch as $item) {
+                $id = $item['id'];
+                $msgidBatch = $pendingMap[$id]['msgid'];
+                $translated = $existingSingular[$msgidBatch] ?? '';
+                $targetTranslations[$msgidBatch] = $translated;
+                if ($translated !== '') {
+                    $keepRawSingular[$msgidBatch] = true;
+                }
+                logAction($logFile, $lang, $msgidBatch, 'failed – kept original');
+            }
+        }
+
+        $pendingBatch = [];
+        $pendingMap = [];
+    };
+
     try {
         foreach ($baseEntries as $entry) {
             $entryIndex++;
@@ -954,66 +1148,7 @@ foreach ($langCodes as $lang) {
 
                 // Send batch when full
                 if (count($pendingBatch) >= $batchSize) {
-                    $apiBatchCount++;
-                    $logProgress();
-                    eprintln("[{$lang}] Sending batch {$apiBatchCount} to Grok API ("
-                        .count($pendingBatch)." terms).", true);
-
-                    $batchSuccess = false;
-                    try {
-                        $translations = callGrokTranslateBatch(
-                            $apiUrl,
-                            $apiKey,
-			    $model,
-                            $lang,
-                            $targetLangName,
-                            $pendingBatch
-                        );
-                        eprintln("[{$lang}] Grok API batch {$apiBatchCount} completed, "
-                            .count($translations)." translations received.", true);
-                        $batchSuccess = true;
-                    } catch (Throwable $ex) {
-                        eprintln("[{$lang}] API ERROR in batch {$apiBatchCount}: ".$ex->getMessage(), true);
-                        eprintln("[{$lang}] Skipping this batch. All previous batches are preserved.", true);
-                        // Do NOT re-throw — we continue with next entries
-                    }
-
-                    if ($batchSuccess) {
-                        foreach ($pendingBatch as $item) {
-                            $id = $item['id'];
-                            $msgidBatch = $pendingMap[$id]['msgid'];
-                            $actionBatch = $pendingMap[$id]['action'];
-                            $translated = $translations[$id] ?? '';
-
-                            if ($translated === '') {
-                                $translated = $existingSingular[$msgidBatch] ?? '';
-                                if (isset($existingSingular[$msgidBatch])) {
-                                    $keepRawSingular[$msgidBatch] = true;
-                                }
-                            }
-
-                            $targetTranslations[$msgidBatch] = $translated;
-                            logAction($logFile, $lang, $msgidBatch, $actionBatch);
-                        }
-                        sleep(1);
-                    } else {
-                        // On failure: keep existing translations (or empty) and preserve raw formatting
-                        foreach ($pendingBatch as $item) {
-                            $id = $item['id'];
-                            $msgidBatch = $pendingMap[$id]['msgid'];
-                            $translated = $existingSingular[$msgidBatch] ?? '';
-                            $targetTranslations[$msgidBatch] = $translated;
-                            if ($translated !== '') {
-                                $keepRawSingular[$msgidBatch] = true;
-                            }
-                            logAction($logFile, $lang, $msgidBatch, 'failed – kept original');
-                        }
-                    }
-
-                    // Always clear batch after processing (success or fail)
-                    $pendingBatch = [];
-                    $pendingMap = [];
-
+                    $flushBatch(false);
                     if ($testMode && $apiBatchCount >= $maxBatches) {
                         eprintln("[{$lang}] Test mode limit reached.", true);
                     }
@@ -1033,55 +1168,7 @@ foreach ($langCodes as $lang) {
 
         // Final batch (if any)
         if (!empty($pendingBatch) && $apiBatchCount < $maxBatches) {
-            $apiBatchCount++;
-            $logProgress();
-            eprintln("[{$lang}] Sending final batch {$apiBatchCount} to Grok API ("
-                .count($pendingBatch)." terms).", true);
-
-            $finalSuccess = false;
-            try {
-                $translations = callGrokTranslateBatch(
-                    $apiUrl,
-                    $apiKey,
-                    $lang,
-                    $targetLangName,
-                    $pendingBatch
-                );
-                eprintln("[{$lang}] Final batch completed.", true);
-                $finalSuccess = true;
-            } catch (Throwable $ex) {
-                eprintln("[{$lang}] FINAL BATCH FAILED: ".$ex->getMessage(), true);
-                eprintln("[{$lang}] Writing file with all previously translated batches.", true);
-            }
-
-            if ($finalSuccess) {
-                foreach ($pendingBatch as $item) {
-                    $id = $item['id'];
-                    $msgidBatch = $pendingMap[$id]['msgid'];
-                    $actionBatch = $pendingMap[$id]['action'];
-                    $translated = $translations[$id] ?? '';
-                    if ($translated === '') {
-                        $translated = $existingSingular[$msgidBatch] ?? '';
-                        if (isset($existingSingular[$msgidBatch])) {
-                            $keepRawSingular[$msgidBatch] = true;
-                        }
-                    }
-                    $targetTranslations[$msgidBatch] = $translated;
-                    logAction($logFile, $lang, $msgidBatch, $actionBatch);
-                }
-            } else {
-                // Keep existing or leave empty for failed items
-                foreach ($pendingBatch as $item) {
-                    $id = $item['id'];
-                    $msgidBatch = $pendingMap[$id]['msgid'];
-                    $translated = $existingSingular[$msgidBatch] ?? '';
-                    $targetTranslations[$msgidBatch] = $translated;
-                    if ($translated !== '') {
-                        $keepRawSingular[$msgidBatch] = true;
-                    }
-                    logAction($logFile, $lang, $msgidBatch, 'failed – kept original');
-                }
-            }
+            $flushBatch(true);
         }
 
         // Final write on success

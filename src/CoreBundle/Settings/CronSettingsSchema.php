@@ -20,6 +20,8 @@ class CronSettingsSchema extends AbstractSettingsSchema
                     'cron_remind_course_finished_activate' => 'false',
                     'cron_remind_course_expiration_frequency' => '',
                     'cron_remind_course_expiration_activate' => 'false',
+                    'cron_certificate_expiry_reminder_activate' => 'false',
+                    'cron_certificate_expiry_reminder_days' => '30',
                 ]
             )
         ;
@@ -27,6 +29,8 @@ class CronSettingsSchema extends AbstractSettingsSchema
             'cron_remind_course_finished_activate' => ['string'],
             'cron_remind_course_expiration_frequency' => ['string'],
             'cron_remind_course_expiration_activate' => ['string'],
+            'cron_certificate_expiry_reminder_activate' => ['string'],
+            'cron_certificate_expiry_reminder_days' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
@@ -37,6 +41,8 @@ class CronSettingsSchema extends AbstractSettingsSchema
             ->add('cron_remind_course_finished_activate', YesNoType::class)
             ->add('cron_remind_course_expiration_frequency')
             ->add('cron_remind_course_expiration_activate', YesNoType::class)
+            ->add('cron_certificate_expiry_reminder_activate', YesNoType::class)
+            ->add('cron_certificate_expiry_reminder_days')
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

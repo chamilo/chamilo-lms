@@ -277,6 +277,15 @@ export default {
   },
 
   /**
+   * Fetches certificates that are expired or about to expire for the current Gradebook category.
+   * @param {Object} params Course context and optional category/daysAhead filters.
+   * @returns {Promise<Object>} Certificate expirations data.
+   */
+  async getCertificateExpirations(params) {
+    return await baseService.get("/api/gradebook/certificate-expirations", params)
+  },
+
+  /**
    * Builds the PDF export URL for generated Gradebook certificates.
    * @param {Object} params Course context and optional category/official-code filters.
    * @returns {string} Certificate PDF export URL.
@@ -312,7 +321,6 @@ export default {
     }
   },
 
-
   /**
    * Updates the calculation mode (weighted_average | points_sum) of a gradebook category.
    * @param {number|string} categoryId The numeric id of the gradebook category.
@@ -333,6 +341,4 @@ export default {
       category: `/api/gradebook_categories/${categoryId}`,
     })
   },
-
-
 }

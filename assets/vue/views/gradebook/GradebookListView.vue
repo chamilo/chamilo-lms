@@ -89,6 +89,15 @@
                 type="primary-text"
               />
               <BaseButton
+                v-if="overview.currentCategory?.generateCertificates"
+                :label="t('Certificate')"
+                :route="buildReportRoute('GradebookCertificates')"
+                icon="gradebook"
+                only-icon
+                size="normal"
+                type="primary-text"
+              />
+              <BaseButton
                 v-if="overview.controlledFallbacks?.gradingElectronic"
                 :label="t('Export')"
                 :to-url="overview.controlledFallbacks.gradingElectronic"
@@ -127,15 +136,6 @@
               only-icon
               size="normal"
               type="secondary-text"
-            />
-            <BaseButton
-              v-if="overview.currentCategory?.generateCertificates"
-              :label="t('Certificate')"
-              :route="buildReportRoute('GradebookCertificates')"
-              icon="gradebook"
-              only-icon
-              size="normal"
-              type="primary-text"
             />
             <BaseButton
               v-if="canShowWeightReport"
@@ -194,9 +194,6 @@
               size="normal"
               type="primary-text"
             />
-          </template>
-
-          <template #end>
             <BaseButton
               v-if="overview.currentCategory?.generateCertificates"
               :label="t('Certificate')"
@@ -437,10 +434,7 @@
                 </RouterLink>
                 <span
                   v-else
-                  :class="[
-                    'break-words font-semibold',
-                    data.visible ? 'text-gray-90' : 'text-gray-500',
-                  ]"
+                  :class="['break-words font-semibold', data.visible ? 'text-gray-90' : 'text-gray-500']"
                 >
                   {{ data.title }}
                 </span>
@@ -457,10 +451,7 @@
             <template #body="{ data }">
               <span
                 v-if="data.description"
-                :class="[
-                  'whitespace-pre-line text-sm',
-                  data.visible ? 'text-gray-700' : 'text-gray-500',
-                ]"
+                :class="['whitespace-pre-line text-sm', data.visible ? 'text-gray-700' : 'text-gray-500']"
               >
                 {{ data.description }}
               </span>
@@ -484,7 +475,8 @@
           >
             <template #body="{ data }">
               <span v-if="data.score !== null && data.score !== undefined">
-                {{ formatNumber(data.score) }}<template v-if="data.maxScore !== null"> / {{ formatNumber(data.maxScore) }}</template>
+                {{ formatNumber(data.score)
+                }}<template v-if="data.maxScore !== null"> / {{ formatNumber(data.maxScore) }}</template>
                 <template v-if="data.percentage !== null && data.percentage !== undefined">
                   ({{ formatNumber(data.percentage) }}%)
                 </template>
@@ -872,6 +864,15 @@
           name="gradebook_category_generate_certificates"
         />
 
+        <BaseInputNumber
+          v-if="isEditingRootCategory && canChangeGradeModelSettings && categoryForm.generateCertificates"
+          id="gradebook-category-certificate-validity-period"
+          v-model="categoryForm.certificateValidityPeriod"
+          :label="t('Certificate validity (days)')"
+          :min="0"
+          name="gradebook_category_certificate_validity_period"
+        />
+
         <BaseCheckbox
           id="gradebook-category-requirement"
           v-model="categoryForm.isRequirement"
@@ -1244,6 +1245,7 @@ const categoryForm = reactive({
   visible: true,
   certificateMinScore: 0,
   generateCertificates: false,
+  certificateValidityPeriod: 0,
   isRequirement: false,
   allowSkillsBySubcategory: true,
   gradeModelId: -1,
@@ -1358,7 +1360,9 @@ const gradeModelOptions = computed(() => [
 const canAddCategory = computed(() => true !== overview.value?.currentCategory?.hasGradeModel)
 const canShowWeightReport = computed(() => !items.value.some((item) => item.kind === "category"))
 const canShowScoringSettings = computed(
-  () => true === overview.value?.settings?.teachersCanChangeScoreSettings && true === overview.value?.settings?.scoreDisplayCustom,
+  () =>
+    true === overview.value?.settings?.teachersCanChangeScoreSettings &&
+    true === overview.value?.settings?.scoreDisplayCustom,
 )
 const evaluationCategoryOptions = computed(() =>
   categoryOptions.value
@@ -1372,7 +1376,10 @@ const showActivityCategorySelector = computed(() => evaluationCategoryOptions.va
 const evaluationMaximumScoreLocked = computed(() => {
   const scoreModelMax = overview.value?.settings?.scoreModelMax
   const hasScoreModel =
-    scoreModelMax !== null && scoreModelMax !== undefined && scoreModelMax !== "" && Number.isFinite(Number(scoreModelMax))
+    scoreModelMax !== null &&
+    scoreModelMax !== undefined &&
+    scoreModelMax !== "" &&
+    Number.isFinite(Number(scoreModelMax))
 
   return hasScoreModel || true === evaluationForm.hasResults
 })
@@ -1386,8 +1393,8 @@ const linkTypeOptions = computed(() =>
       value: Number(type.type),
     })),
 )
-const selectedLinkType = computed(() =>
-  linkTypes.value.find((type) => Number(type.type) === Number(linkForm.type || 0)) || null,
+const selectedLinkType = computed(
+  () => linkTypes.value.find((type) => Number(type.type) === Number(linkForm.type || 0)) || null,
 )
 const linkResourceOptions = computed(() =>
   (Array.isArray(selectedLinkType.value?.items) ? selectedLinkType.value.items : []).map((item) => ({
@@ -1448,7 +1455,6 @@ function getContextParams(includeCategory = true) {
     gid: getQueryValue(route.query.gid),
     node: route.params.node,
   }
-
 
   if (includeCategory) {
     const categoryId = Number(getQueryValue(route.query.categoryId) || 0)
@@ -1658,7 +1664,6 @@ function evaluationLockedForTeacher(evaluation) {
 function linkLockedForTeacher(link) {
   return true === link?.locked && true !== overview.value?.canUnlock
 }
-
 
 let skillSearchTimer = null
 
@@ -1931,6 +1936,7 @@ function resetCategoryForm() {
   categoryForm.visible = true === overview.value?.settings?.defaultCategoryVisible
   categoryForm.certificateMinScore = 0
   categoryForm.generateCertificates = false
+  categoryForm.certificateValidityPeriod = 0
   categoryForm.isRequirement = false
   categoryForm.allowSkillsBySubcategory = true
   categoryForm.gradeModelId = -1
@@ -1962,6 +1968,7 @@ async function startEditCategory(category) {
   categoryForm.visible = true === category.visible
   categoryForm.certificateMinScore = Number(category.certificateMinScore || 0)
   categoryForm.generateCertificates = true === category.generateCertificates
+  categoryForm.certificateValidityPeriod = Number(category.certificateValidityPeriod || 0)
   categoryForm.isRequirement = true === category.isRequirement
   categoryForm.allowSkillsBySubcategory = true === category.allowSkillsBySubcategory
   categoryForm.gradeModelId = -1
@@ -1997,6 +2004,10 @@ async function saveCategory() {
         generateCertificates:
           isEditingRootCategory.value && canChangeGradeModelSettings.value
             ? true === categoryForm.generateCertificates
+            : null,
+        certificateValidityPeriod:
+          isEditingRootCategory.value && canChangeGradeModelSettings.value
+            ? Number(categoryForm.certificateValidityPeriod || 0)
             : null,
         isRequirement: true === categoryForm.isRequirement,
         allowSkillsBySubcategory: true === categoryForm.allowSkillsBySubcategory,
@@ -2167,7 +2178,9 @@ function resetEvaluationForm() {
   evaluationForm.description = ""
   evaluationForm.categoryId = Number(overview.value?.currentCategory?.id || 0)
   evaluationForm.weight = Number(overview.value?.settings?.defaultWeight || 100)
-  evaluationForm.maxScore = Number(overview.value?.settings?.scoreModelMax ?? overview.value?.settings?.defaultWeight ?? 100)
+  evaluationForm.maxScore = Number(
+    overview.value?.settings?.scoreModelMax ?? overview.value?.settings?.defaultWeight ?? 100,
+  )
   evaluationForm.minScore = null
   evaluationForm.hasResults = false
   evaluationForm.gradeLearners = false
@@ -2195,7 +2208,8 @@ function startEditEvaluation(evaluation) {
   evaluationForm.categoryId = Number(overview.value?.currentCategory?.id || 0)
   evaluationForm.weight = Number(evaluation.weight || 0)
   evaluationForm.maxScore = Number(evaluation.maxScore || 0)
-  evaluationForm.minScore = evaluation.minScore === null || evaluation.minScore === undefined ? null : Number(evaluation.minScore)
+  evaluationForm.minScore =
+    evaluation.minScore === null || evaluation.minScore === undefined ? null : Number(evaluation.minScore)
   evaluationForm.hasResults = true === evaluation.hasResults
   evaluationForm.gradeLearners = false
   evaluationFormSubmitted.value = false
@@ -2446,7 +2460,8 @@ async function startEditLink(link) {
   linkForm.weight = Number(current.weight || 0)
   linkForm.minScore = current.minScore === null || current.minScore === undefined ? 0 : Number(current.minScore)
   linkForm.pointsOne = current.pointsOne === null || current.pointsOne === undefined ? 0 : Number(current.pointsOne)
-  linkForm.pointsMany = current.pointsMany === null || current.pointsMany === undefined ? null : Number(current.pointsMany)
+  linkForm.pointsMany =
+    current.pointsMany === null || current.pointsMany === undefined ? null : Number(current.pointsMany)
   isLinkDialogVisible.value = true
 }
 
@@ -2469,7 +2484,10 @@ async function saveLink() {
       minScore: Number(linkForm.minScore || 0),
       pointsOne: linkUsesParticipationPoints.value ? Number(linkForm.pointsOne || 0) : null,
       pointsMany:
-        linkUsesParticipationPoints.value && linkForm.pointsMany !== null && linkForm.pointsMany !== undefined && linkForm.pointsMany !== ""
+        linkUsesParticipationPoints.value &&
+        linkForm.pointsMany !== null &&
+        linkForm.pointsMany !== undefined &&
+        linkForm.pointsMany !== ""
           ? Number(linkForm.pointsMany)
           : null,
       submittedCsrfToken: linkOptions.value?.csrfToken || overview.value?.linkCsrfToken || "",
@@ -2606,13 +2624,7 @@ onMounted(loadOverview)
 
 useStudentViewRefresh(loadOverview)
 watch(
-  () => [
-    route.query.cid,
-    route.query.sid,
-    route.query.gid,
-    route.query.categoryId,
-    route.params.node,
-  ],
+  () => [route.query.cid, route.query.sid, route.query.gid, route.query.categoryId, route.params.node],
   () => loadOverview(),
 )
 </script>

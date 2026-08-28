@@ -39712,3 +39712,21 @@ msgstr ""
 
 msgid "Users whose latest access is older than the selected date."
 msgstr ""
+
+msgid "Your certificate is about to expire"
+msgstr ""
+
+msgid "Your certificate has expired"
+msgstr ""
+
+msgid "Your certificate is about to expire:"
+msgstr ""
+
+msgid "Your certificate has expired:"
+msgstr ""
+
+msgid "Expiry date"
+msgstr ""
+
+msgid "%s days remaining"
+msgstr ""

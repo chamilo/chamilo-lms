@@ -84,6 +84,12 @@ final class GradebookCategoryAction
     #[Groups(['gradebook_category_action:write'])]
     public ?bool $generateCertificates = null;
 
+    /**
+     * Number of days a generated certificate stays valid, or null/0 for no expiry.
+     */
+    #[Groups(['gradebook_category_action:write'])]
+    public ?int $certificateValidityPeriod = null;
+
     #[Groups(['gradebook_category_action:write'])]
     public ?bool $isRequirement = null;
 

@@ -72,6 +72,20 @@ final class GradebookCertificateAction
     #[Groups(['gradebook_certificate_action:write'])]
     public string $notificationMessage = '';
 
+    /**
+     * Used by `set_expiry_date` (a 'Y-m-d' date, or '' to clear). Ignored by other actions.
+     */
+    #[Groups(['gradebook_certificate_action:write'])]
+    public ?string $expiryDate = null;
+
+    /**
+     * Used by `notify_expiry` — the certificate owners to send an expiry reminder to.
+     *
+     * @var list<int>
+     */
+    #[Groups(['gradebook_certificate_action:write'])]
+    public array $userIds = [];
+
     #[Groups(['gradebook_certificate_action:write'])]
     public string $submittedCsrfToken = '';
 

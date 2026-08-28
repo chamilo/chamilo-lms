@@ -592,6 +592,7 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
                 ? (int) $category->getCertifMinScore()
                 : null,
             'generateCertificates' => (bool) $category->getGenerateCertificates(),
+            'certificateValidityPeriod' => $category->getCertificateValidityPeriod(),
             'certificateTemplate' => null !== $templateDocument
                 ? [
                     'id' => (int) $templateDocument->getIid(),

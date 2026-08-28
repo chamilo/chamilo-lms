@@ -254,6 +254,7 @@ define('LOG_EXERCISE_ATTEMPT_DELETE', 'exe_attempt_deleted');
 define('LOG_LP_ATTEMPT_DELETE', 'lp_attempt_deleted');
 define('LOG_QUESTION_RESULT_DELETE', 'qst_attempt_deleted');
 define('LOG_QUESTION_SCORE_UPDATE', 'score_attempt_updated');
+define('LOG_CERTIFICATE_EXPIRY_UPDATE', 'certificate_expiry_date_updated');
 
 define('LOG_MY_FOLDER_CREATE', 'my_folder_created');
 define('LOG_MY_FOLDER_CHANGE', 'my_folder_changed');
@@ -286,6 +287,7 @@ define('LOG_PROMOTION_ID', 'promotion_id');
 define('LOG_GRADEBOOK_LOCKED', 'gradebook_locked');
 define('LOG_GRADEBOOK_UNLOCKED', 'gradebook_unlocked');
 define('LOG_GRADEBOOK_ID', 'gradebook_id');
+define('LOG_CERTIFICATE_ID', 'certificate_id');
 //define('LOG_WIKI_PAGE_ID', 'wiki_page_id');
 define('LOG_EXERCISE_ID', 'exercise_id');
 define('LOG_EXERCISE_AND_USER_ID', 'exercise_and_user_id');

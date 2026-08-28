@@ -89,6 +89,12 @@ export default {
       component: () => import("../views/gradebook/GradebookCertificatesView.vue"),
     },
     {
+      name: "GradebookCertificateExpirations",
+      path: "certificates/expirations",
+      meta: { breadcrumb: "Expiring certificates" },
+      component: () => import("../views/gradebook/GradebookCertificateExpirationsView.vue"),
+    },
+    {
       name: "GradebookPrint",
       path: "print/:scope/:id?",
       meta: { breadcrumb: "Print" },

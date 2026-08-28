@@ -259,6 +259,14 @@ final readonly class GradebookCategoryActionProcessor implements ProcessorInterf
                 $category->setGenerateCertificates($data->generateCertificates);
             }
 
+            if (null !== $data->certificateValidityPeriod) {
+                if (!$this->canChangeGradeModelSettings()) {
+                    throw new AccessDeniedHttpException('You are not allowed to change Gradebook certificate generation.');
+                }
+
+                $category->setCertificateValidityPeriod($data->certificateValidityPeriod > 0 ? $data->certificateValidityPeriod : null);
+            }
+
             if ($this->isSettingEnabled('gradebook.gradebook_enable_subcategory_skills_independant_assignement')
                 && null !== $data->allowSkillsBySubcategory
             ) {

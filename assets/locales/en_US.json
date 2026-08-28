@@ -3870,5 +3870,19 @@
     "Acquired": "Acquired",
     "Recommended course picture: 1600 \u00d7 900 px (16:9). Use at least 1280 \u00d7 720 px for sharp display on larger or high-density screens.": "Recommended course picture: 1600 \u00d7 900 px (16:9). Use at least 1280 \u00d7 720 px for sharp display on larger or high-density screens.",
     "Courses of the selected URL": "Courses of the selected URL",
-    "Course categories in selected URL": "Course categories in selected URL"
+    "Course categories in selected URL": "Course categories in selected URL",
+    "Never expires": "Never expires",
+    "Expiry date": "Expiry date",
+    "Edit expiry date": "Edit expiry date",
+    "Certificate validity (days)": "Certificate validity (days)",
+    "Expiring certificates": "Expiring certificates",
+    "Expiring soon": "Expiring soon",
+    "Never": "Never",
+    "Expired notice": "Expired notice",
+    "Expiring notice": "Expiring notice",
+    "outdated": "outdated",
+    "Last reminder sent": "Last reminder sent",
+    "Days ahead": "Days ahead",
+    "Send notification": "Send notification",
+    "Are you sure you want to send this notification?": "Are you sure you want to send this notification?"
 }

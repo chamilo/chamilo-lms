@@ -97,6 +97,15 @@
         size="normal"
         type="primary-text"
       />
+      <BaseButton
+        v-if="certificates?.canManage"
+        :label="t('Expiring certificates')"
+        :route="expirationsRoute"
+        icon="calendar-clock"
+        only-icon
+        size="normal"
+        type="secondary-text"
+      />
     </div>
 
     <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
@@ -183,6 +192,25 @@
       <Column :header="t('Date')">
         <template #body="{ data }">
           {{ formatDate(data.certificate?.issuedAt) }}
+        </template>
+      </Column>
+
+      <Column :header="t('Expiry date')">
+        <template #body="{ data }">
+          <div class="flex items-center gap-1">
+            <span>{{
+              data.certificate?.expiryDate ? formatDateOnly(data.certificate.expiryDate) : t("Never expires")
+            }}</span>
+            <BaseButton
+              v-if="certificates?.canManage && data.certificate && !data.certificate.expiryLocked"
+              :label="t('Edit expiry date')"
+              icon="pencil"
+              only-icon
+              size="small"
+              type="secondary-text"
+              @click="openExpiryDialog(data)"
+            />
+          </div>
         </template>
       </Column>
 
@@ -274,6 +302,28 @@
         />
       </template>
     </BaseDialog>
+
+    <BaseDialog
+      v-model:is-visible="isExpiryDialogVisible"
+      :title="t('Edit expiry date')"
+      header-icon="pencil"
+    >
+      <BaseCalendar
+        id="gradebook-certificate-expiry-date"
+        v-model="expiryDateForm"
+        :label="t('Expiry date')"
+        name="gradebook_certificate_expiry_date"
+      />
+      <template #footer>
+        <BaseButton
+          :disabled="isRunningAction"
+          :is-loading="isRunningAction && currentAction === 'set_expiry_date'"
+          :label="t('Save')"
+          type="success"
+          @click="saveExpiryDate"
+        />
+      </template>
+    </BaseDialog>
   </section>
 </template>
 
@@ -282,6 +332,7 @@ import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
@@ -302,6 +353,9 @@ const errorMessage = ref("")
 const infoMessage = ref("")
 const isNotificationDialogVisible = ref(false)
 const isPreviewDialogVisible = ref(false)
+const isExpiryDialogVisible = ref(false)
+const expiryDateForm = ref(null)
+const expiryDialogRow = ref(null)
 const previewUrl = ref("")
 const previewLearnerName = ref("")
 const previewCacheKey = ref(0)
@@ -376,6 +430,20 @@ const certificateTemplatesRoute = computed(() => {
   }
 })
 
+const expirationsRoute = computed(() => {
+  const query = { ...cleanQuery(route.query) }
+  const categoryId = Number(certificates.value?.category?.id || getQueryValue(route.query.categoryId) || 0)
+  if (categoryId > 0) {
+    query.categoryId = categoryId
+  }
+
+  return {
+    name: "GradebookCertificateExpirations",
+    params: { node: route.params.node },
+    query,
+  }
+})
+
 const exportContextParams = computed(() => getContextParams())
 
 function getQueryValue(value) {
@@ -420,7 +488,7 @@ async function loadCertificates() {
   }
 }
 
-async function runAction(action, userId = null) {
+async function runAction(action, userId = null, extra = {}) {
   if (!certificates.value?.csrfToken) {
     return
   }
@@ -439,6 +507,7 @@ async function runAction(action, userId = null) {
         officialCode: officialCode.value || "",
         notificationMessage: action === "notify_all" ? notificationMessage.value : "",
         submittedCsrfToken: certificates.value.csrfToken,
+        ...extra,
       },
       getContextParams(),
     )
@@ -509,6 +578,57 @@ function confirmDeleteAll() {
   })
 }
 
+function parseDateOnly(value) {
+  if (!value) {
+    return null
+  }
+
+  const [year, month, day] = String(value)
+    .split("-")
+    .map((part) => Number(part))
+  if (!year || !month || !day) {
+    return null
+  }
+
+  return new Date(year, month - 1, day)
+}
+
+function formatDateOnlyForSubmit(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    return ""
+  }
+
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+
+  return `${year}-${month}-${day}`
+}
+
+function openExpiryDialog(row) {
+  if (!row?.user?.id) {
+    return
+  }
+
+  expiryDialogRow.value = row
+  expiryDateForm.value = parseDateOnly(row.certificate?.expiryDate)
+  isExpiryDialogVisible.value = true
+}
+
+async function saveExpiryDate() {
+  const row = expiryDialogRow.value
+  if (!row?.user?.id) {
+    return
+  }
+
+  await runAction("set_expiry_date", row.user.id, {
+    expiryDate: formatDateOnlyForSubmit(expiryDateForm.value),
+  })
+  if (!errorMessage.value) {
+    isExpiryDialogVisible.value = false
+  }
+}
+
 function formatNumber(value) {
   const number = Number(value)
   if (!Number.isFinite(number)) {
@@ -534,6 +654,15 @@ function formatDate(value) {
   }).format(date)
 }
 
+function formatDateOnly(value) {
+  const date = parseDateOnly(value)
+  if (!date) {
+    return "-"
+  }
+
+  return new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(date)
+}
+
 function getErrorMessage(error) {
   return error?.response?.data?.detail || error?.response?.data?.message || error?.message || t("An error occurred")
 }
@@ -546,6 +675,15 @@ watch(isPreviewDialogVisible, (isVisible) => {
   previewUrl.value = ""
   previewLearnerName.value = ""
   previewCacheKey.value = 0
+})
+
+watch(isExpiryDialogVisible, (isVisible) => {
+  if (isVisible) {
+    return
+  }
+
+  expiryDialogRow.value = null
+  expiryDateForm.value = null
 })
 
 watch(officialCode, async () => {

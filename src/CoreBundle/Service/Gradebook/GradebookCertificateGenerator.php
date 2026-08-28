@@ -23,6 +23,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use DateTime;
 use DateTimeInterface;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -164,6 +165,7 @@ final readonly class GradebookCertificateGenerator
             $eligibility['score'],
             $issuedAt,
             '',
+            $existing instanceof GradebookCertificate ? $existing->getExpiryDate() : null,
         );
 
         $certificate = $this->certificateRepository->upsertCertificateResource(
@@ -184,6 +186,7 @@ final readonly class GradebookCertificateGenerator
             $eligibility['score'],
             $certificate->getCreatedAt(),
             $viewUrl,
+            $certificate->getExpiryDate(),
         );
 
         return $this->certificateRepository->upsertCertificateResource(
@@ -223,6 +226,13 @@ final readonly class GradebookCertificateGenerator
             $hash = '';
         }
 
+        $expiryDate = $certificate->getExpiryDate();
+        $validityPeriod = (int) ($certificate->getCategory()?->getCertificateValidityPeriod() ?? 0);
+        $today = new DateTime('today', new DateTimeZone('UTC'));
+        $daysUntilExpiry = null !== $expiryDate
+            ? (int) $today->diff($expiryDate)->format('%r%a')
+            : null;
+
         return [
             'id' => (int) $certificate->getId(),
             'score' => $certificate->getScoreCertificate(),
@@ -232,6 +242,14 @@ final readonly class GradebookCertificateGenerator
             'downloadUrl' => '' !== $hash && !$hideDownload
                 ? '/certificates/'.rawurlencode($hash).'.pdf'
                 : '',
+            'expiryDate' => $expiryDate?->format('Y-m-d'),
+            'expiryLocked' => $validityPeriod > 0,
+            'daysUntilExpiry' => $daysUntilExpiry,
+            'expiryStatus' => match (true) {
+                null === $expiryDate => 'none',
+                $daysUntilExpiry < 0 => 'expired',
+                default => 'valid',
+            },
         ];
     }
 
@@ -297,6 +315,7 @@ final readonly class GradebookCertificateGenerator
         float $score,
         DateTimeInterface $issuedAt,
         string $viewUrl,
+        ?DateTimeInterface $expiryDate,
     ): string {
         $teacher = $this->resolveTeacher($category, $course, $session);
         $scoreText = rtrim(rtrim(number_format($score, 2, '.', ''), '0'), '.');
@@ -313,6 +332,9 @@ final readonly class GradebookCertificateGenerator
             '((official_code))' => $this->escape((string) ($user->getOfficialCode() ?? '')),
             '((date_certificate))' => $this->escape($issuedAt->format('Y-m-d H:i')),
             '((date_certificate_no_time))' => $this->escape($issuedAt->format('Y-m-d')),
+            '((expiry_date))' => null !== $expiryDate
+                ? $this->escape($expiryDate->format('Y-m-d'))
+                : $this->escape($this->translator->trans('Never expires')),
             '((course_code))' => $this->escape((string) $course->getCode()),
             '((course_title))' => $this->escape((string) $course->getTitle()),
             '((gradebook_grade))' => $this->escape($scoreText.'%'),
@@ -352,6 +374,7 @@ final readonly class GradebookCertificateGenerator
             '((official_code))',
             '((date_certificate))',
             '((date_certificate_no_time))',
+            '((expiry_date))',
             '((course_code))',
             '((course_title))',
             '((gradebook_grade))',

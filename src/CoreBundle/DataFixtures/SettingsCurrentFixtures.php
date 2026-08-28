@@ -1525,6 +1525,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Send course finished notification',
                     'comment' => 'Whether to send an e-mail to students when their course (session) is finished. This requires cron tasks to be configured (see main/cron/ directory).',
                 ],
+                [
+                    'name' => 'cron_certificate_expiry_reminder_activate',
+                    'title' => 'Certificate expiry reminder cron',
+                    'comment' => 'Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire.',
+                ],
+                [
+                    'name' => 'cron_certificate_expiry_reminder_days',
+                    'title' => 'Certificate expiry reminder window (days)',
+                    'comment' => 'Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead.',
+                ],
             ],
             'announcement' => [
                 [

@@ -11,18 +11,23 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookCertificateAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateExpiryNotifier;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
 use Chamilo\CoreBundle\Service\Gradebook\LegacyGradebookCertificateBridge;
 use Chamilo\CourseBundle\Entity\CDocument;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Event;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -41,6 +46,10 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
     private const ACTION_DELETE_ALL = 'delete_all';
     private const ACTION_NOTIFY_ALL = 'notify_all';
     private const ACTION_SET_TEMPLATE = 'set_template';
+    private const ACTION_SET_EXPIRY_DATE = 'set_expiry_date';
+    private const ACTION_NOTIFY_EXPIRY = 'notify_expiry';
+
+    private const MAX_NOTIFY_EXPIRY_RECIPIENTS = 500;
 
     public function __construct(
         private RequestStack $requestStack,
@@ -48,6 +57,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         private GradebookCertificateGenerator $certificateGenerator,
         private GradebookCertificateRepository $certificateRepository,
         private LegacyGradebookCertificateBridge $legacyCertificateBridge,
+        private GradebookCertificateExpiryNotifier $expiryNotifier,
         private EntityManagerInterface $entityManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private TranslatorInterface $translator,
@@ -93,6 +103,8 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             self::ACTION_DELETE_ALL => $this->deleteAll($data, $category, $resolved),
             self::ACTION_NOTIFY_ALL => $this->notifyAll($data, $category, $resolved),
             self::ACTION_SET_TEMPLATE => $this->setTemplate($data, $resolved),
+            self::ACTION_SET_EXPIRY_DATE => $this->setExpiryDate($data, $category, $resolved),
+            self::ACTION_NOTIFY_EXPIRY => $this->notifyExpiry($data, $category, $resolved),
             default => throw new BadRequestHttpException('Unsupported Gradebook certificate action.'),
         };
 
@@ -275,6 +287,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
 
             if ($matchesSessionContext) {
                 $belongsToContext = true;
+
                 break;
             }
         }
@@ -306,6 +319,118 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         }
 
         return $affected;
+    }
+
+    /**
+     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
+     */
+    private function setExpiryDate(GradebookCertificateAction $data, GradebookCategory $category, array $resolved): int
+    {
+        $learner = $this->requireLearner($data, $resolved);
+
+        $validityPeriod = (int) ($category->getCertificateValidityPeriod() ?? 0);
+        if ($validityPeriod > 0) {
+            throw new ConflictHttpException("This certificate's expiry date is managed automatically and cannot be edited ".'while the category has a certificate validity period.');
+        }
+
+        $certificate = $this->certificateRepository->getCertificateByUserId(
+            (int) $category->getId(),
+            (int) $learner->getId(),
+        );
+        if (!$certificate instanceof GradebookCertificate) {
+            throw new NotFoundHttpException('The requested certificate was not found.');
+        }
+
+        $rawDate = trim((string) ($data->expiryDate ?? ''));
+        $newExpiryDate = null;
+        if ('' !== $rawDate) {
+            $newExpiryDate = DateTime::createFromFormat('!Y-m-d', $rawDate);
+            $errors = DateTime::getLastErrors();
+            if (false === $newExpiryDate || ($errors && ($errors['warning_count'] > 0 || $errors['error_count'] > 0))) {
+                throw new BadRequestHttpException('The expiry date must be a valid date in the Y-m-d format.');
+            }
+        }
+
+        $oldExpiryDate = $certificate->getExpiryDate();
+        $certificate->setExpiryDate($newExpiryDate);
+        $this->entityManager->flush();
+
+        $this->recordExpiryDateAudit($certificate, $resolved['user'], $oldExpiryDate, $newExpiryDate);
+
+        return 1;
+    }
+
+    /**
+     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
+     */
+    private function notifyExpiry(GradebookCertificateAction $data, GradebookCategory $category, array $resolved): int
+    {
+        $userIds = array_values(array_unique(array_filter(
+            array_map('intval', $data->userIds),
+            static fn (int $id): bool => $id > 0,
+        )));
+
+        if ([] === $userIds) {
+            throw new BadRequestHttpException('At least one learner id is required.');
+        }
+
+        if (\count($userIds) > self::MAX_NOTIFY_EXPIRY_RECIPIENTS) {
+            throw new BadRequestHttpException('Too many recipients selected for a single notification batch.');
+        }
+
+        $affected = 0;
+        foreach ($userIds as $userId) {
+            // Throws AccessDeniedHttpException for a user outside the current course/session
+            // context — a manipulated payload must fail loudly, not silently skip (see CLAUDE.md
+            // OWASP checklist: mass parameter manipulation).
+            $learner = $this->contextResolver->getStudentInContext($userId, $resolved['course'], $resolved['session']);
+
+            $certificate = $this->certificateRepository->getCertificateByUserId(
+                (int) $category->getId(),
+                (int) $learner->getId(),
+            );
+            if (!$certificate instanceof GradebookCertificate) {
+                continue;
+            }
+
+            $summary = $this->certificateGenerator->normalizeCertificate($certificate, false);
+            $viewUrl = (string) ($summary['viewUrl'] ?? '');
+            $certificateUrl = '' !== $viewUrl ? rtrim((string) api_get_path(WEB_PATH), '/').$viewUrl : '';
+
+            // A teacher explicitly selected these certificates from the expirations page, where
+            // "last reminder sent" is already visible — honor that choice rather than silently
+            // refusing a resend (unlike the cron, which defaults to not resending).
+            $result = $this->expiryNotifier->notify($certificate, $certificateUrl, true, $resolved['user']);
+            if ($result['sent']) {
+                $affected++;
+            }
+        }
+
+        return $affected;
+    }
+
+    private function recordExpiryDateAudit(
+        GradebookCertificate $certificate,
+        User $editor,
+        ?DateTime $oldExpiryDate,
+        ?DateTime $newExpiryDate,
+    ): void {
+        if (!class_exists(Event::class) || !\defined('LOG_CERTIFICATE_EXPIRY_UPDATE') || !\defined('LOG_CERTIFICATE_ID')) {
+            return;
+        }
+
+        Event::addEvent(
+            LOG_CERTIFICATE_EXPIRY_UPDATE,
+            LOG_CERTIFICATE_ID,
+            [
+                'certificate_id' => (int) $certificate->getId(),
+                'user_id' => (int) $certificate->getUser()->getId(),
+                'old_expiry_date' => $oldExpiryDate?->format('Y-m-d'),
+                'new_expiry_date' => $newExpiryDate?->format('Y-m-d'),
+            ],
+            null,
+            (int) $editor->getId(),
+        );
     }
 
     /**
@@ -361,6 +486,8 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             self::ACTION_DELETE_ALL => 'Certificates deleted: '.$affected.'.',
             self::ACTION_NOTIFY_ALL => 'Certificate notifications sent: '.$affected.'.',
             self::ACTION_SET_TEMPLATE => 'Default certificate template updated.',
+            self::ACTION_SET_EXPIRY_DATE => 'Certificate expiry date updated.',
+            self::ACTION_NOTIFY_EXPIRY => 'Certificate expiry reminders sent: '.$affected.'.',
             default => '',
         };
     }

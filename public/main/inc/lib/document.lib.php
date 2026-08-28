@@ -1342,6 +1342,11 @@ class DocumentManager
             $courseObjectives = $description['description_content'];
         }
 
+        $expiryDateRaw = $info_grade_certificate['expiry_date'] ?? '';
+        $expiryDate = !empty($expiryDateRaw)
+            ? api_convert_and_format_date($expiryDateRaw, DATE_FORMAT_LONG_NO_DAY)
+            : get_lang('Never expires');
+
         // Replace content
         $info_to_replace_in_content_html = [
             $first_name,
@@ -1367,6 +1372,7 @@ class DocumentManager
             $timeInCourseInAllSessions,
             $startDateAndEndDate,
             $courseObjectives,
+            $expiryDate,
         ];
 
         $tags = [
@@ -1393,6 +1399,7 @@ class DocumentManager
             '((time_in_course_in_all_sessions))',
             '((start_date_and_end_date))',
             '((course_objectives))',
+            '((expiry_date))',
         ];
 
         if (!empty($extraFields)) {

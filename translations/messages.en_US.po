@@ -39795,3 +39795,21 @@ msgstr "Count course by language"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Users whose latest access is older than the selected date."
+
+msgid "Your certificate is about to expire"
+msgstr "Your certificate is about to expire"
+
+msgid "Your certificate has expired"
+msgstr "Your certificate has expired"
+
+msgid "Your certificate is about to expire:"
+msgstr "Your certificate is about to expire:"
+
+msgid "Your certificate has expired:"
+msgstr "Your certificate has expired:"
+
+msgid "Expiry date"
+msgstr "Expiry date"
+
+msgid "%s days remaining"
+msgstr "%s days remaining"

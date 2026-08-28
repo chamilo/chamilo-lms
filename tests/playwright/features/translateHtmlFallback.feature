@@ -4,10 +4,13 @@
 # translate_html (assets/js/translatehtml.js) lets a course description mark
 # up several language variants inside one HTML blob
 # (<span class="mce-translatehtml" lang="...">...</span>), then hides every
-# block except the one matching the viewer's own locale. Before this fix, if
-# NO block matched the viewer's locale, every block stayed hidden and the
-# content rendered blank. It now falls back to the course language, then the
-# platform default language, before giving up.
+# block except the one matching the viewer's own locale. Rendering stored
+# multilingual content is independent from editor.translate_html: that setting
+# only enables/disables the TinyMCE authoring plugin. Existing translated HTML
+# must therefore remain readable even when the editor plugin is disabled.
+#
+# The fallback behavior also guarantees that if NO block matches the viewer's
+# locale, the course language is tried first and then the platform default.
 #
 # Both scenarios below deliberately avoid ever tagging a block with the real
 # admin viewer's own interface locale: course/platform languages are set to
@@ -36,7 +39,7 @@
 Feature: translate_html language fallback
   In order for multi-language course content to never render blank
   As a viewer with no matching language block
-  I want translate_html to fall back to the course language, then the platform default language
+  I want translate_html to remain readable and fall back to the course language, then the platform default language
 
   Background:
     Given I am a platform administrator
@@ -106,3 +109,37 @@ Feature: translate_html language fallback
     And I press "Yes"
     And I wait for the page to be loaded
     Then I should not see "TrHtmlEs"
+
+  Scenario: Existing translated content remains readable when the editor plugin is disabled
+    Given I am on "/admin/settings/editor"
+    And I wait for the page to be loaded
+    And I select the value "false" from "form_translate_html"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
+    Given I am on "/main/admin/course_add.php"
+    And I wait for the page to be loaded
+    And I fill in "title" with "TrHtmlOff"
+    And I select "Deutsch" from "course_language"
+    And I press "submit"
+    And wait very long for the page to be loaded
+
+    Given I am on course "TrHtmlOff" homepage
+    And I wait for the page to be loaded
+    And I follow "Kursbeschreibung"
+    And I wait for the page to be loaded
+    And I click the "span.mdi-image-text" element
+    And I fill in "course_description_title" with "Disabled plugin test"
+    And I fill in tinymce field "course_description_content" with "<span class=\"mce-translatehtml\" lang=\"de\">GERMANWHENDISABLED</span><span class=\"mce-translatehtml\" lang=\"xx\">HIDDENDECOY</span>"
+    And I press "save"
+    And I wait for the page to be loaded
+    Then I should see "GERMANWHENDISABLED"
+    And I should not see "HIDDENDECOY"
+
+    Given I am on "/admin/course-list?keyword=TrHtmlOff"
+    And I wait for the page to be loaded
+    Then I click the "[title='Delete']" icon in the row for "TrHtmlOff"
+    And I press "Yes"
+    And I wait for the page to be loaded
+    Then I should not see "TrHtmlOff"
+

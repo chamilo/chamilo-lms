@@ -406,6 +406,20 @@
                         <pre class="max-h-[480px] overflow-auto whitespace-pre-wrap break-words rounded-xl bg-gray-90 p-4 text-gray-15">{{ result.rawResponse }}</pre>
                     </section>
                 {% endif %}
+
+                {% set course_home_url = '/course/' ~ course.id ~ '/home' %}
+                {% if session %}
+                    {% set course_home_url = course_home_url ~ '?sid=' ~ session.id %}
+                {% endif %}
+
+                <div class="mb-6 flex justify-end">
+                    <a
+                            href="{{ course_home_url }}"
+                            class="inline-flex min-h-[42px] items-center justify-center rounded-xl border-0 bg-primary px-5 py-2.5 font-bold text-white hover:bg-primary-gradient"
+                    >
+                        {{ 'Course homepage'|trans }}
+                    </a>
+                </div>
             {% endif %}
         </div>
     </main>

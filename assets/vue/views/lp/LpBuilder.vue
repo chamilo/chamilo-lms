@@ -182,7 +182,10 @@ onMounted(async () => {
   const requestedItem = requestedItemId > 0 ? findItem(tree.value, requestedItemId) : null
   if (requestedItem) {
     selectedId.value = requestedItemId
-    if ("audio" === String(route.query.panel || "") && !requestedItem.isSection && !requestedItem.isFinal) {
+    const requestedPanel = String(route.query.panel || "")
+    if ("edit" === requestedPanel) {
+      panelMode.value = "edit"
+    } else if ("audio" === requestedPanel && !requestedItem.isSection && !requestedItem.isFinal) {
       panelMode.value = "audio"
     }
     return

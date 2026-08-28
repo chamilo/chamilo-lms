@@ -130,6 +130,56 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         return $quiz instanceof CQuiz ? $quiz : null;
     }
 
+    /**
+     * The same lookup as findInCourseContext(), plus the visibility of the link it matched.
+     *
+     * Every exercise endpoint runs this query and then applies its own rule on the visibility —
+     * some ignore it, some demand a teacher, some accept an unpublished exercise reached from a
+     * learning path. Only the query is shared; the rule stays with the caller.
+     *
+     * @param bool $sessionOnly exclude base course content when a session is given, as the
+     *                          export and notification services do
+     *
+     * @return array{quiz: CQuiz, visibility: int}|null
+     */
+    public function findInCourseContextWithVisibility(
+        int $exerciseId,
+        Course $course,
+        ?Session $session,
+        bool $sessionOnly = false
+    ): ?array {
+        $queryBuilder = $this->createQueryBuilder('quiz')
+            ->addSelect('links.visibility AS linkVisibility')
+            ->innerJoin('quiz.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('quiz.iid = :exerciseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('exerciseId', $exerciseId)
+            ->setMaxResults(1)
+        ;
+
+        $this->addCourseQueryBuilder($course, $queryBuilder);
+
+        if (null === $session) {
+            $this->addSessionNullQueryBuilder($queryBuilder);
+        } elseif ($sessionOnly) {
+            $this->addSessionOnlyQueryBuilder($session, $queryBuilder);
+        } else {
+            $this->addSessionAndBaseContentQueryBuilder($session, $queryBuilder);
+        }
+
+        $row = $queryBuilder->getQuery()->getOneOrNullResult();
+        if (!\is_array($row) || !($row[0] ?? null) instanceof CQuiz) {
+            return null;
+        }
+
+        return [
+            'quiz' => $row[0],
+            'visibility' => (int) ($row['linkVisibility'] ?? 0),
+        ];
+    }
+
     public function findQuizzesUsingQuestion(int $questionId, int $excludeQuizId = 0): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -157,7 +207,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         return $qb->getQuery()->getResult();
     }
 
-    private function addDateFilterQueryBuilder(DateTime $dateTime, ?QueryBuilder $qb = null): QueryBuilder
+    private function addDateFilterQueryBuilder(DateTime $dateTime, ?QueryBuilder $qb = null): void
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -186,11 +236,9 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
             )')
             ->setParameter('date', $dateTime)
         ;
-
-        return $qb;
     }
 
-    private function addNotDeletedQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
+    private function addNotDeletedQueryBuilder(?QueryBuilder $qb = null): void
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -198,11 +246,9 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
             ->andWhere('links.deletedAt IS NULL')
             ->andWhere('links.endVisibilityAt IS NULL')
         ;
-
-        return $qb;
     }
 
-    private function addCategoryQueryBuilder(?int $categoryId = null, ?QueryBuilder $qb = null): QueryBuilder
+    private function addCategoryQueryBuilder(?int $categoryId = null, ?QueryBuilder $qb = null): void
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -212,15 +258,13 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
                 ->setParameter('category_id', $categoryId)
             ;
         }
-
-        return $qb;
     }
 
     /**
      * If $active is provided (any value), enforce links.visibility = 2 (visible).
      * If $active is null, do not add a visibility filter here.
      */
-    private function addActiveQueryBuilder(?int $active = null, ?QueryBuilder $qb = null): QueryBuilder
+    private function addActiveQueryBuilder(?int $active = null, ?QueryBuilder $qb = null): void
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -230,7 +274,5 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
                 ->setParameter('visibility', 2)
             ;
         }
-
-        return $qb;
     }
 }

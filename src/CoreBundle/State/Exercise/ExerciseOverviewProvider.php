@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
@@ -42,7 +43,6 @@ use const PHP_SESSION_ACTIVE;
 final readonly class ExerciseOverviewProvider implements ProviderInterface
 {
     private const VISIBILITY_PUBLISHED = 2;
-    private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS = 0;
     private const RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS = 1;
     private const RESULT_DISABLE_SHOW_SCORE_ONLY = 2;
@@ -65,6 +65,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         private IsAllowedToEditHelper $isAllowedToEditHelper,
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
+        private CQuizRepository $quizRepository,
     ) {}
 
     /**
@@ -183,43 +184,17 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
     /**
      * @return array{0: CQuiz, 1: int}
      */
+    /**
+     * @return array{0: CQuiz, 1: int}
+     */
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): array
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('quiz')
-            ->addSelect('links.visibility AS linkVisibility')
-            ->from(CQuiz::class, 'quiz')
-            ->innerJoin('quiz.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->andWhere('quiz.iid = :exerciseId')
-            ->andWhere('IDENTITY(links.course) = :courseId')
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('links.session IS NULL');
-        }
-
-        $row = $queryBuilder->getQuery()->getOneOrNullResult();
-        if (!\is_array($row)) {
+        $context = $this->quizRepository->findInCourseContextWithVisibility($exerciseId, $course, $session);
+        if (null === $context) {
             throw new NotFoundHttpException('The requested exercise was not found.');
         }
 
-        $quiz = $row[0] ?? $row['quiz'] ?? null;
-        if (!$quiz instanceof CQuiz) {
-            throw new NotFoundHttpException('The requested exercise was not found.');
-        }
-
-        return [$quiz, (int) ($row['linkVisibility'] ?? self::VISIBILITY_PUBLISHED)];
+        return [$context['quiz'], $context['visibility']];
     }
 
     private function getQuestionCount(CQuiz $quiz): int

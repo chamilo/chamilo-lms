@@ -15,6 +15,7 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
@@ -50,6 +51,7 @@ final readonly class ExerciseQti2ExportService
         private EntityManagerInterface $entityManager,
         private CidReqHelper $cidReqHelper,
         private UserHelper $userHelper,
+        private CQuizRepository $quizRepository,
     ) {}
 
     public function exportExerciseZip(int $exerciseId): BinaryFileResponse
@@ -96,56 +98,17 @@ final readonly class ExerciseQti2ExportService
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('quiz')
-            ->addSelect('links.visibility AS linkVisibility')
-            ->from(CQuiz::class, 'quiz')
-            ->innerJoin('quiz.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->andWhere('quiz.iid = :exerciseId')
-            ->andWhere('IDENTITY(links.course) = :courseId')
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('IDENTITY(links.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('links.session IS NULL');
-        }
-
-        $row = $queryBuilder->getQuery()->getOneOrNullResult();
-        if (null === $row) {
+        $context = $this->quizRepository->findInCourseContextWithVisibility($exerciseId, $course, $session, true);
+        if (null === $context) {
             throw new NotFoundHttpException('The requested exercise was not found in the current course context.');
         }
 
-        $quiz = null;
-        $visibility = self::VISIBILITY_PUBLISHED;
-        if ($row instanceof CQuiz) {
-            $quiz = $row;
-        } elseif (\is_array($row)) {
-            $candidate = $row[0] ?? $row['quiz'] ?? null;
-            if ($candidate instanceof CQuiz) {
-                $quiz = $candidate;
-            }
-            $visibility = (int) ($row['linkVisibility'] ?? self::VISIBILITY_PUBLISHED);
-        }
-
-        if (!$quiz instanceof CQuiz) {
-            throw new NotFoundHttpException('The requested exercise was not found.');
-        }
-
+        $visibility = $context['visibility'];
         if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->userHelper->isTeacherOfCurrentCourse()) {
             throw new AccessDeniedHttpException('The requested exercise is not visible.');
         }
 
-        return $quiz;
+        return $context['quiz'];
     }
 
     private function buildExerciseXml(CQuiz $quiz): string

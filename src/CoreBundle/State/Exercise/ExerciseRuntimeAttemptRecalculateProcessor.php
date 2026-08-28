@@ -97,30 +97,7 @@ final readonly class ExerciseRuntimeAttemptRecalculateProcessor implements Proce
             throw new NotFoundHttpException('The requested exercise was not found.');
         }
 
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('quiz.iid')
-            ->from(CQuiz::class, 'quiz')
-            ->innerJoin('quiz.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->andWhere('quiz.iid = :exerciseId')
-            ->andWhere('IDENTITY(links.course) = :courseId')
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('links.session IS NULL');
-        }
-
-        if (null === $queryBuilder->getQuery()->getOneOrNullResult()) {
+        if (null === $this->quizRepository->findInCourseContext($exerciseId, $course, $session)) {
             throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
         }
 

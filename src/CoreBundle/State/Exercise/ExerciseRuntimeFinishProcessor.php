@@ -511,39 +511,17 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             throw new NotFoundHttpException('The requested exercise was not found.');
         }
 
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('quiz.iid')
-            ->addSelect('links.visibility AS linkVisibility')
-            ->from(CQuiz::class, 'quiz')
-            ->innerJoin('quiz.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->andWhere('quiz.iid = :exerciseId')
-            ->andWhere('IDENTITY(links.course) = :courseId')
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('links.session IS NULL');
-        }
-
-        $row = $queryBuilder->getQuery()->getOneOrNullResult();
-        if (null === $row) {
+        $context = $this->quizRepository->findInCourseContextWithVisibility($exerciseId, $course, $session);
+        if (null === $context) {
             throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
         }
 
         if (!$canManage) {
-            $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
+            $visibility = $context['visibility'];
             $now = new DateTime();
-            if (self::VISIBILITY_PUBLISHED !== $visibility && !$this->exerciseLearnpathVisibilityHelper->isVisibleThroughLearnpath($quiz, $course, $session)) {
+            if (self::VISIBILITY_PUBLISHED !== $visibility
+                && !$this->exerciseLearnpathVisibilityHelper->isVisibleThroughLearnpath($quiz, $course, $session)
+            ) {
                 throw new AccessDeniedHttpException('The requested exercise is not visible.');
             }
 

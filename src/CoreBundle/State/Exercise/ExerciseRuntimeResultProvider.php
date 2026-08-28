@@ -19,7 +19,6 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
-use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -83,7 +82,6 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
-        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -105,12 +103,12 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
+        // Membership in the current course is already settled by the operation's own security
+        // expression, which runs before this provider.
+        //
         // tutor: true restores the course tutor, whom result.php reached through its
         // api_is_course_tutor() term. Same criterion as TrackEExerciseVoter.
         $canManage = $this->isAllowedToEditHelper->check(tutor: true, coach: true);
-        if (!$canManage && !$this->canViewExercises()) {
-            throw new AccessDeniedHttpException('You are not allowed to view this exercise result.');
-        }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $canManage);
         $attempt = $this->getAttempt($attemptId, $quiz, $course, $session, $canManage);
@@ -272,13 +270,6 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'achievedLevel' => $destinationResult->getAchievedLevel(),
             'hash' => $destinationResult->getHash(),
         ];
-    }
-
-    private function canViewExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->userHelper->isTeacherOfCurrentCourse();
     }
 
     private function isReviewMode(TrackEExercise $attempt, bool $canManage, Request $request): bool

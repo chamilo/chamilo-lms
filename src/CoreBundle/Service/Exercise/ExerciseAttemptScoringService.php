@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Service\Exercise;
 
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Helpers\ExerciseHotspotGeometryHelper;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -29,40 +30,41 @@ use const ENT_SUBSTITUTE;
  */
 final readonly class ExerciseAttemptScoringService
 {
-    private const MEDIA_QUESTION = 15;
-    private const UNIQUE_ANSWER = 1;
-    private const MULTIPLE_ANSWER = 2;
-    private const FILL_IN_BLANKS = 3;
-    private const MATCHING = 4;
-    private const FREE_ANSWER = 5;
-    private const HOT_SPOT = 6;
-    private const CALCULATED_ANSWER = 16;
-    private const DRAGGABLE = 18;
-    private const READING_COMPREHENSION = 21;
-    private const PAGE_BREAK = 31;
-    private const ORAL_EXPRESSION = 13;
-    private const UPLOAD_ANSWER = 23;
-    private const ANSWER_IN_OFFICE_DOC = 30;
-    private const ANNOTATION = 20;
-    private const MULTIPLE_ANSWER_COMBINATION = 9;
-    private const UNIQUE_ANSWER_NO_OPTION = 10;
-    private const MULTIPLE_ANSWER_TRUE_FALSE = 11;
-    private const MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE = 12;
-    private const MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY = 22;
-    private const GLOBAL_MULTIPLE_ANSWER = 14;
-    private const UNIQUE_ANSWER_IMAGE = 17;
-    private const MATCHING_DRAGGABLE = 19;
-    private const FILL_IN_BLANKS_COMBINATION = 27;
-    private const MULTIPLE_ANSWER_DROPDOWN_COMBINATION = 28;
-    private const MULTIPLE_ANSWER_DROPDOWN = 29;
-    private const MATCHING_COMBINATION = 24;
-    private const MATCHING_DRAGGABLE_COMBINATION = 25;
-    private const HOT_SPOT_COMBINATION = 26;
+    private const int MEDIA_QUESTION = 15;
+    private const int UNIQUE_ANSWER = 1;
+    private const int MULTIPLE_ANSWER = 2;
+    private const int FILL_IN_BLANKS = 3;
+    private const int MATCHING = 4;
+    private const int FREE_ANSWER = 5;
+    private const int HOT_SPOT = 6;
+    private const int HOT_SPOT_DELINEATION = 8;
+    private const int CALCULATED_ANSWER = 16;
+    private const int DRAGGABLE = 18;
+    private const int READING_COMPREHENSION = 21;
+    private const int PAGE_BREAK = 31;
+    private const int ORAL_EXPRESSION = 13;
+    private const int UPLOAD_ANSWER = 23;
+    private const int ANSWER_IN_OFFICE_DOC = 30;
+    private const int ANNOTATION = 20;
+    private const int MULTIPLE_ANSWER_COMBINATION = 9;
+    private const int UNIQUE_ANSWER_NO_OPTION = 10;
+    private const int MULTIPLE_ANSWER_TRUE_FALSE = 11;
+    private const int MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE = 12;
+    private const int MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY = 22;
+    private const int GLOBAL_MULTIPLE_ANSWER = 14;
+    private const int UNIQUE_ANSWER_IMAGE = 17;
+    private const int MATCHING_DRAGGABLE = 19;
+    private const int FILL_IN_BLANKS_COMBINATION = 27;
+    private const int MULTIPLE_ANSWER_DROPDOWN_COMBINATION = 28;
+    private const int MULTIPLE_ANSWER_DROPDOWN = 29;
+    private const int MATCHING_COMBINATION = 24;
+    private const int MATCHING_DRAGGABLE_COMBINATION = 25;
+    private const int HOT_SPOT_COMBINATION = 26;
 
     /**
      * @var array<int, string>
      */
-    private const SUPPORTED_TYPE_NAMES = [
+    private const array SUPPORTED_TYPE_NAMES = [
         self::UNIQUE_ANSWER => 'Unique answer',
         self::UNIQUE_ANSWER_NO_OPTION => 'Unique answer no option',
         self::UNIQUE_ANSWER_IMAGE => 'Unique answer with images',
@@ -96,6 +98,7 @@ final readonly class ExerciseAttemptScoringService
 
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private ExerciseHotspotGeometryHelper $exerciseHotspotGeometryHelper,
     ) {}
 
     /**
@@ -186,7 +189,7 @@ final readonly class ExerciseAttemptScoringService
     /**
      * @return array<int, int>
      */
-    private function parseQuestionIds(string $value): array
+    public function parseQuestionIds(string $value): array
     {
         if ('' === trim($value)) {
             return [];
@@ -200,7 +203,7 @@ final readonly class ExerciseAttemptScoringService
      *
      * @return array<int, CQuizQuestion>
      */
-    private function getQuestions(CQuiz $quiz, array $questionIds): array
+    public function getQuestions(CQuiz $quiz, array $questionIds): array
     {
         $relations = $this->entityManager->createQueryBuilder()
             ->select('relQuestion')
@@ -237,7 +240,7 @@ final readonly class ExerciseAttemptScoringService
      *
      * @return array<int, string>
      */
-    private function getUnsupportedQuestionTypes(array $questions): array
+    public function getUnsupportedQuestionTypes(array $questions): array
     {
         $unsupportedTypes = [];
         foreach ($questions as $question) {
@@ -258,7 +261,7 @@ final readonly class ExerciseAttemptScoringService
     /**
      * @return array<int, TrackEAttempt>
      */
-    private function getAttemptRows(int $attemptId, int $questionId): array
+    public function getAttemptRows(int $attemptId, int $questionId): array
     {
         $rows = $this->entityManager->createQueryBuilder()
             ->select('saved')
@@ -285,7 +288,7 @@ final readonly class ExerciseAttemptScoringService
     /**
      * @return array<int, CQuizAnswer>
      */
-    private function getQuestionAnswers(int $questionId): array
+    public function getQuestionAnswers(int $questionId): array
     {
         $rows = $this->entityManager->createQueryBuilder()
             ->select('answer')
@@ -313,7 +316,7 @@ final readonly class ExerciseAttemptScoringService
     /**
      * @return array<int, CQuizQuestionOption>
      */
-    private function getQuestionOptions(int $questionId): array
+    public function getQuestionOptions(int $questionId): array
     {
         $rows = $this->entityManager->createQueryBuilder()
             ->select('questionOption')
@@ -341,7 +344,7 @@ final readonly class ExerciseAttemptScoringService
      * @param array<int, CQuizQuestionOption> $options
      * @param array<int, TrackEAttempt>       $rows
      */
-    private function scoreQuestion(CQuiz $quiz, CQuizQuestion $question, array $answers, array $options, array $rows): float
+    public function scoreQuestion(CQuiz $quiz, CQuizQuestion $question, array $answers, array $options, array $rows): float
     {
         return match ((int) $question->getType()) {
             self::UNIQUE_ANSWER,
@@ -365,6 +368,7 @@ final readonly class ExerciseAttemptScoringService
             self::MATCHING_DRAGGABLE_COMBINATION => $this->scoreMatchingCombination($question, $answers, $rows),
             self::CALCULATED_ANSWER => $this->scoreCalculatedAnswer($question, $answers, $rows),
             self::HOT_SPOT => $this->scoreHotspotAnswer($answers, $rows, false, (float) $question->getPonderation()),
+            self::HOT_SPOT_DELINEATION => $this->scoreHotspotDelineationAnswer($quiz, $question, $answers, $rows),
             self::HOT_SPOT_COMBINATION => $this->scoreHotspotAnswer($answers, $rows, true, (float) $question->getPonderation()),
             self::FREE_ANSWER,
             self::ORAL_EXPRESSION,
@@ -970,7 +974,7 @@ final readonly class ExerciseAttemptScoringService
                     continue;
                 }
 
-                if ($this->isPointInHotspot($point, $hotspotType, (string) $answer->getHotspotCoordinates())) {
+                if ($this->exerciseHotspotGeometryHelper->isPointInHotspot($point, $hotspotType, (string) $answer->getHotspotCoordinates())) {
                     $matchedAnswerIds[$answerId] = true;
                     if (!$combination) {
                         $score += (float) $answer->getPonderation();
@@ -998,7 +1002,7 @@ final readonly class ExerciseAttemptScoringService
         $points = [];
         foreach ($rows as $row) {
             foreach (explode('|', (string) $row->getAnswer()) as $coordinate) {
-                $point = $this->decodeHotspotPoint($coordinate);
+                $point = $this->exerciseHotspotGeometryHelper->decodeHotspotPoint($coordinate);
                 if (null !== $point) {
                     $points[] = $point;
                 }
@@ -1006,127 +1010,6 @@ final readonly class ExerciseAttemptScoringService
         }
 
         return $points;
-    }
-
-    /**
-     * @return array{x: float, y: float, answerId?: int}|null
-     */
-    private function decodeHotspotPoint(string $coordinate): ?array
-    {
-        $answerId = 0;
-        $coordinateValue = trim($coordinate);
-        if (str_contains($coordinateValue, ':')) {
-            [$answerIdValue, $coordinateValue] = explode(':', $coordinateValue, 2);
-            $answerId = (int) $answerIdValue;
-        }
-
-        $parts = array_map('trim', explode(';', $coordinateValue));
-        if (\count($parts) < 2 || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
-            return null;
-        }
-
-        $point = ['x' => (float) $parts[0], 'y' => (float) $parts[1]];
-        if ($answerId > 0) {
-            $point['answerId'] = $answerId;
-        }
-
-        return $point;
-    }
-
-    /**
-     * @param array{x: float, y: float, ...} $point
-     */
-    private function isPointInHotspot(array $point, string $hotspotType, string $coordinates): bool
-    {
-        return match ($hotspotType) {
-            'square' => $this->isPointInSquare($point, $coordinates),
-            'circle' => $this->isPointInEllipse($point, $coordinates),
-            'poly' => $this->isPointInPolygon($point, $coordinates),
-            default => false,
-        };
-    }
-
-    /**
-     * @param array{x: float, y: float, ...} $point
-     */
-    private function isPointInSquare(array $point, string $coordinates): bool
-    {
-        [$origin, $width, $height] = $this->parseBoxCoordinates($coordinates);
-        if (null === $origin) {
-            return false;
-        }
-
-        return $point['x'] >= $origin['x']
-            && $point['x'] <= $origin['x'] + $width
-            && $point['y'] >= $origin['y']
-            && $point['y'] <= $origin['y'] + $height;
-    }
-
-    /**
-     * @param array{x: float, y: float, ...} $point
-     */
-    private function isPointInEllipse(array $point, string $coordinates): bool
-    {
-        [$origin, $width, $height] = $this->parseBoxCoordinates($coordinates);
-        if (null === $origin || $width <= 0.0 || $height <= 0.0) {
-            return false;
-        }
-
-        $radiusX = $width / 2;
-        $radiusY = $height / 2;
-        $centerX = $origin['x'] + $radiusX;
-        $centerY = $origin['y'] + $radiusY;
-
-        return ((($point['x'] - $centerX) ** 2) / ($radiusX ** 2))
-            + ((($point['y'] - $centerY) ** 2) / ($radiusY ** 2)) <= 1.0;
-    }
-
-    /**
-     * @return array{0: array{x: float, y: float}|null, 1: float, 2: float}
-     */
-    private function parseBoxCoordinates(string $coordinates): array
-    {
-        $parts = explode('|', $coordinates);
-        $origin = $this->decodeHotspotPoint((string) ($parts[0] ?? ''));
-        $width = isset($parts[1]) && is_numeric($parts[1]) ? (float) $parts[1] : 0.0;
-        $height = isset($parts[2]) && is_numeric($parts[2]) ? (float) $parts[2] : 0.0;
-
-        return [$origin, $width, $height];
-    }
-
-    /**
-     * @param array{x: float, y: float, ...} $point
-     */
-    private function isPointInPolygon(array $point, string $coordinates): bool
-    {
-        $vertices = [];
-        foreach (explode('|', $coordinates) as $coordinate) {
-            $decoded = $this->decodeHotspotPoint($coordinate);
-            if (null !== $decoded) {
-                $vertices[] = $decoded;
-            }
-        }
-
-        $count = \count($vertices);
-        if ($count < 3) {
-            return false;
-        }
-
-        $inside = false;
-        for ($i = 0, $j = $count - 1; $i < $count; $j = $i++) {
-            $xi = $vertices[$i]['x'];
-            $yi = $vertices[$i]['y'];
-            $xj = $vertices[$j]['x'];
-            $yj = $vertices[$j]['y'];
-
-            $intersects = (($yi > $point['y']) !== ($yj > $point['y']))
-                && ($point['x'] < ($xj - $xi) * ($point['y'] - $yi) / (($yj - $yi) ?: 0.000001) + $xi);
-            if ($intersects) {
-                $inside = !$inside;
-            }
-        }
-
-        return $inside;
     }
 
     /**
@@ -1191,7 +1074,7 @@ final readonly class ExerciseAttemptScoringService
     /**
      * @param array<int, CQuizAnswer> $answers
      */
-    private function getQuestionWeight(CQuizQuestion $question, array $answers): float
+    public function getQuestionWeight(CQuizQuestion $question, array $answers): float
     {
         $type = (int) $question->getType();
         if (\in_array($type, [self::MEDIA_QUESTION, self::PAGE_BREAK], true)) {
@@ -1241,7 +1124,7 @@ final readonly class ExerciseAttemptScoringService
         return $positions;
     }
 
-    private function requiresManualCorrection(CQuizQuestion $question): bool
+    public function requiresManualCorrection(CQuizQuestion $question): bool
     {
         return \in_array((int) $question->getType(), [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::UPLOAD_ANSWER, self::ANSWER_IN_OFFICE_DOC, self::ANNOTATION], true);
     }
@@ -1262,7 +1145,7 @@ final readonly class ExerciseAttemptScoringService
     /**
      * @param array<int, TrackEAttempt> $rows
      */
-    private function updateQuestionAttemptRows(CQuizQuestion $question, array $rows, float $score): void
+    public function updateQuestionAttemptRows(CQuizQuestion $question, array $rows, float $score): void
     {
         foreach ($rows as $row) {
             $row->setMarks($score);
@@ -1272,5 +1155,120 @@ final readonly class ExerciseAttemptScoringService
         if ([] === $rows && !$this->requiresManualCorrection($question)) {
             return;
         }
+    }
+
+    /**
+     * @param array<int, CQuizAnswer>   $answers
+     * @param array<int, TrackEAttempt> $rows
+     */
+    private function scoreHotspotDelineationAnswer(CQuiz $quiz, CQuizQuestion $question, array $answers, array $rows): float
+    {
+        $studentPolygon = $this->getSavedDelineationPolygon($rows);
+        if (\count($studentPolygon) < 3) {
+            return 0.0;
+        }
+
+        $teacherDelineation = null;
+        $organsAtRisk = [];
+        foreach ($answers as $answer) {
+            $hotspotType = (string) $answer->getHotspotType();
+            if ('delineation' === $hotspotType && null === $teacherDelineation) {
+                $teacherDelineation = $answer;
+
+                continue;
+            }
+
+            if ('oar' === $hotspotType) {
+                $organsAtRisk[] = $answer;
+            }
+        }
+
+        if (!$teacherDelineation instanceof CQuizAnswer) {
+            return 0.0;
+        }
+
+        $teacherPolygon = $this->exerciseHotspotGeometryHelper->parseDelineationPolygon((string) $teacherDelineation->getHotspotCoordinates());
+        if (\count($teacherPolygon) < 3) {
+            return 0.0;
+        }
+
+        $metrics = $this->exerciseHotspotGeometryHelper->getDelineationOverlapMetrics($teacherPolygon, $studentPolygon);
+        $thresholds = $this->getDelineationThresholds($quiz, $question, (int) $teacherDelineation->getPosition());
+
+        if ($metrics['overlap'] < $thresholds['minOverlap']) {
+            return 0.0;
+        }
+
+        if ($metrics['excess'] > $thresholds['maxExcess']) {
+            return 0.0;
+        }
+
+        if ($metrics['missing'] > $thresholds['maxMissing']) {
+            return 0.0;
+        }
+
+        foreach ($organsAtRisk as $organAtRisk) {
+            $organPolygon = $this->exerciseHotspotGeometryHelper->parseDelineationPolygon((string) $organAtRisk->getHotspotCoordinates());
+            if (\count($organPolygon) >= 3 && $this->exerciseHotspotGeometryHelper->polygonsOverlap($studentPolygon, $organPolygon)) {
+                return 0.0;
+            }
+        }
+
+        $score = (float) $teacherDelineation->getPonderation();
+
+        return $score > 0.0 ? $score : (float) $question->getPonderation();
+    }
+
+    /**
+     * @return array{minOverlap: float, maxExcess: float, maxMissing: float}
+     */
+    private function getDelineationThresholds(CQuiz $quiz, CQuizQuestion $question, int $position): array
+    {
+        $relation = $this->entityManager->getRepository(CQuizRelQuestion::class)->findOneBy([
+            'quiz' => $quiz,
+            'question' => $question,
+        ]);
+
+        if (!$relation instanceof CQuizRelQuestion || '' === (string) $relation->getDestination()) {
+            return ['minOverlap' => 1.0, 'maxExcess' => 100.0, 'maxMissing' => 100.0];
+        }
+
+        $destination = json_decode((string) $relation->getDestination(), true);
+        if (!\is_array($destination)) {
+            return ['minOverlap' => 1.0, 'maxExcess' => 100.0, 'maxMissing' => 100.0];
+        }
+
+        $thresholds = \is_array($destination['thresholds'] ?? null) ? $destination['thresholds'] : [];
+        $positionThresholds = \is_array($thresholds[(string) $position] ?? null) ? $thresholds[(string) $position] : [];
+
+        return [
+            'minOverlap' => $this->normalizePercentage($positionThresholds['minOverlap'] ?? 1.0, 1.0),
+            'maxExcess' => $this->normalizePercentage($positionThresholds['maxExcess'] ?? 100.0, 100.0),
+            'maxMissing' => $this->normalizePercentage($positionThresholds['maxMissing'] ?? 100.0, 100.0),
+        ];
+    }
+
+    /**
+     * @param array<int, TrackEAttempt> $rows
+     *
+     * @return array<int, array{x: float, y: float}>
+     */
+    private function getSavedDelineationPolygon(array $rows): array
+    {
+        $row = $rows[0] ?? null;
+        if (!$row instanceof TrackEAttempt) {
+            return [];
+        }
+
+        return $this->exerciseHotspotGeometryHelper->parseDelineationPolygon((string) $row->getAnswer());
+    }
+
+    private function normalizePercentage(mixed $value, float $default): float
+    {
+        if (!is_numeric($value)) {
+            return $default;
+        }
+
+        return min(100.0, max(0.0, (float) $value));
     }
 }

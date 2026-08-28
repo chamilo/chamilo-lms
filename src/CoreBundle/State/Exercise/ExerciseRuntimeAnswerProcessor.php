@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\ExerciseHotspotGeometryHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
@@ -60,28 +61,28 @@ use const PATHINFO_EXTENSION;
  */
 final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterface
 {
-    private const VISIBILITY_PUBLISHED = 2;
-    private const LP_ITEM_TYPE_QUIZ = 'quiz';
-    private const STATUS_INCOMPLETE = 'incomplete';
-    private const FEEDBACK_TYPE_DIRECT = 1;
-    private const FEEDBACK_TYPE_POPUP = 3;
-    private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
-    private const UNIQUE_TYPES = [1, 10, 17, 21];
-    private const MULTIPLE_TYPES = [2, 9, 14];
-    private const TRUE_FALSE_TYPES = [11, 12];
-    private const TRUE_FALSE_DEGREE_CERTAINTY_TYPES = [22];
-    private const FILL_BLANK_TYPES = [3, 27];
-    private const MATCHING_TYPES = [4, 19, 24, 25];
-    private const DRAGGABLE_TYPES = [18];
-    private const DROPDOWN_TYPES = [28, 29];
-    private const CALCULATED_TYPES = [16];
-    private const FREE_ANSWER_TYPES = [5];
-    private const ANNOTATION_TYPES = [20];
-    private const HOTSPOT_DELINEATION = 8;
-    private const HOTSPOT_TYPES = [6, self::HOTSPOT_DELINEATION, 26];
-    private const ANSWER_IN_OFFICE_DOC = 30;
-    private const ATTEMPT_FILE_RESOURCE_TYPE = 'attempt_file';
-    private const ONLYOFFICE_ALLOWED_EXTENSIONS = ['doc', 'docx', 'xls', 'xlsx'];
+    private const int VISIBILITY_PUBLISHED = 2;
+    private const string LP_ITEM_TYPE_QUIZ = 'quiz';
+    private const string STATUS_INCOMPLETE = 'incomplete';
+    private const int FEEDBACK_TYPE_DIRECT = 1;
+    private const int FEEDBACK_TYPE_POPUP = 3;
+    private const int FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
+    private const array UNIQUE_TYPES = [1, 10, 17, 21];
+    private const array MULTIPLE_TYPES = [2, 9, 14];
+    private const array TRUE_FALSE_TYPES = [11, 12];
+    private const array TRUE_FALSE_DEGREE_CERTAINTY_TYPES = [22];
+    private const array FILL_BLANK_TYPES = [3, 27];
+    private const array MATCHING_TYPES = [4, 19, 24, 25];
+    private const array DRAGGABLE_TYPES = [18];
+    private const array DROPDOWN_TYPES = [28, 29];
+    private const array CALCULATED_TYPES = [16];
+    private const array FREE_ANSWER_TYPES = [5];
+    private const array ANNOTATION_TYPES = [20];
+    private const int HOTSPOT_DELINEATION = 8;
+    private const array HOTSPOT_TYPES = [6, self::HOTSPOT_DELINEATION, 26];
+    private const int ANSWER_IN_OFFICE_DOC = 30;
+    private const string ATTEMPT_FILE_RESOURCE_TYPE = 'attempt_file';
+    private const array ONLYOFFICE_ALLOWED_EXTENSIONS = ['doc', 'docx', 'xls', 'xlsx'];
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
@@ -93,6 +94,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         private ResourceNodeRepository $resourceNodeRepository,
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
+        private ExerciseHotspotGeometryHelper $exerciseHotspotGeometryHelper,
     ) {}
 
     /**
@@ -2284,12 +2286,12 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             return 0.0;
         }
 
-        $teacherPolygon = $this->parseDelineationPolygon((string) $teacherDelineation->getHotspotCoordinates());
+        $teacherPolygon = $this->exerciseHotspotGeometryHelper->parseDelineationPolygon((string) $teacherDelineation->getHotspotCoordinates());
         if (\count($teacherPolygon) < 3) {
             return 0.0;
         }
 
-        $metrics = $this->getDelineationOverlapMetrics($teacherPolygon, $studentPolygon);
+        $metrics = $this->exerciseHotspotGeometryHelper->getDelineationOverlapMetrics($teacherPolygon, $studentPolygon);
         $thresholds = $this->getDelineationThresholds($quiz, $question, (int) $teacherDelineation->getPosition());
 
         if ($metrics['overlap'] < $thresholds['minOverlap']) {
@@ -2305,8 +2307,8 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         }
 
         foreach ($organsAtRisk as $organAtRisk) {
-            $organPolygon = $this->parseDelineationPolygon((string) $organAtRisk->getHotspotCoordinates());
-            if (\count($organPolygon) >= 3 && $this->polygonsOverlap($studentPolygon, $organPolygon)) {
+            $organPolygon = $this->exerciseHotspotGeometryHelper->parseDelineationPolygon((string) $organAtRisk->getHotspotCoordinates());
+            if (\count($organPolygon) >= 3 && $this->exerciseHotspotGeometryHelper->polygonsOverlap($studentPolygon, $organPolygon)) {
                 return 0.0;
             }
         }
@@ -2328,142 +2330,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             return [];
         }
 
-        return $this->parseDelineationPolygon((string) ($row['answer'] ?? ''));
-    }
-
-    /**
-     * @return array<int, array{x: float, y: float}>
-     */
-    private function parseDelineationPolygon(string $coordinates): array
-    {
-        $normalizedCoordinates = str_replace('/', '|', trim($coordinates));
-        $points = [];
-        foreach (explode('|', $normalizedCoordinates) as $coordinate) {
-            $point = $this->decodeHotspotPoint($coordinate);
-            if (null !== $point) {
-                $points[] = ['x' => $point['x'], 'y' => $point['y']];
-            }
-        }
-
-        return $this->removeDuplicateClosingPoint($points);
-    }
-
-    /**
-     * @param array<int, array{x: float, y: float}> $points
-     *
-     * @return array<int, array{x: float, y: float}>
-     */
-    private function removeDuplicateClosingPoint(array $points): array
-    {
-        $count = \count($points);
-        if ($count < 4) {
-            return $points;
-        }
-
-        $first = $points[0];
-        $last = $points[$count - 1];
-        if (abs($first['x'] - $last['x']) < 0.0001 && abs($first['y'] - $last['y']) < 0.0001) {
-            array_pop($points);
-        }
-
-        return $points;
-    }
-
-    /**
-     * @param array<int, array{x: float, y: float}> $expectedPolygon
-     * @param array<int, array{x: float, y: float}> $studentPolygon
-     *
-     * @return array{overlap: float, missing: float, excess: float}
-     */
-    private function getDelineationOverlapMetrics(array $expectedPolygon, array $studentPolygon): array
-    {
-        $bounds = $this->getPolygonUnionBounds($expectedPolygon, $studentPolygon);
-        if (null === $bounds) {
-            return ['overlap' => 0.0, 'missing' => 100.0, 'excess' => 100.0];
-        }
-
-        $maxDimension = max($bounds['maxX'] - $bounds['minX'], $bounds['maxY'] - $bounds['minY']);
-        $step = max(1.0, ceil($maxDimension / 500.0));
-        $expectedArea = 0;
-        $studentArea = 0;
-        $overlapArea = 0;
-        $expectedCoordinates = $this->encodePolygonCoordinates($expectedPolygon);
-        $studentCoordinates = $this->encodePolygonCoordinates($studentPolygon);
-
-        for ($x = $bounds['minX']; $x <= $bounds['maxX']; $x += $step) {
-            for ($y = $bounds['minY']; $y <= $bounds['maxY']; $y += $step) {
-                $point = ['x' => $x + ($step / 2), 'y' => $y + ($step / 2)];
-                $insideExpected = $this->isPointInPolygon($point, $expectedCoordinates);
-                $insideStudent = $this->isPointInPolygon($point, $studentCoordinates);
-
-                if ($insideExpected) {
-                    ++$expectedArea;
-                }
-                if ($insideStudent) {
-                    ++$studentArea;
-                }
-                if ($insideExpected && $insideStudent) {
-                    ++$overlapArea;
-                }
-            }
-        }
-
-        if ($expectedArea <= 0) {
-            return ['overlap' => 0.0, 'missing' => 100.0, 'excess' => 100.0];
-        }
-
-        $overlap = round(($overlapArea / $expectedArea) * 100.0, 2);
-        $missing = max(0.0, 100.0 - $overlap);
-        $excess = round((max(0, $studentArea - $overlapArea) / $expectedArea) * 100.0, 2);
-
-        return [
-            'overlap' => min(100.0, $overlap),
-            'missing' => min(100.0, $missing),
-            'excess' => min(100.0, $excess),
-        ];
-    }
-
-    /**
-     * @param array<int, array{x: float, y: float}> $firstPolygon
-     * @param array<int, array{x: float, y: float}> $secondPolygon
-     */
-    private function polygonsOverlap(array $firstPolygon, array $secondPolygon): bool
-    {
-        $metrics = $this->getDelineationOverlapMetrics($secondPolygon, $firstPolygon);
-
-        return $metrics['overlap'] > 0.0;
-    }
-
-    /**
-     * @param array<int, array{x: float, y: float}> $firstPolygon
-     * @param array<int, array{x: float, y: float}> $secondPolygon
-     *
-     * @return array{minX: float, maxX: float, minY: float, maxY: float}|null
-     */
-    private function getPolygonUnionBounds(array $firstPolygon, array $secondPolygon): ?array
-    {
-        $points = [...$firstPolygon, ...$secondPolygon];
-        if ([] === $points) {
-            return null;
-        }
-
-        $xValues = array_map(static fn (array $point): float => $point['x'], $points);
-        $yValues = array_map(static fn (array $point): float => $point['y'], $points);
-
-        return [
-            'minX' => min($xValues),
-            'maxX' => max($xValues),
-            'minY' => min($yValues),
-            'maxY' => max($yValues),
-        ];
-    }
-
-    /**
-     * @param array<int, array{x: float, y: float}> $polygon
-     */
-    private function encodePolygonCoordinates(array $polygon): string
-    {
-        return implode('|', array_map(static fn (array $point): string => $point['x'].';'.$point['y'], $polygon));
+        return $this->exerciseHotspotGeometryHelper->parseDelineationPolygon((string) ($row['answer'] ?? ''));
     }
 
     /**
@@ -2502,66 +2369,6 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         }
 
         return min(100.0, max(0.0, (float) $value));
-    }
-
-    /**
-     * @return array{x: float, y: float, answerId?: int}|null
-     */
-    private function decodeHotspotPoint(string $coordinate): ?array
-    {
-        $answerId = 0;
-        $coordinateValue = trim($coordinate);
-        if (str_contains($coordinateValue, ':')) {
-            [$answerIdValue, $coordinateValue] = explode(':', $coordinateValue, 2);
-            $answerId = (int) $answerIdValue;
-        }
-
-        $parts = array_map('trim', explode(';', $coordinateValue));
-        if (\count($parts) < 2 || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
-            return null;
-        }
-
-        $point = ['x' => (float) $parts[0], 'y' => (float) $parts[1]];
-        if ($answerId > 0) {
-            $point['answerId'] = $answerId;
-        }
-
-        return $point;
-    }
-
-    /**
-     * @param array{x: float, y: float} $point
-     */
-    private function isPointInPolygon(array $point, string $coordinates): bool
-    {
-        $vertices = [];
-        foreach (explode('|', $coordinates) as $coordinate) {
-            $decoded = $this->decodeHotspotPoint($coordinate);
-            if (null !== $decoded) {
-                $vertices[] = $decoded;
-            }
-        }
-
-        $count = \count($vertices);
-        if ($count < 3) {
-            return false;
-        }
-
-        $inside = false;
-        for ($i = 0, $j = $count - 1; $i < $count; $j = $i++) {
-            $xi = $vertices[$i]['x'];
-            $yi = $vertices[$i]['y'];
-            $xj = $vertices[$j]['x'];
-            $yj = $vertices[$j]['y'];
-
-            $intersects = (($yi > $point['y']) !== ($yj > $point['y']))
-                && ($point['x'] < ($xj - $xi) * ($point['y'] - $yi) / (($yj - $yi) ?: 0.000001) + $xi);
-            if ($intersects) {
-                $inside = !$inside;
-            }
-        }
-
-        return $inside;
     }
 
     /**

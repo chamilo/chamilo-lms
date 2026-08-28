@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!isInIframe"
+    v-if="showLoginForm"
     class="login-section"
   >
     <h2 class="login-section__title">{{ t("Sign in") }}</h2>
@@ -161,15 +161,38 @@ const useVirtualKeyboard = computed(() => {
 })
 const isInIframe = window.self !== window.top
 const isHttps = window.location.protocol === "https:"
+const showLoginForm = ref(!isInIframe)
 
 if (isInIframe) {
+  // The original iframe escape was added for same-origin learning-path content.
+  // OAuth clients can host Chamilo in a cross-origin authorization frame, where
+  // reading window.top.location is forbidden. In that case the current URL is
+  // already /login?redirect=/oauth/authorize..., so preserve it verbatim and use
+  // an absolute Chamilo URL when trying to escape the frame.
+  let topTarget = window.location.href
+  let hasSameOriginParent = false
+
   try {
-    const parentUrl = window.top.location.href
-    const parent = new URL(parentUrl)
-    const redirectPath = parent.pathname + parent.search + parent.hash
-    window.top.location.href = "/login?redirect=" + encodeURIComponent(redirectPath)
+    const parent = new URL(window.top.location.href)
+
+    if (parent.origin === window.location.origin) {
+      hasSameOriginParent = true
+      const redirectPath = parent.pathname + parent.search + parent.hash
+      topTarget = `${window.location.origin}/login?redirect=${encodeURIComponent(redirectPath)}`
+    }
   } catch {
-    window.top.location.href = "/login"
+    // Cross-origin parent: keep the current absolute login URL, including its
+    // OAuth redirect parameter, and leave the form visible as a fallback.
+  }
+
+  showLoginForm.value = !hasSameOriginParent
+
+  try {
+    window.top.location.href = topTarget
+  } catch {
+    // Sandboxed frames can reject top navigation. Never leave the user with an
+    // empty Chamilo shell in that case; allow authentication inside the frame.
+    showLoginForm.value = true
   }
 }
 

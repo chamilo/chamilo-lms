@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
+use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
 use Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator;
 use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
@@ -291,6 +292,33 @@ class SecurityController extends AbstractController
         $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]);
 
         return new JsonResponse(['isAuthenticated' => true, 'user' => json_decode($data)], Response::HTTP_OK);
+    }
+
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
+    #[Route('/session/online-presence', name: 'session_online_presence', methods: ['POST'])]
+    public function updateOnlinePresence(
+        Request $request,
+        TrackEOnlineRepository $trackEOnlineRepository,
+    ): JsonResponse {
+        $user = $this->userHelper->getCurrent();
+
+        if (!$user instanceof User) {
+            return new JsonResponse(
+                ['isAuthenticated' => false],
+                Response::HTTP_UNAUTHORIZED
+            );
+        }
+
+        $trackEOnlineRepository->touchOnlineSession(
+            $user,
+            (string) $request->getClientIp()
+        );
+
+        $response = new JsonResponse(['updated' => true]);
+        $response->headers->set('Cache-Control', 'no-store, private');
+        $response->headers->set('Pragma', 'no-cache');
+
+        return $response;
     }
 
     #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]

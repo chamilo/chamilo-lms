@@ -500,42 +500,50 @@ Feature: Special case 1 — course/session creation
   Scenario: Create teacher and configure "Present session" with settings and include course
     Given I am a platform administrator
 
-    # Teacher account (named "teacher1", not the source's "teacher" — see
-    # header comment for the real createUser.feature username collision
-    # this avoids)
-    When I am on "/main/admin/user_add.php"
-    And I wait for the page to be loaded
-    And I fill in the following:
-      | firstname | Teacher |
-      | lastname  | Teacher |
-      | email     | teacher1@example.test |
-      | username  | teacher1 |
-    And I select "Teacher" from "user_add_roles"
-    And I click the "input#send_mail_no" element
-    And I press "submit"
-    And I wait for the page to be loaded
-    Then I should not see an error
-
-    # user_edit.php only renders reset_password=2 ("Set password manually")
-    # when security.admins_can_set_users_pass is on. Fresh-install default is
-    # off — a real CI snapshot of this step showed only "Don't reset password"
-    # / "Automatically generate a new password", then a 15-minute hang on
-    # input[name=reset_password][value=2]. Enable it here rather than
-    # depending on specialCase1PlatformSettings having finished first.
+    # admins_can_set_users_pass must be ON *before* the add-user form is opened,
+    # not after: UserAdd.vue only renders the "Set password manually" radio while
+    # it is on, and this scenario needs teacher1's password to be a known value
+    # (it logs in as teacher1 further down). Enabled here rather than depending
+    # on specialCase1PlatformSettings having finished first. Fresh-install
+    # default is off.
     Given I am on "/admin/settings/security"
     And I wait for the page to be loaded
     And I select "Yes" from "form_admins_can_set_users_pass"
     And I press "Save settings"
     And I wait for the page to be loaded
 
-    Given I am on "/admin/user-list?keyword=teacher1"
-    And I wait for the page to be loaded
-    And I click the "[title='Edit']" icon in the row for "teacher1@example.test"
-    And I wait for the page to be loaded
-    And I click the "input[name='reset_password'][value='2']" element
+    # Teacher account (named "teacher1", not the source's "teacher" — see
+    # header comment for the real createUser.feature username collision
+    # this avoids)
+    #
+    # "/admin/user-add", NOT "/main/admin/user_add.php". Master commit
+    # d89fa1a9395 ("Admin: Convert users add/edit pages to Vue + tighten
+    # permissions") blanked the legacy page down to the project's 124-byte
+    # deprecated stub, so the old path now serves an empty document: the CI run
+    # of 2026-08-26 failed here with `No form field found for "firstname"`,
+    # which is the fail-fast resolveField() error correctly reporting that the
+    # page has no fields at all rather than hanging for the 15-minute budget.
+    #
+    # The step sequence below mirrors createUser.feature's own "Create a HRM
+    # user" scenario verbatim, because that is the proven path for creating a
+    # user with a KNOWN password in a single pass. That also removes the
+    # user-edit round trip this scenario used to need, and with it the legacy
+    # input[name=reset_password][value=2] radio, which no longer exists — the
+    # Vue form exposes it as a labelled "Set password manually" radio instead.
+    When I am on "/admin/user-add"
+    And I wait very long for the page to be loaded
+    And I fill in the following:
+      | firstname | Teacher |
+      | lastname  | Teacher |
+      | email     | teacher1@example.test |
+      | username  | teacher1 |
+    And I check the "Set password manually" radio button
     And I fill in "password" with "teacher1"
-    And I press "submit"
-    And I wait for the page to be loaded
+    And I check the "No" radio button
+    And I press the multiselect option "Teacher" in "roles"
+    And wait very long for the page to be loaded
+    And I press "Add"
+    And wait very long for the page to be loaded
     Then I should not see an error
 
     # Session "Present session" — straddles today (2026-08-05 in this

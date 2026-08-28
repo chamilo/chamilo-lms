@@ -46,6 +46,8 @@ const ACTIVITY_EVENTS = ["keydown", "pointerdown", "pointermove", "scroll", "tou
 const SESSION_STATE_STORAGE_KEY = "chamilo.session.expiration.state"
 const SESSION_LOGOUT_STORAGE_KEY = "chamilo.session.expiration.logout"
 const MINIMUM_KEEP_ALIVE_INTERVAL_MS = 30_000
+const ONLINE_PRESENCE_INTERVAL_MS = 60_000
+const ONLINE_PRESENCE_RETRY_INTERVAL_MS = 15_000
 
 const { t } = useI18n()
 
@@ -75,6 +77,9 @@ let warningTimeoutId = null
 let countdownIntervalId = null
 let keepAlivePromise = null
 let logoutUrl = "/logout"
+let nextOnlinePresenceAtMs = 0
+let onlinePresencePromise = null
+let onlinePresenceIntervalId = null
 
 function clearWarningTimers() {
   if (warningTimeoutId !== null) {
@@ -232,7 +237,46 @@ async function renewSession() {
   return keepAlivePromise
 }
 
+function updateOnlinePresence({ force = false } = {}) {
+  const now = Date.now()
+
+  if (document.hidden || (!force && now < nextOnlinePresenceAtMs) || onlinePresencePromise) {
+    return
+  }
+
+  nextOnlinePresenceAtMs = now + ONLINE_PRESENCE_INTERVAL_MS
+
+  onlinePresencePromise = securityService
+    .updateOnlinePresence()
+    .catch(() => {
+      // Allow a relatively quick retry after a temporary network failure,
+      // without reporting presence failures to the global notification UI.
+      nextOnlinePresenceAtMs = Date.now() + ONLINE_PRESENCE_RETRY_INTERVAL_MS
+    })
+    .finally(() => {
+      onlinePresencePromise = null
+    })
+}
+
+function stopOnlinePresenceHeartbeat() {
+  if (onlinePresenceIntervalId !== null) {
+    window.clearInterval(onlinePresenceIntervalId)
+    onlinePresenceIntervalId = null
+  }
+}
+
+function startOnlinePresenceHeartbeat() {
+  stopOnlinePresenceHeartbeat()
+  void updateOnlinePresence({ force: true })
+
+  onlinePresenceIntervalId = window.setInterval(() => {
+    void updateOnlinePresence({ force: true })
+  }, ONLINE_PRESENCE_INTERVAL_MS)
+}
+
 function handleActivity() {
+  void updateOnlinePresence()
+
   if (!enabled || isWarningVisible.value || Date.now() < nextKeepAliveAtMs) {
     return
   }
@@ -299,6 +343,7 @@ function handleStorage(event) {
 
 function handleVisibilityChange() {
   if (!document.hidden) {
+    void updateOnlinePresence({ force: true })
     scheduleWarning()
   }
 }
@@ -314,6 +359,8 @@ onMounted(async () => {
   document.addEventListener("visibilitychange", handleVisibilityChange)
   window.addEventListener("storage", handleStorage)
 
+  startOnlinePresenceHeartbeat()
+
   try {
     const data = await securityService.getSessionExpiration()
     applySessionState(data)
@@ -324,6 +371,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   clearWarningTimers()
+  stopOnlinePresenceHeartbeat()
 
   for (const eventName of ACTIVITY_EVENTS) {
     document.removeEventListener(eventName, handleActivity, {

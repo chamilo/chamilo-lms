@@ -14,10 +14,6 @@
 @use "timepicker/jquery.timepicker.min.css" as timepicker;
 @use "qtip2/dist/jquery.qtip.min.css" as qtip;
 
-mjx-container svg {
-  display: block;
-}
-
 @layer utilities {
   .border-gray-300 {
     --tw-border-opacity: 1;

@@ -954,14 +954,24 @@
                       name="teacher_comment"
                       rows="3"
                     />
-                    <BaseButton
-                      :disabled="correctionSavingQuestionId === question.id"
-                      :is-loading="correctionSavingQuestionId === question.id"
-                      :label="t('Save correction')"
-                      icon="content-save"
-                      type="success"
-                      @click="saveManualCorrection(question)"
-                    />
+                    <div class="flex flex-col gap-2">
+                      <BaseButton
+                        :disabled="correctionSavingQuestionId === question.id"
+                        :is-loading="correctionSavingQuestionId === question.id"
+                        :label="t('Save as draft')"
+                        icon="content-save-outline"
+                        type="secondary"
+                        @click="saveManualCorrection(question, false)"
+                      />
+                      <BaseButton
+                        :disabled="correctionSavingQuestionId === question.id"
+                        :is-loading="correctionSavingQuestionId === question.id"
+                        :label="t('Save correction')"
+                        icon="content-save"
+                        type="success"
+                        @click="saveManualCorrection(question, true)"
+                      />
+                    </div>
                   </div>
                   <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
                     <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
@@ -1158,14 +1168,24 @@
                       name="teacher_comment"
                       rows="3"
                     />
-                    <BaseButton
-                      :disabled="correctionSavingQuestionId === question.id"
-                      :is-loading="correctionSavingQuestionId === question.id"
-                      :label="t('Save correction')"
-                      icon="content-save"
-                      type="success"
-                      @click="saveManualCorrection(question)"
-                    />
+                    <div class="flex flex-col gap-2">
+                      <BaseButton
+                        :disabled="correctionSavingQuestionId === question.id"
+                        :is-loading="correctionSavingQuestionId === question.id"
+                        :label="t('Save as draft')"
+                        icon="content-save-outline"
+                        type="secondary"
+                        @click="saveManualCorrection(question, false)"
+                      />
+                      <BaseButton
+                        :disabled="correctionSavingQuestionId === question.id"
+                        :is-loading="correctionSavingQuestionId === question.id"
+                        :label="t('Save correction')"
+                        icon="content-save"
+                        type="success"
+                        @click="saveManualCorrection(question, true)"
+                      />
+                    </div>
                   </div>
                   <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
                     <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
@@ -1364,14 +1384,24 @@
                       name="teacher_comment"
                       rows="3"
                     />
-                    <BaseButton
-                      :disabled="correctionSavingQuestionId === question.id"
-                      :is-loading="correctionSavingQuestionId === question.id"
-                      :label="t('Save correction')"
-                      icon="content-save"
-                      type="success"
-                      @click="saveManualCorrection(question)"
-                    />
+                    <div class="flex flex-col gap-2">
+                      <BaseButton
+                        :disabled="correctionSavingQuestionId === question.id"
+                        :is-loading="correctionSavingQuestionId === question.id"
+                        :label="t('Save as draft')"
+                        icon="content-save-outline"
+                        type="secondary"
+                        @click="saveManualCorrection(question, false)"
+                      />
+                      <BaseButton
+                        :disabled="correctionSavingQuestionId === question.id"
+                        :is-loading="correctionSavingQuestionId === question.id"
+                        :label="t('Save correction')"
+                        icon="content-save"
+                        type="success"
+                        @click="saveManualCorrection(question, true)"
+                      />
+                    </div>
                   </div>
                   <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
                     <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
@@ -1554,14 +1584,24 @@
                       name="teacher_comment"
                       rows="3"
                     />
-                    <BaseButton
-                      :disabled="correctionSavingQuestionId === question.id"
-                      :is-loading="correctionSavingQuestionId === question.id"
-                      :label="t('Save correction')"
-                      icon="content-save"
-                      type="success"
-                      @click="saveManualCorrection(question)"
-                    />
+                    <div class="flex flex-col gap-2">
+                      <BaseButton
+                        :disabled="correctionSavingQuestionId === question.id"
+                        :is-loading="correctionSavingQuestionId === question.id"
+                        :label="t('Save as draft')"
+                        icon="content-save-outline"
+                        type="secondary"
+                        @click="saveManualCorrection(question, false)"
+                      />
+                      <BaseButton
+                        :disabled="correctionSavingQuestionId === question.id"
+                        :is-loading="correctionSavingQuestionId === question.id"
+                        :label="t('Save correction')"
+                        icon="content-save"
+                        type="success"
+                        @click="saveManualCorrection(question, true)"
+                      />
+                    </div>
                   </div>
                   <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
                     <label class="flex items-center gap-2 text-sm font-semibold text-gray-700">
@@ -2470,7 +2510,7 @@ function prepareCorrectionNotificationContent(question) {
   form.notificationContent = form.teacherComment || ""
 }
 
-async function saveManualCorrection(question) {
+async function saveManualCorrection(question, final = true) {
   const form = correctionForms.value[question.id]
   const exerciseId = getExerciseId()
   const attemptId = getAttemptId()
@@ -2491,7 +2531,8 @@ async function saveManualCorrection(question) {
         questionId,
         marks: Number(form.marks || 0),
         teacherComment: form.teacherComment || "",
-        sendNotification: Boolean(form.sendNotification),
+        final,
+        sendNotification: final && Boolean(form.sendNotification),
         notificationContent: form.notificationContent || form.teacherComment || "",
       },
       getContextParams(),
@@ -2503,7 +2544,11 @@ async function saveManualCorrection(question) {
       throw new Error(response?.message || "Could not save correction")
     }
 
-    correctionMessage.value = response?.notificationSent ? t("Message Sent") : t("Correction saved")
+    correctionMessage.value = response?.notificationSent
+      ? t("Message Sent")
+      : final
+        ? t("Correction saved")
+        : t("Draft saved")
     await loadResult()
   } catch (error) {
     console.error("Error saving exercise correction", error)

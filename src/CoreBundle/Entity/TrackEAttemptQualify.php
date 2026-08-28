@@ -61,6 +61,13 @@ class TrackEAttemptQualify
     #[ORM\Column(name: 'answer', type: 'text', nullable: true)]
     protected ?string $answer;
 
+    /**
+     * Whether this correction record is final (validated) or a draft save
+     * that has not been validated by the teacher yet.
+     */
+    #[ORM\Column(name: 'final', type: 'boolean', nullable: false, options: ['default' => true])]
+    protected bool $final;
+
     #[ORM\ManyToOne(inversedBy: 'revisedAttempts')]
     #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id', nullable: false, onDelete: 'CASCADE')]
     private ?TrackEExercise $trackExercise = null;
@@ -71,6 +78,7 @@ class TrackEAttemptQualify
         $this->answer = null;
         $this->sessionId = 0;
         $this->author = 0;
+        $this->final = true;
     }
 
     public function getTrackExercise(): ?TrackEExercise
@@ -196,6 +204,18 @@ class TrackEAttemptQualify
     public function setAnswer(?string $answer): self
     {
         $this->answer = $answer;
+
+        return $this;
+    }
+
+    public function isFinal(): bool
+    {
+        return $this->final;
+    }
+
+    public function setFinal(bool $final): static
+    {
+        $this->final = $final;
 
         return $this;
     }

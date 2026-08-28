@@ -176,7 +176,7 @@ $revisedSelect = "
             SELECT 1
             FROM $trackAttemptQualifyTable taq
             WHERE taq.exe_id = te.exe_id
-              AND taq.author > 0
+              AND taq.author > 0 AND taq.final = 1
             LIMIT 1
         ) THEN 1
         ELSE 0
@@ -190,7 +190,7 @@ $qualifierSelect = "
         INNER JOIN $userTable author
             ON author.id = taq.author
         WHERE taq.exe_id = te.exe_id
-          AND taq.author > 0
+          AND taq.author > 0 AND taq.final = 1
         ORDER BY taq.insert_date DESC
         LIMIT 1
     ), '')
@@ -201,7 +201,7 @@ $qualificationDateSelect = "
         SELECT taq.insert_date
         FROM $trackAttemptQualifyTable taq
         WHERE taq.exe_id = te.exe_id
-          AND taq.author > 0
+          AND taq.author > 0 AND taq.final = 1
         ORDER BY taq.insert_date DESC
         LIMIT 1
     ), '')
@@ -252,7 +252,7 @@ switch ($statusId) {
             SELECT 1
             FROM $trackAttemptQualifyTable taq
             WHERE taq.exe_id = te.exe_id
-              AND taq.author > 0
+              AND taq.author > 0 AND taq.final = 1
             LIMIT 1
         )";
         break;
@@ -263,7 +263,7 @@ switch ($statusId) {
             SELECT 1
             FROM $trackAttemptQualifyTable taq
             WHERE taq.exe_id = te.exe_id
-              AND taq.author > 0
+              AND taq.author > 0 AND taq.final = 1
             LIMIT 1
         )";
         break;

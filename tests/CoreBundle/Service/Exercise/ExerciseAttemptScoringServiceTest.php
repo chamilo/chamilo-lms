@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Service\Exercise;
 
 use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptScoringService;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use ReflectionMethod;
 
 final class ExerciseAttemptScoringServiceTest extends TestCase
@@ -18,9 +18,8 @@ final class ExerciseAttemptScoringServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->service = new ExerciseAttemptScoringService(
-            $this->createMock(EntityManagerInterface::class),
-        );
+        $reflection = new ReflectionClass(ExerciseAttemptScoringService::class);
+        $this->service = $reflection->newInstanceWithoutConstructor();
         $this->fillBlankMatcher = new ReflectionMethod(
             ExerciseAttemptScoringService::class,
             'isFillBlankStudentAnswerGood',

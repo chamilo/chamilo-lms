@@ -41356,3 +41356,21 @@ msgstr "Kurse nach Sprache zählen"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Benutzer, deren letzter Zugriff älter als das ausgewählte Datum ist."
 
+msgid "Your certificate is about to expire"
+msgstr "Ihr Zertifikat läuft bald ab"
+
+msgid "Your certificate has expired"
+msgstr "Ihr Zertifikat ist abgelaufen"
+
+msgid "Your certificate is about to expire:"
+msgstr "Ihr Zertifikat läuft bald ab:"
+
+msgid "Your certificate has expired:"
+msgstr "Ihr Zertifikat ist abgelaufen:"
+
+msgid "Expiry date"
+msgstr "Ablaufdatum"
+
+msgid "%s days remaining"
+msgstr "%s Tage verbleibend"
+

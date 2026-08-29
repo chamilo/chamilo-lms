@@ -39790,3 +39790,21 @@ msgstr "Hitung kursus menurut bahasa"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Pengguna yang akses terakhirnya lebih lama dari tanggal yang dipilih."
 
+msgid "Your certificate is about to expire"
+msgstr "Sertifikat Anda akan segera kedaluwarsa"
+
+msgid "Your certificate has expired"
+msgstr "Sertifikat Anda telah kedaluwarsa"
+
+msgid "Your certificate is about to expire:"
+msgstr "Sertifikat Anda akan segera kedaluwarsa:"
+
+msgid "Your certificate has expired:"
+msgstr "Sertifikat Anda telah kedaluwarsa:"
+
+msgid "Expiry date"
+msgstr "Tanggal kedaluwarsa"
+
+msgid "%s days remaining"
+msgstr "%s hari tersisa"
+

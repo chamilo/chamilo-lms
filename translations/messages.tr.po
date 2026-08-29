@@ -39792,3 +39792,21 @@ msgstr "Dile göre kurs sayısı"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Son erişimi seçilen tarihten daha eski olan kullanıcılar."
 
+msgid "Your certificate is about to expire"
+msgstr "Sertifikanızın süresi dolmak üzere"
+
+msgid "Your certificate has expired"
+msgstr "Sertifikanızın süresi doldu"
+
+msgid "Your certificate is about to expire:"
+msgstr "Sertifikanızın süresi dolmak üzere:"
+
+msgid "Your certificate has expired:"
+msgstr "Sertifikanızın süresi doldu:"
+
+msgid "Expiry date"
+msgstr "Bitiş tarihi"
+
+msgid "%s days remaining"
+msgstr "%s gün kaldı"
+

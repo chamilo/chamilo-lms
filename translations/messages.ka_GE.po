@@ -39786,3 +39786,21 @@ msgstr "კურსების რაოდენობა ენის მი
 msgid "Users whose latest access is older than the selected date."
 msgstr "მომხმარებლები, რომელთა ბოლო წვდომა უფრო ძველია, ვიდრე არჩეული თარიღი."
 
+msgid "Your certificate is about to expire"
+msgstr "თქვენი სერტიფიკატი მალე იწურება"
+
+msgid "Your certificate has expired"
+msgstr "თქვენი სერტიფიკატი ვადაგასულია"
+
+msgid "Your certificate is about to expire:"
+msgstr "თქვენი სერტიფიკატი მალე იწურება:"
+
+msgid "Your certificate has expired:"
+msgstr "თქვენი სერტიფიკატი ვადაგასულია:"
+
+msgid "Expiry date"
+msgstr "ვადის გასვლის თარიღი"
+
+msgid "%s days remaining"
+msgstr "%s დღე დარჩა"
+

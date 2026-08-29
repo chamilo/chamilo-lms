@@ -8648,7 +8648,7 @@ msgid "%B %d, %Y at %I:%M %p"
 msgstr "%d %B, %Y às %I:%M %p"
 
 msgid "%I:%M %p"
-msgstr "%I:%M %p"
+msgstr "%H:%M"
 
 msgid "Yes"
 msgstr "Sim"
@@ -16256,7 +16256,7 @@ msgid "Quarterly report"
 msgstr "Relatório trimestral"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%d de %B de %Y"
 
 msgid "%A"
 msgstr "%A"
@@ -39804,4 +39804,22 @@ msgstr "Contar cursos por idioma"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Usuários cujo último acesso é anterior à data selecionada."
+
+msgid "Your certificate is about to expire"
+msgstr "Seu certificado está prestes a expirar"
+
+msgid "Your certificate has expired"
+msgstr "Seu certificado expirou"
+
+msgid "Your certificate is about to expire:"
+msgstr "Seu certificado está prestes a expirar:"
+
+msgid "Your certificate has expired:"
+msgstr "Seu certificado expirou:"
+
+msgid "Expiry date"
+msgstr "Data de validade"
+
+msgid "%s days remaining"
+msgstr "%s dias restantes"
 

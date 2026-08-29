@@ -3884,5 +3884,9 @@
     "Last reminder sent": "Last reminder sent",
     "Days ahead": "Days ahead",
     "Send notification": "Send notification",
-    "Are you sure you want to send this notification?": "Are you sure you want to send this notification?"
+    "Are you sure you want to send this notification?": "Are you sure you want to send this notification?",
+    "Attach certificate": "Attach certificate",
+    "Default certificate": "Default certificate",
+    "Notify": "Notify",
+    "Certificate notification": "Certificate notification"
 }

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Príklad vzorca: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukážka vzorca: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -14684,7 +14684,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Povoliť tlačidlo rozšírené, pokiaľ je editor WYSIWYG maximalizovaný"
 
 msgid "HTML Editor"
-msgstr "HTML editor"
+msgstr "Editor HTML"
 
 msgid "Go directly to the course after login"
 msgstr "Priamo prejdite do kurzu po prihlásení"
@@ -39281,7 +39281,7 @@ msgid "Delete failed"
 msgstr "Odstránenie zlyhalo"
 
 msgid "PHP cache"
-msgstr "PHP cache"
+msgstr "Vyrovnávacia pamäť PHP"
 
 msgid "Live OPcache and APCu diagnostics"
 msgstr "Diagnostika OPcache a APCu v reálnom čase"
@@ -39804,4 +39804,22 @@ msgstr "Počet kurzov podľa jazyka"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Používatelia, ktorých posledný prístup je starší ako vybraný dátum."
+
+msgid "Your certificate is about to expire"
+msgstr "Váš certifikát čoskoro vyprší"
+
+msgid "Your certificate has expired"
+msgstr "Váš certifikát vypršal"
+
+msgid "Your certificate is about to expire:"
+msgstr "Váš certifikát čoskoro vyprší:"
+
+msgid "Your certificate has expired:"
+msgstr "Váš certifikát vypršal:"
+
+msgid "Expiry date"
+msgstr "Dátum vypršania"
+
+msgid "%s days remaining"
+msgstr "Zostáva %s dní"
 

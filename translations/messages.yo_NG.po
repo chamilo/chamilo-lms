@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ fọ́múlà: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -39785,4 +39785,22 @@ msgstr "Ka ìkẹ́kọ̀ọ́ nípasẹ̀ èdè"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Àwọn olùmúlò tí ìwọlé wọn tó kẹ́yìn pẹ́ ju ọjọ́ tí a yàn lọ."
+
+msgid "Your certificate is about to expire"
+msgstr "Ìwé-ẹ̀rí rẹ fẹ́ parí"
+
+msgid "Your certificate has expired"
+msgstr "Ìwé-ẹ̀rí rẹ ti parí"
+
+msgid "Your certificate is about to expire:"
+msgstr "Ìwé-ẹ̀rí rẹ fẹ́ parí:"
+
+msgid "Your certificate has expired:"
+msgstr "Ìwé-ẹ̀rí rẹ ti parí:"
+
+msgid "Expiry date"
+msgstr "Ọjọ́ ìparí"
+
+msgid "%s days remaining"
+msgstr "%s ọjọ́ ṣẹ́kù"
 

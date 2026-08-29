@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "با احترام"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نمونه فورمول: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نمونهٔ فورمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "محدوده متغیرها"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":بله:حق نشر,, خیر:بدون حق نشر"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوشه,, application/msword:MsWord,, application/octet-stream:جریان اُکتت,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوشه,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":تمرین:تمرین,,      شبیه‌سازی:شبیه‌سازی,,      پرسشنامه:پرسشنامه,,      نمودار:نمودار,,      شکل:شکل,,      گراف:گراف,,      نمایه:نمایه,,      اسلاید:اسلاید,,      جدول:جدول,,      متن روایی:متن روایی,,      امتحان:امتحان,,      آزمایش:آزمایش,,      بیان مسئله:بیان مسئله,,      خودارزیابی:خودارزیابی,,      سخنرانی:سخنرانی"
@@ -39785,4 +39785,22 @@ msgstr "شمارش دوره بر اساس زبان"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "کاربرانی که آخرین دسترسی‌شان قدیمی‌تر از تاریخ انتخاب‌شده است."
+
+msgid "Your certificate is about to expire"
+msgstr "گواهینامهٔ شما به‌زودی منقضی می‌شود"
+
+msgid "Your certificate has expired"
+msgstr "گواهینامهٔ شما منقضی شده است"
+
+msgid "Your certificate is about to expire:"
+msgstr "گواهینامهٔ شما به‌زودی منقضی می‌شود:"
+
+msgid "Your certificate has expired:"
+msgstr "گواهینامهٔ شما منقضی شده است:"
+
+msgid "Expiry date"
+msgstr "تاریخ انقضا"
+
+msgid "%s days remaining"
+msgstr "%s روز باقی‌مانده"
 

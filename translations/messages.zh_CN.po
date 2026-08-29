@@ -39792,3 +39792,21 @@ msgstr "按语言统计课程数量"
 msgid "Users whose latest access is older than the selected date."
 msgstr "最近访问早于所选日期的用户。"
 
+msgid "Your certificate is about to expire"
+msgstr "您的证书即将过期"
+
+msgid "Your certificate has expired"
+msgstr "您的证书已过期"
+
+msgid "Your certificate is about to expire:"
+msgstr "您的证书即将过期："
+
+msgid "Your certificate has expired:"
+msgstr "您的证书已过期："
+
+msgid "Expiry date"
+msgstr "到期日期"
+
+msgid "%s days remaining"
+msgstr "剩余 %s 天"
+

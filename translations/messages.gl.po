@@ -39805,3 +39805,21 @@ msgstr "Contar cursos por idioma"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Usuarios cuxo último acceso é anterior á data seleccionada."
 
+msgid "Your certificate is about to expire"
+msgstr "O seu certificado está a piques de caducar"
+
+msgid "Your certificate has expired"
+msgstr "O seu certificado caducou"
+
+msgid "Your certificate is about to expire:"
+msgstr "O seu certificado está a piques de caducar:"
+
+msgid "Your certificate has expired:"
+msgstr "O seu certificado caducou:"
+
+msgid "Expiry date"
+msgstr "Data de caducidade"
+
+msgid "%s days remaining"
+msgstr "Quedan %s días"
+

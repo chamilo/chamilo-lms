@@ -39790,3 +39790,21 @@ msgstr "شمارش درس بر اساس زبان"
 msgid "Users whose latest access is older than the selected date."
 msgstr "کاربرانی که آخرین دسترسی آن‌ها قدیمی‌تر از تاریخ انتخاب‌شده است."
 
+msgid "Your certificate is about to expire"
+msgstr "گواهینامه شما در حال انقضا است"
+
+msgid "Your certificate has expired"
+msgstr "گواهینامه شما منقضی شده است"
+
+msgid "Your certificate is about to expire:"
+msgstr "گواهینامه شما در حال انقضا است:"
+
+msgid "Your certificate has expired:"
+msgstr "گواهینامه شما منقضی شده است:"
+
+msgid "Expiry date"
+msgstr "تاریخ انقضا"
+
+msgid "%s days remaining"
+msgstr "%s روز باقی‌مانده"
+

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "З повагою"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Приклад формули: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Приклад формули: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Діапазони змінних"
@@ -30790,7 +30790,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (внутрішній ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Ідентифікатор Azure (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Організаційний email"
@@ -31525,7 +31525,7 @@ msgid "SCIM external ID"
 msgstr "SCIM зовнішній ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "Ідентифікатор OAuth2"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Будь ласка, прийміть останню версію умов та правил."
@@ -33745,10 +33745,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "Ідентифікатор EntraID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "UID EntraID"
 
 msgid "Required fields"
 msgstr "Обов’язкові поля"
@@ -39785,4 +39785,22 @@ msgstr "Кількість курсів за мовою"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Користувачі, останній доступ яких старіший за вибрану дату."
+
+msgid "Your certificate is about to expire"
+msgstr "Термін дії вашого сертифіката незабаром закінчиться"
+
+msgid "Your certificate has expired"
+msgstr "Термін дії вашого сертифіката закінчився"
+
+msgid "Your certificate is about to expire:"
+msgstr "Термін дії вашого сертифіката незабаром закінчиться:"
+
+msgid "Your certificate has expired:"
+msgstr "Термін дії вашого сертифіката закінчився:"
+
+msgid "Expiry date"
+msgstr "Дата закінчення терміну дії"
+
+msgid "%s days remaining"
+msgstr "Залишилося %s днів"
 

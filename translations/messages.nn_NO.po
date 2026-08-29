@@ -30794,7 +30794,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (intern ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure-ID (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Organisasjonse-post"
@@ -31529,7 +31529,7 @@ msgid "SCIM external ID"
 msgstr "SCIM ekstern ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "OAuth2-ID"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Vennlegst godta den nyaste versjonen av vilkår og betingelser."
@@ -33749,10 +33749,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "EntraID-ID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "EntraID-UID"
 
 msgid "Required fields"
 msgstr "Påkravde felt"
@@ -39789,4 +39789,22 @@ msgstr "Tel kurs etter språk"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Brukarar der siste tilgang er eldre enn den valde datoen."
+
+msgid "Your certificate is about to expire"
+msgstr "Sertifikatet ditt er i ferd med å gå ut"
+
+msgid "Your certificate has expired"
+msgstr "Sertifikatet ditt har gått ut"
+
+msgid "Your certificate is about to expire:"
+msgstr "Sertifikatet ditt er i ferd med å gå ut:"
+
+msgid "Your certificate has expired:"
+msgstr "Sertifikatet ditt har gått ut:"
+
+msgid "Expiry date"
+msgstr "Utløpsdato"
+
+msgid "%s days remaining"
+msgstr "%s dagar att"
 

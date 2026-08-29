@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képletminta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -39789,4 +39789,22 @@ msgstr "Kurzusok száma nyelv szerint"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Felhasználók, akiknek a legutóbbi belépése régebbi a kiválasztott dátumnál."
+
+msgid "Your certificate is about to expire"
+msgstr "A tanúsítványa hamarosan lejár"
+
+msgid "Your certificate has expired"
+msgstr "A tanúsítványa lejárt"
+
+msgid "Your certificate is about to expire:"
+msgstr "A tanúsítványa hamarosan lejár:"
+
+msgid "Your certificate has expired:"
+msgstr "A tanúsítványa lejárt:"
+
+msgid "Expiry date"
+msgstr "Lejárati dátum"
+
+msgid "%s days remaining"
+msgstr "%s nap van hátra"
 

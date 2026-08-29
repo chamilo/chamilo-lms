@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Pagarbiai"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulės pavyzdys: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulės pavyzdys: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kintamųjų ribos"
@@ -39790,4 +39790,22 @@ msgstr "Kursų skaičius pagal kalbą"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Naudotojai, kurių paskutinė prieiga senesnė nei pasirinkta data."
+
+msgid "Your certificate is about to expire"
+msgstr "Jūsų sertifikatas netrukus baigs galioti"
+
+msgid "Your certificate has expired"
+msgstr "Jūsų sertifikatas nebegalioja"
+
+msgid "Your certificate is about to expire:"
+msgstr "Jūsų sertifikatas netrukus baigs galioti:"
+
+msgid "Your certificate has expired:"
+msgstr "Jūsų sertifikatas nebegalioja:"
+
+msgid "Expiry date"
+msgstr "Galiojimo pabaigos data"
+
+msgid "%s days remaining"
+msgstr "Liko %s d."
 

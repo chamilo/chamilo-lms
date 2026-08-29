@@ -39790,3 +39790,21 @@ msgstr "Líon cúrsaí de réir teanga"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Úsáideoirí a bhfuil a rochtain is déanaí níos sine ná an dáta roghnaithe."
 
+msgid "Your certificate is about to expire"
+msgstr "Tá do theastas ar tí dul in éag"
+
+msgid "Your certificate has expired"
+msgstr "Tá do theastas imithe in éag"
+
+msgid "Your certificate is about to expire:"
+msgstr "Tá do theastas ar tí dul in éag:"
+
+msgid "Your certificate has expired:"
+msgstr "Tá do theastas imithe in éag:"
+
+msgid "Expiry date"
+msgstr "Dáta éaga"
+
+msgid "%s days remaining"
+msgstr "%s lá fágtha"
+

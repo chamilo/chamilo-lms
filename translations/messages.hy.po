@@ -39790,3 +39790,21 @@ msgstr "Դասընթացների քանակ ըստ լեզվի"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Օգտատերեր, որոնց վերջին մուտքը ավելի հին է, քան ընտրված ամսաթիվը։"
 
+msgid "Your certificate is about to expire"
+msgstr "Ձեր վկայականը շուտով կսպառվի"
+
+msgid "Your certificate has expired"
+msgstr "Ձեր վկայականը սպառվել է"
+
+msgid "Your certificate is about to expire:"
+msgstr "Ձեր վկայականը շուտով կսպառվի՝"
+
+msgid "Your certificate has expired:"
+msgstr "Ձեր վկայականը սպառվել է՝"
+
+msgid "Expiry date"
+msgstr "Սպառման ամսաթիվ"
+
+msgid "%s days remaining"
+msgstr "մնացել է %s օր"
+

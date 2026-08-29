@@ -39790,3 +39790,21 @@ msgstr "언어별 강좌 수"
 msgid "Users whose latest access is older than the selected date."
 msgstr "최근 접속이 선택한 날짜보다 이전인 사용자."
 
+msgid "Your certificate is about to expire"
+msgstr "인증서가 곧 만료됩니다"
+
+msgid "Your certificate has expired"
+msgstr "인증서가 만료되었습니다"
+
+msgid "Your certificate is about to expire:"
+msgstr "인증서가 곧 만료됩니다:"
+
+msgid "Your certificate has expired:"
+msgstr "인증서가 만료되었습니다:"
+
+msgid "Expiry date"
+msgstr "만료일"
+
+msgid "%s days remaining"
+msgstr "%s일 남음"
+

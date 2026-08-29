@@ -39786,3 +39786,21 @@ msgstr "भाषा के अनुसार पाठ्यक्रम ग�
 msgid "Users whose latest access is older than the selected date."
 msgstr "वे उपयोगकर्ता जिनकी नवीनतम पहुँच चयनित तिथि से पुरानी है।"
 
+msgid "Your certificate is about to expire"
+msgstr "आपका प्रमाणपत्र समाप्त होने वाला है"
+
+msgid "Your certificate has expired"
+msgstr "आपका प्रमाणपत्र समाप्त हो गया है"
+
+msgid "Your certificate is about to expire:"
+msgstr "आपका प्रमाणपत्र समाप्त होने वाला है:"
+
+msgid "Your certificate has expired:"
+msgstr "आपका प्रमाणपत्र समाप्त हो गया है:"
+
+msgid "Expiry date"
+msgstr "समाप्ति तिथि"
+
+msgid "%s days remaining"
+msgstr "%s दिन शेष"
+

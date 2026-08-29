@@ -338,7 +338,7 @@ msgid "Sincerely"
 msgstr "ດ້ວຍຄວາມຈິງໃຈ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ຕົວຢ່າງສູດ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ຕົວຢ່າງສູດ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ຊ່ວງຂອງຕົວປ່ຽນ"
@@ -39834,4 +39834,22 @@ msgstr "ນັບຫຼັກສູດຕາມພາສາ"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "ຜູ້ໃຊ້ທີ່ການເຂົ້າເຖິງຫຼ້າສຸດເກົ່າກວ່າວັນທີ່ເລືອກ."
+
+msgid "Your certificate is about to expire"
+msgstr "ໃບຢັ້ງຢືນຂອງທ່ານໃກ້ຈະໝົດອາຍຸ"
+
+msgid "Your certificate has expired"
+msgstr "ໃບຢັ້ງຢືນຂອງທ່ານໝົດອາຍຸແລ້ວ"
+
+msgid "Your certificate is about to expire:"
+msgstr "ໃບຢັ້ງຢືນຂອງທ່ານໃກ້ຈະໝົດອາຍຸ:"
+
+msgid "Your certificate has expired:"
+msgstr "ໃບຢັ້ງຢືນຂອງທ່ານໝົດອາຍຸແລ້ວ:"
+
+msgid "Expiry date"
+msgstr "ວັນທີໝົດອາຍຸ"
+
+msgid "%s days remaining"
+msgstr "ເຫຼືອ %s ວັນ"
 

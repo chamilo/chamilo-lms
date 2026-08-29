@@ -39790,3 +39790,21 @@ msgstr "Numëro kurset sipas gjuhës"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Përdoruesit, qasja e fundit e të cilëve është më e vjetër se data e zgjedhur."
 
+msgid "Your certificate is about to expire"
+msgstr "Certifikata juaj është gati të skadojë"
+
+msgid "Your certificate has expired"
+msgstr "Certifikata juaj ka skaduar"
+
+msgid "Your certificate is about to expire:"
+msgstr "Certifikata juaj është gati të skadojë:"
+
+msgid "Your certificate has expired:"
+msgstr "Certifikata juaj ka skaduar:"
+
+msgid "Expiry date"
+msgstr "Data e skadimit"
+
+msgid "%s days remaining"
+msgstr "%s ditë të mbetura"
+

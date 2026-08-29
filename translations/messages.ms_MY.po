@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Sekiranya ini"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Julat pembolehubah"
@@ -39789,4 +39789,22 @@ msgstr "Kira kursus mengikut bahasa"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Pengguna yang akses terkininya lebih lama daripada tarikh yang dipilih."
+
+msgid "Your certificate is about to expire"
+msgstr "Sijil anda hampir tamat tempoh"
+
+msgid "Your certificate has expired"
+msgstr "Sijil anda telah tamat tempoh"
+
+msgid "Your certificate is about to expire:"
+msgstr "Sijil anda hampir tamat tempoh:"
+
+msgid "Your certificate has expired:"
+msgstr "Sijil anda telah tamat tempoh:"
+
+msgid "Expiry date"
+msgstr "Tarikh luput"
+
+msgid "%s days remaining"
+msgstr "%s hari lagi"
 

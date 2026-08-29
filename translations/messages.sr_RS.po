@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Opsezi varijabli"
@@ -26659,7 +26659,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfiguracija LDAP konekcije"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] <\/pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Postavi datum isteka pri prvoj prijavi"
@@ -39792,4 +39792,22 @@ msgstr "Broj kurseva po jeziku"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Korisnici čiji je poslednji pristup stariji od izabranog datuma."
+
+msgid "Your certificate is about to expire"
+msgstr "Vaš sertifikat uskoro ističe"
+
+msgid "Your certificate has expired"
+msgstr "Vaš sertifikat je istekao"
+
+msgid "Your certificate is about to expire:"
+msgstr "Vaš sertifikat uskoro ističe:"
+
+msgid "Your certificate has expired:"
+msgstr "Vaš sertifikat je istekao:"
+
+msgid "Expiry date"
+msgstr "Datum isteka"
+
+msgid "%s days remaining"
+msgstr "Preostalo %s dana"
 

@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Cordial"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de formulă: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu de formulă: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Domenii de variabile"
@@ -39805,4 +39805,22 @@ msgstr "Număr de cursuri pe limbă"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Utilizatori a căror ultimă accesare este mai veche decât data selectată."
+
+msgid "Your certificate is about to expire"
+msgstr "Certificatul dvs. este pe cale să expire"
+
+msgid "Your certificate has expired"
+msgstr "Certificatul dvs. a expirat"
+
+msgid "Your certificate is about to expire:"
+msgstr "Certificatul dvs. este pe cale să expire:"
+
+msgid "Your certificate has expired:"
+msgstr "Certificatul dvs. a expirat:"
+
+msgid "Expiry date"
+msgstr "Data expirării"
+
+msgid "%s days remaining"
+msgstr "%s zile rămase"
 

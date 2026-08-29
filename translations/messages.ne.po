@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "शुभकामना"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चलहरूको दायरा"
@@ -39789,4 +39789,22 @@ msgstr "भाषाअनुसार पाठ्यक्रम गणना"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "पछिल्लो पहुँच चयन गरिएको मितिभन्दा पुरानो भएका प्रयोगकर्ताहरू।"
+
+msgid "Your certificate is about to expire"
+msgstr "तपाईंको प्रमाणपत्र म्याद सकिन लागेको छ"
+
+msgid "Your certificate has expired"
+msgstr "तपाईंको प्रमाणपत्रको म्याद सकिएको छ"
+
+msgid "Your certificate is about to expire:"
+msgstr "तपाईंको प्रमाणपत्र म्याद सकिन लागेको छ:"
+
+msgid "Your certificate has expired:"
+msgstr "तपाईंको प्रमाणपत्रको म्याद सकिएको छ:"
+
+msgid "Expiry date"
+msgstr "म्याद सकिने मिति"
+
+msgid "%s days remaining"
+msgstr "%s दिन बाँकी"
 

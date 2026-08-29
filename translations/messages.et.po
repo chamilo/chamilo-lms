@@ -39791,3 +39791,21 @@ msgstr "Kursuste arv keele järgi"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Kasutajad, kelle viimane juurdepääs on vanem kui valitud kuupäev."
 
+msgid "Your certificate is about to expire"
+msgstr "Teie sertifikaat on peagi aegumas"
+
+msgid "Your certificate has expired"
+msgstr "Teie sertifikaat on aegunud"
+
+msgid "Your certificate is about to expire:"
+msgstr "Teie sertifikaat on peagi aegumas:"
+
+msgid "Your certificate has expired:"
+msgstr "Teie sertifikaat on aegunud:"
+
+msgid "Expiry date"
+msgstr "Aegumiskuupäev"
+
+msgid "%s days remaining"
+msgstr "%s päeva jäänud"
+

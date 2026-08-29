@@ -39805,3 +39805,21 @@ msgstr "Αριθμός μαθημάτων ανά γλώσσα"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Χρήστες των οποίων η τελευταία πρόσβαση είναι παλαιότερη από την επιλεγμένη ημερομηνία."
 
+msgid "Your certificate is about to expire"
+msgstr "Το πιστοποιητικό σας πρόκειται να λήξει"
+
+msgid "Your certificate has expired"
+msgstr "Το πιστοποιητικό σας έχει λήξει"
+
+msgid "Your certificate is about to expire:"
+msgstr "Το πιστοποιητικό σας πρόκειται να λήξει:"
+
+msgid "Your certificate has expired:"
+msgstr "Το πιστοποιητικό σας έχει λήξει:"
+
+msgid "Expiry date"
+msgstr "Ημερομηνία λήξης"
+
+msgid "%s days remaining"
+msgstr "Απομένουν %s ημέρες"
+

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mẫu công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -39791,4 +39791,22 @@ msgstr "Đếm khóa học theo ngôn ngữ"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Người dùng có lần truy cập gần nhất cũ hơn ngày đã chọn."
+
+msgid "Your certificate is about to expire"
+msgstr "Chứng chỉ của bạn sắp hết hạn"
+
+msgid "Your certificate has expired"
+msgstr "Chứng chỉ của bạn đã hết hạn"
+
+msgid "Your certificate is about to expire:"
+msgstr "Chứng chỉ của bạn sắp hết hạn:"
+
+msgid "Your certificate has expired:"
+msgstr "Chứng chỉ của bạn đã hết hạn:"
+
+msgid "Expiry date"
+msgstr "Ngày hết hạn"
+
+msgid "%s days remaining"
+msgstr "Còn %s ngày"
 

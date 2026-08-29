@@ -3858,5 +3858,14 @@
     "Acquired": "Omandatud",
     "Recommended course picture: 1600 \u00d7 900 px (16:9). Use at least 1280 \u00d7 720 px for sharp display on larger or high-density screens.": "Soovitatav kursuse pilt: 1600 \u00d7 900 px (16:9). Terava kuvamise jaoks suurematel v\u00f5i k\u00f5rge tihedusega ekraanidel kasutage v\u00e4hemalt 1280 \u00d7 720 px.",
     "Courses of the selected URL": "Valitud URL-i kursused",
-    "Course categories in selected URL": "Kursuste kategooriad valitud URL-is"
+    "Course categories in selected URL": "Kursuste kategooriad valitud URL-is",
+    "Attach certificate": "Manusta sertifikaat",
+    "Default certificate": "Vaikimisi sertifikaat",
+    "Notify": "Teavita",
+    "Certificate notification": "Tunnistuse teatis",
+    "Save as draft": "Salvesta mustandina",
+    "api_get_path() constants resolved on this portal": "Sellel portaalil lahendatud api_get_path() konstandid",
+    "Never expires": "Ei aegu kunagi",
+    "Expiry date": "Aegumiskuup\u00e4ev",
+    "Never": "Mitte kunagi"
 }

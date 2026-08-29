@@ -39791,3 +39791,21 @@ msgstr "Kursu skaits pēc valodas"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Lietotāji, kuru pēdējā piekļuve ir vecāka par izvēlēto datumu."
 
+msgid "Your certificate is about to expire"
+msgstr "Jūsu sertifikāts drīz beigsies"
+
+msgid "Your certificate has expired"
+msgstr "Jūsu sertifikāts ir beidzies"
+
+msgid "Your certificate is about to expire:"
+msgstr "Jūsu sertifikāts drīz beigsies:"
+
+msgid "Your certificate has expired:"
+msgstr "Jūsu sertifikāts ir beidzies:"
+
+msgid "Expiry date"
+msgstr "Derīguma termiņš"
+
+msgid "%s days remaining"
+msgstr "Atlikušas %s dienas"
+

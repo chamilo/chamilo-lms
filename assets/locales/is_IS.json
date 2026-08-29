@@ -3858,5 +3858,21 @@
     "Acquired": "\u00d6\u00f0last",
     "Recommended course picture: 1600 \u00d7 900 px (16:9). Use at least 1280 \u00d7 720 px for sharp display on larger or high-density screens.": "R\u00e1\u00f0l\u00f6g\u00f0 n\u00e1mskei\u00f0smynd: 1600 \u00d7 900 px (16:9). Nota\u00f0u a\u00f0 minnsta kosti 1280 \u00d7 720 px fyrir skarpa birtingu \u00e1 st\u00e6rri e\u00f0a h\u00e1\u00fe\u00e9ttniskj\u00e1m.",
     "Courses of the selected URL": "N\u00e1mskei\u00f0 valinnar vefsl\u00f3\u00f0ar",
-    "Course categories in selected URL": "N\u00e1mskei\u00f0sflokkar \u00e1 valinni vefsl\u00f3\u00f0"
+    "Course categories in selected URL": "N\u00e1mskei\u00f0sflokkar \u00e1 valinni vefsl\u00f3\u00f0",
+    "Attach certificate": "Hengja vi\u00f0 sk\u00edrteini",
+    "Default certificate": "Sj\u00e1lfgefi\u00f0 sk\u00edrteini",
+    "Notify": "Tilkynna",
+    "Certificate notification": "Tilkynning um sk\u00edrteini",
+    "Save as draft": "Vista sem dr\u00f6g",
+    "Paths": "Sl\u00f3\u00f0ir",
+    "Courses space": "N\u00e1mskei\u00f0ar\u00fdmi",
+    "State of Chamilo requirements": "Sta\u00f0a krafna Chamilo",
+    "State of PHP settings on the server": "Sta\u00f0a PHP-stillinga \u00e1 \u00fej\u00f3ninum",
+    "Database server configuration and metadata": "Stillingar gagnagrunns\u00fej\u00f3ns og l\u00fdsig\u00f6gn",
+    "Information about your webserver configuration": "Uppl\u00fdsingar um stillingar vef\u00fej\u00f3nsins",
+    "api_get_path() constants resolved on this portal": "api_get_path() fastar leystir \u00e1 \u00feessari g\u00e1tt",
+    "Disk usage per course vs disk quota": "Disknotkun eftir n\u00e1mskei\u00f0i \u00e1 m\u00f3ti diskkv\u00f3ta",
+    "Never expires": "Rennur aldrei \u00fat",
+    "Expiry date": "Fyrningardagsetning",
+    "Never": "Aldrei"
 }

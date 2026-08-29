@@ -3858,5 +3858,21 @@
     "Acquired": "Oppn\u00e5dd",
     "Recommended course picture: 1600 \u00d7 900 px (16:9). Use at least 1280 \u00d7 720 px for sharp display on larger or high-density screens.": "Anbefalt kursbilde: 1600 \u00d7 900 px (16:9). Bruk minst 1280 \u00d7 720 px for skarp visning p\u00e5 st\u00f8rre eller h\u00f8yoppl\u00f8selige skjermer.",
     "Courses of the selected URL": "Kurs for den valgte URL-en",
-    "Course categories in selected URL": "Kurskategorier i valgt URL"
+    "Course categories in selected URL": "Kurskategorier i valgt URL",
+    "Attach certificate": "Legg ved sertifikat",
+    "Default certificate": "Standard sertifikat",
+    "Notify": "Varsle",
+    "Certificate notification": "Sertifikatvarsling",
+    "Save as draft": "Lagre som utkast",
+    "Paths": "Stier",
+    "Courses space": "Kursomr\u00e5de",
+    "State of Chamilo requirements": "Status for Chamilo-krav",
+    "State of PHP settings on the server": "Status for PHP-innstillinger p\u00e5 serveren",
+    "Database server configuration and metadata": "Database-serverkonfigurasjon og metadata",
+    "Information about your webserver configuration": "Informasjon om webserverkonfigurasjonen din",
+    "api_get_path() constants resolved on this portal": "api_get_path()-konstanter l\u00f8st p\u00e5 denne portalen",
+    "Disk usage per course vs disk quota": "Diskbruk per kurs vs. diskkvote",
+    "Never expires": "Utl\u00f8per aldri",
+    "Expiry date": "Utl\u00f8psdato",
+    "Never": "Aldri"
 }

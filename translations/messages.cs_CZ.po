@@ -39786,3 +39786,21 @@ msgstr "Počet kurzů podle jazyka"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Uživatelé, jejichž poslední přístup je starší než vybrané datum."
 
+msgid "Your certificate is about to expire"
+msgstr "Váš certifikát brzy vyprší"
+
+msgid "Your certificate has expired"
+msgstr "Váš certifikát vypršel"
+
+msgid "Your certificate is about to expire:"
+msgstr "Váš certifikát brzy vyprší:"
+
+msgid "Your certificate has expired:"
+msgstr "Váš certifikát vypršel:"
+
+msgid "Expiry date"
+msgstr "Datum vypršení"
+
+msgid "%s days remaining"
+msgstr "Zbývá %s dní"
+

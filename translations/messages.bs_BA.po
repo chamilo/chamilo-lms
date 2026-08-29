@@ -4138,7 +4138,7 @@ msgid "MySql Client"
 msgstr "MySql Klijent"
 
 msgid "MySql Server"
-msgstr "MySQL server"
+msgstr "MySql Server"
 
 msgid "Owner"
 msgstr "Vlasnik"
@@ -32455,7 +32455,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Brisanje nije uspjelo: nedostaje kontekst kursa ili nevažeći ID pitanja."
 
 msgid "AI Tutor"
-msgstr "AI tutor"
+msgstr "AI Tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "APCu ekstenzija mora biti instalirana i omogućena kako bi platforma mogla da je koristi."
@@ -39785,4 +39785,22 @@ msgstr "Broj kurseva po jeziku"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Korisnici čiji je posljednji pristup stariji od odabranog datuma."
+
+msgid "Your certificate is about to expire"
+msgstr "Vaš certifikat uskoro ističe"
+
+msgid "Your certificate has expired"
+msgstr "Vaš certifikat je istekao"
+
+msgid "Your certificate is about to expire:"
+msgstr "Vaš certifikat uskoro ističe:"
+
+msgid "Your certificate has expired:"
+msgstr "Vaš certifikat je istekao:"
+
+msgid "Expiry date"
+msgstr "Datum isteka"
+
+msgid "%s days remaining"
+msgstr "%s dana preostalo"
 

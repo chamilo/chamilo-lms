@@ -39792,3 +39792,21 @@ msgstr "Räkna kurser per språk"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Användare vars senaste åtkomst är äldre än det valda datumet."
 
+msgid "Your certificate is about to expire"
+msgstr "Ditt certifikat är på väg att gå ut"
+
+msgid "Your certificate has expired"
+msgstr "Ditt certifikat har gått ut"
+
+msgid "Your certificate is about to expire:"
+msgstr "Ditt certifikat är på väg att gå ut:"
+
+msgid "Your certificate has expired:"
+msgstr "Ditt certifikat har gått ut:"
+
+msgid "Expiry date"
+msgstr "Utgångsdatum"
+
+msgid "%s days remaining"
+msgstr "%s dagar kvar"
+

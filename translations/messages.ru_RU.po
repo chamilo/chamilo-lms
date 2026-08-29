@@ -39793,3 +39793,21 @@ msgstr "Количество курсов по языкам"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Пользователи, чей последний доступ старше выбранной даты."
 
+msgid "Your certificate is about to expire"
+msgstr "Срок действия вашего сертификата скоро истечёт"
+
+msgid "Your certificate has expired"
+msgstr "Срок действия вашего сертификата истёк"
+
+msgid "Your certificate is about to expire:"
+msgstr "Срок действия вашего сертификата скоро истечёт:"
+
+msgid "Your certificate has expired:"
+msgstr "Срок действия вашего сертификата истёк:"
+
+msgid "Expiry date"
+msgstr "Дата истечения срока"
+
+msgid "%s days remaining"
+msgstr "Осталось %s дней"
+

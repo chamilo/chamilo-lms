@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "S spoštovanjem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorec formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Obseg spremenljivk območja"
@@ -39805,4 +39805,22 @@ msgstr "Število tečajev po jeziku"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Uporabniki, katerih zadnji dostop je starejši od izbranega datuma."
+
+msgid "Your certificate is about to expire"
+msgstr "Vaš certifikat bo kmalu potekel"
+
+msgid "Your certificate has expired"
+msgstr "Vaš certifikat je potekel"
+
+msgid "Your certificate is about to expire:"
+msgstr "Vaš certifikat bo kmalu potekel:"
+
+msgid "Your certificate has expired:"
+msgstr "Vaš certifikat je potekel:"
+
+msgid "Expiry date"
+msgstr "Datum poteka"
+
+msgid "%s days remaining"
+msgstr "še %s dni"
 

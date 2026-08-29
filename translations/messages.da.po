@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med venlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formelprøve: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel-eksempel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervaller"
@@ -19107,7 +19107,7 @@ msgid "Select an action"
 msgstr "Vælg en handling"
 
 msgid "Login: %s"
-msgstr "Login: %s"
+msgstr "Log ind: %s"
 
 msgid "Database <b>%s</b> will be created"
 msgstr "Database <b>%s</b> vil blive oprettet"
@@ -39791,4 +39791,22 @@ msgstr "Tæl kurser efter sprog"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Brugere, hvis seneste adgang er ældre end den valgte dato."
+
+msgid "Your certificate is about to expire"
+msgstr "Dit certifikat er ved at udløbe"
+
+msgid "Your certificate has expired"
+msgstr "Dit certifikat er udløbet"
+
+msgid "Your certificate is about to expire:"
+msgstr "Dit certifikat er ved at udløbe:"
+
+msgid "Your certificate has expired:"
+msgstr "Dit certifikat er udløbet:"
+
+msgid "Expiry date"
+msgstr "Udløbsdato"
+
+msgid "%s days remaining"
+msgstr "%s dage tilbage"
 

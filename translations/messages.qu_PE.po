@@ -39792,3 +39792,21 @@ msgstr "Yachay wasikunata yupay simi sapaqpi"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Ruraqkuna qhipa yaykuyninku akllasqa p'unchawmanta aswan ñaupa kaq."
 
+msgid "Your certificate is about to expire"
+msgstr "Sutichasqa qillqayki puchukayninman haykushan"
+
+msgid "Your certificate has expired"
+msgstr "Sutichasqa qillqayki puchukarunña"
+
+msgid "Your certificate is about to expire:"
+msgstr "Sutichasqa qillqayki puchukayninman haykushan:"
+
+msgid "Your certificate has expired:"
+msgstr "Sutichasqa qillqayki puchukarunña:"
+
+msgid "Expiry date"
+msgstr "Puchukay p'unchaw"
+
+msgid "%s days remaining"
+msgstr "%s p'unchaw puchun"
+

@@ -16248,7 +16248,7 @@ msgid "Quarterly report"
 msgstr "Neljännesraportti"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%d. %B %Y"
 
 msgid "%A"
 msgstr "%A"
@@ -39791,4 +39791,22 @@ msgstr "Laske kurssit kielen mukaan"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Käyttäjät, joiden viimeisin käyttö on vanhempi kuin valittu päivämäärä."
+
+msgid "Your certificate is about to expire"
+msgstr "Varmenteesi on vanhenemassa"
+
+msgid "Your certificate has expired"
+msgstr "Varmenteesi on vanhentunut"
+
+msgid "Your certificate is about to expire:"
+msgstr "Varmenteesi on vanhenemassa:"
+
+msgid "Your certificate has expired:"
+msgstr "Varmenteesi on vanhentunut:"
+
+msgid "Expiry date"
+msgstr "Vanhenemispäivä"
+
+msgid "%s days remaining"
+msgstr "%s päivää jäljellä"
 

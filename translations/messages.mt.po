@@ -25128,7 +25128,7 @@ msgid "The update failed for the following courses"
 msgstr "L-aġġornament falliet għall-korsijiet li ġejjin"
 
 msgid "%02d h %02d m %02d s"
-msgstr "%02d h %02d m %02d s"
+msgstr "%02d siegħ %02d min %02d sek"
 
 msgid "User management"
 msgstr "Ġestjoni tal-utenti"
@@ -26670,7 +26670,7 @@ msgid "Selective display of roles"
 msgstr "Wirja selettiva tar-rwoli"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Array ta' role => true/false li jiddefinixxi jekk dak ir-rwol għandux jintwera jew jinħeba.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Array ta' rwol => true/false li jiddefinixxi jekk dak ir-rwol għandux jintwera jew jinħeba.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Għażliet tal-wiri tar-rwoli"
@@ -26982,7 +26982,7 @@ msgid "Immediately block users who have been disabled by the admin through users
 msgstr "Imblokka immedjatament utenti li ġew diżattivati mill-amministratur permezz tal-ġestjoni tal-utenti. Inkella, utenti li ġew diżattivati se jżommu l-privileġġi preċedenti tagħhom sakemm joħorġu."
 
 msgid "Session cookie samesite"
-msgstr "Session cookie samesite"
+msgstr "Cookie tas-sessjoni samesite"
 
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr "Attiva l-parametru samesite:None għas-session cookie. Aktar informazzjoni: https://www.chromium.org/updates/same-site u https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
@@ -28440,7 +28440,7 @@ msgid "The DSN fully includes all parameters needed to connect to the mail servi
 msgstr "Id-DSN jinkludi l-parametri kollha meħtieġa biex tikkonnettja mas-servizz tal-posta. Tista' titgħallem aktar fuq %s. Il-valur default huwa null://null u jiddiżattiva l-ibgħat tal-email. Uża native://default biex tuża l-konfigurazzjoni PHP default fuq is-server tiegħek. Hawn xi eżempji ta' sintassi DSN appoġġjati: %s."
 
 msgid "Mail DSN"
-msgstr "Mail DSN"
+msgstr "DSN tal-posta"
 
 msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header. We recommend using a 'no-reply' e-mail address here, to avoid excessive filling of an e-mail box. The support e-mail address defined in the Platform section should be used to contact you, but replying to automatic notifications should not be encouraged."
 msgstr "L-indirizz tal-email minn fejn jintbagħtu l-emails meta l-pjattaforma tibgħat email, użat ukoll bħala header 'reply-to'. Nirrakkomandaw li tuża indirizz 'no-reply' hawnhekk, biex tevita mili eċċessiv ta' kaxxa tal-email. L-indirizz tal-email ta' appoġġ definit fis-sezzjoni Pjattaforma għandu jintuża biex tikkuntattjana, iżda m'għandux jiġi mħeġġeġ li twieġeb għan-notifiki awtomatiċi."
@@ -31527,7 +31527,7 @@ msgid "Reply to all"
 msgstr "Irrispondi lil kulħadd"
 
 msgid "SCIM external ID"
-msgstr "SCIM external ID"
+msgstr "ID estern SCIM"
 
 msgid "OAuth2 ID"
 msgstr "OAuth2 ID"
@@ -31617,7 +31617,7 @@ msgid "In case you need to define the charset to use when sending those e-mails.
 msgstr "Fil-każ li jkollok bżonn tiddefinixxi l-charset li tuża meta tibgħat dawk l-emails. Ħalli vojt jekk m'intix ċert."
 
 msgid "Mail: Debug"
-msgstr "Mail: Debug"
+msgstr "Posta: Debug"
 
 msgid "Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity."
 msgstr "Agħżel jekk tridx tattiva l-logs tad-debug tal-ibgħat tal-email. Dawn jagħtuk aktar informazzjoni dwar x'jiġri meta tikkonnettja mas-servizz tal-posta, iżda mhumiex eleganti u jistgħu jkissru d-disinn tal-paġna. Uża biss meta ma jkunx hemm attività tal-utent."
@@ -39189,7 +39189,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard qed jaqra"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Keepalive tal-pjanċa tal-punteġġi"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard qed jistenna"
@@ -39790,4 +39790,22 @@ msgstr "Għadd tal-korsijiet skont il-lingwa"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Utenti li l-aħħar aċċess tagħhom huwa qabel id-data magħżula."
+
+msgid "Your certificate is about to expire"
+msgstr "Iċ-ċertifikat tiegħek wasal biex jiskadi"
+
+msgid "Your certificate has expired"
+msgstr "Iċ-ċertifikat tiegħek skada"
+
+msgid "Your certificate is about to expire:"
+msgstr "Iċ-ċertifikat tiegħek wasal biex jiskadi:"
+
+msgid "Your certificate has expired:"
+msgstr "Iċ-ċertifikat tiegħek skada:"
+
+msgid "Expiry date"
+msgstr "Data ta' skadenza"
+
+msgid "%s days remaining"
+msgstr "%s ġranet li fadal"
 

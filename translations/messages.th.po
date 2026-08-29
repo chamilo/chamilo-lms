@@ -39792,3 +39792,21 @@ msgstr "นับจำนวนรายวิชาตามภาษา"
 msgid "Users whose latest access is older than the selected date."
 msgstr "ผู้ใช้ที่เข้าใช้ล่าสุดเก่ากว่าวันที่ที่เลือก"
 
+msgid "Your certificate is about to expire"
+msgstr "ใบรับรองของคุณใกล้หมดอายุ"
+
+msgid "Your certificate has expired"
+msgstr "ใบรับรองของคุณหมดอายุแล้ว"
+
+msgid "Your certificate is about to expire:"
+msgstr "ใบรับรองของคุณใกล้หมดอายุ:"
+
+msgid "Your certificate has expired:"
+msgstr "ใบรับรองของคุณหมดอายุแล้ว:"
+
+msgid "Expiry date"
+msgstr "วันหมดอายุ"
+
+msgid "%s days remaining"
+msgstr "เหลืออีก %s วัน"
+

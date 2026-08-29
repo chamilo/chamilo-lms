@@ -39856,3 +39856,21 @@ msgstr "言語別コース数"
 msgid "Users whose latest access is older than the selected date."
 msgstr "最終アクセスが選択した日付より古いユーザー。"
 
+msgid "Your certificate is about to expire"
+msgstr "証明書の有効期限が近づいています"
+
+msgid "Your certificate has expired"
+msgstr "証明書の有効期限が切れています"
+
+msgid "Your certificate is about to expire:"
+msgstr "証明書の有効期限が近づいています:"
+
+msgid "Your certificate has expired:"
+msgstr "証明書の有効期限が切れています:"
+
+msgid "Expiry date"
+msgstr "有効期限"
+
+msgid "%s days remaining"
+msgstr "残り %s 日"
+

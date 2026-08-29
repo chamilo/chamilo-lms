@@ -39791,3 +39791,21 @@ msgstr "Broj tečajeva po jeziku"
 msgid "Users whose latest access is older than the selected date."
 msgstr "Korisnici čiji je posljednji pristup stariji od odabranog datuma."
 
+msgid "Your certificate is about to expire"
+msgstr "Vaš certifikat uskoro ističe"
+
+msgid "Your certificate has expired"
+msgstr "Vaš certifikat je istekao"
+
+msgid "Your certificate is about to expire:"
+msgstr "Vaš certifikat uskoro ističe:"
+
+msgid "Your certificate has expired:"
+msgstr "Vaš certifikat je istekao:"
+
+msgid "Expiry date"
+msgstr "Datum isteka"
+
+msgid "%s days remaining"
+msgstr "%s dana preostalo"
+

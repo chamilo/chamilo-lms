@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول بېلګه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول بېلګه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -39785,4 +39785,22 @@ msgstr "د ژبې له مخې د کورسونو شمېر"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "هغه کاروونکي چې وروستی لاسرسی یې د ټاکل شوې نېټې څخه زوړ دی."
+
+msgid "Your certificate is about to expire"
+msgstr "ستاسو سند نږدې پای ته رسېږي"
+
+msgid "Your certificate has expired"
+msgstr "ستاسو سند پای ته رسېدلی دی"
+
+msgid "Your certificate is about to expire:"
+msgstr "ستاسو سند نږدې پای ته رسېږي:"
+
+msgid "Your certificate has expired:"
+msgstr "ستاسو سند پای ته رسېدلی دی:"
+
+msgid "Expiry date"
+msgstr "د پای نېټه"
+
+msgid "%s days remaining"
+msgstr "%s ورځې پاتې دي"
 

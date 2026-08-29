@@ -39804,3 +39804,21 @@ msgstr "عدد الدورات حسب اللغة"
 msgid "Users whose latest access is older than the selected date."
 msgstr "المستخدمون الذين يكون آخر وصول لهم أقدم من التاريخ المحدد."
 
+msgid "Your certificate is about to expire"
+msgstr "شهادتك على وشك الانتهاء"
+
+msgid "Your certificate has expired"
+msgstr "انتهت صلاحية شهادتك"
+
+msgid "Your certificate is about to expire:"
+msgstr "شهادتك على وشك الانتهاء:"
+
+msgid "Your certificate has expired:"
+msgstr "انتهت صلاحية شهادتك:"
+
+msgid "Expiry date"
+msgstr "تاريخ الانتهاء"
+
+msgid "%s days remaining"
+msgstr "%s أيام متبقية"
+

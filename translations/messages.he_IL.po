@@ -39803,3 +39803,21 @@ msgstr "ספירת קורסים לפי שפה"
 msgid "Users whose latest access is older than the selected date."
 msgstr "משתמשים שהגישה האחרונה שלהם קודמת לתאריך שנבחר."
 
+msgid "Your certificate is about to expire"
+msgstr "התעודה שלך עומדת לפוג"
+
+msgid "Your certificate has expired"
+msgstr "התעודה שלך פגה"
+
+msgid "Your certificate is about to expire:"
+msgstr "התעודה שלך עומדת לפוג:"
+
+msgid "Your certificate has expired:"
+msgstr "התעודה שלך פגה:"
+
+msgid "Expiry date"
+msgstr "תאריך תפוגה"
+
+msgid "%s days remaining"
+msgstr "נותרו %s ימים"
+

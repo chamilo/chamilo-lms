@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример на формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -39789,4 +39789,22 @@ msgstr "Број на курсеви по јазик"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Корисници чиј последен пристап е постари од избраниот датум."
+
+msgid "Your certificate is about to expire"
+msgstr "Вашиот сертификат наскоро истекува"
+
+msgid "Your certificate has expired"
+msgstr "Вашиот сертификат истече"
+
+msgid "Your certificate is about to expire:"
+msgstr "Вашиот сертификат наскоро истекува:"
+
+msgid "Your certificate has expired:"
+msgstr "Вашиот сертификат истече:"
+
+msgid "Expiry date"
+msgstr "Датум на истекување"
+
+msgid "%s days remaining"
+msgstr "Преостануваат %s дена"
 

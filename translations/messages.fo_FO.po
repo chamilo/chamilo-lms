@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Við kærleika"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formuludømi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formuludømi: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablumørk"
@@ -31954,7 +31954,7 @@ msgid "View badge"
 msgstr "Vís merki"
 
 msgid "%d min"
-msgstr "%d min"
+msgstr "%d mín"
 
 msgid "Duration in minutes"
 msgstr "Lægd í minuttum"
@@ -33301,7 +33301,7 @@ msgid "Received"
 msgstr "Móttekið"
 
 msgid "%s min"
-msgstr "%s min"
+msgstr "%s mín"
 
 msgid "Unlock column"
 msgstr "Opna kolonnu"
@@ -39785,4 +39785,22 @@ msgstr "Tel skeið eftir máli"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Brúkarar, hvørs seinasta atgongd er eldri enn valda dagfestingin."
+
+msgid "Your certificate is about to expire"
+msgstr "Títt certifikat er um at ganga út"
+
+msgid "Your certificate has expired"
+msgstr "Títt certifikat er gingið út"
+
+msgid "Your certificate is about to expire:"
+msgstr "Títt certifikat er um at ganga út:"
+
+msgid "Your certificate has expired:"
+msgstr "Títt certifikat er gingið út:"
+
+msgid "Expiry date"
+msgstr "Útgongudagur"
+
+msgid "%s days remaining"
+msgstr "%s dagar eftir"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vennlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel-eksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelområder"
@@ -39790,4 +39790,22 @@ msgstr "Tell kurs etter språk"
 
 msgid "Users whose latest access is older than the selected date."
 msgstr "Brukere hvis siste tilgang er eldre enn den valgte datoen."
+
+msgid "Your certificate is about to expire"
+msgstr "Sertifikatet ditt er i ferd med å utløpe"
+
+msgid "Your certificate has expired"
+msgstr "Sertifikatet ditt har utløpt"
+
+msgid "Your certificate is about to expire:"
+msgstr "Sertifikatet ditt er i ferd med å utløpe:"
+
+msgid "Your certificate has expired:"
+msgstr "Sertifikatet ditt har utløpt:"
+
+msgid "Expiry date"
+msgstr "Utløpsdato"
+
+msgid "%s days remaining"
+msgstr "%s dager igjen"
 

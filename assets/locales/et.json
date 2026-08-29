@@ -3867,5 +3867,20 @@
     "api_get_path() constants resolved on this portal": "Sellel portaalil lahendatud api_get_path() konstandid",
     "Never expires": "Ei aegu kunagi",
     "Expiry date": "Aegumiskuup\u00e4ev",
-    "Never": "Mitte kunagi"
+    "Never": "Mitte kunagi",
+    "Edit expiry date": "Muuda aegumiskuup\u00e4eva",
+    "Certificate validity (days)": "Sertifikaadi kehtivus (p\u00e4evades)",
+    "Expiring certificates": "Aeguvad sertifikaadid",
+    "Expiring soon": "Aegub peagi",
+    "Expired notice": "Aegunud teade",
+    "Expiring notice": "Aegumise teade",
+    "outdated": "aegunud",
+    "Last reminder sent": "Viimane meeldetuletus saadetud",
+    "Days ahead": "P\u00e4evi ette",
+    "Send notification": "Saada teavitus",
+    "Are you sure you want to send this notification?": "Kas oled kindel, et soovid selle teavituse saata?",
+    "Expired: {0}": "Aegunud: {0}",
+    "Expiring soon: {0}": "Aegub peagi: {0}",
+    "Expired notice: {0}": "Aegunud teade: {0}",
+    "Expiring notice: {0}": "Aegumise teade: {0}"
 }

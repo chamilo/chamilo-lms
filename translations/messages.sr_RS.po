@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Opsezi varijabli"
@@ -26659,7 +26659,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfiguracija LDAP konekcije"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] <\/pre>"
+msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Postavi datum isteka pri prvoj prijavi"
@@ -39810,4 +39810,52 @@ msgstr "Datum isteka"
 
 msgid "%s days remaining"
 msgstr "Preostalo %s dana"
+
+msgid "Hello, %s"
+msgstr "Zdravo, %s"
+
+msgid "Edit expiry date"
+msgstr "Izmeni datum isteka"
+
+msgid "Certificate validity (days)"
+msgstr "Važenje sertifikata (dani)"
+
+msgid "Expiring certificates"
+msgstr "Sertifikati koji ističu"
+
+msgid "Expiring soon"
+msgstr "Uskoro ističe"
+
+msgid "Expired notice"
+msgstr "Obaveštenje o isteku"
+
+msgid "Expiring notice"
+msgstr "Obaveštenje o predstojećem isteku"
+
+msgid "outdated"
+msgstr "zastarelo"
+
+msgid "Last reminder sent"
+msgstr "Poslednji podsetnik poslat"
+
+msgid "Days ahead"
+msgstr "Dana unapred"
+
+msgid "Send notification"
+msgstr "Pošalji obaveštenje"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Da li ste sigurni da želite da pošaljete ovo obaveštenje?"
+
+msgid "Expired: %s"
+msgstr "Isteklo: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Uskoro ističe: %s"
+
+msgid "Expired notice: %s"
+msgstr "Obaveštenje o isteku: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Obaveštenje o predstojećem isteku: %s"
 

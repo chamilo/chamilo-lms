@@ -39810,3 +39810,51 @@ msgstr "Vanhenemispäivä"
 msgid "%s days remaining"
 msgstr "%s päivää jäljellä"
 
+msgid "Hello, %s"
+msgstr "Hei, %s"
+
+msgid "Edit expiry date"
+msgstr "Muokkaa vanhenemispäivää"
+
+msgid "Certificate validity (days)"
+msgstr "Todistuksen voimassaolo (päivää)"
+
+msgid "Expiring certificates"
+msgstr "Vanhenevat todistukset"
+
+msgid "Expiring soon"
+msgstr "Vanhenee pian"
+
+msgid "Expired notice"
+msgstr "Ilmoitus vanhentuneesta"
+
+msgid "Expiring notice"
+msgstr "Ilmoitus vanhenemisesta"
+
+msgid "outdated"
+msgstr "vanhentunut"
+
+msgid "Last reminder sent"
+msgstr "Viimeisin muistutus lähetetty"
+
+msgid "Days ahead"
+msgstr "Päivää etukäteen"
+
+msgid "Send notification"
+msgstr "Lähetä ilmoitus"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Haluatko varmasti lähettää tämän ilmoituksen?"
+
+msgid "Expired: %s"
+msgstr "Vanhentunut: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Vanhenee pian: %s"
+
+msgid "Expired notice: %s"
+msgstr "Ilmoitus vanhentuneesta: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Ilmoitus vanhenemisesta: %s"
+

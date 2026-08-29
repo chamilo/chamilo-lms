@@ -39821,3 +39821,51 @@ msgstr "תאריך תפוגה"
 msgid "%s days remaining"
 msgstr "נותרו %s ימים"
 
+msgid "Hello, %s"
+msgstr "שלום, %s"
+
+msgid "Edit expiry date"
+msgstr "עריכת תאריך תפוגה"
+
+msgid "Certificate validity (days)"
+msgstr "תוקף תעודה (ימים)"
+
+msgid "Expiring certificates"
+msgstr "תעודות שפגות"
+
+msgid "Expiring soon"
+msgstr "פג בקרוב"
+
+msgid "Expired notice"
+msgstr "הודעת תפוגה"
+
+msgid "Expiring notice"
+msgstr "הודעת פקיעה קרובה"
+
+msgid "outdated"
+msgstr "פג תוקף"
+
+msgid "Last reminder sent"
+msgstr "תזכורת אחרונה שנשלחה"
+
+msgid "Days ahead"
+msgstr "ימים מראש"
+
+msgid "Send notification"
+msgstr "שליחת התראה"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "האם אתה בטוח שברצונך לשלוח התראה זו?"
+
+msgid "Expired: %s"
+msgstr "פג תוקף: %s"
+
+msgid "Expiring soon: %s"
+msgstr "פג בקרוב: %s"
+
+msgid "Expired notice: %s"
+msgstr "הודעת תפוגה: %s"
+
+msgid "Expiring notice: %s"
+msgstr "הודעת פקיעה קרובה: %s"
+

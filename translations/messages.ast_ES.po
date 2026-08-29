@@ -39810,3 +39810,51 @@ msgstr "Data de caducidá"
 msgid "%s days remaining"
 msgstr "Queden %s díes"
 
+msgid "Hello, %s"
+msgstr "Hola, %s"
+
+msgid "Edit expiry date"
+msgstr "Editar fecha de caducidá"
+
+msgid "Certificate validity (days)"
+msgstr "Validez del certificáu (díes)"
+
+msgid "Expiring certificates"
+msgstr "Certificaos que van caducar"
+
+msgid "Expiring soon"
+msgstr "Caduca pronto"
+
+msgid "Expired notice"
+msgstr "Avisu de caducáu"
+
+msgid "Expiring notice"
+msgstr "Avisu de caducidá"
+
+msgid "outdated"
+msgstr "caducáu"
+
+msgid "Last reminder sent"
+msgstr "Últimu recordatoriu unviáu"
+
+msgid "Days ahead"
+msgstr "Díes d'antelación"
+
+msgid "Send notification"
+msgstr "Unviar notificación"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "¿Tas seguru de que quies unviar esta notificación?"
+
+msgid "Expired: %s"
+msgstr "Caducáu: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Caduca pronto: %s"
+
+msgid "Expired notice: %s"
+msgstr "Avisu de caducáu: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Avisu de caducidá: %s"
+

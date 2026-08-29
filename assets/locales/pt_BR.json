@@ -3876,5 +3876,20 @@
     "Save as draft": "Salvar como rascunho",
     "Never expires": "Nunca expira",
     "Expiry date": "Data de validade",
-    "Never": "Nunca"
+    "Never": "Nunca",
+    "Edit expiry date": "Editar data de validade",
+    "Certificate validity (days)": "Validade do certificado (dias)",
+    "Expiring certificates": "Certificados a vencer",
+    "Expiring soon": "Vence em breve",
+    "Expired notice": "Aviso de expirado",
+    "Expiring notice": "Aviso de vencimento",
+    "outdated": "desatualizado",
+    "Last reminder sent": "\u00daltimo lembrete enviado",
+    "Days ahead": "Dias de anteced\u00eancia",
+    "Send notification": "Enviar notifica\u00e7\u00e3o",
+    "Are you sure you want to send this notification?": "Tem certeza de que deseja enviar esta notifica\u00e7\u00e3o?",
+    "Expired: {0}": "Expirado: {0}",
+    "Expiring soon: {0}": "Vence em breve: {0}",
+    "Expired notice: {0}": "Aviso de expirado: {0}",
+    "Expiring notice: {0}": "Aviso de vencimento: {0}"
 }

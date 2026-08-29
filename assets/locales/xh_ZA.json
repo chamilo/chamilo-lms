@@ -3876,5 +3876,20 @@
     "Save as draft": "Gcina njengoyilo",
     "Never expires": "Ayiphephileyo",
     "Expiry date": "Umhla wokuphelelwa",
-    "Never": "Zange kuphinda"
+    "Never": "Zange kuphinda",
+    "Edit expiry date": "Hlela umhla wokuphelelwa",
+    "Certificate validity (days)": "Ukuba semthethweni kwesatifikethi (iintsuku)",
+    "Expiring certificates": "Izatifikethi eziphelelwayo",
+    "Expiring soon": "Ziphelelwa kungekudala",
+    "Expired notice": "Isaziso sokuphelelwa",
+    "Expiring notice": "Isaziso sokuphelelwa kungekudala",
+    "outdated": "iphelelwe lixesha",
+    "Last reminder sent": "Isikhumbuzi sokugqibela esithunyelweyo",
+    "Days ahead": "Iintsuku ezingaphambili",
+    "Send notification": "Thumela isaziso",
+    "Are you sure you want to send this notification?": "Uqinisekile ukuba ufuna ukuthumela esi saziso?",
+    "Expired: {0}": "Iphelile: {0}",
+    "Expiring soon: {0}": "Iphelelwa kungekudala: {0}",
+    "Expired notice: {0}": "Isaziso sokuphelelwa: {0}",
+    "Expiring notice: {0}": "Isaziso sokuphelelwa kungekudala: {0}"
 }

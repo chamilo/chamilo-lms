@@ -39822,3 +39822,51 @@ msgstr "تاريخ الانتهاء"
 msgid "%s days remaining"
 msgstr "%s أيام متبقية"
 
+msgid "Hello, %s"
+msgstr "مرحباً، %s"
+
+msgid "Edit expiry date"
+msgstr "تعديل تاريخ الانتهاء"
+
+msgid "Certificate validity (days)"
+msgstr "صلاحية الشهادة (أيام)"
+
+msgid "Expiring certificates"
+msgstr "الشهادات المنتهية قريباً"
+
+msgid "Expiring soon"
+msgstr "تنتهي قريباً"
+
+msgid "Expired notice"
+msgstr "إشعار الانتهاء"
+
+msgid "Expiring notice"
+msgstr "إشعار قرب الانتهاء"
+
+msgid "outdated"
+msgstr "منتهية الصلاحية"
+
+msgid "Last reminder sent"
+msgstr "آخر تذكير أُرسل"
+
+msgid "Days ahead"
+msgstr "الأيام مسبقاً"
+
+msgid "Send notification"
+msgstr "إرسال إشعار"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "هل أنت متأكد من أنك تريد إرسال هذا الإشعار؟"
+
+msgid "Expired: %s"
+msgstr "منتهية: %s"
+
+msgid "Expiring soon: %s"
+msgstr "تنتهي قريباً: %s"
+
+msgid "Expired notice: %s"
+msgstr "إشعار الانتهاء: %s"
+
+msgid "Expiring notice: %s"
+msgstr "إشعار قرب الانتهاء: %s"
+

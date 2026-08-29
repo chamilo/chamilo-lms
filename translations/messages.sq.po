@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Me respekt"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Shembull formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Shembull formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Vargjet e variablave"
@@ -39807,4 +39807,52 @@ msgstr "Data e skadimit"
 
 msgid "%s days remaining"
 msgstr "%s ditë të mbetura"
+
+msgid "Hello, %s"
+msgstr "Përshëndetje, %s"
+
+msgid "Edit expiry date"
+msgstr "Ndrysho datën e skadimit"
+
+msgid "Certificate validity (days)"
+msgstr "Vlefshmëria e certifikatës (ditë)"
+
+msgid "Expiring certificates"
+msgstr "Certifikata që skadojnë"
+
+msgid "Expiring soon"
+msgstr "Skadon së shpejti"
+
+msgid "Expired notice"
+msgstr "Njoftim i skaduar"
+
+msgid "Expiring notice"
+msgstr "Njoftim i skadimit"
+
+msgid "outdated"
+msgstr "i vjetëruar"
+
+msgid "Last reminder sent"
+msgstr "Kujtesa e fundit e dërguar"
+
+msgid "Days ahead"
+msgstr "Ditë përpara"
+
+msgid "Send notification"
+msgstr "Dërgo njoftimin"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Jeni i sigurt që dëshironi të dërgoni këtë njoftim?"
+
+msgid "Expired: %s"
+msgstr "Skaduar: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Skadon së shpejti: %s"
+
+msgid "Expired notice: %s"
+msgstr "Njoftim i skaduar: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Njoftim i skadimit: %s"
 

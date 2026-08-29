@@ -3876,5 +3876,20 @@
     "Save as draft": "Goym sum uppkast",
     "Never expires": "Rennur ongant\u00ed\u00f0 \u00fat",
     "Expiry date": "\u00datgongudagur",
-    "Never": "Ongin"
+    "Never": "Ongin",
+    "Edit expiry date": "Broytt gildist\u00ed\u00f0",
+    "Certificate validity (days)": "Gildi av pr\u00f3gvi (dagar)",
+    "Expiring certificates": "Pr\u00f3gv i\u00f0 fara at ganga \u00fat",
+    "Expiring soon": "Ganga \u00fat skj\u00f3tt",
+    "Expired notice": "Bo\u00f0 um \u00fatgongd",
+    "Expiring notice": "Bo\u00f0 um at ganga \u00fat",
+    "outdated": "\u00fatgongt",
+    "Last reminder sent": "Seinasta \u00e1minning send",
+    "Days ahead": "Dagar frammanundan",
+    "Send notification": "Send fr\u00e1bo\u00f0an",
+    "Are you sure you want to send this notification?": "Ert t\u00fa v\u00eds/ur \u00ed at t\u00fa vilt senda hesa fr\u00e1bo\u00f0anina?",
+    "Expired: {0}": "\u00datgongt: {0}",
+    "Expiring soon: {0}": "Ganga \u00fat skj\u00f3tt: {0}",
+    "Expired notice: {0}": "Bo\u00f0 um \u00fatgongd: {0}",
+    "Expiring notice: {0}": "Bo\u00f0 um at ganga \u00fat: {0}"
 }

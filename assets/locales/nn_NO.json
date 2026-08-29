@@ -3876,5 +3876,20 @@
     "Save as draft": "Lagra som utkast",
     "Never expires": "Utl\u00f8par aldri",
     "Expiry date": "Utl\u00f8psdato",
-    "Never": "Alder"
+    "Never": "Alder",
+    "Edit expiry date": "Rediger utl\u00f8psdato",
+    "Certificate validity (days)": "Gyldigheit for sertifikat (dagar)",
+    "Expiring certificates": "Sertifikat som g\u00e5r ut",
+    "Expiring soon": "G\u00e5r snart ut",
+    "Expired notice": "Varsel om utl\u00f8pt",
+    "Expiring notice": "Varsel om utl\u00f8p",
+    "outdated": "utdatert",
+    "Last reminder sent": "Siste p\u00e5minning sendt",
+    "Days ahead": "Dagar i forkant",
+    "Send notification": "Send varsel",
+    "Are you sure you want to send this notification?": "Er du sikker p\u00e5 at du vil sende dette varselet?",
+    "Expired: {0}": "Utl\u00f8pt: {0}",
+    "Expiring soon: {0}": "G\u00e5r snart ut: {0}",
+    "Expired notice: {0}": "Varsel om utl\u00f8pt: {0}",
+    "Expiring notice: {0}": "Varsel om utl\u00f8p: {0}"
 }

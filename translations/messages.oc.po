@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cordialament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de formula : sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":òc:dret d'autor,, non:sens dret d'autor"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dorsièr,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dorsièr,, application/msword:MsWord,, application/octet-stream:Flux octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercici:exercici,,      simulacion:simulacion,,      questionari:questionari,,      diagrama:diagrama,,      figura:figura,,      grafic:grafic,,      indèx:indèx,,      diapositiva:diapositiva,,      taula:taula,,      tèxte narratiu:tèxte narratiu,,      examen:examen,,      experiment:experiment,,      enunciat de problèma:enunciat de problèma,,      autoevaluacion:autoevaluacion,,      leçon:leçon"
@@ -39803,4 +39803,52 @@ msgstr "Data d'expiracion"
 
 msgid "%s days remaining"
 msgstr "%s jorns restants"
+
+msgid "Hello, %s"
+msgstr "Bonjorn, %s"
+
+msgid "Edit expiry date"
+msgstr "Modificar la data d'expiracion"
+
+msgid "Certificate validity (days)"
+msgstr "Validitat del certificat (jorns)"
+
+msgid "Expiring certificates"
+msgstr "Certificats que caducan"
+
+msgid "Expiring soon"
+msgstr "Caduca lèu"
+
+msgid "Expired notice"
+msgstr "Avís d'expiracion"
+
+msgid "Expiring notice"
+msgstr "Avís de caducitat pròcha"
+
+msgid "outdated"
+msgstr "despassat"
+
+msgid "Last reminder sent"
+msgstr "Darrièr rapèl mandat"
+
+msgid "Days ahead"
+msgstr "Jorns d'avança"
+
+msgid "Send notification"
+msgstr "Mandar una notificacion"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Sètz segur que volètz mandar aquesta notificacion ?"
+
+msgid "Expired: %s"
+msgstr "Expirat : %s"
+
+msgid "Expiring soon: %s"
+msgstr "Caduca lèu : %s"
+
+msgid "Expired notice: %s"
+msgstr "Avís d'expiracion : %s"
+
+msgid "Expiring notice: %s"
+msgstr "Avís d'expiracion : %s"
 

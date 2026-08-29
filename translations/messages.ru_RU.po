@@ -39811,3 +39811,51 @@ msgstr "Дата истечения срока"
 msgid "%s days remaining"
 msgstr "Осталось %s дней"
 
+msgid "Hello, %s"
+msgstr "Здравствуйте, %s"
+
+msgid "Edit expiry date"
+msgstr "Изменить дату истечения"
+
+msgid "Certificate validity (days)"
+msgstr "Срок действия сертификата (дни)"
+
+msgid "Expiring certificates"
+msgstr "Истекающие сертификаты"
+
+msgid "Expiring soon"
+msgstr "Скоро истекает"
+
+msgid "Expired notice"
+msgstr "Уведомление об истечении"
+
+msgid "Expiring notice"
+msgstr "Уведомление о скором истечении"
+
+msgid "outdated"
+msgstr "устарел"
+
+msgid "Last reminder sent"
+msgstr "Последнее напоминание отправлено"
+
+msgid "Days ahead"
+msgstr "Дней заранее"
+
+msgid "Send notification"
+msgstr "Отправить уведомление"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Вы уверены, что хотите отправить это уведомление?"
+
+msgid "Expired: %s"
+msgstr "Истёк: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Скоро истекает: %s"
+
+msgid "Expired notice: %s"
+msgstr "Уведомление об истечении: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Уведомление о скором истечении: %s"
+

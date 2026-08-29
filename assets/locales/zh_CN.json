@@ -3876,5 +3876,20 @@
     "Save as draft": "\u4fdd\u5b58\u4e3a\u8349\u7a3f",
     "Never expires": "\u4ece\u4e0d\u5931\u6548",
     "Expiry date": "\u5230\u671f\u65e5\u671f",
-    "Never": "\u4ece\u4e0d"
+    "Never": "\u4ece\u4e0d",
+    "Edit expiry date": "\u7f16\u8f91\u5230\u671f\u65e5\u671f",
+    "Certificate validity (days)": "\u8bc1\u4e66\u6709\u6548\u671f\uff08\u5929\uff09",
+    "Expiring certificates": "\u5373\u5c06\u8fc7\u671f\u7684\u8bc1\u4e66",
+    "Expiring soon": "\u5373\u5c06\u8fc7\u671f",
+    "Expired notice": "\u8fc7\u671f\u901a\u77e5",
+    "Expiring notice": "\u5373\u5c06\u8fc7\u671f\u901a\u77e5",
+    "outdated": "\u5df2\u8fc7\u671f",
+    "Last reminder sent": "\u4e0a\u6b21\u63d0\u9192\u53d1\u9001\u65f6\u95f4",
+    "Days ahead": "\u63d0\u524d\u5929\u6570",
+    "Send notification": "\u53d1\u9001\u901a\u77e5",
+    "Are you sure you want to send this notification?": "\u786e\u5b9a\u8981\u53d1\u9001\u6b64\u901a\u77e5\u5417\uff1f",
+    "Expired: {0}": "\u5df2\u8fc7\u671f\uff1a{0}",
+    "Expiring soon: {0}": "\u5373\u5c06\u8fc7\u671f\uff1a{0}",
+    "Expired notice: {0}": "\u8fc7\u671f\u901a\u77e5\uff1a{0}",
+    "Expiring notice: {0}": "\u5373\u5c06\u8fc7\u671f\u901a\u77e5\uff1a{0}"
 }

@@ -3876,5 +3876,20 @@
     "Save as draft": "Tallenna luonnoksena",
     "Never expires": "Ei vanhene koskaan",
     "Expiry date": "Vanhenemisp\u00e4iv\u00e4",
-    "Never": "Ei koskaan"
+    "Never": "Ei koskaan",
+    "Edit expiry date": "Muokkaa vanhenemisp\u00e4iv\u00e4\u00e4",
+    "Certificate validity (days)": "Todistuksen voimassaolo (p\u00e4iv\u00e4\u00e4)",
+    "Expiring certificates": "Vanhenevat todistukset",
+    "Expiring soon": "Vanhenee pian",
+    "Expired notice": "Ilmoitus vanhentuneesta",
+    "Expiring notice": "Ilmoitus vanhenemisesta",
+    "outdated": "vanhentunut",
+    "Last reminder sent": "Viimeisin muistutus l\u00e4hetetty",
+    "Days ahead": "P\u00e4iv\u00e4\u00e4 etuk\u00e4teen",
+    "Send notification": "L\u00e4het\u00e4 ilmoitus",
+    "Are you sure you want to send this notification?": "Haluatko varmasti l\u00e4hett\u00e4\u00e4 t\u00e4m\u00e4n ilmoituksen?",
+    "Expired: {0}": "Vanhentunut: {0}",
+    "Expiring soon: {0}": "Vanhenee pian: {0}",
+    "Expired notice: {0}": "Ilmoitus vanhentuneesta: {0}",
+    "Expiring notice: {0}": "Ilmoitus vanhenemisesta: {0}"
 }

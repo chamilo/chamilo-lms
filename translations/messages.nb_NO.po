@@ -39809,3 +39809,51 @@ msgstr "Utløpsdato"
 msgid "%s days remaining"
 msgstr "%s dager igjen"
 
+msgid "Hello, %s"
+msgstr "Hei, %s"
+
+msgid "Edit expiry date"
+msgstr "Rediger utløpsdato"
+
+msgid "Certificate validity (days)"
+msgstr "Sertifikatgyldighet (dager)"
+
+msgid "Expiring certificates"
+msgstr "Sertifikater som utløper"
+
+msgid "Expiring soon"
+msgstr "Utløper snart"
+
+msgid "Expired notice"
+msgstr "Varsel om utløpt"
+
+msgid "Expiring notice"
+msgstr "Varsel om utløp"
+
+msgid "outdated"
+msgstr "utdatert"
+
+msgid "Last reminder sent"
+msgstr "Siste påminnelse sendt"
+
+msgid "Days ahead"
+msgstr "Dager i forveien"
+
+msgid "Send notification"
+msgstr "Send varsling"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Er du sikker på at du vil sende denne varslingen?"
+
+msgid "Expired: %s"
+msgstr "Utløpt: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Utløper snart: %s"
+
+msgid "Expired notice: %s"
+msgstr "Varsel om utløpt: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Varsel om utløp: %s"
+

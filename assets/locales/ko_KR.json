@@ -3876,5 +3876,20 @@
     "Save as draft": "\ucd08\uc548\uc73c\ub85c \uc800\uc7a5",
     "Never expires": "\ub9cc\ub8cc\ub418\uc9c0 \uc54a\uc74c",
     "Expiry date": "\ub9cc\ub8cc\uc77c",
-    "Never": "\uc5c6\uc74c"
+    "Never": "\uc5c6\uc74c",
+    "Edit expiry date": "\ub9cc\ub8cc\uc77c \ud3b8\uc9d1",
+    "Certificate validity (days)": "\uc218\ub8cc\uc99d \uc720\ud6a8 \uae30\uac04(\uc77c)",
+    "Expiring certificates": "\ub9cc\ub8cc \uc608\uc815 \uc218\ub8cc\uc99d",
+    "Expiring soon": "\uace7 \ub9cc\ub8cc",
+    "Expired notice": "\ub9cc\ub8cc \uc54c\ub9bc",
+    "Expiring notice": "\ub9cc\ub8cc \uc608\uc815 \uc54c\ub9bc",
+    "outdated": "\ub9cc\ub8cc\ub428",
+    "Last reminder sent": "\ub9c8\uc9c0\ub9c9 \uc54c\ub9bc \ubc1c\uc1a1",
+    "Days ahead": "\ubbf8\ub9ac \uc54c\ub9bc \uc77c\uc218",
+    "Send notification": "\uc54c\ub9bc \ubcf4\ub0b4\uae30",
+    "Are you sure you want to send this notification?": "\uc774 \uc54c\ub9bc\uc744 \ubcf4\ub0b4\uc2dc\uaca0\uc2b5\ub2c8\uae4c?",
+    "Expired: {0}": "\ub9cc\ub8cc\ub428: {0}",
+    "Expiring soon: {0}": "\uace7 \ub9cc\ub8cc: {0}",
+    "Expired notice: {0}": "\ub9cc\ub8cc \uc54c\ub9bc: {0}",
+    "Expiring notice: {0}": "\ub9cc\ub8cc \uc608\uc815 \uc54c\ub9bc: {0}"
 }

@@ -39804,3 +39804,51 @@ msgstr "Datum vypršení"
 msgid "%s days remaining"
 msgstr "Zbývá %s dní"
 
+msgid "Hello, %s"
+msgstr "Dobrý den, %s"
+
+msgid "Edit expiry date"
+msgstr "Upravit datum vypršení"
+
+msgid "Certificate validity (days)"
+msgstr "Platnost certifikátu (dny)"
+
+msgid "Expiring certificates"
+msgstr "Certifikáty s končící platností"
+
+msgid "Expiring soon"
+msgstr "Brzy vyprší"
+
+msgid "Expired notice"
+msgstr "Oznámení o vypršení"
+
+msgid "Expiring notice"
+msgstr "Oznámení o blížícím se vypršení"
+
+msgid "outdated"
+msgstr "zastaralé"
+
+msgid "Last reminder sent"
+msgstr "Poslední připomínka odeslána"
+
+msgid "Days ahead"
+msgstr "Dny předem"
+
+msgid "Send notification"
+msgstr "Odeslat oznámení"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Opravdu chcete odeslat toto oznámení?"
+
+msgid "Expired: %s"
+msgstr "Vypršelo: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Brzy vyprší: %s"
+
+msgid "Expired notice: %s"
+msgstr "Oznámení o vypršení: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Oznámení o blížícím se vypršení: %s"
+

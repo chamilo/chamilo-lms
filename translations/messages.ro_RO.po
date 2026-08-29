@@ -39824,3 +39824,51 @@ msgstr "Data expirării"
 msgid "%s days remaining"
 msgstr "%s zile rămase"
 
+msgid "Hello, %s"
+msgstr "Salut, %s"
+
+msgid "Edit expiry date"
+msgstr "Editează data de expirare"
+
+msgid "Certificate validity (days)"
+msgstr "Valabilitate certificat (zile)"
+
+msgid "Expiring certificates"
+msgstr "Certificate care expiră"
+
+msgid "Expiring soon"
+msgstr "Expiră în curând"
+
+msgid "Expired notice"
+msgstr "Notificare de expirare"
+
+msgid "Expiring notice"
+msgstr "Notificare de expirare iminentă"
+
+msgid "outdated"
+msgstr "expirat"
+
+msgid "Last reminder sent"
+msgstr "Ultimul memento trimis"
+
+msgid "Days ahead"
+msgstr "Zile în avans"
+
+msgid "Send notification"
+msgstr "Trimite notificare"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Sigur doriți să trimiteți această notificare?"
+
+msgid "Expired: %s"
+msgstr "Expirat: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Expiră în curând: %s"
+
+msgid "Expired notice: %s"
+msgstr "Notificare de expirare: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Notificare de expirare iminentă: %s"
+

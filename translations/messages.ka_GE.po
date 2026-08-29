@@ -39804,3 +39804,51 @@ msgstr "ვადის გასვლის თარიღი"
 msgid "%s days remaining"
 msgstr "%s დღე დარჩა"
 
+msgid "Hello, %s"
+msgstr "გამარჯობა, %s"
+
+msgid "Edit expiry date"
+msgstr "ვადის გასვლის თარიღის რედაქტირება"
+
+msgid "Certificate validity (days)"
+msgstr "სერტიფიკატის მოქმედების ვადა (დღეები)"
+
+msgid "Expiring certificates"
+msgstr "ვადის ამოწურვის სერტიფიკატები"
+
+msgid "Expiring soon"
+msgstr "მალე იწურება"
+
+msgid "Expired notice"
+msgstr "ვადაგასულის შეტყობინება"
+
+msgid "Expiring notice"
+msgstr "ვადის ამოწურვის შეტყობინება"
+
+msgid "outdated"
+msgstr "მოძველებული"
+
+msgid "Last reminder sent"
+msgstr "ბოლო შეხსენება გაიგზავნა"
+
+msgid "Days ahead"
+msgstr "დღეები წინასწარ"
+
+msgid "Send notification"
+msgstr "შეტყობინების გაგზავნა"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ შეტყობინების გაგზავნა?"
+
+msgid "Expired: %s"
+msgstr "ვადაგასული: %s"
+
+msgid "Expiring soon: %s"
+msgstr "მალე იწურება: %s"
+
+msgid "Expired notice: %s"
+msgstr "ვადაგასულის შეტყობინება: %s"
+
+msgid "Expiring notice: %s"
+msgstr "ვადის ამოწურვის შეტყობინება: %s"
+

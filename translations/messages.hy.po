@@ -39808,3 +39808,51 @@ msgstr "Սպառման ամսաթիվ"
 msgid "%s days remaining"
 msgstr "մնացել է %s օր"
 
+msgid "Hello, %s"
+msgstr "Բարև, %s"
+
+msgid "Edit expiry date"
+msgstr "Խմբագրել ժամկետի ավարտի ամսաթիվը"
+
+msgid "Certificate validity (days)"
+msgstr "Վկայականի վավերականություն (օրեր)"
+
+msgid "Expiring certificates"
+msgstr "Ժամկետը լրացող վկայականներ"
+
+msgid "Expiring soon"
+msgstr "Շուտով ժամկետը կլրանա"
+
+msgid "Expired notice"
+msgstr "Ժամկետանց ծանուցում"
+
+msgid "Expiring notice"
+msgstr "Ժամկետի ավարտի ծանուցում"
+
+msgid "outdated"
+msgstr "հնացած"
+
+msgid "Last reminder sent"
+msgstr "Վերջին հիշեցումը ուղարկվել է"
+
+msgid "Days ahead"
+msgstr "Օրեր առաջ"
+
+msgid "Send notification"
+msgstr "Ուղարկել ծանուցում"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Վստա՞հ եք, որ ցանկանում եք ուղարկել այս ծանուցումը։"
+
+msgid "Expired: %s"
+msgstr "Ժամկետանց է՝ %s"
+
+msgid "Expiring soon: %s"
+msgstr "Շուտով ժամկետը կլրանա՝ %s"
+
+msgid "Expired notice: %s"
+msgstr "Ժամկետանց ծանուցում՝ %s"
+
+msgid "Expiring notice: %s"
+msgstr "Ժամկետի ավարտի ծանուցում՝ %s"
+

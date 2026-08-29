@@ -39808,3 +39808,51 @@ msgstr "Lejárati dátum"
 msgid "%s days remaining"
 msgstr "%s nap van hátra"
 
+msgid "Hello, %s"
+msgstr "Helló, %s"
+
+msgid "Edit expiry date"
+msgstr "Lejárati dátum szerkesztése"
+
+msgid "Certificate validity (days)"
+msgstr "Tanúsítvány érvényessége (nap)"
+
+msgid "Expiring certificates"
+msgstr "Lejáró tanúsítványok"
+
+msgid "Expiring soon"
+msgstr "Hamarosan lejár"
+
+msgid "Expired notice"
+msgstr "Lejárt értesítés"
+
+msgid "Expiring notice"
+msgstr "Lejáró értesítés"
+
+msgid "outdated"
+msgstr "elavult"
+
+msgid "Last reminder sent"
+msgstr "Utolsó emlékeztető elküldve"
+
+msgid "Days ahead"
+msgstr "Napokkal előre"
+
+msgid "Send notification"
+msgstr "Értesítés küldése"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Biztosan elküldi ezt az értesítést?"
+
+msgid "Expired: %s"
+msgstr "Lejárt: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Hamarosan lejár: %s"
+
+msgid "Expired notice: %s"
+msgstr "Lejárt értesítés: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Lejáró értesítés: %s"
+

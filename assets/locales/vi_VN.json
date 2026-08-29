@@ -3876,5 +3876,20 @@
     "Save as draft": "L\u01b0u d\u01b0\u1edbi d\u1ea1ng b\u1ea3n nh\u00e1p",
     "Never expires": "Kh\u00f4ng bao gi\u1edd h\u1ebft h\u1ea1n",
     "Expiry date": "Ng\u00e0y h\u1ebft h\u1ea1n",
-    "Never": "Kh\u00f4ng bao gi\u1edd"
+    "Never": "Kh\u00f4ng bao gi\u1edd",
+    "Edit expiry date": "S\u1eeda ng\u00e0y h\u1ebft h\u1ea1n",
+    "Certificate validity (days)": "Th\u1eddi h\u1ea1n ch\u1ee9ng ch\u1ec9 (ng\u00e0y)",
+    "Expiring certificates": "Ch\u1ee9ng ch\u1ec9 s\u1eafp h\u1ebft h\u1ea1n",
+    "Expiring soon": "S\u1eafp h\u1ebft h\u1ea1n",
+    "Expired notice": "Th\u00f4ng b\u00e1o h\u1ebft h\u1ea1n",
+    "Expiring notice": "Th\u00f4ng b\u00e1o s\u1eafp h\u1ebft h\u1ea1n",
+    "outdated": "h\u1ebft h\u1ea1n",
+    "Last reminder sent": "L\u1ea7n nh\u1eafc cu\u1ed1i \u0111\u00e3 g\u1eedi",
+    "Days ahead": "S\u1ed1 ng\u00e0y tr\u01b0\u1edbc",
+    "Send notification": "G\u1eedi th\u00f4ng b\u00e1o",
+    "Are you sure you want to send this notification?": "B\u1ea1n c\u00f3 ch\u1eafc mu\u1ed1n g\u1eedi th\u00f4ng b\u00e1o n\u00e0y?",
+    "Expired: {0}": "\u0110\u00e3 h\u1ebft h\u1ea1n: {0}",
+    "Expiring soon: {0}": "S\u1eafp h\u1ebft h\u1ea1n: {0}",
+    "Expired notice: {0}": "Th\u00f4ng b\u00e1o h\u1ebft h\u1ea1n: {0}",
+    "Expiring notice: {0}": "Th\u00f4ng b\u00e1o s\u1eafp h\u1ebft h\u1ea1n: {0}"
 }

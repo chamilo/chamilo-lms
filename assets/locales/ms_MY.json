@@ -3876,5 +3876,20 @@
     "Save as draft": "Simpan sebagai draf",
     "Never expires": "Tidak pernah tamat tempoh",
     "Expiry date": "Tarikh luput",
-    "Never": "Tidak pernah"
+    "Never": "Tidak pernah",
+    "Edit expiry date": "Sunting tarikh luput",
+    "Certificate validity (days)": "Kesahan sijil (hari)",
+    "Expiring certificates": "Sijil yang akan luput",
+    "Expiring soon": "Akan luput tidak lama lagi",
+    "Expired notice": "Notis luput",
+    "Expiring notice": "Notis akan luput",
+    "outdated": "luput",
+    "Last reminder sent": "Peringatan terakhir dihantar",
+    "Days ahead": "Hari lebih awal",
+    "Send notification": "Hantar pemberitahuan",
+    "Are you sure you want to send this notification?": "Adakah anda pasti mahu menghantar pemberitahuan ini?",
+    "Expired: {0}": "Luput: {0}",
+    "Expiring soon: {0}": "Akan luput tidak lama lagi: {0}",
+    "Expired notice: {0}": "Notis luput: {0}",
+    "Expiring notice: {0}": "Notis akan luput: {0}"
 }

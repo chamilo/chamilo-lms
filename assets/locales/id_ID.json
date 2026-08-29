@@ -3876,5 +3876,20 @@
     "Save as draft": "Simpan sebagai draf",
     "Never expires": "Tidak pernah kedaluwarsa",
     "Expiry date": "Tanggal kedaluwarsa",
-    "Never": "Tidak pernah"
+    "Never": "Tidak pernah",
+    "Edit expiry date": "Ubah tanggal kedaluwarsa",
+    "Certificate validity (days)": "Masa berlaku sertifikat (hari)",
+    "Expiring certificates": "Sertifikat yang akan kedaluwarsa",
+    "Expiring soon": "Segera kedaluwarsa",
+    "Expired notice": "Pemberitahuan kedaluwarsa",
+    "Expiring notice": "Pemberitahuan akan kedaluwarsa",
+    "outdated": "kedaluwarsa",
+    "Last reminder sent": "Pengingat terakhir dikirim",
+    "Days ahead": "Hari ke depan",
+    "Send notification": "Kirim notifikasi",
+    "Are you sure you want to send this notification?": "Apakah Anda yakin ingin mengirim notifikasi ini?",
+    "Expired: {0}": "Kedaluwarsa: {0}",
+    "Expiring soon: {0}": "Segera kedaluwarsa: {0}",
+    "Expired notice: {0}": "Pemberitahuan kedaluwarsa: {0}",
+    "Expiring notice: {0}": "Pemberitahuan akan kedaluwarsa: {0}"
 }

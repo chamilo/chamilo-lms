@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ fọ́múlà: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -39803,4 +39803,52 @@ msgstr "Ọjọ́ ìparí"
 
 msgid "%s days remaining"
 msgstr "%s ọjọ́ ṣẹ́kù"
+
+msgid "Hello, %s"
+msgstr "Pẹ̀lẹ́, %s"
+
+msgid "Edit expiry date"
+msgstr "Ṣàtúnṣe ọjọ́ ìparí"
+
+msgid "Certificate validity (days)"
+msgstr "Ìwúlò ìwé-ẹ̀rí (ọjọ́)"
+
+msgid "Expiring certificates"
+msgstr "Àwọn ìwé-ẹ̀rí tó ń parí"
+
+msgid "Expiring soon"
+msgstr "Ń parí láìpẹ́"
+
+msgid "Expired notice"
+msgstr "Ìkìlọ̀ ìparí"
+
+msgid "Expiring notice"
+msgstr "Ìkìlọ̀ ìparí tó ń bọ̀"
+
+msgid "outdated"
+msgstr "ti kọjá ìgbà"
+
+msgid "Last reminder sent"
+msgstr "Ìránnilétí tó kẹ́yìn tí a fi ránṣẹ́"
+
+msgid "Days ahead"
+msgstr "Ọjọ́ síwájú"
+
+msgid "Send notification"
+msgstr "Fi ìfitónilétí ránṣẹ́"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Ṣé ó dá ọ lójú pé o fẹ́ fi ìfitónilétí yìí ránṣẹ́?"
+
+msgid "Expired: %s"
+msgstr "Ti parí: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Ń parí láìpẹ́: %s"
+
+msgid "Expired notice: %s"
+msgstr "Ìkìlọ̀ ìparí: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Ìkìlọ̀ ìparí tó ń bọ̀: %s"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula-adibidea: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula adibidea: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -39814,4 +39814,52 @@ msgstr "Iraungitze-data"
 
 msgid "%s days remaining"
 msgstr "%s egun geratzen dira"
+
+msgid "Hello, %s"
+msgstr "Kaixo, %s"
+
+msgid "Edit expiry date"
+msgstr "Editatu iraungitze-data"
+
+msgid "Certificate validity (days)"
+msgstr "Ziurtagiriaren baliozkotasuna (egunak)"
+
+msgid "Expiring certificates"
+msgstr "Iraungitzen ari diren ziurtagiriak"
+
+msgid "Expiring soon"
+msgstr "Laster iraungiko da"
+
+msgid "Expired notice"
+msgstr "Iraungitako oharra"
+
+msgid "Expiring notice"
+msgstr "Iraungitze-oharra"
+
+msgid "outdated"
+msgstr "zaharkitua"
+
+msgid "Last reminder sent"
+msgstr "Azken oroigarria bidalia"
+
+msgid "Days ahead"
+msgstr "Aurrerapen-egunak"
+
+msgid "Send notification"
+msgstr "Bidali jakinarazpena"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Ziur zaude jakinarazpen hau bidali nahi duzula?"
+
+msgid "Expired: %s"
+msgstr "Iraungita: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Laster iraungiko da: %s"
+
+msgid "Expired notice: %s"
+msgstr "Iraungitako oharra: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Iraungitze-oharra: %s"
 

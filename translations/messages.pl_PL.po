@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Z poważaniem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Przykład wzoru: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Przykład formuły: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Zakresy zmiennych"
@@ -39813,4 +39813,52 @@ msgstr "Data wygaśnięcia"
 
 msgid "%s days remaining"
 msgstr "Pozostało %s dni"
+
+msgid "Hello, %s"
+msgstr "Witaj, %s"
+
+msgid "Edit expiry date"
+msgstr "Edytuj datę wygaśnięcia"
+
+msgid "Certificate validity (days)"
+msgstr "Ważność certyfikatu (dni)"
+
+msgid "Expiring certificates"
+msgstr "Wygasające certyfikaty"
+
+msgid "Expiring soon"
+msgstr "Wkrótce wygasa"
+
+msgid "Expired notice"
+msgstr "Powiadomienie o wygaśnięciu"
+
+msgid "Expiring notice"
+msgstr "Powiadomienie o zbliżającym się wygaśnięciu"
+
+msgid "outdated"
+msgstr "przeterminowane"
+
+msgid "Last reminder sent"
+msgstr "Ostatnie przypomnienie wysłano"
+
+msgid "Days ahead"
+msgstr "Dni wcześniej"
+
+msgid "Send notification"
+msgstr "Wyślij powiadomienie"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Czy na pewno chcesz wysłać to powiadomienie?"
+
+msgid "Expired: %s"
+msgstr "Wygasło: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Wkrótce wygasa: %s"
+
+msgid "Expired notice: %s"
+msgstr "Powiadomienie o wygaśnięciu: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Powiadomienie o zbliżającym się wygaśnięciu: %s"
 

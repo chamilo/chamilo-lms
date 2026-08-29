@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Sekiranya ini"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Julat pembolehubah"
@@ -39807,4 +39807,52 @@ msgstr "Tarikh luput"
 
 msgid "%s days remaining"
 msgstr "%s hari lagi"
+
+msgid "Hello, %s"
+msgstr "Helo, %s"
+
+msgid "Edit expiry date"
+msgstr "Sunting tarikh luput"
+
+msgid "Certificate validity (days)"
+msgstr "Kesahan sijil (hari)"
+
+msgid "Expiring certificates"
+msgstr "Sijil yang akan luput"
+
+msgid "Expiring soon"
+msgstr "Akan luput tidak lama lagi"
+
+msgid "Expired notice"
+msgstr "Notis luput"
+
+msgid "Expiring notice"
+msgstr "Notis akan luput"
+
+msgid "outdated"
+msgstr "luput"
+
+msgid "Last reminder sent"
+msgstr "Peringatan terakhir dihantar"
+
+msgid "Days ahead"
+msgstr "Hari lebih awal"
+
+msgid "Send notification"
+msgstr "Hantar pemberitahuan"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Adakah anda pasti mahu menghantar pemberitahuan ini?"
+
+msgid "Expired: %s"
+msgstr "Luput: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Akan luput tidak lama lagi: %s"
+
+msgid "Expired notice: %s"
+msgstr "Notis luput: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Notis akan luput: %s"
 

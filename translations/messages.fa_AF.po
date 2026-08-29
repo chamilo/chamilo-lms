@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "با احترام"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نمونهٔ فورمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نمونه فرمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "محدوده متغیرها"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":بله:حق نشر,, خیر:بدون حق نشر"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوشه,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوشه,, application/msword:MsWord,, application/octet-stream:جریان اکتِت,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":تمرین:تمرین,,      شبیه‌سازی:شبیه‌سازی,,      پرسشنامه:پرسشنامه,,      نمودار:نمودار,,      شکل:شکل,,      گراف:گراف,,      نمایه:نمایه,,      اسلاید:اسلاید,,      جدول:جدول,,      متن روایی:متن روایی,,      امتحان:امتحان,,      آزمایش:آزمایش,,      بیان مسئله:بیان مسئله,,      خودارزیابی:خودارزیابی,,      سخنرانی:سخنرانی"
@@ -39803,4 +39803,52 @@ msgstr "تاریخ انقضا"
 
 msgid "%s days remaining"
 msgstr "%s روز باقی‌مانده"
+
+msgid "Hello, %s"
+msgstr "سلام، %s"
+
+msgid "Edit expiry date"
+msgstr "ویرایش تاریخ انقضا"
+
+msgid "Certificate validity (days)"
+msgstr "اعتبار تصدیق‌نامه (روز)"
+
+msgid "Expiring certificates"
+msgstr "تصدیق‌نامه‌های در حال انقضا"
+
+msgid "Expiring soon"
+msgstr "به‌زودی منقضی می‌شود"
+
+msgid "Expired notice"
+msgstr "اطلاعیه منقضی‌شده"
+
+msgid "Expiring notice"
+msgstr "اطلاعیه در حال انقضا"
+
+msgid "outdated"
+msgstr "منسوخ"
+
+msgid "Last reminder sent"
+msgstr "آخرین یادآوری ارسال‌شده"
+
+msgid "Days ahead"
+msgstr "روزهای پیش‌رو"
+
+msgid "Send notification"
+msgstr "ارسال اطلاعیه"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "آیا مطمئن هستید که می‌خواهید این اطلاعیه را ارسال کنید؟"
+
+msgid "Expired: %s"
+msgstr "منقضی‌شده: %s"
+
+msgid "Expiring soon: %s"
+msgstr "به‌زودی منقضی می‌شود: %s"
+
+msgid "Expired notice: %s"
+msgstr "اطلاعیه منقضی‌شده: %s"
+
+msgid "Expiring notice: %s"
+msgstr "اطلاعیه در حال انقضا: %s"
 

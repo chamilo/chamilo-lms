@@ -3876,5 +3876,20 @@
     "Save as draft": "Gorde zirriborro gisa",
     "Never expires": "Inoiz ez da iraungiko",
     "Expiry date": "Iraungitze-data",
-    "Never": "Inoiz ez"
+    "Never": "Inoiz ez",
+    "Edit expiry date": "Editatu iraungitze-data",
+    "Certificate validity (days)": "Ziurtagiriaren baliozkotasuna (egunak)",
+    "Expiring certificates": "Iraungitzen ari diren ziurtagiriak",
+    "Expiring soon": "Laster iraungiko da",
+    "Expired notice": "Iraungitako oharra",
+    "Expiring notice": "Iraungitze-oharra",
+    "outdated": "zaharkitua",
+    "Last reminder sent": "Azken oroigarria bidalia",
+    "Days ahead": "Aurrerapen-egunak",
+    "Send notification": "Bidali jakinarazpena",
+    "Are you sure you want to send this notification?": "Ziur zaude jakinarazpen hau bidali nahi duzula?",
+    "Expired: {0}": "Iraungita: {0}",
+    "Expiring soon: {0}": "Laster iraungiko da: {0}",
+    "Expired notice: {0}": "Iraungitako oharra: {0}",
+    "Expiring notice: {0}": "Iraungitze-oharra: {0}"
 }

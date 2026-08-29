@@ -39810,3 +39810,51 @@ msgstr "到期日期"
 msgid "%s days remaining"
 msgstr "剩余 %s 天"
 
+msgid "Hello, %s"
+msgstr "您好，%s"
+
+msgid "Edit expiry date"
+msgstr "编辑到期日期"
+
+msgid "Certificate validity (days)"
+msgstr "证书有效期（天）"
+
+msgid "Expiring certificates"
+msgstr "即将过期的证书"
+
+msgid "Expiring soon"
+msgstr "即将过期"
+
+msgid "Expired notice"
+msgstr "过期通知"
+
+msgid "Expiring notice"
+msgstr "即将过期通知"
+
+msgid "outdated"
+msgstr "已过期"
+
+msgid "Last reminder sent"
+msgstr "上次提醒发送时间"
+
+msgid "Days ahead"
+msgstr "提前天数"
+
+msgid "Send notification"
+msgstr "发送通知"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "确定要发送此通知吗？"
+
+msgid "Expired: %s"
+msgstr "已过期：%s"
+
+msgid "Expiring soon: %s"
+msgstr "即将过期：%s"
+
+msgid "Expired notice: %s"
+msgstr "过期通知：%s"
+
+msgid "Expiring notice: %s"
+msgstr "即将过期通知：%s"
+

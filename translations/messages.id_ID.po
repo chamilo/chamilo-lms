@@ -39808,3 +39808,51 @@ msgstr "Tanggal kedaluwarsa"
 msgid "%s days remaining"
 msgstr "%s hari tersisa"
 
+msgid "Hello, %s"
+msgstr "Halo, %s"
+
+msgid "Edit expiry date"
+msgstr "Ubah tanggal kedaluwarsa"
+
+msgid "Certificate validity (days)"
+msgstr "Masa berlaku sertifikat (hari)"
+
+msgid "Expiring certificates"
+msgstr "Sertifikat yang akan kedaluwarsa"
+
+msgid "Expiring soon"
+msgstr "Segera kedaluwarsa"
+
+msgid "Expired notice"
+msgstr "Pemberitahuan kedaluwarsa"
+
+msgid "Expiring notice"
+msgstr "Pemberitahuan akan kedaluwarsa"
+
+msgid "outdated"
+msgstr "kedaluwarsa"
+
+msgid "Last reminder sent"
+msgstr "Pengingat terakhir dikirim"
+
+msgid "Days ahead"
+msgstr "Hari ke depan"
+
+msgid "Send notification"
+msgstr "Kirim notifikasi"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Apakah Anda yakin ingin mengirim notifikasi ini?"
+
+msgid "Expired: %s"
+msgstr "Kedaluwarsa: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Segera kedaluwarsa: %s"
+
+msgid "Expired notice: %s"
+msgstr "Pemberitahuan kedaluwarsa: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Pemberitahuan akan kedaluwarsa: %s"
+

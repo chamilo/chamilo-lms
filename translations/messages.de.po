@@ -41374,3 +41374,51 @@ msgstr "Ablaufdatum"
 msgid "%s days remaining"
 msgstr "%s Tage verbleibend"
 
+msgid "Hello, %s"
+msgstr "Hallo, %s"
+
+msgid "Edit expiry date"
+msgstr "Ablaufdatum bearbeiten"
+
+msgid "Certificate validity (days)"
+msgstr "Gültigkeit des Zertifikats (Tage)"
+
+msgid "Expiring certificates"
+msgstr "Ablaufende Zertifikate"
+
+msgid "Expiring soon"
+msgstr "Läuft bald ab"
+
+msgid "Expired notice"
+msgstr "Hinweis bei Ablauf"
+
+msgid "Expiring notice"
+msgstr "Hinweis vor Ablauf"
+
+msgid "outdated"
+msgstr "veraltet"
+
+msgid "Last reminder sent"
+msgstr "Letzte Erinnerung gesendet"
+
+msgid "Days ahead"
+msgstr "Tage im Voraus"
+
+msgid "Send notification"
+msgstr "Benachrichtigung senden"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Möchten Sie diese Benachrichtigung wirklich senden?"
+
+msgid "Expired: %s"
+msgstr "Abgelaufen: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Läuft bald ab: %s"
+
+msgid "Expired notice: %s"
+msgstr "Hinweis bei Ablauf: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Hinweis vor Ablauf: %s"
+

@@ -3876,5 +3876,20 @@
     "Save as draft": "Salve come boze",
     "Never expires": "No scade mai",
     "Expiry date": "Date di scjadince",
-    "Never": "Mai"
+    "Never": "Mai",
+    "Edit expiry date": "Modifiche date di scjadince",
+    "Certificate validity (days)": "Validit\u00e2t dal certific\u00e2t (d\u00ees)",
+    "Expiring certificates": "Certific\u00e2ts in scjadince",
+    "Expiring soon": "Scjadince imminente",
+    "Expired notice": "Av\u00ees di scjad\u00fbt",
+    "Expiring notice": "Av\u00ees di scjadince",
+    "outdated": "f\u00fbr date",
+    "Last reminder sent": "Ultin recuard invi\u00e2t",
+    "Days ahead": "D\u00ees in avance",
+    "Send notification": "Invie notifiche",
+    "Are you sure you want to send this notification?": "S\u00eastu sig\u00fbr di vol\u00ea invi\u00e2 cheste notifiche?",
+    "Expired: {0}": "Scjad\u00fbt: {0}",
+    "Expiring soon: {0}": "Scjadince imminente: {0}",
+    "Expired notice: {0}": "Av\u00ees di scjad\u00fbt: {0}",
+    "Expiring notice: {0}": "Av\u00ees di scjadince: {0}"
 }

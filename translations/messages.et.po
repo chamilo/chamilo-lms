@@ -39809,3 +39809,51 @@ msgstr "Aegumiskuupäev"
 msgid "%s days remaining"
 msgstr "%s päeva jäänud"
 
+msgid "Hello, %s"
+msgstr "Tere, %s"
+
+msgid "Edit expiry date"
+msgstr "Muuda aegumiskuupäeva"
+
+msgid "Certificate validity (days)"
+msgstr "Sertifikaadi kehtivus (päevades)"
+
+msgid "Expiring certificates"
+msgstr "Aeguvad sertifikaadid"
+
+msgid "Expiring soon"
+msgstr "Aegub peagi"
+
+msgid "Expired notice"
+msgstr "Aegunud teade"
+
+msgid "Expiring notice"
+msgstr "Aegumise teade"
+
+msgid "outdated"
+msgstr "aegunud"
+
+msgid "Last reminder sent"
+msgstr "Viimane meeldetuletus saadetud"
+
+msgid "Days ahead"
+msgstr "Päevi ette"
+
+msgid "Send notification"
+msgstr "Saada teavitus"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Kas oled kindel, et soovid selle teavituse saata?"
+
+msgid "Expired: %s"
+msgstr "Aegunud: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Aegub peagi: %s"
+
+msgid "Expired notice: %s"
+msgstr "Aegunud teade: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Aegumise teade: %s"
+

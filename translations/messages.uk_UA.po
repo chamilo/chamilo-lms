@@ -39804,3 +39804,51 @@ msgstr "Дата закінчення терміну дії"
 msgid "%s days remaining"
 msgstr "Залишилося %s днів"
 
+msgid "Hello, %s"
+msgstr "Вітаємо, %s"
+
+msgid "Edit expiry date"
+msgstr "Редагувати дату закінчення"
+
+msgid "Certificate validity (days)"
+msgstr "Термін дії сертифіката (дні)"
+
+msgid "Expiring certificates"
+msgstr "Сертифікати з терміном, що закінчується"
+
+msgid "Expiring soon"
+msgstr "Незабаром закінчується"
+
+msgid "Expired notice"
+msgstr "Повідомлення про закінчення терміну"
+
+msgid "Expiring notice"
+msgstr "Повідомлення про наближення закінчення"
+
+msgid "outdated"
+msgstr "застарілий"
+
+msgid "Last reminder sent"
+msgstr "Останнє нагадування надіслано"
+
+msgid "Days ahead"
+msgstr "Днів наперед"
+
+msgid "Send notification"
+msgstr "Надіслати сповіщення"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Ви впевнені, що хочете надіслати це сповіщення?"
+
+msgid "Expired: %s"
+msgstr "Термін закінчився: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Незабаром закінчується: %s"
+
+msgid "Expired notice: %s"
+msgstr "Повідомлення про закінчення терміну: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Повідомлення про наближення закінчення: %s"
+

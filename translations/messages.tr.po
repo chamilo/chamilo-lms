@@ -39810,3 +39810,51 @@ msgstr "Bitiş tarihi"
 msgid "%s days remaining"
 msgstr "%s gün kaldı"
 
+msgid "Hello, %s"
+msgstr "Merhaba, %s"
+
+msgid "Edit expiry date"
+msgstr "Son kullanma tarihini düzenle"
+
+msgid "Certificate validity (days)"
+msgstr "Sertifika geçerliliği (gün)"
+
+msgid "Expiring certificates"
+msgstr "Süresi dolacak sertifikalar"
+
+msgid "Expiring soon"
+msgstr "Yakında süresi dolacak"
+
+msgid "Expired notice"
+msgstr "Süresi dolmuş bildirimi"
+
+msgid "Expiring notice"
+msgstr "Süresi dolacak bildirimi"
+
+msgid "outdated"
+msgstr "güncel değil"
+
+msgid "Last reminder sent"
+msgstr "Son hatırlatma gönderildi"
+
+msgid "Days ahead"
+msgstr "Gün öncesi"
+
+msgid "Send notification"
+msgstr "Bildirim gönder"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Bu bildirimi göndermek istediğinizden emin misiniz?"
+
+msgid "Expired: %s"
+msgstr "Süresi doldu: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Yakında süresi dolacak: %s"
+
+msgid "Expired notice: %s"
+msgstr "Süresi dolmuş bildirimi: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Süresi dolacak bildirimi: %s"
+

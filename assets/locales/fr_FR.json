@@ -3876,5 +3876,20 @@
     "Save as draft": "Enregistrer comme brouillon",
     "Never expires": "N'expire jamais",
     "Expiry date": "Date d'expiration",
-    "Never": "Jamais"
+    "Never": "Jamais",
+    "Edit expiry date": "Modifier la date d'expiration",
+    "Certificate validity (days)": "Validit\u00e9 du certificat (jours)",
+    "Expiring certificates": "Certificats arrivant \u00e0 expiration",
+    "Expiring soon": "Expire bient\u00f4t",
+    "Expired notice": "Avis d'expiration",
+    "Expiring notice": "Avis d'\u00e9ch\u00e9ance",
+    "outdated": "p\u00e9rim\u00e9",
+    "Last reminder sent": "Dernier rappel envoy\u00e9",
+    "Days ahead": "Jours d'avance",
+    "Send notification": "Envoyer une notification",
+    "Are you sure you want to send this notification?": "Voulez-vous vraiment envoyer cette notification ?",
+    "Expired: {0}": "Expir\u00e9 : {0}",
+    "Expiring soon: {0}": "Expire bient\u00f4t : {0}",
+    "Expired notice: {0}": "Avis d'expiration : {0}",
+    "Expiring notice: {0}": "Avis d'\u00e9ch\u00e9ance : {0}"
 }

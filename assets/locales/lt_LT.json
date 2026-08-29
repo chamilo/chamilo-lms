@@ -3876,5 +3876,20 @@
     "Save as draft": "I\u0161saugoti kaip juodra\u0161t\u012f",
     "Never expires": "Am\u017einai galios",
     "Expiry date": "Galiojimo pabaigos data",
-    "Never": "Niekada"
+    "Never": "Niekada",
+    "Edit expiry date": "Redaguoti galiojimo dat\u0105",
+    "Certificate validity (days)": "Sertifikato galiojimas (dienomis)",
+    "Expiring certificates": "Baigiantys galioti sertifikatai",
+    "Expiring soon": "Netrukus baigs galioti",
+    "Expired notice": "Prane\u0161imas apie pasibaigus\u012f galiojim\u0105",
+    "Expiring notice": "Prane\u0161imas apie baigiant\u012f galioti",
+    "outdated": "pasen\u0119s",
+    "Last reminder sent": "Paskutinis priminimas i\u0161si\u0173stas",
+    "Days ahead": "Dien\u0173 i\u0161 anksto",
+    "Send notification": "Si\u0173sti prane\u0161im\u0105",
+    "Are you sure you want to send this notification?": "Ar tikrai norite i\u0161si\u0173sti \u0161\u012f prane\u0161im\u0105?",
+    "Expired: {0}": "Galiojimas pasibaig\u0119s: {0}",
+    "Expiring soon: {0}": "Netrukus baigs galioti: {0}",
+    "Expired notice: {0}": "Prane\u0161imas apie pasibaigus\u012f galiojim\u0105: {0}",
+    "Expiring notice: {0}": "Prane\u0161imas apie baigiant\u012f galioti: {0}"
 }

@@ -39730,3 +39730,51 @@ msgstr ""
 
 msgid "%s days remaining"
 msgstr ""
+
+msgid "Hello, %s"
+msgstr ""
+
+msgid "Edit expiry date"
+msgstr ""
+
+msgid "Certificate validity (days)"
+msgstr ""
+
+msgid "Expiring certificates"
+msgstr ""
+
+msgid "Expiring soon"
+msgstr ""
+
+msgid "Expired notice"
+msgstr ""
+
+msgid "Expiring notice"
+msgstr ""
+
+msgid "outdated"
+msgstr ""
+
+msgid "Last reminder sent"
+msgstr ""
+
+msgid "Days ahead"
+msgstr ""
+
+msgid "Send notification"
+msgstr ""
+
+msgid "Are you sure you want to send this notification?"
+msgstr ""
+
+msgid "Expired: %s"
+msgstr ""
+
+msgid "Expiring soon: %s"
+msgstr ""
+
+msgid "Expired notice: %s"
+msgstr ""
+
+msgid "Expiring notice: %s"
+msgstr ""

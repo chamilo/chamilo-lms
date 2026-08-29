@@ -3876,5 +3876,20 @@
     "Save as draft": "Desa com a esborrany",
     "Never expires": "Mai caduca",
     "Expiry date": "Data de caducitat",
-    "Never": "Mai"
+    "Never": "Mai",
+    "Edit expiry date": "Edita la data de caducitat",
+    "Certificate validity (days)": "Validesa del certificat (dies)",
+    "Expiring certificates": "Certificats que caduquen",
+    "Expiring soon": "Caduca aviat",
+    "Expired notice": "Av\u00eds de caducat",
+    "Expiring notice": "Av\u00eds de caducitat",
+    "outdated": "obsolet",
+    "Last reminder sent": "\u00daltim recordatori enviat",
+    "Days ahead": "Dies d'antelaci\u00f3",
+    "Send notification": "Envia la notificaci\u00f3",
+    "Are you sure you want to send this notification?": "Segur que voleu enviar aquesta notificaci\u00f3?",
+    "Expired: {0}": "Caducat: {0}",
+    "Expiring soon: {0}": "Caduca aviat: {0}",
+    "Expired notice: {0}": "Av\u00eds de caducat: {0}",
+    "Expiring notice: {0}": "Av\u00eds de caducitat: {0}"
 }

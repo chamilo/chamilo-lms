@@ -39810,3 +39810,51 @@ msgstr "วันหมดอายุ"
 msgid "%s days remaining"
 msgstr "เหลืออีก %s วัน"
 
+msgid "Hello, %s"
+msgstr "สวัสดี %s"
+
+msgid "Edit expiry date"
+msgstr "แก้ไขวันหมดอายุ"
+
+msgid "Certificate validity (days)"
+msgstr "อายุใบรับรอง (วัน)"
+
+msgid "Expiring certificates"
+msgstr "ใบรับรองที่กำลังหมดอายุ"
+
+msgid "Expiring soon"
+msgstr "ใกล้หมดอายุ"
+
+msgid "Expired notice"
+msgstr "แจ้งเตือนหมดอายุแล้ว"
+
+msgid "Expiring notice"
+msgstr "แจ้งเตือนใกล้หมดอายุ"
+
+msgid "outdated"
+msgstr "หมดอายุแล้ว"
+
+msgid "Last reminder sent"
+msgstr "ส่งการเตือนครั้งล่าสุด"
+
+msgid "Days ahead"
+msgstr "จำนวนวันล่วงหน้า"
+
+msgid "Send notification"
+msgstr "ส่งการแจ้งเตือน"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการส่งการแจ้งเตือนนี้?"
+
+msgid "Expired: %s"
+msgstr "หมดอายุแล้ว: %s"
+
+msgid "Expiring soon: %s"
+msgstr "ใกล้หมดอายุ: %s"
+
+msgid "Expired notice: %s"
+msgstr "แจ้งเตือนหมดอายุแล้ว: %s"
+
+msgid "Expiring notice: %s"
+msgstr "แจ้งเตือนใกล้หมดอายุ: %s"
+

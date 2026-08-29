@@ -30585,13 +30585,13 @@ msgid "ex. root"
 msgstr "t.d. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE virkar"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE virkar"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN virkar"
 
 msgid "Theme selected as current"
 msgstr "Þema valið sem núverandi"
@@ -39808,4 +39808,52 @@ msgstr "Fyrningardagsetning"
 
 msgid "%s days remaining"
 msgstr "%s dagar eftir"
+
+msgid "Hello, %s"
+msgstr "Halló, %s"
+
+msgid "Edit expiry date"
+msgstr "Breyta gildistíma"
+
+msgid "Certificate validity (days)"
+msgstr "Gildistími vottorðs (dagar)"
+
+msgid "Expiring certificates"
+msgstr "Vottorð sem eru að renna út"
+
+msgid "Expiring soon"
+msgstr "Rennur brátt út"
+
+msgid "Expired notice"
+msgstr "Tilkynning um útrunnið"
+
+msgid "Expiring notice"
+msgstr "Tilkynning um að renni út"
+
+msgid "outdated"
+msgstr "úrelt"
+
+msgid "Last reminder sent"
+msgstr "Síðasta áminning send"
+
+msgid "Days ahead"
+msgstr "Dagar fyrirfram"
+
+msgid "Send notification"
+msgstr "Senda tilkynningu"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Ertu viss um að þú viljir senda þessa tilkynningu?"
+
+msgid "Expired: %s"
+msgstr "Útrunnið: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Rennur brátt út: %s"
+
+msgid "Expired notice: %s"
+msgstr "Tilkynning um útrunnið: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Tilkynning um að renni út: %s"
 

@@ -39809,3 +39809,51 @@ msgstr "Galiojimo pabaigos data"
 msgid "%s days remaining"
 msgstr "Liko %s d."
 
+msgid "Hello, %s"
+msgstr "Sveiki, %s"
+
+msgid "Edit expiry date"
+msgstr "Redaguoti galiojimo datą"
+
+msgid "Certificate validity (days)"
+msgstr "Sertifikato galiojimas (dienomis)"
+
+msgid "Expiring certificates"
+msgstr "Baigiantys galioti sertifikatai"
+
+msgid "Expiring soon"
+msgstr "Netrukus baigs galioti"
+
+msgid "Expired notice"
+msgstr "Pranešimas apie pasibaigusį galiojimą"
+
+msgid "Expiring notice"
+msgstr "Pranešimas apie baigiantį galioti"
+
+msgid "outdated"
+msgstr "pasenęs"
+
+msgid "Last reminder sent"
+msgstr "Paskutinis priminimas išsiųstas"
+
+msgid "Days ahead"
+msgstr "Dienų iš anksto"
+
+msgid "Send notification"
+msgstr "Siųsti pranešimą"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Ar tikrai norite išsiųsti šį pranešimą?"
+
+msgid "Expired: %s"
+msgstr "Galiojimas pasibaigęs: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Netrukus baigs galioti: %s"
+
+msgid "Expired notice: %s"
+msgstr "Pranešimas apie pasibaigusį galiojimą: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Pranešimas apie baigiantį galioti: %s"
+

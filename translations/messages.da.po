@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med venlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-eksempel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formelprøve: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervaller"
@@ -39809,4 +39809,52 @@ msgstr "Udløbsdato"
 
 msgid "%s days remaining"
 msgstr "%s dage tilbage"
+
+msgid "Hello, %s"
+msgstr "Hej, %s"
+
+msgid "Edit expiry date"
+msgstr "Rediger udløbsdato"
+
+msgid "Certificate validity (days)"
+msgstr "Certifikatgyldighed (dage)"
+
+msgid "Expiring certificates"
+msgstr "Udløbende certifikater"
+
+msgid "Expiring soon"
+msgstr "Udløber snart"
+
+msgid "Expired notice"
+msgstr "Meddelelse om udløb"
+
+msgid "Expiring notice"
+msgstr "Meddelelse om forestående udløb"
+
+msgid "outdated"
+msgstr "forældet"
+
+msgid "Last reminder sent"
+msgstr "Sidste påmindelse sendt"
+
+msgid "Days ahead"
+msgstr "Dage i forvejen"
+
+msgid "Send notification"
+msgstr "Send notifikation"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Er du sikker på, at du vil sende denne notifikation?"
+
+msgid "Expired: %s"
+msgstr "Udløbet: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Udløber snart: %s"
+
+msgid "Expired notice: %s"
+msgstr "Meddelelse om udløb: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Meddelelse om forestående udløb: %s"
 

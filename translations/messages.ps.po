@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول بېلګه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول بېلګه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -39803,4 +39803,52 @@ msgstr "د پای نېټه"
 
 msgid "%s days remaining"
 msgstr "%s ورځې پاتې دي"
+
+msgid "Hello, %s"
+msgstr "سلام، %s"
+
+msgid "Edit expiry date"
+msgstr "د پای نیټې سمون"
+
+msgid "Certificate validity (days)"
+msgstr "د سند اعتبار (ورځې)"
+
+msgid "Expiring certificates"
+msgstr "پای ته رسېدونکي سندونه"
+
+msgid "Expiring soon"
+msgstr "ژر پای ته رسېدونکی"
+
+msgid "Expired notice"
+msgstr "د پای ته رسېدلي خبرتیا"
+
+msgid "Expiring notice"
+msgstr "د پای ته رسېدو خبرتیا"
+
+msgid "outdated"
+msgstr "له وخته تېر"
+
+msgid "Last reminder sent"
+msgstr "وروستۍ یادونه لېږل شوې"
+
+msgid "Days ahead"
+msgstr "مخکې ورځې"
+
+msgid "Send notification"
+msgstr "خبرتیا ولېږئ"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "آیا تاسو ډاډه یاست چې دا خبرتیا ولېږئ؟"
+
+msgid "Expired: %s"
+msgstr "پای ته رسېدلی: %s"
+
+msgid "Expiring soon: %s"
+msgstr "ژر پای ته رسېدونکی: %s"
+
+msgid "Expired notice: %s"
+msgstr "د پای ته رسېدلي خبرتیا: %s"
+
+msgid "Expiring notice: %s"
+msgstr "د پای ته رسېدو خبرتیا: %s"
 

@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":si:con copyright,, non:sen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartafol,, application/msword:MsWord,, application/octet-stream:Fluxo de octetos,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartafol,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercicio,, simulation:simulación,, questionnaire:cuestionario,, diagram:diagrama,, figure:figura,, graph:gráfico,, index:índice,, slide:diapositiva,, table:táboa,, narrative text:texto narrativo,, exam:examen,, experiment:experimento,, problem statement:problema,, self assessment:autoevaluación,, lecture:presentación"
@@ -39822,4 +39822,52 @@ msgstr "Data de caducidade"
 
 msgid "%s days remaining"
 msgstr "Quedan %s días"
+
+msgid "Hello, %s"
+msgstr "Ola, %s"
+
+msgid "Edit expiry date"
+msgstr "Editar data de caducidade"
+
+msgid "Certificate validity (days)"
+msgstr "Validez do certificado (días)"
+
+msgid "Expiring certificates"
+msgstr "Certificados que van caducar"
+
+msgid "Expiring soon"
+msgstr "Caduca axiña"
+
+msgid "Expired notice"
+msgstr "Aviso de caducidade"
+
+msgid "Expiring notice"
+msgstr "Aviso de próxima caducidade"
+
+msgid "outdated"
+msgstr "caducado"
+
+msgid "Last reminder sent"
+msgstr "Último recordatorio enviado"
+
+msgid "Days ahead"
+msgstr "Días de antelación"
+
+msgid "Send notification"
+msgstr "Enviar notificación"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Está seguro de que quere enviar esta notificación?"
+
+msgid "Expired: %s"
+msgstr "Caducado: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Caduca axiña: %s"
+
+msgid "Expired notice: %s"
+msgstr "Aviso de caducidade: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Aviso de próxima caducidade: %s"
 

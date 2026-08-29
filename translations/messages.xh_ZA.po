@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:akukho copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Ifolda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:umsebenzi,,      simulation:ukwenza okufana,,      questionnaire:ufuzo,,      diagram:umzobo,,      figure:umfanekiso,,      graph:grafu,,      index:isazisi,,      slide:isilayidi,,      table:thebhule,,      narrative text:umbhalo obalasele,,      exam:oviwo,,      experiment:uphando,,      problem statement:ingxelo yengxaki,,      self assessment:ukuzivavanya,,      lecture:intetho"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: ukubala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -35533,7 +35533,7 @@ msgid "%s results"
 msgstr "%s iziphumo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: ukubala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Kususiwe"
@@ -39803,4 +39803,52 @@ msgstr "Umhla wokuphelelwa"
 
 msgid "%s days remaining"
 msgstr "kusele iintsuku ezi-%s"
+
+msgid "Hello, %s"
+msgstr "Molo, %s"
+
+msgid "Edit expiry date"
+msgstr "Hlela umhla wokuphelelwa"
+
+msgid "Certificate validity (days)"
+msgstr "Ukuba semthethweni kwesatifikethi (iintsuku)"
+
+msgid "Expiring certificates"
+msgstr "Izatifikethi eziphelelwayo"
+
+msgid "Expiring soon"
+msgstr "Ziphelelwa kungekudala"
+
+msgid "Expired notice"
+msgstr "Isaziso sokuphelelwa"
+
+msgid "Expiring notice"
+msgstr "Isaziso sokuphelelwa kungekudala"
+
+msgid "outdated"
+msgstr "iphelelwe lixesha"
+
+msgid "Last reminder sent"
+msgstr "Isikhumbuzi sokugqibela esithunyelweyo"
+
+msgid "Days ahead"
+msgstr "Iintsuku ezingaphambili"
+
+msgid "Send notification"
+msgstr "Thumela isaziso"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Uqinisekile ukuba ufuna ukuthumela esi saziso?"
+
+msgid "Expired: %s"
+msgstr "Iphelile: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Iphelelwa kungekudala: %s"
+
+msgid "Expired notice: %s"
+msgstr "Isaziso sokuphelelwa: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Isaziso sokuphelelwa kungekudala: %s"
 

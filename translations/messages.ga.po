@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Le meas"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Sampla foirmle: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Sampla foirmle: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raonta athróg"
@@ -39807,4 +39807,52 @@ msgstr "Dáta éaga"
 
 msgid "%s days remaining"
 msgstr "%s lá fágtha"
+
+msgid "Hello, %s"
+msgstr "Dia duit, %s"
+
+msgid "Edit expiry date"
+msgstr "Cuir dáta éaga in eagar"
+
+msgid "Certificate validity (days)"
+msgstr "Bailíocht teastais (laethanta)"
+
+msgid "Expiring certificates"
+msgstr "Teastais ag dul in éag"
+
+msgid "Expiring soon"
+msgstr "Ag dul in éag go luath"
+
+msgid "Expired notice"
+msgstr "Fógra éagtha"
+
+msgid "Expiring notice"
+msgstr "Fógra ag dul in éag"
+
+msgid "outdated"
+msgstr "as dáta"
+
+msgid "Last reminder sent"
+msgstr "Meabhrúchán deireanach seolta"
+
+msgid "Days ahead"
+msgstr "Laethanta chun tosaigh"
+
+msgid "Send notification"
+msgstr "Seol fógra"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "An bhfuil tú cinnte gur mian leat an fógra seo a sheoladh?"
+
+msgid "Expired: %s"
+msgstr "Éagtha: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Ag dul in éag go luath: %s"
+
+msgid "Expired notice: %s"
+msgstr "Fógra éagtha: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Fógra ag dul in éag: %s"
 

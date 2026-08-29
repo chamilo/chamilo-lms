@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "शुभकामना"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र नमूना: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चलहरूको दायरा"
@@ -39807,4 +39807,52 @@ msgstr "म्याद सकिने मिति"
 
 msgid "%s days remaining"
 msgstr "%s दिन बाँकी"
+
+msgid "Hello, %s"
+msgstr "नमस्ते, %s"
+
+msgid "Edit expiry date"
+msgstr "म्याद सकिने मिति सम्पादन गर्नुहोस्"
+
+msgid "Certificate validity (days)"
+msgstr "प्रमाणपत्र वैधता (दिन)"
+
+msgid "Expiring certificates"
+msgstr "म्याद सकिन लागेका प्रमाणपत्रहरू"
+
+msgid "Expiring soon"
+msgstr "चाँडै म्याद सकिने"
+
+msgid "Expired notice"
+msgstr "म्याद सकिएको सूचना"
+
+msgid "Expiring notice"
+msgstr "म्याद सकिन लागेको सूचना"
+
+msgid "outdated"
+msgstr "पुरानो"
+
+msgid "Last reminder sent"
+msgstr "पछिल्लो सम्झना पठाइएको"
+
+msgid "Days ahead"
+msgstr "अगाडिका दिनहरू"
+
+msgid "Send notification"
+msgstr "सूचना पठाउनुहोस्"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "के तपाईं यो सूचना पठाउन निश्चित हुनुहुन्छ?"
+
+msgid "Expired: %s"
+msgstr "म्याद सकिएको: %s"
+
+msgid "Expiring soon: %s"
+msgstr "चाँडै म्याद सकिने: %s"
+
+msgid "Expired notice: %s"
+msgstr "म्याद सकिएको सूचना: %s"
+
+msgid "Expiring notice: %s"
+msgstr "म्याद सकिन लागेको सूचना: %s"
 

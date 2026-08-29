@@ -39808,3 +39808,51 @@ msgstr "تاریخ انقضا"
 msgid "%s days remaining"
 msgstr "%s روز باقی‌مانده"
 
+msgid "Hello, %s"
+msgstr "سلام، %s"
+
+msgid "Edit expiry date"
+msgstr "ویرایش تاریخ انقضا"
+
+msgid "Certificate validity (days)"
+msgstr "اعتبار گواهینامه (روز)"
+
+msgid "Expiring certificates"
+msgstr "گواهینامه‌های در حال انقضا"
+
+msgid "Expiring soon"
+msgstr "به‌زودی منقضی می‌شود"
+
+msgid "Expired notice"
+msgstr "اعلان منقضی‌شده"
+
+msgid "Expiring notice"
+msgstr "اعلان در حال انقضا"
+
+msgid "outdated"
+msgstr "منسوخ"
+
+msgid "Last reminder sent"
+msgstr "آخرین یادآوری ارسال‌شده"
+
+msgid "Days ahead"
+msgstr "روزهای پیش‌رو"
+
+msgid "Send notification"
+msgstr "ارسال اعلان"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "آیا مطمئن هستید که می‌خواهید این اعلان را ارسال کنید؟"
+
+msgid "Expired: %s"
+msgstr "منقضی‌شده: %s"
+
+msgid "Expiring soon: %s"
+msgstr "به‌زودی منقضی می‌شود: %s"
+
+msgid "Expired notice: %s"
+msgstr "اعلان منقضی‌شده: %s"
+
+msgid "Expiring notice: %s"
+msgstr "اعلان در حال انقضا: %s"
+

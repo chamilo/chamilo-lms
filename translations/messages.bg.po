@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "С уважение"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример за формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазони на променливите"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Папка,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -39809,4 +39809,52 @@ msgstr "Дата на изтичане"
 
 msgid "%s days remaining"
 msgstr "Остават %s дни"
+
+msgid "Hello, %s"
+msgstr "Здравейте, %s"
+
+msgid "Edit expiry date"
+msgstr "Редактиране на дата на изтичане"
+
+msgid "Certificate validity (days)"
+msgstr "Валидност на сертификата (дни)"
+
+msgid "Expiring certificates"
+msgstr "Изтичащи сертификати"
+
+msgid "Expiring soon"
+msgstr "Изтича скоро"
+
+msgid "Expired notice"
+msgstr "Известие за изтекъл"
+
+msgid "Expiring notice"
+msgstr "Известие за изтичане"
+
+msgid "outdated"
+msgstr "просрочен"
+
+msgid "Last reminder sent"
+msgstr "Последно изпратено напомняне"
+
+msgid "Days ahead"
+msgstr "Дни предварително"
+
+msgid "Send notification"
+msgstr "Изпращане на известие"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Сигурни ли сте, че искате да изпратите това известие?"
+
+msgid "Expired: %s"
+msgstr "Изтекъл: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Изтича скоро: %s"
+
+msgid "Expired notice: %s"
+msgstr "Известие за изтекъл: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Известие за изтичане: %s"
 

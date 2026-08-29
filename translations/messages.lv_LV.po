@@ -39809,3 +39809,51 @@ msgstr "Derīguma termiņš"
 msgid "%s days remaining"
 msgstr "Atlikušas %s dienas"
 
+msgid "Hello, %s"
+msgstr "Sveiki, %s"
+
+msgid "Edit expiry date"
+msgstr "Rediģēt derīguma termiņu"
+
+msgid "Certificate validity (days)"
+msgstr "Sertifikāta derīgums (dienas)"
+
+msgid "Expiring certificates"
+msgstr "Sertifikāti, kuriem beidzas derīgums"
+
+msgid "Expiring soon"
+msgstr "Drīz beigsies"
+
+msgid "Expired notice"
+msgstr "Paziņojums par beigušos derīgumu"
+
+msgid "Expiring notice"
+msgstr "Paziņojums par beigušos derīgumu"
+
+msgid "outdated"
+msgstr "novecojis"
+
+msgid "Last reminder sent"
+msgstr "Pēdējais atgādinājums nosūtīts"
+
+msgid "Days ahead"
+msgstr "Dienas iepriekš"
+
+msgid "Send notification"
+msgstr "Sūtīt paziņojumu"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Vai tiešām vēlaties nosūtīt šo paziņojumu?"
+
+msgid "Expired: %s"
+msgstr "Beidzies: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Drīz beigsies: %s"
+
+msgid "Expired notice: %s"
+msgstr "Paziņojums par beigušos derīgumu: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Paziņojums par beigušos derīgumu: %s"
+

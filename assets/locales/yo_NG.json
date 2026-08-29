@@ -3876,5 +3876,20 @@
     "Save as draft": "Fi pam\u1ecd\u0301 g\u1eb9\u0301g\u1eb9\u0301 b\u00ed \u00e0k\u1ecds\u00edl\u1eb9\u0300",
     "Never expires": "K\u00f2 p\u1eb9\u0301 rara",
     "Expiry date": "\u1eccj\u1ecd\u0301 \u00ecpar\u00ed",
-    "Never": "K\u00f2 \u1e63\u1eb9l\u1eb9\u0300 r\u00ed"
+    "Never": "K\u00f2 \u1e63\u1eb9l\u1eb9\u0300 r\u00ed",
+    "Edit expiry date": "\u1e62\u00e0t\u00fan\u1e63e \u1ecdj\u1ecd\u0301 \u00ecpar\u00ed",
+    "Certificate validity (days)": "\u00ccw\u00fal\u00f2 \u00ecw\u00e9-\u1eb9\u0300r\u00ed (\u1ecdj\u1ecd\u0301)",
+    "Expiring certificates": "\u00c0w\u1ecdn \u00ecw\u00e9-\u1eb9\u0300r\u00ed t\u00f3 \u0144 par\u00ed",
+    "Expiring soon": "\u0143 par\u00ed l\u00e1\u00ecp\u1eb9\u0301",
+    "Expired notice": "\u00cck\u00ecl\u1ecd\u0300 \u00ecpar\u00ed",
+    "Expiring notice": "\u00cck\u00ecl\u1ecd\u0300 \u00ecpar\u00ed t\u00f3 \u0144 b\u1ecd\u0300",
+    "outdated": "ti k\u1ecdj\u00e1 \u00ecgb\u00e0",
+    "Last reminder sent": "\u00ccr\u00e1nnil\u00e9t\u00ed t\u00f3 k\u1eb9\u0301y\u00ecn t\u00ed a fi r\u00e1n\u1e63\u1eb9\u0301",
+    "Days ahead": "\u1eccj\u1ecd\u0301 s\u00edw\u00e1j\u00fa",
+    "Send notification": "Fi \u00ecfit\u00f3nil\u00e9t\u00ed r\u00e1n\u1e63\u1eb9\u0301",
+    "Are you sure you want to send this notification?": "\u1e62\u00e9 \u00f3 d\u00e1 \u1ecd l\u00f3j\u00fa p\u00e9 o f\u1eb9\u0301 fi \u00ecfit\u00f3nil\u00e9t\u00ed y\u00ec\u00ed r\u00e1n\u1e63\u1eb9\u0301?",
+    "Expired: {0}": "Ti par\u00ed: {0}",
+    "Expiring soon: {0}": "\u0143 par\u00ed l\u00e1\u00ecp\u1eb9\u0301: {0}",
+    "Expired notice: {0}": "\u00cck\u00ecl\u1ecd\u0300 \u00ecpar\u00ed: {0}",
+    "Expiring notice: {0}": "\u00cck\u00ecl\u1ecd\u0300 \u00ecpar\u00ed t\u00f3 \u0144 b\u1ecd\u0300: {0}"
 }

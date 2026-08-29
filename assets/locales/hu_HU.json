@@ -3876,5 +3876,20 @@
     "Save as draft": "Ment\u00e9s piszkozatk\u00e9nt",
     "Never expires": "Soha nem j\u00e1r le",
     "Expiry date": "Lej\u00e1rati d\u00e1tum",
-    "Never": "Soha"
+    "Never": "Soha",
+    "Edit expiry date": "Lej\u00e1rati d\u00e1tum szerkeszt\u00e9se",
+    "Certificate validity (days)": "Tan\u00fas\u00edtv\u00e1ny \u00e9rv\u00e9nyess\u00e9ge (nap)",
+    "Expiring certificates": "Lej\u00e1r\u00f3 tan\u00fas\u00edtv\u00e1nyok",
+    "Expiring soon": "Hamarosan lej\u00e1r",
+    "Expired notice": "Lej\u00e1rt \u00e9rtes\u00edt\u00e9s",
+    "Expiring notice": "Lej\u00e1r\u00f3 \u00e9rtes\u00edt\u00e9s",
+    "outdated": "elavult",
+    "Last reminder sent": "Utols\u00f3 eml\u00e9keztet\u0151 elk\u00fcldve",
+    "Days ahead": "Napokkal el\u0151re",
+    "Send notification": "\u00c9rtes\u00edt\u00e9s k\u00fcld\u00e9se",
+    "Are you sure you want to send this notification?": "Biztosan elk\u00fcldi ezt az \u00e9rtes\u00edt\u00e9st?",
+    "Expired: {0}": "Lej\u00e1rt: {0}",
+    "Expiring soon: {0}": "Hamarosan lej\u00e1r: {0}",
+    "Expired notice: {0}": "Lej\u00e1rt \u00e9rtes\u00edt\u00e9s: {0}",
+    "Expiring notice: {0}": "Lej\u00e1r\u00f3 \u00e9rtes\u00edt\u00e9s: {0}"
 }

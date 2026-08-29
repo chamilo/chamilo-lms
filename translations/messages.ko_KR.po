@@ -39808,3 +39808,51 @@ msgstr "만료일"
 msgid "%s days remaining"
 msgstr "%s일 남음"
 
+msgid "Hello, %s"
+msgstr "안녕하세요, %s"
+
+msgid "Edit expiry date"
+msgstr "만료일 편집"
+
+msgid "Certificate validity (days)"
+msgstr "수료증 유효 기간(일)"
+
+msgid "Expiring certificates"
+msgstr "만료 예정 수료증"
+
+msgid "Expiring soon"
+msgstr "곧 만료"
+
+msgid "Expired notice"
+msgstr "만료 알림"
+
+msgid "Expiring notice"
+msgstr "만료 예정 알림"
+
+msgid "outdated"
+msgstr "만료됨"
+
+msgid "Last reminder sent"
+msgstr "마지막 알림 발송"
+
+msgid "Days ahead"
+msgstr "미리 알림 일수"
+
+msgid "Send notification"
+msgstr "알림 보내기"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "이 알림을 보내시겠습니까?"
+
+msgid "Expired: %s"
+msgstr "만료됨: %s"
+
+msgid "Expiring soon: %s"
+msgstr "곧 만료: %s"
+
+msgid "Expired notice: %s"
+msgstr "만료 알림: %s"
+
+msgid "Expiring notice: %s"
+msgstr "만료 예정 알림: %s"
+

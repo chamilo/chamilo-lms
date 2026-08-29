@@ -3876,5 +3876,20 @@
     "Save as draft": "Guardar como borrador",
     "Never expires": "Nun espira enxam\u00e1s",
     "Expiry date": "Data de caducid\u00e1",
-    "Never": "Nun"
+    "Never": "Nun",
+    "Edit expiry date": "Editar fecha de caducid\u00e1",
+    "Certificate validity (days)": "Validez del certific\u00e1u (d\u00edes)",
+    "Expiring certificates": "Certificaos que van caducar",
+    "Expiring soon": "Caduca pronto",
+    "Expired notice": "Avisu de caduc\u00e1u",
+    "Expiring notice": "Avisu de caducid\u00e1",
+    "outdated": "caduc\u00e1u",
+    "Last reminder sent": "\u00daltimu recordatoriu unvi\u00e1u",
+    "Days ahead": "D\u00edes d'antelaci\u00f3n",
+    "Send notification": "Unviar notificaci\u00f3n",
+    "Are you sure you want to send this notification?": "\u00bfTas seguru de que quies unviar esta notificaci\u00f3n?",
+    "Expired: {0}": "Caduc\u00e1u: {0}",
+    "Expiring soon: {0}": "Caduca pronto: {0}",
+    "Expired notice: {0}": "Avisu de caduc\u00e1u: {0}",
+    "Expiring notice: {0}": "Avisu de caducid\u00e1: {0}"
 }

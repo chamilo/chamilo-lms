@@ -40948,3 +40948,51 @@ msgstr "Fecha de caducidad"
 msgid "%s days remaining"
 msgstr "Quedan %s días"
 
+msgid "Hello, %s"
+msgstr "Hola, %s"
+
+msgid "Edit expiry date"
+msgstr "Editar fecha de caducidad"
+
+msgid "Certificate validity (days)"
+msgstr "Validez del certificado (días)"
+
+msgid "Expiring certificates"
+msgstr "Certificados por caducar"
+
+msgid "Expiring soon"
+msgstr "Caduca pronto"
+
+msgid "Expired notice"
+msgstr "Aviso de caducado"
+
+msgid "Expiring notice"
+msgstr "Aviso de caducidad"
+
+msgid "outdated"
+msgstr "caducado"
+
+msgid "Last reminder sent"
+msgstr "Último recordatorio enviado"
+
+msgid "Days ahead"
+msgstr "Días de antelación"
+
+msgid "Send notification"
+msgstr "Enviar notificación"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "¿Está seguro de que desea enviar esta notificación?"
+
+msgid "Expired: %s"
+msgstr "Caducado: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Caduca pronto: %s"
+
+msgid "Expired notice: %s"
+msgstr "Aviso de caducado: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Aviso de caducidad: %s"
+

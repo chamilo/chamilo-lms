@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Tusaalaha qaacidada: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaalaha qaaciddada: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes: xuquuqda daabacaadda ,, no: xuquuqda daabacaadda maaha"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Galka,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise: layli ,,      simulation: simulation ,,      questionnaire: su'aalo ,,      diagram: jaantus ,,      figure: jaantus ,,      graph: graf ,,      index: index ,,      slide: slide ,,      table: miis ,,      narrative text: qoraal sheeko ah ,,      exam: imtixaan ,,      experiment: tijaabo ,,      problem statement: bayaan dhibaato ,,      self assessment: is-qiimeyn ,,      lecture: cashar"
@@ -14449,7 +14449,7 @@ msgid "Compose"
 msgstr "Qor"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Liin dhanaan yar"
 
 msgid "Blue lagoon"
 msgstr "Badda buluugga ah"
@@ -35533,7 +35533,7 @@ msgid "%s results"
 msgstr "%s natiijo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Tusaale: buuxi dhaqdhaqaaqa foomka : xisaabi Tilmaanta Cufka Jirka</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Da'da</strong></td>            <td width=\"75%\" style=\"\">[25] sano jir</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Jinsiga</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ama F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Miisaanka</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Dhererka</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tilmaanta Cufka Jirka</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Miisaanka/Dhererka<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Maqaalka Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Tusaale buuxi dhaqdhaqaaqa foomka : xisaabi Tusaha Cufka Jidhka</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Da'da</strong></td>            <td width=\"75%\" style=\"\">[25] sano jir</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Jinsiga</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ama F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Miisaanka</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Dhererka</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tusaha Cufka Jidhka</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Maqaalka Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Laga saaray"
@@ -39803,4 +39803,52 @@ msgstr "Taariikhda dhicitaanka"
 
 msgid "%s days remaining"
 msgstr "%s maalmood ayaa haray"
+
+msgid "Hello, %s"
+msgstr "Salaan, %s"
+
+msgid "Edit expiry date"
+msgstr "Wax ka beddel taariikhda dhicitaanka"
+
+msgid "Certificate validity (days)"
+msgstr "Ansaxnimada shahaadada (maalmo)"
+
+msgid "Expiring certificates"
+msgstr "Shahaadooyinka dhacaya"
+
+msgid "Expiring soon"
+msgstr "Dhawaan dhacaya"
+
+msgid "Expired notice"
+msgstr "Ogeysiiska dhicitaanka"
+
+msgid "Expiring notice"
+msgstr "Ogeysiiska dhicitaanka soo socda"
+
+msgid "outdated"
+msgstr "duugoobay"
+
+msgid "Last reminder sent"
+msgstr "Xusuusinta ugu dambeysay ee la diray"
+
+msgid "Days ahead"
+msgstr "Maalmo horay"
+
+msgid "Send notification"
+msgstr "Dir ogeysiis"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Ma hubtaa inaad rabto inaad dirto ogeysiiskan?"
+
+msgid "Expired: %s"
+msgstr "Dhacay: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Dhawaan dhacaya: %s"
+
+msgid "Expired notice: %s"
+msgstr "Ogeysiis dhacay: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Ogeysiis dhacaya: %s"
 

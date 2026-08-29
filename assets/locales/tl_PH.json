@@ -3876,5 +3876,20 @@
     "Save as draft": "I-save bilang draft",
     "Never expires": "Hindi pumapaso",
     "Expiry date": "Petsa ng pag-expire",
-    "Never": "Hindi Kailanman"
+    "Never": "Hindi Kailanman",
+    "Edit expiry date": "I-edit ang petsa ng pag-expire",
+    "Certificate validity (days)": "Bisa ng sertipiko (araw)",
+    "Expiring certificates": "Mga sertipikong malapit nang mag-expire",
+    "Expiring soon": "Malapit nang mag-expire",
+    "Expired notice": "Abiso ng pag-expire",
+    "Expiring notice": "Abiso ng malapit nang mag-expire",
+    "outdated": "luma na",
+    "Last reminder sent": "Huling paalalang ipinadala",
+    "Days ahead": "Mga araw nang maaga",
+    "Send notification": "Magpadala ng abiso",
+    "Are you sure you want to send this notification?": "Sigurado ka bang gusto mong ipadala ang abisong ito?",
+    "Expired: {0}": "Nag-expire: {0}",
+    "Expiring soon: {0}": "Malapit nang mag-expire: {0}",
+    "Expired notice: {0}": "Expired na paunawa: {0}",
+    "Expiring notice: {0}": "Paunawang mag-e-expire: {0}"
 }

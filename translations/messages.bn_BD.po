@@ -39804,3 +39804,51 @@ msgstr "মেয়াদ শেষের তারিখ"
 msgid "%s days remaining"
 msgstr "%s দিন বাকি"
 
+msgid "Hello, %s"
+msgstr "হ্যালো, %s"
+
+msgid "Edit expiry date"
+msgstr "মেয়াদ শেষের তারিখ সম্পাদনা"
+
+msgid "Certificate validity (days)"
+msgstr "সনদের মেয়াদ (দিন)"
+
+msgid "Expiring certificates"
+msgstr "মেয়াদ শেষ হতে যাওয়া সনদ"
+
+msgid "Expiring soon"
+msgstr "শীঘ্রই মেয়াদ শেষ"
+
+msgid "Expired notice"
+msgstr "মেয়াদোত্তীর্ণ বিজ্ঞপ্তি"
+
+msgid "Expiring notice"
+msgstr "মেয়াদ শেষের বিজ্ঞপ্তি"
+
+msgid "outdated"
+msgstr "মেয়াদোত্তীর্ণ"
+
+msgid "Last reminder sent"
+msgstr "সর্বশেষ অনুস্মারক পাঠানো হয়েছে"
+
+msgid "Days ahead"
+msgstr "আগাম দিন"
+
+msgid "Send notification"
+msgstr "বিজ্ঞপ্তি পাঠান"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "আপনি কি নিশ্চিত যে এই বিজ্ঞপ্তি পাঠাতে চান?"
+
+msgid "Expired: %s"
+msgstr "মেয়াদোত্তীর্ণ: %s"
+
+msgid "Expiring soon: %s"
+msgstr "শীঘ্রই মেয়াদ শেষ: %s"
+
+msgid "Expired notice: %s"
+msgstr "মেয়াদোত্তীর্ণ বিজ্ঞপ্তি: %s"
+
+msgid "Expiring notice: %s"
+msgstr "মেয়াদ শেষের বিজ্ঞপ্তি: %s"
+

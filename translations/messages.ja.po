@@ -39874,3 +39874,51 @@ msgstr "有効期限"
 msgid "%s days remaining"
 msgstr "残り %s 日"
 
+msgid "Hello, %s"
+msgstr "こんにちは、%s"
+
+msgid "Edit expiry date"
+msgstr "有効期限を編集"
+
+msgid "Certificate validity (days)"
+msgstr "証明書の有効期間（日）"
+
+msgid "Expiring certificates"
+msgstr "期限切れ間近の証明書"
+
+msgid "Expiring soon"
+msgstr "まもなく期限切れ"
+
+msgid "Expired notice"
+msgstr "期限切れ通知"
+
+msgid "Expiring notice"
+msgstr "期限切れ間近の通知"
+
+msgid "outdated"
+msgstr "期限切れ"
+
+msgid "Last reminder sent"
+msgstr "最終リマインダー送信日"
+
+msgid "Days ahead"
+msgstr "何日前"
+
+msgid "Send notification"
+msgstr "通知を送信"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "この通知を送信してもよろしいですか？"
+
+msgid "Expired: %s"
+msgstr "期限切れ: %s"
+
+msgid "Expiring soon: %s"
+msgstr "まもなく期限切れ: %s"
+
+msgid "Expired notice: %s"
+msgstr "期限切れ通知: %s"
+
+msgid "Expiring notice: %s"
+msgstr "期限切れ間近の通知: %s"
+

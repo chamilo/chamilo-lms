@@ -3876,5 +3876,20 @@
     "Save as draft": "Saglab\u0101t k\u0101 melnrakstu",
     "Never expires": "Termi\u0146a beigu datuma nav",
     "Expiry date": "Der\u012bguma termi\u0146\u0161",
-    "Never": "Nekad"
+    "Never": "Nekad",
+    "Edit expiry date": "Redi\u0123\u0113t der\u012bguma termi\u0146u",
+    "Certificate validity (days)": "Sertifik\u0101ta der\u012bgums (dienas)",
+    "Expiring certificates": "Sertifik\u0101ti, kuriem beidzas der\u012bgums",
+    "Expiring soon": "Dr\u012bz beigsies",
+    "Expired notice": "Pazi\u0146ojums par beigu\u0161os der\u012bgumu",
+    "Expiring notice": "Pazi\u0146ojums par beigu\u0161os der\u012bgumu",
+    "outdated": "novecojis",
+    "Last reminder sent": "P\u0113d\u0113jais atg\u0101din\u0101jums nos\u016bt\u012bts",
+    "Days ahead": "Dienas iepriek\u0161",
+    "Send notification": "S\u016bt\u012bt pazi\u0146ojumu",
+    "Are you sure you want to send this notification?": "Vai tie\u0161\u0101m v\u0113laties nos\u016bt\u012bt \u0161o pazi\u0146ojumu?",
+    "Expired: {0}": "Beidzies: {0}",
+    "Expiring soon: {0}": "Dr\u012bz beigsies: {0}",
+    "Expired notice: {0}": "Pazi\u0146ojums par beigu\u0161os der\u012bgumu: {0}",
+    "Expiring notice: {0}": "Pazi\u0146ojums par beigu\u0161os der\u012bgumu: {0}"
 }

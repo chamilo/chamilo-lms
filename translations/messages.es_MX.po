@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Atentamente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ejemplo de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ejemplo de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rangos de variables"
@@ -39809,4 +39809,52 @@ msgstr "Fecha de vencimiento"
 
 msgid "%s days remaining"
 msgstr "%s días restantes"
+
+msgid "Hello, %s"
+msgstr "Hola, %s"
+
+msgid "Edit expiry date"
+msgstr "Editar fecha de vencimiento"
+
+msgid "Certificate validity (days)"
+msgstr "Validez del certificado (días)"
+
+msgid "Expiring certificates"
+msgstr "Certificados por vencer"
+
+msgid "Expiring soon"
+msgstr "Por vencer pronto"
+
+msgid "Expired notice"
+msgstr "Aviso de vencido"
+
+msgid "Expiring notice"
+msgstr "Aviso de vencimiento"
+
+msgid "outdated"
+msgstr "vencido"
+
+msgid "Last reminder sent"
+msgstr "Último recordatorio enviado"
+
+msgid "Days ahead"
+msgstr "Días de anticipación"
+
+msgid "Send notification"
+msgstr "Enviar notificación"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "¿Está seguro de que desea enviar esta notificación?"
+
+msgid "Expired: %s"
+msgstr "Vencido: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Por vencer pronto: %s"
+
+msgid "Expired notice: %s"
+msgstr "Aviso de vencido: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Aviso de vencimiento: %s"
 

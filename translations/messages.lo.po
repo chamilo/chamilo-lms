@@ -39853,3 +39853,51 @@ msgstr "ວັນທີໝົດອາຍຸ"
 msgid "%s days remaining"
 msgstr "ເຫຼືອ %s ວັນ"
 
+msgid "Hello, %s"
+msgstr "ສະບາຍດີ, %s"
+
+msgid "Edit expiry date"
+msgstr "ແກ້ໄຂວັນໝົດອາຍຸ"
+
+msgid "Certificate validity (days)"
+msgstr "ໄລຍະທີ່ໃບຢັ້ງຢືນມີຜົນ (ມື້)"
+
+msgid "Expiring certificates"
+msgstr "ໃບຢັ້ງຢືນທີ່ຈະໝົດອາຍຸ"
+
+msgid "Expiring soon"
+msgstr "ຈະໝົດອາຍຸໃນໄວໆນີ້"
+
+msgid "Expired notice"
+msgstr "ແຈ້ງເຕືອນໝົດອາຍຸ"
+
+msgid "Expiring notice"
+msgstr "ແຈ້ງເຕືອນຈະໝົດອາຍຸ"
+
+msgid "outdated"
+msgstr "ລ້າສະໄໝ"
+
+msgid "Last reminder sent"
+msgstr "ການເຕືອນຄັ້ງສຸດທ້າຍທີ່ສົ່ງ"
+
+msgid "Days ahead"
+msgstr "ຈຳນວນມື້ລ່ວງໜ້າ"
+
+msgid "Send notification"
+msgstr "ສົ່ງການແຈ້ງເຕືອນ"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການສົ່ງການແຈ້ງເຕືອນນີ້?"
+
+msgid "Expired: %s"
+msgstr "ໝົດອາຍຸແລ້ວ: %s"
+
+msgid "Expiring soon: %s"
+msgstr "ຈະໝົດອາຍຸໃນໄວໆນີ້: %s"
+
+msgid "Expired notice: %s"
+msgstr "ແຈ້ງເຕືອນໝົດອາຍຸ: %s"
+
+msgid "Expiring notice: %s"
+msgstr "ແຈ້ງເຕືອນຈະໝົດອາຍຸ: %s"
+

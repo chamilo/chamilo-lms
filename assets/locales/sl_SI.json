@@ -3876,5 +3876,20 @@
     "Save as draft": "Shrani kot osnutek",
     "Never expires": "Nikoli ne pote\u010de",
     "Expiry date": "Datum poteka",
-    "Never": "Nikoli"
+    "Never": "Nikoli",
+    "Edit expiry date": "Uredi datum poteka",
+    "Certificate validity (days)": "Veljavnost certifikata (dni)",
+    "Expiring certificates": "Certifikati, ki pote\u010dejo",
+    "Expiring soon": "Kmalu pote\u010de",
+    "Expired notice": "Obvestilo o poteku",
+    "Expiring notice": "Obvestilo o prihajajo\u010dem poteku",
+    "outdated": "zastarelo",
+    "Last reminder sent": "Zadnji opomnik poslan",
+    "Days ahead": "Dni vnaprej",
+    "Send notification": "Po\u0161lji obvestilo",
+    "Are you sure you want to send this notification?": "Ali ste prepri\u010dani, da \u017eelite poslati to obvestilo?",
+    "Expired: {0}": "Poteklo: {0}",
+    "Expiring soon: {0}": "Kmalu pote\u010de: {0}",
+    "Expired notice: {0}": "Obvestilo o poteku: {0}",
+    "Expiring notice: {0}": "Obvestilo o prihajajo\u010dem poteku: {0}"
 }

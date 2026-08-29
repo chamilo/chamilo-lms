@@ -3876,5 +3876,20 @@
     "Save as draft": "Ulo\u017ei\u0165 ako koncept",
     "Never expires": "Nikdy nevypr\u0161\u00ed",
     "Expiry date": "D\u00e1tum vypr\u0161ania",
-    "Never": "Nikdy"
+    "Never": "Nikdy",
+    "Edit expiry date": "Upravi\u0165 d\u00e1tum expir\u00e1cie",
+    "Certificate validity (days)": "Platnos\u0165 certifik\u00e1tu (dni)",
+    "Expiring certificates": "Expiruj\u00face certifik\u00e1ty",
+    "Expiring soon": "\u010coskoro expiruje",
+    "Expired notice": "Ozn\u00e1menie o expir\u00e1ci\u00ed",
+    "Expiring notice": "Ozn\u00e1menie o bl\u00edzkej expir\u00e1ci\u00ed",
+    "outdated": "zastaran\u00e9",
+    "Last reminder sent": "Posledn\u00e1 pripomienka odoslan\u00e1",
+    "Days ahead": "Dni vopred",
+    "Send notification": "Odosla\u0165 ozn\u00e1menie",
+    "Are you sure you want to send this notification?": "Naozaj chcete odosla\u0165 toto ozn\u00e1menie?",
+    "Expired: {0}": "Expirovan\u00e9: {0}",
+    "Expiring soon: {0}": "\u010coskoro expiruje: {0}",
+    "Expired notice: {0}": "Ozn\u00e1menie o expir\u00e1ci\u00ed: {0}",
+    "Expiring notice: {0}": "Ozn\u00e1menie o bl\u00edzkej expir\u00e1ci\u00ed: {0}"
 }

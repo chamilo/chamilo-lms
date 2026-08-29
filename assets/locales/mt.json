@@ -3866,5 +3866,20 @@
     "Save as draft": "A\u0127\u017cen b\u0127ala abbozz",
     "Never expires": "Qatt ma jiskadi",
     "Expiry date": "Data ta' skadenza",
-    "Never": "Qatt"
+    "Never": "Qatt",
+    "Edit expiry date": "Editja d-data ta' skadenza",
+    "Certificate validity (days)": "Validit\u00e0 ta\u010b-\u010bertifikat (jiem)",
+    "Expiring certificates": "\u010aertifikati li se jiskadu",
+    "Expiring soon": "Se jiskadu dalwaqt",
+    "Expired notice": "Avvi\u017c ta' skadenza",
+    "Expiring notice": "Avvi\u017c ta' skadenza imminenti",
+    "outdated": "skadut",
+    "Last reminder sent": "L-a\u0127\u0127ar tfakkira mibg\u0127uta",
+    "Days ahead": "Jiem minn qabel",
+    "Send notification": "Ibg\u0127at notifika",
+    "Are you sure you want to send this notification?": "\u017bgur li trid tibg\u0127at din in-notifika?",
+    "Expired: {0}": "Skadut: {0}",
+    "Expiring soon: {0}": "Se jiskadu dalwaqt: {0}",
+    "Expired notice: {0}": "Avvi\u017c ta' skadenza: {0}",
+    "Expiring notice: {0}": "Avvi\u017c ta' skadenza imminenti: {0}"
 }

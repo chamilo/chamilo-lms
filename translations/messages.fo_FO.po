@@ -39804,3 +39804,51 @@ msgstr "Útgongudagur"
 msgid "%s days remaining"
 msgstr "%s dagar eftir"
 
+msgid "Hello, %s"
+msgstr "Halló, %s"
+
+msgid "Edit expiry date"
+msgstr "Broytt gildistíð"
+
+msgid "Certificate validity (days)"
+msgstr "Gildi av prógvi (dagar)"
+
+msgid "Expiring certificates"
+msgstr "Prógv ið fara at ganga út"
+
+msgid "Expiring soon"
+msgstr "Ganga út skjótt"
+
+msgid "Expired notice"
+msgstr "Boð um útgongd"
+
+msgid "Expiring notice"
+msgstr "Boð um at ganga út"
+
+msgid "outdated"
+msgstr "útgongt"
+
+msgid "Last reminder sent"
+msgstr "Seinasta áminning send"
+
+msgid "Days ahead"
+msgstr "Dagar frammanundan"
+
+msgid "Send notification"
+msgstr "Send fráboðan"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Ert tú vís/ur í at tú vilt senda hesa fráboðanina?"
+
+msgid "Expired: %s"
+msgstr "Útgongt: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Ganga út skjótt: %s"
+
+msgid "Expired notice: %s"
+msgstr "Boð um útgongd: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Boð um at ganga út: %s"
+

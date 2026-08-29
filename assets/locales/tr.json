@@ -3876,5 +3876,20 @@
     "Save as draft": "Taslak olarak kaydet",
     "Never expires": "Asla sona ermez",
     "Expiry date": "Biti\u015f tarihi",
-    "Never": "Asla"
+    "Never": "Asla",
+    "Edit expiry date": "Son kullanma tarihini d\u00fczenle",
+    "Certificate validity (days)": "Sertifika ge\u00e7erlili\u011fi (g\u00fcn)",
+    "Expiring certificates": "S\u00fcresi dolacak sertifikalar",
+    "Expiring soon": "Yak\u0131nda s\u00fcresi dolacak",
+    "Expired notice": "S\u00fcresi dolmu\u015f bildirimi",
+    "Expiring notice": "S\u00fcresi dolacak bildirimi",
+    "outdated": "g\u00fcncel de\u011fil",
+    "Last reminder sent": "Son hat\u0131rlatma g\u00f6nderildi",
+    "Days ahead": "G\u00fcn \u00f6ncesi",
+    "Send notification": "Bildirim g\u00f6nder",
+    "Are you sure you want to send this notification?": "Bu bildirimi g\u00f6ndermek istedi\u011finizden emin misiniz?",
+    "Expired: {0}": "S\u00fcresi doldu: {0}",
+    "Expiring soon: {0}": "Yak\u0131nda s\u00fcresi dolacak: {0}",
+    "Expired notice: {0}": "S\u00fcresi dolmu\u015f bildirimi: {0}",
+    "Expiring notice: {0}": "S\u00fcresi dolacak bildirimi: {0}"
 }

@@ -3876,5 +3876,20 @@
     "Save as draft": "Ulo\u017eit jako koncept",
     "Never expires": "Nikdy nevypr\u0161\u00ed",
     "Expiry date": "Datum vypr\u0161en\u00ed",
-    "Never": "Nikdy"
+    "Never": "Nikdy",
+    "Edit expiry date": "Upravit datum vypr\u0161en\u00ed",
+    "Certificate validity (days)": "Platnost certifik\u00e1tu (dny)",
+    "Expiring certificates": "Certifik\u00e1ty s kon\u010d\u00edc\u00ed platnost\u00ed",
+    "Expiring soon": "Brzy vypr\u0161\u00ed",
+    "Expired notice": "Ozn\u00e1men\u00ed o vypr\u0161en\u00ed",
+    "Expiring notice": "Ozn\u00e1men\u00ed o bl\u00ed\u017e\u00edc\u00edm se vypr\u0161en\u00ed",
+    "outdated": "zastaral\u00e9",
+    "Last reminder sent": "Posledn\u00ed p\u0159ipom\u00ednka odesl\u00e1na",
+    "Days ahead": "Dny p\u0159edem",
+    "Send notification": "Odeslat ozn\u00e1men\u00ed",
+    "Are you sure you want to send this notification?": "Opravdu chcete odeslat toto ozn\u00e1men\u00ed?",
+    "Expired: {0}": "Vypr\u0161elo: {0}",
+    "Expiring soon: {0}": "Brzy vypr\u0161\u00ed: {0}",
+    "Expired notice: {0}": "Ozn\u00e1men\u00ed o vypr\u0161en\u00ed: {0}",
+    "Expiring notice: {0}": "Ozn\u00e1men\u00ed o bl\u00ed\u017e\u00edc\u00edm se vypr\u0161en\u00ed: {0}"
 }

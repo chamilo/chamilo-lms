@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Mtiririko wa okteti,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -39803,4 +39803,52 @@ msgstr "Tarehe ya kuisha"
 
 msgid "%s days remaining"
 msgstr "siku %s zimebaki"
+
+msgid "Hello, %s"
+msgstr "Habari, %s"
+
+msgid "Edit expiry date"
+msgstr "Hariri tarehe ya kuisha"
+
+msgid "Certificate validity (days)"
+msgstr "Uhalali wa cheti (siku)"
+
+msgid "Expiring certificates"
+msgstr "Vyeti vinavyokaribia kuisha"
+
+msgid "Expiring soon"
+msgstr "Vinakaribia kuisha"
+
+msgid "Expired notice"
+msgstr "Arifa ya kuisha"
+
+msgid "Expiring notice"
+msgstr "Arifa ya kukaribia kuisha"
+
+msgid "outdated"
+msgstr "zilizopitwa na wakati"
+
+msgid "Last reminder sent"
+msgstr "Kumbusho la mwisho lililotumwa"
+
+msgid "Days ahead"
+msgstr "Siku mbele"
+
+msgid "Send notification"
+msgstr "Tuma arifa"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Je, una uhakika unataka kutuma arifa hii?"
+
+msgid "Expired: %s"
+msgstr "Imeisha: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Inakaribia kuisha: %s"
+
+msgid "Expired notice: %s"
+msgstr "Arifa ya kuisha: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Arifa ya kukaribia kuisha: %s"
 

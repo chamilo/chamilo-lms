@@ -3876,5 +3876,20 @@
     "Save as draft": "Borrador hina waqaychay",
     "Never expires": "Haykaqpas tukukunchu",
     "Expiry date": "Puchukay p'unchaw",
-    "Never": "Manaqa"
+    "Never": "Manaqa",
+    "Edit expiry date": "Tukukuy p'unchawta llamk'apuy",
+    "Certificate validity (days)": "Certificadoq allin kaynin (p'unchawkuna)",
+    "Expiring certificates": "Tukukuchkaq certificados",
+    "Expiring soon": "Qaylla tukukunqa",
+    "Expired notice": "Tukusqa willakuy",
+    "Expiring notice": "Tukukuchkaq willakuy",
+    "outdated": "mawk'a",
+    "Last reminder sent": "Qhipa yuyarichiy apachisqa",
+    "Days ahead": "\u00d1awpaq p'unchawkuna",
+    "Send notification": "Willakuyta apachiy",
+    "Are you sure you want to send this notification?": "\u00bfChiqa kayta munankichu kay willakuyta apachiyta?",
+    "Expired: {0}": "Tukusqa: {0}",
+    "Expiring soon: {0}": "Qaylla tukukunqa: {0}",
+    "Expired notice: {0}": "Tukusqa willakuy: {0}",
+    "Expiring notice: {0}": "Tukukuchkaq willakuy: {0}"
 }

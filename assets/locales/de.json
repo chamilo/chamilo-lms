@@ -3876,5 +3876,20 @@
     "Save as draft": "Als Entwurf speichern",
     "Never expires": "L\u00e4uft nie ab",
     "Expiry date": "Ablaufdatum",
-    "Never": "Nie"
+    "Never": "Nie",
+    "Edit expiry date": "Ablaufdatum bearbeiten",
+    "Certificate validity (days)": "G\u00fcltigkeit des Zertifikats (Tage)",
+    "Expiring certificates": "Ablaufende Zertifikate",
+    "Expiring soon": "L\u00e4uft bald ab",
+    "Expired notice": "Hinweis bei Ablauf",
+    "Expiring notice": "Hinweis vor Ablauf",
+    "outdated": "veraltet",
+    "Last reminder sent": "Letzte Erinnerung gesendet",
+    "Days ahead": "Tage im Voraus",
+    "Send notification": "Benachrichtigung senden",
+    "Are you sure you want to send this notification?": "M\u00f6chten Sie diese Benachrichtigung wirklich senden?",
+    "Expired: {0}": "Abgelaufen: {0}",
+    "Expiring soon: {0}": "L\u00e4uft bald ab: {0}",
+    "Expired notice: {0}": "Hinweis bei Ablauf: {0}",
+    "Expiring notice: {0}": "Hinweis vor Ablauf: {0}"
 }

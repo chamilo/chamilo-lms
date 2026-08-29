@@ -3874,5 +3874,20 @@
     "Disk usage per course vs disk quota": "Diskbruk per kurs vs. diskkvote",
     "Never expires": "Utl\u00f8per aldri",
     "Expiry date": "Utl\u00f8psdato",
-    "Never": "Aldri"
+    "Never": "Aldri",
+    "Edit expiry date": "Rediger utl\u00f8psdato",
+    "Certificate validity (days)": "Sertifikatgyldighet (dager)",
+    "Expiring certificates": "Sertifikater som utl\u00f8per",
+    "Expiring soon": "Utl\u00f8per snart",
+    "Expired notice": "Varsel om utl\u00f8pt",
+    "Expiring notice": "Varsel om utl\u00f8p",
+    "outdated": "utdatert",
+    "Last reminder sent": "Siste p\u00e5minnelse sendt",
+    "Days ahead": "Dager i forveien",
+    "Send notification": "Send varsling",
+    "Are you sure you want to send this notification?": "Er du sikker p\u00e5 at du vil sende denne varslingen?",
+    "Expired: {0}": "Utl\u00f8pt: {0}",
+    "Expiring soon: {0}": "Utl\u00f8per snart: {0}",
+    "Expired notice: {0}": "Varsel om utl\u00f8pt: {0}",
+    "Expiring notice: {0}": "Varsel om utl\u00f8p: {0}"
 }

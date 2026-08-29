@@ -4138,7 +4138,7 @@ msgid "MySql Client"
 msgstr "MySql Klijent"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL server"
 
 msgid "Owner"
 msgstr "Vlasnik"
@@ -32455,7 +32455,7 @@ msgid "Delete failed: missing course context or invalid question id."
 msgstr "Brisanje nije uspjelo: nedostaje kontekst kursa ili nevažeći ID pitanja."
 
 msgid "AI Tutor"
-msgstr "AI Tutor"
+msgstr "AI tutor"
 
 msgid "The APCu extension needs to be both installed and enabled in order for the platform to use it."
 msgstr "APCu ekstenzija mora biti instalirana i omogućena kako bi platforma mogla da je koristi."
@@ -39803,4 +39803,52 @@ msgstr "Datum isteka"
 
 msgid "%s days remaining"
 msgstr "%s dana preostalo"
+
+msgid "Hello, %s"
+msgstr "Zdravo, %s"
+
+msgid "Edit expiry date"
+msgstr "Uredi datum isteka"
+
+msgid "Certificate validity (days)"
+msgstr "Važenje certifikata (dani)"
+
+msgid "Expiring certificates"
+msgstr "Certifikati koji ističu"
+
+msgid "Expiring soon"
+msgstr "Uskoro ističe"
+
+msgid "Expired notice"
+msgstr "Obavijest o isteku"
+
+msgid "Expiring notice"
+msgstr "Obavijest o isteku"
+
+msgid "outdated"
+msgstr "zastarjelo"
+
+msgid "Last reminder sent"
+msgstr "Posljednji podsjetnik poslan"
+
+msgid "Days ahead"
+msgstr "Dana unaprijed"
+
+msgid "Send notification"
+msgstr "Pošalji obavijest"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Jeste li sigurni da želite poslati ovu obavijest?"
+
+msgid "Expired: %s"
+msgstr "Isteklo: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Uskoro ističe: %s"
+
+msgid "Expired notice: %s"
+msgstr "Istekla obavijest: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Obavijest o isteku: %s"
 

@@ -3876,5 +3876,20 @@
     "Save as draft": "Gardar como borrador",
     "Never expires": "Nunca expira",
     "Expiry date": "Data de caducidade",
-    "Never": "Nunca"
+    "Never": "Nunca",
+    "Edit expiry date": "Editar data de caducidade",
+    "Certificate validity (days)": "Validez do certificado (d\u00edas)",
+    "Expiring certificates": "Certificados que van caducar",
+    "Expiring soon": "Caduca axi\u00f1a",
+    "Expired notice": "Aviso de caducidade",
+    "Expiring notice": "Aviso de pr\u00f3xima caducidade",
+    "outdated": "caducado",
+    "Last reminder sent": "\u00daltimo recordatorio enviado",
+    "Days ahead": "D\u00edas de antelaci\u00f3n",
+    "Send notification": "Enviar notificaci\u00f3n",
+    "Are you sure you want to send this notification?": "Est\u00e1 seguro de que quere enviar esta notificaci\u00f3n?",
+    "Expired: {0}": "Caducado: {0}",
+    "Expiring soon: {0}": "Caduca axi\u00f1a: {0}",
+    "Expired notice: {0}": "Aviso de caducidade: {0}",
+    "Expiring notice: {0}": "Aviso de pr\u00f3xima caducidade: {0}"
 }

@@ -3876,5 +3876,20 @@
     "Save as draft": "Konservi kiel malneton",
     "Never expires": "Neniam finitaj",
     "Expiry date": "Eksvalidi\u011da dato",
-    "Never": "Neniam"
+    "Never": "Neniam",
+    "Edit expiry date": "Redakti limdaton",
+    "Certificate validity (days)": "Valideco de atestilo (tagoj)",
+    "Expiring certificates": "Eksvalidi\u011dantaj atestiloj",
+    "Expiring soon": "Balda\u016d eksvalidi\u011donta",
+    "Expired notice": "Avizo pri eksvalidi\u011do",
+    "Expiring notice": "Avizo pri balda\u016da eksvalidi\u011do",
+    "outdated": "malaktuala",
+    "Last reminder sent": "Lasta memorigo sendita",
+    "Days ahead": "Tagoj anta\u016de",
+    "Send notification": "Sendi sciigon",
+    "Are you sure you want to send this notification?": "\u0108u vi certas, ke vi volas sendi \u0109i tiun sciigon?",
+    "Expired: {0}": "Eksvalidi\u011dinta: {0}",
+    "Expiring soon: {0}": "Balda\u016d eksvalidi\u011donta: {0}",
+    "Expired notice: {0}": "Avizo pri eksvalidi\u011do: {0}",
+    "Expiring notice: {0}": "Avizo pri balda\u016da eksvalidi\u011do: {0}"
 }

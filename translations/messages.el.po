@@ -39823,3 +39823,51 @@ msgstr "Ημερομηνία λήξης"
 msgid "%s days remaining"
 msgstr "Απομένουν %s ημέρες"
 
+msgid "Hello, %s"
+msgstr "Γεια σας, %s"
+
+msgid "Edit expiry date"
+msgstr "Επεξεργασία ημερομηνίας λήξης"
+
+msgid "Certificate validity (days)"
+msgstr "Ισχύς πιστοποιητικού (ημέρες)"
+
+msgid "Expiring certificates"
+msgstr "Πιστοποιητικά που λήγουν"
+
+msgid "Expiring soon"
+msgstr "Λήγει σύντομα"
+
+msgid "Expired notice"
+msgstr "Ειδοποίηση λήξης"
+
+msgid "Expiring notice"
+msgstr "Ειδοποίηση επικείμενης λήξης"
+
+msgid "outdated"
+msgstr "παρωχημένο"
+
+msgid "Last reminder sent"
+msgstr "Τελευταία υπενθύμιση που στάλθηκε"
+
+msgid "Days ahead"
+msgstr "Ημέρες εκ των προτέρων"
+
+msgid "Send notification"
+msgstr "Αποστολή ειδοποίησης"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Είστε βέβαιοι ότι θέλετε να στείλετε αυτή την ειδοποίηση;"
+
+msgid "Expired: %s"
+msgstr "Έληξε: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Λήγει σύντομα: %s"
+
+msgid "Expired notice: %s"
+msgstr "Ειδοποίηση λήξης: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Ειδοποίηση επικείμενης λήξης: %s"
+

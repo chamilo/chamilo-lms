@@ -34638,10 +34638,10 @@ msgid "Open map"
 msgstr "Apri mappa"
 
 msgid "Provider: OpenStreetMap"
-msgstr "Provider: OpenStreetMap"
+msgstr "Fornitore: OpenStreetMap"
 
 msgid "Provider: Google Maps"
-msgstr "Provider: Google Maps"
+msgstr "Fornitore: Google Maps"
 
 msgid "Personal files"
 msgstr "File personali"
@@ -39823,4 +39823,52 @@ msgstr "Data di scadenza"
 
 msgid "%s days remaining"
 msgstr "%s giorni rimanenti"
+
+msgid "Hello, %s"
+msgstr "Salve, %s"
+
+msgid "Edit expiry date"
+msgstr "Modifica data di scadenza"
+
+msgid "Certificate validity (days)"
+msgstr "Validità del certificato (giorni)"
+
+msgid "Expiring certificates"
+msgstr "Certificati in scadenza"
+
+msgid "Expiring soon"
+msgstr "In scadenza a breve"
+
+msgid "Expired notice"
+msgstr "Avviso di scadenza"
+
+msgid "Expiring notice"
+msgstr "Avviso di imminente scadenza"
+
+msgid "outdated"
+msgstr "obsoleto"
+
+msgid "Last reminder sent"
+msgstr "Ultimo promemoria inviato"
+
+msgid "Days ahead"
+msgstr "Giorni di anticipo"
+
+msgid "Send notification"
+msgstr "Invia notifica"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Sei sicuro di voler inviare questa notifica?"
+
+msgid "Expired: %s"
+msgstr "Scaduto: %s"
+
+msgid "Expiring soon: %s"
+msgstr "In scadenza a breve: %s"
+
+msgid "Expired notice: %s"
+msgstr "Avviso di scadenza: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Avviso di imminente scadenza: %s"
 

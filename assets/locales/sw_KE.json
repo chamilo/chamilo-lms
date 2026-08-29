@@ -3876,5 +3876,20 @@
     "Save as draft": "Hifadhi kama rasimu",
     "Never expires": "Haiishi kamwe",
     "Expiry date": "Tarehe ya kuisha",
-    "Never": "Kamwe"
+    "Never": "Kamwe",
+    "Edit expiry date": "Hariri tarehe ya kuisha",
+    "Certificate validity (days)": "Uhalali wa cheti (siku)",
+    "Expiring certificates": "Vyeti vinavyokaribia kuisha",
+    "Expiring soon": "Vinakaribia kuisha",
+    "Expired notice": "Arifa ya kuisha",
+    "Expiring notice": "Arifa ya kukaribia kuisha",
+    "outdated": "zilizopitwa na wakati",
+    "Last reminder sent": "Kumbusho la mwisho lililotumwa",
+    "Days ahead": "Siku mbele",
+    "Send notification": "Tuma arifa",
+    "Are you sure you want to send this notification?": "Je, una uhakika unataka kutuma arifa hii?",
+    "Expired: {0}": "Imeisha: {0}",
+    "Expiring soon: {0}": "Inakaribia kuisha: {0}",
+    "Expired notice: {0}": "Arifa ya kuisha: {0}",
+    "Expiring notice: {0}": "Arifa ya kukaribia kuisha: {0}"
 }

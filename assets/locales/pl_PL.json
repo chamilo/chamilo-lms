@@ -3876,5 +3876,20 @@
     "Save as draft": "Zapisz jako szkic",
     "Never expires": "Nigdy nie wygasa",
     "Expiry date": "Data wyga\u015bni\u0119cia",
-    "Never": "Nigdy"
+    "Never": "Nigdy",
+    "Edit expiry date": "Edytuj dat\u0119 wyga\u015bni\u0119cia",
+    "Certificate validity (days)": "Wa\u017cno\u015b\u0107 certyfikatu (dni)",
+    "Expiring certificates": "Wygasaj\u0105ce certyfikaty",
+    "Expiring soon": "Wkr\u00f3tce wygasa",
+    "Expired notice": "Powiadomienie o wyga\u015bni\u0119ciu",
+    "Expiring notice": "Powiadomienie o zbli\u017caj\u0105cym si\u0119 wyga\u015bni\u0119ciu",
+    "outdated": "przeterminowane",
+    "Last reminder sent": "Ostatnie przypomnienie wys\u0142ano",
+    "Days ahead": "Dni wcze\u015bniej",
+    "Send notification": "Wy\u015blij powiadomienie",
+    "Are you sure you want to send this notification?": "Czy na pewno chcesz wys\u0142a\u0107 to powiadomienie?",
+    "Expired: {0}": "Wygas\u0142o: {0}",
+    "Expiring soon: {0}": "Wkr\u00f3tce wygasa: {0}",
+    "Expired notice: {0}": "Powiadomienie o wyga\u015bni\u0119ciu: {0}",
+    "Expiring notice: {0}": "Powiadomienie o zbli\u017caj\u0105cym si\u0119 wyga\u015bni\u0119ciu: {0}"
 }

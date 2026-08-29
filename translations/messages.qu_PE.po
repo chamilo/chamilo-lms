@@ -39810,3 +39810,51 @@ msgstr "Puchukay p'unchaw"
 msgid "%s days remaining"
 msgstr "%s p'unchaw puchun"
 
+msgid "Hello, %s"
+msgstr "Rimaykullayki, %s"
+
+msgid "Edit expiry date"
+msgstr "Tukukuy p'unchawta llamk'apuy"
+
+msgid "Certificate validity (days)"
+msgstr "Certificadoq allin kaynin (p'unchawkuna)"
+
+msgid "Expiring certificates"
+msgstr "Tukukuchkaq certificados"
+
+msgid "Expiring soon"
+msgstr "Qaylla tukukunqa"
+
+msgid "Expired notice"
+msgstr "Tukusqa willakuy"
+
+msgid "Expiring notice"
+msgstr "Tukukuchkaq willakuy"
+
+msgid "outdated"
+msgstr "mawk'a"
+
+msgid "Last reminder sent"
+msgstr "Qhipa yuyarichiy apachisqa"
+
+msgid "Days ahead"
+msgstr "Ñawpaq p'unchawkuna"
+
+msgid "Send notification"
+msgstr "Willakuyta apachiy"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "¿Chiqa kayta munankichu kay willakuyta apachiyta?"
+
+msgid "Expired: %s"
+msgstr "Tukusqa: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Qaylla tukukunqa: %s"
+
+msgid "Expired notice: %s"
+msgstr "Tukusqa willakuy: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Tukukuchkaq willakuy: %s"
+

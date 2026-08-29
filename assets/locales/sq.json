@@ -3876,5 +3876,20 @@
     "Save as draft": "Ruaj si skic\u00eb",
     "Never expires": "Nuk skadon kurr\u00eb",
     "Expiry date": "Data e skadimit",
-    "Never": "Kurr\u00eb"
+    "Never": "Kurr\u00eb",
+    "Edit expiry date": "Ndrysho dat\u00ebn e skadimit",
+    "Certificate validity (days)": "Vlefshm\u00ebria e certifikat\u00ebs (dit\u00eb)",
+    "Expiring certificates": "Certifikata q\u00eb skadojn\u00eb",
+    "Expiring soon": "Skadon s\u00eb shpejti",
+    "Expired notice": "Njoftim i skaduar",
+    "Expiring notice": "Njoftim i skadimit",
+    "outdated": "i vjet\u00ebruar",
+    "Last reminder sent": "Kujtesa e fundit e d\u00ebrguar",
+    "Days ahead": "Dit\u00eb p\u00ebrpara",
+    "Send notification": "D\u00ebrgo njoftimin",
+    "Are you sure you want to send this notification?": "Jeni i sigurt q\u00eb d\u00ebshironi t\u00eb d\u00ebrgoni k\u00ebt\u00eb njoftim?",
+    "Expired: {0}": "Skaduar: {0}",
+    "Expiring soon: {0}": "Skadon s\u00eb shpejti: {0}",
+    "Expired notice: {0}": "Njoftim i skaduar: {0}",
+    "Expiring notice: {0}": "Njoftim i skadimit: {0}"
 }

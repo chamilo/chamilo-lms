@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример на формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример за формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -39807,4 +39807,52 @@ msgstr "Датум на истекување"
 
 msgid "%s days remaining"
 msgstr "Преостануваат %s дена"
+
+msgid "Hello, %s"
+msgstr "Здраво, %s"
+
+msgid "Edit expiry date"
+msgstr "Уреди датум на истекување"
+
+msgid "Certificate validity (days)"
+msgstr "Валидност на сертификат (денови)"
+
+msgid "Expiring certificates"
+msgstr "Сертификати што истекуваат"
+
+msgid "Expiring soon"
+msgstr "Наскоро истекува"
+
+msgid "Expired notice"
+msgstr "Известување за истечен"
+
+msgid "Expiring notice"
+msgstr "Известување за истекување"
+
+msgid "outdated"
+msgstr "застарено"
+
+msgid "Last reminder sent"
+msgstr "Последен потсетник испратен"
+
+msgid "Days ahead"
+msgstr "Денови однапред"
+
+msgid "Send notification"
+msgstr "Испрати известување"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Дали сте сигурни дека сакате да го испратите ова известување?"
+
+msgid "Expired: %s"
+msgstr "Истечено: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Наскоро истекува: %s"
+
+msgid "Expired notice: %s"
+msgstr "Известување за истечен: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Известување за истекување: %s"
 

@@ -3876,5 +3876,20 @@
     "Save as draft": "\u4e0b\u66f8\u304d\u3068\u3057\u3066\u4fdd\u5b58",
     "Never expires": "\u7121\u671f\u9650",
     "Expiry date": "\u6709\u52b9\u671f\u9650",
-    "Never": "\u306a\u3057"
+    "Never": "\u306a\u3057",
+    "Edit expiry date": "\u6709\u52b9\u671f\u9650\u3092\u7de8\u96c6",
+    "Certificate validity (days)": "\u8a3c\u660e\u66f8\u306e\u6709\u52b9\u671f\u9593\uff08\u65e5\uff09",
+    "Expiring certificates": "\u671f\u9650\u5207\u308c\u9593\u8fd1\u306e\u8a3c\u660e\u66f8",
+    "Expiring soon": "\u307e\u3082\u306a\u304f\u671f\u9650\u5207\u308c",
+    "Expired notice": "\u671f\u9650\u5207\u308c\u901a\u77e5",
+    "Expiring notice": "\u671f\u9650\u5207\u308c\u9593\u8fd1\u306e\u901a\u77e5",
+    "outdated": "\u671f\u9650\u5207\u308c",
+    "Last reminder sent": "\u6700\u7d42\u30ea\u30de\u30a4\u30f3\u30c0\u30fc\u9001\u4fe1\u65e5",
+    "Days ahead": "\u4f55\u65e5\u524d",
+    "Send notification": "\u901a\u77e5\u3092\u9001\u4fe1",
+    "Are you sure you want to send this notification?": "\u3053\u306e\u901a\u77e5\u3092\u9001\u4fe1\u3057\u3066\u3082\u3088\u308d\u3057\u3044\u3067\u3059\u304b\uff1f",
+    "Expired: {0}": "\u671f\u9650\u5207\u308c: {0}",
+    "Expiring soon: {0}": "\u307e\u3082\u306a\u304f\u671f\u9650\u5207\u308c: {0}",
+    "Expired notice: {0}": "\u671f\u9650\u5207\u308c\u901a\u77e5: {0}",
+    "Expiring notice: {0}": "\u671f\u9650\u5207\u308c\u9593\u8fd1\u306e\u901a\u77e5: {0}"
 }

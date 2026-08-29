@@ -39804,3 +39804,51 @@ msgstr "समाप्ति तिथि"
 msgid "%s days remaining"
 msgstr "%s दिन शेष"
 
+msgid "Hello, %s"
+msgstr "नमस्ते, %s"
+
+msgid "Edit expiry date"
+msgstr "समाप्ति तिथि संपादित करें"
+
+msgid "Certificate validity (days)"
+msgstr "प्रमाणपत्र वैधता (दिन)"
+
+msgid "Expiring certificates"
+msgstr "समाप्त होने वाले प्रमाणपत्र"
+
+msgid "Expiring soon"
+msgstr "जल्द समाप्त हो रहे"
+
+msgid "Expired notice"
+msgstr "समाप्ति सूचना"
+
+msgid "Expiring notice"
+msgstr "समाप्ति-पूर्व सूचना"
+
+msgid "outdated"
+msgstr "पुराना"
+
+msgid "Last reminder sent"
+msgstr "अंतिम अनुस्मारक भेजा गया"
+
+msgid "Days ahead"
+msgstr "दिन पहले"
+
+msgid "Send notification"
+msgstr "सूचना भेजें"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "क्या आप वाकई यह सूचना भेजना चाहते हैं?"
+
+msgid "Expired: %s"
+msgstr "समाप्त: %s"
+
+msgid "Expiring soon: %s"
+msgstr "जल्द समाप्त: %s"
+
+msgid "Expired notice: %s"
+msgstr "समाप्ति सूचना: %s"
+
+msgid "Expiring notice: %s"
+msgstr "समाप्ति-पूर्व सूचना: %s"
+

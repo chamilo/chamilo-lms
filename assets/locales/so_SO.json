@@ -3876,5 +3876,20 @@
     "Save as draft": "Kaydi sidii qoraal",
     "Never expires": "Marna ma dhacdo",
     "Expiry date": "Taariikhda dhicitaanka",
-    "Never": "Waligeed"
+    "Never": "Waligeed",
+    "Edit expiry date": "Wax ka beddel taariikhda dhicitaanka",
+    "Certificate validity (days)": "Ansaxnimada shahaadada (maalmo)",
+    "Expiring certificates": "Shahaadooyinka dhacaya",
+    "Expiring soon": "Dhawaan dhacaya",
+    "Expired notice": "Ogeysiiska dhicitaanka",
+    "Expiring notice": "Ogeysiiska dhicitaanka soo socda",
+    "outdated": "duugoobay",
+    "Last reminder sent": "Xusuusinta ugu dambeysay ee la diray",
+    "Days ahead": "Maalmo horay",
+    "Send notification": "Dir ogeysiis",
+    "Are you sure you want to send this notification?": "Ma hubtaa inaad rabto inaad dirto ogeysiiskan?",
+    "Expired: {0}": "Dhacay: {0}",
+    "Expiring soon: {0}": "Dhawaan dhacaya: {0}",
+    "Expired notice: {0}": "Ogeysiis dhacay: {0}",
+    "Expiring notice: {0}": "Ogeysiis dhacaya: {0}"
 }

@@ -39809,3 +39809,51 @@ msgstr "Data ta' skadenza"
 msgid "%s days remaining"
 msgstr "%s ġranet li fadal"
 
+msgid "Hello, %s"
+msgstr "Bonġu, %s"
+
+msgid "Edit expiry date"
+msgstr "Editja d-data ta' skadenza"
+
+msgid "Certificate validity (days)"
+msgstr "Validità taċ-ċertifikat (jiem)"
+
+msgid "Expiring certificates"
+msgstr "Ċertifikati li se jiskadu"
+
+msgid "Expiring soon"
+msgstr "Se jiskadu dalwaqt"
+
+msgid "Expired notice"
+msgstr "Avviż ta' skadenza"
+
+msgid "Expiring notice"
+msgstr "Avviż ta' skadenza imminenti"
+
+msgid "outdated"
+msgstr "skadut"
+
+msgid "Last reminder sent"
+msgstr "L-aħħar tfakkira mibgħuta"
+
+msgid "Days ahead"
+msgstr "Jiem minn qabel"
+
+msgid "Send notification"
+msgstr "Ibgħat notifika"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Żgur li trid tibgħat din in-notifika?"
+
+msgid "Expired: %s"
+msgstr "Skadut: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Se jiskadu dalwaqt: %s"
+
+msgid "Expired notice: %s"
+msgstr "Avviż ta' skadenza: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Avviż ta' skadenza imminenti: %s"
+

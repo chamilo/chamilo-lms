@@ -3876,5 +3876,20 @@
     "Save as draft": "Opslaan als concept",
     "Never expires": "Vervalt nooit",
     "Expiry date": "Vervaldatum",
-    "Never": "Nooit"
+    "Never": "Nooit",
+    "Edit expiry date": "Vervaldatum bewerken",
+    "Certificate validity (days)": "Geldigheid certificaat (dagen)",
+    "Expiring certificates": "Verlopende certificaten",
+    "Expiring soon": "Verloopt binnenkort",
+    "Expired notice": "Melding verlopen",
+    "Expiring notice": "Melding verlopend",
+    "outdated": "verouderd",
+    "Last reminder sent": "Laatste herinnering verzonden",
+    "Days ahead": "Dagen vooruit",
+    "Send notification": "Melding verzenden",
+    "Are you sure you want to send this notification?": "Weet u zeker dat u deze melding wilt verzenden?",
+    "Expired: {0}": "Verlopen: {0}",
+    "Expiring soon: {0}": "Verloopt binnenkort: {0}",
+    "Expired notice: {0}": "Verlopen bericht: {0}",
+    "Expiring notice: {0}": "Verlopend bericht: {0}"
 }

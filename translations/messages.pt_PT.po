@@ -39816,3 +39816,51 @@ msgstr "Data de validade"
 msgid "%s days remaining"
 msgstr "%s dias restantes"
 
+msgid "Hello, %s"
+msgstr "Olá, %s"
+
+msgid "Edit expiry date"
+msgstr "Editar data de validade"
+
+msgid "Certificate validity (days)"
+msgstr "Validade do certificado (dias)"
+
+msgid "Expiring certificates"
+msgstr "Certificados a expirar"
+
+msgid "Expiring soon"
+msgstr "A expirar em breve"
+
+msgid "Expired notice"
+msgstr "Aviso de expirado"
+
+msgid "Expiring notice"
+msgstr "Aviso de expiração"
+
+msgid "outdated"
+msgstr "desatualizado"
+
+msgid "Last reminder sent"
+msgstr "Último lembrete enviado"
+
+msgid "Days ahead"
+msgstr "Dias de antecedência"
+
+msgid "Send notification"
+msgstr "Enviar notificação"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Tem a certeza de que pretende enviar esta notificação?"
+
+msgid "Expired: %s"
+msgstr "Expirado: %s"
+
+msgid "Expiring soon: %s"
+msgstr "A expirar em breve: %s"
+
+msgid "Expired notice: %s"
+msgstr "Aviso de expirado: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Aviso de expiração: %s"
+

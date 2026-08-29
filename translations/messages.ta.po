@@ -39808,3 +39808,51 @@ msgstr "காலாவதி தேதி"
 msgid "%s days remaining"
 msgstr "%s நாட்கள் மீதமுள்ளன"
 
+msgid "Hello, %s"
+msgstr "வணக்கம், %s"
+
+msgid "Edit expiry date"
+msgstr "காலாவதி தேதியைத் திருத்து"
+
+msgid "Certificate validity (days)"
+msgstr "சான்றிதழ் செல்லுபடியாகும் காலம் (நாட்கள்)"
+
+msgid "Expiring certificates"
+msgstr "காலாவதியாகும் சான்றிதழ்கள்"
+
+msgid "Expiring soon"
+msgstr "விரைவில் காலாவதியாகும்"
+
+msgid "Expired notice"
+msgstr "காலாவதியான அறிவிப்பு"
+
+msgid "Expiring notice"
+msgstr "காலாவதியாகும் அறிவிப்பு"
+
+msgid "outdated"
+msgstr "காலாவதியானது"
+
+msgid "Last reminder sent"
+msgstr "கடைசியாக அனுப்பிய நினைவூட்டல்"
+
+msgid "Days ahead"
+msgstr "முன்னோக்கிய நாட்கள்"
+
+msgid "Send notification"
+msgstr "அறிவிப்பை அனுப்பு"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "இந்த அறிவிப்பை அனுப்ப விரும்புகிறீர்களா?"
+
+msgid "Expired: %s"
+msgstr "காலாவதியானது: %s"
+
+msgid "Expiring soon: %s"
+msgstr "விரைவில் காலாவதியாகும்: %s"
+
+msgid "Expired notice: %s"
+msgstr "காலாவதியான அறிவிப்பு: %s"
+
+msgid "Expiring notice: %s"
+msgstr "காலாவதியாகும் அறிவிப்பு: %s"
+

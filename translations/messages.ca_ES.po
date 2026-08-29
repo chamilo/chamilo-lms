@@ -39823,3 +39823,51 @@ msgstr "Data de caducitat"
 msgid "%s days remaining"
 msgstr "%s dies restants"
 
+msgid "Hello, %s"
+msgstr "Hola, %s"
+
+msgid "Edit expiry date"
+msgstr "Edita la data de caducitat"
+
+msgid "Certificate validity (days)"
+msgstr "Validesa del certificat (dies)"
+
+msgid "Expiring certificates"
+msgstr "Certificats que caduquen"
+
+msgid "Expiring soon"
+msgstr "Caduca aviat"
+
+msgid "Expired notice"
+msgstr "Avís de caducat"
+
+msgid "Expiring notice"
+msgstr "Avís de caducitat"
+
+msgid "outdated"
+msgstr "obsolet"
+
+msgid "Last reminder sent"
+msgstr "Últim recordatori enviat"
+
+msgid "Days ahead"
+msgstr "Dies d'antelació"
+
+msgid "Send notification"
+msgstr "Envia la notificació"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Segur que voleu enviar aquesta notificació?"
+
+msgid "Expired: %s"
+msgstr "Caducat: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Caduca aviat: %s"
+
+msgid "Expired notice: %s"
+msgstr "Avís de caducat: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Avís de caducitat: %s"
+

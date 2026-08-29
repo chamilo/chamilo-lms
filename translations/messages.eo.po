@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulo-ekzemplo: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ekzemplo de formulo: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -39809,4 +39809,52 @@ msgstr "Eksvalidiĝa dato"
 
 msgid "%s days remaining"
 msgstr "%s tagoj restas"
+
+msgid "Hello, %s"
+msgstr "Saluton, %s"
+
+msgid "Edit expiry date"
+msgstr "Redakti limdaton"
+
+msgid "Certificate validity (days)"
+msgstr "Valideco de atestilo (tagoj)"
+
+msgid "Expiring certificates"
+msgstr "Eksvalidiĝantaj atestiloj"
+
+msgid "Expiring soon"
+msgstr "Baldaŭ eksvalidiĝonta"
+
+msgid "Expired notice"
+msgstr "Avizo pri eksvalidiĝo"
+
+msgid "Expiring notice"
+msgstr "Avizo pri baldaŭa eksvalidiĝo"
+
+msgid "outdated"
+msgstr "malaktuala"
+
+msgid "Last reminder sent"
+msgstr "Lasta memorigo sendita"
+
+msgid "Days ahead"
+msgstr "Tagoj antaŭe"
+
+msgid "Send notification"
+msgstr "Sendi sciigon"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Ĉu vi certas, ke vi volas sendi ĉi tiun sciigon?"
+
+msgid "Expired: %s"
+msgstr "Eksvalidiĝinta: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Baldaŭ eksvalidiĝonta: %s"
+
+msgid "Expired notice: %s"
+msgstr "Avizo pri eksvalidiĝo: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Avizo pri baldaŭa eksvalidiĝo: %s"
 

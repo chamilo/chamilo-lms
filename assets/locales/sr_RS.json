@@ -3876,5 +3876,20 @@
     "Save as draft": "Sa\u010duvaj kao nacrt",
     "Never expires": "Nikada ne isti\u010de",
     "Expiry date": "Datum isteka",
-    "Never": "Nikad"
+    "Never": "Nikad",
+    "Edit expiry date": "Izmeni datum isteka",
+    "Certificate validity (days)": "Va\u017eenje sertifikata (dani)",
+    "Expiring certificates": "Sertifikati koji isti\u010du",
+    "Expiring soon": "Uskoro isti\u010de",
+    "Expired notice": "Obave\u0161tenje o isteku",
+    "Expiring notice": "Obave\u0161tenje o predstoje\u0107em isteku",
+    "outdated": "zastarelo",
+    "Last reminder sent": "Poslednji podsetnik poslat",
+    "Days ahead": "Dana unapred",
+    "Send notification": "Po\u0161alji obave\u0161tenje",
+    "Are you sure you want to send this notification?": "Da li ste sigurni da \u017eelite da po\u0161aljete ovo obave\u0161tenje?",
+    "Expired: {0}": "Isteklo: {0}",
+    "Expiring soon: {0}": "Uskoro isti\u010de: {0}",
+    "Expired notice: {0}": "Obave\u0161tenje o isteku: {0}",
+    "Expiring notice: {0}": "Obave\u0161tenje o predstoje\u0107em isteku: {0}"
 }

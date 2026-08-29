@@ -43,6 +43,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+
 /**
  * Read-only provider for migrated exercise runtime result/review data.
  *
@@ -1272,12 +1275,14 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         for ($index = 0; $index < $blankCount; ++$index) {
             $blank = [
                 'position' => $index + 1,
-                'studentAnswer' => $showStudentAnswers ? (string) ($studentInfo['student_answer'][$index] ?? '') : '',
+                'studentAnswer' => $showStudentAnswers
+                    ? $this->trimFillBlankOption((string) ($studentInfo['student_answer'][$index] ?? ''))
+                    : '',
                 'studentScore' => $showStudentAnswers ? (string) ($studentInfo['student_score'][$index] ?? '') : '',
             ];
 
             if ($showExpectedAnswers && null !== $teacherInfo) {
-                $blank['correctAnswer'] = (string) ($teacherInfo['words'][$index] ?? '');
+                $blank['correctAnswer'] = $this->resolveFillBlankCorrectAnswerDisplay((string) ($teacherInfo['words'][$index] ?? ''));
             }
 
             $blanks[] = $blank;
@@ -2198,6 +2203,35 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             6 => ['$', '$'],
             default => ['[', ']'],
         };
+    }
+
+    /**
+     * A raw blank word may encode a menu (single "|", first item is the
+     * correct answer) or several accepted free-text answers (double "||").
+     * Resolve it to the text that should actually be displayed as "the
+     * correct answer", instead of the raw pipe-joined string. Mirrors the
+     * detection in ExerciseAttemptScoringService::isFillBlankStudentAnswerGood().
+     */
+    private function resolveFillBlankCorrectAnswerDisplay(string $rawAnswer): string
+    {
+        if (str_contains($rawAnswer, '|') && !str_contains($rawAnswer, '||')) {
+            $menuAnswers = array_map([$this, 'trimFillBlankOption'], explode('|', $rawAnswer));
+
+            return (string) ($menuAnswers[0] ?? '');
+        }
+
+        if (str_contains($rawAnswer, '||')) {
+            $answers = array_map([$this, 'trimFillBlankOption'], preg_split('/\|\|/', $rawAnswer) ?: []);
+
+            return implode(' / ', $answers);
+        }
+
+        return $this->trimFillBlankOption($rawAnswer);
+    }
+
+    private function trimFillBlankOption(string $value): string
+    {
+        return trim(html_entity_decode($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
     }
 
     private function isStructuralContentQuestion(CQuizQuestion $question): bool

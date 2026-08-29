@@ -174,6 +174,10 @@
             v-html="messagePreviews.expired"
           />
         </div>
+
+        <p class="text-xs italic text-gray-500">
+          {{ t("Notifications are sent to users in their own configured language.") }}
+        </p>
       </div>
 
       <template #footer>

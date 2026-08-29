@@ -41,6 +41,10 @@ framework:
             policy: 'sliding_window'
             limit: 120
             interval: '1 minute'
+        external_api_authentication:
+            policy: 'sliding_window'
+            limit: 120
+            interval: '1 minute'
         oauth_registration:
             policy: 'sliding_window'
             limit: 5

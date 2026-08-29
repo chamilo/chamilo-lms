@@ -3216,6 +3216,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Allow MCP by roles',
                     'comment' => 'JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections.',
                 ],
+                [
+                    'name' => 'external_api_enabled',
+                    'title' => 'Enable external API keys',
+                    'comment' => 'Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the "chamilo:security:generate-external-api-key" console command. Disabled by default: existing keys cannot be used until this is turned on.',
+                ],
             ],
             'session' => [
                 [

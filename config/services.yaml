@@ -263,6 +263,23 @@ services:
             - '%env(AZURE_STORAGE_PLUGINS_CONTAINER)%'
             - '%env(AZURE_STORAGE_PLUGINS_PREFIX)%'
 
+    # Template for the `api` firewall's JWT authenticator (see security.yaml,
+    # `api.jwt.authenticator`) — same 5 arguments as Lexik's own abstract
+    # `lexik_jwt_authentication.security.jwt_authenticator` template (index 3, the
+    # user provider, is left unset here; Lexik's own JWTAuthenticatorFactory fills it
+    # in per-firewall via replaceArgument(3, ...)), just backed by a subclass that
+    # narrows supports() to actual JWT-shaped tokens. See StrictJwtAuthenticator's
+    # docblock for why.
+    chamilo.security.strict_jwt_authenticator:
+        class: Chamilo\CoreBundle\Security\Authenticator\StrictJwtAuthenticator
+        abstract: true
+        arguments:
+            - '@lexik_jwt_authentication.jwt_manager'
+            - '@event_dispatcher'
+            - '@lexik_jwt_authentication.extractor.chain_extractor'
+            - ~
+            - '@?translator'
+
     Chamilo\CoreBundle\Security\Authenticator\Ldap\ExtAdapter: ~
 
     Symfony\Component\Ldap\Ldap:

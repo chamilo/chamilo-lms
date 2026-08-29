@@ -90,11 +90,17 @@ security:
             stateless: true
             provider: app_user_provider
 
-        # Use to connect via a JWT token
+        # Use to connect via a JWT token, or via an external API key (server-to-server
+        # integrations, e.g. the WordPress storefront plugin's service account) — the latter
+        # only engages when the bearer token matches that key's format, so JWT auth for every
+        # other /api consumer is untouched.
         api:
             pattern: ^/api
 #            stateless: true
-            jwt: ~
+            jwt:
+                authenticator: chamilo.security.strict_jwt_authenticator
+            custom_authenticators:
+                - Chamilo\CoreBundle\Security\Authenticator\ExternalApiKeyAuthenticator
             context: main
             provider: app_user_provider
             # set throttling through the rate-limit package (uses Lock for persistence, see config/packages/lock.yaml)

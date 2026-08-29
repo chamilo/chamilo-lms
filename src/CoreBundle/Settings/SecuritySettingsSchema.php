@@ -55,6 +55,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'oauth_server_enabled' => 'false',
             'mcp_enabled' => 'false',
             'mcp_allowed_roles' => '{"ADMIN":true,"COURSEMANAGER":true,"STUDENT":false,"DRH":false,"SESSIONADMIN":false,"STUDENT_BOSS":false,"INVITEE":false}',
+            'external_api_enabled' => 'false',
         ]);
 
         $allowedTypes = [
@@ -105,6 +106,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('mcp_allowed_roles', TextareaType::class, [
                 'constraints' => [new Json()],
             ])
+            ->add('external_api_enabled', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

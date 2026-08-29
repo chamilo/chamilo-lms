@@ -41,6 +41,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
     private const ACTION_DELETE_ALL = 'delete_all';
     private const ACTION_NOTIFY_ALL = 'notify_all';
     private const ACTION_SET_TEMPLATE = 'set_template';
+    private const ACTION_USE_SYSTEM_TEMPLATE = 'use_system_template';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -93,6 +94,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             self::ACTION_DELETE_ALL => $this->deleteAll($data, $category, $resolved),
             self::ACTION_NOTIFY_ALL => $this->notifyAll($data, $category, $resolved),
             self::ACTION_SET_TEMPLATE => $this->setTemplate($data, $resolved),
+            self::ACTION_USE_SYSTEM_TEMPLATE => $this->useSystemTemplate($resolved),
             default => throw new BadRequestHttpException('Unsupported Gradebook certificate action.'),
         };
 
@@ -295,7 +297,27 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         return $affected;
     }
 
-    private function applyTemplateToCategoryTree(GradebookCategory $category, CDocument $document): int
+    /**
+     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
+     */
+    private function useSystemTemplate(array $resolved): int
+    {
+        if ($this->certificateGenerator->usesCustomCertificate($resolved['course'])) {
+            throw new BadRequestHttpException('CustomCertificate templates must use the existing plugin workflow.');
+        }
+
+        $rootCategory = $resolved['rootCategory'];
+        if (!$rootCategory instanceof GradebookCategory) {
+            throw new NotFoundHttpException('The Gradebook was not found.');
+        }
+
+        $affected = $this->applyTemplateToCategoryTree($rootCategory, null);
+        $this->entityManager->flush();
+
+        return $affected;
+    }
+
+    private function applyTemplateToCategoryTree(GradebookCategory $category, ?CDocument $document): int
     {
         $category->setDocument($document);
         $affected = 1;
@@ -362,6 +384,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             self::ACTION_DELETE_ALL => 'Certificates deleted: '.$affected.'.',
             self::ACTION_NOTIFY_ALL => 'Certificate notifications sent: '.$affected.'.',
             self::ACTION_SET_TEMPLATE => 'Default certificate template updated.',
+            self::ACTION_USE_SYSTEM_TEMPLATE => 'System default certificate template restored.',
             default => '',
         };
     }

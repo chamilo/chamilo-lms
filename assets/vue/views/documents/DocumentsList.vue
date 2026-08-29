@@ -27,6 +27,15 @@
       type="black"
       @click="goToUploadFile"
     />
+    <BaseButton
+      v-if="showUseSystemDefaultCertificateButton"
+      :disabled="isSettingDefaultCertificate"
+      :label="t('Use system default certificate')"
+      icon="restore"
+      only-icon
+      type="secondary-text"
+      @click="confirmUseSystemDefaultCertificate"
+    />
 
     <BaseButton
       v-if="showBackButtonIfNotRootFolder"
@@ -133,6 +142,14 @@
   >
     <span class="font-semibold">{{ t("Default certificate") }}:</span>
     <span class="ml-1">{{ defaultCertificateTitle || t("No data available") }}</span>
+    <div
+      v-if="certificateTemplateFallback"
+      class="mt-1 text-yellow-700"
+      role="status"
+    >
+      <span class="font-semibold">{{ t("Warning") }}:</span>
+      {{ t("The attached certificate is unavailable. The system default certificate will be used.") }}
+    </div>
   </div>
 
   <BaseTable
@@ -720,6 +737,7 @@ import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseChart from "../../components/basecomponents/BaseChart.vue"
 import DocumentAudioRecorder from "../../components/documents/DocumentAudioRecorder.vue"
 import { useNotification } from "../../composables/notification"
+import { useConfirmation } from "../../composables/useConfirmation"
 import { useSecurityStore } from "../../store/securityStore"
 import prettyBytes from "pretty-bytes"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
@@ -741,6 +759,7 @@ const courseSettingsStore = useCourseSettings()
 const platformConfigStore = usePlatformConfig()
 const { t, locale } = useI18n()
 const notification = useNotification()
+const { requireConfirmation } = useConfirmation()
 
 const isDownloadingAll = ref(false)
 
@@ -936,11 +955,22 @@ const gradebookReturnRoute = computed(() => {
 
 const defaultCertificateId = ref(null)
 const defaultCertificateTitle = ref("")
+const certificateAttachedDocumentId = ref(null)
+const certificateTemplateFallback = ref(false)
 const certificateCategoryId = ref(null)
 const certificateCsrfToken = ref("")
 const isSettingDefaultCertificate = ref(false)
 
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher && !platformConfigStore.isStudentViewActive)
+const showUseSystemDefaultCertificateButton = computed(() => {
+  return (
+    isCertificateMode.value &&
+    isCurrentTeacher.value &&
+    Number(certificateAttachedDocumentId.value || 0) > 0 &&
+    Boolean(certificateCategoryId.value) &&
+    Boolean(certificateCsrfToken.value)
+  )
+})
 
 const onlyofficePluginEnabled = computed(() => {
   return platformConfigStore.plugins?.onlyoffice?.enabled === true
@@ -1853,12 +1883,16 @@ async function loadCertificateManagement() {
     certificateCsrfToken.value = String(data?.csrfToken || "")
     defaultCertificateId.value = Number(template?.id || 0) || null
     defaultCertificateTitle.value = String(template?.title || "")
+    certificateAttachedDocumentId.value = Number(template?.attachedDocumentId || 0) || null
+    certificateTemplateFallback.value = Boolean(template?.fallback)
   } catch (error) {
     console.error("[Documents] Error loading Gradebook certificate settings:", error)
     certificateCategoryId.value = null
     certificateCsrfToken.value = ""
     defaultCertificateId.value = null
     defaultCertificateTitle.value = ""
+    certificateAttachedDocumentId.value = null
+    certificateTemplateFallback.value = false
   }
 }
 
@@ -1891,6 +1925,44 @@ async function selectAsDefaultCertificate(certificate) {
   } catch (error) {
     console.error("[Documents] Error setting Gradebook certificate template:", error)
     notification.showErrorNotification(t("Error setting certificate as default"))
+  } finally {
+    isSettingDefaultCertificate.value = false
+  }
+}
+
+function confirmUseSystemDefaultCertificate() {
+  if (!showUseSystemDefaultCertificateButton.value) {
+    return
+  }
+
+  requireConfirmation({
+    message: t("Use the system default certificate instead of the attached certificate?"),
+    accept: useSystemDefaultCertificate,
+  })
+}
+
+async function useSystemDefaultCertificate() {
+  if (!showUseSystemDefaultCertificateButton.value || isSettingDefaultCertificate.value) {
+    return
+  }
+
+  isSettingDefaultCertificate.value = true
+
+  try {
+    await gradebookService.runCertificateAction(
+      {
+        action: "use_system_template",
+        categoryId: Number(certificateCategoryId.value),
+        submittedCsrfToken: certificateCsrfToken.value,
+      },
+      getGradebookCertificateContextParams(),
+    )
+    await loadCertificateManagement()
+    triggerTableLoad()
+    notification.showSuccessNotification(t("Success"))
+  } catch (error) {
+    console.error("[Documents] Error restoring the system Gradebook certificate template:", error)
+    notification.showErrorNotification(t("An error occurred"))
   } finally {
     isSettingDefaultCertificate.value = false
   }

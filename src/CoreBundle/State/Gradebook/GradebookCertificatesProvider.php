@@ -125,19 +125,13 @@ final readonly class GradebookCertificatesProvider implements ProviderInterface
         ];
         $resourceWeight = $this->getResourceWeight($category);
         $categoryWeight = (float) $category->getWeight();
-        $templateDocument = $category->getDocument();
         $resource->category = [
             'id' => (int) $category->getId(),
             'title' => $category->getTitle(),
             'weight' => $categoryWeight,
             'resourceWeight' => $resourceWeight,
             'weightWarning' => abs($resourceWeight - $categoryWeight) > 0.00001,
-            'certificateTemplate' => null !== $templateDocument
-                ? [
-                    'id' => (int) $templateDocument->getIid(),
-                    'title' => $templateDocument->getTitle(),
-                ]
-                : null,
+            'certificateTemplate' => $this->certificateGenerator->getTemplateSummary($category),
         ];
         $resource->canManage = $resolved['canManage'];
         $resource->settings = [

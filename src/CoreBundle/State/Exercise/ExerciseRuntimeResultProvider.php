@@ -1436,7 +1436,9 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         for ($index = 0; $index < $blankCount; ++$index) {
             $blank = [
                 'position' => $index + 1,
-                'studentAnswer' => $showStudentAnswers ? (string) ($studentInfo['student_answer'][$index] ?? '') : '',
+                'studentAnswer' => $showStudentAnswers
+                    ? $this->trimFillBlankOption((string) ($studentInfo['student_answer'][$index] ?? ''))
+                    : '',
                 'studentScore' => $showStudentAnswers ? (string) ($studentInfo['student_score'][$index] ?? '') : '',
             ];
 
@@ -2385,7 +2387,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             return implode(' / ', $answers);
         }
 
-        return $rawAnswer;
+        return $this->trimFillBlankOption($rawAnswer);
     }
 
     private function trimFillBlankOption(string $value): string

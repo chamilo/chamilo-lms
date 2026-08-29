@@ -814,6 +814,7 @@ final readonly class ExerciseAttemptScoringService
 
     private function isFillBlankStudentAnswerGood(string $studentAnswer, string $correctAnswer, bool $caseInsensitive): bool
     {
+        $studentAnswer = $this->trimFillBlankOption($studentAnswer);
         $normalizedStudentAnswer = $caseInsensitive ? mb_strtolower($studentAnswer) : $studentAnswer;
 
         if (str_contains($correctAnswer, '|') && !str_contains($correctAnswer, '||')) {

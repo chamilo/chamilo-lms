@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Traits\NonResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CForumThreadFeedback;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -13,6 +14,8 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class CForumThreadFeedbackRepository extends ServiceEntityRepository
 {
+    use NonResourceRepository;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CForumThreadFeedback::class);

@@ -28,6 +28,14 @@ use const DATE_ATOM;
 
 /**
  * @implements ProviderInterface<GradebookCertificateExpirations>
+ *
+ * Do not render Twig templates (e.g. via GradebookCertificateExpiryMailer) from this
+ * class. API Platform providers run during kernel.request, before TwigListener adds its
+ * globals on kernel.controller — rendering here locks the shared Twig environment first
+ * and makes TwigListener's later addGlobal() throw a LogicException, breaking the whole
+ * request (including its own error page). Twig rendering is safe from state *processors*
+ * (kernel.view, after TwigListener) — see GradebookCertificateActionProcessor's
+ * `preview_expiry` action for the certificate-expiry mailer preview.
  */
 final readonly class GradebookCertificateExpirationsProvider implements ProviderInterface
 {

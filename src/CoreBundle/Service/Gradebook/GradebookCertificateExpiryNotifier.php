@@ -72,8 +72,11 @@ final readonly class GradebookCertificateExpiryNotifier
             return ['sent' => false, 'reason' => 'invalid_email', 'type' => $type];
         }
 
-        $subject = $this->mailer->buildSubject($type);
-        $body = $this->mailer->renderBody($learner, $course, $category, $expiryDate, $type, $certificateUrl);
+        // Like any other internal notification, this is addressed to the learner and
+        // must read in their own language — not the current session's or the cron's.
+        $locale = $learner->getLocale();
+        $subject = $this->mailer->buildSubject($type, $locale);
+        $body = $this->mailer->renderBody($learner, $course, $category, $expiryDate, $type, $certificateUrl, $locale);
 
         try {
             $this->mailer->send($learner, $subject, $body);

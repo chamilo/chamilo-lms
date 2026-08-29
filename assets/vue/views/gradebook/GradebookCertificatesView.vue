@@ -216,11 +216,11 @@
 
       <Column :header="t('Actions')">
         <template #body="{ data }">
-          <div class="flex flex-wrap justify-end gap-1">
+          <div class="flex flex-wrap justify-start gap-1">
             <BaseButton
               v-if="data.certificate?.viewUrl"
               :label="t('View')"
-              icon="eye-on"
+              icon="preview"
               only-icon
               size="small"
               type="primary-text"

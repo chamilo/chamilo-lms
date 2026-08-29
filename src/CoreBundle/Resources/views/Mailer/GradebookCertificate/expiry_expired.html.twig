@@ -1,15 +1,16 @@
+{% set locale = locale is defined ? locale : 'en' %}
 <div id="email-message" style="padding-top:10px; padding-bottom:10px;">
-    <p>{{ 'Hello,'|trans }} {{ full_name }}</p>
-    <p>{{ 'Your certificate has expired:'|trans }}</p>
+    <p>{{ 'Hello, %s'|trans({'%s': full_name}, 'messages', locale) }}</p>
+    <p>{{ 'Your certificate has expired:'|trans({}, 'messages', locale) }}</p>
     <div style="border-color: #ebccd1; padding: 15px; background-color: #f2dede; margin-bottom: 15px; font-size: 16px; color:#a94442;">
         <p>
-            <strong>{{ 'Course'|trans }}: </strong>{{ course_title }}<br>
-            <strong>{{ 'Certificate'|trans }}: </strong>{{ category_title }}<br>
-            <strong>{{ 'Expiry date'|trans }}: </strong>{{ expiry_date }}
+            <strong>{{ 'Course'|trans({}, 'messages', locale) }}: </strong>{{ course_title }}<br>
+            <strong>{{ 'Certificate'|trans({}, 'messages', locale) }}: </strong>{{ category_title }}<br>
+            <strong>{{ 'Expiry date'|trans({}, 'messages', locale) }}: </strong>{{ expiry_date }}
         </p>
     </div>
 
     {% if certificate_url %}
-        <p><a style="font-weight: bold; color: #2BA6CB;" href="{{ certificate_url }}">{{ 'Online link to certificate'|trans }}</a></p>
+        <p><a style="font-weight: bold; color: #2BA6CB;" href="{{ certificate_url }}">{{ 'Online link to certificate'|trans({}, 'messages', locale) }}</a></p>
     {% endif %}
 </div>

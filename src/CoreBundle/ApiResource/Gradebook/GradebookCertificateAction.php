@@ -98,6 +98,17 @@ final class GradebookCertificateAction
     #[Groups(['gradebook_certificate_action:read'])]
     public string $message = '';
 
+    /**
+     * Populated by `preview_expiry` — the rendered reminder-email bodies with placeholder
+     * tokens instead of real learner data (a single send can target many learners, so
+     * there is no single set of real values to show).
+     */
+    #[Groups(['gradebook_certificate_action:read'])]
+    public string $previewExpired = '';
+
+    #[Groups(['gradebook_certificate_action:read'])]
+    public string $previewExpiring = '';
+
     public function getId(): string
     {
         return $this->id;

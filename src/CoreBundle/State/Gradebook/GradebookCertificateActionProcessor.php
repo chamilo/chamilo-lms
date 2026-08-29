@@ -14,7 +14,9 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Enums\CertificateExpiryNotificationType;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateExpiryMailer;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateExpiryNotifier;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
 use Chamilo\CoreBundle\Service\Gradebook\LegacyGradebookCertificateBridge;
@@ -48,6 +50,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
     private const ACTION_SET_TEMPLATE = 'set_template';
     private const ACTION_SET_EXPIRY_DATE = 'set_expiry_date';
     private const ACTION_NOTIFY_EXPIRY = 'notify_expiry';
+    private const ACTION_PREVIEW_EXPIRY = 'preview_expiry';
 
     private const MAX_NOTIFY_EXPIRY_RECIPIENTS = 500;
 
@@ -58,6 +61,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         private GradebookCertificateRepository $certificateRepository,
         private LegacyGradebookCertificateBridge $legacyCertificateBridge,
         private GradebookCertificateExpiryNotifier $expiryNotifier,
+        private GradebookCertificateExpiryMailer $expiryMailer,
         private EntityManagerInterface $entityManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private TranslatorInterface $translator,
@@ -97,6 +101,20 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             : $rootCategory;
 
         $action = strtolower(trim($data->action));
+
+        // Handled separately: it returns rendered HTML rather than an affected-count,
+        // and is a distinct GradebookCertificateAction response shape.
+        if (self::ACTION_PREVIEW_EXPIRY === $action) {
+            $response = new GradebookCertificateAction();
+            $response->action = $action;
+            $response->categoryId = (int) $category->getId();
+            $response->success = true;
+            $response->previewExpired = $this->expiryMailer->renderPreview(CertificateExpiryNotificationType::EXPIRED);
+            $response->previewExpiring = $this->expiryMailer->renderPreview(CertificateExpiryNotificationType::ABOUT_TO_EXPIRE);
+
+            return $response;
+        }
+
         $affected = match ($action) {
             self::ACTION_GENERATE_ALL => $this->generateAll($category, $resolved),
             self::ACTION_DELETE => $this->deleteOne($data, $category, $resolved),

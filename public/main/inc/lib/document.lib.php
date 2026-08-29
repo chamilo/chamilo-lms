@@ -1344,7 +1344,7 @@ class DocumentManager
 
         $expiryDateRaw = $info_grade_certificate['expiry_date'] ?? '';
         $expiryDate = !empty($expiryDateRaw)
-            ? api_convert_and_format_date($expiryDateRaw, DATE_FORMAT_LONG_NO_DAY)
+            ? api_format_date($expiryDateRaw, DATE_FORMAT_LONG, $course_info['language'])
             : get_lang('Never expires');
 
         // Replace content

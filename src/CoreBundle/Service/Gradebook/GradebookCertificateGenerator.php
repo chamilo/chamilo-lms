@@ -333,7 +333,7 @@ final readonly class GradebookCertificateGenerator
             '((date_certificate))' => $this->escape($issuedAt->format('Y-m-d H:i')),
             '((date_certificate_no_time))' => $this->escape($issuedAt->format('Y-m-d')),
             '((expiry_date))' => null !== $expiryDate
-                ? $this->escape($expiryDate->format('Y-m-d'))
+                ? $this->escape(api_format_date($expiryDate->format('Y-m-d'), DATE_FORMAT_LONG, $course->getCourseLanguage()))
                 : $this->escape($this->translator->trans('Never expires')),
             '((course_code))' => $this->escape((string) $course->getCode()),
             '((course_title))' => $this->escape((string) $course->getTitle()),

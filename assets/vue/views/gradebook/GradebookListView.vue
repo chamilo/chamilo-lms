@@ -537,7 +537,7 @@
                 <BaseButton
                   :disabled="categoryLockedForTeacher(data)"
                   :label="data.visible ? t('Hide') : t('Show')"
-                  :icon="data.visible ? 'eye-off' : 'eye-on'"
+                  :icon="data.visible ? 'eye-on' : 'eye-off'"
                   only-icon
                   size="small"
                   type="primary-text"
@@ -605,7 +605,7 @@
                 <BaseButton
                   :disabled="evaluationLockedForTeacher(data)"
                   :label="data.visible ? t('Hide') : t('Show')"
-                  :icon="data.visible ? 'eye-off' : 'eye-on'"
+                  :icon="data.visible ? 'eye-on' : 'eye-off'"
                   only-icon
                   size="small"
                   type="primary-text"
@@ -673,7 +673,7 @@
                 <BaseButton
                   :disabled="linkLockedForTeacher(data)"
                   :label="data.visible ? t('Hide') : t('Show')"
-                  :icon="data.visible ? 'eye-off' : 'eye-on'"
+                  :icon="data.visible ? 'eye-on' : 'eye-off'"
                   only-icon
                   size="small"
                   type="primary-text"

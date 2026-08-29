@@ -13,9 +13,11 @@ use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SystemTemplate;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
+use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookScoreCalculator;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -42,6 +44,7 @@ final readonly class GradebookCertificateGenerator
         private GradebookScoreCalculator $scoreCalculator,
         private GradebookCertificateRepository $certificateRepository,
         private CDocumentRepository $documentRepository,
+        private SystemTemplateRepository $systemTemplateRepository,
         private SettingsManager $settingsManager,
         private PluginHelper $pluginHelper,
         private GradebookSkillAwarder $skillAwarder,
@@ -213,6 +216,49 @@ final readonly class GradebookCertificateGenerator
     }
 
     /**
+     * @return array{id: int, title: string, system: bool, attachedDocumentId: int|null, fallback: bool}|null
+     */
+    public function getTemplateSummary(GradebookCategory $category): ?array
+    {
+        $document = $category->getDocument();
+        $attachedDocumentId = $document instanceof CDocument ? (int) $document->getIid() : null;
+
+        if ($document instanceof CDocument && null !== $this->getDocumentTemplateHtml($category, $document, false)) {
+            return [
+                'id' => (int) $document->getIid(),
+                'title' => $document->getTitle(),
+                'system' => false,
+                'attachedDocumentId' => (int) $document->getIid(),
+                'fallback' => false,
+            ];
+        }
+
+        $systemTemplate = $this->systemTemplateRepository->findDefaultCertificateTemplate();
+        if ($systemTemplate instanceof SystemTemplate && '' !== trim((string) $systemTemplate->getContent())) {
+            return [
+                'id' => 0,
+                'title' => $systemTemplate->getTitle(),
+                'system' => true,
+                'attachedDocumentId' => $attachedDocumentId,
+                'fallback' => null !== $attachedDocumentId,
+            ];
+        }
+
+        $fallback = $this->projectDir.'/public/main/gradebook/certificate_template/template.html';
+        if (!is_file($fallback)) {
+            return null;
+        }
+
+        return [
+            'id' => 0,
+            'title' => $this->translator->trans('Default certificate'),
+            'system' => true,
+            'attachedDocumentId' => $attachedDocumentId,
+            'fallback' => null !== $attachedDocumentId,
+        ];
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function normalizeCertificate(GradebookCertificate $certificate, bool $hideDownload): array
@@ -254,24 +300,18 @@ final readonly class GradebookCertificateGenerator
     private function getTemplateHtml(GradebookCategory $category): string
     {
         $document = $category->getDocument();
-        $resourceNode = $document?->getResourceNode();
-        if ($document instanceof CDocument && null !== $resourceNode) {
-            $editableHtml = trim((string) ($resourceNode->getContent() ?? ''));
-            if ('' !== $editableHtml) {
-                return $editableHtml;
+        if ($document instanceof CDocument) {
+            $documentHtml = $this->getDocumentTemplateHtml($category, $document);
+            if (null !== $documentHtml) {
+                return $documentHtml;
             }
+        }
 
-            try {
-                $html = $this->documentRepository->getResourceFileContent($document);
-                if ('' !== trim($html)) {
-                    return $html;
-                }
-            } catch (Throwable $exception) {
-                $this->logger->warning('Unable to read the Gradebook certificate document.', [
-                    'categoryId' => (int) $category->getId(),
-                    'documentId' => (int) $document->getIid(),
-                    'exception' => $exception,
-                ]);
+        $systemTemplate = $this->systemTemplateRepository->findDefaultCertificateTemplate();
+        if ($systemTemplate instanceof SystemTemplate) {
+            $content = trim((string) $systemTemplate->getContent());
+            if ('' !== $content) {
+                return $content;
             }
         }
 
@@ -286,6 +326,38 @@ final readonly class GradebookCertificateGenerator
         }
 
         return str_replace('{IMG_PATH}', '/main/gradebook/certificate_template/', $html);
+    }
+
+    private function getDocumentTemplateHtml(
+        GradebookCategory $category,
+        CDocument $document,
+        bool $logFailure = true,
+    ): ?string {
+        $resourceNode = $document->getResourceNode();
+        if (null === $resourceNode) {
+            return null;
+        }
+
+        $editableHtml = trim((string) ($resourceNode->getContent() ?? ''));
+        if ('' !== $editableHtml) {
+            return $editableHtml;
+        }
+
+        try {
+            $html = trim($this->documentRepository->getResourceFileContent($document));
+
+            return '' !== $html ? $html : null;
+        } catch (Throwable $exception) {
+            if ($logFailure) {
+                $this->logger->warning('Unable to read the Gradebook certificate document. The system template will be used.', [
+                    'categoryId' => (int) $category->getId(),
+                    'documentId' => (int) $document->getIid(),
+                    'exception' => $exception,
+                ]);
+            }
+
+            return null;
+        }
     }
 
     private function renderTemplate(

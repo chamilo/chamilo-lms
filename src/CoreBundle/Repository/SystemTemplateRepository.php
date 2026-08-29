@@ -17,6 +17,14 @@ class SystemTemplateRepository extends ServiceEntityRepository
         parent::__construct($registry, SystemTemplate::class);
     }
 
+    public function findDefaultCertificateTemplate(): ?SystemTemplate
+    {
+        return $this->findOneBy(
+            ['title' => SystemTemplate::DEFAULT_CERTIFICATE_TITLE],
+            ['id' => 'ASC'],
+        );
+    }
+
     public function findForLanguageFilter(array $languageCandidates): array
     {
         $normalizedCandidates = [];

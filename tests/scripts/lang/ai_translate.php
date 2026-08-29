@@ -49,6 +49,10 @@ if ($timeoutSeconds < 30) {
  *   the partially translated .po file is written so you can inspect it.
  * - --backup creates a .bak copy of each file before modifying it.
  *   Off by default (Git history serves as backup).
+ * - Terms the API returns unchanged (same as the English source) are recorded
+ *   in ai_translate_memory.json with a per-language hit count. After 3 hits
+ *   the term is skipped on later runs (not sent to the API). Delete an entry
+ *   or lower its count below 3 to retry. The file is gitignored.
  *
  * Notes:
  * - This script rewrites translation .po files (except the header entry),
@@ -69,6 +73,11 @@ $basePoFile = $translationsDir . "messages.{$sourceLanguageCode}.po";
 
 // Log file
 $logFile = __DIR__ . "/grok_translate.log";
+
+// Per-language memory of terms the API keeps returning in English.
+// After $untranslatedSkipThreshold identical hits, the term is skipped.
+$memoryFile = __DIR__.'/ai_translate_memory.json';
+$untranslatedSkipThreshold = 3;
 
 // Batch size for API calls (10 was a workaround for grok-4.6 high-reasoning timeouts)
 $batchSize = (int) ($translationBatchSize ?? 50);
@@ -533,6 +542,153 @@ function needsTranslationUpdate(string $msgid, string $msgstr, string $targetLan
 }
 
 /**
+ * Normalize a string for "same as English source" comparison.
+ */
+function normalizeForIdentity(string $s): string {
+    $s = poUnescape($s);
+    $s = preg_replace('/\s+/u', ' ', $s);
+
+    return mb_strtolower(trim((string) $s));
+}
+
+/**
+ * True when the API result is the same text as the English source.
+ */
+function translationEqualsSource(string $msgid, string $translation): bool {
+    $src = normalizeForIdentity($msgid);
+    $tgt = normalizeForIdentity($translation);
+
+    return $src !== '' && $src === $tgt;
+}
+
+/**
+ * Load ai_translate_memory.json.
+ *
+ * Shape:
+ * {
+ *   "_comment": "...",
+ *   "fr_FR": { "Some English term": 3 }
+ * }
+ *
+ * @return array<string, array<string, int>>
+ */
+function loadTranslationMemory(string $path): array {
+    if (!is_file($path)) {
+        return [];
+    }
+
+    $raw = file_get_contents($path);
+    if ($raw === false || trim($raw) === '') {
+        return [];
+    }
+
+    $data = json_decode($raw, true);
+    if (!is_array($data)) {
+        eprintln("Warning: Could not parse translation memory file {$path}; starting empty.");
+
+        return [];
+    }
+
+    $out = [];
+    foreach ($data as $lang => $terms) {
+        if (!is_string($lang) || $lang === '' || $lang[0] === '_') {
+            continue;
+        }
+        if (!is_array($terms)) {
+            continue;
+        }
+        foreach ($terms as $term => $count) {
+            // json_decode turns purely numeric keys into ints
+            $term = (string) $term;
+            if ($term === '') {
+                continue;
+            }
+            $out[$lang][$term] = (int) $count;
+        }
+    }
+
+    return $out;
+}
+
+/**
+ * Write ai_translate_memory.json (pretty-printed, atomic replace).
+ *
+ * @param array<string, array<string, int>> $memory
+ */
+function saveTranslationMemory(string $path, array $memory): void {
+    ksort($memory);
+    foreach ($memory as &$terms) {
+        if (is_array($terms)) {
+            ksort($terms);
+        }
+    }
+    unset($terms);
+
+    $payload = [
+        '_comment' => 'Terms the translator returned unchanged (same as English). Count increments per identical API result. After 3 hits the term is skipped on later runs. Delete a term (or set its count below 3) to retry it.',
+    ] + $memory;
+
+    $json = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if ($json === false) {
+        eprintln('Warning: Failed to encode translation memory as JSON.');
+
+        return;
+    }
+
+    $tmp = $path.'.tmp';
+    if (file_put_contents($tmp, $json."\n") === false) {
+        eprintln("Warning: Failed to write translation memory file: {$tmp}");
+
+        return;
+    }
+
+    if (!rename($tmp, $path)) {
+        if (!copy($tmp, $path)) {
+            eprintln("Warning: Failed to replace translation memory file: {$path}");
+        }
+        @unlink($tmp);
+    }
+}
+
+/**
+ * @param array<string, array<string, int>> $memory
+ */
+function isIgnoredByTranslationMemory(array $memory, string $lang, string $msgid, int $threshold): bool {
+    return ((int) ($memory[$lang][$msgid] ?? 0)) >= $threshold;
+}
+
+/**
+ * @param array<string, array<string, int>> $memory
+ */
+function recordUntranslatedIdentity(array &$memory, string $lang, string $msgid): int {
+    if (!isset($memory[$lang]) || !is_array($memory[$lang])) {
+        $memory[$lang] = [];
+    }
+    $current = (int) ($memory[$lang][$msgid] ?? 0);
+    ++$current;
+    $memory[$lang][$msgid] = $current;
+
+    return $current;
+}
+
+/**
+ * Drop a term from memory after a real (non-identical) translation arrives.
+ *
+ * @param array<string, array<string, int>> $memory
+ */
+function clearUntranslatedIdentity(array &$memory, string $lang, string $msgid): bool {
+    if (!isset($memory[$lang][$msgid])) {
+        return false;
+    }
+    unset($memory[$lang][$msgid]);
+    if ($memory[$lang] === []) {
+        unset($memory[$lang]);
+    }
+
+    return true;
+}
+
+/**
  * Append line to log file.
  */
 function logAction(string $logFile, string $lang, string $msgid, string $action): void {
@@ -939,6 +1095,22 @@ $baseEntries = parseBasePoFile($basePoFile);
 $totalTerms = count($baseEntries);
 eprintln("Base entries loaded: {$totalTerms} (including header and plurals).", true);
 
+$translationMemory = loadTranslationMemory($memoryFile);
+$memoryIgnoredTotal = 0;
+foreach ($translationMemory as $memTerms) {
+    foreach ($memTerms as $memCount) {
+        if ((int) $memCount >= $untranslatedSkipThreshold) {
+            ++$memoryIgnoredTotal;
+        }
+    }
+}
+$memoryLangCount = count($translationMemory);
+eprintln(
+    "Translation memory: {$memoryFile} ({$memoryLangCount} language(s), "
+    ."{$memoryIgnoredTotal} term(s) at or above skip threshold {$untranslatedSkipThreshold}).",
+    true
+);
+
 foreach ($langCodes as $lang) {
     $lang = trim($lang);
     if ($lang === '') {
@@ -979,6 +1151,7 @@ foreach ($langCodes as $lang) {
 
     $pendingBatch = [];
     $pendingMap = []; // id => ['msgid'=>..., 'action'=>...]
+    $skippedByMemory = 0;
 
     $entryIndex = 0;
 
@@ -999,9 +1172,11 @@ foreach ($langCodes as $lang) {
     $writeCurrentState = function (?Throwable $error = null) use (
         &$targetTranslations,
         &$keepRawSingular,
+        &$translationMemory,
         $baseEntries,
         $targetParsed,
         $targetFile,
+        $memoryFile,
         $lang
     ) {
         $newContent = buildTargetPoContent($baseEntries, $targetParsed, $targetTranslations, $keepRawSingular);
@@ -1009,6 +1184,8 @@ foreach ($langCodes as $lang) {
             eprintln("[{$lang}] WARNING: Failed to write partial file!", true);
             return;
         }
+
+        saveTranslationMemory($memoryFile, $translationMemory);
 
         if ($error !== null) {
             eprintln("[{$lang}] Partial translation file successfully written after error: ".$error->getMessage(), true);
@@ -1023,6 +1200,7 @@ foreach ($langCodes as $lang) {
         &$apiBatchCount,
         &$targetTranslations,
         &$keepRawSingular,
+        &$translationMemory,
         $existingSingular,
         $logFile,
         $lang,
@@ -1032,6 +1210,8 @@ foreach ($langCodes as $lang) {
         $model,
         $timeoutSeconds,
         $reasoningEffort,
+        $memoryFile,
+        $untranslatedSkipThreshold,
         $logProgress
     ): void {
         if (empty($pendingBatch)) {
@@ -1068,6 +1248,7 @@ foreach ($langCodes as $lang) {
         }
 
         if ($batchSuccess) {
+            $memoryDirty = false;
             foreach ($pendingBatch as $item) {
                 $id = $item['id'];
                 $msgidBatch = $pendingMap[$id]['msgid'];
@@ -1079,10 +1260,22 @@ foreach ($langCodes as $lang) {
                     if (isset($existingSingular[$msgidBatch])) {
                         $keepRawSingular[$msgidBatch] = true;
                     }
+                } elseif (translationEqualsSource($msgidBatch, $translated)) {
+                    $hitCount = recordUntranslatedIdentity($translationMemory, $lang, $msgidBatch);
+                    $memoryDirty = true;
+                    $actionBatch .= ' – same as English ('.$hitCount.'/'.$untranslatedSkipThreshold.')';
+                    if ($hitCount >= $untranslatedSkipThreshold) {
+                        $actionBatch .= ', will skip next runs';
+                    }
+                } elseif (clearUntranslatedIdentity($translationMemory, $lang, $msgidBatch)) {
+                    $memoryDirty = true;
                 }
 
                 $targetTranslations[$msgidBatch] = $translated;
                 logAction($logFile, $lang, $msgidBatch, $actionBatch);
+            }
+            if ($memoryDirty) {
+                saveTranslationMemory($memoryFile, $translationMemory);
             }
             sleep(1);
         } else {
@@ -1135,6 +1328,24 @@ foreach ($langCodes as $lang) {
                 }
             }
 
+            if ($needsTranslation && isIgnoredByTranslationMemory(
+                $translationMemory,
+                $lang,
+                $msgid,
+                $untranslatedSkipThreshold
+            )) {
+                $needsTranslation = false;
+                ++$skippedByMemory;
+                if ($existing !== '') {
+                    $targetTranslations[$msgid] = $existing;
+                    $keepRawSingular[$msgid] = true;
+                } else {
+                    $targetTranslations[$msgid] = $msgid;
+                }
+                $action = 'ignored (untranslatable memory)';
+                logAction($logFile, $lang, $msgid, $action);
+            }
+
             if ($needsTranslation && $apiBatchCount < $maxBatches) {
                 $localId = count($pendingBatch);
                 $pendingBatch[] = [
@@ -1173,6 +1384,12 @@ foreach ($langCodes as $lang) {
 
         // Final write on success
         $writeCurrentState();
+        if ($skippedByMemory > 0) {
+            eprintln(
+                "[{$lang}] Skipped {$skippedByMemory} term(s) already marked untranslatable in memory.",
+                true
+            );
+        }
         eprintln("[{$lang}] Translation completed and file written successfully.", true);
 
     } catch (Throwable $fatal) {

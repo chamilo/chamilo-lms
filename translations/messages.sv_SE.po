@@ -8640,7 +8640,7 @@ msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y kl. %I:%M %p"
 
 msgid "%I:%M %p"
-msgstr "%I:%M %p"
+msgstr "%H:%M"
 
 msgid "Yes"
 msgstr "ja"
@@ -38508,6 +38508,12 @@ msgstr "Fyll i luckor"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Använd de valda markörerna för att definiera luckor. Exempel: Perus huvudstad är [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "För att göra ett tomt fält till en rullgardinsmeny, separera valen med ett enda |, där det första är det rätta svaret. Exempel: Perus huvudstad är [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "För att tillåta flera rätta svar, separera dem med ||. Exempel: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Ange rullgardinsalternativen, ett svar per rad. Markera sedan de förväntade svaren nedan, som i det äldre verktyget."
 
@@ -39857,4 +39863,7 @@ msgstr "Meddelande om utgånget: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Meddelande om utgång: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Aviseringar skickas till användare på deras eget konfigurerade språk."
 

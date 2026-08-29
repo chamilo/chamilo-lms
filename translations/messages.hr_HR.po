@@ -26969,7 +26969,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "X-Content-Type-Options sprječava preglednik da pokušava MIME-sniffati tip sadržaja i prisiljava ga da se drži deklariranog content-typea. Jedina valjana vrijednost za ovaj header je 'nosniff'."
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Sigurnosna Referrer politika"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Referrer Policy je novi header koji omogućuje stranici kontrolu koliko informacija preglednik uključuje s navigacijom izvan dokumenta i trebao bi ga postaviti svaki site."
@@ -38507,6 +38507,12 @@ msgstr "Ispunjavanje praznina"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Koristite odabrane oznake za definiranje praznina. Primjer: Glavni grad Perua je [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Da biste prazninu pretvorili u padajući izbornik, odvojite izbore jednim znakom |, pri čemu je prvi točan odgovor. Primjer: Glavni grad Perua je [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Da biste omogućili više točnih odgovora, odvojite ih s ||. Primjer: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Unesite mogućnosti padajućeg izbornika, jedan odgovor po retku. Zatim označite očekivane odgovore ispod, kao u starom alatu."
 
@@ -39856,4 +39862,7 @@ msgstr "Obavijest o isteku: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Obavijest o predstojećem isteku: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Obavijesti se šalju korisnicima na njihovom konfiguriranom jeziku."
 

@@ -38508,6 +38508,12 @@ msgstr "Rellenar blancos"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Usa los marcadores seleicionaos pa definir blancos. Exemplu: La capital de Perú ye [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Pa convertir un blancu nun menú desplegable, separe les opciones con un solu |, siendo la primera la respuesta correuta. Exemplu: La capital de Perú ye [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Pa permitir delles respuestes correutes, separeles con ||. Exemplu: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Introduz les opciones del desplegable, una rempuesta per llinia. Depués marca les rempuestes esperaes embaxo, como na ferramienta heredada."
 
@@ -39857,4 +39863,7 @@ msgstr "Avisu de caducáu: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Avisu de caducidá: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Les notificaciones únviase a los usuarios nel so propiu idioma configuráu."
 

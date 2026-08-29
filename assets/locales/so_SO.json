@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Dhacay: {0}",
     "Expiring soon: {0}": "Dhawaan dhacaya: {0}",
     "Expired notice: {0}": "Ogeysiis dhacay: {0}",
-    "Expiring notice: {0}": "Ogeysiis dhacaya: {0}"
+    "Expiring notice: {0}": "Ogeysiis dhacaya: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Si aad u beddesho meel bannaan liis hoos u dhac ah, kala saar doorashooyinka {'|'} keliya, kan ugu horreeya waa jawaabta saxda ah. Tusaale: Caasimadda Peru waa [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Si aad u oggolaato dhowr jawaabood oo sax ah, kala saar {'|'}{'|'}. Tusaale: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Ogeysiisyada waxaa loo diraa isticmaalayaasha luqadda ay iyagu u habeeyeen."
 }

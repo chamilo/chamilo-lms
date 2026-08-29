@@ -24765,7 +24765,7 @@ msgid "*: Current quarter, incomplete data"
 msgstr "*: 本季，資料不完整"
 
 msgid "Q%s %s"
-msgstr "Q%s %s"
+msgstr "第%s題 %s"
 
 msgid "YoY"
 msgstr "年比年"
@@ -38508,6 +38508,12 @@ msgstr "填空"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "使用所選標記定義空格。範例：秘魯的首都是 [利馬]。"
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "若要將空白轉為下拉選單，請以單一 | 分隔選項，第一個為正確答案。範例：秘魯的首都是 [Lima|Paris|Bogota]。"
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "若要允許多個正確答案，請以 || 分隔。範例：1||one||uno。"
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "請輸入下拉選單選項，每行一個答案。然後在下方標記正確答案，與舊版工具相同。"
 
@@ -39857,4 +39863,7 @@ msgstr "已過期通知：%s"
 
 msgid "Expiring notice: %s"
 msgstr "即將到期通知：%s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "通知會以使用者自行設定的語言傳送給使用者。"
 

@@ -38506,6 +38506,12 @@ msgstr "Լրացնել դատարկ տեղերը"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Օգտագործեք ընտրված նշիչները՝ դատարկ տեղերը սահմանելու համար։ Օրինակ՝ Պերուի մայրաքաղաքը [Լիմա] է։"
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Դատարկ դաշտը բացվող ցանկի վերածելու համար ընտրանքները բաժանեք մեկ | նշանով, առաջինը ճիշտ պատասխանն է։ Օրինակ՝ Պերուի մայրաքաղաքը [Lima|Paris|Bogota] է։"
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Մի քանի ճիշտ պատասխան թույլատրելու համար դրանք բաժանեք || նշանով։ Օրինակ՝ 1||one||uno։"
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Մուտքագրեք բացվող ընտրացանկի տարբերակները՝ յուրաքանչյուր պատասխանը առանձին տողով։ Այնուհետև նշեք սպասվող պատասխանները ստորև, ինչպես հին գործիքում։"
 
@@ -39855,4 +39861,7 @@ msgstr "Ժամկետանց ծանուցում՝ %s"
 
 msgid "Expiring notice: %s"
 msgstr "Ժամկետի ավարտի ծանուցում՝ %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Ծանուցումները օգտատերերին ուղարկվում են նրանց կարգավորված լեզվով։"
 

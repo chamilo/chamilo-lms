@@ -2020,7 +2020,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ya:hak-cipta,, tidak:tidak ber-hak-cipta"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Folder,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:latihan,,      simulation:simulasi,,      questionnaire:kuesioner,,      diagram:diagram,,      figure:gambar,,      graph:grafik,,      index:indeks,,      slide:slide,,      table:tabel,,      narrative text:teks naratif,,      exam:ujian,,      experiment:eksperimen,,      problem statement:pernyataan masalah,,      self assessment:penilaian diri,,      lecture:kuliah"
@@ -4639,7 +4639,7 @@ msgid "Invalid end date was given."
 msgstr "Tanggal selesai tidak sah."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d\/m\/y h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "File-Homepage tidak dapat ditulisi!"
@@ -26656,7 +26656,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurasi koneksi LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array yang mendefinisikan host dan port untuk server LDAP.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array yang mendefinisikan host dan port untuk server LDAP.<br><pre> ['host' => '', 'port' => ''] <\/pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Atur tanggal kedaluwarsa pada login pertama"
@@ -38506,6 +38506,12 @@ msgstr "Isi bagian kosong"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Gunakan penanda yang dipilih untuk menentukan bagian kosong. Contoh: Ibu kota Peru adalah [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Untuk mengubah isian kosong menjadi menu tarik-turun, pisahkan pilihan dengan satu |, yang pertama adalah jawaban yang benar. Contoh: Ibu kota Peru adalah [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Untuk mengizinkan beberapa jawaban benar, pisahkan dengan ||. Contoh: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Masukkan opsi dropdown, satu jawaban per baris. Kemudian tandai jawaban yang diharapkan di bawah, seperti alat lama."
 
@@ -39855,4 +39861,7 @@ msgstr "Pemberitahuan kedaluwarsa: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Pemberitahuan akan kedaluwarsa: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Notifikasi dikirim kepada pengguna dalam bahasa yang mereka atur."
 

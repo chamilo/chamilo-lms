@@ -3891,5 +3891,8 @@
     "Expired: {0}": "\u00datgongt: {0}",
     "Expiring soon: {0}": "Ganga \u00fat skj\u00f3tt: {0}",
     "Expired notice: {0}": "Bo\u00f0 um \u00fatgongd: {0}",
-    "Expiring notice: {0}": "Bo\u00f0 um at ganga \u00fat: {0}"
+    "Expiring notice: {0}": "Bo\u00f0 um at ganga \u00fat: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Fyri at gera eitt t\u00f3mt felt til eitt fellilista, skilja valini vi\u00f0 einum {'|'}, har ta\u00f0 fyrsta er r\u00e6tta svari\u00f0. D\u00f8mi: H\u00f8vu\u00f0ssta\u00f0urin \u00ed Peru er [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Fyri at loyva fleiri r\u00f8ttum sv\u00f8rum, skilja tey vi\u00f0 {'|'}{'|'}. D\u00f8mi: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Bo\u00f0 ver\u00f0a send br\u00fakarum \u00e1 teirra egna stilla\u00f0a m\u00e1li."
 }

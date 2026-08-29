@@ -38506,6 +38506,12 @@ msgstr "காலியிடங்களை நிரப்பவும்"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "காலியிடங்களை வரையறுக்கத் தேர்ந்தெடுக்கப்பட்ட குறிப்பான்களைப் பயன்படுத்தவும். எடுத்துக்காட்டு: பெருவின் தலைநகரம் [லிமா]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "ஒரு வெற்றிடத்தை கீழ்தோன்றும் பட்டியலாக மாற்ற, தேர்வுகளை ஒற்றை | கொண்டு பிரிக்கவும்; முதலாவது சரியான விடை. எடுத்துக்காட்டு: பெருவின் தலைநகரம் [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "பல சரியான விடைகளை அனுமதிக்க, அவற்றை || கொண்டு பிரிக்கவும். எடுத்துக்காட்டு: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "கீழ்தோன்றல் விருப்பங்களை உள்ளிடவும், ஒரு வரிக்கு ஒரு பதில். பின்னர் எதிர்பார்க்கப்படும் பதில்களை கீழே குறிக்கவும், மரபு கருவியைப் போல."
 
@@ -39855,4 +39861,7 @@ msgstr "காலாவதியான அறிவிப்பு: %s"
 
 msgid "Expiring notice: %s"
 msgstr "காலாவதியாகும் அறிவிப்பு: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "அறிவிப்புகள் பயனர்களுக்கு அவர்கள் அமைத்துள்ள மொழியில் அனுப்பப்படும்."
 

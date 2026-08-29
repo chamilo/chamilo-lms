@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "בכנות"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "דוגמת נוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "דוגמת נוסחה: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "טווחים משתנים"
@@ -38519,6 +38519,12 @@ msgstr "מלא חסרים"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "השתמש בסמנים שנבחרו להגדרת חסרים. דוגמה: בירת פרו היא [לימה]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "כדי להפוך שדה ריק לתפריט נפתח, הפרד את האפשרויות בסימן | בודד, כאשר הראשונה היא התשובה הנכונה. דוגמה: The capital of Peru is [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "כדי לאפשר מספר תשובות נכונות, הפרד אותן בסימן ||. דוגמה: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "הזן את אפשרויות התפריט הנשלף, תשובה אחת בכל שורה. לאחר מכן סמן את התשובות הצפויות למטה, כמו בכלי הישן."
 
@@ -39868,4 +39874,7 @@ msgstr "הודעת תפוגה: %s"
 
 msgid "Expiring notice: %s"
 msgstr "הודעת פקיעה קרובה: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "ההתראות נשלחות למשתמשים בשפה שהוגדרה עבורם."
 

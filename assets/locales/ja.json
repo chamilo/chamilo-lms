@@ -3891,5 +3891,8 @@
     "Expired: {0}": "\u671f\u9650\u5207\u308c: {0}",
     "Expiring soon: {0}": "\u307e\u3082\u306a\u304f\u671f\u9650\u5207\u308c: {0}",
     "Expired notice: {0}": "\u671f\u9650\u5207\u308c\u901a\u77e5: {0}",
-    "Expiring notice: {0}": "\u671f\u9650\u5207\u308c\u9593\u8fd1\u306e\u901a\u77e5: {0}"
+    "Expiring notice: {0}": "\u671f\u9650\u5207\u308c\u9593\u8fd1\u306e\u901a\u77e5: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "\u7a7a\u6b04\u3092\u30c9\u30ed\u30c3\u30d7\u30c0\u30a6\u30f3\u30e1\u30cb\u30e5\u30fc\u306b\u3059\u308b\u306b\u306f\u3001\u9078\u629e\u80a2\u30921\u3064\u306e {'|'} \u3067\u533a\u5207\u308a\u307e\u3059\u3002\u6700\u521d\u306e\u3082\u306e\u304c\u6b63\u89e3\u3067\u3059\u3002\u4f8b: The capital of Peru is [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "\u8907\u6570\u306e\u6b63\u89e3\u3092\u8a31\u53ef\u3059\u308b\u306b\u306f\u3001{'|'}{'|'} \u3067\u533a\u5207\u308a\u307e\u3059\u3002\u4f8b: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "\u901a\u77e5\u306f\u3001\u5404\u30e6\u30fc\u30b6\u30fc\u304c\u8a2d\u5b9a\u3057\u305f\u8a00\u8a9e\u3067\u9001\u4fe1\u3055\u308c\u307e\u3059\u3002"
 }

@@ -3891,5 +3891,8 @@
     "Expired: {0}": "\u0110\u00e3 h\u1ebft h\u1ea1n: {0}",
     "Expiring soon: {0}": "S\u1eafp h\u1ebft h\u1ea1n: {0}",
     "Expired notice: {0}": "Th\u00f4ng b\u00e1o h\u1ebft h\u1ea1n: {0}",
-    "Expiring notice: {0}": "Th\u00f4ng b\u00e1o s\u1eafp h\u1ebft h\u1ea1n: {0}"
+    "Expiring notice: {0}": "Th\u00f4ng b\u00e1o s\u1eafp h\u1ebft h\u1ea1n: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "\u0110\u1ec3 bi\u1ebfn ch\u1ed7 tr\u1ed1ng th\u00e0nh menu th\u1ea3 xu\u1ed1ng, h\u00e3y ph\u00e2n t\u00e1ch c\u00e1c l\u1ef1a ch\u1ecdn b\u1eb1ng m\u1ed9t d\u1ea5u {'|'}, l\u1ef1a ch\u1ecdn \u0111\u1ea7u ti\u00ean l\u00e0 \u0111\u00e1p \u00e1n \u0111\u00fang. V\u00ed d\u1ee5: Th\u1ee7 \u0111\u00f4 c\u1ee7a Peru l\u00e0 [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "\u0110\u1ec3 cho ph\u00e9p nhi\u1ec1u \u0111\u00e1p \u00e1n \u0111\u00fang, h\u00e3y ph\u00e2n t\u00e1ch ch\u00fang b\u1eb1ng {'|'}{'|'}. V\u00ed d\u1ee5: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Th\u00f4ng b\u00e1o \u0111\u01b0\u1ee3c g\u1eedi \u0111\u1ebfn ng\u01b0\u1eddi d\u00f9ng b\u1eb1ng ng\u00f4n ng\u1eef h\u1ecd \u0111\u00e3 c\u1ea5u h\u00ecnh."
 }

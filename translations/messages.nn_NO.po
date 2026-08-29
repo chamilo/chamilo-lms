@@ -38506,6 +38506,12 @@ msgstr "Fyll inn tomrom"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Bruk dei valde markørane til å definere tomrom. Eksempel: Hovudstaden i Peru er [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "For å gjere eit tomt felt om til ei nedtrekksmeny, skil vala med ein enkelt |, der det første er det rette svaret. Døme: Hovudstaden i Peru er [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "For å tillate fleire rette svar, skil dei med ||. Døme: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Skriv inn nedtrekksvala, eitt svar per linje. Merk så dei forventa svara nedanfor, som i det gamle verktøyet."
 
@@ -39855,4 +39861,7 @@ msgstr "Varsel om utløpt: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Varsel om utløp: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Varslingar vert sende til brukarane på det språket dei har sett opp."
 

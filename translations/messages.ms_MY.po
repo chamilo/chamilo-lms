@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Sekiranya ini"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Julat pembolehubah"
@@ -31958,7 +31958,7 @@ msgid "View badge"
 msgstr "Lihat lencana"
 
 msgid "%d min"
-msgstr "%d min"
+msgstr "%d minit"
 
 msgid "Duration in minutes"
 msgstr "Tempoh dalam minit"
@@ -33305,7 +33305,7 @@ msgid "Received"
 msgstr "Diterima"
 
 msgid "%s min"
-msgstr "%s min"
+msgstr "%s minit"
 
 msgid "Unlock column"
 msgstr "Buka kunci lajur"
@@ -38506,6 +38506,12 @@ msgstr "Isi tempat kosong"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Gunakan penanda yang dipilih untuk menentukan ruang kosong. Contoh: Ibu negara Peru ialah [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Untuk menukar ruang kosong kepada menu lungsur, asingkan pilihan dengan satu |, yang pertama ialah jawapan yang betul. Contoh: Ibu negara Peru ialah [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Untuk membenarkan beberapa jawapan yang betul, asingkannya dengan ||. Contoh: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Masukkan pilihan dropdown, satu jawapan setiap baris. Kemudian tandakan jawapan yang dijangka di bawah, seperti alat warisan."
 
@@ -39855,4 +39861,7 @@ msgstr "Notis luput: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Notis akan luput: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Pemberitahuan dihantar kepada pengguna dalam bahasa yang dikonfigurasikan sendiri."
 

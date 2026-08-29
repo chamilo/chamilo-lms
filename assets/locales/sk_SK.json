@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Expirovan\u00e9: {0}",
     "Expiring soon: {0}": "\u010coskoro expiruje: {0}",
     "Expired notice: {0}": "Ozn\u00e1menie o expir\u00e1ci\u00ed: {0}",
-    "Expiring notice: {0}": "Ozn\u00e1menie o bl\u00edzkej expir\u00e1ci\u00ed: {0}"
+    "Expiring notice: {0}": "Ozn\u00e1menie o bl\u00edzkej expir\u00e1ci\u00ed: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Ak chcete z pr\u00e1zdneho po\u013ea urobi\u0165 rozba\u013eovaciu ponuku, odde\u013ete mo\u017enosti jedn\u00fdm znakom {'|'}, pri\u010dom prv\u00e1 je spr\u00e1vna odpove\u010f. Pr\u00edklad: Hlavn\u00e9 mesto Peru je [Lima{'|'}Par\u00ed\u017e{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Ak chcete povoli\u0165 viacero spr\u00e1vnych odpoved\u00ed, odde\u013ete ich znakmi {'|'}{'|'}. Pr\u00edklad: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Ozn\u00e1menia sa pou\u017e\u00edvate\u013eom odosielaj\u00fa v ich nastavenom jazyku."
 }

@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "С уважением"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример формулы: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример формулы: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазоны переменных"
@@ -38509,6 +38509,12 @@ msgstr "Заполнить пропуски"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Используйте выбранные маркеры для обозначения пропусков. Пример: Столица Перу — [Лима]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Чтобы превратить пропуск в выпадающее меню, разделите варианты одним символом |, первый из них — правильный ответ. Пример: Столица Перу — [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Чтобы разрешить несколько правильных ответов, разделите их с помощью ||. Пример: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Введите варианты для выпадающего списка, по одному ответу в строке. Затем отметьте правильные ответы ниже, как в прежнем инструменте."
 
@@ -39858,4 +39864,7 @@ msgstr "Уведомление об истечении: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Уведомление о скором истечении: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Уведомления отправляются пользователям на выбранном ими языке."
 

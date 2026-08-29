@@ -38502,6 +38502,12 @@ msgstr "ცარიელი ადგილების შევსება"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "გამოიყენეთ არჩეული მარკერები ცარიელი ადგილების განსაზღვრისთვის. მაგალითი: პერუს დედაქალაქია [ლიმა]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "ცარიელი ადგილის ჩამოსაშლელ მენიუდ გადასაქცევად, არჩევანები გამოყავით ერთი | სიმბოლოთი; პირველი არის სწორი პასუხი. მაგალითი: პერუს დედაქალაქია [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "რამდენიმე სწორი პასუხის დასაშვებად, გამოყავით ისინი || სიმბოლოებით. მაგალითი: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "შეიყვანეთ ჩამოსაშლელი ვარიანტები, ერთი პასუხი თითო ხაზზე. შემდეგ მონიშნეთ მოსალოდნელი პასუხები ქვემოთ, როგორც ძველ ინსტრუმენტში."
 
@@ -39851,4 +39857,7 @@ msgstr "ვადაგასულის შეტყობინება: %s"
 
 msgid "Expiring notice: %s"
 msgstr "ვადის ამოწურვის შეტყობინება: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "შეტყობინებები იგზავნება მომხმარებლებთან მათ მიერ კონფიგურირებულ ენაზე."
 

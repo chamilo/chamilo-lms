@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med venlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formelprøve: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel-eksempel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervaller"
@@ -14454,7 +14454,7 @@ msgid "Compose"
 msgstr "Skriv"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Babyorange"
 
 msgid "Blue lagoon"
 msgstr "Blå lagune"
@@ -38508,6 +38508,12 @@ msgstr "Udfyld felter"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Brug de valgte markører til at definere felter. Eksempel: Perus hovedstad er [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "For at omdanne et tomt felt til en rullemenu skal du adskille valgene med et enkelt |, hvor det første er det korrekte svar. Eksempel: Perus hovedstad er [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "For at tillade flere korrekte svar skal du adskille dem med ||. Eksempel: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Indtast rulleliste-mulighederne, ét svar pr. linje. Markér derefter de forventede svar nedenfor, som i det gamle værktøj."
 
@@ -39857,4 +39863,7 @@ msgstr "Meddelelse om udløb: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Meddelelse om forestående udløb: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Notifikationer sendes til brugere på deres eget konfigurerede sprog."
 

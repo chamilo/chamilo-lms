@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Cordial"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de formulă: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu de formulă: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Domenii de variabile"
@@ -8649,7 +8649,7 @@ msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y la %I:%M %p"
 
 msgid "%I:%M %p"
-msgstr "%I:%M %p"
+msgstr "%H:%M"
 
 msgid "Yes"
 msgstr "Da"
@@ -38522,6 +38522,12 @@ msgstr "Completare spații libere"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Utilizați marcatorii selectați pentru a defini spațiile libere. Exemplu: Capitala Peru este [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Pentru a transforma un spațiu gol într-un meniu derulant, separați opțiunile cu un singur |, prima fiind răspunsul corect. Exemplu: Capitala Peruului este [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Pentru a permite mai multe răspunsuri corecte, separați-le cu ||. Exemplu: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Introduceți opțiunile dropdown, câte un răspuns pe linie. Apoi marcați răspunsurile așteptate mai jos, similar instrumentului legacy."
 
@@ -39871,4 +39877,7 @@ msgstr "Notificare de expirare: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Notificare de expirare iminentă: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Notificările sunt trimise utilizatorilor în limba configurată de aceștia."
 

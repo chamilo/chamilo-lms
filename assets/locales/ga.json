@@ -3891,5 +3891,8 @@
     "Expired: {0}": "\u00c9agtha: {0}",
     "Expiring soon: {0}": "Ag dul in \u00e9ag go luath: {0}",
     "Expired notice: {0}": "F\u00f3gra \u00e9agtha: {0}",
-    "Expiring notice: {0}": "F\u00f3gra ag dul in \u00e9ag: {0}"
+    "Expiring notice: {0}": "F\u00f3gra ag dul in \u00e9ag: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Chun sp\u00e1s b\u00e1n a iomp\u00fa ina roghchl\u00e1r anuas, scar na roghanna le {'|'} amh\u00e1in, an ch\u00e9ad cheann mar an freagra ceart. Sampla: Pr\u00edomhchathair na Peiri\u00fa is ea [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Chun roinnt freagra\u00ed cearta a chead\u00fa, scar iad le {'|'}{'|'}. Sampla: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Seoltar f\u00f3gra\u00ed chuig \u00fas\u00e1ideoir\u00ed ina dteanga f\u00e9in at\u00e1 cumraithe."
 }

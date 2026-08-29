@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ukážka vzorca: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukážka vzorca: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -25141,7 +25141,7 @@ msgid "The update failed for the following courses"
 msgstr "Aktualizácia zlyhala pre nasledujúce kurzy"
 
 msgid "%02d h %02d m %02d s"
-msgstr "%02d h %02d m %02d s"
+msgstr "%02d h %02d min %02d s"
 
 msgid "User management"
 msgstr "Správa používateľov"
@@ -38521,6 +38521,12 @@ msgstr "Vyplniť medzery"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Pomocou vybraných značiek definujte medzery. Príklad: Hlavné mesto Peru je [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Ak chcete z prázdneho poľa urobiť rozbaľovaciu ponuku, oddeľte možnosti jedným znakom |, pričom prvá je správna odpoveď. Príklad: Hlavné mesto Peru je [Lima|Paríž|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Ak chcete povoliť viacero správnych odpovedí, oddeľte ich znakmi ||. Príklad: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Zadajte možnosti rozbaľovacieho zoznamu, jednu odpoveď na riadok. Potom označte očakávané odpovede nižšie, ako v pôvodnom nástroji."
 
@@ -39870,4 +39876,7 @@ msgstr "Oznámenie o expirácií: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Oznámenie o blízkej expirácií: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Oznámenia sa používateľom odosielajú v ich nastavenom jazyku."
 

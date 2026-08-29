@@ -1332,7 +1332,7 @@
     "Click to insert": "Klik untuk sisip",
     "Preferred: SVG. PNG max size: {0}px.": "Disuci: SVG. Saiz PNG maks: {0}px.",
     "View badge": "Lihat lencana",
-    "{0} min": "{0} min",
+    "{0} min": "{0} minit",
     "Duration in minutes": "Tempoh dalam minit",
     "Go back to standard view": "Kembali ke paparan standard",
     "Search for student...": "Cari pelajar...",
@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Luput: {0}",
     "Expiring soon: {0}": "Akan luput tidak lama lagi: {0}",
     "Expired notice: {0}": "Notis luput: {0}",
-    "Expiring notice: {0}": "Notis akan luput: {0}"
+    "Expiring notice: {0}": "Notis akan luput: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Untuk menukar ruang kosong kepada menu lungsur, asingkan pilihan dengan satu {'|'}, yang pertama ialah jawapan yang betul. Contoh: Ibu negara Peru ialah [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Untuk membenarkan beberapa jawapan yang betul, asingkannya dengan {'|'}{'|'}. Contoh: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Pemberitahuan dihantar kepada pengguna dalam bahasa yang dikonfigurasikan sendiri."
 }

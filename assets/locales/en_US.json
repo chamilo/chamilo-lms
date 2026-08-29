@@ -3894,5 +3894,6 @@
     "Expired: {0}": "Expired: {0}",
     "Expiring soon: {0}": "Expiring soon: {0}",
     "Expired notice: {0}": "Expired notice: {0}",
-    "Expiring notice: {0}": "Expiring notice: {0}"
+    "Expiring notice: {0}": "Expiring notice: {0}",
+    "Notifications are sent to users in their own configured language.": "Notifications are sent to users in their own configured language."
 }

@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Udl\u00f8bet: {0}",
     "Expiring soon: {0}": "Udl\u00f8ber snart: {0}",
     "Expired notice: {0}": "Meddelelse om udl\u00f8b: {0}",
-    "Expiring notice: {0}": "Meddelelse om forest\u00e5ende udl\u00f8b: {0}"
+    "Expiring notice: {0}": "Meddelelse om forest\u00e5ende udl\u00f8b: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "For at omdanne et tomt felt til en rullemenu skal du adskille valgene med et enkelt {'|'}, hvor det f\u00f8rste er det korrekte svar. Eksempel: Perus hovedstad er [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "For at tillade flere korrekte svar skal du adskille dem med {'|'}{'|'}. Eksempel: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Notifikationer sendes til brugere p\u00e5 deres eget konfigurerede sprog."
 }

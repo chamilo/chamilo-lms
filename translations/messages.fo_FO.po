@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Við kærleika"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formuludømi: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formuldømi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablumørk"
@@ -26965,7 +26965,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "X-Content-Type-Options steðgar browsaranum í at royna at MIME-sniffa innihaldstypin og neyðir hann til at halda seg við úttalað innihalds-type. Einans galdandi virði fyri henda header er 'nosniff'."
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Trygdarpolitikkur fyri tilvísara"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Referrer Policy er ein nýggjur header, sum leyvir einari síðu at stýra, hvat informatiòn browsarin tekur við, tá ið farið verður burtur frá einum dokumenti, og skuldi settast á øllum síðum."
@@ -38502,6 +38502,12 @@ msgstr "Fyll út gløgg"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Brúka valdu merkingarnar til at skilmarka gløgg. Dømi: Høvuðsstaður Perú er [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Fyri at gera eitt tómt felt til eitt fellilista, skilja valini við einum |, har tað fyrsta er rætta svarið. Dømi: Høvuðsstaðurin í Peru er [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Fyri at loyva fleiri røttum svørum, skilja tey við ||. Dømi: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Skriva niðurvalsmøguleikar, eitt svar á hvørjari linju. Merkið síðan væntaðu svarini niðanfyri, eins og í gamla amboðinum."
 
@@ -39851,4 +39857,7 @@ msgstr "Boð um útgongd: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Boð um at ganga út: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Boð verða send brúkarum á teirra egna stillaða máli."
 

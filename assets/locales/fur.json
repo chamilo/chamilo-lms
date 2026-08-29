@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Scjad\u00fbt: {0}",
     "Expiring soon: {0}": "Scjadince imminente: {0}",
     "Expired notice: {0}": "Av\u00ees di scjad\u00fbt: {0}",
-    "Expiring notice: {0}": "Av\u00ees di scjadince: {0}"
+    "Expiring notice: {0}": "Av\u00ees di scjadince: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Par trasform\u00e2 un spazi blanc intun men\u00f9 a tendine, separe lis sieltis cuntun s\u00f4l {'|'}, la prime e je la rispueste juste. Esempli: La capit\u00e2l dal Per\u00f9 e je [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Par permeti plui rispuestis justis, separelis cun {'|'}{'|'}. Esempli: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Lis notifichis a vegnin mandadis ai utents te l\u00f4r lenghe configurade."
 }

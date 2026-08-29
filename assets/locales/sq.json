@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Skaduar: {0}",
     "Expiring soon: {0}": "Skadon s\u00eb shpejti: {0}",
     "Expired notice: {0}": "Njoftim i skaduar: {0}",
-    "Expiring notice: {0}": "Njoftim i skadimit: {0}"
+    "Expiring notice: {0}": "Njoftim i skadimit: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "P\u00ebr ta kthyer nj\u00eb hap\u00ebsir\u00eb bosh n\u00eb nj\u00eb menu r\u00ebn\u00ebse, ndani zgjedhjet me nj\u00eb {'|'} t\u00eb vet\u00ebm, e para \u00ebsht\u00eb p\u00ebrgjigjja e sakt\u00eb. Shembull: Kryeqyteti i Perus\u00eb \u00ebsht\u00eb [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "P\u00ebr t\u00eb lejuar disa p\u00ebrgjigje t\u00eb sakta, ndajini ato me {'|'}{'|'}. Shembull: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Njoftimet u d\u00ebrgohen p\u00ebrdoruesve n\u00eb gjuh\u00ebn e tyre t\u00eb konfiguruar."
 }

@@ -26922,13 +26922,13 @@ msgid "Check password strength"
 msgstr "Kontroli fortikecon de pasvorto"
 
 msgid "HTTP Strict Transport Security"
-msgstr "HTTP Strict Transport Security"
+msgstr "HTTP-strikta transporsekureco"
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr "HTTP Strict Transport Security estas bonega trajto por subteni en via retejo kaj fortigas vian implimenton de TLS per devigado de la Uzanto Agento uzi HTTPS. Rekomendata valoro: 'strict-transport-security: max-age=63072000; includeSubDomains'. Vidu https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. Vi povas inkluzivi la sufikson 'preload', sed tio havas sekvojn por la plej supra nivela domeno (TLD), do verŝajne ne farenda leĝere. Vidu https://hstspreload.org/. Lasu malplenan por malŝalti."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Enhavsekureca politiko"
 
 msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
 msgstr "Content Security Policy estas efika mezuro por protekti vian retejon kontraŭ atakoj XSS. Per blanklistigo de fontoj de aprobitaj enhavo, vi povas malhelpi la foliumilon ŝargi malicajn rimedojn. Tiu agordo estas aparte komplikita por agordi kun WYSIWYG-redaktiloj, sed se vi aldonas ĉiujn domenojn kiujn vi volas aŭtorizi por enmeto de iframes en la deklaro child-src, tiu ekzemplo devus funkcii por vi. Vi povas malhelpi JavaScript ekzekuti el eksteraj fontoj (inkluzive ene de SVG-bildoj) uzante striktajn listojn en la argumento 'script-src'. Lasu malplenan por malŝalti. Ekzempla agordo: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
@@ -26940,7 +26940,7 @@ msgid "This setting allows you to experiment by reporting but not enforcing some
 msgstr "Tiu agordo permesas al vi eksperimenti per raportado sed ne devigado de iom da Content Security Policy."
 
 msgid "HTTP Public Key Pinning"
-msgstr "HTTP Public Key Pinning"
+msgstr "HTTP-publika-ŝlosila fiksado"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr "HTTP Public Key Pinning protektas vian retejon kontraŭ atakoj MiTM uzante malicajn atestilojn X.509. Per blanklistigo nur de identecoj kiujn la foliumilo devus kredi, viaj uzantoj estas protektitaj en okazo ke aŭtoritato de atestiloj estas komprometitaj."
@@ -38508,6 +38508,12 @@ msgstr "Plenigi la malplenaĵojn"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Uzu la elektitajn markilojn por difini malplenaĵojn. Ekzemplo: La ĉefurbo de Peruo estas [Limo]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Por ŝanĝi malplenon en falmenuon, apartigu la elektojn per unuopa |, la unua estante la ĝusta respondo. Ekzemplo: La ĉefurbo de Peruo estas [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Por permesi plurajn ĝustajn respondojn, apartigu ilin per ||. Ekzemplo: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Enigu la malsuprenmenuajn opciojn, unu respondo po linio. Poste marku la atendatajn respondojn sube, kiel en la hereda ilo."
 
@@ -39857,4 +39863,7 @@ msgstr "Avizo pri eksvalidiĝo: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Avizo pri baldaŭa eksvalidiĝo: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Sciigoj estas sendataj al uzantoj en ilia propra agordita lingvo."
 

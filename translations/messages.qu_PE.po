@@ -38508,6 +38508,12 @@ msgstr "Chawpiyukunata hunt'ay"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Akllasqa marcadores nisqawan chawpiyukunata t'aqay. Kay hina: Perúpa uma llaqtanqa [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Huk blanco nisqata uraykuy menuman tikranaykipaq, akllaykunata huk | nisqawan t'aqay; ñawpaq kaqqa allin kutichiy. Qhawarina: Piruwpa uma llaqtanqa [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Achka allin kutichiykunata saqinaykipaq, || nisqawan t'aqay. Qhawarina: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Dropdown nisqapaq kutipaykunata qallariy, sapa kutipayta huk siq'ipi. Chaymanta kay qhipapi suyay kutipaykunata qillqay, kay hina kay ñawpaq llamk'anapi."
 
@@ -39148,7 +39154,7 @@ msgid "Graceful workers"
 msgstr "Allin ruwaqkuna"
 
 msgid "Server MPM"
-msgstr "Server MPM"
+msgstr "Servidor MPM"
 
 msgid "Requests per second (live)"
 msgstr "Segundopi mañakuykuna (kawsay)"
@@ -39190,7 +39196,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard ñawiray"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Puntaje qhaway tabla keepalive"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard suyay"
@@ -39857,4 +39863,7 @@ msgstr "Tukusqa willakuy: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Tukukuchkaq willakuy: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Willakuykunaqa ruraqkunaman kachasqa kanku paykunaq churasqa siminkupi."
 

@@ -38506,6 +38506,12 @@ msgstr "Hiányzó részek kitöltése"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Használja a kiválasztott jelölőket az üres helyek meghatározásához. Példa: Peru fővárosa [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Ha üres mezőből legördülő menüt szeretne, a lehetőségeket egyetlen | jellel válassza el; az első a helyes válasz. Példa: Peru fővárosa [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Több helyes válasz engedélyezéséhez válassza el őket || jellel. Példa: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Adja meg a legördülő menü opcióit, soronként egy választ. Ezután jelölje meg az elvárt válaszokat lent, a hagyományos eszközhöz hasonlóan."
 
@@ -39855,4 +39861,7 @@ msgstr "Lejárt értesítés: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Lejáró értesítés: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Az értesítések a felhasználók saját beállított nyelvén kerülnek kiküldésre."
 

@@ -3609,7 +3609,7 @@
     "System status": "Status sistema",
     "Chamilo": "Chamilo",
     "PHP": "PHP",
-    "Web server": "Web server",
+    "Web server": "Web poslu\u017eitelj",
     "Paths": "Putanje",
     "Courses space": "Prostor kurseva",
     "Section": "Sekcija",
@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Isteklo: {0}",
     "Expiring soon: {0}": "Uskoro isti\u010de: {0}",
     "Expired notice: {0}": "Istekla obavijest: {0}",
-    "Expiring notice: {0}": "Obavijest o isteku: {0}"
+    "Expiring notice: {0}": "Obavijest o isteku: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Da biste prazninu pretvorili u padaju\u0107i meni, odvojite izbore jednim {'|'}, pri \u010demu je prvi ta\u010dan odgovor. Primjer: Glavni grad Perua je [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Da biste dozvolili vi\u0161e ta\u010dnih odgovora, odvojite ih sa {'|'}{'|'}. Primjer: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Obavje\u0161tenja se \u0161alju korisnicima na njihovom pode\u0161enom jeziku."
 }

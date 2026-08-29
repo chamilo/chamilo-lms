@@ -38506,6 +38506,12 @@ msgstr "खाली ठाउँ भर्नुहोस्"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "चयन गरिएका मार्करहरू प्रयोग गरेर खाली ठाउँ परिभाषित गर्नुहोस्। उदाहरण: पेरुको राजधानी [लिमा] हो।"
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "खाली ठाउँलाई ड्रपडाउन मेनुमा बदल्न, विकल्पहरूलाई एउटा | ले छुट्याउनुहोस्; पहिलो सही उत्तर हो। उदाहरण: पेरूको राजधानी [Lima|Paris|Bogota] हो।"
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "धेरै सही उत्तरहरू अनुमति दिन, तिनीहरूलाई || ले छुट्याउनुहोस्। उदाहरण: 1||one||uno।"
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "ड्रपडाउन विकल्पहरू प्रविष्ट गर्नुहोस्, एउटा उत्तर प्रति लाइन। त्यसपछि तल अपेक्षित उत्तरहरू चिन्ह लगाउनुहोस्, जस्तै लिगेसी उपकरण।"
 
@@ -39855,4 +39861,7 @@ msgstr "म्याद सकिएको सूचना: %s"
 
 msgid "Expiring notice: %s"
 msgstr "म्याद सकिन लागेको सूचना: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "सूचनाहरू प्रयोगकर्ताहरूलाई उनीहरूको आफ्नै कन्फिगर गरिएको भाषामा पठाइन्छ।"
 

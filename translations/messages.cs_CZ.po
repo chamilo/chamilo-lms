@@ -4138,7 +4138,7 @@ msgid "MySql Client"
 msgstr "MySql Klient"
 
 msgid "MySql Server"
-msgstr "MySQL server"
+msgstr "Server MySQL"
 
 msgid "Owner"
 msgstr "Vlastník"
@@ -9544,7 +9544,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Nahrání souboru selhalo: tato přípona souboru nebo typ souboru je zakázán"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "URL OpenID"
 
 msgid "The file is too big to upload."
 msgstr "Soubor je příliš velký k nahrání."
@@ -14671,7 +14671,7 @@ msgid "Enable button bars extended when the WYSIWYG editor is maximized"
 msgstr "Povolit rozšířené panely nástrojů, když je WYSIWYG editor maximalizován"
 
 msgid "HTML Editor"
-msgstr "HTML editor"
+msgstr "Editor HTML"
 
 msgid "Go directly to the course after login"
 msgstr "Přejít přímo do kurzu po přihlášení"
@@ -30790,7 +30790,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (interní ID)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "ID Azure (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "E-mail organizace"
@@ -31525,7 +31525,7 @@ msgid "SCIM external ID"
 msgstr "SCIM externí ID"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "ID OAuth2"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Přijměte prosím nejnovější verzi obchodních podmínek."
@@ -33745,10 +33745,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "ID EntraID"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "UID EntraID"
 
 msgid "Required fields"
 msgstr "Povinná pole"
@@ -38502,6 +38502,12 @@ msgstr "Vyplnit mezery"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Použijte vybrané značky k označení mezer. Příklad: Hlavní město Peru je [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Chcete-li z prázdného pole vytvořit rozbalovací nabídku, oddělte volby jedním znakem |, přičemž první je správná odpověď. Příklad: Hlavní město Peru je [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Chcete-li povolit více správných odpovědí, oddělte je pomocí ||. Příklad: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Zadejte možnosti rozbalovací nabídky, jednu odpověď na řádek. Poté označte očekávané odpovědi níže, jako v původním nástroji."
 
@@ -39851,4 +39857,7 @@ msgstr "Oznámení o vypršení: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Oznámení o blížícím se vypršení: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Oznámení se uživatelům odesílají v jejich nastaveném jazyce."
 

@@ -38508,6 +38508,12 @@ msgstr "Boşlukları doldur"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Boşlukları tanımlamak için seçilen işaretleyicileri kullanın. Örnek: Peru'nun başkenti [Lima]'dır."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Boşluğu açılır menüye dönüştürmek için seçenekleri tek bir | ile ayırın; ilki doğru cevaptır. Örnek: Peru'nun başkenti [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Birden fazla doğru cevaba izin vermek için bunları || ile ayırın. Örnek: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Açılır liste seçeneklerini girin, her satıra bir cevap. Ardından beklenen cevapları aşağıda, eski araçtaki gibi işaretleyin."
 
@@ -39589,7 +39595,7 @@ msgid "User subscriptions are limited through your course properties. To increas
 msgstr "Kullanıcı kayıtları, kurs özelliklerinizle sınırlıdır. Limitinizi artırmak için bir"
 
 msgid "pro plan"
-msgstr "pro plan"
+msgstr "pro planı"
 
 msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
 msgstr "alın ve bu kursun yedeğini Kurs Bakımı üzerinden yeni ücretli kursunuza aktarın veya bu planı edindikten sonra kursunuzun pro kursa dönüştürülmesi için bir destek kaydı açın."
@@ -39857,4 +39863,7 @@ msgstr "Süresi dolmuş bildirimi: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Süresi dolacak bildirimi: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Bildirimler kullanıcılara kendi yapılandırılmış dillerinde gönderilir."
 

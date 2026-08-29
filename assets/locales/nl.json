@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Verlopen: {0}",
     "Expiring soon: {0}": "Verloopt binnenkort: {0}",
     "Expired notice: {0}": "Verlopen bericht: {0}",
-    "Expiring notice: {0}": "Verlopend bericht: {0}"
+    "Expiring notice: {0}": "Verlopend bericht: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Om een invulveld om te zetten in een keuzemenu, scheidt u de keuzes met een enkele {'|'}, waarbij de eerste de juiste antwoord is. Voorbeeld: De hoofdstad van Peru is [Lima{'|'}Parijs{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Om meerdere juiste antwoorden toe te staan, scheidt u ze met {'|'}{'|'}. Voorbeeld: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Meldingen worden naar gebruikers verzonden in hun eigen geconfigureerde taal."
 }

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ fọ́múlà: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -38502,6 +38502,12 @@ msgstr "Fọwọ́ sí àwọn ààyè òfìfo"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Lo àwọn àmì tí a yàn láti ṣe ìtumọ̀ àwọn ààyè òfìfo. Àpẹẹrẹ: Olú-ìlú Peru ni [Lagos]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Láti sọ àyè òfo di àkójọ àṣàyàn, pín àwọn àṣàyàn pẹ̀lú | kan ṣoṣo, èyí àkọ́kọ́ ni ìdáhùn tó tọ́. Àpẹẹrẹ: Olú-ìlú Peru ni [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Láti gba ọ̀pọ̀ ìdáhùn tó tọ́, pín wọn pẹ̀lú ||. Àpẹẹrẹ: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Tẹ àwọn àṣàyàn ìsàlẹ̀, ìdáhùn kan ní ìlà kan. Lẹ́yìn náà samisi àwọn ìdáhùn tí a retí ní abẹ́, bí irinṣẹ́ àtọwọ́dọ́wọ́."
 
@@ -39851,4 +39857,7 @@ msgstr "Ìkìlọ̀ ìparí: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Ìkìlọ̀ ìparí tó ń bọ̀: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "A ń fi àwọn ìfitónilétí ránṣẹ́ sí àwọn olùmúlò ní èdè tí wọ́n ti ṣètò fún ara wọn."
 

@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Imeisha: {0}",
     "Expiring soon: {0}": "Inakaribia kuisha: {0}",
     "Expired notice: {0}": "Arifa ya kuisha: {0}",
-    "Expiring notice: {0}": "Arifa ya kukaribia kuisha: {0}"
+    "Expiring notice: {0}": "Arifa ya kukaribia kuisha: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Ili kugeuza nafasi tupu kuwa menyu kunjuzi, tenganisha chaguo kwa {'|'} moja, la kwanza likiwa jibu sahihi. Mfano: Mji mkuu wa Peru ni [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Ili kuruhusu majibu sahihi kadhaa, tenganisha kwa {'|'}{'|'}. Mfano: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Arifa hutumwa kwa watumiaji katika lugha yao iliyosanidiwa."
 }

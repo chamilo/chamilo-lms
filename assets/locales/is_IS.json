@@ -3889,5 +3889,8 @@
     "Expired: {0}": "\u00datrunni\u00f0: {0}",
     "Expiring soon: {0}": "Rennur br\u00e1tt \u00fat: {0}",
     "Expired notice: {0}": "Tilkynning um \u00fatrunni\u00f0: {0}",
-    "Expiring notice: {0}": "Tilkynning um a\u00f0 renni \u00fat: {0}"
+    "Expiring notice: {0}": "Tilkynning um a\u00f0 renni \u00fat: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Til a\u00f0 breyta ey\u00f0u \u00ed fellilista, a\u00f0skildu valkostina me\u00f0 einu {'|'}, \u00fear sem s\u00e1 fyrsti er r\u00e9tt svar. D\u00e6mi: H\u00f6fu\u00f0borg Per\u00fa er [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Til a\u00f0 leyfa m\u00f6rg r\u00e9tt sv\u00f6r, a\u00f0skildu \u00feau me\u00f0 {'|'}{'|'}. D\u00e6mi: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Tilkynningar eru sendar notendum \u00e1 \u00feeirra eigin stilltu tungum\u00e1li."
 }

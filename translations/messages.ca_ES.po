@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Sincerament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -38521,6 +38521,12 @@ msgstr "Omplir buits"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Utilitzeu els marcadors seleccionats per definir els buits. Exemple: La capital del Perú és [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Per convertir un espai en blanc en un menú desplegable, separeu les opcions amb un sol |, sent la primera la resposta correcta. Exemple: La capital del Perú és [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Per permetre diverses respostes correctes, separeu-les amb ||. Exemple: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Introduïu les opcions del desplegable, una resposta per línia. Després marqueu les respostes esperades a continuació, com a l'eina antiga."
 
@@ -39870,4 +39876,7 @@ msgstr "Avís de caducat: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Avís de caducitat: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Les notificacions s'envien als usuaris en el seu idioma configurat."
 

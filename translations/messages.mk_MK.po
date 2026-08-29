@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Примерок на формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -38506,6 +38506,12 @@ msgstr "Пополни празни места"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Користете ги избраните маркери за да дефинирате празни места. Пример: Главниот град на Перу е [Лима]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "За да го претворите празното поле во паѓачко мени, одделете ги изборите со една |, при што првиот е точниот одговор. Пример: Главниот град на Перу е [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "За да дозволите повеќе точни одговори, одделете ги со ||. Пример: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Внесете ги опциите за паѓачко мени, по еден одговор во ред. Потоа означете ги очекуваните одговори подолу, како во старата алатка."
 
@@ -39855,4 +39861,7 @@ msgstr "Известување за истечен: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Известување за истекување: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Известувањата се испраќаат до корисниците на нивниот сопствен конфигуриран јазик."
 

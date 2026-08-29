@@ -3891,5 +3891,8 @@
     "Expired: {0}": "\u5df2\u904e\u671f\uff1a{0}",
     "Expiring soon: {0}": "\u5373\u5c07\u5230\u671f\uff1a{0}",
     "Expired notice: {0}": "\u5df2\u904e\u671f\u901a\u77e5\uff1a{0}",
-    "Expiring notice: {0}": "\u5373\u5c07\u5230\u671f\u901a\u77e5\uff1a{0}"
+    "Expiring notice: {0}": "\u5373\u5c07\u5230\u671f\u901a\u77e5\uff1a{0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "\u82e5\u8981\u5c07\u7a7a\u767d\u8f49\u70ba\u4e0b\u62c9\u9078\u55ae\uff0c\u8acb\u4ee5\u55ae\u4e00 {'|'} \u5206\u9694\u9078\u9805\uff0c\u7b2c\u4e00\u500b\u70ba\u6b63\u78ba\u7b54\u6848\u3002\u7bc4\u4f8b\uff1a\u79d8\u9b6f\u7684\u9996\u90fd\u662f [Lima{'|'}Paris{'|'}Bogota]\u3002",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "\u82e5\u8981\u5141\u8a31\u591a\u500b\u6b63\u78ba\u7b54\u6848\uff0c\u8acb\u4ee5 {'|'}{'|'} \u5206\u9694\u3002\u7bc4\u4f8b\uff1a1{'|'}{'|'}one{'|'}{'|'}uno\u3002",
+    "Notifications are sent to users in their own configured language.": "\u901a\u77e5\u6703\u4ee5\u4f7f\u7528\u8005\u81ea\u884c\u8a2d\u5b9a\u7684\u8a9e\u8a00\u50b3\u9001\u7d66\u4f7f\u7528\u8005\u3002"
 }

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula adibidea: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulako adibidea: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -30801,7 +30801,7 @@ msgid "Azure UID (internal ID)"
 msgstr "Azure UID (ID barnekoa)"
 
 msgid "Azure ID (mailNickname)"
-msgstr "Azure ID (mailNickname)"
+msgstr "Azure IDa (mailNickname)"
 
 msgid "Organisation e-mail"
 msgstr "Erakundearen posta-elektronikoa"
@@ -31536,7 +31536,7 @@ msgid "SCIM external ID"
 msgstr "SCIM ID kanpokoa"
 
 msgid "OAuth2 ID"
-msgstr "OAuth2 ID"
+msgstr "OAuth2 IDa"
 
 msgid "Please accept the latest version of the terms and conditions."
 msgstr "Onartu baldintza eta条款en azken bertsioa mesedez."
@@ -32184,7 +32184,7 @@ msgid "Moodle version"
 msgstr "Moodle bertsioa"
 
 msgid "Admin ID"
-msgstr "Admin ID"
+msgstr "Admin IDa"
 
 msgid "Internal integer user id"
 msgstr "Barneko erabiltzaile ID osoa"
@@ -33756,10 +33756,10 @@ msgid "GDPRTitle"
 msgstr "GDPRTitle"
 
 msgid "EntraID ID"
-msgstr "EntraID ID"
+msgstr "EntraID IDa"
 
 msgid "EntraID UID"
-msgstr "EntraID UID"
+msgstr "EntraID UIDa"
 
 msgid "Required fields"
 msgstr "Eskatutako eremuak"
@@ -38513,6 +38513,12 @@ msgstr "Bete hutsuneak"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Erabili hautatutako markatzaileak hutsuneak definitzeko. Adibidez: Peruko hiriburua [Lima] da."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Hutsune bat goitibeherako menu bihurtzeko, bereizi aukerak | bakarrarekin; lehenengoa da erantzun zuzena. Adibidea: Peruko hiriburua [Lima|Paris|Bogota] da."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Erantzun zuzen bat baino gehiago onartzeko, bereizi || bidez. Adibidea: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Sartu goitibeherako aukerak, erantzun bat lerro bakoitzeko. Ondoren, markatu beheko espero diren erantzunak, tresna zaharraren antzera."
 
@@ -39862,4 +39868,7 @@ msgstr "Iraungitako oharra: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Iraungitze-oharra: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Jakinarazpenak erabiltzaileei haien hizkuntza-konfigurazioan bidaltzen zaizkie."
 

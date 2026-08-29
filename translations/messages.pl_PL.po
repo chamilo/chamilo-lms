@@ -38512,6 +38512,12 @@ msgstr "Uzupełnij luki"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Użyj wybranych znaczników do zdefiniowania luk. Przykład: Stolicą Peru jest [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Aby zamienić lukę w menu rozwijane, oddziel opcje pojedynczym znakiem |, przy czym pierwsza jest poprawną odpowiedzią. Przykład: Stolicą Peru jest [Lima|Paryż|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Aby zezwolić na kilka poprawnych odpowiedzi, oddziel je znakami ||. Przykład: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Wprowadź opcje rozwijane, po jednej odpowiedzi w wierszu. Następnie zaznacz oczekiwane odpowiedzi poniżej, jak w narzędziu starszej wersji."
 
@@ -39861,4 +39867,7 @@ msgstr "Powiadomienie o wygaśnięciu: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Powiadomienie o zbliżającym się wygaśnięciu: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Powiadomienia są wysyłane do użytkowników w ich własnym skonfigurowanym języku."
 

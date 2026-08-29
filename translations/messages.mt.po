@@ -38507,6 +38507,12 @@ msgstr "Imla l-vojt"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Uża l-markaturi magħżula biex tiddefinixxi l-vojt. Eżempju: Il-kapitali ta' Peru hija [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Biex tibdel vojt f'menu dropdown, ifred l-għażliet b'| wieħed, l-ewwel waħda tkun it-tweġiba korretta. Eżempju: The capital of Peru is [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Biex tħalli diversi tweġibiet korretti, ifridhom b'||. Eżempju: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Daħħal l-għażliet tad-dropdown, tweġiba waħda għal kull linja. Imbagħad immarka t-tweġibiet mistennija hawn taħt, bħall-għodda legacy."
 
@@ -39856,4 +39862,7 @@ msgstr "Avviż ta' skadenza: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Avviż ta' skadenza imminenti: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "In-notifikazzjonijiet jintbagħtu lill-utenti fil-lingwa konfigurata tagħhom stess."
 

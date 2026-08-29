@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول بېلګه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول نمونه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -38502,6 +38502,12 @@ msgstr "تشې ډکول"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "د تشو د تعریف لپاره ټاکل شوي نښه‌ګانې وکاروئ. بېلګه: د پیرو پلازمینه [لیما] ده."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "د خالي ځای د ښکته غورځېدونکي مینو په توګه بدلولو لپاره، انتخابونه د یوه | سره جلا کړئ، لومړی یې سم ځواب دی. بېلګه: د پیرو پلازمینه [Lima|Paris|Bogota] ده."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "د څو سم ځوابونو اجازه ورکولو لپاره، هغوی د || سره جلا کړئ. بېلګه: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "د ډراپ‌ډاون انتخابونه دننه کړئ، هر ځواب په یوه کرښه کې. بیا لاندې متوقع ځوابونه په نښه کړئ، لکه د زاړه اوزار په څېر."
 
@@ -39851,4 +39857,7 @@ msgstr "د پای ته رسېدلي خبرتیا: %s"
 
 msgid "Expiring notice: %s"
 msgstr "د پای ته رسېدو خبرتیا: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "خبرتیاوې کاروونکو ته په خپله تنظیم شوې ژبه لیږل کیږي."
 

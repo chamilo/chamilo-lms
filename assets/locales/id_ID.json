@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Kedaluwarsa: {0}",
     "Expiring soon: {0}": "Segera kedaluwarsa: {0}",
     "Expired notice: {0}": "Pemberitahuan kedaluwarsa: {0}",
-    "Expiring notice: {0}": "Pemberitahuan akan kedaluwarsa: {0}"
+    "Expiring notice: {0}": "Pemberitahuan akan kedaluwarsa: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Untuk mengubah isian kosong menjadi menu tarik-turun, pisahkan pilihan dengan satu {'|'}, yang pertama adalah jawaban yang benar. Contoh: Ibu kota Peru adalah [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Untuk mengizinkan beberapa jawaban benar, pisahkan dengan {'|'}{'|'}. Contoh: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Notifikasi dikirim kepada pengguna dalam bahasa yang mereka atur."
 }

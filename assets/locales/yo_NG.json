@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Ti par\u00ed: {0}",
     "Expiring soon: {0}": "\u0143 par\u00ed l\u00e1\u00ecp\u1eb9\u0301: {0}",
     "Expired notice: {0}": "\u00cck\u00ecl\u1ecd\u0300 \u00ecpar\u00ed: {0}",
-    "Expiring notice: {0}": "\u00cck\u00ecl\u1ecd\u0300 \u00ecpar\u00ed t\u00f3 \u0144 b\u1ecd\u0300: {0}"
+    "Expiring notice: {0}": "\u00cck\u00ecl\u1ecd\u0300 \u00ecpar\u00ed t\u00f3 \u0144 b\u1ecd\u0300: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "L\u00e1ti s\u1ecd \u00e0y\u00e8 \u00f2fo di \u00e0k\u00f3j\u1ecd \u00e0\u1e63\u00e0y\u00e0n, p\u00edn \u00e0w\u1ecdn \u00e0\u1e63\u00e0y\u00e0n p\u1eb9\u0300l\u00fa {'|'} kan \u1e63o\u1e63o, \u00e8y\u00ed \u00e0k\u1ecd\u0301k\u1ecd\u0301 ni \u00ecd\u00e1h\u00f9n t\u00f3 t\u1ecd\u0301. \u00c0p\u1eb9\u1eb9r\u1eb9: Ol\u00fa-\u00ecl\u00fa Peru ni [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "L\u00e1ti gba \u1ecd\u0300p\u1ecd\u0300 \u00ecd\u00e1h\u00f9n t\u00f3 t\u1ecd\u0301, p\u00edn w\u1ecdn p\u1eb9\u0300l\u00fa {'|'}{'|'}. \u00c0p\u1eb9\u1eb9r\u1eb9: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "A \u0144 fi \u00e0w\u1ecdn \u00ecfit\u00f3nil\u00e9t\u00ed r\u00e1n\u1e63\u1eb9\u0301 s\u00ed \u00e0w\u1ecdn ol\u00f9m\u00fal\u00f2 n\u00ed \u00e8d\u00e8 t\u00ed w\u1ecd\u0301n ti \u1e63\u00e8t\u00f2 f\u00fan ara w\u1ecdn."
 }

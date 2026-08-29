@@ -9549,7 +9549,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "上传文件失败：文件类型不符合要求"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID 网址"
 
 msgid "The file is too big to upload."
 msgstr "文件过大"
@@ -15078,7 +15078,7 @@ msgid "Install Chamilo"
 msgstr "安装 Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo 网址"
 
 msgid "You have no session in your sessions history"
 msgstr "你还没有任何培训记录"
@@ -38508,6 +38508,12 @@ msgstr "填空"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "使用选定的标记定义空白。例如：秘鲁的首都是 [利马]。"
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "要将空白变为下拉菜单，请用单个 | 分隔选项，第一个为正确答案。示例：秘鲁的首都是 [Lima|Paris|Bogota]。"
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "要允许多个正确答案，请用 || 分隔。示例：1||one||uno。"
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "输入下拉选项，每行一个答案。然后在下方标记正确答案，操作方式与旧版工具相同。"
 
@@ -39857,4 +39863,7 @@ msgstr "过期通知：%s"
 
 msgid "Expiring notice: %s"
 msgstr "即将过期通知：%s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "通知将以用户自行配置的语言发送。"
 

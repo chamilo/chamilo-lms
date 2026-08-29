@@ -338,7 +338,7 @@ msgid "Sincerely"
 msgstr "ດ້ວຍຄວາມຈິງໃຈ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ຕົວຢ່າງສູດ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ຕົວຢ່າງສູດ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ຊ່ວງຂອງຕົວປ່ຽນ"
@@ -38551,6 +38551,12 @@ msgstr "ຕື່ມຊ່ອງວ່າງ"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "ໃຊ້ເຄື່ອງໝາຍທີ່ເລືອກເພື່ອກຳນົດຊ່ອງວ່າງ. ຕົວຢ່າງ: ນະຄອນຫຼວງຂອງເປຣູແມ່ນ [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "ເພື່ອປ່ຽນຊ່ອງວ່າງເປັນເມນູເລື່ອນລົງ ໃຫ້ແຍກຕົວເລືອກດ້ວຍ | ດຽວ ຕົວເລືອກທຳອິດແມ່ນຄຳຕອບທີ່ຖືກ. ຕົວຢ່າງ: ນະຄອນຫຼວງຂອງເປຣູແມ່ນ [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "ເພື່ອອະນຸຍາດຄຳຕອບທີ່ຖືກຫຼາຍຄຳ ໃຫ້ແຍກດ້ວຍ ||. ຕົວຢ່າງ: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "ໃສ່ຕົວເລືອກແບບເລື່ອນລົງ ຄຳຕອບລະແຖວ. ຈາກນັ້ນໝາຍຄຳຕອບທີ່ຄາດໄວ້ດ້ານລຸ່ມ ເຊັ່ນດຽວກັບເຄື່ອງມືເກົ່າ."
 
@@ -39900,4 +39906,7 @@ msgstr "ແຈ້ງເຕືອນໝົດອາຍຸ: %s"
 
 msgid "Expiring notice: %s"
 msgstr "ແຈ້ງເຕືອນຈະໝົດອາຍຸ: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "ການແຈ້ງເຕືອນຈະຖືກສົ່ງໃຫ້ຜູ້ໃຊ້ເປັນພາສາທີ່ພວກເຂົາຕັ້ງຄ່າໄວ້."
 

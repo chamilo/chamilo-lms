@@ -38502,6 +38502,12 @@ msgstr "ফাঁকা স্থান পূরণ করুন"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "ফাঁকা স্থান নির্ধারণ করতে নির্বাচিত মার্কার ব্যবহার করুন। উদাহরণ: পেরুর রাজধানী হল [লিমা]।"
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "খালি স্থানকে ড্রপডাউন মেনুতে পরিণত করতে, পছন্দগুলো একটিমাত্র | দিয়ে আলাদা করুন; প্রথমটি সঠিক উত্তর। উদাহরণ: The capital of Peru is [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "একাধিক সঠিক উত্তর অনুমোদন করতে, সেগুলো || দিয়ে আলাদা করুন। উদাহরণ: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "ড্রপডাউন অপশনগুলি প্রবেশ করান, প্রতি লাইনে একটি উত্তর। তারপর নিচে প্রত্যাশিত উত্তরগুলি চিহ্নিত করুন, লেগ্যাসি টুলের মতো।"
 
@@ -39851,4 +39857,7 @@ msgstr "মেয়াদোত্তীর্ণ বিজ্ঞপ্তি: 
 
 msgid "Expiring notice: %s"
 msgstr "মেয়াদ শেষের বিজ্ঞপ্তি: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "বিজ্ঞপ্তি ব্যবহারকারীদের তাদের নিজস্ব কনফিগার করা ভাষায় পাঠানো হয়।"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "С уважение"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Примерна формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазони на променливите"
@@ -9549,7 +9549,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "Качването на файла не е успешно: не е позвалено да се качва файл с това разширение или файл от този тип."
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "URL на OpenID"
 
 msgid "The file is too big to upload."
 msgstr "Файлът е твърде голям, за да бъде качен."
@@ -38508,6 +38508,12 @@ msgstr "Попълване на празни места"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Използвайте избраните маркери, за да дефинирате празните места. Пример: Столицата на Перу е [Лима]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "За да превърнете празно поле в падащо меню, разделете вариантите с единичен |, като първият е верният отговор. Пример: Столицата на Перу е [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "За да позволите няколко верни отговора, разделете ги с ||. Пример: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Въведете опциите за падащото меню, по един отговор на ред. След това отбележете очакваните отговори по-долу, както в наследения инструмент."
 
@@ -39857,4 +39863,7 @@ msgstr "Известие за изтекъл: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Известие за изтичане: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Известията се изпращат на потребителите на конфигурирания от тях език."
 

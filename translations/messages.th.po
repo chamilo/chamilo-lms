@@ -38508,6 +38508,12 @@ msgstr "เติมช่องว่าง"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "ใช้เครื่องหมายที่เลือกเพื่อกำหนดช่องว่าง ตัวอย่าง: เมืองหลวงของเปรูคือ [ลิมา]"
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "หากต้องการเปลี่ยนช่องว่างให้เป็นเมนูแบบเลื่อนลง ให้แยกตัวเลือกด้วย | เพียงตัวเดียว โดยตัวเลือกแรกเป็นคำตอบที่ถูกต้อง ตัวอย่าง: The capital of Peru is [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "หากต้องการอนุญาตคำตอบที่ถูกต้องหลายข้อ ให้แยกด้วย || ตัวอย่าง: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "ป้อนตัวเลือกแบบดรอปดาวน์ คำตอบละบรรทัด แล้วทำเครื่องหมายคำตอบที่คาดหวังด้านล่างเหมือนเครื่องมือเดิม"
 
@@ -39857,4 +39863,7 @@ msgstr "แจ้งเตือนหมดอายุแล้ว: %s"
 
 msgid "Expiring notice: %s"
 msgstr "แจ้งเตือนใกล้หมดอายุ: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "การแจ้งเตือนจะถูกส่งไปยังผู้ใช้ในภาษาที่ผู้ใช้ตั้งค่าไว้"
 

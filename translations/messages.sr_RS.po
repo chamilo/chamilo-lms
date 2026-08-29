@@ -4351,7 +4351,7 @@ msgid "Production Server"
 msgstr "Produkcioni server"
 
 msgid "Test Server"
-msgstr "Test server"
+msgstr "Testni server"
 
 msgid "Who's Online"
 msgstr "Ko je Online"
@@ -38509,6 +38509,12 @@ msgstr "Popuni praznine"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Koristite izabrane markere za definisanje praznina. Primer: Glavni grad Perua je [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Da biste prazninu pretvorili u padajući meni, odvojite izbore jednim |, pri čemu je prvi tačan odgovor. Primer: Glavni grad Perua je [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Da biste dozvolili više tačnih odgovora, odvojite ih sa ||. Primer: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Unesite opcije padajućeg menija, po jedan odgovor u redu. Zatim označite očekivane odgovore ispod, kao u starom alatu."
 
@@ -39858,4 +39864,7 @@ msgstr "Obaveštenje o isteku: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Obaveštenje o predstojećem isteku: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Obaveštenja se šalju korisnicima na njihovom podešenom jeziku."
 

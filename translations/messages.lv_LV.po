@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -38507,6 +38507,12 @@ msgstr "Aizpildīt tukšās vietas"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Izmantojiet atlasītos marķierus, lai definētu tukšumus. Piemērs: Peru galvaspilsēta ir [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Lai tukšo vietu pārvērstu par nolaižamo izvēlni, atdaliet izvēles ar vienu |, pirmā ir pareizā atbilde. Piemērs: Peru galvaspilsēta ir [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Lai atļautu vairākas pareizās atbildes, atdaliet tās ar ||. Piemērs: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Ievadiet nolaižamās izvēlnes opcijas, vienu atbildi katrā rindā. Pēc tam atzīmējiet paredzamās atbildes zemāk, kā mantojumā esošajā rīkā."
 
@@ -39856,4 +39862,7 @@ msgstr "Paziņojums par beigušos derīgumu: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Paziņojums par beigušos derīgumu: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Paziņojumi tiek nosūtīti lietotājiem viņu konfigurētajā valodā."
 

@@ -38506,6 +38506,12 @@ msgstr "Plotëso boshllëqet"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Përdorni shënuesit e zgjedhur për të përcaktuar boshllëqet. Shembull: Kryeqyteti i Shqipërisë është [Tirana]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Për ta kthyer një hapësirë bosh në një menu rënëse, ndani zgjedhjet me një | të vetëm, e para është përgjigjja e saktë. Shembull: Kryeqyteti i Perusë është [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Për të lejuar disa përgjigje të sakta, ndajini ato me ||. Shembull: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Fut opsionet e listës rënëse, një përgjigje për rresht. Pastaj shëno përgjigjet e pritura më poshtë, si në mjetin e trashëguar."
 
@@ -39855,4 +39861,7 @@ msgstr "Njoftim i skaduar: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Njoftim i skadimit: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Njoftimet u dërgohen përdoruesve në gjuhën e tyre të konfiguruar."
 

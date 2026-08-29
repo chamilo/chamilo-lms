@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Wygas\u0142o: {0}",
     "Expiring soon: {0}": "Wkr\u00f3tce wygasa: {0}",
     "Expired notice: {0}": "Powiadomienie o wyga\u015bni\u0119ciu: {0}",
-    "Expiring notice: {0}": "Powiadomienie o zbli\u017caj\u0105cym si\u0119 wyga\u015bni\u0119ciu: {0}"
+    "Expiring notice: {0}": "Powiadomienie o zbli\u017caj\u0105cym si\u0119 wyga\u015bni\u0119ciu: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Aby zamieni\u0107 luk\u0119 w menu rozwijane, oddziel opcje pojedynczym znakiem {'|'}, przy czym pierwsza jest poprawn\u0105 odpowiedzi\u0105. Przyk\u0142ad: Stolic\u0105 Peru jest [Lima{'|'}Pary\u017c{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Aby zezwoli\u0107 na kilka poprawnych odpowiedzi, oddziel je znakami {'|'}{'|'}. Przyk\u0142ad: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Powiadomienia s\u0105 wysy\u0142ane do u\u017cytkownik\u00f3w w ich w\u0142asnym skonfigurowanym j\u0119zyku."
 }

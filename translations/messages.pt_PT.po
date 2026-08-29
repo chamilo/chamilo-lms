@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Cordialmente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplo de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Amostra de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rangos de las variables"
@@ -38514,6 +38514,12 @@ msgstr "Preencher lacunas"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Utilize os marcadores selecionados para definir as lacunas. Exemplo: A capital do Peru é [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Para transformar um espaço em branco num menu pendente, separe as opções com um único |, sendo a primeira a resposta correta. Exemplo: A capital do Peru é [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Para permitir várias respostas corretas, separe-as com ||. Exemplo: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Introduza as opções do menu suspenso, uma resposta por linha. Depois marque as respostas esperadas abaixo, como na ferramenta antiga."
 
@@ -39863,4 +39869,7 @@ msgstr "Aviso de expirado: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Aviso de expiração: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "As notificações são enviadas aos utilizadores no idioma que tiverem configurado."
 

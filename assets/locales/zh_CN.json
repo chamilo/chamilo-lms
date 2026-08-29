@@ -257,7 +257,7 @@
     "DROP COLUMN works": "\u5220\u9664\u5217 works",
     "Step 5 - Configuration settings": "\u6b65\u9aa45 - \u914d\u7f6e\u8bbe\u7f6e",
     "System": "\u7cfb\u7edf",
-    "Chamilo URL": "Chamilo URL",
+    "Chamilo URL": "Chamilo \u7f51\u5740",
     "Path": "\u8def\u5f84",
     "Administrator": "\u7ba1\u7406\u5458",
     "Superior (n+1)": "\u4e0a\u7ea7 (n+1)",
@@ -3891,5 +3891,8 @@
     "Expired: {0}": "\u5df2\u8fc7\u671f\uff1a{0}",
     "Expiring soon: {0}": "\u5373\u5c06\u8fc7\u671f\uff1a{0}",
     "Expired notice: {0}": "\u8fc7\u671f\u901a\u77e5\uff1a{0}",
-    "Expiring notice: {0}": "\u5373\u5c06\u8fc7\u671f\u901a\u77e5\uff1a{0}"
+    "Expiring notice: {0}": "\u5373\u5c06\u8fc7\u671f\u901a\u77e5\uff1a{0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "\u8981\u5c06\u7a7a\u767d\u53d8\u4e3a\u4e0b\u62c9\u83dc\u5355\uff0c\u8bf7\u7528\u5355\u4e2a {'|'} \u5206\u9694\u9009\u9879\uff0c\u7b2c\u4e00\u4e2a\u4e3a\u6b63\u786e\u7b54\u6848\u3002\u793a\u4f8b\uff1a\u79d8\u9c81\u7684\u9996\u90fd\u662f [Lima{'|'}Paris{'|'}Bogota]\u3002",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "\u8981\u5141\u8bb8\u591a\u4e2a\u6b63\u786e\u7b54\u6848\uff0c\u8bf7\u7528 {'|'}{'|'} \u5206\u9694\u3002\u793a\u4f8b\uff1a1{'|'}{'|'}one{'|'}{'|'}uno\u3002",
+    "Notifications are sent to users in their own configured language.": "\u901a\u77e5\u5c06\u4ee5\u7528\u6237\u81ea\u884c\u914d\u7f6e\u7684\u8bed\u8a00\u53d1\u9001\u3002"
 }

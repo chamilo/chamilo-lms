@@ -14513,7 +14513,7 @@ msgid "Compose"
 msgstr "Nachricht erstellen"
 
 msgid "Baby Orange"
-msgstr "Baby Orange"
+msgstr "Baby-Orange"
 
 msgid "Blue lagoon"
 msgstr "Blauer Lagunen"
@@ -40072,6 +40072,12 @@ msgstr "Lücken ausfüllen"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Verwenden Sie die ausgewählten Marker, um Lücken zu definieren. Beispiel: Die Hauptstadt von Peru ist [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Um ein leeres Feld in ein Dropdown-Menü zu verwandeln, trennen Sie die Auswahlmöglichkeiten mit einem einzelnen |, wobei die erste die richtige Antwort ist. Beispiel: Die Hauptstadt von Peru ist [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Um mehrere richtige Antworten zuzulassen, trennen Sie diese mit ||. Beispiel: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Geben Sie die Dropdown-Optionen ein, eine Antwort pro Zeile. Markieren Sie dann die erwarteten Antworten unten, wie im Legacy-Tool."
 
@@ -41421,4 +41427,7 @@ msgstr "Hinweis bei Ablauf: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Hinweis vor Ablauf: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Benachrichtigungen werden den Benutzern in ihrer jeweils konfigurierten Sprache gesendet."
 

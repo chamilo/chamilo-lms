@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Vencido: {0}",
     "Expiring soon: {0}": "Por vencer pronto: {0}",
     "Expired notice: {0}": "Aviso de vencido: {0}",
-    "Expiring notice: {0}": "Aviso de vencimiento: {0}"
+    "Expiring notice: {0}": "Aviso de vencimiento: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Para convertir un espacio en blanco en un men\u00fa desplegable, separe las opciones con un solo {'|'}, siendo la primera la respuesta correcta. Ejemplo: La capital de Per\u00fa es [Lima{'|'}Par\u00eds{'|'}Bogot\u00e1].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Para permitir varias respuestas correctas, sep\u00e1relas con {'|'}{'|'}. Ejemplo: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Las notificaciones se env\u00edan a los usuarios en su idioma configurado."
 }

@@ -3691,7 +3691,7 @@
     "Busy workers": "Llamkaq ruwaqkuna",
     "Idle workers": "Samasqa ruwaqkuna",
     "Graceful workers": "Allin ruwaqkuna",
-    "Server MPM": "Server MPM",
+    "Server MPM": "Servidor MPM",
     "Requests per second (live)": "Segundopi ma\u00f1akuykuna (kawsay)",
     "Requests per second (since start)": "Segundopi ma\u00f1akuykuna (qallariymanta)",
     "Bytes per second (live)": "Segundopi bytes (kawsay)",
@@ -3705,7 +3705,7 @@
     "Load average (15 min)": "Carga promedio (15 min)",
     "Scoreboard sending": "Scoreboard qollqay",
     "Scoreboard reading": "Scoreboard \u00f1awiray",
-    "Scoreboard keepalive": "Scoreboard keepalive",
+    "Scoreboard keepalive": "Puntaje qhaway tabla keepalive",
     "Scoreboard waiting": "Scoreboard suyay",
     "Scoreboard open slots": "Scoreboard kichaq ranphakuna",
     "Active connections": "Kawsay t'inkiykuna",
@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Tukusqa: {0}",
     "Expiring soon: {0}": "Qaylla tukukunqa: {0}",
     "Expired notice: {0}": "Tukusqa willakuy: {0}",
-    "Expiring notice: {0}": "Tukukuchkaq willakuy: {0}"
+    "Expiring notice: {0}": "Tukukuchkaq willakuy: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Huk blanco nisqata uraykuy menuman tikranaykipaq, akllaykunata huk {'|'} nisqawan t'aqay; \u00f1awpaq kaqqa allin kutichiy. Qhawarina: Piruwpa uma llaqtanqa [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Achka allin kutichiykunata saqinaykipaq, {'|'}{'|'} nisqawan t'aqay. Qhawarina: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Willakuykunaqa ruraqkunaman kachasqa kanku paykunaq churasqa siminkupi."
 }

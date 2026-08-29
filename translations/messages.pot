@@ -39784,3 +39784,6 @@ msgstr ""
 
 msgid "Expiring notice: %s"
 msgstr ""
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr ""

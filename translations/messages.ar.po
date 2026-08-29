@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نموذج الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "مثال الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -38520,6 +38520,12 @@ msgstr "ملء الفراغات"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "استخدم العلامات المحددة لتحديد الفراغات. مثال: عاصمة بيرو هي [ليما]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "لتحويل فراغ إلى قائمة منسدلة، افصل الخيارات بعلامة | واحدة، بحيث يكون الخيار الأول هو الإجابة الصحيحة. مثال: عاصمة بيرو هي [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "للسماح بعدة إجابات صحيحة، افصل بينها بـ ||. مثال: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "أدخل خيارات القائمة المنسدلة، إجابة واحدة في كل سطر. ثم حدد الإجابات المتوقعة أدناه، كما في الأداة القديمة."
 
@@ -39869,4 +39875,7 @@ msgstr "إشعار الانتهاء: %s"
 
 msgid "Expiring notice: %s"
 msgstr "إشعار قرب الانتهاء: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "يتم إرسال الإشعارات إلى المستخدمين بلغتهم المُعدّة الخاصة بهم."
 

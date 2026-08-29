@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Eksvalidi\u011dinta: {0}",
     "Expiring soon: {0}": "Balda\u016d eksvalidi\u011donta: {0}",
     "Expired notice: {0}": "Avizo pri eksvalidi\u011do: {0}",
-    "Expiring notice: {0}": "Avizo pri balda\u016da eksvalidi\u011do: {0}"
+    "Expiring notice: {0}": "Avizo pri balda\u016da eksvalidi\u011do: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Por \u015dan\u011di malplenon en falmenuon, apartigu la elektojn per unuopa {'|'}, la unua estante la \u011dusta respondo. Ekzemplo: La \u0109efurbo de Peruo estas [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Por permesi plurajn \u011dustajn respondojn, apartigu ilin per {'|'}{'|'}. Ekzemplo: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Sciigoj estas sendataj al uzantoj en ilia propra agordita lingvo."
 }

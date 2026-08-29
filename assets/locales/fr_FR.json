@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Expir\u00e9 : {0}",
     "Expiring soon: {0}": "Expire bient\u00f4t : {0}",
     "Expired notice: {0}": "Avis d'expiration : {0}",
-    "Expiring notice: {0}": "Avis d'\u00e9ch\u00e9ance : {0}"
+    "Expiring notice: {0}": "Avis d'\u00e9ch\u00e9ance : {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Pour transformer un blanc en menu d\u00e9roulant, s\u00e9parez les choix par un seul {'|'}, le premier \u00e9tant la bonne r\u00e9ponse. Exemple : La capitale du P\u00e9rou est [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Pour autoriser plusieurs r\u00e9ponses correctes, s\u00e9parez-les par {'|'}{'|'}. Exemple : 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Les notifications sont envoy\u00e9es aux utilisateurs dans leur langue configur\u00e9e."
 }

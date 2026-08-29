@@ -38502,6 +38502,12 @@ msgstr "Заповнити пропуски"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Використовуйте вибрані маркери для позначення пропусків. Приклад: Столиця Перу — [Ліма]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Щоб перетворити пропуск на спадне меню, розділіть варіанти одним символом |; перший варіант є правильною відповіддю. Приклад: Столиця Перу — [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Щоб дозволити кілька правильних відповідей, розділіть їх символами ||. Приклад: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Введіть варіанти для випадаючого списку, по одній відповіді в рядок. Потім позначте очікувані відповіді нижче, як у застарілому інструменті."
 
@@ -39851,4 +39857,7 @@ msgstr "Повідомлення про закінчення терміну: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Повідомлення про наближення закінчення: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Сповіщення надсилаються користувачам мовою, яку вони налаштували."
 

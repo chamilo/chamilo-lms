@@ -38508,6 +38508,12 @@ msgstr "Completar espacios en blanco"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Utilice los marcadores seleccionados para definir espacios en blanco. Ejemplo: La capital de Perú es [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Para convertir un espacio en blanco en un menú desplegable, separe las opciones con un solo |, siendo la primera la respuesta correcta. Ejemplo: La capital de Perú es [Lima|París|Bogotá]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Para permitir varias respuestas correctas, sepárelas con ||. Ejemplo: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Introduzca las opciones del menú desplegable, una respuesta por línea. Luego marque las respuestas esperadas a continuación, como en la herramienta anterior."
 
@@ -39857,4 +39863,7 @@ msgstr "Aviso de vencido: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Aviso de vencimiento: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Las notificaciones se envían a los usuarios en su idioma configurado."
 

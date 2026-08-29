@@ -38508,6 +38508,12 @@ msgstr "Điền chỗ trống"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Dùng các điểm đánh dấu đã chọn để xác định chỗ trống. Ví dụ: Thủ đô của Peru là [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Để biến chỗ trống thành menu thả xuống, hãy phân tách các lựa chọn bằng một dấu |, lựa chọn đầu tiên là đáp án đúng. Ví dụ: Thủ đô của Peru là [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Để cho phép nhiều đáp án đúng, hãy phân tách chúng bằng ||. Ví dụ: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Nhập các tùy chọn danh sách thả xuống, mỗi câu trả lời một dòng. Sau đó đánh dấu các câu trả lời mong đợi bên dưới, giống công cụ cũ."
 
@@ -39857,4 +39863,7 @@ msgstr "Thông báo hết hạn: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Thông báo sắp hết hạn: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Thông báo được gửi đến người dùng bằng ngôn ngữ họ đã cấu hình."
 

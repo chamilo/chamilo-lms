@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Tusaalaha qaaciddada: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaale qaacido: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -35533,7 +35533,7 @@ msgid "%s results"
 msgstr "%s natiijo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Tusaale buuxi dhaqdhaqaaqa foomka : xisaabi Tusaha Cufka Jidhka</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Da'da</strong></td>            <td width=\"75%\" style=\"\">[25] sano jir</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Jinsiga</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ama F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Miisaanka</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Dhererka</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tusaha Cufka Jidhka</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Maqaalka Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Tusaale buuxi foomka dhaqdhaqaaqa : xisaabi Tilmaanta Cufka Jidhka</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Da'da</strong></td>            <td width=\"75%\" style=\"\">[25] sano jir</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Jinsiga</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ama F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Miisaanka</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Dhererka</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tilmaanta Cufka Jidhka</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Miisaanka/Dhererka<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Maqaalka Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Laga saaray"
@@ -38502,6 +38502,12 @@ msgstr "Buuxi meelaha bannaan"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Isticmaal calaamadaha la doortay si aad u qeexdo meelaha bannaan. Tusaale: Caasimadda Peru waa [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Si aad u beddesho meel bannaan liis hoos u dhac ah, kala saar doorashooyinka | keliya, kan ugu horreeya waa jawaabta saxda ah. Tusaale: Caasimadda Peru waa [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Si aad u oggolaato dhowr jawaabood oo sax ah, kala saar ||. Tusaale: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Geli xulashooyinka hoos-u-dhaca, hal jawaab safkiiba. Ka dibna calaamadi jawaabaha la filayo hoos, sida qalabka hore."
 
@@ -39851,4 +39857,7 @@ msgstr "Ogeysiis dhacay: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Ogeysiis dhacaya: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Ogeysiisyada waxaa loo diraa isticmaalayaasha luqadda ay iyagu u habeeyeen."
 

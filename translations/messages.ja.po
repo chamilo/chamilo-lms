@@ -38572,6 +38572,12 @@ msgstr "空欄補充"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "選択したマーカーを使用して空欄を定義します。例: ペルーの首都は [リマ] です。"
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "空欄をドロップダウンメニューにするには、選択肢を1つの | で区切ります。最初のものが正解です。例: The capital of Peru is [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "複数の正解を許可するには、|| で区切ります。例: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "ドロップダウンの選択肢を1行に1つずつ入力してください。次に、従来のツールと同様に、期待される回答を以下でマークします。"
 
@@ -39921,4 +39927,7 @@ msgstr "期限切れ通知: %s"
 
 msgid "Expiring notice: %s"
 msgstr "期限切れ間近の通知: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "通知は、各ユーザーが設定した言語で送信されます。"
 

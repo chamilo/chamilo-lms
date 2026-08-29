@@ -38502,6 +38502,12 @@ msgstr "रिक्त स्थान भरें"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "रिक्त स्थान परिभाषित करने के लिए चयनित मार्करों का उपयोग करें। उदाहरण: पेरू की राजधानी [लीमा] है।"
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "रिक्त स्थान को ड्रॉपडाउन मेनू बनाने के लिए, विकल्पों को एक | से अलग करें, पहला सही उत्तर है। उदाहरण: पेरू की राजधानी [Lima|Paris|Bogota] है।"
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "कई सही उत्तरों की अनुमति देने के लिए, उन्हें || से अलग करें। उदाहरण: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "ड्रॉपडाउन विकल्प दर्ज करें, प्रति पंक्ति एक उत्तर। फिर अपेक्षित उत्तर नीचे चिह्नित करें, जैसे लीगेसी टूल में।"
 
@@ -39851,4 +39857,7 @@ msgstr "समाप्ति सूचना: %s"
 
 msgid "Expiring notice: %s"
 msgstr "समाप्ति-पूर्व सूचना: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "सूचनाएँ उपयोगकर्ताओं को उनकी स्वयं कॉन्फ़िगर की गई भाषा में भेजी जाती हैं।"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Með kveðju"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formúlu dæmi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Dæmi um formúlu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Breytusvið"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:höfundarréttur,, no:engin höfundarréttur"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Mappa,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:æfing,,      simulation:herming,,      questionnaire:spurningalisti,,      diagram:skýringarmynd,,      figure:mynd,,      graph:graf,,      index:yfirlit,,      slide:skyggna,,      table:tafla,,      narrative text:frásagnartexti,,      exam:próf,,      experiment:tilraun,,      problem statement:vandamálalýsing,,      self assessment:sjálfsmat,,      lecture:fyrirlestur"
@@ -38507,6 +38507,12 @@ msgstr "Fylla út auð"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Notið valda merki til að skilgreina auð. Dæmi: Höfuðborg Perú er [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Til að breyta eyðu í fellilista, aðskildu valkostina með einu |, þar sem sá fyrsti er rétt svar. Dæmi: Höfuðborg Perú er [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Til að leyfa mörg rétt svör, aðskildu þau með ||. Dæmi: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Sláið inn valkostina fyrir fellilista, eitt svar á línu. Merkið síðan væntanleg svör hér að neðan, eins og í eldri útgáfu."
 
@@ -39856,4 +39862,7 @@ msgstr "Tilkynning um útrunnið: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Tilkynning um að renni út: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Tilkynningar eru sendar notendum á þeirra eigin stilltu tungumáli."
 

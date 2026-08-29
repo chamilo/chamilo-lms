@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "감사합니다"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "수식 예제: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "수식 예: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "변수 범위"
@@ -38506,6 +38506,12 @@ msgstr "빈칸 채우기"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "선택한 마커를 사용하여 빈칸을 정의하세요. 예: 페루의 수도는 [리마]입니다."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "빈칸을 드롭다운 메뉴로 만들려면 선택지를 단일 |로 구분하세요. 첫 번째가 정답입니다. 예: 페루의 수도는 [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "여러 정답을 허용하려면 ||로 구분하세요. 예: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "드롭다운 옵션을 한 줄에 하나씩 입력하세요. 그런 다음 아래에서 정답을 표시하세요(기존 도구와 동일)."
 
@@ -39855,4 +39861,7 @@ msgstr "만료 알림: %s"
 
 msgid "Expiring notice: %s"
 msgstr "만료 예정 알림: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "알림은 사용자가 설정한 언어로 전송됩니다."
 

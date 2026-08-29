@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Utg\u00e5nget: {0}",
     "Expiring soon: {0}": "G\u00e5r snart ut: {0}",
     "Expired notice: {0}": "Meddelande om utg\u00e5nget: {0}",
-    "Expiring notice: {0}": "Meddelande om utg\u00e5ng: {0}"
+    "Expiring notice: {0}": "Meddelande om utg\u00e5ng: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "F\u00f6r att g\u00f6ra ett tomt f\u00e4lt till en rullgardinsmeny, separera valen med ett enda {'|'}, d\u00e4r det f\u00f6rsta \u00e4r det r\u00e4tta svaret. Exempel: Perus huvudstad \u00e4r [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "F\u00f6r att till\u00e5ta flera r\u00e4tta svar, separera dem med {'|'}{'|'}. Exempel: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Aviseringar skickas till anv\u00e4ndare p\u00e5 deras eget konfigurerade spr\u00e5k."
 }

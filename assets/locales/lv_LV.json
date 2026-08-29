@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Beidzies: {0}",
     "Expiring soon: {0}": "Dr\u012bz beigsies: {0}",
     "Expired notice: {0}": "Pazi\u0146ojums par beigu\u0161os der\u012bgumu: {0}",
-    "Expiring notice: {0}": "Pazi\u0146ojums par beigu\u0161os der\u012bgumu: {0}"
+    "Expiring notice: {0}": "Pazi\u0146ojums par beigu\u0161os der\u012bgumu: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Lai tuk\u0161o vietu p\u0101rv\u0113rstu par nolai\u017eamo izv\u0113lni, atdaliet izv\u0113les ar vienu {'|'}, pirm\u0101 ir pareiz\u0101 atbilde. Piem\u0113rs: Peru galvaspils\u0113ta ir [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Lai at\u013cautu vair\u0101kas pareiz\u0101s atbildes, atdaliet t\u0101s ar {'|'}{'|'}. Piem\u0113rs: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Pazi\u0146ojumi tiek nos\u016bt\u012bti lietot\u0101jiem vi\u0146u konfigur\u0113taj\u0101 valod\u0101."
 }

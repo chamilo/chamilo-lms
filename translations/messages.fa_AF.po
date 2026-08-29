@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "با احترام"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نمونه فرمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نمونه فرمول: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "محدوده متغیرها"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":بله:حق نشر,, خیر:بدون حق نشر"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوشه,, application/msword:MsWord,, application/octet-stream:جریان اکتِت,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:پوشه,, application\/msword:MsWord,, application\/octet-stream:جریان اُکتت,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":تمرین:تمرین,,      شبیه‌سازی:شبیه‌سازی,,      پرسشنامه:پرسشنامه,,      نمودار:نمودار,,      شکل:شکل,,      گراف:گراف,,      نمایه:نمایه,,      اسلاید:اسلاید,,      جدول:جدول,,      متن روایی:متن روایی,,      امتحان:امتحان,,      آزمایش:آزمایش,,      بیان مسئله:بیان مسئله,,      خودارزیابی:خودارزیابی,,      سخنرانی:سخنرانی"
@@ -38502,6 +38502,12 @@ msgstr "پر کردن جاهای خالی"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "از نشانگرهای انتخاب‌شده برای تعریف جاهای خالی استفاده کنید. مثال: پایتخت پرو [لیما] است."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "برای تبدیل یک جای خالی به منوی کشویی، گزینه‌ها را با یک | جدا کنید؛ گزینهٔ اول پاسخ درست است. مثال: پایتخت پرو [Lima|Paris|Bogota] است."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "برای اجازه دادن به چند پاسخ درست، آن‌ها را با || جدا کنید. مثال: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "گزینه‌های منوی کشویی را وارد کنید، هر پاسخ در یک خط. سپس پاسخ‌های مورد انتظار را در زیر علامت بزنید، مانند ابزار قدیمی."
 
@@ -39851,4 +39857,7 @@ msgstr "اطلاعیه منقضی‌شده: %s"
 
 msgid "Expiring notice: %s"
 msgstr "اطلاعیه در حال انقضا: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "اطلاعیه‌ها به کاربران به زبان پیکربندی‌شدهٔ خودشان ارسال می‌شوند."
 

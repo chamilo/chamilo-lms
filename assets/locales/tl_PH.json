@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Nag-expire: {0}",
     "Expiring soon: {0}": "Malapit nang mag-expire: {0}",
     "Expired notice: {0}": "Expired na paunawa: {0}",
-    "Expiring notice: {0}": "Paunawang mag-e-expire: {0}"
+    "Expiring notice: {0}": "Paunawang mag-e-expire: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Para gawing dropdown menu ang blank, ihiwalay ang mga pagpipilian gamit ang iisang {'|'}, ang una ang tamang sagot. Halimbawa: Ang kabisera ng Peru ay [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Para payagan ang ilang tamang sagot, ihiwalay ang mga ito gamit ang {'|'}{'|'}. Halimbawa: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Ipinapadala ang mga abiso sa mga user sa kanilang naka-configure na wika."
 }

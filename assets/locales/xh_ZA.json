@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Iphelile: {0}",
     "Expiring soon: {0}": "Iphelelwa kungekudala: {0}",
     "Expired notice: {0}": "Isaziso sokuphelelwa: {0}",
-    "Expiring notice: {0}": "Isaziso sokuphelelwa kungekudala: {0}"
+    "Expiring notice: {0}": "Isaziso sokuphelelwa kungekudala: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Ukuze uguqule isithuba sibe yimenyu yokudonsela ezantsi, yahlula ukhetho nge-{'|'} enye, eyokuqala ibe yimpendulo echanekileyo. Umzekelo: Ikomkhulu lePeru ngu-[Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Ukuvumela iimpendulo ezininzi ezichanekileyo, zahlula nge-{'|'}{'|'}. Umzekelo: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Izaziso zithunyelwa kubasebenzisi ngolwimi lwabo olumiselweyo."
 }

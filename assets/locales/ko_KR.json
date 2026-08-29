@@ -3891,5 +3891,8 @@
     "Expired: {0}": "\ub9cc\ub8cc\ub428: {0}",
     "Expiring soon: {0}": "\uace7 \ub9cc\ub8cc: {0}",
     "Expired notice: {0}": "\ub9cc\ub8cc \uc54c\ub9bc: {0}",
-    "Expiring notice: {0}": "\ub9cc\ub8cc \uc608\uc815 \uc54c\ub9bc: {0}"
+    "Expiring notice: {0}": "\ub9cc\ub8cc \uc608\uc815 \uc54c\ub9bc: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "\ube48\uce78\uc744 \ub4dc\ub86d\ub2e4\uc6b4 \uba54\ub274\ub85c \ub9cc\ub4e4\ub824\uba74 \uc120\ud0dd\uc9c0\ub97c \ub2e8\uc77c {'|'}\ub85c \uad6c\ubd84\ud558\uc138\uc694. \uccab \ubc88\uc9f8\uac00 \uc815\ub2f5\uc785\ub2c8\ub2e4. \uc608: \ud398\ub8e8\uc758 \uc218\ub3c4\ub294 [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "\uc5ec\ub7ec \uc815\ub2f5\uc744 \ud5c8\uc6a9\ud558\ub824\uba74 {'|'}{'|'}\ub85c \uad6c\ubd84\ud558\uc138\uc694. \uc608: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "\uc54c\ub9bc\uc740 \uc0ac\uc6a9\uc790\uac00 \uc124\uc815\ud55c \uc5b8\uc5b4\ub85c \uc804\uc1a1\ub429\ub2c8\ub2e4."
 }

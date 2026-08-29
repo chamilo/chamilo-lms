@@ -3891,5 +3891,8 @@
     "Expired: {0}": "S\u00fcresi doldu: {0}",
     "Expiring soon: {0}": "Yak\u0131nda s\u00fcresi dolacak: {0}",
     "Expired notice: {0}": "S\u00fcresi dolmu\u015f bildirimi: {0}",
-    "Expiring notice: {0}": "S\u00fcresi dolacak bildirimi: {0}"
+    "Expiring notice: {0}": "S\u00fcresi dolacak bildirimi: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Bo\u015flu\u011fu a\u00e7\u0131l\u0131r men\u00fcye d\u00f6n\u00fc\u015ft\u00fcrmek i\u00e7in se\u00e7enekleri tek bir {'|'} ile ay\u0131r\u0131n; ilki do\u011fru cevapt\u0131r. \u00d6rnek: Peru'nun ba\u015fkenti [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Birden fazla do\u011fru cevaba izin vermek i\u00e7in bunlar\u0131 {'|'}{'|'} ile ay\u0131r\u0131n. \u00d6rnek: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Bildirimler kullan\u0131c\u0131lara kendi yap\u0131land\u0131r\u0131lm\u0131\u015f dillerinde g\u00f6nderilir."
 }

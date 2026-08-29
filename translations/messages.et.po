@@ -38507,6 +38507,12 @@ msgstr "Täida tühikud"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Kasuta valitud markereid tühikute määratlemiseks. Näide: Peruu pealinn on [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Tühiku rippmenüüks muutmiseks eraldage valikud ühe | märgiga, esimene on õige vastus. Näide: Peruu pealinn on [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Mitme õige vastuse lubamiseks eraldage need || märkidega. Näide: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Sisesta rippmenüü valikud, üks vastus rea kohta. Seejärel märgi oodatud vastused allpool, nagu pärand-tööriistas."
 
@@ -39856,4 +39862,7 @@ msgstr "Aegunud teade: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Aegumise teade: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Teavitused saadetakse kasutajatele nende enda seadistatud keeles."
 

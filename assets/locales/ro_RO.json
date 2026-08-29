@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Expirat: {0}",
     "Expiring soon: {0}": "Expir\u0103 \u00een cur\u00e2nd: {0}",
     "Expired notice: {0}": "Notificare de expirare: {0}",
-    "Expiring notice: {0}": "Notificare de expirare iminent\u0103: {0}"
+    "Expiring notice: {0}": "Notificare de expirare iminent\u0103: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Pentru a transforma un spa\u021biu gol \u00eentr-un meniu derulant, separa\u021bi op\u021biunile cu un singur {'|'}, prima fiind r\u0103spunsul corect. Exemplu: Capitala Peruului este [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Pentru a permite mai multe r\u0103spunsuri corecte, separa\u021bi-le cu {'|'}{'|'}. Exemplu: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Notific\u0103rile sunt trimise utilizatorilor \u00een limba configurat\u0103 de ace\u0219tia."
 }

@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Galiojimas pasibaig\u0119s: {0}",
     "Expiring soon: {0}": "Netrukus baigs galioti: {0}",
     "Expired notice: {0}": "Prane\u0161imas apie pasibaigus\u012f galiojim\u0105: {0}",
-    "Expiring notice: {0}": "Prane\u0161imas apie baigiant\u012f galioti: {0}"
+    "Expiring notice: {0}": "Prane\u0161imas apie baigiant\u012f galioti: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Kad tu\u0161\u010di\u0105 viet\u0105 paverstum\u0117te i\u0161skleid\u017eiamuoju meniu, atskirkite pasirinkimus vienu {'|'}, pirmasis yra teisingas atsakymas. Pavyzdys: Peru sostin\u0117 yra [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Kad leistum\u0117te kelis teisingus atsakymus, atskirkite juos su {'|'}{'|'}. Pavyzdys: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Prane\u0161imai siun\u010diami naudotojams j\u0173 sukonfig\u016bruota kalba."
 }

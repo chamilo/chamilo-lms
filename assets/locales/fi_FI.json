@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Vanhentunut: {0}",
     "Expiring soon: {0}": "Vanhenee pian: {0}",
     "Expired notice: {0}": "Ilmoitus vanhentuneesta: {0}",
-    "Expiring notice: {0}": "Ilmoitus vanhenemisesta: {0}"
+    "Expiring notice: {0}": "Ilmoitus vanhenemisesta: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Muuttaaksesi tyhj\u00e4n kohdan avattavaksi valikoksi erota vaihtoehdot yhdell\u00e4 {'|'}-merkill\u00e4; ensimm\u00e4inen on oikea vastaus. Esimerkki: Perun p\u00e4\u00e4kaupunki on [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Salliaksesi useita oikeita vastauksia erota ne merkill\u00e4 {'|'}{'|'}. Esimerkki: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Ilmoitukset l\u00e4hetet\u00e4\u00e4n k\u00e4ytt\u00e4jille heid\u00e4n omalla m\u00e4\u00e4ritetyll\u00e4 kielell\u00e4\u00e4n."
 }

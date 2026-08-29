@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "S spoštovanjem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorec formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Vzorec formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Obseg spremenljivk območja"
@@ -38522,6 +38522,12 @@ msgstr "Izpolni praznine"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Uporabite izbrane označevalce za določitev praznin. Primer: Glavno mesto Peruja je [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Če želite prazno mesto spremeniti v spustni meni, ločite izbire z enim znakom |, pri čemer je prva pravilni odgovor. Primer: Glavno mesto Peruja je [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Če želite dovoliti več pravilnih odgovorov, jih ločite z ||. Primer: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Vnesite možnosti spustnega seznama, po en odgovor v vrstico. Nato spodaj označite pričakovane odgovore, kot pri starem orodju."
 
@@ -39871,4 +39877,7 @@ msgstr "Obvestilo o poteku: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Obvestilo o prihajajočem poteku: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Obvestila se uporabnikom pošiljajo v njihovem nastavljenem jeziku."
 

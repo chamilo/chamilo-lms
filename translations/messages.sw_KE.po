@@ -4804,7 +4804,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "AWStats inakuruhusu kushauriana takwimu za jukwaa lako: wageni, maono ya ukurasa, referrers..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Chamilo MAKTABA"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Chamilo LIBRARY ni Injini ya Utafutaji inayotoa fahirisi na utafiti wa vigezo vingi. Ni sehemu ya vipengele vya Chamilo Medical."
@@ -38502,6 +38502,12 @@ msgstr "Jaza nafasi"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Tumia viashiria vilivyochaguliwa kufafanua nafasi. Mfano: Mji mkuu wa Peru ni [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Ili kugeuza nafasi tupu kuwa menyu kunjuzi, tenganisha chaguo kwa | moja, la kwanza likiwa jibu sahihi. Mfano: Mji mkuu wa Peru ni [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Ili kuruhusu majibu sahihi kadhaa, tenganisha kwa ||. Mfano: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Weka chaguzi za kunjuzi, jibu moja kwa kila mstari. Kisha alama majibu yanayotarajiwa hapa chini, kama zana ya zamani."
 
@@ -39851,4 +39857,7 @@ msgstr "Arifa ya kuisha: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Arifa ya kukaribia kuisha: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Arifa hutumwa kwa watumiaji katika lugha yao iliyosanidiwa."
 

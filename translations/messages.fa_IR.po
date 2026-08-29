@@ -38506,6 +38506,12 @@ msgstr "پر کردن جاهای خالی"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "از نشانگرهای انتخاب‌شده برای تعریف جاهای خالی استفاده کنید. مثال: پایتخت پرو [لیما] است."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "برای تبدیل یک جای خالی به منوی کشویی، گزینه‌ها را با یک | از هم جدا کنید؛ اولین گزینه پاسخ صحیح است. مثال: پایتخت پرو [Lima|Paris|Bogota] است."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "برای مجاز کردن چند پاسخ صحیح، آن‌ها را با || از هم جدا کنید. مثال: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "گزینه‌های کشویی را وارد کنید، هر پاسخ در یک خط. سپس پاسخ‌های مورد انتظار را در زیر علامت بزنید، مانند ابزار قدیمی."
 
@@ -39855,4 +39861,7 @@ msgstr "اعلان منقضی‌شده: %s"
 
 msgid "Expiring notice: %s"
 msgstr "اعلان در حال انقضا: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "اعلان‌ها به کاربران به زبان پیکربندی‌شده خودشان ارسال می‌شوند."
 

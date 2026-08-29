@@ -38506,6 +38506,12 @@ msgstr "Líon isteach na bearnaí"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Úsáid na marcóirí roghnaithe chun bearnaí a shainiú. Sampla: Is é príomhchathair Pheiriú [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Chun spás bán a iompú ina roghchlár anuas, scar na roghanna le | amháin, an chéad cheann mar an freagra ceart. Sampla: Príomhchathair na Peiriú is ea [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Chun roinnt freagraí cearta a cheadú, scar iad le ||. Sampla: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Iontráil na roghanna anuas, freagra amháin in aghaidh an líne. Ansin marcáil na freagraí ionchais thíos, mar an uirlis oidhreachta."
 
@@ -39855,4 +39861,7 @@ msgstr "Fógra éagtha: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Fógra ag dul in éag: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Seoltar fógraí chuig úsáideoirí ina dteanga féin atá cumraithe."
 

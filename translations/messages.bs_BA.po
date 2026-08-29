@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primjer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primjer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raspon varijabli"
@@ -16450,7 +16450,7 @@ msgid "Off"
 msgstr "Isključeno"
 
 msgid "Web server"
-msgstr "Web server"
+msgstr "Web poslužitelj"
 
 msgid "Not inserted"
 msgstr "Nije ubačeno"
@@ -20350,7 +20350,7 @@ msgid "Start video call"
 msgstr "Započni video poziv"
 
 msgid "Video URL"
-msgstr "Video URL"
+msgstr "URL videa"
 
 msgid "Insert a valid URL"
 msgstr "Umetnite valjan URL"
@@ -26653,7 +26653,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfiguracija LDAP konekcije"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] <\/pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Postavi datum isteka pri prvoj prijavi"
@@ -38502,6 +38502,12 @@ msgstr "Popuni praznine"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Koristite odabrane markere za definisanje praznina. Primjer: Glavni grad Perua je [Lima]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Da biste prazninu pretvorili u padajući meni, odvojite izbore jednim |, pri čemu je prvi tačan odgovor. Primjer: Glavni grad Perua je [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Da biste dozvolili više tačnih odgovora, odvojite ih sa ||. Primjer: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Unesite opcije padajućeg izbornika, jedan odgovor po liniji. Zatim označite očekivane odgovore ispod, kao u starom alatu."
 
@@ -39851,4 +39857,7 @@ msgstr "Istekla obavijest: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Obavijest o isteku: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Obavještenja se šalju korisnicima na njihovom podešenom jeziku."
 

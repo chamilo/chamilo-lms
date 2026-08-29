@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Expirat : {0}",
     "Expiring soon: {0}": "Caduca l\u00e8u : {0}",
     "Expired notice: {0}": "Av\u00eds d'expiracion : {0}",
-    "Expiring notice: {0}": "Av\u00eds d'expiracion : {0}"
+    "Expiring notice: {0}": "Av\u00eds d'expiracion : {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Per transformar un blanc en men\u00fa desenrotlant, separatz las causidas amb un sol {'|'}, la primi\u00e8ra essent la responsa corr\u00e8cta. Exemple : La capitala de Per\u00f3 es [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Per permetre mantuna responsa corr\u00e8cta, separatz-las amb {'|'}{'|'}. Exemple : 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Las notificacions son mandadas als utilizaires dins lor pr\u00f2pria lenga configurada."
 }

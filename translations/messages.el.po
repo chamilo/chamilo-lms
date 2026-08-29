@@ -38521,6 +38521,12 @@ msgstr "Συμπλήρωση κενών"
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 msgstr "Χρησιμοποιήστε τους επιλεγμένους δείκτες για να ορίσετε κενά. Παράδειγμα: Η πρωτεύουσα του Περού είναι [Λίμα]."
 
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Για να μετατρέψετε ένα κενό σε αναπτυσσόμενο μενού, διαχωρίστε τις επιλογές με ένα μόνο |, με την πρώτη να είναι η σωστή απάντηση. Παράδειγμα: Η πρωτεύουσα του Περού είναι [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Για να επιτρέψετε πολλές σωστές απαντήσεις, διαχωρίστε τις με ||. Παράδειγμα: 1||one||uno."
+
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 msgstr "Εισαγάγετε τις επιλογές αναπτυσσόμενου μενού, μία απάντηση ανά γραμμή. Στη συνέχεια, σημειώστε τις αναμενόμενες απαντήσεις παρακάτω, όπως στο παλαιότερο εργαλείο."
 
@@ -39870,4 +39876,7 @@ msgstr "Ειδοποίηση λήξης: %s"
 
 msgid "Expiring notice: %s"
 msgstr "Ειδοποίηση επικείμενης λήξης: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Οι ειδοποιήσεις αποστέλλονται στους χρήστες στη δική τους ρυθμισμένη γλώσσα."
 

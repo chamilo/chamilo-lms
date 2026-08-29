@@ -1408,7 +1408,7 @@
     "Selected items will be the only ones included in the exported file.": "Hautatutako elementuak soilik izango dira esportatutako fitxategian barneratuak.",
     "Moodle export": "Moodle esportazioa",
     "Moodle version": "Moodle bertsioa",
-    "Admin ID": "Admin ID",
+    "Admin ID": "Admin IDa",
     "Internal integer user id": "Barneko erabiltzaile ID osoa",
     "Moodle requires an internal user id stored in XML. If in doubt, use 1.": "Moodle-k XML-n gordetako barneko erabiltzaile ID bat behar du. Zalantzan bazaude, 1 erabili.",
     "Username to appear as owner of imported items": "Inportatutako elementuen jabe gisa agertuko den erabiltzaile-izena",
@@ -1845,8 +1845,8 @@
     "Login %status% for username %username%": "{0}tatus% saioa %username% erabiltzailearentzat",
     "Co-generated with AI": "AI-rekin batera sortua",
     "GDPRTitle": "GDPRTitle",
-    "EntraID ID": "EntraID ID",
-    "EntraID UID": "EntraID UID",
+    "EntraID ID": "EntraID IDa",
+    "EntraID UID": "EntraID UIDa",
     "Required fields": "Eskatutako eremuak",
     "No available users.": "Ez dago erabiltzaile eskuragarririk.",
     "No users added yet.": "Oraindik ez da erabiltzailerik gehitu.",
@@ -3891,5 +3891,8 @@
     "Expired: {0}": "Iraungita: {0}",
     "Expiring soon: {0}": "Laster iraungiko da: {0}",
     "Expired notice: {0}": "Iraungitako oharra: {0}",
-    "Expiring notice: {0}": "Iraungitze-oharra: {0}"
+    "Expiring notice: {0}": "Iraungitze-oharra: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "Hutsune bat goitibeherako menu bihurtzeko, bereizi aukerak {'|'} bakarrarekin; lehenengoa da erantzun zuzena. Adibidea: Peruko hiriburua [Lima{'|'}Paris{'|'}Bogota] da.",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Erantzun zuzen bat baino gehiago onartzeko, bereizi {'|'}{'|'} bidez. Adibidea: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Jakinarazpenak erabiltzaileei haien hizkuntza-konfigurazioan bidaltzen zaizkie."
 }

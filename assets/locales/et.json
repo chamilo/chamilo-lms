@@ -3882,5 +3882,8 @@
     "Expired: {0}": "Aegunud: {0}",
     "Expiring soon: {0}": "Aegub peagi: {0}",
     "Expired notice: {0}": "Aegunud teade: {0}",
-    "Expiring notice: {0}": "Aegumise teade: {0}"
+    "Expiring notice: {0}": "Aegumise teade: {0}",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "T\u00fchiku rippmen\u00fc\u00fcks muutmiseks eraldage valikud \u00fche {'|'} m\u00e4rgiga, esimene on \u00f5ige vastus. N\u00e4ide: Peruu pealinn on [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "Mitme \u00f5ige vastuse lubamiseks eraldage need {'|'}{'|'} m\u00e4rkidega. N\u00e4ide: 1{'|'}{'|'}one{'|'}{'|'}uno.",
+    "Notifications are sent to users in their own configured language.": "Teavitused saadetakse kasutajatele nende enda seadistatud keeles."
 }

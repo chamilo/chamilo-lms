@@ -73,7 +73,7 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-        if ($this->isGradebookLocked((int) $quiz->getIid(), $course, $session)) {
+        if ($this->gradebookLinkManager->isResourceLocked($course, $session, GradebookLinkResourceResolver::LINK_EXERCISE, (int) $quiz->getIid())) {
             throw new BadRequestHttpException('This exercise is locked by gradebook.');
         }
         if (!$this->canDeleteResults()) {
@@ -101,30 +101,7 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
             throw new NotFoundHttpException('The requested exercise was not found.');
         }
 
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('quiz.iid')
-            ->from(CQuiz::class, 'quiz')
-            ->innerJoin('quiz.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->andWhere('quiz.iid = :exerciseId')
-            ->andWhere('IDENTITY(links.course) = :courseId')
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('links.session IS NULL');
-        }
-
-        if (null === $queryBuilder->getQuery()->getOneOrNullResult()) {
+        if (null === $this->quizRepository->findInCourseContext($exerciseId, $course, $session)) {
             throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
         }
 
@@ -138,16 +115,6 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
         }
 
         return !$this->isSettingEnabled('exercise.limit_exercise_teacher_access');
-    }
-
-    private function isGradebookLocked(int $exerciseId, Course $course, ?Session $session): bool
-    {
-        return $this->gradebookLinkManager->isResourceLocked(
-            $course,
-            $session,
-            GradebookLinkResourceResolver::LINK_EXERCISE,
-            $exerciseId,
-        );
     }
 
     private function isSettingEnabled(string $name): bool

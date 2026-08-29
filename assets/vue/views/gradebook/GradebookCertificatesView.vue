@@ -44,6 +44,17 @@
         type="secondary-text"
       />
       <BaseButton
+        v-if="certificates?.canManage && hasAttachedCertificateTemplate && !certificates?.settings?.customCertificateFallback"
+        :disabled="isRunningAction"
+        :is-loading="isRunningAction && currentAction === 'use_system_template'"
+        :label="t('Use system default certificate')"
+        icon="restore"
+        only-icon
+        size="normal"
+        type="secondary-text"
+        @click="confirmUseSystemDefaultCertificate"
+      />
+      <BaseButton
         v-if="certificates?.canManage && certificates?.settings?.customCertificateFallback"
         :label="t('Generate')"
         :to-url="certificates.customCertificateFallbackUrl"
@@ -126,6 +137,14 @@
           >
             <span class="font-semibold">{{ t("Default certificate") }}:</span>
             {{ certificates?.category?.certificateTemplate?.title || t("No data available") }}
+          </p>
+          <p
+            v-if="certificates?.canManage && certificates?.category?.certificateTemplate?.fallback"
+            class="mt-2 text-sm text-yellow-700"
+            role="status"
+          >
+            <span class="font-semibold">{{ t("Warning") }}:</span>
+            {{ t("The attached certificate is unavailable. The system default certificate will be used.") }}
           </p>
         </div>
 
@@ -378,6 +397,9 @@ const learners = computed(() =>
   })),
 )
 const hasGeneratedCertificates = computed(() => learners.value.some((row) => Boolean(row.certificate)))
+const hasAttachedCertificateTemplate = computed(
+  () => Number(certificates.value?.category?.certificateTemplate?.attachedDocumentId || 0) > 0,
+)
 const previewDialogTitle = computed(() => {
   const learnerName = previewLearnerName.value.trim()
 
@@ -558,6 +580,17 @@ async function sendNotifications() {
 
 function generateAll() {
   runAction("generate_all")
+}
+
+function confirmUseSystemDefaultCertificate() {
+  if (!hasAttachedCertificateTemplate.value) {
+    return
+  }
+
+  requireConfirmation({
+    message: t("Use the system default certificate instead of the attached certificate?"),
+    accept: () => runAction("use_system_template"),
+  })
 }
 
 function confirmDeleteOne(row) {

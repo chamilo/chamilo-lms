@@ -3494,6 +3494,8 @@
     "Highest value": "Highest value",
     "Fill in blanks": "Fill in blanks",
     "Use the selected markers to define blanks. Example: The capital of Peru is [Lima].": "Use the selected markers to define blanks. Example: The capital of Peru is [Lima].",
+    "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].": "To turn a blank into a dropdown menu, separate the choices with a single {'|'}, the first one being the correct answer. Example: The capital of Peru is [Lima{'|'}Paris{'|'}Bogota].",
+    "To allow several correct answers, separate them with ||. Example: 1||one||uno.": "To allow several correct answers, separate them with {'|'}{'|'}. Example: 1{'|'}{'|'}one{'|'}{'|'}uno.",
     "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool.": "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool.",
     "Refresh answers": "Refresh answers",
     "This dropdown combination question uses one global score, like legacy.": "This dropdown combination question uses one global score, like legacy.",

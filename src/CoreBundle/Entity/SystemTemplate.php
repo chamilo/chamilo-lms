@@ -16,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SystemTemplateRepository::class)]
 class SystemTemplate
 {
+    public const DEFAULT_CERTIFICATE_TITLE = 'Chamilo certificate';
+
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]

@@ -79,7 +79,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-        $lockedByGradebook = $this->isGradebookLocked((int) $quiz->getIid(), $course, $session);
+        $lockedByGradebook = $this->gradebookLinkManager->isResourceLocked($course, $session, GradebookLinkResourceResolver::LINK_EXERCISE, (int) $quiz->getIid());
         $showUsername = $this->shouldShowUsername();
         $showIp = $this->shouldShowIp();
         $attempts = $this->getAttempts($request, $quiz, $course, $session, $lockedByGradebook, $showUsername, $showIp);
@@ -120,36 +120,12 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             throw new NotFoundHttpException('The requested exercise was not found.');
         }
 
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('quiz.iid')
-            ->addSelect('links.visibility AS linkVisibility')
-            ->from(CQuiz::class, 'quiz')
-            ->innerJoin('quiz.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->andWhere('quiz.iid = :exerciseId')
-            ->andWhere('IDENTITY(links.course) = :courseId')
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('links.session IS NULL');
-        }
-
-        $row = $queryBuilder->getQuery()->getOneOrNullResult();
-        if (null === $row) {
+        $context = $this->quizRepository->findInCourseContextWithVisibility($exerciseId, $course, $session);
+        if (null === $context) {
             throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
         }
 
-        $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
+        $visibility = $context['visibility'];
         if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('The requested exercise is not visible.');
         }
@@ -500,16 +476,6 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
 
         return !$this->isSettingEnabled('exercise.limit_exercise_teacher_access')
             && !$this->isSettingEnabled('exercise.disable_clean_exercise_results_for_teachers');
-    }
-
-    private function isGradebookLocked(int $exerciseId, Course $course, ?Session $session): bool
-    {
-        return $this->gradebookLinkManager->isResourceLocked(
-            $course,
-            $session,
-            GradebookLinkResourceResolver::LINK_EXERCISE,
-            $exerciseId,
-        );
     }
 
     private function isSettingEnabled(string $name): bool

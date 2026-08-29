@@ -158,17 +158,14 @@ final class Version20260822212700 extends AbstractMigrationChamilo
             // The file was just created by this migration, so the CLI process owns
             // it and can safely grant access to the shared deployment group.
             if (!@chmod($absolutePath, 0660)) {
-                throw new RuntimeException(sprintf(
-                    'Could not set shared permissions on demo resource file "%s".',
-                    $absolutePath
-                ));
+                throw new RuntimeException(\sprintf('Could not set shared permissions on demo resource file "%s".', $absolutePath));
             }
 
             ++$normalized;
         }
 
         if ($normalized > 0) {
-            $this->write(sprintf(
+            $this->write(\sprintf(
                 'Normalized shared permissions for %d bundled demo resource files.',
                 $normalized
             ));

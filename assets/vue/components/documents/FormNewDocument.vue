@@ -12,8 +12,10 @@
       />
 
       <BaseTextArea
+        id="document-description"
         v-model="item.comment"
         :label="t('Description')"
+        name="document_description"
         rows="4"
         auto-resize
       />

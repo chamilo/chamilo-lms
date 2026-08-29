@@ -18,11 +18,10 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CourseBundle\Entity\CLpItem;
-use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizDestinationResult;
@@ -43,6 +42,9 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 /**
  * Read-only provider for migrated exercise runtime result/review data.
@@ -82,6 +84,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
     ) {}
 
     /**
@@ -325,175 +328,21 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             throw new NotFoundHttpException('The requested exercise was not found.');
         }
 
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('quiz.iid')
-            ->addSelect('links.visibility AS linkVisibility')
-            ->from(CQuiz::class, 'quiz')
-            ->innerJoin('quiz.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->andWhere('quiz.iid = :exerciseId')
-            ->andWhere('IDENTITY(links.course) = :courseId')
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('links.session IS NULL');
-        }
-
-        $row = $queryBuilder->getQuery()->getOneOrNullResult();
-        if (null === $row) {
+        $context = $this->quizRepository->findInCourseContextWithVisibility($exerciseId, $course, $session);
+        if (null === $context) {
             throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
         }
 
         if (!$canManage) {
-            $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
-            if (self::VISIBILITY_PUBLISHED !== $visibility && !$this->isVisibleThroughLearnpath($quiz, $course, $session)) {
+            $visibility = $context['visibility'];
+            if (self::VISIBILITY_PUBLISHED !== $visibility
+                && !$this->exerciseLearnpathVisibilityHelper->isVisibleThroughLearnpath($quiz, $course, $session)
+            ) {
                 throw new AccessDeniedHttpException('The requested exercise is not visible.');
             }
         }
 
         return $quiz;
-    }
-
-    private function isVisibleThroughLearnpath(CQuiz $quiz, Course $course, ?Session $session): bool
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            return false;
-        }
-
-        $learnpathId = $this->getQueryPositiveInt($request, ['learnpath_id', 'lp_id']);
-        $learnpathItemId = $this->getQueryPositiveInt($request, ['learnpath_item_id', 'lp_item_id']);
-        $learnpathItemViewId = $this->getQueryPositiveInt($request, ['learnpath_item_view_id']);
-        $origin = strtolower(trim((string) $request->query->get('origin', '')));
-        $hasLearnpathContext = 'learnpath' === $origin
-            || $request->query->has('lp_init')
-            || $learnpathId > 0
-            || $learnpathItemId > 0
-            || $learnpathItemViewId > 0;
-
-        if (!$hasLearnpathContext || $learnpathId <= 0 || $learnpathItemId <= 0) {
-            return false;
-        }
-
-        $user = $this->security->getUser();
-        if (!$user instanceof User) {
-            return false;
-        }
-
-        $exerciseId = (int) ($quiz->getIid() ?? 0);
-        if ($exerciseId <= 0) {
-            return false;
-        }
-
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('item.iid')
-            ->from(CLpItem::class, 'item')
-            ->innerJoin('item.lp', 'lp')
-            ->innerJoin('lp.resourceNode', 'lpNode')
-            ->innerJoin('lpNode.resourceLinks', 'lpLinks')
-            ->andWhere('item.iid = :learnpathItemId')
-            ->andWhere('IDENTITY(item.lp) = :learnpathId')
-            ->andWhere('item.itemType = :itemType')
-            ->andWhere('(item.path = :exerciseIdString OR item.ref = :exerciseIdString)')
-            ->andWhere('IDENTITY(lpLinks.course) = :courseId')
-            ->andWhere('lpLinks.visibility = :publishedVisibility')
-            ->andWhere('lpLinks.deletedAt IS NULL')
-            ->andWhere('lpLinks.endVisibilityAt IS NULL')
-            ->setParameter('learnpathItemId', $learnpathItemId, Types::INTEGER)
-            ->setParameter('learnpathId', $learnpathId, Types::INTEGER)
-            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ)
-            ->setParameter('exerciseIdString', (string) $exerciseId)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('publishedVisibility', self::VISIBILITY_PUBLISHED, Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('(IDENTITY(lpLinks.session) = :sessionId OR lpLinks.session IS NULL)')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('lpLinks.session IS NULL');
-        }
-
-        if (null === $queryBuilder->getQuery()->getOneOrNullResult()) {
-            return false;
-        }
-
-        if ($learnpathItemViewId <= 0) {
-            return true;
-        }
-
-        return $this->hasValidLearnpathItemView($learnpathItemViewId, $learnpathItemId, $learnpathId, $course, $session, $user);
-    }
-
-    private function hasValidLearnpathItemView(
-        int $learnpathItemViewId,
-        int $learnpathItemId,
-        int $learnpathId,
-        Course $course,
-        ?Session $session,
-        User $user,
-    ): bool {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('itemView.iid')
-            ->from(CLpItemView::class, 'itemView')
-            ->innerJoin('itemView.view', 'lpView')
-            ->andWhere('itemView.iid = :learnpathItemViewId')
-            ->andWhere('IDENTITY(itemView.item) = :learnpathItemId')
-            ->andWhere('IDENTITY(lpView.lp) = :learnpathId')
-            ->andWhere('IDENTITY(lpView.course) = :courseId')
-            ->andWhere('IDENTITY(lpView.user) = :userId')
-            ->setParameter('learnpathItemViewId', $learnpathItemViewId, Types::INTEGER)
-            ->setParameter('learnpathItemId', $learnpathItemId, Types::INTEGER)
-            ->setParameter('learnpathId', $learnpathId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('IDENTITY(lpView.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('lpView.session IS NULL');
-        }
-
-        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
-    }
-
-    /**
-     * @param array<int, string> $names
-     */
-    private function getQueryPositiveInt(Request $request, array $names): int
-    {
-        foreach ($names as $name) {
-            $value = $request->query->get($name);
-            if (\is_array($value)) {
-                $value = $value[0] ?? null;
-            }
-
-            if (null === $value || '' === (string) $value || !is_numeric((string) $value)) {
-                continue;
-            }
-
-            return max(0, (int) $value);
-        }
-
-        return 0;
     }
 
     private function getAttempt(int $attemptId, CQuiz $quiz, Course $course, ?Session $session, bool $canManage): TrackEExercise
@@ -1426,12 +1275,14 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         for ($index = 0; $index < $blankCount; ++$index) {
             $blank = [
                 'position' => $index + 1,
-                'studentAnswer' => $showStudentAnswers ? (string) ($studentInfo['student_answer'][$index] ?? '') : '',
+                'studentAnswer' => $showStudentAnswers
+                    ? $this->trimFillBlankOption((string) ($studentInfo['student_answer'][$index] ?? ''))
+                    : '',
                 'studentScore' => $showStudentAnswers ? (string) ($studentInfo['student_score'][$index] ?? '') : '',
             ];
 
             if ($showExpectedAnswers && null !== $teacherInfo) {
-                $blank['correctAnswer'] = (string) ($teacherInfo['words'][$index] ?? '');
+                $blank['correctAnswer'] = $this->resolveFillBlankCorrectAnswerDisplay((string) ($teacherInfo['words'][$index] ?? ''));
             }
 
             $blanks[] = $blank;
@@ -2352,6 +2203,35 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             6 => ['$', '$'],
             default => ['[', ']'],
         };
+    }
+
+    /**
+     * A raw blank word may encode a menu (single "|", first item is the
+     * correct answer) or several accepted free-text answers (double "||").
+     * Resolve it to the text that should actually be displayed as "the
+     * correct answer", instead of the raw pipe-joined string. Mirrors the
+     * detection in ExerciseAttemptScoringService::isFillBlankStudentAnswerGood().
+     */
+    private function resolveFillBlankCorrectAnswerDisplay(string $rawAnswer): string
+    {
+        if (str_contains($rawAnswer, '|') && !str_contains($rawAnswer, '||')) {
+            $menuAnswers = array_map([$this, 'trimFillBlankOption'], explode('|', $rawAnswer));
+
+            return (string) ($menuAnswers[0] ?? '');
+        }
+
+        if (str_contains($rawAnswer, '||')) {
+            $answers = array_map([$this, 'trimFillBlankOption'], preg_split('/\|\|/', $rawAnswer) ?: []);
+
+            return implode(' / ', $answers);
+        }
+
+        return $this->trimFillBlankOption($rawAnswer);
+    }
+
+    private function trimFillBlankOption(string $value): string
+    {
+        return trim(html_entity_decode($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
     }
 
     private function isStructuralContentQuestion(CQuizQuestion $question): bool

@@ -74,7 +74,8 @@ final readonly class ExerciseLearningPathItemProcessor implements ProcessorInter
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
+        $quiz = $this->quizRepository->findInCourseContext($exerciseId, $course, $session)
+        ?? throw new NotFoundHttpException('The requested exercise was not found.');
         $lp = $this->getLearningPathFromCurrentContext($request, $course, $session);
         $parent = $this->resolveParentItem($request, $lp) ?? $this->getLearningPathRootItem($lp);
         $lpItem = $this->getExistingLearningPathExerciseItem($lp, $exerciseId);
@@ -105,48 +106,6 @@ final readonly class ExerciseLearningPathItemProcessor implements ProcessorInter
         $returnToLp = strtolower((string) $request->query->get('returnToLp', ''));
 
         return 'learnpath' === $origin || \in_array($returnToLp, ['1', 'true', 'yes'], true);
-    }
-
-    private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
-    {
-        $quiz = $this->quizRepository->find($exerciseId);
-        if (!$quiz instanceof CQuiz) {
-            throw new NotFoundHttpException('The requested exercise was not found.');
-        }
-
-        if ($this->isExerciseInContext($exerciseId, $course, $session)) {
-            return $quiz;
-        }
-
-        throw new AccessDeniedHttpException('The requested exercise does not belong to the current course context.');
-    }
-
-    private function isExerciseInContext(int $exerciseId, Course $course, ?Session $session): bool
-    {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('quiz.iid')
-            ->from(CQuiz::class, 'quiz')
-            ->innerJoin('quiz.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->andWhere('quiz.iid = :exerciseId')
-            ->andWhere('IDENTITY(links.course) = :courseId')
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('links.session IS NULL');
-        }
-
-        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     private function getLearningPathFromCurrentContext(Request $request, Course $course, ?Session $session): CLp

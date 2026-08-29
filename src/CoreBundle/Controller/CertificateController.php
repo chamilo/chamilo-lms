@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Flysystem\FilesystemException;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
@@ -353,52 +354,57 @@ class CertificateController extends AbstractController
                     return \sprintf('resource/%s/%s/%s/%s', $a, $b, $c, $filename);
                 };
 
-                // Try via ResourceFile->title first (this is usually the stored physical filename)
-                foreach ($node->getResourceFiles() as $rf) {
-                    $title = (string) $rf->getTitle();
-                    if ('' !== $title) {
-                        if ('' !== $basePath) {
-                            $p = $basePath.'/'.$title;
-                            if ($fs->fileExists($p)) {
-                                $content = $fs->read($p);
+                try {
+                    // Try via ResourceFile->title first (this is usually the stored physical filename)
+                    foreach ($node->getResourceFiles() as $rf) {
+                        $title = (string) $rf->getTitle();
+                        if ('' !== $title) {
+                            if ('' !== $basePath) {
+                                $p = $basePath.'/'.$title;
+                                if ($fs->fileExists($p)) {
+                                    $content = $fs->read($p);
+                                    if (false !== $content && null !== $content) {
+                                        return $content;
+                                    }
+                                }
+                            }
+
+                            $p2 = $sharded($title);
+                            if ($fs->fileExists($p2)) {
+                                $content = $fs->read($p2);
                                 if (false !== $content && null !== $content) {
                                     return $content;
                                 }
                             }
                         }
-
-                        $p2 = $sharded($title);
-                        if ($fs->fileExists($p2)) {
-                            $content = $fs->read($p2);
-                            if (false !== $content && null !== $content) {
-                                return $content;
-                            }
-                        }
                     }
-                }
 
-                // Try via ResourceFile->original_name
-                foreach ($node->getResourceFiles() as $rf) {
-                    $orig = (string) $rf->getOriginalName();
-                    if ('' !== $orig) {
-                        if ('' !== $basePath) {
-                            $p = $basePath.'/'.$orig;
-                            if ($fs->fileExists($p)) {
-                                $content = $fs->read($p);
+                    // Try via ResourceFile->original_name
+                    foreach ($node->getResourceFiles() as $rf) {
+                        $orig = (string) $rf->getOriginalName();
+                        if ('' !== $orig) {
+                            if ('' !== $basePath) {
+                                $p = $basePath.'/'.$orig;
+                                if ($fs->fileExists($p)) {
+                                    $content = $fs->read($p);
+                                    if (false !== $content && null !== $content) {
+                                        return $content;
+                                    }
+                                }
+                            }
+
+                            $p2 = $sharded($orig);
+                            if ($fs->fileExists($p2)) {
+                                $content = $fs->read($p2);
                                 if (false !== $content && null !== $content) {
                                     return $content;
                                 }
                             }
                         }
-
-                        $p2 = $sharded($orig);
-                        if ($fs->fileExists($p2)) {
-                            $content = $fs->read($p2);
-                            if (false !== $content && null !== $content) {
-                                return $content;
-                            }
-                        }
                     }
+                } catch (FilesystemException) {
+                    // Corrupted/invalid stored filename (e.g. control characters from
+                    // legacy migrated data) - fall through to the resource fallback below.
                 }
             }
 

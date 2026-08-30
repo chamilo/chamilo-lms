@@ -661,7 +661,7 @@ switch ($action) {
         $status = $_REQUEST['status'] ?? 0;
         $questionType = $_REQUEST['questionType'] ?? 0;
         $showAttemptsInSessions = $_REQUEST['showAttemptsInSessions'] ? true : false;
-        if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
+        if (isset($_GET['filter_by_user']) && (int) $_GET['filter_by_user'] > 0) {
             $filter_user = (int) $_GET['filter_by_user'];
             if (empty($whereCondition)) {
                 $whereCondition .= " te.exe_user_id  = '$filter_user'";

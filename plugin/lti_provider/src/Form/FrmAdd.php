@@ -53,9 +53,6 @@ class FrmAdd extends FormValidator
             [
                 'quiz' => $plugin->get_lang('Quizzes'),
                 'lp' => $plugin->get_lang('Learnpaths'),
-            ],
-            [
-                'onclick' => 'selectToolProvider(this.value)',
             ]
         );
 

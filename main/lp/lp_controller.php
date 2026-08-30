@@ -1270,11 +1270,34 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed(true);
         }
+        header('Content-Type: application/json');
+        if (!Security::check_token('post')) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Invalid security token']);
+            exit;
+        }
+
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
         $tableLp = Database::get_course_table(TABLE_LP_MAIN);
 
-        $lists = isset($_POST['lists']) ? (array) $_POST['lists'] : [];
+        $lists = isset($_POST['lists']) && is_array($_POST['lists']) ? $_POST['lists'] : [];
+        if (empty($lists)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid learning path order']);
+            exit;
+        }
+
+        if ($sessionId > 0) {
+            if (!learnpath::reorderSessionLearningPaths($courseId, $sessionId, $lists)) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Invalid session learning path order']);
+                exit;
+            }
+
+            echo json_encode(['ok' => true]);
+            exit;
+        }
 
         foreach ($lists as $categoryIdStr => $lpIds) {
             $categoryId = (int) $categoryIdStr;
@@ -1293,7 +1316,6 @@ switch ($action) {
             }
         }
 
-        header('Content-Type: application/json');
         echo json_encode(['ok' => true]);
         exit;
     case 'edit':

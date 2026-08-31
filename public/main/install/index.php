@@ -752,8 +752,16 @@ if (isset($_POST['step2'])) {
             (new Dotenv())->load($envFile);
 
             error_log('Load kernel');
-            // Load Symfony Kernel
-            $kernel = new Kernel('dev', true);
+            // Load Symfony Kernel using the environment just written to .env
+            // (not hardcoded 'dev'), so a "composer install --no-dev" deployment
+            // (no DebugBundle/WebProfilerBundle/etc. installed) can finish installing.
+            $installerAppEnv = (string) (
+                $_SERVER['APP_ENV']
+                ?? $_ENV['APP_ENV']
+                ?? getenv('APP_ENV')
+                ?? 'dev'
+            );
+            $kernel = new Kernel($installerAppEnv, true);
             $application = new Application($kernel);
 
             // Create database schema

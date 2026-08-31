@@ -118,8 +118,7 @@ class SessionAdminController extends BaseController
             $isSessionAdmin,
             $user
         ) {
-            $sessionRel = $gc->getCategory()->getCourse()->getSessions()[0] ?? null;
-            $session = $sessionRel?->getSession();
+            $session = $gc->getCategory()->getSession();
             $path = $gc->getPathCertificate();
 
             $hash = null;

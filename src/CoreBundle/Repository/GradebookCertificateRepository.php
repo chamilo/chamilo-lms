@@ -363,8 +363,6 @@ class GradebookCertificateRepository extends ResourceRepository
             ->join('cat.course', 'course')
             ->join('course.urls', 'curl')
             ->join('curl.url', 'url')
-            ->leftJoin('course.sessions', 'src')
-            ->leftJoin('src.session', 'session')
             ->where('url.id = :urlId')
             ->setParameter('urlId', $urlId)
             ->orderBy('gc.createdAt', 'DESC')

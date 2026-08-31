@@ -8,8 +8,6 @@ $strings['client_id_help'] = 'Client ID to be used for tools by default. You can
 $strings['ImsLtiDescription'] = '<p>Learning Tools Interoperability® (LTI®) is a specification developed by IMS Global Learning Consortium. The principal concept of LTI is to establish a standard way of integrating rich learning applications (often remotely hosted and provided through third-party services) with platforms like learning management systems, portals, learning object repositories, or other educational environments.</p>';
 $strings['ManageToolButton'] = '<p>To manage the tools go to <a href="%s">Tool list</a></p>';
 $strings['AddExternalTool'] = 'Add external tool';
-$strings['AddExternalToolDescription'] = 'Create and configure a reusable external tool for the IMS/LTI client plugin.';
-$strings['BackToTools'] = 'Back to tools';
 $strings['ProviderName'] = 'Provider name';
 $strings['LaunchUrl'] = 'Launch URL';
 $strings['ConsumerKey'] = 'Consumer key';
@@ -85,13 +83,22 @@ $strings['SelectCoursesForExternalTool'] = 'Select one or more courses to add th
 $strings['ExternalToolWithoutResourceNode'] = 'The external tool does not have a resource node yet.';
 $strings['JwksUrlOrRsaKey'] = 'JWKS URL or RSA key';
 $strings['CompleteParamsLti'] = 'Complete the external tool configuration before adding it to courses: %s.';
+
+// Admin/create interface.
 $strings['LogicalTools'] = 'Logical tools';
 $strings['ReadyForCourses'] = 'Ready for courses';
 $strings['WithHiddenDuplicates'] = 'With hidden duplicates';
-$strings['ToolId'] = 'Tool ID';
 $strings['ExternalTools'] = 'External tools';
-$strings['Courses'] = 'Courses';
-$strings['CourseSingular'] = 'course';
-$strings['CoursePlural'] = 'courses';
-$strings['NoToolsYetHelp'] = 'Create your first external tool to start using the IMS/LTI client plugin.';
-$strings['ToolHasCourseCopies'] = 'This tool has internal course copies. Remove course assignments first.';
+$strings['Tools'] = 'Tools';
+$strings['ToolId'] = 'Tool ID';
+$strings['CreateFirstExternalToolHelp'] = 'Create your first external tool to start using the IMS/LTI client plugin.';
+$strings['BackToTools'] = 'Back to tools';
+$strings['CreateExternalToolDescription'] = 'Create and configure a reusable external tool for the IMS/LTI client plugin.';
+$strings['LaunchUrlRequiredLti11'] = 'Launch URL is required for LTI 1.0 / 1.1 tools.';
+$strings['ToolHasInternalCourseCopies'] = 'This tool has internal course copies. Remove course assignments first.';
+$strings['RemoveCourseActivityConfirm'] = 'Removing an activity from a course can have an impact on the assessments of that course. Are you sure you want to remove it?';
+$strings['InvalidServerResponse'] = 'Invalid server response.';
+$strings['UnexpectedServerResponse'] = 'Unexpected server response.';
+$strings['UnableToSubmitForm'] = 'Unable to submit the form.';
+$strings['UnableToLoadContent'] = 'Unable to load the content.';
+$strings['EditExternalToolDescription'] = 'Edit and update this external tool configuration.';

@@ -28,7 +28,7 @@ if ($form->validate()) {
 
     if (ImsLti::V_1P1 === $formValues['version'] && empty($formValues['launch_url'])) {
         Display::addFlash(
-            Display::return_message('Launch URL is required for LTI 1.0 / 1.1 tools.', 'error')
+            Display::return_message($plugin->get_lang('LaunchUrlRequiredLti11'), 'error')
         );
 
         $form->setDefaults($formValues);
@@ -126,7 +126,10 @@ $pageTitle = $plugin->get_lang('AddExternalTool');
 
 $template = new Template($pageTitle);
 $template->assign('form', $form->returnForm());
+$template->assign('page_title', $pageTitle);
+$template->assign('page_description', $plugin->get_lang('CreateExternalToolDescription'));
 $template->assign('back_url', api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
+$template->assign('back_label', $plugin->get_lang('BackToTools'));
 
 $content = $template->fetch('ImsLti/view/add.tpl');
 

@@ -40676,7 +40676,7 @@ msgid "This user is already subscribed to the course."
 msgstr "Este usuario ya está suscrito al curso."
 
 msgid "Multi URLs"
-msgstr "Varias URL"
+msgstr "Multi URL"
 
 msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
 msgstr "Entidades como usuarios y cursos pueden estar activas en más de una URL al mismo tiempo, por lo que la suma de los valores siguientes no coincidirá con el total."

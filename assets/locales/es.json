@@ -3815,7 +3815,7 @@
     "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature.": "Esta funci\u00f3n analizar\u00e1 el contenido de este curso y enviar\u00e1 informaci\u00f3n sobre el comportamiento de aprendizaje al modelo de IA configurado. Aunque no se env\u00edan datos personales directamente identificables al modelo de IA, algunos de los datos enviados podr\u00edan proporcionar de forma indirecta informaci\u00f3n identificable sobre el usuario. En caso de duda, consulte siempre con su persona de referencia en IA antes de usar esta funci\u00f3n.",
     "PNG recommended width: {0}px.": "Anchura recomendada del PNG: {0}px.",
     "PNG max size: {0}px.": "Tama\u00f1o m\u00e1ximo del PNG: {0}px.",
-    "Multi URLs": "Varias URL",
+    "Multi URLs": "Multi URL",
     "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total.": "Entidades como usuarios y cursos pueden estar activas en m\u00e1s de una URL al mismo tiempo, por lo que la suma de los valores siguientes no coincidir\u00e1 con el total.",
     "General information": "Informaci\u00f3n general",
     "Administrators": "Administradores",

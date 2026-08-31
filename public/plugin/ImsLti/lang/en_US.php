@@ -8,6 +8,8 @@ $strings['client_id_help'] = 'Client ID to be used for tools by default. You can
 $strings['ImsLtiDescription'] = '<p>Learning Tools Interoperability® (LTI®) is a specification developed by IMS Global Learning Consortium. The principal concept of LTI is to establish a standard way of integrating rich learning applications (often remotely hosted and provided through third-party services) with platforms like learning management systems, portals, learning object repositories, or other educational environments.</p>';
 $strings['ManageToolButton'] = '<p>To manage the tools go to <a href="%s">Tool list</a></p>';
 $strings['AddExternalTool'] = 'Add external tool';
+$strings['AddExternalToolDescription'] = 'Create and configure a reusable external tool for the IMS/LTI client plugin.';
+$strings['BackToTools'] = 'Back to tools';
 $strings['ProviderName'] = 'Provider name';
 $strings['LaunchUrl'] = 'Launch URL';
 $strings['ConsumerKey'] = 'Consumer key';

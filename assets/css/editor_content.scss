@@ -37,6 +37,17 @@
   display: inline;
 }
 
+// Tailwind's preflight forces every <svg> to `display: block` (see assets/css/app.scss's
+// @use "tailwind"), which fights MathJax's own inline-flow SVG output wherever a typeset
+// formula is displayed OUTSIDE a .tiny-content wrapper — e.g. the exercise runtime's
+// question/answer text (assets/vue/views/exercise/ExercisePlayerView.vue's
+// .exercise-runtime-html, ExerciseResultView.vue's .exercise-result-html) is rendered via
+// v-html with its own scoped <style>, which the .tiny-content rule above never reaches.
+// Un-scoped so it applies wherever MathJax typesets, not just inside that one wrapper class.
+mjx-container svg {
+  display: inline;
+}
+
 .tiny-content table,
 .tiny-content td,
 .tiny-content th {

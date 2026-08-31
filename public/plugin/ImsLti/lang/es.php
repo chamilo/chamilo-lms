@@ -85,3 +85,21 @@ $strings['SelectCoursesForExternalTool'] = 'Seleccione uno o más cursos para ag
 $strings['ExternalToolWithoutResourceNode'] = 'La herramienta externa todavía no tiene un nodo de recurso.';
 $strings['JwksUrlOrRsaKey'] = 'URL JWKS o clave RSA';
 $strings['CompleteParamsLti'] = 'Complete la configuración de la herramienta externa antes de agregarla a los cursos: %s.';
+
+// Admin/create interface.
+$strings['LogicalTools'] = 'Herramientas lógicas';
+$strings['ReadyForCourses'] = 'Listas para los cursos';
+$strings['WithHiddenDuplicates'] = 'Con duplicados ocultos';
+$strings['ExternalTools'] = 'Herramientas externas';
+$strings['Tools'] = 'Herramientas';
+$strings['ToolId'] = 'ID de herramienta';
+$strings['CreateFirstExternalToolHelp'] = 'Cree su primera herramienta externa para comenzar a usar el plugin cliente IMS/LTI.';
+$strings['BackToTools'] = 'Volver a las herramientas';
+$strings['CreateExternalToolDescription'] = 'Cree y configure una herramienta externa reutilizable para el plugin cliente IMS/LTI.';
+$strings['LaunchUrlRequiredLti11'] = 'La URL de lanzamiento es obligatoria para las herramientas LTI 1.0 / 1.1.';
+$strings['ToolHasInternalCourseCopies'] = 'Esta herramienta tiene copias internas en cursos. Elimine primero las asignaciones a cursos.';
+$strings['RemoveCourseActivityConfirm'] = 'Eliminar una actividad de un curso puede afectar a las evaluaciones de ese curso. ¿Está seguro de que desea eliminarla?';
+$strings['InvalidServerResponse'] = 'Respuesta del servidor no válida.';
+$strings['UnexpectedServerResponse'] = 'Respuesta inesperada del servidor.';
+$strings['UnableToSubmitForm'] = 'No se pudo enviar el formulario.';
+$strings['UnableToLoadContent'] = 'No se pudo cargar el contenido.';

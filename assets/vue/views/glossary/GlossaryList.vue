@@ -287,6 +287,8 @@ async function exportToDocuments() {
   const postData = {
     parentResourceNodeId: parentResourceNodeId.value,
     resourceLinkList: resourceLinkList.value,
+    sid: route.query.sid,
+    cid: route.query.cid,
   }
 
   try {

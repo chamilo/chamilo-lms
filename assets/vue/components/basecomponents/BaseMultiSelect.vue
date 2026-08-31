@@ -10,11 +10,19 @@
         :input-id="inputId"
         :option-label="optionLabel"
         :option-value="optionValue"
+        :show-toggle-all="showToggleAll"
         @blur="isFocused = false"
         @focus="isFocused = true"
         @update:model-value="updateModelValue"
         :loading="isLoading"
-      />
+      >
+        <template
+          v-if="showToggleAll && toggleAllLabel"
+          #header
+        >
+          <div class="px-3 pt-2 text-body-2 text-gray-70">{{ toggleAllLabel }}</div>
+        </template>
+      </MultiSelect>
       <label
         :for="inputId"
         v-text="label"
@@ -82,6 +90,16 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false,
+  },
+  showToggleAll: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
+  toggleAllLabel: {
+    type: String,
+    required: false,
+    default: null,
   },
 })
 const emit = defineEmits(["update:modelValue"])

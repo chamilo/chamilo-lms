@@ -49,9 +49,12 @@ readonly class ExportCGlossaryAction
         CGlossaryRepository $repo,
         EntityManager $em,
     ): Response {
-        $format = (string) $request->query->get('format', '');
+        $format = (string) $request->request->get('format', '');
         $cid = $request->request->getInt('cid');
-        $sid = $request->request->getInt('sid');
+        // sid is sent as an empty string when no session is selected; getInt()
+        // rejects that (FILTER_VALIDATE_INT has no FILTER_NULL_ON_FAILURE here),
+        // so cast the raw value instead of using the strict accessor.
+        $sid = (int) $request->request->get('sid', '0');
 
         if (!\in_array($format, ['csv', 'xls', 'pdf'], true)) {
             throw new BadRequestHttpException('Invalid export format.');

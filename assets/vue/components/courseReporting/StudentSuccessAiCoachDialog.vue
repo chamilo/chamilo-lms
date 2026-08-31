@@ -86,9 +86,18 @@
           v-if="isAnalyzing"
           class="rounded-lg border border-primary/20 bg-primary/5 p-5"
         >
-          <div class="flex items-center gap-4">
-            <ProgressSpinner class="h-9 w-9" />
-            <div>
+          <div
+            class="flex items-center justify-start gap-4 text-left"
+            role="status"
+            aria-live="polite"
+          >
+            <span
+              class="inline-flex h-9 w-9 shrink-0 items-center justify-center text-primary"
+              aria-hidden="true"
+            >
+              <i class="mdi mdi-loading mdi-spin mdi-24px" />
+            </span>
+            <div class="min-w-0 text-left">
               <div class="font-semibold">{{ statusMessage }}</div>
               <div class="mt-1 text-sm text-gray-50">
                 {{ t("Keep this window open while Chamilo prepares the recommendation.") }}

@@ -1,4 +1,11 @@
 <VirtualHost *:80>
+    # Section to be modified and uncommented to enable SSL
+    #DocumentRoot /home/runner/work/chamilo-lms/chamilo-lms/public
+    #ServerName localhost
+    #RewriteEngine On
+    #RedirectMatch 302 (.*) https://localhost$1
+#</VirtualHost>
+#<VirtualHost *:443>
     DocumentRoot /home/runner/work/chamilo-lms/chamilo-lms/public
     ServerName localhost
     SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
@@ -11,6 +18,18 @@
     # predictable login — see index.php's CHAMILO_INSTALLER_DEFAULT_ADMIN_PASSWORD
     # usage for the (env-var-only, never request-controllable) fallback logic.
     SetEnv CHAMILO_INSTALLER_DEFAULT_ADMIN_PASSWORD admin
+
+    # Section to be modified and uncommented to enable SSL
+    #SSLEngine On
+    #SSLCertificateFile /etc/letsencrypt/live/localhost/fullchain.pem
+    #SSLCertificateKeyFile /etc/letsencrypt/live/localhost/privkey.pem
+    #SSLProtocol all -SSLv3 -SSLv2 -TLSv1 -TLSv1.1
+    #SSLCipherSuite AES128+EECDH
+    #SSLHonorCipherOrder On
+    #Header always set Strict-Transport-Security "max-age=63072000; includeSubdomains; preload"
+    #Header always set X-Frame-Options DENY
+    #Header always set X-Content-Type-Options nosniff
+    #SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 
     <Directory "/home/runner/work/chamilo-lms/chamilo-lms/public">
         Options Indexes FollowSymLinks

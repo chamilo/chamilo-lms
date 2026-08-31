@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'course', columns: ['c_id'])]
 #[ORM\Index(name: 'login_user_id', columns: ['login_user_id'])]
 #[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\UniqueConstraint(name: 'uniq_track_e_online_user_url', columns: ['login_user_id', 'access_url_id'])]
 #[ORM\Entity(repositoryClass: TrackEOnlineRepository::class)]
 class TrackEOnline
 {

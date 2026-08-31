@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -74,17 +75,13 @@ class TrackEOnlineRepository extends ServiceEntityRepository
     ): void {
         $effectiveAccessUrlId = $accessUrlId ?? (int) $this->accessUrlHelper->getCurrent()->getId();
 
-        // track_e_online stores current presence, not login history. Reuse the
-        // most recently active row for this portal and clean older duplicates.
-        $sessions = $this->findBy(
-            [
-                'loginUserId' => $user->getId(),
-                'accessUrlId' => $effectiveAccessUrlId,
-            ],
-            ['loginDate' => 'DESC', 'loginId' => 'DESC']
-        );
-
-        $trackEOnline = array_shift($sessions);
+        // track_e_online stores current presence, not login history: the unique index on
+        // (login_user_id, access_url_id) guarantees at most one row per pair, so a single
+        // lookup is enough — no need to fetch every row and delete the older duplicates.
+        $trackEOnline = $this->findOneBy([
+            'loginUserId' => $user->getId(),
+            'accessUrlId' => $effectiveAccessUrlId,
+        ]);
 
         if (!$trackEOnline instanceof TrackEOnline) {
             $trackEOnline = new TrackEOnline();
@@ -110,11 +107,13 @@ class TrackEOnlineRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
         $entityManager->persist($trackEOnline);
 
-        foreach ($sessions as $duplicate) {
-            $entityManager->remove($duplicate);
+        try {
+            $entityManager->flush();
+        } catch (UniqueConstraintViolationException) {
+            // Two near-simultaneous FIRST heartbeats for the same user/portal both found no
+            // existing row and both tried to create one; the other request already marked the
+            // user online an instant ago, so there is nothing left to do here.
         }
-
-        $entityManager->flush();
     }
 
     public function removeOnlineSessionsByUser(int $userId): void

@@ -30,6 +30,7 @@ class ExternalToolRepository extends ResourceRepository implements ResourceWithL
             $params = array_merge($params, $extraParams);
         }
 
-        return $router->generate('chamilo_lti_show', $params);
+        // The ImsLti plugin serves the tool launch, not LtiBundle's disabled chamilo_lti_show route.
+        return '/plugin/ImsLti/start.php?'.http_build_query($params);
     }
 }

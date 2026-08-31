@@ -14,10 +14,10 @@ use Chamilo\LtiBundle\Repository\ExternalToolRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/lti')]
+// Disabled until the ImsLti plugin integration is completed. Restore the #[Route] attributes
+// (class prefix '/admin/lti' and the four actions below) to bring this admin UI back.
 #[IsGranted('ROLE_ADMIN')]
 class AdminController extends BaseController
 {
@@ -27,7 +27,6 @@ class AdminController extends BaseController
         private ExternalToolRepository $externalToolRepository
     ) {}
 
-    #[Route(path: '/', name: 'chamilo_lti_admin')]
     public function admin(): Response
     {
         $tools = $this->externalToolRepository->findAll();
@@ -37,7 +36,6 @@ class AdminController extends BaseController
         ]);
     }
 
-    #[Route(path: '/add', name: 'chamilo_lti_admin_add')]
     public function adminAdd(Request $request): Response
     {
         $form = $this->createForm(ExternalToolType::class, new ExternalTool());
@@ -62,7 +60,6 @@ class AdminController extends BaseController
         );
     }
 
-    #[Route(path: '/edit/{toolId}', name: 'chamilo_lti_admin_edit', requirements: ['toolId' => '\d+'])]
     public function adminEdit(int $toolId, Request $request): Response
     {
         $em = $this->managerRegistry
@@ -102,7 +99,6 @@ class AdminController extends BaseController
         );
     }
 
-    #[Route(path: '/delete/{toolId}', name: 'chamilo_lti_admin_delete', requirements: ['toolId' => '\d+'])]
     public function adminDelete(int $toolId): Response
     {
         $em = $this->managerRegistry->getManager();

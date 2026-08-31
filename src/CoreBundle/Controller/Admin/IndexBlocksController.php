@@ -588,12 +588,6 @@ class IndexBlocksController extends BaseController
         }
 
         $items[] = [
-            'class' => 'item-lti-admin',
-            'url' => $this->generateUrl('chamilo_lti_admin'),
-            'label' => $this->translator->trans('External tools (LTI)'),
-        ];
-
-        $items[] = [
             'class' => 'item-contact-category-admin',
             'url' => $this->generateUrl('chamilo_contact_category_index'),
             'label' => $this->translator->trans('Contact form categories'),

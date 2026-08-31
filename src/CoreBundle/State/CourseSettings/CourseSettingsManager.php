@@ -532,7 +532,9 @@ final readonly class CourseSettingsManager
         return [
             'lti' => [
                 'enabled' => $ltiEnabled,
-                'url' => $ltiEnabled ? $this->router->generate('chamilo_lti_configure', $ltiParameters) : '',
+                // The ImsLti plugin owns the course-level LTI screens (see ResourceController's
+                // redirect to ImsLti/start.php), not LtiBundle's chamilo_lti_configure route.
+                'url' => $ltiEnabled ? '/plugin/ImsLti/configure.php?'.http_build_query($ltiParameters) : '',
             ],
             'courseBlock' => ['enabled' => $this->pluginHelper->isPluginEnabled('CourseBlock')],
             'courseHomeNotify' => [

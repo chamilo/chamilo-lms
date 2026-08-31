@@ -39870,3 +39870,6 @@ msgstr "Expiring notice: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Notifications are sent to users in their own configured language."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."

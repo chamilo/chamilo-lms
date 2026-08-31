@@ -90,8 +90,9 @@ export default function makeService(endpoint, extensions = {}) {
       }
     },
     async findAll(options = {}) {
+      const { params, ...config } = options
       try {
-        const response = await api.get(toApiUrl(endpoint), { params: options.params || {} })
+        const response = await api.get(toApiUrl(endpoint), { params: params || {}, ...config })
 
         return asResponse(response)
       } catch (error) {

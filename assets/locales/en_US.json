@@ -3895,5 +3895,6 @@
     "Expiring soon: {0}": "Expiring soon: {0}",
     "Expired notice: {0}": "Expired notice: {0}",
     "Expiring notice: {0}": "Expiring notice: {0}",
-    "Notifications are sent to users in their own configured language.": "Notifications are sent to users in their own configured language."
+    "Notifications are sent to users in their own configured language.": "Notifications are sent to users in their own configured language.",
+    "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately.": "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
 }

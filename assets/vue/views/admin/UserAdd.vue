@@ -139,6 +139,7 @@
             input-id="roles"
             option-label="label"
             option-value="value"
+            :toggle-all-label="t('Select all')"
           />
 
           <BaseSelect

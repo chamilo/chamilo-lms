@@ -273,7 +273,7 @@ foreach ($groupedTools as $groupTools) {
         'assigned_courses_count' => count($courseIds),
         'can_delete' => 1 === $groupCount,
         'delete_disabled_reason' => $groupCount > 1
-            ? 'This tool has internal course copies. Remove course assignments first.'
+            ? $plugin->get_lang('ToolHasCourseCopies')
             : '',
     ];
 }

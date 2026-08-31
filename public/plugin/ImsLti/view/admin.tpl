@@ -34,14 +34,14 @@
             <div class="grid grid-cols-1 gap-4 px-6 py-5 lg:grid-cols-3 lg:px-8">
                 <div class="rounded-2xl border border-gray-25 bg-gray-10 p-4">
                     <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
-                        {{ 'Logical tools'|trans }}
+                        {{ 'LogicalTools'|get_plugin_lang('ImsLtiPlugin') }}
                     </div>
                     <div class="mt-2 text-2xl font-semibold text-gray-90">{{ tools|length }}</div>
                 </div>
 
                 <div class="rounded-2xl border border-gray-25 bg-gray-10 p-4">
                     <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
-                        {{ 'Ready for courses'|trans }}
+                        {{ 'ReadyForCourses'|get_plugin_lang('ImsLtiPlugin') }}
                     </div>
                     <div class="mt-2 text-2xl font-semibold text-gray-90">
                         {{ tools|filter(tool => tool.is_ready_for_courses)|length }}
@@ -50,7 +50,7 @@
 
                 <div class="rounded-2xl border border-gray-25 bg-gray-10 p-4">
                     <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
-                        {{ 'With hidden duplicates'|trans }}
+                        {{ 'WithHiddenDuplicates'|get_plugin_lang('ImsLtiPlugin') }}
                     </div>
                     <div class="mt-2 text-2xl font-semibold text-gray-90">
                         {{ tools|filter(tool => tool.has_duplicates)|length }}
@@ -64,7 +64,7 @@
                 <div class="flex items-center justify-between gap-4">
                     <div>
                         <h2 class="text-body-1 font-semibold text-gray-90">
-                            {{ 'External tools'|get_plugin_lang('ImsLtiPlugin') }}
+                            {{ 'ExternalTools'|get_plugin_lang('ImsLtiPlugin') }}
                         </h2>
                         <p class="mt-1 text-body-2 text-gray-50">
                             {{ tools|length }} {{ tools|length == 1 ? 'tool' : 'tools' }}
@@ -103,7 +103,7 @@
                             <div>
                                 <div class="flex flex-col gap-2">
                                     <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
-                                        {{ 'Tool ID'|trans }}
+                                        {{ 'ToolId'|get_plugin_lang('ImsLtiPlugin') }}
                                     </div>
                                     <div class="text-body-2 font-semibold text-gray-90">#{{ tool.id }}</div>
 
@@ -125,7 +125,7 @@
 
                                 <div class="flex flex-col gap-3">
                                     <div class="text-body-2 font-semibold text-gray-90">
-                                        {{ tool.assigned_courses_count }} {{ tool.assigned_courses_count == 1 ? 'course'|trans : 'courses'|trans }}
+                                        {{ tool.assigned_courses_count }} {{ tool.assigned_courses_count == 1 ? 'CourseSingular'|get_plugin_lang('ImsLtiPlugin') : 'CoursePlural'|get_plugin_lang('ImsLtiPlugin') }}
                                     </div>
 
                                     {% if tool.assigned_courses|length > 0 %}
@@ -214,7 +214,7 @@
                                             type="button"
                                             class="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-gray-10 px-4 py-2 text-body-2 font-semibold text-gray-50 opacity-70"
                                             disabled="disabled"
-                                            title="{{ tool.delete_disabled_reason|trans }}"
+                                            title="{{ tool.delete_disabled_reason }}"
                                         >
                                             <i class="mdi mdi-trash-can-outline" aria-hidden="true"></i>
                                             <span>{{ 'Delete'|get_lang }}</span>
@@ -231,10 +231,10 @@
                                 <i class="mdi mdi-puzzle-outline text-2xl" aria-hidden="true"></i>
                             </div>
                             <div class="text-body-1 font-semibold text-gray-90">
-                                {{ 'NoData'|get_lang }}
+                                {{ 'NoData'|get_plugin_lang('ImsLtiPlugin') }}
                             </div>
                             <div class="text-body-2 text-gray-50">
-                                {{ 'Create your first external tool to start using the IMS/LTI client plugin.'|trans }}
+                                {{ 'NoToolsYetHelp'|get_plugin_lang('ImsLtiPlugin') }}
                             </div>
                             <a
                                 href="{{ pluginBaseUrl }}create.php"

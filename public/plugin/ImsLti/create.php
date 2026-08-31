@@ -129,7 +129,6 @@ $template->assign('form', $form->returnForm());
 $template->assign('page_title', $pageTitle);
 $template->assign('page_description', $plugin->get_lang('CreateExternalToolDescription'));
 $template->assign('back_url', api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
-$template->assign('back_label', $plugin->get_lang('BackToTools'));
 
 $content = $template->fetch('ImsLti/view/add.tpl');
 

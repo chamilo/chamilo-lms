@@ -223,39 +223,67 @@ sudo systemctl reload apache2
 
 ## Quick updates for development/testing purposes
 
-If you have already installed it and just want to update it from Git, do:
+If Chamilo is already installed in a development environment and you only want
+to update the code and dependencies, use:
 ~~~~
 git pull origin master
 composer install
-# php bin/console doctrine:schema:update --force --complete (only recommended if you installed before beta 1)
+php bin/console doctrine:migrations:migrate --no-interaction
 php bin/console cache:clear
-yarn install && yarn dev
+yarn install
+NODE_OPTIONS="--max-old-space-size=4096" yarn dev
 ~~~~
 
-The commands above will update the JS (yarn) in public/build/ and PHP (composer) dependencies in vendor/.
+If your local clone uses a fork, replace `origin` with the remote that tracks the
+official Chamilo repository (commonly `upstream`).
 
-Note for developers in alpha stage: the doctrine command will try to update
-your database schema to the expected database schema in a fresh installation.
+`doctrine:migrations:migrate` is the normal way to update the database of an
+existing development installation. Do not use `doctrine:schema:update --force`
+as a replacement: schema updates do not execute the data-processing logic
+contained in migrations and can result in data loss.
 
-This is not always perfect, as Doctrine will take the fastest route to do this.
-
-For example, if you have a migration to rename a table (which would apply just
-fine to a system in Chamilo 1 being *migrated*), Doctrine might consider that
-the destination table does not exist and the original (which should not be
-there in a new installation) is still there, so it will just drop the old
-table and create a new one, losing all records in that table in the process.
-
-To avoid this, prefer executing migrations with the following instead.
+Occasionally a change can add data to a migration that your local database has
+already marked as executed. In that specific case, re-run the migration
+explicitly as instructed by the change:
 ```
-php bin/console doctrine:migrations:execute "Chamilo\CoreBundle\Migrations\Schema\V300\Version[date]"
+php bin/console doctrine:migrations:execute "Chamilo\CoreBundle\Migrations\Schema\V300\Version[date]" --up
 ```
-This will respect the migration logic and do the required data processing.
-You can see the version numbers in the list of updated or created files when launching `git pull`.
 
-Som`e updates might (rarely) cause conflicts with existing files so, to avoid those, here are some hints :
-- for composer errors, you can remove the vendor folder and composer.lock file, then launch `composer update`
-- for yarn errors, you can remove yarn.lock .yarn/cache/* node_modules/* and launch `yarn up`
-- when opening Chamilo, if the page does not load, then you might want to delete var/cache/* or launch `php bin/console cache:clear` from the root of Chamilo
+### Fixtures for development and testing
+
+Doctrine fixtures are intended for fresh or disposable development/test
+databases. `doctrine:fixtures:load` purges existing data by default, so do not
+run it against a database containing data you want to keep.
+
+For the PHPUnit test database, after creating the schema as described in
+`tests/README.md`, load the fixtures with:
+```
+php bin/console --env=test doctrine:fixtures:load --no-interaction
+```
+
+Playwright uses additional browser-level seed scenarios. Run them once, in this
+order, before the main browser test suite:
+```
+yarn test:playwright:seed
+yarn test:playwright:seed-course
+yarn test:playwright:seed-private-course
+yarn test:playwright:seed-settings
+```
+
+These seeds create the fixed test users, the `TEMP` and `TEMPPRIVATE` courses,
+and the platform settings expected by the Playwright scenarios. The
+`yarn test:playwright:install` command is destructive because it recreates the
+database and is intended for CI installation testing, not for updating an
+existing development environment.
+
+Fixture groups are not a substitute for migrations on an existing installation.
+Changes that must reach already-installed databases should be delivered through
+the corresponding migration.
+
+If an update causes dependency or cache problems, first retry the normal
+installation commands (`composer install`, `yarn install`, and
+`php bin/console cache:clear`) before removing lock files or replacing pinned
+dependencies.
 
 ### Refresh configuration settings
 

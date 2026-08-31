@@ -127,7 +127,7 @@ class FrmAdd extends FormValidator
         $showAGS = false;
 
         if (api_get_course_int_id()) {
-            $caterories = Category::load(null, null, api_get_course_id());
+            $caterories = Category::load(null, null, api_get_course_int_id());
 
             if (!empty($caterories)) {
                 $showAGS = true;

@@ -1521,7 +1521,7 @@ if ($enableAiHelpers) {
 if ($isImsLtiEnabled) {
     $button = Display::toolbarButton(
         get_lang('External tools (LTI)'),
-        $router->generate('chamilo_lti_configure', ['cid' => $courseId]).'?'.api_get_cidreq(),
+        api_get_path(WEB_PLUGIN_PATH).'ImsLti/configure.php?'.api_get_cidreq(),
         'cog',
         'primary'
     );

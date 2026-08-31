@@ -25,12 +25,13 @@ use Evaluation;
 use HTML_QuickForm_select;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UserManager;
 
-#[Route(path: '/courses/{cid}/lti')]
+// Disabled until the ImsLti plugin integration is completed. The course-level LTI screens are
+// served by public/plugin/ImsLti/ instead. Restore the #[Route] attributes (class prefix
+// '/courses/{cid}/lti' and the ones on each action below) to bring this controller back.
 class CourseController extends ToolBaseController
 {
     public function __construct(
@@ -39,7 +40,6 @@ class CourseController extends ToolBaseController
         private readonly UserHelper $userHelper,
     ) {}
 
-    #[Route(path: '/edit/{id}', name: 'chamilo_lti_edit', requirements: ['id' => '\d+'])]
     public function edit(int $id, Request $request): Response
     {
         $em = $this->managerRegistry->getManager();
@@ -100,7 +100,6 @@ class CourseController extends ToolBaseController
         return $this->redirect($formActionUrl);
     }
 
-    #[Route(path: '/launch/{id}', name: 'chamilo_lti_launch', requirements: ['id' => '\d+'])]
     public function launch(int $id, Utils $ltiUtil): Response
     {
         $em = $this->managerRegistry->getManager();
@@ -243,7 +242,6 @@ class CourseController extends ToolBaseController
         );
     }
 
-    #[Route(path: '/item_return', name: 'chamilo_lti_return_item')]
     public function returnItem(Request $request): Response
     {
         $contentItems = $request->request->get('content_items');
@@ -312,7 +310,6 @@ class CourseController extends ToolBaseController
         );
     }
 
-    #[Route(path: '/{id}', name: 'chamilo_lti_show', requirements: ['id' => '\d+'])]
     public function show(int $id): Response
     {
         $course = $this->getCourse();
@@ -339,7 +336,6 @@ class CourseController extends ToolBaseController
     }
 
     #[IsGranted('ROLE_TEACHER')]
-    #[Route(path: '/remove/{id}', name: 'chamilo_lti_remove_from_course', requirements: ['id' => '\d+'])]
     public function removeFromCourse(int $id, Request $request): Response
     {
         $em = $this->managerRegistry->getManager();
@@ -401,8 +397,6 @@ class CourseController extends ToolBaseController
     }
 
     #[IsGranted('ROLE_TEACHER')]
-    #[Route(path: '/', name: 'chamilo_lti_configure')]
-    #[Route(path: '/add/{id}', name: 'chamilo_lti_configure_global', requirements: ['id' => '\d+'])]
     public function courseConfigure(?int $id, Request $request): Response
     {
         $em = $this->managerRegistry->getManager();
@@ -524,7 +518,6 @@ class CourseController extends ToolBaseController
         );
     }
 
-    #[Route(path: '/grade/{catId}', name: 'chamilo_lti_grade', requirements: ['catId' => '\d+'])]
     #[IsGranted('ROLE_TEACHER')]
     public function grade(int $catId, Request $request): Response
     {

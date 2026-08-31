@@ -349,6 +349,8 @@ import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
 import "@uppy/image-editor/dist/style.css"
 
+const DEFAULT_ROLE = "STUDENT"
+
 const { t } = useI18n()
 const router = useRouter()
 const { showSuccessNotification, showErrorNotification } = useNotification()
@@ -510,11 +512,20 @@ onBeforeUnmount(() => {
   revokeStagedPreview()
 })
 
+function getDefaultRoles(roleOptions = data.value.roleOptions) {
+  if (!Array.isArray(roleOptions)) {
+    return []
+  }
+
+  return roleOptions.some((option) => option.value === DEFAULT_ROLE) ? [DEFAULT_ROLE] : []
+}
+
 async function loadData() {
   const response = await baseService.get("/admin/user-add-data")
   data.value = response
 
   form.authSource = response.authSources.length > 0 ? [response.authSources[0].value] : []
+  form.roles = getDefaultRoles(response.roleOptions)
   form.locale = response.defaultLocale
   form.hasExpirationDate = response.hideNeverExpireOption
   form.expirationDate = response.defaultExpirationDate ? new Date(response.defaultExpirationDate) : null
@@ -671,7 +682,7 @@ function resetForm() {
   form.username = ""
   form.password = ""
   form.passwordMode = "auto"
-  form.roles = []
+  form.roles = getDefaultRoles()
   uppy.value.cancelAll()
   picturePreviewUrl.value = ""
 }

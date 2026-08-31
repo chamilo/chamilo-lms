@@ -163,9 +163,8 @@ $pageTitle = $plugin->get_lang('EditExternalTool');
 $template = new Template($pageTitle);
 $template->assign('form', $form->returnForm());
 $template->assign('page_title', $pageTitle);
-$template->assign('page_description', 'Edit and update this external tool configuration.');
+$template->assign('page_description', $plugin->get_lang('EditExternalToolDescription'));
 $template->assign('back_url', api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
-$template->assign('back_label', 'Back to tools');
 
 $content = $template->fetch('ImsLti/view/add.tpl');
 

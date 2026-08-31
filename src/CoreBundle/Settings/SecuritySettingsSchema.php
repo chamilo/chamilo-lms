@@ -19,7 +19,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
     {
         $builder->setDefaults([
             'filter_terms' => '',
-            'admins_can_set_users_pass' => '',
+            'admins_can_set_users_pass' => 'true',
             'allow_strength_pass_checker' => 'true',
             'allow_captcha' => 'false',
             'user_reset_password' => 'false',

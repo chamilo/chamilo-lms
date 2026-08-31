@@ -3827,7 +3827,7 @@ msgid "Edit coach"
 msgstr "Ändere Kursleiter"
 
 msgid "Edit this session"
-msgstr "Änderung speichern"
+msgstr "Diese Session ändern"
 
 msgid "Export session(s)"
 msgstr "Exportiere Session(s)"

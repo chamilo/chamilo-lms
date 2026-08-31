@@ -5,14 +5,14 @@
             class="mb-6 inline-flex items-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2 text-body-2 font-semibold text-gray-90 shadow-sm transition hover:border-primary hover:text-primary"
         >
             <i class="mdi mdi-arrow-left" aria-hidden="true"></i>
-            <span>{{ back_label }}</span>
+            <span>{{ 'Back to tools'|trans }}</span>
         </a>
 
         <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl">
             <div class="border-b border-gray-25 bg-support-2 px-6 py-5 lg:px-8">
-                <h1 class="text-2xl font-semibold text-gray-90">{{ page_title }}</h1>
+                <h1 class="text-2xl font-semibold text-gray-90">{{ 'AddExternalTool'|get_plugin_lang('ImsLtiPlugin') }}</h1>
                 <p class="mt-2 max-w-3xl text-body-2 text-gray-50">
-                    {{ page_description }}
+                    {{ 'Create and configure a reusable external tool for the IMS/LTI client plugin.'|get_plugin_lang('ImsLtiPlugin') }}
                 </p>
             </div>
 

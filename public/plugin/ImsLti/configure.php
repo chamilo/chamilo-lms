@@ -49,7 +49,7 @@ if ($baseTool && null !== $baseTool->getFirstResourceLink()) {
     exit;
 }
 
-$categories = Category::load(null, null, $course->getCode());
+$categories = Category::load(null, null, $course->getId());
 
 switch ($action) {
     case 'add':
@@ -275,6 +275,7 @@ $template->assign('type', $baseTool ? $baseTool->getId() : null);
 $template->assign('added_tools', $addedTools);
 $template->assign('global_tools', $globalTools);
 $template->assign('form', $form->returnForm());
+$template->assign('back_url', api_get_path(WEB_PLUGIN_PATH).'ImsLti/configure.php?'.api_get_cidreq());
 
 $content = $template->fetch('ImsLti/view/add.tpl');
 

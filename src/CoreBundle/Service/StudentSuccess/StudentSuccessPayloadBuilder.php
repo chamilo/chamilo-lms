@@ -33,7 +33,10 @@ final readonly class StudentSuccessPayloadBuilder
     ): array {
         $activity = $this->activityCollector->collect($course, $session, $student);
         $activityResult = $this->anonymizer->sanitize($activity, $student);
-        $promptResult = $this->anonymizer->sanitizeTeacherPrompt($teacherPrompt, $student);
+        $promptResult = $this->anonymizer->sanitizeTeacherPrompt(
+            $this->withCourseLanguageInstruction($teacherPrompt, $course),
+            $student,
+        );
 
         $courseAnalysisContext = $this->analysisStorage->getCourseAnalysis($course, $session);
         $courseAnalysis = \is_array($courseAnalysisContext['analysis'] ?? null)
@@ -70,5 +73,25 @@ final readonly class StudentSuccessPayloadBuilder
                     + $courseAnalysisRedactions,
             ],
         ];
+    }
+
+    private function withCourseLanguageInstruction(string $teacherPrompt, Course $course): string
+    {
+        $courseLanguage = trim($course->getCourseLanguage());
+        $courseLanguage = (string) \preg_replace('/[^\p{L}\p{N}_-]+/u', ' ', $courseLanguage);
+        $courseLanguage = trim(\mb_substr($courseLanguage, 0, 80));
+        if ('' === $courseLanguage) {
+            $courseLanguage = 'english';
+        }
+
+        $languageInstruction = \sprintf(
+            'Write the complete Student Success recommendation in the course language (%s). Keep the JSON structure and keys unchanged.',
+            $courseLanguage,
+        );
+        $teacherPrompt = trim($teacherPrompt);
+
+        return '' === $teacherPrompt
+            ? $languageInstruction
+            : $teacherPrompt."\n\n".$languageInstruction;
     }
 }

@@ -236,6 +236,38 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * Batch variant of self::getByHandlerAndFieldId() for many items and many fields at once,
+     * so a listing page can fetch every value it needs in a single query instead of one per item.
+     *
+     * @param int[] $itemIds
+     * @param int[] $fieldIds
+     *
+     * @return ExtraFieldValues[]
+     */
+    public function getByItemIdsAndFieldIds(array $itemIds, array $fieldIds, int $itemType): array
+    {
+        $itemIds = array_values(array_unique(array_map('intval', $itemIds)));
+        $fieldIds = array_values(array_unique(array_map('intval', $fieldIds)));
+        if ([] === $itemIds || [] === $fieldIds) {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('efv');
+
+        return $qb
+            ->innerJoin('efv.field', 'ef')
+            ->where($qb->expr()->in('efv.itemId', ':item_ids'))
+            ->andWhere($qb->expr()->in('efv.field', ':field_ids'))
+            ->andWhere($qb->expr()->eq('ef.itemType', ':item_type'))
+            ->setParameter('item_ids', $itemIds)
+            ->setParameter('field_ids', $fieldIds)
+            ->setParameter('item_type', $itemType)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function getJsonValueByVariableAndItem(string $variable, int $itemId, int $itemType): ?array
     {
         $value = $this->getValueByVariableAndItem($variable, $itemId, $itemType);

@@ -2430,6 +2430,55 @@ class GroupManager
     }
 
     /**
+     * Batch variant of self::getAllGroupPerUserSubscription() for many users at once: runs 2 queries
+     * total (one for member subscriptions, one for tutorships) instead of one query per user.
+     * Preserves the same matching rules as the single-user method (no course/session scoping).
+     *
+     * @param int[] $userIds
+     *
+     * @return array<int, array> Groups keyed by user id
+     */
+    public static function getAllGroupsPerUsersSubscription(array $userIds): array
+    {
+        $userIds = array_values(array_unique(array_filter(array_map('intval', $userIds))));
+        if ([] === $userIds) {
+            return [];
+        }
+
+        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
+        $table_tutor_user = Database::get_course_table(TABLE_GROUP_TUTOR);
+        $table_group = Database::get_course_table(TABLE_GROUP);
+        $idList = implode(',', $userIds);
+
+        $groupsByUser = [];
+        $sql = "SELECT gu.user_id AS assoc_user_id, g.*
+                FROM $table_group g
+                INNER JOIN $table_group_user gu
+                ON (gu.group_id = g.iid)
+                WHERE gu.user_id IN ($idList)";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_assoc($res)) {
+            $userId = (int) $row['assoc_user_id'];
+            unset($row['assoc_user_id']);
+            $groupsByUser[$userId][(int) $row['iid']] = $row;
+        }
+
+        $sql = "SELECT tu.user_id AS assoc_user_id, g.*
+                FROM $table_group g
+                INNER JOIN $table_tutor_user tu
+                ON (tu.group_id = g.iid)
+                WHERE tu.user_id IN ($idList)";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_assoc($res)) {
+            $userId = (int) $row['assoc_user_id'];
+            unset($row['assoc_user_id']);
+            $groupsByUser[$userId][(int) $row['iid']] = $row;
+        }
+
+        return array_map('array_values', $groupsByUser);
+    }
+
+    /**
      * @param CGroup[] $groupList
      * @param int      $category_id
      *

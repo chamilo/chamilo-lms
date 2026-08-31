@@ -81,6 +81,58 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         $this->assertCount(0, $values);
     }
 
+    public function testGetByItemIdsAndFieldIds(): void
+    {
+        $em = $this->getEntityManager();
+
+        /** @var ExtraFieldValuesRepository $repo */
+        $repo = self::getContainer()->get(ExtraFieldValuesRepository::class);
+
+        $fieldA = (new ExtraField())
+            ->setDisplayText('batch a')
+            ->setVariable('batch_a')
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TEXT)
+        ;
+        $fieldB = (new ExtraField())
+            ->setDisplayText('batch b')
+            ->setVariable('batch_b')
+            ->setItemType(ExtraField::USER_FIELD_TYPE)
+            ->setValueType(\ExtraField::FIELD_TYPE_TEXT)
+        ;
+        $em->persist($fieldA);
+        $em->persist($fieldB);
+        $em->flush();
+
+        $userOne = $this->createUser('batch_user_one');
+        $userTwo = $this->createUser('batch_user_two');
+
+        $valueOneA = (new ExtraFieldValues())->setField($fieldA)->setItemId($userOne->getId())->setFieldValue('one-a');
+        $valueTwoB = (new ExtraFieldValues())->setField($fieldB)->setItemId($userTwo->getId())->setFieldValue('two-b');
+        $em->persist($valueOneA);
+        $em->persist($valueTwoB);
+        $em->flush();
+
+        $values = $repo->getByItemIdsAndFieldIds(
+            [$userOne->getId(), $userTwo->getId()],
+            [$fieldA->getId(), $fieldB->getId()],
+            ExtraField::USER_FIELD_TYPE,
+        );
+
+        $this->assertCount(2, $values);
+
+        $byItemAndField = [];
+        foreach ($values as $value) {
+            $byItemAndField[$value->getItemId()][$value->getField()->getId()] = $value->getFieldValue();
+        }
+        $this->assertSame('one-a', $byItemAndField[$userOne->getId()][$fieldA->getId()]);
+        $this->assertSame('two-b', $byItemAndField[$userTwo->getId()][$fieldB->getId()]);
+
+        // Empty inputs must not run a query with an empty IN() clause.
+        $this->assertSame([], $repo->getByItemIdsAndFieldIds([], [$fieldA->getId()], ExtraField::USER_FIELD_TYPE));
+        $this->assertSame([], $repo->getByItemIdsAndFieldIds([$userOne->getId()], [], ExtraField::USER_FIELD_TYPE));
+    }
+
     public function testUpdateItemData(): void
     {
         /** @var ExtraFieldValuesRepository $repo */

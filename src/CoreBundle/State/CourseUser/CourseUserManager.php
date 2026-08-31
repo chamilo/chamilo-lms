@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use CourseManager;
@@ -24,7 +25,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use ExtraField;
 use ExtraFieldOption;
-use ExtraFieldValue;
 use GroupManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -281,24 +281,28 @@ final readonly class CourseUserManager
             $active,
         );
 
-        $items = [];
         $keyword = trim((string) $request->query->get('search', ''));
         $canManage = $this->canManage($course, $session);
         $extraFields = $canManage ? $this->getFilteredExtraFields() : [];
 
+        $rows = [];
         foreach ($users as $userId => $userData) {
             $userId = (int) ($userData['user_id'] ?? $userId);
-            $user = $this->entityManager->getRepository(User::class)->find($userId);
-            if (!$user instanceof User || !$this->matchesKeyword($user, $keyword)) {
+            if ($userId <= 0 || !$this->matchesKeywordInRow($userData, $keyword)) {
                 continue;
             }
 
-            $items[] = $this->normalizeMember($course, $session, $type, $user, $userData, $extraFields);
+            $userData['user_id'] = $userId;
+            $userData['full_name'] = trim(
+                ((string) ($userData['firstname'] ?? '')).' '.((string) ($userData['lastname'] ?? ''))
+            );
+            $rows[] = $userData;
         }
 
-        $items = $this->sortItems($items, $request);
-        $totalItems = \count($items);
-        $items = $this->paginate($items, $request);
+        $rows = $this->sortRows($rows, $request);
+        $totalItems = \count($rows);
+        $pageRows = $this->paginate($rows, $request);
+        $items = $this->normalizeMembers($course, $session, $type, $pageRows, $extraFields);
         $currentUser = $this->security->getUser();
         $currentUserId = $currentUser instanceof User ? (int) $currentUser->getId() : 0;
         $limitState = self::TYPE_STUDENT === $type
@@ -758,8 +762,110 @@ final readonly class CourseUserManager
     }
 
     /**
+     * Hydrates and enriches only the current page of rows. Groups, extra-field values and
+     * illustration URLs are each fetched in a single batched query for the whole page instead
+     * of one query per user, which is what made this listing slow on large courses.
+     *
+     * @param array<int, array<string, mixed>> $rows        Raw rows from CourseManager::get_user_list_from_course_code(), already filtered/sorted/paginated
+     * @param array<int, array<string, mixed>> $extraFields
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function normalizeMembers(Course $course, ?Session $session, int $type, array $rows, array $extraFields): array
+    {
+        $userIds = array_values(array_unique(array_map(
+            static fn (array $row): int => (int) $row['user_id'],
+            $rows,
+        )));
+
+        if ([] === $userIds) {
+            return [];
+        }
+
+        $usersById = [];
+        foreach ($this->entityManager->getRepository(User::class)->findBy(['id' => $userIds]) as $user) {
+            $usersById[(int) $user->getId()] = $user;
+        }
+
+        $groupsByUser = GroupManager::getAllGroupsPerUsersSubscription($userIds);
+        $extraValuesByUser = $this->getExtraFieldValuesForUsers($userIds, $extraFields);
+        $pictureUrlsByUser = $this->illustrationRepository->getIllustrationUrlsForResources($usersById);
+
+        $items = [];
+        foreach ($rows as $row) {
+            $userId = (int) $row['user_id'];
+            $user = $usersById[$userId] ?? null;
+            if (!$user instanceof User) {
+                continue;
+            }
+
+            $items[] = $this->normalizeMember(
+                $course,
+                $session,
+                $type,
+                $user,
+                $row,
+                $extraFields,
+                $groupsByUser[$userId] ?? [],
+                $extraValuesByUser[$userId] ?? [],
+                $pictureUrlsByUser[$userId] ?? '',
+            );
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param int[]                            $userIds
+     * @param array<int, array<string, mixed>> $extraFields
+     *
+     * @return array<int, array<string, string>> Extra field display value keyed by user id, then by field id
+     */
+    private function getExtraFieldValuesForUsers(array $userIds, array $extraFields): array
+    {
+        $fieldIds = array_values(array_filter(array_map(
+            static fn (array $field): int => (int) ($field['id'] ?? 0),
+            $extraFields,
+        )));
+
+        if ([] === $fieldIds || [] === $userIds) {
+            return [];
+        }
+
+        /** @var ExtraFieldValuesRepository $repository */
+        $repository = $this->entityManager->getRepository(ExtraFieldValues::class);
+        $values = $repository->getByItemIdsAndFieldIds($userIds, $fieldIds, ExtraFieldEntity::USER_FIELD_TYPE);
+
+        $rawByUserAndField = [];
+        foreach ($values as $value) {
+            $userId = (int) $value->getItemId();
+            $fieldId = (int) $value->getField()->getId();
+            // First match wins per (user, field), matching ExtraFieldValue::get_values_by_handler_and_field_id().
+            $rawByUserAndField[$userId][$fieldId] ??= (string) $value->getFieldValue();
+        }
+
+        $optionManager = new ExtraFieldOption('user');
+        $optionsByField = [];
+        foreach ($fieldIds as $fieldId) {
+            $optionsByField[$fieldId] = (array) $optionManager->get_field_options_by_field($fieldId, true);
+        }
+
+        $result = [];
+        foreach ($rawByUserAndField as $userId => $fieldValues) {
+            foreach ($fieldValues as $fieldId => $value) {
+                $options = $optionsByField[$fieldId] ?? [];
+                $result[$userId][(string) $fieldId] = isset($options[$value]) ? (string) $options[$value] : $value;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @param array<string, mixed>             $userData
      * @param array<int, array<string, mixed>> $extraFields
+     * @param array<int, array<string, mixed>> $groups
+     * @param array<string, string>            $extraValuesForUser
      *
      * @return array<string, mixed>
      */
@@ -770,18 +876,18 @@ final readonly class CourseUserManager
         User $user,
         array $userData,
         array $extraFields,
+        array $groups,
+        array $extraValuesForUser,
+        string $pictureUrl,
     ): array {
         $userId = (int) $user->getId();
-        $groups = GroupManager::getAllGroupPerUserSubscription($userId, (int) $course->getId(), $session?->getId());
         $groupNames = array_values(array_filter(array_map(
             static fn (array $group): string => (string) ($group['name'] ?? $group['title'] ?? ''),
-            \is_array($groups) ? $groups : [],
+            $groups,
         )));
         $isTutor = 1 === (int) ($userData['is_tutor'] ?? 0);
         $status = self::TYPE_TEACHER === $type ? 'Teacher' : ($isTutor ? 'Course tutor' : 'Learner');
         $extraValues = [];
-        $valueManager = new ExtraFieldValue('user');
-        $optionManager = new ExtraFieldOption('user');
 
         foreach ($extraFields as $field) {
             $fieldId = (int) ($field['id'] ?? 0);
@@ -789,10 +895,7 @@ final readonly class CourseUserManager
                 continue;
             }
 
-            $data = $valueManager->get_values_by_handler_and_field_id($userId, $fieldId);
-            $value = (string) ($data['value'] ?? $data['field_value'] ?? '');
-            $options = (array) $optionManager->get_field_options_by_field($fieldId, true);
-            $extraValues[(string) $fieldId] = isset($options[$value]) ? (string) $options[$value] : $value;
+            $extraValues[(string) $fieldId] = $extraValuesForUser[(string) $fieldId] ?? '';
         }
 
         $currentUser = $this->security->getUser();
@@ -812,7 +915,7 @@ final readonly class CourseUserManager
             'email' => $canManage ? $user->getEmail() : '',
             'phone' => $canManage ? (string) $user->getPhone() : '',
             'legalAgreement' => $canManage && 1 === (int) ($userData['legal_agreement'] ?? 0),
-            'pictureUrl' => trim((string) $this->illustrationRepository->getIllustrationUrl($user)),
+            'pictureUrl' => trim($pictureUrl),
             'groups' => $groupNames,
             'status' => $status,
             'active' => $user->isActive(),
@@ -837,24 +940,29 @@ final readonly class CourseUserManager
     }
 
     /**
-     * @param array<int, array<string, mixed>> $items
+     * Sorts the raw (pre-hydration) rows returned by CourseManager::get_user_list_from_course_code(),
+     * so pagination can slice down to one page before the per-user enrichment queries run.
+     *
+     * @param array<int, array<string, mixed>> $rows
      *
      * @return array<int, array<string, mixed>>
      */
-    private function sortItems(array $items, Request $request): array
+    private function sortRows(array $rows, Request $request): array
     {
         $field = (string) $request->query->get('sort', 'lastname');
-        $field = match ($field) {
-            'firstname', 'lastname', 'username', 'officialCode', 'email', 'fullName' => $field,
+        $rawField = match ($field) {
+            'officialCode' => 'official_code',
+            'fullName' => 'full_name',
+            'firstname', 'lastname', 'username', 'email' => $field,
             default => 'lastname',
         };
         $direction = 'desc' === strtolower((string) $request->query->get('order', 'asc')) ? -1 : 1;
 
-        usort($items, static function (array $left, array $right) use ($field, $direction): int {
-            return $direction * strcasecmp((string) ($left[$field] ?? ''), (string) ($right[$field] ?? ''));
+        usort($rows, static function (array $left, array $right) use ($rawField, $direction): int {
+            return $direction * strcasecmp((string) ($left[$rawField] ?? ''), (string) ($right[$rawField] ?? ''));
         });
 
-        return $items;
+        return $rows;
     }
 
     /**
@@ -870,22 +978,21 @@ final readonly class CourseUserManager
         return array_values(\array_slice($items, ($page - 1) * $itemsPerPage, $itemsPerPage));
     }
 
-    private function matchesKeyword(User $user, string $keyword, bool $includeEmail = false): bool
+    /**
+     * @param array<string, mixed> $userData Raw row from CourseManager::get_user_list_from_course_code()
+     */
+    private function matchesKeywordInRow(array $userData, string $keyword): bool
     {
         if ('' === $keyword) {
             return true;
         }
 
         $haystack = [
-            (string) $user->getFirstname(),
-            (string) $user->getLastname(),
-            $user->getUsername(),
-            (string) $user->getOfficialCode(),
+            (string) ($userData['firstname'] ?? ''),
+            (string) ($userData['lastname'] ?? ''),
+            (string) ($userData['username'] ?? ''),
+            (string) ($userData['official_code'] ?? ''),
         ];
-
-        if ($includeEmail) {
-            $haystack[] = $user->getEmail();
-        }
 
         foreach (array_values(array_filter(preg_split('/\s+/', $keyword) ?: [])) as $term) {
             $found = false;

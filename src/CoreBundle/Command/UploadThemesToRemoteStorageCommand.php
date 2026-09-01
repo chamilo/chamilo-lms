@@ -111,7 +111,12 @@ HELP
                     try {
                         $this->filesystem->writeStream($path, $stream);
                     } finally {
-                        fclose($stream);
+                        // The Azure adapter hands the handle to a Guzzle PSR-7 stream, whose
+                        // destructor closes it, so it is often already closed here. Static
+                        // analysis reports this check as always true; it is not.
+                        if (\is_resource($stream)) {
+                            fclose($stream);
+                        }
                     }
                 }
 

@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Command\UploadThemesToRemoteStorageCommand;
 use League\Flysystem\Filesystem as Flysystem;
+use League\Flysystem\FilesystemOperator;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -94,6 +95,30 @@ class UploadThemesToRemoteStorageCommandTest extends TestCase
         $this->assertSame(0, $tester->getStatusCode());
         $this->assertStringContainsString('Nothing to upload', $tester->getDisplay());
         $this->assertSame([], glob($source.'/.chamilo-themes-upload-*'));
+    }
+
+    /**
+     * Adapters are free to consume the handle they are given: the Azure one wraps it in a
+     * Guzzle PSR-7 stream whose destructor closes it, and a bare fclose() afterwards then
+     * fails with "supplied resource is not a valid stream resource", aborting the upload on
+     * its very first file.
+     */
+    public function testSurvivesAnAdapterThatClosesTheStreamItself(): void
+    {
+        $filesystem = $this->createMock(FilesystemOperator::class);
+        $filesystem->method('fileExists')->willReturn(false);
+        $filesystem
+            ->method('writeStream')
+            ->willReturnCallback(static function (string $path, $stream): void {
+                fclose($stream);
+            })
+        ;
+
+        $tester = new CommandTester(new UploadThemesToRemoteStorageCommand($filesystem, $this->projectDir));
+        $tester->execute([]);
+
+        $this->assertSame(0, $tester->getStatusCode());
+        $this->assertStringContainsString('2 file(s) uploaded, 0 kept, 0 failed', $tester->getDisplay());
     }
 
     private function execute(string $targetDir, array $input = []): CommandTester

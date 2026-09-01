@@ -68,7 +68,7 @@ export default {
     Promise.all(userPayload.map((p) => baseService.post("/api/third_party_data_exchange_users", p))),
 
   updateThirdParty: (id, payload) =>
-    baseService.put(`/api/third_parties/${id}`, payload),
+    baseService.patch(`/api/third_parties/${id}`, payload),
 
   deleteThirdParty: (idOrIri) =>
     baseService.delete(
@@ -78,7 +78,7 @@ export default {
     ),
 
   updateExchange: (idOrIri, payload) =>
-    baseService.put(
+    baseService.patch(
       idOrIri.startsWith("/api/")
         ? idOrIri
         : `/api/third_party_data_exchanges/${idOrIri}`,

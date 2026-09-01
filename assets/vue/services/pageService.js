@@ -104,8 +104,7 @@ async function createPageLayout(params) {
  * @returns {Promise<Object>}
  */
 async function updatePageLayout(iri, params) {
-  const { data } = await api.put(iri, params)
-  return data
+  return await baseService.patch(iri, params)
 }
 
 /**
@@ -135,8 +134,7 @@ async function createPageLayoutTemplate(params) {
 }
 
 async function updatePageLayoutTemplate(iri, params) {
-  const { data } = await api.put(iri, params)
-  return data
+  return await baseService.patch(iri, params)
 }
 
 async function deletePageLayoutTemplate(iri) {

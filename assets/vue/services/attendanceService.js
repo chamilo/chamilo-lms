@@ -118,7 +118,7 @@ export default {
    * @returns {Promise<Object>} - Data of the updated calendar event.
    */
   updateCalendarEvent: async (calendarId, data) => {
-    return await baseService.put(`/api/c_attendance_calendars/${calendarId}`, data)
+    return await baseService.patch(`/api/c_attendance_calendars/${calendarId}`, data)
   },
 
   /**
@@ -164,17 +164,6 @@ export default {
       console.error("Error fetching attendance sheet users:", error)
       throw error
     }
-  },
-
-  /**
-   * Updates an existing calendar entry for an attendance list.
-   * @param {Number|String} attendanceId - ID of the attendance list.
-   * @param {Number|String} calendarId - ID of the calendar entry to update.
-   * @param {Object} data - Updated calendar data.
-   * @returns {Promise<Object>} - Data of the updated calendar entry.
-   */
-  updateAttendanceCalendar: async (attendanceId, calendarId, data) => {
-    return await baseService.put(`/api/attendances/${attendanceId}/calendars/${calendarId}`, data)
   },
 
   /**

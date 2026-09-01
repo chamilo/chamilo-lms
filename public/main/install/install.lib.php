@@ -2138,6 +2138,19 @@ function executeMigration(): array
                 throw new RuntimeException($message);
             }
 
+            // Bundled themes change between releases, so push the new ones to the configured
+            // themes filesystem. Files already there are kept, which leaves administrator
+            // uploads and color themes untouched, and a failure never fails the update.
+            $themesInput = new ArrayInput([
+                'command' => 'chamilo:remote-storage:upload-themes',
+            ]);
+            $themesInput->setInteractive(false);
+            $themesOutput = new BufferedOutput();
+
+            if (0 !== $application->run($themesInput, $themesOutput)) {
+                error_log('Could not upload the themes: '.trim($themesOutput->fetch()));
+            }
+
             $resultStatus['status'] = true;
             $resultStatus['message'] = 'Migration and bundled demo course installation completed successfully.';
             $resultStatus['progress_percentage'] = 100;

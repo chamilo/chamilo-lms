@@ -816,6 +816,21 @@ if (isset($_POST['step2'])) {
                     $kernel
                 );
 
+                // Upload the themes bundled in var/themes to the configured themes
+                // filesystem. Does nothing when no remote storage is configured, and never
+                // aborts the installation: a storage misconfiguration only costs the theme
+                // files, which can be uploaded later with the same command.
+                error_log('Upload themes to the configured storage');
+
+                try {
+                    $input = new ArrayInput([]);
+                    $input->setInteractive(false);
+                    $command = $application->find('chamilo:remote-storage:upload-themes');
+                    $command->run($input, new ConsoleOutput());
+                } catch (Throwable $e) {
+                    error_log('Could not upload the themes: '.$e->getMessage());
+                }
+
                 error_log('Finish installation');
             } else {
                 error_log('ERROR during installation.');

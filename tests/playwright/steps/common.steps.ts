@@ -3276,11 +3276,17 @@ Then(
 // entirely for this form. Matches an option by its exact visible text
 // (e.g. "Fiona Apple Maggart (fapple)"), same text-matching rationale as
 // "I select ... from the multiselect ..." above.
+// Scoped to the open overlay: with `display="chip"` an already-selected value also
+// renders as a `p-chip-label` with the same exact text, so an unscoped getByText
+// matches twice and fails on strict mode. Clicking inside the overlay toggles, so
+// pressing an already-selected option deselects it.
 When("I press the multiselect option {string} in {string}", async ({ page }, optionText: string, fieldId: string) => {
   const field = page.locator(`#${fieldId}`)
   await field.scrollIntoViewIfNeeded()
   await field.click({ force: true })
-  await page.getByText(optionText, { exact: true }).click()
+  const overlay = page.locator(".p-multiselect-overlay")
+  await overlay.waitFor({ state: "visible" })
+  await overlay.getByText(optionText, { exact: true }).click()
   await page.keyboard.press("Escape")
 })
 

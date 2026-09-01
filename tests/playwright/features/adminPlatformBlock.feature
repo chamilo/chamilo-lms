@@ -15,6 +15,12 @@
 #   is reemplemented to work with Chamilo 2") — this is a genuinely dead
 #   feature in the current app, not a renamed/hidden one, confirmed live (no
 #   matching link at all).
+# - "Open External tools (LTI)" dropped entirely: that label only exists in
+#   COURSE settings (public/main/course_info/infocours.php,
+#   CourseSettingsManager::getSections()), never on /admin. The ImsLti plugin's
+#   own admin entry is labelled "External tools" (no "(LTI)") and only renders
+#   when the plugin is enabled, which a fresh install never is — so no link
+#   with this text can exist on this page.
 Feature: Admin Platform management block
   In order to verify administration platform pages
   As a platform administrator
@@ -122,13 +128,6 @@ Feature: Admin Platform management block
     Given I am on "/admin"
     And I wait for the page to be loaded
     And I follow "Mail templates"
-    And I wait for the page to be loaded
-    Then I should not see an error
-
-  Scenario: Open External tools (LTI)
-    Given I am on "/admin"
-    And I wait for the page to be loaded
-    And I follow "External tools (LTI)"
     And I wait for the page to be loaded
     Then I should not see an error
 

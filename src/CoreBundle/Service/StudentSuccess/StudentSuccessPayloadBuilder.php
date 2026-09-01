@@ -78,8 +78,8 @@ final readonly class StudentSuccessPayloadBuilder
     private function withCourseLanguageInstruction(string $teacherPrompt, Course $course): string
     {
         $courseLanguage = trim($course->getCourseLanguage());
-        $courseLanguage = (string) \preg_replace('/[^\p{L}\p{N}_-]+/u', ' ', $courseLanguage);
-        $courseLanguage = trim(\mb_substr($courseLanguage, 0, 80));
+        $courseLanguage = (string) preg_replace('/[^\p{L}\p{N}_-]+/u', ' ', $courseLanguage);
+        $courseLanguage = trim(mb_substr($courseLanguage, 0, 80));
         if ('' === $courseLanguage) {
             $courseLanguage = 'english';
         }

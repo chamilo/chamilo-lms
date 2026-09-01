@@ -43,7 +43,7 @@ final class Version20260828190000 extends AbstractMigrationChamilo
 
         $created = $fixtures->installDefaultTemplates($this->entityManager);
 
-        $this->write(sprintf(
+        $this->write(\sprintf(
             'Installed %d bundled system document template(s). Existing templates with the same titles were left unchanged.',
             $created,
         ));

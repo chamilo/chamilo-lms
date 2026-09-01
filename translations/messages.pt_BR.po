@@ -39880,3 +39880,192 @@ msgstr "Aviso de vencimento: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "As notificações são enviadas aos usuários no idioma configurado por eles."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "As páginas são armazenadas em cache HTTP por 60s por padrão, conforme definido na entidade Page, portanto as alterações podem não ser refletidas imediatamente."
+
+msgid "Activate legal notice"
+msgstr "Ativar aviso legal"
+
+msgid "Agreement content"
+msgstr "Conteúdo do acordo"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Permitir que os alunos excluam a própria publicação"
+
+msgid "Allow learners to edit agenda"
+msgstr "Permitir que os alunos editem a agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Permitir que os alunos validem a própria frequência"
+
+msgid "Allow learners to view users list"
+msgstr "Permitir que os alunos vejam a lista de usuários"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Inscrever automaticamente os usuários nas notificações do fórum"
+
+msgid "Certificate mode"
+msgstr "Modo de certificado"
+
+msgid "Configure external tools"
+msgstr "Configurar ferramentas externas"
+
+msgid "Contents"
+msgstr "Conteúdos"
+
+msgid "Contents to show"
+msgstr "Conteúdos a exibir"
+
+msgid "Course certificate"
+msgstr "Certificado do curso"
+
+msgid "Course delivery dates"
+msgstr "Datas de entrega do curso"
+
+msgid "Course duration in hours"
+msgstr "Duração do curso em horas"
+
+msgid "Course legal agreement"
+msgstr "Acordo legal do curso"
+
+msgid "Custom"
+msgstr "Personalizado"
+
+msgid "Custom certificate"
+msgstr "Certificado personalizado"
+
+msgid "Default visibility for new documents"
+msgstr "Visibilidade padrão para novos documentos"
+
+msgid "Direct invitation link"
+msgstr "Link de convite direto"
+
+msgid "Do not notify"
+msgstr "Não notificar"
+
+msgid "Documents list"
+msgstr "Lista de documentos"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Enviar e-mail ao aluno na inscrição manual"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Enviar e-mail aos professores sobre o feedback da publicação do aluno"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Enviar e-mail aos usuários ao receber arquivo na Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Ativar notificação da página inicial do curso"
+
+msgid "Enable course themes in learning paths"
+msgstr "Ativar temas do curso nos percursos de aprendizagem"
+
+msgid "Exercises invisible in session"
+msgstr "Exercícios invisíveis na sessão"
+
+msgid "Expiration link"
+msgstr "Link de expiração"
+
+msgid "Forums list"
+msgstr "Lista de fóruns"
+
+msgid "Issue date type"
+msgstr "Tipo de data de emissão"
+
+msgid "Learning path index"
+msgstr "Índice do itinerário de aprendizagem"
+
+msgid "Learning paths list"
+msgstr "Lista de itinerários de aprendizagem"
+
+msgid "Left margin"
+msgstr "Margem esquerda"
+
+msgid "Legal notice"
+msgstr "Aviso legal"
+
+msgid "Maximum subscribed students"
+msgstr "Máximo de alunos inscritos"
+
+msgid "Notify in course home"
+msgstr "Notificar na página inicial do curso"
+
+msgid "Notify learners"
+msgstr "Notificar alunos"
+
+msgid "Notify with agreement file"
+msgstr "Notificar com arquivo de acordo"
+
+msgid "Notify without attachment"
+msgstr "Notificar sem anexo"
+
+msgid "Open chat in a new window"
+msgstr "Abrir chat em uma nova janela"
+
+msgid "Open to the platform"
+msgstr "Aberto à plataforma"
+
+msgid "Place"
+msgstr "Local"
+
+msgid "Platform default"
+msgstr "Padrão da plataforma"
+
+msgid "Registration password"
+msgstr "Senha de inscrição"
+
+msgid "Remove previous agreements"
+msgstr "Remover acordos anteriores"
+
+msgid "Right margin"
+msgstr "Margem direita"
+
+msgid "Selected learning path"
+msgstr "Itinerário de aprendizagem selecionado"
+
+msgid "Selected test"
+msgstr "Teste selecionado"
+
+msgid "Show learner picture in forums"
+msgstr "Mostrar foto do aluno nos fóruns"
+
+msgid "Show system folders"
+msgstr "Mostrar pastas do sistema"
+
+msgid "Signature text 1"
+msgstr "Texto da assinatura 1"
+
+msgid "Signature text 2"
+msgstr "Texto da assinatura 2"
+
+msgid "Signature text 3"
+msgstr "Texto da assinatura 3"
+
+msgid "Signature text 4"
+msgstr "Texto da assinatura 4"
+
+msgid "Student and course information"
+msgstr "Informações do aluno e do curso"
+
+msgid "Subscription allowed"
+msgstr "Inscrição permitida"
+
+msgid "Tests list"
+msgstr "Lista de testes"
+
+msgid "Unsubscription allowed"
+msgstr "Cancelamento de inscrição permitido"
+
+msgid "Use certificate download date"
+msgstr "Usar data de download do certificado"
+
+msgid "Use certificate generation date"
+msgstr "Usar data de geração do certificado"
+
+msgid "Use session access dates"
+msgstr "Usar datas de acesso da sessão"
+
+msgid "Use session access end date"
+msgstr "Usar data final de acesso da sessão"
+

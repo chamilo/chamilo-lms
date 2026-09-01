@@ -39861,3 +39861,192 @@ msgstr "Oznámení o blížícím se vypršení: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Oznámení se uživatelům odesílají v jejich nastaveném jazyce."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Stránky jsou ve výchozím nastavení HTTP-cachovány na 60 s, jak je definováno v entitě Page, proto se změny nemusí projevit okamžitě."
+
+msgid "Activate legal notice"
+msgstr "Aktivovat právní upozornění"
+
+msgid "Agreement content"
+msgstr "Obsah souhlasu"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Povolit studentům smazat vlastní publikaci"
+
+msgid "Allow learners to edit agenda"
+msgstr "Povolit studentům upravovat agendu"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Povolit studentům potvrdit vlastní docházku"
+
+msgid "Allow learners to view users list"
+msgstr "Povolit studentům zobrazit seznam uživatelů"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Automaticky přihlásit uživatele k oznámením fóra"
+
+msgid "Certificate mode"
+msgstr "Režim certifikátu"
+
+msgid "Configure external tools"
+msgstr "Konfigurovat externí nástroje"
+
+msgid "Contents"
+msgstr "Obsah"
+
+msgid "Contents to show"
+msgstr "Obsah k zobrazení"
+
+msgid "Course certificate"
+msgstr "Certifikát kurzu"
+
+msgid "Course delivery dates"
+msgstr "Termíny konání kurzu"
+
+msgid "Course duration in hours"
+msgstr "Délka kurzu v hodinách"
+
+msgid "Course legal agreement"
+msgstr "Právní souhlas kurzu"
+
+msgid "Custom"
+msgstr "Vlastní"
+
+msgid "Custom certificate"
+msgstr "Vlastní certifikát"
+
+msgid "Default visibility for new documents"
+msgstr "Výchozí viditelnost nových dokumentů"
+
+msgid "Direct invitation link"
+msgstr "Přímý odkaz na pozvánku"
+
+msgid "Do not notify"
+msgstr "Neoznamovat"
+
+msgid "Documents list"
+msgstr "Seznam dokumentů"
+
+msgid "E-mail learner on manual subscription"
+msgstr "E-mail studentovi při ručním zápisu"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "E-mail učitelům při nové zpětné vazbě k publikaci studenta"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "E-mail uživatelům při přijetí souboru v Dropboxu"
+
+msgid "Enable course home notification"
+msgstr "Povolit oznámení na úvodní stránce kurzu"
+
+msgid "Enable course themes in learning paths"
+msgstr "Povolit témata kurzu ve výukových cestách"
+
+msgid "Exercises invisible in session"
+msgstr "Cvičení neviditelná v relaci"
+
+msgid "Expiration link"
+msgstr "Odkaz na vypršení"
+
+msgid "Forums list"
+msgstr "Seznam fór"
+
+msgid "Issue date type"
+msgstr "Typ data vydání"
+
+msgid "Learning path index"
+msgstr "Rejstřík výukové cesty"
+
+msgid "Learning paths list"
+msgstr "Seznam výukových cest"
+
+msgid "Left margin"
+msgstr "Levý okraj"
+
+msgid "Legal notice"
+msgstr "Právní upozornění"
+
+msgid "Maximum subscribed students"
+msgstr "Maximální počet zapsaných studentů"
+
+msgid "Notify in course home"
+msgstr "Oznámit na úvodní stránce kurzu"
+
+msgid "Notify learners"
+msgstr "Upozornit studenty"
+
+msgid "Notify with agreement file"
+msgstr "Upozornit se souborem souhlasu"
+
+msgid "Notify without attachment"
+msgstr "Upozornit bez přílohy"
+
+msgid "Open chat in a new window"
+msgstr "Otevřít chat v novém okně"
+
+msgid "Open to the platform"
+msgstr "Otevřít platformě"
+
+msgid "Place"
+msgstr "Místo"
+
+msgid "Platform default"
+msgstr "Výchozí nastavení platformy"
+
+msgid "Registration password"
+msgstr "Heslo pro registraci"
+
+msgid "Remove previous agreements"
+msgstr "Odstranit předchozí souhlasy"
+
+msgid "Right margin"
+msgstr "Pravý okraj"
+
+msgid "Selected learning path"
+msgstr "Vybraná výuková cesta"
+
+msgid "Selected test"
+msgstr "Vybraný test"
+
+msgid "Show learner picture in forums"
+msgstr "Zobrazit fotografii studenta ve fórech"
+
+msgid "Show system folders"
+msgstr "Zobrazit systémové složky"
+
+msgid "Signature text 1"
+msgstr "Text podpisu 1"
+
+msgid "Signature text 2"
+msgstr "Text podpisu 2"
+
+msgid "Signature text 3"
+msgstr "Text podpisu 3"
+
+msgid "Signature text 4"
+msgstr "Text podpisu 4"
+
+msgid "Student and course information"
+msgstr "Informace o studentovi a kurzu"
+
+msgid "Subscription allowed"
+msgstr "Zápis povolen"
+
+msgid "Tests list"
+msgstr "Seznam testů"
+
+msgid "Unsubscription allowed"
+msgstr "Odhlášení povoleno"
+
+msgid "Use certificate download date"
+msgstr "Použít datum stažení certifikátu"
+
+msgid "Use certificate generation date"
+msgstr "Použít datum vygenerování certifikátu"
+
+msgid "Use session access dates"
+msgstr "Použít data přístupu k relaci"
+
+msgid "Use session access end date"
+msgstr "Použít datum konce přístupu k relaci"
+

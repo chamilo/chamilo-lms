@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Við kærleika"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formuldømi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formuludømi: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablumørk"
@@ -39860,4 +39860,193 @@ msgstr "Boð um at ganga út: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Boð verða send brúkarum á teirra egna stillaða máli."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Síður verða HTTP-goymdar í 60s sum standard, sum ásett í Page-einingini, so broytingar koma kanska ikki til sjóndar beinanvegin."
+
+msgid "Activate legal notice"
+msgstr "Aktivera løgfrøðiliga kunngerð"
+
+msgid "Agreement content"
+msgstr "Innihald av sáttmála"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Lat næmingar strika egnar útgávur"
+
+msgid "Allow learners to edit agenda"
+msgstr "Lat næmingar rætta dagskrá"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Lat næmingar góðkenna egna møting"
+
+msgid "Allow learners to view users list"
+msgstr "Lat næmingar síggja brúkaralista"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Sjálvvirkandi tekna brúkarar til forum-boð"
+
+msgid "Certificate mode"
+msgstr "Prógvsháttur"
+
+msgid "Configure external tools"
+msgstr "Still uttanhýsis amboð"
+
+msgid "Contents"
+msgstr "Innihald"
+
+msgid "Contents to show"
+msgstr "Innihald at vísa"
+
+msgid "Course certificate"
+msgstr "Skeiðsprógv"
+
+msgid "Course delivery dates"
+msgstr "Avhendingardagar fyri skeið"
+
+msgid "Course duration in hours"
+msgstr "Skeiðslongd í tímum"
+
+msgid "Course legal agreement"
+msgstr "Løgfrøðiligur sáttmáli fyri skeið"
+
+msgid "Custom"
+msgstr "Sérsnið"
+
+msgid "Custom certificate"
+msgstr "Sérsniðað prógv"
+
+msgid "Default visibility for new documents"
+msgstr "Standard sjónligheit fyri nýggj skjøl"
+
+msgid "Direct invitation link"
+msgstr "Beinleiðis invitatióntslink"
+
+msgid "Do not notify"
+msgstr "Ikkí boða"
+
+msgid "Documents list"
+msgstr "Skjalalisti"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Send teldupost til næming við manualari innskriving"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Send teldupost til lærarar um afturboðan á nýggjari næmingaútgávu"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Send teldupost til brúkarar tá Dropbox-fíla er móttikin"
+
+msgid "Enable course home notification"
+msgstr "Aktivera kunngerð á skeiðsheimasíðu"
+
+msgid "Enable course themes in learning paths"
+msgstr "Virkja skeiðstema í læringarleiðum"
+
+msgid "Exercises invisible in session"
+msgstr "Venjingar ósjónligar í setu"
+
+msgid "Expiration link"
+msgstr "Útrennandi leinkja"
+
+msgid "Forums list"
+msgstr "Forumslisti"
+
+msgid "Issue date type"
+msgstr "Útgávudagsslag"
+
+msgid "Learning path index"
+msgstr "Læringarleiðaryvirlit"
+
+msgid "Learning paths list"
+msgstr "Læringarleiðalisti"
+
+msgid "Left margin"
+msgstr "Vinstrumargin"
+
+msgid "Legal notice"
+msgstr "Lógarupplýsing"
+
+msgid "Maximum subscribed students"
+msgstr "Hámark innskrivaðir næmingar"
+
+msgid "Notify in course home"
+msgstr "Boða frá á skeiðsheim"
+
+msgid "Notify learners"
+msgstr "Boða næmingum"
+
+msgid "Notify with agreement file"
+msgstr "Boða við sáttmálaskjali"
+
+msgid "Notify without attachment"
+msgstr "Boða uttan viðhefting"
+
+msgid "Open chat in a new window"
+msgstr "Opna kjatt í nýggjum vindeyga"
+
+msgid "Open to the platform"
+msgstr "Opna til pallin"
+
+msgid "Place"
+msgstr "Staður"
+
+msgid "Platform default"
+msgstr "Pallsstandardur"
+
+msgid "Registration password"
+msgstr "Skrásetingarlykilorð"
+
+msgid "Remove previous agreements"
+msgstr "Tak burtur fyrri sáttmálar"
+
+msgid "Right margin"
+msgstr "Høgrumargin"
+
+msgid "Selected learning path"
+msgstr "Vald læringarleið"
+
+msgid "Selected test"
+msgstr "Vald roynd"
+
+msgid "Show learner picture in forums"
+msgstr "Vís næmingsmynd í forumum"
+
+msgid "Show system folders"
+msgstr "Vís skipanarmappur"
+
+msgid "Signature text 1"
+msgstr "Undirskriftartekstur 1"
+
+msgid "Signature text 2"
+msgstr "Undirskriftartekstur 2"
+
+msgid "Signature text 3"
+msgstr "Undirskriftartekstur 3"
+
+msgid "Signature text 4"
+msgstr "Undirskriftartekstur 4"
+
+msgid "Student and course information"
+msgstr "Næminga- og skeiðsupplýsingar"
+
+msgid "Subscription allowed"
+msgstr "Innskriving loyvd"
+
+msgid "Tests list"
+msgstr "Royndalisti"
+
+msgid "Unsubscription allowed"
+msgstr "Útskriving loyvd"
+
+msgid "Use certificate download date"
+msgstr "Brúka prógvniðurtøku dag"
+
+msgid "Use certificate generation date"
+msgstr "Brúka prógvgerðardag"
+
+msgid "Use session access dates"
+msgstr "Brúka setuatgongdardagar"
+
+msgid "Use session access end date"
+msgstr "Brúka setuatgongd enda dag"
 

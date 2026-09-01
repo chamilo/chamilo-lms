@@ -39861,3 +39861,192 @@ msgstr "মেয়াদ শেষের বিজ্ঞপ্তি: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "বিজ্ঞপ্তি ব্যবহারকারীদের তাদের নিজস্ব কনফিগার করা ভাষায় পাঠানো হয়।"
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "পৃষ্ঠাগুলো ডিফল্টভাবে ৬০ সেকেন্ডের জন্য HTTP-ক্যাশ করা হয়, যা পেজ এন্টিটিতে নির্ধারিত, তাই পরিবর্তনগুলো তাৎক্ষণিকভাবে প্রতিফলিত নাও হতে পারে।"
+
+msgid "Activate legal notice"
+msgstr "আইনি নোটিশ সক্রিয় করুন"
+
+msgid "Agreement content"
+msgstr "চুক্তির বিষয়বস্তু"
+
+msgid "Allow learners to delete their own publication"
+msgstr "শিক্ষার্থীদের নিজস্ব প্রকাশনা মুছে ফেলার অনুমতি দিন"
+
+msgid "Allow learners to edit agenda"
+msgstr "শিক্ষার্থীদের এজেন্ডা সম্পাদনার অনুমতি দিন"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "শিক্ষার্থীদের নিজস্ব উপস্থিতি যাচাই করার অনুমতি দিন"
+
+msgid "Allow learners to view users list"
+msgstr "শিক্ষার্থীদের ব্যবহারকারী তালিকা দেখার অনুমতি দিন"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "ফোরাম বিজ্ঞপ্তিতে ব্যবহারকারীদের স্বয়ংক্রিয়ভাবে সাবস্ক্রাইব করুন"
+
+msgid "Certificate mode"
+msgstr "সনদপত্র মোড"
+
+msgid "Configure external tools"
+msgstr "বহিরাগত সরঞ্জাম কনফিগার করুন"
+
+msgid "Contents"
+msgstr "বিষয়বস্তু"
+
+msgid "Contents to show"
+msgstr "দেখানোর বিষয়বস্তু"
+
+msgid "Course certificate"
+msgstr "কোর্স সনদপত্র"
+
+msgid "Course delivery dates"
+msgstr "কোর্স প্রদানের তারিখ"
+
+msgid "Course duration in hours"
+msgstr "ঘণ্টায় কোর্সের সময়কাল"
+
+msgid "Course legal agreement"
+msgstr "কোর্সের আইনি চুক্তি"
+
+msgid "Custom"
+msgstr "কাস্টম"
+
+msgid "Custom certificate"
+msgstr "কাস্টম সনদপত্র"
+
+msgid "Default visibility for new documents"
+msgstr "নতুন নথির জন্য ডিফল্ট দৃশ্যমানতা"
+
+msgid "Direct invitation link"
+msgstr "সরাসরি আমন্ত্রণ লিংক"
+
+msgid "Do not notify"
+msgstr "বিজ্ঞপ্তি দেবেন না"
+
+msgid "Documents list"
+msgstr "নথির তালিকা"
+
+msgid "E-mail learner on manual subscription"
+msgstr "ম্যানুয়াল সাবস্ক্রিপশনে শিক্ষার্থীকে ই-মেইল করুন"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "নতুন ব্যবহারকারীর শিক্ষার্থী প্রকাশনার মতামতে শিক্ষকদের ই-মেইল করুন"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "ড্রপবক্স ফাইল গ্রহণে ব্যবহারকারীদের ই-মেইল করুন"
+
+msgid "Enable course home notification"
+msgstr "কোর্স হোম বিজ্ঞপ্তি সক্রিয় করুন"
+
+msgid "Enable course themes in learning paths"
+msgstr "লার্নিং পাথে কোর্স থিম সক্রিয় করুন"
+
+msgid "Exercises invisible in session"
+msgstr "সেশনে অনুশীলনী অদৃশ্য"
+
+msgid "Expiration link"
+msgstr "মেয়াদোত্তীর্ণ লিংক"
+
+msgid "Forums list"
+msgstr "ফোরামের তালিকা"
+
+msgid "Issue date type"
+msgstr "ইস্যু তারিখের ধরন"
+
+msgid "Learning path index"
+msgstr "লার্নিং পাথ সূচি"
+
+msgid "Learning paths list"
+msgstr "লার্নিং পাথের তালিকা"
+
+msgid "Left margin"
+msgstr "বাম মার্জিন"
+
+msgid "Legal notice"
+msgstr "আইনি নোটিশ"
+
+msgid "Maximum subscribed students"
+msgstr "সর্বোচ্চ নিবন্ধিত শিক্ষার্থী"
+
+msgid "Notify in course home"
+msgstr "কোর্স হোমে অবহিত করুন"
+
+msgid "Notify learners"
+msgstr "শিক্ষার্থীদের অবহিত করুন"
+
+msgid "Notify with agreement file"
+msgstr "চুক্তি ফাইলসহ অবহিত করুন"
+
+msgid "Notify without attachment"
+msgstr "সংযুক্তি ছাড়া অবহিত করুন"
+
+msgid "Open chat in a new window"
+msgstr "নতুন উইন্ডোতে চ্যাট খুলুন"
+
+msgid "Open to the platform"
+msgstr "প্ল্যাটফর্মে উন্মুক্ত"
+
+msgid "Place"
+msgstr "স্থান"
+
+msgid "Platform default"
+msgstr "প্ল্যাটফর্মের ডিফল্ট"
+
+msgid "Registration password"
+msgstr "নিবন্ধন পাসওয়ার্ড"
+
+msgid "Remove previous agreements"
+msgstr "পূর্ববর্তী চুক্তি সরান"
+
+msgid "Right margin"
+msgstr "ডান মার্জিন"
+
+msgid "Selected learning path"
+msgstr "নির্বাচিত শেখার পথ"
+
+msgid "Selected test"
+msgstr "নির্বাচিত পরীক্ষা"
+
+msgid "Show learner picture in forums"
+msgstr "ফোরামে শিক্ষার্থীর ছবি দেখান"
+
+msgid "Show system folders"
+msgstr "সিস্টেম ফোল্ডার দেখান"
+
+msgid "Signature text 1"
+msgstr "স্বাক্ষর পাঠ্য ১"
+
+msgid "Signature text 2"
+msgstr "স্বাক্ষর পাঠ্য ২"
+
+msgid "Signature text 3"
+msgstr "স্বাক্ষর পাঠ্য ৩"
+
+msgid "Signature text 4"
+msgstr "স্বাক্ষর পাঠ্য ৪"
+
+msgid "Student and course information"
+msgstr "শিক্ষার্থী ও কোর্সের তথ্য"
+
+msgid "Subscription allowed"
+msgstr "সাবস্ক্রিপশন অনুমোদিত"
+
+msgid "Tests list"
+msgstr "পরীক্ষার তালিকা"
+
+msgid "Unsubscription allowed"
+msgstr "আনসাবস্ক্রিপশন অনুমোদিত"
+
+msgid "Use certificate download date"
+msgstr "সার্টিফিকেট ডাউনলোডের তারিখ ব্যবহার করুন"
+
+msgid "Use certificate generation date"
+msgstr "সার্টিফিকেট তৈরির তারিখ ব্যবহার করুন"
+
+msgid "Use session access dates"
+msgstr "সেশন অ্যাক্সেসের তারিখ ব্যবহার করুন"
+
+msgid "Use session access end date"
+msgstr "সেশন অ্যাক্সেসের শেষ তারিখ ব্যবহার করুন"
+

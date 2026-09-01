@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Pagarbiai"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulės pavyzdys: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulės pavyzdys: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kintamųjų ribos"
@@ -39865,4 +39865,193 @@ msgstr "Pranešimas apie baigiantį galioti: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Pranešimai siunčiami naudotojams jų sukonfigūruota kalba."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Puslapiai pagal numatytuosius nustatymus talpinami HTTP talpykloje 60 s, kaip apibrėžta Page entitete, todėl pakeitimai gali būti matomi ne iš karto."
+
+msgid "Activate legal notice"
+msgstr "Aktyvuoti teisinį pranešimą"
+
+msgid "Agreement content"
+msgstr "Sutarties turinys"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Leisti mokiniams ištrinti savo publikaciją"
+
+msgid "Allow learners to edit agenda"
+msgstr "Leisti mokiniams redaguoti darbotvarkę"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Leisti mokiniams patvirtinti savo lankomumą"
+
+msgid "Allow learners to view users list"
+msgstr "Leisti mokiniams peržiūrėti naudotojų sąrašą"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Automatiškai prenumeruoti naudotojus forumo pranešimams"
+
+msgid "Certificate mode"
+msgstr "Sertifikato režimas"
+
+msgid "Configure external tools"
+msgstr "Konfigūruoti išorinius įrankius"
+
+msgid "Contents"
+msgstr "Turinys"
+
+msgid "Contents to show"
+msgstr "Rodomas turinys"
+
+msgid "Course certificate"
+msgstr "Kurso sertifikatas"
+
+msgid "Course delivery dates"
+msgstr "Kurso vykdymo datos"
+
+msgid "Course duration in hours"
+msgstr "Kurso trukmė valandomis"
+
+msgid "Course legal agreement"
+msgstr "Kurso teisinė sutartis"
+
+msgid "Custom"
+msgstr "Pasirinktinis"
+
+msgid "Custom certificate"
+msgstr "Pasirinktinis sertifikatas"
+
+msgid "Default visibility for new documents"
+msgstr "Numatytasis naujų dokumentų matomumas"
+
+msgid "Direct invitation link"
+msgstr "Tiesioginė kvietimo nuoroda"
+
+msgid "Do not notify"
+msgstr "Nepranešti"
+
+msgid "Documents list"
+msgstr "Dokumentų sąrašas"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Siųsti el. laišką mokiniui rankinio prenumeravimo metu"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Siųsti el. laišką dėstytojams apie naują mokinio publikacijos atsiliepimą"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Siųsti el. laišką naudotojams gavus Dropbox failą"
+
+msgid "Enable course home notification"
+msgstr "Įjungti kurso pradžios pranešimą"
+
+msgid "Enable course themes in learning paths"
+msgstr "Įjungti kurso temas mokymosi keliuose"
+
+msgid "Exercises invisible in session"
+msgstr "Pratybos nematomos sesijoje"
+
+msgid "Expiration link"
+msgstr "Galiojimo pabaigos nuoroda"
+
+msgid "Forums list"
+msgstr "Forumų sąrašas"
+
+msgid "Issue date type"
+msgstr "Išdavimo datos tipas"
+
+msgid "Learning path index"
+msgstr "Mokymosi kelio indeksas"
+
+msgid "Learning paths list"
+msgstr "Mokymosi kelių sąrašas"
+
+msgid "Left margin"
+msgstr "Kairioji paraštė"
+
+msgid "Legal notice"
+msgstr "Teisinis pranešimas"
+
+msgid "Maximum subscribed students"
+msgstr "Maksimalus užsiregistravusių studentų skaičius"
+
+msgid "Notify in course home"
+msgstr "Pranešti kurso pradžios puslapyje"
+
+msgid "Notify learners"
+msgstr "Pranešti besimokantiesiems"
+
+msgid "Notify with agreement file"
+msgstr "Pranešti su sutarties failu"
+
+msgid "Notify without attachment"
+msgstr "Pranešti be priedo"
+
+msgid "Open chat in a new window"
+msgstr "Atidaryti pokalbį naujame lange"
+
+msgid "Open to the platform"
+msgstr "Atvira platformai"
+
+msgid "Place"
+msgstr "Vieta"
+
+msgid "Platform default"
+msgstr "Platformos numatytoji reikšmė"
+
+msgid "Registration password"
+msgstr "Registracijos slaptažodis"
+
+msgid "Remove previous agreements"
+msgstr "Pašalinti ankstesnius susitarimus"
+
+msgid "Right margin"
+msgstr "Dešinioji paraštė"
+
+msgid "Selected learning path"
+msgstr "Pasirinktas mokymosi kelias"
+
+msgid "Selected test"
+msgstr "Pasirinktas testas"
+
+msgid "Show learner picture in forums"
+msgstr "Rodyti besimokančiojo nuotrauką forumuose"
+
+msgid "Show system folders"
+msgstr "Rodyti sistemos aplankus"
+
+msgid "Signature text 1"
+msgstr "Parašo tekstas 1"
+
+msgid "Signature text 2"
+msgstr "Parašo tekstas 2"
+
+msgid "Signature text 3"
+msgstr "Parašo tekstas 3"
+
+msgid "Signature text 4"
+msgstr "Parašo tekstas 4"
+
+msgid "Student and course information"
+msgstr "Studento ir kurso informacija"
+
+msgid "Subscription allowed"
+msgstr "Užsirašymas leidžiamas"
+
+msgid "Tests list"
+msgstr "Testų sąrašas"
+
+msgid "Unsubscription allowed"
+msgstr "Atsirašymas leidžiamas"
+
+msgid "Use certificate download date"
+msgstr "Naudoti sertifikato atsisiuntimo datą"
+
+msgid "Use certificate generation date"
+msgstr "Naudoti sertifikato sukūrimo datą"
+
+msgid "Use session access dates"
+msgstr "Naudoti sesijos prieigos datas"
+
+msgid "Use session access end date"
+msgstr "Naudoti sesijos prieigos pabaigos datą"
 

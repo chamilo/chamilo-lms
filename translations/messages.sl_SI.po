@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "S spoštovanjem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorec formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Obseg spremenljivk območja"
@@ -39880,4 +39880,193 @@ msgstr "Obvestilo o prihajajočem poteku: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Obvestila se uporabnikom pošiljajo v njihovem nastavljenem jeziku."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Strani so privzeto HTTP-predpomnjene 60 s, kot je določeno v entiteti Page, zato spremembe morda ne bodo takoj vidne."
+
+msgid "Activate legal notice"
+msgstr "Aktiviraj pravno obvestilo"
+
+msgid "Agreement content"
+msgstr "Vsebina sporazuma"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Dovoli udeležencem brisanje lastnih objav"
+
+msgid "Allow learners to edit agenda"
+msgstr "Dovoli udeležencem urejanje koledarja"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Dovoli udeležencem potrditev lastne prisotnosti"
+
+msgid "Allow learners to view users list"
+msgstr "Dovoli udeležencem ogled seznama uporabnikov"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Samodejno naroči uporabnike na obvestila foruma"
+
+msgid "Certificate mode"
+msgstr "Način potrdila"
+
+msgid "Configure external tools"
+msgstr "Nastavi zunanja orodja"
+
+msgid "Contents"
+msgstr "Vsebine"
+
+msgid "Contents to show"
+msgstr "Vsebine za prikaz"
+
+msgid "Course certificate"
+msgstr "Potrdilo tečaja"
+
+msgid "Course delivery dates"
+msgstr "Datumi izvedbe tečaja"
+
+msgid "Course duration in hours"
+msgstr "Trajanje tečaja v urah"
+
+msgid "Course legal agreement"
+msgstr "Pravni sporazum tečaja"
+
+msgid "Custom"
+msgstr "Po meri"
+
+msgid "Custom certificate"
+msgstr "Potrdilo po meri"
+
+msgid "Default visibility for new documents"
+msgstr "Privzeta vidnost za nove dokumente"
+
+msgid "Direct invitation link"
+msgstr "Neposredna povezava za povabilo"
+
+msgid "Do not notify"
+msgstr "Ne obveščaj"
+
+msgid "Documents list"
+msgstr "Seznam dokumentov"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Pošlji e-pošto udeležencu ob ročnem vpisu"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Pošlji e-pošto učiteljem ob povratnih informacijah o študentski objavi novega uporabnika"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Pošlji e-pošto uporabnikom ob prejemu datoteke v Dropboxu"
+
+msgid "Enable course home notification"
+msgstr "Omogoči obvestila na začetni strani tečaja"
+
+msgid "Enable course themes in learning paths"
+msgstr "Omogoči teme tečaja v učnih poteh"
+
+msgid "Exercises invisible in session"
+msgstr "Vaje nevidne v seji"
+
+msgid "Expiration link"
+msgstr "Povezava za potek"
+
+msgid "Forums list"
+msgstr "Seznam forumov"
+
+msgid "Issue date type"
+msgstr "Vrsta datuma izdaje"
+
+msgid "Learning path index"
+msgstr "Kazalo učne poti"
+
+msgid "Learning paths list"
+msgstr "Seznam učnih poti"
+
+msgid "Left margin"
+msgstr "Levi rob"
+
+msgid "Legal notice"
+msgstr "Pravno obvestilo"
+
+msgid "Maximum subscribed students"
+msgstr "Največje število vpisanih študentov"
+
+msgid "Notify in course home"
+msgstr "Obvesti na začetni strani predmeta"
+
+msgid "Notify learners"
+msgstr "Obvesti učence"
+
+msgid "Notify with agreement file"
+msgstr "Obvesti s datoteko sporazuma"
+
+msgid "Notify without attachment"
+msgstr "Obvesti brez priloge"
+
+msgid "Open chat in a new window"
+msgstr "Odpri klepet v novem oknu"
+
+msgid "Open to the platform"
+msgstr "Odprto za platformo"
+
+msgid "Place"
+msgstr "Kraj"
+
+msgid "Platform default"
+msgstr "Privzeto platforme"
+
+msgid "Registration password"
+msgstr "Geslo za registracijo"
+
+msgid "Remove previous agreements"
+msgstr "Odstrani prejšnje sporazume"
+
+msgid "Right margin"
+msgstr "Desni rob"
+
+msgid "Selected learning path"
+msgstr "Izbrana učna pot"
+
+msgid "Selected test"
+msgstr "Izbrani test"
+
+msgid "Show learner picture in forums"
+msgstr "Prikaži sliko učenca na forumih"
+
+msgid "Show system folders"
+msgstr "Prikaži sistemske mape"
+
+msgid "Signature text 1"
+msgstr "Besedilo podpisa 1"
+
+msgid "Signature text 2"
+msgstr "Besedilo podpisa 2"
+
+msgid "Signature text 3"
+msgstr "Besedilo podpisa 3"
+
+msgid "Signature text 4"
+msgstr "Besedilo podpisa 4"
+
+msgid "Student and course information"
+msgstr "Podatki o študentu in predmetu"
+
+msgid "Subscription allowed"
+msgstr "Vpis dovoljen"
+
+msgid "Tests list"
+msgstr "Seznam testov"
+
+msgid "Unsubscription allowed"
+msgstr "Odjava dovoljena"
+
+msgid "Use certificate download date"
+msgstr "Uporabi datum prenosa potrdila"
+
+msgid "Use certificate generation date"
+msgstr "Uporabi datum izdelave potrdila"
+
+msgid "Use session access dates"
+msgstr "Uporabi datume dostopa seje"
+
+msgid "Use session access end date"
+msgstr "Uporabi končni datum dostopa seje"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Atentamente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Ranges de variables"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sí:copyright,, no:ensin copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Carpeta,, application\/msword:MsWord,, application\/octet-stream:Fluxu d'octetos,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exerciciu,, simulation:simulación,, questionnaire:cuestionariu,, diagram:diagrama,, figure:figura,, graph:gráficu,, index:índiz,, slide:diapositiva,, table:tabla,, narrative text:testu narrativu,, exam:exame,, experiment:esperimentu,, problem statement:problema,, self assessment:autoevaluación,, lecture:llectura"
@@ -39866,4 +39866,193 @@ msgstr "Avisu de caducidá: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Les notificaciones únviase a los usuarios nel so propiu idioma configuráu."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Les páxines tán en caché HTTP 60s por defectu, como se define na entidá Page, polo que los cambeos podríen nun reflexase darréu."
+
+msgid "Activate legal notice"
+msgstr "Activar l'avisu llegal"
+
+msgid "Agreement content"
+msgstr "Conteníu del alcuerdu"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Permitir a los alumnos desaniciar la so propia publicación"
+
+msgid "Allow learners to edit agenda"
+msgstr "Permitir a los alumnos editar l'axenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Permitir a los alumnos validar la so propia asistencia"
+
+msgid "Allow learners to view users list"
+msgstr "Permitir a los alumnos ver la llista d'usuarios"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Soscribir automáticamente a los usuarios a les notificaciones del foru"
+
+msgid "Certificate mode"
+msgstr "Mou de certificáu"
+
+msgid "Configure external tools"
+msgstr "Configurar ferramientes esternes"
+
+msgid "Contents"
+msgstr "Conteníos"
+
+msgid "Contents to show"
+msgstr "Conteníos a amosar"
+
+msgid "Course certificate"
+msgstr "Certificáu del cursu"
+
+msgid "Course delivery dates"
+msgstr "Dates d'impartición del cursu"
+
+msgid "Course duration in hours"
+msgstr "Duración del cursu n'hores"
+
+msgid "Course legal agreement"
+msgstr "Alcuerdu llegal del cursu"
+
+msgid "Custom"
+msgstr "Personalizáu"
+
+msgid "Custom certificate"
+msgstr "Certificáu personalizáu"
+
+msgid "Default visibility for new documents"
+msgstr "Visibilidá predeterminada pa documentos nuevos"
+
+msgid "Direct invitation link"
+msgstr "Enllaz d'invitación direuta"
+
+msgid "Do not notify"
+msgstr "Nun notificar"
+
+msgid "Documents list"
+msgstr "Llista de documentos"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Unviar corréu al alumnu na soscripción manual"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Unviar corréu a los profesores nel feedback de publicación d'estudiantes d'un usuariu nuevu"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Unviar corréu a los usuarios na recepción de ficheru de Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Activar notificación de portada del cursu"
+
+msgid "Enable course themes in learning paths"
+msgstr "Activar temes del cursu nes rutes d'aprendizaxe"
+
+msgid "Exercises invisible in session"
+msgstr "Exercicios invisibles na sesión"
+
+msgid "Expiration link"
+msgstr "Enllaz de caducidá"
+
+msgid "Forums list"
+msgstr "Llista de foros"
+
+msgid "Issue date type"
+msgstr "Tipu de data d'emisión"
+
+msgid "Learning path index"
+msgstr "Índiz de ruta d'aprendizaxe"
+
+msgid "Learning paths list"
+msgstr "Llista d'itinerarios d'aprendizaxe"
+
+msgid "Left margin"
+msgstr "Marxe esquierdu"
+
+msgid "Legal notice"
+msgstr "Avisu llegal"
+
+msgid "Maximum subscribed students"
+msgstr "Máximu d'estudiantes suscritos"
+
+msgid "Notify in course home"
+msgstr "Notificar na páxina d'aniciu del cursu"
+
+msgid "Notify learners"
+msgstr "Notificar a los aprendices"
+
+msgid "Notify with agreement file"
+msgstr "Notificar col ficheru d'alcuerdu"
+
+msgid "Notify without attachment"
+msgstr "Notificar ensin axuntu"
+
+msgid "Open chat in a new window"
+msgstr "Abrir el chat nuna ventana nueva"
+
+msgid "Open to the platform"
+msgstr "Abierto a la plataforma"
+
+msgid "Place"
+msgstr "Llugar"
+
+msgid "Platform default"
+msgstr "Predetermináu de la plataforma"
+
+msgid "Registration password"
+msgstr "Contraseña de rexistru"
+
+msgid "Remove previous agreements"
+msgstr "Quitar alcuerdos anteriores"
+
+msgid "Right margin"
+msgstr "Marxe derechu"
+
+msgid "Selected learning path"
+msgstr "Itinerariu d'aprendizaxe escoyíu"
+
+msgid "Selected test"
+msgstr "Prueba escoyida"
+
+msgid "Show learner picture in forums"
+msgstr "Amosar la semeya del aprendiz nos foros"
+
+msgid "Show system folders"
+msgstr "Amosar carpetes del sistema"
+
+msgid "Signature text 1"
+msgstr "Testu de firma 1"
+
+msgid "Signature text 2"
+msgstr "Testu de firma 2"
+
+msgid "Signature text 3"
+msgstr "Testu de firma 3"
+
+msgid "Signature text 4"
+msgstr "Testu de firma 4"
+
+msgid "Student and course information"
+msgstr "Información del estudiante y del cursu"
+
+msgid "Subscription allowed"
+msgstr "Suscripción permitida"
+
+msgid "Tests list"
+msgstr "Llista de pruebes"
+
+msgid "Unsubscription allowed"
+msgstr "Desuscripción permitida"
+
+msgid "Use certificate download date"
+msgstr "Usar la data de descarga del certificáu"
+
+msgid "Use certificate generation date"
+msgstr "Usar la data de xeneración del certificáu"
+
+msgid "Use session access dates"
+msgstr "Usar les dates d'accesu de la sesión"
+
+msgid "Use session access end date"
+msgstr "Usar la data final d'accesu de la sesión"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Cordialmente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Esempio di formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Esempio di formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervalli variabili"
@@ -39880,4 +39880,193 @@ msgstr "Avviso di imminente scadenza: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Le notifiche vengono inviate agli utenti nella lingua da loro configurata."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Le pagine sono memorizzate in cache HTTP per 60s per impostazione predefinita, come definito nell'entità Page, quindi le modifiche potrebbero non essere visibili immediatamente."
+
+msgid "Activate legal notice"
+msgstr "Attiva avviso legale"
+
+msgid "Agreement content"
+msgstr "Contenuto dell'accordo"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Consenti agli studenti di eliminare le proprie pubblicazioni"
+
+msgid "Allow learners to edit agenda"
+msgstr "Consenti agli studenti di modificare l'agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Consenti agli studenti di convalidare la propria presenza"
+
+msgid "Allow learners to view users list"
+msgstr "Consenti agli studenti di visualizzare l'elenco utenti"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Iscrivi automaticamente gli utenti alle notifiche del forum"
+
+msgid "Certificate mode"
+msgstr "Modalità certificato"
+
+msgid "Configure external tools"
+msgstr "Configura strumenti esterni"
+
+msgid "Contents"
+msgstr "Contenuti"
+
+msgid "Contents to show"
+msgstr "Contenuti da mostrare"
+
+msgid "Course certificate"
+msgstr "Certificato del corso"
+
+msgid "Course delivery dates"
+msgstr "Date di erogazione del corso"
+
+msgid "Course duration in hours"
+msgstr "Durata del corso in ore"
+
+msgid "Course legal agreement"
+msgstr "Accordo legale del corso"
+
+msgid "Custom"
+msgstr "Personalizzato"
+
+msgid "Custom certificate"
+msgstr "Certificato personalizzato"
+
+msgid "Default visibility for new documents"
+msgstr "Visibilità predefinita per i nuovi documenti"
+
+msgid "Direct invitation link"
+msgstr "Link di invito diretto"
+
+msgid "Do not notify"
+msgstr "Non notificare"
+
+msgid "Documents list"
+msgstr "Elenco documenti"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Invia e-mail allo studente all'iscrizione manuale"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Invia e-mail ai docenti sul feedback di una pubblicazione dello studente"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Invia e-mail agli utenti alla ricezione di un file nella Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Abilita notifica nella home del corso"
+
+msgid "Enable course themes in learning paths"
+msgstr "Abilita temi del corso nei percorsi di apprendimento"
+
+msgid "Exercises invisible in session"
+msgstr "Esercizi invisibili in sessione"
+
+msgid "Expiration link"
+msgstr "Link di scadenza"
+
+msgid "Forums list"
+msgstr "Elenco forum"
+
+msgid "Issue date type"
+msgstr "Tipo di data di emissione"
+
+msgid "Learning path index"
+msgstr "Indice del percorso formativo"
+
+msgid "Learning paths list"
+msgstr "Elenco percorsi formativi"
+
+msgid "Left margin"
+msgstr "Margine sinistro"
+
+msgid "Legal notice"
+msgstr "Avviso legale"
+
+msgid "Maximum subscribed students"
+msgstr "Numero massimo di studenti iscritti"
+
+msgid "Notify in course home"
+msgstr "Notifica nella home del corso"
+
+msgid "Notify learners"
+msgstr "Notifica gli studenti"
+
+msgid "Notify with agreement file"
+msgstr "Notifica con file di accordo"
+
+msgid "Notify without attachment"
+msgstr "Notifica senza allegato"
+
+msgid "Open chat in a new window"
+msgstr "Apri la chat in una nuova finestra"
+
+msgid "Open to the platform"
+msgstr "Aperto alla piattaforma"
+
+msgid "Place"
+msgstr "Luogo"
+
+msgid "Platform default"
+msgstr "Predefinito della piattaforma"
+
+msgid "Registration password"
+msgstr "Password di registrazione"
+
+msgid "Remove previous agreements"
+msgstr "Rimuovi gli accordi precedenti"
+
+msgid "Right margin"
+msgstr "Margine destro"
+
+msgid "Selected learning path"
+msgstr "Percorso formativo selezionato"
+
+msgid "Selected test"
+msgstr "Test selezionato"
+
+msgid "Show learner picture in forums"
+msgstr "Mostra la foto dello studente nei forum"
+
+msgid "Show system folders"
+msgstr "Mostra le cartelle di sistema"
+
+msgid "Signature text 1"
+msgstr "Testo firma 1"
+
+msgid "Signature text 2"
+msgstr "Testo firma 2"
+
+msgid "Signature text 3"
+msgstr "Testo firma 3"
+
+msgid "Signature text 4"
+msgstr "Testo firma 4"
+
+msgid "Student and course information"
+msgstr "Informazioni su studente e corso"
+
+msgid "Subscription allowed"
+msgstr "Iscrizione consentita"
+
+msgid "Tests list"
+msgstr "Elenco test"
+
+msgid "Unsubscription allowed"
+msgstr "Disiscrizione consentita"
+
+msgid "Use certificate download date"
+msgstr "Usa la data di download del certificato"
+
+msgid "Use certificate generation date"
+msgstr "Usa la data di generazione del certificato"
+
+msgid "Use session access dates"
+msgstr "Usa le date di accesso alla sessione"
+
+msgid "Use session access end date"
+msgstr "Usa la data di fine accesso alla sessione"
 

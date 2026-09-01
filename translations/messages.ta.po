@@ -39865,3 +39865,192 @@ msgstr "காலாவதியாகும் அறிவிப்பு: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "அறிவிப்புகள் பயனர்களுக்கு அவர்கள் அமைத்துள்ள மொழியில் அனுப்பப்படும்."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "பக்கங்கள் இயல்பாக 60 வினாடிகளுக்கு HTTP-இல் தற்காலிகமாக சேமிக்கப்படுகின்றன (Page நிறுவனத்தில் வரையறுக்கப்பட்டுள்ளபடி), எனவே மாற்றங்கள் உடனடியாக தெரியாமல் இருக்கலாம்."
+
+msgid "Activate legal notice"
+msgstr "சட்ட அறிவிப்பை செயல்படுத்து"
+
+msgid "Agreement content"
+msgstr "ஒப்பந்த உள்ளடக்கம்"
+
+msgid "Allow learners to delete their own publication"
+msgstr "கற்றவர்கள் தங்கள் சொந்த வெளியீட்டை நீக்க அனுமதி"
+
+msgid "Allow learners to edit agenda"
+msgstr "கற்றவர்கள் நிகழ்ச்சி நிரல் திருத்த அனுமதி"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "கற்றவர்கள் தங்கள் சொந்த வருகையை உறுதிப்படுத்த அனுமதி"
+
+msgid "Allow learners to view users list"
+msgstr "கற்றவர்கள் பயனர் பட்டியலைப் பார்க்க அனுமதி"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "மன்ற அறிவிப்புகளுக்கு பயனர்களை தானாக சேர்"
+
+msgid "Certificate mode"
+msgstr "சான்றிதழ் முறை"
+
+msgid "Configure external tools"
+msgstr "வெளிப்புற கருவிகளை அமைக்கவும்"
+
+msgid "Contents"
+msgstr "உள்ளடக்கங்கள்"
+
+msgid "Contents to show"
+msgstr "காட்ட வேண்டிய உள்ளடக்கங்கள்"
+
+msgid "Course certificate"
+msgstr "பாடநெறி சான்றிதழ்"
+
+msgid "Course delivery dates"
+msgstr "பாடநெறி வழங்கல் தேதிகள்"
+
+msgid "Course duration in hours"
+msgstr "பாடநெறி காலம் (மணிநேரங்களில்)"
+
+msgid "Course legal agreement"
+msgstr "பாடநெறி சட்ட ஒப்பந்தம்"
+
+msgid "Custom"
+msgstr "தனிப்பயன்"
+
+msgid "Custom certificate"
+msgstr "தனிப்பயன் சான்றிதழ்"
+
+msgid "Default visibility for new documents"
+msgstr "புதிய ஆவணங்களுக்கான இயல்புநிலை தெரிவுநிலை"
+
+msgid "Direct invitation link"
+msgstr "நேரடி அழைப்பு இணைப்பு"
+
+msgid "Do not notify"
+msgstr "அறிவிக்க வேண்டாம்"
+
+msgid "Documents list"
+msgstr "ஆவணங்கள் பட்டியல்"
+
+msgid "E-mail learner on manual subscription"
+msgstr "கைமுறை சேர்க்கையில் கற்றவருக்கு மின்னஞ்சல்"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "புதிய பயனரின் மாணவர் வெளியீட்டு கருத்துக்கு ஆசிரியர்களுக்கு மின்னஞ்சல்"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Dropbox கோப்பு பெறும்போது பயனர்களுக்கு மின்னஞ்சல்"
+
+msgid "Enable course home notification"
+msgstr "பாடநெறி முகப்பு அறிவிப்பை இயக்கு"
+
+msgid "Enable course themes in learning paths"
+msgstr "கற்றல் பாதைகளில் பாடநெறி தீம்களை இயக்கு"
+
+msgid "Exercises invisible in session"
+msgstr "அமர்வில் பயிற்சிகள் மறைக்கப்பட்டவை"
+
+msgid "Expiration link"
+msgstr "காலாவதி இணைப்பு"
+
+msgid "Forums list"
+msgstr "மன்றங்கள் பட்டியல்"
+
+msgid "Issue date type"
+msgstr "வழங்கல் தேதி வகை"
+
+msgid "Learning path index"
+msgstr "கற்றல் பாதை அட்டவணை"
+
+msgid "Learning paths list"
+msgstr "கற்றல் பாதைகள் பட்டியல்"
+
+msgid "Left margin"
+msgstr "இடது விளிம்பு"
+
+msgid "Legal notice"
+msgstr "சட்ட அறிவிப்பு"
+
+msgid "Maximum subscribed students"
+msgstr "அதிகபட்ச பதிவு செய்த மாணவர்கள்"
+
+msgid "Notify in course home"
+msgstr "பாடநெறி முகப்பில் அறிவிக்கவும்"
+
+msgid "Notify learners"
+msgstr "கற்பவர்களுக்கு அறிவிக்கவும்"
+
+msgid "Notify with agreement file"
+msgstr "ஒப்பந்தக் கோப்புடன் அறிவிக்கவும்"
+
+msgid "Notify without attachment"
+msgstr "இணைப்பு இல்லாமல் அறிவிக்கவும்"
+
+msgid "Open chat in a new window"
+msgstr "புதிய சாளரத்தில் அரட்டையைத் திறக்கவும்"
+
+msgid "Open to the platform"
+msgstr "தளத்திற்கு திறந்தது"
+
+msgid "Place"
+msgstr "இடம்"
+
+msgid "Platform default"
+msgstr "தள இயல்புநிலை"
+
+msgid "Registration password"
+msgstr "பதிவு கடவுச்சொல்"
+
+msgid "Remove previous agreements"
+msgstr "முந்தைய ஒப்பந்தங்களை அகற்று"
+
+msgid "Right margin"
+msgstr "வலது விளிம்பு"
+
+msgid "Selected learning path"
+msgstr "தேர்ந்தெடுக்கப்பட்ட கற்றல் பாதை"
+
+msgid "Selected test"
+msgstr "தேர்ந்தெடுக்கப்பட்ட தேர்வு"
+
+msgid "Show learner picture in forums"
+msgstr "மன்றங்களில் கற்பவர் படத்தைக் காட்டு"
+
+msgid "Show system folders"
+msgstr "கணினி கோப்புறைகளைக் காட்டு"
+
+msgid "Signature text 1"
+msgstr "கையொப்ப உரை 1"
+
+msgid "Signature text 2"
+msgstr "கையொப்ப உரை 2"
+
+msgid "Signature text 3"
+msgstr "கையொப்ப உரை 3"
+
+msgid "Signature text 4"
+msgstr "கையொப்ப உரை 4"
+
+msgid "Student and course information"
+msgstr "மாணவர் மற்றும் பாடநெறி தகவல்"
+
+msgid "Subscription allowed"
+msgstr "பதிவு அனுமதிக்கப்பட்டது"
+
+msgid "Tests list"
+msgstr "தேர்வுகள் பட்டியல்"
+
+msgid "Unsubscription allowed"
+msgstr "பதிவு நீக்கம் அனுமதிக்கப்பட்டது"
+
+msgid "Use certificate download date"
+msgstr "சான்றிதழ் பதிவிறக்க தேதியைப் பயன்படுத்து"
+
+msgid "Use certificate generation date"
+msgstr "சான்றிதழ் உருவாக்க தேதியைப் பயன்படுத்து"
+
+msgid "Use session access dates"
+msgstr "அமர்வு அணுகல் தேதிகளைப் பயன்படுத்து"
+
+msgid "Use session access end date"
+msgstr "அமர்வு அணுகல் முடிவு தேதியைப் பயன்படுத்து"
+

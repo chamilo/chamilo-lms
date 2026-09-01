@@ -39866,3 +39866,192 @@ msgstr "Avviż ta' skadenza imminenti: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "In-notifikazzjonijiet jintbagħtu lill-utenti fil-lingwa konfigurata tagħhom stess."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Il-paġni huma HTTP-cached għal 60s b'mod default, kif definit fl-entità Page, għalhekk il-bidliet jistgħu ma jidhrux mill-ewwel."
+
+msgid "Activate legal notice"
+msgstr "Attiva l-avviż legali"
+
+msgid "Agreement content"
+msgstr "Kontenut tal-ftehim"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Ħalli l-istudenti jħassru l-pubblikazzjoni tagħhom stess"
+
+msgid "Allow learners to edit agenda"
+msgstr "Ħalli l-istudenti jeditjaw l-aġenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Ħalli l-istudenti jivvalidaw l-attendenza tagħhom stess"
+
+msgid "Allow learners to view users list"
+msgstr "Ħalli l-istudenti jaraw il-lista tal-utenti"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Abbona awtomatikament l-utenti għan-notifiki tal-forum"
+
+msgid "Certificate mode"
+msgstr "Modalità taċ-ċertifikat"
+
+msgid "Configure external tools"
+msgstr "Ikkonfigura għodod esterni"
+
+msgid "Contents"
+msgstr "Kontenuti"
+
+msgid "Contents to show"
+msgstr "Kontenuti x'turi"
+
+msgid "Course certificate"
+msgstr "Ċertifikat tal-kors"
+
+msgid "Course delivery dates"
+msgstr "Dati tal-għoti tal-kors"
+
+msgid "Course duration in hours"
+msgstr "Tul tal-kors f'sigħat"
+
+msgid "Course legal agreement"
+msgstr "Ftehim legali tal-kors"
+
+msgid "Custom"
+msgstr "Personalizzat"
+
+msgid "Custom certificate"
+msgstr "Ċertifikat personalizzat"
+
+msgid "Default visibility for new documents"
+msgstr "Viżibilità default għal dokumenti ġodda"
+
+msgid "Direct invitation link"
+msgstr "Link ta' stedina diretta"
+
+msgid "Do not notify"
+msgstr "Tinnutifikax"
+
+msgid "Documents list"
+msgstr "Lista tad-dokumenti"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Ibgħat email lill-istudent fuq abbonament manwali"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Ibgħat email lill-għalliema fuq feedback ġdid ta' pubblikazzjoni tal-istudent"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Ibgħat email lill-utenti meta jirċievu fajl Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Attiva n-notifika tal-paġna ewlenija tal-kors"
+
+msgid "Enable course themes in learning paths"
+msgstr "Attiva t-temi tal-kors fil-mogħdijiet tat-tagħlim"
+
+msgid "Exercises invisible in session"
+msgstr "Eżerċizzji invisibbli fis-sessjoni"
+
+msgid "Expiration link"
+msgstr "Link ta' skadenza"
+
+msgid "Forums list"
+msgstr "Lista tal-forums"
+
+msgid "Issue date type"
+msgstr "Tip tad-data tal-ħruġ"
+
+msgid "Learning path index"
+msgstr "Indiċi tal-mogħdija tat-tagħlim"
+
+msgid "Learning paths list"
+msgstr "Lista tal-mogħdijiet tat-tagħlim"
+
+msgid "Left margin"
+msgstr "Marġni tax-xellug"
+
+msgid "Legal notice"
+msgstr "Avviż legali"
+
+msgid "Maximum subscribed students"
+msgstr "Numru massimu ta' studenti abbonati"
+
+msgid "Notify in course home"
+msgstr "Notifika fil-paġna ewlenija tal-kors"
+
+msgid "Notify learners"
+msgstr "Notifika lill-istudenti"
+
+msgid "Notify with agreement file"
+msgstr "Notifika b'fajl tal-ftehim"
+
+msgid "Notify without attachment"
+msgstr "Notifika mingħajr attachment"
+
+msgid "Open chat in a new window"
+msgstr "Iftaħ iċ-chat f'tieqa ġdida"
+
+msgid "Open to the platform"
+msgstr "Miftuħ għall-pjattaforma"
+
+msgid "Place"
+msgstr "Post"
+
+msgid "Platform default"
+msgstr "Default tal-pjattaforma"
+
+msgid "Registration password"
+msgstr "Password tar-reġistrazzjoni"
+
+msgid "Remove previous agreements"
+msgstr "Neħħi l-ftehimiet preċedenti"
+
+msgid "Right margin"
+msgstr "Marġni tal-lemin"
+
+msgid "Selected learning path"
+msgstr "Mogħdija ta' tagħlim magħżula"
+
+msgid "Selected test"
+msgstr "Test magħżul"
+
+msgid "Show learner picture in forums"
+msgstr "Uri r-ritratt tal-istudent fil-forums"
+
+msgid "Show system folders"
+msgstr "Uri l-folders tas-sistema"
+
+msgid "Signature text 1"
+msgstr "Test tal-firma 1"
+
+msgid "Signature text 2"
+msgstr "Test tal-firma 2"
+
+msgid "Signature text 3"
+msgstr "Test tal-firma 3"
+
+msgid "Signature text 4"
+msgstr "Test tal-firma 4"
+
+msgid "Student and course information"
+msgstr "Informazzjoni tal-istudent u tal-kors"
+
+msgid "Subscription allowed"
+msgstr "Sottoskrizzjoni permessa"
+
+msgid "Tests list"
+msgstr "Lista tat-testijiet"
+
+msgid "Unsubscription allowed"
+msgstr "Tneħħija tas-sottoskrizzjoni permessa"
+
+msgid "Use certificate download date"
+msgstr "Uża d-data tat-tniżżil taċ-ċertifikat"
+
+msgid "Use certificate generation date"
+msgstr "Uża d-data tal-ġenerazzjoni taċ-ċertifikat"
+
+msgid "Use session access dates"
+msgstr "Uża d-dati tal-aċċess tas-sessjoni"
+
+msgid "Use session access end date"
+msgstr "Uża d-data tat-tmiem tal-aċċess tas-sessjoni"
+

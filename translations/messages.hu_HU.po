@@ -30584,13 +30584,13 @@ msgid "ex. root"
 msgstr "pl. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE működik"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE működik"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN működik"
 
 msgid "Theme selected as current"
 msgstr "Téma kiválasztva aktuálisként"
@@ -39864,4 +39864,193 @@ msgstr "Lejáró értesítés: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Az értesítések a felhasználók saját beállított nyelvén kerülnek kiküldésre."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Az oldalak alapértelmezés szerint 60 másodpercig HTTP-gyorsítótárazottak, a Page entitásban megadottak szerint, ezért a változások nem feltétlenül jelennek meg azonnal."
+
+msgid "Activate legal notice"
+msgstr "Jogi nyilatkozat aktiválása"
+
+msgid "Agreement content"
+msgstr "Megállapodás tartalma"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Tanulók törölhetik saját közzétételüket"
+
+msgid "Allow learners to edit agenda"
+msgstr "Tanulók szerkeszthetik a napirendet"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Tanulók érvényesíthetik saját jelenlétüket"
+
+msgid "Allow learners to view users list"
+msgstr "Tanulók megtekinthetik a felhasználók listáját"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Felhasználók automatikus feliratkoztatása a fórumértesítésekre"
+
+msgid "Certificate mode"
+msgstr "Tanúsítvány mód"
+
+msgid "Configure external tools"
+msgstr "Külső eszközök beállítása"
+
+msgid "Contents"
+msgstr "Tartalom"
+
+msgid "Contents to show"
+msgstr "Megjelenítendő tartalom"
+
+msgid "Course certificate"
+msgstr "Kurzus tanúsítványa"
+
+msgid "Course delivery dates"
+msgstr "Kurzus teljesítési dátumai"
+
+msgid "Course duration in hours"
+msgstr "Kurzus időtartama órákban"
+
+msgid "Course legal agreement"
+msgstr "Kurzus jogi megállapodása"
+
+msgid "Custom"
+msgstr "Egyéni"
+
+msgid "Custom certificate"
+msgstr "Egyéni tanúsítvány"
+
+msgid "Default visibility for new documents"
+msgstr "Új dokumentumok alapértelmezett láthatósága"
+
+msgid "Direct invitation link"
+msgstr "Közvetlen meghívóhivatkozás"
+
+msgid "Do not notify"
+msgstr "Ne értesítsen"
+
+msgid "Documents list"
+msgstr "Dokumentumok listája"
+
+msgid "E-mail learner on manual subscription"
+msgstr "E-mail a tanulónak kézi feliratkozáskor"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "E-mail a tanároknak a tanulói közzététel új visszajelzéséről"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Felhasználók e-mail értesítése Dropbox-fájl fogadásakor"
+
+msgid "Enable course home notification"
+msgstr "Kurzuskezdő értesítés engedélyezése"
+
+msgid "Enable course themes in learning paths"
+msgstr "Kurzustémák engedélyezése a tanulási útvonalakban"
+
+msgid "Exercises invisible in session"
+msgstr "Gyakorlatok láthatatlanok a munkamenetben"
+
+msgid "Expiration link"
+msgstr "Lejárati link"
+
+msgid "Forums list"
+msgstr "Fórumok listája"
+
+msgid "Issue date type"
+msgstr "Kiállítás dátumának típusa"
+
+msgid "Learning path index"
+msgstr "Tanulási útvonal indexe"
+
+msgid "Learning paths list"
+msgstr "Tanulási útvonalak listája"
+
+msgid "Left margin"
+msgstr "Bal margó"
+
+msgid "Legal notice"
+msgstr "Jogi nyilatkozat"
+
+msgid "Maximum subscribed students"
+msgstr "Feliratkozott hallgatók maximális száma"
+
+msgid "Notify in course home"
+msgstr "Értesítés a kurzus kezdőlapján"
+
+msgid "Notify learners"
+msgstr "Tanulók értesítése"
+
+msgid "Notify with agreement file"
+msgstr "Értesítés megállapodásfájllal"
+
+msgid "Notify without attachment"
+msgstr "Értesítés melléklet nélkül"
+
+msgid "Open chat in a new window"
+msgstr "Csevegés megnyitása új ablakban"
+
+msgid "Open to the platform"
+msgstr "Nyitott a platform számára"
+
+msgid "Place"
+msgstr "Helyszín"
+
+msgid "Platform default"
+msgstr "Platform alapértelmezett"
+
+msgid "Registration password"
+msgstr "Regisztrációs jelszó"
+
+msgid "Remove previous agreements"
+msgstr "Korábbi megállapodások eltávolítása"
+
+msgid "Right margin"
+msgstr "Jobb margó"
+
+msgid "Selected learning path"
+msgstr "Kiválasztott tanulási útvonal"
+
+msgid "Selected test"
+msgstr "Kiválasztott teszt"
+
+msgid "Show learner picture in forums"
+msgstr "Tanuló képének megjelenítése a fórumokban"
+
+msgid "Show system folders"
+msgstr "Rendszermappák megjelenítése"
+
+msgid "Signature text 1"
+msgstr "Aláírás szövege 1"
+
+msgid "Signature text 2"
+msgstr "Aláírás szövege 2"
+
+msgid "Signature text 3"
+msgstr "Aláírás szövege 3"
+
+msgid "Signature text 4"
+msgstr "Aláírás szövege 4"
+
+msgid "Student and course information"
+msgstr "Hallgatói és kurzusinformációk"
+
+msgid "Subscription allowed"
+msgstr "Feliratkozás engedélyezett"
+
+msgid "Tests list"
+msgstr "Tesztek listája"
+
+msgid "Unsubscription allowed"
+msgstr "Leiratkozás engedélyezett"
+
+msgid "Use certificate download date"
+msgstr "Tanúsítvány letöltési dátumának használata"
+
+msgid "Use certificate generation date"
+msgstr "Tanúsítvány generálási dátumának használata"
+
+msgid "Use session access dates"
+msgstr "Szekció-hozzáférési dátumok használata"
+
+msgid "Use session access end date"
+msgstr "Szekció-hozzáférés záró dátumának használata"
 

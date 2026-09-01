@@ -39867,3 +39867,192 @@ msgstr "แจ้งเตือนใกล้หมดอายุ: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "การแจ้งเตือนจะถูกส่งไปยังผู้ใช้ในภาษาที่ผู้ใช้ตั้งค่าไว้"
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "หน้าถูกแคช HTTP เป็นเวลา 60 วินาทีตามค่าเริ่มต้น ตามที่กำหนดในเอนทิตี Page ดังนั้นการเปลี่ยนแปลงอาจไม่แสดงทันที"
+
+msgid "Activate legal notice"
+msgstr "เปิดใช้งานประกาศทางกฎหมาย"
+
+msgid "Agreement content"
+msgstr "เนื้อหาข้อตกลง"
+
+msgid "Allow learners to delete their own publication"
+msgstr "อนุญาตให้ผู้เรียนลบผลงานของตนเอง"
+
+msgid "Allow learners to edit agenda"
+msgstr "อนุญาตให้ผู้เรียนแก้ไขวาระ"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "อนุญาตให้ผู้เรียนยืนยันการเข้าเรียนของตนเอง"
+
+msgid "Allow learners to view users list"
+msgstr "อนุญาตให้ผู้เรียนดูรายชื่อผู้ใช้"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "สมัครผู้ใช้รับการแจ้งเตือนฟอรัมโดยอัตโนมัติ"
+
+msgid "Certificate mode"
+msgstr "โหมดใบรับรอง"
+
+msgid "Configure external tools"
+msgstr "กำหนดค่าเครื่องมือภายนอก"
+
+msgid "Contents"
+msgstr "เนื้อหา"
+
+msgid "Contents to show"
+msgstr "เนื้อหาที่จะแสดง"
+
+msgid "Course certificate"
+msgstr "ใบรับรองหลักสูตร"
+
+msgid "Course delivery dates"
+msgstr "วันที่จัดการเรียนการสอน"
+
+msgid "Course duration in hours"
+msgstr "ระยะเวลาหลักสูตรเป็นชั่วโมง"
+
+msgid "Course legal agreement"
+msgstr "ข้อตกลงทางกฎหมายของหลักสูตร"
+
+msgid "Custom"
+msgstr "กำหนดเอง"
+
+msgid "Custom certificate"
+msgstr "ใบรับรองกำหนดเอง"
+
+msgid "Default visibility for new documents"
+msgstr "การมองเห็นเริ่มต้นสำหรับเอกสารใหม่"
+
+msgid "Direct invitation link"
+msgstr "ลิงก์เชิญโดยตรง"
+
+msgid "Do not notify"
+msgstr "ไม่แจ้งเตือน"
+
+msgid "Documents list"
+msgstr "รายการเอกสาร"
+
+msgid "E-mail learner on manual subscription"
+msgstr "ส่งอีเมลถึงผู้เรียนเมื่อลงทะเบียนด้วยตนเอง"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "ส่งอีเมลถึงครูเมื่อมีการให้ข้อเสนอแนะผลงานของผู้เรียนใหม่"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "ส่งอีเมลถึงผู้ใช้เมื่อได้รับไฟล์ Dropbox"
+
+msgid "Enable course home notification"
+msgstr "เปิดใช้งานการแจ้งเตือนหน้าแรกของหลักสูตร"
+
+msgid "Enable course themes in learning paths"
+msgstr "เปิดใช้งานธีมหลักสูตรในเส้นทางการเรียนรู้"
+
+msgid "Exercises invisible in session"
+msgstr "แบบฝึกหัดที่มองไม่เห็นในเซสชัน"
+
+msgid "Expiration link"
+msgstr "ลิงก์หมดอายุ"
+
+msgid "Forums list"
+msgstr "รายการฟอรัม"
+
+msgid "Issue date type"
+msgstr "ประเภทวันที่ออกเอกสาร"
+
+msgid "Learning path index"
+msgstr "ดัชนีเส้นทางการเรียนรู้"
+
+msgid "Learning paths list"
+msgstr "รายการเส้นทางการเรียนรู้"
+
+msgid "Left margin"
+msgstr "ระยะขอบซ้าย"
+
+msgid "Legal notice"
+msgstr "ประกาศทางกฎหมาย"
+
+msgid "Maximum subscribed students"
+msgstr "จำนวนนักเรียนที่ลงทะเบียนสูงสุด"
+
+msgid "Notify in course home"
+msgstr "แจ้งเตือนในหน้าหลักของหลักสูตร"
+
+msgid "Notify learners"
+msgstr "แจ้งเตือนผู้เรียน"
+
+msgid "Notify with agreement file"
+msgstr "แจ้งเตือนพร้อมไฟล์ข้อตกลง"
+
+msgid "Notify without attachment"
+msgstr "แจ้งเตือนโดยไม่มีไฟล์แนบ"
+
+msgid "Open chat in a new window"
+msgstr "เปิดแชทในหน้าต่างใหม่"
+
+msgid "Open to the platform"
+msgstr "เปิดให้แพลตฟอร์ม"
+
+msgid "Place"
+msgstr "สถานที่"
+
+msgid "Platform default"
+msgstr "ค่าเริ่มต้นของแพลตฟอร์ม"
+
+msgid "Registration password"
+msgstr "รหัสผ่านการลงทะเบียน"
+
+msgid "Remove previous agreements"
+msgstr "ลบข้อตกลงก่อนหน้า"
+
+msgid "Right margin"
+msgstr "ระยะขอบขวา"
+
+msgid "Selected learning path"
+msgstr "เส้นทางการเรียนรู้ที่เลือก"
+
+msgid "Selected test"
+msgstr "แบบทดสอบที่เลือก"
+
+msgid "Show learner picture in forums"
+msgstr "แสดงรูปผู้เรียนในฟอรัม"
+
+msgid "Show system folders"
+msgstr "แสดงโฟลเดอร์ระบบ"
+
+msgid "Signature text 1"
+msgstr "ข้อความลายเซ็น 1"
+
+msgid "Signature text 2"
+msgstr "ข้อความลายเซ็น 2"
+
+msgid "Signature text 3"
+msgstr "ข้อความลายเซ็น 3"
+
+msgid "Signature text 4"
+msgstr "ข้อความลายเซ็น 4"
+
+msgid "Student and course information"
+msgstr "ข้อมูลนักเรียนและหลักสูตร"
+
+msgid "Subscription allowed"
+msgstr "อนุญาตให้ลงทะเบียน"
+
+msgid "Tests list"
+msgstr "รายการแบบทดสอบ"
+
+msgid "Unsubscription allowed"
+msgstr "อนุญาตให้ยกเลิกการลงทะเบียน"
+
+msgid "Use certificate download date"
+msgstr "ใช้วันที่ดาวน์โหลดใบรับรอง"
+
+msgid "Use certificate generation date"
+msgstr "ใช้วันที่สร้างใบรับรอง"
+
+msgid "Use session access dates"
+msgstr "ใช้วันที่เข้าถึงเซสชัน"
+
+msgid "Use session access end date"
+msgstr "ใช้วันที่สิ้นสุดการเข้าถึงเซสชัน"
+

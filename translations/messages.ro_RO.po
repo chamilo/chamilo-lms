@@ -39881,3 +39881,192 @@ msgstr "Notificare de expirare iminentă: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Notificările sunt trimise utilizatorilor în limba configurată de aceștia."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Paginile sunt stocate în cache HTTP timp de 60s în mod implicit, după cum este definit în entitatea Page, astfel încât modificările s-ar putea să nu se reflecte imediat."
+
+msgid "Activate legal notice"
+msgstr "Activează avizul legal"
+
+msgid "Agreement content"
+msgstr "Conținutul acordului"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Permite cursanților să șteargă propria publicație"
+
+msgid "Allow learners to edit agenda"
+msgstr "Permite cursanților să editeze agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Permite cursanților să își valideze propria prezență"
+
+msgid "Allow learners to view users list"
+msgstr "Permite cursanților să vadă lista de utilizatori"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Abonează automat utilizatorii la notificările forumului"
+
+msgid "Certificate mode"
+msgstr "Mod certificat"
+
+msgid "Configure external tools"
+msgstr "Configurează instrumente externe"
+
+msgid "Contents"
+msgstr "Conținut"
+
+msgid "Contents to show"
+msgstr "Conținut de afișat"
+
+msgid "Course certificate"
+msgstr "Certificat de curs"
+
+msgid "Course delivery dates"
+msgstr "Date de desfășurare a cursului"
+
+msgid "Course duration in hours"
+msgstr "Durata cursului în ore"
+
+msgid "Course legal agreement"
+msgstr "Acord legal al cursului"
+
+msgid "Custom"
+msgstr "Personalizat"
+
+msgid "Custom certificate"
+msgstr "Certificat personalizat"
+
+msgid "Default visibility for new documents"
+msgstr "Vizibilitate implicită pentru documente noi"
+
+msgid "Direct invitation link"
+msgstr "Link de invitație directă"
+
+msgid "Do not notify"
+msgstr "Nu notifica"
+
+msgid "Documents list"
+msgstr "Lista de documente"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Trimite e-mail cursantului la înscrierea manuală"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "E-mail către profesori la feedback-ul publicației studentului de către un utilizator nou"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "E-mail utilizatorilor la primirea fișierelor Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Activează notificarea pe pagina principală a cursului"
+
+msgid "Enable course themes in learning paths"
+msgstr "Activează temele cursului în traseele de învățare"
+
+msgid "Exercises invisible in session"
+msgstr "Exerciții invizibile în sesiune"
+
+msgid "Expiration link"
+msgstr "Link de expirare"
+
+msgid "Forums list"
+msgstr "Lista forumurilor"
+
+msgid "Issue date type"
+msgstr "Tipul datei de emitere"
+
+msgid "Learning path index"
+msgstr "Indexul traseului de învățare"
+
+msgid "Learning paths list"
+msgstr "Lista traseelor de învățare"
+
+msgid "Left margin"
+msgstr "Margine stângă"
+
+msgid "Legal notice"
+msgstr "Notificare legală"
+
+msgid "Maximum subscribed students"
+msgstr "Număr maxim de studenți înscriși"
+
+msgid "Notify in course home"
+msgstr "Notifică pe pagina principală a cursului"
+
+msgid "Notify learners"
+msgstr "Notifică cursanții"
+
+msgid "Notify with agreement file"
+msgstr "Notifică cu fișierul de acord"
+
+msgid "Notify without attachment"
+msgstr "Notifică fără atașament"
+
+msgid "Open chat in a new window"
+msgstr "Deschide chat-ul într-o fereastră nouă"
+
+msgid "Open to the platform"
+msgstr "Deschis către platformă"
+
+msgid "Place"
+msgstr "Loc"
+
+msgid "Platform default"
+msgstr "Implicit platformă"
+
+msgid "Registration password"
+msgstr "Parolă de înregistrare"
+
+msgid "Remove previous agreements"
+msgstr "Elimină acordurile anterioare"
+
+msgid "Right margin"
+msgstr "Margine dreaptă"
+
+msgid "Selected learning path"
+msgstr "Traseu de învățare selectat"
+
+msgid "Selected test"
+msgstr "Test selectat"
+
+msgid "Show learner picture in forums"
+msgstr "Afișează fotografia cursantului în forumuri"
+
+msgid "Show system folders"
+msgstr "Afișează folderele de sistem"
+
+msgid "Signature text 1"
+msgstr "Text semnătură 1"
+
+msgid "Signature text 2"
+msgstr "Text semnătură 2"
+
+msgid "Signature text 3"
+msgstr "Text semnătură 3"
+
+msgid "Signature text 4"
+msgstr "Text semnătură 4"
+
+msgid "Student and course information"
+msgstr "Informații student și curs"
+
+msgid "Subscription allowed"
+msgstr "Înscriere permisă"
+
+msgid "Tests list"
+msgstr "Lista testelor"
+
+msgid "Unsubscription allowed"
+msgstr "Dezabonare permisă"
+
+msgid "Use certificate download date"
+msgstr "Folosește data descărcării certificatului"
+
+msgid "Use certificate generation date"
+msgstr "Folosește data generării certificatului"
+
+msgid "Use session access dates"
+msgstr "Folosește datele de acces la sesiune"
+
+msgid "Use session access end date"
+msgstr "Folosește data de sfârșit a accesului la sesiune"
+

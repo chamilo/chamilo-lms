@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Tusaale qaacido: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaalaha qaaciddada: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -35533,7 +35533,7 @@ msgid "%s results"
 msgstr "%s natiijo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Tusaale buuxi foomka dhaqdhaqaaqa : xisaabi Tilmaanta Cufka Jidhka</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Da'da</strong></td>            <td width=\"75%\" style=\"\">[25] sano jir</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Jinsiga</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ama F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Miisaanka</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Dhererka</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tilmaanta Cufka Jidhka</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Miisaanka/Dhererka<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Maqaalka Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Tusaale: buuxi dhaqdhaqaaqa foomka : xisaabi Tusaha Cufka Jidhka</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Da'da</strong></td>            <td width=\"75%\" style=\"\">[25] sano jir</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Jinsiga</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ama F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Miisaanka</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Dhererka</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tusaha Cufka Jidhka</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Miisaanka/Dhererka<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Maqaalka Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Laga saaray"
@@ -39860,4 +39860,193 @@ msgstr "Ogeysiis dhacaya: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Ogeysiisyada waxaa loo diraa isticmaalayaasha luqadda ay iyagu u habeeyeen."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Bogagga waxaa HTTP-ku kaydsan 60s si caadi ah, sida lagu qeexay hay'adda Bogga, sidaas darteed isbeddelladu laga yaabaa inaysan isla markiiba muuqan."
+
+msgid "Activate legal notice"
+msgstr "Dhaqaaji ogeysiiska sharciga"
+
+msgid "Agreement content"
+msgstr "Nuxurka heshiiska"
+
+msgid "Allow learners to delete their own publication"
+msgstr "U oggolow ardayda inay tirtiraan daabacaaddooda"
+
+msgid "Allow learners to edit agenda"
+msgstr "U oggolow ardayda inay wax ka beddelaan jadwalka"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "U oggolow ardayda inay xaqiijiyaan imaanshahooda"
+
+msgid "Allow learners to view users list"
+msgstr "U oggolow ardayda inay arkaan liiska isticmaalayaasha"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Si toos ah ugu qor isticmaalayaasha ogeysiisyada doodda"
+
+msgid "Certificate mode"
+msgstr "Habka shahaadada"
+
+msgid "Configure external tools"
+msgstr "Habee qalabka dibadda"
+
+msgid "Contents"
+msgstr "Nuxurka"
+
+msgid "Contents to show"
+msgstr "Nuxurka la soo bandhigo"
+
+msgid "Course certificate"
+msgstr "Shahaadada koorsada"
+
+msgid "Course delivery dates"
+msgstr "Taariikhaha bixinta koorsada"
+
+msgid "Course duration in hours"
+msgstr "Muddada koorsada saacadaha"
+
+msgid "Course legal agreement"
+msgstr "Heshiiska sharciga ee koorsada"
+
+msgid "Custom"
+msgstr "Gaar ah"
+
+msgid "Custom certificate"
+msgstr "Shahaadada gaarka ah"
+
+msgid "Default visibility for new documents"
+msgstr "Muuqaalka caadiga ah ee dukumentiyada cusub"
+
+msgid "Direct invitation link"
+msgstr "Xiriirka casuumaadda tooska ah"
+
+msgid "Do not notify"
+msgstr "Ha ogeysiinin"
+
+msgid "Documents list"
+msgstr "Liiska dukumentiyada"
+
+msgid "E-mail learner on manual subscription"
+msgstr "U dir iimayl ardayga marka si gacanta loo diiwaangeliyo"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "U dir iimayl macallimiinta marka jawaab-celin daabacaad arday ah ee isticmaale cusub"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "U dir iimayl isticmaalayaasha marka faylka Dropbox la helo"
+
+msgid "Enable course home notification"
+msgstr "Daarul ogeysiinta guriga koorsada"
+
+msgid "Enable course themes in learning paths"
+msgstr "Daarul mawduucyada koorsada waddooyinka waxbarashada"
+
+msgid "Exercises invisible in session"
+msgstr "Layliyada aan la arki karin kalfadhiga"
+
+msgid "Expiration link"
+msgstr "Xiriirka dhicitaanka"
+
+msgid "Forums list"
+msgstr "Liiska doodaha"
+
+msgid "Issue date type"
+msgstr "Nooca taariikhda soo saarista"
+
+msgid "Learning path index"
+msgstr "Tusaha waddada waxbarashada"
+
+msgid "Learning paths list"
+msgstr "Liiska waddooyinka waxbarashada"
+
+msgid "Left margin"
+msgstr "Xadka bidix"
+
+msgid "Legal notice"
+msgstr "Ogeysiis sharci"
+
+msgid "Maximum subscribed students"
+msgstr "Ugu badnaan ardayda isdiiwaangeliyay"
+
+msgid "Notify in course home"
+msgstr "Ogeysii guriga koorsada"
+
+msgid "Notify learners"
+msgstr "Ogeysii ardayda"
+
+msgid "Notify with agreement file"
+msgstr "Ogeysii faylka heshiiska"
+
+msgid "Notify without attachment"
+msgstr "Ogeysii iyada oo aan lifaaq lahayn"
+
+msgid "Open chat in a new window"
+msgstr "Fur sheekada daaqad cusub"
+
+msgid "Open to the platform"
+msgstr "U fur platformka"
+
+msgid "Place"
+msgstr "Meel"
+
+msgid "Platform default"
+msgstr "Caadiga platformka"
+
+msgid "Registration password"
+msgstr "Furaha diiwaangelinta"
+
+msgid "Remove previous agreements"
+msgstr "Ka saar heshiisyadii hore"
+
+msgid "Right margin"
+msgstr "Xadka midig"
+
+msgid "Selected learning path"
+msgstr "Waddada waxbarashada la doortay"
+
+msgid "Selected test"
+msgstr "Imtixaanka la doortay"
+
+msgid "Show learner picture in forums"
+msgstr "Muuji sawirka ardayga doodaha"
+
+msgid "Show system folders"
+msgstr "Muuji galka nidaamka"
+
+msgid "Signature text 1"
+msgstr "Qoraalka saxiixa 1"
+
+msgid "Signature text 2"
+msgstr "Qoraalka saxiixa 2"
+
+msgid "Signature text 3"
+msgstr "Qoraalka saxiixa 3"
+
+msgid "Signature text 4"
+msgstr "Qoraalka saxiixa 4"
+
+msgid "Student and course information"
+msgstr "Macluumaadka ardayga iyo koorsada"
+
+msgid "Subscription allowed"
+msgstr "Isdiiwaangelinta waa la oggol yahay"
+
+msgid "Tests list"
+msgstr "Liiska imtixaannada"
+
+msgid "Unsubscription allowed"
+msgstr "Ka bixitaanka waa la oggol yahay"
+
+msgid "Use certificate download date"
+msgstr "Isticmaal taariikhda soo dejinta shahaadada"
+
+msgid "Use certificate generation date"
+msgstr "Isticmaal taariikhda abuurista shahaadada"
+
+msgid "Use session access dates"
+msgstr "Isticmaal taariikhaha gelitaanka kalfadhiga"
+
+msgid "Use session access end date"
+msgstr "Isticmaal taariikhda dhammaadka gelitaanka kalfadhiga"
 

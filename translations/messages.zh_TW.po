@@ -8631,10 +8631,10 @@ msgid "."
 msgstr "。"
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%Y年%b %d日"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%Y年%B%d日 %A"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y %I:%M %p"
@@ -9486,7 +9486,7 @@ msgid "Not yet begun"
 msgstr "尚未開始"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%Y年%B %d日"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "無效的資料夾：請在您的文件工具中建立名為 images 的資料夾，以便圖片可以上傳到此資料夾"
@@ -16248,7 +16248,7 @@ msgid "Quarterly report"
 msgstr "季度報告"
 
 msgid "%d %B %Y"
-msgstr "%d %B %Y"
+msgstr "%Y年%B%d日"
 
 msgid "%A"
 msgstr "%A"
@@ -19035,7 +19035,7 @@ msgid "%b %d, %Y at %I:%M %p"
 msgstr "%b %d, %Y %I:%M %p"
 
 msgid "%I:%M %p, %b %d %Y"
-msgstr "%I:%M %p, %b %d %Y"
+msgstr "%Y年%b %d日 %I:%M %p"
 
 msgid "Login to vote"
 msgstr "登入投票"
@@ -39866,4 +39866,193 @@ msgstr "即將到期通知：%s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "通知會以使用者自行設定的語言傳送給使用者。"
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "頁面預設會依 Page 實體設定進行 60 秒 HTTP 快取，因此變更可能不會立即顯示。"
+
+msgid "Activate legal notice"
+msgstr "啟用法律聲明"
+
+msgid "Agreement content"
+msgstr "同意書內容"
+
+msgid "Allow learners to delete their own publication"
+msgstr "允許學習者刪除自己的發表"
+
+msgid "Allow learners to edit agenda"
+msgstr "允許學習者編輯行程"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "允許學習者驗證自己的出席"
+
+msgid "Allow learners to view users list"
+msgstr "允許學習者檢視使用者清單"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "自動為使用者訂閱論壇通知"
+
+msgid "Certificate mode"
+msgstr "證書模式"
+
+msgid "Configure external tools"
+msgstr "設定外部工具"
+
+msgid "Contents"
+msgstr "內容"
+
+msgid "Contents to show"
+msgstr "要顯示的內容"
+
+msgid "Course certificate"
+msgstr "課程證書"
+
+msgid "Course delivery dates"
+msgstr "課程授課日期"
+
+msgid "Course duration in hours"
+msgstr "課程時數"
+
+msgid "Course legal agreement"
+msgstr "課程法律協議"
+
+msgid "Custom"
+msgstr "自訂"
+
+msgid "Custom certificate"
+msgstr "自訂證書"
+
+msgid "Default visibility for new documents"
+msgstr "新文件的預設可見性"
+
+msgid "Direct invitation link"
+msgstr "直接邀請連結"
+
+msgid "Do not notify"
+msgstr "不通知"
+
+msgid "Documents list"
+msgstr "文件清單"
+
+msgid "E-mail learner on manual subscription"
+msgstr "手動註冊時寄信給學習者"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "新使用者對學員作業回饋時寄信給教師"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "收到檔案匣檔案時寄信給使用者"
+
+msgid "Enable course home notification"
+msgstr "啟用課程首頁通知"
+
+msgid "Enable course themes in learning paths"
+msgstr "在學習路徑中啟用課程主題"
+
+msgid "Exercises invisible in session"
+msgstr "在時段中隱藏測驗"
+
+msgid "Expiration link"
+msgstr "過期連結"
+
+msgid "Forums list"
+msgstr "論壇清單"
+
+msgid "Issue date type"
+msgstr "核發日期類型"
+
+msgid "Learning path index"
+msgstr "學習路徑索引"
+
+msgid "Learning paths list"
+msgstr "學習路徑清單"
+
+msgid "Left margin"
+msgstr "左邊距"
+
+msgid "Legal notice"
+msgstr "法律聲明"
+
+msgid "Maximum subscribed students"
+msgstr "訂閱學生人數上限"
+
+msgid "Notify in course home"
+msgstr "在課程首頁通知"
+
+msgid "Notify learners"
+msgstr "通知學習者"
+
+msgid "Notify with agreement file"
+msgstr "以協議檔案通知"
+
+msgid "Notify without attachment"
+msgstr "不附加檔案通知"
+
+msgid "Open chat in a new window"
+msgstr "在新視窗開啟聊天"
+
+msgid "Open to the platform"
+msgstr "對平台開放"
+
+msgid "Place"
+msgstr "地點"
+
+msgid "Platform default"
+msgstr "平台預設"
+
+msgid "Registration password"
+msgstr "註冊密碼"
+
+msgid "Remove previous agreements"
+msgstr "移除先前協議"
+
+msgid "Right margin"
+msgstr "右邊距"
+
+msgid "Selected learning path"
+msgstr "已選學習路徑"
+
+msgid "Selected test"
+msgstr "已選測驗"
+
+msgid "Show learner picture in forums"
+msgstr "在論壇顯示學習者頭像"
+
+msgid "Show system folders"
+msgstr "顯示系統資料夾"
+
+msgid "Signature text 1"
+msgstr "簽名文字 1"
+
+msgid "Signature text 2"
+msgstr "簽名文字 2"
+
+msgid "Signature text 3"
+msgstr "簽名文字 3"
+
+msgid "Signature text 4"
+msgstr "簽名文字 4"
+
+msgid "Student and course information"
+msgstr "學生與課程資訊"
+
+msgid "Subscription allowed"
+msgstr "允許訂閱"
+
+msgid "Tests list"
+msgstr "測驗清單"
+
+msgid "Unsubscription allowed"
+msgstr "允許取消訂閱"
+
+msgid "Use certificate download date"
+msgstr "使用證書下載日期"
+
+msgid "Use certificate generation date"
+msgstr "使用證書產生日期"
+
+msgid "Use session access dates"
+msgstr "使用課程期程存取日期"
+
+msgid "Use session access end date"
+msgstr "使用課程期程存取結束日期"
 

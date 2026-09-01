@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "감사합니다"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "수식 예: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "수식 예제: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "변수 범위"
@@ -39864,4 +39864,193 @@ msgstr "만료 예정 알림: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "알림은 사용자가 설정한 언어로 전송됩니다."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "페이지는 Page 엔터티에 정의된 대로 기본적으로 60초 동안 HTTP 캐시되므로 변경 사항이 즉시 반영되지 않을 수 있습니다."
+
+msgid "Activate legal notice"
+msgstr "법적 고지 활성화"
+
+msgid "Agreement content"
+msgstr "동의 내용"
+
+msgid "Allow learners to delete their own publication"
+msgstr "학습자가 자신의 게시물을 삭제하도록 허용"
+
+msgid "Allow learners to edit agenda"
+msgstr "학습자가 일정을 편집하도록 허용"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "학습자가 자신의 출석을 확인하도록 허용"
+
+msgid "Allow learners to view users list"
+msgstr "학습자가 사용자 목록을 보도록 허용"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "사용자를 포럼 알림에 자동 구독"
+
+msgid "Certificate mode"
+msgstr "수료증 모드"
+
+msgid "Configure external tools"
+msgstr "외부 도구 구성"
+
+msgid "Contents"
+msgstr "콘텐츠"
+
+msgid "Contents to show"
+msgstr "표시할 콘텐츠"
+
+msgid "Course certificate"
+msgstr "과정 수료증"
+
+msgid "Course delivery dates"
+msgstr "과정 제공 날짜"
+
+msgid "Course duration in hours"
+msgstr "과정 기간(시간)"
+
+msgid "Course legal agreement"
+msgstr "과정 법적 동의"
+
+msgid "Custom"
+msgstr "사용자 지정"
+
+msgid "Custom certificate"
+msgstr "사용자 지정 수료증"
+
+msgid "Default visibility for new documents"
+msgstr "새 문서의 기본 공개 설정"
+
+msgid "Direct invitation link"
+msgstr "직접 초대 링크"
+
+msgid "Do not notify"
+msgstr "알리지 않음"
+
+msgid "Documents list"
+msgstr "문서 목록"
+
+msgid "E-mail learner on manual subscription"
+msgstr "수동 등록 시 학습자에게 이메일 발송"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "새 사용자의 학생 게시물 피드백 시 교사에게 이메일 발송"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Dropbox 파일 수신 시 사용자에게 이메일 발송"
+
+msgid "Enable course home notification"
+msgstr "과정 홈 알림 활성화"
+
+msgid "Enable course themes in learning paths"
+msgstr "학습 경로에서 과정 테마 사용"
+
+msgid "Exercises invisible in session"
+msgstr "세션에서 연습문제 숨김"
+
+msgid "Expiration link"
+msgstr "만료 링크"
+
+msgid "Forums list"
+msgstr "포럼 목록"
+
+msgid "Issue date type"
+msgstr "발급일 유형"
+
+msgid "Learning path index"
+msgstr "학습 경로 색인"
+
+msgid "Learning paths list"
+msgstr "학습 경로 목록"
+
+msgid "Left margin"
+msgstr "왼쪽 여백"
+
+msgid "Legal notice"
+msgstr "법적 고지"
+
+msgid "Maximum subscribed students"
+msgstr "최대 수강 학생 수"
+
+msgid "Notify in course home"
+msgstr "과정 홈에서 알림"
+
+msgid "Notify learners"
+msgstr "학습자에게 알림"
+
+msgid "Notify with agreement file"
+msgstr "동의 파일과 함께 알림"
+
+msgid "Notify without attachment"
+msgstr "첨부 없이 알림"
+
+msgid "Open chat in a new window"
+msgstr "새 창에서 채팅 열기"
+
+msgid "Open to the platform"
+msgstr "플랫폼에 공개"
+
+msgid "Place"
+msgstr "장소"
+
+msgid "Platform default"
+msgstr "플랫폼 기본값"
+
+msgid "Registration password"
+msgstr "등록 비밀번호"
+
+msgid "Remove previous agreements"
+msgstr "이전 동의 제거"
+
+msgid "Right margin"
+msgstr "오른쪽 여백"
+
+msgid "Selected learning path"
+msgstr "선택한 학습 경로"
+
+msgid "Selected test"
+msgstr "선택한 시험"
+
+msgid "Show learner picture in forums"
+msgstr "포럼에 학습자 사진 표시"
+
+msgid "Show system folders"
+msgstr "시스템 폴더 표시"
+
+msgid "Signature text 1"
+msgstr "서명 텍스트 1"
+
+msgid "Signature text 2"
+msgstr "서명 텍스트 2"
+
+msgid "Signature text 3"
+msgstr "서명 텍스트 3"
+
+msgid "Signature text 4"
+msgstr "서명 텍스트 4"
+
+msgid "Student and course information"
+msgstr "학생 및 과정 정보"
+
+msgid "Subscription allowed"
+msgstr "수강 신청 허용"
+
+msgid "Tests list"
+msgstr "시험 목록"
+
+msgid "Unsubscription allowed"
+msgstr "수강 취소 허용"
+
+msgid "Use certificate download date"
+msgstr "수료증 다운로드 날짜 사용"
+
+msgid "Use certificate generation date"
+msgstr "수료증 생성 날짜 사용"
+
+msgid "Use session access dates"
+msgstr "세션 접근 날짜 사용"
+
+msgid "Use session access end date"
+msgstr "세션 접근 종료일 사용"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vänliga hälsningar,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formelprov: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formelprov: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -39866,4 +39866,193 @@ msgstr "Meddelande om utgång: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Aviseringar skickas till användare på deras eget konfigurerade språk."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Sidor HTTP-cachas i 60 s som standard, enligt Page-entiteten, så ändringar syns kanske inte omedelbart."
+
+msgid "Activate legal notice"
+msgstr "Aktivera juridisk information"
+
+msgid "Agreement content"
+msgstr "Avtalsinnehåll"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Tillåt deltagare att radera sina egna publikationer"
+
+msgid "Allow learners to edit agenda"
+msgstr "Tillåt deltagare att redigera agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Tillåt deltagare att validera sin egen närvaro"
+
+msgid "Allow learners to view users list"
+msgstr "Tillåt deltagare att se användarlistan"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Prenumerera automatiskt användare på forumaviseringar"
+
+msgid "Certificate mode"
+msgstr "Certifikatläge"
+
+msgid "Configure external tools"
+msgstr "Konfigurera externa verktyg"
+
+msgid "Contents"
+msgstr "Innehåll"
+
+msgid "Contents to show"
+msgstr "Innehåll att visa"
+
+msgid "Course certificate"
+msgstr "Kursintyg"
+
+msgid "Course delivery dates"
+msgstr "Datum för kursleverans"
+
+msgid "Course duration in hours"
+msgstr "Kurslängd i timmar"
+
+msgid "Course legal agreement"
+msgstr "Juridiskt avtal för kurs"
+
+msgid "Custom"
+msgstr "Anpassad"
+
+msgid "Custom certificate"
+msgstr "Anpassat intyg"
+
+msgid "Default visibility for new documents"
+msgstr "Standardvisning för nya dokument"
+
+msgid "Direct invitation link"
+msgstr "Direkt inbjudningslänk"
+
+msgid "Do not notify"
+msgstr "Avisera inte"
+
+msgid "Documents list"
+msgstr "Dokumentlista"
+
+msgid "E-mail learner on manual subscription"
+msgstr "E-posta deltagare vid manuell registrering"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "E-posta lärare vid återkoppling på ny studentpublikation"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "E-posta användare vid mottagning av Dropbox-fil"
+
+msgid "Enable course home notification"
+msgstr "Aktivera avisering på kursens startsida"
+
+msgid "Enable course themes in learning paths"
+msgstr "Aktivera kursteman i lärstigar"
+
+msgid "Exercises invisible in session"
+msgstr "Övningar osynliga i session"
+
+msgid "Expiration link"
+msgstr "Utgångslänk"
+
+msgid "Forums list"
+msgstr "Forumlista"
+
+msgid "Issue date type"
+msgstr "Typ av utfärdandedatum"
+
+msgid "Learning path index"
+msgstr "Index för lärstig"
+
+msgid "Learning paths list"
+msgstr "Lista över lärstigar"
+
+msgid "Left margin"
+msgstr "Vänstermarginal"
+
+msgid "Legal notice"
+msgstr "Juridisk information"
+
+msgid "Maximum subscribed students"
+msgstr "Maximalt antal anmälda studenter"
+
+msgid "Notify in course home"
+msgstr "Meddela på kursens startsida"
+
+msgid "Notify learners"
+msgstr "Meddela deltagare"
+
+msgid "Notify with agreement file"
+msgstr "Meddela med avtalsfil"
+
+msgid "Notify without attachment"
+msgstr "Meddela utan bilaga"
+
+msgid "Open chat in a new window"
+msgstr "Öppna chatt i nytt fönster"
+
+msgid "Open to the platform"
+msgstr "Öppen för plattformen"
+
+msgid "Place"
+msgstr "Plats"
+
+msgid "Platform default"
+msgstr "Plattformens standard"
+
+msgid "Registration password"
+msgstr "Registreringslösenord"
+
+msgid "Remove previous agreements"
+msgstr "Ta bort tidigare avtal"
+
+msgid "Right margin"
+msgstr "Högermarginal"
+
+msgid "Selected learning path"
+msgstr "Vald lärstig"
+
+msgid "Selected test"
+msgstr "Valt test"
+
+msgid "Show learner picture in forums"
+msgstr "Visa deltagarbild i forum"
+
+msgid "Show system folders"
+msgstr "Visa systemmappar"
+
+msgid "Signature text 1"
+msgstr "Signaturtext 1"
+
+msgid "Signature text 2"
+msgstr "Signaturtext 2"
+
+msgid "Signature text 3"
+msgstr "Signaturtext 3"
+
+msgid "Signature text 4"
+msgstr "Signaturtext 4"
+
+msgid "Student and course information"
+msgstr "Student- och kursinformation"
+
+msgid "Subscription allowed"
+msgstr "Anmälning tillåten"
+
+msgid "Tests list"
+msgstr "Testlista"
+
+msgid "Unsubscription allowed"
+msgstr "Avanmälan tillåten"
+
+msgid "Use certificate download date"
+msgstr "Använd certifikatets nedladdningsdatum"
+
+msgid "Use certificate generation date"
+msgstr "Använd certifikatets genereringsdatum"
+
+msgid "Use session access dates"
+msgstr "Använd sessionens åtkomstdatum"
+
+msgid "Use session access end date"
+msgstr "Använd sessionens slutdatum för åtkomst"
 

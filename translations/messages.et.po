@@ -39866,3 +39866,192 @@ msgstr "Aegumise teade: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Teavitused saadetakse kasutajatele nende enda seadistatud keeles."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Lehed on vaikimisi HTTP-vahemälus 60 s, nagu määratud Page olemi juures, seega muudatused ei pruugi kohe kajastuda."
+
+msgid "Activate legal notice"
+msgstr "Aktiveeri õigusteade"
+
+msgid "Agreement content"
+msgstr "Lepingu sisu"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Luba õppijatel oma publikatsioon kustutada"
+
+msgid "Allow learners to edit agenda"
+msgstr "Luba õppijatel päevakava muuta"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Luba õppijatel oma osalemist kinnitada"
+
+msgid "Allow learners to view users list"
+msgstr "Luba õppijatel kasutajate nimekirja vaadata"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Telli kasutajad automaatselt foorumi teavitustele"
+
+msgid "Certificate mode"
+msgstr "Sertifikaadi režiim"
+
+msgid "Configure external tools"
+msgstr "Seadista välised tööriistad"
+
+msgid "Contents"
+msgstr "Sisu"
+
+msgid "Contents to show"
+msgstr "Kuvatav sisu"
+
+msgid "Course certificate"
+msgstr "Kursuse sertifikaat"
+
+msgid "Course delivery dates"
+msgstr "Kursuse toimumise kuupäevad"
+
+msgid "Course duration in hours"
+msgstr "Kursuse kestus tundides"
+
+msgid "Course legal agreement"
+msgstr "Kursuse õiguslik leping"
+
+msgid "Custom"
+msgstr "Kohandatud"
+
+msgid "Custom certificate"
+msgstr "Kohandatud sertifikaat"
+
+msgid "Default visibility for new documents"
+msgstr "Uute dokumentide vaikimisi nähtavus"
+
+msgid "Direct invitation link"
+msgstr "Otsene kutselink"
+
+msgid "Do not notify"
+msgstr "Ära teavita"
+
+msgid "Documents list"
+msgstr "Dokumentide nimekiri"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Saada õppijale e-kiri käsitsi registreerimisel"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Saada õpetajatele e-kiri uue kasutaja õppija publikatsiooni tagasiside kohta"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Saada kasutajatele e-kiri Dropboxi faili vastuvõtmisel"
+
+msgid "Enable course home notification"
+msgstr "Luba kursuse avalehe teavitus"
+
+msgid "Enable course themes in learning paths"
+msgstr "Luba kursuse teemad õpiteedes"
+
+msgid "Exercises invisible in session"
+msgstr "Harjutused seansis nähtamatud"
+
+msgid "Expiration link"
+msgstr "Aegumise link"
+
+msgid "Forums list"
+msgstr "Foorumite nimekiri"
+
+msgid "Issue date type"
+msgstr "Väljastamise kuupäeva tüüp"
+
+msgid "Learning path index"
+msgstr "Õpitee indeks"
+
+msgid "Learning paths list"
+msgstr "Õpiteede nimekiri"
+
+msgid "Left margin"
+msgstr "Vasak veeris"
+
+msgid "Legal notice"
+msgstr "Juriidiline teade"
+
+msgid "Maximum subscribed students"
+msgstr "Maksimaalne registreerunud õpilaste arv"
+
+msgid "Notify in course home"
+msgstr "Teavita kursuse avalehel"
+
+msgid "Notify learners"
+msgstr "Teavita õppijaid"
+
+msgid "Notify with agreement file"
+msgstr "Teavita kokkuleppefailiga"
+
+msgid "Notify without attachment"
+msgstr "Teavita ilma manusta"
+
+msgid "Open chat in a new window"
+msgstr "Ava vestlus uues aknas"
+
+msgid "Open to the platform"
+msgstr "Avatud platvormile"
+
+msgid "Place"
+msgstr "Koht"
+
+msgid "Platform default"
+msgstr "Platvormi vaikeväärtus"
+
+msgid "Registration password"
+msgstr "Registreerimise parool"
+
+msgid "Remove previous agreements"
+msgstr "Eemalda varasemad kokkulepped"
+
+msgid "Right margin"
+msgstr "Parem veeris"
+
+msgid "Selected learning path"
+msgstr "Valitud õpitee"
+
+msgid "Selected test"
+msgstr "Valitud test"
+
+msgid "Show learner picture in forums"
+msgstr "Näita õppija pilti foorumites"
+
+msgid "Show system folders"
+msgstr "Näita süsteemikaustu"
+
+msgid "Signature text 1"
+msgstr "Allkirja tekst 1"
+
+msgid "Signature text 2"
+msgstr "Allkirja tekst 2"
+
+msgid "Signature text 3"
+msgstr "Allkirja tekst 3"
+
+msgid "Signature text 4"
+msgstr "Allkirja tekst 4"
+
+msgid "Student and course information"
+msgstr "Õpilase ja kursuse teave"
+
+msgid "Subscription allowed"
+msgstr "Registreerumine lubatud"
+
+msgid "Tests list"
+msgstr "Testide loend"
+
+msgid "Unsubscription allowed"
+msgstr "Loobumine lubatud"
+
+msgid "Use certificate download date"
+msgstr "Kasuta tunnistuse allalaadimise kuupäeva"
+
+msgid "Use certificate generation date"
+msgstr "Kasuta tunnistuse loomise kuupäeva"
+
+msgid "Use session access dates"
+msgstr "Kasuta sessiooni juurdepääsu kuupäevi"
+
+msgid "Use session access end date"
+msgstr "Kasuta sessiooni juurdepääsu lõppkuupäeva"
+

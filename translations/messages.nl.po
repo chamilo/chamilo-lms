@@ -2048,7 +2048,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:geen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octetstream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:oefening,,      simulation:simulatie,,      questionnaire:enquête,,      diagram:diagram,,      figure:figuur,,      graph:grafiek,,      index:index,,      slide:dia,,      table:tabel,,      narrative text:vertellende tekst,,      exam:examen,,      experiment:experiment,,      problem statement:probleemstelling,,      self assessment:zelftest,,      lecture:voordracht"
@@ -41944,4 +41944,193 @@ msgstr "Verlopend bericht: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Meldingen worden naar gebruikers verzonden in hun eigen geconfigureerde taal."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Pagina's worden standaard 60 s HTTP-gecached, zoals gedefinieerd in de Page-entiteit, dus wijzigingen zijn mogelijk niet meteen zichtbaar."
+
+msgid "Activate legal notice"
+msgstr "Juridische kennisgeving activeren"
+
+msgid "Agreement content"
+msgstr "Inhoud van de overeenkomst"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Cursisten toestaan hun eigen publicatie te verwijderen"
+
+msgid "Allow learners to edit agenda"
+msgstr "Cursisten toestaan de agenda te bewerken"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Cursisten toestaan hun eigen aanwezigheid te valideren"
+
+msgid "Allow learners to view users list"
+msgstr "Cursisten toestaan de gebruikerslijst te bekijken"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Gebruikers automatisch abonneren op forummeldingen"
+
+msgid "Certificate mode"
+msgstr "Certificaatmodus"
+
+msgid "Configure external tools"
+msgstr "Externe tools configureren"
+
+msgid "Contents"
+msgstr "Inhoud"
+
+msgid "Contents to show"
+msgstr "Te tonen inhoud"
+
+msgid "Course certificate"
+msgstr "Cursuscertificaat"
+
+msgid "Course delivery dates"
+msgstr "Leveringsdata van de cursus"
+
+msgid "Course duration in hours"
+msgstr "Cursusduur in uren"
+
+msgid "Course legal agreement"
+msgstr "Juridische overeenkomst van de cursus"
+
+msgid "Custom"
+msgstr "Aangepast"
+
+msgid "Custom certificate"
+msgstr "Aangepast certificaat"
+
+msgid "Default visibility for new documents"
+msgstr "Standaardzichtbaarheid voor nieuwe documenten"
+
+msgid "Direct invitation link"
+msgstr "Directe uitnodigingslink"
+
+msgid "Do not notify"
+msgstr "Niet waarschuwen"
+
+msgid "Documents list"
+msgstr "Documentenlijst"
+
+msgid "E-mail learner on manual subscription"
+msgstr "E-mail naar cursist bij handmatige inschrijving"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "E-mail naar docenten bij feedback op studentpublicatie van nieuwe gebruiker"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "E-mail gebruikers bij ontvangst van Dropbox-bestand"
+
+msgid "Enable course home notification"
+msgstr "Cursushome-melding inschakelen"
+
+msgid "Enable course themes in learning paths"
+msgstr "Cursusthema's in leerpaden inschakelen"
+
+msgid "Exercises invisible in session"
+msgstr "Oefeningen onzichtbaar in sessie"
+
+msgid "Expiration link"
+msgstr "Vervaldatumlink"
+
+msgid "Forums list"
+msgstr "Forumlijst"
+
+msgid "Issue date type"
+msgstr "Type uitgiftedatum"
+
+msgid "Learning path index"
+msgstr "Leerpadindex"
+
+msgid "Learning paths list"
+msgstr "Leerpadenlijst"
+
+msgid "Left margin"
+msgstr "Linkermarge"
+
+msgid "Legal notice"
+msgstr "Juridische kennisgeving"
+
+msgid "Maximum subscribed students"
+msgstr "Maximum aantal ingeschreven studenten"
+
+msgid "Notify in course home"
+msgstr "Melden op cursushome"
+
+msgid "Notify learners"
+msgstr "Cursisten waarschuwen"
+
+msgid "Notify with agreement file"
+msgstr "Melden met overeenkomstbestand"
+
+msgid "Notify without attachment"
+msgstr "Melden zonder bijlage"
+
+msgid "Open chat in a new window"
+msgstr "Chat in een nieuw venster openen"
+
+msgid "Open to the platform"
+msgstr "Open voor het platform"
+
+msgid "Place"
+msgstr "Plaats"
+
+msgid "Platform default"
+msgstr "Platformstandaard"
+
+msgid "Registration password"
+msgstr "Registratiewachtwoord"
+
+msgid "Remove previous agreements"
+msgstr "Vorige overeenkomsten verwijderen"
+
+msgid "Right margin"
+msgstr "Rechtermarge"
+
+msgid "Selected learning path"
+msgstr "Geselecteerd leerpad"
+
+msgid "Selected test"
+msgstr "Geselecteerde toets"
+
+msgid "Show learner picture in forums"
+msgstr "Foto van cursist in forums tonen"
+
+msgid "Show system folders"
+msgstr "Systeemmappen tonen"
+
+msgid "Signature text 1"
+msgstr "Handtekeningtekst 1"
+
+msgid "Signature text 2"
+msgstr "Handtekeningtekst 2"
+
+msgid "Signature text 3"
+msgstr "Handtekeningtekst 3"
+
+msgid "Signature text 4"
+msgstr "Handtekeningtekst 4"
+
+msgid "Student and course information"
+msgstr "Studenten- en cursusinformatie"
+
+msgid "Subscription allowed"
+msgstr "Inschrijving toegestaan"
+
+msgid "Tests list"
+msgstr "Toetsenlijst"
+
+msgid "Unsubscription allowed"
+msgstr "Uitschrijving toegestaan"
+
+msgid "Use certificate download date"
+msgstr "Downloaddatum van certificaat gebruiken"
+
+msgid "Use certificate generation date"
+msgstr "Generatiedatum van certificaat gebruiken"
+
+msgid "Use session access dates"
+msgstr "Sessie-toegangsdata gebruiken"
+
+msgid "Use session access end date"
+msgstr "Einddatum sessietoegang gebruiken"
 

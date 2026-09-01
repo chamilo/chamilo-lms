@@ -39866,3 +39866,192 @@ msgstr "Varsel om utløp: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Varsler sendes til brukere på deres eget konfigurerte språk."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Sider HTTP-bufres i 60 s som standard, som definert i Page-entiteten, så endringer vises kanskje ikke umiddelbart."
+
+msgid "Activate legal notice"
+msgstr "Aktiver juridisk merknad"
+
+msgid "Agreement content"
+msgstr "Avtaleinnhold"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Tillat deltakere å slette egne publikasjoner"
+
+msgid "Allow learners to edit agenda"
+msgstr "Tillat deltakere å redigere agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Tillat deltakere å bekrefte eget oppmøte"
+
+msgid "Allow learners to view users list"
+msgstr "Tillat deltakere å se brukerlisten"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Abonner automatisk brukere på forumvarsler"
+
+msgid "Certificate mode"
+msgstr "Sertifikatmodus"
+
+msgid "Configure external tools"
+msgstr "Konfigurer eksterne verktøy"
+
+msgid "Contents"
+msgstr "Innhold"
+
+msgid "Contents to show"
+msgstr "Innhold som skal vises"
+
+msgid "Course certificate"
+msgstr "Kurssertifikat"
+
+msgid "Course delivery dates"
+msgstr "Kursleveringsdatoer"
+
+msgid "Course duration in hours"
+msgstr "Kursvarighet i timer"
+
+msgid "Course legal agreement"
+msgstr "Juridisk avtale for kurset"
+
+msgid "Custom"
+msgstr "Tilpasset"
+
+msgid "Custom certificate"
+msgstr "Tilpasset sertifikat"
+
+msgid "Default visibility for new documents"
+msgstr "Standard synlighet for nye dokumenter"
+
+msgid "Direct invitation link"
+msgstr "Direkte invitasjonslenke"
+
+msgid "Do not notify"
+msgstr "Ikke varsle"
+
+msgid "Documents list"
+msgstr "Dokumentliste"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Send e-post til deltaker ved manuell påmelding"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Send e-post til lærere ved tilbakemelding på studentpublikasjon fra ny bruker"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Send e-post til brukere ved mottak av Dropbox-fil"
+
+msgid "Enable course home notification"
+msgstr "Aktiver varsling på kursets startside"
+
+msgid "Enable course themes in learning paths"
+msgstr "Aktiver kurstemaer i læringsstier"
+
+msgid "Exercises invisible in session"
+msgstr "Øvelser usynlige i økt"
+
+msgid "Expiration link"
+msgstr "Utløpslenke"
+
+msgid "Forums list"
+msgstr "Forumliste"
+
+msgid "Issue date type"
+msgstr "Type utstedelsesdato"
+
+msgid "Learning path index"
+msgstr "Indeks for læringssti"
+
+msgid "Learning paths list"
+msgstr "Liste over læringsstier"
+
+msgid "Left margin"
+msgstr "Venstre marg"
+
+msgid "Legal notice"
+msgstr "Juridisk merknad"
+
+msgid "Maximum subscribed students"
+msgstr "Maksimalt antall påmeldte studenter"
+
+msgid "Notify in course home"
+msgstr "Varsle på kursets startside"
+
+msgid "Notify learners"
+msgstr "Varsle deltakere"
+
+msgid "Notify with agreement file"
+msgstr "Varsle med avtalevedlegg"
+
+msgid "Notify without attachment"
+msgstr "Varsle uten vedlegg"
+
+msgid "Open chat in a new window"
+msgstr "Åpne chat i nytt vindu"
+
+msgid "Open to the platform"
+msgstr "Åpen for plattformen"
+
+msgid "Place"
+msgstr "Sted"
+
+msgid "Platform default"
+msgstr "Plattformstandard"
+
+msgid "Registration password"
+msgstr "Registreringspassord"
+
+msgid "Remove previous agreements"
+msgstr "Fjern tidligere avtaler"
+
+msgid "Right margin"
+msgstr "Høyre marg"
+
+msgid "Selected learning path"
+msgstr "Valgt læringssti"
+
+msgid "Selected test"
+msgstr "Valgt test"
+
+msgid "Show learner picture in forums"
+msgstr "Vis deltakerbilde i forum"
+
+msgid "Show system folders"
+msgstr "Vis systemmapper"
+
+msgid "Signature text 1"
+msgstr "Signaturtekst 1"
+
+msgid "Signature text 2"
+msgstr "Signaturtekst 2"
+
+msgid "Signature text 3"
+msgstr "Signaturtekst 3"
+
+msgid "Signature text 4"
+msgstr "Signaturtekst 4"
+
+msgid "Student and course information"
+msgstr "Student- og kursinformasjon"
+
+msgid "Subscription allowed"
+msgstr "Påmelding tillatt"
+
+msgid "Tests list"
+msgstr "Testliste"
+
+msgid "Unsubscription allowed"
+msgstr "Avmelding tillatt"
+
+msgid "Use certificate download date"
+msgstr "Bruk nedlastingsdato for sertifikat"
+
+msgid "Use certificate generation date"
+msgstr "Bruk genereringsdato for sertifikat"
+
+msgid "Use session access dates"
+msgstr "Bruk øktens tilgangsdatoer"
+
+msgid "Use session access end date"
+msgstr "Bruk sluttidspunkt for økttilgang"
+

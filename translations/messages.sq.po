@@ -39865,3 +39865,192 @@ msgstr "Njoftim i skadimit: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Njoftimet u dërgohen përdoruesve në gjuhën e tyre të konfiguruar."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Faqet ruhen në cache HTTP për 60s si parazgjedhje, siç përcaktohet në entitetin Page, kështu që ndryshimet mund të mos shfaqen menjëherë."
+
+msgid "Activate legal notice"
+msgstr "Aktivizo njoftimin ligjor"
+
+msgid "Agreement content"
+msgstr "Përmbajtja e marrëveshjes"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Lejo nxënësit të fshijnë botimin e tyre"
+
+msgid "Allow learners to edit agenda"
+msgstr "Lejo nxënësit të ndryshojnë agjendën"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Lejo nxënësit të vërtetojnë pjesëmarrjen e tyre"
+
+msgid "Allow learners to view users list"
+msgstr "Lejo nxënësit të shohin listën e përdoruesve"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Abono automatikisht përdoruesit në njoftimet e forumit"
+
+msgid "Certificate mode"
+msgstr "Mënyra e certifikatës"
+
+msgid "Configure external tools"
+msgstr "Konfiguro mjetet e jashtme"
+
+msgid "Contents"
+msgstr "Përmbajtja"
+
+msgid "Contents to show"
+msgstr "Përmbajtja për t'u shfaqur"
+
+msgid "Course certificate"
+msgstr "Certifikata e kursit"
+
+msgid "Course delivery dates"
+msgstr "Datat e zhvillimit të kursit"
+
+msgid "Course duration in hours"
+msgstr "Kohëzgjatja e kursit në orë"
+
+msgid "Course legal agreement"
+msgstr "Marrëveshja ligjore e kursit"
+
+msgid "Custom"
+msgstr "E personalizuar"
+
+msgid "Custom certificate"
+msgstr "Certifikatë e personalizuar"
+
+msgid "Default visibility for new documents"
+msgstr "Dukshmëria e parazgjedhur për dokumentet e reja"
+
+msgid "Direct invitation link"
+msgstr "Lidhja e drejtpërdrejtë e ftesës"
+
+msgid "Do not notify"
+msgstr "Mos njofto"
+
+msgid "Documents list"
+msgstr "Lista e dokumenteve"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Dërgo e-mail nxënësit në abonim manual"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Dërgo e-mail mësuesve për komentet e reja në botimet e studentëve"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Dërgo e-mail përdoruesve kur marrin skedarë në Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Aktivizo njoftimin në faqen kryesore të kursit"
+
+msgid "Enable course themes in learning paths"
+msgstr "Aktivizo temat e kursit në shtigjet e të nxënit"
+
+msgid "Exercises invisible in session"
+msgstr "Ushtrimet të padukshme në sesion"
+
+msgid "Expiration link"
+msgstr "Lidhja e skadimit"
+
+msgid "Forums list"
+msgstr "Lista e forumeve"
+
+msgid "Issue date type"
+msgstr "Lloji i datës së lëshimit"
+
+msgid "Learning path index"
+msgstr "Indeksi i shtegut të të nxënit"
+
+msgid "Learning paths list"
+msgstr "Lista e shtigjeve të të nxënit"
+
+msgid "Left margin"
+msgstr "Margjina e majtë"
+
+msgid "Legal notice"
+msgstr "Njoftim ligjor"
+
+msgid "Maximum subscribed students"
+msgstr "Numri maksimal i studentëve të regjistruar"
+
+msgid "Notify in course home"
+msgstr "Njofto në faqen kryesore të kursit"
+
+msgid "Notify learners"
+msgstr "Njofto nxënësit"
+
+msgid "Notify with agreement file"
+msgstr "Njofto me skedarin e marrëveshjes"
+
+msgid "Notify without attachment"
+msgstr "Njofto pa bashkëngjitje"
+
+msgid "Open chat in a new window"
+msgstr "Hap bisedën në një dritare të re"
+
+msgid "Open to the platform"
+msgstr "I hapur për platformën"
+
+msgid "Place"
+msgstr "Vendi"
+
+msgid "Platform default"
+msgstr "Parazgjedhja e platformës"
+
+msgid "Registration password"
+msgstr "Fjalëkalimi i regjistrimit"
+
+msgid "Remove previous agreements"
+msgstr "Hiq marrëveshjet e mëparshme"
+
+msgid "Right margin"
+msgstr "Margjina e djathtë"
+
+msgid "Selected learning path"
+msgstr "Shtegu i zgjedhur i të nxënit"
+
+msgid "Selected test"
+msgstr "Testi i zgjedhur"
+
+msgid "Show learner picture in forums"
+msgstr "Shfaq foton e nxënësit në forume"
+
+msgid "Show system folders"
+msgstr "Shfaq dosjet e sistemit"
+
+msgid "Signature text 1"
+msgstr "Teksti i nënshkrimit 1"
+
+msgid "Signature text 2"
+msgstr "Teksti i nënshkrimit 2"
+
+msgid "Signature text 3"
+msgstr "Teksti i nënshkrimit 3"
+
+msgid "Signature text 4"
+msgstr "Teksti i nënshkrimit 4"
+
+msgid "Student and course information"
+msgstr "Informacioni i studentit dhe i kursit"
+
+msgid "Subscription allowed"
+msgstr "Regjistrimi i lejuar"
+
+msgid "Tests list"
+msgstr "Lista e testeve"
+
+msgid "Unsubscription allowed"
+msgstr "Çregjistrimi i lejuar"
+
+msgid "Use certificate download date"
+msgstr "Përdor datën e shkarkimit të certifikatës"
+
+msgid "Use certificate generation date"
+msgstr "Përdor datën e gjenerimit të certifikatës"
+
+msgid "Use session access dates"
+msgstr "Përdor datat e aksesit të sesionit"
+
+msgid "Use session access end date"
+msgstr "Përdor datën e përfundimit të aksesit të sesionit"
+

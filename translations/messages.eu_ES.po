@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulako adibidea: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula adibidea: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -39871,4 +39871,193 @@ msgstr "Iraungitze-oharra: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Jakinarazpenak erabiltzaileei haien hizkuntza-konfigurazioan bidaltzen zaizkie."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Orrialdeak HTTP bidez cacheatzen dira 60s-z lehenetsita, Page entitatean definituta dagoenez, beraz aldaketak agian ez dira berehala islatuko."
+
+msgid "Activate legal notice"
+msgstr "Aktibatu ohar legala"
+
+msgid "Agreement content"
+msgstr "Hitzarmenaren edukia"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Baimendu ikasleei beren argitalpena ezabatzea"
+
+msgid "Allow learners to edit agenda"
+msgstr "Baimendu ikasleei agenda editatzeko"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Baimendu ikasleei beren asistentzia baliozkotzea"
+
+msgid "Allow learners to view users list"
+msgstr "Baimendu ikasleei erabiltzaileen zerrenda ikustea"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Harpidetu automatikoki erabiltzaileak foro-jakinarazpenetara"
+
+msgid "Certificate mode"
+msgstr "Ziurtagiri-modua"
+
+msgid "Configure external tools"
+msgstr "Konfiguratu kanpoko tresnak"
+
+msgid "Contents"
+msgstr "Edukiak"
+
+msgid "Contents to show"
+msgstr "Erakutsi beharreko edukiak"
+
+msgid "Course certificate"
+msgstr "Ikastaroaren ziurtagiria"
+
+msgid "Course delivery dates"
+msgstr "Ikastaroaren emate-datak"
+
+msgid "Course duration in hours"
+msgstr "Ikastaroaren iraupena orduetan"
+
+msgid "Course legal agreement"
+msgstr "Ikastaroaren hitzarmen legala"
+
+msgid "Custom"
+msgstr "Pertsonalizatua"
+
+msgid "Custom certificate"
+msgstr "Ziurtagiri pertsonalizatua"
+
+msgid "Default visibility for new documents"
+msgstr "Dokumentu berrien ikusgaitasun lehenetsia"
+
+msgid "Direct invitation link"
+msgstr "Zuzeneko gonbidapen-esteka"
+
+msgid "Do not notify"
+msgstr "Ez jakinarazi"
+
+msgid "Documents list"
+msgstr "Dokumentuen zerrenda"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Bidali e-posta ikasleari eskuzko harpidetzan"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Bidali e-posta irakasleei erabiltzaile berriaren ikasle-argitalpenaren feedbackean"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Bidali e-posta erabiltzaileei Dropbox fitxategia jasotzean"
+
+msgid "Enable course home notification"
+msgstr "Gaitu ikastaroaren hasierako jakinarazpena"
+
+msgid "Enable course themes in learning paths"
+msgstr "Gaitu ikastaroaren gaiak ikasketa-ibilbideetan"
+
+msgid "Exercises invisible in session"
+msgstr "Ariketak ikusezinak saioan"
+
+msgid "Expiration link"
+msgstr "Iraungitze-esteka"
+
+msgid "Forums list"
+msgstr "Foroen zerrenda"
+
+msgid "Issue date type"
+msgstr "Jaulkipen-dataren mota"
+
+msgid "Learning path index"
+msgstr "Ikasketa-ibilbidearen indizea"
+
+msgid "Learning paths list"
+msgstr "Ikasketa-ibilbideen zerrenda"
+
+msgid "Left margin"
+msgstr "Ezkerreko marjina"
+
+msgid "Legal notice"
+msgstr "Legezko oharra"
+
+msgid "Maximum subscribed students"
+msgstr "Izena emandako ikasleen gehienezkoa"
+
+msgid "Notify in course home"
+msgstr "Jakinarazi ikastaroaren hasieran"
+
+msgid "Notify learners"
+msgstr "Jakinarazi ikasleei"
+
+msgid "Notify with agreement file"
+msgstr "Jakinarazi hitzarmen-fitxategiarekin"
+
+msgid "Notify without attachment"
+msgstr "Jakinarazi eranskinik gabe"
+
+msgid "Open chat in a new window"
+msgstr "Ireki txata leiho berri batean"
+
+msgid "Open to the platform"
+msgstr "Plataformari irekia"
+
+msgid "Place"
+msgstr "Lekua"
+
+msgid "Platform default"
+msgstr "Plataformaren lehenetsia"
+
+msgid "Registration password"
+msgstr "Izen-emateko pasahitza"
+
+msgid "Remove previous agreements"
+msgstr "Kendu aurreko hitzarmenak"
+
+msgid "Right margin"
+msgstr "Eskuineko marjina"
+
+msgid "Selected learning path"
+msgstr "Hautatutako ikasketa-ibilbidea"
+
+msgid "Selected test"
+msgstr "Hautatutako proba"
+
+msgid "Show learner picture in forums"
+msgstr "Erakutsi ikaslearen argazkia foroetan"
+
+msgid "Show system folders"
+msgstr "Erakutsi sistemaren karpetak"
+
+msgid "Signature text 1"
+msgstr "Sinadura-testua 1"
+
+msgid "Signature text 2"
+msgstr "Sinadura-testua 2"
+
+msgid "Signature text 3"
+msgstr "Sinadura-testua 3"
+
+msgid "Signature text 4"
+msgstr "Sinadura-testua 4"
+
+msgid "Student and course information"
+msgstr "Ikaslearen eta ikastaroaren informazioa"
+
+msgid "Subscription allowed"
+msgstr "Izen-ematea baimenduta"
+
+msgid "Tests list"
+msgstr "Proben zerrenda"
+
+msgid "Unsubscription allowed"
+msgstr "Baja baimenduta"
+
+msgid "Use certificate download date"
+msgstr "Erabili ziurtagiriaren deskarga-data"
+
+msgid "Use certificate generation date"
+msgstr "Erabili ziurtagiriaren sorrera-data"
+
+msgid "Use session access dates"
+msgstr "Erabili saioaren sarbide-datak"
+
+msgid "Use session access end date"
+msgstr "Erabili saioaren sarbidearen amaiera-data"
 

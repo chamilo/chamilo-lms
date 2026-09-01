@@ -39865,3 +39865,192 @@ msgstr "اعلان در حال انقضا: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "اعلان‌ها به کاربران به زبان پیکربندی‌شده خودشان ارسال می‌شوند."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "صفحات به‌طور پیش‌فرض به مدت ۶۰ ثانیه در حافظه پنهان HTTP ذخیره می‌شوند، همان‌طور که در موجودیت Page تعریف شده است؛ بنابراین ممکن است تغییرات فوراً اعمال نشوند."
+
+msgid "Activate legal notice"
+msgstr "فعال‌سازی اطلاعیه قانونی"
+
+msgid "Agreement content"
+msgstr "محتوای توافق‌نامه"
+
+msgid "Allow learners to delete their own publication"
+msgstr "اجازه به فراگیران برای حذف انتشار خود"
+
+msgid "Allow learners to edit agenda"
+msgstr "اجازه به فراگیران برای ویرایش برنامه"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "اجازه به فراگیران برای تأیید حضور خود"
+
+msgid "Allow learners to view users list"
+msgstr "اجازه به فراگیران برای مشاهده فهرست کاربران"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "اشتراک خودکار کاربران در اعلان‌های انجمن"
+
+msgid "Certificate mode"
+msgstr "حالت گواهینامه"
+
+msgid "Configure external tools"
+msgstr "پیکربندی ابزارهای خارجی"
+
+msgid "Contents"
+msgstr "محتواها"
+
+msgid "Contents to show"
+msgstr "محتواهای قابل نمایش"
+
+msgid "Course certificate"
+msgstr "گواهینامه درس"
+
+msgid "Course delivery dates"
+msgstr "تاریخ‌های ارائه درس"
+
+msgid "Course duration in hours"
+msgstr "مدت درس به ساعت"
+
+msgid "Course legal agreement"
+msgstr "توافق‌نامه قانونی درس"
+
+msgid "Custom"
+msgstr "سفارشی"
+
+msgid "Custom certificate"
+msgstr "گواهینامه سفارشی"
+
+msgid "Default visibility for new documents"
+msgstr "نمایش پیش‌فرض برای اسناد جدید"
+
+msgid "Direct invitation link"
+msgstr "پیوند دعوت مستقیم"
+
+msgid "Do not notify"
+msgstr "اعلان نشود"
+
+msgid "Documents list"
+msgstr "فهرست اسناد"
+
+msgid "E-mail learner on manual subscription"
+msgstr "ارسال ایمیل به فراگیر هنگام ثبت‌نام دستی"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "ارسال ایمیل به مدرسان هنگام بازخورد انتشار دانشجو توسط کاربر جدید"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "ارسال ایمیل به کاربران هنگام دریافت فایل در دراپ‌باکس"
+
+msgid "Enable course home notification"
+msgstr "فعال‌سازی اعلان صفحه اصلی درس"
+
+msgid "Enable course themes in learning paths"
+msgstr "فعال‌سازی پوسته‌های درس در مسیرهای یادگیری"
+
+msgid "Exercises invisible in session"
+msgstr "تمرین‌های نامرئی در نشست"
+
+msgid "Expiration link"
+msgstr "پیوند انقضا"
+
+msgid "Forums list"
+msgstr "فهرست انجمن‌ها"
+
+msgid "Issue date type"
+msgstr "نوع تاریخ صدور"
+
+msgid "Learning path index"
+msgstr "فهرست مسیر یادگیری"
+
+msgid "Learning paths list"
+msgstr "فهرست مسیرهای یادگیری"
+
+msgid "Left margin"
+msgstr "حاشیه چپ"
+
+msgid "Legal notice"
+msgstr "اطلاعیه قانونی"
+
+msgid "Maximum subscribed students"
+msgstr "حداکثر دانشجویان ثبت‌نام‌شده"
+
+msgid "Notify in course home"
+msgstr "اعلان در صفحه اصلی درس"
+
+msgid "Notify learners"
+msgstr "اعلان به فراگیران"
+
+msgid "Notify with agreement file"
+msgstr "اعلان همراه با فایل توافق‌نامه"
+
+msgid "Notify without attachment"
+msgstr "اعلان بدون پیوست"
+
+msgid "Open chat in a new window"
+msgstr "باز کردن گفتگو در پنجره جدید"
+
+msgid "Open to the platform"
+msgstr "باز برای پلتفرم"
+
+msgid "Place"
+msgstr "مکان"
+
+msgid "Platform default"
+msgstr "پیش‌فرض پلتفرم"
+
+msgid "Registration password"
+msgstr "رمز ثبت‌نام"
+
+msgid "Remove previous agreements"
+msgstr "حذف توافق‌نامه‌های قبلی"
+
+msgid "Right margin"
+msgstr "حاشیه راست"
+
+msgid "Selected learning path"
+msgstr "مسیر یادگیری انتخاب‌شده"
+
+msgid "Selected test"
+msgstr "آزمون انتخاب‌شده"
+
+msgid "Show learner picture in forums"
+msgstr "نمایش تصویر فراگیر در انجمن‌ها"
+
+msgid "Show system folders"
+msgstr "نمایش پوشه‌های سیستم"
+
+msgid "Signature text 1"
+msgstr "متن امضا ۱"
+
+msgid "Signature text 2"
+msgstr "متن امضا ۲"
+
+msgid "Signature text 3"
+msgstr "متن امضا ۳"
+
+msgid "Signature text 4"
+msgstr "متن امضا ۴"
+
+msgid "Student and course information"
+msgstr "اطلاعات دانشجو و درس"
+
+msgid "Subscription allowed"
+msgstr "ثبت‌نام مجاز است"
+
+msgid "Tests list"
+msgstr "فهرست آزمون‌ها"
+
+msgid "Unsubscription allowed"
+msgstr "لغو ثبت‌نام مجاز است"
+
+msgid "Use certificate download date"
+msgstr "استفاده از تاریخ دانلود گواهینامه"
+
+msgid "Use certificate generation date"
+msgstr "استفاده از تاریخ صدور گواهینامه"
+
+msgid "Use session access dates"
+msgstr "استفاده از تاریخ‌های دسترسی نشست"
+
+msgid "Use session access end date"
+msgstr "استفاده از تاریخ پایان دسترسی نشست"
+

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "با احترام"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نمونه فرمول: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نمونهٔ فورمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "محدوده متغیرها"
@@ -39860,4 +39860,193 @@ msgstr "اطلاعیه در حال انقضا: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "اطلاعیه‌ها به کاربران به زبان پیکربندی‌شدهٔ خودشان ارسال می‌شوند."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "صفحات به‌صورت پیش‌فرض برای ۶۰ ثانیه در HTTP کش می‌شوند، چنان‌که در موجودیت Page تعریف شده است؛ بنابراین تغییرات ممکن است فوراً ظاهر نشوند."
+
+msgid "Activate legal notice"
+msgstr "فعال‌سازی اطلاعیهٔ حقوقی"
+
+msgid "Agreement content"
+msgstr "محتوای توافق‌نامه"
+
+msgid "Allow learners to delete their own publication"
+msgstr "اجازه به متعلمین برای حذف نشریهٔ خود"
+
+msgid "Allow learners to edit agenda"
+msgstr "اجازه به متعلمین برای ویرایش اجندا"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "اجازه به متعلمین برای تأیید حضور خود"
+
+msgid "Allow learners to view users list"
+msgstr "اجازه به متعلمین برای مشاهدهٔ فهرست کاربران"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "اشتراک خودکار کاربران در اطلاعیه‌های فوروم"
+
+msgid "Certificate mode"
+msgstr "حالت گواهینامه"
+
+msgid "Configure external tools"
+msgstr "پیکربندی ابزارهای خارجی"
+
+msgid "Contents"
+msgstr "محتواها"
+
+msgid "Contents to show"
+msgstr "محتواهای قابل نمایش"
+
+msgid "Course certificate"
+msgstr "گواهینامهٔ کورس"
+
+msgid "Course delivery dates"
+msgstr "تاریخ‌های ارائهٔ کورس"
+
+msgid "Course duration in hours"
+msgstr "مدت کورس به ساعت"
+
+msgid "Course legal agreement"
+msgstr "توافق‌نامهٔ حقوقی کورس"
+
+msgid "Custom"
+msgstr "سفارشی"
+
+msgid "Custom certificate"
+msgstr "گواهینامهٔ سفارشی"
+
+msgid "Default visibility for new documents"
+msgstr "قابلیت دید پیش‌فرض برای اسناد جدید"
+
+msgid "Direct invitation link"
+msgstr "لینک دعوت مستقیم"
+
+msgid "Do not notify"
+msgstr "اطلاع نده"
+
+msgid "Documents list"
+msgstr "فهرست اسناد"
+
+msgid "E-mail learner on manual subscription"
+msgstr "ارسال ایمیل به متعلم هنگام اشتراک دستی"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "ارسال ایمیل به استادان هنگام بازخورد نشریهٔ شاگرد از کاربر جدید"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "ارسال ایمیل به کاربران هنگام دریافت فایل در دراپ‌باکس"
+
+msgid "Enable course home notification"
+msgstr "فعال‌سازی اطلاعیه در صفحهٔ اصلی کورس"
+
+msgid "Enable course themes in learning paths"
+msgstr "فعال‌سازی قالب‌های کورس در مسیرهای یادگیری"
+
+msgid "Exercises invisible in session"
+msgstr "تمرین‌ها در سشن نامرئی"
+
+msgid "Expiration link"
+msgstr "لینک انقضا"
+
+msgid "Forums list"
+msgstr "فهرست فوروم‌ها"
+
+msgid "Issue date type"
+msgstr "نوع تاریخ صدور"
+
+msgid "Learning path index"
+msgstr "فهرست مسیر یادگیری"
+
+msgid "Learning paths list"
+msgstr "فهرست مسیرهای یادگیری"
+
+msgid "Left margin"
+msgstr "حاشیهٔ چپ"
+
+msgid "Legal notice"
+msgstr "اطلاعیهٔ حقوقی"
+
+msgid "Maximum subscribed students"
+msgstr "حداکثر شاگردان مشترک"
+
+msgid "Notify in course home"
+msgstr "اطلاع در صفحهٔ اصلی کورس"
+
+msgid "Notify learners"
+msgstr "اطلاع به متعلمین"
+
+msgid "Notify with agreement file"
+msgstr "اطلاع همراه با فایل توافق‌نامه"
+
+msgid "Notify without attachment"
+msgstr "اطلاع بدون پیوست"
+
+msgid "Open chat in a new window"
+msgstr "باز کردن چت در پنجرهٔ جدید"
+
+msgid "Open to the platform"
+msgstr "باز برای پلتفرم"
+
+msgid "Place"
+msgstr "مکان"
+
+msgid "Platform default"
+msgstr "پیش‌فرض پلتفرم"
+
+msgid "Registration password"
+msgstr "رمز ثبت‌نام"
+
+msgid "Remove previous agreements"
+msgstr "حذف توافق‌نامه‌های قبلی"
+
+msgid "Right margin"
+msgstr "حاشیهٔ راست"
+
+msgid "Selected learning path"
+msgstr "مسیر یادگیری انتخاب‌شده"
+
+msgid "Selected test"
+msgstr "آزمون انتخاب‌شده"
+
+msgid "Show learner picture in forums"
+msgstr "نمایش تصویر شاگرد در فوروم‌ها"
+
+msgid "Show system folders"
+msgstr "نمایش پوشه‌های سیستم"
+
+msgid "Signature text 1"
+msgstr "متن امضا ۱"
+
+msgid "Signature text 2"
+msgstr "متن امضا ۲"
+
+msgid "Signature text 3"
+msgstr "متن امضا ۳"
+
+msgid "Signature text 4"
+msgstr "متن امضا ۴"
+
+msgid "Student and course information"
+msgstr "معلومات شاگرد و کورس"
+
+msgid "Subscription allowed"
+msgstr "اشتراک مجاز است"
+
+msgid "Tests list"
+msgstr "فهرست آزمون‌ها"
+
+msgid "Unsubscription allowed"
+msgstr "لغو اشتراک مجاز است"
+
+msgid "Use certificate download date"
+msgstr "استفاده از تاریخ دانلود گواهینامه"
+
+msgid "Use certificate generation date"
+msgstr "استفاده از تاریخ تولید گواهینامه"
+
+msgid "Use session access dates"
+msgstr "استفاده از تاریخ‌های دسترسی جلسه"
+
+msgid "Use session access end date"
+msgstr "استفاده از تاریخ پایان دسترسی جلسه"
 

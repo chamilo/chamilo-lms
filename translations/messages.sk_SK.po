@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ukážka vzorca: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukážka vzorca: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -39879,4 +39879,193 @@ msgstr "Oznámenie o blízkej expirácií: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Oznámenia sa používateľom odosielajú v ich nastavenom jazyku."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Stránky sú predvolene HTTP-kešované na 60 s, ako je definované v entite Page, takže zmeny sa nemusia prejaviť okamžite."
+
+msgid "Activate legal notice"
+msgstr "Aktivovať právne oznámenie"
+
+msgid "Agreement content"
+msgstr "Obsah súhlasu"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Povoliť študentom odstrániť vlastnú publikáciu"
+
+msgid "Allow learners to edit agenda"
+msgstr "Povoliť študentom upravovať agendu"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Povoliť študentom potvrdiť vlastnú dochádzku"
+
+msgid "Allow learners to view users list"
+msgstr "Povoliť študentom zobraziť zoznam používateľov"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Automaticky prihlásiť používateľov na upozornenia fóra"
+
+msgid "Certificate mode"
+msgstr "Režim certifikátu"
+
+msgid "Configure external tools"
+msgstr "Konfigurovať externé nástroje"
+
+msgid "Contents"
+msgstr "Obsah"
+
+msgid "Contents to show"
+msgstr "Obsah na zobrazenie"
+
+msgid "Course certificate"
+msgstr "Certifikát kurzu"
+
+msgid "Course delivery dates"
+msgstr "Termíny poskytovania kurzu"
+
+msgid "Course duration in hours"
+msgstr "Trvanie kurzu v hodinách"
+
+msgid "Course legal agreement"
+msgstr "Právna dohoda kurzu"
+
+msgid "Custom"
+msgstr "Vlastné"
+
+msgid "Custom certificate"
+msgstr "Vlastný certifikát"
+
+msgid "Default visibility for new documents"
+msgstr "Predvolená viditeľnosť nových dokumentov"
+
+msgid "Direct invitation link"
+msgstr "Priamy odkaz na pozvánku"
+
+msgid "Do not notify"
+msgstr "Neupozorňovať"
+
+msgid "Documents list"
+msgstr "Zoznam dokumentov"
+
+msgid "E-mail learner on manual subscription"
+msgstr "E-mail študentovi pri manuálnom prihlásení"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "E-mail učiteľom pri spätnej väzbe k študentskej publikácii nového používateľa"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "E-mail používateľom pri prijatí súboru v Dropboxe"
+
+msgid "Enable course home notification"
+msgstr "Povoliť oznámenie na úvodnej stránke kurzu"
+
+msgid "Enable course themes in learning paths"
+msgstr "Povoliť témy kurzu v učebných cestách"
+
+msgid "Exercises invisible in session"
+msgstr "Cvičenia neviditeľné v relácii"
+
+msgid "Expiration link"
+msgstr "Odkaz na vypršanie"
+
+msgid "Forums list"
+msgstr "Zoznam fór"
+
+msgid "Issue date type"
+msgstr "Typ dátumu vydania"
+
+msgid "Learning path index"
+msgstr "Index učebnej cesty"
+
+msgid "Learning paths list"
+msgstr "Zoznam učebných ciest"
+
+msgid "Left margin"
+msgstr "Ľavý okraj"
+
+msgid "Legal notice"
+msgstr "Právne upozornenie"
+
+msgid "Maximum subscribed students"
+msgstr "Maximálny počet prihlásených študentov"
+
+msgid "Notify in course home"
+msgstr "Upozorniť na úvodnej stránke kurzu"
+
+msgid "Notify learners"
+msgstr "Upozorniť študentov"
+
+msgid "Notify with agreement file"
+msgstr "Upozorniť so súborom súhlasu"
+
+msgid "Notify without attachment"
+msgstr "Upozorniť bez prílohy"
+
+msgid "Open chat in a new window"
+msgstr "Otvoriť chat v novom okne"
+
+msgid "Open to the platform"
+msgstr "Otvorené pre platformu"
+
+msgid "Place"
+msgstr "Miesto"
+
+msgid "Platform default"
+msgstr "Predvolené nastavenie platformy"
+
+msgid "Registration password"
+msgstr "Registračné heslo"
+
+msgid "Remove previous agreements"
+msgstr "Odstrániť predchádzajúce súhlasy"
+
+msgid "Right margin"
+msgstr "Pravý okraj"
+
+msgid "Selected learning path"
+msgstr "Vybraná učebná cesta"
+
+msgid "Selected test"
+msgstr "Vybraný test"
+
+msgid "Show learner picture in forums"
+msgstr "Zobraziť fotografiu študenta vo fórach"
+
+msgid "Show system folders"
+msgstr "Zobraziť systémové priečinky"
+
+msgid "Signature text 1"
+msgstr "Text podpisu 1"
+
+msgid "Signature text 2"
+msgstr "Text podpisu 2"
+
+msgid "Signature text 3"
+msgstr "Text podpisu 3"
+
+msgid "Signature text 4"
+msgstr "Text podpisu 4"
+
+msgid "Student and course information"
+msgstr "Informácie o študentovi a kurze"
+
+msgid "Subscription allowed"
+msgstr "Prihlásenie povolené"
+
+msgid "Tests list"
+msgstr "Zoznam testov"
+
+msgid "Unsubscription allowed"
+msgstr "Odhlásenie povolené"
+
+msgid "Use certificate download date"
+msgstr "Použiť dátum stiahnutia certifikátu"
+
+msgid "Use certificate generation date"
+msgstr "Použiť dátum vygenerovania certifikátu"
+
+msgid "Use session access dates"
+msgstr "Použiť dátumy prístupu k relácii"
+
+msgid "Use session access end date"
+msgstr "Použiť dátum ukončenia prístupu k relácii"
 

@@ -39931,3 +39931,192 @@ msgstr "期限切れ間近の通知: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "通知は、各ユーザーが設定した言語で送信されます。"
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "ページは Page エンティティの定義により、既定で60秒間 HTTP キャッシュされます。そのため変更がすぐには反映されない場合があります。"
+
+msgid "Activate legal notice"
+msgstr "法的通知を有効にする"
+
+msgid "Agreement content"
+msgstr "同意内容"
+
+msgid "Allow learners to delete their own publication"
+msgstr "学習者が自分の投稿を削除できるようにする"
+
+msgid "Allow learners to edit agenda"
+msgstr "学習者が予定表を編集できるようにする"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "学習者が自分の出席を確定できるようにする"
+
+msgid "Allow learners to view users list"
+msgstr "学習者がユーザー一覧を閲覧できるようにする"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "フォーラム通知にユーザーを自動登録する"
+
+msgid "Certificate mode"
+msgstr "修了証モード"
+
+msgid "Configure external tools"
+msgstr "外部ツールを設定"
+
+msgid "Contents"
+msgstr "内容"
+
+msgid "Contents to show"
+msgstr "表示する内容"
+
+msgid "Course certificate"
+msgstr "コース修了証"
+
+msgid "Course delivery dates"
+msgstr "コース実施日"
+
+msgid "Course duration in hours"
+msgstr "コース時間（時間）"
+
+msgid "Course legal agreement"
+msgstr "コース利用規約"
+
+msgid "Custom"
+msgstr "カスタム"
+
+msgid "Custom certificate"
+msgstr "カスタム修了証"
+
+msgid "Default visibility for new documents"
+msgstr "新規ドキュメントの既定の公開設定"
+
+msgid "Direct invitation link"
+msgstr "直接招待リンク"
+
+msgid "Do not notify"
+msgstr "通知しない"
+
+msgid "Documents list"
+msgstr "ドキュメント一覧"
+
+msgid "E-mail learner on manual subscription"
+msgstr "手動登録時に学習者へメール送信"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "学習者の課題への新しいフィードバック時に教師へメール送信"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "ドロップボックスでファイル受信時にユーザーへメール送信"
+
+msgid "Enable course home notification"
+msgstr "コースホームの通知を有効にする"
+
+msgid "Enable course themes in learning paths"
+msgstr "学習パスでコーステーマを有効にする"
+
+msgid "Exercises invisible in session"
+msgstr "セッション内で非表示の演習"
+
+msgid "Expiration link"
+msgstr "有効期限リンク"
+
+msgid "Forums list"
+msgstr "フォーラム一覧"
+
+msgid "Issue date type"
+msgstr "発行日の種類"
+
+msgid "Learning path index"
+msgstr "学習パスの目次"
+
+msgid "Learning paths list"
+msgstr "学習パス一覧"
+
+msgid "Left margin"
+msgstr "左余白"
+
+msgid "Legal notice"
+msgstr "法的通知"
+
+msgid "Maximum subscribed students"
+msgstr "最大登録学生数"
+
+msgid "Notify in course home"
+msgstr "コースホームで通知"
+
+msgid "Notify learners"
+msgstr "学習者に通知"
+
+msgid "Notify with agreement file"
+msgstr "同意ファイル付きで通知"
+
+msgid "Notify without attachment"
+msgstr "添付なしで通知"
+
+msgid "Open chat in a new window"
+msgstr "新しいウィンドウでチャットを開く"
+
+msgid "Open to the platform"
+msgstr "プラットフォームに公開"
+
+msgid "Place"
+msgstr "場所"
+
+msgid "Platform default"
+msgstr "プラットフォームのデフォルト"
+
+msgid "Registration password"
+msgstr "登録パスワード"
+
+msgid "Remove previous agreements"
+msgstr "以前の同意を削除"
+
+msgid "Right margin"
+msgstr "右余白"
+
+msgid "Selected learning path"
+msgstr "選択した学習パス"
+
+msgid "Selected test"
+msgstr "選択したテスト"
+
+msgid "Show learner picture in forums"
+msgstr "フォーラムで学習者の写真を表示"
+
+msgid "Show system folders"
+msgstr "システムフォルダを表示"
+
+msgid "Signature text 1"
+msgstr "署名テキスト 1"
+
+msgid "Signature text 2"
+msgstr "署名テキスト 2"
+
+msgid "Signature text 3"
+msgstr "署名テキスト 3"
+
+msgid "Signature text 4"
+msgstr "署名テキスト 4"
+
+msgid "Student and course information"
+msgstr "学生とコースの情報"
+
+msgid "Subscription allowed"
+msgstr "登録を許可"
+
+msgid "Tests list"
+msgstr "テスト一覧"
+
+msgid "Unsubscription allowed"
+msgstr "登録解除を許可"
+
+msgid "Use certificate download date"
+msgstr "証明書のダウンロード日を使用"
+
+msgid "Use certificate generation date"
+msgstr "証明書の生成日を使用"
+
+msgid "Use session access dates"
+msgstr "セッションのアクセス日を使用"
+
+msgid "Use session access end date"
+msgstr "セッションのアクセス終了日を使用"
+

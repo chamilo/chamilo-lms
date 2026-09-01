@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:dirit d'autor,, no:senza dirit d'autor"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartele,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartele,, application/msword:MsWord,, application/octet-stream:Flus octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:esercizi,,      simulation:simulazion,,      questionnaire:cuestionari,,      diagram:diagrami,,      figure:figure,,      graph:graf,,      index:indis,,      slide:diapositivis,,      table:tabile,,      narrative text:test narativ,,      exam:sîs,,      experiment:esperiments,,      problem statement:enunzi de problem,,      self assessment:auto valutazion,,      lecture:lecion"
@@ -39860,4 +39860,193 @@ msgstr "Avîs di scjadince: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Lis notifichis a vegnin mandadis ai utents te lôr lenghe configurade."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Lis pagjinis a son metudis in cache HTTP par 60s di default, come definît te entitât Page, duncje i cambiaments a podarès no jessi visibii subite."
+
+msgid "Activate legal notice"
+msgstr "Ative l'avîs legâl"
+
+msgid "Agreement content"
+msgstr "Contignût dal acuardi"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Permet ai studients di cancelâ lis lôr publicazions"
+
+msgid "Allow learners to edit agenda"
+msgstr "Permet ai studients di modificâ l'agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Permet ai studients di convalidâ la lôr presince"
+
+msgid "Allow learners to view users list"
+msgstr "Permet ai studients di viodi la liste dai utents"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Iscriv automaticamentri i utents aes notifichis dal forum"
+
+msgid "Certificate mode"
+msgstr "Modalitât certificât"
+
+msgid "Configure external tools"
+msgstr "Configure i struments esternis"
+
+msgid "Contents"
+msgstr "Contignûts"
+
+msgid "Contents to show"
+msgstr "Contignûts di mostrâ"
+
+msgid "Course certificate"
+msgstr "Certificât dal cors"
+
+msgid "Course delivery dates"
+msgstr "Datis di consegne dal cors"
+
+msgid "Course duration in hours"
+msgstr "Durade dal cors in oris"
+
+msgid "Course legal agreement"
+msgstr "Acuardi legâl dal cors"
+
+msgid "Custom"
+msgstr "Personalizât"
+
+msgid "Custom certificate"
+msgstr "Certificât personalizât"
+
+msgid "Default visibility for new documents"
+msgstr "Visibilitât predefinide pai gnûfs documents"
+
+msgid "Direct invitation link"
+msgstr "Leam di invit diret"
+
+msgid "Do not notify"
+msgstr "No notificâ"
+
+msgid "Documents list"
+msgstr "Liste dai documents"
+
+msgid "E-mail learner on manual subscription"
+msgstr "E-mail al studient su iscrizion manuâl"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "E-mail ai insegnants su gnûf feedback di publicazion dal studient"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "E-mail ai utents su ricezion di file te Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Ative la notifiche de cjase dal cors"
+
+msgid "Enable course themes in learning paths"
+msgstr "Ative i temis dal cors tes percorsis di apprendiment"
+
+msgid "Exercises invisible in session"
+msgstr "Esercizis invisibii te session"
+
+msgid "Expiration link"
+msgstr "Leam di scjadince"
+
+msgid "Forums list"
+msgstr "Liste dai forums"
+
+msgid "Issue date type"
+msgstr "Gjenar di date di emission"
+
+msgid "Learning path index"
+msgstr "Indiç dal percors di apprendiment"
+
+msgid "Learning paths list"
+msgstr "Liste des percorsis di apprendiment"
+
+msgid "Left margin"
+msgstr "Màrgin çamp"
+
+msgid "Legal notice"
+msgstr "Avîs legâl"
+
+msgid "Maximum subscribed students"
+msgstr "Numar massim di students iscrits"
+
+msgid "Notify in course home"
+msgstr "Notifiche te cjase dal cors"
+
+msgid "Notify learners"
+msgstr "Notifiche i students"
+
+msgid "Notify with agreement file"
+msgstr "Notifiche cun file di acuardi"
+
+msgid "Notify without attachment"
+msgstr "Notifiche cence aleât"
+
+msgid "Open chat in a new window"
+msgstr "Vierç la chat intune gnove barcon"
+
+msgid "Open to the platform"
+msgstr "Vierç ae plateforme"
+
+msgid "Place"
+msgstr "Lûc"
+
+msgid "Platform default"
+msgstr "Predefinît de plateforme"
+
+msgid "Registration password"
+msgstr "Password di regjistrazion"
+
+msgid "Remove previous agreements"
+msgstr "Gjave i acuardis precedents"
+
+msgid "Right margin"
+msgstr "Màrgin di drete"
+
+msgid "Selected learning path"
+msgstr "Percors di apprendiment selezionât"
+
+msgid "Selected test"
+msgstr "Prove selezionade"
+
+msgid "Show learner picture in forums"
+msgstr "Mostre la foto dal student tai forums"
+
+msgid "Show system folders"
+msgstr "Mostre lis cartelis di sisteme"
+
+msgid "Signature text 1"
+msgstr "Test de firme 1"
+
+msgid "Signature text 2"
+msgstr "Test de firme 2"
+
+msgid "Signature text 3"
+msgstr "Test de firme 3"
+
+msgid "Signature text 4"
+msgstr "Test de firme 4"
+
+msgid "Student and course information"
+msgstr "Informazions dal student e dal cors"
+
+msgid "Subscription allowed"
+msgstr "Iscrizion permetude"
+
+msgid "Tests list"
+msgstr "Liste des provis"
+
+msgid "Unsubscription allowed"
+msgstr "Disiscrizion permetude"
+
+msgid "Use certificate download date"
+msgstr "Dopre la date di discjariament dal certificât"
+
+msgid "Use certificate generation date"
+msgstr "Dopre la date di gjenerazion dal certificât"
+
+msgid "Use session access dates"
+msgstr "Dopre lis datis di acès ae session"
+
+msgid "Use session access end date"
+msgstr "Dopre la date di fin di acès ae session"
 

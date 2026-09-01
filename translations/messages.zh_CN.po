@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "此致敬礼"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式示例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式示例：sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "变量范围"
@@ -39866,4 +39866,193 @@ msgstr "即将过期通知：%s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "通知将以用户自行配置的语言发送。"
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "页面默认按 Page 实体中的定义进行 60 秒 HTTP 缓存，因此更改可能不会立即生效。"
+
+msgid "Activate legal notice"
+msgstr "启用法律声明"
+
+msgid "Agreement content"
+msgstr "协议内容"
+
+msgid "Allow learners to delete their own publication"
+msgstr "允许学员删除自己的发布内容"
+
+msgid "Allow learners to edit agenda"
+msgstr "允许学员编辑日程"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "允许学员确认自己的出勤"
+
+msgid "Allow learners to view users list"
+msgstr "允许学员查看用户列表"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "自动为用户订阅论坛通知"
+
+msgid "Certificate mode"
+msgstr "证书模式"
+
+msgid "Configure external tools"
+msgstr "配置外部工具"
+
+msgid "Contents"
+msgstr "内容"
+
+msgid "Contents to show"
+msgstr "要显示的内容"
+
+msgid "Course certificate"
+msgstr "课程证书"
+
+msgid "Course delivery dates"
+msgstr "课程交付日期"
+
+msgid "Course duration in hours"
+msgstr "课程时长（小时）"
+
+msgid "Course legal agreement"
+msgstr "课程法律协议"
+
+msgid "Custom"
+msgstr "自定义"
+
+msgid "Custom certificate"
+msgstr "自定义证书"
+
+msgid "Default visibility for new documents"
+msgstr "新文档的默认可见性"
+
+msgid "Direct invitation link"
+msgstr "直接邀请链接"
+
+msgid "Do not notify"
+msgstr "不通知"
+
+msgid "Documents list"
+msgstr "文档列表"
+
+msgid "E-mail learner on manual subscription"
+msgstr "手动注册时向学员发送电子邮件"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "学员作业收到反馈时向教师发送电子邮件"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "接收投递箱文件时向用户发送电子邮件"
+
+msgid "Enable course home notification"
+msgstr "启用课程主页通知"
+
+msgid "Enable course themes in learning paths"
+msgstr "在学习路径中启用课程主题"
+
+msgid "Exercises invisible in session"
+msgstr "会话中练习不可见"
+
+msgid "Expiration link"
+msgstr "过期链接"
+
+msgid "Forums list"
+msgstr "论坛列表"
+
+msgid "Issue date type"
+msgstr "签发日期类型"
+
+msgid "Learning path index"
+msgstr "学习路径索引"
+
+msgid "Learning paths list"
+msgstr "学习路径列表"
+
+msgid "Left margin"
+msgstr "左边距"
+
+msgid "Legal notice"
+msgstr "法律声明"
+
+msgid "Maximum subscribed students"
+msgstr "最大学员订阅数"
+
+msgid "Notify in course home"
+msgstr "在课程主页通知"
+
+msgid "Notify learners"
+msgstr "通知学员"
+
+msgid "Notify with agreement file"
+msgstr "附协议文件通知"
+
+msgid "Notify without attachment"
+msgstr "无附件通知"
+
+msgid "Open chat in a new window"
+msgstr "在新窗口中打开聊天"
+
+msgid "Open to the platform"
+msgstr "对平台开放"
+
+msgid "Place"
+msgstr "地点"
+
+msgid "Platform default"
+msgstr "平台默认"
+
+msgid "Registration password"
+msgstr "注册密码"
+
+msgid "Remove previous agreements"
+msgstr "删除先前协议"
+
+msgid "Right margin"
+msgstr "右边距"
+
+msgid "Selected learning path"
+msgstr "所选学习路径"
+
+msgid "Selected test"
+msgstr "所选测验"
+
+msgid "Show learner picture in forums"
+msgstr "在论坛中显示学员头像"
+
+msgid "Show system folders"
+msgstr "显示系统文件夹"
+
+msgid "Signature text 1"
+msgstr "签名文本 1"
+
+msgid "Signature text 2"
+msgstr "签名文本 2"
+
+msgid "Signature text 3"
+msgstr "签名文本 3"
+
+msgid "Signature text 4"
+msgstr "签名文本 4"
+
+msgid "Student and course information"
+msgstr "学员与课程信息"
+
+msgid "Subscription allowed"
+msgstr "允许订阅"
+
+msgid "Tests list"
+msgstr "测验列表"
+
+msgid "Unsubscription allowed"
+msgstr "允许取消订阅"
+
+msgid "Use certificate download date"
+msgstr "使用证书下载日期"
+
+msgid "Use certificate generation date"
+msgstr "使用证书生成日期"
+
+msgid "Use session access dates"
+msgstr "使用学期访问日期"
+
+msgid "Use session access end date"
+msgstr "使用学期访问结束日期"
 

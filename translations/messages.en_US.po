@@ -40059,3 +40059,9 @@ msgstr "Use session access dates"
 
 msgid "Use session access end date"
 msgstr "Use session access end date"
+
+msgid "Group report"
+msgstr "Group report"
+
+msgid "Student follow-up"
+msgstr "Student follow-up"

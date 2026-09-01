@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "בכנות"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "דוגמת נוסחה: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "דוגמת נוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "טווחים משתנים"
@@ -39877,4 +39877,193 @@ msgstr "הודעת פקיעה קרובה: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "ההתראות נשלחות למשתמשים בשפה שהוגדרה עבורם."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "הדפים נשמרים במטמון HTTP למשך 60 שניות כברירת מחדל, כפי שמוגדר בישות Page, כך ששינויים עשויים שלא להשתקף מיד."
+
+msgid "Activate legal notice"
+msgstr "הפעל הודעה משפטית"
+
+msgid "Agreement content"
+msgstr "תוכן ההסכם"
+
+msgid "Allow learners to delete their own publication"
+msgstr "אפשר ללומדים למחוק את הפרסום שלהם"
+
+msgid "Allow learners to edit agenda"
+msgstr "אפשר ללומדים לערוך את סדר היום"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "אפשר ללומדים לאמת את הנוכחות שלהם"
+
+msgid "Allow learners to view users list"
+msgstr "אפשר ללומדים לצפות ברשימת המשתמשים"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "הרשם משתמשים אוטומטית להתראות בפורום"
+
+msgid "Certificate mode"
+msgstr "מצב תעודה"
+
+msgid "Configure external tools"
+msgstr "הגדר כלים חיצוניים"
+
+msgid "Contents"
+msgstr "תוכן"
+
+msgid "Contents to show"
+msgstr "תוכן להצגה"
+
+msgid "Course certificate"
+msgstr "תעודת קורס"
+
+msgid "Course delivery dates"
+msgstr "תאריכי מסירת הקורס"
+
+msgid "Course duration in hours"
+msgstr "משך הקורס בשעות"
+
+msgid "Course legal agreement"
+msgstr "הסכם משפטי של הקורס"
+
+msgid "Custom"
+msgstr "מותאם אישית"
+
+msgid "Custom certificate"
+msgstr "תעודה מותאמת אישית"
+
+msgid "Default visibility for new documents"
+msgstr "נראות ברירת מחדל למסמכים חדשים"
+
+msgid "Direct invitation link"
+msgstr "קישור הזמנה ישיר"
+
+msgid "Do not notify"
+msgstr "אל תודיע"
+
+msgid "Documents list"
+msgstr "רשימת מסמכים"
+
+msgid "E-mail learner on manual subscription"
+msgstr "שלח דוא\"ל ללומד בהרשמה ידנית"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "שלח דוא\"ל למורים על משוב לפרסום סטודנט של משתמש חדש"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "שלח דוא\"ל למשתמשים בקבלת קובץ בתיבת ההורדות"
+
+msgid "Enable course home notification"
+msgstr "הפעל התראה בדף הבית של הקורס"
+
+msgid "Enable course themes in learning paths"
+msgstr "הפעל ערכות נושא של הקורס בנתיבי למידה"
+
+msgid "Exercises invisible in session"
+msgstr "תרגילים בלתי נראים בסשן"
+
+msgid "Expiration link"
+msgstr "קישור תפוגה"
+
+msgid "Forums list"
+msgstr "רשימת פורומים"
+
+msgid "Issue date type"
+msgstr "סוג תאריך הנפקה"
+
+msgid "Learning path index"
+msgstr "אינדקס נתיב למידה"
+
+msgid "Learning paths list"
+msgstr "רשימת נתיבי למידה"
+
+msgid "Left margin"
+msgstr "שוליים שמאליים"
+
+msgid "Legal notice"
+msgstr "הודעה משפטית"
+
+msgid "Maximum subscribed students"
+msgstr "מספר מקסימלי של תלמידים רשומים"
+
+msgid "Notify in course home"
+msgstr "הודע בדף הבית של הקורס"
+
+msgid "Notify learners"
+msgstr "הודע ללומדים"
+
+msgid "Notify with agreement file"
+msgstr "הודע עם קובץ הסכמה"
+
+msgid "Notify without attachment"
+msgstr "הודע ללא קובץ מצורף"
+
+msgid "Open chat in a new window"
+msgstr "פתח צ'אט בחלון חדש"
+
+msgid "Open to the platform"
+msgstr "פתוח לפלטפורמה"
+
+msgid "Place"
+msgstr "מקום"
+
+msgid "Platform default"
+msgstr "ברירת מחדל של הפלטפורמה"
+
+msgid "Registration password"
+msgstr "סיסמת הרשמה"
+
+msgid "Remove previous agreements"
+msgstr "הסר הסכמות קודמות"
+
+msgid "Right margin"
+msgstr "שוליים ימניים"
+
+msgid "Selected learning path"
+msgstr "נתיב למידה נבחר"
+
+msgid "Selected test"
+msgstr "מבחן נבחר"
+
+msgid "Show learner picture in forums"
+msgstr "הצג תמונת לומד בפורומים"
+
+msgid "Show system folders"
+msgstr "הצג תיקיות מערכת"
+
+msgid "Signature text 1"
+msgstr "טקסט חתימה 1"
+
+msgid "Signature text 2"
+msgstr "טקסט חתימה 2"
+
+msgid "Signature text 3"
+msgstr "טקסט חתימה 3"
+
+msgid "Signature text 4"
+msgstr "טקסט חתימה 4"
+
+msgid "Student and course information"
+msgstr "מידע על תלמיד וקורס"
+
+msgid "Subscription allowed"
+msgstr "הרשמה מותרת"
+
+msgid "Tests list"
+msgstr "רשימת מבחנים"
+
+msgid "Unsubscription allowed"
+msgstr "ביטול הרשמה מותר"
+
+msgid "Use certificate download date"
+msgstr "השתמש בתאריך הורדת התעודה"
+
+msgid "Use certificate generation date"
+msgstr "השתמש בתאריך יצירת התעודה"
+
+msgid "Use session access dates"
+msgstr "השתמש בתאריכי גישה למושב"
+
+msgid "Use session access end date"
+msgstr "השתמש בתאריך סיום גישה למושב"
 

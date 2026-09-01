@@ -39865,3 +39865,192 @@ msgstr "म्याद सकिन लागेको सूचना: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "सूचनाहरू प्रयोगकर्ताहरूलाई उनीहरूको आफ्नै कन्फिगर गरिएको भाषामा पठाइन्छ।"
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "पृष्ठहरू पूर्वनिर्धारित रूपमा ६० सेकेन्डका लागि HTTP-क्यास गरिन्छन्, जुन Page entity मा परिभाषित छ, त्यसैले परिवर्तनहरू तुरुन्तै देखिन नसक्छन्।"
+
+msgid "Activate legal notice"
+msgstr "कानुनी सूचना सक्रिय गर्नुहोस्"
+
+msgid "Agreement content"
+msgstr "सम्झौताको सामग्री"
+
+msgid "Allow learners to delete their own publication"
+msgstr "शिक्षार्थीहरूलाई आफ्नै प्रकाशन मेटाउन अनुमति दिनुहोस्"
+
+msgid "Allow learners to edit agenda"
+msgstr "शिक्षार्थीहरूलाई एजेन्डा सम्पादन गर्न अनुमति दिनुहोस्"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "शिक्षार्थीहरूलाई आफ्नै उपस्थिति प्रमाणित गर्न अनुमति दिनुहोस्"
+
+msgid "Allow learners to view users list"
+msgstr "शिक्षार्थीहरूलाई प्रयोगकर्ता सूची हेर्न अनुमति दिनुहोस्"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "प्रयोगकर्ताहरूलाई फोरम सूचनाहरूमा स्वतः सदस्यता दिनुहोस्"
+
+msgid "Certificate mode"
+msgstr "प्रमाणपत्र मोड"
+
+msgid "Configure external tools"
+msgstr "बाह्य उपकरणहरू कन्फिगर गर्नुहोस्"
+
+msgid "Contents"
+msgstr "सामग्रीहरू"
+
+msgid "Contents to show"
+msgstr "देखाउने सामग्रीहरू"
+
+msgid "Course certificate"
+msgstr "पाठ्यक्रम प्रमाणपत्र"
+
+msgid "Course delivery dates"
+msgstr "पाठ्यक्रम वितरण मितिहरू"
+
+msgid "Course duration in hours"
+msgstr "घण्टामा पाठ्यक्रम अवधि"
+
+msgid "Course legal agreement"
+msgstr "पाठ्यक्रम कानुनी सम्झौता"
+
+msgid "Custom"
+msgstr "अनुकूलित"
+
+msgid "Custom certificate"
+msgstr "अनुकूलित प्रमाणपत्र"
+
+msgid "Default visibility for new documents"
+msgstr "नयाँ कागजातहरूको पूर्वनिर्धारित दृश्यता"
+
+msgid "Direct invitation link"
+msgstr "प्रत्यक्ष निमन्त्रणा लिङ्क"
+
+msgid "Do not notify"
+msgstr "सूचना नदिनुहोस्"
+
+msgid "Documents list"
+msgstr "कागजात सूची"
+
+msgid "E-mail learner on manual subscription"
+msgstr "म्यानुअल सदस्यतामा शिक्षार्थीलाई इमेल गर्नुहोस्"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "नयाँ प्रयोगकर्ताको विद्यार्थी प्रकाशन प्रतिक्रियामा शिक्षकहरूलाई इमेल गर्नुहोस्"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "ड्रपबक्स फाइल प्राप्तिमा प्रयोगकर्ताहरूलाई इमेल गर्नुहोस्"
+
+msgid "Enable course home notification"
+msgstr "पाठ्यक्रम गृह सूचना सक्षम गर्नुहोस्"
+
+msgid "Enable course themes in learning paths"
+msgstr "सिकाइ पथहरूमा पाठ्यक्रम थिमहरू सक्षम गर्नुहोस्"
+
+msgid "Exercises invisible in session"
+msgstr "सत्रमा अभ्यासहरू अदृश्य"
+
+msgid "Expiration link"
+msgstr "म्याद सकिने लिङ्क"
+
+msgid "Forums list"
+msgstr "फोरमहरूको सूची"
+
+msgid "Issue date type"
+msgstr "जारी मिति प्रकार"
+
+msgid "Learning path index"
+msgstr "सिकाइ मार्ग अनुक्रमणिका"
+
+msgid "Learning paths list"
+msgstr "सिकाइ मार्गहरूको सूची"
+
+msgid "Left margin"
+msgstr "बायाँ मार्जिन"
+
+msgid "Legal notice"
+msgstr "कानुनी सूचना"
+
+msgid "Maximum subscribed students"
+msgstr "अधिकतम दर्ता भएका विद्यार्थीहरू"
+
+msgid "Notify in course home"
+msgstr "पाठ्यक्रम गृहपृष्ठमा सूचना दिनुहोस्"
+
+msgid "Notify learners"
+msgstr "सिकारुहरूलाई सूचना दिनुहोस्"
+
+msgid "Notify with agreement file"
+msgstr "सम्झौता फाइलसहित सूचना दिनुहोस्"
+
+msgid "Notify without attachment"
+msgstr "संलग्नक बिना सूचना दिनुहोस्"
+
+msgid "Open chat in a new window"
+msgstr "नयाँ विन्डोमा च्याट खोल्नुहोस्"
+
+msgid "Open to the platform"
+msgstr "प्लेटफर्ममा खुला"
+
+msgid "Place"
+msgstr "स्थान"
+
+msgid "Platform default"
+msgstr "प्लेटफर्म पूर्वनिर्धारित"
+
+msgid "Registration password"
+msgstr "दर्ता पासवर्ड"
+
+msgid "Remove previous agreements"
+msgstr "अघिल्ला सम्झौताहरू हटाउनुहोस्"
+
+msgid "Right margin"
+msgstr "दायाँ मार्जिन"
+
+msgid "Selected learning path"
+msgstr "चयन गरिएको सिकाइ मार्ग"
+
+msgid "Selected test"
+msgstr "चयन गरिएको परीक्षा"
+
+msgid "Show learner picture in forums"
+msgstr "फोरमहरूमा सिकारुको तस्बिर देखाउनुहोस्"
+
+msgid "Show system folders"
+msgstr "प्रणाली फोल्डरहरू देखाउनुहोस्"
+
+msgid "Signature text 1"
+msgstr "हस्ताक्षर पाठ १"
+
+msgid "Signature text 2"
+msgstr "हस्ताक्षर पाठ २"
+
+msgid "Signature text 3"
+msgstr "हस्ताक्षर पाठ ३"
+
+msgid "Signature text 4"
+msgstr "हस्ताक्षर पाठ ४"
+
+msgid "Student and course information"
+msgstr "विद्यार्थी र पाठ्यक्रम जानकारी"
+
+msgid "Subscription allowed"
+msgstr "सदस्यता अनुमति छ"
+
+msgid "Tests list"
+msgstr "परीक्षाहरूको सूची"
+
+msgid "Unsubscription allowed"
+msgstr "सदस्यता रद्द अनुमति छ"
+
+msgid "Use certificate download date"
+msgstr "प्रमाणपत्र डाउनलोड मिति प्रयोग गर्नुहोस्"
+
+msgid "Use certificate generation date"
+msgstr "प्रमाणपत्र सिर्जना मिति प्रयोग गर्नुहोस्"
+
+msgid "Use session access dates"
+msgstr "सत्र पहुँच मितिहरू प्रयोग गर्नुहोस्"
+
+msgid "Use session access end date"
+msgstr "सत्र पहुँच अन्त्य मिति प्रयोग गर्नुहोस्"
+

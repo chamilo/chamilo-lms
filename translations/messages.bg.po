@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "С уважение"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Примерна формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Примерен формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазони на променливите"
@@ -39866,4 +39866,193 @@ msgstr "Известие за изтичане: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Известията се изпращат на потребителите на конфигурирания от тях език."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Страниците се кешират по HTTP за 60 с по подразбиране, както е дефинирано в обекта Page, затова промените може да не се отразят веднага."
+
+msgid "Activate legal notice"
+msgstr "Активиране на правно уведомление"
+
+msgid "Agreement content"
+msgstr "Съдържание на споразумението"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Разрешаване на обучаемите да изтриват собствената си публикация"
+
+msgid "Allow learners to edit agenda"
+msgstr "Разрешаване на обучаемите да редактират дневния ред"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Разрешаване на обучаемите да потвърждават собственото си присъствие"
+
+msgid "Allow learners to view users list"
+msgstr "Разрешаване на обучаемите да виждат списъка с потребители"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Автоматично абониране на потребителите за известия от форума"
+
+msgid "Certificate mode"
+msgstr "Режим на сертификат"
+
+msgid "Configure external tools"
+msgstr "Конфигуриране на външни инструменти"
+
+msgid "Contents"
+msgstr "Съдържание"
+
+msgid "Contents to show"
+msgstr "Съдържание за показване"
+
+msgid "Course certificate"
+msgstr "Сертификат за курса"
+
+msgid "Course delivery dates"
+msgstr "Дати на провеждане на курса"
+
+msgid "Course duration in hours"
+msgstr "Продължителност на курса в часове"
+
+msgid "Course legal agreement"
+msgstr "Правно споразумение за курса"
+
+msgid "Custom"
+msgstr "По избор"
+
+msgid "Custom certificate"
+msgstr "Персонализиран сертификат"
+
+msgid "Default visibility for new documents"
+msgstr "Видимост по подразбиране за нови документи"
+
+msgid "Direct invitation link"
+msgstr "Директна връзка за покана"
+
+msgid "Do not notify"
+msgstr "Без известяване"
+
+msgid "Documents list"
+msgstr "Списък с документи"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Имейл до обучаемия при ръчно записване"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Имейл до преподавателите при обратна връзка по публикация на обучаем"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Имейл до потребителите при получаване на файл в Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Активиране на известие на началната страница на курса"
+
+msgid "Enable course themes in learning paths"
+msgstr "Активиране на теми на курса в учебните пътеки"
+
+msgid "Exercises invisible in session"
+msgstr "Упражненията са невидими в сесията"
+
+msgid "Expiration link"
+msgstr "Връзка с изтичане"
+
+msgid "Forums list"
+msgstr "Списък с форуми"
+
+msgid "Issue date type"
+msgstr "Тип дата на издаване"
+
+msgid "Learning path index"
+msgstr "Индекс на учебната пътека"
+
+msgid "Learning paths list"
+msgstr "Списък с учебни пътеки"
+
+msgid "Left margin"
+msgstr "Ляво поле"
+
+msgid "Legal notice"
+msgstr "Правна информация"
+
+msgid "Maximum subscribed students"
+msgstr "Максимален брой записани студенти"
+
+msgid "Notify in course home"
+msgstr "Уведоми в началната страница на курса"
+
+msgid "Notify learners"
+msgstr "Уведоми обучаемите"
+
+msgid "Notify with agreement file"
+msgstr "Уведоми с файл за съгласие"
+
+msgid "Notify without attachment"
+msgstr "Уведоми без прикачен файл"
+
+msgid "Open chat in a new window"
+msgstr "Отвори чата в нов прозорец"
+
+msgid "Open to the platform"
+msgstr "Отворено за платформата"
+
+msgid "Place"
+msgstr "Място"
+
+msgid "Platform default"
+msgstr "По подразбиране за платформата"
+
+msgid "Registration password"
+msgstr "Парола за регистрация"
+
+msgid "Remove previous agreements"
+msgstr "Премахни предишни съгласия"
+
+msgid "Right margin"
+msgstr "Дясно поле"
+
+msgid "Selected learning path"
+msgstr "Избрана учебна пътека"
+
+msgid "Selected test"
+msgstr "Избран тест"
+
+msgid "Show learner picture in forums"
+msgstr "Показвай снимка на обучаемия във форумите"
+
+msgid "Show system folders"
+msgstr "Показвай системни папки"
+
+msgid "Signature text 1"
+msgstr "Текст на подпис 1"
+
+msgid "Signature text 2"
+msgstr "Текст на подпис 2"
+
+msgid "Signature text 3"
+msgstr "Текст на подпис 3"
+
+msgid "Signature text 4"
+msgstr "Текст на подпис 4"
+
+msgid "Student and course information"
+msgstr "Информация за студента и курса"
+
+msgid "Subscription allowed"
+msgstr "Записването е разрешено"
+
+msgid "Tests list"
+msgstr "Списък с тестове"
+
+msgid "Unsubscription allowed"
+msgstr "Отписването е разрешено"
+
+msgid "Use certificate download date"
+msgstr "Използвай дата на изтегляне на сертификата"
+
+msgid "Use certificate generation date"
+msgstr "Използвай дата на генериране на сертификата"
+
+msgid "Use session access dates"
+msgstr "Използвай дати за достъп до сесията"
+
+msgid "Use session access end date"
+msgstr "Използвай крайна дата за достъп до сесията"
 

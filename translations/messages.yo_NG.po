@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ fọ́múlà: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -39860,4 +39860,193 @@ msgstr "Ìkìlọ̀ ìparí tó ń bọ̀: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "A ń fi àwọn ìfitónilétí ránṣẹ́ sí àwọn olùmúlò ní èdè tí wọ́n ti ṣètò fún ara wọn."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Àwọn ojú-ewé jẹ́ HTTP-cached fún ìṣẹ́jú 60 ní ìpìlẹ̀, gẹ́gẹ́ bí a ṣe ṣàlàyé nínú ẹ̀yà Page, nítorí náà àwọn ìyípadà lè má hàn lẹ́sẹ̀kẹsẹ̀."
+
+msgid "Activate legal notice"
+msgstr "Mú ìkìlọ̀ òfin ṣiṣẹ́"
+
+msgid "Agreement content"
+msgstr "Àkóónú àdéhùn"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Jẹ́ kí àwọn akẹ́kọ̀ọ́ pa ìtẹ̀jáde tiwọn"
+
+msgid "Allow learners to edit agenda"
+msgstr "Jẹ́ kí àwọn akẹ́kọ̀ọ́ ṣàtúnṣe àkójọpọ̀ iṣẹ́"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Jẹ́ kí àwọn akẹ́kọ̀ọ́ jẹ́rìí sí ìwàsíwájú tiwọn"
+
+msgid "Allow learners to view users list"
+msgstr "Jẹ́ kí àwọn akẹ́kọ̀ọ́ wo àtòkọ àwọn olùmúlò"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Forúkọsílẹ̀ àwọn olùmúlò fún ìfitónilétí àpéjọ láìfọwọ́kọ"
+
+msgid "Certificate mode"
+msgstr "Ipo ìwé-ẹ̀rí"
+
+msgid "Configure external tools"
+msgstr "Ṣètò àwọn irinṣẹ́ ìta"
+
+msgid "Contents"
+msgstr "Àwọn àkóónú"
+
+msgid "Contents to show"
+msgstr "Àwọn àkóónú láti fi hàn"
+
+msgid "Course certificate"
+msgstr "Ìwé-ẹ̀rí ẹ̀kọ́"
+
+msgid "Course delivery dates"
+msgstr "Àwọn ọjọ́ ìfúnni ẹ̀kọ́"
+
+msgid "Course duration in hours"
+msgstr "Ìgbà ẹ̀kọ́ ní wákàtí"
+
+msgid "Course legal agreement"
+msgstr "Àdéhùn òfin ẹ̀kọ́"
+
+msgid "Custom"
+msgstr "Àkànṣe"
+
+msgid "Custom certificate"
+msgstr "Ìwé-ẹ̀rí àkànṣe"
+
+msgid "Default visibility for new documents"
+msgstr "Ìhàn ìpìlẹ̀ fún àwọn ìwé tuntun"
+
+msgid "Direct invitation link"
+msgstr "Ọ̀nà ìpè tààrà"
+
+msgid "Do not notify"
+msgstr "Má ṣe fìtónilétí"
+
+msgid "Documents list"
+msgstr "Àtòkọ àwọn ìwé"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Fi e-mail ránṣẹ́ sí akẹ́kọ̀ọ́ nígbà ìforúkọsílẹ̀ ọwọ́"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Fi e-mail ránṣẹ́ sí àwọn olùkọ́ nígbà ìdáhùn ìtẹ̀jáde akẹ́kọ̀ọ́ tuntun"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Fi e-mail ránṣẹ́ sí àwọn olùmúlò nígbà gbígba fáìlì Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Mú ìfitónilétí ilé ẹ̀kọ́ ṣiṣẹ́"
+
+msgid "Enable course themes in learning paths"
+msgstr "Mu àwọn àkòrí kọ́ọ̀sì ṣiṣẹ́ nínú àwọn ọ̀nà ẹ̀kọ́"
+
+msgid "Exercises invisible in session"
+msgstr "Àwọn iṣẹ́ ìdánwò kò hàn nínú sẹ́ṣọ̀n"
+
+msgid "Expiration link"
+msgstr "Ọ̀nà ìsopọ̀ ìparí"
+
+msgid "Forums list"
+msgstr "Àtòkọ àwọn fórọ́mù"
+
+msgid "Issue date type"
+msgstr "Irú ọjọ́ ìtẹ̀jáde"
+
+msgid "Learning path index"
+msgstr "Àtòjọ ọ̀nà ẹ̀kọ́"
+
+msgid "Learning paths list"
+msgstr "Àtòkọ àwọn ọ̀nà ẹ̀kọ́"
+
+msgid "Left margin"
+msgstr "Àlà òsì"
+
+msgid "Legal notice"
+msgstr "Ìkìlọ̀ òfin"
+
+msgid "Maximum subscribed students"
+msgstr "Iye àwọn akẹ́kọ̀ọ́ tí a forúkọsílẹ̀ púpọ̀ jù"
+
+msgid "Notify in course home"
+msgstr "Fi tó lẹ́nu ní ibùdó kọ́ọ̀sì"
+
+msgid "Notify learners"
+msgstr "Fi tó àwọn akẹ́kọ̀ọ́ lẹ́nu"
+
+msgid "Notify with agreement file"
+msgstr "Fi tó lẹ́nu pẹ̀lú fáìlì àdéhùn"
+
+msgid "Notify without attachment"
+msgstr "Fi tó lẹ́nu láìsí àfikún"
+
+msgid "Open chat in a new window"
+msgstr "Ṣí ìtàkurọ̀sọ nínú fèrèsé tuntun"
+
+msgid "Open to the platform"
+msgstr "Ṣí sí pẹpẹ"
+
+msgid "Place"
+msgstr "Ibi"
+
+msgid "Platform default"
+msgstr "Àìyípadà pẹpẹ"
+
+msgid "Registration password"
+msgstr "Ọ̀rọ̀ aṣínà ìforúkọsílẹ̀"
+
+msgid "Remove previous agreements"
+msgstr "Yọ àwọn àdéhùn tẹ́lẹ̀ kúrò"
+
+msgid "Right margin"
+msgstr "Àlà ọ̀tún"
+
+msgid "Selected learning path"
+msgstr "Ọ̀nà ẹ̀kọ́ tí a yàn"
+
+msgid "Selected test"
+msgstr "Ìdánwò tí a yàn"
+
+msgid "Show learner picture in forums"
+msgstr "Fi àwòrán akẹ́kọ̀ọ́ hàn nínú àwọn fórọ́mù"
+
+msgid "Show system folders"
+msgstr "Fi àwọn fódà ètò hàn"
+
+msgid "Signature text 1"
+msgstr "Ọ̀rọ̀ ìtọwọ́bọ̀wé 1"
+
+msgid "Signature text 2"
+msgstr "Ọ̀rọ̀ ìtọwọ́bọ̀wé 2"
+
+msgid "Signature text 3"
+msgstr "Ọ̀rọ̀ ìtọwọ́bọ̀wé 3"
+
+msgid "Signature text 4"
+msgstr "Ọ̀rọ̀ ìtọwọ́bọ̀wé 4"
+
+msgid "Student and course information"
+msgstr "Àlàyé akẹ́kọ̀ọ́ àti kọ́ọ̀sì"
+
+msgid "Subscription allowed"
+msgstr "Ìforúkọsílẹ̀ jẹ́ gbígbà"
+
+msgid "Tests list"
+msgstr "Àtòkọ àwọn ìdánwò"
+
+msgid "Unsubscription allowed"
+msgstr "Ìyọkúrò jẹ́ gbígbà"
+
+msgid "Use certificate download date"
+msgstr "Lo ọjọ́ ìgbàsílẹ̀ ìwé ẹ̀rí"
+
+msgid "Use certificate generation date"
+msgstr "Lo ọjọ́ ìṣẹ̀dá ìwé ẹ̀rí"
+
+msgid "Use session access dates"
+msgstr "Lo àwọn ọjọ́ ìwọlé sẹ́ṣọ̀n"
+
+msgid "Use session access end date"
+msgstr "Lo ọjọ́ ìparí ìwọlé sẹ́ṣọ̀n"
 

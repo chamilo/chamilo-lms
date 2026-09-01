@@ -63,8 +63,10 @@
   right: 0;
   height: 50px;
   background-repeat: repeat-x;
-  background-position: center bottom;
-  background-size: auto 50px;
+  background-position-x: center;
+  // Sprite sheet: 13 stacked frames, 50px each once scaled (see AdminBlock.vue),
+  // background-position-y set inline per block to select a frame.
+  background-size: auto 650px;
   opacity: 0.20;
   pointer-events: none;
 }

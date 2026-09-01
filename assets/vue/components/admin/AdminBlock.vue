@@ -70,7 +70,10 @@
       v-if="bgImageUrl"
       aria-hidden="true"
       class="admin-block__bg-image"
-      :style="{ backgroundImage: `url('${bgImageUrl}')` }"
+      :style="{
+        backgroundImage: `url('${bgImageUrl}')`,
+        backgroundPositionY: `-${props.bgIndex * BG_SPRITE_FRAME_HEIGHT}px`,
+      }"
     />
   </BaseCard>
 </template>
@@ -107,8 +110,14 @@ const props = defineProps({
   description: { type: String, required: false, default: () => null },
   searchUrl: { type: String, required: false, default: () => null },
   items: { type: Array, required: true, default: () => [] },
-  bgImage: { type: String, required: false, default: null },
+  bgIndex: { type: Number, required: false, default: null },
 })
+
+// All admin blocks share one sprite sheet (13 frames stacked vertically, 50px
+// each once scaled by .admin-block__bg-image's background-size) to cut 13
+// per-block image requests down to 1; bgIndex selects the frame.
+const BG_SPRITE_PATH = "images/bg-block-admin-sprite.png"
+const BG_SPRITE_FRAME_HEIGHT = 50
 
 // computed IDs for search input and button derived from the title
 const inputId = computed(() => {
@@ -131,5 +140,5 @@ const visibleItems = computed(() =>
     .filter((item) => item.visible),
 )
 
-const bgImageUrl = computed(() => (props.bgImage ? getThemeAssetUrl(props.bgImage) : null))
+const bgImageUrl = computed(() => (props.bgIndex !== null ? getThemeAssetUrl(BG_SPRITE_PATH) : null))
 </script>

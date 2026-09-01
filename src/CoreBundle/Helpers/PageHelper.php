@@ -520,6 +520,11 @@ class PageHelper
         return '' !== $value ? $value : 'generic';
     }
 
+    /**
+     * Custom pages are PHP files executed with include(), so they are read from the local
+     * disk on purpose and not through the themes filesystem: they must live on the server
+     * that runs them, and a remote storage adapter cannot provide an executable path.
+     */
     private function resolveCustomPageFile(string $page): ?string
     {
         $relativePath = self::CUSTOM_PAGE_DIRECTORY.DIRECTORY_SEPARATOR.$page.'.'.self::CUSTOM_PAGE_EXTENSION;

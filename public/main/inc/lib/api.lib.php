@@ -19,8 +19,9 @@ use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -4005,12 +4006,12 @@ function api_get_visual_theme(): string
 }
 
 /**
- * Returns a list of CSS themes currently available in the CSS folder
+ * Returns a list of themes currently available in the themes filesystem.
  * The folder must have a default.css file.
  *
  * @param bool $getOnlyThemeFromVirtualInstance Used by the vchamilo plugin
  *
- * @return array list of themes directories from the css folder
+ * @return array list of theme directories from the themes filesystem
  *               Note: Directory names (names of themes) in the file system should contain ASCII-characters only
  */
 function api_get_themes($getOnlyThemeFromVirtualInstance = false)
@@ -4018,32 +4019,40 @@ function api_get_themes($getOnlyThemeFromVirtualInstance = false)
     // This configuration value is set by the vchamilo plugin
     $virtualTheme = api_get_configuration_value('virtual_css_theme_folder');
 
-    $readCssFolder = function ($dir) use ($virtualTheme) {
-        $finder = new Finder();
-        $themes = $finder->directories()->in($dir)->depth(0)->sortByName();
+    /** @var FilesystemOperator $filesystem */
+    $filesystem = Container::$container->get('oneup_flysystem.themes_filesystem');
+
+    $readCssFolder = function ($dir) use ($filesystem, $virtualTheme) {
         $list = [];
-        /** @var Symfony\Component\Finder\SplFileInfo $theme */
-        foreach ($themes as $theme) {
-            $folder = $theme->getFilename();
-            // A theme folder is consider if there's a default.css file
-            if (!file_exists($theme->getPathname().'/default.css')) {
-                continue;
+
+        try {
+            foreach ($filesystem->listContents($dir, false) as $item) {
+                if (!$item->isDir()) {
+                    continue;
+                }
+                $folder = basename($item->path());
+                // A theme folder is consider if there's a default.css file
+                if (!$filesystem->fileExists($item->path().'/default.css')) {
+                    continue;
+                }
+                if ($folder == $virtualTheme) {
+                    continue;
+                }
+                $list[$folder] = ucwords(str_replace('_', ' ', $folder));
             }
-            $name = ucwords(str_replace('_', ' ', $folder));
-            if ($folder == $virtualTheme) {
-                continue;
-            }
-            $list[$folder] = $name;
+        } catch (FilesystemException) {
+            return [];
         }
+
+        ksort($list);
 
         return $list;
     };
 
-    $dir = Container::getProjectDir().'var/themes/';
-    $list = $readCssFolder($dir);
+    $list = $readCssFolder('');
 
     if (!empty($virtualTheme)) {
-        $newList = $readCssFolder($dir.'/'.$virtualTheme);
+        $newList = $readCssFolder($virtualTheme);
         if ($getOnlyThemeFromVirtualInstance) {
             return $newList;
         }

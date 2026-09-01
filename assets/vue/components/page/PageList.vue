@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from "vue"
+import { computed, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import PageCard from "./PageCard.vue"
-import pageService from "../../services/page"
+import { usePagesStore } from "../../store/pagesStore"
 
 const props = defineProps({
   categoryTitle: {
@@ -12,19 +12,13 @@ const props = defineProps({
 })
 
 const { locale } = useI18n()
+const pagesStore = usePagesStore()
 
-const pageList = ref([])
+const pageList = computed(() => pagesStore.getPages(props.categoryTitle, locale.value))
 
-pageService
-  .findAll({
-    params: {
-      "category.title": props.categoryTitle,
-      enabled: "1",
-      locale: locale.value,
-    },
-  })
-  .then((response) => response.json())
-  .then((json) => (pageList.value = json["hydra:member"]))
+pagesStore.fetchByCategory(props.categoryTitle, locale.value)
+
+watch(locale, (newLocale) => pagesStore.fetchByCategory(props.categoryTitle, newLocale))
 </script>
 
 <template>

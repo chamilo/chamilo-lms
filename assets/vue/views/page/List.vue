@@ -225,6 +225,20 @@
       <p class="text-xs text-gray-500 italic">{{ t("Select the link above and press Ctrl+C to copy it") }}</p>
     </div>
   </Dialog>
+
+  <Message
+    v-if="securityStore.isAdmin"
+    :closable="false"
+    class="mt-5"
+    icon="mdi mdi-information"
+    severity="info"
+  >
+    {{
+      t(
+        "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately.",
+      )
+    }}
+  </Message>
 </template>
 
 <script setup>
@@ -239,6 +253,7 @@ import { useLocale } from "../../composables/locale"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import FloatLabel from "primevue/floatlabel"
+import Message from "primevue/message"
 
 const router = useRouter()
 const store = useStore()

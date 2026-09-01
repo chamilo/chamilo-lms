@@ -1,8 +1,10 @@
 import { onMounted, ref } from "vue"
+import { storeToRefs } from "pinia"
 import { usePlatformConfig } from "../../store/platformConfig"
 import adminService from "../../services/adminService"
 import { useNotification } from "../notification"
 import { useSecurityStore } from "../../store/securityStore"
+import { useAdminIndexBlocksStore } from "../../store/adminIndexBlocksStore"
 import { useI18n } from "vue-i18n"
 
 export function useIndexBlocks() {
@@ -12,10 +14,9 @@ export function useIndexBlocks() {
 
   const platformConfigStore = usePlatformConfig()
   const securityStore = useSecurityStore()
+  const adminIndexBlocksStore = useAdminIndexBlocksStore()
 
-  const blockVersionStatusEl = ref()
-  const blockNewsStatusEl = ref()
-  const blockSupportStatusEl = ref()
+  const { blockVersionStatusEl, blockNewsStatusEl, blockSupportStatusEl } = storeToRefs(adminIndexBlocksStore)
 
   onMounted(() => {
     if (!securityStore.isAdmin) {
@@ -42,28 +43,30 @@ export function useIndexBlocks() {
    */
   function checkVersion(doNotListCampus) {
     adminService.registerCampus(doNotListCampus).then(() => {
-      loadVersion().then(() => {})
+      adminIndexBlocksStore
+        .loadVersion({ force: true, onFetchStart: () => (blockVersionStatusEl.value = t("Loading")) })
+        .then(() => {})
 
       showSuccessNotification(t("Version check enabled"))
     })
   }
 
   async function loadVersion() {
-    blockVersionStatusEl.value = t("Loading")
-
-    blockVersionStatusEl.value = await adminService.findVersion()
+    await adminIndexBlocksStore.loadVersion({
+      onFetchStart: () => (blockVersionStatusEl.value = t("Loading")),
+    })
   }
 
   async function loadNews() {
-    blockNewsStatusEl.value = t("Loading")
-
-    blockNewsStatusEl.value = await adminService.findAnnouncements()
+    await adminIndexBlocksStore.loadNews({
+      onFetchStart: () => (blockNewsStatusEl.value = t("Loading")),
+    })
   }
 
   async function loadSupport() {
-    blockSupportStatusEl.value = t("Loading")
-
-    blockSupportStatusEl.value = await adminService.findSupport()
+    await adminIndexBlocksStore.loadSupport({
+      onFetchStart: () => (blockSupportStatusEl.value = t("Loading")),
+    })
   }
 
   const blockUsers = ref(null)

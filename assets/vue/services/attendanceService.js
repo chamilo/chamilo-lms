@@ -118,7 +118,7 @@ export default {
    * @returns {Promise<Object>} - Data of the updated calendar event.
    */
   updateCalendarEvent: async (calendarId, data) => {
-    return await baseService.put(`/api/c_attendance_calendars/${calendarId}`, data)
+    return await baseService.patch(`/api/c_attendance_calendars/${calendarId}`, data)
   },
 
   /**

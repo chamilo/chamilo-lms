@@ -167,17 +167,6 @@ export default {
   },
 
   /**
-   * Updates an existing calendar entry for an attendance list.
-   * @param {Number|String} attendanceId - ID of the attendance list.
-   * @param {Number|String} calendarId - ID of the calendar entry to update.
-   * @param {Object} data - Updated calendar data.
-   * @returns {Promise<Object>} - Data of the updated calendar entry.
-   */
-  updateAttendanceCalendar: async (attendanceId, calendarId, data) => {
-    return await baseService.put(`/api/attendances/${attendanceId}/calendars/${calendarId}`, data)
-  },
-
-  /**
    * Deletes a specific calendar entry for an attendance list.
    * @param {Number|String} attendanceId - ID of the attendance list.
    * @param {Number|String} calendarId - ID of the calendar entry to delete.

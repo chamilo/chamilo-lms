@@ -328,7 +328,7 @@ export default {
    * @returns {Promise<Object>} The updated category resource.
    */
   async updateCalculationMode(categoryId, calculationMode) {
-    return await baseService.put(`/api/gradebook_categories/${categoryId}`, { calculationMode })
+    return await baseService.patch(`/api/gradebook_categories/${categoryId}`, { calculationMode })
   },
 
   /**

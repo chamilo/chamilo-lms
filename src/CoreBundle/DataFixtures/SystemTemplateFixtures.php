@@ -204,7 +204,7 @@ HTML,
 
     private static function getBundledCertificateTemplate(): string
     {
-        $path = dirname(__DIR__, 3).'/public/main/gradebook/certificate_template/template.html';
+        $path = \dirname(__DIR__, 3).'/public/main/gradebook/certificate_template/template.html';
         $content = file_get_contents($path);
 
         if (false === $content || '' === trim($content)) {

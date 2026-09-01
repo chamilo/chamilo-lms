@@ -23,6 +23,10 @@ use Symfony\Component\HttpFoundation\Request;
  * (three dot-separated segments) — JWT parsing/validation itself is completely
  * untouched. Wired in only for the `api` firewall via its `jwt: authenticator: ...`
  * config (see security.yaml); the `main` firewall keeps Lexik's original.
+ *
+ * @psalm-suppress UnimplementedInterfaceMethod authenticate() comes from Lexik's
+ *                 ForwardCompatAuthenticatorTrait, whose body is built with eval() —
+ *                 static analysis cannot see it. Survives --no-cache.
  */
 final class StrictJwtAuthenticator extends JWTAuthenticator
 {

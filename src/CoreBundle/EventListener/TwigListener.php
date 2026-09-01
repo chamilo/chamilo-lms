@@ -57,6 +57,14 @@ class TwigListener
 
         $languages = $this->languageRepository->getAllAvailable()->getQuery()->getArrayResult();
 
+        // Merge in each sub-language's parent isocode (e.g. 'fr_69' => 'fr_FR') so the
+        // Vue i18n fallback chain can fall back to the real parent instead of English.
+        $parentIsocodes = $this->languageRepository->getParentIsocodesByChildIsocode();
+        foreach ($languages as &$language) {
+            $language['parentIsocode'] = $parentIsocodes[$language['isocode']] ?? null;
+        }
+        unset($language);
+
         // $this->twig->addGlobal('text_direction', api_get_text_direction());
         $this->twig->addGlobal('is_authenticated', json_encode($isAuth));
         $this->twig->addGlobal('user_json', $data ?? json_encode([]));

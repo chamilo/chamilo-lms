@@ -560,8 +560,6 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I check the "Set password manually" radio button
     And I fill in "password" with "studentone"
     And I check the "No" radio button
-    And I press the multiselect option "Learner" in "roles"
-    And wait very long for the page to be loaded
     And I press "Add"
     And wait very long for the page to be loaded
     Then I should not see an error
@@ -576,8 +574,6 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I check the "Set password manually" radio button
     And I fill in "password" with "studenttwo"
     And I check the "No" radio button
-    And I press the multiselect option "Learner" in "roles"
-    And wait very long for the page to be loaded
     And I press "Add"
     And wait very long for the page to be loaded
     Then I should not see an error
@@ -593,8 +589,6 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I check the "Set password manually" radio button
     And I fill in "password" with "studentthree"
     And I check the "No" radio button
-    And I press the multiselect option "Learner" in "roles"
-    And wait very long for the page to be loaded
     And I press "Add"
     And wait very long for the page to be loaded
     Then I should not see an error

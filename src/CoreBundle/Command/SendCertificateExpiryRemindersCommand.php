@@ -234,8 +234,8 @@ class SendCertificateExpiryRemindersCommand extends Command
                 ->andWhere('rel.course = :course')
                 ->andWhere('rel.session = :session')
                 ->andWhere('rel.status = :status')
-                ->setParameter('course', $course)
-                ->setParameter('session', $session)
+                ->setParameter('course', $course->getId())
+                ->setParameter('session', $session->getId())
                 ->setParameter('status', Session::STUDENT)
             ;
         } else {
@@ -243,7 +243,7 @@ class SendCertificateExpiryRemindersCommand extends Command
                 ->from(CourseRelUser::class, 'rel')
                 ->andWhere('rel.course = :course')
                 ->andWhere('rel.status = :status')
-                ->setParameter('course', $course)
+                ->setParameter('course', $course->getId())
                 ->setParameter('status', CourseRelUser::STUDENT)
             ;
         }

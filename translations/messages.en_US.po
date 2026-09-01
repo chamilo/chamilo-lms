@@ -39873,3 +39873,189 @@ msgstr "Notifications are sent to users in their own configured language."
 
 msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
 msgstr "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+
+msgid "Activate legal notice"
+msgstr "Activate legal notice"
+
+msgid "Agreement content"
+msgstr "Agreement content"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Allow learners to delete their own publication"
+
+msgid "Allow learners to edit agenda"
+msgstr "Allow learners to edit agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Allow learners to validate their own attendance"
+
+msgid "Allow learners to view users list"
+msgstr "Allow learners to view users list"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Automatically subscribe users to forum notifications"
+
+msgid "Certificate mode"
+msgstr "Certificate mode"
+
+msgid "Configure external tools"
+msgstr "Configure external tools"
+
+msgid "Contents"
+msgstr "Contents"
+
+msgid "Contents to show"
+msgstr "Contents to show"
+
+msgid "Course certificate"
+msgstr "Course certificate"
+
+msgid "Course delivery dates"
+msgstr "Course delivery dates"
+
+msgid "Course duration in hours"
+msgstr "Course duration in hours"
+
+msgid "Course legal agreement"
+msgstr "Course legal agreement"
+
+msgid "Custom"
+msgstr "Custom"
+
+msgid "Custom certificate"
+msgstr "Custom certificate"
+
+msgid "Default visibility for new documents"
+msgstr "Default visibility for new documents"
+
+msgid "Direct invitation link"
+msgstr "Direct invitation link"
+
+msgid "Do not notify"
+msgstr "Do not notify"
+
+msgid "Documents list"
+msgstr "Documents list"
+
+msgid "E-mail learner on manual subscription"
+msgstr "E-mail learner on manual subscription"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "E-mail to teachers on new user's student publication feedback"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "E-mail users on Dropbox file reception"
+
+msgid "Enable course home notification"
+msgstr "Enable course home notification"
+
+msgid "Enable course themes in learning paths"
+msgstr "Enable course themes in learning paths"
+
+msgid "Exercises invisible in session"
+msgstr "Exercises invisible in session"
+
+msgid "Expiration link"
+msgstr "Expiration link"
+
+msgid "Forums list"
+msgstr "Forums list"
+
+msgid "Issue date type"
+msgstr "Issue date type"
+
+msgid "Learning path index"
+msgstr "Learning path index"
+
+msgid "Learning paths list"
+msgstr "Learning paths list"
+
+msgid "Left margin"
+msgstr "Left margin"
+
+msgid "Legal notice"
+msgstr "Legal notice"
+
+msgid "Maximum subscribed students"
+msgstr "Maximum subscribed students"
+
+msgid "Notify in course home"
+msgstr "Notify in course home"
+
+msgid "Notify learners"
+msgstr "Notify learners"
+
+msgid "Notify with agreement file"
+msgstr "Notify with agreement file"
+
+msgid "Notify without attachment"
+msgstr "Notify without attachment"
+
+msgid "Open chat in a new window"
+msgstr "Open chat in a new window"
+
+msgid "Open to the platform"
+msgstr "Open to the platform"
+
+msgid "Place"
+msgstr "Place"
+
+msgid "Platform default"
+msgstr "Platform default"
+
+msgid "Registration password"
+msgstr "Registration password"
+
+msgid "Remove previous agreements"
+msgstr "Remove previous agreements"
+
+msgid "Right margin"
+msgstr "Right margin"
+
+msgid "Selected learning path"
+msgstr "Selected learning path"
+
+msgid "Selected test"
+msgstr "Selected test"
+
+msgid "Show learner picture in forums"
+msgstr "Show learner picture in forums"
+
+msgid "Show system folders"
+msgstr "Show system folders"
+
+msgid "Signature text 1"
+msgstr "Signature text 1"
+
+msgid "Signature text 2"
+msgstr "Signature text 2"
+
+msgid "Signature text 3"
+msgstr "Signature text 3"
+
+msgid "Signature text 4"
+msgstr "Signature text 4"
+
+msgid "Student and course information"
+msgstr "Student and course information"
+
+msgid "Subscription allowed"
+msgstr "Subscription allowed"
+
+msgid "Tests list"
+msgstr "Tests list"
+
+msgid "Unsubscription allowed"
+msgstr "Unsubscription allowed"
+
+msgid "Use certificate download date"
+msgstr "Use certificate download date"
+
+msgid "Use certificate generation date"
+msgstr "Use certificate generation date"
+
+msgid "Use session access dates"
+msgstr "Use session access dates"
+
+msgid "Use session access end date"
+msgstr "Use session access end date"

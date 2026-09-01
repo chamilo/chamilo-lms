@@ -114,8 +114,8 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $values = $repo->getByItemIdsAndFieldIds(
-            [$userOne->getId(), $userTwo->getId()],
-            [$fieldA->getId(), $fieldB->getId()],
+            [(int) $userOne->getId(), (int) $userTwo->getId()],
+            [(int) $fieldA->getId(), (int) $fieldB->getId()],
             ExtraField::USER_FIELD_TYPE,
         );
 
@@ -129,8 +129,8 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         $this->assertSame('two-b', $byItemAndField[$userTwo->getId()][$fieldB->getId()]);
 
         // Empty inputs must not run a query with an empty IN() clause.
-        $this->assertSame([], $repo->getByItemIdsAndFieldIds([], [$fieldA->getId()], ExtraField::USER_FIELD_TYPE));
-        $this->assertSame([], $repo->getByItemIdsAndFieldIds([$userOne->getId()], [], ExtraField::USER_FIELD_TYPE));
+        $this->assertSame([], $repo->getByItemIdsAndFieldIds([], [(int) $fieldA->getId()], ExtraField::USER_FIELD_TYPE));
+        $this->assertSame([], $repo->getByItemIdsAndFieldIds([(int) $userOne->getId()], [], ExtraField::USER_FIELD_TYPE));
     }
 
     public function testUpdateItemData(): void

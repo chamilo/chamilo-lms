@@ -22,6 +22,12 @@ export default {
     }
   },
 
+  // Cheap redirect-only check, used by the router guard so navigation to /reporting
+  // isn't blocked on the full dashboard's expensive metrics queries.
+  async getLanding() {
+    return await baseService.get("/api/global-reporting/landing")
+  },
+
   clearDashboardCache() {
     dashboardPromise = null
   },

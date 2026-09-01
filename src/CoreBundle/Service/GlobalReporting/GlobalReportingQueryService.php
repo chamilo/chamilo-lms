@@ -40,6 +40,33 @@ final readonly class GlobalReportingQueryService
     ) {}
 
     /**
+     * Cheap landing-page resolution: only the context/settings data needed to decide
+     * whether /reporting should redirect elsewhere. Deliberately avoids the expensive
+     * followed-user and generic-metrics queries that getDashboard() runs afterward,
+     * so the router can resolve a redirect without blocking on them.
+     */
+    public function resolveLandingUrl(GlobalReportingContext $context): ?string
+    {
+        if ($context->isSessionAdministratorOnly) {
+            return '/reporting/sessions';
+        }
+
+        if (!$context->canViewGlobalReports) {
+            if ($context->isStudentBoss) {
+                return '/reporting/learners';
+            }
+
+            if ($context->blockMyProgressPage) {
+                return '/';
+            }
+
+            return '/reporting/my-progress';
+        }
+
+        return null;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function getDashboard(GlobalReportingContext $context): array
@@ -59,31 +86,24 @@ final readonly class GlobalReportingQueryService
             'studentFollowUpEnabled' => $context->studentFollowUpEnabled,
         ];
 
-        if ($context->isSessionAdministratorOnly) {
-            return [
-                ...$baseData,
-                'redirectUrl' => '/reporting/sessions',
-            ];
-        }
-
-        if (!$context->canViewGlobalReports) {
-            $redirectUrl = '/reporting/my-progress';
-            if ($context->isStudentBoss) {
-                $redirectUrl = '/reporting/learners';
-            } elseif ($context->blockMyProgressPage) {
-                $redirectUrl = '/';
-            }
-
+        $redirectUrl = $this->resolveLandingUrl($context);
+        if (null !== $redirectUrl) {
             return [
                 ...$baseData,
                 'redirectUrl' => $redirectUrl,
             ];
         }
 
-        $studentIds = $this->getFollowedUserIds($context, self::USER_STATUS_STUDENT);
-        $studentBossIds = $this->getFollowedUserIds($context, self::USER_STATUS_STUDENT_BOSS);
-        $teacherIds = $this->getFollowedUserIds($context, self::USER_STATUS_TEACHER);
-        $humanResourcesIds = $this->getFollowedUserIds($context, self::USER_STATUS_HUMAN_RESOURCES);
+        $followedUserIdsByStatus = $this->getFollowedUserIdsForStatuses($context, [
+            self::USER_STATUS_STUDENT,
+            self::USER_STATUS_STUDENT_BOSS,
+            self::USER_STATUS_TEACHER,
+            self::USER_STATUS_HUMAN_RESOURCES,
+        ]);
+        $studentIds = $followedUserIdsByStatus[self::USER_STATUS_STUDENT] ?? [];
+        $studentBossIds = $followedUserIdsByStatus[self::USER_STATUS_STUDENT_BOSS] ?? [];
+        $teacherIds = $followedUserIdsByStatus[self::USER_STATUS_TEACHER] ?? [];
+        $humanResourcesIds = $followedUserIdsByStatus[self::USER_STATUS_HUMAN_RESOURCES] ?? [];
         $assignedCourses = $this->countAssignedCourses($context);
         $followedCourses = $this->countFollowedCourses($context);
         $followedSessions = $this->countFollowedSessions($context);
@@ -127,18 +147,22 @@ final readonly class GlobalReportingQueryService
      */
     public function getScopedUserIds(GlobalReportingContext $context, ?int $userStatus = null): array
     {
-        if (null !== $userStatus) {
-            return $this->getFollowedUserIds($context, $userStatus);
-        }
-
-        $userIds = [];
-        foreach ([
+        $statuses = null !== $userStatus ? [$userStatus] : [
             self::USER_STATUS_STUDENT,
             self::USER_STATUS_STUDENT_BOSS,
             self::USER_STATUS_TEACHER,
             self::USER_STATUS_HUMAN_RESOURCES,
-        ] as $status) {
-            foreach ($this->getFollowedUserIds($context, $status) as $userId) {
+        ];
+
+        $followedUserIdsByStatus = $this->getFollowedUserIdsForStatuses($context, $statuses);
+
+        if (null !== $userStatus) {
+            return $followedUserIdsByStatus[$userStatus] ?? [];
+        }
+
+        $userIds = [];
+        foreach ($followedUserIdsByStatus as $ids) {
+            foreach ($ids as $userId) {
                 $userIds[$userId] = $userId;
             }
         }
@@ -348,98 +372,42 @@ final readonly class GlobalReportingQueryService
     }
 
     /**
-     * @return int[]
+     * Batched replacement for the former per-status getFollowedUserIds(): fetches all
+     * requested statuses in a single round trip per relation source (status IN (...))
+     * instead of one round trip per status, and merges the 4 default-scope relation
+     * sources into one UNION query instead of 4 separate ones.
+     *
+     * @param int[] $userStatuses
+     *
+     * @return array<int, int[]> user ids keyed by user status
      */
-    private function getFollowedUserIds(GlobalReportingContext $context, int $userStatus): array
+    private function getFollowedUserIdsForStatuses(GlobalReportingContext $context, array $userStatuses): array
     {
         if ($context->isStudentBoss) {
-            return $this->getUsersFromStudentBossScope($context, $userStatus);
+            return $this->getUsersFromStudentBossScopeForStatuses($context, $userStatuses);
         }
 
         if ($context->isSessionAdministratorOnly) {
-            return $this->getUsersFromSessionAdministratorScope($context, $userStatus);
+            return $this->getUsersFromSessionAdministratorScopeForStatuses($context, $userStatuses);
         }
 
         if ($context->isHumanResourcesManager && $context->humanResourcesCanAccessAllSessionContent) {
-            return $this->getUsersFromHumanResourcesScope($context, $userStatus);
+            return $this->getUsersFromHumanResourcesScopeForStatuses($context, $userStatuses);
         }
 
-        $userIds = [];
-        foreach ($this->getDirectlyRelatedUsers($context, $userStatus) as $userId) {
-            $userIds[$userId] = $userId;
-        }
-        foreach ($this->getUsersFromTeacherCourses($context, $userStatus) as $userId) {
-            $userIds[$userId] = $userId;
-        }
-        foreach ($this->getUsersFromGeneralCoachSessions($context, $userStatus) as $userId) {
-            $userIds[$userId] = $userId;
-        }
-        foreach ($this->getUsersFromCourseCoachSessions($context, $userStatus) as $userId) {
-            $userIds[$userId] = $userId;
-        }
-
-        ksort($userIds);
-
-        return array_values($userIds);
-    }
-
-    /**
-     * @return int[]
-     */
-    private function getUsersFromStudentBossScope(GlobalReportingContext $context, int $userStatus): array
-    {
-        return $this->fetchIntegerColumn(
-            'SELECT DISTINCT target.id
+        return $this->fetchIntegerColumnGroupedByStatus(
+            'SELECT DISTINCT target.id, target.status
                FROM user target
                INNER JOIN user_rel_user relation
                    ON relation.user_id = target.id
                INNER JOIN access_url_rel_user access_user
                    ON access_user.user_id = target.id
               WHERE relation.friend_user_id = :currentUserId
-                AND relation.relation_type = :relationType
-                AND target.status = :userStatus
-                AND access_user.access_url_id = :accessUrlId',
-            [
-                'currentUserId' => $context->currentUserId(),
-                'relationType' => self::USER_RELATION_TYPE_BOSS,
-                'userStatus' => $userStatus,
-                'accessUrlId' => $context->accessUrlId,
-            ],
-        );
-    }
-
-    /**
-     * @return int[]
-     */
-    private function getDirectlyRelatedUsers(GlobalReportingContext $context, int $userStatus): array
-    {
-        return $this->fetchIntegerColumn(
-            'SELECT DISTINCT target.id
-               FROM user target
-               INNER JOIN user_rel_user relation
-                   ON relation.user_id = target.id
-               INNER JOIN access_url_rel_user access_user
-                   ON access_user.user_id = target.id
-              WHERE relation.friend_user_id = :currentUserId
-                AND relation.relation_type = :relationType
-                AND target.status = :userStatus
-                AND access_user.access_url_id = :accessUrlId',
-            [
-                'currentUserId' => $context->currentUserId(),
-                'relationType' => self::USER_RELATION_TYPE_HUMAN_RESOURCES,
-                'userStatus' => $userStatus,
-                'accessUrlId' => $context->accessUrlId,
-            ],
-        );
-    }
-
-    /**
-     * @return int[]
-     */
-    private function getUsersFromTeacherCourses(GlobalReportingContext $context, int $userStatus): array
-    {
-        return $this->fetchIntegerColumn(
-            'SELECT DISTINCT target.id
+                AND relation.relation_type = :hrRelationType
+                AND target.status IN (:userStatuses)
+                AND access_user.access_url_id = :accessUrlId
+              UNION
+             SELECT DISTINCT target.id, target.status
                FROM user target
                INNER JOIN course_rel_user target_subscription
                    ON target_subscription.user_id = target.id
@@ -451,25 +419,11 @@ final readonly class GlobalReportingQueryService
                    ON access_user.user_id = target.id
                INNER JOIN access_url_rel_course access_course
                    ON access_course.c_id = target_subscription.c_id
-              WHERE target.status = :userStatus
+              WHERE target.status IN (:userStatuses)
                 AND access_user.access_url_id = :accessUrlId
-                AND access_course.access_url_id = :accessUrlId',
-            [
-                'currentUserId' => $context->currentUserId(),
-                'teacherStatus' => self::COURSE_STATUS_TEACHER,
-                'userStatus' => $userStatus,
-                'accessUrlId' => $context->accessUrlId,
-            ],
-        );
-    }
-
-    /**
-     * @return int[]
-     */
-    private function getUsersFromGeneralCoachSessions(GlobalReportingContext $context, int $userStatus): array
-    {
-        return $this->fetchIntegerColumn(
-            'SELECT DISTINCT target.id
+                AND access_course.access_url_id = :accessUrlId
+              UNION
+             SELECT DISTINCT target.id, target.status
                FROM user target
                INNER JOIN session_rel_course_rel_user target_subscription
                    ON target_subscription.user_id = target.id
@@ -481,25 +435,11 @@ final readonly class GlobalReportingQueryService
                    ON access_user.user_id = target.id
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_subscription.session_id
-              WHERE target.status = :userStatus
+              WHERE target.status IN (:userStatuses)
                 AND access_user.access_url_id = :accessUrlId
-                AND access_session.access_url_id = :accessUrlId',
-            [
-                'currentUserId' => $context->currentUserId(),
-                'generalCoach' => self::SESSION_RELATION_TYPE_GENERAL_COACH,
-                'userStatus' => $userStatus,
-                'accessUrlId' => $context->accessUrlId,
-            ],
-        );
-    }
-
-    /**
-     * @return int[]
-     */
-    private function getUsersFromCourseCoachSessions(GlobalReportingContext $context, int $userStatus): array
-    {
-        return $this->fetchIntegerColumn(
-            'SELECT DISTINCT target.id
+                AND access_session.access_url_id = :accessUrlId
+              UNION
+             SELECT DISTINCT target.id, target.status
                FROM user target
                INNER JOIN session_rel_course_rel_user target_subscription
                    ON target_subscription.user_id = target.id
@@ -512,25 +452,57 @@ final readonly class GlobalReportingQueryService
                    ON access_user.user_id = target.id
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_subscription.session_id
-              WHERE target.status = :userStatus
+              WHERE target.status IN (:userStatuses)
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId',
             [
                 'currentUserId' => $context->currentUserId(),
+                'hrRelationType' => self::USER_RELATION_TYPE_HUMAN_RESOURCES,
+                'teacherStatus' => self::COURSE_STATUS_TEACHER,
+                'generalCoach' => self::SESSION_RELATION_TYPE_GENERAL_COACH,
                 'courseCoach' => self::SESSION_STATUS_COURSE_COACH,
-                'userStatus' => $userStatus,
+                'userStatuses' => $userStatuses,
                 'accessUrlId' => $context->accessUrlId,
             ],
         );
     }
 
     /**
-     * @return int[]
+     * @param int[] $userStatuses
+     *
+     * @return array<int, int[]>
      */
-    private function getUsersFromSessionAdministratorScope(GlobalReportingContext $context, int $userStatus): array
+    private function getUsersFromStudentBossScopeForStatuses(GlobalReportingContext $context, array $userStatuses): array
     {
-        return $this->fetchIntegerColumn(
-            'SELECT DISTINCT target.id
+        return $this->fetchIntegerColumnGroupedByStatus(
+            'SELECT DISTINCT target.id, target.status
+               FROM user target
+               INNER JOIN user_rel_user relation
+                   ON relation.user_id = target.id
+               INNER JOIN access_url_rel_user access_user
+                   ON access_user.user_id = target.id
+              WHERE relation.friend_user_id = :currentUserId
+                AND relation.relation_type = :relationType
+                AND target.status IN (:userStatuses)
+                AND access_user.access_url_id = :accessUrlId',
+            [
+                'currentUserId' => $context->currentUserId(),
+                'relationType' => self::USER_RELATION_TYPE_BOSS,
+                'userStatuses' => $userStatuses,
+                'accessUrlId' => $context->accessUrlId,
+            ],
+        );
+    }
+
+    /**
+     * @param int[] $userStatuses
+     *
+     * @return array<int, int[]>
+     */
+    private function getUsersFromSessionAdministratorScopeForStatuses(GlobalReportingContext $context, array $userStatuses): array
+    {
+        return $this->fetchIntegerColumnGroupedByStatus(
+            'SELECT DISTINCT target.id, target.status
                FROM user target
                INNER JOIN session_rel_course_rel_user target_relation
                    ON target_relation.user_id = target.id
@@ -542,11 +514,11 @@ final readonly class GlobalReportingQueryService
                    ON access_user.user_id = target.id
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_relation.session_id
-              WHERE target.status = :userStatus
+              WHERE target.status IN (:userStatuses)
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId
               UNION
-             SELECT DISTINCT target.id
+             SELECT DISTINCT target.id, target.status
                FROM user target
                INNER JOIN session_rel_user target_relation
                    ON target_relation.user_id = target.id
@@ -558,25 +530,27 @@ final readonly class GlobalReportingQueryService
                    ON access_user.user_id = target.id
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_relation.session_id
-              WHERE target.status = :userStatus
+              WHERE target.status IN (:userStatuses)
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId',
             [
                 'currentUserId' => $context->currentUserId(),
                 'sessionAdministrator' => self::SESSION_RELATION_TYPE_SESSION_ADMIN,
-                'userStatus' => $userStatus,
+                'userStatuses' => $userStatuses,
                 'accessUrlId' => $context->accessUrlId,
             ],
         );
     }
 
     /**
-     * @return int[]
+     * @param int[] $userStatuses
+     *
+     * @return array<int, int[]>
      */
-    private function getUsersFromHumanResourcesScope(GlobalReportingContext $context, int $userStatus): array
+    private function getUsersFromHumanResourcesScopeForStatuses(GlobalReportingContext $context, array $userStatuses): array
     {
-        return $this->fetchIntegerColumn(
-            'SELECT DISTINCT target.id
+        return $this->fetchIntegerColumnGroupedByStatus(
+            'SELECT DISTINCT target.id, target.status
                FROM user target
                INNER JOIN session_rel_course_rel_user target_subscription
                    ON target_subscription.user_id = target.id
@@ -588,11 +562,11 @@ final readonly class GlobalReportingQueryService
                    ON access_user.user_id = target.id
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_subscription.session_id
-              WHERE target.status = :userStatus
+              WHERE target.status IN (:userStatuses)
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId
               UNION
-             SELECT DISTINCT target.id
+             SELECT DISTINCT target.id, target.status
                FROM user target
                INNER JOIN course_rel_user target_subscription
                    ON target_subscription.user_id = target.id
@@ -605,11 +579,11 @@ final readonly class GlobalReportingQueryService
                    ON access_user.user_id = target.id
                INNER JOIN access_url_rel_course access_course
                    ON access_course.c_id = target_subscription.c_id
-              WHERE target.status = :userStatus
+              WHERE target.status IN (:userStatuses)
                 AND access_user.access_url_id = :accessUrlId
                 AND access_course.access_url_id = :accessUrlId
               UNION
-             SELECT DISTINCT target.id
+             SELECT DISTINCT target.id, target.status
                FROM user target
                INNER JOIN user_rel_user relation
                    ON relation.user_id = target.id
@@ -617,7 +591,7 @@ final readonly class GlobalReportingQueryService
                    ON access_user.user_id = target.id
               WHERE relation.friend_user_id = :currentUserId
                 AND relation.relation_type = :humanResourcesUserRelation
-                AND target.status = :userStatus
+                AND target.status IN (:userStatuses)
                 AND access_user.access_url_id = :accessUrlId',
             [
                 'currentUserId' => $context->currentUserId(),
@@ -625,7 +599,7 @@ final readonly class GlobalReportingQueryService
                 'humanResourcesStatus' => self::USER_STATUS_HUMAN_RESOURCES,
                 'humanResourcesCourseRelation' => self::COURSE_RELATION_TYPE_HUMAN_RESOURCES,
                 'humanResourcesUserRelation' => self::USER_RELATION_TYPE_HUMAN_RESOURCES,
-                'userStatus' => $userStatus,
+                'userStatuses' => $userStatuses,
                 'accessUrlId' => $context->accessUrlId,
             ],
         );
@@ -878,5 +852,31 @@ final readonly class GlobalReportingQueryService
             'intval',
             $this->connection->fetchFirstColumn($sql, $parameters),
         ));
+    }
+
+    /**
+     * @param array<string, mixed> $parameters must include a 'userStatuses' int[] entry
+     *
+     * @return array<int, int[]> ids keyed by the 'status' column, each list sorted ascending
+     */
+    private function fetchIntegerColumnGroupedByStatus(string $sql, array $parameters): array
+    {
+        $rows = $this->connection->fetchAllAssociative(
+            $sql,
+            $parameters,
+            ['userStatuses' => ArrayParameterType::INTEGER],
+        );
+
+        $grouped = [];
+        foreach ($rows as $row) {
+            $grouped[(int) $row['status']][] = (int) $row['id'];
+        }
+
+        foreach ($grouped as $status => $ids) {
+            sort($ids);
+            $grouped[$status] = $ids;
+        }
+
+        return $grouped;
     }
 }

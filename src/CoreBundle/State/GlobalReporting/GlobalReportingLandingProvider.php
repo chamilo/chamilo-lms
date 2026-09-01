@@ -14,8 +14,14 @@ use Chamilo\CoreBundle\Service\GlobalReporting\GlobalReportingQueryService;
 
 use const PHP_SESSION_ACTIVE;
 
-/** @implements ProviderInterface<GlobalReportingDashboard> */
-final readonly class GlobalReportingDashboardProvider implements ProviderInterface
+/**
+ * Cheap counterpart to GlobalReportingDashboardProvider: resolves only the /reporting
+ * redirect target, without running the expensive followed-user/generic-metrics queries.
+ * Used by the router to decide where to land before the full dashboard has loaded.
+ *
+ * @implements ProviderInterface<GlobalReportingDashboard>
+ */
+final readonly class GlobalReportingLandingProvider implements ProviderInterface
 {
     public function __construct(
         private GlobalReportingContextResolver $contextResolver,
@@ -37,12 +43,8 @@ final readonly class GlobalReportingDashboardProvider implements ProviderInterfa
             session_write_close();
         }
 
-        $data = $this->queryService->getDashboard($reportingContext);
         $resource = new GlobalReportingDashboard();
-
-        foreach ($data as $property => $value) {
-            $resource->{$property} = $value;
-        }
+        $resource->redirectUrl = $this->queryService->resolveLandingUrl($reportingContext);
 
         return $resource;
     }

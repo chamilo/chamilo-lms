@@ -776,12 +776,19 @@ router.beforeEach(async (to, from, next) => {
   // Resolve the global reporting landing page before mounting the Overview component.
   // This prevents users without global-report access from briefly seeing the overview UI
   // while its component waits for the dashboard API response and redirects afterwards.
+  // Uses the cheap /landing endpoint (context/settings only) rather than /dashboard, which
+  // also computes expensive followed-user and generic-metrics queries the Overview page
+  // needs to display but the redirect decision itself never depends on. The full dashboard
+  // fetch is still kicked off here (not awaited) so it's already in flight, memoized, and
+  // ready for the Overview component's own (spinner-backed) load by the time it mounts.
   if (to.name === "GlobalReportingOverview") {
-    try {
-      const dashboard = await globalReportingService.getDashboard(true)
+    globalReportingService.getDashboard(true).catch(() => {})
 
-      if (dashboard.redirectUrl && dashboard.redirectUrl !== "/reporting") {
-        next({ path: dashboard.redirectUrl, replace: true })
+    try {
+      const landing = await globalReportingService.getLanding()
+
+      if (landing.redirectUrl && landing.redirectUrl !== "/reporting") {
+        next({ path: landing.redirectUrl, replace: true })
 
         return
       }

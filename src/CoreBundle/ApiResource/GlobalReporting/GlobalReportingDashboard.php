@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use Chamilo\CoreBundle\State\GlobalReporting\GlobalReportingDashboardProvider;
+use Chamilo\CoreBundle\State\GlobalReporting\GlobalReportingLandingProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
@@ -18,6 +19,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/global-reporting/dashboard',
             name: 'get_global_reporting_dashboard',
             provider: GlobalReportingDashboardProvider::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+        ),
+        new Get(
+            uriTemplate: '/global-reporting/landing',
+            name: 'get_global_reporting_landing',
+            provider: GlobalReportingLandingProvider::class,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
         ),
     ],

@@ -48,10 +48,34 @@ function resolveBestLocale(requested, keys) {
   return { requested: raw, resolved: "en", base }
 }
 
-// Build fallback chain (prefer base, then English)
+// Chamilo sub-languages (an admin-created variant of an existing language, e.g.
+// "fr_69" derived from "fr_FR") only override a handful of strings and rely on
+// falling back to their real parent for everything else. That parent isn't
+// derivable from the code itself -- this codebase has no bare "xx.json" bundle
+// for any language, so naively splitting on "_" (e.g. "fr_69" -> "fr") never
+// matches an actual file and silently degrades straight to English. The real
+// parent/child relationships are published in window.languages (see
+// TwigListener::__invoke() / LanguageRepository::getParentIsocodesByChildIsocode()).
+function findRealParentLocale(code, keys) {
+  const languages = window.languages || []
+  const entry = languages.find((l) => l.isocode === code)
+  const parentIso = entry?.parentIsocode
+
+  return parentIso && keys.includes(parentIso) ? parentIso : null
+}
+
+// Build fallback chain (prefer the real parent language, then the bare base
+// code if a bundle for it happens to exist, then English)
 function buildFallbackChain(base, resolved, keys) {
   const chain = []
-  if (base && base !== resolved && keys.includes(base)) chain.push(base)
+  const realParent = findRealParentLocale(resolved, keys)
+
+  if (realParent && realParent !== resolved) {
+    chain.push(realParent)
+  } else if (base && base !== resolved && keys.includes(base)) {
+    chain.push(base)
+  }
+
   chain.push("en")
   return chain
 }
@@ -95,9 +119,10 @@ const i18n = createI18n({
   messages: {},
 })
 
-// Resolves once the boot locale's messages (and its fallback chain, at most
-// "<base>" and "en") are loaded and registered. main.js awaits this before
-// mounting the app, so templates never render raw translation keys.
+// Resolves once the boot locale's messages (and its fallback chain -- the real
+// parent locale for a sub-language, or else "<base>" -- plus "en") are loaded
+// and registered. main.js awaits this before mounting the app, so templates
+// never render raw translation keys.
 export const i18nReady = loadLocaleWithFallbacks(initial.resolved, initial.base)
 
 /**

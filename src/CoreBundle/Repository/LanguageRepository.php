@@ -48,6 +48,25 @@ class LanguageRepository extends ServiceEntityRepository
     }
 
     /**
+     * Maps every sub-language's isocode to its parent's isocode (e.g. 'fr_69' => 'fr_FR').
+     * Used to feed the Vue i18n fallback chain, since array hydration of
+     * getAllAvailable() drops the un-joined 'parent' association.
+     *
+     * @return array<string, string>
+     */
+    public function getParentIsocodesByChildIsocode(): array
+    {
+        $rows = $this->createQueryBuilder('l')
+            ->select('l.isocode AS childIso', 'p.isocode AS parentIso')
+            ->innerJoin('l.parent', 'p')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return array_column($rows, 'parentIso', 'childIso');
+    }
+
+    /**
      * @return array<string,string> [isocode => original_name]
      */
     public function getAllAvailableToArray(

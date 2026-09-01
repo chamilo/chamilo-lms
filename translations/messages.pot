@@ -39790,3 +39790,189 @@ msgstr ""
 
 msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
 msgstr ""
+
+msgid "Activate legal notice"
+msgstr ""
+
+msgid "Agreement content"
+msgstr ""
+
+msgid "Allow learners to delete their own publication"
+msgstr ""
+
+msgid "Allow learners to edit agenda"
+msgstr ""
+
+msgid "Allow learners to validate their own attendance"
+msgstr ""
+
+msgid "Allow learners to view users list"
+msgstr ""
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr ""
+
+msgid "Certificate mode"
+msgstr ""
+
+msgid "Configure external tools"
+msgstr ""
+
+msgid "Contents"
+msgstr ""
+
+msgid "Contents to show"
+msgstr ""
+
+msgid "Course certificate"
+msgstr ""
+
+msgid "Course delivery dates"
+msgstr ""
+
+msgid "Course duration in hours"
+msgstr ""
+
+msgid "Course legal agreement"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
+msgid "Custom certificate"
+msgstr ""
+
+msgid "Default visibility for new documents"
+msgstr ""
+
+msgid "Direct invitation link"
+msgstr ""
+
+msgid "Do not notify"
+msgstr ""
+
+msgid "Documents list"
+msgstr ""
+
+msgid "E-mail learner on manual subscription"
+msgstr ""
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr ""
+
+msgid "E-mail users on Dropbox file reception"
+msgstr ""
+
+msgid "Enable course home notification"
+msgstr ""
+
+msgid "Enable course themes in learning paths"
+msgstr ""
+
+msgid "Exercises invisible in session"
+msgstr ""
+
+msgid "Expiration link"
+msgstr ""
+
+msgid "Forums list"
+msgstr ""
+
+msgid "Issue date type"
+msgstr ""
+
+msgid "Learning path index"
+msgstr ""
+
+msgid "Learning paths list"
+msgstr ""
+
+msgid "Left margin"
+msgstr ""
+
+msgid "Legal notice"
+msgstr ""
+
+msgid "Maximum subscribed students"
+msgstr ""
+
+msgid "Notify in course home"
+msgstr ""
+
+msgid "Notify learners"
+msgstr ""
+
+msgid "Notify with agreement file"
+msgstr ""
+
+msgid "Notify without attachment"
+msgstr ""
+
+msgid "Open chat in a new window"
+msgstr ""
+
+msgid "Open to the platform"
+msgstr ""
+
+msgid "Place"
+msgstr ""
+
+msgid "Platform default"
+msgstr ""
+
+msgid "Registration password"
+msgstr ""
+
+msgid "Remove previous agreements"
+msgstr ""
+
+msgid "Right margin"
+msgstr ""
+
+msgid "Selected learning path"
+msgstr ""
+
+msgid "Selected test"
+msgstr ""
+
+msgid "Show learner picture in forums"
+msgstr ""
+
+msgid "Show system folders"
+msgstr ""
+
+msgid "Signature text 1"
+msgstr ""
+
+msgid "Signature text 2"
+msgstr ""
+
+msgid "Signature text 3"
+msgstr ""
+
+msgid "Signature text 4"
+msgstr ""
+
+msgid "Student and course information"
+msgstr ""
+
+msgid "Subscription allowed"
+msgstr ""
+
+msgid "Tests list"
+msgstr ""
+
+msgid "Unsubscription allowed"
+msgstr ""
+
+msgid "Use certificate download date"
+msgstr ""
+
+msgid "Use certificate generation date"
+msgstr ""
+
+msgid "Use session access dates"
+msgstr ""
+
+msgid "Use session access end date"
+msgstr ""

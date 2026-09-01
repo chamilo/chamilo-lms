@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelCourse;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\UsergroupHelper;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +28,7 @@ class UsergroupCoursesController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly UsergroupHelper $usergroupHelper,
     ) {}
 
     #[Route('/{id}', name: 'admin_usergroup_courses_data', requirements: ['id' => '\d+'], methods: ['GET'])]
@@ -107,31 +110,55 @@ class UsergroupCoursesController extends AbstractController
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $courseIds = array_map('intval', (array) $request->request->all('courseIds'));
+        $courseIds = array_values(
+            array_unique(
+                array_filter(
+                    array_map('intval', (array) $request->request->all('courseIds')),
+                    static fn (int $courseId): bool => $courseId > 0
+                )
+            )
+        );
+        $courseIds = $this->filterAllowedCourseIds($courseIds);
 
-        $this->em->createQueryBuilder()
-            ->delete(UsergroupRelCourse::class, 'rc')
-            ->where('rc.usergroup = :ugId')
-            ->setParameter('ugId', $id, Types::INTEGER)
-            ->getQuery()
-            ->execute()
-        ;
-
-        foreach ($courseIds as $courseId) {
-            $course = $this->em->find(Course::class, $courseId);
-            if (null === $course) {
-                continue;
-            }
-
-            $rel = new UsergroupRelCourse();
-            $rel->setUsergroup($usergroup);
-            $rel->setCourse($course);
-            $this->em->persist($rel);
-        }
-
-        $this->em->flush();
+        $this->usergroupHelper->synchronizeCourses($id, $courseIds);
 
         return $this->json(['success' => true]);
+    }
+
+    /**
+     * @param list<int> $courseIds
+     *
+     * @return list<int>
+     */
+    private function filterAllowedCourseIds(array $courseIds): array
+    {
+        if (empty($courseIds)) {
+            return [];
+        }
+
+        $qb = $this->em->createQueryBuilder()
+            ->select('c.id')
+            ->from(Course::class, 'c')
+            ->where('c.id IN (:courseIds)')
+            ->setParameter('courseIds', $courseIds, ArrayParameterType::INTEGER)
+        ;
+
+        if ($this->accessUrlHelper->isMultiple()) {
+            $accessUrl = $this->accessUrlHelper->getCurrent();
+            if (null !== $accessUrl) {
+                $qb->innerJoin('c.urls', 'urlRel')
+                    ->andWhere('urlRel.url = :urlId')
+                    ->setParameter('urlId', $accessUrl->getId(), Types::INTEGER)
+                ;
+            }
+        }
+
+        return array_map(
+            'intval',
+            $qb
+                ->getQuery()
+                ->getSingleColumnResult()
+        );
     }
 
     private function belongsToCurrentUrl(Usergroup $usergroup): bool

@@ -9,12 +9,10 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
+use Chamilo\CoreBundle\Helpers\UsergroupHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CourseBundle\Entity\CGroupRelUser;
-use Chamilo\CourseBundle\Entity\CGroupRelUsergroup;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use GroupManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +36,7 @@ class UsergroupAddUsersController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly SettingsManager $settingsManager,
+        private readonly UsergroupHelper $usergroupHelper,
     ) {}
 
     #[Route('', name: 'admin_usergroup_add_users_data', methods: ['GET'])]
@@ -188,78 +187,13 @@ class UsergroupAddUsersController extends AbstractController
         $rawIds = $request->request->all('userIds');
         $userIds = array_map('intval', (array) $rawIds);
 
-        // Remove existing memberships for this group + relation type
-        $this->em->createQueryBuilder()
-            ->delete(UsergroupRelUser::class, 'ru')
-            ->where('ru.usergroup = :ugId')
-            ->andWhere('ru.relationType = :rel')
-            ->setParameter('ugId', $id, Types::INTEGER)
-            ->setParameter('rel', $relationType, Types::INTEGER)
-            ->getQuery()
-            ->execute()
-        ;
-
-        // Add new memberships
-        foreach ($userIds as $userId) {
-            $user = $this->em->find(User::class, $userId);
-            if (null === $user) {
-                continue;
-            }
-
-            $rel = new UsergroupRelUser();
-            $rel->setUsergroup($usergroup);
-            $rel->setUser($user);
-            $rel->setRelationType($relationType);
-            $this->em->persist($rel);
-        }
-
-        $this->em->flush();
-
-        // Sync course group members for groups linked to this usergroup.
-        $this->syncLinkedCourseGroups($id, $userIds);
+        // Delegates to the legacy workflow: diffs against the current membership,
+        // (un)subscribes users to/from every session and course linked to this
+        // usergroup, persists the usergroup_rel_user rows, and re-syncs any
+        // course groups linked to the usergroup.
+        $this->usergroupHelper->subscribeUsers($id, $userIds, true, $relationType);
 
         return $this->json(['success' => true]);
-    }
-
-    /**
-     * When a usergroup's member list changes, update all course groups
-     * that are linked to it via CGroupRelUsergroup.
-     */
-    private function syncLinkedCourseGroups(int $usergroupId, array $newUserIds): void
-    {
-        $linkedRels = $this->em->getRepository(CGroupRelUsergroup::class)
-            ->findBy(['usergroup' => $usergroupId])
-        ;
-
-        if (empty($linkedRels)) {
-            return;
-        }
-
-        foreach ($linkedRels as $rel) {
-            $cGroup = $rel->getGroup();
-            $course = $rel->getCourse();
-            if (null === $cGroup || null === $course) {
-                continue;
-            }
-
-            $courseId = $course->getId();
-
-            // Current group member IDs
-            $currentMemberIds = array_map(
-                fn (CGroupRelUser $m) => $m->getUser()->getId(),
-                $cGroup->getMembers()->toArray()
-            );
-
-            $toAdd = array_diff($newUserIds, $currentMemberIds);
-            $toRemove = array_diff($currentMemberIds, $newUserIds);
-
-            if (!empty($toAdd)) {
-                GroupManager::subscribeUsers(array_values($toAdd), $cGroup, $courseId);
-            }
-            if (!empty($toRemove)) {
-                GroupManager::unsubscribeUsers(array_values($toRemove), $cGroup);
-            }
-        }
     }
 
     #[Route('/export', name: 'admin_usergroup_add_users_export', methods: ['GET'])]

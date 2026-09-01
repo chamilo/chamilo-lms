@@ -332,14 +332,14 @@ final class MigrateCompletionRulesCommand extends Command
             'exercises' => [
                 [
                     'legacy_id' => 5,
-                    'current_id' => 5,
+                    'current_id' => 6,
                     'weight' => 20.0,
-                    'mapping_status' => 'resolved_from_history',
+                    'mapping_status' => 'verified_from_migrated_course_metadata',
                     'mapping_confidence' => 'high',
                 ],
                 [
                     'legacy_id' => 7,
-                    'current_id' => 17,
+                    'current_id' => 8,
                     'weight' => 20.0,
                     'mapping_status' => 'resolved_from_final_exam_rule',
                     'mapping_confidence' => 'high',

@@ -41747,6 +41747,9 @@ msgstr "Avis d'échéance : %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Les notifications sont envoyées aux utilisateurs dans leur langue configurée."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Les pages sont mises en cache HTTP pendant 60 s par défaut, comme défini dans l'entité Page ; les modifications peuvent donc ne pas s'afficher immédiatement."
+
 msgid "Activate legal notice"
 msgstr "Activer la mention légale"
 
@@ -41932,3 +41935,4 @@ msgstr "Utiliser les dates d'accès de la session"
 
 msgid "Use session access end date"
 msgstr "Utiliser la date de fin d'accès de la session"
+

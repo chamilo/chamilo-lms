@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Примерок на формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример на формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -39864,4 +39864,193 @@ msgstr "Известување за истекување: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Известувањата се испраќаат до корисниците на нивниот сопствен конфигуриран јазик."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Страниците стандардно се HTTP-кешираат 60 с, како што е дефинирано во ентитетот Page, па промените може да не се прикажат веднаш."
+
+msgid "Activate legal notice"
+msgstr "Активирај правно известување"
+
+msgid "Agreement content"
+msgstr "Содржина на договорот"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Дозволи на учениците да ги бришат сопствените објави"
+
+msgid "Allow learners to edit agenda"
+msgstr "Дозволи на учениците да ја уредуваат агендата"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Дозволи на учениците да го потврдат сопственото присуство"
+
+msgid "Allow learners to view users list"
+msgstr "Дозволи на учениците да ја гледаат листата на корисници"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Автоматски претплати ги корисниците на известувања од форумот"
+
+msgid "Certificate mode"
+msgstr "Режим на сертификат"
+
+msgid "Configure external tools"
+msgstr "Конфигурирај надворешни алатки"
+
+msgid "Contents"
+msgstr "Содржини"
+
+msgid "Contents to show"
+msgstr "Содржини за приказ"
+
+msgid "Course certificate"
+msgstr "Сертификат за курс"
+
+msgid "Course delivery dates"
+msgstr "Датуми на реализација на курсот"
+
+msgid "Course duration in hours"
+msgstr "Времетраење на курсот во часови"
+
+msgid "Course legal agreement"
+msgstr "Правен договор за курсот"
+
+msgid "Custom"
+msgstr "Прилагодено"
+
+msgid "Custom certificate"
+msgstr "Прилагоден сертификат"
+
+msgid "Default visibility for new documents"
+msgstr "Стандардна видливост за нови документи"
+
+msgid "Direct invitation link"
+msgstr "Директна врска за покана"
+
+msgid "Do not notify"
+msgstr "Не известувај"
+
+msgid "Documents list"
+msgstr "Листа на документи"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Испрати е-пошта на ученикот при рачна претплата"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Испрати е-пошта на наставниците при повратна информација за студентска објава од нов корисник"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Испрати е-пошта на корисниците при прием на датотека во Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Овозможи известување на почетната страница на курсот"
+
+msgid "Enable course themes in learning paths"
+msgstr "Овозможи теми на курсот во патеки за учење"
+
+msgid "Exercises invisible in session"
+msgstr "Вежби невидливи во сесија"
+
+msgid "Expiration link"
+msgstr "Линк за истекување"
+
+msgid "Forums list"
+msgstr "Список на форуми"
+
+msgid "Issue date type"
+msgstr "Тип на датум на издавање"
+
+msgid "Learning path index"
+msgstr "Индекс на патека за учење"
+
+msgid "Learning paths list"
+msgstr "Список на патеки за учење"
+
+msgid "Left margin"
+msgstr "Лева маргина"
+
+msgid "Legal notice"
+msgstr "Правно известување"
+
+msgid "Maximum subscribed students"
+msgstr "Максимален број запишани студенти"
+
+msgid "Notify in course home"
+msgstr "Извести на почетната страница на курсот"
+
+msgid "Notify learners"
+msgstr "Извести ги учениците"
+
+msgid "Notify with agreement file"
+msgstr "Извести со датотека за согласност"
+
+msgid "Notify without attachment"
+msgstr "Извести без прилог"
+
+msgid "Open chat in a new window"
+msgstr "Отвори разговор во нов прозорец"
+
+msgid "Open to the platform"
+msgstr "Отворено за платформата"
+
+msgid "Place"
+msgstr "Место"
+
+msgid "Platform default"
+msgstr "Стандардно за платформата"
+
+msgid "Registration password"
+msgstr "Лозинка за регистрација"
+
+msgid "Remove previous agreements"
+msgstr "Отстрани претходни согласности"
+
+msgid "Right margin"
+msgstr "Десна маргина"
+
+msgid "Selected learning path"
+msgstr "Избрана патека за учење"
+
+msgid "Selected test"
+msgstr "Избран тест"
+
+msgid "Show learner picture in forums"
+msgstr "Прикажи слика на ученикот во форуми"
+
+msgid "Show system folders"
+msgstr "Прикажи системски папки"
+
+msgid "Signature text 1"
+msgstr "Текст на потпис 1"
+
+msgid "Signature text 2"
+msgstr "Текст на потпис 2"
+
+msgid "Signature text 3"
+msgstr "Текст на потпис 3"
+
+msgid "Signature text 4"
+msgstr "Текст на потпис 4"
+
+msgid "Student and course information"
+msgstr "Информации за студент и курс"
+
+msgid "Subscription allowed"
+msgstr "Запишувањето е дозволено"
+
+msgid "Tests list"
+msgstr "Список на тестови"
+
+msgid "Unsubscription allowed"
+msgstr "Откажувањето е дозволено"
+
+msgid "Use certificate download date"
+msgstr "Користи датум на преземање на сертификатот"
+
+msgid "Use certificate generation date"
+msgstr "Користи датум на генерирање на сертификатот"
+
+msgid "Use session access dates"
+msgstr "Користи датуми за пристап до сесијата"
+
+msgid "Use session access end date"
+msgstr "Користи краен датум за пристап до сесијата"
 

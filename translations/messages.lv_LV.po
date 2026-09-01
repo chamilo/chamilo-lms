@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -39865,4 +39865,193 @@ msgstr "Paziņojums par beigušos derīgumu: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Paziņojumi tiek nosūtīti lietotājiem viņu konfigurētajā valodā."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Lapas pēc noklusējuma tiek HTTP kešotas 60 s, kā definēts Page entītijā, tāpēc izmaiņas var neatspoguļoties uzreiz."
+
+msgid "Activate legal notice"
+msgstr "Aktivizēt juridisko paziņojumu"
+
+msgid "Agreement content"
+msgstr "Vienošanās saturs"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Atļaut izglītojamajiem dzēst savu publikāciju"
+
+msgid "Allow learners to edit agenda"
+msgstr "Atļaut izglītojamajiem rediģēt darba kārtību"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Atļaut izglītojamajiem apstiprināt savu apmeklējumu"
+
+msgid "Allow learners to view users list"
+msgstr "Atļaut izglītojamajiem skatīt lietotāju sarakstu"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Automātiski abonēt lietotājiem foruma paziņojumus"
+
+msgid "Certificate mode"
+msgstr "Sertifikāta režīms"
+
+msgid "Configure external tools"
+msgstr "Konfigurēt ārējos rīkus"
+
+msgid "Contents"
+msgstr "Saturs"
+
+msgid "Contents to show"
+msgstr "Rādāmais saturs"
+
+msgid "Course certificate"
+msgstr "Kursa sertifikāts"
+
+msgid "Course delivery dates"
+msgstr "Kursa norises datumi"
+
+msgid "Course duration in hours"
+msgstr "Kursa ilgums stundās"
+
+msgid "Course legal agreement"
+msgstr "Kursa juridiskā vienošanās"
+
+msgid "Custom"
+msgstr "Pielāgots"
+
+msgid "Custom certificate"
+msgstr "Pielāgots sertifikāts"
+
+msgid "Default visibility for new documents"
+msgstr "Jaunu dokumentu noklusējuma redzamība"
+
+msgid "Direct invitation link"
+msgstr "Tiešā uzaicinājuma saite"
+
+msgid "Do not notify"
+msgstr "Nepaziņot"
+
+msgid "Documents list"
+msgstr "Dokumentu saraksts"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Nosūtīt e-pastu izglītojamajam pie manuālas reģistrācijas"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "E-pasts skolotājiem par jaunā lietotāja studentu publikācijas atsauksmēm"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "E-pasts lietotājiem par Dropbox faila saņemšanu"
+
+msgid "Enable course home notification"
+msgstr "Iespējot kursa sākumlapas paziņojumu"
+
+msgid "Enable course themes in learning paths"
+msgstr "Iespējot kursa tēmas mācību ceļos"
+
+msgid "Exercises invisible in session"
+msgstr "Vingrinājumi neredzami sesijā"
+
+msgid "Expiration link"
+msgstr "Derīguma termiņa saite"
+
+msgid "Forums list"
+msgstr "Forumu saraksts"
+
+msgid "Issue date type"
+msgstr "Izsniegšanas datuma veids"
+
+msgid "Learning path index"
+msgstr "Mācību ceļa indekss"
+
+msgid "Learning paths list"
+msgstr "Mācību ceļu saraksts"
+
+msgid "Left margin"
+msgstr "Kreisā mala"
+
+msgid "Legal notice"
+msgstr "Juridiskais paziņojums"
+
+msgid "Maximum subscribed students"
+msgstr "Maksimālais abonēto studentu skaits"
+
+msgid "Notify in course home"
+msgstr "Paziņot kursa sākumlapā"
+
+msgid "Notify learners"
+msgstr "Paziņot izglītojamajiem"
+
+msgid "Notify with agreement file"
+msgstr "Paziņot ar vienošanās failu"
+
+msgid "Notify without attachment"
+msgstr "Paziņot bez pielikuma"
+
+msgid "Open chat in a new window"
+msgstr "Atvērt tērzēšanu jaunā logā"
+
+msgid "Open to the platform"
+msgstr "Atvērts platformai"
+
+msgid "Place"
+msgstr "Vieta"
+
+msgid "Platform default"
+msgstr "Platformas noklusējums"
+
+msgid "Registration password"
+msgstr "Reģistrācijas parole"
+
+msgid "Remove previous agreements"
+msgstr "Noņemt iepriekšējās vienošanās"
+
+msgid "Right margin"
+msgstr "Labā mala"
+
+msgid "Selected learning path"
+msgstr "Izvēlētais mācību ceļš"
+
+msgid "Selected test"
+msgstr "Izvēlētais tests"
+
+msgid "Show learner picture in forums"
+msgstr "Rādīt izglītojamā attēlu forumos"
+
+msgid "Show system folders"
+msgstr "Rādīt sistēmas mapes"
+
+msgid "Signature text 1"
+msgstr "Paraksta teksts 1"
+
+msgid "Signature text 2"
+msgstr "Paraksta teksts 2"
+
+msgid "Signature text 3"
+msgstr "Paraksta teksts 3"
+
+msgid "Signature text 4"
+msgstr "Paraksta teksts 4"
+
+msgid "Student and course information"
+msgstr "Studenta un kursa informācija"
+
+msgid "Subscription allowed"
+msgstr "Abonēšana atļauta"
+
+msgid "Tests list"
+msgstr "Testu saraksts"
+
+msgid "Unsubscription allowed"
+msgstr "Atteikšanās atļauta"
+
+msgid "Use certificate download date"
+msgstr "Izmantot sertifikāta lejupielādes datumu"
+
+msgid "Use certificate generation date"
+msgstr "Izmantot sertifikāta ģenerēšanas datumu"
+
+msgid "Use session access dates"
+msgstr "Izmantot sesijas piekļuves datumus"
+
+msgid "Use session access end date"
+msgstr "Izmantot sesijas piekļuves beigu datumu"
 

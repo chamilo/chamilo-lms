@@ -39910,3 +39910,192 @@ msgstr "ແຈ້ງເຕືອນຈະໝົດອາຍຸ: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "ການແຈ້ງເຕືອນຈະຖືກສົ່ງໃຫ້ຜູ້ໃຊ້ເປັນພາສາທີ່ພວກເຂົາຕັ້ງຄ່າໄວ້."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "ໜ້າເວັບຖືກເກັບ cache HTTP ເປັນເວລາ 60 ວິນາທີໂດຍຄ່າເລີ່ມຕົ້ນ ຕາມທີ່ກຳນົດໃນ Page entity, ສະນັ້ນການປ່ຽນແປງອາດຈະບໍ່ສະແດງທັນທີ."
+
+msgid "Activate legal notice"
+msgstr "ເປີດໃຊ້ແຈ້ງການທາງກົດໝາຍ"
+
+msgid "Agreement content"
+msgstr "ເນື້ອໃນຂໍ້ຕົກລົງ"
+
+msgid "Allow learners to delete their own publication"
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ຮຽນລຶບຜົນງານຂອງຕົນເອງ"
+
+msgid "Allow learners to edit agenda"
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ຮຽນແກ້ໄຂວາລະ"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ຮຽນຢືນຢັນການເຂົ້າຮຽນຂອງຕົນເອງ"
+
+msgid "Allow learners to view users list"
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ຮຽນເບິ່ງລາຍຊື່ຜູ້ໃຊ້"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "ສະໝັກຜູ້ໃຊ້ເຂົ້າການແຈ້ງເຕືອນກອງປະຊຸມອັດຕະໂນມັດ"
+
+msgid "Certificate mode"
+msgstr "ໂໝດໃບຢັ້ງຢືນ"
+
+msgid "Configure external tools"
+msgstr "ຕັ້ງຄ່າເຄື່ອງມືພາຍນອກ"
+
+msgid "Contents"
+msgstr "ເນື້ອໃນ"
+
+msgid "Contents to show"
+msgstr "ເນື້ອໃນທີ່ຈະສະແດງ"
+
+msgid "Course certificate"
+msgstr "ໃບຢັ້ງຢືນວິຊາ"
+
+msgid "Course delivery dates"
+msgstr "ວັນທີສອນວິຊາ"
+
+msgid "Course duration in hours"
+msgstr "ໄລຍະເວລາວິຊາເປັນຊົ່ວໂມງ"
+
+msgid "Course legal agreement"
+msgstr "ຂໍ້ຕົກລົງທາງກົດໝາຍຂອງວິຊາ"
+
+msgid "Custom"
+msgstr "ກຳນົດເອງ"
+
+msgid "Custom certificate"
+msgstr "ໃບຢັ້ງຢືນກຳນົດເອງ"
+
+msgid "Default visibility for new documents"
+msgstr "ການເບິ່ງເຫັນເລີ່ມຕົ້ນສຳລັບເອກະສານໃໝ່"
+
+msgid "Direct invitation link"
+msgstr "ລິ້ງເຊີນຕົງ"
+
+msgid "Do not notify"
+msgstr "ບໍ່ແຈ້ງເຕືອນ"
+
+msgid "Documents list"
+msgstr "ລາຍການເອກະສານ"
+
+msgid "E-mail learner on manual subscription"
+msgstr "ສົ່ງອີເມວຫາຜູ້ຮຽນເມື່ອລົງທະບຽນດ້ວຍຕົນເອງ"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "ສົ່ງອີເມວຫາຄູເມື່ອມີຄຳເຫັນຕໍ່ຜົນງານຂອງນັກຮຽນໃໝ່"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "ສົ່ງອີເມວຫາຜູ້ໃຊ້ເມື່ອໄດ້ຮັບໄຟລ໌ Dropbox"
+
+msgid "Enable course home notification"
+msgstr "ເປີດໃຊ້ການແຈ້ງເຕືອນໜ້າຫຼັກວິຊາ"
+
+msgid "Enable course themes in learning paths"
+msgstr "ເປີດໃຊ້ຮູບແບບວິຊາໃນເສັ້ນທາງການຮຽນ"
+
+msgid "Exercises invisible in session"
+msgstr "ແບບຝຶກຫັດເຊື່ອງໃນຊ່ວງເວລາ"
+
+msgid "Expiration link"
+msgstr "ລິ້ງໝົດອາຍຸ"
+
+msgid "Forums list"
+msgstr "ລາຍການກອງປະຊຸມ"
+
+msgid "Issue date type"
+msgstr "ປະເພດວັນທີອອກ"
+
+msgid "Learning path index"
+msgstr "ດັດສະນີເສັ້ນທາງການຮຽນ"
+
+msgid "Learning paths list"
+msgstr "ລາຍການເສັ້ນທາງການຮຽນ"
+
+msgid "Left margin"
+msgstr "ຂອບຊ້າຍ"
+
+msgid "Legal notice"
+msgstr "ແຈ້ງການທາງກົດໝາຍ"
+
+msgid "Maximum subscribed students"
+msgstr "ຈຳນວນນັກຮຽນລົງທະບຽນສູງສຸດ"
+
+msgid "Notify in course home"
+msgstr "ແຈ້ງເຕືອນໃນໜ້າຫຼັກຫຼັກສູດ"
+
+msgid "Notify learners"
+msgstr "ແຈ້ງເຕືອນນັກຮຽນ"
+
+msgid "Notify with agreement file"
+msgstr "ແຈ້ງເຕືອນພ້ອມໄຟລ໌ຂໍ້ຕົກລົງ"
+
+msgid "Notify without attachment"
+msgstr "ແຈ້ງເຕືອນໂດຍບໍ່ມີໄຟລ໌ແນບ"
+
+msgid "Open chat in a new window"
+msgstr "ເປີດແຊັດໃນໜ້າຕ່າງໃໝ່"
+
+msgid "Open to the platform"
+msgstr "ເປີດໃຫ້ແພລດຟອມ"
+
+msgid "Place"
+msgstr "ສະຖານທີ່"
+
+msgid "Platform default"
+msgstr "ຄ່າເລີ່ມຕົ້ນຂອງແພລດຟອມ"
+
+msgid "Registration password"
+msgstr "ລະຫັດຜ່ານການລົງທະບຽນ"
+
+msgid "Remove previous agreements"
+msgstr "ລຶບຂໍ້ຕົກລົງກ່ອນໜ້າ"
+
+msgid "Right margin"
+msgstr "ຂອບຂວາ"
+
+msgid "Selected learning path"
+msgstr "ເສັ້ນທາງການຮຽນທີ່ເລືອກ"
+
+msgid "Selected test"
+msgstr "ແບບທົດສອບທີ່ເລືອກ"
+
+msgid "Show learner picture in forums"
+msgstr "ສະແດງຮູບນັກຮຽນໃນກະດານສົນທະນາ"
+
+msgid "Show system folders"
+msgstr "ສະແດງໂຟລເດີລະບົບ"
+
+msgid "Signature text 1"
+msgstr "ຂໍ້ຄວາມລາຍເຊັນ 1"
+
+msgid "Signature text 2"
+msgstr "ຂໍ້ຄວາມລາຍເຊັນ 2"
+
+msgid "Signature text 3"
+msgstr "ຂໍ້ຄວາມລາຍເຊັນ 3"
+
+msgid "Signature text 4"
+msgstr "ຂໍ້ຄວາມລາຍເຊັນ 4"
+
+msgid "Student and course information"
+msgstr "ຂໍ້ມູນນັກຮຽນ ແລະ ຫຼັກສູດ"
+
+msgid "Subscription allowed"
+msgstr "ອະນຸຍາດໃຫ້ລົງທະບຽນ"
+
+msgid "Tests list"
+msgstr "ລາຍການແບບທົດສອບ"
+
+msgid "Unsubscription allowed"
+msgstr "ອະນຸຍາດໃຫ້ຍົກເລີກການລົງທະບຽນ"
+
+msgid "Use certificate download date"
+msgstr "ໃຊ້ວັນທີດາວໂຫຼດໃບຢັ້ງຢືນ"
+
+msgid "Use certificate generation date"
+msgstr "ໃຊ້ວັນທີສ້າງໃບຢັ້ງຢືນ"
+
+msgid "Use session access dates"
+msgstr "ໃຊ້ວັນທີເຂົ້າເຖິງເຊດຊັນ"
+
+msgid "Use session access end date"
+msgstr "ໃຊ້ວັນທີສິ້ນສຸດການເຂົ້າເຖິງເຊດຊັນ"
+

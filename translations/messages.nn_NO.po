@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Helsingar"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel-døme: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -39864,4 +39864,193 @@ msgstr "Varsel om utløp: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Varslingar vert sende til brukarane på det språket dei har sett opp."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Sider er HTTP-cachelagra i 60 s som standard, som definert i Page-eininga, så endringar visast kanskje ikkje med ein gong."
+
+msgid "Activate legal notice"
+msgstr "Aktiver juridisk merknad"
+
+msgid "Agreement content"
+msgstr "Avtaleinnhald"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Tillat læringar å slette eiga publisering"
+
+msgid "Allow learners to edit agenda"
+msgstr "Tillat læringar å redigere agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Tillat læringar å stadfeste eiga oppmøte"
+
+msgid "Allow learners to view users list"
+msgstr "Tillat læringar å sjå brukarlista"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Abonner automatisk brukarar på forumvarsel"
+
+msgid "Certificate mode"
+msgstr "Sertifikatmodus"
+
+msgid "Configure external tools"
+msgstr "Konfigurer eksterne verktøy"
+
+msgid "Contents"
+msgstr "Innhald"
+
+msgid "Contents to show"
+msgstr "Innhald som skal visast"
+
+msgid "Course certificate"
+msgstr "Kurssertifikat"
+
+msgid "Course delivery dates"
+msgstr "Leveringsdatoar for kurs"
+
+msgid "Course duration in hours"
+msgstr "Kurslengd i timar"
+
+msgid "Course legal agreement"
+msgstr "Juridisk avtale for kurs"
+
+msgid "Custom"
+msgstr "Tilpassa"
+
+msgid "Custom certificate"
+msgstr "Tilpassa sertifikat"
+
+msgid "Default visibility for new documents"
+msgstr "Standard synlegheit for nye dokument"
+
+msgid "Direct invitation link"
+msgstr "Direkte invitasjonslenke"
+
+msgid "Do not notify"
+msgstr "Ikkje varsla"
+
+msgid "Documents list"
+msgstr "Dokumentliste"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Send e-post til læring ved manuell påmelding"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Send e-post til lærarar ved tilbakemelding på studentpublisering frå ny brukar"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Send e-post til brukarar ved mottak av Dropbox-fil"
+
+msgid "Enable course home notification"
+msgstr "Aktiver varsling på kursheimesida"
+
+msgid "Enable course themes in learning paths"
+msgstr "Aktiver kurstema i læringsstiar"
+
+msgid "Exercises invisible in session"
+msgstr "Øvingar usynlege i økt"
+
+msgid "Expiration link"
+msgstr "Utløpslenkje"
+
+msgid "Forums list"
+msgstr "Forumliste"
+
+msgid "Issue date type"
+msgstr "Type utstedingsdato"
+
+msgid "Learning path index"
+msgstr "Indeks for læringssti"
+
+msgid "Learning paths list"
+msgstr "Liste over læringsstiar"
+
+msgid "Left margin"
+msgstr "Venstremarg"
+
+msgid "Legal notice"
+msgstr "Juridisk merknad"
+
+msgid "Maximum subscribed students"
+msgstr "Maksimalt tal på påmelde studentar"
+
+msgid "Notify in course home"
+msgstr "Varsle på kursheimesida"
+
+msgid "Notify learners"
+msgstr "Varsle lærande"
+
+msgid "Notify with agreement file"
+msgstr "Varsle med avtale-fil"
+
+msgid "Notify without attachment"
+msgstr "Varsle utan vedlegg"
+
+msgid "Open chat in a new window"
+msgstr "Opne chat i nytt vindauge"
+
+msgid "Open to the platform"
+msgstr "Open for plattforma"
+
+msgid "Place"
+msgstr "Stad"
+
+msgid "Platform default"
+msgstr "Plattformstandard"
+
+msgid "Registration password"
+msgstr "Registreringspassord"
+
+msgid "Remove previous agreements"
+msgstr "Fjern tidlegare avtalar"
+
+msgid "Right margin"
+msgstr "Høgremarg"
+
+msgid "Selected learning path"
+msgstr "Vald læringssti"
+
+msgid "Selected test"
+msgstr "Vald test"
+
+msgid "Show learner picture in forums"
+msgstr "Vis bilete av lærande i forum"
+
+msgid "Show system folders"
+msgstr "Vis systemmapper"
+
+msgid "Signature text 1"
+msgstr "Signaturtekst 1"
+
+msgid "Signature text 2"
+msgstr "Signaturtekst 2"
+
+msgid "Signature text 3"
+msgstr "Signaturtekst 3"
+
+msgid "Signature text 4"
+msgstr "Signaturtekst 4"
+
+msgid "Student and course information"
+msgstr "Student- og kursinformasjon"
+
+msgid "Subscription allowed"
+msgstr "Påmelding tillate"
+
+msgid "Tests list"
+msgstr "Testliste"
+
+msgid "Unsubscription allowed"
+msgstr "Avmelding tillate"
+
+msgid "Use certificate download date"
+msgstr "Bruk nedlastingsdato for sertifikat"
+
+msgid "Use certificate generation date"
+msgstr "Bruk genereringsdato for sertifikat"
+
+msgid "Use session access dates"
+msgstr "Bruk tilgangsdatoar for økt"
+
+msgid "Use session access end date"
+msgstr "Bruk sluttdato for økttilgang"
 

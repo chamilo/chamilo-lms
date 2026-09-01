@@ -39867,3 +39867,192 @@ msgstr "Süresi dolacak bildirimi: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Bildirimler kullanıcılara kendi yapılandırılmış dillerinde gönderilir."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Sayfalar, Page varlığında tanımlandığı üzere varsayılan olarak 60 saniye HTTP önbelleğe alınır; bu nedenle değişiklikler hemen yansımayabilir."
+
+msgid "Activate legal notice"
+msgstr "Yasal bildirimi etkinleştir"
+
+msgid "Agreement content"
+msgstr "Sözleşme içeriği"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Öğrenenlerin kendi yayınlarını silmesine izin ver"
+
+msgid "Allow learners to edit agenda"
+msgstr "Öğrenenlerin ajandayı düzenlemesine izin ver"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Öğrenenlerin kendi yoklamalarını onaylamasına izin ver"
+
+msgid "Allow learners to view users list"
+msgstr "Öğrenenlerin kullanıcı listesini görmesine izin ver"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Kullanıcıları forum bildirimlerine otomatik abone et"
+
+msgid "Certificate mode"
+msgstr "Sertifika modu"
+
+msgid "Configure external tools"
+msgstr "Harici araçları yapılandır"
+
+msgid "Contents"
+msgstr "İçerikler"
+
+msgid "Contents to show"
+msgstr "Gösterilecek içerikler"
+
+msgid "Course certificate"
+msgstr "Kurs sertifikası"
+
+msgid "Course delivery dates"
+msgstr "Kurs teslim tarihleri"
+
+msgid "Course duration in hours"
+msgstr "Kurs süresi (saat)"
+
+msgid "Course legal agreement"
+msgstr "Kurs yasal sözleşmesi"
+
+msgid "Custom"
+msgstr "Özel"
+
+msgid "Custom certificate"
+msgstr "Özel sertifika"
+
+msgid "Default visibility for new documents"
+msgstr "Yeni belgeler için varsayılan görünürlük"
+
+msgid "Direct invitation link"
+msgstr "Doğrudan davet bağlantısı"
+
+msgid "Do not notify"
+msgstr "Bildirme"
+
+msgid "Documents list"
+msgstr "Belgeler listesi"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Manuel kayıtta öğrenene e-posta gönder"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Yeni kullanıcının öğrenci yayını geri bildiriminde öğretmenlere e-posta gönder"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Dropbox dosyası alındığında kullanıcılara e-posta gönder"
+
+msgid "Enable course home notification"
+msgstr "Kurs ana sayfası bildirimini etkinleştir"
+
+msgid "Enable course themes in learning paths"
+msgstr "Öğrenme yollarında kurs temalarını etkinleştir"
+
+msgid "Exercises invisible in session"
+msgstr "Oturumda görünmeyen alıştırmalar"
+
+msgid "Expiration link"
+msgstr "Süre sonu bağlantısı"
+
+msgid "Forums list"
+msgstr "Forumlar listesi"
+
+msgid "Issue date type"
+msgstr "Düzenleme tarihi türü"
+
+msgid "Learning path index"
+msgstr "Öğrenme yolu dizini"
+
+msgid "Learning paths list"
+msgstr "Öğrenme yolları listesi"
+
+msgid "Left margin"
+msgstr "Sol kenar boşluğu"
+
+msgid "Legal notice"
+msgstr "Yasal bildirim"
+
+msgid "Maximum subscribed students"
+msgstr "Maksimum kayıtlı öğrenci"
+
+msgid "Notify in course home"
+msgstr "Kurs ana sayfasında bildir"
+
+msgid "Notify learners"
+msgstr "Öğrencileri bilgilendir"
+
+msgid "Notify with agreement file"
+msgstr "Sözleşme dosyasıyla bildir"
+
+msgid "Notify without attachment"
+msgstr "Ek olmadan bildir"
+
+msgid "Open chat in a new window"
+msgstr "Sohbeti yeni pencerede aç"
+
+msgid "Open to the platform"
+msgstr "Platforma açık"
+
+msgid "Place"
+msgstr "Yer"
+
+msgid "Platform default"
+msgstr "Platform varsayılanı"
+
+msgid "Registration password"
+msgstr "Kayıt şifresi"
+
+msgid "Remove previous agreements"
+msgstr "Önceki sözleşmeleri kaldır"
+
+msgid "Right margin"
+msgstr "Sağ kenar boşluğu"
+
+msgid "Selected learning path"
+msgstr "Seçilen öğrenme yolu"
+
+msgid "Selected test"
+msgstr "Seçilen test"
+
+msgid "Show learner picture in forums"
+msgstr "Forumlarda öğrenci resmini göster"
+
+msgid "Show system folders"
+msgstr "Sistem klasörlerini göster"
+
+msgid "Signature text 1"
+msgstr "İmza metni 1"
+
+msgid "Signature text 2"
+msgstr "İmza metni 2"
+
+msgid "Signature text 3"
+msgstr "İmza metni 3"
+
+msgid "Signature text 4"
+msgstr "İmza metni 4"
+
+msgid "Student and course information"
+msgstr "Öğrenci ve ders bilgileri"
+
+msgid "Subscription allowed"
+msgstr "Kayıt izni var"
+
+msgid "Tests list"
+msgstr "Test listesi"
+
+msgid "Unsubscription allowed"
+msgstr "Kayıttan çıkma izni var"
+
+msgid "Use certificate download date"
+msgstr "Sertifika indirme tarihini kullan"
+
+msgid "Use certificate generation date"
+msgstr "Sertifika oluşturma tarihini kullan"
+
+msgid "Use session access dates"
+msgstr "Oturum erişim tarihlerini kullan"
+
+msgid "Use session access end date"
+msgstr "Oturum erişim bitiş tarihini kullan"
+

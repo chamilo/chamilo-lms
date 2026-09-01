@@ -39861,3 +39861,192 @@ msgstr "Arifa ya kukaribia kuisha: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Arifa hutumwa kwa watumiaji katika lugha yao iliyosanidiwa."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Kurasa huhifadhiwa kwenye akiba ya HTTP kwa sekunde 60 kwa chaguomsingi, kama ilivyofafanuliwa katika huluki ya Ukurasa, kwa hivyo mabadiliko huenda yasioneshe mara moja."
+
+msgid "Activate legal notice"
+msgstr "Washa taarifa ya kisheria"
+
+msgid "Agreement content"
+msgstr "Maudhui ya makubaliano"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Ruhusu wanafunzi kufuta machapisho yao"
+
+msgid "Allow learners to edit agenda"
+msgstr "Ruhusu wanafunzi kuhariri ajenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Ruhusu wanafunzi kuthibitisha mahudhurio yao"
+
+msgid "Allow learners to view users list"
+msgstr "Ruhusu wanafunzi kuona orodha ya watumiaji"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Sajili watumiaji kiotomatiki kwa arifa za jukwaa"
+
+msgid "Certificate mode"
+msgstr "Hali ya cheti"
+
+msgid "Configure external tools"
+msgstr "Sanidi zana za nje"
+
+msgid "Contents"
+msgstr "Maudhui"
+
+msgid "Contents to show"
+msgstr "Maudhui ya kuonyesha"
+
+msgid "Course certificate"
+msgstr "Cheti cha kozi"
+
+msgid "Course delivery dates"
+msgstr "Tarehe za utoaji wa kozi"
+
+msgid "Course duration in hours"
+msgstr "Muda wa kozi kwa saa"
+
+msgid "Course legal agreement"
+msgstr "Makubaliano ya kisheria ya kozi"
+
+msgid "Custom"
+msgstr "Maalum"
+
+msgid "Custom certificate"
+msgstr "Cheti maalum"
+
+msgid "Default visibility for new documents"
+msgstr "Mwonekano chaguomsingi wa hati mpya"
+
+msgid "Direct invitation link"
+msgstr "Kiungo cha mwaliko wa moja kwa moja"
+
+msgid "Do not notify"
+msgstr "Usiarifu"
+
+msgid "Documents list"
+msgstr "Orodha ya hati"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Tuma barua pepe kwa mwanafunzi wakati wa usajili wa mkono"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Tuma barua pepe kwa walimu kuhusu maoni kwenye chapisho la mwanafunzi la mtumiaji mpya"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Tuma barua pepe kwa watumiaji wanapopokea faili katika Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Wezesha arifa ya ukurasa wa nyumbani wa kozi"
+
+msgid "Enable course themes in learning paths"
+msgstr "Wezesha mandhari ya kozi katika njia za kujifunza"
+
+msgid "Exercises invisible in session"
+msgstr "Mazoezi yasiyoonekana katika kipindi"
+
+msgid "Expiration link"
+msgstr "Kiungo cha kuisha muda"
+
+msgid "Forums list"
+msgstr "Orodha ya vikao"
+
+msgid "Issue date type"
+msgstr "Aina ya tarehe ya kutolewa"
+
+msgid "Learning path index"
+msgstr "Fahirisi ya njia ya kujifunza"
+
+msgid "Learning paths list"
+msgstr "Orodha ya njia za kujifunza"
+
+msgid "Left margin"
+msgstr "Pambizo la kushoto"
+
+msgid "Legal notice"
+msgstr "Ilani ya kisheria"
+
+msgid "Maximum subscribed students"
+msgstr "Idadi kubwa ya wanafunzi waliojisajili"
+
+msgid "Notify in course home"
+msgstr "Arifu katika ukurasa wa nyumbani wa kozi"
+
+msgid "Notify learners"
+msgstr "Arifu wanafunzi"
+
+msgid "Notify with agreement file"
+msgstr "Arifu na faili ya makubaliano"
+
+msgid "Notify without attachment"
+msgstr "Arifu bila kiambatisho"
+
+msgid "Open chat in a new window"
+msgstr "Fungua gumzo katika dirisha jipya"
+
+msgid "Open to the platform"
+msgstr "Fungua kwa jukwaa"
+
+msgid "Place"
+msgstr "Mahali"
+
+msgid "Platform default"
+msgstr "Chaguo-msingi la jukwaa"
+
+msgid "Registration password"
+msgstr "Nenosiri la usajili"
+
+msgid "Remove previous agreements"
+msgstr "Ondoa makubaliano ya awali"
+
+msgid "Right margin"
+msgstr "Pambizo la kulia"
+
+msgid "Selected learning path"
+msgstr "Njia ya kujifunza iliyochaguliwa"
+
+msgid "Selected test"
+msgstr "Mtihani uliochaguliwa"
+
+msgid "Show learner picture in forums"
+msgstr "Onyesha picha ya mwanafunzi katika vikao"
+
+msgid "Show system folders"
+msgstr "Onyesha folda za mfumo"
+
+msgid "Signature text 1"
+msgstr "Maandishi ya saini 1"
+
+msgid "Signature text 2"
+msgstr "Maandishi ya saini 2"
+
+msgid "Signature text 3"
+msgstr "Maandishi ya saini 3"
+
+msgid "Signature text 4"
+msgstr "Maandishi ya saini 4"
+
+msgid "Student and course information"
+msgstr "Taarifa za mwanafunzi na kozi"
+
+msgid "Subscription allowed"
+msgstr "Usajili unaruhusiwa"
+
+msgid "Tests list"
+msgstr "Orodha ya mitihani"
+
+msgid "Unsubscription allowed"
+msgstr "Kujiondoa kunaruhusiwa"
+
+msgid "Use certificate download date"
+msgstr "Tumia tarehe ya kupakua cheti"
+
+msgid "Use certificate generation date"
+msgstr "Tumia tarehe ya kutengeneza cheti"
+
+msgid "Use session access dates"
+msgstr "Tumia tarehe za ufikiaji wa kipindi"
+
+msgid "Use session access end date"
+msgstr "Tumia tarehe ya mwisho ya ufikiaji wa kipindi"
+

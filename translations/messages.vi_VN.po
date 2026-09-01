@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mẫu công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -39866,4 +39866,193 @@ msgstr "Thông báo sắp hết hạn: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Thông báo được gửi đến người dùng bằng ngôn ngữ họ đã cấu hình."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Các trang được lưu bộ nhớ đệm HTTP trong 60 giây theo mặc định, như được định nghĩa trong thực thể Page, nên thay đổi có thể không hiển thị ngay."
+
+msgid "Activate legal notice"
+msgstr "Kích hoạt thông báo pháp lý"
+
+msgid "Agreement content"
+msgstr "Nội dung thỏa thuận"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Cho phép người học xóa bài đăng của chính họ"
+
+msgid "Allow learners to edit agenda"
+msgstr "Cho phép người học chỉnh sửa lịch trình"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Cho phép người học xác nhận điểm danh của chính họ"
+
+msgid "Allow learners to view users list"
+msgstr "Cho phép người học xem danh sách người dùng"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Tự động đăng ký người dùng nhận thông báo diễn đàn"
+
+msgid "Certificate mode"
+msgstr "Chế độ chứng chỉ"
+
+msgid "Configure external tools"
+msgstr "Cấu hình công cụ bên ngoài"
+
+msgid "Contents"
+msgstr "Nội dung"
+
+msgid "Contents to show"
+msgstr "Nội dung hiển thị"
+
+msgid "Course certificate"
+msgstr "Chứng chỉ khóa học"
+
+msgid "Course delivery dates"
+msgstr "Ngày triển khai khóa học"
+
+msgid "Course duration in hours"
+msgstr "Thời lượng khóa học tính bằng giờ"
+
+msgid "Course legal agreement"
+msgstr "Thỏa thuận pháp lý khóa học"
+
+msgid "Custom"
+msgstr "Tùy chỉnh"
+
+msgid "Custom certificate"
+msgstr "Chứng chỉ tùy chỉnh"
+
+msgid "Default visibility for new documents"
+msgstr "Hiển thị mặc định cho tài liệu mới"
+
+msgid "Direct invitation link"
+msgstr "Liên kết mời trực tiếp"
+
+msgid "Do not notify"
+msgstr "Không thông báo"
+
+msgid "Documents list"
+msgstr "Danh sách tài liệu"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Gửi e-mail cho người học khi đăng ký thủ công"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Gửi e-mail cho giảng viên khi có phản hồi bài đăng của học viên"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Gửi e-mail cho người dùng khi nhận tệp Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Bật thông báo trang chủ khóa học"
+
+msgid "Enable course themes in learning paths"
+msgstr "Bật giao diện khóa học trong lộ trình học"
+
+msgid "Exercises invisible in session"
+msgstr "Bài tập ẩn trong phiên"
+
+msgid "Expiration link"
+msgstr "Liên kết hết hạn"
+
+msgid "Forums list"
+msgstr "Danh sách diễn đàn"
+
+msgid "Issue date type"
+msgstr "Loại ngày cấp"
+
+msgid "Learning path index"
+msgstr "Mục lục lộ trình học"
+
+msgid "Learning paths list"
+msgstr "Danh sách lộ trình học"
+
+msgid "Left margin"
+msgstr "Lề trái"
+
+msgid "Legal notice"
+msgstr "Thông báo pháp lý"
+
+msgid "Maximum subscribed students"
+msgstr "Số học viên đăng ký tối đa"
+
+msgid "Notify in course home"
+msgstr "Thông báo trên trang chủ khóa học"
+
+msgid "Notify learners"
+msgstr "Thông báo cho học viên"
+
+msgid "Notify with agreement file"
+msgstr "Thông báo kèm tệp thỏa thuận"
+
+msgid "Notify without attachment"
+msgstr "Thông báo không kèm tệp đính kèm"
+
+msgid "Open chat in a new window"
+msgstr "Mở trò chuyện trong cửa sổ mới"
+
+msgid "Open to the platform"
+msgstr "Mở cho toàn nền tảng"
+
+msgid "Place"
+msgstr "Địa điểm"
+
+msgid "Platform default"
+msgstr "Mặc định của nền tảng"
+
+msgid "Registration password"
+msgstr "Mật khẩu đăng ký"
+
+msgid "Remove previous agreements"
+msgstr "Xóa các thỏa thuận trước đó"
+
+msgid "Right margin"
+msgstr "Lề phải"
+
+msgid "Selected learning path"
+msgstr "Lộ trình học đã chọn"
+
+msgid "Selected test"
+msgstr "Bài kiểm tra đã chọn"
+
+msgid "Show learner picture in forums"
+msgstr "Hiển thị ảnh học viên trong diễn đàn"
+
+msgid "Show system folders"
+msgstr "Hiển thị thư mục hệ thống"
+
+msgid "Signature text 1"
+msgstr "Văn bản chữ ký 1"
+
+msgid "Signature text 2"
+msgstr "Văn bản chữ ký 2"
+
+msgid "Signature text 3"
+msgstr "Văn bản chữ ký 3"
+
+msgid "Signature text 4"
+msgstr "Văn bản chữ ký 4"
+
+msgid "Student and course information"
+msgstr "Thông tin học viên và khóa học"
+
+msgid "Subscription allowed"
+msgstr "Cho phép đăng ký"
+
+msgid "Tests list"
+msgstr "Danh sách bài kiểm tra"
+
+msgid "Unsubscription allowed"
+msgstr "Cho phép hủy đăng ký"
+
+msgid "Use certificate download date"
+msgstr "Sử dụng ngày tải chứng chỉ"
+
+msgid "Use certificate generation date"
+msgstr "Sử dụng ngày tạo chứng chỉ"
+
+msgid "Use session access dates"
+msgstr "Sử dụng ngày truy cập phiên"
+
+msgid "Use session access end date"
+msgstr "Sử dụng ngày kết thúc truy cập phiên"
 

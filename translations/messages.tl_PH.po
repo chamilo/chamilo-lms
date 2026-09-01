@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Mangyaring i-type ang iyong text sa ibaba"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad sa pagpuno ng form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad sa pagpuno ng form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Taas<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Isulat ang address"
@@ -25708,7 +25708,7 @@ msgid "Video player renderers"
 msgstr "Mga renderer ng video player"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "Paganahin ang mga player renderer para sa media ng YouTube, Vimeo, Facebook, DailyMotion, Twitch"
+msgstr "Paganahin ang player renderer para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Payagan ang mga guro na mag-edit ng mga pagsusulit sa learning paths"
@@ -39860,4 +39860,193 @@ msgstr "Paunawang mag-e-expire: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Ipinapadala ang mga abiso sa mga user sa kanilang naka-configure na wika."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Ang mga page ay naka-HTTP-cache nang 60s bilang default, ayon sa tinukoy sa Page entity, kaya maaaring hindi agad makita ang mga pagbabago."
+
+msgid "Activate legal notice"
+msgstr "I-activate ang legal notice"
+
+msgid "Agreement content"
+msgstr "Nilalaman ng kasunduan"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Payagan ang mga mag-aaral na tanggalin ang kanilang sariling publikasyon"
+
+msgid "Allow learners to edit agenda"
+msgstr "Payagan ang mga mag-aaral na i-edit ang agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Payagan ang mga mag-aaral na i-validate ang kanilang sariling attendance"
+
+msgid "Allow learners to view users list"
+msgstr "Payagan ang mga mag-aaral na tingnan ang listahan ng mga user"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Awtomatikong i-subscribe ang mga user sa mga notification ng forum"
+
+msgid "Certificate mode"
+msgstr "Mode ng sertipiko"
+
+msgid "Configure external tools"
+msgstr "I-configure ang mga panlabas na tool"
+
+msgid "Contents"
+msgstr "Mga nilalaman"
+
+msgid "Contents to show"
+msgstr "Mga nilalamang ipapakita"
+
+msgid "Course certificate"
+msgstr "Sertipiko ng kurso"
+
+msgid "Course delivery dates"
+msgstr "Mga petsa ng paghahatid ng kurso"
+
+msgid "Course duration in hours"
+msgstr "Tagal ng kurso sa oras"
+
+msgid "Course legal agreement"
+msgstr "Legal na kasunduan ng kurso"
+
+msgid "Custom"
+msgstr "Pasadya"
+
+msgid "Custom certificate"
+msgstr "Pasadyang sertipiko"
+
+msgid "Default visibility for new documents"
+msgstr "Default na visibility para sa mga bagong dokumento"
+
+msgid "Direct invitation link"
+msgstr "Direktang link ng imbitasyon"
+
+msgid "Do not notify"
+msgstr "Huwag abisuhan"
+
+msgid "Documents list"
+msgstr "Listahan ng mga dokumento"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Mag-email sa mag-aaral sa manu-manong pagpapatala"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Mag-email sa mga guro sa feedback ng publikasyon ng mag-aaral ng bagong user"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Mag-email sa mga user sa pagtanggap ng file sa Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Paganahin ang abiso sa home ng kurso"
+
+msgid "Enable course themes in learning paths"
+msgstr "Paganahin ang mga tema ng kurso sa mga learning path"
+
+msgid "Exercises invisible in session"
+msgstr "Mga ehersisyo na hindi nakikita sa session"
+
+msgid "Expiration link"
+msgstr "Link ng pag-expire"
+
+msgid "Forums list"
+msgstr "Listahan ng mga forum"
+
+msgid "Issue date type"
+msgstr "Uri ng petsa ng pag-isyu"
+
+msgid "Learning path index"
+msgstr "Indeks ng learning path"
+
+msgid "Learning paths list"
+msgstr "Listahan ng mga learning path"
+
+msgid "Left margin"
+msgstr "Kaliwang margin"
+
+msgid "Legal notice"
+msgstr "Legal na paunawa"
+
+msgid "Maximum subscribed students"
+msgstr "Pinakamataas na bilang ng naka-subscribe na mag-aaral"
+
+msgid "Notify in course home"
+msgstr "Abisuhan sa home ng kurso"
+
+msgid "Notify learners"
+msgstr "Abisuhan ang mga mag-aaral"
+
+msgid "Notify with agreement file"
+msgstr "Abisuhan na may file ng kasunduan"
+
+msgid "Notify without attachment"
+msgstr "Abisuhan nang walang attachment"
+
+msgid "Open chat in a new window"
+msgstr "Buksan ang chat sa bagong window"
+
+msgid "Open to the platform"
+msgstr "Bukas sa platform"
+
+msgid "Place"
+msgstr "Lugar"
+
+msgid "Platform default"
+msgstr "Default ng platform"
+
+msgid "Registration password"
+msgstr "Password sa pagpaparehistro"
+
+msgid "Remove previous agreements"
+msgstr "Alisin ang mga naunang kasunduan"
+
+msgid "Right margin"
+msgstr "Kanang margin"
+
+msgid "Selected learning path"
+msgstr "Napiling learning path"
+
+msgid "Selected test"
+msgstr "Napiling pagsusulit"
+
+msgid "Show learner picture in forums"
+msgstr "Ipakita ang larawan ng mag-aaral sa mga forum"
+
+msgid "Show system folders"
+msgstr "Ipakita ang mga folder ng sistema"
+
+msgid "Signature text 1"
+msgstr "Teksto ng lagda 1"
+
+msgid "Signature text 2"
+msgstr "Teksto ng lagda 2"
+
+msgid "Signature text 3"
+msgstr "Teksto ng lagda 3"
+
+msgid "Signature text 4"
+msgstr "Teksto ng lagda 4"
+
+msgid "Student and course information"
+msgstr "Impormasyon ng mag-aaral at kurso"
+
+msgid "Subscription allowed"
+msgstr "Pinapayagan ang pagpapatala"
+
+msgid "Tests list"
+msgstr "Listahan ng mga pagsusulit"
+
+msgid "Unsubscription allowed"
+msgstr "Pinapayagan ang pag-unsubscribe"
+
+msgid "Use certificate download date"
+msgstr "Gamitin ang petsa ng pag-download ng sertipiko"
+
+msgid "Use certificate generation date"
+msgstr "Gamitin ang petsa ng pagbuo ng sertipiko"
+
+msgid "Use session access dates"
+msgstr "Gamitin ang mga petsa ng access sa session"
+
+msgid "Use session access end date"
+msgstr "Gamitin ang petsa ng pagtatapos ng access sa session"
 

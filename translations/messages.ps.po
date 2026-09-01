@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول نمونه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول بېلګه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -39860,4 +39860,193 @@ msgstr "د پای ته رسېدو خبرتیا: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "خبرتیاوې کاروونکو ته په خپله تنظیم شوې ژبه لیږل کیږي."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "پاڼې په ډیفالټ کې د ۶۰ ثانیو لپاره HTTP-کیش کیږي، لکه څنګه چې په Page موجودیت کې تعریف شوي، نو بدلونونه ممکن سمدستي نه ښکاري."
+
+msgid "Activate legal notice"
+msgstr "قانوني خبرتیا فعال کړئ"
+
+msgid "Agreement content"
+msgstr "د تړون منځپانګه"
+
+msgid "Allow learners to delete their own publication"
+msgstr "زده‌کوونکو ته اجازه ورکړئ چې خپل خپرونه ړنګ کړي"
+
+msgid "Allow learners to edit agenda"
+msgstr "زده‌کوونکو ته اجازه ورکړئ چې اجنډا سمه کړي"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "زده‌کوونکو ته اجازه ورکړئ چې خپل حاضري تایید کړي"
+
+msgid "Allow learners to view users list"
+msgstr "زده‌کوونکو ته اجازه ورکړئ چې د کاروونکو لیست وګوري"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "کاروونکي په اتومات ډول د فورم خبرتیاوو ته ګډون کړئ"
+
+msgid "Certificate mode"
+msgstr "د سند حالت"
+
+msgid "Configure external tools"
+msgstr "بهرنۍ وسیلې تنظیم کړئ"
+
+msgid "Contents"
+msgstr "منځپانګې"
+
+msgid "Contents to show"
+msgstr "ښودلو لپاره منځپانګې"
+
+msgid "Course certificate"
+msgstr "د کورس سند"
+
+msgid "Course delivery dates"
+msgstr "د کورس د وړاندې کولو نېټې"
+
+msgid "Course duration in hours"
+msgstr "د کورس موده په ساعتونو کې"
+
+msgid "Course legal agreement"
+msgstr "د کورس قانوني تړون"
+
+msgid "Custom"
+msgstr "دودیز"
+
+msgid "Custom certificate"
+msgstr "دودیز سند"
+
+msgid "Default visibility for new documents"
+msgstr "د نوي اسنادو لپاره ډیفالټ لیدل‌کېدنه"
+
+msgid "Direct invitation link"
+msgstr "مستقیم بلنې لینک"
+
+msgid "Do not notify"
+msgstr "خبر مه ورکوئ"
+
+msgid "Documents list"
+msgstr "د اسنادو لیست"
+
+msgid "E-mail learner on manual subscription"
+msgstr "په لاسي ګډون کې زده‌کوونکي ته برېښنالیک"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "د زده‌کوونکي د خپرونې په نوې فیډبک کې ښوونکو ته برېښنالیک"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "د ډراپ‌باکس د فایل په ترلاسه کولو کې کاروونکو ته برېښنالیک"
+
+msgid "Enable course home notification"
+msgstr "د کورس د کور پاڼې خبرتیا فعال کړئ"
+
+msgid "Enable course themes in learning paths"
+msgstr "په زده‌کړیزو لارو کې د کورس موضوعات فعال کړئ"
+
+msgid "Exercises invisible in session"
+msgstr "په سیشن کې تمرینونه پټ"
+
+msgid "Expiration link"
+msgstr "د پای ته رسېدو لینک"
+
+msgid "Forums list"
+msgstr "د فورمونو لیست"
+
+msgid "Issue date type"
+msgstr "د صادرولو د نېټې ډول"
+
+msgid "Learning path index"
+msgstr "د زده‌کړیزې لارې فهرست"
+
+msgid "Learning paths list"
+msgstr "د زده‌کړیزو لارو لیست"
+
+msgid "Left margin"
+msgstr "کیڼ حاشیه"
+
+msgid "Legal notice"
+msgstr "قانوني خبرتیا"
+
+msgid "Maximum subscribed students"
+msgstr "د ګډون کوونکو زده‌کوونکو اعظمي شمېر"
+
+msgid "Notify in course home"
+msgstr "په د کورس کور پاڼه کې خبر ورکړئ"
+
+msgid "Notify learners"
+msgstr "زده‌کوونکو ته خبر ورکړئ"
+
+msgid "Notify with agreement file"
+msgstr "د تړون فایل سره خبر ورکړئ"
+
+msgid "Notify without attachment"
+msgstr "پرته له ضمیمې خبر ورکړئ"
+
+msgid "Open chat in a new window"
+msgstr "چټ په نوې کړکۍ کې پرانیزئ"
+
+msgid "Open to the platform"
+msgstr "پلیټفارم ته پرانستل"
+
+msgid "Place"
+msgstr "ځای"
+
+msgid "Platform default"
+msgstr "د پلیټفارم ډیفالټ"
+
+msgid "Registration password"
+msgstr "د ثبت پټنوم"
+
+msgid "Remove previous agreements"
+msgstr "پخواني تړونونه لرې کړئ"
+
+msgid "Right margin"
+msgstr "ښي حاشیه"
+
+msgid "Selected learning path"
+msgstr "ټاکل شوې زده‌کړې لاره"
+
+msgid "Selected test"
+msgstr "ټاکل شوې ازموینه"
+
+msgid "Show learner picture in forums"
+msgstr "په فورم کې د زده‌کوونکي انځور وښایئ"
+
+msgid "Show system folders"
+msgstr "د سیسټم فولډرونه وښایئ"
+
+msgid "Signature text 1"
+msgstr "د لاسلیک متن ۱"
+
+msgid "Signature text 2"
+msgstr "د لاسلیک متن ۲"
+
+msgid "Signature text 3"
+msgstr "د لاسلیک متن ۳"
+
+msgid "Signature text 4"
+msgstr "د لاسلیک متن ۴"
+
+msgid "Student and course information"
+msgstr "د زده‌کوونکي او کورس معلومات"
+
+msgid "Subscription allowed"
+msgstr "ګډون اجازه لري"
+
+msgid "Tests list"
+msgstr "د ازموینو لیست"
+
+msgid "Unsubscription allowed"
+msgstr "د ګډون لغوه کول اجازه لري"
+
+msgid "Use certificate download date"
+msgstr "د سند د ډاونلوډ نېټه وکاروئ"
+
+msgid "Use certificate generation date"
+msgstr "د سند د جوړولو نېټه وکاروئ"
+
+msgid "Use session access dates"
+msgstr "د غونډې د لاسرسي نېټې وکاروئ"
+
+msgid "Use session access end date"
+msgstr "د غونډې د لاسرسي پای نېټه وکاروئ"
 

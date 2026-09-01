@@ -39865,3 +39865,192 @@ msgstr "Pemberitahuan akan kedaluwarsa: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Notifikasi dikirim kepada pengguna dalam bahasa yang mereka atur."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Halaman di-cache HTTP selama 60 detik secara default, sebagaimana didefinisikan di entitas Page, sehingga perubahan mungkin tidak langsung terlihat."
+
+msgid "Activate legal notice"
+msgstr "Aktifkan pemberitahuan hukum"
+
+msgid "Agreement content"
+msgstr "Konten perjanjian"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Izinkan peserta didik menghapus publikasi mereka sendiri"
+
+msgid "Allow learners to edit agenda"
+msgstr "Izinkan peserta didik mengedit agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Izinkan peserta didik memvalidasi kehadiran mereka sendiri"
+
+msgid "Allow learners to view users list"
+msgstr "Izinkan peserta didik melihat daftar pengguna"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Otomatis daftarkan pengguna ke notifikasi forum"
+
+msgid "Certificate mode"
+msgstr "Mode sertifikat"
+
+msgid "Configure external tools"
+msgstr "Konfigurasi alat eksternal"
+
+msgid "Contents"
+msgstr "Konten"
+
+msgid "Contents to show"
+msgstr "Konten yang ditampilkan"
+
+msgid "Course certificate"
+msgstr "Sertifikat kursus"
+
+msgid "Course delivery dates"
+msgstr "Tanggal pelaksanaan kursus"
+
+msgid "Course duration in hours"
+msgstr "Durasi kursus dalam jam"
+
+msgid "Course legal agreement"
+msgstr "Perjanjian hukum kursus"
+
+msgid "Custom"
+msgstr "Kustom"
+
+msgid "Custom certificate"
+msgstr "Sertifikat kustom"
+
+msgid "Default visibility for new documents"
+msgstr "Visibilitas default untuk dokumen baru"
+
+msgid "Direct invitation link"
+msgstr "Tautan undangan langsung"
+
+msgid "Do not notify"
+msgstr "Jangan beri tahu"
+
+msgid "Documents list"
+msgstr "Daftar dokumen"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Kirim email ke peserta didik saat pendaftaran manual"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Kirim email ke pengajar saat ada umpan balik publikasi siswa pengguna baru"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Kirim email ke pengguna saat menerima berkas Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Aktifkan notifikasi beranda kursus"
+
+msgid "Enable course themes in learning paths"
+msgstr "Aktifkan tema kursus di jalur pembelajaran"
+
+msgid "Exercises invisible in session"
+msgstr "Latihan tidak terlihat dalam sesi"
+
+msgid "Expiration link"
+msgstr "Tautan kedaluwarsa"
+
+msgid "Forums list"
+msgstr "Daftar forum"
+
+msgid "Issue date type"
+msgstr "Jenis tanggal terbit"
+
+msgid "Learning path index"
+msgstr "Indeks jalur pembelajaran"
+
+msgid "Learning paths list"
+msgstr "Daftar jalur pembelajaran"
+
+msgid "Left margin"
+msgstr "Margin kiri"
+
+msgid "Legal notice"
+msgstr "Pemberitahuan hukum"
+
+msgid "Maximum subscribed students"
+msgstr "Jumlah maksimum siswa terdaftar"
+
+msgid "Notify in course home"
+msgstr "Beritahu di beranda kursus"
+
+msgid "Notify learners"
+msgstr "Beritahu peserta didik"
+
+msgid "Notify with agreement file"
+msgstr "Beritahu dengan berkas persetujuan"
+
+msgid "Notify without attachment"
+msgstr "Beritahu tanpa lampiran"
+
+msgid "Open chat in a new window"
+msgstr "Buka obrolan di jendela baru"
+
+msgid "Open to the platform"
+msgstr "Terbuka untuk platform"
+
+msgid "Place"
+msgstr "Tempat"
+
+msgid "Platform default"
+msgstr "Default platform"
+
+msgid "Registration password"
+msgstr "Kata sandi pendaftaran"
+
+msgid "Remove previous agreements"
+msgstr "Hapus persetujuan sebelumnya"
+
+msgid "Right margin"
+msgstr "Margin kanan"
+
+msgid "Selected learning path"
+msgstr "Jalur pembelajaran terpilih"
+
+msgid "Selected test"
+msgstr "Tes terpilih"
+
+msgid "Show learner picture in forums"
+msgstr "Tampilkan foto peserta didik di forum"
+
+msgid "Show system folders"
+msgstr "Tampilkan folder sistem"
+
+msgid "Signature text 1"
+msgstr "Teks tanda tangan 1"
+
+msgid "Signature text 2"
+msgstr "Teks tanda tangan 2"
+
+msgid "Signature text 3"
+msgstr "Teks tanda tangan 3"
+
+msgid "Signature text 4"
+msgstr "Teks tanda tangan 4"
+
+msgid "Student and course information"
+msgstr "Informasi siswa dan kursus"
+
+msgid "Subscription allowed"
+msgstr "Pendaftaran diizinkan"
+
+msgid "Tests list"
+msgstr "Daftar tes"
+
+msgid "Unsubscription allowed"
+msgstr "Pembatalan pendaftaran diizinkan"
+
+msgid "Use certificate download date"
+msgstr "Gunakan tanggal unduh sertifikat"
+
+msgid "Use certificate generation date"
+msgstr "Gunakan tanggal pembuatan sertifikat"
+
+msgid "Use session access dates"
+msgstr "Gunakan tanggal akses sesi"
+
+msgid "Use session access end date"
+msgstr "Gunakan tanggal akhir akses sesi"
+

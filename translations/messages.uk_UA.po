@@ -39861,3 +39861,192 @@ msgstr "Повідомлення про наближення закінченн�
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Сповіщення надсилаються користувачам мовою, яку вони налаштували."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Сторінки за замовчуванням кешуються HTTP протягом 60 с, як визначено в сутності Page, тому зміни можуть відобразитися не одразу."
+
+msgid "Activate legal notice"
+msgstr "Активувати юридичне повідомлення"
+
+msgid "Agreement content"
+msgstr "Зміст угоди"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Дозволити учням видаляти власні публікації"
+
+msgid "Allow learners to edit agenda"
+msgstr "Дозволити учням редагувати порядок денний"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Дозволити учням підтверджувати власну присутність"
+
+msgid "Allow learners to view users list"
+msgstr "Дозволити учням переглядати список користувачів"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Автоматично підписувати користувачів на сповіщення форуму"
+
+msgid "Certificate mode"
+msgstr "Режим сертифіката"
+
+msgid "Configure external tools"
+msgstr "Налаштувати зовнішні інструменти"
+
+msgid "Contents"
+msgstr "Зміст"
+
+msgid "Contents to show"
+msgstr "Зміст для показу"
+
+msgid "Course certificate"
+msgstr "Сертифікат курсу"
+
+msgid "Course delivery dates"
+msgstr "Дати проведення курсу"
+
+msgid "Course duration in hours"
+msgstr "Тривалість курсу в годинах"
+
+msgid "Course legal agreement"
+msgstr "Юридична угода курсу"
+
+msgid "Custom"
+msgstr "Користувацький"
+
+msgid "Custom certificate"
+msgstr "Користувацький сертифікат"
+
+msgid "Default visibility for new documents"
+msgstr "Видимість за замовчуванням для нових документів"
+
+msgid "Direct invitation link"
+msgstr "Пряме посилання-запрошення"
+
+msgid "Do not notify"
+msgstr "Не сповіщати"
+
+msgid "Documents list"
+msgstr "Список документів"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Надсилати електронний лист учню при ручній підписці"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Надсилати електронний лист викладачам про відгук на публікацію студента нового користувача"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Надсилати електронний лист користувачам при отриманні файлу в Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Увімкнути сповіщення на головній сторінці курсу"
+
+msgid "Enable course themes in learning paths"
+msgstr "Увімкнути теми курсу в навчальних шляхах"
+
+msgid "Exercises invisible in session"
+msgstr "Вправи невидимі в сесії"
+
+msgid "Expiration link"
+msgstr "Посилання з терміном дії"
+
+msgid "Forums list"
+msgstr "Список форумів"
+
+msgid "Issue date type"
+msgstr "Тип дати видачі"
+
+msgid "Learning path index"
+msgstr "Індекс навчального шляху"
+
+msgid "Learning paths list"
+msgstr "Список навчальних шляхів"
+
+msgid "Left margin"
+msgstr "Ліве поле"
+
+msgid "Legal notice"
+msgstr "Юридичне повідомлення"
+
+msgid "Maximum subscribed students"
+msgstr "Максимальна кількість підписаних студентів"
+
+msgid "Notify in course home"
+msgstr "Сповіщати на головній сторінці курсу"
+
+msgid "Notify learners"
+msgstr "Сповіщати учнів"
+
+msgid "Notify with agreement file"
+msgstr "Сповіщати з файлом угоди"
+
+msgid "Notify without attachment"
+msgstr "Сповіщати без вкладення"
+
+msgid "Open chat in a new window"
+msgstr "Відкривати чат у новому вікні"
+
+msgid "Open to the platform"
+msgstr "Відкрито для платформи"
+
+msgid "Place"
+msgstr "Місце"
+
+msgid "Platform default"
+msgstr "За замовчуванням платформи"
+
+msgid "Registration password"
+msgstr "Пароль реєстрації"
+
+msgid "Remove previous agreements"
+msgstr "Видалити попередні угоди"
+
+msgid "Right margin"
+msgstr "Праве поле"
+
+msgid "Selected learning path"
+msgstr "Вибраний навчальний шлях"
+
+msgid "Selected test"
+msgstr "Вибраний тест"
+
+msgid "Show learner picture in forums"
+msgstr "Показувати фото учня на форумах"
+
+msgid "Show system folders"
+msgstr "Показувати системні папки"
+
+msgid "Signature text 1"
+msgstr "Текст підпису 1"
+
+msgid "Signature text 2"
+msgstr "Текст підпису 2"
+
+msgid "Signature text 3"
+msgstr "Текст підпису 3"
+
+msgid "Signature text 4"
+msgstr "Текст підпису 4"
+
+msgid "Student and course information"
+msgstr "Інформація про студента та курс"
+
+msgid "Subscription allowed"
+msgstr "Підписка дозволена"
+
+msgid "Tests list"
+msgstr "Список тестів"
+
+msgid "Unsubscription allowed"
+msgstr "Відписка дозволена"
+
+msgid "Use certificate download date"
+msgstr "Використовувати дату завантаження сертифіката"
+
+msgid "Use certificate generation date"
+msgstr "Використовувати дату створення сертифіката"
+
+msgid "Use session access dates"
+msgstr "Використовувати дати доступу до сесії"
+
+msgid "Use session access end date"
+msgstr "Використовувати кінцеву дату доступу до сесії"
+

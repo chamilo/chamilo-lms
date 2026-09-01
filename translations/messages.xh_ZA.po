@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Ngobubele"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Umzekelo wefomyula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Umzekelo wefomula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Ulawulo lweguqu"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:akukho copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Ifolda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:umsebenzi,,      simulation:ukwenza okufana,,      questionnaire:ufuzo,,      diagram:umzobo,,      figure:umfanekiso,,      graph:grafu,,      index:isazisi,,      slide:isilayidi,,      table:thebhule,,      narrative text:umbhalo obalasele,,      exam:oviwo,,      experiment:uphando,,      problem statement:ingxelo yengxaki,,      self assessment:ukuzivavanya,,      lecture:intetho"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Thelekisa.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -35533,7 +35533,7 @@ msgid "%s results"
 msgstr "%s iziphumo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Thelekisa.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Kususiwe"
@@ -39860,4 +39860,193 @@ msgstr "Isaziso sokuphelelwa kungekudala: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Izaziso zithunyelwa kubasebenzisi ngolwimi lwabo olumiselweyo."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Amaphepha agcinwa kwi-HTTP-cache imizuzwana engama-60 ngokwendalo, njengoko kuchaziwe kwi-Page entity, ngoko utshintsho lusenokungabonakali ngoko nangoko."
+
+msgid "Activate legal notice"
+msgstr "Vula isaziso somthetho"
+
+msgid "Agreement content"
+msgstr "Umxholo wesivumelwano"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Vumela abafundi ukuba bacime upapasho lwabo"
+
+msgid "Allow learners to edit agenda"
+msgstr "Vumela abafundi ukuba bahlele i-ajenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Vumela abafundi ukuba baqinisekise ukuzimasa kwabo"
+
+msgid "Allow learners to view users list"
+msgstr "Vumela abafundi ukuba bajonge uluhlu lwabasebenzisi"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Bhalisa abasebenzisi ngokuzenzekelayo kwizaziso zeforam"
+
+msgid "Certificate mode"
+msgstr "Imo yesatifikethi"
+
+msgid "Configure external tools"
+msgstr "Cwangcisa izixhobo zangaphandle"
+
+msgid "Contents"
+msgstr "Imixholo"
+
+msgid "Contents to show"
+msgstr "Imixholo eza kuboniswa"
+
+msgid "Course certificate"
+msgstr "Isatifikethi sekhosi"
+
+msgid "Course delivery dates"
+msgstr "Imihla yokunikezelwa kwekhosi"
+
+msgid "Course duration in hours"
+msgstr "Ubude bekhosi ngeeyure"
+
+msgid "Course legal agreement"
+msgstr "Isivumelwano somthetho sekhosi"
+
+msgid "Custom"
+msgstr "Ngokwezifiso"
+
+msgid "Custom certificate"
+msgstr "Isatifikethi esenziwe ngokwezifiso"
+
+msgid "Default visibility for new documents"
+msgstr "Ukubonakala okuqhelekileyo kwamaxwebhu amatsha"
+
+msgid "Direct invitation link"
+msgstr "Ikhonkco lesimemo ngqo"
+
+msgid "Do not notify"
+msgstr "Musa ukwazisa"
+
+msgid "Documents list"
+msgstr "Uluhlu lwamaxwebhu"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Thumela i-imeyile kumfundi xa ebhaliswa ngesandla"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Thumela i-imeyile kootitshala ngeempendulo zopapasho lomfundi lomsebenzisi omtsha"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Thumela i-imeyile kubasebenzisi xa kufunyenwe ifayile ye-Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Vumela isaziso sekhaya lekhosi"
+
+msgid "Enable course themes in learning paths"
+msgstr "Vumela imixholo yekhosi kwiindlela zokufunda"
+
+msgid "Exercises invisible in session"
+msgstr "Imiqilima ayibonakali kwiseshoni"
+
+msgid "Expiration link"
+msgstr "Ikhonkco lokuphelelwa"
+
+msgid "Forums list"
+msgstr "Uluhlu lweeforamu"
+
+msgid "Issue date type"
+msgstr "Uhlobo lomhla wokukhupha"
+
+msgid "Learning path index"
+msgstr "Isalathiso sendlela yokufunda"
+
+msgid "Learning paths list"
+msgstr "Uluhlu lweendlela zokufunda"
+
+msgid "Left margin"
+msgstr "Umda wasekhohlo"
+
+msgid "Legal notice"
+msgstr "Isaziso somthetho"
+
+msgid "Maximum subscribed students"
+msgstr "Inani eliphezulu labafundi ababhalisiweyo"
+
+msgid "Notify in course home"
+msgstr "Yazisa ekhaya lekhosi"
+
+msgid "Notify learners"
+msgstr "Yazisa abafundi"
+
+msgid "Notify with agreement file"
+msgstr "Yazisa ngefayile yesivumelwano"
+
+msgid "Notify without attachment"
+msgstr "Yazisa ngaphandle kwesiqhoboshi"
+
+msgid "Open chat in a new window"
+msgstr "Vula incoko kwifestile entsha"
+
+msgid "Open to the platform"
+msgstr "Vuleleke kwiqonga"
+
+msgid "Place"
+msgstr "Indawo"
+
+msgid "Platform default"
+msgstr "Okumiselweyo kweqonga"
+
+msgid "Registration password"
+msgstr "Iphasiwedi yokubhalisa"
+
+msgid "Remove previous agreements"
+msgstr "Susa izivumelwano zangaphambili"
+
+msgid "Right margin"
+msgstr "Umda wasekunene"
+
+msgid "Selected learning path"
+msgstr "Indlela yokufunda ekhethiweyo"
+
+msgid "Selected test"
+msgstr "Uvavanyo olukhethiweyo"
+
+msgid "Show learner picture in forums"
+msgstr "Bonisa umfanekiso womfundi kwiiforamu"
+
+msgid "Show system folders"
+msgstr "Bonisa iifolda zenkqubo"
+
+msgid "Signature text 1"
+msgstr "Umbhalo wesiginitsha 1"
+
+msgid "Signature text 2"
+msgstr "Umbhalo wesiginitsha 2"
+
+msgid "Signature text 3"
+msgstr "Umbhalo wesiginitsha 3"
+
+msgid "Signature text 4"
+msgstr "Umbhalo wesiginitsha 4"
+
+msgid "Student and course information"
+msgstr "Ulwazi lomfundi nekhosi"
+
+msgid "Subscription allowed"
+msgstr "Ukubhalisa kuvunyelwe"
+
+msgid "Tests list"
+msgstr "Uluhlu lovavanyo"
+
+msgid "Unsubscription allowed"
+msgstr "Ukuphelisa ubhaliso kuvunyelwe"
+
+msgid "Use certificate download date"
+msgstr "Sebenzisa umhla wokukhuphela isatifikethi"
+
+msgid "Use certificate generation date"
+msgstr "Sebenzisa umhla wokuveliswa kwesatifikethi"
+
+msgid "Use session access dates"
+msgstr "Sebenzisa imihla yokufikelela kwiseshoni"
+
+msgid "Use session access end date"
+msgstr "Sebenzisa umhla wokuphela kokufikelela kwiseshoni"
 

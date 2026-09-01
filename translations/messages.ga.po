@@ -39865,3 +39865,192 @@ msgstr "Fógra ag dul in éag: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Seoltar fógraí chuig úsáideoirí ina dteanga féin atá cumraithe."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Tá leathanaigh i dtaisce HTTP ar feadh 60s de réir réamhshocraithe, mar atá sainmhínithe sa t-eintiteas Page, mar sin b’fhéidir nach léireofar athruithe láithreach."
+
+msgid "Activate legal notice"
+msgstr "Gníomhachtaigh fógra dlíthiúil"
+
+msgid "Agreement content"
+msgstr "Ábhar an chomhaontaithe"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Lig d’fhoghlaimeoirí a bhfoilseachán féin a scriosadh"
+
+msgid "Allow learners to edit agenda"
+msgstr "Lig d’fhoghlaimeoirí an clár oibre a chur in eagar"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Lig d’fhoghlaimeoirí a bhfreastal féin a bhailíochtú"
+
+msgid "Allow learners to view users list"
+msgstr "Lig d’fhoghlaimeoirí liosta úsáideoirí a fheiceáil"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Liostáil úsáideoirí go huathoibríoch le fógraí fóraim"
+
+msgid "Certificate mode"
+msgstr "Mód teastais"
+
+msgid "Configure external tools"
+msgstr "Cumraigh uirlisí seachtracha"
+
+msgid "Contents"
+msgstr "Ábhar"
+
+msgid "Contents to show"
+msgstr "Ábhar le taispeáint"
+
+msgid "Course certificate"
+msgstr "Teastas cúrsa"
+
+msgid "Course delivery dates"
+msgstr "Dátaí seachadta an chúrsa"
+
+msgid "Course duration in hours"
+msgstr "Fad an chúrsa in uaireanta"
+
+msgid "Course legal agreement"
+msgstr "Comhaontú dlíthiúil an chúrsa"
+
+msgid "Custom"
+msgstr "Saincheaptha"
+
+msgid "Custom certificate"
+msgstr "Teastas saincheaptha"
+
+msgid "Default visibility for new documents"
+msgstr "Infheictheacht réamhshocraithe do dhoiciméid nua"
+
+msgid "Direct invitation link"
+msgstr "Nasc cuiridh dhíreach"
+
+msgid "Do not notify"
+msgstr "Ná fógair"
+
+msgid "Documents list"
+msgstr "Liosta doiciméad"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Seol ríomhphost chuig an bhfoghlaimeoir ar liostáil láimhe"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Seol ríomhphost chuig múinteoirí ar aiseolas foilseacháin mac léinn ó úsáideoir nua"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Seol ríomhphost chuig úsáideoirí ar fháil comhaid Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Cumasaigh fógra baile an chúrsa"
+
+msgid "Enable course themes in learning paths"
+msgstr "Cumasaigh téamaí cúrsa i gcosáin foghlama"
+
+msgid "Exercises invisible in session"
+msgstr "Cleachtaí dofheicthe sa seisiún"
+
+msgid "Expiration link"
+msgstr "Nasc éaga"
+
+msgid "Forums list"
+msgstr "Liosta fóraim"
+
+msgid "Issue date type"
+msgstr "Cineál dáta eisiúna"
+
+msgid "Learning path index"
+msgstr "Innéacs cosáin foghlama"
+
+msgid "Learning paths list"
+msgstr "Liosta cosán foghlama"
+
+msgid "Left margin"
+msgstr "Imeall clé"
+
+msgid "Legal notice"
+msgstr "Fógra dlíthiúil"
+
+msgid "Maximum subscribed students"
+msgstr "Uasmhéid mac léinn cláraithe"
+
+msgid "Notify in course home"
+msgstr "Cuir in iúl ar leathanach baile an chúrsa"
+
+msgid "Notify learners"
+msgstr "Cuir foghlaimeoirí ar an eolas"
+
+msgid "Notify with agreement file"
+msgstr "Cuir in iúl le comhad comhaontaithe"
+
+msgid "Notify without attachment"
+msgstr "Cuir in iúl gan iatán"
+
+msgid "Open chat in a new window"
+msgstr "Oscail comhrá i bhfuinneog nua"
+
+msgid "Open to the platform"
+msgstr "Oscailte don ardán"
+
+msgid "Place"
+msgstr "Áit"
+
+msgid "Platform default"
+msgstr "Réamhshocrú an ardáin"
+
+msgid "Registration password"
+msgstr "Pasfhocal clárúcháin"
+
+msgid "Remove previous agreements"
+msgstr "Bain comhaontuithe roimhe seo"
+
+msgid "Right margin"
+msgstr "Imeall deas"
+
+msgid "Selected learning path"
+msgstr "Conair foghlama roghnaithe"
+
+msgid "Selected test"
+msgstr "Tástáil roghnaithe"
+
+msgid "Show learner picture in forums"
+msgstr "Taispeáin pictiúr an fhoghlaimeora sna fóraim"
+
+msgid "Show system folders"
+msgstr "Taispeáin fillteáin an chórais"
+
+msgid "Signature text 1"
+msgstr "Téacs sínithe 1"
+
+msgid "Signature text 2"
+msgstr "Téacs sínithe 2"
+
+msgid "Signature text 3"
+msgstr "Téacs sínithe 3"
+
+msgid "Signature text 4"
+msgstr "Téacs sínithe 4"
+
+msgid "Student and course information"
+msgstr "Eolas faoin mac léinn agus an cúrsa"
+
+msgid "Subscription allowed"
+msgstr "Clárú ceadaithe"
+
+msgid "Tests list"
+msgstr "Liosta tástálacha"
+
+msgid "Unsubscription allowed"
+msgstr "Díchlárú ceadaithe"
+
+msgid "Use certificate download date"
+msgstr "Úsáid dáta íoslódála an teastais"
+
+msgid "Use certificate generation date"
+msgstr "Úsáid dáta giniúna an teastais"
+
+msgid "Use session access dates"
+msgstr "Úsáid dátaí rochtana an tseisiúin"
+
+msgid "Use session access end date"
+msgstr "Úsáid dáta deiridh rochtana an tseisiúin"
+

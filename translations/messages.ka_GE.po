@@ -39861,3 +39861,192 @@ msgstr "ვადის ამოწურვის შეტყობინე�
 msgid "Notifications are sent to users in their own configured language."
 msgstr "შეტყობინებები იგზავნება მომხმარებლებთან მათ მიერ კონფიგურირებულ ენაზე."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "გვერდები ნაგულისხმევად HTTP-ქეშირდება 60 წამით, როგორც განსაზღვრულია Page entiti-ში, ამიტომ ცვლილებები შეიძლება დაუყოვნებლივ არ აისახოს."
+
+msgid "Activate legal notice"
+msgstr "იურიდიული შეტყობინების გააქტიურება"
+
+msgid "Agreement content"
+msgstr "შეთანხმების შინაარსი"
+
+msgid "Allow learners to delete their own publication"
+msgstr "მოსწავლეებს საკუთარი პუბლიკაციის წაშლის უფლება"
+
+msgid "Allow learners to edit agenda"
+msgstr "მოსწავლეებს დღის წესრიგის რედაქტირების უფლება"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "მოსწავლეებს საკუთარი დასწრების დადასტურების უფლება"
+
+msgid "Allow learners to view users list"
+msgstr "მოსწავლეებს მომხმარებელთა სიის ნახვის უფლება"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "მომხმარებლების ავტომატური გამოწერა ფორუმის შეტყობინებებზე"
+
+msgid "Certificate mode"
+msgstr "სერტიფიკატის რეჟიმი"
+
+msgid "Configure external tools"
+msgstr "გარე ხელსაწყოების კონფიგურაცია"
+
+msgid "Contents"
+msgstr "შინაარსი"
+
+msgid "Contents to show"
+msgstr "საჩვენებელი შინაარსი"
+
+msgid "Course certificate"
+msgstr "კურსის სერტიფიკატი"
+
+msgid "Course delivery dates"
+msgstr "კურსის ჩატარების თარიღები"
+
+msgid "Course duration in hours"
+msgstr "კურსის ხანგრძლივობა საათებში"
+
+msgid "Course legal agreement"
+msgstr "კურსის იურიდიული შეთანხმება"
+
+msgid "Custom"
+msgstr "მორგებული"
+
+msgid "Custom certificate"
+msgstr "მორგებული სერტიფიკატი"
+
+msgid "Default visibility for new documents"
+msgstr "ახალი დოკუმენტების ნაგულისხმევი ხილვადობა"
+
+msgid "Direct invitation link"
+msgstr "პირდაპირი მოწვევის ბმული"
+
+msgid "Do not notify"
+msgstr "არ შეატყობინო"
+
+msgid "Documents list"
+msgstr "დოკუმენტების სია"
+
+msgid "E-mail learner on manual subscription"
+msgstr "ელფოსტა მოსწავლეს ხელით ჩაწერისას"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "ელფოსტა მასწავლებლებს ახალი მომხმარებლის სტუდენტური პუბლიკაციის უკუკავშირზე"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "ელფოსტა მომხმარებლებს Dropbox ფაილის მიღებისას"
+
+msgid "Enable course home notification"
+msgstr "კურსის მთავარი გვერდის შეტყობინების ჩართვა"
+
+msgid "Enable course themes in learning paths"
+msgstr "კურსის თემების ჩართვა სასწავლო ბილიკებში"
+
+msgid "Exercises invisible in session"
+msgstr "სესიაში უხილავი სავარჯიშოები"
+
+msgid "Expiration link"
+msgstr "ვადის გასვლის ბმული"
+
+msgid "Forums list"
+msgstr "ფორუმების სია"
+
+msgid "Issue date type"
+msgstr "გაცემის თარიღის ტიპი"
+
+msgid "Learning path index"
+msgstr "სასწავლო გზის ინდექსი"
+
+msgid "Learning paths list"
+msgstr "სასწავლო გზების სია"
+
+msgid "Left margin"
+msgstr "მარცხენა მინდორი"
+
+msgid "Legal notice"
+msgstr "იურიდიული შენიშვნა"
+
+msgid "Maximum subscribed students"
+msgstr "ჩაწერილი სტუდენტების მაქსიმუმი"
+
+msgid "Notify in course home"
+msgstr "შეტყობინება კურსის მთავარ გვერდზე"
+
+msgid "Notify learners"
+msgstr "მოსწავლეების შეტყობინება"
+
+msgid "Notify with agreement file"
+msgstr "შეტყობინება შეთანხმების ფაილით"
+
+msgid "Notify without attachment"
+msgstr "შეტყობინება დანართის გარეშე"
+
+msgid "Open chat in a new window"
+msgstr "ჩატის გახსნა ახალ ფანჯარაში"
+
+msgid "Open to the platform"
+msgstr "პლატფორმისთვის ღია"
+
+msgid "Place"
+msgstr "ადგილი"
+
+msgid "Platform default"
+msgstr "პლატფორმის ნაგულისხმევი"
+
+msgid "Registration password"
+msgstr "რეგისტრაციის პაროლი"
+
+msgid "Remove previous agreements"
+msgstr "წინა შეთანხმებების წაშლა"
+
+msgid "Right margin"
+msgstr "მარჯვენა მინდორი"
+
+msgid "Selected learning path"
+msgstr "არჩეული სასწავლო გზა"
+
+msgid "Selected test"
+msgstr "არჩეული ტესტი"
+
+msgid "Show learner picture in forums"
+msgstr "მოსწავლის სურათის ჩვენება ფორუმებში"
+
+msgid "Show system folders"
+msgstr "სისტემური საქაღალდეების ჩვენება"
+
+msgid "Signature text 1"
+msgstr "ხელმოწერის ტექსტი 1"
+
+msgid "Signature text 2"
+msgstr "ხელმოწერის ტექსტი 2"
+
+msgid "Signature text 3"
+msgstr "ხელმოწერის ტექსტი 3"
+
+msgid "Signature text 4"
+msgstr "ხელმოწერის ტექსტი 4"
+
+msgid "Student and course information"
+msgstr "სტუდენტისა და კურსის ინფორმაცია"
+
+msgid "Subscription allowed"
+msgstr "ჩაწერა ნებადართულია"
+
+msgid "Tests list"
+msgstr "ტესტების სია"
+
+msgid "Unsubscription allowed"
+msgstr "გამოწერა ნებადართულია"
+
+msgid "Use certificate download date"
+msgstr "სერტიფიკატის ჩამოტვირთვის თარიღის გამოყენება"
+
+msgid "Use certificate generation date"
+msgstr "სერტიფიკატის გენერაციის თარიღის გამოყენება"
+
+msgid "Use session access dates"
+msgstr "სესიის წვდომის თარიღების გამოყენება"
+
+msgid "Use session access end date"
+msgstr "სესიის წვდომის დასრულების თარიღის გამოყენება"
+

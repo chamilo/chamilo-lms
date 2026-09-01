@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Fórmula qhawarina: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Fórmula qhawarina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -39274,7 +39274,7 @@ msgid "Delete failed"
 msgstr "Pichay manam atinchu"
 
 msgid "PHP cache"
-msgstr "PHP cache"
+msgstr "PHP waqaychaq"
 
 msgid "Live OPcache and APCu diagnostics"
 msgstr "Kawsay OPcache hinaspa APCu qhawariykuna"
@@ -39866,4 +39866,193 @@ msgstr "Tukukuchkaq willakuy: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Willakuykunaqa ruraqkunaman kachasqa kanku paykunaq churasqa siminkupi."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "P'anqakuna HTTP-pi 60s waqaychasqa kanku kikinmanta, Page entidadpi nisqa hina, chaymi hukchasqakuna manan utqaylla rikukunmanchu."
+
+msgid "Activate legal notice"
+msgstr "Kamachiy willayta kachariy"
+
+msgid "Agreement content"
+msgstr "Rimanakuy qillqa"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Yachakuqkuna kikinkupa willayninkuta chinkachinankupaq saqiy"
+
+msgid "Allow learners to edit agenda"
+msgstr "Yachakuqkuna agenda ruwanankupaq saqiy"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Yachakuqkuna kikinkupa hamusqankuta chiqaqchanankupaq saqiy"
+
+msgid "Allow learners to view users list"
+msgstr "Yachakuqkuna ruwaqkunapa listanta qhawanankupaq saqiy"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Ruwaqkunata kikinmanta foro willaykunaman qillqachiy"
+
+msgid "Certificate mode"
+msgstr "Certificado laya"
+
+msgid "Configure external tools"
+msgstr "Hawa llamk'anakunata allichay"
+
+msgid "Contents"
+msgstr "Contenidokuna"
+
+msgid "Contents to show"
+msgstr "Rikuchina contenidokuna"
+
+msgid "Course certificate"
+msgstr "Yachaywasipa certificado"
+
+msgid "Course delivery dates"
+msgstr "Yachaywasipa qusqan p'unchawkuna"
+
+msgid "Course duration in hours"
+msgstr "Yachaywasipa unaynin uraspi"
+
+msgid "Course legal agreement"
+msgstr "Yachaywasipa kamachiy rimanakuynin"
+
+msgid "Custom"
+msgstr "Sapaq"
+
+msgid "Custom certificate"
+msgstr "Sapaq certificado"
+
+msgid "Default visibility for new documents"
+msgstr "Musuq qillqakunapaq kikinmanta rikukuynin"
+
+msgid "Direct invitation link"
+msgstr "Chiqa waqyay t'inki"
+
+msgid "Do not notify"
+msgstr "Ama willaychu"
+
+msgid "Documents list"
+msgstr "Qillqakuna lista"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Yachakuqman correo kachay makipi qillqachisqa kaptin"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Yachachiqkunaman correo musuq ruwaqpa yachakuq willayninpi kutichiy kaptin"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Ruwaqkunaman correo Dropbox willañiqta chaskispa"
+
+msgid "Enable course home notification"
+msgstr "Yachay wasi qallariypi willakuyta habilitay"
+
+msgid "Enable course themes in learning paths"
+msgstr "Yachay ñankunapi curso temas habilitay"
+
+msgid "Exercises invisible in session"
+msgstr "Sesionpi mana rikukuq ruwaykuna"
+
+msgid "Expiration link"
+msgstr "Puchukay t'inki"
+
+msgid "Forums list"
+msgstr "Forokuna lista"
+
+msgid "Issue date type"
+msgstr "Qusqay p'unchaw laya"
+
+msgid "Learning path index"
+msgstr "Yachay ñan qillqa"
+
+msgid "Learning paths list"
+msgstr "Yachay ñankuna lista"
+
+msgid "Left margin"
+msgstr "Lluq'i kantu"
+
+msgid "Legal notice"
+msgstr "Kamachiy willakuy"
+
+msgid "Maximum subscribed students"
+msgstr "Aswan achka qillqasqa yachakuqkuna"
+
+msgid "Notify in course home"
+msgstr "Yachay wasi qallariypi willay"
+
+msgid "Notify learners"
+msgstr "Yachakuqkunaman willay"
+
+msgid "Notify with agreement file"
+msgstr "Rimanakuy willañiqinwan willay"
+
+msgid "Notify without attachment"
+msgstr "Mana k'askachisqawan willay"
+
+msgid "Open chat in a new window"
+msgstr "Musuq ventanapi chat kichay"
+
+msgid "Open to the platform"
+msgstr "Plataformaman kichasqa"
+
+msgid "Place"
+msgstr "Kiti"
+
+msgid "Platform default"
+msgstr "Plataforma kikinmanta"
+
+msgid "Registration password"
+msgstr "Qillqakuy yaykuna simi"
+
+msgid "Remove previous agreements"
+msgstr "Ñawpaq rimanakuykunata hurquy"
+
+msgid "Right margin"
+msgstr "Paña kantu"
+
+msgid "Selected learning path"
+msgstr "Akllasqa yachay ñan"
+
+msgid "Selected test"
+msgstr "Akllasqa pruebay"
+
+msgid "Show learner picture in forums"
+msgstr "Forokunapi yachakuqpa fotonta rikuchiy"
+
+msgid "Show system folders"
+msgstr "Sistema q'ipikunata rikuchiy"
+
+msgid "Signature text 1"
+msgstr "Firma qillqa 1"
+
+msgid "Signature text 2"
+msgstr "Firma qillqa 2"
+
+msgid "Signature text 3"
+msgstr "Firma qillqa 3"
+
+msgid "Signature text 4"
+msgstr "Firma qillqa 4"
+
+msgid "Student and course information"
+msgstr "Yachakuqpa chay curso willakuy"
+
+msgid "Subscription allowed"
+msgstr "Qillqakuy saqillasqa"
+
+msgid "Tests list"
+msgstr "Pruebakuna lista"
+
+msgid "Unsubscription allowed"
+msgstr "Qillqakuy hurquy saqillasqa"
+
+msgid "Use certificate download date"
+msgstr "Certificado uraykachiy p'unchawta llamk'achiy"
+
+msgid "Use certificate generation date"
+msgstr "Certificado ruway p'unchawta llamk'achiy"
+
+msgid "Use session access dates"
+msgstr "Sesion yaykuy p'unchawkunata llamk'achiy"
+
+msgid "Use session access end date"
+msgstr "Sesion yaykuy puchukay p'unchawta llamk'achiy"
 

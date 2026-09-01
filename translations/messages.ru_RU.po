@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "С уважением"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример формулы: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример формулы: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазоны переменных"
@@ -39867,4 +39867,193 @@ msgstr "Уведомление о скором истечении: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Уведомления отправляются пользователям на выбранном ими языке."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Страницы по умолчанию кэшируются по HTTP на 60 с, как задано в сущности Page, поэтому изменения могут отображаться не сразу."
+
+msgid "Activate legal notice"
+msgstr "Активировать правовое уведомление"
+
+msgid "Agreement content"
+msgstr "Текст соглашения"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Разрешить учащимся удалять свои публикации"
+
+msgid "Allow learners to edit agenda"
+msgstr "Разрешить учащимся редактировать расписание"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Разрешить учащимся подтверждать свою посещаемость"
+
+msgid "Allow learners to view users list"
+msgstr "Разрешить учащимся просматривать список пользователей"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Автоматически подписывать пользователей на уведомления форума"
+
+msgid "Certificate mode"
+msgstr "Режим сертификата"
+
+msgid "Configure external tools"
+msgstr "Настроить внешние инструменты"
+
+msgid "Contents"
+msgstr "Содержание"
+
+msgid "Contents to show"
+msgstr "Отображаемое содержимое"
+
+msgid "Course certificate"
+msgstr "Сертификат курса"
+
+msgid "Course delivery dates"
+msgstr "Даты проведения курса"
+
+msgid "Course duration in hours"
+msgstr "Продолжительность курса в часах"
+
+msgid "Course legal agreement"
+msgstr "Правовое соглашение курса"
+
+msgid "Custom"
+msgstr "Пользовательский"
+
+msgid "Custom certificate"
+msgstr "Пользовательский сертификат"
+
+msgid "Default visibility for new documents"
+msgstr "Видимость новых документов по умолчанию"
+
+msgid "Direct invitation link"
+msgstr "Прямая ссылка-приглашение"
+
+msgid "Do not notify"
+msgstr "Не уведомлять"
+
+msgid "Documents list"
+msgstr "Список документов"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Отправлять учащемуся письмо при ручной записи"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Отправлять преподавателям письмо при отзыве на работу учащегося"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Уведомлять пользователей по эл. почте о получении файла в Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Включить уведомление на главной странице курса"
+
+msgid "Enable course themes in learning paths"
+msgstr "Включить темы курса в учебных траекториях"
+
+msgid "Exercises invisible in session"
+msgstr "Упражнения скрыты в сессии"
+
+msgid "Expiration link"
+msgstr "Ссылка с истечением срока"
+
+msgid "Forums list"
+msgstr "Список форумов"
+
+msgid "Issue date type"
+msgstr "Тип даты выдачи"
+
+msgid "Learning path index"
+msgstr "Оглавление учебной траектории"
+
+msgid "Learning paths list"
+msgstr "Список учебных траекторий"
+
+msgid "Left margin"
+msgstr "Левое поле"
+
+msgid "Legal notice"
+msgstr "Правовое уведомление"
+
+msgid "Maximum subscribed students"
+msgstr "Максимальное число записанных учащихся"
+
+msgid "Notify in course home"
+msgstr "Уведомлять на главной курса"
+
+msgid "Notify learners"
+msgstr "Уведомлять учащихся"
+
+msgid "Notify with agreement file"
+msgstr "Уведомлять с файлом соглашения"
+
+msgid "Notify without attachment"
+msgstr "Уведомлять без вложения"
+
+msgid "Open chat in a new window"
+msgstr "Открывать чат в новом окне"
+
+msgid "Open to the platform"
+msgstr "Открыто для платформы"
+
+msgid "Place"
+msgstr "Место"
+
+msgid "Platform default"
+msgstr "По умолчанию платформы"
+
+msgid "Registration password"
+msgstr "Пароль регистрации"
+
+msgid "Remove previous agreements"
+msgstr "Удалить предыдущие соглашения"
+
+msgid "Right margin"
+msgstr "Правое поле"
+
+msgid "Selected learning path"
+msgstr "Выбранный учебный путь"
+
+msgid "Selected test"
+msgstr "Выбранный тест"
+
+msgid "Show learner picture in forums"
+msgstr "Показывать фото учащегося на форумах"
+
+msgid "Show system folders"
+msgstr "Показывать системные папки"
+
+msgid "Signature text 1"
+msgstr "Текст подписи 1"
+
+msgid "Signature text 2"
+msgstr "Текст подписи 2"
+
+msgid "Signature text 3"
+msgstr "Текст подписи 3"
+
+msgid "Signature text 4"
+msgstr "Текст подписи 4"
+
+msgid "Student and course information"
+msgstr "Информация об учащемся и курсе"
+
+msgid "Subscription allowed"
+msgstr "Подписка разрешена"
+
+msgid "Tests list"
+msgstr "Список тестов"
+
+msgid "Unsubscription allowed"
+msgstr "Отписка разрешена"
+
+msgid "Use certificate download date"
+msgstr "Использовать дату скачивания сертификата"
+
+msgid "Use certificate generation date"
+msgstr "Использовать дату создания сертификата"
+
+msgid "Use session access dates"
+msgstr "Использовать даты доступа к сессии"
+
+msgid "Use session access end date"
+msgstr "Использовать дату окончания доступа к сессии"
 

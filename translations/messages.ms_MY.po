@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Sekiranya ini"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Julat pembolehubah"
@@ -39864,4 +39864,193 @@ msgstr "Notis akan luput: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Pemberitahuan dihantar kepada pengguna dalam bahasa yang dikonfigurasikan sendiri."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Halaman di-cache HTTP selama 60s secara lalai, seperti ditakrifkan dalam entiti Page, jadi perubahan mungkin tidak kelihatan serta-merta."
+
+msgid "Activate legal notice"
+msgstr "Aktifkan notis undang-undang"
+
+msgid "Agreement content"
+msgstr "Kandungan perjanjian"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Benarkan pelajar memadam penerbitan mereka sendiri"
+
+msgid "Allow learners to edit agenda"
+msgstr "Benarkan pelajar mengedit agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Benarkan pelajar mengesahkan kehadiran mereka sendiri"
+
+msgid "Allow learners to view users list"
+msgstr "Benarkan pelajar melihat senarai pengguna"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Langgan pengguna secara automatik kepada pemberitahuan forum"
+
+msgid "Certificate mode"
+msgstr "Mod sijil"
+
+msgid "Configure external tools"
+msgstr "Konfigurasi alatan luaran"
+
+msgid "Contents"
+msgstr "Kandungan"
+
+msgid "Contents to show"
+msgstr "Kandungan untuk dipaparkan"
+
+msgid "Course certificate"
+msgstr "Sijil kursus"
+
+msgid "Course delivery dates"
+msgstr "Tarikh penyampaian kursus"
+
+msgid "Course duration in hours"
+msgstr "Tempoh kursus dalam jam"
+
+msgid "Course legal agreement"
+msgstr "Perjanjian undang-undang kursus"
+
+msgid "Custom"
+msgstr "Tersuai"
+
+msgid "Custom certificate"
+msgstr "Sijil tersuai"
+
+msgid "Default visibility for new documents"
+msgstr "Keterlihatan lalai untuk dokumen baharu"
+
+msgid "Direct invitation link"
+msgstr "Pautan jemputan langsung"
+
+msgid "Do not notify"
+msgstr "Jangan beritahu"
+
+msgid "Documents list"
+msgstr "Senarai dokumen"
+
+msgid "E-mail learner on manual subscription"
+msgstr "E-mel pelajar semasa langganan manual"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "E-mel kepada guru tentang maklum balas penerbitan pelajar pengguna baharu"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "E-mel pengguna semasa penerimaan fail Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Dayakan pemberitahuan laman utama kursus"
+
+msgid "Enable course themes in learning paths"
+msgstr "Dayakan tema kursus dalam laluan pembelajaran"
+
+msgid "Exercises invisible in session"
+msgstr "Latihan tidak kelihatan dalam sesi"
+
+msgid "Expiration link"
+msgstr "Pautan tamat tempoh"
+
+msgid "Forums list"
+msgstr "Senarai forum"
+
+msgid "Issue date type"
+msgstr "Jenis tarikh terbitan"
+
+msgid "Learning path index"
+msgstr "Indeks laluan pembelajaran"
+
+msgid "Learning paths list"
+msgstr "Senarai laluan pembelajaran"
+
+msgid "Left margin"
+msgstr "Margin kiri"
+
+msgid "Legal notice"
+msgstr "Notis undang-undang"
+
+msgid "Maximum subscribed students"
+msgstr "Pelajar berlanggan maksimum"
+
+msgid "Notify in course home"
+msgstr "Maklumkan di laman utama kursus"
+
+msgid "Notify learners"
+msgstr "Maklumkan pelajar"
+
+msgid "Notify with agreement file"
+msgstr "Maklumkan dengan fail perjanjian"
+
+msgid "Notify without attachment"
+msgstr "Maklumkan tanpa lampiran"
+
+msgid "Open chat in a new window"
+msgstr "Buka sembang dalam tetingkap baharu"
+
+msgid "Open to the platform"
+msgstr "Buka kepada platform"
+
+msgid "Place"
+msgstr "Tempat"
+
+msgid "Platform default"
+msgstr "Lalai platform"
+
+msgid "Registration password"
+msgstr "Kata laluan pendaftaran"
+
+msgid "Remove previous agreements"
+msgstr "Buang perjanjian terdahulu"
+
+msgid "Right margin"
+msgstr "Margin kanan"
+
+msgid "Selected learning path"
+msgstr "Laluan pembelajaran terpilih"
+
+msgid "Selected test"
+msgstr "Ujian terpilih"
+
+msgid "Show learner picture in forums"
+msgstr "Tunjuk gambar pelajar dalam forum"
+
+msgid "Show system folders"
+msgstr "Tunjuk folder sistem"
+
+msgid "Signature text 1"
+msgstr "Teks tandatangan 1"
+
+msgid "Signature text 2"
+msgstr "Teks tandatangan 2"
+
+msgid "Signature text 3"
+msgstr "Teks tandatangan 3"
+
+msgid "Signature text 4"
+msgstr "Teks tandatangan 4"
+
+msgid "Student and course information"
+msgstr "Maklumat pelajar dan kursus"
+
+msgid "Subscription allowed"
+msgstr "Langganan dibenarkan"
+
+msgid "Tests list"
+msgstr "Senarai ujian"
+
+msgid "Unsubscription allowed"
+msgstr "Nyahlanggan dibenarkan"
+
+msgid "Use certificate download date"
+msgstr "Guna tarikh muat turun sijil"
+
+msgid "Use certificate generation date"
+msgstr "Guna tarikh penjanaan sijil"
+
+msgid "Use session access dates"
+msgstr "Guna tarikh akses sesi"
+
+msgid "Use session access end date"
+msgstr "Guna tarikh tamat akses sesi"
 

@@ -39879,3 +39879,192 @@ msgstr "إشعار قرب الانتهاء: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "يتم إرسال الإشعارات إلى المستخدمين بلغتهم المُعدّة الخاصة بهم."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "يتم تخزين الصفحات مؤقتًا عبر HTTP لمدة 60 ثانية افتراضيًا، كما هو محدد في كيان الصفحة، لذا قد لا تظهر التغييرات فورًا."
+
+msgid "Activate legal notice"
+msgstr "تفعيل الإشعار القانوني"
+
+msgid "Agreement content"
+msgstr "محتوى الاتفاقية"
+
+msgid "Allow learners to delete their own publication"
+msgstr "السماح للمتعلمين بحذف منشوراتهم الخاصة"
+
+msgid "Allow learners to edit agenda"
+msgstr "السماح للمتعلمين بتحرير جدول الأعمال"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "السماح للمتعلمين بالتحقق من حضورهم الخاص"
+
+msgid "Allow learners to view users list"
+msgstr "السماح للمتعلمين بعرض قائمة المستخدمين"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "الاشتراك التلقائي للمستخدمين في إشعارات المنتدى"
+
+msgid "Certificate mode"
+msgstr "وضع الشهادة"
+
+msgid "Configure external tools"
+msgstr "تكوين الأدوات الخارجية"
+
+msgid "Contents"
+msgstr "المحتويات"
+
+msgid "Contents to show"
+msgstr "المحتويات المراد عرضها"
+
+msgid "Course certificate"
+msgstr "شهادة المقرر"
+
+msgid "Course delivery dates"
+msgstr "تواريخ تقديم المقرر"
+
+msgid "Course duration in hours"
+msgstr "مدة المقرر بالساعات"
+
+msgid "Course legal agreement"
+msgstr "الاتفاقية القانونية للمقرر"
+
+msgid "Custom"
+msgstr "مخصص"
+
+msgid "Custom certificate"
+msgstr "شهادة مخصصة"
+
+msgid "Default visibility for new documents"
+msgstr "الرؤية الافتراضية للمستندات الجديدة"
+
+msgid "Direct invitation link"
+msgstr "رابط الدعوة المباشر"
+
+msgid "Do not notify"
+msgstr "عدم الإشعار"
+
+msgid "Documents list"
+msgstr "قائمة المستندات"
+
+msgid "E-mail learner on manual subscription"
+msgstr "إرسال بريد إلكتروني للمتعلم عند الاشتراك اليدوي"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "إرسال بريد إلكتروني للمعلمين عند ملاحظات منشور الطالب لمستخدم جديد"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "إرسال بريد إلكتروني للمستخدمين عند استلام ملف في صندوق الإسقاط"
+
+msgid "Enable course home notification"
+msgstr "تفعيل إشعار الصفحة الرئيسية للمقرر"
+
+msgid "Enable course themes in learning paths"
+msgstr "تفعيل سمات المقرر في مسارات التعلم"
+
+msgid "Exercises invisible in session"
+msgstr "التمارين غير مرئية في الجلسة"
+
+msgid "Expiration link"
+msgstr "رابط انتهاء الصلاحية"
+
+msgid "Forums list"
+msgstr "قائمة المنتديات"
+
+msgid "Issue date type"
+msgstr "نوع تاريخ الإصدار"
+
+msgid "Learning path index"
+msgstr "فهرس مسار التعلم"
+
+msgid "Learning paths list"
+msgstr "قائمة مسارات التعلم"
+
+msgid "Left margin"
+msgstr "الهامش الأيسر"
+
+msgid "Legal notice"
+msgstr "الإشعار القانوني"
+
+msgid "Maximum subscribed students"
+msgstr "الحد الأقصى للطلاب المشتركين"
+
+msgid "Notify in course home"
+msgstr "الإشعار في الصفحة الرئيسية للمقرر"
+
+msgid "Notify learners"
+msgstr "إشعار المتعلمين"
+
+msgid "Notify with agreement file"
+msgstr "الإشعار مع ملف الاتفاقية"
+
+msgid "Notify without attachment"
+msgstr "الإشعار بدون مرفق"
+
+msgid "Open chat in a new window"
+msgstr "فتح الدردشة في نافذة جديدة"
+
+msgid "Open to the platform"
+msgstr "مفتوح للمنصة"
+
+msgid "Place"
+msgstr "المكان"
+
+msgid "Platform default"
+msgstr "الافتراضي للمنصة"
+
+msgid "Registration password"
+msgstr "كلمة مرور التسجيل"
+
+msgid "Remove previous agreements"
+msgstr "إزالة الاتفاقيات السابقة"
+
+msgid "Right margin"
+msgstr "الهامش الأيمن"
+
+msgid "Selected learning path"
+msgstr "مسار التعلم المحدد"
+
+msgid "Selected test"
+msgstr "الاختبار المحدد"
+
+msgid "Show learner picture in forums"
+msgstr "عرض صورة المتعلم في المنتديات"
+
+msgid "Show system folders"
+msgstr "عرض مجلدات النظام"
+
+msgid "Signature text 1"
+msgstr "نص التوقيع 1"
+
+msgid "Signature text 2"
+msgstr "نص التوقيع 2"
+
+msgid "Signature text 3"
+msgstr "نص التوقيع 3"
+
+msgid "Signature text 4"
+msgstr "نص التوقيع 4"
+
+msgid "Student and course information"
+msgstr "معلومات الطالب والمقرر"
+
+msgid "Subscription allowed"
+msgstr "الاشتراك مسموح"
+
+msgid "Tests list"
+msgstr "قائمة الاختبارات"
+
+msgid "Unsubscription allowed"
+msgstr "إلغاء الاشتراك مسموح"
+
+msgid "Use certificate download date"
+msgstr "استخدام تاريخ تنزيل الشهادة"
+
+msgid "Use certificate generation date"
+msgstr "استخدام تاريخ إنشاء الشهادة"
+
+msgid "Use session access dates"
+msgstr "استخدام تواريخ الوصول للجلسة"
+
+msgid "Use session access end date"
+msgstr "استخدام تاريخ نهاية الوصول للجلسة"
+

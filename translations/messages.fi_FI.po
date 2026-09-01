@@ -39867,3 +39867,192 @@ msgstr "Ilmoitus vanhenemisesta: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Ilmoitukset lähetetään käyttäjille heidän omalla määritetyllä kielellään."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Sivut ovat oletuksena HTTP-välimuistissa 60 sekuntia Page-entiteetin mukaisesti, joten muutokset eivät välttämättä näy heti."
+
+msgid "Activate legal notice"
+msgstr "Aktivoi oikeudellinen ilmoitus"
+
+msgid "Agreement content"
+msgstr "Sopimuksen sisältö"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Salli oppijoiden poistaa omat julkaisunsa"
+
+msgid "Allow learners to edit agenda"
+msgstr "Salli oppijoiden muokata kalenteria"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Salli oppijoiden vahvistaa oma läsnäolonsa"
+
+msgid "Allow learners to view users list"
+msgstr "Salli oppijoiden nähdä käyttäjälista"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Tilaa käyttäjät automaattisesti foorumi-ilmoituksiin"
+
+msgid "Certificate mode"
+msgstr "Todistustila"
+
+msgid "Configure external tools"
+msgstr "Määritä ulkoiset työkalut"
+
+msgid "Contents"
+msgstr "Sisältö"
+
+msgid "Contents to show"
+msgstr "Näytettävä sisältö"
+
+msgid "Course certificate"
+msgstr "Kurssitodistus"
+
+msgid "Course delivery dates"
+msgstr "Kurssin toteutuspäivät"
+
+msgid "Course duration in hours"
+msgstr "Kurssin kesto tunteina"
+
+msgid "Course legal agreement"
+msgstr "Kurssin oikeudellinen sopimus"
+
+msgid "Custom"
+msgstr "Mukautettu"
+
+msgid "Custom certificate"
+msgstr "Mukautettu todistus"
+
+msgid "Default visibility for new documents"
+msgstr "Uusien asiakirjojen oletusnäkyvyys"
+
+msgid "Direct invitation link"
+msgstr "Suora kutsulinkki"
+
+msgid "Do not notify"
+msgstr "Älä ilmoita"
+
+msgid "Documents list"
+msgstr "Asiakirjaluettelo"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Lähetä sähköposti oppijalle manuaalisessa ilmoittautumisessa"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Lähetä sähköposti opettajille uuden käyttäjän opiskelijajulkaisun palautteesta"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Lähetä sähköposti käyttäjille Dropbox-tiedoston vastaanotosta"
+
+msgid "Enable course home notification"
+msgstr "Ota käyttöön kurssin etusivun ilmoitus"
+
+msgid "Enable course themes in learning paths"
+msgstr "Ota käyttöön kurssiteemat oppimispoluissa"
+
+msgid "Exercises invisible in session"
+msgstr "Harjoitukset näkymättömiä istunnossa"
+
+msgid "Expiration link"
+msgstr "Vanhentumislinkki"
+
+msgid "Forums list"
+msgstr "Foorumiluettelo"
+
+msgid "Issue date type"
+msgstr "Myöntämispäivän tyyppi"
+
+msgid "Learning path index"
+msgstr "Oppimispolun hakemisto"
+
+msgid "Learning paths list"
+msgstr "Oppimispolkujen luettelo"
+
+msgid "Left margin"
+msgstr "Vasen marginaali"
+
+msgid "Legal notice"
+msgstr "Oikeudellinen huomautus"
+
+msgid "Maximum subscribed students"
+msgstr "Ilmoittautuneiden opiskelijoiden enimmäismäärä"
+
+msgid "Notify in course home"
+msgstr "Ilmoita kurssin etusivulla"
+
+msgid "Notify learners"
+msgstr "Ilmoita oppijoille"
+
+msgid "Notify with agreement file"
+msgstr "Ilmoita sopimustiedoston kanssa"
+
+msgid "Notify without attachment"
+msgstr "Ilmoita ilman liitettä"
+
+msgid "Open chat in a new window"
+msgstr "Avaa keskustelu uudessa ikkunassa"
+
+msgid "Open to the platform"
+msgstr "Avoin alustalle"
+
+msgid "Place"
+msgstr "Paikka"
+
+msgid "Platform default"
+msgstr "Alustan oletus"
+
+msgid "Registration password"
+msgstr "Rekisteröitymissalasana"
+
+msgid "Remove previous agreements"
+msgstr "Poista aiemmat sopimukset"
+
+msgid "Right margin"
+msgstr "Oikea marginaali"
+
+msgid "Selected learning path"
+msgstr "Valittu oppimispolku"
+
+msgid "Selected test"
+msgstr "Valittu testi"
+
+msgid "Show learner picture in forums"
+msgstr "Näytä oppijan kuva foorumeissa"
+
+msgid "Show system folders"
+msgstr "Näytä järjestelmäkansiot"
+
+msgid "Signature text 1"
+msgstr "Allekirjoitusteksti 1"
+
+msgid "Signature text 2"
+msgstr "Allekirjoitusteksti 2"
+
+msgid "Signature text 3"
+msgstr "Allekirjoitusteksti 3"
+
+msgid "Signature text 4"
+msgstr "Allekirjoitusteksti 4"
+
+msgid "Student and course information"
+msgstr "Opiskelijan ja kurssin tiedot"
+
+msgid "Subscription allowed"
+msgstr "Ilmoittautuminen sallittu"
+
+msgid "Tests list"
+msgstr "Testiluettelo"
+
+msgid "Unsubscription allowed"
+msgstr "Ilmoittautumisen peruminen sallittu"
+
+msgid "Use certificate download date"
+msgstr "Käytä todistuksen latauspäivää"
+
+msgid "Use certificate generation date"
+msgstr "Käytä todistuksen luontipäivää"
+
+msgid "Use session access dates"
+msgstr "Käytä istunnon käyttöoikeuspäiviä"
+
+msgid "Use session access end date"
+msgstr "Käytä istunnon käyttöoikeuden päättymispäivää"
+

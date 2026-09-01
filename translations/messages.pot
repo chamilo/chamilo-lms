@@ -39976,3 +39976,9 @@ msgstr ""
 
 msgid "Use session access end date"
 msgstr ""
+
+msgid "Group report"
+msgstr ""
+
+msgid "Student follow-up"
+msgstr ""

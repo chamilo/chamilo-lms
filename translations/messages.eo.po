@@ -39867,3 +39867,192 @@ msgstr "Avizo pri baldaŭa eksvalidiĝo: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Sciigoj estas sendataj al uzantoj en ilia propra agordita lingvo."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Paĝoj estas HTTP-kaŝmemorigitaj dum 60s defaŭlte, kiel difinite en la ento Page, do ŝanĝoj eble ne tuj videbliĝas."
+
+msgid "Activate legal notice"
+msgstr "Aktivigi juran avizon"
+
+msgid "Agreement content"
+msgstr "Enhavo de la interkonsento"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Permesi al lernantoj forigi sian propran publikaĵon"
+
+msgid "Allow learners to edit agenda"
+msgstr "Permesi al lernantoj redakti la agendon"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Permesi al lernantoj validigi sian propran ĉeeston"
+
+msgid "Allow learners to view users list"
+msgstr "Permesi al lernantoj vidi la liston de uzantoj"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Aŭtomate aboni uzantojn al forumaj sciigoj"
+
+msgid "Certificate mode"
+msgstr "Reĝimo de atestilo"
+
+msgid "Configure external tools"
+msgstr "Agordi eksterajn ilojn"
+
+msgid "Contents"
+msgstr "Enhavo"
+
+msgid "Contents to show"
+msgstr "Enhavo por montri"
+
+msgid "Course certificate"
+msgstr "Kurso-atestilo"
+
+msgid "Course delivery dates"
+msgstr "Datoj de kurso-livero"
+
+msgid "Course duration in hours"
+msgstr "Daŭro de la kurso en horoj"
+
+msgid "Course legal agreement"
+msgstr "Jura interkonsento de la kurso"
+
+msgid "Custom"
+msgstr "Personigita"
+
+msgid "Custom certificate"
+msgstr "Personigita atestilo"
+
+msgid "Default visibility for new documents"
+msgstr "Defaŭlta videbleco por novaj dokumentoj"
+
+msgid "Direct invitation link"
+msgstr "Rekta invito-ligilo"
+
+msgid "Do not notify"
+msgstr "Ne sciigi"
+
+msgid "Documents list"
+msgstr "Listo de dokumentoj"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Retpoŝti lernanton ĉe mana abono"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Retpoŝti al instruistoj pri nova reago al studenta publikaĵo de uzanto"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Retpoŝti uzantojn ĉe ricevo de Dropbox-dosiero"
+
+msgid "Enable course home notification"
+msgstr "Ebligi sciigon de kursa hejmpaĝo"
+
+msgid "Enable course themes in learning paths"
+msgstr "Ebligi kursajn etosojn en lernovojoj"
+
+msgid "Exercises invisible in session"
+msgstr "Ekzercoj nevideblaj en seanco"
+
+msgid "Expiration link"
+msgstr "Eksvalidiĝa ligilo"
+
+msgid "Forums list"
+msgstr "Listo de forumoj"
+
+msgid "Issue date type"
+msgstr "Tipo de eldonodato"
+
+msgid "Learning path index"
+msgstr "Indekso de lernovojo"
+
+msgid "Learning paths list"
+msgstr "Listo de lernovojoj"
+
+msgid "Left margin"
+msgstr "Maldekstra marĝeno"
+
+msgid "Legal notice"
+msgstr "Jura avizo"
+
+msgid "Maximum subscribed students"
+msgstr "Maksimumo de abonitaj studentoj"
+
+msgid "Notify in course home"
+msgstr "Sciigi en kursa hejmo"
+
+msgid "Notify learners"
+msgstr "Sciigi lernantojn"
+
+msgid "Notify with agreement file"
+msgstr "Sciigi kun konsenta dosiero"
+
+msgid "Notify without attachment"
+msgstr "Sciigi sen aldonaĵo"
+
+msgid "Open chat in a new window"
+msgstr "Malfermi babilejon en nova fenestro"
+
+msgid "Open to the platform"
+msgstr "Malferma al la platformo"
+
+msgid "Place"
+msgstr "Loko"
+
+msgid "Platform default"
+msgstr "Platforma defaŭlto"
+
+msgid "Registration password"
+msgstr "Registriĝa pasvorto"
+
+msgid "Remove previous agreements"
+msgstr "Forigi antaŭajn konsentojn"
+
+msgid "Right margin"
+msgstr "Dekstra marĝeno"
+
+msgid "Selected learning path"
+msgstr "Elektita lernovojo"
+
+msgid "Selected test"
+msgstr "Elektita testo"
+
+msgid "Show learner picture in forums"
+msgstr "Montri bildon de lernanto en forumoj"
+
+msgid "Show system folders"
+msgstr "Montri sistemajn dosierujojn"
+
+msgid "Signature text 1"
+msgstr "Subskriba teksto 1"
+
+msgid "Signature text 2"
+msgstr "Subskriba teksto 2"
+
+msgid "Signature text 3"
+msgstr "Subskriba teksto 3"
+
+msgid "Signature text 4"
+msgstr "Subskriba teksto 4"
+
+msgid "Student and course information"
+msgstr "Informoj pri studento kaj kurso"
+
+msgid "Subscription allowed"
+msgstr "Abono permesita"
+
+msgid "Tests list"
+msgstr "Listo de testoj"
+
+msgid "Unsubscription allowed"
+msgstr "Malabono permesita"
+
+msgid "Use certificate download date"
+msgstr "Uzi daton de elŝuto de atestilo"
+
+msgid "Use certificate generation date"
+msgstr "Uzi daton de generado de atestilo"
+
+msgid "Use session access dates"
+msgstr "Uzi datojn de aliro al sesio"
+
+msgid "Use session access end date"
+msgstr "Uzi finodaton de aliro al sesio"
+

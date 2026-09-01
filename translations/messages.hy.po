@@ -39865,3 +39865,192 @@ msgstr "Ժամկետի ավարտի ծանուցում՝ %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Ծանուցումները օգտատերերին ուղարկվում են նրանց կարգավորված լեզվով։"
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Էջերը լռելյայն HTTP-քեշավորվում են 60 վայրկյանով, ինչպես սահմանված է Page էության մեջ, ուստի փոփոխությունները կարող են անմիջապես չարտացոլվել։"
+
+msgid "Activate legal notice"
+msgstr "Ակտիվացնել իրավական ծանուցումը"
+
+msgid "Agreement content"
+msgstr "Համաձայնագրի բովանդակություն"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Թույլատրել սովորողներին ջնջել իրենց հրապարակումը"
+
+msgid "Allow learners to edit agenda"
+msgstr "Թույլատրել սովորողներին խմբագրել օրակարգը"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Թույլատրել սովորողներին հաստատել իրենց ներկայությունը"
+
+msgid "Allow learners to view users list"
+msgstr "Թույլատրել սովորողներին դիտել օգտատերերի ցանկը"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Ավտոմատ բաժանորդագրել օգտատերերին ֆորումի ծանուցումներին"
+
+msgid "Certificate mode"
+msgstr "Վկայագրի ռեժիմ"
+
+msgid "Configure external tools"
+msgstr "Կարգավորել արտաքին գործիքները"
+
+msgid "Contents"
+msgstr "Բովանդակություն"
+
+msgid "Contents to show"
+msgstr "Ցուցադրվող բովանդակություն"
+
+msgid "Course certificate"
+msgstr "Դասընթացի վկայագիր"
+
+msgid "Course delivery dates"
+msgstr "Դասընթացի իրականացման ամսաթվեր"
+
+msgid "Course duration in hours"
+msgstr "Դասընթացի տևողությունը ժամերով"
+
+msgid "Course legal agreement"
+msgstr "Դասընթացի իրավական համաձայնագիր"
+
+msgid "Custom"
+msgstr "Հատուկ"
+
+msgid "Custom certificate"
+msgstr "Հատուկ վկայագիր"
+
+msgid "Default visibility for new documents"
+msgstr "Նոր փաստաթղթերի լռելյայն տեսանելիություն"
+
+msgid "Direct invitation link"
+msgstr "Ուղիղ հրավերի հղում"
+
+msgid "Do not notify"
+msgstr "Չծանուցել"
+
+msgid "Documents list"
+msgstr "Փաստաթղթերի ցանկ"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Էլ. նամակ ուսանողին ձեռքով գրանցման ժամանակ"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Էլ. նամակ ուսուցիչներին նոր օգտատիրոջ ուսանողական հրապարակման արձագանքի մասին"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Էլ. նամակ օգտատերերին Dropbox ֆայլի ստացման մասին"
+
+msgid "Enable course home notification"
+msgstr "Միացնել դասընթացի գլխավոր էջի ծանուցումը"
+
+msgid "Enable course themes in learning paths"
+msgstr "Միացնել դասընթացի թեմաները ուսումնական ուղիներում"
+
+msgid "Exercises invisible in session"
+msgstr "Վարժությունները անտեսանելի են նիստում"
+
+msgid "Expiration link"
+msgstr "Ժամկետի ավարտի հղում"
+
+msgid "Forums list"
+msgstr "Ֆորումների ցանկ"
+
+msgid "Issue date type"
+msgstr "Թողարկման ամսաթվի տեսակ"
+
+msgid "Learning path index"
+msgstr "Ուսումնական ուղու ինդեքս"
+
+msgid "Learning paths list"
+msgstr "Ուսումնական ուղիների ցանկ"
+
+msgid "Left margin"
+msgstr "Ձախ լուսանցք"
+
+msgid "Legal notice"
+msgstr "Իրավական ծանուցում"
+
+msgid "Maximum subscribed students"
+msgstr "Գրանցված ուսանողների առավելագույն թիվ"
+
+msgid "Notify in course home"
+msgstr "Ծանուցել դասընթացի գլխավոր էջում"
+
+msgid "Notify learners"
+msgstr "Ծանուցել ուսանողներին"
+
+msgid "Notify with agreement file"
+msgstr "Ծանուցել համաձայնագրի ֆայլով"
+
+msgid "Notify without attachment"
+msgstr "Ծանուցել առանց կցորդի"
+
+msgid "Open chat in a new window"
+msgstr "Բացել զրույցը նոր պատուհանում"
+
+msgid "Open to the platform"
+msgstr "Բաց հարթակի համար"
+
+msgid "Place"
+msgstr "Վայր"
+
+msgid "Platform default"
+msgstr "Հարթակի լռելյայն"
+
+msgid "Registration password"
+msgstr "Գրանցման գաղտնաբառ"
+
+msgid "Remove previous agreements"
+msgstr "Հեռացնել նախորդ համաձայնագրերը"
+
+msgid "Right margin"
+msgstr "Աջ լուսանցք"
+
+msgid "Selected learning path"
+msgstr "Ընտրված ուսումնական ուղի"
+
+msgid "Selected test"
+msgstr "Ընտրված թեստ"
+
+msgid "Show learner picture in forums"
+msgstr "Ցուցադրել ուսանողի նկարը ֆորումներում"
+
+msgid "Show system folders"
+msgstr "Ցուցադրել համակարգային թղթապանակները"
+
+msgid "Signature text 1"
+msgstr "Ստորագրության տեքստ 1"
+
+msgid "Signature text 2"
+msgstr "Ստորագրության տեքստ 2"
+
+msgid "Signature text 3"
+msgstr "Ստորագրության տեքստ 3"
+
+msgid "Signature text 4"
+msgstr "Ստորագրության տեքստ 4"
+
+msgid "Student and course information"
+msgstr "Ուսանողի և դասընթացի տեղեկություններ"
+
+msgid "Subscription allowed"
+msgstr "Գրանցումը թույլատրված է"
+
+msgid "Tests list"
+msgstr "Թեստերի ցանկ"
+
+msgid "Unsubscription allowed"
+msgstr "Ապագրանցումը թույլատրված է"
+
+msgid "Use certificate download date"
+msgstr "Օգտագործել վկայականի ներբեռնման ամսաթիվը"
+
+msgid "Use certificate generation date"
+msgstr "Օգտագործել վկայականի ստեղծման ամսաթիվը"
+
+msgid "Use session access dates"
+msgstr "Օգտագործել նիստի մուտքի ամսաթվերը"
+
+msgid "Use session access end date"
+msgstr "Օգտագործել նիստի մուտքի ավարտի ամսաթիվը"
+

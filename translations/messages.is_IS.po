@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Með kveðju"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Dæmi um formúlu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Dæmi um formúlu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Breytusvið"
@@ -39865,4 +39865,193 @@ msgstr "Tilkynning um að renni út: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Tilkynningar eru sendar notendum á þeirra eigin stilltu tungumáli."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Síður eru HTTP-vistaðar í skyndiminni í 60 sekúndur sjálfgefið, eins og skilgreint er í Page-einingunni, svo breytingar gætu ekki birtst strax."
+
+msgid "Activate legal notice"
+msgstr "Virkja lagalega tilkynningu"
+
+msgid "Agreement content"
+msgstr "Efni samnings"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Leyfa nemendum að eyða eigin birtingu"
+
+msgid "Allow learners to edit agenda"
+msgstr "Leyfa nemendum að breyta dagskrá"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Leyfa nemendum að staðfesta eigin mætingu"
+
+msgid "Allow learners to view users list"
+msgstr "Leyfa nemendum að skoða notendalista"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Skrá notendur sjálfkrafa á tilkynningar um spjallborð"
+
+msgid "Certificate mode"
+msgstr "Vottorðsstilling"
+
+msgid "Configure external tools"
+msgstr "Stilla ytri verkfæri"
+
+msgid "Contents"
+msgstr "Efni"
+
+msgid "Contents to show"
+msgstr "Efni sem á að sýna"
+
+msgid "Course certificate"
+msgstr "Námskeiðsvottorð"
+
+msgid "Course delivery dates"
+msgstr "Afhendingardagsetningar námskeiðs"
+
+msgid "Course duration in hours"
+msgstr "Lengd námskeiðs í klukkustundum"
+
+msgid "Course legal agreement"
+msgstr "Lagalegur samningur námskeiðs"
+
+msgid "Custom"
+msgstr "Sérsniðið"
+
+msgid "Custom certificate"
+msgstr "Sérsniðið vottorð"
+
+msgid "Default visibility for new documents"
+msgstr "Sjálfgefin sýnileiki fyrir ný skjöl"
+
+msgid "Direct invitation link"
+msgstr "Beinn boðshlekkur"
+
+msgid "Do not notify"
+msgstr "Ekki tilkynna"
+
+msgid "Documents list"
+msgstr "Skjalalisti"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Senda tölvupóst til nemanda við handvirka skráningu"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Senda tölvupóst til kennara við endurgjöf á nemendabirtingu nýs notanda"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Senda tölvupóst til notenda við móttöku Dropbox-skrár"
+
+msgid "Enable course home notification"
+msgstr "Virkja tilkynningu á heimasíðu námskeiðs"
+
+msgid "Enable course themes in learning paths"
+msgstr "Virkja námskeiðsþemu í námsleiðum"
+
+msgid "Exercises invisible in session"
+msgstr "Æfingar ósýnilegar í lotu"
+
+msgid "Expiration link"
+msgstr "Gildistímatengill"
+
+msgid "Forums list"
+msgstr "Listi yfir spjallborð"
+
+msgid "Issue date type"
+msgstr "Tegund útgáfudags"
+
+msgid "Learning path index"
+msgstr "Efnisyfirlit námsleiðar"
+
+msgid "Learning paths list"
+msgstr "Listi yfir námsleiðir"
+
+msgid "Left margin"
+msgstr "Vinstri spássía"
+
+msgid "Legal notice"
+msgstr "Lagaleg tilkynning"
+
+msgid "Maximum subscribed students"
+msgstr "Hámarksfjöldi skráðra nemenda"
+
+msgid "Notify in course home"
+msgstr "Tilkynna á heimasíðu námskeiðs"
+
+msgid "Notify learners"
+msgstr "Tilkynna nemendum"
+
+msgid "Notify with agreement file"
+msgstr "Tilkynna með samningsskrá"
+
+msgid "Notify without attachment"
+msgstr "Tilkynna án viðhengis"
+
+msgid "Open chat in a new window"
+msgstr "Opna spjall í nýjum glugga"
+
+msgid "Open to the platform"
+msgstr "Opið fyrir kerfið"
+
+msgid "Place"
+msgstr "Staður"
+
+msgid "Platform default"
+msgstr "Sjálfgefið kerfisgildi"
+
+msgid "Registration password"
+msgstr "Skráningarlykilorð"
+
+msgid "Remove previous agreements"
+msgstr "Fjarlægja fyrri samninga"
+
+msgid "Right margin"
+msgstr "Hægri spássía"
+
+msgid "Selected learning path"
+msgstr "Valin námsleið"
+
+msgid "Selected test"
+msgstr "Valið próf"
+
+msgid "Show learner picture in forums"
+msgstr "Sýna mynd nemanda á spjallborðum"
+
+msgid "Show system folders"
+msgstr "Sýna kerfismöppur"
+
+msgid "Signature text 1"
+msgstr "Undirskriftartexti 1"
+
+msgid "Signature text 2"
+msgstr "Undirskriftartexti 2"
+
+msgid "Signature text 3"
+msgstr "Undirskriftartexti 3"
+
+msgid "Signature text 4"
+msgstr "Undirskriftartexti 4"
+
+msgid "Student and course information"
+msgstr "Upplýsingar um nemanda og námskeið"
+
+msgid "Subscription allowed"
+msgstr "Skráning leyfð"
+
+msgid "Tests list"
+msgstr "Listi yfir próf"
+
+msgid "Unsubscription allowed"
+msgstr "Aðskráning leyfð"
+
+msgid "Use certificate download date"
+msgstr "Nota niðurhalsdagsetningu vottorðs"
+
+msgid "Use certificate generation date"
+msgstr "Nota útgáfudagsetningu vottorðs"
+
+msgid "Use session access dates"
+msgstr "Nota aðgangsdagsetningar lotu"
+
+msgid "Use session access end date"
+msgstr "Nota lokadagsetningu aðgangs lotu"
 

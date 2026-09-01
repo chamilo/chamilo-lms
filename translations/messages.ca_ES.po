@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Sincerament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -39879,4 +39879,193 @@ msgstr "Avís de caducitat: %s"
 
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Les notificacions s'envien als usuaris en el seu idioma configurat."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Les pàgines es desen a la memòria cau HTTP durant 60 s per defecte, tal com es defineix a l'entitat Page, de manera que els canvis podrien no reflectir-se immediatament."
+
+msgid "Activate legal notice"
+msgstr "Activa l'avís legal"
+
+msgid "Agreement content"
+msgstr "Contingut de l'acord"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Permet als alumnes eliminar la seva pròpia publicació"
+
+msgid "Allow learners to edit agenda"
+msgstr "Permet als alumnes editar l'agenda"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Permet als alumnes validar la seva pròpia assistència"
+
+msgid "Allow learners to view users list"
+msgstr "Permet als alumnes veure la llista d'usuaris"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Subscriu automàticament els usuaris a les notificacions del fòrum"
+
+msgid "Certificate mode"
+msgstr "Mode de certificat"
+
+msgid "Configure external tools"
+msgstr "Configura eines externes"
+
+msgid "Contents"
+msgstr "Continguts"
+
+msgid "Contents to show"
+msgstr "Continguts a mostrar"
+
+msgid "Course certificate"
+msgstr "Certificat del curs"
+
+msgid "Course delivery dates"
+msgstr "Dates d'impartició del curs"
+
+msgid "Course duration in hours"
+msgstr "Durada del curs en hores"
+
+msgid "Course legal agreement"
+msgstr "Acord legal del curs"
+
+msgid "Custom"
+msgstr "Personalitzat"
+
+msgid "Custom certificate"
+msgstr "Certificat personalitzat"
+
+msgid "Default visibility for new documents"
+msgstr "Visibilitat per defecte dels documents nous"
+
+msgid "Direct invitation link"
+msgstr "Enllaç d'invitació directa"
+
+msgid "Do not notify"
+msgstr "No notifiquis"
+
+msgid "Documents list"
+msgstr "Llista de documents"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Envia un correu a l'alumne en la subscripció manual"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Envia un correu als professors quan hi hagi comentaris nous a la publicació de l'estudiant"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Envia un correu als usuaris en rebre un fitxer a Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Activa la notificació de la pàgina d'inici del curs"
+
+msgid "Enable course themes in learning paths"
+msgstr "Activa els temes del curs als itineraris d'aprenentatge"
+
+msgid "Exercises invisible in session"
+msgstr "Exercicis invisibles a la sessió"
+
+msgid "Expiration link"
+msgstr "Enllaç de caducitat"
+
+msgid "Forums list"
+msgstr "Llista de fòrums"
+
+msgid "Issue date type"
+msgstr "Tipus de data d'emissió"
+
+msgid "Learning path index"
+msgstr "Índex de l'itinerari d'aprenentatge"
+
+msgid "Learning paths list"
+msgstr "Llista d'itineraris d'aprenentatge"
+
+msgid "Left margin"
+msgstr "Marge esquerre"
+
+msgid "Legal notice"
+msgstr "Avís legal"
+
+msgid "Maximum subscribed students"
+msgstr "Màxim d'estudiants subscrits"
+
+msgid "Notify in course home"
+msgstr "Notificar a l'inici del curs"
+
+msgid "Notify learners"
+msgstr "Notificar als alumnes"
+
+msgid "Notify with agreement file"
+msgstr "Notificar amb fitxer d'acord"
+
+msgid "Notify without attachment"
+msgstr "Notificar sense adjunt"
+
+msgid "Open chat in a new window"
+msgstr "Obrir el xat en una finestra nova"
+
+msgid "Open to the platform"
+msgstr "Obert a la plataforma"
+
+msgid "Place"
+msgstr "Lloc"
+
+msgid "Platform default"
+msgstr "Predeterminat de la plataforma"
+
+msgid "Registration password"
+msgstr "Contrasenya de registre"
+
+msgid "Remove previous agreements"
+msgstr "Eliminar acords anteriors"
+
+msgid "Right margin"
+msgstr "Marge dret"
+
+msgid "Selected learning path"
+msgstr "Itinerari d'aprenentatge seleccionat"
+
+msgid "Selected test"
+msgstr "Test seleccionat"
+
+msgid "Show learner picture in forums"
+msgstr "Mostrar la foto de l'alumne als fòrums"
+
+msgid "Show system folders"
+msgstr "Mostrar carpetes del sistema"
+
+msgid "Signature text 1"
+msgstr "Text de signatura 1"
+
+msgid "Signature text 2"
+msgstr "Text de signatura 2"
+
+msgid "Signature text 3"
+msgstr "Text de signatura 3"
+
+msgid "Signature text 4"
+msgstr "Text de signatura 4"
+
+msgid "Student and course information"
+msgstr "Informació de l'estudiant i del curs"
+
+msgid "Subscription allowed"
+msgstr "Subscripció permesa"
+
+msgid "Tests list"
+msgstr "Llista de tests"
+
+msgid "Unsubscription allowed"
+msgstr "Baixa permesa"
+
+msgid "Use certificate download date"
+msgstr "Utilitzar la data de descàrrega del certificat"
+
+msgid "Use certificate generation date"
+msgstr "Utilitzar la data de generació del certificat"
+
+msgid "Use session access dates"
+msgstr "Utilitzar les dates d'accés a la sessió"
+
+msgid "Use session access end date"
+msgstr "Utilitzar la data de fi d'accés a la sessió"
 

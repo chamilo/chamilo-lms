@@ -39880,3 +39880,192 @@ msgstr "Ειδοποίηση επικείμενης λήξης: %s"
 msgid "Notifications are sent to users in their own configured language."
 msgstr "Οι ειδοποιήσεις αποστέλλονται στους χρήστες στη δική τους ρυθμισμένη γλώσσα."
 
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Οι σελίδες αποθηκεύονται προσωρινά μέσω HTTP για 60 δευτερόλεπτα από προεπιλογή, όπως ορίζεται στην οντότητα Page, επομένως οι αλλαγές ενδέχεται να μην εμφανίζονται αμέσως."
+
+msgid "Activate legal notice"
+msgstr "Ενεργοποίηση νομικής ειδοποίησης"
+
+msgid "Agreement content"
+msgstr "Περιεχόμενο συμφωνίας"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Να επιτρέπεται στους εκπαιδευόμενους να διαγράφουν τη δική τους δημοσίευση"
+
+msgid "Allow learners to edit agenda"
+msgstr "Να επιτρέπεται στους εκπαιδευόμενους να επεξεργάζονται το ημερολόγιο"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Να επιτρέπεται στους εκπαιδευόμενους να επικυρώνουν τη δική τους παρουσία"
+
+msgid "Allow learners to view users list"
+msgstr "Να επιτρέπεται στους εκπαιδευόμενους να βλέπουν τη λίστα χρηστών"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Αυτόματη εγγραφή χρηστών στις ειδοποιήσεις φόρουμ"
+
+msgid "Certificate mode"
+msgstr "Λειτουργία πιστοποιητικού"
+
+msgid "Configure external tools"
+msgstr "Διαμόρφωση εξωτερικών εργαλείων"
+
+msgid "Contents"
+msgstr "Περιεχόμενα"
+
+msgid "Contents to show"
+msgstr "Περιεχόμενα προς εμφάνιση"
+
+msgid "Course certificate"
+msgstr "Πιστοποιητικό μαθήματος"
+
+msgid "Course delivery dates"
+msgstr "Ημερομηνίες παράδοσης μαθήματος"
+
+msgid "Course duration in hours"
+msgstr "Διάρκεια μαθήματος σε ώρες"
+
+msgid "Course legal agreement"
+msgstr "Νομική συμφωνία μαθήματος"
+
+msgid "Custom"
+msgstr "Προσαρμοσμένο"
+
+msgid "Custom certificate"
+msgstr "Προσαρμοσμένο πιστοποιητικό"
+
+msgid "Default visibility for new documents"
+msgstr "Προεπιλεγμένη ορατότητα για νέα έγγραφα"
+
+msgid "Direct invitation link"
+msgstr "Άμεσος σύνδεσμος πρόσκλησης"
+
+msgid "Do not notify"
+msgstr "Να μην ειδοποιείται"
+
+msgid "Documents list"
+msgstr "Λίστα εγγράφων"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Αποστολή e-mail στον εκπαιδευόμενο κατά τη χειροκίνητη εγγραφή"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Αποστολή e-mail στους εκπαιδευτές για ανατροφοδότηση σε εργασία εκπαιδευόμενου νέου χρήστη"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Αποστολή e-mail στους χρήστες κατά τη λήψη αρχείου Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Ενεργοποίηση ειδοποίησης αρχικής σελίδας μαθήματος"
+
+msgid "Enable course themes in learning paths"
+msgstr "Ενεργοποίηση θεμάτων μαθήματος στις διαδρομές μάθησης"
+
+msgid "Exercises invisible in session"
+msgstr "Ασκήσεις αόρατες στη συνεδρία"
+
+msgid "Expiration link"
+msgstr "Σύνδεσμος λήξης"
+
+msgid "Forums list"
+msgstr "Λίστα φόρουμ"
+
+msgid "Issue date type"
+msgstr "Τύπος ημερομηνίας έκδοσης"
+
+msgid "Learning path index"
+msgstr "Ευρετήριο διαδρομής μάθησης"
+
+msgid "Learning paths list"
+msgstr "Λίστα διαδρομών μάθησης"
+
+msgid "Left margin"
+msgstr "Αριστερό περιθώριο"
+
+msgid "Legal notice"
+msgstr "Νομική ειδοποίηση"
+
+msgid "Maximum subscribed students"
+msgstr "Μέγιστος αριθμός εγγεγραμμένων εκπαιδευόμενων"
+
+msgid "Notify in course home"
+msgstr "Ειδοποίηση στην αρχική σελίδα μαθήματος"
+
+msgid "Notify learners"
+msgstr "Ειδοποίηση εκπαιδευομένων"
+
+msgid "Notify with agreement file"
+msgstr "Ειδοποίηση με αρχείο συμφωνίας"
+
+msgid "Notify without attachment"
+msgstr "Ειδοποίηση χωρίς συνημμένο"
+
+msgid "Open chat in a new window"
+msgstr "Άνοιγμα συνομιλίας σε νέο παράθυρο"
+
+msgid "Open to the platform"
+msgstr "Ανοιχτό στην πλατφόρμα"
+
+msgid "Place"
+msgstr "Τόπος"
+
+msgid "Platform default"
+msgstr "Προεπιλογή πλατφόρμας"
+
+msgid "Registration password"
+msgstr "Κωδικός εγγραφής"
+
+msgid "Remove previous agreements"
+msgstr "Αφαίρεση προηγούμενων συμφωνιών"
+
+msgid "Right margin"
+msgstr "Δεξί περιθώριο"
+
+msgid "Selected learning path"
+msgstr "Επιλεγμένη διαδρομή μάθησης"
+
+msgid "Selected test"
+msgstr "Επιλεγμένο τεστ"
+
+msgid "Show learner picture in forums"
+msgstr "Εμφάνιση εικόνας εκπαιδευόμενου στα φόρουμ"
+
+msgid "Show system folders"
+msgstr "Εμφάνιση φακέλων συστήματος"
+
+msgid "Signature text 1"
+msgstr "Κείμενο υπογραφής 1"
+
+msgid "Signature text 2"
+msgstr "Κείμενο υπογραφής 2"
+
+msgid "Signature text 3"
+msgstr "Κείμενο υπογραφής 3"
+
+msgid "Signature text 4"
+msgstr "Κείμενο υπογραφής 4"
+
+msgid "Student and course information"
+msgstr "Πληροφορίες μαθητή και μαθήματος"
+
+msgid "Subscription allowed"
+msgstr "Επιτρέπεται η εγγραφή"
+
+msgid "Tests list"
+msgstr "Λίστα τεστ"
+
+msgid "Unsubscription allowed"
+msgstr "Επιτρέπεται η απεγγραφή"
+
+msgid "Use certificate download date"
+msgstr "Χρήση ημερομηνίας λήψης πιστοποιητικού"
+
+msgid "Use certificate generation date"
+msgstr "Χρήση ημερομηνίας δημιουργίας πιστοποιητικού"
+
+msgid "Use session access dates"
+msgstr "Χρήση ημερομηνιών πρόσβασης συνεδρίας"
+
+msgid "Use session access end date"
+msgstr "Χρήση ημερομηνίας λήξης πρόσβασης συνεδρίας"
+

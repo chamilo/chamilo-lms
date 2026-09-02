@@ -41,6 +41,12 @@ final readonly class AiFeatureAccessHelper
 
         $mode = $this->getFeatureMode($feature);
 
+        // The tutor chatbot becomes platform-controlled when globally enabled.
+        // Keep the course switch only for plugin-defined (BuyCourses) mode.
+        if ('tutor_chatbot' === $feature && self::MODE_ENABLED === $mode) {
+            return false;
+        }
+
         if (self::MODE_ENABLED === $mode) {
             return true;
         }
@@ -54,6 +60,18 @@ final readonly class AiFeatureAccessHelper
 
     public function isFeatureEnabledForCourse(string $feature, int $courseId): bool
     {
+        if (!$this->isSupportedFeature($feature) || $courseId <= 0 || !$this->isMasterEnabled()) {
+            return false;
+        }
+
+        $mode = $this->getFeatureMode($feature);
+
+        // When the tutor is enabled at platform level, it is enabled in every course.
+        // plugin_defined intentionally keeps the existing per-course BuyCourses behavior.
+        if ('tutor_chatbot' === $feature && self::MODE_ENABLED === $mode) {
+            return true;
+        }
+
         if (!$this->isFeatureConfigurableForCourse($feature, $courseId)) {
             return false;
         }
@@ -63,6 +81,13 @@ final readonly class AiFeatureAccessHelper
             ['real_id' => $courseId],
             true
         );
+    }
+
+    public function isFeatureEnabledAtPlatform(string $feature): bool
+    {
+        return $this->isSupportedFeature($feature)
+            && $this->isMasterEnabled()
+            && self::MODE_ENABLED === $this->getFeatureMode($feature);
     }
 
     public function getFeatureMode(string $feature): string

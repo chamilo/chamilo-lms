@@ -62,9 +62,9 @@
               </button>
             </div>
 
-            <!-- AI Tutor quick entry (only when course context is available) -->
+            <!-- AI Tutor quick entry (course tutor or global Chamilo support) -->
             <div
-              v-if="inCourse && tutorCtx.enabled && !contactsHasAiTutor"
+              v-if="tutorCtx.enabled && !contactsHasAiTutor"
               class="chd-ai"
             >
               <button
@@ -158,7 +158,7 @@
                   >
                     <div
                       class="chd-bubble__content"
-                      v-html="renderMessage(msg.message)"
+                      v-html="renderMessage(msg)"
                     />
                     <div class="chd-bubble__meta">
                       <span class="chd-bubble__date">{{ formatTs(msg.date) }}</span>
@@ -459,10 +459,11 @@ const scrollBox = ref(null)
 /** Tutor context (backend-authoritative) */
 const tutorCtx = reactive({
   loaded: false,
-  enabled: false, // TRUE only when backend says enabled (course-aware)
+  enabled: false, // TRUE only when backend says enabled for the current context
   inTest: false,
   course: null, // { id, title, language }
   provider: "", // default provider key
+  mode: null, // "course" or "global"
 })
 
 /** Unread tracking */
@@ -531,7 +532,7 @@ function normalizeContactsHtmlForAiTutor(html) {
     )
     .forEach((n) => n.remove())
 
-  const shouldShowAi = !!tutorCtx.enabled && !!inCourse.value && !tutorCtx.inTest
+  const shouldShowAi = !!tutorCtx.enabled && !tutorCtx.inTest
 
   if (shouldShowAi) {
     const row = document.createElement("div")
@@ -622,11 +623,172 @@ function linkify(raw) {
 }
 
 /**
- * Render chat message safely for v-html.
- * Allow only <a> and <br> tags (chat messages are treated as plain text).
+ * Decode the HTML entities/line breaks produced by legacy chat storage back
+ * into plain text. The result is always escaped again before being rendered.
  */
-function renderMessage(rawMessage) {
-  const html = linkify(rawMessage)
+function normalizeStoredChatText(rawMessage) {
+  let text = String(rawMessage ?? "")
+
+  // Chat::sanitize() stores line breaks as <br>. Some AI providers can also
+  // escape the tag, so accept an optional leading backslash.
+  text = text.replace(/\\?<br\s*\/?>/gi, "\n")
+
+  // Messages coming from the legacy chat table have already passed through
+  // htmlspecialchars(). Decode once, then escape again in the renderer below.
+  const decoder = document.createElement("textarea")
+  decoder.innerHTML = text
+
+  return decoder.value
+}
+
+function safeHttpUrl(rawUrl) {
+  try {
+    const url = new URL(String(rawUrl || ""))
+    if (!/^https?:$/i.test(url.protocol)) return ""
+    return url.toString()
+  } catch {
+    return ""
+  }
+}
+
+/**
+ * Render the limited Markdown normally returned by AI providers.
+ * Raw HTML is never trusted: content is escaped first and DOMPurify remains
+ * the final safety boundary.
+ */
+function renderAiInlineMarkdown(rawText) {
+  let text = String(rawText ?? "")
+
+  // Providers occasionally escape Markdown punctuation (\*\*, \[, ...).
+  // Unescape it only for assistant messages so normal user chat stays literal.
+  text = text.replace(/\\([\\`*_[\]{}()#+\-.!>])/g, "$1")
+
+  const tokens = []
+  const token = (html) => {
+    const key = `\uE000${tokens.length}\uE001`
+    tokens.push(html)
+    return key
+  }
+
+  // Markdown links first so the URL is not picked up again by bare-link logic.
+  text = text.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, (match, label, rawUrl) => {
+    const href = safeHttpUrl(rawUrl)
+    if (!href) return match
+
+    return token(
+      `<a href="${escapeForHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeForHtml(label)}</a>`,
+    )
+  })
+
+  // Inline code.
+  text = text.replace(/`([^`\n]+)`/g, (match, code) => token(`<code>${escapeForHtml(code)}</code>`))
+
+  // Bare HTTP(S) URLs.
+  text = text.replace(/https?:\/\/[^\s<>"']+/g, (rawUrl) => {
+    const href = safeHttpUrl(rawUrl)
+    if (!href) return rawUrl
+
+    return token(
+      `<a href="${escapeForHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeForHtml(rawUrl)}</a>`,
+    )
+  })
+
+  let html = escapeForHtml(text)
+
+  // Limited emphasis support. Keep this intentionally small and predictable.
+  html = html.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>")
+  html = html.replace(/__([^_\n]+)__/g, "<strong>$1</strong>")
+  html = html.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>")
+  html = html.replace(/(^|[^_])_([^_\n]+)_(?!_)/g, "$1<em>$2</em>")
+
+  tokens.forEach((value, index) => {
+    html = html.replaceAll(`\uE000${index}\uE001`, value)
+  })
+
+  return html
+}
+
+function renderAiMarkdown(rawMessage) {
+  const text = normalizeStoredChatText(rawMessage)
+  const lines = text.split(/\n/)
+  const out = []
+  let listType = ""
+
+  const closeList = () => {
+    if (!listType) return
+    out.push(`</${listType}>`)
+    listType = ""
+  }
+
+  const openList = (type) => {
+    if (listType === type) return
+    closeList()
+    listType = type
+    out.push(`<${type}>`)
+  }
+
+  for (const rawLine of lines) {
+    const line = rawLine.trimEnd()
+
+    if (!line.trim()) {
+      closeList()
+      out.push("<br>")
+      continue
+    }
+
+    const heading = line.match(/^#{1,6}\s+(.+)$/)
+    if (heading) {
+      closeList()
+      out.push(`<strong>${renderAiInlineMarkdown(heading[1])}</strong><br>`)
+      continue
+    }
+
+    if (/^\s*---+\s*$/.test(line)) {
+      closeList()
+      out.push("<br>")
+      continue
+    }
+
+    const bullet = line.match(/^\s*[-*]\s+(.+)$/)
+    if (bullet) {
+      openList("ul")
+      out.push(`<li>${renderAiInlineMarkdown(bullet[1])}</li>`)
+      continue
+    }
+
+    const numbered = line.match(/^\s*\d+[.)]\s+(.+)$/)
+    if (numbered) {
+      openList("ol")
+      out.push(`<li>${renderAiInlineMarkdown(numbered[1])}</li>`)
+      continue
+    }
+
+    closeList()
+    out.push(`${renderAiInlineMarkdown(line)}<br>`)
+  }
+
+  closeList()
+
+  return DOMPurify.sanitize(out.join(""), {
+    ALLOWED_TAGS: ["a", "br", "strong", "em", "code", "ul", "ol", "li"],
+    ALLOWED_ATTR: ["href", "target", "rel"],
+    ADD_ATTR: ["target", "rel"],
+  })
+}
+
+/**
+ * Render chat messages safely for v-html.
+ * - Normal chat stays plain text with safe clickable links.
+ * - AI assistant messages get a small, sanitized Markdown renderer.
+ */
+function renderMessage(message) {
+  const fromId = Number(message?.from_user_info?.id ?? message?.f ?? 0)
+
+  if (fromId === AI_PEER_ID) {
+    return renderAiMarkdown(message?.message)
+  }
+
+  const html = linkify(normalizeStoredChatText(message?.message))
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: ["a", "br"],
     ALLOWED_ATTR: ["href", "target", "rel"],
@@ -911,8 +1073,8 @@ function collectVisibleContactIds() {
   const root = document.querySelector(".chd .chd-contacts .chd-contacts-html")
   const ids = new Set()
 
-  // Only include AI Tutor when backend says it is enabled (course-aware).
-  if (tutorCtx.enabled && inCourse.value) ids.add(AI_PEER_ID)
+  // Include AI Tutor whenever the backend enables it for the current context.
+  if (tutorCtx.enabled) ids.add(AI_PEER_ID)
 
   if (root) {
     root
@@ -955,6 +1117,7 @@ async function loadTutorContext() {
   tutorCtx.inTest = false
   tutorCtx.course = null
   tutorCtx.provider = ""
+  tutorCtx.mode = null
 
   try {
     const r = await getJSON(API.tutor_context)
@@ -962,11 +1125,13 @@ async function loadTutorContext() {
     tutorCtx.inTest = !!r?.in_test
     tutorCtx.course = r?.course || null
     tutorCtx.provider = typeof r?.provider === "string" ? r.provider : ""
+    tutorCtx.mode = typeof r?.mode === "string" ? r.mode : null
   } catch {
     tutorCtx.enabled = false
     tutorCtx.inTest = false
     tutorCtx.course = null
     tutorCtx.provider = ""
+    tutorCtx.mode = null
   } finally {
     tutorCtx.loaded = true
   }
@@ -1080,8 +1245,8 @@ function resetAiThreadCache() {
 async function openConversation(peer) {
   const pid = Number(peer.id)
 
-  // Guard: AI Tutor must be course-only and enabled by backend.
-  if (pid === AI_PEER_ID && (!tutorCtx.enabled || !inCourse.value || tutorCtx.inTest)) return
+  // Backend decides whether the AI Tutor is available in course or global support mode.
+  if (pid === AI_PEER_ID && (!tutorCtx.enabled || tutorCtx.inTest)) return
 
   activePeer.value = {
     id: pid,
@@ -1377,7 +1542,7 @@ const sendDisabled = computed(() => {
   if (sending.value) return true
   if (userStatus.value !== 1) return true
   if (isAiThread.value && tutorCtx.inTest) return true
-  if (isAiThread.value && (!tutorCtx.enabled || !inCourse.value)) return true
+  if (isAiThread.value && !tutorCtx.enabled) return true
   return false
 })
 
@@ -1705,7 +1870,7 @@ async function send() {
 
   if (pid === AI_PEER_ID) {
     if (tutorCtx.inTest) return
-    if (!tutorCtx.enabled || !inCourse.value) return
+    if (!tutorCtx.enabled) return
   }
 
   const nowSec = Math.floor(Date.now() / 1000)
@@ -1774,7 +1939,7 @@ async function clearConversation() {
     const pid = activePeer.value.id
 
     if (Number(pid) === AI_PEER_ID) {
-      // Server reset for AI tutor (course-only)
+      // Server reset for the current AI tutor context.
       await post(API.tutor_reset, { ai_provider: tutorCtx.provider || "" })
       resetAiThreadCache()
       await getPreviousMessages()
@@ -1923,7 +2088,7 @@ async function onNavigationChanged() {
   }
 
   if (aiActive) {
-    if (!tutorCtx.enabled || !inCourse.value || tutorCtx.inTest) {
+    if (!tutorCtx.enabled || tutorCtx.inTest) {
       activePeer.value = null
       resetAiThreadCache()
       return

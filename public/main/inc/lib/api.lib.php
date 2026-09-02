@@ -1755,17 +1755,10 @@ function api_get_user_info_from_entity(
     if (isset($result['user_is_online'])) {
         $result['user_is_online'] = true == $result['user_is_online'] ? 1 : 0;
     }
-    if (isset($result['user_is_online_in_chat'])) {
-        $result['user_is_online_in_chat'] = $result['user_is_online_in_chat'];
-    }
 
     $result['password'] = '';
     if ($showPassword) {
         $result['password'] = $user->getPassword();
-    }
-
-    if (isset($result['profile_completed'])) {
-        $result['profile_completed'] = $result['profile_completed'];
     }
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
@@ -1777,10 +1770,6 @@ function api_get_user_info_from_entity(
         $sendMessage,
         ['class' => 'ajax']
     );
-
-    if (isset($result['extra'])) {
-        $result['extra'] = $result['extra'];
-    }
 
     return $result;
 }

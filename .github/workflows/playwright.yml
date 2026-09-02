@@ -13,7 +13,7 @@ on: [ push, pull_request ]
 jobs:
     build:
         name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
-        runs-on: ubuntu-24.04
+        runs-on: ${{ matrix.operating-system }}
 
         strategy:
             fail-fast: false

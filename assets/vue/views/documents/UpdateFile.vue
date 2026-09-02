@@ -105,6 +105,7 @@ import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useDocumentUpdate } from "../../composables/useDocumentUpdate"
 import { useCertificateTags } from "../../composables/useCertificateTags"
 import { useDocumentTemplates } from "../../composables/useDocumentTemplates"
+import { looksLikeHtmlContent } from "../../composables/fileUtils"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
 import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
@@ -165,6 +166,49 @@ const isCertificateDocument = computed(() =>
   "certificate" === String(item.value?.filetype || filetype).trim().toLowerCase(),
 )
 
+const isEditableTextDocument = computed(() => {
+  const document = item.value
+  const documentFiletype = String(document?.filetype || filetype)
+    .trim()
+    .toLowerCase()
+
+  if (["certificate", "html"].includes(documentFiletype)) {
+    return true
+  }
+
+  if ("file" !== documentFiletype) {
+    return false
+  }
+
+  const resourceFile = document?.resourceNode?.firstResourceFile
+  if (!resourceFile) {
+    return false
+  }
+
+  const mime = String(resourceFile.mimeType || "")
+    .split(";")[0]
+    .trim()
+    .toLowerCase()
+  const originalName = String(resourceFile.originalName || resourceFile.title || document?.title || "")
+    .trim()
+    .toLowerCase()
+  const extension = originalName.includes(".") ? originalName.split(".").pop() : ""
+
+  if (mime.includes("text/html") || mime.includes("application/xhtml") || ["html", "htm", "xhtml"].includes(extension)) {
+    return true
+  }
+
+  if (resourceFile.image || resourceFile.video || resourceFile.audio) {
+    return false
+  }
+
+  if (mime.startsWith("image/") || mime.startsWith("video/") || mime.startsWith("audio/")) {
+    return false
+  }
+
+  return looksLikeHtmlContent(document?.contentFile)
+})
+
 const { certificateTags, insertCertificateTag, copyAllCertificateTags } = useCertificateTags(item)
 const { templates, fetchTemplates, addTemplateToEditor } = useDocumentTemplates(item, updateForm)
 
@@ -184,7 +228,20 @@ const canEditItem = computed(() => {
 watch(
   item,
   (val) => {
-    if (!val || typeof val !== "object") return
+    if (!val || typeof val !== "object" || 0 === Object.keys(val).length) return
+
+    if (!isEditableTextDocument.value) {
+      const query = { ...route.query }
+      delete query.getFile
+
+      router.replace({
+        name: "DocumentsUpdate",
+        params: { node: route.params.node },
+        query,
+      })
+      return
+    }
+
     if ("certificate" === String(val.filetype || filetype).trim().toLowerCase()) {
       val.indexDocumentContent = false
       val.searchFieldValues = {}

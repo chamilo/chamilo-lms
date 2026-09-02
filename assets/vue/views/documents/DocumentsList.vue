@@ -80,7 +80,7 @@
     <BaseButton
       v-if="showNewDrawingButton"
       :label="t('New drawing')"
-      icon="drawing"
+      icon="shape"
       only-icon
       type="success"
       @click="goToNewDrawing"
@@ -1596,9 +1596,71 @@ function btnChangeVisibilityOnClick(item) {
   })
 }
 
+function isEditableTextDocument(item) {
+  const filetype = String(item?.filetype || "")
+    .trim()
+    .toLowerCase()
+
+  if (["certificate", "html"].includes(filetype)) {
+    return true
+  }
+
+  if ("file" !== filetype) {
+    return false
+  }
+
+  const resourceFile = item?.resourceNode?.firstResourceFile
+  if (!resourceFile) {
+    return false
+  }
+
+  const mime = String(resourceFile.mimeType || "")
+    .split(";")[0]
+    .trim()
+    .toLowerCase()
+  const extension = getDocumentExtension(item)
+  const binaryExtensions = new Set([
+    "avif",
+    "bmp",
+    "gif",
+    "ico",
+    "jpeg",
+    "jpg",
+    "png",
+    "webp",
+    "mp3",
+    "ogg",
+    "wav",
+    "m4a",
+    "mp4",
+    "m4v",
+    "mov",
+    "webm",
+    "avi",
+    "pdf",
+  ])
+
+  if (
+    isImage(item) ||
+    resourceFile.video ||
+    resourceFile.audio ||
+    mime.startsWith("image/") ||
+    mime.startsWith("video/") ||
+    mime.startsWith("audio/") ||
+    "application/pdf" === mime ||
+    binaryExtensions.has(extension)
+  ) {
+    return false
+  }
+
+  return Boolean(resourceFile.text) || isHtml(item) || mime.startsWith("text/")
+}
+
 function btnEditOnClick(item) {
-  const folderParams = route.query
-  folderParams.id = item["@id"]
+  const folderParams = {
+    ...route.query,
+    id: item["@id"],
+  }
 
   if ("folder" === item.filetype || isEmpty(item.filetype)) {
     router.push({
@@ -1613,18 +1675,28 @@ function btnEditOnClick(item) {
     router.push({
       name: "DocumentsSvgEditor",
       params: { node: route.params.node },
+      query: folderParams,
+    })
+    return
+  }
+
+  if (isEditableTextDocument(item)) {
+    router.push({
+      name: "DocumentsUpdateFile",
+      params: { id: item["@id"] },
       query: {
         ...folderParams,
-        id: item["@id"],
+        getFile: true,
       },
     })
     return
   }
 
-  if ("file" === item.filetype || "certificate" === item.filetype || "html" === item.filetype) {
-    folderParams.getFile = true
-    router.push({ name: "DocumentsUpdateFile", params: { id: item["@id"] }, query: folderParams })
-  }
+  router.push({
+    name: "DocumentsUpdate",
+    params: { id: item["@id"] },
+    query: folderParams,
+  })
 }
 
 function showSlideShowWithFirstImage() {

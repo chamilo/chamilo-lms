@@ -4,7 +4,7 @@
       v-if="data.preview"
       class="mb-6 flex items-center justify-center gap-2 rounded-lg bg-blue-10 px-4 py-3 text-sm font-semibold text-blue-90"
     >
-      <BaseIcon icon="eye-on" />
+      <BaseIcon icon="preview" />
       {{ t("Preview") }}
     </div>
 

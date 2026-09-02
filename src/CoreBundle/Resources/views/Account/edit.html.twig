@@ -231,6 +231,7 @@
                                                 <div
                                                     id="profile-picture-crop-viewport"
                                                     class="relative h-64 w-64 max-w-full overflow-hidden rounded-full border border-gray-25 bg-white shadow-inner"
+                                                    style="touch-action:none;"
                                                 >
                                                     <img
                                                         id="profile-picture-crop-image"
@@ -238,6 +239,7 @@
                                                         src=""
                                                         alt=""
                                                         draggable="false"
+                                                        style="max-width:none;"
                                                     />
                                                 </div>
                                             </div>
@@ -535,7 +537,7 @@
                 }
 
                 cropPanel.classList.remove('hidden');
-                initialiseCropper();
+                window.requestAnimationFrame(initialiseCropper);
 
                 setStatus(
                   '{{ 'New picture'|trans|e('js') }}',

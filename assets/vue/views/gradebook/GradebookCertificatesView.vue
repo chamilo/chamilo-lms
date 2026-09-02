@@ -272,7 +272,7 @@
     <BaseDialog
       v-model:is-visible="isPreviewDialogVisible"
       :title="previewDialogTitle"
-      header-icon="eye-on"
+      header-icon="preview"
     >
       <div class="overflow-hidden rounded-lg border border-gray-20 bg-white">
         <iframe

@@ -61,6 +61,18 @@
               class="min-h-0 flex-1 overflow-auto"
             />
 
+            <video
+              v-else-if="contentReady && isActiveVideo"
+              :key="`${activeItem.id}-${runtime.contentUrl}-${iframeReloadKey}`"
+              :src="runtime.contentUrl"
+              :title="activeItem.title"
+              class="lp-impress-frame"
+              controls
+              playsinline
+              preload="metadata"
+              @loadedmetadata="handleMediaLoad"
+            />
+
             <iframe
               v-else-if="contentReady"
               ref="contentFrame"
@@ -122,7 +134,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(["active-change", "iframe-load", "open-item"])
+const emit = defineEmits(["active-change", "iframe-load", "media-load", "open-item"])
 const { t } = useI18n()
 
 const activeItemId = ref(0)
@@ -159,6 +171,7 @@ const contentReady = computed(
     Number(activeItem.value.id) === Number(props.runtime.currentItemId) &&
     Boolean(props.runtime.contentUrl),
 )
+const isActiveVideo = computed(() => "video" === String(activeItem.value?.itemType || "").trim().toLowerCase())
 
 watch(
   () => [props.runtime?.currentItemId, props.runtime?.items],
@@ -295,6 +308,12 @@ function handleTouchEnd(event) {
 function handleIframeLoad(event) {
   emit("iframe-load", event)
   attachFrameKeyboardNavigation()
+}
+
+function handleMediaLoad() {
+  contentFrame.value = null
+  detachFrameKeyboardNavigation()
+  emit("media-load")
 }
 
 function attachFrameKeyboardNavigation() {

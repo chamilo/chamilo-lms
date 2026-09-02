@@ -1060,8 +1060,6 @@ class SocialManager extends UserManager
             ];
         }
 
-        error_log('$userInfo ->'.print_r($userInfo['language'], true));
-
         if (isset($options['language']) && false === $options['language']) {
             $userInfo['language'] = '';
         }

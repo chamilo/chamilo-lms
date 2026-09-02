@@ -113,9 +113,9 @@ $role = 0;
 $usergroup = new UserGroupModel();
 if (0 != $group_id) {
     $groupInfo = $usergroup->get($group_id);
-    $groupInfo['name'] = Security::remove_XSS($groupInfo['name']);
+    $groupInfo['title'] = Security::remove_XSS($groupInfo['title']);
     $groupInfo['description'] = Security::remove_XSS($groupInfo['description']);
-    $interbreadcrumb[] = ['url' => '#', 'name' => $groupInfo['name']];
+    $interbreadcrumb[] = ['url' => '#', 'name' => $groupInfo['title']];
 
     if (isset($_GET['action']) && 'leave' === $_GET['action']) {
         $user_leaved = intval($_GET['u']);
@@ -158,7 +158,7 @@ $social_right_content = null;
 $socialForum = '';
 
 $groupInfo = $usergroup->get($group_id);
-$groupInfo['name'] = Security::remove_XSS($groupInfo['name']);
+$groupInfo['title'] = Security::remove_XSS($groupInfo['title']);
 $groupInfo['description'] = Security::remove_XSS($groupInfo['description']);
 
 //Loading group information

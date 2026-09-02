@@ -63,6 +63,15 @@ Feature: Social Group
     Then I should not see an error
     And I remember the created group id
 
+  # @slow-scenario (4-minute budget, see the Before hook in common.steps.ts):
+  # "I have a friend named ..." does 3 full logins and 2 logouts on its own
+  # (admin -> fbaggins -> admin), plus find_users, send_invitation and the
+  # add_friend fetch. That is the most session round-trips of any scenario in
+  # the suite, and a trace of a timed-out run measured them at 6-12s each
+  # (/login 11.7s, add_friend 9.1s, /logout 6.5s) — the default 90s is spent
+  # before the logout-link assertion even starts, so the failure surfaces as
+  # "login produced no session" rather than "this scenario is too long".
+  @slow-scenario
   Scenario: Invite a friend to group
     Given I am a platform administrator
     And I have a friend named "fbaggins"

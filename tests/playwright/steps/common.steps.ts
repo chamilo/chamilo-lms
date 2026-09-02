@@ -2926,7 +2926,13 @@ When("I invite the friend to the social group I just created", async ({ page }) 
   if (!lastFriendUserId) {
     throw new Error("No friend id remembered — run \"I have a friend named ...\" first.")
   }
-  await page.goto(`/main/social/group_invitation.php?id=${encodeURIComponent(lastCreatedGroupId)}`)
+  // gotoReliably, not a bare page.goto(): the preceding "I have a friend named
+  // ..." step ends with loginAs(page, "admin"), whose SPA login finishes with a
+  // client-side redirect. When that redirect is still in flight this goto is
+  // cancelled by it, and Playwright reports the collision as a bare
+  // `net::ERR_ABORTED` / "maybe frame was detached?" with no interrupting URL
+  // to name — already in gotoReliably's retry set (isRetryableNavigationRace).
+  await gotoReliably(page, `/main/social/group_invitation.php?id=${encodeURIComponent(lastCreatedGroupId)}`)
   const alreadyInvited = page.getByText("Users already invited")
   try {
     await page.waitForSelector("#invitation option", { timeout: 15_000 })

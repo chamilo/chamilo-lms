@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\AiTutorConversationRepository;
+use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
@@ -36,12 +37,14 @@ final class AiTutorChatService
 
     private const string DEFAULT_PROVIDER = 'openai';
     private const string ACTIVE_PROVIDER_SESSION_PREFIX = 'ai_tutor_active_provider_';
+    public const string OFFICIAL_DOCUMENTATION_URL = 'https://docs.chamilo.org';
 
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly AiProviderFactory $aiProviderFactory,
         private readonly EntityManagerInterface $em,
         private readonly AiTutorConversationRepository $conversationRepo,
+        private readonly CCourseDescriptionRepository $courseDescriptionRepository,
         private readonly AiChatCompletionClientInterface $client,
         private readonly LoggerInterface $logger
     ) {}
@@ -195,7 +198,7 @@ final class AiTutorChatService
         string $newUserMessage,
         string $selectedTextContext = ''
     ): array {
-        $system = $this->buildSystemPrompt($course);
+        $system = $this->buildContextSystemPrompt($course);
 
         $providerMessages = [];
         $providerMessages[] = ['role' => 'system', 'content' => $system];
@@ -598,20 +601,70 @@ final class AiTutorChatService
             // ignore
         }
 
-        return "You are a digital tutor and mentor inside Chamilo. Answer in the user's language.";
+        return $this->buildContextSystemPrompt(null, $uiLang);
     }
 
-    private function buildSystemPrompt(Course $course, string $courseLanguage = ''): string
+    /**
+     * Build the AI Tutor system prompt for course and global support modes.
+     *
+     * The wording is provided by the product owner. Course mode also appends the
+     * course description sections as plain-text context.
+     */
+    public function buildContextSystemPrompt(?Course $course, string $courseLanguage = ''): string
     {
-        $title = (string) ($course->getTitle() ?: 'this course');
         $lang = trim($courseLanguage);
+        $documentationUrl = self::OFFICIAL_DOCUMENTATION_URL.'/';
 
-        return "You are a digital tutor and mentor. You help me understand topics related to my courses, in this case '{$title}'. "
-            .($lang ? "The course is in '{$lang}' but just answer me in whatever language I talk to you. " : 'Just answer me in whatever language I talk to you. ')
+        if ($course instanceof Course) {
+            if ('' === $lang && method_exists($course, 'getCourseLanguage')) {
+                $lang = trim((string) ($course->getCourseLanguage() ?? ''));
+            }
+
+            $title = (string) ($course->getTitle() ?: 'this course');
+            $description = $this->buildCourseDescriptionContext($course);
+
+            return "You are a digital tutor and mentor. You help me understand topics related to my course titled <title>'{$title}'</title> with the following description: <description>{$description}</description>. "
+                ."The course is in '{$lang}' but just answer me in whatever language I talk to you. "
+                .'This is an educational use, so content that would not be appropriate for children (or minors under any law) is not acceptable. '
+                ."You are not available to me when I'm taking an exam, just in case I forget and I ask why you weren't there. "
+                .'You must mention the course title when greeting or when the user asks what you are. '
+                .'If the user asks something unrelated to the course topic or the use of the platform, politely redirect to course-related or platform-related help. '
+                ."For information about the use of the platform, use the documentation at {$documentationUrl}. "
+                ."If you don't know, say so, don't halucinate on topics you don't know. "
+                .'Provide references to the documentation if useful (for illustrations, for example).';
+        }
+
+        return 'You are a patient technical support assistant specialised in the use of Chamilo as an e-learning platform. '
+            .'Answer questions the user might have about the user of the platform. '
+            ."For information about the use of the platform, use the documentation at {$documentationUrl}. "
             .'This is an educational use, so content that would not be appropriate for children (or minors under any law) is not acceptable. '
-            ."You are not available to me when I'm taking an exam, just in case I forget and I ask why you weren't there. "
-            .'You must mention the course title when greeting or when the user asks what you are. '
-            .'If the user asks something unrelated to the course topic, politely redirect to course-related help.';
+            ."If you don't know, say so, don't halucinate on topics you don't know. "
+            .'Provide references to the documentation if useful (for illustrations, for example). '
+            .'If the user asks something unrelated to the topic of use of the platform, politely redirect to platform-related help.';
+    }
+
+    private function buildCourseDescriptionContext(Course $course): string
+    {
+        $sections = $this->courseDescriptionRepository->findAllInCourse($course);
+        $parts = [];
+
+        foreach ($sections as $section) {
+            $title = trim(strip_tags((string) $section->getTitle()));
+            $content = trim(strip_tags((string) $section->getContent()));
+
+            if ('' === $title && '' === $content) {
+                continue;
+            }
+
+            $text = '' !== $title && '' !== $content
+                ? $title.': '.$content
+                : ($title ?: $content);
+
+            $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+            $parts[] = trim($text);
+        }
+
+        return implode(' | ', $parts);
     }
 
     private function renderEmptyState(): string

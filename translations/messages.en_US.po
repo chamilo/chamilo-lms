@@ -39121,8 +39121,8 @@ msgstr "Auto-refresh every 5 seconds"
 msgid "Web server load"
 msgstr "Web server load"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Live Apache or Nginx status metrics"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Live Apache, Nginx or FrankenPHP status metrics"
 
 msgid "Click to show web server load metrics"
 msgstr "Click to show web server load metrics"
@@ -39130,8 +39130,8 @@ msgstr "Click to show web server load metrics"
 msgid "Requires a local web server status module"
 msgstr "Requires a local web server status module"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
 
 msgid "Paths scanned"
 msgstr "Paths scanned"
@@ -39142,8 +39142,8 @@ msgstr "Detected"
 msgid "Status path"
 msgstr "Status path"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Web server load metrics are only available for Apache and Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "None of the scanned status paths responded on localhost."
@@ -39226,8 +39226,23 @@ msgstr "Accepts"
 msgid "Handled"
 msgstr "Handled"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+
+msgid "Total threads"
+msgstr "Total threads"
+
+msgid "Busy threads"
+msgstr "Busy threads"
+
+msgid "Queue depth"
+msgstr "Queue depth"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Average request time"
 
 msgid "Grade percentage distribution"
 msgstr "Grade percentage distribution"
@@ -39295,11 +39310,17 @@ msgstr "OPcache is installed but not enabled."
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache extension is not available on this server."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu is installed but not enabled."
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu extension is not available on this server."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
 
 msgid "Constant"
 msgstr "Constant"

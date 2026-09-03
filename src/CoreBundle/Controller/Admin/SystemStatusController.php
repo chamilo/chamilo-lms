@@ -28,7 +28,10 @@ use Throwable;
 use function opcache_get_status;
 
 use const DATE_ATOM;
+use const INF;
+use const NAN;
 use const PHP_SESSION_ACTIVE;
+use const PREG_SET_ORDER;
 
 #[IsGranted('ROLE_ADMIN')]
 final class SystemStatusController extends AbstractController
@@ -125,6 +128,25 @@ final class SystemStatusController extends AbstractController
     private const array WEBSERVER_NGINX_STATUS_PATHS = [
         '/nginx_status',
         '/stub_status',
+    ];
+
+    /**
+     * Localhost-only FrankenPHP/Caddy Prometheus metrics path (tried in order).
+     *
+     * @var list<string>
+     */
+    private const array WEBSERVER_FRANKENPHP_STATUS_PATHS = [
+        '/metrics',
+    ];
+
+    /**
+     * FrankenPHP metrics are served by Caddy's admin API, not the site's own
+     * port — this is fixed and unrelated to SERVER_PORT.
+     *
+     * @var list<int>
+     */
+    private const array WEBSERVER_FRANKENPHP_ADMIN_PORTS = [
+        2019,
     ];
 
     public function __construct(
@@ -235,10 +257,13 @@ final class SystemStatusController extends AbstractController
     }
 
     /**
-     * Lightweight Apache/Nginx load metrics for the Web server section.
+     * Lightweight Apache/Nginx/FrankenPHP load metrics for the Web server section.
      *
      * Requires the engine status module to answer on localhost (no configurable URL —
-     * fixed paths only). Detects Apache vs Nginx from SERVER_SOFTWARE.
+     * fixed paths only). Detects Apache/Nginx from SERVER_SOFTWARE, FrankenPHP via
+     * the frankenphp_log() capability check (see detectWebserverEngine()); FrankenPHP's
+     * metrics are read from Caddy's admin API (127.0.0.1:2019/metrics), which requires
+     * `{ metrics }` to be enabled in the Caddyfile's global options block.
      * Cumulative counters are returned so the UI can compute live rates between polls.
      */
     #[Route('/admin/system-status-webserver-data', name: 'admin_system_status_webserver_data', methods: ['GET'])]
@@ -602,7 +627,8 @@ final class SystemStatusController extends AbstractController
      *         path: string|null,
      *         engine: string|null,
      *         apache: array<string, mixed>|null,
-     *         nginx: array<string, mixed>|null
+     *         nginx: array<string, mixed>|null,
+     *         frankenphp: array<string, mixed>|null
      *     }
      * }
      */
@@ -620,11 +646,16 @@ final class SystemStatusController extends AbstractController
             );
         }
 
-        $scannedPaths = 'apache' === $detected
-            ? self::WEBSERVER_APACHE_STATUS_PATHS
-            : self::WEBSERVER_NGINX_STATUS_PATHS;
+        $scannedPaths = match ($detected) {
+            'apache' => self::WEBSERVER_APACHE_STATUS_PATHS,
+            'frankenphp' => self::WEBSERVER_FRANKENPHP_STATUS_PATHS,
+            default => self::WEBSERVER_NGINX_STATUS_PATHS,
+        };
 
-        $ports = $this->webserverProbePorts($request);
+        // FrankenPHP's metrics live on Caddy's admin API port, not the site's own port.
+        $ports = 'frankenphp' === $detected
+            ? self::WEBSERVER_FRANKENPHP_ADMIN_PORTS
+            : $this->webserverProbePorts($request);
         $hosts = ['127.0.0.1', '[::1]'];
 
         foreach ($scannedPaths as $path) {
@@ -650,6 +681,29 @@ final class SystemStatusController extends AbstractController
                         'engine' => 'apache',
                         'apache' => $apache,
                         'nginx' => null,
+                        'frankenphp' => null,
+                    ],
+                ];
+            }
+
+            if ('frankenphp' === $detected) {
+                $frankenphp = $this->parseFrankenphpMetrics($body);
+                if (null === $frankenphp) {
+                    continue;
+                }
+
+                return [
+                    'detected' => 'frankenphp',
+                    'software' => $software,
+                    'scannedPaths' => $scannedPaths,
+                    'status' => [
+                        'available' => true,
+                        'reason' => null,
+                        'path' => $path,
+                        'engine' => 'frankenphp',
+                        'apache' => null,
+                        'nginx' => null,
+                        'frankenphp' => $frankenphp,
                     ],
                 ];
             }
@@ -670,6 +724,7 @@ final class SystemStatusController extends AbstractController
                     'engine' => 'nginx',
                     'apache' => null,
                     'nginx' => $nginx,
+                    'frankenphp' => null,
                 ],
             ];
         }
@@ -695,7 +750,8 @@ final class SystemStatusController extends AbstractController
      *         path: string|null,
      *         engine: string|null,
      *         apache: null,
-     *         nginx: null
+     *         nginx: null,
+     *         frankenphp: null
      *     }
      * }
      */
@@ -716,6 +772,7 @@ final class SystemStatusController extends AbstractController
                 'engine' => $detected,
                 'apache' => null,
                 'nginx' => null,
+                'frankenphp' => null,
             ],
         ];
     }
@@ -728,15 +785,24 @@ final class SystemStatusController extends AbstractController
     }
 
     /**
-     * @return 'apache'|'nginx'|null
+     * @return 'apache'|'nginx'|'frankenphp'|null
      */
     private function detectWebserverEngine(?string $software): ?string
     {
+        // frankenphp_log() only exists inside the FrankenPHP SAPI, so this is a
+        // reliable capability check regardless of what SERVER_SOFTWARE reports.
+        if (\function_exists('frankenphp_log')) {
+            return 'frankenphp';
+        }
+
         if (null === $software || '' === $software) {
             return null;
         }
 
         $lower = strtolower($software);
+        if (str_contains($lower, 'frankenphp')) {
+            return 'frankenphp';
+        }
         if (str_contains($lower, 'apache') || str_contains($lower, 'httpd')) {
             return 'apache';
         }
@@ -1042,6 +1108,162 @@ final class SystemStatusController extends AbstractController
             'writing' => $writing,
             'waiting' => $waiting,
         ];
+    }
+
+    /**
+     * Parse FrankenPHP's Prometheus-format metrics body (Caddy admin API /metrics).
+     *
+     * @return array{
+     *     totalThreads: int|null,
+     *     busyThreads: int|null,
+     *     queueDepth: int|null,
+     *     busyThreadsPercent: float|null,
+     *     workers: list<array{
+     *         name: string,
+     *         totalWorkers: int|null,
+     *         busyWorkers: int|null,
+     *         avgRequestTimeSeconds: float|null
+     *     }>
+     * }|null
+     */
+    private function parseFrankenphpMetrics(string $body): ?array
+    {
+        // Reject non-Prometheus/unrelated content (e.g. an HTML error page).
+        if (!preg_match('/^frankenphp_\w+/m', $body)) {
+            return null;
+        }
+
+        $samples = $this->parsePrometheusTextMetrics($body);
+        if ([] === $samples) {
+            return null;
+        }
+
+        $scalar = static function (array $samples, string $name): ?float {
+            foreach ($samples as $sample) {
+                if ($sample['name'] === $name) {
+                    return $sample['value'];
+                }
+            }
+
+            return null;
+        };
+
+        $totalThreads = $scalar($samples, 'frankenphp_total_threads');
+        $busyThreads = $scalar($samples, 'frankenphp_busy_threads');
+        $queueDepth = $scalar($samples, 'frankenphp_queue_depth');
+
+        $busyThreadsPercent = null;
+        if (null !== $totalThreads && null !== $busyThreads && $totalThreads > 0) {
+            $busyThreadsPercent = round(100 * $busyThreads / $totalThreads, 2);
+        }
+
+        // Per-worker breakdown, keyed by the "worker" label. frankenphp_worker_request_time
+        // may be exposed either as a plain gauge (seconds) or, if it's ever turned into a
+        // Summary/Histogram upstream, as separate _sum/_count series — track both shapes
+        // without conflating their units.
+        $workers = [];
+        $requestTimeSum = [];
+        $requestTimeCount = [];
+        foreach ($samples as $sample) {
+            if (!str_starts_with($sample['name'], 'frankenphp_total_workers')
+                && !str_starts_with($sample['name'], 'frankenphp_busy_workers')
+                && !str_starts_with($sample['name'], 'frankenphp_worker_request_time')
+            ) {
+                continue;
+            }
+
+            $worker = $sample['labels']['worker'] ?? null;
+            if (null === $worker || '' === $worker) {
+                continue;
+            }
+
+            $workers[$worker] ??= [
+                'name' => $worker,
+                'totalWorkers' => null,
+                'busyWorkers' => null,
+                'avgRequestTimeSeconds' => null,
+            ];
+
+            if (str_starts_with($sample['name'], 'frankenphp_total_workers')) {
+                $workers[$worker]['totalWorkers'] = (int) $sample['value'];
+            } elseif (str_starts_with($sample['name'], 'frankenphp_busy_workers')) {
+                $workers[$worker]['busyWorkers'] = (int) $sample['value'];
+            } elseif ('frankenphp_worker_request_time_sum' === $sample['name']) {
+                $requestTimeSum[$worker] = $sample['value'];
+            } elseif ('frankenphp_worker_request_time_count' === $sample['name']) {
+                $requestTimeCount[$worker] = $sample['value'];
+            } elseif ('frankenphp_worker_request_time' === $sample['name']) {
+                // Plain gauge shape: use as-is, no averaging needed.
+                $workers[$worker]['avgRequestTimeSeconds'] = $sample['value'];
+            }
+        }
+
+        foreach ($requestTimeSum as $worker => $sum) {
+            $count = $requestTimeCount[$worker] ?? null;
+            if (null !== $count && $count > 0) {
+                $workers[$worker]['avgRequestTimeSeconds'] = round($sum / $count, 4);
+            }
+        }
+
+        if (null === $totalThreads && null === $busyThreads && [] === $workers) {
+            return null;
+        }
+
+        return [
+            'totalThreads' => null !== $totalThreads ? (int) $totalThreads : null,
+            'busyThreads' => null !== $busyThreads ? (int) $busyThreads : null,
+            'queueDepth' => null !== $queueDepth ? (int) $queueDepth : null,
+            'busyThreadsPercent' => $busyThreadsPercent,
+            'workers' => array_values($workers),
+        ];
+    }
+
+    /**
+     * Minimal Prometheus text-exposition-format parser (comment/HELP/TYPE lines ignored).
+     *
+     * @return list<array{name: string, labels: array<string, string>, value: float}>
+     */
+    private function parsePrometheusTextMetrics(string $body): array
+    {
+        $samples = [];
+
+        foreach (preg_split("/\r\n|\n|\r/", $body) ?: [] as $line) {
+            $line = trim($line);
+            if ('' === $line || str_starts_with($line, '#')) {
+                continue;
+            }
+
+            if (!preg_match(
+                '/^([a-zA-Z_:][a-zA-Z0-9_:]*)(\{(?P<labels>[^}]*)\})?\s+(?P<value>[+\-0-9.eE]+|NaN|\+Inf|-Inf)\s*$/',
+                $line,
+                $matches
+            )) {
+                continue;
+            }
+
+            $value = match ($matches['value']) {
+                'NaN' => NAN,
+                '+Inf' => INF,
+                '-Inf' => -INF,
+                default => (float) $matches['value'],
+            };
+
+            $labels = [];
+            if (!empty($matches['labels'])) {
+                preg_match_all('/([a-zA-Z_][a-zA-Z0-9_]*)="((?:[^"\\\]|\\\.)*)"/', $matches['labels'], $labelMatches, PREG_SET_ORDER);
+                foreach ($labelMatches as $labelMatch) {
+                    $labels[$labelMatch[1]] = stripcslashes($labelMatch[2]);
+                }
+            }
+
+            $samples[] = [
+                'name' => $matches[1],
+                'labels' => $labels,
+                'value' => $value,
+            ];
+        }
+
+        return $samples;
     }
 
     /**

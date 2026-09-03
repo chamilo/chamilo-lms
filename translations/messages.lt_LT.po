@@ -20543,9 +20543,6 @@ msgstr "Nuoroda pasibaigė, bandykite dar kartą."
 msgid "Instructions for the password change procedure"
 msgstr "Instrukcijos slaptažodžio keitimo procedūrai"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Jūs gaunate šį pranešimą, nes jūs (arba kažkas, apsimetantis jumis) paprašėte sugeneruoti naują slaptažodį jums.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Priminti kurso galiojimo pabaigos cron"
 

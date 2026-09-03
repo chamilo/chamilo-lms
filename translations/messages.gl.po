@@ -20556,9 +20556,6 @@ msgstr "Ligazón caducada, probe de novo."
 msgid "Instructions for the password change procedure"
 msgstr "Instrucións para o procedemento de cambio de contrasinal"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Está a recibir esta mensaxe porque vostede (ou alguén que se fai pasar por vostede) solicitou que se xere un novo contrasinal para vostede.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Lembrar caducidade do curso cron"
 

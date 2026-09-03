@@ -20544,9 +20544,6 @@ msgstr "Ссылка истекла, попробуйте снова."
 msgid "Instructions for the password change procedure"
 msgstr "Инструкции по процедуре смены пароля"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Вы получили это сообщение, потому что вы (или кто-то, выдающий себя за вас) запросили генерацию нового пароля.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Напоминание об истечении курса cron"
 

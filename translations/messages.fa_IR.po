@@ -20541,9 +20541,6 @@ msgstr "لینک منقضی شده، لطفاً دوباره تلاش کنید."
 msgid "Instructions for the password change procedure"
 msgstr "دستورالعمل‌های فرآیند تغییر رمز عبور"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "شما این پیام را دریافت می‌کنید زیرا شما (یا کسی که خود را شما جا زده) درخواست تولید رمز عبور جدید کرده‌اید.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "یادآوری انقضای درس cron"
 

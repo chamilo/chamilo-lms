@@ -20608,9 +20608,6 @@ msgstr "Der Link ist abgelaufen, bitte versuchen Sie es erneut."
 msgid "Instructions for the password change procedure"
 msgstr "Anweisungen zum Ändern des Kennworts"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Sie erhalten diese Nachricht, weil Sie (oder jemand der vorgibt, Sie zu sein) angefordert hat, ein neues Kennwort für Sie zu generieren.<br>Um ein neues Passwort zu setzen, klicken Sie bitte auf den Link:<p>%s<p>Wenn Sie diese Anfrage nicht getätigt haben, können Sie diese Nachricht ignorieren. Sollten Sie weiterhin diese Nachricht erhalten, kontakieren Sie bitte den Portal-Administrator."
-
 msgid "Remind Course Expiration cron"
 msgstr "Erinnerungs-Cron zum Kursablaufdatum"
 

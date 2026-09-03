@@ -20543,9 +20543,6 @@ msgstr "Linkki on vanhentunut, yritä uudelleen."
 msgid "Instructions for the password change procedure"
 msgstr "Ohjeet salasanamuutokselle"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Saat tämän viestin, koska sinä (tai joku sinuksi teeskentelevä) olet pyytänyt uuden salasanan luomista.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Muistuta kurssin voimassaoloa cron"
 

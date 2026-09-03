@@ -207,8 +207,8 @@ class Login
         $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
         $mailSubject = get_lang('Instructions for the password change procedure');
         $mailBody = sprintf(
-            get_lang('You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>'),
-            $url
+            get_lang('This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator.'),
+            sprintf('<a href="%s">%s</a>', $url, $url)
         );
 
         api_mail_html(

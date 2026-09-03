@@ -20557,9 +20557,6 @@ msgstr "Povezava je potekla. Prosimo, poskusite ponovno."
 msgid "Instructions for the password change procedure"
 msgstr "Navodilo za menjavo gesla"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "To sporočilo ste prejeli, ker ste sami (ali pa se je nekdo predstavljal za vas) zahtevali menjavo gesla. Za nastavitev novega gesla, je tega potrebno predhodno aktivirati. Za to sledite naslednji povezavi %s. V primeru, da VI niste zahtevali te zamenjave, prosimo, da ignorirate to sporočilo. V primeru, da se to sporočilo ponavlja, vas prosimo, da kontaktirajte aupravitelja portala."
-
 msgid "Remind Course Expiration cron"
 msgstr "Periodično opravilo (cron) - Obvestilo o zaključku tečaja"
 

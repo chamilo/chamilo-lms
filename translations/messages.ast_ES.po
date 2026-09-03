@@ -20543,9 +20543,6 @@ msgstr "Enllace caíu, por favor inténtalo de nuevu."
 msgid "Instructions for the password change procedure"
 msgstr "Instruiciones pal procesu de cambiu de contraseña"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Tas recibindo esti mensaxe porque tú (o alguien que finge ser tú) pidisti que se xenerare una contraseña nueva pa ti.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Cron de recordatoriu de caducidá del cursu"
 

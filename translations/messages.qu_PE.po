@@ -20543,9 +20543,6 @@ msgstr "Llinkichu qhipa kachkan, manaqchu qhaway."
 msgid "Instructions for the password change procedure"
 msgstr "Paskuta cambianapaq rurasqakuna"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Kay mensajeta chaskiranki, pasku maskhaywan (ninmi kayta qhapaq) qhapaq paskuta kamachisqanki.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Yachay qhipa cron yuyarispa"
 

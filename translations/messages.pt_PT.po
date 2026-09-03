@@ -20549,9 +20549,6 @@ msgstr "Link expirado, tente novamente."
 msgid "Instructions for the password change procedure"
 msgstr "Instruções para o procedimento de alteração de senha"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Você está recebendo esta mensagem porque você (ou alguém fingindo ser você) solicitou que uma nova senha fosse gerada para você.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Lembrete de expiração de curso cron"
 

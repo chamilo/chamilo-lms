@@ -20541,9 +20541,6 @@ msgstr "A link lejárt, próbálja újra."
 msgid "Instructions for the password change procedure"
 msgstr "Utasítások a jelszóváltoztatási eljáráshoz"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Ezt az üzenetet azért kapja, mert Ön (vagy valaki, aki Önként teszeti magát) új jelszó generálását kérte.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Kurzus lejárat emlékeztető cron"
 

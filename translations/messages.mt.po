@@ -20543,9 +20543,6 @@ msgstr "Link skadiet, jekk jogħġbok erġa' pprova."
 msgid "Instructions for the password change procedure"
 msgstr "Istruzzjonijiet għall-proċedura tal-bidla tal-password"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Inti qed tirċievi dan il-messaġġ għax inti (jew xi ħadd li jippretendi li hu inti) talab li tiġi ġġenerata password ġdida għalik.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Cron ta' Tfakkira ta' Skadenza tal-Kors"
 

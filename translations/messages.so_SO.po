@@ -20538,9 +20538,6 @@ msgstr "Xiriirka wuu dhacay, fadlan isku day mar kale."
 msgid "Instructions for the password change procedure"
 msgstr "Tilmaamaha nidaamka beddelka erayga sirta ah"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr " Waxaad helaysaa fariintaan sababtoo ah adiga (ama qof iska dhigaya adiga) ayaa codsaday eray sir ah oo cusub oo laguugu soo saaro.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Xusuusi dhammaadka koorska cron"
 

@@ -20538,9 +20538,6 @@ msgstr "লিঙ্কের মেয়াদ শেষ, আবার চে�
 msgid "Instructions for the password change procedure"
 msgstr "পাসওয়ার্ড পরিবর্তন প্রক্রিয়ার নির্দেশনা"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "আপনি (বা কেউ আপনার ভান করে) আপনার জন্য নতুন পাসওয়ার্ড তৈরি করার অনুরোধ করেছেন বলে এই বার্তা পাচ্ছেন।<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "কোর্স মেয়াদ শেষের স্মারক cron"
 

@@ -20541,9 +20541,6 @@ msgstr "Pautan tamat tempoh, sila cuba lagi."
 msgid "Instructions for the password change procedure"
 msgstr "Arahan untuk prosedur pertukaran kata laluan"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Anda menerima mesej ini kerana anda (atau seseorang yang berpura-pura menjadi anda) telah meminta kata laluan baru dihasilkan untuk anda.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Peringatan tamat tempoh kursus cron"
 

@@ -20530,7 +20530,7 @@ msgstr ""
 msgid "Instructions for the password change procedure"
 msgstr ""
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
 msgstr ""
 
 msgid "Remind Course Expiration cron"
@@ -31548,7 +31548,7 @@ msgstr ""
 msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
 msgstr ""
 
-msgid "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at https://symfony.com/doc/6.4/mailer.html#using-built-in-transports. Here are a few examples of supported DSN syntaxes: https://symfony.com/doc/6.4/mailer.html#using-a-3rd-party-transport"
+msgid "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at https://symfony.com/doc/7.4/mailer.html#using-built-in-transports. Here are a few examples of supported DSN syntaxes: https://symfony.com/doc/7.4/mailer.html#using-a-3rd-party-transport"
 msgstr ""
 
 msgid "Mail: character set"

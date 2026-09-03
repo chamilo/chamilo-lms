@@ -20557,9 +20557,6 @@ msgstr "Link scaduto, riprova."
 msgid "Instructions for the password change procedure"
 msgstr "Istruzioni per la procedura di modifica della password"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Hai ricevuto questo messaggio perché tu (o qualcuno con le tue credenziali) ha richiesto una nuova password. Per impostare una nuova password devi prima attivarla. Per farlo, clicca qui: %s Se non hai richiesto una nuova password, ignora questo messaggio. Se invece continui a riceverlo, contatta l'amministratore e segnala il problema."
-
 msgid "Remind Course Expiration cron"
 msgstr "Promemoria periodico Scadenza Corso"
 

@@ -20538,9 +20538,6 @@ msgstr " لینک پای ته رسېدلی، مهرباني وکړئ بیا هڅ
 msgid "Instructions for the password change procedure"
 msgstr "د پاسورډ بدلولو د پروسیجر لارښوونې"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "تاسو دا پیغام ترلاسه کوئ ځکه چې تاسو (یا څوک بل چې ستاسو ګڼل کېږي) د خپل لپاره نوي پاسورډ تولیدولو غوښتنه کړې ده.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "د کورس پای ته رسېدو یادونه cron"
 

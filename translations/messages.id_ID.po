@@ -20541,9 +20541,6 @@ msgstr "Link kadaluarsa, silakan coba lagi."
 msgid "Instructions for the password change procedure"
 msgstr "Petunjuk untuk prosedur perubahan kata sandi"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Anda menerima pesan ini karena Anda (atau seseorang yang berpura-pura menjadi Anda) telah meminta kata sandi baru dibuatkan untuk Anda.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Pengingat Kadaluarsa Kursus cron"
 

@@ -20505,9 +20505,6 @@ msgstr "བརྒྱུད་འགྲོ་བ་ལྷག་མ་འགྱུ
 msgid "Instructions for the password change procedure"
 msgstr "རྒྱུན་ལྡན་སྒྲུབ་པའི་ཐབས་ལམ་རྒྱུན་མཐའ་ཚིགས་"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "རང (ཡང་ན་རང་ལ་ལོག་པར་འདྲ་བ་མི་འདྲ་བ་) རང་གི་རྒྱུན་ལྡན་སྒྲུབ་པ་གསར་པ་རྒྱུན་ལྡན་འབྱུང་བར་གསོལ་བ་འདེབས་འབྱུང་བས་གློག་འཕྲིན་འདི་ཐོབ་པར་འགྱུར་<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "སློབ་ཀྲིད་ལྷག་མ་རྗེས་འབྲེལ་རྒྱུན་མཐའ་ཚིགས་"
 

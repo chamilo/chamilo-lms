@@ -20538,9 +20538,6 @@ msgstr "Ikhonkco liphelelwe, nceda uzame kwakhona."
 msgid "Instructions for the password change procedure"
 msgstr "Imiyalelo yenkqubo yokutshintsha ipasswedi"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Ufumana le myalezo kuba wena (okanye umntu ozenza nguwe) ucele ipasswedi entsha ukuze yenziwe kuwe.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Khumbuza ukuphelelwa kwexesha lesifundo cron"
 

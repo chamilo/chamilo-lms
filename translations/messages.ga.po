@@ -20542,9 +20542,6 @@ msgstr "Nasc imithe in éag, déan iarracht arís."
 msgid "Instructions for the password change procedure"
 msgstr "Treoracha do nós imeachta athrú pasfhocail"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Tá an teachtaireacht seo á fháil agat toisc gur iarr tú (nó duine éigin ag ligean ort) pasfhocal nua a ghiniúint duit.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Meabhair cron Éaga Cúrsa"
 

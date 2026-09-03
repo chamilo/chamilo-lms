@@ -950,7 +950,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
     private function usesSingleCorrectAnswer(int $type): bool
     {
-        return \in_array($type, [self::UNIQUE_ANSWER, self::UNIQUE_ANSWER_NO_OPTION, self::UNIQUE_ANSWER_IMAGE], true);
+        return \in_array($type, [self::UNIQUE_ANSWER, self::UNIQUE_ANSWER_NO_OPTION, self::UNIQUE_ANSWER_IMAGE, self::READING_COMPREHENSION], true);
     }
 
     private function usesGlobalScore(int $type): bool
@@ -1863,7 +1863,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
     private function isStructuralQuestionType(int $type): bool
     {
-        return \in_array($type, [self::MEDIA_QUESTION, self::READING_COMPREHENSION, self::PAGE_BREAK], true);
+        return \in_array($type, [self::MEDIA_QUESTION, self::PAGE_BREAK], true);
     }
 
     private function usesMatching(int $type): bool

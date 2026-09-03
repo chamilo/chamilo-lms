@@ -20543,9 +20543,6 @@ msgstr "ลิงก์หมดอายุแล้ว กรุณาลอ�
 msgid "Instructions for the password change procedure"
 msgstr "คำแนะนำสำหรับขั้นตอนการเปลี่ยนรหัสผ่าน"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "คุณได้รับข้อความนี้เพราะคุณ (หรือใครบางคนที่แสร้งเป็นคุณ) ได้ร้องขอให้สร้างรหัสผ่านใหม่สำหรับคุณ<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "เตือนการหมดอายุหลักสูตร cron"
 

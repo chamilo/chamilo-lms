@@ -1198,8 +1198,20 @@ class ExtraField extends Model
                         break;
                     case self::FIELD_TYPE_RADIO:
                         $group = [];
+                        $defaultValue = null;
+                        $currentValue = $extraData["extra_$variable"] ?? null;
+                        if (is_array($currentValue)) {
+                            $currentValue = $currentValue["extra_$variable"] ?? null;
+                        }
+                        $hasCurrentValue = null !== $currentValue && '' !== (string) $currentValue;
+
                         if (isset($field_details['options']) && !empty($field_details['options'])) {
+                            $optionValues = [];
+                            $optionLabels = [];
                             foreach ($field_details['options'] as $option_details) {
+                                $optionValue = (string) $option_details['option_value'];
+                                $optionValues[] = $optionValue;
+                                $optionLabels[$optionValue] = $option_details['display_text'];
                                 $options[$option_details['option_value']] = $option_details['display_text'];
                                 $group[] = $form->createElement(
                                     'radio',
@@ -1209,10 +1221,30 @@ class ExtraField extends Model
                                     $option_details['option_value']
                                 );
                             }
+
+                            if (!$hasCurrentValue) {
+                                if (array_key_exists('default_value', $field_details) &&
+                                    null !== $field_details['default_value'] &&
+                                    '' !== (string) $field_details['default_value']
+                                ) {
+                                    $defaultValue = (string) $field_details['default_value'];
+                                } else {
+                                    $booleanValues = array_values(array_unique($optionValues));
+                                    sort($booleanValues);
+                                    if (['0', '1'] === $booleanValues &&
+                                        'Yes' === ($optionLabels['1'] ?? null) &&
+                                        'No' === ($optionLabels['0'] ?? null)
+                                    ) {
+                                        $defaultValue = '0';
+                                    }
+                                }
+
+                                if (null !== $defaultValue && !in_array($defaultValue, $optionValues, true)) {
+                                    $defaultValue = null;
+                                }
+                            }
                         } else {
                             // Fallback: Yes/No
-                            $currentValue = $extraData["extra_$variable"] ?? null;
-
                             $group[] = $form->createElement(
                                 'radio',
                                 'extra_'.$variable,
@@ -1228,20 +1260,36 @@ class ExtraField extends Model
                                 '0'
                             );
 
-                            // Select default if nothing set
-                            if (!isset($currentValue)) {
-                                if (!empty($field_details['default_value'])) {
-                                    $form->setDefaults(['extra_'.$variable => $field_details['default_value']]);
+                            if (!$hasCurrentValue) {
+                                if (array_key_exists('default_value', $field_details) &&
+                                    null !== $field_details['default_value'] &&
+                                    '' !== (string) $field_details['default_value']
+                                ) {
+                                    $defaultValue = (string) $field_details['default_value'];
                                 } else {
-                                    $form->setDefaults(['extra_'.$variable => '0']);
+                                    $defaultValue = '0';
+                                }
+
+                                if (!in_array($defaultValue, ['0', '1'], true)) {
+                                    $defaultValue = null;
                                 }
                             }
                         }
+
                         $form->addGroup(
                             $group,
                             'extra_'.$variable,
                             $field_details['display_text']
                         );
+
+                        if (null !== $defaultValue) {
+                            $form->setDefaults([
+                                'extra_'.$variable => [
+                                    'extra_'.$variable => $defaultValue,
+                                ],
+                            ]);
+                        }
+
                         if ($freezeElement) {
                             $form->freeze('extra_'.$variable);
                         }

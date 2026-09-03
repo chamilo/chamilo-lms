@@ -40,13 +40,24 @@ class LanguageRepositoryTest extends AbstractApiTest
 
     public function testGetAllAvailable(): void
     {
+        $em = $this->getEntityManager();
         $repo = self::getContainer()->get(LanguageRepository::class);
-        $languages = $repo->getAllAvailable()->getQuery()->getResult();
-        $this->assertNotNull($languages);
-        $this->assertCount(11, $languages);
 
-        $languages = $repo->getAllAvailableToArray(true);
-        $this->assertCount(11, $languages);
+        // LanguageFixtures enables every language it ships, so the filter only has
+        // something to leave out once an unavailable language exists.
+        $availableCountBefore = \count($repo->getAllAvailable()->getQuery()->getResult());
+
+        $language = (new Language())
+            ->setAvailable(false)
+            ->setOriginalName('unavailable')
+            ->setEnglishName('unavailable')
+            ->setIsocode('una')
+        ;
+        $em->persist($language);
+        $em->flush();
+
+        $this->assertCount($availableCountBefore, $repo->getAllAvailable()->getQuery()->getResult());
+        $this->assertCount($availableCountBefore, $repo->getAllAvailableToArray(true));
     }
 
     public function testFindAllSubLanguages(): void

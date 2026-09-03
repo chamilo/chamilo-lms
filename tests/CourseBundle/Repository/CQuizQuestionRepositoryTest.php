@@ -26,6 +26,8 @@ class CQuizQuestionRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $questionRepo = self::getContainer()->get(CQuizQuestionRepository::class);
 
+        $questionCountBefore = $questionRepo->count([]);
+
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
@@ -108,7 +110,7 @@ class CQuizQuestionRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $question->getOptions()->count());
         $this->assertSame(1, $question->getAnswers()->count());
         $this->assertSame(1, $exercise->getQuestions()->count());
-        $this->assertSame(1, $questionRepo->count([]));
+        $this->assertSame($questionCountBefore + 1, $questionRepo->count([]));
         $this->assertSame(1, $quizRelQuestion->getQuestionOrder());
         $this->assertSame('', $questionRepo->getHotSpotImageUrl($question));
         $this->assertSame(1, $question->getCategories()->count());

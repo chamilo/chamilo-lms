@@ -21,7 +21,6 @@ class CToolRepositoryTest extends AbstractApiTest
     {
         $repo = self::getContainer()->get(CToolRepository::class);
         $toolRepo = self::getContainer()->get(ToolRepository::class);
-        $this->assertSame(0, $repo->count([]));
 
         $em = $this->getEntityManager();
 
@@ -54,16 +53,17 @@ class CToolRepositoryTest extends AbstractApiTest
     {
         $repo = self::getContainer()->get(CToolRepository::class);
         $course_repo = self::getContainer()->get(CourseRepository::class);
-        $this->assertSame(0, $repo->count([]));
+
+        $courseCountBefore = $course_repo->count([]);
 
         $course = $this->createCourse('new');
-        $this->assertSame(1, $course_repo->count([]));
+        $this->assertSame($courseCountBefore + 1, $course_repo->count([]));
         $defaultCount = $repo->count([]);
 
         /** @var CTool $courseTool */
         $courseTool = $course->getTools()->first();
         $repo->delete($courseTool);
-        $this->assertSame(1, $course_repo->count([]));
+        $this->assertSame($courseCountBefore + 1, $course_repo->count([]));
 
         $this->assertSame($defaultCount - 1, $repo->count([]));
     }

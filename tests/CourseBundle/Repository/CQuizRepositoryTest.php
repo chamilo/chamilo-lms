@@ -22,6 +22,8 @@ class CQuizRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CQuizRepository::class);
 
+        $quizCountBefore = $repo->count([]);
+
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
@@ -58,20 +60,29 @@ class CQuizRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame('exercise', (string) $item);
-        $this->assertSame(1, $repo->count([]));
+        $this->assertSame($quizCountBefore + 1, $repo->count([]));
 
         $this->assertSame(0, $item->getQuestionsCategories()->count());
-        $this->assertSame(0, $item->getMaxScore());
+        $this->assertSame(0.0, $item->getMaxScore());
 
         $repo->updateNodeForResource($item);
 
         $link = $repo->getLink($item, $this->getContainer()->get('router'));
-        $this->assertSame('/main/exercise/overview.php?exerciseId='.$item->getIid(), $link);
+        $this->assertSame(
+            \sprintf(
+                '/resources/exercise/%d/%d/overview',
+                $course->getResourceNode()->getId(),
+                $item->getIid()
+            ),
+            $link
+        );
     }
 
     public function testUpdateNodeForResource(): void
     {
         $repo = self::getContainer()->get(CQuizRepository::class);
+
+        $quizCountBefore = $repo->count([]);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -83,7 +94,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         ;
         $repo->create($item);
 
-        $this->assertSame(1, $repo->count([]));
+        $this->assertSame($quizCountBefore + 1, $repo->count([]));
 
         $item->setTitle('exercise modified');
         $repo->updateNodeForResource($item);
@@ -91,7 +102,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         /** @var CQuiz $newExercise */
         $newExercise = $repo->find($item->getIid());
         $this->assertSame('exercise modified', $newExercise->getTitle());
-        $this->assertSame(1, $repo->count([]));
+        $this->assertSame($quizCountBefore + 1, $repo->count([]));
     }
 
     public function testFindAllByCourse(): void

@@ -95,7 +95,8 @@ class PageRepositoryTest extends AbstractApiTest
 
         $this->assertSame(0, $pageFrench->getPosition());
         $this->assertSame('fr', $pageFrench->getLocale());
-        $this->assertSame('lete', $pageFrench->getSlug());
+        // The apostrophe is a word separator for the slugger, not a character to drop.
+        $this->assertSame('l-ete', $pageFrench->getSlug());
         $this->assertSame($defaultCount + 2, $pageRepo->count([]));
 
         return $page;
@@ -318,8 +319,10 @@ class PageRepositoryTest extends AbstractApiTest
         $result = $createDefaultPages->createDefaultPages($admin, $this->getAccessUrl(), 'en_US');
         $this->assertTrue($result);
         $this->assertSame(2, $pageRepo->count([]));
+        // home, index, faq, demo, footer_public, footer_private, menu_links, public
+        // and introduction, plus one category per admin block.
         $this->assertSame(
-            8 + \count(PageCategory::ADMIN_BLOCKS_CATEGORIES),
+            9 + \count(PageCategory::ADMIN_BLOCKS_CATEGORIES),
             $pageCategoryRepo->count([])
         );
 

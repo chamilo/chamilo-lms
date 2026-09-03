@@ -26,6 +26,10 @@ class CLpItemRepositoryTest extends AbstractApiTest
         $lpItemRepo = self::getContainer()->get(CLpItemRepository::class);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
+        $courseCountBefore = $courseRepo->count([]);
+        $lpCountBefore = $lpRepo->count([]);
+        $lpItemCountBefore = $lpItemRepo->count([]);
+
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
         $student = $this->createUser('student');
@@ -117,13 +121,13 @@ class CLpItemRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $lp->getItems()->count());
         $this->assertSame('lp', (string) $lp);
         $this->assertNotEmpty((string) $lpItem);
-        $this->assertSame(1, $lpRepo->count([]));
-        $this->assertSame(2, $lpItemRepo->count([]));
+        $this->assertSame($lpCountBefore + 1, $lpRepo->count([]));
+        $this->assertSame($lpItemCountBefore + 2, $lpItemRepo->count([]));
 
         $lpRepo->delete($lp);
 
-        $this->assertSame(1, $courseRepo->count([]));
-        $this->assertSame(0, $lpRepo->count([]));
-        $this->assertSame(0, $lpItemRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
+        $this->assertSame($lpCountBefore, $lpRepo->count([]));
+        $this->assertSame($lpItemCountBefore, $lpItemRepo->count([]));
     }
 }

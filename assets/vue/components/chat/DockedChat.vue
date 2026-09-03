@@ -236,6 +236,20 @@
                 <span class="chd-hint">{{ t("Enter to send · Shift+Enter for newline") }}</span>
                 <div class="chd-spacer" />
                 <button
+                  v-if="isAiThread"
+                  :aria-label="t('Save')"
+                  :disabled="conversationSaved || savingConversation || sending || clearing || activeMessages.length === 0"
+                  :title="t('Save')"
+                  class="chd-btn chd-btn--ghost chd-btn--xs"
+                  type="button"
+                  @click="saveConversation"
+                >
+                  <i
+                    :class="savingConversation ? 'mdi mdi-loading mdi-spin' : conversationSaved ? 'mdi mdi-check' : 'mdi mdi-content-save-outline'"
+                    aria-hidden="true"
+                  />
+                </button>
+                <button
                   :disabled="sending || clearing"
                   class="chd-btn chd-btn--danger-outline"
                   @click="clearConversation"
@@ -452,6 +466,7 @@ const API = {
     "/account/chat/api/tutor_context",
   ),
   tutor_reset: RG(["chat_api_tutor_reset", "chamilo_core_chat_api_tutor_reset"], "/account/chat/api/tutor/reset"),
+  tutor_save: RG(["chat_api_tutor_save", "chamilo_core_chat_api_tutor_save"], "/account/chat/api/tutor/save"),
 }
 
 /** ===== State ===== */
@@ -468,6 +483,8 @@ const fetchingPrev = ref(false)
 const draft = ref("")
 const sending = ref(false)
 const aiTutorResponding = ref(false)
+const savingConversation = ref(false)
+const conversationSaved = ref(false)
 const clearing = ref(false)
 
 const scrollBox = ref(null)
@@ -553,16 +570,26 @@ function normalizeContactsHtmlForAiTutor(html) {
   if (shouldShowAi) {
     const row = document.createElement("div")
     row.className = "chd-ai-contact"
+    const tutorLabel = t("AI Tutor")
     row.dataset.user = String(AI_PEER_ID)
-    row.setAttribute("data-name", "AI Tutor")
+    row.setAttribute("data-name", tutorLabel)
     row.style.cursor = "pointer"
     row.style.padding = "10px"
     row.style.borderBottom = "1px solid #eee"
-    row.innerHTML = `
-      <span style="margin-right:8px;">🤖</span>
-      <strong>AI Tutor</strong>
-      <span style="float:right; color:#2e7d32;">●</span>
-    `
+
+    const robot = document.createElement("span")
+    robot.style.marginRight = "8px"
+    robot.textContent = "🤖"
+
+    const label = document.createElement("strong")
+    label.textContent = tutorLabel
+
+    const presence = document.createElement("span")
+    presence.style.float = "right"
+    presence.style.color = "#2e7d32"
+    presence.textContent = "●"
+
+    row.replaceChildren(robot, label, presence)
     wrap.prepend(row)
   }
 
@@ -1126,9 +1153,19 @@ function paintPresenceOnContacts(map) {
   })
 }
 
+/** Current Chamilo URL without scheme or domain, for AI contextual help. */
+function currentRelativeUrl() {
+  const pathname = String(window.location.pathname || "/")
+  const search = String(window.location.search || "")
+  const hash = String(window.location.hash || "")
+
+  return `${pathname}${search}${hash}`
+}
+
 /** Tutor context */
 async function loadTutorContext() {
   tutorCtx.loaded = false
+  conversationSaved.value = false
   tutorCtx.enabled = false
   tutorCtx.inTest = false
   tutorCtx.course = null
@@ -1917,6 +1954,7 @@ async function send() {
   sending.value = true
 
   if (pid === AI_PEER_ID) {
+    conversationSaved.value = false
     aiTutorResponding.value = true
     requestAnimationFrame(() => {
       const el = scrollBox.value
@@ -1928,14 +1966,19 @@ async function send() {
     const selectionContext = pid === AI_PEER_ID && selectedTextContext.value ? selectedTextContext.value : ""
     const extra =
       pid === AI_PEER_ID
-        ? { ai_provider: tutorCtx.provider, selected_text: selectionContext }
+        ? { ai_provider: tutorCtx.provider, selected_text: selectionContext, current_path: currentRelativeUrl() }
         : {}
     const res = await post(API.send, { to: pid, message: raw, chat_sec_token: me.secToken, ...extra })
 
-    if (res?.assistant?.id) {
+    if (res?.assistant) {
+      const assistant = { ...res.assistant }
+      if (!Number(assistant.id)) {
+        assistant.id = -Date.now() - 1
+      }
+
       const arr2 = messagesByPeer.get(pid) || []
-      if (!arr2.find((m) => Number(m.id) === Number(res.assistant.id))) {
-        messagesByPeer.set(pid, [...arr2, res.assistant].sort(byChronoId))
+      if (!arr2.find((m) => Number(m.id) === Number(assistant.id))) {
+        messagesByPeer.set(pid, [...arr2, assistant].sort(byChronoId))
       }
       requestAnimationFrame(() => {
         const el = scrollBox.value
@@ -1947,6 +1990,15 @@ async function send() {
       if (res.sec_token) me.secToken = res.sec_token
       replaceTempId(pid, tempId, { id: Number(res.id), recd: 2, date: nowSec })
       removePending(pid, tempId)
+    } else if (pid === AI_PEER_ID && res?.assistant) {
+      // Course AI errors are intentionally not persisted in the global chat table.
+      // Remove the optimistic user row and keep only the transient assistant error.
+      const arr2 = messagesByPeer.get(pid) || []
+      messagesByPeer.set(
+        pid,
+        arr2.filter((m) => Number(m.id) !== Number(tempId)),
+      )
+      removePending(pid, tempId)
     }
   } catch {
     // keep pending bubble
@@ -1955,6 +2007,25 @@ async function send() {
       aiTutorResponding.value = false
     }
     sending.value = false
+  }
+}
+
+async function saveConversation() {
+  if (!isAiThread.value || savingConversation.value || activeMessages.value.length === 0) return
+
+  savingConversation.value = true
+  conversationSaved.value = false
+
+  try {
+    const res = await post(API.tutor_save, {
+      ai_provider: tutorCtx.provider || "",
+      current_path: currentRelativeUrl(),
+    })
+    conversationSaved.value = !!res?.ok
+  } catch {
+    conversationSaved.value = false
+  } finally {
+    savingConversation.value = false
   }
 }
 
@@ -1969,6 +2040,7 @@ async function clearConversation() {
       // Server reset for the current AI tutor context.
       await post(API.tutor_reset, { ai_provider: tutorCtx.provider || "" })
       resetAiThreadCache()
+      conversationSaved.value = false
       await getPreviousMessages()
     } else {
       const nowSec = Math.floor(Date.now() / 1000)

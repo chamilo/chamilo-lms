@@ -10,11 +10,17 @@ use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiTutorChatService;
 use Chamilo\CoreBundle\Entity\Chat as ChatEntity;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageRelUser;
+use Chamilo\CoreBundle\Entity\MessageTag;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\LanguageHelper;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ChatRepository;
+use Chamilo\CoreBundle\Repository\MessageTagRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
@@ -37,6 +43,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 use const ENT_QUOTES;
@@ -54,6 +61,7 @@ final class ChatController extends AbstractController
     private const int AI_TUTOR_UNAVAILABLE_COOLDOWN_SECONDS = 60;
     private const string AI_TUTOR_UNAVAILABLE_MESSAGE = 'AI tutor is temporarily unavailable. Please try again later.';
     private const int AI_SELECTED_TEXT_CONTEXT_MAX_CHARS = 12000;
+    private const int AI_CURRENT_PATH_MAX_CHARS = 2048;
 
     public function __construct(
         private readonly CidReqHelper $cidReqHelper,
@@ -562,6 +570,7 @@ final class ChatController extends AbstractController
             $selectedTextContext = $this->normalizeAiSelectedTextContext(
                 (string) $req->request->get('selected_text', '')
             );
+            $currentPath = $this->normalizeAiCurrentPath((string) $req->request->get('current_path', ''));
 
             $course = $this->resolveCourseFromRequest($req, $doctrine);
             $mode = null === $course ? 'global' : 'course';
@@ -635,7 +644,47 @@ final class ChatController extends AbstractController
             $now = $nowUtc->format('Y-m-d H:i:s');
             $nowTs = $nowUtc->getTimestamp();
 
-            // Store the user message as a normal chat row (me -> -1)
+            /*
+             * Course and global AI Tutor histories must be independent.
+             * Course mode is persisted only in ai_tutor_*; the generic chat
+             * table is reserved for the platform-global AI Tutor thread.
+             */
+            if ($course instanceof Course) {
+                if ($this->isAiTutorTemporarilyUnavailable($req)) {
+                    return $this->buildAiTutorUnavailableResponse(
+                        $chat,
+                        $chatRepository,
+                        (int) $me,
+                        0,
+                        $nowTs,
+                        'course',
+                        false
+                    );
+                }
+
+                $this->releaseSessionLock($req);
+
+                $result = $aiTutorChatService->sendTutorMessageForDockedChat(
+                    (int) $me,
+                    $course,
+                    null,
+                    $providerKey,
+                    $message,
+                    $uiLang,
+                    $selectedTextContext,
+                    $currentPath
+                );
+
+                if ((int) ($result['id'] ?? 0) <= 0) {
+                    $this->markAiTutorTemporarilyUnavailable($req);
+                    $result['degraded'] = true;
+                    $result['temporarily_unavailable'] = true;
+                }
+
+                return new JsonResponse($result);
+            }
+
+            // Global AI Tutor messages are the only AI messages stored in chat.
             $userSanitized = $chat->sanitize($message);
             $userMsgId = $chatRepository->insertChatRow(
                 (int) $me,
@@ -652,33 +701,21 @@ final class ChatController extends AbstractController
                     (int) $me,
                     (int) $userMsgId,
                     $nowTs,
-                    $mode
+                    'global'
                 );
             }
 
             $this->releaseSessionLock($req);
 
             try {
-                if (null !== $course) {
-                    // Persist into ai_tutor_* when course context exists
-                    $assistantText = $aiTutorChatService->handleUserMessageAndGetAssistantText(
-                        (int) $me,
-                        $course,
-                        null,
-                        $providerKey,
-                        $message,
-                        $selectedTextContext
-                    );
-                } else {
-                    // Global mode: keep current behavior (no ai_tutor_* persistence without course)
-                    $assistantText = $aiTutorChatService->generateGlobalAssistantReply(
-                        (int) $me,
-                        $providerKey,
-                        $message,
-                        $uiLang,
-                        $selectedTextContext
-                    );
-                }
+                $assistantText = $aiTutorChatService->generateGlobalAssistantReply(
+                    (int) $me,
+                    $providerKey,
+                    $message,
+                    $uiLang,
+                    $selectedTextContext,
+                    $currentPath
+                );
             } catch (Throwable $e) {
                 error_log('[AI][chat] Failed to generate assistant reply: '.$e->getMessage());
                 $this->markAiTutorTemporarilyUnavailable($req);
@@ -689,7 +726,7 @@ final class ChatController extends AbstractController
                     (int) $me,
                     (int) $userMsgId,
                     $nowTs,
-                    $mode
+                    'global'
                 );
             }
 
@@ -703,7 +740,7 @@ final class ChatController extends AbstractController
                     (int) $me,
                     (int) $userMsgId,
                     $nowTs,
-                    $mode
+                    'global'
                 );
             }
 
@@ -717,11 +754,11 @@ final class ChatController extends AbstractController
                     (int) $me,
                     (int) $userMsgId,
                     $nowTs,
-                    $mode
+                    'global'
                 );
             }
 
-            // Store assistant message (-1 -> me) as unread (recd=0)
+            // Store assistant message (-1 -> me) as unread (recd=0).
             $assistantSanitized = $chat->sanitize($assistantText);
             $assistantId = $chatRepository->insertChatRow(
                 AiTutorChatService::FRIEND_AI,
@@ -749,7 +786,7 @@ final class ChatController extends AbstractController
                     ],
                     'to_user_info' => api_get_user_info((int) $me, true),
                 ],
-                'mode' => $mode,
+                'mode' => 'global',
             ]);
         }
 
@@ -770,6 +807,127 @@ final class ChatController extends AbstractController
         }
 
         return new JsonResponse($ret ?? ['id' => 0]);
+    }
+
+    #[Route(
+        path: '/account/chat/api/tutor/save',
+        name: 'chamilo_core_chat_api_tutor_save',
+        options: ['expose' => true],
+        methods: ['POST']
+    )]
+    public function globalTutorSave(
+        Request $req,
+        AiTutorChatService $aiTutorChatService,
+        AiProviderFactory $aiProviderFactory,
+        SettingsCourseManager $courseSettingsManager,
+        ManagerRegistry $doctrine,
+        MessageHelper $messageHelper,
+        MessageTagRepository $messageTagRepository,
+        TranslatorInterface $translator
+    ): JsonResponse {
+        $me = $this->getCurrentUserIdOrNull();
+        if (null === $me) {
+            return new JsonResponse(['error' => 'unauthorized'], 401);
+        }
+
+        if (!$this->isGlobalChatEnabled()) {
+            return $this->globalChatDisabledJson(['ok' => false]);
+        }
+
+        $currentPath = $this->normalizeAiCurrentPath((string) $req->request->get('current_path', ''));
+        $course = $this->resolveCourseFromRequest($req, $doctrine);
+        $mode = null === $course ? 'global' : 'course';
+        $providerKey = '';
+        $conversationId = 0;
+        $sessionId = (int) ($req->request->get('sid') ?? $req->query->get('sid') ?? 0);
+
+        if (null === $course) {
+            if (!$this->aiFeatureAccessHelper->isFeatureEnabledAtPlatform('tutor_chatbot')) {
+                return new JsonResponse(['error' => 'ai_not_enabled_at_platform'], 403);
+            }
+
+            $messages = $this->getGlobalAiTutorArchiveMessages($doctrine, (int) $me);
+        } else {
+            if (!$this->aiFeatureAccessHelper->isFeatureEnabledForCourse('tutor_chatbot', (int) $course->getId())) {
+                return new JsonResponse(['error' => 'ai_disabled_for_course'], 403);
+            }
+
+            $courseSettingsManager->setCourse($course);
+            $courseSettingValue = (string) $courseSettingsManager->getCourseSettingValue('tutor_chatbot');
+            $requestedProvider = trim((string) $req->request->get('ai_provider', ''));
+            $providerKey = (string) ($this->resolveTextProviderKey(
+                $requestedProvider ?: $courseSettingValue,
+                $aiProviderFactory
+            ) ?? '');
+
+            if ('' === $providerKey) {
+                return new JsonResponse(['error' => 'ai_not_configured'], 503);
+            }
+
+            $archive = $aiTutorChatService->getConversationArchiveData((int) $me, $course, $providerKey);
+            if (null === $archive) {
+                return new JsonResponse(['ok' => false, 'error' => 'empty_conversation'], 400);
+            }
+
+            $conversationId = (int) $archive['conversation_id'];
+            $providerKey = (string) $archive['provider'];
+            if ($sessionId <= 0) {
+                $sessionId = (int) $archive['session_id'];
+            }
+            $messages = $archive['messages'];
+        }
+
+        if ([] === $messages) {
+            return new JsonResponse(['ok' => false, 'error' => 'empty_conversation'], 400);
+        }
+
+        $metadata = [
+            'source' => 'ai-tutor',
+            'mode' => $mode,
+            'course_id' => (int) ($course?->getId() ?? 0),
+            'session_id' => max(0, $sessionId),
+            'conversation_id' => $conversationId,
+            'provider' => $providerKey,
+            'path' => $currentPath,
+        ];
+
+        $subject = $translator->trans('AI Tutor');
+        if ($course instanceof Course) {
+            $subject .= ' - '.(string) $course->getTitle();
+        }
+
+        $content = $this->buildAiTutorArchiveHtml(
+            $messages,
+            $metadata,
+            $translator->trans('You'),
+            $translator->trans('AI Tutor')
+        );
+
+        $messageId = $messageHelper->sendMessageSimple(
+            (int) $me,
+            $subject,
+            $content,
+            (int) $me,
+            false,
+            false
+        );
+
+        if (null === $messageId) {
+            return new JsonResponse(['ok' => false, 'error' => 'save_failed'], 500);
+        }
+
+        $this->tagAiTutorArchiveMessage(
+            $doctrine,
+            $messageTagRepository,
+            (int) $me,
+            (int) $messageId
+        );
+
+        return new JsonResponse([
+            'ok' => true,
+            'message_id' => (int) $messageId,
+            'mode' => $mode,
+        ]);
     }
 
     #[Route(
@@ -845,6 +1003,25 @@ final class ChatController extends AbstractController
         }
 
         return $normalized;
+    }
+
+    private function normalizeAiCurrentPath(string $path): string
+    {
+        $path = trim($path);
+        if ('' === $path) {
+            return '';
+        }
+
+        $path = preg_replace('/[\x00-\x1F\x7F]/u', '', $path) ?? '';
+        if ('' === $path || !str_starts_with($path, '/') || str_starts_with($path, '//')) {
+            return '';
+        }
+
+        if (mb_strlen($path, 'UTF-8') > self::AI_CURRENT_PATH_MAX_CHARS) {
+            $path = mb_substr($path, 0, self::AI_CURRENT_PATH_MAX_CHARS, 'UTF-8');
+        }
+
+        return $path;
     }
 
     private function resolveCourseLanguage(Course $course): string
@@ -1461,6 +1638,133 @@ final class ChatController extends AbstractController
     }
 
     /**
+     * @return list<array{role:string,content:string,date:string}>
+     */
+    private function getGlobalAiTutorArchiveMessages(ManagerRegistry $doctrine, int $userId): array
+    {
+        /** @var ChatEntity[] $rows */
+        $rows = $doctrine->getRepository(ChatEntity::class)
+            ->createQueryBuilder('chat')
+            ->andWhere(
+                '(chat.fromUser = :userId AND chat.toUser = :aiId) OR '
+                .'(chat.fromUser = :aiId AND chat.toUser = :userId)'
+            )
+            ->setParameter('userId', $userId)
+            ->setParameter('aiId', AiTutorChatService::FRIEND_AI)
+            ->orderBy('chat.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $messages = [];
+        foreach ($rows as $row) {
+            $role = (int) $row->getFromUser() === $userId ? 'user' : 'assistant';
+            $content = (string) $row->getMessage();
+            $content = preg_replace('~<br\s*/?>~i', "\n", $content) ?? $content;
+            $content = html_entity_decode(strip_tags($content), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $content = trim($content);
+            if ('' === $content) {
+                continue;
+            }
+
+            $messages[] = [
+                'role' => $role,
+                'content' => $content,
+                'date' => $row->getSent()->format(DATE_ATOM),
+            ];
+        }
+
+        return $messages;
+    }
+
+    /**
+     * @param list<array{role:string,content:string,date:string}> $messages
+     * @param array{source:string,mode:string,course_id:int,session_id:int,conversation_id:int,provider:string,path:string} $metadata
+     */
+    private function buildAiTutorArchiveHtml(
+        array $messages,
+        array $metadata,
+        string $youLabel,
+        string $aiTutorLabel
+    ): string {
+        $attr = static fn (string $value): string => htmlspecialchars(
+            $value,
+            ENT_QUOTES | ENT_SUBSTITUTE,
+            'UTF-8'
+        );
+
+        $html = '<div hidden'
+            .' data-chamilo-source="'.$attr($metadata['source']).'"'
+            .' data-ai-tutor-mode="'.$attr($metadata['mode']).'"'
+            .' data-course-id="'.(int) $metadata['course_id'].'"'
+            .' data-session-id="'.(int) $metadata['session_id'].'"'
+            .' data-ai-tutor-conversation-id="'.(int) $metadata['conversation_id'].'"'
+            .' data-ai-provider="'.$attr($metadata['provider']).'"'
+            .' data-ai-tutor-path="'.$attr($metadata['path']).'"'
+            .'></div>';
+
+        foreach ($messages as $message) {
+            $role = 'user' === ($message['role'] ?? '') ? 'user' : 'assistant';
+            $label = 'user' === $role ? $youLabel : $aiTutorLabel;
+            $content = htmlspecialchars(
+                trim((string) ($message['content'] ?? '')),
+                ENT_QUOTES | ENT_SUBSTITUTE,
+                'UTF-8'
+            );
+            if ('' === $content) {
+                continue;
+            }
+
+            $html .= '<p><strong>'.$attr($label).'</strong><br>'.nl2br($content).'</p>';
+        }
+
+        return $html;
+    }
+
+    private function tagAiTutorArchiveMessage(
+        ManagerRegistry $doctrine,
+        MessageTagRepository $messageTagRepository,
+        int $userId,
+        int $messageId
+    ): void {
+        $entityManager = $doctrine->getManagerForClass(Message::class);
+        if (!$entityManager instanceof EntityManagerInterface) {
+            return;
+        }
+
+        $message = $entityManager->getRepository(Message::class)->find($messageId);
+        $user = $entityManager->getRepository(User::class)->find($userId);
+        if (!$message instanceof Message || !$user instanceof User) {
+            return;
+        }
+
+        $tag = $messageTagRepository->findOneBy([
+            'user' => $user,
+            'tag' => 'ai-tutor',
+        ]);
+
+        if (!$tag instanceof MessageTag) {
+            $tag = (new MessageTag())
+                ->setUser($user)
+                ->setTag('ai-tutor')
+            ;
+            $messageTagRepository->update($tag);
+        }
+
+        foreach ($message->getReceivers() as $relation) {
+            if (
+                MessageRelUser::TYPE_TO === $relation->getReceiverType()
+                && (int) $relation->getReceiver()->getId() === $userId
+            ) {
+                $relation->addTag($tag);
+                $entityManager->persist($relation);
+                $entityManager->flush();
+                break;
+            }
+        }
+    }
+
+    /**
      * Pick a valid provider key for the "text" service.
      * - If requested provider is valid for "text", use it.
      * - Otherwise fallback to the first available "text" provider (config order).
@@ -1613,16 +1917,21 @@ final class ChatController extends AbstractController
         int $userId,
         int $userMessageId,
         int $timestamp,
-        string $mode = 'course'
+        string $mode = 'course',
+        bool $persistInGlobalChat = true
     ): JsonResponse {
         $assistantSanitized = $chat->sanitize(self::AI_TUTOR_UNAVAILABLE_MESSAGE);
-        $assistantId = $chatRepository->insertChatRow(
-            AiTutorChatService::FRIEND_AI,
-            $userId,
-            $assistantSanitized,
-            1,
-            (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s')
-        );
+        $assistantId = 0;
+
+        if ($persistInGlobalChat) {
+            $assistantId = $chatRepository->insertChatRow(
+                AiTutorChatService::FRIEND_AI,
+                $userId,
+                $assistantSanitized,
+                1,
+                (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s')
+            );
+        }
 
         return new JsonResponse([
             'id' => $userMessageId,

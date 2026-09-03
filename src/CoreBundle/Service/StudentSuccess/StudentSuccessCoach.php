@@ -180,7 +180,7 @@ PROMPT;
         $rawAnalysis = $this->textAiService->requestJson(
             $teacher,
             $requestedProvider,
-            $this->systemPrompt(),
+            $this->systemPrompt($course),
             $userPrompt,
             self::MAX_OUTPUT_TOKENS,
         );
@@ -237,11 +237,18 @@ PROMPT;
         return $this->analysisStorage->getStudentAnalysis($student, $course, $session);
     }
 
-    private function systemPrompt(): string
+    private function systemPrompt(Course $course): string
     {
         $sourceLines = [];
         foreach (self::EVIDENCE_SOURCES as $id => $source) {
             $sourceLines[] = $id.' | '.$source['title'].' | '.$source['url'];
+        }
+
+        $courseLanguage = trim($course->getCourseLanguage());
+        $courseLanguage = (string) preg_replace('/[^\p{L}\p{N}_-]+/u', ' ', $courseLanguage);
+        $courseLanguage = trim(mb_substr($courseLanguage, 0, 80));
+        if ('' === $courseLanguage) {
+            $courseLanguage = 'en';
         }
 
         return <<<'PROMPT'
@@ -274,6 +281,12 @@ Return only valid JSON with this exact top-level structure:
 
 Keep the answer specific to observable activity. Prefer a small number of high-value recommendations over generic advice.
 PROMPT
+            ."\n\nCourse language: {$courseLanguage}."
+            ."\nSource-language priority rules:"
+            ."\n- Prioritize approved pedagogical sources that are practical for a teacher working in the course language."
+            ."\n- Avoid adding a reference in another language merely to fill sourceIds."
+            ."\n- If no approved source is practical in the course language, prefer an empty sourceIds array unless a source in another language is essential and materially supports a high-priority recommendation."
+            ."\n- Never invent translated source titles, localized URLs or source IDs."
             ."\n\nApproved source catalog:\n"
             .implode("\n", $sourceLines);
     }

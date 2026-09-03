@@ -724,20 +724,15 @@
             </div>
 
             <div v-else-if="isDropdownQuestion(question)" class="space-y-3">
-              <select
+              <BaseMultiSelect
                 v-model="answers[question.id].dropdown"
-                class="rounded border border-gray-30 px-3 py-2 text-sm"
-                :name="`question_${question.id}_dropdown`"
-              >
-                <option value="">{{ t("Select") }}</option>
-                <option
-                  v-for="option in question.dropdown.options"
-                  :key="option.id"
-                  :value="option.id"
-                >
-                  {{ displayText(option.answer) }}
-                </option>
-              </select>
+                :input-id="`question_${question.id}_dropdown`"
+                :label="t('Select')"
+                :options="dropdownOptions(question)"
+                option-label="label"
+                option-value="value"
+                :show-toggle-all="false"
+              />
             </div>
 
             <div v-else-if="isCalculatedQuestion(question)" class="space-y-3">
@@ -1613,6 +1608,7 @@ import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
+import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue"
 import AudioRecorder from "../../components/AudioRecorder.vue"
 import ExerciseFillBlanksRuntime from "./components/ExerciseFillBlanksRuntime.vue"
 import exerciseService from "../../services/exerciseService"
@@ -3301,7 +3297,7 @@ function buildAnswerPayload(question) {
   }
 
   if (isDropdownQuestion(question)) {
-    return { dropdown: questionAnswer.dropdown }
+    return { choices: Array.isArray(questionAnswer.dropdown) ? questionAnswer.dropdown : [] }
   }
 
   if (isCalculatedQuestion(question)) {
@@ -3446,7 +3442,7 @@ function applySavedAnswer(question, rows) {
   }
 
   if (isDropdownQuestion(question)) {
-    questionAnswer.dropdown = Number(rows[0]?.answer || 0) || ""
+    questionAnswer.dropdown = rows.map((row) => Number(row.answer || 0)).filter((value) => value > 0)
     return
   }
 
@@ -3569,7 +3565,7 @@ function initializeAnswerState() {
       blanks: {},
       matching: {},
       draggableOrder: draggableInitialOrder(question),
-      dropdown: "",
+      dropdown: [],
       calculated: "",
       calculatedAnswerId: currentCalculatedVariation(question).id || question.calculated?.answerId || null,
       text: "",
@@ -4300,6 +4296,19 @@ function onDraggableOrderDrop(question, targetItemId) {
 
 function isDropdownQuestion(question) {
   return [28, 29].includes(Number(question.type)) && question.dropdown
+}
+
+function dropdownOptions(question) {
+  if (!Array.isArray(question?.dropdown?.options)) {
+    return []
+  }
+
+  return question.dropdown.options
+    .map((option) => ({
+      label: displayText(option.answer),
+      value: Number(option.id || 0),
+    }))
+    .filter((option) => option.value > 0)
 }
 
 function currentCalculatedVariation(question) {

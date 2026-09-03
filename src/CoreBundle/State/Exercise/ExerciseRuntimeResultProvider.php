@@ -1418,7 +1418,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
      */
     private function normalizeDropdownAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
     {
-        $selectedId = $this->getFirstSavedAnswerId($rows);
+        $selectedAnswerIds = $this->getSavedAnswerIds($rows);
+        $selectedIds = array_flip($selectedAnswerIds);
         $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
         $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
         $showOnlyCorrectAnswers = true === ($visibility['showOnlyCorrectAnswers'] ?? false);
@@ -1431,7 +1432,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                 continue;
             }
 
-            $isSelected = $answerId === $selectedId;
+            $isSelected = isset($selectedIds[$answerId]);
             $option = [
                 'id' => $answerId,
                 'answer' => $answer->getAnswer(),
@@ -1453,7 +1454,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         return [
             'kind' => 'dropdown',
-            'selectedId' => $showStudentAnswers && $selectedId > 0 ? $selectedId : null,
+            'selectedId' => $showStudentAnswers && [] !== $selectedAnswerIds ? $selectedAnswerIds[0] : null,
             'options' => $options,
         ];
     }
@@ -2044,16 +2045,6 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         }
 
         return $answerIds;
-    }
-
-    /**
-     * @param array<int, TrackEAttempt> $rows
-     */
-    private function getFirstSavedAnswerId(array $rows): int
-    {
-        $row = $rows[0] ?? null;
-
-        return $row instanceof TrackEAttempt ? (int) $row->getAnswer() : 0;
     }
 
     /**

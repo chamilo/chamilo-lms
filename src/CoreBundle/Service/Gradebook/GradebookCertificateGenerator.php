@@ -27,6 +27,10 @@ use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\Writer\PngWriter;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -329,7 +333,7 @@ final readonly class GradebookCertificateGenerator
         if ($systemTemplate instanceof SystemTemplate) {
             $content = trim((string) $systemTemplate->getContent());
             if ('' !== $content) {
-                return $content;
+                return $this->ensureDefaultCertificateQrPlaceholder($content);
             }
         }
 
@@ -344,6 +348,24 @@ final readonly class GradebookCertificateGenerator
         }
 
         return str_replace('{IMG_PATH}', '/main/gradebook/certificate_template/', $html);
+    }
+
+    private function ensureDefaultCertificateQrPlaceholder(string $template): string
+    {
+        if (str_contains($template, '((certificate_barcode))')) {
+            return $template;
+        }
+
+        $linkPlaceholder = '((certificate_link_html))';
+        if (!str_contains($template, $linkPlaceholder)) {
+            return $template;
+        }
+
+        return str_replace(
+            $linkPlaceholder,
+            '<div style="margin-bottom:8px;">((certificate_barcode))</div><div>'.$linkPlaceholder.'</div>',
+            $template,
+        );
     }
 
     private function getDocumentTemplateHtml(
@@ -392,6 +414,7 @@ final readonly class GradebookCertificateGenerator
         $teacher = $this->resolveTeacher($category, $course, $session);
         $scoreText = rtrim(rtrim(number_format($score, 2, '.', ''), '0'), '.');
         $escapedViewUrl = htmlspecialchars($viewUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $absoluteViewUrl = '' !== $viewUrl ? rtrim((string) api_get_path(WEB_PATH), '/').$viewUrl : '';
 
         $replacements = [
             '((user_firstname))' => $this->escape((string) $user->getFirstname()),
@@ -418,7 +441,7 @@ final readonly class GradebookCertificateGenerator
                     .$this->escape($this->translator->trans('Online link to certificate'))
                     .'</a>'
                 : '',
-            '((certificate_barcode))' => '',
+            '((certificate_barcode))' => $this->buildCertificateQrCodeHtml($absoluteViewUrl),
             '((external_style))' => '',
             '((time_in_course))' => '',
             '((time_in_course_in_all_sessions))' => '',
@@ -427,6 +450,35 @@ final readonly class GradebookCertificateGenerator
         ];
 
         return str_replace(array_keys($replacements), array_values($replacements), $template);
+    }
+
+    private function buildCertificateQrCodeHtml(string $certificateUrl): string
+    {
+        if ('' === trim($certificateUrl)) {
+            return '';
+        }
+
+        try {
+            $result = Builder::create()
+                ->writer(new PngWriter())
+                ->data($certificateUrl)
+                ->encoding(new Encoding('UTF-8'))
+                ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+                ->size(180)
+                ->margin(5)
+                ->build()
+            ;
+
+            $encodedImage = base64_encode($result->getString());
+
+            return '<img src="data:image/png;base64,'.$encodedImage.'" alt="QR" style="width:96px;height:96px;" />';
+        } catch (Throwable $exception) {
+            $this->logger->warning('Unable to generate the Gradebook certificate QR code.', [
+                'exception' => $exception,
+            ]);
+
+            return '';
+        }
     }
 
     private function requiresLegacyTemplateCompatibility(string $template): bool

@@ -49,6 +49,7 @@ export const chamiloIconToClass = {
   "download": "mdi mdi-download-box",
   "comment": "mdi mdi-comment-text-outline",
   "drawing": "mdi mdi-pencil-outline",
+  "shape": "mdi mdi-shape",
   "edit": "mdi mdi-pencil",
   "email-plus": "mdi mdi-email-plus-outline",
   "email-unread": "mdi mdi-email-mark-as-unread",

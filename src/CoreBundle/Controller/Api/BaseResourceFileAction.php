@@ -703,7 +703,17 @@ class BaseResourceFileAction
 
         if ($hasFile && null !== $content) {
             $content = $this->sanitizeContentFileForUpdate((string) $content, $request, $resourceNode);
-            $repo->updateResourceFileContent($resource, $content);
+
+            if ($resource instanceof CDocument && $repo instanceof CDocumentRepository) {
+                $repo->updateStoredFileContent(
+                    $resource,
+                    $content,
+                    $this->resolveUpdatedContentMimeType($request, $resourceNode, $content),
+                );
+            } else {
+                $repo->updateResourceFileContent($resource, $content);
+            }
+
             $resource->setResourceNode($resourceNode);
         }
 
@@ -809,6 +819,29 @@ class BaseResourceFileAction
         $resourceNode->setUpdatedAt(new DateTime());
 
         return $resource;
+    }
+
+    private function resolveUpdatedContentMimeType(Request $request, ResourceNode $resourceNode, string $content): string
+    {
+        $requestedMimeType = strtolower(trim((string) $request->request->get('contentFileMimeType', '')));
+        if ('' !== $requestedMimeType) {
+            return $requestedMimeType;
+        }
+
+        $resourceFile = $resourceNode->getFirstResourceFile();
+        $currentMimeType = $resourceFile instanceof ResourceFile
+            ? strtolower(trim((string) $resourceFile->getMimeType()))
+            : '';
+
+        if ('image/svg+xml' === $currentMimeType) {
+            return $currentMimeType;
+        }
+
+        if (1 === preg_match('/<(?:!doctype\s+html|html|head|body|main|section|article|div|p|h[1-6]|table|ul|ol|style)\b/i', $content)) {
+            return 'text/html';
+        }
+
+        return '' !== $currentMimeType ? $currentMimeType : 'text/plain';
     }
 
     private function getContentFileUploadInfo(Request $request, string $title): array

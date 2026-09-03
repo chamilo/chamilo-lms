@@ -338,6 +338,7 @@
           :runtime="runtime"
           @active-change="handleImpressActiveChange"
           @iframe-load="handleIframeLoad"
+          @media-load="handleMediaLoad"
           @open-item="openItem"
         />
 
@@ -353,6 +354,18 @@
             v-if="isFinalItem"
             :data="runtime.finalItem"
             class="h-full overflow-y-auto"
+          />
+
+          <video
+            v-else-if="runtime.contentUrl && isVideoItem"
+            :key="`${runtime.currentItemId}-${runtime.contentUrl}-${iframeReloadKey}`"
+            :src="runtime.contentUrl"
+            :title="currentItem?.title || runtime.title"
+            class="lp-runtime-video"
+            controls
+            playsinline
+            preload="metadata"
+            @loadedmetadata="handleMediaLoad"
           />
 
           <iframe
@@ -521,6 +534,7 @@ const currentItem = computed(
 const isFinalItem = computed(
   () => currentItem.value?.itemType === "final_item" && Boolean(runtime.value?.finalItem?.enabled),
 )
+const isVideoItem = computed(() => "video" === String(currentItem.value?.itemType || "").trim().toLowerCase())
 const previewImageUrl = computed(() => String(runtime.value?.previewImageUrl || ""))
 const shouldShowPreviewImage = computed(() => {
   const url = previewImageUrl.value.trim()
@@ -1121,6 +1135,12 @@ function handleIframeLoad(event) {
   scheduleRuntimeRefresh()
 }
 
+function handleMediaLoad() {
+  contentFrame.value = null
+  iframeLoading.value = false
+  scheduleRuntimeRefresh()
+}
+
 function handleImpressActiveChange(item) {
   const isSection = Boolean(item?.isSection)
   if (isSection && !impressActiveIsSection.value) {
@@ -1606,6 +1626,13 @@ body.lp-runtime-document {
   height: 100%;
   border: 0;
   background: #ffffff;
+}
+
+.lp-runtime-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .lp-runtime-loader {

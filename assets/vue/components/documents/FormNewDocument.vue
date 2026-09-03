@@ -21,10 +21,7 @@
       />
 
       <BaseTinyEditor
-        v-if="
-          (item.resourceNode && item.resourceNode.firstResourceFile && item.resourceNode.firstResourceFile.text) ||
-          ['file', 'certificate'].includes(item.filetype)
-        "
+        v-if="showContentEditor"
         id="item_content"
         v-model="item.contentFile"
         :full-page="fullPage"
@@ -34,7 +31,7 @@
       />
     </div>
     <div
-      v-if="editorDrafts.length > 0"
+      v-if="showContentEditor && editorDrafts.length > 0"
       class="mt-3 rounded-lg border border-gray-25 bg-gray-10 px-4 py-3"
     >
       <button
@@ -211,6 +208,7 @@ import { ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
+import { looksLikeHtmlContent } from "../../composables/fileUtils"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
@@ -302,6 +300,47 @@ export default {
     },
     isCertificateDocument() {
       return "certificate" === String(this.item?.filetype || "").trim().toLowerCase()
+    },
+    showContentEditor() {
+      if (Boolean(this.item?.newDocument)) {
+        return true
+      }
+
+      const filetype = String(this.item?.filetype || "")
+        .trim()
+        .toLowerCase()
+
+      if (["certificate", "html"].includes(filetype)) {
+        return true
+      }
+
+      const resourceFile = this.item?.resourceNode?.firstResourceFile
+      if (!resourceFile || "file" !== filetype) {
+        return false
+      }
+
+      const mime = String(resourceFile.mimeType || "")
+        .split(";")[0]
+        .trim()
+        .toLowerCase()
+      const originalName = String(resourceFile.originalName || resourceFile.title || this.item?.title || "")
+        .trim()
+        .toLowerCase()
+      const extension = originalName.includes(".") ? originalName.split(".").pop() : ""
+
+      if (mime.includes("text/html") || mime.includes("application/xhtml") || ["html", "htm", "xhtml"].includes(extension)) {
+        return true
+      }
+
+      if (resourceFile.image || resourceFile.video || resourceFile.audio) {
+        return false
+      }
+
+      if (mime.startsWith("image/") || mime.startsWith("video/") || mime.startsWith("audio/")) {
+        return false
+      }
+
+      return looksLikeHtmlContent(this.item?.contentFile)
     },
     effectiveParentResourceNodeId() {
       const routeNode = this.normalizeNodeId(this.$route?.params?.node ?? this.$route?.params?.id)

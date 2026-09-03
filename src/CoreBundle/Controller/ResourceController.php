@@ -719,7 +719,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $fileName = $resourceFile->getOriginalName();
         $fileSize = $resourceFile->getSize();
         $mimeType = $resourceFile->getMimeType() ?: '';
-        [$start, $end, $length] = $this->getRange($request, $fileSize);
+        [$start, $end, $length, $isPartialContent] = $this->resolveFileRange($request, $fileSize);
         $resourceNodeRepo = $this->getResourceNodeRepository();
 
         // Convert the file name to ASCII using iconv
@@ -976,12 +976,75 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $response->headers->set('Content-Length', (string) $length);
         $response->headers->set('Accept-Ranges', 'bytes');
-        $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
-        $response->setStatusCode(
-            $start > 0 || $end < $fileSize - 1 ? Response::HTTP_PARTIAL_CONTENT : Response::HTTP_OK
-        );
+
+        if ($isPartialContent) {
+            $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
+            $response->setStatusCode(Response::HTTP_PARTIAL_CONTENT);
+        } else {
+            $response->setStatusCode(Response::HTTP_OK);
+        }
 
         return $response;
+    }
+
+    /**
+     * Resolve one HTTP byte range for streamed resources.
+     *
+     * Malformed, unsupported multi-range, or out-of-bounds requests are intentionally ignored
+     * and fall back to the complete representation. This keeps the endpoint compatible with
+     * clients that retry media requests while still returning a correct 206 response for valid
+     * single ranges such as "bytes=0-", "bytes=1000-" and suffix ranges.
+     *
+     * @return array{0: int, 1: int, 2: int, 3: bool}
+     */
+    private function resolveFileRange(Request $request, int $fileSize): array
+    {
+        if ($fileSize <= 0) {
+            return [0, 0, 0, false];
+        }
+
+        $fullRange = [0, $fileSize - 1, $fileSize, false];
+        $rangeHeader = trim((string) $request->headers->get('Range', ''));
+
+        if ('' === $rangeHeader
+            || 1 !== preg_match('/^bytes=(\d*)-(\d*)$/', $rangeHeader, $matches)
+        ) {
+            return $fullRange;
+        }
+
+        $startValue = $matches[1];
+        $endValue = $matches[2];
+
+        if ('' === $startValue && '' === $endValue) {
+            return $fullRange;
+        }
+
+        if ('' === $startValue) {
+            $suffixLength = (int) $endValue;
+            if ($suffixLength <= 0) {
+                return $fullRange;
+            }
+
+            $length = min($suffixLength, $fileSize);
+            $start = $fileSize - $length;
+
+            return [$start, $fileSize - 1, $length, true];
+        }
+
+        $start = (int) $startValue;
+        if ($start >= $fileSize) {
+            return $fullRange;
+        }
+
+        $end = '' === $endValue
+            ? $fileSize - 1
+            : min((int) $endValue, $fileSize - 1);
+
+        if ($end < $start) {
+            return $fullRange;
+        }
+
+        return [$start, $end, $end - $start + 1, true];
     }
 
     /**

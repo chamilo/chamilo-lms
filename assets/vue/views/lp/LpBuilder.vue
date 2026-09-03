@@ -743,7 +743,7 @@ function goBack() {
       <BaseButton
         :label="t('Preview')"
         :to-url="previewUrl"
-        icon="eye-on"
+        icon="preview"
         only-icon
         type="primary-text"
       />

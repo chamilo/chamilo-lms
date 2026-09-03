@@ -22,6 +22,7 @@ class CGlossaryRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $glossaryRepo = self::getContainer()->get(CGlossaryRepository::class);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -56,6 +57,6 @@ class CGlossaryRepositoryTest extends AbstractApiTest
 
         // A glossary is a global resource, so don't cascade-delete it
         $this->assertSame(1, $glossaryRepo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 }

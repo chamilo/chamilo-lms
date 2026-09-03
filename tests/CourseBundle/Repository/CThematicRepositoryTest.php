@@ -20,6 +20,7 @@ class CThematicRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
         $repo = self::getContainer()->get(CThematicRepository::class);
 
         $course = $this->createCourse('new');
@@ -42,6 +43,6 @@ class CThematicRepositoryTest extends AbstractApiTest
 
         // Fixme Thematic progress is highly bound to the course and should be cascade-deleted with the course
         // $this->assertSame(0, $repo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 }

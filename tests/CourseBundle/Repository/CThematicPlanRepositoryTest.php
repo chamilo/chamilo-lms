@@ -22,6 +22,7 @@ class CThematicPlanRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
         $thematicRepo = self::getContainer()->get(CThematicRepository::class);
         $planRepo = self::getContainer()->get(CThematicPlanRepository::class);
 
@@ -52,14 +53,14 @@ class CThematicPlanRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $thematic->getPlans()->count());
         $this->assertSame(1, $thematicRepo->count([]));
         $this->assertSame(1, $planRepo->count([]));
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
 
         $plan = $planRepo->find($plan->getIid());
         $em->remove($plan);
         $em->flush();
 
         $this->assertSame(1, $thematicRepo->count([]));
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
         $this->assertSame(0, $planRepo->count([]));
     }
 
@@ -67,6 +68,7 @@ class CThematicPlanRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
         $thematicRepo = self::getContainer()->get(CThematicRepository::class);
         $planRepo = self::getContainer()->get(CThematicPlanRepository::class);
 
@@ -97,7 +99,7 @@ class CThematicPlanRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $thematic->getPlans()->count());
         $this->assertSame(1, $thematicRepo->count([]));
         $this->assertSame(1, $planRepo->count([]));
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
 
         $course = $this->getCourse($course->getId());
         $courseRepo->delete($course);
@@ -105,6 +107,6 @@ class CThematicPlanRepositoryTest extends AbstractApiTest
         // Fixme Thematic plans are highly bound to the course and should be cascade-deleted with the course
         // $this->assertSame(0, $thematicRepo->count([]));
         // $this->assertSame(0, $planRepo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 }

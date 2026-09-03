@@ -27,6 +27,7 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
         ]);
         $repo->setRequestStack($request_stack);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -74,7 +75,7 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
 
         // Fixme student publications should be cascade-deleted with the course
         // $this->assertSame(0, $repo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 
     public function testCreateWithPublicationRelUser(): void
@@ -83,6 +84,7 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
 
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
         $publicationRelUserRepo = $em->getRepository(CStudentPublicationRelUser::class);
 
         $course = $this->createCourse('new');
@@ -107,7 +109,7 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame(1, $repo->count([]));
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
         $this->assertSame(1, $publicationRelUserRepo->count([]));
 
         $course = $this->getCourse($course->getId());
@@ -117,7 +119,7 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
         // Fixme Student publications are bound to courses and should be cascade-deleted with the course
         // $this->assertSame(0, $publicationRelUserRepo->count([]));
         // $this->assertSame(0, $repo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 
     public function testFindAllByCourse(): void

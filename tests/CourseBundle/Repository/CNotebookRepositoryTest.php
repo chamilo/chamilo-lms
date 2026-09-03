@@ -21,6 +21,7 @@ class CNotebookRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $notebookRepo = self::getContainer()->get(CNotebookRepository::class);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -45,6 +46,6 @@ class CNotebookRepositoryTest extends AbstractApiTest
         // Notebook resources belong to the user before anything else,
         // and should not be cascade-deleted with the course
         $this->assertSame(1, $notebookRepo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 }

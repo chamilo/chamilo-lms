@@ -26,6 +26,7 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
         $categoryRepo = self::getContainer()->get(GradeBookCategoryRepository::class);
         $evaluationRepo = $em->getRepository(GradebookEvaluation::class);
         $linkRepo = $em->getRepository(GradebookLink::class);
@@ -86,12 +87,12 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
         $em->persist($category);
         $em->flush();
 
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
 
         $em->remove($course);
         $em->flush();
 
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
         $this->assertSame(0, $categoryRepo->count([]));
         $this->assertSame(0, $evaluationRepo->count([]));
         $this->assertSame(0, $linkRepo->count([]));
@@ -101,6 +102,7 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
         $repo = self::getContainer()->get(GradeBookCategoryRepository::class);
 
         $course = $this->createCourse('new');
@@ -182,11 +184,11 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
         $em->persist($resultAttempt);
         $em->flush();
 
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
 
         $courseRepo->delete($course);
 
         $this->assertSame(0, $repo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 }

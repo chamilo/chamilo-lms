@@ -23,6 +23,8 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $courseCountBefore = $courseRepo->count([]);
         $repo = self::getContainer()->get(CToolIntroRepository::class);
 
         $this->assertSame(0, $repo->count([]));
@@ -55,7 +57,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         // Delete intro.
         $repo->delete($intro);
         $this->assertSame(0, $repo->count([]));
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
     }
 
     public function testCreateAndDeleteCourse(): void
@@ -63,6 +65,8 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $courseCountBefore = $courseRepo->count([]);
         $repo = self::getContainer()->get(CToolIntroRepository::class);
 
         $course = $this->createCourse('new');
@@ -82,13 +86,13 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $em->persist($intro);
         $em->flush();
 
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
         $this->assertSame(1, $repo->count([]));
 
         // Delete course.
         $courseRepo->delete($course);
         $this->assertSame(0, $repo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 
     public function testCreateInSession(): void

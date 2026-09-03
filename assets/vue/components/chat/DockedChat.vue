@@ -173,7 +173,22 @@
                   </div>
                 </div>
                 <div
-                  v-if="activeMessages.length === 0"
+                  v-if="isAiThread && aiTutorResponding"
+                  :aria-label="t('AI Tutor')"
+                  aria-live="polite"
+                  class="chd-row chd-row--peer"
+                >
+                  <div
+                    class="chd-bubble chd-ai-typing"
+                    role="status"
+                  >
+                    <span class="chd-ai-typing__dot" />
+                    <span class="chd-ai-typing__dot" />
+                    <span class="chd-ai-typing__dot" />
+                  </div>
+                </div>
+                <div
+                  v-if="activeMessages.length === 0 && !aiTutorResponding"
                   class="chd-text--muted chd-center chd-py-8"
                 >
                   {{ t("No messages yet") }}
@@ -452,6 +467,7 @@ const fetchingPrev = ref(false)
 
 const draft = ref("")
 const sending = ref(false)
+const aiTutorResponding = ref(false)
 const clearing = ref(false)
 
 const scrollBox = ref(null)
@@ -1900,6 +1916,14 @@ async function send() {
   draft.value = ""
   sending.value = true
 
+  if (pid === AI_PEER_ID) {
+    aiTutorResponding.value = true
+    requestAnimationFrame(() => {
+      const el = scrollBox.value
+      if (el) el.scrollTop = el.scrollHeight
+    })
+  }
+
   try {
     const selectionContext = pid === AI_PEER_ID && selectedTextContext.value ? selectedTextContext.value : ""
     const extra =
@@ -1927,6 +1951,9 @@ async function send() {
   } catch {
     // keep pending bubble
   } finally {
+    if (pid === AI_PEER_ID) {
+      aiTutorResponding.value = false
+    }
     sending.value = false
   }
 }
@@ -2283,6 +2310,47 @@ html[dir="rtl"] .chd .chd-contacts .chd-contact-dot {
   align-items: center;
   justify-content: center;
 }
+/* AI Tutor response indicator. */
+.chd-ai-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 48px;
+  min-height: 30px;
+}
+.chd-ai-typing__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.35;
+  animation: chd-ai-typing-pulse 1.2s infinite ease-in-out;
+}
+.chd-ai-typing__dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.chd-ai-typing__dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes chd-ai-typing-pulse {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  40% {
+    transform: translateY(-3px);
+    opacity: 0.9;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chd-ai-typing__dot {
+    animation: none;
+    opacity: 0.55;
+  }
+}
+
 /* AI contact styles (minimal and non-breaking) */
 .chd-ai {
   padding: 8px 10px;

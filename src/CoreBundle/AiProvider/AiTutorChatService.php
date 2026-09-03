@@ -608,7 +608,7 @@ final class AiTutorChatService
      * Build the AI Tutor system prompt for course and global support modes.
      *
      * The wording is provided by the product owner. Course mode also appends the
-     * course description sections as plain-text context.
+     * course description sections as structured XML-like context.
      */
     public function buildContextSystemPrompt(?Course $course, string $courseLanguage = ''): string
     {
@@ -620,7 +620,11 @@ final class AiTutorChatService
                 $lang = trim((string) ($course->getCourseLanguage() ?? ''));
             }
 
-            $title = (string) ($course->getTitle() ?: 'this course');
+            $title = htmlspecialchars(
+                (string) ($course->getTitle() ?: 'this course'),
+                ENT_QUOTES | ENT_SUBSTITUTE,
+                'UTF-8'
+            );
             $description = $this->buildCourseDescriptionContext($course);
 
             return "You are a digital tutor and mentor. You help me understand topics related to my course titled <title>'{$title}'</title> with the following description: <description>{$description}</description>. "
@@ -646,7 +650,7 @@ final class AiTutorChatService
     private function buildCourseDescriptionContext(Course $course): string
     {
         $sections = $this->courseDescriptionRepository->findAllInCourse($course);
-        $parts = [];
+        $blocks = [];
 
         foreach ($sections as $section) {
             $title = trim(strip_tags((string) $section->getTitle()));
@@ -656,15 +660,23 @@ final class AiTutorChatService
                 continue;
             }
 
-            $text = '' !== $title && '' !== $content
-                ? $title.': '.$content
-                : ($title ?: $content);
+            $title = preg_replace('/\s+/u', ' ', $title) ?? $title;
+            $content = preg_replace('/\s+/u', ' ', $content) ?? $content;
 
-            $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
-            $parts[] = trim($text);
+            $title = htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $content = htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+            $blocks[] = "\n<course_description>\n"
+                .'  <title>'.$title."</title>\n"
+                .'  <content>'.$content."</content>\n"
+                .'</course_description>';
         }
 
-        return implode(' | ', $parts);
+        if ([] === $blocks) {
+            return '';
+        }
+
+        return implode('', $blocks)."\n";
     }
 
     private function renderEmptyState(): string

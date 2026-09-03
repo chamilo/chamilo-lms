@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -56,6 +57,7 @@ final readonly class GeneratedMediaStorageService
         private TranslatorInterface $translator,
         private CourseRepository $courseRepository,
         private CourseHelper $courseHelper,
+        private CidReqHelper $cidReqHelper,
         private AiDisclosureHelper $aiDisclosureHelper,
     ) {}
 
@@ -156,6 +158,7 @@ final readonly class GeneratedMediaStorageService
                         $this->translator,
                         $this->courseRepository,
                         $this->courseHelper,
+                        $this->cidReqHelper,
                         $this->aiDisclosureHelper,
                     );
                 }

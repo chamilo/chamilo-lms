@@ -160,6 +160,7 @@ final readonly class GeneratedMediaStorageService
                         $this->courseHelper,
                         $this->cidReqHelper,
                         $this->aiDisclosureHelper,
+                        $course,
                     );
                 }
             );

@@ -232,7 +232,7 @@ final readonly class CreateCourseDocumentTool
 
         /** @var CDocument $document */
         $document = $this->entityManager->wrapInTransaction(
-            function () use ($courseId, $title, $topic, $content, $languageIsoCode, $visibility, $courseResourceNode): CDocument {
+            function () use ($course, $courseId, $title, $topic, $content, $languageIsoCode, $visibility, $courseResourceNode): CDocument {
                 $request = Request::create(
                     '/api/documents?cid='.$courseId,
                     'POST',
@@ -267,6 +267,7 @@ final readonly class CreateCourseDocumentTool
                     $this->courseHelper,
                     $this->cidReqHelper,
                     $this->aiDisclosureHelper,
+                    $course,
                 );
 
                 $resourceFile = $document->getResourceNode()?->getFirstResourceFile();

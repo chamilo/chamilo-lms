@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
@@ -51,6 +52,7 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
         CourseHelper $courseHelper,
         CidReqHelper $cidReqHelper,
         AiDisclosureHelper $aiDisclosureHelper,
+        ?Course $course = null,
     ): CDocument {
         // The link context (cid/sid/gid) is taken from the session-resolved
         // course that gated this operation, not from the request body. This
@@ -59,7 +61,8 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
         $resourceLinkList = $this->buildResourceLinkListFromContext(
             $cidReqHelper,
             $this->extractResourceLinkListFromRequest($request),
-            ResourceLink::VISIBILITY_PUBLISHED
+            ResourceLink::VISIBILITY_PUBLISHED,
+            $course
         );
 
         $isUncompressZipEnabled = (string) $request->request->get('isUncompressZipEnabled', 'false');
@@ -79,7 +82,8 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
                 $courseRepository,
                 $repo,
                 $courseHelper,
-                $resourceLinkList
+                $resourceLinkList,
+                $course
             );
         } else {
             $result = $this->handleCreateFileRequest(
@@ -92,7 +96,8 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
                 $translator,
                 $courseRepository,
                 $courseHelper,
-                $resourceLinkList
+                $resourceLinkList,
+                $course
             );
         }
 

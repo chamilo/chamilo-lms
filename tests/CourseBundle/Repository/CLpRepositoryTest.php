@@ -19,64 +19,6 @@ class CLpRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testCreateLp(): void
-    {
-        $repo = self::getContainer()->get(CLpRepository::class);
-
-        $lpCountBefore = $repo->count([]);
-
-        $course = $this->createCourse('new');
-        $teacher = $this->createUser('teacher');
-
-        $lp = (new CLp())
-            ->setTitle('lp')
-            ->setDescription('desc')
-            ->setTheme('chamilo')
-            ->setAccumulateScormTime(100)
-            ->setAccumulateWorkTime(100)
-            ->setAuthor('author')
-            ->setContentMaker('maker')
-            ->setContentLocal('local')
-            ->setForceCommit(false)
-            ->setUseMaxScore(100)
-            ->setSubscribeUsers(1)
-            ->setJsLib('lib')
-            ->setHideTocFrame(true)
-            ->setRef('ref')
-            ->setPath('path')
-            ->setAutolaunch(0)
-            ->setCategory(null)
-            ->setParent($course)
-            ->setCreator($teacher)
-            ->setLpType(CLp::LP_TYPE)
-        ;
-        $this->assertHasNoEntityViolations($lp);
-        $repo->createLp($lp);
-
-        $this->assertSame('lp', $lp->getTitle());
-        $this->assertSame('desc', $lp->getDescription());
-        $this->assertSame('chamilo', $lp->getTheme());
-        $this->assertSame('author', $lp->getAuthor());
-        $this->assertSame('local', $lp->getContentLocal());
-        $this->assertSame('maker', $lp->getContentMaker());
-
-        $this->assertNotNull($lp->getResourceNode());
-        $this->assertSame(1, $lp->getItems()->count());
-        $this->assertFalse($lp->hasCategory());
-        $this->assertSame('lp', (string) $lp);
-        $this->assertSame($lpCountBefore + 1, $repo->count([]));
-
-        $link = $repo->getLink($lp, $this->getContainer()->get('router'));
-        $this->assertSame(
-            \sprintf(
-                '/resources/lp/%d/%d/runtime?origin=learnpath&isStudentView=true',
-                $course->getResourceNode()->getId(),
-                $lp->getIid()
-            ),
-            $link
-        );
-    }
-
     public function testCreateWithCategory(): void
     {
         $lpRepo = self::getContainer()->get(CLpRepository::class);

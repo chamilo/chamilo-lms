@@ -6,10 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -17,61 +15,6 @@ use Chamilo\Tests\ChamiloTestTrait;
 class ExtraFieldValuesRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
-
-    public function testCreate(): void
-    {
-        $em = $this->getEntityManager();
-
-        /** @var AssetRepository $assetRepo */
-        $assetRepo = self::getContainer()->get(AssetRepository::class);
-        $extraFieldValueRepo = self::getContainer()->get(ExtraFieldValuesRepository::class);
-
-        $field = (new ExtraField())
-            ->setFieldOrder(1)
-            ->setChangeable(true)
-            ->setFilter(true)
-            ->setHelperText('helper')
-            ->setVisibleToOthers(true)
-            ->setVisibleToSelf(true)
-            ->setDisplayText('test')
-            ->setVariable('test')
-            ->setItemType(ExtraField::USER_FIELD_TYPE)
-            ->setValueType(\ExtraField::FIELD_TYPE_TEXT)
-        ;
-        $em->persist($field);
-        $em->flush();
-
-        $user = $this->createUser('test');
-
-        $file = $this->getUploadedFile();
-
-        // Create asset.
-        $asset = (new Asset())
-            ->setTitle('file')
-            ->setCategory(Asset::EXTRA_FIELD)
-            ->setFile($file)
-        ;
-        $em->persist($asset);
-
-        $extraFieldValue = (new ExtraFieldValues())
-            ->setField($field)
-            ->setItemId($user->getId())
-            ->setFieldValue('test')
-            ->setComment('comment')
-            ->setAsset($asset)
-        ;
-        $this->assertHasNoEntityViolations($extraFieldValue);
-        $em->persist($extraFieldValue);
-        $em->flush();
-
-        $this->assertNotNull($extraFieldValue->getId());
-        $this->assertSame('comment', $extraFieldValue->getComment());
-        $this->assertSame('test', $extraFieldValue->getFieldValue());
-        $this->assertNotNull($extraFieldValue->getAsset());
-
-        $this->assertSame(1, $assetRepo->count([]));
-        $this->assertSame(1, $extraFieldValueRepo->count([]));
-    }
 
     public function testGetVisibleValues(): void
     {

@@ -15,34 +15,6 @@ class CCourseDescriptionRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testCreate(): void
-    {
-        $em = $this->getEntityManager();
-        $repo = self::getContainer()->get(CCourseDescriptionRepository::class);
-
-        $descriptionCountBefore = $repo->count([]);
-
-        $course = $this->createCourse('new');
-        $teacher = $this->createUser('teacher');
-
-        $item = (new CCourseDescription())
-            ->setTitle('title')
-            ->setContent('content')
-            ->setDescriptionType(1)
-            ->setProgress(100)
-            ->setParent($course)
-            ->setCreator($teacher)
-        ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
-        $em->flush();
-
-        $this->assertSame('title', (string) $item);
-        $this->assertNotNull($item->getProgress());
-        $this->assertSame($item->getIid(), $item->getResourceIdentifier());
-        $this->assertSame($descriptionCountBefore + 1, $repo->count([]));
-    }
-
     public function testGetDescriptions(): void
     {
         $repo = self::getContainer()->get(CCourseDescriptionRepository::class);

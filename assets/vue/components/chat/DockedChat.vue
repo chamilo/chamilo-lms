@@ -395,26 +395,53 @@ watch(activePeer, (v) => {
   if (v?.id) localStorage.setItem(LAST_PEER_KEY, String(v.id))
 })
 
+function currentRouteContext() {
+  const routeName = String(route?.name || "").toLowerCase()
+  const routePath = String(route?.path || "").toLowerCase()
+  const fullPath = String(route?.fullPath || "").toLowerCase()
+  const tool = String(route?.meta?.tool || "").toLowerCase()
+  const locationPath = String(window.location.pathname || "").toLowerCase()
+  const locationSearch = String(window.location.search || "").toLowerCase()
+  const context = `${routeName} ${routePath} ${fullPath} ${locationPath} ${locationSearch}`
+
+  return { routeName, tool, context }
+}
+
 function isAssignmentsPage() {
-  const p = String(window.location.pathname || "")
-  const q = String(window.location.search || "")
+  const { routeName, tool, context } = currentRouteContext()
+
   return (
-    p.includes("/work/") ||
-    p.includes("/student_publication/") ||
-    p.endsWith("/work.php") ||
-    q.includes("work.php") ||
-    q.includes("student_publication")
+    tool === "student_publication" ||
+    routeName.startsWith("assignment") ||
+    context.includes("/resources/assignment/") ||
+    context.includes("/work/") ||
+    context.includes("/student_publication/") ||
+    context.includes("/work.php") ||
+    context.includes("student_publication")
   )
 }
 
 function isExercisePage() {
-  const p = String(window.location.pathname || "")
-  const q = String(window.location.search || "")
+  const { routeName, tool, context } = currentRouteContext()
+
   return (
-    p.includes("/exercise/") ||
-    p.endsWith("/exercise.php") ||
-    q.includes("exercise.php") ||
-    (q.includes("cidReq") && (q.includes("exercise") || q.includes("lp_id")))
+    tool === "exercise" ||
+    routeName.startsWith("exercise") ||
+    context.includes("/resources/exercise/") ||
+    context.includes("/exercise/") ||
+    context.includes("/exercise.php")
+  )
+}
+
+function isLearningPathPage() {
+  const { routeName, context } = currentRouteContext()
+
+  return (
+    routeName.startsWith("lp") ||
+    context.includes("/resources/lp/") ||
+    context.includes("/lp/lp_controller.php") ||
+    context.includes("origin=learnpath") ||
+    context.includes("lp_id=")
   )
 }
 
@@ -432,6 +459,7 @@ const canRenderDock = computed(() => {
   if (!dockEnabled.value) return false
   if (isAssignmentsPage()) return false
   if (isExercisePage()) return false
+  if (isLearningPathPage()) return false
   return true
 })
 

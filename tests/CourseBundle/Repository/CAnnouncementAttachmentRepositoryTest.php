@@ -24,6 +24,7 @@ class CAnnouncementAttachmentRepositoryTest extends AbstractApiTest
         $repoAnnouncement = self::getContainer()->get(CAnnouncementRepository::class);
         $repoAttachment = self::getContainer()->get(CAnnouncementAttachmentRepository::class);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -70,6 +71,6 @@ class CAnnouncementAttachmentRepositoryTest extends AbstractApiTest
         // Fixme Announcements are highly bound to courses and should be cascade-deleted with them
         // $this->assertSame(0, $repoAttachment->count([]));
         // $this->assertSame(0, $repoAnnouncement->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 }

@@ -28,6 +28,11 @@ class CAttendanceRepositoryTest extends AbstractApiTest
         $courseRepo = self::getContainer()->get(CourseRepository::class);
         $repo = self::getContainer()->get(CAttendanceRepository::class);
 
+        // The installed platform ships demo courses, so only the delta this test causes is
+        // meaningful -- asserting an absolute count would just measure the fixtures.
+        $courseCountBefore = $courseRepo->count([]);
+        $attendanceCountBefore = $repo->count([]);
+
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
@@ -55,12 +60,12 @@ class CAttendanceRepositoryTest extends AbstractApiTest
         $this->assertSame(100.0, $item->getAttendanceWeight());
         $this->assertSame(1, $item->getLocked());
 
-        $this->assertSame(1, $repo->count([]));
+        $this->assertSame($attendanceCountBefore + 1, $repo->count([]));
         $courseRepo->delete($course);
 
         // Fixme Attendances are highly bound to courses and should be cascade-deleted with them
-        // $this->assertSame(0, $repo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        // $this->assertSame($attendanceCountBefore, $repo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 
     public function testCreateWithCalendar(): void

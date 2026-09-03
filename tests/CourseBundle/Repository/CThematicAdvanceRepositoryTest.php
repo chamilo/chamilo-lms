@@ -27,6 +27,8 @@ class CThematicAdvanceRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $courseCountBefore = $courseRepo->count([]);
         $thematicRepo = self::getContainer()->get(CThematicRepository::class);
         $advanceRepo = self::getContainer()->get(CThematicAdvanceRepository::class);
         $attendanceRepo = self::getContainer()->get(CAttendanceRepository::class);
@@ -89,7 +91,7 @@ class CThematicAdvanceRepositoryTest extends AbstractApiTest
         $advance = $advanceRepo->find($advance->getIid());
         $advanceRepo->delete($advance);
 
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
         $this->assertSame(1, $thematicRepo->count([]));
         $this->assertSame(1, $attendanceRepo->count([]));
         $this->assertSame(0, $advanceRepo->count([]));
@@ -100,6 +102,8 @@ class CThematicAdvanceRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $courseCountBefore = $courseRepo->count([]);
         $thematicRepo = self::getContainer()->get(CThematicRepository::class);
         $advanceRepo = self::getContainer()->get(CThematicAdvanceRepository::class);
         $attendanceRepo = self::getContainer()->get(CAttendanceRepository::class);
@@ -155,7 +159,7 @@ class CThematicAdvanceRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $thematic->getAdvances()->count());
         $this->assertSame(0, $thematic->getPlans()->count());
 
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
         $this->assertSame(1, $thematicRepo->count([]));
         $this->assertSame(1, $attendanceRepo->count([]));
         $this->assertSame(1, $advanceRepo->count([]));
@@ -167,6 +171,6 @@ class CThematicAdvanceRepositoryTest extends AbstractApiTest
         // $this->assertSame(0, $thematicRepo->count([]));
         // $this->assertSame(0, $attendanceRepo->count([]));
         // $this->assertSame(0, $advanceRepo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 }

@@ -136,12 +136,13 @@ class CourseRepositoryTest extends AbstractApiTest
     {
         /** @var CourseRepository $courseRepo */
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
 
         $course = $this->createCourse('Test course');
 
         $courseRepo->deleteCourse($course);
 
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 
     public function testGetCoursesByUser(): void

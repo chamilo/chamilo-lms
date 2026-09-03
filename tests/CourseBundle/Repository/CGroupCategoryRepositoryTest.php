@@ -21,6 +21,7 @@ class CGroupCategoryRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $categoryRepo = self::getContainer()->get(CGroupCategoryRepository::class);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -68,6 +69,6 @@ class CGroupCategoryRepositoryTest extends AbstractApiTest
         $categoryRepo->delete($category);
 
         $this->assertSame(0, $categoryRepo->count([]));
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
     }
 }

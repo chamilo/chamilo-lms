@@ -32,6 +32,30 @@ class BranchSyncRepositoryTest extends AbstractApiTest
         $this->assertSame(2, $repo->count([]));
     }
 
+    public function testCoordinatesKeepDecimalPrecision(): void
+    {
+        $em = $this->getEntityManager();
+        $repo = self::getContainer()->get(BranchSyncRepository::class);
+
+        $item = (new BranchSync())
+            ->setTitle('Precise coordinates branch')
+            ->setLatitude('50.84655731')
+            ->setLongitude('4.35169742')
+        ;
+
+        $this->assertHasNoEntityViolations($item);
+        $em->persist($item);
+        $em->flush();
+        $id = $item->getId();
+        $em->clear();
+
+        $stored = $repo->find($id);
+
+        $this->assertInstanceOf(BranchSync::class, $stored);
+        $this->assertSame('50.84655731', $stored->getLatitude());
+        $this->assertSame('4.35169742', $stored->getLongitude());
+    }
+
     public function testSearchByKeyword(): void
     {
         $repo = self::getContainer()->get(BranchSyncRepository::class);

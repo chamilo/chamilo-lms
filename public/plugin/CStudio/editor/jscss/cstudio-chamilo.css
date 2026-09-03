@@ -1130,10 +1130,34 @@ body {
     font-size: 12px !important;
     font-weight: 500 !important;
     line-height: 1.3 !important;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    word-break: normal;
     text-align: left !important;
     text-overflow: clip !important;
     white-space: normal !important;
+}
+
+/*
+ * GrapesJS basic blocks render their icon through ::before. In the row layout
+ * that pseudo-element already consumes horizontal space, so do not reserve the
+ * extra legacy background-image padding on their labels.
+ */
+.gjs-block.gjs-fonts::before,
+.gjs-block.fa::before {
+    display: inline-flex !important;
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px !important;
+    line-height: 1 !important;
+}
+
+.gjs-block.gjs-fonts .gjs-block-label,
+.gjs-block.fa .gjs-block-label {
+    padding-left: 0 !important;
 }
 
 /* MDI blocks use the same icon + label arrangement as LP runtime TOC rows. */
@@ -1161,8 +1185,8 @@ body {
 }
 
 /* Legacy-image blocks keep their known icon but reserve readable label space. */
-.cstudio-mdi-ready .gjs-block:not(.cstudio-block-mdi) .gjs-block-label,
-.gjs-block:not(.cstudio-block-mdi) .gjs-block-label {
+.cstudio-mdi-ready .gjs-block:not(.cstudio-block-mdi):not(.gjs-fonts):not(.fa) .gjs-block-label,
+.gjs-block:not(.cstudio-block-mdi):not(.gjs-fonts):not(.fa) .gjs-block-label {
     padding-left: 38px !important;
 }
 

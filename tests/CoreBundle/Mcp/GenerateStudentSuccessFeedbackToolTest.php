@@ -48,8 +48,6 @@ final class GenerateStudentSuccessFeedbackToolTest extends TestCase
         $reflection = new ReflectionClass(GenerateStudentSuccessFeedbackTool::class);
 
         /** @var GenerateStudentSuccessFeedbackTool $tool */
-        $tool = $reflection->newInstanceWithoutConstructor();
-
-        return $tool;
+        return $reflection->newInstanceWithoutConstructor();
     }
 }

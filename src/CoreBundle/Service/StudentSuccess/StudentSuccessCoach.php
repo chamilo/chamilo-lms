@@ -337,7 +337,7 @@ PROMPT
     }
 
     /**
-     * @param array<string, mixed>                           $raw
+     * @param array<string, mixed>                          $raw
      * @param array<string, array{title:string,url:string}> $evidenceSources
      *
      * @return array<string, mixed>

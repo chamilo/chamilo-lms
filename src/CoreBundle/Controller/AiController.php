@@ -4138,6 +4138,7 @@ class AiController extends AbstractController
                 ) {
                     $relation->addTag($tag);
                     $this->em->persist($relation);
+
                     break;
                 }
             }

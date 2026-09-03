@@ -585,15 +585,21 @@ class MessageRepositoryTest extends AbstractApiTest
             true
         );
 
-        $receiverRelation = $message->getFirstReceiver();
-        $senderRelationIri = $this->findIriBy(
+        // getFirstReceiver() is receivers->first() over an unordered collection
+        // that still holds the sender relation deleted above, so which one comes
+        // back depends on the row order the database happens to return -- it is
+        // the TO relation on MariaDB and the stale sender one on MySQL, whose id
+        // no longer resolves to an IRI. Ask for the TO relation by type, the way
+        // the sender relation is asked for above.
+        $receiverRelation = $message->getReceiversTo()[0];
+        $receiverRelationIri = $this->findIriBy(
             MessageRelUser::class,
-            ['id' => $receiverRelation?->getId()]
+            ['id' => $receiverRelation->getId()]
         );
 
         $this->createClientWithCredentials($tokenTo)->request(
             'DELETE',
-            $senderRelationIri,
+            $receiverRelationIri,
         );
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);

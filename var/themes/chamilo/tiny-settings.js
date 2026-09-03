@@ -585,6 +585,22 @@
           body.style.fontSize = "12pt"
         }
       })
+
+      // Chamilo 1.11's CKEditor opened the image properties dialog on double-click.
+      // TinyMCE's own "image" plugin never wires this up (unlike e.g. its "codesample"
+      // plugin, which does the exact same double-click-opens-its-dialog pattern for
+      // itself), so it has to be added here. Select the image first so the dialog
+      // reads the current selection and opens in "edit" mode, pre-filled, instead of
+      // "insert". Lives in this shared base config (not the Vue-only editor wrapper)
+      // so both the Vue and legacy PHP editors get it, since both merge through
+      // window.buildTinyMceConfig().
+      editor.on("dblclick", function (e) {
+        const img = e?.target?.closest ? e.target.closest("img") : null
+        if (img) {
+          editor.selection.select(img)
+          editor.execCommand("mceImage")
+        }
+      })
     },
   }
 

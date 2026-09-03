@@ -134,15 +134,7 @@
           <template #body="slotProps">
             <div class="py-1">
               <div class="flex min-w-0 items-center gap-3">
-                <div
-                  :class="getEntryIconContainerClass(slotProps.data)"
-                  class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
-                >
-                  <v-icon
-                    :icon="getEntryIcon(slotProps.data)"
-                    class="text-lg"
-                  />
-                </div>
+                <DocumentEntryThumbnail :data="slotProps.data" />
 
                 <div class="min-w-0 flex-1">
                   <template v-if="slotProps.data?.resourceNode?.firstResourceFile">
@@ -292,6 +284,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import DocumentEntryThumbnail from "../../components/documents/DocumentEntryThumbnail.vue"
 
 export default {
   name: "DocumentForHtmlEditor",
@@ -301,6 +294,7 @@ export default {
     BaseDialogConfirmCancel,
     BaseButton,
     BaseToolbar,
+    DocumentEntryThumbnail,
   },
   mixins: [ListMixin],
   setup() {
@@ -545,37 +539,6 @@ export default {
       if (type === "audio") return this.t("Audio")
 
       return this.t("File")
-    },
-    getEntryIcon(entry) {
-      const type = this.getEntryType(entry)
-
-      if (type === "folder") return "mdi-folder"
-      if (type === "image") return "mdi-file-image-outline"
-      if (type === "video") return "mdi-file-video-outline"
-      if (type === "audio") return "mdi-file-music-outline"
-
-      return "mdi-file-document-outline"
-    },
-    getEntryIconContainerClass(entry) {
-      const type = this.getEntryType(entry)
-
-      if (type === "folder") {
-        return "border-support-3 bg-support-1 text-support-4"
-      }
-
-      if (type === "image") {
-        return "border-info bg-support-2 text-info"
-      }
-
-      if (type === "video") {
-        return "border-secondary bg-support-6 text-secondary"
-      }
-
-      if (type === "audio") {
-        return "border-primary bg-support-2 text-primary"
-      }
-
-      return "border-gray-25 bg-gray-10 text-gray-50"
     },
     getEntryBadgeClass(entry) {
       const type = this.getEntryType(entry)

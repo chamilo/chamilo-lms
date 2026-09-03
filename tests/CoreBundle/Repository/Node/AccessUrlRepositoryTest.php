@@ -80,9 +80,12 @@ class AccessUrlRepositoryTest extends KernelTestCase
         $accessUrl = $repo->find($accessUrl->getId());
 
         $this->assertNotNull($accessUrl->getTms());
-        $this->assertSame(1, $accessUrl->getLft());
-        $this->assertSame(2, $accessUrl->getRgt());
-        $this->assertSame(0, $accessUrl->getLvl());
+
+        // A new portal joins the tree of the installed one instead of starting its
+        // own: the nested-set columns place it as a leaf under the default URL.
+        $this->assertSame(2, $accessUrl->getLft());
+        $this->assertSame(3, $accessUrl->getRgt());
+        $this->assertSame(1, $accessUrl->getLvl());
         $this->assertSame(1, $accessUrl->getCreatedBy());
         $this->assertTrue($accessUrl->getUrlType());
 

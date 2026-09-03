@@ -22,6 +22,8 @@ class IllustrationRepositoryTest extends WebTestCase
         /** @var IllustrationRepository $repo */
         $repo = self::getContainer()->get(IllustrationRepository::class);
 
+        $illustrationCountBefore = $repo->count([]);
+
         $course = $this->createCourse('course');
         $file = $repo->addIllustration($course, $this->getUser('admin'), $this->getUploadedFile());
 
@@ -35,11 +37,11 @@ class IllustrationRepositoryTest extends WebTestCase
             $url
         );
         $this->assertResponseIsSuccessful();
-        $this->assertSame(1, $repo->count([]));
+        $this->assertSame($illustrationCountBefore + 1, $repo->count([]));
         $this->assertTrue($repo->hasIllustration($course));
 
         $repo->deleteIllustration($course);
-        $this->assertSame(0, $repo->count([]));
+        $this->assertSame($illustrationCountBefore, $repo->count([]));
     }
 
     public function testCreateUserIllustration(): void

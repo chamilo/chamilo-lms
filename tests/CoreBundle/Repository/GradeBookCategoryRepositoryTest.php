@@ -152,10 +152,13 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
 
         $user = $this->createUser('test');
 
+        // A certificate is a resource, so ResourceListener demands a creator and
+        // there is no authenticated user in this test.
         $certificate = (new GradebookCertificate())
             ->setUser($user)
             ->setScoreCertificate(100.00)
             ->setCategory($category)
+            ->setCreator($user)
         ;
         $em->persist($certificate);
         $em->flush();

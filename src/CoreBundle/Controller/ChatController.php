@@ -46,6 +46,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
+use const DATE_ATOM;
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
 use const JSON_UNESCAPED_SLASHES;
@@ -1678,7 +1679,7 @@ final class ChatController extends AbstractController
     }
 
     /**
-     * @param list<array{role:string,content:string,date:string}> $messages
+     * @param list<array{role:string,content:string,date:string}>                                                           $messages
      * @param array{source:string,mode:string,course_id:int,session_id:int,conversation_id:int,provider:string,path:string} $metadata
      */
     private function buildAiTutorArchiveHtml(
@@ -1759,6 +1760,7 @@ final class ChatController extends AbstractController
                 $relation->addTag($tag);
                 $entityManager->persist($relation);
                 $entityManager->flush();
+
                 break;
             }
         }

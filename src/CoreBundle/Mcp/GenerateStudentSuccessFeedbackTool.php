@@ -71,11 +71,7 @@ final readonly class GenerateStudentSuccessFeedbackTool
         } catch (AccessDeniedException|InvalidArgumentException|RuntimeException $exception) {
             throw new ToolCallException($exception->getMessage());
         } catch (Throwable $throwable) {
-            throw new ToolCallException(
-                'The Student Success feedback could not be generated because of an unexpected server error. Check the Chamilo log for technical details.',
-                0,
-                $throwable,
-            );
+            throw new ToolCallException('The Student Success feedback could not be generated because of an unexpected server error. Check the Chamilo log for technical details.', 0, $throwable);
         }
     }
 
@@ -108,9 +104,7 @@ final readonly class GenerateStudentSuccessFeedbackTool
 
         $teacherPrompt = trim($teacherPrompt);
         if (mb_strlen($teacherPrompt) > self::MAX_TEACHER_PROMPT_LENGTH) {
-            throw new InvalidArgumentException(
-                sprintf('Additional instructions must be %d characters or fewer.', self::MAX_TEACHER_PROMPT_LENGTH),
-            );
+            throw new InvalidArgumentException(\sprintf('Additional instructions must be %d characters or fewer.', self::MAX_TEACHER_PROMPT_LENGTH));
         }
 
         $provider = null === $provider ? null : trim($provider);

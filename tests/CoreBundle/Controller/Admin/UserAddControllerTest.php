@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -282,13 +284,27 @@ class UserAddControllerTest extends WebTestCase
 
     public function testNonPlatformAuthSourceUsesPlaceholderPassword(): void
     {
-        // config/authentication.yaml now has LDAP enabled (a real, standing
-        // config change, not test-specific), so "extldap" is a genuinely
-        // allowed auth source here — this now exercises the actual
-        // "!hasPlatformAuth" branch (password forced to the 'PLACEHOLDER'
-        // sentinel, auth handled externally) rather than the "no valid auth
-        // source submitted" branch it used to fall into when LDAP was off.
         $client = static::createClient();
+
+        // The auth sources the controller accepts come from the `authentication`
+        // container parameter, which config/authentication.yaml supplies -- and
+        // that file is gitignored, so a checkout without one (CI, a fresh clone)
+        // only ever offers `platform` and answers 400 "Required field" here.
+        // Skip rather than assert a precondition the repository cannot carry.
+        $enabled = static::getContainer()
+            ->get(AuthenticationConfigHelper::class)
+            ->getAuthSourceAuthentications(null)
+        ;
+
+        if (!\in_array(UserAuthSource::LDAP, $enabled, true)) {
+            self::markTestSkipped(
+                'No non-platform auth source is configured: config/authentication.yaml is absent or has LDAP disabled.'
+            );
+        }
+
+        // With one enabled this exercises the real "!hasPlatformAuth" branch --
+        // password forced to the PLACEHOLDER sentinel, auth handled externally --
+        // rather than the "no valid auth source submitted" branch.
         $client->loginUser($this->getUser('admin'));
 
         $client->request(

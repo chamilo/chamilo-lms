@@ -20547,9 +20547,6 @@ msgstr "Link wygasł, spróbuj ponownie."
 msgid "Instructions for the password change procedure"
 msgstr "Instrukcje procedury zmiany hasła"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Otrzymujesz tę wiadomość, ponieważ ty (lub ktoś udający ciebie) zażądałeś wygenerowania nowego hasła dla ciebie.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Cron przypomnienia o wygaśnięciu kursu"
 

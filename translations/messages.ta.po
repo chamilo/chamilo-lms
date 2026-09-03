@@ -20542,9 +20542,6 @@ msgstr "தொடர்பு காலாவதியானது, மீண்
 msgid "Instructions for the password change procedure"
 msgstr "கடவுச்சொல் மாற்ற நடைமுறைக்கான வழிமுறைகள்"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "நீங்கள் (அல்லது உங்களாக நடிக்கும் யாராவது) உங்களுக்காக புதிய கடவுச்சொல் உருவாக்குமாறு கோரியதால் இந்தச் செய்தியைப் பெறுகிறீர்கள்.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "பாடம் காலாவதியாகும் நினைவூட்டல் cron"
 

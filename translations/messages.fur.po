@@ -20538,9 +20538,6 @@ msgstr "Leç coligament è scadû, plês prover a rivâ."
 msgid "Instructions for the password change procedure"
 msgstr "Istruions par la procedura di cambiament de password"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Tu ricevis chest messagi parce che tu (o chi che fas il pret che si si tu) â requestâ une password nuove par te.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Cron par rivâ a scadi il cors"
 

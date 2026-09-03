@@ -20542,9 +20542,6 @@ msgstr "Հղման ժամկետն ավարտվել է, խնդրում ենք փ�
 msgid "Instructions for the password change procedure"
 msgstr "Գաղտնաբառը փոխելու ընթացակարգի հրահանգներ"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Դուք ստանում եք այս հաղորդագրությունը, քանի որ դուք (կամ ինչ-որ մեկը, ով կենտրոնացած է ձեզ վրա) խնդրել եք գեներացնել նոր գաղտնաբառ ձեզ համար:<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Հիշեցնել դասընթացի ժամկետի ավարտի cron"
 

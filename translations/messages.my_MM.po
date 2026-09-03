@@ -20542,9 +20542,6 @@ msgstr "လင့်ခ်သက်တမ်းကုန်သွားပါပ
 msgid "Instructions for the password change procedure"
 msgstr "စကားဝှက်ပြောင်းလဲမှုလုပ်ထုံးလုပ်နည်းအတွက် ညွှန်ကြားချက်များ"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "သင် (သို့မဟုတ် သင်ဖြစ်ဟန်ဆောင်သူတစ်ဦး) မှ သင့်အတွက် စကားဝှက်အသစ်တစ်ခုထုတ်လုပ်ရန် တောင်းဆိုထားသောကြောင့် ဤမက်ဆေ့ခ်ျကို သင်လက်ခံရရှိနေပါသည်။<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "သင်တန်းသက်တမ်းကုန်ဆုံးမှု သတိပေးချက် cron"
 

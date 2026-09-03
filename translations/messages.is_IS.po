@@ -20543,9 +20543,6 @@ msgstr "Tengill útrunninn, reyndu aftur."
 msgid "Instructions for the password change procedure"
 msgstr "Leiðbeiningar um aðferð við að breyta lykilorði"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Þú færð þessi skilaboð vegna þess að þú (eða einhver sem þykist vera þú) hefur óskað eftir því að nýtt lykilorð verði búið til fyrir þig.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Cron til að minna á útrunnin námskeið"
 

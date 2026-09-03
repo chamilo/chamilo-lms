@@ -20543,9 +20543,6 @@ msgstr "Liên kết đã hết hạn, vui lòng thử lại."
 msgid "Instructions for the password change procedure"
 msgstr "Hướng dẫn cho quy trình thay đổi mật khẩu"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Bạn nhận được thông báo này vì bạn (hoặc ai đó giả mạo bạn) đã yêu cầu tạo mật khẩu mới cho bạn.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Nhắc nhở hết hạn khóa học cron"
 

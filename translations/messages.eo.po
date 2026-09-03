@@ -20543,9 +20543,6 @@ msgstr "Ligo eksvalidiĝis, bonvolu reprovi."
 msgid "Instructions for the password change procedure"
 msgstr "Instrukcioj por la procedo de ŝanĝo de pasvorto"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Vi ricevas ĉi tiun mesaĝon ĉar vi (aŭ iu pretendantaj esti vi) petis generiĝon de nova pasvorto por vi.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Rapeli finiĝon de kurso cron"
 

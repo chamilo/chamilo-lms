@@ -20607,9 +20607,6 @@ msgstr "リンクが期限切れです。もう一度お試しください。"
 msgid "Instructions for the password change procedure"
 msgstr "パスワード変更手順の説明"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "あなた（またはあなたを装った誰か）が新しいパスワードの生成を依頼したため、このメッセージを受け取っています。<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "コース期限切れリマインダークロン"
 

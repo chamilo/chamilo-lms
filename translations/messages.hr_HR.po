@@ -20542,9 +20542,6 @@ msgstr "Link je istekao, pokušajte ponovno."
 msgid "Instructions for the password change procedure"
 msgstr "Upute za postupak promjene lozinke"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Primate ovu poruku jer ste vi (ili netko tko se pretvara da je vi) zatražili da se generira nova lozinka za vas.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Podsjetnik isteka kursa cron"
 

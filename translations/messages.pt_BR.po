@@ -20556,9 +20556,6 @@ msgstr "Link expirou, por favor, tente novamente."
 msgid "Instructions for the password change procedure"
 msgstr "Instruções para o procedimento de mudança de senha"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Você está recebendo esta mensagem porque você (ou alguém fingindo ser você) solicitou uma nova senha para ser gerado para você.\n\nPara definir uma nova senha a você precisa ativá-lo. Para fazer isso, clique neste link:\n\n%s\n\nSe você não tenha solicitado esse procedimento, em seguida, ignore esta mensagem. Se você continuar recebendo-o, por favor, entre em contato com o administrador do portal."
-
 msgid "Remind Course Expiration cron"
 msgstr "Lembre Course Vencimento cron"
 

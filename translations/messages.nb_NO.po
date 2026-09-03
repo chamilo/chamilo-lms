@@ -20543,9 +20543,6 @@ msgstr "Lenken er utløpt, vennligst prøv igjen."
 msgid "Instructions for the password change procedure"
 msgstr "Instruksjoner for prosedyre for endring av passord"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Du mottar denne meldingen fordi du (eller noen som utgir seg for å være deg) har bedt om å få generert et nytt passord for deg.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Påminnelse om kursets utløp cron"
 

@@ -20543,8 +20543,8 @@ msgstr "Link expired, please try again."
 msgid "Instructions for the password change procedure"
 msgstr "Instructions for the password change procedure"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
 
 msgid "Remind Course Expiration cron"
 msgstr "Remind Course Expiration cron"

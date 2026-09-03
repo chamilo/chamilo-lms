@@ -20543,9 +20543,6 @@ msgstr "链接已过期，请重试。"
 msgid "Instructions for the password change procedure"
 msgstr "密码更改程序说明"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "您收到此消息是因为您（或冒充您的人）请求为您生成新密码。<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "提醒课程到期 cron"
 

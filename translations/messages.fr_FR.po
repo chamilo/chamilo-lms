@@ -21169,9 +21169,6 @@ msgstr "Lien expiré, merci de recommencer la procédure."
 msgid "Instructions for the password change procedure"
 msgstr "Instructions de changement de mot de passe"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Ce message vous est envoyé parce que vous (ou quelqu'un qui tente d'usurper votre identité) a demandé qu'un nouveau mot de passe soit généré pour votre compte.<br/>Pour configurer votre nouveau mot de passe, veuillez suivre le lien suivant:<br/>%s<br/>Si vous n'avez rien demandé, vous pouvez simplement ignorer ce message. Si vous continuez malgré tout à recevoir ces messages, veuillez contacter l'administrateur du portail."
-
 msgid "Remind Course Expiration cron"
 msgstr "Cron de rappel de fin de cours"
 

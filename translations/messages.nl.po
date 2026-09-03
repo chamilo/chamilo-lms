@@ -20990,11 +20990,6 @@ msgstr "Link verlopen, probeer het opnieuw."
 msgid "Instructions for the password change procedure"
 msgstr "Instructies voor de procedure voor het wijzigen van wachtwoorden"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr ""
-"U ontvangt dit bericht omdat u (of iemand die zich als u voordoet) heeft "
-"verzocht om een nieuw wachtwoord voor u aan te maken.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Herinnering cursusverloop cron"
 

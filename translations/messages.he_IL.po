@@ -20554,9 +20554,6 @@ msgstr "פג תוקף הקישור, אנא נסה שוב."
 msgid "Instructions for the password change procedure"
 msgstr "הוראות להליך שינוי הסיסמה"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "אתה מקבל הודעה זו מכיוון שאתה (או מישהו שמתחזה שאתה) ביקשת ליצור עבורך סיסמה חדשה.<br/>\nכדי להגדיר את הסיסמה החדשה עליך להפעיל אותה. כדי לעשות זאת, אנא לחץ על הקישור הזה:<br/>%s<br/>אם לא ביקשת הליך זה, אנא התעלם מהודעה זו. אם אתה ממשיך לקבל אותו, אנא פנה למנהל הפורטל."
-
 msgid "Remind Course Expiration cron"
 msgstr "תזכיר את תפוגת הקורס cron"
 

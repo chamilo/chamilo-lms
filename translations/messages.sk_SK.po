@@ -20556,9 +20556,6 @@ msgstr "Odkaz vypršal, skúste to znova."
 msgid "Instructions for the password change procedure"
 msgstr "Inštrukcie k postupu zmeny hesla"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Táto správa vám bola zaslaná, pretože vy (alebo niekto, kto sa vydáva za vás) ste požiadali o vygenerovanie nového hesla.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Cron pripomenutia expirácie kurzu"
 

@@ -20538,9 +20538,6 @@ msgstr "Посилання застаріло, будь ласка, спробу
 msgid "Instructions for the password change procedure"
 msgstr "Інструкції щодо процедури зміни пароля"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Ви отримуєте це повідомлення, тому що ви (або хтось, хто видає себе за вас) попросили згенерувати новий пароль для вас.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Нагадування про закінчення терміну курсу cron"
 

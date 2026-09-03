@@ -20556,9 +20556,6 @@ msgstr "Ο σύνδεσμος έχει λήξει, παρακαλούμε δοκ
 msgid "Instructions for the password change procedure"
 msgstr "Οδηγίες για τη διαδικασία αλλαγής κωδικού πρόσβασης"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Λαμβάνετε αυτό το μήνυμα επειδή εσείς (ή κάποιος που προσποιείται ότι είστε εσείς) έχετε ζητήσει να δημιουργηθεί νέος κωδικός πρόσβασης για εσάς.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Υπενθύμιση λήξης μαθήματος cron"
 

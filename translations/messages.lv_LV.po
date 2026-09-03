@@ -20542,9 +20542,6 @@ msgstr "Saite ir beigusies, lūdzu mēģiniet vēlreiz."
 msgid "Instructions for the password change procedure"
 msgstr "Norādījumi par paroles maiņas procedūru"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Jūs saņemat šo ziņu, jo jūs (vai kāds, kas izliekas par jums) esat pieprasījis ģenerēt jaunu paroli jums.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Atgādināt kursa beigu cron"
 

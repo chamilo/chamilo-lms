@@ -20556,9 +20556,6 @@ msgstr "Enllaç caducat, torneu-ho a provar."
 msgid "Instructions for the password change procedure"
 msgstr "Instruccions per al procediment de canvi de contrasenya"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Rebeu aquest missatge perquè vós (o algú que es fa passar per vós) heu sol·licitat que es generi una nova contrasenya per a vós.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Cron de Recordatori d'Expiració de Curs"
 

@@ -20542,9 +20542,6 @@ msgstr "Lidhja ka skaduar, ju lutemi provoni përsëri."
 msgid "Instructions for the password change procedure"
 msgstr "Udhëzime për procedurën e ndryshimit të fjalëkalimit"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Po merrni këtë mesazh sepse ju (ose dikush që pretendon të jetë ju) keni kërkuar të gjenerohet një fjalëkalim i ri për ju.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Kujto skadimin e kursit cron"
 

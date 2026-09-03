@@ -20538,9 +20538,6 @@ msgstr "लिंक समाप्त हो गया, कृपया पु
 msgid "Instructions for the password change procedure"
 msgstr "पासवर्ड परिवर्तन प्रक्रिया के निर्देश"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "आपको यह संदेश इसलिए प्राप्त हो रहा है क्योंकि आपने (या किसी ने आपके होने का नाटक किया है) आपके लिए नया पासवर्ड उत्पन्न करने का अनुरोध किया है।<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "कोर्स समाप्ति स्मरण क्रॉन"
 

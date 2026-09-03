@@ -20541,9 +20541,6 @@ msgstr "Линкот истече, ве молиме обидете се пов�
 msgid "Instructions for the password change procedure"
 msgstr "Инструкции за постапката за промена на лозинка"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Го добивате ова порака затоа што вие (или некој кој се преправа дека сте вие) побарал нова лозинка да се генерира за вас.<br/>"
-
 msgid "Remind Course Expiration cron"
 msgstr "Потсетник за истекување на курсот cron"
 

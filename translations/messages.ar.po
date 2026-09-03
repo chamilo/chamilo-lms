@@ -20556,9 +20556,6 @@ msgstr "انتهت صلاحية الرابط، يرجى المحاولة من ج
 msgid "Instructions for the password change procedure"
 msgstr "ارشادات تغيير رمز المرور"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "لقد استلمت هذه الرسالة بسبب انك (او شخص ينتحل هويتك) قد طلبت اعادة تعيين رمز مرور جديد، لغرض اعداد رمز المرور الجديد فانه يجب عليك تفعيل ذلك من خلال النقر على الرابط التالي"
-
 msgid "Remind Course Expiration cron"
 msgstr "التذكير بجدولة انتهاء المقرر"
 

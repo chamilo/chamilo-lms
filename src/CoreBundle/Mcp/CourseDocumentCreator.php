@@ -7,12 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Mcp;
 
 use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
-use Chamilo\CoreBundle\Dto\ResourceFileInput;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Mcp\Dto\CourseDocumentInput;
+use Chamilo\CoreBundle\Mcp\Dto\ResourceFileInput;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;

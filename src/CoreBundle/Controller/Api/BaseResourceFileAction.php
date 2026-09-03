@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Dto\ResourceFileInput;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
@@ -20,6 +19,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
+use Chamilo\CoreBundle\Mcp\Dto\ResourceFileInput;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;

@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
-use Chamilo\CoreBundle\Dto\ResourceFileInput;
+use Chamilo\CoreBundle\Mcp\Dto\ResourceFileInput;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

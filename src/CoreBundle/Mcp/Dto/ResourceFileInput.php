@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Dto;
+namespace Chamilo\CoreBundle\Mcp\Dto;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -25,6 +25,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *   HTML editor save, which is a real create.
  * - $language null means the caller said nothing about the language, so the
  *   resource keeps whatever it has; '' means "use the course's".
+ *
+ * It lives under Mcp/Dto/ because the MCP surface is being gathered in one place,
+ * not because it is MCP-only: handleCreateFile() takes it on every path, including
+ * the personal-file, student-publication and link actions.
  */
 final readonly class ResourceFileInput
 {

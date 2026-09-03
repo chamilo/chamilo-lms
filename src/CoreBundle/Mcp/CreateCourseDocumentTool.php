@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Mcp\Dto\CourseDocumentInput;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;

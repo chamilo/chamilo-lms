@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Mcp;
+namespace Chamilo\CoreBundle\Mcp\Dto;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

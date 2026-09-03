@@ -34,6 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
+        new Get(security: "is_granted('VIEW', object.resourceNode)"),
         new Get(
             uriTemplate: '/c_tool_intros/current.{_format}',
             normalizationContext: [
@@ -64,7 +65,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ),
             ],
         ),
-        new Get(security: "is_granted('VIEW', object.resourceNode)"),
         new Put(
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             parameters: [
@@ -199,8 +199,10 @@ class CToolIntro extends AbstractResource implements ResourceInterface, Resource
     #[ORM\JoinColumn(name: 'c_tool_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
     protected CTool $courseTool;
 
+    // Write-only and optional: CToolIntroStateProcessor falls back to
+    // course_homepage when it is empty, so it must not be uninitialized either.
     #[Groups(['c_tool_intro:create'])]
-    private string $toolName;
+    private string $toolName = '';
 
     public function __toString(): string
     {

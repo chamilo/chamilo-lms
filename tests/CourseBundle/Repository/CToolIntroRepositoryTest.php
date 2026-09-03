@@ -192,7 +192,20 @@ class CToolIntroRepositoryTest extends AbstractApiTest
     public function testGetToolIntros(): void
     {
         $token = $this->getUserToken([]);
-        $response = $this->createClientWithCredentials($token)->request('GET', '/api/c_tool_intros');
+
+        // Tool introductions belong to a course tool, so listing them without a
+        // course is a contract violation, not an empty result.
+        $this->createClientWithCredentials($token)->request('GET', '/api/c_tool_intros');
+        $this->assertResponseStatusCodeSame(422);
+
+        $course = $this->createCourse('new');
+        $response = $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_tool_intros',
+            [
+                'query' => ['cid' => $course->getId()],
+            ]
+        );
         $this->assertResponseIsSuccessful();
 
         // Asserts that the returned content type is JSON-LD (the default)
@@ -223,7 +236,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
 
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/c_tool_intros',
+            '/api/c_tool_intros?cid='.$course->getId(),
             [
                 'json' => [
                     'introText' => 'introduction here',
@@ -274,7 +287,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
 
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/c_tool_intros',
+            '/api/c_tool_intros?cid='.$course->getId(),
             [
                 'json' => [
                     'introText' => 'introduction here',
@@ -285,14 +298,19 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         );
         $this->assertResponseIsSuccessful();
 
+        // PATCH, not PUT: courseTool is set server-side by the Post branch of the
+        // processor and is not writable, so a PUT -- which replaces the whole
+        // representation -- leaves it uninitialized. The Vue service works around
+        // the same thing.
         $iri = $response->toArray()['@id'];
         $this->createClientWithCredentials($token)->request(
-            'PUT',
-            $iri,
+            'PATCH',
+            $iri.'?cid='.$course->getId(),
             [
                 'json' => [
                     'introText' => 'MODIFIED',
                 ],
+                'headers' => ['content-type' => 'application/merge-patch+json'],
             ]
         );
 

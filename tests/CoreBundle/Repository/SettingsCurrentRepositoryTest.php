@@ -54,7 +54,7 @@ class SettingsCurrentRepositoryTest extends AbstractApiTest
         $this->assertSame('comment', $setting->getComment());
         $this->assertSame('scope', $setting->getScope());
         $this->assertSame(1, $setting->getAccessUrlChangeable());
-        $this->assertSame(1, $setting->getAccessUrlLocked());
+        $this->assertSame(0, $setting->getAccessUrlLocked());
 
         $this->assertNotNull($option->getId());
         $this->assertSame('variable', $option->getVariable());

@@ -24,6 +24,8 @@ class CForumRepositoryTest extends AbstractApiTest
         $courseRepo = self::getContainer()->get(CourseRepository::class);
         $forumRepo = self::getContainer()->get(CForumRepository::class);
 
+        $courseCountBefore = $courseRepo->count([]);
+
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
@@ -64,7 +66,7 @@ class CForumRepositoryTest extends AbstractApiTest
 
         // A forum can be global, so don't delete it upon course deletion
         $this->assertSame(1, $forumRepo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 
     public function testCreateWithAttachment(): void
@@ -89,8 +91,9 @@ class CForumRepositoryTest extends AbstractApiTest
         $repo = self::getContainer()->get(CForumRepository::class);
         $lpRepo = self::getContainer()->get(CLpRepository::class);
 
+        $lpCountBefore = $lpRepo->count([]);
+
         $this->assertSame(0, $repo->count([]));
-        $this->assertSame(0, $lpRepo->count([]));
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -113,12 +116,12 @@ class CForumRepositoryTest extends AbstractApiTest
 
         $this->assertNotNull($forum->getLp());
         $this->assertSame(1, $repo->count([]));
-        $this->assertSame(1, $lpRepo->count([]));
+        $this->assertSame($lpCountBefore + 1, $lpRepo->count([]));
 
         $lpRepo->delete($lp);
 
         $this->assertSame(1, $repo->count([]));
-        $this->assertSame(0, $lpRepo->count([]));
+        $this->assertSame($lpCountBefore, $lpRepo->count([]));
     }
 
     public function testDelete(): void

@@ -34,6 +34,9 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $surveyRepo->setRequestStack($request_stack);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
+        $courseCountBefore = $courseRepo->count([]);
+        $surveyCountBefore = $surveyRepo->count([]);
+
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
@@ -65,7 +68,7 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame('survey', (string) $survey);
-        $this->assertSame(1, $surveyRepo->count([]));
+        $this->assertSame($surveyCountBefore + 1, $surveyRepo->count([]));
 
         $qb = $surveyRepo->findAllByCourse($course);
         $this->assertCount(1, $qb->getQuery()->getResult());
@@ -83,8 +86,8 @@ class CSurveyRepositoryTest extends AbstractApiTest
 
         // A survey is a global resource that should not be cascade-deleted
         // by the course
-        $this->assertSame(1, $surveyRepo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($surveyCountBefore + 1, $surveyRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 
     public function testCreateWithQuestions(): void
@@ -97,6 +100,11 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $surveyAnswerRepo = self::getContainer()->get(CSurveyAnswerRepository::class);
         $surveyInvitationRepo = self::getContainer()->get(CSurveyInvitationRepository::class);
         $surveyOptionRepo = $em->getRepository(CSurveyQuestionOption::class);
+
+        $courseCountBefore = $courseRepo->count([]);
+        $surveyCountBefore = $surveyRepo->count([]);
+        $surveyQuestionCountBefore = $surveyQuestionRepo->count([]);
+        $surveyOptionCountBefore = $surveyOptionRepo->count([]);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -182,12 +190,12 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $question->getOptions()->count());
         $this->assertSame(1, $question->getAnswers()->count());
 
-        $this->assertSame(1, $surveyRepo->count([]));
-        $this->assertSame(1, $surveyQuestionRepo->count([]));
+        $this->assertSame($surveyCountBefore + 1, $surveyRepo->count([]));
+        $this->assertSame($surveyQuestionCountBefore + 1, $surveyQuestionRepo->count([]));
         $this->assertSame(1, $surveyAnswerRepo->count([]));
         $this->assertSame(1, $surveyInvitationRepo->count([]));
-        $this->assertSame(1, $surveyOptionRepo->count([]));
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($surveyOptionCountBefore + 1, $surveyOptionRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
 
         $invitations = $surveyInvitationRepo->getUserPendingInvitations($student);
         $this->assertCount(1, $invitations);
@@ -197,10 +205,10 @@ class CSurveyRepositoryTest extends AbstractApiTest
 
         // Surveys are global and should not be cascade-deleted by the course
         $this->assertSame(0, $surveyInvitationRepo->count([]));
-        $this->assertSame(1, $surveyQuestionRepo->count([]));
+        $this->assertSame($surveyQuestionCountBefore + 1, $surveyQuestionRepo->count([]));
         $this->assertSame(1, $surveyAnswerRepo->count([]));
-        $this->assertSame(1, $surveyOptionRepo->count([]));
-        $this->assertSame(1, $surveyRepo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($surveyOptionCountBefore + 1, $surveyOptionRepo->count([]));
+        $this->assertSame($surveyCountBefore + 1, $surveyRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 }

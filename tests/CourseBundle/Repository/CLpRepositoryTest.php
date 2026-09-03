@@ -23,6 +23,8 @@ class CLpRepositoryTest extends AbstractApiTest
     {
         $repo = self::getContainer()->get(CLpRepository::class);
 
+        $lpCountBefore = $repo->count([]);
+
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
@@ -62,16 +64,25 @@ class CLpRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $lp->getItems()->count());
         $this->assertFalse($lp->hasCategory());
         $this->assertSame('lp', (string) $lp);
-        $this->assertSame(1, $repo->count([]));
+        $this->assertSame($lpCountBefore + 1, $repo->count([]));
 
         $link = $repo->getLink($lp, $this->getContainer()->get('router'));
-        $this->assertSame('/main/lp/lp_controller.php?lp_id='.$lp->getIid().'&action=view', $link);
+        $this->assertSame(
+            \sprintf(
+                '/resources/lp/%d/%d/runtime?origin=learnpath&isStudentView=true',
+                $course->getResourceNode()->getId(),
+                $lp->getIid()
+            ),
+            $link
+        );
     }
 
     public function testCreateWithCategory(): void
     {
         $lpRepo = self::getContainer()->get(CLpRepository::class);
         $categoryRepo = self::getContainer()->get(CLpCategoryRepository::class);
+
+        $lpCountBefore = $lpRepo->count([]);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -95,13 +106,13 @@ class CLpRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($lp);
         $lpRepo->createLp($lp);
 
-        $this->assertSame(1, $lpRepo->count([]));
+        $this->assertSame($lpCountBefore + 1, $lpRepo->count([]));
         $this->assertSame(1, $categoryRepo->count([]));
         $this->assertInstanceOf(CLpCategory::class, $lp->getCategory());
 
         $lpRepo->delete($lp);
 
-        $this->assertSame(0, $lpRepo->count([]));
+        $this->assertSame($lpCountBefore, $lpRepo->count([]));
         $this->assertSame(1, $categoryRepo->count([]));
     }
 

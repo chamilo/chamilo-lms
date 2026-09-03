@@ -28,6 +28,8 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         ]);
         $categoryRepo->setRequestStack($request_stack);
 
+        $categoryCountBefore = $categoryRepo->count([]);
+
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
@@ -62,14 +64,14 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         /** @var CForumCategory $category */
         $category = $categoryRepo->find($category->getIid());
         $this->assertSame(1, $category->getForums()->count());
-        $this->assertSame(1, $categoryRepo->count([]));
+        $this->assertSame($categoryCountBefore + 1, $categoryRepo->count([]));
         $this->assertSame(1, $forumRepo->count([]));
 
         $this->assertNotNull($categoryRepo->getForumCategoryByTitle('cat 1', $course));
 
         $categoryRepo->delete($category);
 
-        $this->assertSame(0, $categoryRepo->count([]));
+        $this->assertSame($categoryCountBefore, $categoryRepo->count([]));
         // FIXME Bring back once behavior is fixed on the source.
         // CForumCategoryRepository's delete() is removing the related CForum's
         // data on removal.

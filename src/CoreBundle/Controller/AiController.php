@@ -14,13 +14,18 @@ use Chamilo\CoreBundle\AiProvider\AiVideoJobProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiVideoProviderInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageRelUser;
+use Chamilo\CoreBundle\Entity\MessageTag;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
+use Chamilo\CoreBundle\Repository\MessageTagRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
@@ -720,6 +725,14 @@ class AiController extends AbstractController
         $enabled = $this->isAiFeatureEnabledForCourse('course_analyser', (int) $course->getId());
 
         $session = $this->getAiCourseAnalyzerSessionFromRequest($request);
+        $currentUser = $this->getUser();
+        $previousAnalysisMessage = $currentUser instanceof User
+            ? $this->findLatestCourseAnalyzerMessage(
+                $currentUser,
+                (int) $course->getId(),
+                (int) ($session?->getId() ?? 0),
+            )
+            : null;
         $providers = $this->aiProviderFactory->getProvidersForType('text');
         $defaultProvider = $providers[0] ?? '';
         $csrfTokenId = 'ai_course_analyzer_'.$course->getId();
@@ -788,6 +801,29 @@ class AiController extends AbstractController
                                     );
                                 }
                             }
+
+                            if ($currentUser instanceof User) {
+                                try {
+                                    $savedMessage = $this->archiveCourseAnalyzerResult(
+                                        $currentUser,
+                                        $course,
+                                        $session,
+                                        $result,
+                                        $selectedProvider,
+                                        $prompt,
+                                    );
+
+                                    if ($savedMessage instanceof Message) {
+                                        $previousAnalysisMessage = $savedMessage;
+                                    }
+                                } catch (Throwable $messageException) {
+                                    // The course analysis must remain available even if the inbox copy cannot be saved.
+                                    error_log(
+                                        '[AI][course_analyzer] Could not save analysis copy to Messages: '
+                                        .$messageException->getMessage()
+                                    );
+                                }
+                            }
                         } catch (Throwable $exception) {
                             $error = 'The AI analysis could not be completed: '.$exception->getMessage();
                         }
@@ -808,6 +844,13 @@ class AiController extends AbstractController
             'include_standalone_documents' => $includeStandaloneDocuments,
             'include_standalone_exercises' => $includeStandaloneExercises,
             'csrf_token_id' => $csrfTokenId,
+            'previous_analysis_message' => $previousAnalysisMessage instanceof Message
+                ? [
+                    'id' => (int) $previousAnalysisMessage->getId(),
+                    'url' => '/resources/messages/show?id=/api/messages/'.(int) $previousAnalysisMessage->getId().'&receiverType='.MessageRelUser::TYPE_TO,
+                    'send_date' => $previousAnalysisMessage->getSendDate(),
+                ]
+                : null,
         ]);
     }
 
@@ -3988,6 +4031,417 @@ class AiController extends AbstractController
         }
 
         error_log($message);
+    }
+
+    private function findLatestCourseAnalyzerMessage(User $user, int $courseId, int $sessionId): ?Message
+    {
+        if ($courseId <= 0 || null === $user->getId()) {
+            return null;
+        }
+
+        $queryBuilder = $this->em->createQueryBuilder();
+        $message = $queryBuilder
+            ->select('message')
+            ->from(Message::class, 'message')
+            ->innerJoin('message.receivers', 'receiverRelation')
+            ->andWhere('receiverRelation.receiver = :user')
+            ->andWhere('receiverRelation.receiverType = :receiverType')
+            ->andWhere('(receiverRelation.deletedAt IS NULL OR receiverRelation.deletedAt > CURRENT_TIMESTAMP())')
+            ->andWhere('message.msgType = :messageType')
+            ->andWhere('message.status <> :deletedStatus')
+            ->andWhere('message.content LIKE :sourceMetadata')
+            ->andWhere('message.content LIKE :courseMetadata')
+            ->andWhere('message.content LIKE :sessionMetadata')
+            ->setParameter('user', $user)
+            ->setParameter('receiverType', MessageRelUser::TYPE_TO)
+            ->setParameter('messageType', Message::MESSAGE_TYPE_INBOX)
+            ->setParameter('deletedStatus', Message::MESSAGE_STATUS_DELETED)
+            ->setParameter('sourceMetadata', '%data-chamilo-source="course-analyser"%')
+            ->setParameter('courseMetadata', '%data-course-id="'.$courseId.'"%')
+            ->setParameter('sessionMetadata', '%data-session-id="'.max(0, $sessionId).'"%')
+            ->orderBy('message.sendDate', 'DESC')
+            ->addOrderBy('message.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $message instanceof Message ? $message : null;
+    }
+
+    /**
+     * @param array<string, mixed> $result
+     */
+    private function archiveCourseAnalyzerResult(
+        User $user,
+        Course $course,
+        ?Session $session,
+        array $result,
+        string $provider,
+        string $teacherPrompt,
+    ): ?Message {
+        $userId = (int) $user->getId();
+        if ($userId <= 0) {
+            return null;
+        }
+
+        $subject = $this->translator->trans('AI analyzer').' - '.(string) $course->getTitle();
+        $content = $this->buildCourseAnalyzerMessageHtml(
+            $course,
+            $session,
+            $result,
+            $provider,
+            $teacherPrompt,
+        );
+
+        $messageId = $this->messageHelper->sendMessageSimple(
+            $userId,
+            $subject,
+            $content,
+            $userId,
+            false,
+            false,
+        );
+
+        if (null === $messageId) {
+            return null;
+        }
+
+        $message = $this->em->getRepository(Message::class)->find($messageId);
+        if (!$message instanceof Message) {
+            return null;
+        }
+
+        try {
+            $tagRepository = $this->em->getRepository(MessageTag::class);
+            if (!$tagRepository instanceof MessageTagRepository) {
+                throw new RuntimeException('Message tag repository is unavailable.');
+            }
+
+            $tag = $tagRepository->findOneBy([
+                'user' => $user,
+                'tag' => 'course-analyser',
+            ]);
+
+            if (!$tag instanceof MessageTag) {
+                $tag = (new MessageTag())
+                    ->setUser($user)
+                    ->setTag('course-analyser')
+                ;
+                $tagRepository->update($tag);
+            }
+
+            foreach ($message->getReceivers() as $relation) {
+                if (
+                    MessageRelUser::TYPE_TO === $relation->getReceiverType()
+                    && (int) $relation->getReceiver()->getId() === $userId
+                ) {
+                    $relation->addTag($tag);
+                    $this->em->persist($relation);
+                    break;
+                }
+            }
+
+            $this->em->flush();
+        } catch (Throwable $tagException) {
+            error_log(
+                '[AI][course_analyzer] Could not tag archived analysis message: '.$tagException->getMessage()
+            );
+        }
+
+        if ($this->aiDisclosureHelper->isDisclosureEnabled()) {
+            try {
+                $this->aiDisclosureHelper->markAiAssistedExtraField('message', $messageId, true);
+            } catch (Throwable $disclosureException) {
+                error_log(
+                    '[AI][course_analyzer] Could not mark archived analysis message as AI-assisted: '
+                    .$disclosureException->getMessage()
+                );
+            }
+        }
+
+        return $message;
+    }
+
+    /**
+     * @param array<string, mixed> $result
+     */
+    private function buildCourseAnalyzerMessageHtml(
+        Course $course,
+        ?Session $session,
+        array $result,
+        string $provider,
+        string $teacherPrompt,
+    ): string {
+        $escape = static fn (string $value): string => htmlspecialchars(
+            $value,
+            ENT_QUOTES | ENT_SUBSTITUTE,
+            'UTF-8'
+        );
+
+        $courseId = (int) $course->getId();
+        $sessionId = (int) ($session?->getId() ?? 0);
+        $structuredResponse = $result['structuredResponse'] ?? null;
+        $payload = \is_array($result['payload'] ?? null) ? $result['payload'] : [];
+
+        $html = '<div hidden'
+            .' data-chamilo-source="course-analyser"'
+            .' data-course-id="'.$courseId.'"'
+            .' data-session-id="'.$sessionId.'"'
+            .' data-ai-provider="'.$escape($provider).'"'
+            .'></div>';
+
+        $html .= '<h2>'.$escape($this->translator->trans('AI analyzer')).'</h2>';
+        $html .= '<p><strong>'.$escape($this->translator->trans('Course')).':</strong> '
+            .$escape((string) $course->getTitle()).'</p>';
+
+        if ($session instanceof Session) {
+            $html .= '<p><strong>'.$escape($this->translator->trans('Session')).':</strong> #'
+                .$sessionId.'</p>';
+        }
+
+        $html .= '<p><strong>'.$escape($this->translator->trans('AI provider')).':</strong> '
+            .$escape($provider).'</p>';
+
+        if ('' !== trim($teacherPrompt)) {
+            $html .= '<h3>'.$escape($this->translator->trans('What feedback do you want about this course?')).'</h3>';
+            $html .= '<p>'.nl2br($escape(trim($teacherPrompt))).'</p>';
+        }
+
+        if (\is_array($structuredResponse) && [] !== $structuredResponse) {
+            $lessonCount = \count(\is_array($payload['lessons'] ?? null) ? $payload['lessons'] : []);
+            $standaloneDocumentCount = \count(
+                \is_array($payload['standaloneDocuments'] ?? null) ? $payload['standaloneDocuments'] : []
+            );
+            $standaloneExerciseCount = \count(
+                \is_array($payload['standaloneExercises'] ?? null) ? $payload['standaloneExercises'] : []
+            );
+
+            $html .= '<hr>';
+            $html .= '<h3>'.$escape($this->translator->trans('Analysis summary')).'</h3>';
+            $html .= '<p>'
+                .$escape($this->translator->trans('Lessons included')).': '.$lessonCount.' &middot; '
+                .$escape($this->translator->trans('Standalone documents included')).': '.$standaloneDocumentCount.' &middot; '
+                .$escape($this->translator->trans('Standalone exercises included')).': '.$standaloneExerciseCount
+                .'</p>';
+
+            $generalFeedback = trim((string) ($structuredResponse['generalFeedback'] ?? ''));
+            if ('' !== $generalFeedback) {
+                $html .= '<h3>'.$escape($this->translator->trans('General feedback')).'</h3>';
+                $html .= '<p>'.nl2br($escape($generalFeedback)).'</p>';
+            }
+
+            $html .= $this->renderCourseAnalyzerMessageList(
+                $this->translator->trans('Strengths'),
+                $structuredResponse['strengths'] ?? []
+            );
+            $html .= $this->renderCourseAnalyzerMessageList(
+                $this->translator->trans('Risks'),
+                $structuredResponse['risks'] ?? []
+            );
+            $html .= $this->renderCourseAnalyzerMessageList(
+                $this->translator->trans('Recommendations'),
+                $structuredResponse['recommendations'] ?? []
+            );
+
+            $html .= $this->renderCourseAnalyzerResourceFeedbackSection(
+                $this->translator->trans('Lesson feedback'),
+                $structuredResponse['lessons'] ?? [],
+                true,
+            );
+            $html .= $this->renderCourseAnalyzerResourceFeedbackSection(
+                $this->translator->trans('Standalone document feedback'),
+                $structuredResponse['standaloneDocuments'] ?? [],
+            );
+            $html .= $this->renderCourseAnalyzerResourceFeedbackSection(
+                $this->translator->trans('Standalone exercise feedback'),
+                $structuredResponse['standaloneExercises'] ?? [],
+            );
+            $html .= $this->renderCourseAnalyzerResourceFeedbackSection(
+                $this->translator->trans('Assignments'),
+                $structuredResponse['assignments'] ?? [],
+            );
+            $html .= $this->renderCourseAnalyzerResourceFeedbackSection(
+                $this->translator->trans('Surveys'),
+                $structuredResponse['surveys'] ?? [],
+            );
+
+            return $html;
+        }
+
+        $analysisText = trim((string) ($result['rawResponse'] ?? ''));
+        if ('' !== $analysisText) {
+            $html .= '<hr>';
+            $html .= '<h3>'.$escape($this->translator->trans('AI response')).'</h3>';
+            $html .= '<p>'.nl2br($escape($analysisText)).'</p>';
+        }
+
+        return $html;
+    }
+
+    private function renderCourseAnalyzerMessageList(string $title, mixed $items): string
+    {
+        if (!\is_array($items) || [] === $items) {
+            return '';
+        }
+
+        $escape = static fn (string $value): string => htmlspecialchars(
+            $value,
+            ENT_QUOTES | ENT_SUBSTITUTE,
+            'UTF-8'
+        );
+
+        $listItems = '';
+        foreach ($items as $item) {
+            if (!\is_scalar($item)) {
+                continue;
+            }
+
+            $text = trim((string) $item);
+            if ('' === $text) {
+                continue;
+            }
+
+            $listItems .= '<li>'.$escape($text).'</li>';
+        }
+
+        if ('' === $listItems) {
+            return '';
+        }
+
+        return '<h3>'.$escape($title).'</h3><ul>'.$listItems.'</ul>';
+    }
+
+    private function renderCourseAnalyzerResourceFeedbackSection(
+        string $sectionTitle,
+        mixed $resources,
+        bool $renderLessonItems = false,
+    ): string {
+        if (!\is_array($resources) || [] === $resources) {
+            return '';
+        }
+
+        $escape = static fn (string $value): string => htmlspecialchars(
+            $value,
+            ENT_QUOTES | ENT_SUBSTITUTE,
+            'UTF-8'
+        );
+
+        $articles = '';
+        foreach ($resources as $resource) {
+            if (!\is_array($resource)) {
+                continue;
+            }
+
+            $title = trim((string) ($resource['title'] ?? ''));
+            $feedback = trim((string) ($resource['feedback'] ?? ''));
+            $sequenceFeedback = trim((string) ($resource['sequenceFeedback'] ?? ''));
+
+            $article = '<div>';
+            if ('' !== $title) {
+                $article .= '<h4>'.$escape($title).'</h4>';
+            }
+            if ('' !== $feedback) {
+                $article .= '<p>'.nl2br($escape($feedback)).'</p>';
+            }
+            if ('' !== $sequenceFeedback) {
+                $article .= '<p><strong>'.$escape($this->translator->trans('Sequence feedback')).':</strong> '
+                    .nl2br($escape($sequenceFeedback)).'</p>';
+            }
+
+            if ($renderLessonItems && \is_array($resource['items'] ?? null)) {
+                foreach ($resource['items'] as $item) {
+                    if (!\is_array($item)) {
+                        continue;
+                    }
+
+                    $itemTitle = trim((string) ($item['title'] ?? ''));
+                    $itemType = trim((string) ($item['type'] ?? ''));
+                    $itemPurpose = trim((string) ($item['purpose'] ?? ''));
+                    $itemFeedback = trim((string) ($item['feedback'] ?? ''));
+
+                    $article .= '<div style="margin-left: 1em">';
+                    if ('' !== $itemTitle) {
+                        $article .= '<p><strong>'.$escape($itemTitle).'</strong>';
+                        if ('' !== $itemType) {
+                            $article .= ' <em>('.$escape($itemType).')</em>';
+                        }
+                        $article .= '</p>';
+                    }
+                    if ('' !== $itemPurpose) {
+                        $article .= '<p><strong>'.$escape($this->translator->trans('Purpose')).':</strong> '
+                            .nl2br($escape($itemPurpose)).'</p>';
+                    }
+                    if ('' !== $itemFeedback) {
+                        $article .= '<p>'.nl2br($escape($itemFeedback)).'</p>';
+                    }
+                    $article .= $this->renderCourseAnalyzerQuestionFeedback($item['questions'] ?? []);
+                    $article .= $this->renderCourseAnalyzerMessageList(
+                        $this->translator->trans('Recommendations'),
+                        $item['recommendations'] ?? []
+                    );
+                    $article .= '</div>';
+                }
+            }
+
+            $article .= $this->renderCourseAnalyzerQuestionFeedback($resource['questions'] ?? []);
+            $article .= $this->renderCourseAnalyzerMessageList(
+                $this->translator->trans('Recommendations'),
+                $resource['recommendations'] ?? []
+            );
+            $article .= '</div>';
+
+            $articles .= $article;
+        }
+
+        if ('' === $articles) {
+            return '';
+        }
+
+        return '<hr><h3>'.$escape($sectionTitle).'</h3>'.$articles;
+    }
+
+    private function renderCourseAnalyzerQuestionFeedback(mixed $questions): string
+    {
+        if (!\is_array($questions) || [] === $questions) {
+            return '';
+        }
+
+        $escape = static fn (string $value): string => htmlspecialchars(
+            $value,
+            ENT_QUOTES | ENT_SUBSTITUTE,
+            'UTF-8'
+        );
+
+        $html = '';
+        foreach ($questions as $question) {
+            if (!\is_array($question)) {
+                continue;
+            }
+
+            $questionText = trim((string) ($question['question'] ?? ''));
+            $feedback = trim((string) ($question['feedback'] ?? ''));
+            $answersFeedback = trim((string) ($question['answersFeedback'] ?? ''));
+
+            $html .= '<div style="margin-left: 1em">';
+            if ('' !== $questionText) {
+                $html .= '<p><strong>'.$escape($questionText).'</strong></p>';
+            }
+            if ('' !== $feedback) {
+                $html .= '<p>'.nl2br($escape($feedback)).'</p>';
+            }
+            if ('' !== $answersFeedback) {
+                $html .= '<p><strong>'.$escape($this->translator->trans('Answers')).':</strong> '
+                    .nl2br($escape($answersFeedback)).'</p>';
+            }
+            $html .= $this->renderCourseAnalyzerMessageList(
+                $this->translator->trans('Recommendations'),
+                $question['recommendations'] ?? []
+            );
+            $html .= '</div>';
+        }
+
+        return $html;
     }
 
     private function getAiCourseAnalyzerSessionFromRequest(Request $request): ?Session

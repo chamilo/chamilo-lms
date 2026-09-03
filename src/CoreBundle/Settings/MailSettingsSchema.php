@@ -35,7 +35,6 @@ class MailSettingsSchema extends AbstractSettingsSchema
             'mailer_debug_enable' => 'false',
             'mailer_exclude_json' => 'false',
             'mailer_dkim' => '',
-            'mailer_xoauth2' => '',
         ]);
 
         // $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -61,7 +60,6 @@ class MailSettingsSchema extends AbstractSettingsSchema
             ->add('mailer_debug_enable', YesNoType::class)
             ->add('mailer_exclude_json', YesNoType::class)
             ->add('mailer_dkim', TextareaType::class)
-            ->add('mailer_xoauth2', TextareaType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

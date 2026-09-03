@@ -635,19 +635,6 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'passphrase' => '',
                     ],
                 ],
-                [
-                    'variable' => 'mailer_xoauth2',
-                    'json_example' => [
-                        'method' => false,
-                        'url_authorize' => 'https://provider.example/oauth2/auth',
-                        'url_access_token' => 'https://provider.example/token',
-                        'url_resource_owner_details' => 'https://provider.example/userinfo',
-                        'scopes' => '',
-                        'client_id' => '',
-                        'client_secret' => '',
-                        'refresh_token' => '',
-                    ],
-                ],
             ],
             'profile' => [
                 [

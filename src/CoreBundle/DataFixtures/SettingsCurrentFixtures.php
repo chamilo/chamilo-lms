@@ -1188,11 +1188,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Mail: DKIM headers',
                     'comment' => 'Enter a JSON array of your DKIM configuration settings (see example).',
                 ],
-                [
-                    'name' => 'mailer_xoauth2',
-                    'title' => 'Mail: XOAuth2 options',
-                    'comment' => 'If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting.',
-                ],
             ],
             'search' => [
                 [

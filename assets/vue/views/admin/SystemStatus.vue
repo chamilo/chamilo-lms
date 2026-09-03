@@ -181,7 +181,7 @@
                 </div>
                 <template v-else-if="cacheData?.opcache?.enabled">
                   <div
-                    v-if="opcacheMemoryBar"
+                    v-if="opcacheMemoryBar && !opcacheMemoryBar.unreliable"
                     class="mb-4"
                   >
                     <div class="mb-1 flex items-center justify-between gap-2 text-caption">
@@ -209,6 +209,16 @@
                       ></div>
                     </div>
                   </div>
+                  <p
+                    v-else-if="opcacheMemoryBar?.unreliable"
+                    class="mb-4 text-caption text-warning"
+                  >
+                    {{
+                      t(
+                        "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP).",
+                      )
+                    }}
+                  </p>
                   <dl class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <div
                       v-for="metric in opcacheMetrics"
@@ -269,7 +279,7 @@
                 </div>
                 <template v-else-if="cacheData?.apcu?.enabled">
                   <div
-                    v-if="apcuMemoryBar"
+                    v-if="apcuMemoryBar && !apcuMemoryBar.unreliable"
                     class="mb-4"
                   >
                     <div class="mb-1 flex items-center justify-between gap-2 text-caption">
@@ -297,6 +307,16 @@
                       ></div>
                     </div>
                   </div>
+                  <p
+                    v-else-if="apcuMemoryBar?.unreliable"
+                    class="mb-4 text-caption text-warning"
+                  >
+                    {{
+                      t(
+                        "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes).",
+                      )
+                    }}
+                  </p>
                   <dl class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <div
                       v-for="metric in apcuMetrics"
@@ -561,7 +581,7 @@
                 <p class="mt-0.5 text-caption text-gray-50">
                   {{
                     wsExpanded
-                      ? t("Live Apache or Nginx status metrics")
+                      ? t("Live Apache, Nginx or FrankenPHP status metrics")
                       : t("Click to show web server load metrics")
                   }}
                 </p>
@@ -613,10 +633,18 @@
                 {{ t("Requires a local web server status module") }}
               </p>
               <p class="mt-1 text-caption">
-                {{ t("Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1).") }}
+                {{
+                  t(
+                    "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1).",
+                  )
+                }}
               </p>
               <p class="mt-1 text-caption">
-                {{ t("Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.") }}
+                {{
+                  t(
+                    'Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global "metrics" option to the Caddyfile, which exposes Prometheus metrics on Caddy\'s admin API (127.0.0.1:2019/metrics) by default.',
+                  )
+                }}
               </p>
               <p
                 v-if="wsScannedPathsLabel"
@@ -647,7 +675,7 @@
               >
                 <div class="mb-1 flex items-center justify-between gap-2 text-caption">
                   <span class="font-semibold text-gray-70">
-                    {{ t("Busy workers") }}
+                    {{ wsBusyBar.label }}
                   </span>
                   <span class="font-mono text-gray-90">
                     {{ formatNumber(wsBusyBar.busy) }}
@@ -662,7 +690,7 @@
                   :aria-valuenow="wsBusyBar.percent"
                   aria-valuemin="0"
                   aria-valuemax="100"
-                  :aria-label="t('Busy workers')"
+                  :aria-label="wsBusyBar.label"
                 >
                   <div
                     class="h-full rounded-full transition-all duration-300"
@@ -908,8 +936,12 @@ const opcacheMemoryBar = computed(() => {
 
   // Total allocated OPcache pool = used + free + wasted.
   const total = used + free + (Number.isNaN(wasted) ? 0 : wasted)
-  if (total <= 0) {
-    return null
+
+  // OPcache's own shared-memory counters can go negative/inconsistent under
+  // threaded SAPIs (e.g. FrankenPHP) — surface that instead of silently
+  // hiding the widget or rendering nonsense numbers.
+  if (used < 0 || free < 0 || wasted < 0 || total <= 0) {
+    return { unreliable: true }
   }
 
   // Occupancy includes wasted memory (still reserved in the pool).
@@ -918,6 +950,10 @@ const opcacheMemoryBar = computed(() => {
     o.memoryUsedPercent !== null && o.memoryUsedPercent !== undefined && !Number.isNaN(Number(o.memoryUsedPercent))
       ? Number(o.memoryUsedPercent)
       : Math.round((10000 * occupied) / total) / 100
+
+  if (percent < 0 || percent > 100) {
+    return { unreliable: true }
+  }
 
   return { used, total, percent }
 })
@@ -930,14 +966,21 @@ const apcuMemoryBar = computed(() => {
 
   const used = Number(a.memoryUsedBytes)
   const total = Number(a.memorySizeBytes)
-  if (Number.isNaN(used) || Number.isNaN(total) || total <= 0) {
+  if (Number.isNaN(used) || Number.isNaN(total)) {
     return null
+  }
+  if (used < 0 || total <= 0) {
+    return { unreliable: true }
   }
 
   const percent =
     a.memoryUsedPercent !== null && a.memoryUsedPercent !== undefined && !Number.isNaN(Number(a.memoryUsedPercent))
       ? Number(a.memoryUsedPercent)
       : Math.round((10000 * used) / total) / 100
+
+  if (percent < 0 || percent > 100) {
+    return { unreliable: true }
+  }
 
   return { used, total, percent }
 })
@@ -1081,7 +1124,7 @@ const wsScannedPathsLabel = computed(() => {
   const paths = wsData.value?.scannedPaths
   if (!Array.isArray(paths) || !paths.length) {
     // Default expected paths before first response (Apache is most common).
-    return "/server-status?auto · /nginx_status · /stub_status"
+    return "/server-status?auto · /nginx_status · /stub_status · :2019/metrics"
   }
 
   return paths.join(" · ")
@@ -1095,6 +1138,9 @@ const wsDetectedLabel = computed(() => {
   if ("nginx" === d) {
     return "Nginx"
   }
+  if ("frankenphp" === d) {
+    return "FrankenPHP"
+  }
 
   return t("Unknown")
 })
@@ -1102,7 +1148,7 @@ const wsDetectedLabel = computed(() => {
 const wsUnavailableReason = computed(() => {
   const code = wsData.value?.status?.reason
   if ("unsupported_server" === code) {
-    return t("Web server load metrics are only available for Apache and Nginx.")
+    return t("Web server load metrics are only available for Apache, Nginx and FrankenPHP.")
   }
   if ("status_unavailable" === code) {
     return t("None of the scanned status paths responded on localhost.")
@@ -1162,25 +1208,40 @@ const wsRates = computed(() => {
 
 const wsBusyBar = computed(() => {
   const a = wsData.value?.status?.apache
-  if (!a) {
-    return null
-  }
-  const percent = a.workersBusyPercent
-  const busy = a.busyWorkers
-  const idle = a.idleWorkers
-  if (percent === null || percent === undefined || Number.isNaN(Number(percent))) {
-    return null
-  }
-  const total =
-    busy !== null && busy !== undefined && idle !== null && idle !== undefined
-      ? Number(busy) + Number(idle)
-      : null
+  if (a) {
+    const percent = a.workersBusyPercent
+    const busy = a.busyWorkers
+    const idle = a.idleWorkers
+    if (percent === null || percent === undefined || Number.isNaN(Number(percent))) {
+      return null
+    }
+    const total =
+      busy !== null && busy !== undefined && idle !== null && idle !== undefined ? Number(busy) + Number(idle) : null
 
-  return {
-    percent: Number(percent),
-    busy: busy !== null && busy !== undefined ? Number(busy) : null,
-    total,
+    return {
+      label: t("Busy workers"),
+      percent: Number(percent),
+      busy: busy !== null && busy !== undefined ? Number(busy) : null,
+      total,
+    }
   }
+
+  const f = wsData.value?.status?.frankenphp
+  if (f) {
+    const percent = f.busyThreadsPercent
+    if (percent === null || percent === undefined || Number.isNaN(Number(percent))) {
+      return null
+    }
+
+    return {
+      label: t("Busy threads"),
+      percent: Number(percent),
+      busy: f.busyThreads !== null && f.busyThreads !== undefined ? Number(f.busyThreads) : null,
+      total: f.totalThreads !== null && f.totalThreads !== undefined ? Number(f.totalThreads) : null,
+    }
+  }
+
+  return null
 })
 
 const wsMetrics = computed(() => {
@@ -1236,6 +1297,30 @@ const wsMetrics = computed(() => {
       { label: t("Accepts"), value: formatNumber(n.accepts) },
       { label: t("Handled"), value: formatNumber(n.handled) },
     ]
+  }
+
+  if ("frankenphp" === status.engine && status.frankenphp) {
+    const f = status.frankenphp
+    const metrics = [
+      { label: t("Total threads"), value: formatNumber(f.totalThreads) },
+      { label: t("Busy threads"), value: formatNumber(f.busyThreads) },
+      { label: t("Queue depth"), value: formatNumber(f.queueDepth) },
+    ]
+
+    for (const worker of f.workers || []) {
+      metrics.push(
+        {
+          label: `${t("Worker")}: ${worker.name}`,
+          value: `${formatNumber(worker.busyWorkers)} / ${formatNumber(worker.totalWorkers)}`,
+        },
+        {
+          label: `${t("Average request time")}: ${worker.name}`,
+          value: formatMillis(worker.avgRequestTimeSeconds),
+        },
+      )
+    }
+
+    return metrics
   }
 
   return []
@@ -1403,17 +1488,19 @@ function formatBytes(bytes) {
     return "—"
   }
   const n = Number(bytes)
-  if (n < 1024) {
-    return `${n} B`
+  const sign = n < 0 ? "-" : ""
+  const abs = Math.abs(n)
+  if (abs < 1024) {
+    return `${sign}${abs} B`
   }
-  if (n < 1024 * 1024) {
-    return `${(n / 1024).toFixed(1)} KB`
+  if (abs < 1024 * 1024) {
+    return `${sign}${(abs / 1024).toFixed(1)} KB`
   }
-  if (n < 1024 * 1024 * 1024) {
-    return `${(n / (1024 * 1024)).toFixed(2)} MB`
+  if (abs < 1024 * 1024 * 1024) {
+    return `${sign}${(abs / (1024 * 1024)).toFixed(2)} MB`
   }
 
-  return `${(n / (1024 * 1024 * 1024)).toFixed(2)} GB`
+  return `${sign}${(abs / (1024 * 1024 * 1024)).toFixed(2)} GB`
 }
 
 function formatNumber(value) {
@@ -1507,6 +1594,14 @@ function formatApacheTotalKBytes(kbytes) {
   }
 
   return formatBytes(Number(kbytes) * 1024)
+}
+
+function formatMillis(seconds) {
+  if (seconds === null || seconds === undefined || Number.isNaN(Number(seconds))) {
+    return "—"
+  }
+
+  return `${(Number(seconds) * 1000).toFixed(1)} ms`
 }
 
 function selectSection(key) {

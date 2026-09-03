@@ -42,31 +42,52 @@ Keep the analysis evidence-based and useful for later comparison with an individ
 PROMPT;
 
     /**
-     * The model may only cite these fixed sources. The server resolves source
-     * IDs back to these exact references so fabricated URLs never reach the UI.
+     * The model may only cite sources from the catalog selected for the course
+     * language. The server resolves source IDs back to these exact references,
+     * so fabricated or wrong-language URLs never reach the UI.
      *
-     * @var array<string, array{title:string,url:string}>
+     * @var array<string, array<string, array{title:string,url:string}>>
      */
-    private const array EVIDENCE_SOURCES = [
-        'CAST_UDL' => [
-            'title' => 'CAST Universal Design for Learning Guidelines',
-            'url' => 'https://udlguidelines.cast.org/',
+    private const array EVIDENCE_SOURCES_BY_LANGUAGE = [
+        'en' => [
+            'CAST_UDL' => [
+                'title' => 'CAST Universal Design for Learning Guidelines',
+                'url' => 'https://udlguidelines.cast.org/',
+            ],
+            'DUNLOSKY_2013' => [
+                'title' => 'Dunlosky et al. (2013), Improving Students’ Learning With Effective Learning Techniques',
+                'url' => 'https://doi.org/10.1177/1529100612453266',
+            ],
+            'CEPEDA_2006' => [
+                'title' => 'Cepeda et al. (2006), Distributed practice in verbal recall tasks',
+                'url' => 'https://doi.org/10.1037/0033-2909.132.3.354',
+            ],
+            'ROEDIGER_KARPICKE_2006' => [
+                'title' => 'Roediger & Karpicke (2006), Test-Enhanced Learning',
+                'url' => 'https://doi.org/10.1111/j.1467-9280.2006.01693.x',
+            ],
+            'SWELLER_1988' => [
+                'title' => 'Sweller (1988), Cognitive Load During Problem Solving',
+                'url' => 'https://doi.org/10.1207/s15516709cog1202_4',
+            ],
         ],
-        'DUNLOSKY_2013' => [
-            'title' => 'Dunlosky et al. (2013), Improving Students’ Learning With Effective Learning Techniques',
-            'url' => 'https://doi.org/10.1177/1529100612453266',
-        ],
-        'CEPEDA_2006' => [
-            'title' => 'Cepeda et al. (2006), Distributed practice in verbal recall tasks',
-            'url' => 'https://doi.org/10.1037/0033-2909.132.3.354',
-        ],
-        'ROEDIGER_KARPICKE_2006' => [
-            'title' => 'Roediger & Karpicke (2006), Test-Enhanced Learning',
-            'url' => 'https://doi.org/10.1111/j.1467-9280.2006.01693.x',
-        ],
-        'SWELLER_1988' => [
-            'title' => 'Sweller (1988), Cognitive Load During Problem Solving',
-            'url' => 'https://doi.org/10.1207/s15516709cog1202_4',
+        'fr' => [
+            'CSEN_MEMORY_FR' => [
+                'title' => 'Conseil scientifique de l’éducation nationale — La boîte à idées du CSEN',
+                'url' => 'https://www.csen.education.gouv.fr/publications/la-boite-a-idees-du-csen/',
+            ],
+            'CSEN_EXPLICIT_TEACHING_FR' => [
+                'title' => 'Conseil scientifique de l’éducation nationale — L’enseignement explicite : de quoi s’agit-il, pourquoi ça marche et dans quelles conditions ?',
+                'url' => 'https://www.csen.education.gouv.fr/publications/enseignement-explicite-quoi-quelle-efficacite-dans-quelles-conditions/',
+            ],
+            'CSEN_METACOGNITION_FR' => [
+                'title' => 'Conseil scientifique de l’éducation nationale — La métacognition',
+                'url' => 'https://www.csen.education.gouv.fr/publications/la-metacognition/',
+            ],
+            'CANOPE_INCLUSIVE_DESIGN_FR' => [
+                'title' => 'Réseau Canopé — Des solutions pédagogiques pour répondre aux besoins de tous les élèves',
+                'url' => 'https://www.reseau-canope.fr/service/des-solutions-pedagogiques-pour-repondre-aux-besoins-de-tous-les-eleves',
+            ],
         ],
     ];
 
@@ -177,10 +198,12 @@ PROMPT;
         [$aiPayload, $payloadCompacted] = $this->compactPayloadForAi($payload);
         $userPrompt = $this->encodePayload($aiPayload);
 
+        $evidenceSources = $this->evidenceSourcesForCourse($course);
+
         $rawAnalysis = $this->textAiService->requestJson(
             $teacher,
             $requestedProvider,
-            $this->systemPrompt($course),
+            $this->systemPrompt($course, $evidenceSources),
             $userPrompt,
             self::MAX_OUTPUT_TOKENS,
         );
@@ -189,7 +212,7 @@ PROMPT;
         $responseRepaired = (bool) ($rawAnalysis['_structured_output_repaired'] ?? false);
         unset($rawAnalysis['_provider'], $rawAnalysis['_structured_output_repaired']);
 
-        $analysis = $this->normalizeAnalysis($rawAnalysis);
+        $analysis = $this->normalizeAnalysis($rawAnalysis, $evidenceSources);
         if (!$this->hasUsefulAnalysis($analysis)) {
             throw new RuntimeException('The AI model returned an empty Student Success recommendation.');
         }
@@ -237,10 +260,31 @@ PROMPT;
         return $this->analysisStorage->getStudentAnalysis($student, $course, $session);
     }
 
-    private function systemPrompt(Course $course): string
+    /**
+     * @return array<string, array{title:string,url:string}>
+     */
+    private function evidenceSourcesForCourse(Course $course): array
+    {
+        $rawLanguage = strtolower(trim($course->getCourseLanguage()));
+        $normalizedLanguage = str_replace('-', '_', $rawLanguage);
+        $primaryLanguage = explode('_', $normalizedLanguage)[0] ?? '';
+
+        $evidenceLanguage = match ($primaryLanguage) {
+            'fr', 'fra', 'fre', 'french', 'francais', 'français' => 'fr',
+            default => 'en',
+        };
+
+        return self::EVIDENCE_SOURCES_BY_LANGUAGE[$evidenceLanguage]
+            ?? self::EVIDENCE_SOURCES_BY_LANGUAGE['en'];
+    }
+
+    /**
+     * @param array<string, array{title:string,url:string}> $evidenceSources
+     */
+    private function systemPrompt(Course $course, array $evidenceSources): string
     {
         $sourceLines = [];
-        foreach (self::EVIDENCE_SOURCES as $id => $source) {
+        foreach ($evidenceSources as $id => $source) {
             $sourceLines[] = $id.' | '.$source['title'].' | '.$source['url'];
         }
 
@@ -282,21 +326,23 @@ Return only valid JSON with this exact top-level structure:
 Keep the answer specific to observable activity. Prefer a small number of high-value recommendations over generic advice.
 PROMPT
             ."\n\nCourse language: {$courseLanguage}."
-            ."\nSource-language priority rules:"
-            ."\n- Prioritize approved pedagogical sources that are practical for a teacher working in the course language."
-            ."\n- Avoid adding a reference in another language merely to fill sourceIds."
-            ."\n- If no approved source is practical in the course language, prefer an empty sourceIds array unless a source in another language is essential and materially supports a high-priority recommendation."
+            ."\nSource-language rules:"
+            ."\n- The approved source catalog below has already been selected by the server for the course language."
+            ."\n- Use only source IDs from this catalog, and only when the source genuinely supports the recommendation."
+            ."\n- Do not replace these sources with references in another language."
+            ."\n- If none of these sources applies, return an empty sourceIds array."
             ."\n- Never invent translated source titles, localized URLs or source IDs."
-            ."\n\nApproved source catalog:\n"
+            ."\n\nApproved source catalog for this course language:\n"
             .implode("\n", $sourceLines);
     }
 
     /**
-     * @param array<string, mixed> $raw
+     * @param array<string, mixed>                           $raw
+     * @param array<string, array{title:string,url:string}> $evidenceSources
      *
      * @return array<string, mixed>
      */
-    private function normalizeAnalysis(array $raw): array
+    private function normalizeAnalysis(array $raw, array $evidenceSources): array
     {
         $recommendations = \is_array($raw['recommendations'] ?? null)
             ? $raw['recommendations']
@@ -308,24 +354,30 @@ PROMPT
             'recommendations' => [
                 'additionalActivities' => $this->normalizeRecommendationList(
                     $recommendations['additionalActivities'] ?? [],
+                    $evidenceSources,
                 ),
                 'rhythm' => $this->normalizeRecommendationList(
                     $recommendations['rhythm'] ?? [],
+                    $evidenceSources,
                 ),
                 'learningMethodologies' => $this->normalizeRecommendationList(
                     $recommendations['learningMethodologies'] ?? [],
+                    $evidenceSources,
                 ),
                 'misc' => $this->normalizeRecommendationList(
                     $recommendations['misc'] ?? [],
+                    $evidenceSources,
                 ),
             ],
         ];
     }
 
     /**
+     * @param array<string, array{title:string,url:string}> $evidenceSources
+     *
      * @return list<array{recommendation:string,rationale:string,sources:list<array{id:string,title:string,url:string}>}>
      */
-    private function normalizeRecommendationList(mixed $rawItems): array
+    private function normalizeRecommendationList(mixed $rawItems, array $evidenceSources): array
     {
         if (!\is_array($rawItems)) {
             return [];
@@ -365,14 +417,14 @@ PROMPT
             $sources = [];
             foreach (array_values(array_unique(array_map('strval', $sourceIds))) as $sourceId) {
                 $sourceId = trim($sourceId);
-                if (!isset(self::EVIDENCE_SOURCES[$sourceId])) {
+                if (!isset($evidenceSources[$sourceId])) {
                     continue;
                 }
 
                 $sources[] = [
                     'id' => $sourceId,
-                    'title' => self::EVIDENCE_SOURCES[$sourceId]['title'],
-                    'url' => self::EVIDENCE_SOURCES[$sourceId]['url'],
+                    'title' => $evidenceSources[$sourceId]['title'],
+                    'url' => $evidenceSources[$sourceId]['url'],
                 ];
             }
 

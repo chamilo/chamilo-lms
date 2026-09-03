@@ -4052,7 +4052,7 @@ class AiController extends AbstractController
             ->andWhere('message.content LIKE :sourceMetadata')
             ->andWhere('message.content LIKE :courseMetadata')
             ->andWhere('message.content LIKE :sessionMetadata')
-            ->setParameter('user', $user)
+            ->setParameter('user', $user->getId())
             ->setParameter('receiverType', MessageRelUser::TYPE_TO)
             ->setParameter('messageType', Message::MESSAGE_TYPE_INBOX)
             ->setParameter('deletedStatus', Message::MESSAGE_STATUS_DELETED)

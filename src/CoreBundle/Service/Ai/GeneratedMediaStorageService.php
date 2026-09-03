@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Service\Ai;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
-use Chamilo\CoreBundle\Service\Document\CourseDocumentCreator;
-use Chamilo\CoreBundle\Service\Document\CourseDocumentInput;
+use Chamilo\CoreBundle\Mcp\CourseDocumentCreator;
+use Chamilo\CoreBundle\Mcp\CourseDocumentInput;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\EntityManagerInterface;
 use finfo;

@@ -15,8 +15,6 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
-use Chamilo\CoreBundle\Service\Document\CourseDocumentCreator;
-use Chamilo\CoreBundle\Service\Document\CourseDocumentInput;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;

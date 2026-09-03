@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Service\Document\CourseDocumentCreator;
+use Chamilo\CoreBundle\Mcp\CourseDocumentCreator;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Service\Document;
+namespace Chamilo\CoreBundle\Mcp;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -40,7 +40,6 @@ final readonly class CourseDocumentInput
         public ?UploadedFile $uploadFile = null,
         public ?string $language = null,
         public string $fileExistsOption = 'rename',
-        public bool $uncompressZip = false,
         public bool $aiAssisted = false,
     ) {}
 }

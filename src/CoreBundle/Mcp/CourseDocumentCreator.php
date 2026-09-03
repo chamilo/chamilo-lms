@@ -4,9 +4,10 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Service\Document;
+namespace Chamilo\CoreBundle\Mcp;
 
 use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
+use Chamilo\CoreBundle\Dto\ResourceFileInput;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
@@ -22,8 +23,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
-use const JSON_THROW_ON_ERROR;
-
 /**
  * Creates a course document. CreateDocumentFileAction is the HTTP face of this;
  * callers that are not a request (the MCP tools, the AI media storage service) go
@@ -33,10 +32,14 @@ use const JSON_THROW_ON_ERROR;
  * actions do -- FileManagerController is the precedent for reaching them from
  * outside API Platform.
  *
- * The one seam left: handleCreateFileRequest() reads everything off a Request, so
- * create() still builds one. That happens here, once, behind a typed boundary,
- * instead of at every call site. Giving that method its own typed input is the
- * next step and touches its five callers, so it is not part of this change.
+ * Neither entry point fabricates a Request: create() hands handleCreateFile() a
+ * ResourceFileInput, and createFromRequest() passes the real request through. The
+ * zip upload is the one thing only the request path offers, because unpacking an
+ * archive into a course is a browser feature and no in-process caller wants it.
+ *
+ * It sits under Mcp/ although POST /api/documents goes through it too, so do not
+ * read the namespace as "only reachable from MCP": CreateDocumentFileAction and
+ * GeneratedMediaStorageService are consumers as well.
  */
 class CourseDocumentCreator extends BaseResourceFileAction
 {
@@ -83,7 +86,38 @@ class CourseDocumentCreator extends BaseResourceFileAction
      */
     public function create(CourseDocumentInput $input, Course $course): CDocument
     {
-        return $this->createFromRequest($this->buildRequest($input, $course), $course);
+        $document = new CDocument();
+
+        $result = $this->handleCreateFile(
+            $document,
+            $this->documentRepository,
+            new ResourceFileInput(
+                filetype: $input->filetype,
+                parentResourceNodeId: $input->parentResourceNodeId,
+                title: $input->title,
+                comment: $input->comment,
+                resourceLinkList: $this->buildResourceLinkListFromContext(
+                    $this->cidReqHelper,
+                    [['visibility' => $input->visibility]],
+                    ResourceLink::VISIBILITY_PUBLISHED,
+                    $course
+                ),
+                uploadFile: $input->uploadFile,
+                contentFile: $input->contentFile,
+                contentFileExtension: $input->contentFileExtension ?? 'html',
+                contentFileMimeType: $input->contentFileMimeType ?? 'text/html',
+                language: $input->language,
+            ),
+            $this->entityManager,
+            $this->cidReqHelper,
+            $input->fileExistsOption,
+            $this->translator,
+            $this->courseRepository,
+            $this->courseHelper,
+            $course
+        );
+
+        return $this->finish($document, $result, $input->language, $input->aiAssisted, $course);
     }
 
     /**
@@ -138,6 +172,52 @@ class CourseDocumentCreator extends BaseResourceFileAction
             );
         }
 
+        $document = $this->titleFiletypeAndComment($document, $result);
+
+        // We need the iid to write ExtraFieldValue, so we persist+flush here.
+        $this->entityManager->persist($document);
+        $this->entityManager->flush();
+
+        $this->applyResourceLanguageFromRequest($document, $request, $this->entityManager);
+        $this->entityManager->flush();
+
+        $this->markAiAssisted($document, $isAiAssisted);
+
+        return $document;
+    }
+
+    /**
+     * The tail both entry points share, with the language applied from the typed
+     * input rather than from a request.
+     *
+     * @param array<string, string> $result
+     */
+    private function finish(
+        CDocument $document,
+        array $result,
+        ?string $language,
+        bool $isAiAssisted,
+        Course $course
+    ): CDocument {
+        $document = $this->titleFiletypeAndComment($document, $result);
+
+        // We need the iid to write ExtraFieldValue, so we persist+flush here.
+        $this->entityManager->persist($document);
+        $this->entityManager->flush();
+
+        $this->applyResourceLanguageCode($document, $language, $this->entityManager, $course);
+        $this->entityManager->flush();
+
+        $this->markAiAssisted($document, $isAiAssisted);
+
+        return $document;
+    }
+
+    /**
+     * @param array<string, string> $result
+     */
+    private function titleFiletypeAndComment(CDocument $document, array $result): CDocument
+    {
         $filetype = (string) ($result['filetype'] ?? 'file');
         $comment = (string) ($result['comment'] ?? '');
 
@@ -149,71 +229,26 @@ class CourseDocumentCreator extends BaseResourceFileAction
         $document->setFiletype($filetype);
         $document->setComment($comment);
 
-        // We need the iid to write ExtraFieldValue, so we persist+flush here.
-        $this->entityManager->persist($document);
-        $this->entityManager->flush();
-
-        $this->applyResourceLanguageFromRequest($document, $request, $this->entityManager);
-        $this->entityManager->flush();
-
-        // Mark ExtraField: type=document, variable=ai_assisted, item_id=document iid.
-        if ($isAiAssisted && $this->aiDisclosureHelper->isDisclosureEnabled()) {
-            try {
-                $documentId = (int) ($document->getIid() ?? 0);
-                if ($documentId > 0) {
-                    $this->aiDisclosureHelper->markAiAssistedExtraField('document', $documentId, true);
-                }
-            } catch (Throwable) {
-                // Never block the upload flow because of AI marking.
-            }
-        }
-
         return $document;
     }
 
     /**
-     * The cid rides in the query because that is where the language fallback reads
-     * it from when the input names no language: an empty one means "the course's".
-     * The link binding does not come from here -- $course does.
+     * Marks ExtraField: type=document, variable=ai_assisted, item_id=document iid.
      */
-    private function buildRequest(CourseDocumentInput $input, Course $course): Request
+    private function markAiAssisted(CDocument $document, bool $isAiAssisted): void
     {
-        $parameters = [
-            'filetype' => $input->filetype,
-            'comment' => $input->comment,
-            'parentResourceNodeId' => $input->parentResourceNodeId,
-            'resourceLinkList' => json_encode(
-                [['visibility' => $input->visibility]],
-                JSON_THROW_ON_ERROR
-            ),
-            'fileExistsOption' => $input->fileExistsOption,
-            'isUncompressZipEnabled' => $input->uncompressZip ? 'true' : 'false',
-            'language' => $input->language ?? '',
-        ];
-
-        if (null !== $input->title) {
-            $parameters['title'] = $input->title;
+        if (!$isAiAssisted || !$this->aiDisclosureHelper->isDisclosureEnabled()) {
+            return;
         }
 
-        if (null !== $input->contentFile) {
-            $parameters['contentFile'] = $input->contentFile;
-            $parameters['contentFileExtension'] = $input->contentFileExtension ?? '';
-            $parameters['contentFileMimeType'] = $input->contentFileMimeType ?? '';
+        try {
+            $documentId = (int) ($document->getIid() ?? 0);
+            if ($documentId > 0) {
+                $this->aiDisclosureHelper->markAiAssistedExtraField('document', $documentId, true);
+            }
+        } catch (Throwable) {
+            // Never block the upload flow because of AI marking.
         }
-
-        if ($input->aiAssisted) {
-            $parameters['ai_assisted'] = '1';
-        }
-
-        return Request::create(
-            '/api/documents?cid='.$course->getId(),
-            'POST',
-            $parameters,
-            [],
-            null === $input->uploadFile ? [] : ['uploadFile' => $input->uploadFile],
-            [],
-            ''
-        );
     }
 
     private function normalizeCloudLinkUrl(string $url): string

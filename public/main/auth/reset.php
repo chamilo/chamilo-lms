@@ -45,7 +45,7 @@ if ($form->validate()) {
     $token = $values['token'];
 
     /** @var \Chamilo\CoreBundle\Entity\User $user */
-    $user = Container::getUserRepository()->findUserByConfirmationToken($token);
+    $user = Container::getUserRepository()->findOneBy(['confirmationToken' => $token]);
     if ($user) {
         if (!$user->isPasswordRequestNonExpired($ttl)) {
             Display::addFlash(Display::return_message(get_lang('Link expired, please try again.')), 'warning');

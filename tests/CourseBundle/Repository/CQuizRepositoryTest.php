@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -155,13 +156,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         $qb = $repo->findAllByCourse($course, null, 'exercise 1');
         $this->assertCount(2, $qb->getQuery()->getResult());
 
-        $qb = $repo->findAllByCourse($course, null, null, 0);
-        $this->assertCount(0, $qb->getQuery()->getResult());
-
-        $qb = $repo->findAllByCourse($course, null, null, 1);
-        $this->assertCount(2, $qb->getQuery()->getResult());
-
-        $qb = $repo->findAllByCourse($course, null, null, null, true, $category->getId());
+        $qb = $repo->findAllByCourse($course, null, null, false, true, $category->getId());
         $this->assertCount(1, $qb->getQuery()->getResult());
 
         $found = $repo->findCourseResourceByTitle('exercise 1', $course->getResourceNode(), $course);
@@ -220,5 +215,21 @@ class CQuizRepositoryTest extends AbstractApiTest
         // FIXME Re-add: Why the course exercise is visible?
         // $this->assertFalse($exercise->isVisible($course));
         $this->assertTrue($exercise->isVisible($course, $session));
+
+        // An unpublished exercise still belongs to the course, so it only drops out
+        // once the caller asks for the visible ones.
+        $draft = (new CQuiz())
+            ->setTitle('exercise draft')
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course, null, null, ResourceLink::VISIBILITY_DRAFT)
+        ;
+        $repo->create($draft);
+
+        $qb = $repo->findAllByCourse($course, null, null, false, false);
+        $this->assertCount(3, $qb->getQuery()->getResult());
+
+        $qb = $repo->findAllByCourse($course, null, null, true, false);
+        $this->assertCount(2, $qb->getQuery()->getResult());
     }
 }

@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
@@ -28,7 +29,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         Course $course,
         ?Session $session = null,
         ?string $title = null,
-        ?int $active = null,
+        bool $onlyVisibles = false,
         bool $onlyPublished = true,
         ?int $categoryId = null,
         bool $includeDeleted = false
@@ -46,7 +47,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         }
 
         $this->addCategoryQueryBuilder($categoryId, $qb);
-        $this->addActiveQueryBuilder($active, $qb);
+        $this->addOnlyVisiblesQueryBuilder($onlyVisibles, $qb);
 
         if (false === $includeDeleted) {
             $this->addNotDeletedQueryBuilder($qb);
@@ -264,15 +265,15 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
      * If $active is provided (any value), enforce links.visibility = 2 (visible).
      * If $active is null, do not add a visibility filter here.
      */
-    private function addActiveQueryBuilder(?int $active = null, ?QueryBuilder $qb = null): void
+    private function addOnlyVisiblesQueryBuilder(bool $onlyVisibles = false, ?QueryBuilder $qb = null): void
     {
-        $qb = $this->getOrCreateQueryBuilder($qb);
-
-        if (null !== $active) {
-            $qb
-                ->andWhere('links.visibility = :visibility')
-                ->setParameter('visibility', 2)
-            ;
+        if (!$onlyVisibles) {
+            return;
         }
+
+        $this->getOrCreateQueryBuilder($qb)
+            ->andWhere('links.visibility = :visibility')
+            ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
+        ;
     }
 }

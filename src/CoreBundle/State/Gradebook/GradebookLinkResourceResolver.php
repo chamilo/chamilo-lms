@@ -224,7 +224,7 @@ final readonly class GradebookLinkResourceResolver
     {
         return match ($type) {
             self::LINK_EXERCISE => $this->quizRepository
-                ->findAllByCourse($course, $session, null, 1, false)
+                ->findAllByCourse($course, $session, null, true, false)
                 ->getQuery()
                 ->getResult(),
             self::LINK_STUDENT_PUBLICATION => $this->studentPublicationRepository

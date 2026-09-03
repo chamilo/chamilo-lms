@@ -24,6 +24,27 @@
                 </div>
             {% endif %}
 
+            {% if previous_analysis_message %}
+                <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                            <h2 class="m-0 text-lg font-bold text-gray-90">{{ 'Previous AI course analysis'|trans }}</h2>
+                            <p class="mt-1 text-sm text-gray-60">
+                                {{ 'A previous analysis is available for this course and session. You can review it without running the AI analysis again.'|trans }}
+                            </p>
+                        </div>
+
+                        <a
+                                href="{{ previous_analysis_message.url }}"
+                                class="inline-flex min-h-[42px] items-center justify-center gap-1.5 rounded-xl border border-primary px-5 py-2.5 font-bold text-primary hover:bg-primary/5"
+                        >
+                            <span class="mdi mdi-email-open-outline text-lg leading-none" aria-hidden="true"></span>
+                            <span>{{ 'View previous analysis'|trans }}</span>
+                        </a>
+                    </div>
+                </section>
+            {% endif %}
+
             <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
                 {% if not enabled %}
                     <p>{{ 'AI course analyzer is disabled by the platform administrator.'|trans }}</p>

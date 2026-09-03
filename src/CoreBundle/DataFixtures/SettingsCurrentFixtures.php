@@ -1154,8 +1154,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Mail DSN',
                     'comment' => \sprintf(
                         'The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. Here are a few examples of supported DSN syntaxes: %s',
-                        'https://symfony.com/doc/6.4/mailer.html#using-built-in-transports',
-                        'https://symfony.com/doc/6.4/mailer.html#using-a-3rd-party-transport'
+                        'https://symfony.com/doc/7.4/mailer.html#using-built-in-transports',
+                        'https://symfony.com/doc/7.4/mailer.html#using-a-3rd-party-transport'
                     ),
                 ],
                 [

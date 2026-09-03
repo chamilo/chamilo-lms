@@ -31548,7 +31548,7 @@ msgstr ""
 msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
 msgstr ""
 
-msgid "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at https://symfony.com/doc/6.4/mailer.html#using-built-in-transports. Here are a few examples of supported DSN syntaxes: https://symfony.com/doc/6.4/mailer.html#using-a-3rd-party-transport"
+msgid "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at https://symfony.com/doc/7.4/mailer.html#using-built-in-transports. Here are a few examples of supported DSN syntaxes: https://symfony.com/doc/7.4/mailer.html#using-a-3rd-party-transport"
 msgstr ""
 
 msgid "Mail: character set"

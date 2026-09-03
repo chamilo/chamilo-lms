@@ -26,6 +26,8 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testCreateMessage(): void
     {
+        $this->setPlatformSenderAddress();
+
         $this->createUser('from');
         $senderUserIri = $this->findIriBy(User::class, ['username' => 'from']);
         $fromUserToken = $this->getUserToken(['username' => 'from', 'password' => 'from']);
@@ -100,16 +102,19 @@ class MessageRepositoryTest extends AbstractApiTest
         $messageArray = $response->toArray();
         $messageRelUserIri = $messageArray['firstReceiver']['@id'];
 
+        // PATCH, not PUT: receiver is not writable and a PUT replaces the whole
+        // representation, so it would arrive null. The Vue service does the same.
         $this
             ->createClientWithCredentials($receiverUserToken)
             ->request(
-                'PUT',
+                'PATCH',
                 $messageRelUserIri,
                 [
                     'json' => [
                         'read' => true,
                         'starred' => true,
                     ],
+                    'headers' => ['content-type' => 'application/merge-patch+json'],
                 ]
             )
         ;
@@ -628,8 +633,9 @@ class MessageRepositoryTest extends AbstractApiTest
      */
     private function setPlatformSenderAddress(): void
     {
-        self::getContainer()->get(SettingsManager::class)
-            ->updateSetting('mail.mailer_from_email', 'noreply@example.com')
-        ;
+        $this->getEntityManager()->getConnection()->executeStatement(
+            "UPDATE settings SET selected_value = :address WHERE variable = 'mailer_from_email'",
+            ['address' => 'noreply@example.com']
+        );
     }
 }

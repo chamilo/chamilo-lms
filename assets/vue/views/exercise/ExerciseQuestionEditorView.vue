@@ -1916,11 +1916,11 @@ const difficultyOptions = [
 ]
 
 const readingSpeedOptions = computed(() => [
-  { label: t("%s words per minute", [50]), value: 1 },
-  { label: t("%s words per minute", [100]), value: 2 },
-  { label: t("%s words per minute", [175]), value: 3 },
-  { label: t("%s words per minute", [300]), value: 4 },
-  { label: t("%s words per minute", [600]), value: 5 },
+  { label: formatReadingSpeed(50), value: 1 },
+  { label: formatReadingSpeed(100), value: 2 },
+  { label: formatReadingSpeed(175), value: 3 },
+  { label: formatReadingSpeed(300), value: 4 },
+  { label: formatReadingSpeed(600), value: 5 },
 ])
 
 const fillBlanksSeparatorOptions = [
@@ -2019,14 +2019,14 @@ const isDropdownCombinationQuestion = computed(() => MULTIPLE_ANSWER_DROPDOWN_CO
 const isMatchingQuestion = computed(() => [MATCHING, MATCHING_COMBINATION, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_COMBINATION].includes(Number(form.type)))
 const isMatchingCombinationQuestion = computed(() => [MATCHING_COMBINATION, MATCHING_DRAGGABLE_COMBINATION].includes(Number(form.type)))
 const isDraggableOrderingQuestion = computed(() => DRAGGABLE === Number(form.type))
-const hasAnswerOptions = computed(() => !isOpenQuestion.value && !isOralExpressionQuestion.value && !isAnnotationQuestion.value && !isHotspotQuestion.value && !isUploadAnswerQuestion.value && !isOnlyofficeQuestion.value && !isCalculatedAnswerQuestion.value && !isStructuralQuestion.value && !isFillBlanksQuestion.value && !isDropdownQuestion.value && !isMatchingQuestion.value && !isDraggableOrderingQuestion.value)
+const hasAnswerOptions = computed(() => !isOpenQuestion.value && !isOralExpressionQuestion.value && !isAnnotationQuestion.value && !isHotspotQuestion.value && !isUploadAnswerQuestion.value && !isOnlyofficeQuestion.value && !isCalculatedAnswerQuestion.value && (!isStructuralQuestion.value || isReadingComprehensionQuestion.value) && !isFillBlanksQuestion.value && !isDropdownQuestion.value && !isMatchingQuestion.value && !isDraggableOrderingQuestion.value)
 const isGlobalMultipleAnswer = computed(() => GLOBAL_MULTIPLE_ANSWER === Number(form.type))
 const isDegreeCertaintyQuestion = computed(() => MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === Number(form.type))
 const isTrueFalseQuestion = computed(() => [MULTIPLE_ANSWER_TRUE_FALSE, MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE, MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY].includes(Number(form.type)))
 const usesTrueFalseScores = computed(() => [MULTIPLE_ANSWER_TRUE_FALSE, MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY].includes(Number(form.type)))
 const usesUnknownScore = computed(() => MULTIPLE_ANSWER_TRUE_FALSE === Number(form.type))
 const usesGlobalScore = computed(() => [MULTIPLE_ANSWER_COMBINATION, MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE, GLOBAL_MULTIPLE_ANSWER, MATCHING_COMBINATION, MATCHING_DRAGGABLE_COMBINATION, HOT_SPOT_COMBINATION, FILL_IN_BLANKS_COMBINATION, MULTIPLE_ANSWER_DROPDOWN_COMBINATION].includes(Number(form.type)))
-const isSingleCorrectAnswer = computed(() => [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, UNIQUE_ANSWER_IMAGE].includes(Number(form.type)))
+const isSingleCorrectAnswer = computed(() => [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, UNIQUE_ANSWER_IMAGE, READING_COMPREHENSION].includes(Number(form.type)))
 const canConvertAnswerType = computed(() => [UNIQUE_ANSWER, MULTIPLE_ANSWER].includes(Number(form.type)))
 const annotationPreviewUrl = computed(() => form.annotationImageData || form.annotationImageUrl || "")
 const hotspotPreviewUrl = computed(() => form.hotspotImageData || form.hotspotImageUrl || "")
@@ -2202,6 +2202,14 @@ function formatTranslatedText(key, replacements = []) {
     (text, value, index) => String(text).split(`{${index}}`).join(String(value)),
     t(key),
   )
+}
+
+function formatReadingSpeed(speed) {
+  const value = String(Number(speed || 0))
+  const wordsLabel = String(t("Words"))
+  const minutesLabel = String(t("Minutes"))
+
+  return `${value} ${wordsLabel}/${minutesLabel}`
 }
 
 function formatScore(value) {
@@ -3549,7 +3557,7 @@ function buildPayload() {
     mandatory: canMarkMandatoryQuestion.value ? form.mandatory : false,
     duration: isStructuralQuestion.value ? null : (form.duration ? Number(form.duration) : null),
     difficulty: Number(form.difficulty || 1),
-    categoryId: isStructuralQuestion.value ? 0 : Number(form.categoryId || 0),
+    categoryId: isStructuralQuestion.value && !isReadingComprehensionQuestion.value ? 0 : Number(form.categoryId || 0),
     parentMediaId: isStructuralQuestion.value ? 0 : normalizeParentMediaIdForPayload(),
     matchingOptions: isMatchingQuestion.value
       ? form.matchingOptions.map((option, index) => ({
@@ -3596,7 +3604,7 @@ function validateForm() {
     return false
   }
 
-  if (isStructuralQuestion.value) {
+  if (isStructuralQuestion.value && !isReadingComprehensionQuestion.value) {
     return true
   }
 

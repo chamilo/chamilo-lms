@@ -333,6 +333,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         $score = $this->calculateQuestionScore($data);
+        $isReadingComprehension = self::READING_COMPREHENSION === $type;
         $question
             ->setQuestion(trim($data->title))
             ->setDescription((string) $data->description)
@@ -342,9 +343,9 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             ->setLevel($this->normalizeDifficulty($data->difficulty))
             ->setPosition($position)
             ->setPonderation($score)
-            ->setMandatory($this->isStructuralQuestionType($type) || null === $quiz ? 0 : ($this->isMandatoryQuestionInCategoryEnabled($quiz) && $data->mandatory ? 1 : 0))
-            ->setDuration($this->isStructuralQuestionType($type) ? null : $this->normalizeNullablePositiveInteger($data->duration))
-            ->setParentMediaId($this->isStructuralQuestionType($type) || null === $quiz ? null : $this->normalizeParentMediaId($quiz, $data, $question))
+            ->setMandatory($this->isStructuralQuestionType($type) || $isReadingComprehension || null === $quiz ? 0 : ($this->isMandatoryQuestionInCategoryEnabled($quiz) && $data->mandatory ? 1 : 0))
+            ->setDuration($this->isStructuralQuestionType($type) || $isReadingComprehension ? null : $this->normalizeNullablePositiveInteger($data->duration))
+            ->setParentMediaId($this->isStructuralQuestionType($type) || $isReadingComprehension || null === $quiz ? null : $this->normalizeParentMediaId($quiz, $data, $question))
         ;
     }
 
@@ -1358,7 +1359,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
     private function usesSingleCorrectAnswer(int $type): bool
     {
-        return \in_array($type, [self::UNIQUE_ANSWER, self::UNIQUE_ANSWER_NO_OPTION, self::UNIQUE_ANSWER_IMAGE], true);
+        return \in_array($type, [self::UNIQUE_ANSWER, self::UNIQUE_ANSWER_NO_OPTION, self::UNIQUE_ANSWER_IMAGE, self::READING_COMPREHENSION], true);
     }
 
     private function usesGlobalScore(int $type): bool
@@ -2920,7 +2921,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
     private function isStructuralQuestionType(int $type): bool
     {
-        return \in_array($type, [self::MEDIA_QUESTION, self::READING_COMPREHENSION, self::PAGE_BREAK], true);
+        return \in_array($type, [self::MEDIA_QUESTION, self::PAGE_BREAK], true);
     }
 
     private function usesMatching(int $type): bool

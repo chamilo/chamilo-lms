@@ -362,7 +362,7 @@
                 {{ questionNumberLabel(question, index) }} · {{ t(question.typeLabel) }}
               </div>
               <h2
-                v-if="!settings.hideQuestionTitle"
+                v-if="!settings.hideQuestionTitle && (!isReadingQuestion(question) || isReadingComplete(question))"
                 class="exercise-runtime-html text-lg font-semibold text-gray-90"
                 v-html="displayTranslatedHtml(question.title)"
               />
@@ -389,23 +389,45 @@
             <div v-if="isRadioChoice(question)" class="space-y-3">
               <div
                 v-if="isReadingQuestion(question) && question.reading?.text"
-                class="exercise-runtime-html rounded-lg border border-gray-20 bg-gray-10 p-4 text-gray-800"
-                v-html="displayTranslatedHtml(question.reading.text)"
-              />
-              <label
-                v-for="choice in question.choices"
-                :key="choice.id"
-                class="flex items-start gap-3 rounded-lg border border-gray-20 p-3 hover:bg-gray-10"
+                class="space-y-3"
               >
-                <input
-                  v-model="answers[question.id].choice"
-                  class="mt-1"
-                  :name="`question_${question.id}`"
-                  type="radio"
-                  :value="choice.id"
-                />
-                <div class="exercise-runtime-html min-w-0 flex-1" v-html="displayTranslatedHtml(choice.answer)" />
-              </label>
+                <div class="rounded-lg border border-gray-20 p-3 text-sm text-gray-700">
+                  {{ t("Reading speed") }}: {{ formatReadingSpeed(question.reading.speed) }}
+                </div>
+                <div class="space-y-3 rounded-lg border border-gray-20 bg-gray-10 p-4">
+                  <div
+                    v-if="!isReadingStarted(question)"
+                    class="flex justify-center"
+                  >
+                    <BaseButton
+                      :label="t('Start')"
+                      icon="play"
+                      type="primary"
+                      @click="startReadingQuestion(question)"
+                    />
+                  </div>
+                  <div
+                    class="exercise-reading-text exercise-runtime-html text-gray-800"
+                    v-html="readingDisplayHtml(question)"
+                  />
+                </div>
+              </div>
+              <template v-if="!isReadingQuestion(question) || isReadingComplete(question)">
+                <label
+                  v-for="choice in question.choices"
+                  :key="choice.id"
+                  class="flex items-start gap-3 rounded-lg border border-gray-20 p-3 hover:bg-gray-10"
+                >
+                  <input
+                    v-model="answers[question.id].choice"
+                    class="mt-1"
+                    :name="`question_${question.id}`"
+                    type="radio"
+                    :value="choice.id"
+                  />
+                  <div class="exercise-runtime-html min-w-0 flex-1" v-html="displayTranslatedHtml(choice.answer)" />
+                </label>
+              </template>
             </div>
 
             <div v-else-if="isCheckboxChoice(question)" class="space-y-3">
@@ -1206,16 +1228,6 @@
               </div>
             </div>
 
-            <div v-else-if="isReadingQuestion(question)" class="space-y-3">
-              <div class="rounded-lg border border-gray-20 p-3 text-sm text-gray-700">
-                {{ t("Reading speed") }}: {{ t("%s words per minute", [question.reading.speed]) }}
-              </div>
-              <div
-                class="exercise-runtime-html rounded-lg border border-gray-20 p-4 text-gray-800"
-                v-html="displayTranslatedHtml(question.reading.text || question.description)"
-              />
-            </div>
-
             <div v-else-if="isPageBreak(question)" class="space-y-3">
               <div
                 v-if="question.content?.description || question.description"
@@ -1239,7 +1251,7 @@
           </div>
 
           <div
-            v-if="showReviewLaterOption(question)"
+            v-if="showReviewLaterOption(question) && (!isReadingQuestion(question) || isReadingComplete(question))"
             class="mt-4 rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
           >
             <label class="flex items-center gap-2">
@@ -1255,7 +1267,7 @@
           </div>
 
           <div
-            v-if="!canManage && activeAttempt && !usesPagedNavigation && isDraftSaveSupported(question)"
+            v-if="!canManage && activeAttempt && !usesPagedNavigation && isDraftSaveSupported(question) && (!isReadingQuestion(question) || isReadingComplete(question))"
             class="mt-4 flex justify-end border-t border-gray-20 pt-4"
           >
             <BaseButton
@@ -1344,7 +1356,7 @@
         >
           <BaseButton
             v-if="showPreviousNavigationButton"
-            :disabled="!canMovePrevious || isSavingAnswer || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
+            :disabled="!canMovePrevious || isSavingAnswer || isQuestionTimeExpired || isAutoAdvancingTimedQuestion || isVisibleReadingInProgress"
             :label="previousNavigationLabel"
             icon="back"
             type="secondary"
@@ -1353,7 +1365,7 @@
           <div class="flex flex-wrap gap-2">
             <BaseButton
               v-if="!canManage && activeAttempt && usesPagedNavigation"
-              :disabled="isSavingAnswer || isTimeExpired || isQuestionTimeExpired || isAutoAdvancingTimedQuestion || !visibleQuestions.some(isDraftSaveSupported)"
+              :disabled="isSavingAnswer || isTimeExpired || isQuestionTimeExpired || isAutoAdvancingTimedQuestion || isVisibleReadingInProgress || !visibleQuestions.some(isDraftSaveSupported)"
               :label="isSavingAnswer ? t('Saving') : t('Save draft')"
               icon="check"
               type="success"
@@ -1361,7 +1373,7 @@
             />
             <BaseButton
               v-if="canMoveNext"
-              :disabled="isSavingAnswer || isTimeExpired || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
+              :disabled="isSavingAnswer || isTimeExpired || isQuestionTimeExpired || isAutoAdvancingTimedQuestion || isVisibleReadingInProgress"
               :label="nextNavigationLabel"
               icon="next"
               icon-position="right"
@@ -1378,6 +1390,7 @@
             />
             <BaseButton
               v-if="!isReviewingMarkedQuestions && canManage && canFinishCurrentPage"
+              :disabled="isVisibleReadingInProgress"
               :label="t('Finish test')"
               icon="check"
               type="primary"
@@ -1385,7 +1398,7 @@
             />
             <BaseButton
               v-if="!isReviewingMarkedQuestions && !canManage && activeAttempt && canFinishCurrentPage"
-              :disabled="!canSubmit || !canFinishWithConfirmation || isSavingAnswer || isFinishingAttempt || isAutoFinishingExpiredAttempt || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
+              :disabled="!canSubmit || !canFinishWithConfirmation || isSavingAnswer || isFinishingAttempt || isAutoFinishingExpiredAttempt || isQuestionTimeExpired || isAutoAdvancingTimedQuestion || isVisibleReadingInProgress"
               :label="finishButtonLabel"
               icon="check"
               type="primary"
@@ -1654,6 +1667,7 @@ const isReviewFlagSaving = ref(false)
 const reviewFlagError = ref("")
 const draggedMatchingOptionId = ref(null)
 const selectedMatchingOptions = ref({})
+const readingProgress = ref({})
 const draggedDraggableItemId = ref(null)
 const countdownRemainingSeconds = ref(null)
 const countdownTimer = ref(null)
@@ -1677,6 +1691,8 @@ const confirmedSavedAnswers = ref(false)
 const isZoomDialogVisible = ref(false)
 const zoomImageSrc = ref("")
 const zoomImageAlt = ref("")
+const READING_REFRESH_SECONDS = 3
+const readingTimers = new Map()
 let copyPasteCleanup = null
 let keepAliveTimer = null
 
@@ -1744,6 +1760,9 @@ const visibleQuestions = computed(() => {
 })
 
 const visibleQuestionTotal = computed(() => answerableQuestions.value.length)
+const isVisibleReadingInProgress = computed(() => visibleQuestions.value.some(
+  (question) => isReadingQuestion(question) && !isReadingComplete(question),
+))
 const isImmediateFeedbackRuntime = computed(() => [1, 3, 4].includes(Number(settings.value.feedbackType || 0)))
 const isReviewAnswersEnabled = computed(() => !isImmediateFeedbackRuntime.value && Number(settings.value.reviewAnswers || 0) > 0)
 const isCheckAnswersBeforeFinishEnabled = computed(() => !isImmediateFeedbackRuntime.value && true === settings.value.checkAllAnswersBeforeEndTest)
@@ -2605,6 +2624,7 @@ async function loadRuntime() {
     syncQuestionCountdown()
     scheduleRuntimeHtmlEnhancement()
     await nextTick()
+    syncVisibleReadingQuestions()
     prepareVisibleOnlyofficeDocuments()
   } catch (error) {
     console.error("Error loading exercise runtime", error)
@@ -2645,6 +2665,7 @@ async function startAttempt() {
       syncRuntimeSettingsEffects()
       syncQuestionCountdown()
       await nextTick()
+      syncVisibleReadingQuestions()
       prepareVisibleOnlyofficeDocuments()
       return
     }
@@ -2727,7 +2748,7 @@ function reorderQuestionsFromAttempt(questionIds = []) {
 }
 
 async function goToPreviousQuestion() {
-  if (isTimeExpired.value || isQuestionTimeExpired.value || isAutoAdvancingTimedQuestion.value || !canMovePrevious.value) {
+  if (isVisibleReadingInProgress.value || isTimeExpired.value || isQuestionTimeExpired.value || isAutoAdvancingTimedQuestion.value || !canMovePrevious.value) {
     return
   }
 
@@ -2749,7 +2770,7 @@ async function goToPreviousQuestion() {
 }
 
 async function goToNextQuestion() {
-  if (isTimeExpired.value || isQuestionTimeExpired.value || isAutoAdvancingTimedQuestion.value || !canMoveNext.value) {
+  if (isVisibleReadingInProgress.value || isTimeExpired.value || isQuestionTimeExpired.value || isAutoAdvancingTimedQuestion.value || !canMoveNext.value) {
     return
   }
 
@@ -2825,7 +2846,7 @@ async function saveVisibleAnswers(options = {}) {
 }
 
 function finishPreview() {
-  if (!canManage.value || !canFinishCurrentPage.value) {
+  if (!canManage.value || !canFinishCurrentPage.value || isVisibleReadingInProgress.value) {
     return
   }
 
@@ -2844,10 +2865,15 @@ function restartPreview() {
   isFeedbackDialogVisible.value = false
   initializeAnswerState()
   syncQuestionCountdown()
+  nextTick(syncVisibleReadingQuestions)
   window.scrollTo({ top: 0, behavior: "smooth" })
 }
 
 async function finishAttempt(options = {}) {
+  if (isVisibleReadingInProgress.value) {
+    return
+  }
+
   const exerciseId = getExerciseId()
   const attemptId = Number(activeAttempt.value?.attemptId || 0)
   if (canManage.value || !exerciseId || !attemptId) {
@@ -3597,6 +3623,7 @@ function initializeAnswerState() {
 
   answers.value = nextAnswers
   selectedMatchingOptions.value = nextSelectedMatchingOptions
+  initializeReadingProgress()
 }
 
 
@@ -4380,6 +4407,260 @@ function isReadingQuestion(question) {
   return Number(question.type) === 21 && question.reading
 }
 
+function formatReadingSpeed(speed) {
+  const value = String(Number(speed || 0))
+  const wordsLabel = String(t("Words"))
+  const minutesLabel = String(t("Minutes"))
+
+  return `${value} ${wordsLabel}/${minutesLabel}`
+}
+
+function readingText(question) {
+  return displayTranslatedHtml(question?.reading?.text || question?.description || "")
+}
+
+function readingPlainText(question) {
+  return displayText(readingText(question), "")
+}
+
+function readingWordsPerStep(question) {
+  const speed = Math.max(1, Number(question?.reading?.speed || 50))
+
+  return Math.max(1, Math.floor((speed / 60) * READING_REFRESH_SECONDS))
+}
+
+function readingTotalSteps(question) {
+  const wordCount = readingPlainText(question).split(/\s+/u).filter(Boolean).length
+  if (wordCount <= 0) {
+    return 0
+  }
+
+  return Math.max(1, Math.ceil(wordCount / readingWordsPerStep(question)))
+}
+
+function getReadingProgress(question) {
+  const questionId = Number(question?.id || 0)
+
+  return readingProgress.value[questionId] || {
+    started: false,
+    step: -1,
+    totalSteps: readingTotalSteps(question),
+    complete: 0 === readingTotalSteps(question),
+  }
+}
+
+function isReadingStarted(question) {
+  return true === getReadingProgress(question).started
+}
+
+function isReadingComplete(question) {
+  return true === getReadingProgress(question).complete
+}
+
+function setReadingProgress(questionId, state) {
+  readingProgress.value = {
+    ...readingProgress.value,
+    [questionId]: state,
+  }
+}
+
+function stopReadingTimer(questionId) {
+  const timer = readingTimers.get(Number(questionId))
+  if (timer) {
+    window.clearInterval(timer)
+    readingTimers.delete(Number(questionId))
+  }
+}
+
+function stopAllReadingTimers() {
+  for (const questionId of readingTimers.keys()) {
+    stopReadingTimer(questionId)
+  }
+}
+
+function initializeReadingProgress() {
+  stopAllReadingTimers()
+
+  const nextProgress = {}
+  for (const question of questions.value) {
+    if (!isReadingQuestion(question)) {
+      continue
+    }
+
+    const questionId = Number(question.id || 0)
+    const totalSteps = readingTotalSteps(question)
+    nextProgress[questionId] = {
+      started: false,
+      step: -1,
+      totalSteps,
+      complete: 0 === totalSteps,
+    }
+  }
+
+  readingProgress.value = nextProgress
+}
+
+function completeReadingQuestion(question) {
+  const questionId = Number(question?.id || 0)
+  const state = getReadingProgress(question)
+  stopReadingTimer(questionId)
+  setReadingProgress(questionId, {
+    ...state,
+    started: true,
+    step: Math.max(0, state.totalSteps - 1),
+    complete: true,
+  })
+}
+
+function advanceReadingQuestion(question) {
+  const questionId = Number(question?.id || 0)
+  const state = getReadingProgress(question)
+  if (state.complete) {
+    stopReadingTimer(questionId)
+    return
+  }
+
+  const nextStep = state.step + 1
+  const isComplete = nextStep >= state.totalSteps - 1
+  setReadingProgress(questionId, {
+    ...state,
+    started: true,
+    step: nextStep,
+    complete: isComplete,
+  })
+
+  if (isComplete) {
+    stopReadingTimer(questionId)
+  }
+}
+
+function startReadingQuestion(question) {
+  if (!isReadingQuestion(question)) {
+    return
+  }
+
+  const questionId = Number(question.id || 0)
+  if (questionId <= 0) {
+    return
+  }
+
+  const state = getReadingProgress(question)
+  if (state.complete || state.started) {
+    return
+  }
+
+  if (state.totalSteps <= 0) {
+    completeReadingQuestion(question)
+    return
+  }
+
+  setReadingProgress(questionId, {
+    ...state,
+    started: true,
+    step: 0,
+    complete: 1 === state.totalSteps,
+  })
+
+  if (1 === state.totalSteps) {
+    return
+  }
+
+  stopReadingTimer(questionId)
+  readingTimers.set(
+    questionId,
+    window.setInterval(() => advanceReadingQuestion(question), READING_REFRESH_SECONDS * 1000),
+  )
+}
+
+function syncVisibleReadingQuestions() {
+  const visibleIds = new Set(visibleQuestions.value.map((question) => Number(question.id || 0)))
+  for (const questionId of readingTimers.keys()) {
+    if (!visibleIds.has(Number(questionId))) {
+      stopReadingTimer(questionId)
+    }
+  }
+
+  for (const question of visibleQuestions.value) {
+    if (!isReadingQuestion(question)) {
+      continue
+    }
+
+    if (savedQuestionIds.value.has(Number(question.id || 0))) {
+      completeReadingQuestion(question)
+      continue
+    }
+
+    if (true === settings.value.oneQuestionPerPage && !isReadingStarted(question)) {
+      startReadingQuestion(question)
+    }
+  }
+}
+
+function readingDisplayHtml(question) {
+  const html = readingText(question)
+  if (!isReadingQuestion(question) || typeof document === "undefined") {
+    return html
+  }
+
+  const state = getReadingProgress(question)
+  const wordsPerStep = readingWordsPerStep(question)
+  const container = document.createElement("div")
+  container.innerHTML = html
+
+  const textNodes = []
+  const walker = document.createTreeWalker(container, window.NodeFilter?.SHOW_TEXT || 4)
+  let textNode = walker.nextNode()
+  while (textNode) {
+    const parentTag = String(textNode.parentElement?.tagName || "").toUpperCase()
+    if (!["SCRIPT", "STYLE", "NOSCRIPT"].includes(parentTag)) {
+      textNodes.push(textNode)
+    }
+    textNode = walker.nextNode()
+  }
+
+  let wordIndex = 0
+  for (const node of textNodes) {
+    const parts = String(node.nodeValue || "").split(/(\s+)/u)
+    const fragment = document.createDocumentFragment()
+
+    for (const part of parts) {
+      if (!part) {
+        continue
+      }
+
+      if (/^\s+$/u.test(part)) {
+        fragment.appendChild(document.createTextNode(part))
+        continue
+      }
+
+      const wordStep = Math.floor(wordIndex / wordsPerStep)
+      const span = document.createElement("span")
+      span.textContent = part
+      span.classList.add("exercise-reading-word")
+      span.style.color = "transparent"
+      span.style.textShadow = "0 0 5px rgb(0 0 0 / 50%)"
+      span.style.transition = "color 0.5s linear, text-shadow 0.5s linear"
+
+      if (state.started && wordStep === state.step) {
+        span.classList.add("exercise-reading-word-active")
+        span.style.color = "inherit"
+        span.style.textShadow = "none"
+      } else if (state.started && Math.abs(wordStep - state.step) === 1) {
+        span.classList.add("exercise-reading-word-border")
+        span.style.color = "rgb(156 163 175)"
+        span.style.textShadow = "none"
+      }
+
+      fragment.appendChild(span)
+      wordIndex += 1
+    }
+
+    node.parentNode?.replaceChild(fragment, node)
+  }
+
+  return container.innerHTML
+}
+
 function isPageBreak(question) {
   return Number(question.type) === 31
 }
@@ -4697,6 +4978,7 @@ function displayText(value, fallback = "") {
 onBeforeUnmount(() => {
   stopCountdownTimer()
   stopQuestionCountdownTimer()
+  stopAllReadingTimers()
   stopRuntimeSettingsEffects()
 })
 
@@ -4731,6 +5013,7 @@ watch(
   ],
   () => {
     scheduleRuntimeHtmlEnhancement()
+    syncVisibleReadingQuestions()
     prepareVisibleOnlyofficeDocuments()
   },
 )
@@ -4765,5 +5048,25 @@ watch(
 
 .exercise-runtime-html :deep(p:last-child) {
   margin-bottom: 0;
+}
+
+.exercise-reading-text {
+  user-select: none;
+}
+
+.exercise-reading-text :deep(.exercise-reading-word) {
+  color: transparent;
+  text-shadow: 0 0 5px rgb(0 0 0 / 50%);
+  transition: color 0.12s linear, text-shadow 0.12s linear;
+}
+
+.exercise-reading-text :deep(.exercise-reading-word-active) {
+  color: inherit;
+  text-shadow: none;
+}
+
+.exercise-reading-text :deep(.exercise-reading-word-border) {
+  color: rgb(156 163 175);
+  text-shadow: none;
 }
 </style>

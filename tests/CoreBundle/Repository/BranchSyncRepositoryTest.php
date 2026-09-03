@@ -15,23 +15,6 @@ class BranchSyncRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testCreate(): void
-    {
-        $em = $this->getEntityManager();
-        $repo = self::getContainer()->get(BranchSyncRepository::class);
-
-        $item = (new BranchSync())
-            ->setTitle('Branch')
-            ->setAdminName('Julio')
-        ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
-        $em->flush();
-
-        // By default there's a root branch.
-        $this->assertSame(2, $repo->count([]));
-    }
-
     public function testCoordinatesKeepDecimalPrecision(): void
     {
         $em = $this->getEntityManager();

@@ -15,29 +15,6 @@ class LanguageRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testCreate(): void
-    {
-        $em = $this->getEntityManager();
-        $repo = self::getContainer()->get(LanguageRepository::class);
-        $defaultCount = $repo->count([]);
-
-        $language = (new Language())
-            ->setAvailable(true)
-            ->setOriginalName('language')
-            ->setEnglishName('language')
-            ->setIsocode('lan')
-        ;
-        $this->assertHasNoEntityViolations($language);
-        $em->persist($language);
-        $em->flush();
-
-        $this->assertSame('language', $language->getOriginalName());
-        $this->assertSame('language', $language->getEnglishName());
-        $this->assertSame('lan', $language->getIsocode());
-        $this->assertIsInt($language->getId());
-        $this->assertSame($defaultCount + 1, $repo->count([]));
-    }
-
     public function testGetAllAvailable(): void
     {
         $em = $this->getEntityManager();

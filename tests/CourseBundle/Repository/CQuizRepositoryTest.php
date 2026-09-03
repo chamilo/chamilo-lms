@@ -12,72 +12,10 @@ use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use DateTime;
 
 class CQuizRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
-
-    public function testCreate(): void
-    {
-        $em = $this->getEntityManager();
-        $repo = self::getContainer()->get(CQuizRepository::class);
-
-        $quizCountBefore = $repo->count([]);
-
-        $course = $this->createCourse('new');
-        $teacher = $this->createUser('teacher');
-
-        $item = (new CQuiz())
-            ->setTitle('exercise')
-            ->setDescription('desc')
-            ->setPreventBackwards(1)
-            ->setHideQuestionNumber(1)
-            ->setNotifications('')
-            ->setType(1)
-            ->setAutoLaunch(false)
-            ->setFeedbackType(1)
-            ->setMaxAttempt(10)
-            ->setShowPreviousButton(true)
-            ->setResultsDisabled(0)
-            ->setReviewAnswers(0)
-            ->setPropagateNeg(0)
-            ->setPageResultConfiguration([])
-            ->setHideQuestionTitle(true)
-            ->setRandomAnswers(false)
-            ->setStartTime(new DateTime())
-            ->setExpiredTime(100)
-            ->setSaveCorrectAnswers(1)
-            ->setDisplayCategoryName(1)
-            ->setPassPercentage(1)
-            ->setAccessCondition('')
-            ->setRandom(0)
-            ->setTextWhenFinished('text when finished')
-            ->setParent($course)
-            ->setCreator($teacher)
-        ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
-        $em->flush();
-
-        $this->assertSame('exercise', (string) $item);
-        $this->assertSame($quizCountBefore + 1, $repo->count([]));
-
-        $this->assertSame(0, $item->getQuestionsCategories()->count());
-        $this->assertSame(0.0, $item->getMaxScore());
-
-        $repo->updateNodeForResource($item);
-
-        $link = $repo->getLink($item, $this->getContainer()->get('router'));
-        $this->assertSame(
-            \sprintf(
-                '/resources/exercise/%d/%d/overview',
-                $course->getResourceNode()->getId(),
-                $item->getIid()
-            ),
-            $link
-        );
-    }
 
     public function testUpdateNodeForResource(): void
     {

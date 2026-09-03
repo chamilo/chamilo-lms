@@ -97,12 +97,12 @@ class BranchSync
 
     #[Groups(['branch:read', 'branch:write'])]
     #[Assert\Range(min: -90, max: 90)]
-    #[ORM\Column(name: 'latitude', type: 'decimal', nullable: true, unique: false)]
+    #[ORM\Column(name: 'latitude', type: 'decimal', precision: 10, scale: 8, nullable: true, unique: false)]
     protected ?string $latitude = null;
 
     #[Groups(['branch:read', 'branch:write'])]
     #[Assert\Range(min: -180, max: 180)]
-    #[ORM\Column(name: 'longitude', type: 'decimal', nullable: true, unique: false)]
+    #[ORM\Column(name: 'longitude', type: 'decimal', precision: 11, scale: 8, nullable: true, unique: false)]
     protected ?string $longitude = null;
 
     #[Groups(['branch:read', 'branch:write'])]

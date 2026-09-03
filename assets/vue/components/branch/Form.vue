@@ -260,8 +260,8 @@ const parsedLatitude = computed(() => parseCoordinate(v$.value.item.latitude.$mo
 const parsedLongitude = computed(() => parseCoordinate(v$.value.item.longitude.$model, -180, 180))
 
 function onMarkerMoved({ latitude, longitude }) {
-  v$.value.item.latitude.$model = latitude.toFixed(6)
-  v$.value.item.longitude.$model = longitude.toFixed(6)
+  v$.value.item.latitude.$model = latitude.toFixed(8)
+  v$.value.item.longitude.$model = longitude.toFixed(8)
 }
 
 watch(

@@ -170,40 +170,13 @@ class BaseResourceFileAction
      * @return array<int, array<string, int>> a single link bound to the current course context
      */
     protected function buildResourceLinkListFromContext(
-        Request $request,
+        CidReqHelper $cidReqHelper,
         array $bodyResourceLinkList,
         int $defaultVisibility = ResourceLink::VISIBILITY_PUBLISHED
     ): array {
-        $cid = 0;
-        $sid = 0;
-        $gid = 0;
-
-        if ($request->hasSession()) {
-            $session = $request->getSession();
-
-            $course = $session->get('course');
-            if ($course instanceof Course) {
-                $cid = (int) $course->getId();
-            }
-
-            $courseSession = $session->get('session');
-            if ($courseSession instanceof Session) {
-                $sid = (int) $courseSession->getId();
-            }
-
-            $group = $session->get('group');
-            if ($group instanceof CGroup) {
-                $gid = (int) $group->getIid();
-            }
-        }
-
-        // Fallback to the query parameters (kept in sync with the session by
-        // CidReqListener) in the unlikely case the session context is missing.
-        if ($cid <= 0) {
-            $cid = $request->query->getInt('cid');
-            $sid = $request->query->getInt('sid');
-            $gid = $request->query->getInt('gid');
-        }
+        $cid = (int) $cidReqHelper->getCourseEntity()?->getId();
+        $sid = (int) $cidReqHelper->getSessionEntity()?->getId();
+        $gid = (int) $cidReqHelper->getGroupEntity()?->getIid();
 
         // Visibility is the only field still honored from the body.
         $visibility = $defaultVisibility;
@@ -294,8 +267,13 @@ class BaseResourceFileAction
     /**
      * @todo use this function inside handleCreateFileRequest
      */
-    protected function handleCreateRequest(AbstractResource $resource, ResourceRepository $resourceRepository, Request $request): array
-    {
+    protected function handleCreateRequest(
+        AbstractResource $resource,
+        ResourceRepository $resourceRepository,
+        Request $request,
+        CidReqHelper $cidReqHelper,
+        EntityManagerInterface $em
+    ): array {
         $contentData = $request->getContent();
 
         if (!empty($contentData)) {
@@ -327,6 +305,8 @@ class BaseResourceFileAction
             throw new Exception('Parameter parentResourceNodeId int value is needed');
         }
 
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em);
+
         $resource->setParentResourceNode($parentResourceNodeId);
 
         if (empty($title)) {
@@ -348,6 +328,7 @@ class BaseResourceFileAction
         ResourceRepository $resourceRepository,
         Request $request,
         EntityManager $em,
+        CidReqHelper $cidReqHelper,
         string $fileExistsOption = '',
         ?TranslatorInterface $translator = null
     ): array {
@@ -364,6 +345,8 @@ class BaseResourceFileAction
         if (0 === $parentResourceNodeId) {
             throw new Exception('parentResourceNodeId int value needed');
         }
+
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em);
 
         $resource->setParentResourceNode($parentResourceNodeId);
 
@@ -385,6 +368,7 @@ class BaseResourceFileAction
         ResourceRepository $resourceRepository,
         Request $request,
         EntityManager $em,
+        CidReqHelper $cidReqHelper,
         string $fileExistsOption = '',
         ?TranslatorInterface $translator = null,
         ?CourseRepository $courseRepository = null,
@@ -434,6 +418,8 @@ class BaseResourceFileAction
         if (0 === $parentResourceNodeId) {
             throw new Exception('parentResourceNodeId int value needed');
         }
+
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em);
 
         $resource->setParentResourceNode($parentResourceNodeId);
 
@@ -601,6 +587,7 @@ class BaseResourceFileAction
         Request $request,
         EntityManager $em,
         KernelInterface $kernel,
+        CidReqHelper $cidReqHelper,
         ?CourseRepository $courseRepository = null,
         ?CDocumentRepository $documentRepository = null,
         ?CourseHelper $courseHelper = null,
@@ -638,6 +625,10 @@ class BaseResourceFileAction
         if (0 === $parentResourceNodeId) {
             throw new Exception('parentResourceNodeId int value needed');
         }
+
+        // Before extracting: saveZipContentsAsDocuments() writes every entry under this parent,
+        // so an unchecked id would seed a whole tree into a foreign course.
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em);
 
         if ('file' === $fileType && $request->files->count() > 0) {
             if (!$request->files->has('uploadFile')) {

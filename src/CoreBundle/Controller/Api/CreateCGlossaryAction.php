@@ -28,7 +28,7 @@ final class CreateCGlossaryAction extends BaseResourceFileAction
         $parentResourceNodeId = $data['parentResourceNodeId'] ?? null;
         $bodyResourceLinkList = json_decode((string) ($data['resourceLinkList'] ?? '[]'), true);
         $resourceLinkList = $this->buildResourceLinkListFromContext(
-            $request,
+            $cidReqHelper,
             \is_array($bodyResourceLinkList) ? $bodyResourceLinkList : [],
         );
 

@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
@@ -33,6 +34,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         TranslatorInterface $translator,
         MessageHelper $messageHelper,
         Security $security,
+        CidReqHelper $cidReqHelper,
         AiDisclosureHelper $aiDisclosureHelper
     ): CStudentPublicationComment {
         $fileExistsOption = $request->get('fileExistsOption', 'rename');
@@ -48,6 +50,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
                 $commentRepo,
                 $request,
                 $em,
+                $cidReqHelper,
                 $fileExistsOption,
                 $translator
             );

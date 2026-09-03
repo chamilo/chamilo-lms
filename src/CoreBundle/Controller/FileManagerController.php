@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
 use Chamilo\CoreBundle\Entity\PersonalFile;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +29,8 @@ class FileManagerController extends AbstractController
     public function __construct(
         BaseResourceFileAction $baseResourceFileAction,
         PersonalFileRepository $personalFileRepository,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        private readonly CidReqHelper $cidReqHelper,
     ) {
         $this->baseResourceFileAction = $baseResourceFileAction;
         $this->personalFileRepository = $personalFileRepository;
@@ -48,6 +50,7 @@ class FileManagerController extends AbstractController
             $this->personalFileRepository,
             $request,
             $this->entityManager,
+            $this->cidReqHelper,
             'overwrite'
         );
 

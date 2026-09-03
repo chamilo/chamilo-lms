@@ -42,7 +42,7 @@ final class ExportGlossaryToDocumentsAction extends BaseResourceFileAction
         }
 
         $resourceLinkList = $this->buildResourceLinkListFromContext(
-            $request,
+            $cidReqHelper,
             \is_array($resourceLinkListRaw) ? $resourceLinkListRaw : [],
         );
 

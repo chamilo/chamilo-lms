@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -31,6 +32,7 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         KernelInterface $kernel,
         TranslatorInterface $translator,
         Security $security,
+        CidReqHelper $cidReqHelper,
         SettingsManager $settingsManager
     ): CStudentPublication {
         $cid = (int) $request->query->get('cid', 0);
@@ -50,6 +52,7 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
             $repo,
             $request,
             $em,
+            $cidReqHelper,
             $fileExistsOption,
             $translator
         );

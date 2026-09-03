@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -28,6 +29,7 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
         TranslatorInterface $translator,
         CourseRepository $courseRepository,
         CourseHelper $courseHelper,
+        CidReqHelper $cidReqHelper,
         AiDisclosureHelper $aiDisclosureHelper,
     ): CDocument {
         // The link context (cid/sid/gid) is taken from the session-resolved
@@ -35,7 +37,7 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
         // makes it impossible for the body to target a foreign course (IDOR):
         // the body is only allowed to carry the link visibility.
         $resourceLinkList = $this->buildResourceLinkListFromContext(
-            $request,
+            $cidReqHelper,
             $this->extractResourceLinkListFromRequest($request),
             ResourceLink::VISIBILITY_PUBLISHED
         );
@@ -53,6 +55,7 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
                 $request,
                 $em,
                 $kernel,
+                $cidReqHelper,
                 $courseRepository,
                 $repo,
                 $courseHelper,
@@ -64,6 +67,7 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
                 $repo,
                 $request,
                 $em,
+                $cidReqHelper,
                 $fileExistsOption,
                 $translator,
                 $courseRepository,

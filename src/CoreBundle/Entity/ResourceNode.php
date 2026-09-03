@@ -134,8 +134,11 @@ class ResourceNode implements Stringable
     #[ORM\OneToMany(mappedBy: 'resourceNode', targetEntity: ResourceLink::class, cascade: ['persist', 'remove'])]
     protected Collection $resourceLinks;
 
+    // Read-only on purpose: ResourceListener assigns the creator, either from the
+    // resource or from the authenticated user. Leaving it writable let anyone with
+    // EDIT on a node hand its ownership to somebody else.
     #[Assert\NotNull]
-    #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
+    #[Groups(['resource_node:read'])]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?User $creator = null;

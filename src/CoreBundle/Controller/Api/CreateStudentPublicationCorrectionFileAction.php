@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
@@ -29,6 +30,7 @@ class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileActio
         EntityManager $em,
         KernelInterface $kernel,
         TranslatorInterface $translator,
+        CidReqHelper $cidReqHelper,
         Security $security
     ): CStudentPublicationCorrection {
         $submissionId = (int) $request->request->get('submissionId');
@@ -59,6 +61,7 @@ class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileActio
             $correctionRepo,
             $request,
             $em,
+            $cidReqHelper,
             $fileExistsOption,
             $translator
         );

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -37,6 +38,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         TranslatorInterface $translator,
         MessageHelper $messageHelper,
         Security $security,
+        CidReqHelper $cidReqHelper,
         AiDisclosureHelper $aiDisclosureHelper
     ): CStudentPublicationComment {
         $fileExistsOption = $request->request->get('fileExistsOption', 'rename');
@@ -52,6 +54,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
                 $commentRepo,
                 $request,
                 $em,
+                $cidReqHelper,
                 $fileExistsOption,
                 $translator
             );

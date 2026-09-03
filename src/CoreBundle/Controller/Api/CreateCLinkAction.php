@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
@@ -29,6 +30,7 @@ class CreateCLinkAction extends BaseResourceFileAction
         CLinkRepository $repo,
         EntityManager $em,
         CShortcutRepository $shortcutRepository,
+        CidReqHelper $cidReqHelper,
         Security $security,
     ): CLink {
         try {
@@ -49,7 +51,7 @@ class CreateCLinkAction extends BaseResourceFileAction
         $target = $data['target'];
         $parentResourceNodeId = $data['parentResourceNodeId'];
         $resourceLinkList = $this->buildResourceLinkListFromContext(
-            $request,
+            $cidReqHelper,
             $this->decodeResourceLinkList($data['resourceLinkList'] ?? []),
         );
 

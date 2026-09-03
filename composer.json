@@ -150,6 +150,7 @@
     "symfony/mailjet-mailer": "7.4.*",
     "symfony/mcp-bundle": "^0.12",
     "symfony/messenger": "7.4.*",
+    "symfony/microsoft-graph-mailer": "7.4.*",
     "symfony/mime": "7.4.*",
     "symfony/monolog-bundle": "^3.1",
     "symfony/notifier": "7.4.*",

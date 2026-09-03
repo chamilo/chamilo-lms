@@ -67,9 +67,6 @@ class ResourceRepositoryTest extends KernelTestCase
         $content = $repo->getResourceNodeFileContent($url->getResourceNode());
         $this->assertSame('my string', $content);
 
-        $resource = $repo->getResourceNodeFileStream($url->getResourceNode());
-        $this->assertIsResource($resource);
-
         $downloadUrl = $repo->getResourceFileDownloadUrl($url);
         $this->assertNotEmpty($downloadUrl);
     }

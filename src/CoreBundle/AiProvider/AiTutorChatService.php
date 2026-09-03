@@ -37,7 +37,7 @@ final class AiTutorChatService
 
     private const string DEFAULT_PROVIDER = 'openai';
     private const string ACTIVE_PROVIDER_SESSION_PREFIX = 'ai_tutor_active_provider_';
-    public const string OFFICIAL_DOCUMENTATION_URL = 'https://docs.chamilo.org';
+    public const string OFFICIAL_DOCUMENTATION_URL = 'https://docs.chamilo.org/student-guide';
 
     public function __construct(
         private readonly RequestStack $requestStack,
@@ -642,7 +642,7 @@ final class AiTutorChatService
         string $currentPath = ''
     ): string {
         $lang = trim($courseLanguage);
-        $documentationUrl = self::OFFICIAL_DOCUMENTATION_URL.'/';
+        $documentationUrl = self::OFFICIAL_DOCUMENTATION_URL;
 
         if ($course instanceof Course) {
             if ('' === $lang && method_exists($course, 'getCourseLanguage')) {

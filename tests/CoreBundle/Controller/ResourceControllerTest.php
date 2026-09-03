@@ -204,9 +204,9 @@ class ResourceControllerTest extends WebTestCase
         $documentRepo->create($htmlDocument);
         $documentRepo->addFileFromString(
             $htmlDocument,
-            '<html><body><img src="/r/document/files/'.$embeddedUuid.'/view" alt="embedded"></body></html>',
-            'text/html',
             'lp-page.html',
+            'text/html',
+            '<html><body><img src="/r/document/files/'.$embeddedUuid.'/view" alt="embedded"></body></html>',
             true
         );
 
@@ -217,7 +217,12 @@ class ResourceControllerTest extends WebTestCase
         );
 
         $this->assertResponseIsSuccessful();
-        $content = (string) $client->getResponse()->getContent();
+
+        // The view action answers with a StreamedResponse, whose body the browser
+        // already drained into the internal response; getResponse()->getContent()
+        // would be empty.
+        $content = (string) $client->getInternalResponse()->getContent();
+
         self::assertStringContainsString(
             '/r/document/files/'.$embeddedUuid.'/view?origin=learnpath&amp;cid='.$course->getId().'&amp;lp_id=42&amp;lp_item_id=84',
             $content
@@ -329,7 +334,14 @@ class ResourceControllerTest extends WebTestCase
         $url = '/r/learnpath/lps/'.$lp->getResourceNode()->getId().'/link?cid='.$course->getId();
         $client->request('GET', $url);
 
-        $redirects = '/main/lp/lp_controller.php?lp_id='.$lp->getIid().'&action=view&cid='.$course->getId().'&sid=0';
+        // The learning path runtime lives on a resource route now, and it signals
+        // the student view in the URL because a lesson embeds other tools.
+        $redirects = \sprintf(
+            '/resources/lp/%d/%d/runtime?cid=%d&sid=0&origin=learnpath&isStudentView=true',
+            $course->getResourceNode()->getId(),
+            $lp->getIid(),
+            $course->getId()
+        );
         $this->assertResponseRedirects($redirects);
 
         $url = '/r/document/files/'.$lp->getResourceNode()->getId().'/link';

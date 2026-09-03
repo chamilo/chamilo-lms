@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\MessageTagRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -626,9 +627,8 @@ class MessageRepositoryTest extends AbstractApiTest
      */
     private function setPlatformSenderAddress(): void
     {
-        $this->getEntityManager()->getConnection()->executeStatement(
-            "UPDATE settings SET selected_value = :address WHERE variable = 'mailer_from_email'",
-            ['address' => 'noreply@example.com']
-        );
+        self::getContainer()->get(SettingsManager::class)
+            ->updateSetting('mail.mailer_from_email', 'noreply@example.com')
+        ;
     }
 }

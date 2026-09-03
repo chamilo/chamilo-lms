@@ -217,7 +217,14 @@ class CourseControllerTest extends WebTestCase
         foreach ($schemas as $name => $schema) {
             $category = $courseSettingsManager->convertServiceToNameSpace($name);
             $client->request('GET', '/course/'.$course->getId().'/settings/'.$category);
-            $this->assertResponseIsSuccessful();
+
+            // A category whose settings page already moved out of the legacy form
+            // answers with a redirect to its new location rather than rendering.
+            $this->assertContains(
+                $client->getResponse()->getStatusCode(),
+                [Response::HTTP_OK, Response::HTTP_FOUND],
+                \sprintf('Course settings category "%s" is not reachable', $category)
+            );
         }
     }
 

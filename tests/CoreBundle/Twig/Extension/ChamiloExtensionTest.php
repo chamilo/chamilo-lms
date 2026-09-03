@@ -23,6 +23,7 @@ class ChamiloExtensionTest extends AbstractApiTest
         $user = $this->createUser('test');
         $illustrationUrl = $extension->getIllustration($user);
 
-        $this->assertSame('/img/icons/32/unknown.png', $illustrationUrl);
+        // The placeholder for a user with no picture, per UserRepository.
+        $this->assertSame('/img/user_default.svg', $illustrationUrl);
     }
 }

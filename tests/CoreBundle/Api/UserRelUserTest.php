@@ -152,7 +152,9 @@ class UserRelUserTest extends AbstractApiTest
 
         $this->assertSame(1, $user->getFriends()->count());
 
-        // friend2 can get the friend list from user
+        // friend2 cannot read somebody else's relations: UserRelUserExtension keeps
+        // the collection to the ones the caller takes part in, which is the same
+        // rule UserRelUserVoter applies to a single relation.
         $tokenFriend2 = $this->getUserToken(
             [
                 'username' => 'friend2',
@@ -164,7 +166,7 @@ class UserRelUserTest extends AbstractApiTest
             'GET',
             '/api/user_rel_users',
             [
-                'json' => [
+                'query' => [
                     'user' => $user->getIri(),
                 ],
             ]
@@ -177,7 +179,7 @@ class UserRelUserTest extends AbstractApiTest
             [
                 '@context' => '/api/contexts/UserRelUser',
                 '@type' => 'hydra:Collection',
-                'hydra:totalItems' => 1,
+                'hydra:totalItems' => 0,
             ]
         );
 

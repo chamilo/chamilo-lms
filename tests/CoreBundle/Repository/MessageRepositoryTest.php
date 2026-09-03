@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\MessageTagRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -613,5 +614,16 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $messages = $messageRepo->getMessageByUser($testUser, Message::MESSAGE_TYPE_INBOX);
         $this->assertSame(1, \count($messages));
+    }
+
+    /**
+     * MailHelper gives up without a sender address, and the fixtures leave it
+     * empty because a real install takes it from the installer.
+     */
+    private function setPlatformSenderAddress(): void
+    {
+        self::getContainer()->get(SettingsManager::class)
+            ->updateSetting('mail.mailer_from_email', 'noreply@example.com')
+        ;
     }
 }

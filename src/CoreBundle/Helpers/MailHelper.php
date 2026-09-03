@@ -61,11 +61,15 @@ final class MailHelper
         return new Address((string) $fromEmail, (string) $fromName);
     }
 
+    /**
+     * Returns false when the platform has no usable sender address, so the caller
+     * can give up instead of letting Address reject an empty string.
+     */
     private function setNoreplyAndFromAddress(
         TemplatedEmail $email,
         array $sender,
         array $replyToAddress = []
-    ): void {
+    ): bool {
         $emailConstraint = new Assert\Email();
 
         // Default values
@@ -76,6 +80,13 @@ final class MailHelper
         // If the parameter is set, don't use the admin.
         $senderName = !empty($sender['name']) ? $sender['name'] : $defaultSenderName;
         $senderEmail = !empty($sender['email']) ? $sender['email'] : $defaultSenderEmail;
+
+        // Neither mail.mailer_from_email nor admin.administrator_email is set, which
+        // is the state of a database that never went through the installer. Note
+        // Assert\Email accepts the empty string, so it cannot answer this on its own.
+        if (!api_valid_email((string) $senderEmail)) {
+            return false;
+        }
 
         $adminEmail = $this->settingsManager->getSetting('admin.administrator_email', true);
         $adminEmailValidation = $this->validator->validate($adminEmail, $emailConstraint);
@@ -89,14 +100,14 @@ final class MailHelper
 
         // Reply to first
         if (!empty($replyToAddress) && isset($replyToAddress['mail'], $replyToAddress['name'])) {
-            $replyToEmailValidation = $this->validator->validate($replyToAddress['mail'], $emailConstraint);
-
-            if (0 === $replyToEmailValidation->count()) {
+            if (api_valid_email((string) $replyToAddress['mail'])) {
                 $email->addReplyTo(new Address($replyToAddress['mail'], $replyToAddress['name']));
             }
         }
 
         $email->from(new Address($senderEmail, $senderName));
+
+        return true;
     }
 
     public function send(
@@ -118,11 +129,17 @@ final class MailHelper
 
         $templatedEmail = new TemplatedEmail();
 
-        $this->setNoreplyAndFromAddress(
+        $hasSender = $this->setNoreplyAndFromAddress(
             $templatedEmail,
             ['name' => $senderName, 'email' => $senderEmail],
             !empty($extra_headers['reply_to']) ? $extra_headers['reply_to'] : []
         );
+
+        if (!$hasSender) {
+            error_log('MailHelper: no platform sender address configured, mail not sent.');
+
+            return false;
+        }
 
         if ($sendErrorTo) {
             $templatedEmail

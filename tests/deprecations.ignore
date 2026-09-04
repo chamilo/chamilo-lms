@@ -1,0 +1,24 @@
+# Deprecations this codebase deliberately carries, one PCRE pattern per line.
+# Lines starting with "#" are comments. Read by symfony/phpunit-bridge through
+# the ignoreFile option of SYMFONY_DEPRECATIONS_HELPER in .env.test.
+#
+# Unlike the baseline file, entries here are not tied to a test or a count: they
+# stay silent no matter where they fire. Use it only for a deprecation that is
+# knowingly deferred, and always say until what.
+#
+# ---------------------------------------------------------------------------
+# doctrine/collections 2.4: raw field value access on the Criteria matching API.
+#
+# Opting in (Criteria::create(true)) makes the in-memory matching read fields by
+# reflection instead of going through getters. The library's own UPGRADE.md warns
+# that this stops generated ORM proxies from initializing, so their fields read
+# back as null and the filtering silently returns wrong results; the mitigation
+# it offers is PHP 8.4 native lazy objects.
+#
+# This install cannot take that mitigation yet: composer.json requires ^8.3, CI
+# runs 8.3, and config/packages/doctrine.yaml uses generated proxies
+# (enable_lazy_ghost_objects), while enable_native_lazy_objects defaults to false.
+#
+# Remove this entry once the minimum PHP is 8.4 and native lazy objects are on,
+# then pass true at every Criteria::create() call site.
+%^Not enabling raw field value access for .+ is deprecated\. Raw field access will be the only supported method in 3\.0%

@@ -13,7 +13,8 @@ declare(strict_types=1);
  * This script:
  *  1. Takes en_US.php as the source of truth for each plugin.
  *  2. Completes missing (or empty) keys in existing language files (leaves
- *     non-empty translations untouched).
+ *     non-empty translations untouched). A translation that is identical to
+ *     the English source is treated as untranslated and re-sent for translation.
  *  3. Creates new language files for languages that are missing from a plugin.
  *
  * Usage (run from any directory):
@@ -706,17 +707,26 @@ foreach ($plugins as $plugin) {
 
         $existing = parsePluginLangFile($targetFile);
 
-        // Keys that need translation: absent or empty in the target file.
+        // Keys that need translation: absent, empty, or identical to the English
+        // source in the target file. A translation left exactly equal to the
+        // English source means it was never actually translated, so it is treated
+        // as empty and re-sent to the API.
         // Source keys whose own value is empty or whitespace-only carry no
         // translatable content, so they are never sent to the API (otherwise a
         // whitespace-only source like ' ' would be re-flagged on every run,
         // since trim() reduces it to '' regardless of how it was written back).
         $toTranslate = [];
         foreach ($sourceStrings as $key => $sourceValue) {
-            if (trim((string) $sourceValue) === '') {
+            $trimmedSource = trim((string) $sourceValue);
+            if ($trimmedSource === '') {
                 continue;
             }
-            if (!array_key_exists($key, $existing) || trim((string) $existing[$key]) === '') {
+            if (!array_key_exists($key, $existing)) {
+                $toTranslate[$key] = $sourceValue;
+                continue;
+            }
+            $trimmedExisting = trim((string) $existing[$key]);
+            if ('' === $trimmedExisting || $trimmedExisting === $trimmedSource) {
                 $toTranslate[$key] = $sourceValue;
             }
         }

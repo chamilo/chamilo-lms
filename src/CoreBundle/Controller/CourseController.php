@@ -1121,6 +1121,7 @@ class CourseController extends ToolBaseController
             'token' => \Security::get_token(),
             'base_url' => $request->getSchemeAndHttpHost(),
             'allow_subscribe' => $allowSubscribe,
+            'room_location' => $this->buildCourseRoomLocation($course),
         ];
 
         $metaInfo = '<meta property="og:url" content="'.htmlspecialchars($urlCourse, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
@@ -1133,6 +1134,56 @@ class CourseController extends ToolBaseController
         $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 
         return $this->render('@ChamiloCore/Course/about.html.twig', $params);
+    }
+
+    private function buildCourseRoomLocation(Course $course): ?array
+    {
+        $room = $course->getRoom();
+        if (null === $room) {
+            return null;
+        }
+
+        $geolocation = trim((string) $room->getGeolocation());
+        if ('' === $geolocation) {
+            return null;
+        }
+
+        $parts = array_map('trim', explode(',', $geolocation));
+        if (2 !== \count($parts) || !is_numeric($parts[0]) || !is_numeric($parts[1])) {
+            return null;
+        }
+
+        $latitude = (float) $parts[0];
+        $longitude = (float) $parts[1];
+
+        if ($latitude < -90.0 || $latitude > 90.0 || $longitude < -180.0 || $longitude > 180.0) {
+            return null;
+        }
+
+        $delta = 0.05;
+        $bbox = implode(',', [
+            $longitude - $delta,
+            $latitude - $delta,
+            $longitude + $delta,
+            $latitude + $delta,
+        ]);
+        $marker = $latitude.','.$longitude;
+
+        return [
+            'title' => $room->getTitle(),
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'embed_url' => 'https://www.openstreetmap.org/export/embed.html?'.http_build_query(
+                [
+                    'bbox' => $bbox,
+                    'layer' => 'mapnik',
+                    'marker' => $marker,
+                ],
+                '',
+                '&',
+                PHP_QUERY_RFC3986,
+            ),
+        ];
     }
 
     private function buildCourseAboutDescriptionSection(CCourseDescription $description): ?array

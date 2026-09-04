@@ -384,6 +384,11 @@ if ('' !== $searchUser) {
     ));
 }
 
+usort(
+    $servicesSales,
+    static fn (array $a, array $b): int => strtotime((string) ($b['buy_date'] ?? '')) <=> strtotime((string) ($a['buy_date'] ?? ''))
+);
+
 $interbreadcrumb[] = [
     'url' => '../index.php',
     'name' => $plugin->get_lang('plugin_title'),

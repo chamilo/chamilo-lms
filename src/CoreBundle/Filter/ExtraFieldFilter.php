@@ -109,7 +109,7 @@ class ExtraFieldFilter extends AbstractFilter
                     ->innerJoin(
                         ExtraFieldValues::class,
                         $efvAlias,
-                        Join::WITH,
+                        Join::ON,
                         $queryBuilder->expr()->andX(
                             $queryBuilder->expr()->eq("$efvAlias.field", $ef->getId()),
                             $queryBuilder->expr()->eq("$alias.id", "$efvAlias.itemId")

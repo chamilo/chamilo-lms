@@ -1054,7 +1054,7 @@ final readonly class AdminStatisticsQueryService
             ->innerJoin(
                 AccessUrlRelCourse::class,
                 $alias,
-                Join::WITH,
+                Join::ON,
                 'IDENTITY('.$alias.'.course) = '.$courseIdExpression
             )
             ->andWhere('IDENTITY('.$alias.'.url) = :'.$alias.'UrlId')

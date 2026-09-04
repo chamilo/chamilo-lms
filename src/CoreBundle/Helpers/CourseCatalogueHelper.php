@@ -156,7 +156,7 @@ readonly class CourseCatalogueHelper
             ->innerJoin(
                 ExtraFieldValues::class,
                 'efv_show_in_catalogue',
-                Join::WITH,
+                Join::ON,
                 $qb->expr()->andX(
                     $qb->expr()->eq('efv_show_in_catalogue.field', $efShowInCatalogue->getId()),
                     $qb->expr()->eq('efv_show_in_catalogue.itemId', 'c')
@@ -265,7 +265,7 @@ readonly class CourseCatalogueHelper
                 ->leftJoin(
                     ExtraFieldValues::class,
                     'efv_hide_from_catalog',
-                    Join::WITH,
+                    Join::ON,
                     $qb->expr()->andX(
                         $qb->expr()->eq('efv_hide_from_catalog.field', $efHideFromCatalog->getId()),
                         $qb->expr()->eq('efv_hide_from_catalog.itemId', 'c')

@@ -6030,7 +6030,7 @@ EOT;
             ->createQuery('SELECT COUNT(qq)
                 FROM Chamilo\CourseBundle\Entity\CQuizQuestion qq
                 INNER JOIN Chamilo\CourseBundle\Entity\CQuizRelQuestion qrq
-                   WITH qq.iid = qrq.question
+                   ON qq.iid = qrq.question
                 WHERE qrq.quiz = :id'
             )
             ->setParameter('id', $exercise->getIid())
@@ -6040,7 +6040,7 @@ EOT;
             ->createQuery('SELECT COUNT(qq)
                 FROM Chamilo\CourseBundle\Entity\CQuizQuestion qq
                 INNER JOIN Chamilo\CourseBundle\Entity\CQuizRelQuestion qrq
-                   WITH qq.iid = qrq.question
+                   ON qq.iid = qrq.question
                 WHERE qrq.quiz = :id AND qq.type IN (:types)'
             )
             ->setParameters(

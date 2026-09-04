@@ -146,7 +146,7 @@ class CourseRepository extends ResourceRepository
         $queryBuilder->innerJoin(
             User::class,
             'user',
-            Join::WITH,
+            Join::ON,
             'subscriptions.user = user.id'
         );
 
@@ -456,7 +456,7 @@ class CourseRepository extends ResourceRepository
         $qb
             ->select('DISTINCT user')
             ->from(User::class, 'user')
-            ->innerJoin(CourseRelUser::class, 'courseRelUser', Join::WITH, 'courseRelUser.user = user.id')
+            ->innerJoin(CourseRelUser::class, 'courseRelUser', Join::ON, 'courseRelUser.user = user.id')
             ->where('courseRelUser.course = :course')
             ->setParameter('course', $course)
             ->orderBy('user.lastname', 'ASC')

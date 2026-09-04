@@ -824,7 +824,7 @@ class CoursesAndSessionsCatalog
                     $qb3
                         ->select('s3')
                         ->from(ExtraFieldValues::class, 'fv')
-                        ->innerJoin(Session::class, 's3', Join::WITH, 'fv.itemId = s3.id')
+                        ->innerJoin(Session::class, 's3', Join::ON, 'fv.itemId = s3.id')
                         ->where(
                             $qb->expr()->eq('fv.field', $extraFieldInfo['id'])
                         )->andWhere(
@@ -859,31 +859,31 @@ class CoursesAndSessionsCatalog
             ->innerJoin(
                 SessionRelCourse::class,
                 'src',
-                Join::WITH,
+                Join::ON,
                 's.id = src.session'
             )
             ->innerJoin(
                 AccessUrlRelSession::class,
                 'url',
-                Join::WITH,
+                Join::ON,
                 'url.sessionId = s.id'
             )
             ->innerJoin(
                 ExtraFieldRelTag::class,
                 'frt',
-                Join::WITH,
+                Join::ON,
                 'src.course = frt.itemId'
             )
             ->innerJoin(
                 Tag::class,
                 't',
-                Join::WITH,
+                Join::ON,
                 'frt.tagId = t.id'
             )
             ->innerJoin(
                 ExtraField::class,
                 'f',
-                Join::WITH,
+                Join::ON,
                 'frt.fieldId = f.id'
             )
             ->where(
@@ -935,13 +935,13 @@ class CoursesAndSessionsCatalog
             ->innerJoin(
                 SessionRelCourse::class,
                 'src',
-                Join::WITH,
+                Join::ON,
                 's.id = src.session'
             )
             ->innerJoin(
                 AccessUrlRelSession::class,
                 'url',
-                Join::WITH,
+                Join::ON,
                 'url.sessionId = s.id'
             )
             ->andWhere($qb->expr()->eq('url.accessUrlId', $urlId))

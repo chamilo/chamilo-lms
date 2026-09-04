@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -63,7 +64,7 @@ class RoomOccupationController extends BaseController
             ->leftJoin(
                 SessionRelCourse::class,
                 'src',
-                'WITH',
+                Join::ON,
                 'src.session = rl.session AND src.course = rl.course'
             )
             ->where('cal.dateTime >= :start')

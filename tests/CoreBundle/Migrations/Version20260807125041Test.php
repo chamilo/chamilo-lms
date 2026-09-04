@@ -7,8 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Migrations;
 
 use Chamilo\CoreBundle\Migrations\Schema\V300\Version20260807125041;
+use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Schema\DefaultSchemaManagerFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -30,7 +32,15 @@ final class Version20260807125041Test extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);
+        // DBAL 4 makes this factory the only option; declaring it keeps the
+        // connection off the deprecated auto-detection path.
+        $configuration = new Configuration();
+        $configuration->setSchemaManagerFactory(new DefaultSchemaManagerFactory());
+
+        $this->connection = DriverManager::getConnection(
+            ['driver' => 'pdo_sqlite', 'memory' => true],
+            $configuration
+        );
         $this->connection->executeStatement(
             'CREATE TABLE settings_value_template (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,

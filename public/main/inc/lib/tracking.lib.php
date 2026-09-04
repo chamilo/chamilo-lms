@@ -6780,7 +6780,7 @@ class Tracking
                 SELECT csp
                 FROM Chamilo\CourseBundle\Entity\CStudentPublication csp
                 INNER JOIN Chamilo\CourseBundle\Entity\CItemProperty cip
-                    WITH (
+                    ON (
                         csp.iid = cip.ref AND
                         csp.session = cip.session AND
                         csp.cId = cip.course AND

@@ -855,7 +855,7 @@ class CourseChatUtils
                 ->createQuery(
                     'SELECT u FROM Chamilo\CoreBundle\Entity\User u
                      INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelUser gru
-                        WITH u.id = gru.userId AND gru.cId = :course
+                        ON u.id = gru.userId AND gru.cId = :course
                      WHERE u.id != :user AND gru.groupId = :group
                        AND u.active = true'
                 )
@@ -866,7 +866,7 @@ class CourseChatUtils
                 ->createQuery(
                     'SELECT u FROM Chamilo\CoreBundle\Entity\User u
                      INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelTutor grt
-                        WITH u.id = grt.userId AND grt.cId = :course
+                        ON u.id = grt.userId AND grt.cId = :course
                      WHERE u.id != :user AND grt.groupId = :group
                        AND u.active = true'
                 )

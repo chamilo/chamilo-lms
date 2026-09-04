@@ -339,7 +339,7 @@ class AnnouncementManager
         $dql = "SELECT a
                 FROM Chamilo\CourseBundle\Entity\CAnnouncement a
                 JOIN Chamilo\CourseBundle\Entity\CItemProperty ip
-                WITH a.id = ip.ref AND a.cId = ip.course
+                ON a.id = ip.ref AND a.cId = ip.course
                 WHERE
                     ip.tool = 'announcement' AND
                     a.cId = :course AND
@@ -391,7 +391,7 @@ class AnnouncementManager
             $dql = "SELECT a, ip
                     FROM Chamilo\CourseBundle\Entity\CAnnouncement a
                     JOIN Chamilo\CourseBundle\Entity\CItemProperty ip
-                    WITH a.id = ip.ref AND a.cId = ip.course
+                    ON a.id = ip.ref AND a.cId = ip.course
                     WHERE
                         a.id = :announcement AND
                         ip.tool = 'announcement' AND
@@ -416,7 +416,7 @@ class AnnouncementManager
                 $dql = "SELECT a, ip
                         FROM Chamilo\CourseBundle\Entity\CAnnouncement a
                         JOIN Chamilo\CourseBundle\Entity\CItemProperty ip
-                        WITH a.id = ip.ref AND a.cId = ip.course
+                        ON a.id = ip.ref AND a.cId = ip.course
                         WHERE
                             a.id = :announcement AND
                             ip.tool='announcement' AND
@@ -433,7 +433,7 @@ class AnnouncementManager
                 $dql = "SELECT a, ip
                         FROM Chamilo\CourseBundle\Entity\CAnnouncement a
                         JOIN Chamilo\CourseBundle\Entity\CItemProperty ip
-                        WITH a.id = ip.ref AND a.cId = ip.course
+                        ON a.id = ip.ref AND a.cId = ip.course
                         WHERE
                             a.id = :announcement AND
                             ip.tool = 'announcement' AND

@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
 /**
@@ -106,8 +107,8 @@ class ResourceLinkRepository extends SortableRepository
         $queryBuilder
             ->select('DISTINCT t.id, t.title')
             ->from(ResourceLink::class, 'rl')
-            ->innerJoin(ResourceType::class, 'rt', 'WITH', 'rt.id = rl.resourceTypeGroup')
-            ->innerJoin(Tool::class, 't', 'WITH', 't.id = rt.tool')
+            ->innerJoin(ResourceType::class, 'rt', Join::ON, 'rt.id = rl.resourceTypeGroup')
+            ->innerJoin(Tool::class, 't', Join::ON, 't.id = rt.tool')
             ->where('rl.course IS NOT NULL')
             ->andWhere('t.title IN (:toolList)')
             ->setParameter('toolList', array_keys($this->toolList))
@@ -144,10 +145,10 @@ class ResourceLinkRepository extends SortableRepository
                 'MAX(rl.updatedAt) AS last_updated'
             )
             ->from(ResourceLink::class, 'rl')
-            ->innerJoin(ResourceType::class, 'rt', 'WITH', 'rt.id = rl.resourceTypeGroup')
-            ->innerJoin(Tool::class, 't', 'WITH', 't.id = rt.tool')
-            ->innerJoin(Course::class, 'c', 'WITH', 'c.id = rl.course')
-            ->leftJoin(Session::class, 's', 'WITH', 's.id = rl.session')
+            ->innerJoin(ResourceType::class, 'rt', Join::ON, 'rt.id = rl.resourceTypeGroup')
+            ->innerJoin(Tool::class, 't', Join::ON, 't.id = rt.tool')
+            ->innerJoin(Course::class, 'c', Join::ON, 'c.id = rl.course')
+            ->leftJoin(Session::class, 's', Join::ON, 's.id = rl.session')
             ->where($queryBuilder->expr()->in('t.id', ':toolIds'))
             ->groupBy('rl.course, rl.session, t.title')
             ->orderBy('t.title', 'ASC')

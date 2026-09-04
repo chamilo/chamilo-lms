@@ -97,8 +97,8 @@ class PortfolioRepository extends ResourceRepository
 
         if ($tags) {
             $queryBuilder
-                ->innerJoin(ExtraFieldRelTag::class, 'efrt', Join::WITH, 'efrt.itemId = resource.id')
-                ->innerJoin(ExtraField::class, 'ef', Join::WITH, 'ef.id = efrt.fieldId')
+                ->innerJoin(ExtraFieldRelTag::class, 'efrt', Join::ON, 'efrt.itemId = resource.id')
+                ->innerJoin(ExtraField::class, 'ef', Join::ON, 'ef.id = efrt.fieldId')
                 ->andWhere('ef.extraFieldType = :efType')
                 ->andWhere('ef.variable = :variable')
                 ->andWhere('efrt.tagId IN (:tags)')

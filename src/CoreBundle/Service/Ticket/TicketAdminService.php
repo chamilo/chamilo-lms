@@ -756,7 +756,7 @@ final readonly class TicketAdminService
             ->innerJoin('ticket.priority', 'priority')
             ->innerJoin('ticket.status', 'status')
             ->leftJoin('ticket.assignedLastUser', 'assigned')
-            ->leftJoin(User::class, 'creator', Join::WITH, 'creator.id = ticket.insertUserId')
+            ->leftJoin(User::class, 'creator', Join::ON, 'creator.id = ticket.insertUserId')
             ->leftJoin('ticket.course', 'course')
             ->andWhere('IDENTITY(ticket.accessUrl) = :accessUrlId')
             ->andWhere('project.id = :projectId')

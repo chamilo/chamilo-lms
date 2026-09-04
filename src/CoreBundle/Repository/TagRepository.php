@@ -136,7 +136,7 @@ class TagRepository extends ServiceEntityRepository
     {
         $qb = $this
             ->createQueryBuilder('t')
-            ->innerJoin(PortfolioRelTag::class, 'prt', Join::WITH, 't = prt.tag')
+            ->innerJoin(PortfolioRelTag::class, 'prt', Join::ON, 't = prt.tag')
             ->where('prt.course = :course')
             ->setParameter('course', $course)
         ;

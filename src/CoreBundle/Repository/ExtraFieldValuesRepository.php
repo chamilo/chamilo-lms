@@ -42,7 +42,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->innerJoin(
                 ExtraField::class,
                 'f',
-                Join::WITH,
+                Join::ON,
                 'fv.field = f.id'
             )
             ->where(
@@ -194,7 +194,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('efv')
             ->select('efv.itemId as lp_id, efv.fieldValue as ndays')
             ->innerJoin('efv.field', 'ef')
-            ->innerJoin(CLp::class, 'lp', 'WITH', 'lp.iid = efv.itemId')
+            ->innerJoin(CLp::class, 'lp', Join::ON, 'lp.iid = efv.itemId')
             ->where('ef.variable = :variable')
             ->andWhere('efv.fieldValue > 0')
             ->setParameter('variable', 'number_of_days_for_completion')

@@ -391,8 +391,8 @@ trait ClosureTreeRepositoryTrait
         $em->getConnection()->beginTransaction();
         try {
             foreach ($nodesToReparent as $nodeToReparent) {
-                $id = $meta->getReflectionProperty($pk)->getValue($nodeToReparent);
-                $meta->getReflectionProperty($config['parent'])->setValue($nodeToReparent, $parent);
+                $id = $meta->getPropertyAccessor($pk)->getValue($nodeToReparent);
+                $meta->getPropertyAccessor($config['parent'])->setValue($nodeToReparent, $parent);
 
                 $dql = "UPDATE {$config['useObjectClass']} node";
                 $dql .= " SET node.{$config['parent']} = :parent";

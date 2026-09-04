@@ -961,7 +961,7 @@ class Template
         $tutors = $em
             ->createQuery('
                 SELECT u FROM Chamilo\CoreBundle\Entity\User u
-                INNER JOIN Chamilo\CoreBundle\Entity\SessionRelCourseRelUser scu WITH u.id = scu.user
+                INNER JOIN Chamilo\CoreBundle\Entity\SessionRelCourseRelUser scu ON u.id = scu.user
                 WHERE scu.status = :teacher_status AND scu.session = :session AND scu.course = :course
             ')
             ->setParameters([

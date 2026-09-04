@@ -16,6 +16,7 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -174,7 +175,7 @@ final class CalendarMyStudentsScheduleAction
             ->innerJoin(
                 SessionRelCourseRelUser::class,
                 'scru',
-                'WITH',
+                Join::ON,
                 'scru.session = s'
             )
             ->andWhere('scru.user = :user')

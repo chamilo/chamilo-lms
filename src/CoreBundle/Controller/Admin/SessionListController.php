@@ -17,6 +17,7 @@ use DateTimeZone;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use RuntimeException;
 use SessionManager;
@@ -471,7 +472,7 @@ class SessionListController extends AbstractController
             // Replication: only sessions configured for repetition with <= 1 child
             'replication' => $qb->andWhere('s.daysToNewRepetition IS NOT NULL')
                 ->andWhere('s.parentId IS NULL')
-                ->leftJoin(Session::class, 'child', 'WITH', 'child.parentId = s.id')
+                ->leftJoin(Session::class, 'child', Join::ON, 'child.parentId = s.id')
                 ->groupBy('s.id')
                 ->addGroupBy('sc.id')
                 ->having('COUNT(child.id) <= 1'),

@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationRelUser;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -160,7 +161,7 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->addSelect('(SELECT MAX(c2.sentDate) FROM '.CStudentPublication::class.' c2 WHERE c2.publicationParent = resource) AS lastUpload')
             ->join('resource.resourceNode', 'rn')
             ->join('rn.resourceLinks', 'rl')
-            ->leftJoin(CStudentPublicationRelUser::class, 'rel', 'WITH', 'rel.publication = resource AND rel.user = :userId')
+            ->leftJoin(CStudentPublicationRelUser::class, 'rel', Join::ON, 'rel.publication = resource AND rel.user = :userId')
             ->where('resource.publicationParent IS NULL')
             ->andWhere('resource.active IN (0, 1)')
             ->andWhere('resource.filetype = :filetype')
@@ -220,7 +221,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         $qb->select('sp')
             ->from(CStudentPublication::class, 'sp')
             ->join('sp.resourceNode', 'rn')
-            ->join(ResourceLink::class, 'rl', 'WITH', 'rl.resourceNode = rn')
+            ->join(ResourceLink::class, 'rl', Join::ON, 'rl.resourceNode = rn')
             ->where('rl.course = :course')
             ->andWhere($session ? 'rl.session = :session' : 'rl.session IS NULL')
             ->andWhere('sp.active IN (0, 1)')

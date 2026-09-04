@@ -2269,7 +2269,7 @@ abstract class Question
         $dql = '
         SELECT DISTINCT q
         FROM Chamilo\CourseBundle\Entity\CQuiz q
-        JOIN Chamilo\CourseBundle\Entity\CQuizRelQuestion qq WITH qq.quiz = q
+        JOIN Chamilo\CourseBundle\Entity\CQuizRelQuestion qq ON qq.quiz = q
         WHERE IDENTITY(qq.question) = :id
     ';
 

@@ -1474,9 +1474,9 @@ class SurveyManager
                 ->createQuery("
                     SELECT i FROM Chamilo\CourseBundle\Entity\CSurveyInvitation i
                     INNER JOIN Chamilo\CourseBundle\Entity\CSurvey s
-                        WITH (s.code = i.surveyCode AND s.cId = i.cId AND s.sessionId = i.sessionId)
-                    INNER JOIN Chamilo\CoreBundle\Entity\ExtraFieldValues efv WITH efv.itemId = s.iid
-                    INNER JOIN Chamilo\CoreBundle\Entity\ExtraField ef WITH efv.field = ef.id
+                        ON (s.code = i.surveyCode AND s.cId = i.cId AND s.sessionId = i.sessionId)
+                    INNER JOIN Chamilo\CoreBundle\Entity\ExtraFieldValues efv ON efv.itemId = s.iid
+                    INNER JOIN Chamilo\CoreBundle\Entity\ExtraField ef ON efv.field = ef.id
                     WHERE
                         i.answered = 0 AND
                         i.cId = :course AND

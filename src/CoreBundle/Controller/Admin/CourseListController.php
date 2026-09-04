@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,7 +73,7 @@ class CourseListController extends AbstractController
 
         $qb = $this->em->createQueryBuilder()
             ->from(Course::class, 'c')
-            ->innerJoin(AccessUrlRelCourse::class, 'auc', 'WITH', 'auc.course = c')
+            ->innerJoin(AccessUrlRelCourse::class, 'auc', Join::ON, 'auc.course = c')
         ;
 
         if ($accessUrl) {

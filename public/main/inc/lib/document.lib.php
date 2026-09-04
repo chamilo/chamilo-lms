@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  *  Class DocumentManager
@@ -2490,7 +2491,7 @@ jQuery(function ($) {
             ->innerJoin(
                 CDocument::class,
                 'doc',
-                'WITH',
+                Join::ON,
                 'doc.resourceNode = node'
             )
             ->addSelect('files')

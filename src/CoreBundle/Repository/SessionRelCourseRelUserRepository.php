@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 class SessionRelCourseRelUserRepository extends ServiceEntityRepository
@@ -28,8 +29,8 @@ class SessionRelCourseRelUserRepository extends ServiceEntityRepository
             ->select('u.id AS userId, c.title AS courseTitle, lp.iid AS lpId, COALESCE(lpv.progress, 0) AS progress, IDENTITY(scu.session) AS sessionId')
             ->innerJoin('scu.user', 'u')
             ->innerJoin('scu.course', 'c')
-            ->leftJoin(CLpView::class, 'lpv', 'WITH', 'lpv.user = u.id AND lpv.course = scu.course AND lpv.lp IN (:lpIds)')
-            ->leftJoin(CLp::class, 'lp', 'WITH', 'lp.iid IN (:lpIds)')
+            ->leftJoin(CLpView::class, 'lpv', Join::ON, 'lpv.user = u.id AND lpv.course = scu.course AND lpv.lp IN (:lpIds)')
+            ->leftJoin(CLp::class, 'lp', Join::ON, 'lp.iid IN (:lpIds)')
             ->innerJoin('lp.resourceNode', 'rn')
             ->where('scu.course = :courseId')
             ->andWhere('rn.parent = c.resourceNode')

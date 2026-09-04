@@ -888,10 +888,10 @@ trait NestedTreeRepositoryTrait
                 $doRecover($child, $count, $level + 1);
             }
             $rgt = $count++;
-            $meta->getReflectionProperty($config['left'])->setValue($root, $lft);
-            $meta->getReflectionProperty($config['right'])->setValue($root, $rgt);
+            $meta->getPropertyAccessor($config['left'])->setValue($root, $lft);
+            $meta->getPropertyAccessor($config['right'])->setValue($root, $rgt);
             if (isset($config['level'])) {
-                $meta->getReflectionProperty($config['level'])->setValue($root, $level);
+                $meta->getPropertyAccessor($config['level'])->setValue($root, $level);
             }
             $em->persist($root);
         };
@@ -923,10 +923,10 @@ trait NestedTreeRepositoryTrait
                 $doRecover($child, $count, $level + 1);
             }
             $rgt = $count++;
-            $meta->getReflectionProperty($config['left'])->setValue($root, $lft);
-            $meta->getReflectionProperty($config['right'])->setValue($root, $rgt);
+            $meta->getPropertyAccessor($config['left'])->setValue($root, $lft);
+            $meta->getPropertyAccessor($config['right'])->setValue($root, $rgt);
             if (isset($config['level'])) {
-                $meta->getReflectionProperty($config['level'])->setValue($root, $level);
+                $meta->getPropertyAccessor($config['level'])->setValue($root, $level);
             }
             $em->persist($root);
         };
@@ -1002,7 +1002,7 @@ trait NestedTreeRepositoryTrait
         $config = $this->listener->getConfiguration($em, $meta->name);
 
         $identifier = $meta->getSingleIdentifierFieldName();
-        $rootId = isset($config['root']) ? $meta->getReflectionProperty($config['root'])->getValue($root) : null;
+        $rootId = isset($config['root']) ? $meta->getPropertyAccessor($config['root'])->getValue($root) : null;
         $qb = $this->getQueryBuilder();
         $qb->select($qb->expr()->min('node.'.$config['left']))
             ->from($config['useObjectClass'], 'node')
@@ -1087,10 +1087,10 @@ trait NestedTreeRepositoryTrait
         $nodes = $qb->getQuery()->getResult(Query::HYDRATE_OBJECT);
 
         foreach ($nodes as $node) {
-            $right = $meta->getReflectionProperty($config['right'])->getValue($node);
-            $left = $meta->getReflectionProperty($config['left'])->getValue($node);
-            $id = $meta->getReflectionProperty($identifier)->getValue($node);
-            $parent = $meta->getReflectionProperty($config['parent'])->getValue($node);
+            $right = $meta->getPropertyAccessor($config['right'])->getValue($node);
+            $left = $meta->getPropertyAccessor($config['left'])->getValue($node);
+            $id = $meta->getPropertyAccessor($identifier)->getValue($node);
+            $parent = $meta->getPropertyAccessor($config['parent'])->getValue($node);
             if (!$right || !$left) {
                 $errors[] = "node [{$id}] has invalid left or right values";
             } elseif ($right == $left) {
@@ -1099,9 +1099,9 @@ trait NestedTreeRepositoryTrait
                 if ($parent instanceof Proxy && !$parent->__isInitialized__) {
                     $em->refresh($parent);
                 }
-                $parentRight = $meta->getReflectionProperty($config['right'])->getValue($parent);
-                $parentLeft = $meta->getReflectionProperty($config['left'])->getValue($parent);
-                $parentId = $meta->getReflectionProperty($identifier)->getValue($parent);
+                $parentRight = $meta->getPropertyAccessor($config['right'])->getValue($parent);
+                $parentLeft = $meta->getPropertyAccessor($config['left'])->getValue($parent);
+                $parentId = $meta->getPropertyAccessor($identifier)->getValue($parent);
                 if ($left < $parentLeft) {
                     $errors[] = "node [{$id}] left is less than parent`s [{$parentId}] left value";
                 } elseif ($right > $parentRight) {

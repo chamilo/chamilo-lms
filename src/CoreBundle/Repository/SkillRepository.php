@@ -61,7 +61,7 @@ class SkillRepository extends ServiceEntityRepository
             ->innerJoin(
                 SkillRelUser::class,
                 'su',
-                Join::WITH,
+                Join::ON,
                 's.id = su.skill'
             )
             ->where(

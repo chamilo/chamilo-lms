@@ -20,6 +20,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use RuntimeException;
@@ -212,7 +213,7 @@ final class CDocumentRepository extends ResourceRepository
             $folderQuery = $em->createQueryBuilder()
                 ->select('rn')
                 ->from(ResourceNode::class, 'rn')
-                ->innerJoin(CDocument::class, 'd', 'WITH', 'd.resourceNode = rn')
+                ->innerJoin(CDocument::class, 'd', Join::ON, 'd.resourceNode = rn')
                 ->where('rn.parent = :parent')
                 ->andWhere('rn.title LIKE :prefix')
                 ->andWhere('d.filetype = :folderType')
@@ -331,7 +332,7 @@ final class CDocumentRepository extends ResourceRepository
                    FROM Chamilo\CoreBundle\Entity\ResourceNode rn
                    JOIN rn.resourceType rt
                    JOIN rn.resourceLinks rl
-              LEFT JOIN Chamilo\CourseBundle\Entity\CDocument rootDocument WITH rootDocument.resourceNode = rn
+              LEFT JOIN Chamilo\CourseBundle\Entity\CDocument rootDocument ON rootDocument.resourceNode = rn
                   WHERE rn.parent = :parent
                     AND rt = :rtype
                     AND rl.course = :course
@@ -358,7 +359,7 @@ final class CDocumentRepository extends ResourceRepository
                FROM Chamilo\CoreBundle\Entity\ResourceNode rn
                JOIN rn.resourceType rt
                JOIN rn.resourceLinks rl
-          LEFT JOIN Chamilo\CourseBundle\Entity\CDocument rootDocument WITH rootDocument.resourceNode = rn
+          LEFT JOIN Chamilo\CourseBundle\Entity\CDocument rootDocument ON rootDocument.resourceNode = rn
               WHERE rn.parent IS NULL
                 AND rt = :rtype
                 AND rl.course = :course
@@ -793,7 +794,7 @@ final class CDocumentRepository extends ResourceRepository
         $qb = $em->createQueryBuilder()
             ->select('rn')
             ->from(ResourceNode::class, 'rn')
-            ->innerJoin(CDocument::class, 'd', 'WITH', 'd.resourceNode = rn')
+            ->innerJoin(CDocument::class, 'd', Join::ON, 'd.resourceNode = rn')
             ->where('rn.parent = :parent AND rn.title = :title AND rn.resourceType = :rt AND d.filetype = :ft')
             ->setParameter('parent', $parent)
             ->setParameter('title', $title)
@@ -858,7 +859,7 @@ final class CDocumentRepository extends ResourceRepository
         $qb = $em->createQueryBuilder()
             ->select('rn')
             ->from(ResourceNode::class, 'rn')
-            ->innerJoin(CDocument::class, 'd', 'WITH', 'd.resourceNode = rn')
+            ->innerJoin(CDocument::class, 'd', Join::ON, 'd.resourceNode = rn')
             ->where('rn.parent = :parent')
             ->andWhere('rn.title = :title')
             ->andWhere('rn.resourceType = :rt')

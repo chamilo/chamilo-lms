@@ -8,6 +8,11 @@ use Chamilo\CoreBundle\Framework\Container;
 
 abstract class AbstractApiTest extends ApiTestCase
 {
+    // API Platform 5.0 stops booting the kernel on createClient() by default.
+    // Every test here reaches for services through the booted kernel, so keep
+    // the current behaviour explicitly instead of inheriting the future default.
+    protected static ?bool $alwaysBootKernel = true;
+
     private $token;
     private $clientWithCredentials;
 

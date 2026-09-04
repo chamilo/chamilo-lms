@@ -360,7 +360,7 @@ final readonly class PortfolioListProvider implements ProviderInterface
 
         if ([] !== $filters['tags']) {
             $queryBuilder
-                ->innerJoin(ExtraFieldRelTag::class, 'tagRelation', Join::WITH, 'tagRelation.itemId = resource.id')
+                ->innerJoin(ExtraFieldRelTag::class, 'tagRelation', Join::ON, 'tagRelation.itemId = resource.id')
                 ->innerJoin('tagRelation.field', 'tagField')
                 ->innerJoin('tagRelation.tag', 'tagEntity')
                 ->andWhere('tagField.itemType = :portfolioFieldType')

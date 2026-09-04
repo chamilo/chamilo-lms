@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\RoomAccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -30,7 +31,7 @@ class RoomController extends BaseController
         $qb->select('r.id, r.title, r.description, r.floorNumber, r.capacity, b.id AS branchId, b.title AS branchTitle, COUNT(c.id) AS courseCount')
             ->from('Chamilo\CoreBundle\Entity\Room', 'r')
             ->leftJoin('r.branch', 'b')
-            ->leftJoin('Chamilo\CoreBundle\Entity\Course', 'c', 'WITH', 'c.room = r.id')
+            ->leftJoin('Chamilo\CoreBundle\Entity\Course', 'c', Join::ON, 'c.room = r.id')
             ->where('IDENTITY(b.url) = :accessUrlId')
             ->setParameter('accessUrlId', $accessUrlId)
             ->groupBy('r.id')

@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Service\Update\InstalledChamiloVersionProvider;
 use DateTimeImmutable;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -214,15 +215,15 @@ class AccessUrlListController extends AbstractController
             ->from(Session::class, 's')
         ;
         if (null !== $managedUrlIds) {
-            $totalUsersQb->innerJoin(AccessUrlRelUser::class, 'scopeRelUser', 'WITH', 'scopeRelUser.user = u.id')
+            $totalUsersQb->innerJoin(AccessUrlRelUser::class, 'scopeRelUser', Join::ON, 'scopeRelUser.user = u.id')
                 ->andWhere('scopeRelUser.url IN (:managedUrlIds)')
                 ->setParameter('managedUrlIds', $managedUrlIds)
             ;
-            $totalCoursesQb->innerJoin(AccessUrlRelCourse::class, 'scopeRelCourse', 'WITH', 'scopeRelCourse.course = c.id')
+            $totalCoursesQb->innerJoin(AccessUrlRelCourse::class, 'scopeRelCourse', Join::ON, 'scopeRelCourse.course = c.id')
                 ->where('scopeRelCourse.url IN (:managedUrlIds)')
                 ->setParameter('managedUrlIds', $managedUrlIds)
             ;
-            $totalSessionsQb->innerJoin(AccessUrlRelSession::class, 'scopeRelSession', 'WITH', 'scopeRelSession.session = s.id')
+            $totalSessionsQb->innerJoin(AccessUrlRelSession::class, 'scopeRelSession', Join::ON, 'scopeRelSession.session = s.id')
                 ->where('scopeRelSession.url IN (:managedUrlIds)')
                 ->setParameter('managedUrlIds', $managedUrlIds)
             ;

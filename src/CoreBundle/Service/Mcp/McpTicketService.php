@@ -132,7 +132,7 @@ final readonly class McpTicketService
             ->innerJoin('ticket.priority', 'priority')
             ->innerJoin('ticket.status', 'status')
             ->leftJoin('ticket.assignedLastUser', 'assigned')
-            ->leftJoin(User::class, 'creator', Join::WITH, 'creator.id = ticket.insertUserId')
+            ->leftJoin(User::class, 'creator', Join::ON, 'creator.id = ticket.insertUserId')
             ->andWhere('IDENTITY(ticket.accessUrl) = :accessUrlId')
             ->andWhere('project.id = :projectId')
             ->setParameter('accessUrlId', (int) $accessUrl->getId(), Types::INTEGER)
@@ -376,7 +376,7 @@ final readonly class McpTicketService
                 'author.lastname AS authorLastname',
             ])
             ->from(TicketMessage::class, 'message')
-            ->innerJoin(User::class, 'author', Join::WITH, 'author.id = message.insertUserId')
+            ->innerJoin(User::class, 'author', Join::ON, 'author.id = message.insertUserId')
             ->andWhere('IDENTITY(message.ticket) = :ticketId')
             ->andWhere('author.active <> :softDeleted')
             ->setParameter('ticketId', (int) $ticket->getId(), Types::INTEGER)

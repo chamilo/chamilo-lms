@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -54,7 +55,7 @@ final readonly class CourseRelUserExtension implements QueryCollectionExtensionI
                     ->innerJoin(
                         AccessUrlRelCourse::class,
                         'url_rel',
-                        'WITH',
+                        Join::ON,
                         'url_rel.course = '.$rootAlias
                     )
                     ->andWhere('url_rel.url = :access_url_id')

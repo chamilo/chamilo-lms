@@ -18,6 +18,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 
 final readonly class LpAdvancedAccessHelper
 {
@@ -98,7 +99,7 @@ final readonly class LpAdvancedAccessHelper
             ->join(
                 CGroupRelUser::class,
                 'groupRelUser',
-                'WITH',
+                Join::ON,
                 'groupRelUser.group = rel.group AND groupRelUser.user = :user AND groupRelUser.cId = :courseId'
             )
             ->where('rel.course = :course')

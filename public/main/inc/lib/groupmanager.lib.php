@@ -1566,9 +1566,9 @@ class GroupManager
             ->createQuery("
                 SELECT u.id FROM Chamilo\CoreBundle\Entity\User u
                 INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelUser gu
-                WITH u.id = gu.user
+                ON u.id = gu.user
                 INNER JOIN Chamilo\CourseBundle\Entity\CGroup g
-                WITH gu.group = g.iid
+                ON gu.group = g.iid
                 WHERE g.iid = :group
                     $activeCondition
             ")
@@ -1598,9 +1598,9 @@ class GroupManager
             ->createQuery("
                 SELECT COUNT(u.id) FROM Chamilo\CoreBundle\Entity\User u
                 INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelUser gu
-                WITH u.id = gu.user
+                ON u.id = gu.user
                 INNER JOIN Chamilo\CourseBundle\Entity\CGroup g
-                WITH gu.group = g.iid
+                ON gu.group = g.iid
                 WHERE g.iid = :group
                     $activeCondition
             ")

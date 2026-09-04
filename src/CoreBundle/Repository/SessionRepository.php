@@ -349,7 +349,7 @@ class SessionRepository extends ServiceEntityRepository
             ->innerJoin(
                 SessionRelUser::class,
                 'sru',
-                Join::WITH,
+                Join::ON,
                 'src.session = sru.session'
             )
             ->innerJoin('src.session', 'session')
@@ -397,7 +397,7 @@ class SessionRepository extends ServiceEntityRepository
             ->innerJoin(
                 SessionRelCourseRelUser::class,
                 'srcru',
-                Join::WITH,
+                Join::ON,
                 'src.session = srcru.session AND src.course = srcru.course'
             )
             ->innerJoin('srcru.session', 'session')

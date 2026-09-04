@@ -15,6 +15,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Diagnoser;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpClient\HttpClient;
@@ -1555,7 +1556,7 @@ final class SystemStatusController extends AbstractController
             ->select('IDENTITY(rl.course) AS courseId', 'rf.id AS fileId', 'rf.size AS size')
             ->from(ResourceLink::class, 'rl')
             ->innerJoin('rl.resourceNode', 'rn')
-            ->innerJoin(ResourceFile::class, 'rf', 'WITH', 'rf.resourceNode = rn')
+            ->innerJoin(ResourceFile::class, 'rf', Join::ON, 'rf.resourceNode = rn')
             ->where('rl.course IS NOT NULL')
             ->groupBy('rl.course')
             ->addGroupBy('rf.id')

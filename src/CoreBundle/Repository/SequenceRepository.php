@@ -103,7 +103,7 @@ class SequenceRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('r');
         $qb
-            ->leftJoin(SequenceResource::class, 'sr', Join::WITH, 'sr.sequence = r')
+            ->leftJoin(SequenceResource::class, 'sr', Join::ON, 'sr.sequence = r')
         ;
 
         $qb

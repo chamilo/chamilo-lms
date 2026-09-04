@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -26,7 +27,7 @@ class BranchController extends BaseController
         $qb = $em->createQueryBuilder();
         $qb->select('b.id, b.title, b.description, COUNT(r.id) AS roomCount')
             ->from('Chamilo\CoreBundle\Entity\BranchSync', 'b')
-            ->leftJoin('Chamilo\CoreBundle\Entity\Room', 'r', 'WITH', 'r.branch = b.id')
+            ->leftJoin('Chamilo\CoreBundle\Entity\Room', 'r', Join::ON, 'r.branch = b.id')
             ->where('IDENTITY(b.url) = :accessUrlId')
             ->setParameter('accessUrlId', $accessUrlId)
             ->groupBy('b.id')

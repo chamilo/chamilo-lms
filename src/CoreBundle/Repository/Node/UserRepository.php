@@ -683,7 +683,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->innerJoin(
                 SessionRelCourseRelUser::class,
                 'scu',
-                Join::WITH,
+                Join::ON,
                 'scu.user = u'
             )
             ->where(
@@ -711,13 +711,13 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->innerJoin(
                 SessionRelUser::class,
                 'su',
-                Join::WITH,
+                Join::ON,
                 'u = su.user'
             )
             ->innerJoin(
                 SessionRelCourseRelUser::class,
                 'scu',
-                Join::WITH,
+                Join::ON,
                 'su.session = scu.session'
             )
             ->where(
@@ -881,7 +881,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 $dql = "SELECT DISTINCT U
                         FROM Chamilo\CoreBundle\Entity\User U
                         INNER JOIN Chamilo\CoreBundle\Entity\TrackEOnline T
-                        WITH U.id = T.loginUserId
+                        ON U.id = T.loginUserId
                         WHERE
                           U.active = 1 AND
                           T.loginDate >= '".$limit_date."'";
@@ -1081,7 +1081,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         // Start building the query
         $qb->select('ef.id', 'ef.variable as fvar', 'ef.valueType as type', 'efv.fieldValue as fval', 'ef.defaultValue as fval_df')
             ->from(ExtraField::class, 'ef')
-            ->leftJoin(ExtraFieldValues::class, 'efv', Join::WITH, 'efv.field = ef.id AND efv.itemId = :userId')
+            ->leftJoin(ExtraFieldValues::class, 'efv', Join::ON, 'efv.field = ef.id AND efv.itemId = :userId')
             ->where('ef.itemType = :itemType')
             ->setParameter('userId', $userId)
             ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
@@ -1184,8 +1184,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         }
 
         $qb->innerJoin('u.portals', 'urlRelUser')
-            ->leftJoin(UserRelTag::class, 'uv', 'WITH', 'u = uv.user')
-            ->leftJoin(Tag::class, 'ut', 'WITH', 'uv.tag = ut')
+            ->leftJoin(UserRelTag::class, 'uv', Join::ON, 'u = uv.user')
+            ->leftJoin(Tag::class, 'ut', Join::ON, 'uv.tag = ut')
         ;
 
         if (0 !== $fieldId) {

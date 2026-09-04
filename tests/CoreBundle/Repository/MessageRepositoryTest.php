@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\MessageTagRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,8 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testCreateMessage(): void
     {
+        $this->setPlatformSenderAddress();
+
         $this->createUser('from');
         $senderUserIri = $this->findIriBy(User::class, ['username' => 'from']);
         $fromUserToken = $this->getUserToken(['username' => 'from', 'password' => 'from']);
@@ -99,16 +102,19 @@ class MessageRepositoryTest extends AbstractApiTest
         $messageArray = $response->toArray();
         $messageRelUserIri = $messageArray['firstReceiver']['@id'];
 
+        // PATCH, not PUT: receiver is not writable and a PUT replaces the whole
+        // representation, so it would arrive null. The Vue service does the same.
         $this
             ->createClientWithCredentials($receiverUserToken)
             ->request(
-                'PUT',
+                'PATCH',
                 $messageRelUserIri,
                 [
                     'json' => [
                         'read' => true,
                         'starred' => true,
                     ],
+                    'headers' => ['content-type' => 'application/merge-patch+json'],
                 ]
             )
         ;
@@ -579,15 +585,21 @@ class MessageRepositoryTest extends AbstractApiTest
             true
         );
 
-        $receiverRelation = $message->getFirstReceiver();
-        $senderRelationIri = $this->findIriBy(
+        // getFirstReceiver() is receivers->first() over an unordered collection
+        // that still holds the sender relation deleted above, so which one comes
+        // back depends on the row order the database happens to return -- it is
+        // the TO relation on MariaDB and the stale sender one on MySQL, whose id
+        // no longer resolves to an IRI. Ask for the TO relation by type, the way
+        // the sender relation is asked for above.
+        $receiverRelation = $message->getReceiversTo()[0];
+        $receiverRelationIri = $this->findIriBy(
             MessageRelUser::class,
-            ['id' => $receiverRelation?->getId()]
+            ['id' => $receiverRelation->getId()]
         );
 
         $this->createClientWithCredentials($tokenTo)->request(
             'DELETE',
-            $senderRelationIri,
+            $receiverRelationIri,
         );
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
@@ -613,5 +625,16 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $messages = $messageRepo->getMessageByUser($testUser, Message::MESSAGE_TYPE_INBOX);
         $this->assertSame(1, \count($messages));
+    }
+
+    /**
+     * MailHelper gives up without a sender address, and the fixtures leave it
+     * empty because a real install takes it from the installer.
+     */
+    private function setPlatformSenderAddress(): void
+    {
+        self::getContainer()->get(SettingsManager::class)
+            ->updateSetting('mail.mailer_from_email', 'noreply@example.com')
+        ;
     }
 }

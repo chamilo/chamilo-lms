@@ -196,9 +196,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         targetEntity: CTool::class,
         cascade: [
             'persist',
-            'remove',
-        ],
-        orphanRemoval: true
+        ]
     )]
     protected Collection $tools;
     protected Session $currentSession;

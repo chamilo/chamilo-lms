@@ -4,6 +4,7 @@ namespace Chamilo\Tests;
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 
 abstract class AbstractApiTest extends ApiTestCase
 {
@@ -15,6 +16,12 @@ abstract class AbstractApiTest extends ApiTestCase
     protected function setUp(): void
     {
         self::bootKernel();
+
+        // Booting a kernel does not dispatch kernel.request, so LegacyListener
+        // never runs and Container::$container keeps pointing at whatever kernel
+        // an earlier test booted -- one that has since been shut down, so legacy
+        // helpers like api_get_path() die on it. Point it at the live one.
+        Container::setContainer(self::getContainer());
     }
 
     protected function getClientWithGuiCredentials($username, $password): Client

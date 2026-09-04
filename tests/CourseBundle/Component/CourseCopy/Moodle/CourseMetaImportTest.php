@@ -168,6 +168,7 @@ final class CourseMetaImportTest extends TestCase
         $filename = $title.'.html';
 
         mkdir($this->workDir.'/chamilo/document', 0775, true);
+        mkdir($this->workDir.'/files/aa', 0775, true);
         file_put_contents($this->workDir.'/files/aa/'.$hash, '<html><body>Module 1</body></html>');
         file_put_contents($this->workDir.'/files.xml', <<<XML
 <?xml version="1.0" encoding="UTF-8"?>

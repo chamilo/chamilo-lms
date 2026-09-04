@@ -6,39 +6,62 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Service\Document;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
-use Doctrine\ORM\EntityManagerInterface;
+use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class CourseDocumentContentServiceDuplicateTitleTest extends KernelTestCase
 {
+    use ChamiloTestTrait;
+
     public function testDetectsExistingTitleScopedToTheParentFolder(): void
     {
         self::bootKernel();
-        $container = self::getContainer();
 
-        /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
-        $service = $container->get(CourseDocumentContentService::class);
+        $service = self::getContainer()->get(CourseDocumentContentService::class);
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
 
-        $course = $em->getRepository(Course::class)->find(2);
-        if (!$course instanceof Course) {
-            self::markTestSkipped('Course #2 does not exist in this DB, skipping.');
-        }
+        $course = $this->createCourse('Duplicate title');
+        $admin = $this->getUser('admin');
+        $rootNodeId = (int) $course->getResourceNode()->getId();
 
-        $rootNodeId = (int) $course->getResourceNode()?->getId();
+        $documentRepo->create(
+            (new CDocument())
+                ->setFiletype('file')
+                ->setTitle('At the root')
+                ->setParent($course)
+                ->setCreator($admin)
+                ->addCourseLink($course)
+        );
 
+        $folder = (new CDocument())
+            ->setFiletype('folder')
+            ->setTitle('A folder')
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+        $documentRepo->create($folder);
+
+        $documentRepo->create(
+            (new CDocument())
+                ->setFiletype('file')
+                ->setTitle('Inside the folder')
+                ->setParent($folder)
+                ->setCreator($admin)
+                ->addCourseLink($course)
+        );
+
+        self::assertTrue($service->titleExistsInParentFolder($course, $rootNodeId, 'At the root'));
+        self::assertFalse($service->titleExistsInParentFolder($course, $rootNodeId, 'Not A Real Title 12345'));
+
+        // The scoping is the point: this title exists in the course, but under the
+        // folder rather than directly under the course root.
+        self::assertFalse($service->titleExistsInParentFolder($course, $rootNodeId, 'Inside the folder'));
         self::assertTrue(
-            $service->titleExistsInParentFolder($course, $rootNodeId, 'Certificado predeterminado'),
-            'A direct child of the course root node with this exact title exists and must be detected.',
-        );
-        self::assertFalse(
-            $service->titleExistsInParentFolder($course, $rootNodeId, 'Not A Real Title 12345'),
-        );
-        self::assertFalse(
-            $service->titleExistsInParentFolder($course, $rootNodeId, 'Intro 1'),
-            '"Intro 1" exists in this course but under the LP1 folder, not directly under the course root — must not match.',
+            $service->titleExistsInParentFolder($course, (int) $folder->getResourceNode()->getId(), 'Inside the folder')
         );
     }
 }

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
@@ -55,6 +56,7 @@ final readonly class CreateCourseDocumentTool
         private TranslatorInterface $translator,
         private CourseRepository $courseRepository,
         private CourseHelper $courseHelper,
+        private CidReqHelper $cidReqHelper,
         private AiDisclosureHelper $aiDisclosureHelper,
         private LanguageRepository $languageRepository,
         private CourseDocumentContentService $documentContentService,
@@ -230,7 +232,7 @@ final readonly class CreateCourseDocumentTool
 
         /** @var CDocument $document */
         $document = $this->entityManager->wrapInTransaction(
-            function () use ($courseId, $title, $topic, $content, $languageIsoCode, $visibility, $courseResourceNode): CDocument {
+            function () use ($course, $courseId, $title, $topic, $content, $languageIsoCode, $visibility, $courseResourceNode): CDocument {
                 $request = Request::create(
                     '/api/documents?cid='.$courseId,
                     'POST',
@@ -263,7 +265,9 @@ final readonly class CreateCourseDocumentTool
                     $this->translator,
                     $this->courseRepository,
                     $this->courseHelper,
+                    $this->cidReqHelper,
                     $this->aiDisclosureHelper,
+                    $course,
                 );
 
                 $resourceFile = $document->getResourceNode()?->getFirstResourceFile();

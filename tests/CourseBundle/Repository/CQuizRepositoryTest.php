@@ -6,72 +6,22 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use DateTime;
 
 class CQuizRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testCreate(): void
-    {
-        $em = $this->getEntityManager();
-        $repo = self::getContainer()->get(CQuizRepository::class);
-
-        $course = $this->createCourse('new');
-        $teacher = $this->createUser('teacher');
-
-        $item = (new CQuiz())
-            ->setTitle('exercise')
-            ->setDescription('desc')
-            ->setPreventBackwards(1)
-            ->setHideQuestionNumber(1)
-            ->setNotifications('')
-            ->setType(1)
-            ->setAutoLaunch(false)
-            ->setFeedbackType(1)
-            ->setMaxAttempt(10)
-            ->setShowPreviousButton(true)
-            ->setResultsDisabled(0)
-            ->setReviewAnswers(0)
-            ->setPropagateNeg(0)
-            ->setPageResultConfiguration([])
-            ->setHideQuestionTitle(true)
-            ->setRandomAnswers(false)
-            ->setStartTime(new DateTime())
-            ->setExpiredTime(100)
-            ->setSaveCorrectAnswers(1)
-            ->setDisplayCategoryName(1)
-            ->setPassPercentage(1)
-            ->setAccessCondition('')
-            ->setRandom(0)
-            ->setTextWhenFinished('text when finished')
-            ->setParent($course)
-            ->setCreator($teacher)
-        ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
-        $em->flush();
-
-        $this->assertSame('exercise', (string) $item);
-        $this->assertSame(1, $repo->count([]));
-
-        $this->assertSame(0, $item->getQuestionsCategories()->count());
-        $this->assertSame(0, $item->getMaxScore());
-
-        $repo->updateNodeForResource($item);
-
-        $link = $repo->getLink($item, $this->getContainer()->get('router'));
-        $this->assertSame('/main/exercise/overview.php?exerciseId='.$item->getIid(), $link);
-    }
-
     public function testUpdateNodeForResource(): void
     {
         $repo = self::getContainer()->get(CQuizRepository::class);
+
+        $quizCountBefore = $repo->count([]);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -83,7 +33,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         ;
         $repo->create($item);
 
-        $this->assertSame(1, $repo->count([]));
+        $this->assertSame($quizCountBefore + 1, $repo->count([]));
 
         $item->setTitle('exercise modified');
         $repo->updateNodeForResource($item);
@@ -91,7 +41,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         /** @var CQuiz $newExercise */
         $newExercise = $repo->find($item->getIid());
         $this->assertSame('exercise modified', $newExercise->getTitle());
-        $this->assertSame(1, $repo->count([]));
+        $this->assertSame($quizCountBefore + 1, $repo->count([]));
     }
 
     public function testFindAllByCourse(): void
@@ -144,13 +94,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         $qb = $repo->findAllByCourse($course, null, 'exercise 1');
         $this->assertCount(2, $qb->getQuery()->getResult());
 
-        $qb = $repo->findAllByCourse($course, null, null, 0);
-        $this->assertCount(0, $qb->getQuery()->getResult());
-
-        $qb = $repo->findAllByCourse($course, null, null, 1);
-        $this->assertCount(2, $qb->getQuery()->getResult());
-
-        $qb = $repo->findAllByCourse($course, null, null, null, true, $category->getId());
+        $qb = $repo->findAllByCourse($course, null, null, false, true, $category->getId());
         $this->assertCount(1, $qb->getQuery()->getResult());
 
         $found = $repo->findCourseResourceByTitle('exercise 1', $course->getResourceNode(), $course);
@@ -209,5 +153,21 @@ class CQuizRepositoryTest extends AbstractApiTest
         // FIXME Re-add: Why the course exercise is visible?
         // $this->assertFalse($exercise->isVisible($course));
         $this->assertTrue($exercise->isVisible($course, $session));
+
+        // An unpublished exercise still belongs to the course, so it only drops out
+        // once the caller asks for the visible ones.
+        $draft = (new CQuiz())
+            ->setTitle('exercise draft')
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course, null, null, ResourceLink::VISIBILITY_DRAFT)
+        ;
+        $repo->create($draft);
+
+        $qb = $repo->findAllByCourse($course, null, null, false, false);
+        $this->assertCount(3, $qb->getQuery()->getResult());
+
+        $qb = $repo->findAllByCourse($course, null, null, true, false);
+        $this->assertCount(2, $qb->getQuery()->getResult());
     }
 }

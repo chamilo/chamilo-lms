@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\PersonalFile;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManager;
@@ -19,14 +20,14 @@ class CreatePersonalFileAction extends BaseResourceFileAction
         private readonly SettingsManager $settingsManager,
     ) {}
 
-    public function __invoke(Request $request, PersonalFileRepository $repo, EntityManager $em): PersonalFile
+    public function __invoke(Request $request, PersonalFileRepository $repo, EntityManager $em, CidReqHelper $cidReqHelper): PersonalFile
     {
         if ('false' === $this->settingsManager->getSetting('platform.allow_my_files', true)) {
             throw new AccessDeniedHttpException('Personal files are disabled.');
         }
 
         $resource = new PersonalFile();
-        $result = $this->handleCreateFileRequest($resource, $repo, $request, $em, 'overwrite');
+        $result = $this->handleCreateFileRequest($resource, $repo, $request, $em, $cidReqHelper, 'overwrite');
 
         $resource->setTitle($result['title']);
 

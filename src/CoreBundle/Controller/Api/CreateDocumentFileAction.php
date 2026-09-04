@@ -6,8 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -48,16 +50,19 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
         TranslatorInterface $translator,
         CourseRepository $courseRepository,
         CourseHelper $courseHelper,
+        CidReqHelper $cidReqHelper,
         AiDisclosureHelper $aiDisclosureHelper,
+        ?Course $course = null,
     ): CDocument {
         // The link context (cid/sid/gid) is taken from the session-resolved
         // course that gated this operation, not from the request body. This
         // makes it impossible for the body to target a foreign course (IDOR):
         // the body is only allowed to carry the link visibility.
         $resourceLinkList = $this->buildResourceLinkListFromContext(
-            $request,
+            $cidReqHelper,
             $this->extractResourceLinkListFromRequest($request),
-            ResourceLink::VISIBILITY_PUBLISHED
+            ResourceLink::VISIBILITY_PUBLISHED,
+            $course
         );
 
         $isUncompressZipEnabled = (string) $request->request->get('isUncompressZipEnabled', 'false');
@@ -73,10 +78,12 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
                 $request,
                 $em,
                 $kernel,
+                $cidReqHelper,
                 $courseRepository,
                 $repo,
                 $courseHelper,
-                $resourceLinkList
+                $resourceLinkList,
+                $course
             );
         } else {
             $result = $this->handleCreateFileRequest(
@@ -84,11 +91,13 @@ final class CreateDocumentFileAction extends BaseResourceFileAction
                 $repo,
                 $request,
                 $em,
+                $cidReqHelper,
                 $fileExistsOption,
                 $translator,
                 $courseRepository,
                 $courseHelper,
-                $resourceLinkList
+                $resourceLinkList,
+                $course
             );
         }
 

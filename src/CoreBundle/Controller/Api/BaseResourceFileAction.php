@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -34,6 +35,7 @@ use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -171,45 +173,27 @@ class BaseResourceFileAction
      * visibility. This closes the IDOR where the body could target a foreign
      * course regardless of the gated context.
      *
+     * $course is for in-process callers only — the MCP tools and the AI media
+     * storage service, which build a synthetic Request and never pass through
+     * CidReqListener, so there is no session context to read. They already hold
+     * the course as a first-class argument and their own authorization gates it.
+     * A real HTTP request must never reach this parameter: leave it null and the
+     * session stays the single source of truth. Session and group are not part of
+     * the override, since those callers only ever create base-course content.
+     *
      * @param array<int, mixed> $bodyResourceLinkList resource link entries parsed from the request body
      *
      * @return array<int, array<string, int>> a single link bound to the current course context
      */
     protected function buildResourceLinkListFromContext(
-        Request $request,
+        CidReqHelper $cidReqHelper,
         array $bodyResourceLinkList,
-        int $defaultVisibility = ResourceLink::VISIBILITY_PUBLISHED
+        int $defaultVisibility = ResourceLink::VISIBILITY_PUBLISHED,
+        ?Course $course = null
     ): array {
-        $cid = 0;
-        $sid = 0;
-        $gid = 0;
-
-        if ($request->hasSession()) {
-            $session = $request->getSession();
-
-            $course = $session->get('course');
-            if ($course instanceof Course) {
-                $cid = (int) $course->getId();
-            }
-
-            $courseSession = $session->get('session');
-            if ($courseSession instanceof Session) {
-                $sid = (int) $courseSession->getId();
-            }
-
-            $group = $session->get('group');
-            if ($group instanceof CGroup) {
-                $gid = (int) $group->getIid();
-            }
-        }
-
-        // Fallback to the query parameters (kept in sync with the session by
-        // CidReqListener) in the unlikely case the session context is missing.
-        if ($cid <= 0) {
-            $cid = $request->query->getInt('cid');
-            $sid = $request->query->getInt('sid');
-            $gid = $request->query->getInt('gid');
-        }
+        $cid = (int) ($course ?? $cidReqHelper->getCourseEntity())?->getId();
+        $sid = null === $course ? (int) $cidReqHelper->getSessionEntity()?->getId() : 0;
+        $gid = null === $course ? (int) $cidReqHelper->getGroupEntity()?->getIid() : 0;
 
         // Visibility is the only field still honored from the body.
         $visibility = $defaultVisibility;
@@ -233,10 +217,53 @@ class BaseResourceFileAction
     }
 
     /**
+     * The body picks where inside the current course the new node lands; it must never point
+     * the parent at another course's tree. buildResourceLinkListFromContext() already forces
+     * the link binding, so without this a teacher could nest a node under a foreign course
+     * while its link stayed in their own — the node ends up in someone else's path, quota and
+     * subtree. Callers without a course context (personal files, ...) are left untouched.
+     *
+     * $course carries the same in-process-only meaning as in
+     * buildResourceLinkListFromContext(): it lets a caller with no session context
+     * still get the parent checked instead of skipping the guard.
+     */
+    protected function assertParentNodeIsInCurrentCourse(
+        CidReqHelper $cidReqHelper,
+        int $parentResourceNodeId,
+        EntityManagerInterface $em,
+        ?Course $course = null
+    ): void {
+        $courseNode = ($course ?? $cidReqHelper->getCourseEntity())?->getResourceNode();
+        if (null === $courseNode) {
+            return;
+        }
+
+        $parentNode = $em->getRepository(ResourceNode::class)->find($parentResourceNodeId);
+        if (null === $parentNode) {
+            throw new AccessDeniedHttpException('The parent resource node does not exist.');
+        }
+
+        if ((int) $parentNode->getId() === (int) $courseNode->getId()) {
+            return;
+        }
+
+        // Materialized paths end each segment with "-<id>/", so the prefix cannot match a
+        // different course by accident.
+        if (!str_starts_with((string) $parentNode->getPath(), (string) $courseNode->getPath())) {
+            throw new AccessDeniedHttpException('The parent resource node does not belong to the current course.');
+        }
+    }
+
+    /**
      * @todo use this function inside handleCreateFileRequest
      */
-    protected function handleCreateRequest(AbstractResource $resource, ResourceRepository $resourceRepository, Request $request): array
-    {
+    protected function handleCreateRequest(
+        AbstractResource $resource,
+        ResourceRepository $resourceRepository,
+        Request $request,
+        CidReqHelper $cidReqHelper,
+        EntityManagerInterface $em
+    ): array {
         $contentData = $request->getContent();
 
         if (!empty($contentData)) {
@@ -268,6 +295,8 @@ class BaseResourceFileAction
             throw new Exception('Parameter parentResourceNodeId int value is needed');
         }
 
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em);
+
         $resource->setParentResourceNode($parentResourceNodeId);
 
         if (empty($title)) {
@@ -289,6 +318,7 @@ class BaseResourceFileAction
         ResourceRepository $resourceRepository,
         Request $request,
         EntityManager $em,
+        CidReqHelper $cidReqHelper,
         string $fileExistsOption = '',
         ?TranslatorInterface $translator = null
     ): array {
@@ -305,6 +335,8 @@ class BaseResourceFileAction
         if (0 === $parentResourceNodeId) {
             throw new Exception('parentResourceNodeId int value needed');
         }
+
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em);
 
         $resource->setParentResourceNode($parentResourceNodeId);
 
@@ -333,11 +365,13 @@ class BaseResourceFileAction
         ResourceRepository $resourceRepository,
         Request $request,
         EntityManager $em,
+        CidReqHelper $cidReqHelper,
         string $fileExistsOption = '',
         ?TranslatorInterface $translator = null,
         ?CourseRepository $courseRepository = null,
         ?CourseHelper $courseHelper = null,
-        ?array $resourceLinkListOverride = null
+        ?array $resourceLinkListOverride = null,
+        ?Course $course = null
     ): array {
         $contentData = $request->getContent();
 
@@ -382,6 +416,8 @@ class BaseResourceFileAction
         if (0 === $parentResourceNodeId) {
             throw new Exception('parentResourceNodeId int value needed');
         }
+
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em, $course);
 
         $resource->setParentResourceNode($parentResourceNodeId);
 
@@ -559,10 +595,12 @@ class BaseResourceFileAction
         Request $request,
         EntityManager $em,
         KernelInterface $kernel,
+        CidReqHelper $cidReqHelper,
         ?CourseRepository $courseRepository = null,
         ?CDocumentRepository $documentRepository = null,
         ?CourseHelper $courseHelper = null,
-        ?array $resourceLinkListOverride = null
+        ?array $resourceLinkListOverride = null,
+        ?Course $course = null
     ): array {
         $rawParent = $request->request->get('parentResourceNodeId');
         $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
@@ -596,6 +634,10 @@ class BaseResourceFileAction
         if (0 === $parentResourceNodeId) {
             throw new Exception('parentResourceNodeId int value needed');
         }
+
+        // Before extracting: saveZipContentsAsDocuments() writes every entry under this parent,
+        // so an unchecked id would seed a whole tree into a foreign course.
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em, $course);
 
         if ('file' === $fileType && $request->files->count() > 0) {
             if (!$request->files->has('uploadFile')) {

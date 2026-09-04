@@ -65,7 +65,7 @@ class ExerciseLink extends AbstractLink
         $course = api_get_course_entity($this->course_id);
         $session = api_get_session_entity($sessionId);
 
-        $qb = $repo->findAllByCourse($course, $session, null, 1, false);
+        $qb = $repo->findAllByCourse($course, $session, null, true, false);
         /** @var CQuiz[] $exercises */
         $exercises = $qb->getQuery()->getResult();
         $cats = [];

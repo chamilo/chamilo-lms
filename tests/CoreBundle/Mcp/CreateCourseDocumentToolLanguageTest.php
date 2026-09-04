@@ -6,38 +6,33 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Mcp;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Mcp\CreateCourseDocumentTool;
-use Doctrine\ORM\EntityManagerInterface;
+use Chamilo\Tests\ChamiloTestTrait;
 use InvalidArgumentException;
 use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class CreateCourseDocumentToolLanguageTest extends KernelTestCase
 {
-    public function testResolvesCourseDefaultAndTitlesAcrossRealCourses(): void
+    use ChamiloTestTrait;
+
+    public function testResolvesCourseDefaultAndTitles(): void
     {
         self::bootKernel();
-        $container = self::getContainer();
 
-        /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
-        $tool = $container->get(CreateCourseDocumentTool::class);
+        $tool = self::getContainer()->get(CreateCourseDocumentTool::class);
 
         $reflection = new ReflectionMethod($tool, 'resolveLanguageIsoCode');
         $reflection->setAccessible(true);
 
-        foreach ([1 => 'es', 2 => 'en_US', 4 => 'fr_FR'] as $courseId => $expectedCourseLanguage) {
-            $course = $em->getRepository(Course::class)->find($courseId);
-            if (!$course instanceof Course) {
-                self::markTestSkipped("Course #$courseId does not exist in this DB, skipping.");
-            }
-
-            self::assertSame($expectedCourseLanguage, $course->getCourseLanguage());
+        foreach (['es', 'en_US', 'fr_FR'] as $courseLanguage) {
+            $course = $this->createCourse('Language '.$courseLanguage);
+            $course->setCourseLanguage($courseLanguage);
+            $this->getEntityManager()->flush();
 
             // No language requested: falls back to the course's own language.
-            self::assertSame($expectedCourseLanguage, $reflection->invoke($tool, $course, null));
-            self::assertSame($expectedCourseLanguage, $reflection->invoke($tool, $course, ''));
+            self::assertSame($courseLanguage, $reflection->invoke($tool, $course, null));
+            self::assertSame($courseLanguage, $reflection->invoke($tool, $course, ''));
 
             // A specific language requested, by title: resolves to its isocode
             // regardless of the course's own language.

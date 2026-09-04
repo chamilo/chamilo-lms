@@ -57,8 +57,22 @@ final readonly class UserRolesProcessor implements ProcessorInterface
         $hasRoleNow = \in_array('ROLE_GLOBAL_ADMIN', $data->getRoles(), true);
 
         if ($hasRoleNow && !$hadRoleBefore) {
-            $actor = $this->userHelper->getCurrent();
-            if (null === $actor || !$this->accessUrlScope->canGrantGlobalAdminRole($actor)) {
+            // Never null in practice: every operation wired to this processor already requires an
+            // authenticated user (UserVoter::EDIT on Put/Patch, ROLE_ADMIN on Post). Kept only to
+            // narrow the type for the calls below.
+            $actor = $this->userHelper->getCurrent()
+                ?? throw new AccessDeniedHttpException('Only a global admin registered in the topmost access URL may grant the global admin role.');
+
+            // Editing your own account hands the actor and the target the same managed entity,
+            // whose roles denormalization has already mutated. Asking it whether the actor holds
+            // ROLE_GLOBAL_ADMIN would answer with the role the request is trying to obtain, so the
+            // payload would authorize itself. Reaching this branch already proves the persisted
+            // roles lacked it ($hadRoleBefore is false), which settles the self-grant case here.
+            if ((int) $actor->getId() === (int) $data->getId()) {
+                throw new AccessDeniedHttpException('You cannot grant yourself the global admin role.');
+            }
+
+            if (!$this->accessUrlScope->canGrantGlobalAdminRole($actor)) {
                 throw new AccessDeniedHttpException('Only a global admin registered in the topmost access URL may grant the global admin role.');
             }
         }

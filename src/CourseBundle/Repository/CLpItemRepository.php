@@ -13,7 +13,7 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-final class CLpItemRepository extends ServiceEntityRepository
+class CLpItemRepository extends ServiceEntityRepository
 {
     use NestedTreeRepositoryTrait;
     use NonResourceRepository;

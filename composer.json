@@ -239,10 +239,12 @@
     },
     "post-install-cmd": [
       "@auto-scripts",
+      "Chamilo\\CoreBundle\\Component\\Composer\\ScriptHandler::installGitHooks",
       "find var/cache -mindepth 1 -delete 2>/dev/null || true"
     ],
     "post-update-cmd": [
       "@auto-scripts",
+      "Chamilo\\CoreBundle\\Component\\Composer\\ScriptHandler::installGitHooks",
       "find var/cache -mindepth 1 -delete 2>/dev/null || true"
     ],
     "pre-install-cmd": [

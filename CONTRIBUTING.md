@@ -409,10 +409,25 @@ and Composer complains again.
 
 ### git hooks
 
-To use the git hook sample scripts under `tests/scripts/git-hooks/`, the
-following commands can be used.
+`composer install` points git at `tests/scripts/git-hooks/`, so every clone gets
+the project hooks without any manual step. If you cloned before that change, or
+composer ran with `--no-scripts`, enable them with:
 
     git config core.hooksPath tests/scripts/git-hooks/
+
+An existing `core.hooksPath` of your own is never overwritten.
+
+The `pre-push` hook runs ECS (the tool behind `composer phpcs-fix`) over the PHP
+files of the commits you push. If it finds a code style problem, it fixes the
+files in your working tree and stops the push. Add the fix to your commits and
+push again:
+
+    git add -u && git commit --amend --no-edit
+
+The hook uses the `php` of your machine when it can see `vendor/`. If it cannot,
+the hook uses the Docker container `chamilo2-php83`. Set `CHAMILO_PHP` or
+`CHAMILO_PHP_CONTAINER` if your setup is different. To skip the hook one time,
+push with `--no-verify`.
 
 ## Big changes from 1.x (for developers)
 

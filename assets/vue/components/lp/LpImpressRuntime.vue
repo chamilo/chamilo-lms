@@ -71,6 +71,9 @@
               playsinline
               preload="metadata"
               @loadedmetadata="handleMediaLoad"
+              @ended="emit('video-ended')"
+              @play="emit('video-playing')"
+              @seeking="emit('video-playing')"
             />
 
             <iframe
@@ -134,7 +137,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(["active-change", "iframe-load", "media-load", "open-item"])
+const emit = defineEmits(["active-change", "iframe-load", "media-load", "open-item", "video-ended", "video-playing"])
 const { t } = useI18n()
 
 const activeItemId = ref(0)

@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Base;
 
 use DOMElement;
-use XMLGenericDocument;
 
 class CcGeneralFile extends XMLGenericDocument
 {

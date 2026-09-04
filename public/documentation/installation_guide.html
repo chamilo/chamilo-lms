@@ -236,6 +236,95 @@ systemctl restart apache2</pre>
   SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
     </pre>
 
+    <ul>Using Nginx</ul>
+    Using Nginx should be done through an Nginx configuration roughly in the vicinity of the following (this assumes you have a PHP8.3-FPM process running through sockers, that you will call your portal <em>http://my.chamilo.net</em> and that it's located in <em>/var/www/chamilo/public</em>:
+    <pre>
+        server {
+  listen 80;
+  server_name my.chamilo.net;
+  root /var/www/chamilo/public;
+
+  index index.php;
+
+  add_header X-Frame-Options        "SAMEORIGIN"                      always;
+  add_header X-Content-Type-Options "nosniff"                         always;
+  add_header Referrer-Policy        "strict-origin-when-cross-origin" always;
+
+  # Block hidden files (.env, .git, etc.) except Let's Encrypt
+  location ~ /\.(?!well-known) {
+    deny all;
+  }
+
+  # -----------------------------------------------------------------------
+  # Pure static directories
+  # -----------------------------------------------------------------------
+  location ~* ^/(build|bundles|documentation|fonts|img|libs|sound)/ {
+    expires 30d;
+    add_header Cache-Control "public, immutable";
+    try_files $uri =404;
+  }
+
+  # -----------------------------------------------------------------------
+  # Legacy PHP trees — main/ and plugin/ execute .php files directly
+  # -----------------------------------------------------------------------
+  location ~ ^/(main|plugin)/ {
+    try_files $uri $uri/ =404;
+
+    location ~ \.php$ {
+      fastcgi_pass  unix:/var/run/php/php8.3-fpm.sock;
+      fastcgi_split_path_info ^(.+\.php)(/.*)$;
+      include       fastcgi_params;
+      fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+      fastcgi_param DOCUMENT_ROOT   $realpath_root;
+      fastcgi_param PATH_INFO       $fastcgi_path_info;
+    }
+  }
+
+  # -----------------------------------------------------------------------
+  # Symfony front controller
+  # -----------------------------------------------------------------------
+  location / {
+    try_files $uri /index.php$is_args$args;
+  }
+
+  # -----------------------------------------------------------------------
+  # check.php — Symfony requirements checker.
+  # PRODUCTION: block public access entirely.
+  # DEV/TEST:   comment out this block to allow direct browser access.
+  # -----------------------------------------------------------------------
+  location = /check.php {
+    deny all;
+  }
+
+  # -----------------------------------------------------------------------
+  # legacy.php — bootstrap included by legacy PHP scripts via require/include.
+  # Must never be served over HTTP in any environment.
+  # -----------------------------------------------------------------------
+  location = /legacy.php {
+    deny all;
+  }
+
+  # -----------------------------------------------------------------------
+  # PHP execution — Symfony entry point only.
+  # `internal` ensures direct browser requests to /index.php return 404,
+  # preventing duplicate content without needing a redirect.
+  # -----------------------------------------------------------------------
+  location ~ ^/index\.php$ {
+    fastcgi_pass  unix:/var/run/php/php8.3-fpm.sock;
+    fastcgi_split_path_info ^(.+\.php)(/.*)$;
+    include       fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+    fastcgi_param DOCUMENT_ROOT   $realpath_root;
+    fastcgi_param PATH_INFO       $fastcgi_path_info;
+    internal;
+  }
+
+  # Deny direct access to any other .php at root level
+  location ~ \.php$ {
+    return 404;
+  }
+}
+    </pre>
 
     <h3>3.4. Files permissions</h3>
     <a id="cli-install-permissions" class="anchor"></a>

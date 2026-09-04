@@ -15,8 +15,6 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\QueryParameter;
-use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter as OpenApiParameter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
@@ -34,7 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        // Must stay before the item Get, otherwise /c_tool_intros/{iid} matches "current" first.
         new Get(
             uriTemplate: '/c_tool_intros/current.{_format}',
             normalizationContext: [
@@ -65,6 +63,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ),
             ],
         ),
+        new Get(security: "is_granted('VIEW', object.resourceNode)"),
         new Put(
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             parameters: [
@@ -106,17 +105,6 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
         ),
         new GetCollection(
-            openapi: new Operation(
-                parameters: [
-                    new OpenApiParameter(
-                        name: 'cid',
-                        in: 'query',
-                        description: 'Course identifier',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                ],
-            ),
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             parameters: [
                 'cid' => new QueryParameter(

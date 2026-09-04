@@ -239,6 +239,19 @@
                 font-size: .9rem;
             }
 
+            .course-about-room-map {
+                width: 100%;
+                height: 240px;
+                border: 0;
+                border-radius: .5rem;
+            }
+
+            .course-about-room-name {
+                margin: .75rem 0 0;
+                color: #374151;
+                font-weight: 600;
+            }
+
             .course-about-tags {
                 display: flex;
                 flex-wrap: wrap;
@@ -458,6 +471,25 @@
                                     </div>
                                 </article>
                             {% endfor %}
+                        </div>
+                    </section>
+                {% endif %}
+
+                {% if room_location %}
+                    <section class="course-about-card">
+                        <div class="course-about-card-body">
+                            <h2 class="course-about-panel-title">{{ 'Location'|trans }}</h2>
+                            <iframe
+                                class="course-about-room-map"
+                                src="{{ room_location.embed_url }}"
+                                title="{{ 'Room'|trans }}: {{ room_location.title }}"
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                            ></iframe>
+                            <p class="course-about-room-name">
+                                <span class="mdi mdi-map-marker" aria-hidden="true"></span>
+                                {{ room_location.title }}
+                            </p>
                         </div>
                     </section>
                 {% endif %}

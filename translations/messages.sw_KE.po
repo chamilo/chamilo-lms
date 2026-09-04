@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Mtiririko wa Octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -7712,6 +7712,54 @@ msgstr "Orodha ya maswali ya jaribio"
 
 msgid "Recycle existing questions"
 msgstr "Tumia tena maswali yaliyopo"
+
+msgid "Add this question to the test: %s"
+msgstr "Ongeza swali hili kwenye jaribio: %s"
+
+msgid "Edit question: %s"
+msgstr "Hariri swali: %s"
+
+msgid "Add a question: %s"
+msgstr "Ongeza swali: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Nafasi zilizogunduliwa: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "Maswali %s, kwa jumla ya alama (maswali yote) ya %s."
+
+msgid "Unique answer"
+msgstr "Jibu la kipekee"
+
+msgid "Multiple answer true/false"
+msgstr "Majibu mengi kweli/si kweli"
+
+msgid "Multiple answer combination true/false"
+msgstr "Mchanganyiko wa majibu mengi kweli/si kweli"
+
+msgid "Unique answer with images"
+msgstr "Jibu la kipekee na picha"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Majibu mengi kweli/si kweli na kiwango cha uhakika"
+
+msgid "Answer in Office document"
+msgstr "Jibu katika hati ya Office"
+
+msgid "Matching draggable"
+msgstr "Kulinganisha kwa kuburuta"
+
+msgid "Matching draggable combination"
+msgstr "Mchanganyiko wa kulinganisha kwa kuburuta"
+
+msgid "Fill in blanks combination"
+msgstr "Mchanganyiko wa kujaza nafasi"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Mchanganyiko wa menyu kunjuzi ya majibu mengi"
+
+msgid "Matching combination"
+msgstr "Mchanganyiko wa kulinganisha"
 
 msgid "Correct test"
 msgstr "Jaribio sahihi"
@@ -20537,6 +20585,9 @@ msgstr "Kiungo kimeisha, jaribu tena."
 
 msgid "Instructions for the password change procedure"
 msgstr "Maagizo ya utaratibu wa kubadili nywila"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Ujumbe huu unatumwa kwako kwa sababu wewe (au mtu anayejaribu kujifanya wewe) uliomba nenosiri jipya litengenezwe kwa akaunti yako.<br/>Ili kuweka nenosiri lako jipya, tafadhali fuata kiungo hiki:<br/>%s<br/>Ikiwa hukufanya ombi hili, unaweza kupuuza tu ujumbe huu. Ikiwa utaendelea kupokea ujumbe huu, tafadhali wasiliana na msimamizi wa lango."
 
 msgid "Remind Course Expiration cron"
 msgstr "Kumbusha cron ya mwisho wa kozi"
@@ -39108,8 +39159,8 @@ msgstr "Sasisha kiotomatiki kila sekunde 5"
 msgid "Web server load"
 msgstr "Mzigo wa seva ya wavuti"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Vipimo vya hali ya Apache au Nginx moja kwa moja"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Vipimo vya hali ya Apache, Nginx au FrankenPHP moja kwa moja"
 
 msgid "Click to show web server load metrics"
 msgstr "Bofya ili kuonyesha vipimo vya mzigo wa seva ya wavuti"
@@ -39117,8 +39168,8 @@ msgstr "Bofya ili kuonyesha vipimo vya mzigo wa seva ya wavuti"
 msgid "Requires a local web server status module"
 msgstr "Inahitaji moduli ya hali ya seva ya wavuti ya ndani"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Mzigo wa seva ya wavuti husomwa kutoka Apache mod_status au Nginx stub_status kwenye localhost pekee. Ukurasa wa hali lazima uruhusu maombi kutoka 127.0.0.1 (au ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Mzigo wa seva ya wavuti husomwa kutoka Apache mod_status, Nginx stub_status, au kiwango cha vipimo vya FrankenPHP/Caddy, kwenye localhost pekee. Ukurasa wa hali lazima uruhusu maombi kutoka 127.0.0.1 (au ::1)."
 
 msgid "Paths scanned"
 msgstr "Njia zilizochanganuliwa"
@@ -39129,8 +39180,8 @@ msgstr "Zimegunduliwa"
 msgid "Status path"
 msgstr "Njia ya hali"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Vipimo vya mzigo wa seva ya wavuti vinapatikana tu kwa Apache na Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Vipimo vya mzigo wa seva ya wavuti vinapatikana tu kwa Apache, Nginx na FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Hakuna njia za hali zilizochanganuliwa zilizojibu kwenye localhost."
@@ -39213,8 +39264,23 @@ msgstr "Inakubali"
 msgid "Handled"
 msgstr "Imeshughulikiwa"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: wezesha mod_status (ExtendedStatus On) na ruhusu localhost kufikia /server-status. Nginx: wezesha stub_status kwenye eneo la localhost pekee kama /nginx_status au /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: wezesha mod_status (ExtendedStatus On) na uruhusu localhost kwenye /server-status. Nginx: wezesha stub_status kwenye eneo la localhost pekee kama /nginx_status au /stub_status. FrankenPHP: ongeza chaguo la kimataifa \"metrics\" kwenye Caddyfile, ambalo hutoa vipimo vya Prometheus kwenye API ya usimamizi ya Caddy (127.0.0.1:2019/metrics) kwa chaguo-msingi."
+
+msgid "Total threads"
+msgstr "Nyuzi jumla"
+
+msgid "Busy threads"
+msgstr "Nyuzi zinazotumika"
+
+msgid "Queue depth"
+msgstr "Kina cha foleni"
+
+msgid "Worker"
+msgstr "Mfanyakazi"
+
+msgid "Average request time"
+msgstr "Muda wastani wa ombi"
 
 msgid "Grade percentage distribution"
 msgstr "Mgawanyo wa asilimia za alama"
@@ -39282,11 +39348,17 @@ msgstr "OPcache imesakinishwa lakini haijawashwa."
 msgid "OPcache extension is not available on this server."
 msgstr "Kiendelezi cha OPcache hakipatikani kwenye seva hii."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache inaripoti takwimu za kumbukumbu zisizolingana (tatizo linalojulikana kwenye baadhi ya mazingira ya PHP yenye nyuzi, k.m. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu imesakinishwa lakini haijawashwa."
 
 msgid "APCu extension is not available on this server."
 msgstr "Kiendelezi cha APCu hakipatikani kwenye seva hii."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu inaripoti takwimu za kumbukumbu zisizolingana (tatizo linalojulikana kwenye baadhi ya mazingira ya PHP yenye nyuzi)."
 
 msgid "Constant"
 msgstr "Thabiti"
@@ -40046,4 +40118,10 @@ msgstr "Tumia tarehe za ufikiaji wa kipindi"
 
 msgid "Use session access end date"
 msgstr "Tumia tarehe ya mwisho ya ufikiaji wa kipindi"
+
+msgid "Group report"
+msgstr "Ripoti ya kikundi"
+
+msgid "Student follow-up"
+msgstr "Ufuatiliaji wa mwanafunzi"
 

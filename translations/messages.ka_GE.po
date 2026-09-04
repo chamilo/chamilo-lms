@@ -7713,6 +7713,54 @@ msgstr "ტესტის კითხვების სია"
 msgid "Recycle existing questions"
 msgstr "არსებული კითხვების გამოყენება"
 
+msgid "Add this question to the test: %s"
+msgstr "დაამატეთ ეს კითხვა ტესტს: %s"
+
+msgid "Edit question: %s"
+msgstr "კითხვის რედაქტირება: %s"
+
+msgid "Add a question: %s"
+msgstr "კითხვის დამატება: %s"
+
+msgid "Detected blanks: %s"
+msgstr "აღმოჩენილი ცარიელი ადგილები: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s კითხვა, ჯამური ქულა (ყველა კითხვა) %s."
+
+msgid "Unique answer"
+msgstr "ერთი პასუხი"
+
+msgid "Multiple answer true/false"
+msgstr "მრავალი პასუხი მართალი/მცდარი"
+
+msgid "Multiple answer combination true/false"
+msgstr "მრავალი პასუხის კომბინაცია მართალი/მცდარი"
+
+msgid "Unique answer with images"
+msgstr "ერთი პასუხი სურათებით"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "მრავალი პასუხი მართალი/მცდარი დარწმუნებულობის ხარისხით"
+
+msgid "Answer in Office document"
+msgstr "პასუხი Office დოკუმენტში"
+
+msgid "Matching draggable"
+msgstr "შესაბამისობა გადათრევით"
+
+msgid "Matching draggable combination"
+msgstr "შესაბამისობის კომბინაცია გადათრევით"
+
+msgid "Fill in blanks combination"
+msgstr "ცარიელი ადგილების შევსების კომბინაცია"
+
+msgid "Multiple answer dropdown combination"
+msgstr "მრავალი პასუხის ჩამოსაშლელი კომბინაცია"
+
+msgid "Matching combination"
+msgstr "შესაბამისობის კომბინაცია"
+
 msgid "Correct test"
 msgstr "სწორი ტესტი"
 
@@ -20537,6 +20585,9 @@ msgstr "ბმული ვადაგასულია, გთხოვთ �
 
 msgid "Instructions for the password change procedure"
 msgstr "პაროლის შეცვლის პროცედურის ინსტრუქციები"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "ეს შეტყობინება გამოგიგზავნეთ, რადგან თქვენ (ან ვინმემ, ვინც ცდილობს თქვენს იმიტაციას) მოითხოვეთ ახალი პაროლის გენერირება თქვენი ანგარიშისთვის.<br/>ახალი პაროლის დასაყენებლად გთხოვთ მიჰყევით ამ ბმულს:<br/>%s<br/>თუ ეს მოთხოვნა თქვენ არ გაგიკეთებიათ, შეგიძლიათ უბრალოდ უგულებელყოთ ეს შეტყობინება. თუ ამ შეტყობინებების მიღებას გააგრძელებთ, გთხოვთ დაუკავშირდეთ პორტალის ადმინისტრატორს."
 
 msgid "Remind Course Expiration cron"
 msgstr "კურსის ვადის გასული შეხსენების cron"
@@ -39108,8 +39159,8 @@ msgstr "ავტომატური განახლება ყოვე�
 msgid "Web server load"
 msgstr "ვებ სერვერის დატვირთვა"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Apache-ის ან Nginx-ის სტატუსის მეტრიკები რეალურ დროში"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Apache, Nginx ან FrankenPHP-ის პირდაპირი სტატუსის მეტრიკები"
 
 msgid "Click to show web server load metrics"
 msgstr "დააჭირეთ ვებ სერვერის დატვირთვის მეტრიკების საჩვენებლად"
@@ -39117,8 +39168,8 @@ msgstr "დააჭირეთ ვებ სერვერის დატვ
 msgid "Requires a local web server status module"
 msgstr "მოითხოვს ლოკალური ვებ სერვერის სტატუსის მოდულს"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "ვებ სერვერის დატვირთვა იკითხება Apache mod_status-იდან ან Nginx stub_status-იდან მხოლოდ localhost-ზე. სტატუსის გვერდი უნდა იძლეოდეს მოთხოვნებს 127.0.0.1-დან (ან ::1-დან)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "ვებ-სერვერის დატვირთვა იკითხება Apache mod_status-დან, Nginx stub_status-დან ან FrankenPHP/Caddy-ის მეტრიკების წერტილიდან, მხოლოდ localhost-ზე. სტატუსის გვერდმა უნდა დაუშვას მოთხოვნები 127.0.0.1-დან (ან ::1-დან)."
 
 msgid "Paths scanned"
 msgstr "სკანირებული ბილიკები"
@@ -39129,8 +39180,8 @@ msgstr "აღმოჩენილი"
 msgid "Status path"
 msgstr "სტატუსის ბილიკი"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "ვებ სერვერის დატვირთვის მეტრიკები ხელმისაწვდომია მხოლოდ Apache-ისა და Nginx-ისთვის."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "ვებ-სერვერის დატვირთვის მეტრიკები ხელმისაწვდომია მხოლოდ Apache, Nginx და FrankenPHP-ისთვის."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "სკანირებულ სტატუსის ბილიკებიდან არცერთი არ უპასუხა localhost-ზე."
@@ -39213,8 +39264,23 @@ msgstr "მიღებები"
 msgid "Handled"
 msgstr "დამუშავებული"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: ჩართეთ mod_status (ExtendedStatus On) და დაუშვით localhost-ს წვდომა /server-status-ზე. Nginx: ჩართეთ stub_status მხოლოდ localhost-ისთვის განკუთვნილ მდებარეობაზე, მაგალითად /nginx_status ან /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: ჩართეთ mod_status (ExtendedStatus On) და დაუშვით localhost-ს /server-status. Nginx: ჩართეთ stub_status მხოლოდ localhost-ის location-ზე, მაგალითად /nginx_status ან /stub_status. FrankenPHP: დაამატეთ გლობალური \"metrics\" ოფცია Caddyfile-ში, რომელიც ნაგულისხმევად აქვეყნებს Prometheus მეტრიკებს Caddy-ის ადმინისტრაციულ API-ზე (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "სულ ნაკადები"
+
+msgid "Busy threads"
+msgstr "დაკავებული ნაკადები"
+
+msgid "Queue depth"
+msgstr "რიგის სიღრმე"
+
+msgid "Worker"
+msgstr "მუშაკი"
+
+msgid "Average request time"
+msgstr "მოთხოვნის საშუალო დრო"
 
 msgid "Grade percentage distribution"
 msgstr "შეფასების პროცენტული განაწილება"
@@ -39282,11 +39348,17 @@ msgstr "OPcache დაყენებულია, მაგრამ არ ა
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache გაფართოება მიუწვდომელია ამ სერვერზე."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache აცხადებს არათანმიმდევრულ მეხსიერების სტატისტიკას (ცნობილი პრობლემა ზოგიერთ ნაკადულ PHP გარემოში, მაგ. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu დაყენებულია, მაგრამ არ არის ჩართული."
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu გაფართოება ამ სერვერზე მიუწვდომელია."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu აცხადებს არათანმიმდევრულ მეხსიერების სტატისტიკას (ცნობილი პრობლემა ზოგიერთ ნაკადულ PHP გარემოში)."
 
 msgid "Constant"
 msgstr "მუდმივი"
@@ -40046,4 +40118,10 @@ msgstr "სესიის წვდომის თარიღების გ
 
 msgid "Use session access end date"
 msgstr "სესიის წვდომის დასრულების თარიღის გამოყენება"
+
+msgid "Group report"
+msgstr "ჯგუფის ანგარიში"
+
+msgid "Student follow-up"
+msgstr "სტუდენტის მონიტორინგი"
 

@@ -7725,6 +7725,54 @@ msgstr "רשימת השאלות של המבחן"
 msgid "Recycle existing questions"
 msgstr "מחזר שאלות קיימות"
 
+msgid "Add this question to the test: %s"
+msgstr "הוסף שאלה זו למבחן: %s"
+
+msgid "Edit question: %s"
+msgstr "ערוך שאלה: %s"
+
+msgid "Add a question: %s"
+msgstr "הוסף שאלה: %s"
+
+msgid "Detected blanks: %s"
+msgstr "ריקים שזוהו: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s שאלות, לציון כולל (כל השאלות) של %s."
+
+msgid "Unique answer"
+msgstr "תשובה ייחודית"
+
+msgid "Multiple answer true/false"
+msgstr "תשובות מרובות נכון\/לא נכון"
+
+msgid "Multiple answer combination true/false"
+msgstr "שילוב תשובות מרובות נכון\/לא נכון"
+
+msgid "Unique answer with images"
+msgstr "תשובה ייחודית עם תמונות"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "תשובות מרובות נכון\/לא נכון עם דרגת ודאות"
+
+msgid "Answer in Office document"
+msgstr "תשובה במסמך Office"
+
+msgid "Matching draggable"
+msgstr "התאמה בגרירה"
+
+msgid "Matching draggable combination"
+msgstr "שילוב התאמה בגרירה"
+
+msgid "Fill in blanks combination"
+msgstr "שילוב מילוי חסרים"
+
+msgid "Multiple answer dropdown combination"
+msgstr "שילוב תשובות מרובות ברשימה נפתחת"
+
+msgid "Matching combination"
+msgstr "שילוב התאמה"
+
 msgid "Correct test"
 msgstr "בדיקה נכונה"
 
@@ -20553,6 +20601,9 @@ msgstr "פג תוקף הקישור, אנא נסה שוב."
 
 msgid "Instructions for the password change procedure"
 msgstr "הוראות להליך שינוי הסיסמה"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "הודעה זו נשלחת אליך כי אתה (או מישהו שמנסה להתחזות אליך) ביקשת ליצור סיסמה חדשה לחשבונך.<br/>כדי להגדיר את הסיסמה החדשה, אנא עקוב אחר קישור זה:<br/>%s<br/>אם לא ביצעת בקשה זו, ניתן פשוט להתעלם מהודעה זו. אם תמשיך לקבל הודעות אלה, אנא פנה למנהל הפורטל."
 
 msgid "Remind Course Expiration cron"
 msgstr "תזכיר את תפוגת הקורס cron"
@@ -39125,8 +39176,8 @@ msgstr "רענון אוטומטי כל 5 שניות"
 msgid "Web server load"
 msgstr "עומס שרת אינטרנט"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "מדדי סטטוס Apache או Nginx בזמן אמת"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "מדדי סטטוס חיים של Apache, Nginx או FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "לחץ להצגת מדדי עומס שרת אינטרנט"
@@ -39134,8 +39185,8 @@ msgstr "לחץ להצגת מדדי עומס שרת אינטרנט"
 msgid "Requires a local web server status module"
 msgstr "דורש מודול סטטוס שרת אינטרנט מקומי"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "עומס שרת אינטרנט נקרא מ-Apache mod_status או Nginx stub_status ב-localhost בלבד. דף הסטטוס חייב לאפשר בקשות מ-127.0.0.1 (או ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "עומס שרת האינטרנט נקרא מ-Apache mod_status, מ-Nginx stub_status או מנקודת הקצה של מדדי FrankenPHP/Caddy, ב-localhost בלבד. דף הסטטוס חייב לאפשר בקשות מ-127.0.0.1 (או ::1)."
 
 msgid "Paths scanned"
 msgstr "נתיבים שנסרקו"
@@ -39146,8 +39197,8 @@ msgstr "זוהה"
 msgid "Status path"
 msgstr "נתיב סטטוס"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "מדדי עומס שרת אינטרנט זמינים רק עבור Apache ו-Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "מדדי עומס שרת האינטרנט זמינים רק עבור Apache, Nginx ו-FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "אף אחד מהנתיבים שנסרקו לא הגיב ב-localhost."
@@ -39230,8 +39281,23 @@ msgstr "מקבל"
 msgid "Handled"
 msgstr "מטופל"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: הפעל mod_status (ExtendedStatus On) ואפשר ל-localhost לגשת ל-/server-status. Nginx: הפעל stub_status במיקום localhost בלבד כגון /nginx_status או /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: הפעל mod_status (ExtendedStatus On) ואפשר ל-localhost גישה ל-/server-status. Nginx: הפעל stub_status במיקום ל-localhost בלבד כגון /nginx_status או /stub_status. FrankenPHP: הוסף אפשרות גלובלית \"metrics\" ל-Caddyfile, שחושפת מדדי Prometheus ב-API הניהול של Caddy (127.0.0.1:2019/metrics) כברירת מחדל."
+
+msgid "Total threads"
+msgstr "סה\"כ תהליכונים"
+
+msgid "Busy threads"
+msgstr "תהליכונים עסוקים"
+
+msgid "Queue depth"
+msgstr "עומק תור"
+
+msgid "Worker"
+msgstr "עובד"
+
+msgid "Average request time"
+msgstr "זמן בקשה ממוצע"
 
 msgid "Grade percentage distribution"
 msgstr "התפלגות אחוזי הציונים"
@@ -39299,11 +39365,17 @@ msgstr "OPcache מותקן אך לא מופעל."
 msgid "OPcache extension is not available on this server."
 msgstr "הרחבת OPcache אינה זמינה בשרת זה."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache מדווח על סטטיסטיקות זיכרון לא עקביות (בעיה ידועה בחלק מסביבות PHP עם תהליכונים, למשל FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu מותקן אך לא מופעל."
 
 msgid "APCu extension is not available on this server."
 msgstr "הרחבת APCu אינה זמינה בשרת זה."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu מדווח על סטטיסטיקות זיכרון לא עקביות (בעיה ידועה בחלק מסביבות PHP עם תהליכונים)."
 
 msgid "Constant"
 msgstr "קבוע"
@@ -40063,4 +40135,10 @@ msgstr "השתמש בתאריכי גישה למושב"
 
 msgid "Use session access end date"
 msgstr "השתמש בתאריך סיום גישה למושב"
+
+msgid "Group report"
+msgstr "דוח קבוצה"
+
+msgid "Student follow-up"
+msgstr "מעקב אחר תלמיד"
 

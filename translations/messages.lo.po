@@ -338,7 +338,7 @@ msgid "Sincerely"
 msgstr "ດ້ວຍຄວາມຈິງໃຈ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ຕົວຢ່າງສູດ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ຕົວຢ່າງສູດ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ຊ່ວງຂອງຕົວປ່ຽນ"
@@ -7717,6 +7717,54 @@ msgstr "ລາຍການຄຳຖາມຂອງການທົດສອບ"
 
 msgid "Recycle existing questions"
 msgstr "ນຳໃຊ້ຄຳຖາມທີ່ມີຢູ່ແລ້ວຄືນ"
+
+msgid "Add this question to the test: %s"
+msgstr "ເພີ່ມຄຳຖາມນີ້ໃສ່ບົດທົດສອບ: %s"
+
+msgid "Edit question: %s"
+msgstr "ແກ້ໄຂຄຳຖາມ: %s"
+
+msgid "Add a question: %s"
+msgstr "ເພີ່ມຄຳຖາມ: %s"
+
+msgid "Detected blanks: %s"
+msgstr "ຊ່ອງວ່າງທີ່ກວດພົບ: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s ຄຳຖາມ, ສຳລັບຄະແນນລວມ (ທຸກຄຳຖາມ) ຂອງ %s."
+
+msgid "Unique answer"
+msgstr "ຄຳຕອບດຽວ"
+
+msgid "Multiple answer true/false"
+msgstr "ຄຳຕອບຫຼາຍຂໍ້ ຖືກ/ຜິດ"
+
+msgid "Multiple answer combination true/false"
+msgstr "ການປະສົມຄຳຕອບຫຼາຍຂໍ້ ຖືກ/ຜິດ"
+
+msgid "Unique answer with images"
+msgstr "ຄຳຕອບດຽວພ້ອມຮູບພາບ"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "ຄຳຕອບຫຼາຍຂໍ້ ຖືກ/ຜິດ ພ້ອມລະດັບຄວາມແນ່ໃຈ"
+
+msgid "Answer in Office document"
+msgstr "ຄຳຕອບໃນເອກະສານ Office"
+
+msgid "Matching draggable"
+msgstr "ຈັບຄູ່ແບບລາກໄດ້"
+
+msgid "Matching draggable combination"
+msgstr "ການປະສົມຈັບຄູ່ແບບລາກໄດ້"
+
+msgid "Fill in blanks combination"
+msgstr "ການປະສົມຕື່ມຊ່ອງວ່າງ"
+
+msgid "Multiple answer dropdown combination"
+msgstr "ການປະສົມຄຳຕອບຫຼາຍຂໍ້ແບບເລື່ອນລົງ"
+
+msgid "Matching combination"
+msgstr "ການປະສົມຈັບຄູ່"
 
 msgid "Correct test"
 msgstr "ກວດແກ້ການທົດສອບ"
@@ -20573,6 +20621,9 @@ msgstr "ລິ້ງໝົດອາຍຸ, ກະລຸນາລອງໃໝ່�
 
 msgid "Instructions for the password change procedure"
 msgstr "ຄຳແນະນຳສຳລັບຂັ້ນຕອນການປ່ຽນລະຫັດຜ່ານ"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "ຂໍ້ຄວາມນີ້ຖືກສົ່ງຫາທ່ານເພາະວ່າທ່ານ (ຫຼືບາງຄົນທີ່ພະຍາຍາມແທນຕົວທ່ານ) ໄດ້ຮ້ອງຂໍໃຫ້ສ້າງລະຫັດຜ່ານໃໝ່ສຳລັບບັນຊີຂອງທ່ານ.<br/>ເພື່ອຕັ້ງລະຫັດຜ່ານໃໝ່, ກະລຸນາຕິດຕາມລິ້ງນີ້:<br/>%s<br/>ຖ້າທ່ານບໍ່ໄດ້ຮ້ອງຂໍນີ້, ທ່ານສາມາດລະເລີຍຂໍ້ຄວາມນີ້ໄດ້. ຖ້າທ່ານຍັງຄົງໄດ້ຮັບຂໍ້ຄວາມເຫຼົ່ານີ້ຕໍ່ໄປ, ກະລຸນາຕິດຕໍ່ຜູ້ເບິ່ງແຍງພອທອນ."
 
 msgid "Remind Course Expiration cron"
 msgstr "Cron ເຕືອນການໝົດອາຍຸຂອງລາຍວິຊາ"
@@ -39157,8 +39208,8 @@ msgstr "ໂຫຼດອັດຕະໂນມັດທຸກ 5 ວິນາທີ
 msgid "Web server load"
 msgstr "ການໂຫຼດເວັບເຊີບເວີ"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "ຕົວຊີ້ວັດສະຖານະ Apache ຫຼື Nginx ສົດ"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "ມາດຕະການສະຖານະ Apache, Nginx ຫຼື FrankenPHP ແບບສົດ"
 
 msgid "Click to show web server load metrics"
 msgstr "ຄລິກເພື່ອສະແດງຕົວຊີ້ວັດການໂຫຼດເວັບເຊີບເວີ"
@@ -39166,8 +39217,8 @@ msgstr "ຄລິກເພື່ອສະແດງຕົວຊີ້ວັດກ
 msgid "Requires a local web server status module"
 msgstr "ຕ້ອງການໂມດູນສະຖານະເວັບເຊີບເວີທ້ອງຖິ່ນ"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "ການໂຫຼດເວັບເຊີບເວີອ່ານຈາກ Apache mod_status ຫຼື Nginx stub_status ສະເພາະ localhost ເທົ່ານັ້ນ. ໜ້າສະຖານະຕ້ອງອະນຸຍາດການຮ້ອງຂໍຈາກ 127.0.0.1 (ຫຼື ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "ການໂຫຼດເວັບເຊີບເວີຖືກອ່ານຈາກ Apache mod_status, Nginx stub_status, ຫຼື ຈຸດສິ້ນສຸດມາດຕະການ FrankenPHP/Caddy, ເທົ່ານັ້ນໃນ localhost. ໜ້າສະຖານະຕ້ອງອະນຸຍາດຄຳຮ້ອງຂໍຈາກ 127.0.0.1 (ຫຼື ::1)."
 
 msgid "Paths scanned"
 msgstr "ເສັ້ນທາງທີ່ສະແກນແລ້ວ"
@@ -39178,8 +39229,8 @@ msgstr "ກວດພົບແລ້ວ"
 msgid "Status path"
 msgstr "ເສັ້ນທາງສະຖານະ"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "ຕົວຊີ້ວັດການໂຫຼດເວັບເຊີບເວີມີໃຫ້ສະເພາະ Apache ແລະ Nginx ເທົ່ານັ້ນ."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "ມາດຕະການການໂຫຼດເວັບເຊີບເວີມີໃຫ້ສຳລັບ Apache, Nginx ແລະ FrankenPHP ເທົ່ານັ້ນ."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "ບໍ່ມີເສັ້ນທາງສະຖານະທີ່ສະແກນແລ້ວຕອບສະໜອງຢູ່ localhost."
@@ -39262,8 +39313,23 @@ msgstr "ຍອມຮັບ"
 msgid "Handled"
 msgstr "ຈັດການແລ້ວ"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: ເປີດໃຊ້ mod_status (ExtendedStatus On) ແລະອະນຸຍາດ localhost ເຂົ້າ /server-status. Nginx: ເປີດໃຊ້ stub_status ຢູ່ຕຳແໜ່ງສະເພາະ localhost ເຊັ່ນ /nginx_status ຫຼື /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: ເປີດໃຊ້ mod_status (ExtendedStatus On) ແລະອະນຸຍາດ localhost ໄປທີ່ /server-status. Nginx: ເປີດໃຊ້ stub_status ໃນສະຖານທີ່ສະເພາະ localhost ເຊັ່ນ /nginx_status ຫຼື /stub_status. FrankenPHP: ເພີ່ມຕົວເລືອກທົ່ວໂລກ \"metrics\" ໃສ່ Caddyfile, ເຊິ່ງເປີດເຜີຍມາດຕະການ Prometheus ໃນ Caddy's admin API (127.0.0.1:2019/metrics) ໂດຍຄ່າເລີ່ມຕົ້ນ."
+
+msgid "Total threads"
+msgstr "ກະທູ້ທັງໝົດ"
+
+msgid "Busy threads"
+msgstr "ກະທູ້ທີ່ກຳລັງໃຊ້ງານ"
+
+msgid "Queue depth"
+msgstr "ຄວາມເລິກຄິວ"
+
+msgid "Worker"
+msgstr "ວຽກເກີ"
+
+msgid "Average request time"
+msgstr "ເວລາຄຳຮ້ອງຂໍສະເລ່ຍ"
 
 msgid "Grade percentage distribution"
 msgstr "ການແຈກຢາຍເປີເຊັນເກຣດ"
@@ -39331,11 +39397,17 @@ msgstr "OPcache ຖືກຕິດຕັ້ງແລ້ວ ແຕ່ຍັງບ
 msgid "OPcache extension is not available on this server."
 msgstr "ສ່ວນຂະຫຍາຍ OPcache ບໍ່ມີຢູ່ໃນເຊີເວີນີ້."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache ກຳລັງລາຍງານສະຖິຕິຄວາມຈຳທີ່ບໍ່ສອດຄ່ອງ (ບັນຫາທີ່ຮູ້ຈັກໃນບາງ PHP runtime ແບບມີກະທູ້, ເຊັ່ນ FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu ຖືກຕິດຕັ້ງແລ້ວ ແຕ່ຍັງບໍ່ໄດ້ເປີດໃຊ້ງານ."
 
 msgid "APCu extension is not available on this server."
 msgstr "ສ່ວນຂະຫຍາຍ APCu ບໍ່ມີຢູ່ໃນເຊີເວີນີ້."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu ກຳລັງລາຍງານສະຖິຕິຄວາມຈຳທີ່ບໍ່ສອດຄ່ອງ (ບັນຫາທີ່ຮູ້ຈັກໃນບາງ PHP runtime ແບບມີກະທູ້)."
 
 msgid "Constant"
 msgstr "ຄ່າຄົງທີ່"
@@ -40095,4 +40167,10 @@ msgstr "ໃຊ້ວັນທີເຂົ້າເຖິງເຊດຊັນ"
 
 msgid "Use session access end date"
 msgstr "ໃຊ້ວັນທີສິ້ນສຸດການເຂົ້າເຖິງເຊດຊັນ"
+
+msgid "Group report"
+msgstr "ລາຍງານກຸ່ມ"
+
+msgid "Student follow-up"
+msgstr "ການຕິດຕາມນັກຮຽນ"
 

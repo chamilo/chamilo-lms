@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول بېلګه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول بېلګه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -7712,6 +7712,54 @@ msgstr "د ازموینې پوښتنو لړليک"
 
 msgid "Recycle existing questions"
 msgstr "موجوده پوښتنې بیا کارول"
+
+msgid "Add this question to the test: %s"
+msgstr "دا پوښتنه ازموینې ته اضافه کړئ: %s"
+
+msgid "Edit question: %s"
+msgstr "پوښتنه سمول: %s"
+
+msgid "Add a question: %s"
+msgstr "یوه پوښتنه اضافه کړئ: %s"
+
+msgid "Detected blanks: %s"
+msgstr "موندل شوي تشې: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s پوښتنې، د ټولو پوښتنو لپاره ټولیزه نمره %s."
+
+msgid "Unique answer"
+msgstr "یوازینۍ ځواب"
+
+msgid "Multiple answer true/false"
+msgstr "څو ځوابه سم/غلط"
+
+msgid "Multiple answer combination true/false"
+msgstr "د څو ځوابونو ترکیب سم/غلط"
+
+msgid "Unique answer with images"
+msgstr "یوازینۍ ځواب د انځورونو سره"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "څو ځوابه سم/غلط د ډاډ درجې سره"
+
+msgid "Answer in Office document"
+msgstr "ځواب په آفس سند کې"
+
+msgid "Matching draggable"
+msgstr "مطابقت وړ کشیدونکی"
+
+msgid "Matching draggable combination"
+msgstr "د مطابقت وړ کشیدونکي ترکیب"
+
+msgid "Fill in blanks combination"
+msgstr "د تشو ډکولو ترکیب"
+
+msgid "Multiple answer dropdown combination"
+msgstr "د څو ځوابه ښکته غورځېدونکي ترکیب"
+
+msgid "Matching combination"
+msgstr "د مطابقت ترکیب"
 
 msgid "Correct test"
 msgstr "سم ازموینه"
@@ -20537,6 +20585,9 @@ msgstr " لینک پای ته رسېدلی، مهرباني وکړئ بیا هڅ
 
 msgid "Instructions for the password change procedure"
 msgstr "د پاسورډ بدلولو د پروسیجر لارښوونې"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "دا پیغام تاسو ته ځکه لیږل شوی چې تاسو (یا څوک چې ستاسو په نوم ځان ښيي) غوښتنه کړې چې ستاسو حساب لپاره نوی پټنوم جوړ شي.<br/>د خپل نوي پټنوم تنظیمولو لپاره، مهرباني وکړئ دا لینک تعقیب کړئ:<br/>%s<br/>که تاسو دا غوښتنه نه وي کړې، کولی شئ دا پیغام له پامه وغورځوئ. که دا پیغامونه دوام ومومي، مهرباني وکړئ د پورټل مدیر سره اړیکه ونیسئ."
 
 msgid "Remind Course Expiration cron"
 msgstr "د کورس پای ته رسېدو یادونه cron"
@@ -39108,8 +39159,8 @@ msgstr "هر ۵ ثانیو کې اتومات تازه کول"
 msgid "Web server load"
 msgstr "د ویب سرور بار"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "د Apache یا Nginx ژوندي حالت میټریکونه"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "د Apache، Nginx یا FrankenPHP ژوندي وضعیت معیارونه"
 
 msgid "Click to show web server load metrics"
 msgstr "د ویب سرور بار میټریکونو ښودلو لپاره کلیک وکړئ"
@@ -39117,8 +39168,8 @@ msgstr "د ویب سرور بار میټریکونو ښودلو لپاره کل�
 msgid "Requires a local web server status module"
 msgstr "د ځایی ویب سرور حالت ماډل ته اړتیا لري"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "د ویب سرور بار یوازې د Apache mod_status یا Nginx stub_status څخه په localhost کې لوستل کیږي. د حالت پاڼه باید د 127.0.0.1 (یا ::1) څخه غوښتنې اجازه ورکړي."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "د ویب سرور بار یوازې له localhost څخه د Apache mod_status، Nginx stub_status، یا FrankenPHP/Caddy معیارونو پای ټکي څخه لوستل کیږي. د وضعیت پاڼه باید د 127.0.0.1 (یا ::1) غوښتنې ته اجازه ورکړي."
 
 msgid "Paths scanned"
 msgstr "سکین شوي لارې"
@@ -39129,8 +39180,8 @@ msgstr "کشف شوي"
 msgid "Status path"
 msgstr "د حالت لاره"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "د ویب سرور بار میټریکونه یوازې د Apache او Nginx لپاره شتون لري."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "د ویب سرور بار معیارونه یوازې د Apache، Nginx او FrankenPHP لپاره شته دي."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "د سکین شوي حالت لارو څخه هیڅ یوه په localhost کې ځواب نه دی ورکړی."
@@ -39213,8 +39264,23 @@ msgstr "منل"
 msgid "Handled"
 msgstr "سمبال شوي"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: mod_status فعال کړئ (ExtendedStatus On) او localhost ته /server-status ته اجازه ورکړئ. Nginx: stub_status په localhost-only ځای کې فعال کړئ لکه /nginx_status یا /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status فعال کړئ (ExtendedStatus On) او localhost ته /server-status ته اجازه ورکړئ. Nginx: په یوازې localhost موقعیت لکه /nginx_status یا /stub_status کې stub_status فعال کړئ. FrankenPHP: په Caddyfile کې نړیوال \"metrics\" اختیار اضافه کړئ، چې په ډیفالټ د Caddy د اډمین API (127.0.0.1:2019/metrics) کې Prometheus معیارونه ښيي."
+
+msgid "Total threads"
+msgstr "ټول تارونه"
+
+msgid "Busy threads"
+msgstr "بوخت تارونه"
+
+msgid "Queue depth"
+msgstr "د کتار ژوروالی"
+
+msgid "Worker"
+msgstr "کارکوونکی"
+
+msgid "Average request time"
+msgstr "د غوښتنې اوسط وخت"
 
 msgid "Grade percentage distribution"
 msgstr "د نمرې سلنې ویش"
@@ -39282,11 +39348,17 @@ msgstr "OPcache نصب دی خو فعال نه دی."
 msgid "OPcache extension is not available on this server."
 msgstr "د OPcache پراختیا په دې سرور کې شتون نلري."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache ناسازګاره د حافظې احصایې راپوروي (په ځینو تار لرونکو PHP چلولو کې پېژندل شوې ستونزه، لکه FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu نصب دی خو فعال نه دی."
 
 msgid "APCu extension is not available on this server."
 msgstr "د APCu پراختیا په دې سرور کې شتون نلري."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu ناسازګاره د حافظې احصایې راپوروي (په ځینو تار لرونکو PHP چلولو کې پېژندل شوې ستونزه)."
 
 msgid "Constant"
 msgstr "ثابت"
@@ -40046,4 +40118,10 @@ msgstr "د غونډې د لاسرسي نېټې وکاروئ"
 
 msgid "Use session access end date"
 msgstr "د غونډې د لاسرسي پای نېټه وکاروئ"
+
+msgid "Group report"
+msgstr "د ډلې راپور"
+
+msgid "Student follow-up"
+msgstr "د زده‌کوونکي تعقیب"
 

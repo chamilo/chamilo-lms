@@ -7727,6 +7727,54 @@ msgstr "Elenco dei quesiti del test"
 msgid "Recycle existing questions"
 msgstr "Test dall'archivio"
 
+msgid "Add this question to the test: %s"
+msgstr "Aggiungi questa domanda al test: %s"
+
+msgid "Edit question: %s"
+msgstr "Modifica domanda: %s"
+
+msgid "Add a question: %s"
+msgstr "Aggiungi una domanda: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Spazi vuoti rilevati: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s domande, per un punteggio totale (tutte le domande) di %s."
+
+msgid "Unique answer"
+msgstr "Risposta unica"
+
+msgid "Multiple answer true/false"
+msgstr "Risposta multipla vero/falso"
+
+msgid "Multiple answer combination true/false"
+msgstr "Combinazione di risposte multiple vero/falso"
+
+msgid "Unique answer with images"
+msgstr "Risposta unica con immagini"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Risposta multipla vero/falso con grado di certezza"
+
+msgid "Answer in Office document"
+msgstr "Risposta in documento Office"
+
+msgid "Matching draggable"
+msgstr "Abbinamento trascinabile"
+
+msgid "Matching draggable combination"
+msgstr "Combinazione di abbinamenti trascinabili"
+
+msgid "Fill in blanks combination"
+msgstr "Combinazione di riempimento spazi vuoti"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Combinazione di risposte multiple a tendina"
+
+msgid "Matching combination"
+msgstr "Combinazione di abbinamenti"
+
 msgid "Correct test"
 msgstr "Concludi il test"
 
@@ -20556,6 +20604,9 @@ msgstr "Link scaduto, riprova."
 
 msgid "Instructions for the password change procedure"
 msgstr "Istruzioni per la procedura di modifica della password"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Questo messaggio ti viene inviato perché tu (o qualcuno che tenta di impersonarti) hai richiesto la generazione di una nuova password per il tuo account.<br/>Per impostare la nuova password, segui questo collegamento:<br/>%s<br/>Se non hai effettuato questa richiesta, puoi semplicemente ignorare questo messaggio. Se continui a ricevere questi messaggi, contatta l'amministratore del portale."
 
 msgid "Remind Course Expiration cron"
 msgstr "Promemoria periodico Scadenza Corso"
@@ -39128,8 +39179,8 @@ msgstr "Auto-aggiornamento ogni 5 secondi"
 msgid "Web server load"
 msgstr "Carico server web"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Metriche di stato Apache o Nginx in tempo reale"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Metriche di stato in tempo reale di Apache, Nginx o FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Clicca per mostrare le metriche di carico del server web"
@@ -39137,8 +39188,8 @@ msgstr "Clicca per mostrare le metriche di carico del server web"
 msgid "Requires a local web server status module"
 msgstr "Richiede un modulo di stato del server web locale"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Il carico del server web viene letto da Apache mod_status o Nginx stub_status solo su localhost. La pagina di stato deve consentire richieste da 127.0.0.1 (o ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Il carico del server web viene letto da Apache mod_status, Nginx stub_status o dall'endpoint delle metriche di FrankenPHP/Caddy, solo su localhost. La pagina di stato deve consentire le richieste da 127.0.0.1 (o ::1)."
 
 msgid "Paths scanned"
 msgstr "Percorsi analizzati"
@@ -39149,8 +39200,8 @@ msgstr "Rilevati"
 msgid "Status path"
 msgstr "Percorso stato"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Le metriche di carico del server web sono disponibili solo per Apache e Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Le metriche di carico del server web sono disponibili solo per Apache, Nginx e FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Nessuno dei percorsi di stato analizzati ha risposto su localhost."
@@ -39233,8 +39284,23 @@ msgstr "Accetta"
 msgid "Handled"
 msgstr "Gestito"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: abilitare mod_status (ExtendedStatus On) e consentire l'accesso localhost a /server-status. Nginx: abilitare stub_status su una location accessibile solo da localhost come /nginx_status o /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: abilitare mod_status (ExtendedStatus On) e consentire a localhost l'accesso a /server-status. Nginx: abilitare stub_status su una location accessibile solo da localhost, ad esempio /nginx_status o /stub_status. FrankenPHP: aggiungere un'opzione globale \"metrics\" al Caddyfile, che espone le metriche Prometheus sull'API di amministrazione di Caddy (127.0.0.1:2019/metrics) per impostazione predefinita."
+
+msgid "Total threads"
+msgstr "Thread totali"
+
+msgid "Busy threads"
+msgstr "Thread occupati"
+
+msgid "Queue depth"
+msgstr "Profondità della coda"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Tempo medio di richiesta"
 
 msgid "Grade percentage distribution"
 msgstr "Distribuzione percentuale dei voti"
@@ -39302,11 +39368,17 @@ msgstr "OPcache è installato ma non abilitato."
 msgid "OPcache extension is not available on this server."
 msgstr "L'estensione OPcache non è disponibile su questo server."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache sta segnalando statistiche di memoria incoerenti (un problema noto su alcuni runtime PHP con thread, ad es. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu è installato ma non abilitato."
 
 msgid "APCu extension is not available on this server."
 msgstr "L'estensione APCu non è disponibile su questo server."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu sta segnalando statistiche di memoria incoerenti (un problema noto su alcuni runtime PHP con thread)."
 
 msgid "Constant"
 msgstr "Costante"
@@ -40066,4 +40138,10 @@ msgstr "Usa le date di accesso alla sessione"
 
 msgid "Use session access end date"
 msgstr "Usa la data di fine accesso alla sessione"
+
+msgid "Group report"
+msgstr "Rapporto di gruppo"
+
+msgid "Student follow-up"
+msgstr "Follow-up studente"
 

@@ -7718,6 +7718,54 @@ msgstr "Danh mục câu hỏi trong bài tập"
 msgid "Recycle existing questions"
 msgstr "Lấy câu hỏi từ một bài tập khác"
 
+msgid "Add this question to the test: %s"
+msgstr "Thêm câu hỏi này vào bài kiểm tra: %s"
+
+msgid "Edit question: %s"
+msgstr "Chỉnh sửa câu hỏi: %s"
+
+msgid "Add a question: %s"
+msgstr "Thêm câu hỏi: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Các chỗ trống đã phát hiện: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s câu hỏi, tổng điểm (tất cả câu hỏi) là %s."
+
+msgid "Unique answer"
+msgstr "Câu trả lời duy nhất"
+
+msgid "Multiple answer true/false"
+msgstr "Nhiều câu trả lời đúng/sai"
+
+msgid "Multiple answer combination true/false"
+msgstr "Tổ hợp nhiều câu trả lời đúng/sai"
+
+msgid "Unique answer with images"
+msgstr "Câu trả lời duy nhất kèm hình ảnh"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Nhiều câu trả lời đúng/sai kèm mức độ chắc chắn"
+
+msgid "Answer in Office document"
+msgstr "Trả lời trong tài liệu Office"
+
+msgid "Matching draggable"
+msgstr "Ghép cặp kéo thả"
+
+msgid "Matching draggable combination"
+msgstr "Tổ hợp ghép cặp kéo thả"
+
+msgid "Fill in blanks combination"
+msgstr "Tổ hợp điền chỗ trống"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Tổ hợp nhiều câu trả lời dạng danh sách thả xuống"
+
+msgid "Matching combination"
+msgstr "Tổ hợp ghép cặp"
+
 msgid "Correct test"
 msgstr "Chấm bài kiểm tra"
 
@@ -20542,6 +20590,9 @@ msgstr "Liên kết đã hết hạn, vui lòng thử lại."
 
 msgid "Instructions for the password change procedure"
 msgstr "Hướng dẫn cho quy trình thay đổi mật khẩu"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Thông báo này được gửi cho bạn vì bạn (hoặc ai đó đang cố mạo danh bạn) đã yêu cầu tạo mật khẩu mới cho tài khoản của bạn.<br/>Để thiết lập mật khẩu mới, vui lòng theo liên kết này:<br/>%s<br/>Nếu bạn không thực hiện yêu cầu này, bạn có thể bỏ qua thông báo này. Nếu bạn tiếp tục nhận được các thông báo này, vui lòng liên hệ quản trị viên cổng thông tin."
 
 msgid "Remind Course Expiration cron"
 msgstr "Nhắc nhở hết hạn khóa học cron"
@@ -39114,8 +39165,8 @@ msgstr "Tự động làm mới mỗi 5 giây"
 msgid "Web server load"
 msgstr "Tải máy chủ web"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Số liệu trạng thái Apache hoặc Nginx trực tiếp"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Chỉ số trạng thái Apache, Nginx hoặc FrankenPHP theo thời gian thực"
 
 msgid "Click to show web server load metrics"
 msgstr "Nhấp để hiển thị số liệu tải máy chủ web"
@@ -39123,8 +39174,8 @@ msgstr "Nhấp để hiển thị số liệu tải máy chủ web"
 msgid "Requires a local web server status module"
 msgstr "Yêu cầu mô-đun trạng thái máy chủ web cục bộ"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Tải máy chủ web được đọc từ Apache mod_status hoặc Nginx stub_status chỉ trên localhost. Trang trạng thái phải cho phép yêu cầu từ 127.0.0.1 (hoặc ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Tải máy chủ web được đọc từ Apache mod_status, Nginx stub_status, hoặc điểm cuối metrics của FrankenPHP/Caddy, chỉ trên localhost. Trang trạng thái phải cho phép yêu cầu từ 127.0.0.1 (hoặc ::1)."
 
 msgid "Paths scanned"
 msgstr "Đường dẫn đã quét"
@@ -39135,8 +39186,8 @@ msgstr "Đã phát hiện"
 msgid "Status path"
 msgstr "Đường dẫn trạng thái"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Chỉ số tải máy chủ web chỉ khả dụng cho Apache và Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Chỉ số tải máy chủ web chỉ khả dụng cho Apache, Nginx và FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Không có đường dẫn trạng thái nào được quét phản hồi trên localhost."
@@ -39219,8 +39270,23 @@ msgstr "Chấp nhận"
 msgid "Handled"
 msgstr "Đã xử lý"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: bật mod_status (ExtendedStatus On) và cho phép localhost truy cập /server-status. Nginx: bật stub_status trên vị trí chỉ localhost như /nginx_status hoặc /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: bật mod_status (ExtendedStatus On) và cho phép localhost truy cập /server-status. Nginx: bật stub_status trên một vị trí chỉ localhost như /nginx_status hoặc /stub_status. FrankenPHP: thêm tùy chọn toàn cục \"metrics\" vào Caddyfile, mặc định xuất metrics Prometheus trên API quản trị của Caddy (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Tổng số luồng"
+
+msgid "Busy threads"
+msgstr "Luồng đang bận"
+
+msgid "Queue depth"
+msgstr "Độ sâu hàng đợi"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Thời gian yêu cầu trung bình"
 
 msgid "Grade percentage distribution"
 msgstr "Phân bố phần trăm điểm số"
@@ -39288,11 +39354,17 @@ msgstr "OPcache đã cài đặt nhưng chưa được kích hoạt."
 msgid "OPcache extension is not available on this server."
 msgstr "Phần mở rộng OPcache không khả dụng trên máy chủ này."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache đang báo cáo thống kê bộ nhớ không nhất quán (vấn đề đã biết trên một số môi trường PHP đa luồng, ví dụ FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu đã cài đặt nhưng chưa được kích hoạt."
 
 msgid "APCu extension is not available on this server."
 msgstr "Phần mở rộng APCu không khả dụng trên máy chủ này."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu đang báo cáo thống kê bộ nhớ không nhất quán (vấn đề đã biết trên một số môi trường PHP đa luồng)."
 
 msgid "Constant"
 msgstr "Hằng số"
@@ -40052,4 +40124,10 @@ msgstr "Sử dụng ngày truy cập phiên"
 
 msgid "Use session access end date"
 msgstr "Sử dụng ngày kết thúc truy cập phiên"
+
+msgid "Group report"
+msgstr "Báo cáo nhóm"
+
+msgid "Student follow-up"
+msgstr "Theo dõi học viên"
 

@@ -7718,6 +7718,54 @@ msgstr "Soru Listesi"
 msgid "Recycle existing questions"
 msgstr "Soru havuzundan soru al"
 
+msgid "Add this question to the test: %s"
+msgstr "Bu soruyu teste ekle: %s"
+
+msgid "Edit question: %s"
+msgstr "Soruyu düzenle: %s"
+
+msgid "Add a question: %s"
+msgstr "Soru ekle: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Algılanan boşluklar: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s soru, toplam puan (tüm sorular) %s."
+
+msgid "Unique answer"
+msgstr "Tek cevap"
+
+msgid "Multiple answer true/false"
+msgstr "Çoklu cevap doğru/yanlış"
+
+msgid "Multiple answer combination true/false"
+msgstr "Çoklu cevap kombinasyonu doğru/yanlış"
+
+msgid "Unique answer with images"
+msgstr "Görsellerle tek cevap"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Kesinlik dereceli çoklu cevap doğru/yanlış"
+
+msgid "Answer in Office document"
+msgstr "Office belgesinde cevap"
+
+msgid "Matching draggable"
+msgstr "Sürükle-bırak eşleştirme"
+
+msgid "Matching draggable combination"
+msgstr "Sürükle-bırak eşleştirme kombinasyonu"
+
+msgid "Fill in blanks combination"
+msgstr "Boşluk doldurma kombinasyonu"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Açılır menü çoklu cevap kombinasyonu"
+
+msgid "Matching combination"
+msgstr "Eşleştirme kombinasyonu"
+
 msgid "Correct test"
 msgstr "Bitir"
 
@@ -20542,6 +20590,9 @@ msgstr "Bağlantı süresi doldu, lütfen tekrar deneyin."
 
 msgid "Instructions for the password change procedure"
 msgstr "Şifre değiştirme prosedürü için talimatlar"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Bu ileti, hesabınız için yeni bir parola oluşturulmasını talep ettiğiniz (veya sizi taklit etmeye çalışan biri talep ettiği) için gönderilmektedir.<br/>Yeni parolanızı belirlemek için lütfen şu bağlantıyı izleyin:<br/>%s<br/>Bu talebi siz yapmadıysanız bu iletiyi yok sayabilirsiniz. Bu iletileri almaya devam ederseniz lütfen portal yöneticisiyle iletişime geçin."
 
 msgid "Remind Course Expiration cron"
 msgstr "Ders Sonlanma Hatırlatması cron"
@@ -39114,8 +39165,8 @@ msgstr "Her 5 saniyede bir otomatik yenile"
 msgid "Web server load"
 msgstr "Web sunucusu yükü"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Canlı Apache veya Nginx durum metrikleri"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Canlı Apache, Nginx veya FrankenPHP durum metrikleri"
 
 msgid "Click to show web server load metrics"
 msgstr "Web sunucusu yük metriklerini göstermek için tıklayın"
@@ -39123,8 +39174,8 @@ msgstr "Web sunucusu yük metriklerini göstermek için tıklayın"
 msgid "Requires a local web server status module"
 msgstr "Yerel bir web sunucusu durum modülü gerektirir"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Web sunucusu yükü yalnızca localhost üzerinde Apache mod_status veya Nginx stub_status'tan okunur. Durum sayfası 127.0.0.1 (veya ::1) adresinden gelen istekleri kabul etmelidir."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Web sunucusu yükü yalnızca localhost üzerinde Apache mod_status, Nginx stub_status veya FrankenPHP/Caddy metrik uç noktasından okunur. Durum sayfası 127.0.0.1 (veya ::1) adresinden gelen isteklere izin vermelidir."
 
 msgid "Paths scanned"
 msgstr "Taranan yollar"
@@ -39135,8 +39186,8 @@ msgstr "Algılandı"
 msgid "Status path"
 msgstr "Durum yolu"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Web sunucusu yük metrikleri yalnızca Apache ve Nginx için kullanılabilir."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Web sunucusu yük metrikleri yalnızca Apache, Nginx ve FrankenPHP için kullanılabilir."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Taranan durum yollarının hiçbiri localhost üzerinde yanıt vermedi."
@@ -39219,8 +39270,23 @@ msgstr "Kabul"
 msgid "Handled"
 msgstr "İşlendi"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: mod_status'u etkinleştirin (ExtendedStatus On) ve localhost'un /server-status'a erişimine izin verin. Nginx: localhost'a özel bir konumda (örneğin /nginx_status veya /stub_status) stub_status'u etkinleştirin."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status’u etkinleştirin (ExtendedStatus On) ve localhost’un /server-status adresine erişmesine izin verin. Nginx: /nginx_status veya /stub_status gibi yalnızca localhost’a açık bir konumda stub_status’u etkinleştirin. FrankenPHP: Caddyfile’a genel bir \"metrics\" seçeneği ekleyin; bu varsayılan olarak Caddy yönetim API’sinde (127.0.0.1:2019/metrics) Prometheus metriklerini sunar."
+
+msgid "Total threads"
+msgstr "Toplam iş parçacığı"
+
+msgid "Busy threads"
+msgstr "Meşgul iş parçacıkları"
+
+msgid "Queue depth"
+msgstr "Kuyruk derinliği"
+
+msgid "Worker"
+msgstr "İşçi"
+
+msgid "Average request time"
+msgstr "Ortalama istek süresi"
 
 msgid "Grade percentage distribution"
 msgstr "Not yüzdesi dağılımı"
@@ -39288,11 +39354,17 @@ msgstr "OPcache yüklü ancak etkin değil."
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache uzantısı bu sunucuda mevcut değil."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache tutarsız bellek istatistikleri bildiriyor (bazı iş parçacıklı PHP çalışma zamanlarında, örn. FrankenPHP, bilinen bir sorundur)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu yüklü ancak etkin değil."
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu uzantısı bu sunucuda mevcut değil."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu tutarsız bellek istatistikleri bildiriyor (bazı iş parçacıklı PHP çalışma zamanlarında bilinen bir sorundur)."
 
 msgid "Constant"
 msgstr "Sabit"
@@ -40052,4 +40124,10 @@ msgstr "Oturum erişim tarihlerini kullan"
 
 msgid "Use session access end date"
 msgstr "Oturum erişim bitiş tarihini kullan"
+
+msgid "Group report"
+msgstr "Grup raporu"
+
+msgid "Student follow-up"
+msgstr "Öğrenci takibi"
 

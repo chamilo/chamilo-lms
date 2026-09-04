@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula adibidea: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulako adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -7717,6 +7717,54 @@ msgstr "Ariketaren galdera zerrenda"
 
 msgid "Recycle existing questions"
 msgstr "Hartu galdera bildumatik"
+
+msgid "Add this question to the test: %s"
+msgstr "Gehitu galdera hau azterketari: %s"
+
+msgid "Edit question: %s"
+msgstr "Editatu galdera: %s"
+
+msgid "Add a question: %s"
+msgstr "Gehitu galdera: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Detektatutako hutsuneak: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s galdera, puntuazio osoa (galdera guztiak) %s."
+
+msgid "Unique answer"
+msgstr "Erantzun bakarra"
+
+msgid "Multiple answer true/false"
+msgstr "Erantzun anitzeko egia/gezurra"
+
+msgid "Multiple answer combination true/false"
+msgstr "Erantzun anitzeko konbinazioa egia/gezurra"
+
+msgid "Unique answer with images"
+msgstr "Erantzun bakarra irudiekin"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Erantzun anitzeko egia/gezurra ziurtasun-mailarekin"
+
+msgid "Answer in Office document"
+msgstr "Erantzuna Office dokumentuan"
+
+msgid "Matching draggable"
+msgstr "Lotura arrastagarria"
+
+msgid "Matching draggable combination"
+msgstr "Lotura arrastagarriaren konbinazioa"
+
+msgid "Fill in blanks combination"
+msgstr "Hutsuneak betetzeko konbinazioa"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Erantzun anitzeko goitibeherako konbinazioa"
+
+msgid "Matching combination"
+msgstr "Loturaren konbinazioa"
 
 msgid "Correct test"
 msgstr "Ariketa amaitu da"
@@ -20547,6 +20595,9 @@ msgstr "Lotura iraungita, saiatu berriro."
 
 msgid "Instructions for the password change procedure"
 msgstr "Pasahitza aldatzeko prozeduraren argibideak"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Mezu hau jasotzen duzu zure konturako pasahitz berri bat sortzeko eskatu duzulako (edo zu izaten saiatzen ari den norbaitek).<br/>Pasahitz berria ezartzeko, jarraitu esteka hau:<br/>%s<br/>Eskaera hau zuk egin ez baduzu, mezu hau alde batera utz dezakezu. Mezu hauek jasotzen jarraitzen baduzu, jarri harremanetan atariaren administratzailearekin."
 
 msgid "Remind Course Expiration cron"
 msgstr "Gogorarazi Ikastaro Iraungitze cron"
@@ -39119,8 +39170,8 @@ msgstr "Auto-eguneratzea 5 segundoro"
 msgid "Web server load"
 msgstr "Web-zerbitzariaren karga"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Apache edo Nginx egoera-neurri zuzenak"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Apache, Nginx edo FrankenPHP egoera-metrika zuzenak"
 
 msgid "Click to show web server load metrics"
 msgstr "Egin klik web-zerbitzariaren karga-neurriak ikusteko"
@@ -39128,8 +39179,8 @@ msgstr "Egin klik web-zerbitzariaren karga-neurriak ikusteko"
 msgid "Requires a local web server status module"
 msgstr "Web-zerbitzariaren egoera-modulu lokala behar du"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Web-zerbitzariaren karga Apache mod_status edo Nginx stub_status-etik irakurtzen da localhost-ean soilik. Egoera-orriak 127.0.0.1 (edo ::1) helbideetatik jasotako eskaerak onartu behar ditu."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Web-zerbitzariaren karga Apache mod_status, Nginx stub_status edo FrankenPHP/Caddy metrika-amaieratik irakurtzen da, localhost-ean soilik. Egoera-orriak 127.0.0.1 (edo ::1) helbideko eskaerak onartu behar ditu."
 
 msgid "Paths scanned"
 msgstr "Eskaneatutako bideak"
@@ -39140,8 +39191,8 @@ msgstr "Detektatuta"
 msgid "Status path"
 msgstr "Egoera-bidea"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Web-zerbitzariaren karga-neurriak Apache eta Nginx-rako soilik daude erabilgarri."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Web-zerbitzariaren karga-metrikak Apache, Nginx eta FrankenPHP-rako soilik daude eskuragarri."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Ez da eskaneatutako egoera-bideetako bat ere erantzun localhost-ean."
@@ -39224,8 +39275,23 @@ msgstr "Onartuak"
 msgid "Handled"
 msgstr "Kudeatuak"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: gaitu mod_status (ExtendedStatus On) eta baimendu localhost /server-status-era. Nginx: gaitu stub_status localhost soilik den kokapen batean, adibidez /nginx_status edo /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: gaitu mod_status (ExtendedStatus On) eta baimendu localhost /server-status helbidera. Nginx: gaitu stub_status localhost-eko kokapen batean, adibidez /nginx_status edo /stub_status. FrankenPHP: gehitu \"metrics\" aukera globala Caddyfile-ean, Prometheus metrikak Caddy-ren administrazio APIan (127.0.0.1:2019/metrics) agerian uzten dituena, lehenespenez."
+
+msgid "Total threads"
+msgstr "Hariak guztira"
+
+msgid "Busy threads"
+msgstr "Hari okupatuak"
+
+msgid "Queue depth"
+msgstr "Ilara-sakonera"
+
+msgid "Worker"
+msgstr "Langilea"
+
+msgid "Average request time"
+msgstr "Eskaeraren batez besteko denbora"
 
 msgid "Grade percentage distribution"
 msgstr "Kalifikazioen ehuneko banaketa"
@@ -39293,11 +39359,17 @@ msgstr "OPcache instalatuta dago baina ez dago gaituta."
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache luzapena ez dago eskuragarri zerbitzari honetan."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache-k memoria-estatistika koherenteak ez direnak jakinarazten ari da (arazo ezaguna PHP hari-exekuzio-ingurune batzuetan, adibidez FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu instalatuta dago baina ez dago gaituta."
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu luzapena ez dago eskuragarri zerbitzari honetan."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu-k memoria-estatistika koherenteak ez direnak jakinarazten ari da (arazo ezaguna PHP hari-exekuzio-ingurune batzuetan)."
 
 msgid "Constant"
 msgstr "Konstantea"
@@ -40057,4 +40129,10 @@ msgstr "Erabili saioaren sarbide-datak"
 
 msgid "Use session access end date"
 msgstr "Erabili saioaren sarbidearen amaiera-data"
+
+msgid "Group report"
+msgstr "Taldearen txostena"
+
+msgid "Student follow-up"
+msgstr "Ikaslearen jarraipena"
 

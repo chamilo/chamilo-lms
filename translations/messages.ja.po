@@ -7782,6 +7782,54 @@ msgstr "テストの問題リスト"
 msgid "Recycle existing questions"
 msgstr "既存の問題を再利用"
 
+msgid "Add this question to the test: %s"
+msgstr "この問題をテストに追加: %s"
+
+msgid "Edit question: %s"
+msgstr "問題を編集: %s"
+
+msgid "Add a question: %s"
+msgstr "問題を追加: %s"
+
+msgid "Detected blanks: %s"
+msgstr "検出された空欄: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s 問、全問の合計点は %s です。"
+
+msgid "Unique answer"
+msgstr "単一回答"
+
+msgid "Multiple answer true/false"
+msgstr "複数回答 正誤"
+
+msgid "Multiple answer combination true/false"
+msgstr "複数回答組み合わせ 正誤"
+
+msgid "Unique answer with images"
+msgstr "画像付き単一回答"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "確信度付き複数回答 正誤"
+
+msgid "Answer in Office document"
+msgstr "Office文書での回答"
+
+msgid "Matching draggable"
+msgstr "ドラッグ可能なマッチング"
+
+msgid "Matching draggable combination"
+msgstr "ドラッグ可能なマッチング組み合わせ"
+
+msgid "Fill in blanks combination"
+msgstr "穴埋め組み合わせ"
+
+msgid "Multiple answer dropdown combination"
+msgstr "複数回答ドロップダウン組み合わせ"
+
+msgid "Matching combination"
+msgstr "マッチング組み合わせ"
+
 msgid "Correct test"
 msgstr "正解テスト"
 
@@ -20606,6 +20654,9 @@ msgstr "リンクが期限切れです。もう一度お試しください。"
 
 msgid "Instructions for the password change procedure"
 msgstr "パスワード変更手順の説明"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "このメッセージは、あなた（またはあなたになりすまそうとしている人物）がアカウントの新しいパスワードの生成を要求したため送信されています。<br/>新しいパスワードを設定するには、次のリンクに従ってください:<br/>%s<br/>この要求を行っていない場合は、このメッセージを無視してください。これらのメッセージが引き続き届く場合は、ポータル管理者にお問い合わせください。"
 
 msgid "Remind Course Expiration cron"
 msgstr "コース期限切れリマインダークロン"
@@ -39178,8 +39229,8 @@ msgstr "5秒ごとに自動更新"
 msgid "Web server load"
 msgstr "Webサーバー負荷"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "ApacheまたはNginxのライブステータスメトリクス"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Apache、Nginx、または FrankenPHP のリアルタイムステータス指標"
 
 msgid "Click to show web server load metrics"
 msgstr "クリックしてWebサーバー負荷メトリクスを表示"
@@ -39187,8 +39238,8 @@ msgstr "クリックしてWebサーバー負荷メトリクスを表示"
 msgid "Requires a local web server status module"
 msgstr "ローカルWebサーバーステータスモジュールが必要です"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Webサーバー負荷はlocalhost上のApache mod_statusまたはNginx stub_statusからのみ読み取られます。ステータスページは127.0.0.1（または::1）からのリクエストを許可する必要があります。"
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Webサーバーの負荷は、localhost 上の Apache mod_status、Nginx stub_status、または FrankenPHP/Caddy のメトリクスエンドポイントから読み取られます。ステータスページは 127.0.0.1（または ::1）からのリクエストを許可する必要があります。"
 
 msgid "Paths scanned"
 msgstr "スキャンされたパス"
@@ -39199,8 +39250,8 @@ msgstr "検出済み"
 msgid "Status path"
 msgstr "ステータスパス"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Webサーバー負荷メトリクスはApacheおよびNginxでのみ利用可能です。"
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Webサーバー負荷の指標は、Apache、Nginx、FrankenPHP でのみ利用できます。"
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "スキャンされたステータスパスのいずれもlocalhostで応答しませんでした。"
@@ -39283,8 +39334,23 @@ msgstr "受け入れ"
 msgid "Handled"
 msgstr "処理済み"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: mod_statusを有効にし（ExtendedStatus On）、localhostに/server-statusを許可してください。Nginx: localhost限定のロケーション（例: /nginx_status または /stub_status）でstub_statusを有効にしてください。"
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status を有効にし（ExtendedStatus On）、localhost から /server-status へのアクセスを許可してください。Nginx: /nginx_status や /stub_status など、localhost のみの location で stub_status を有効にしてください。FrankenPHP: Caddyfile にグローバルな \"metrics\" オプションを追加すると、デフォルトで Caddy の管理 API（127.0.0.1:2019/metrics）に Prometheus メトリクスが公開されます。"
+
+msgid "Total threads"
+msgstr "スレッド総数"
+
+msgid "Busy threads"
+msgstr "ビジーなスレッド"
+
+msgid "Queue depth"
+msgstr "キューの深さ"
+
+msgid "Worker"
+msgstr "ワーカー"
+
+msgid "Average request time"
+msgstr "平均リクエスト時間"
 
 msgid "Grade percentage distribution"
 msgstr "成績の割合分布"
@@ -39352,11 +39418,17 @@ msgstr "OPcache はインストールされていますが、有効化されて�
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache 拡張モジュールはこのサーバーで利用できません。"
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache が不整合なメモリ統計を報告しています（一部のスレッド型 PHP ランタイム、例: FrankenPHP で既知の問題です）。"
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu はインストールされていますが、有効化されていません。"
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu 拡張モジュールはこのサーバーで利用できません。"
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu が不整合なメモリ統計を報告しています（一部のスレッド型 PHP ランタイムで既知の問題です）。"
 
 msgid "Constant"
 msgstr "定数"
@@ -40116,4 +40188,10 @@ msgstr "セッションのアクセス日を使用"
 
 msgid "Use session access end date"
 msgstr "セッションのアクセス終了日を使用"
+
+msgid "Group report"
+msgstr "グループレポート"
+
+msgid "Student follow-up"
+msgstr "学生フォローアップ"
 

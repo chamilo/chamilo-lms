@@ -7727,6 +7727,54 @@ msgstr "Lista de intrebari a testului"
 msgid "Recycle existing questions"
 msgstr "Alege o intrebare din chestionar"
 
+msgid "Add this question to the test: %s"
+msgstr "Adăugați această întrebare la test: %s"
+
+msgid "Edit question: %s"
+msgstr "Editați întrebarea: %s"
+
+msgid "Add a question: %s"
+msgstr "Adăugați o întrebare: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Spații goale detectate: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s întrebări, pentru un scor total (toate întrebările) de %s."
+
+msgid "Unique answer"
+msgstr "Răspuns unic"
+
+msgid "Multiple answer true/false"
+msgstr "Răspunsuri multiple adevărat/fals"
+
+msgid "Multiple answer combination true/false"
+msgstr "Combinație de răspunsuri multiple adevărat/fals"
+
+msgid "Unique answer with images"
+msgstr "Răspuns unic cu imagini"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Răspunsuri multiple adevărat/fals cu grad de certitudine"
+
+msgid "Answer in Office document"
+msgstr "Răspuns în document Office"
+
+msgid "Matching draggable"
+msgstr "Potrivire prin glisare"
+
+msgid "Matching draggable combination"
+msgstr "Combinație de potrivire prin glisare"
+
+msgid "Fill in blanks combination"
+msgstr "Combinație de completare spații"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Combinație de răspunsuri multiple din listă derulantă"
+
+msgid "Matching combination"
+msgstr "Combinație de potrivire"
+
 msgid "Correct test"
 msgstr "Termina testul"
 
@@ -20556,6 +20604,9 @@ msgstr "Link expirat, încearcă din nou."
 
 msgid "Instructions for the password change procedure"
 msgstr "Instrucțiuni pentru procedura de schimbare a parolei"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Acest mesaj vă este trimis deoarece dumneavoastră (sau cineva care încearcă să vă imite) ați solicitat generarea unei parole noi pentru contul dumneavoastră.<br/>Pentru a seta noua parolă, urmați acest link:<br/>%s<br/>Dacă nu ați făcut această solicitare, puteți ignora acest mesaj. Dacă continuați să primiți aceste mesaje, contactați administratorul portalului."
 
 msgid "Remind Course Expiration cron"
 msgstr "Cron pentru reamintire expirare curs"
@@ -39128,8 +39179,8 @@ msgstr "Reîmprospătare automată la fiecare 5 secunde"
 msgid "Web server load"
 msgstr "Încărcare server web"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Măsurători de stare live Apache sau Nginx"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Metrici de stare live Apache, Nginx sau FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Faceți clic pentru a afișa măsurătorile de încărcare ale serverului web"
@@ -39137,8 +39188,8 @@ msgstr "Faceți clic pentru a afișa măsurătorile de încărcare ale serverulu
 msgid "Requires a local web server status module"
 msgstr "Necesită un modul de stare local al serverului web"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Încărcarea serverului web este citită de la Apache mod_status sau Nginx stub_status doar pe localhost. Pagina de stare trebuie să permită cereri de la 127.0.0.1 (sau ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Încărcarea serverului web este citită din Apache mod_status, Nginx stub_status sau din endpoint-ul de metrici FrankenPHP/Caddy, doar pe localhost. Pagina de stare trebuie să permită cereri de la 127.0.0.1 (sau ::1)."
 
 msgid "Paths scanned"
 msgstr "Căi scanate"
@@ -39149,8 +39200,8 @@ msgstr "Detectat"
 msgid "Status path"
 msgstr "Cale stare"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Măsurătorile de încărcare ale serverului web sunt disponibile doar pentru Apache și Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Metricile de încărcare a serverului web sunt disponibile doar pentru Apache, Nginx și FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Niciuna dintre căile de stare scanate nu a răspuns pe localhost."
@@ -39233,8 +39284,23 @@ msgstr "Acceptate"
 msgid "Handled"
 msgstr "Gestionate"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: activați mod_status (ExtendedStatus On) și permiteți localhost la /server-status. Nginx: activați stub_status pe o locație doar localhost, cum ar fi /nginx_status sau /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: activați mod_status (ExtendedStatus On) și permiteți localhost către /server-status. Nginx: activați stub_status pe o locație doar pentru localhost, cum ar fi /nginx_status sau /stub_status. FrankenPHP: adăugați o opțiune globală \"metrics\" în Caddyfile, care expune metrici Prometheus pe API-ul de administrare Caddy (127.0.0.1:2019/metrics) în mod implicit."
+
+msgid "Total threads"
+msgstr "Fire totale"
+
+msgid "Busy threads"
+msgstr "Fire ocupate"
+
+msgid "Queue depth"
+msgstr "Adâncimea cozii"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Timp mediu de cerere"
 
 msgid "Grade percentage distribution"
 msgstr "Distribuția procentuală a notelor"
@@ -39302,11 +39368,17 @@ msgstr "OPcache este instalat, dar nu este activat."
 msgid "OPcache extension is not available on this server."
 msgstr "Extensia OPcache nu este disponibilă pe acest server."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache raportează statistici de memorie inconsistente (o problemă cunoscută pe unele runtime-uri PHP cu fire, de ex. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu este instalat, dar nu este activat."
 
 msgid "APCu extension is not available on this server."
 msgstr "Extensia APCu nu este disponibilă pe acest server."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu raportează statistici de memorie inconsistente (o problemă cunoscută pe unele runtime-uri PHP cu fire)."
 
 msgid "Constant"
 msgstr "Constantă"
@@ -40066,4 +40138,10 @@ msgstr "Folosește datele de acces la sesiune"
 
 msgid "Use session access end date"
 msgstr "Folosește data de sfârșit a accesului la sesiune"
+
+msgid "Group report"
+msgstr "Raport de grup"
+
+msgid "Student follow-up"
+msgstr "Urmărirea studentului"
 

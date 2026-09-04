@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Me respekt"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Shembull formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Shembull formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Vargjet e variablave"
@@ -7716,6 +7716,54 @@ msgstr "Lista e pyetjeve të testit"
 
 msgid "Recycle existing questions"
 msgstr "Riciklo pyetjet ekzistuese"
+
+msgid "Add this question to the test: %s"
+msgstr "Shto këtë pyetje në test: %s"
+
+msgid "Edit question: %s"
+msgstr "Ndrysho pyetjen: %s"
+
+msgid "Add a question: %s"
+msgstr "Shto një pyetje: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Hapësira të zbuluara: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s pyetje, për një pikëzim total (të gjitha pyetjet) prej %s."
+
+msgid "Unique answer"
+msgstr "Përgjigje unike"
+
+msgid "Multiple answer true/false"
+msgstr "Përgjigje të shumëfishta e vërtetë/e gabuar"
+
+msgid "Multiple answer combination true/false"
+msgstr "Kombinim përgjigjesh të shumëfishta e vërtetë/e gabuar"
+
+msgid "Unique answer with images"
+msgstr "Përgjigje unike me imazhe"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Përgjigje të shumëfishta e vërtetë/e gabuar me shkallë sigurie"
+
+msgid "Answer in Office document"
+msgstr "Përgjigje në dokument Office"
+
+msgid "Matching draggable"
+msgstr "Përputhje e tërheqshme"
+
+msgid "Matching draggable combination"
+msgstr "Kombinim përputhjeje të tërheqshme"
+
+msgid "Fill in blanks combination"
+msgstr "Kombinim i plotësimit të hapësirave"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Kombinim përgjigjesh të shumëfishta me listë zbritëse"
+
+msgid "Matching combination"
+msgstr "Kombinim përputhjeje"
 
 msgid "Correct test"
 msgstr "Testi i saktë"
@@ -20541,6 +20589,9 @@ msgstr "Lidhja ka skaduar, ju lutemi provoni përsëri."
 
 msgid "Instructions for the password change procedure"
 msgstr "Udhëzime për procedurën e ndryshimit të fjalëkalimit"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Ky mesazh ju dërgohet sepse ju (ose dikush që përpiqet t'ju imitojë) kërkuat që të gjenerohet një fjalëkalim i ri për llogarinë tuaj.<br/>Për të vendosur fjalëkalimin tuaj të ri, ju lutemi ndiqni këtë lidhje:<br/>%s<br/>Nëse nuk e keni bërë këtë kërkesë, mund ta injoroni thjesht këtë mesazh. Nëse vazhdoni t'i merrni këto mesazhe, ju lutemi kontaktoni administratorin e portalit."
 
 msgid "Remind Course Expiration cron"
 msgstr "Kujto skadimin e kursit cron"
@@ -39112,8 +39163,8 @@ msgstr "Rifreskim automatik çdo 5 sekonda"
 msgid "Web server load"
 msgstr "Ngarkesa e serverit web"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Metrika të gjendjes së drejtpërdrejtë të Apache ose Nginx"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Metrika të drejtpërdrejta të statusit të Apache, Nginx ose FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Klikoni për të shfaqur metrikat e ngarkesës së serverit web"
@@ -39121,8 +39172,8 @@ msgstr "Klikoni për të shfaqur metrikat e ngarkesës së serverit web"
 msgid "Requires a local web server status module"
 msgstr "Kërkon një modul të statusit të serverit web lokal"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Ngarkesa e serverit web lexohet vetëm nga Apache mod_status ose Nginx stub_status në localhost. Faqja e statusit duhet të lejojë kërkesa nga 127.0.0.1 (ose ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Ngarkesa e serverit ueb lexohet nga Apache mod_status, Nginx stub_status, ose pika e metrikave FrankenPHP/Caddy, vetëm në localhost. Faqja e statusit duhet të lejojë kërkesat nga 127.0.0.1 (ose ::1)."
 
 msgid "Paths scanned"
 msgstr "Shtigje të skanuara"
@@ -39133,8 +39184,8 @@ msgstr "Të zbuluara"
 msgid "Status path"
 msgstr "Shtegu i statusit"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Metrikat e ngarkesës së serverit web janë të disponueshme vetëm për Apache dhe Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Metrikat e ngarkesës së serverit ueb janë të disponueshme vetëm për Apache, Nginx dhe FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Asnjë nga shtigjet e statusit të skanuara nuk u përgjigj në localhost."
@@ -39217,8 +39268,23 @@ msgstr "Pranuar"
 msgid "Handled"
 msgstr "Trajtuar"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: aktivizo mod_status (ExtendedStatus On) dhe lejo localhost në /server-status. Nginx: aktivizo stub_status në një vendndodhje vetëm për localhost si /nginx_status ose /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: aktivizoni mod_status (ExtendedStatus On) dhe lejoni localhost te /server-status. Nginx: aktivizoni stub_status në një vendndodhje vetëm për localhost si /nginx_status ose /stub_status. FrankenPHP: shtoni një opsion global \"metrics\" në Caddyfile, i cili ekspozon metrikat Prometheus në API-në e administrimit të Caddy (127.0.0.1:2019/metrics) si parazgjedhje."
+
+msgid "Total threads"
+msgstr "Fije totale"
+
+msgid "Busy threads"
+msgstr "Fije të zëna"
+
+msgid "Queue depth"
+msgstr "Thellësia e radhës"
+
+msgid "Worker"
+msgstr "Punëtor"
+
+msgid "Average request time"
+msgstr "Koha mesatare e kërkesës"
 
 msgid "Grade percentage distribution"
 msgstr "Shpërndarja e përqindjes së notave"
@@ -39286,11 +39352,17 @@ msgstr "OPcache është instaluar por nuk është aktivizuar."
 msgid "OPcache extension is not available on this server."
 msgstr "Zgjerimi OPcache nuk është i disponueshëm në këtë server."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache po raporton statistika të memories të papërputhshme (një problem i njohur në disa mjedise PHP me fije, p.sh. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu është instaluar por nuk është aktivizuar."
 
 msgid "APCu extension is not available on this server."
 msgstr "Zgjerimi APCu nuk është i disponueshëm në këtë server."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu po raporton statistika të memories të papërputhshme (një problem i njohur në disa mjedise PHP me fije)."
 
 msgid "Constant"
 msgstr "Konstant"
@@ -40050,4 +40122,10 @@ msgstr "Përdor datat e aksesit të sesionit"
 
 msgid "Use session access end date"
 msgstr "Përdor datën e përfundimit të aksesit të sesionit"
+
+msgid "Group report"
+msgstr "Raporti i grupit"
+
+msgid "Student follow-up"
+msgstr "Ndjekja e studentit"
 

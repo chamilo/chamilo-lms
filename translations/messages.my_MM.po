@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "ရိုးသားစွာ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ဖော်မြူလာ နမူနာ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ဖော်မြူလာ နမူနာ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ပြောင်းလဲနိုင်သော အကွာအဝေးများ"
@@ -7673,7 +7673,7 @@ msgid "Please type your text below"
 msgstr "သင့်စာသားကို အောက်တွင် ရိုက်ထည့်ပါ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ဖောင်ဖြည့် လှုပ်ရှားမှု ဥပမာ : ကိုယ်အလေးချိန်ညွှန်းကိန်း (BMI) တွက်ချက်ခြင်း</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ကိုယ်အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ကိုယ်အလေးချိန်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =ကိုယ်အလေးချိန်/အရပ်<sup>2</sup> (Cf.<a href=\"http:\/\/en.wikipedia.org\/wiki\/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ဝီကီပီးဒီးယား ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ပုံစံဖြည့် လုပ်ဆောင်ချက် နမူနာ : ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း တွက်ချက်ရန်</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ဝီကီပီးဒီးယား ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "လိပ်စာကို မှတ်သားပါ"
@@ -7716,6 +7716,54 @@ msgstr "စမ်းသပ်မှု၏ မေးခွန်းစာရင�
 
 msgid "Recycle existing questions"
 msgstr "ရှိပြီးသား မေးခွန်းများကို ပြန်လည်အသုံးပြုပါ"
+
+msgid "Add this question to the test: %s"
+msgstr "ဤမေးခွန်းကို စာမေးပွဲသို့ ထည့်ပါ: %s"
+
+msgid "Edit question: %s"
+msgstr "မေးခွန်း ပြင်ဆင်ရန်: %s"
+
+msgid "Add a question: %s"
+msgstr "မေးခွန်း ထည့်ရန်: %s"
+
+msgid "Detected blanks: %s"
+msgstr "တွေ့ရှိသော နေရာလွတ်များ: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "မေးခွန်း %s ခု၊ စုစုပေါင်း ရမှတ် (မေးခွန်းအားလုံး) %s။"
+
+msgid "Unique answer"
+msgstr "တစ်ခုတည်းသော အဖြေ"
+
+msgid "Multiple answer true/false"
+msgstr "အဖြေများစွာ မှန်/မှား"
+
+msgid "Multiple answer combination true/false"
+msgstr "အဖြေများစွာ ပေါင်းစပ် မှန်/မှား"
+
+msgid "Unique answer with images"
+msgstr "ပုံများပါသော တစ်ခုတည်းသော အဖြေ"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "သေချာမှုအဆင့်ပါသော အဖြေများစွာ မှန်/မှား"
+
+msgid "Answer in Office document"
+msgstr "Office စာရွက်စာတမ်းတွင် အဖြေ"
+
+msgid "Matching draggable"
+msgstr "ဆွဲယူ ကိုက်ညီစေခြင်း"
+
+msgid "Matching draggable combination"
+msgstr "ဆွဲယူ ကိုက်ညီစေခြင်း ပေါင်းစပ်"
+
+msgid "Fill in blanks combination"
+msgstr "နေရာလွတ်ဖြည့် ပေါင်းစပ်"
+
+msgid "Multiple answer dropdown combination"
+msgstr "အဖြေများစွာ ဆွဲချစာရင်း ပေါင်းစပ်"
+
+msgid "Matching combination"
+msgstr "ကိုက်ညီစေခြင်း ပေါင်းစပ်"
 
 msgid "Correct test"
 msgstr "မှန်ကန်သောစမ်းသပ်မှု"
@@ -20541,6 +20589,9 @@ msgstr "လင့်ခ်သက်တမ်းကုန်သွားပါပ
 
 msgid "Instructions for the password change procedure"
 msgstr "စကားဝှက်ပြောင်းလဲမှုလုပ်ထုံးလုပ်နည်းအတွက် ညွှန်ကြားချက်များ"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "ဤစာတိုကို သင့်ထံ ပေးပို့ရခြင်းမှာ သင် (သို့မဟုတ် သင့်ကို အယောင်ဆောင်သူ) က သင့်အကောင့်အတွက် စကားဝှက်အသစ် ထုတ်ပေးရန် တောင်းဆိုခဲ့သောကြောင့်ဖြစ်သည်။<br/>စကားဝှက်အသစ် သတ်မှတ်ရန် ဤလင့်ခ်ကို လိုက်နာပါ:<br/>%s<br/>ဤတောင်းဆိုမှုကို သင်မပြုလုပ်ခဲ့ပါက ဤစာတိုကို လျစ်လျူရှုနိုင်သည်။ ဤစာတိုများကို ဆက်လက်ရရှိနေပါက ပေါ်တယ် စီမံခန့်ခွဲသူထံ ဆက်သွယ်ပါ။"
 
 msgid "Remind Course Expiration cron"
 msgstr "သင်တန်းသက်တမ်းကုန်ဆုံးမှု သတိပေးချက် cron"
@@ -35534,7 +35585,7 @@ msgid "%s results"
 msgstr "%s ရလဒ်များ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ဖောင်ဖြည့် လှုပ်ရှားမှု ဥပမာ : ကိုယ်အလေးချိန်ညွှန်းကိန်း (BMI) တွက်ချက်ခြင်း</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ကိုယ်အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ကိုယ်အလေးချိန်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =ကိုယ်အလေးချိန်\/အရပ်<sup>2</sup> (Cf.<a href=\"http:\/\/en.wikipedia.org\/wiki\/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ဝီကီပီးဒီးယား ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ပုံစံဖြည့် လုပ်ဆောင်ချက် နမူနာ : ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း တွက်ချက်ရန်</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ဝီကီပီးဒီးယား ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "ဖယ်ရှားပြီး"
@@ -39112,8 +39163,8 @@ msgstr "၅ စက္ကန့်တိုင်း အလိုအလျော�
 msgid "Web server load"
 msgstr "ဝဘ်ဆာဗာ ဝန်အား"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Apache သို့မဟုတ် Nginx အခြေအနေ မက်ထရစ်များ တိုက်ရိုက်ကြည့်ရှုရန်"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Apache၊ Nginx သို့မဟုတ် FrankenPHP တိုက်ရိုက် အခြေအနေ တိုင်းတာချက်များ"
 
 msgid "Click to show web server load metrics"
 msgstr "ဝဘ်ဆာဗာ ဝန်အား မက်ထရစ်များ ပြရန် နှိပ်ပါ"
@@ -39121,8 +39172,8 @@ msgstr "ဝဘ်ဆာဗာ ဝန်အား မက်ထရစ်မျာ�
 msgid "Requires a local web server status module"
 msgstr "ဒေသတွင်း ဝဘ်ဆာဗာ အခြေအနေ မော်ဂျူး လိုအပ်သည်"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "ဝဘ်ဆာဗာ ဝန်အားကို Apache mod_status သို့မဟုတ် Nginx stub_status မှ localhost တွင်သာ ဖတ်ယူနိုင်သည်။ အခြေအနေ စာမျက်နှာသည် 127.0.0.1 (သို့မဟုတ် ::1) မှ တောင်းဆိုမှုများကို ခွင့်ပြုရမည်။"
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "ဝဘ်ဆာဗာ ဝန်အားကို localhost တွင်သာ Apache mod_status၊ Nginx stub_status သို့မဟုတ် FrankenPHP/Caddy တိုင်းတာချက် အဆုံးမှတ်မှ ဖတ်ယူသည်။ အခြေအနေ စာမျက်နှာသည် 127.0.0.1 (သို့မဟုတ် ::1) မှ တောင်းဆိုမှုများကို ခွင့်ပြုရမည်။"
 
 msgid "Paths scanned"
 msgstr "စကင်ဖတ်ထားသော လမ်းကြောင်းများ"
@@ -39133,8 +39184,8 @@ msgstr "တွေ့ရှိခဲ့သည်"
 msgid "Status path"
 msgstr "အခြေအနေ လမ်းကြောင်း"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "ဝဘ်ဆာဗာ ဝန်အား မက်ထရစ်များကို Apache နှင့် Nginx အတွက်သာ ရရှိနိုင်သည်။"
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "ဝဘ်ဆာဗာ ဝန်အား တိုင်းတာချက်များကို Apache၊ Nginx နှင့် FrankenPHP အတွက်သာ ရရှိနိုင်သည်။"
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "စကင်ဖတ်ထားသော အခြေအနေ လမ်းကြောင်းများထဲမှ တစ်ခုမှ localhost တွင် တုံ့ပြန်ခြင်းမရှိပါ။"
@@ -39217,8 +39268,23 @@ msgstr "လက်ခံမှုများ"
 msgid "Handled"
 msgstr "ကိုင်တွယ်မှုများ"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: mod_status ကို ဖွင့်ပါ (ExtendedStatus On) နှင့် localhost ကို /server-status သို့ ခွင့်ပြုပါ။ Nginx: stub_status ကို localhost တွင်သာ တည်နေရာတစ်ခုဖြစ်သော /nginx_status သို့မဟုတ် /stub_status တွင် ဖွင့်ပါ။"
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status ကို ဖွင့်ပါ (ExtendedStatus On) ပြီး localhost ကို /server-status သို့ ခွင့်ပြုပါ။ Nginx: localhost-only တည်နေရာတစ်ခုတွင် stub_status ကို ဖွင့်ပါ၊ ဥပမာ /nginx_status သို့မဟုတ် /stub_status။ FrankenPHP: Caddyfile တွင် ကမ္ဘာလုံးဆိုင်ရာ \"metrics\" ရွေးချယ်မှု ထည့်ပါ၊ ပုံမှန်အားဖြင့် Caddy ၏ admin API (127.0.0.1:2019/metrics) တွင် Prometheus တိုင်းတာချက်များကို ဖော်ပြသည်။"
+
+msgid "Total threads"
+msgstr "စုစုပေါင်း ကြိုးများ"
+
+msgid "Busy threads"
+msgstr "အလုပ်များနေသော ကြိုးများ"
+
+msgid "Queue depth"
+msgstr "တန်းစီအတိမ်အနက်"
+
+msgid "Worker"
+msgstr "အလုပ်သမား"
+
+msgid "Average request time"
+msgstr "ပျမ်းမျှ တောင်းဆိုချိန်"
 
 msgid "Grade percentage distribution"
 msgstr "အဆင့် ရာခိုင်နှုန်း ဖြန့်ဝေမှု"
@@ -39286,11 +39352,17 @@ msgstr "OPcache တပ်ဆင်ထားသော်လည်း ဖွင့
 msgid "OPcache extension is not available on this server."
 msgstr "ဤဆာဗာတွင် OPcache တိုးချဲ့မှု မရရှိနိုင်ပါ။"
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache သည် မကိုက်ညီသော မှတ်ဉာဏ် စာရင်းဇယားများ အစီရင်ခံနေသည် (threaded PHP ရန်တိုင်းမ်အချို့တွင် သိရှိထားသော ပြဿနာ၊ ဥပမာ FrankenPHP)။"
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu တပ်ဆင်ထားသော်လည်း ဖွင့်မထားပါ။"
 
 msgid "APCu extension is not available on this server."
 msgstr "ဤဆာဗာတွင် APCu တိုးချဲ့မှု မရရှိနိုင်ပါ။"
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu သည် မကိုက်ညီသော မှတ်ဉာဏ် စာရင်းဇယားများ အစီရင်ခံနေသည် (threaded PHP ရန်တိုင်းမ်အချို့တွင် သိရှိထားသော ပြဿနာ)။"
 
 msgid "Constant"
 msgstr "ကိန်းသေ"
@@ -40050,4 +40122,10 @@ msgstr "ဆက်ရှင်ဝင်ရောက်ရက်စွဲမျာ
 
 msgid "Use session access end date"
 msgstr "ဆက်ရှင်ဝင်ရောက်မှုပြီးဆုံးရက်စွဲကို အသုံးပြုရန်"
+
+msgid "Group report"
+msgstr "အုပ်စု အစီရင်ခံစာ"
+
+msgid "Student follow-up"
+msgstr "ကျောင်းသား နောက်ဆက်တွဲ"
 

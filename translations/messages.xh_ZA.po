@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:akukho copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Ifolda,, application/msword:MsWord,, application/octet-stream:Umsinga we-octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:umsebenzi,,      simulation:ukwenza okufana,,      questionnaire:ufuzo,,      diagram:umzobo,,      figure:umfanekiso,,      graph:grafu,,      index:isazisi,,      slide:isilayidi,,      table:thebhule,,      narrative text:umbhalo obalasele,,      exam:oviwo,,      experiment:uphando,,      problem statement:ingxelo yengxaki,,      self assessment:ukuzivavanya,,      lecture:intetho"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo womsebenzi wokuzalisa ifomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>I-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -7712,6 +7712,54 @@ msgstr "Uluhlu lweembuzo zovavanyo"
 
 msgid "Recycle existing questions"
 msgstr "Sebenzisa kwakhona iimbuzo esele"
+
+msgid "Add this question to the test: %s"
+msgstr "Yongeza lo mbuzo kuvavanyo: %s"
+
+msgid "Edit question: %s"
+msgstr "Hlela umbuzo: %s"
+
+msgid "Add a question: %s"
+msgstr "Yongeza umbuzo: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Izithuba ezifunyenweyo: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "Imibuzo %s, namanqaku ewonke (yonke imibuzo) angama-%s."
+
+msgid "Unique answer"
+msgstr "Impendulo enye"
+
+msgid "Multiple answer true/false"
+msgstr "Iimpendulo ezininzi ziyinyani/bubuxoki"
+
+msgid "Multiple answer combination true/false"
+msgstr "Indibaniselwano yeempendulo ezininzi ziyinyani/bubuxoki"
+
+msgid "Unique answer with images"
+msgstr "Impendulo enye enemifanekiso"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Iimpendulo ezininzi ziyinyani/bubuxoki ngeqondo loqiniseko"
+
+msgid "Answer in Office document"
+msgstr "Impendulo kuxwebhu lwe-Office"
+
+msgid "Matching draggable"
+msgstr "Ukudibanisa okutsalekayo"
+
+msgid "Matching draggable combination"
+msgstr "Indibaniselwano yokudibanisa okutsalekayo"
+
+msgid "Fill in blanks combination"
+msgstr "Indibaniselwano yokuzalisa izithuba"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Indibaniselwano yeempendulo ezininzi kwi-dropdown"
+
+msgid "Matching combination"
+msgstr "Indibaniselwano yokudibanisa"
 
 msgid "Correct test"
 msgstr "Vavanyo oluchanekileyo"
@@ -20537,6 +20585,9 @@ msgstr "Ikhonkco liphelelwe, nceda uzame kwakhona."
 
 msgid "Instructions for the password change procedure"
 msgstr "Imiyalelo yenkqubo yokutshintsha ipasswedi"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Lo myalezo uthunyelwa kuwe kuba wena (okanye umntu ozama ukuzenza wena) ucele ukuba kuveliswe iphasiwedi entsha kwiakhawunti yakho.<br/>Ukuseta iphasiwedi yakho entsha, nceda ulandele le linki:<br/>%s<br/>Ukuba awuzange wenze esi sicelo, ungawutyeshela nje lo myalezo. Ukuba uyaqhubeka ufumana le miyalezo, nceda uqhagamshelane nomlawuli wephothali."
 
 msgid "Remind Course Expiration cron"
 msgstr "Khumbuza ukuphelelwa kwexesha lesifundo cron"
@@ -35530,7 +35581,7 @@ msgid "%s results"
 msgstr "%s iziphumo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo womsebenzi wokuzalisa ifomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>I-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Kususiwe"
@@ -39108,8 +39159,8 @@ msgstr "Hlaziya ngokuzenzekelayo qho ngemizuzwana emi-5"
 msgid "Web server load"
 msgstr "Umxholo weseva yewebhu"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Iinkcukacha zomthwalo we-Apache okanye we-Nginx"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Iimeko zomgangatho we-Apache, Nginx okanye i-FrankenPHP eziphilayo"
 
 msgid "Click to show web server load metrics"
 msgstr "Cofa ukubonisa iinkcukacha zomthwalo weseva yewebhu"
@@ -39117,8 +39168,8 @@ msgstr "Cofa ukubonisa iinkcukacha zomthwalo weseva yewebhu"
 msgid "Requires a local web server status module"
 msgstr "Ifuna imodyuli yemo yeseva yewebhu yendawo"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Umxholo weseva yewebhu ufumanwa kwi-Apache mod_status okanye kwi-Nginx stub_status kwindawo yasekhaya kuphela. Iphepha lemo kufuneka livumele izicelo ezivela ku-127.0.0.1 (okanye ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Umthwalo weseva yewebhu ufundwa kwi-Apache mod_status, i-Nginx stub_status, okanye indawo yeemetriki ze-FrankenPHP/Caddy, kwi-localhost kuphela. Iphepha lomgangatho kufuneka livumele izicelo ezivela ku-127.0.0.1 (okanye ::1)."
 
 msgid "Paths scanned"
 msgstr "Iindlela eziskeniweyo"
@@ -39129,8 +39180,8 @@ msgstr "Kufunyenwe"
 msgid "Status path"
 msgstr "Indlela yemo"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Iinkcukacha zomthwalo weseva yewebhu zifumaneka kuphela kwi-Apache ne-Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Iimetriki zomthwalo weseva yewebhu zifumaneka kuphela kwi-Apache, Nginx ne-FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Akukho ndlela yokuhlola imeko ephendule kwi-localhost."
@@ -39213,8 +39264,23 @@ msgstr "Ukuvunyelwa"
 msgid "Handled"
 msgstr "Kuphathwe"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: vumela i-mod_status (ExtendedStatus On) kwaye uvumele i-localhost ukuya ku-/server-status. Nginx: vumela i-stub_status kwindawo ye-localhost kuphela njenge-/nginx_status okanye i-/stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "I-Apache: vula i-mod_status (ExtendedStatus On) kwaye uvumele i-localhost ku-/server-status. I-Nginx: vula i-stub_status kwindawo ye-localhost kuphela efana no-/nginx_status okanye /stub_status. I-FrankenPHP: yongeza ukhetho lwehlabathi \"metrics\" kwi-Caddyfile, oluveza iimetriki ze-Prometheus kwi-API yolawulo ye-Caddy (127.0.0.1:2019/metrics) ngokwendalo."
+
+msgid "Total threads"
+msgstr "Iintambo zizonke"
+
+msgid "Busy threads"
+msgstr "Iintambo ezixakekileyo"
+
+msgid "Queue depth"
+msgstr "Ubuzulu bomgca"
+
+msgid "Worker"
+msgstr "Umsebenzi"
+
+msgid "Average request time"
+msgstr "Ixesha eliphakathi lesicelo"
 
 msgid "Grade percentage distribution"
 msgstr "Ukwabiwa ngepesenti yamanqaku"
@@ -39282,11 +39348,17 @@ msgstr "I-OPcache ifakiwe kodwa ayivulwanga."
 msgid "OPcache extension is not available on this server."
 msgstr "Isolulo se-OPcache asikho kule seva."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "I-OPcache ixela iinkcukacha zememori ezingahambelaniyo (ingxaki eyaziwayo kwezinye iiruntimes ze-PHP ezineentambo, umz. i-FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "I-APCu ifakiwe kodwa ayivulwanga."
 
 msgid "APCu extension is not available on this server."
 msgstr "Isolulo se-APCu asikho kule seva."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "I-APCu ixela iinkcukacha zememori ezingahambelaniyo (ingxaki eyaziwayo kwezinye iiruntimes ze-PHP ezineentambo)."
 
 msgid "Constant"
 msgstr "Ungatshintshiyo"
@@ -40046,4 +40118,10 @@ msgstr "Sebenzisa imihla yokufikelela kwiseshoni"
 
 msgid "Use session access end date"
 msgstr "Sebenzisa umhla wokuphela kokufikelela kwiseshoni"
+
+msgid "Group report"
+msgstr "Ingxelo yeqela"
+
+msgid "Student follow-up"
+msgstr "Ukulandelela umfundi"
 

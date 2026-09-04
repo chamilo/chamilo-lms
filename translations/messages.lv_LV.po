@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -7716,6 +7716,54 @@ msgstr "Kontroldarba jautājumu saraksts"
 
 msgid "Recycle existing questions"
 msgstr "Izmantot jau citos testos izveidotos un ievadītos jautājumus"
+
+msgid "Add this question to the test: %s"
+msgstr "Pievienot šo jautājumu testam: %s"
+
+msgid "Edit question: %s"
+msgstr "Rediģēt jautājumu: %s"
+
+msgid "Add a question: %s"
+msgstr "Pievienot jautājumu: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Konstatētie tukšumi: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s jautājumi, kopējais punktu skaits (visi jautājumi) %s."
+
+msgid "Unique answer"
+msgstr "Viena atbilde"
+
+msgid "Multiple answer true/false"
+msgstr "Vairākas atbildes patiess/nepatiess"
+
+msgid "Multiple answer combination true/false"
+msgstr "Vairāku atbilžu kombinācija patiess/nepatiess"
+
+msgid "Unique answer with images"
+msgstr "Viena atbilde ar attēliem"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Vairākas atbildes patiess/nepatiess ar pārliecības pakāpi"
+
+msgid "Answer in Office document"
+msgstr "Atbilde Office dokumentā"
+
+msgid "Matching draggable"
+msgstr "Saskaņošana ar vilkšanu"
+
+msgid "Matching draggable combination"
+msgstr "Saskaņošanas vilkšanas kombinācija"
+
+msgid "Fill in blanks combination"
+msgstr "Aizpildīt tukšumus kombinācija"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Vairāku atbilžu nolaižamā saraksta kombinācija"
+
+msgid "Matching combination"
+msgstr "Saskaņošanas kombinācija"
 
 msgid "Correct test"
 msgstr "Labot testu"
@@ -20541,6 +20589,9 @@ msgstr "Saite ir beigusies, lūdzu mēģiniet vēlreiz."
 
 msgid "Instructions for the password change procedure"
 msgstr "Norādījumi par paroles maiņas procedūru"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Šis ziņojums tiek jums nosūtīts, jo jūs (vai kāds, kas mēģina uzdoties par jums) pieprasījāt jaunas paroles ģenerēšanu jūsu kontam.<br/>Lai iestatītu jauno paroli, lūdzu, sekojiet šai saitei:<br/>%s<br/>Ja jūs šo pieprasījumu neesat veicis, varat vienkārši ignorēt šo ziņojumu. Ja turpināt saņemt šos ziņojumus, lūdzu, sazinieties ar portāla administratoru."
 
 msgid "Remind Course Expiration cron"
 msgstr "Atgādināt kursa beigu cron"
@@ -39113,8 +39164,8 @@ msgstr "Automātiska atsvaidzināšana ik pēc 5 sekundēm"
 msgid "Web server load"
 msgstr "Tīmekļa servera slodze"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Aktīvie Apache vai Nginx statusa rādītāji"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Apache, Nginx vai FrankenPHP statusa metrikas reāllaikā"
 
 msgid "Click to show web server load metrics"
 msgstr "Noklikšķiniet, lai parādītu tīmekļa servera slodzes rādītājus"
@@ -39122,8 +39173,8 @@ msgstr "Noklikšķiniet, lai parādītu tīmekļa servera slodzes rādītājus"
 msgid "Requires a local web server status module"
 msgstr "Nepieciešams lokālā tīmekļa servera statusa modulis"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Tīmekļa servera slodze tiek nolasīta tikai no Apache mod_status vai Nginx stub_status localhost. Statusa lapai jāatļauj pieprasījumi no 127.0.0.1 (vai ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Tīmekļa servera slodze tiek nolasīta no Apache mod_status, Nginx stub_status vai FrankenPHP/Caddy metriku galapunkta, tikai localhost. Statusa lapai jāatļauj pieprasījumi no 127.0.0.1 (vai ::1)."
 
 msgid "Paths scanned"
 msgstr "Skenētie ceļi"
@@ -39134,8 +39185,8 @@ msgstr "Noteikts"
 msgid "Status path"
 msgstr "Statusa ceļš"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Tīmekļa servera slodzes metrika ir pieejama tikai Apache un Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Tīmekļa servera slodzes metrikas ir pieejamas tikai Apache, Nginx un FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Neviens no skenētajiem statusa ceļiem neatbildēja localhost."
@@ -39218,8 +39269,23 @@ msgstr "Pieņemtie"
 msgid "Handled"
 msgstr "Apstrādātie"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: iespējojiet mod_status (ExtendedStatus On) un atļaujiet localhost piekļuvi /server-status. Nginx: iespējojiet stub_status tikai localhost atrašanās vietā, piemēram, /nginx_status vai /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: iespējojiet mod_status (ExtendedStatus On) un atļaujiet localhost piekļuvi /server-status. Nginx: iespējojiet stub_status tikai localhost atrašanās vietā, piemēram, /nginx_status vai /stub_status. FrankenPHP: pievienojiet globālo \"metrics\" opciju Caddyfile, kas pēc noklusējuma atklāj Prometheus metrikas Caddy administrācijas API (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Kopējais pavedienu skaits"
+
+msgid "Busy threads"
+msgstr "Aizņemtie pavedieni"
+
+msgid "Queue depth"
+msgstr "Rindas dziļums"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Vidējais pieprasījuma laiks"
 
 msgid "Grade percentage distribution"
 msgstr "Vērtējumu procentuālais sadalījums"
@@ -39287,11 +39353,17 @@ msgstr "OPcache ir instalēts, bet nav iespējots."
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache paplašinājums nav pieejams šajā serverī."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache ziņo par nekonsekventu atmiņas statistiku (zināma problēma dažās pavedienotās PHP izpildlaikā, piemēram, FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu ir instalēts, bet nav iespējots."
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu paplašinājums nav pieejams šajā serverī."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu ziņo par nekonsekventu atmiņas statistiku (zināma problēma dažās pavedienotās PHP izpildlaikā)."
 
 msgid "Constant"
 msgstr "Konstante"
@@ -40051,4 +40123,10 @@ msgstr "Izmantot sesijas piekļuves datumus"
 
 msgid "Use session access end date"
 msgstr "Izmantot sesijas piekļuves beigu datumu"
+
+msgid "Group report"
+msgstr "Grupas pārskats"
+
+msgid "Student follow-up"
+msgstr "Studenta uzraudzība"
 

@@ -7718,6 +7718,54 @@ msgstr "Testi küsimuste loend"
 msgid "Recycle existing questions"
 msgstr "Taaskasuta olemasolevaid küsimusi"
 
+msgid "Add this question to the test: %s"
+msgstr ""
+
+msgid "Edit question: %s"
+msgstr ""
+
+msgid "Add a question: %s"
+msgstr ""
+
+msgid "Detected blanks: %s"
+msgstr ""
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr ""
+
+msgid "Unique answer"
+msgstr ""
+
+msgid "Multiple answer true/false"
+msgstr ""
+
+msgid "Multiple answer combination true/false"
+msgstr ""
+
+msgid "Unique answer with images"
+msgstr ""
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr ""
+
+msgid "Answer in Office document"
+msgstr ""
+
+msgid "Matching draggable"
+msgstr ""
+
+msgid "Matching draggable combination"
+msgstr ""
+
+msgid "Fill in blanks combination"
+msgstr ""
+
+msgid "Multiple answer dropdown combination"
+msgstr ""
+
+msgid "Matching combination"
+msgstr ""
+
 msgid "Correct test"
 msgstr "Paranda test"
 
@@ -14250,25 +14298,25 @@ msgid "<p> The Announcements tool allows you to send an e-mail to some or all of
 msgstr "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 
 msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
-msgstr "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
+msgstr "<p>Vestlustööriist võimaldab teil õpilastega reaalajas vestelda. </p> Erinevalt enamikust kommertslikest vestlustööriistadest on Chamilo vestlus veebipõhine ega nõua täiendavat paigaldust (nt MSN®, Yahoo Messenger®, Skype® jne). Selle lahenduse peamine eelis on seega kohe kättesaadavus õpilastele, mis võimaldab vestluse hõlpsasti kursusesse integreerida. Lisaks arhiveerib Chamilo vestlustööriist arutelud automaatselt ja salvestab need hilisemaks hõlpsaks juurdepääsuks Dokumentide tööriista kaudu. (Olge teadlik, et sõnumi värskendamine võib iga vahetuse korral võtta 1 kuni 5 sekundit – see ei tähenda, et midagi oleks valesti!!). </p> Kui õppijad on üles laadinud profiilipildi, kuvatakse see (vähendatud suuruses) vasakus veerus – vastasel juhul kuvatakse vaikepilt. </p> Õpetaja vastutab lõimede kustutamise eest, millal ta seda asjakohaseks peab. </p> <b>Pedagoogiline kasutus</b> <p>Vestluse lisamine kursusele ei ole alati hea mõte. Selle tööriista parimaks kasutamiseks peate tagama, et arutelud jääksid kursuse sisule keskendunuks. Võite näiteks otsustada hoida vestlusvõimalus peidetuna, kuni on aeg „formaalseks“ planeeritud sessiooniks. Nii, kuigi arutelude vabadus võib küll olla piiratud, saate paremini tagada, et sellised reaalajas kohtumised oleksid kasulikud.</p>"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
-msgstr "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
+msgstr "<p>Ülesannete tööriist on väga lihtne tööriist, mis võimaldab õpilastel kursusele dokumente üles laadida. Seda saab kasutada avatud küsimustele vastuste vastuvõtmiseks üksikisikutelt või rühmadelt või mis tahes muu dokumendi üleslaadimiseks.</p><p>Saate muuta failid vaikimisi kõigile õpilastele nähtavaks või ainult endale nähtavaks vastavalt kursuse nõuetele. Kõigi failide nähtavaks tegemine on kasulik näiteks siis, kui soovite paluda õpilastel jagada arvamusi üksteise tööde kohta või anda neile kogemust tekstide globaalses avaldamises. Hoidke failid nähtamatuna, kui soovite näiteks küsida kõigilt sama küsimust, kuid vältida „petmist“. Dokumentide nähtamatuks tegemine võimaldab teil ka kontrollida, millal dokument on kõigile teistele õpilastele kättesaadav. </p><p>Kui soovite, et õpilased esitaksid dokumendi hindamiseks, on kõige parem määrata esitused tööriista sees kausta.</p> <p>Saate tööriista kasutada tähtaegade ja esitamisjuhiste määramiseks ning ka maksimaalse hinde/skoori jaoks.</p>"
 
 msgid "<p>The Reporting tool helps you track your students' attendance and progress: Did they connect to the system, When? How many times? How much do they score in tests? Did they already upload their assignment paper? When? If you use SCORM courses, you can even track how much time a student spent on a particular module or chapter. Reporting provides two levels of information:<ul><li><b>Global</b>: How many students have accessed the course? What are the most frequently visited pages and links?</i><li><b>Specific</b>: What pages has John Doe visited? What score does he get in tests? When did he last connect to the platform?</li></ul>"
-msgstr "<p>The Reporting tool helps you track your students' attendance and progress: Did they connect to the system, When? How many times? How much do they score in tests? Did they already upload their assignment paper? When? If you use SCORM courses, you can even track how much time a student spent on a particular module or chapter. Reporting provides two levels of information:<ul><li><b>Global</b>: How many students have accessed the course? What are the most frequently visited pages and links?</i><li><b>Specific</b>: What pages has John Doe visited? What score does he get in tests? When did he last connect to the platform?</li></ul>"
+msgstr "<p>Aruandlustööriist aitab teil jälgida õpilaste osalemist ja edasijõudmist: kas nad ühendasid süsteemiga, millal? Mitu korda? Kui palju nad testides skoorivad? Kas nad on juba oma ülesande töö üles laadinud? Millal? Kui kasutate SCORM-kursusi, saate isegi jälgida, kui palju aega õpilane konkreetsele moodulile või peatükile kulutas. Aruandlus pakub kahte teabetaset:<ul><li><b>Üldine</b>: Mitu õpilast on kursusele ligi pääsenud? Millised on kõige sagedamini külastatud lehed ja lingid?</i><li><b>Konkreetne</b>: Milliseid lehti on John Doe külastanud? Millise skoori ta testides saab? Millal ta viimati platvormiga ühendas?</li></ul>"
 
 msgid "Course settings Help"
-msgstr "Course settings Help"
+msgstr "Kursuse seadete abi"
 
 msgid "<p>The Course Settings allows you to manage the global parameters of your course: Title, code, language, name of trainer etc.</p><p>The options situated in the centre of the page deal with confidentiality settings : is the course public or private? Can users register to it? You can use these settings dynamically e.g. allow self-registration for one week > ask your students to register > close access to self-registration > remove possible intruders through the Users list. This way you keep control of who is registered while avoiding the administrative hassle of registering them yourself.</p>(Note - some organizations prefer not to use this method and opt to centralise registration. In this case, participants cannot enrol in your course at all, even if you, as a trainer / teacher, wish to give them access. To check this, look at the home page of your campus (as opposed to your course homepage) to see if the 'Register' link is present.) </p> <p>At the bottom of the page, you can back up the course and delete it. Backup will create a file on the server and allow you to copy it on your own Hard Disk locally so that there will be two backups each in different places. If you back up a course and then delete it you will not be be able to restore it yourself, but the system administrator can do this for you if you give him/her the code of your course. Backing up a course is also a good way to get all your documents transferred to your own computer. You will need a tool, like Winzip® to UNZIP the archive. Note that backing up a course does not automatically remove it.</p>"
-msgstr "<p>The Course Settings allows you to manage the global parameters of your course: Title, code, language, name of trainer etc.</p><p>The options situated in the centre of the page deal with confidentiality settings : is the course public or private? Can users register to it? You can use these settings dynamically e.g. allow self-registration for one week > ask your students to register > close access to self-registration > remove possible intruders through the Users list. This way you keep control of who is registered while avoiding the administrative hassle of registering them yourself.</p>(Note - some organizations prefer not to use this method and opt to centralise registration. In this case, participants cannot enrol in your course at all, even if you, as a trainer / teacher, wish to give them access. To check this, look at the home page of your campus (as opposed to your course homepage) to see if the 'Register' link is present.) </p> <p>At the bottom of the page, you can back up the course and delete it. Backup will create a file on the server and allow you to copy it on your own Hard Disk locally so that there will be two backups each in different places. If you back up a course and then delete it you will not be be able to restore it yourself, but the system administrator can do this for you if you give him/her the code of your course. Backing up a course is also a good way to get all your documents transferred to your own computer. You will need a tool, like Winzip® to UNZIP the archive. Note that backing up a course does not automatically remove it.</p>"
+msgstr "<p>Kursuse seaded võimaldavad hallata kursuse globaalseid parameetreid: pealkiri, kood, keel, treeneri nimi jne.</p><p>Lehe keskel asuvad valikud käsitlevad konfidentsiaalsusseadeid: kas kursus on avalik või privaatne? Kas kasutajad saavad sellele registreeruda? Saate neid seadeid dünaamiliselt kasutada, nt lubada ise registreerimist üheks nädalaks > paluda õpilastel registreeruda > sulgeda ise registreerimise juurdepääs > eemaldada võimalikud sissetungijad kasutajate nimekirja kaudu. Nii säilitate kontrolli selle üle, kes on registreeritud, vältides samal ajal administratiivset vaeva neid ise registreerida.</p>(Märkus – mõned organisatsioonid eelistavad seda meetodit mitte kasutada ja valivad tsentraliseeritud registreerimise. Sel juhul ei saa osalejad teie kursusele üldse registreeruda, isegi kui teie treeneri / õpetajana soovite neile juurdepääsu anda. Selle kontrollimiseks vaadake oma kampuse avalehte (mitte kursuse avalehte), kas link „Registreeru“ on olemas.) </p> <p>Lehe allosas saate kursust varundada ja kustutada. Varundamine loob serverisse faili ja võimaldab teil selle oma kõvakettale kohalikult kopeerida, nii et on kaks varukoopiat eri kohtades. Kui varundate kursuse ja seejärel kustutate selle, ei saa te seda ise taastada, kuid süsteemiadministraator saab seda teie eest teha, kui annate talle/talle kursuse koodi. Kursuse varundamine on ka hea viis kõigi dokumentide oma arvutisse ülekandmiseks. Vajate tööriista, nagu Winzip®, arhiivi lahtipakkimiseks. Pange tähele, et kursuse varundamine ei eemalda seda automaatselt.</p>"
 
 msgid "Add a Link help"
-msgstr "Add a Link help"
+msgstr "Lingi lisamise abi"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
+msgstr "<p>Chamilo on modulaarne tööriist. Saate tööriistu peita ja näidata millal iganes soovite, vastavalt projekti nõuetele või selle konkreetsele kronoloogilisele osale. Kuid saate ka lisada avalehele tööriistu või lehti, mille olete ise loonud või mis pärinevad väljastpoolt teie Chamilo portaali. Nii saate kohandada kursuse avalehte, et muuta see omaks.</p><p>Seda tehes soovite kahtlemata lisada lehele oma linke. Lingid võivad olla kahte tüüpi:<ul><li><b>Väline link</b>: loote avalehele lingi veebisaidile, mis asub väljaspool teie kursuse ala. Sel juhul valite „Siht= Uues aknas“, sest te ei taha, et see veebisait asendaks teie Chamilo keskkonda.</li><li><b>Sisemine link</b>: lingite lehele või tööriistale oma Chamilo kursuse sees. Selleks minge esmalt asjakohasele lehele (või dokumendile või tööriistale), kopeerige selle URL brauseri aadressiribalt (CTRL+C), seejärel minge „Lisa link“ ja kleepige see URL URL-i väljale, andes sellele soovitud nime. Sel juhul valite „Siht=Sama aken“, sest soovite hoida Chamilo bännerit üleval ja lingi lehte samas keskkonnas.</li></ul>Pärast loomist ei saa linke muuta. Nende muutmiseks on ainus lahendus need deaktiveerida ja kustutada ning seejärel uuesti alustada.</p>"
 
 msgid "Clear content"
 msgstr "Tühjenda sisu"
@@ -14718,7 +14766,7 @@ msgid "Chamilo extensions"
 msgstr "Chamilo laiendused"
 
 msgid "Chamilo Green"
-msgstr "Chamilo Green"
+msgstr "Chamilo roheline"
 
 msgid "Chamilo red"
 msgstr "Chamilo punane"
@@ -15318,25 +15366,25 @@ msgid "System status"
 msgstr "Süsteemi olek"
 
 msgid "Courses space"
-msgstr ""
+msgstr "Kursuste ruum"
 
 msgid "Database server configuration and metadata"
-msgstr ""
+msgstr "Andmebaasiserveri konfiguratsioon ja metaandmed"
 
 msgid "Disk usage per course vs disk quota"
-msgstr ""
+msgstr "Kettakasutus kursuse kohta vs kettakvoot"
 
 msgid "Information about your webserver configuration"
-msgstr ""
+msgstr "Teave teie veebiserveri konfiguratsiooni kohta"
 
 msgid "Paths"
-msgstr ""
+msgstr "Teed"
 
 msgid "State of Chamilo requirements"
-msgstr ""
+msgstr "Chamilo nõuete olek"
 
 msgid "State of PHP settings on the server"
-msgstr ""
+msgstr "PHP seadete olek serveris"
 
 msgid "api_get_path() constants resolved on this portal"
 msgstr "Sellel portaalil lahendatud api_get_path() konstandid"
@@ -20542,6 +20590,9 @@ msgstr "Link on aegunud, proovi uuesti."
 
 msgid "Instructions for the password change procedure"
 msgstr "Paroolivahetuse protseduuri juhised"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "See sõnum saadetakse teile, sest teie (või keegi, kes üritab teid jäljendada) palus teie kontole uue parooli genereerimist.<br/>Uue parooli määramiseks järgige palun seda linki:<br/>%s<br/>Kui te seda taotlust ei teinud, võite selle sõnumi lihtsalt ignoreerida. Kui jätkate nende sõnumite saamist, võtke palun ühendust portaali administraatoriga."
 
 msgid "Remind Course Expiration cron"
 msgstr "Kursuse aegumise meeldetuletuse cron"
@@ -39113,8 +39164,8 @@ msgstr "Automaatne värskendus iga 5 sekundi järel"
 msgid "Web server load"
 msgstr "Veebiserveri koormus"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Live Apache või Nginx oleku mõõdikud"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Apache, Nginx või FrankenPHP reaalajas olekumõõdikud"
 
 msgid "Click to show web server load metrics"
 msgstr "Klõpsa veebiserveri koormuse mõõdikute kuvamiseks"
@@ -39122,8 +39173,8 @@ msgstr "Klõpsa veebiserveri koormuse mõõdikute kuvamiseks"
 msgid "Requires a local web server status module"
 msgstr "Nõuab kohalikku veebiserveri oleku moodulit"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Veebiserveri koormust loetakse ainult Apache mod_status või Nginx stub_status kaudu localhostist. Olekuleht peab lubama päringuid aadressilt 127.0.0.1 (või ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Veebiserveri koormus loetakse Apache mod_statusist, Nginx stub_statusist või FrankenPHP/Caddy mõõdikute otspunktist, ainult localhostilt. Olekuleht peab lubama päringuid aadressilt 127.0.0.1 (või ::1)."
 
 msgid "Paths scanned"
 msgstr "Skannitud teed"
@@ -39134,8 +39185,8 @@ msgstr "Tuvastatud"
 msgid "Status path"
 msgstr "Oleku tee"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Veebiserveri koormuse mõõdikud on saadaval ainult Apache ja Nginx jaoks."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Veebiserveri koormuse mõõdikud on saadaval ainult Apache, Nginx ja FrankenPHP jaoks."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Ükski skannitud olekuteedest ei vastanud localhostis."
@@ -39218,8 +39269,23 @@ msgstr "Vastu võetud"
 msgid "Handled"
 msgstr "Käideldud"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: luba mod_status (ExtendedStatus On) ja luba localhostile /server-status. Nginx: luba stub_status ainult localhosti asukohas nagu /nginx_status või /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: lubage mod_status (ExtendedStatus On) ja lubage localhostile juurdepääs /server-status. Nginx: lubage stub_status ainult localhosti asukohas, näiteks /nginx_status või /stub_status. FrankenPHP: lisage Caddyfile'ile globaalne \"metrics\" valik, mis paljastab Prometheus mõõdikud vaikimisi Caddy administraatori API-l (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Lõimed kokku"
+
+msgid "Busy threads"
+msgstr "Hõivatud lõimed"
+
+msgid "Queue depth"
+msgstr "Järjekorra sügavus"
+
+msgid "Worker"
+msgstr "Töötaja"
+
+msgid "Average request time"
+msgstr "Keskmine päringu aeg"
 
 msgid "Grade percentage distribution"
 msgstr "Hinnete protsentuaalne jaotus"
@@ -39287,11 +39353,17 @@ msgstr "OPcache on installitud, kuid pole lubatud."
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache laiendus pole sellel serveril saadaval."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache raporteerib vastuolulisi mälustatistikat (tuntud probleem mõnel lõimelisel PHP käituskeskkonnal, nt FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu on installitud, kuid pole lubatud."
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu laiendus pole sellel serveril saadaval."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu raporteerib vastuolulisi mälustatistikat (tuntud probleem mõnel lõimelisel PHP käituskeskkonnal)."
 
 msgid "Constant"
 msgstr "Konstant"
@@ -40051,4 +40123,10 @@ msgstr "Kasuta sessiooni juurdepääsu kuupäevi"
 
 msgid "Use session access end date"
 msgstr "Kasuta sessiooni juurdepääsu lõppkuupäeva"
+
+msgid "Group report"
+msgstr "Rühmaaruanne"
+
+msgid "Student follow-up"
+msgstr "Õpilase järelvalve"
 

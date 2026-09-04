@@ -7718,6 +7718,54 @@ msgstr "Frågelista för provet"
 msgid "Recycle existing questions"
 msgstr "Hämta en fråga från ett annat prov"
 
+msgid "Add this question to the test: %s"
+msgstr "Lägg till den här frågan i testet: %s"
+
+msgid "Edit question: %s"
+msgstr "Redigera fråga: %s"
+
+msgid "Add a question: %s"
+msgstr "Lägg till en fråga: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Upptäckta luckor: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s frågor, med en totalpoäng (alla frågor) på %s."
+
+msgid "Unique answer"
+msgstr "Unikt svar"
+
+msgid "Multiple answer true/false"
+msgstr "Flera svar sant/falskt"
+
+msgid "Multiple answer combination true/false"
+msgstr "Flera svar kombination sant/falskt"
+
+msgid "Unique answer with images"
+msgstr "Unikt svar med bilder"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Flera svar sant/falskt med säkerhetsgrad"
+
+msgid "Answer in Office document"
+msgstr "Svar i Office-dokument"
+
+msgid "Matching draggable"
+msgstr "Matchning med dra-och-släpp"
+
+msgid "Matching draggable combination"
+msgstr "Matchning med dra-och-släpp kombination"
+
+msgid "Fill in blanks combination"
+msgstr "Fyll i luckor kombination"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Flera svar rullgardin kombination"
+
+msgid "Matching combination"
+msgstr "Matchning kombination"
+
 msgid "Correct test"
 msgstr "Avsluta prov"
 
@@ -20542,6 +20590,9 @@ msgstr "Länken har gått ut, försök igen."
 
 msgid "Instructions for the password change procedure"
 msgstr "Instruktioner för lösenordsändringsprocessen"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Det här meddelandet skickas till dig eftersom du (eller någon som försöker utge sig för att vara du) har begärt att ett nytt lösenord ska genereras för ditt konto.<br/>För att ange ditt nya lösenord, följ den här länken:<br/>%s<br/>Om du inte gjorde den här begäran kan du helt enkelt ignorera meddelandet. Om du fortsätter att få dessa meddelanden, kontakta portaladministratören."
 
 msgid "Remind Course Expiration cron"
 msgstr "Påminn kursutgång cron"
@@ -39114,8 +39165,8 @@ msgstr "Uppdatera automatiskt var 5:e sekund"
 msgid "Web server load"
 msgstr "Webbserverlast"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Live-mått för Apache- eller Nginx-status"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Live-statusmått för Apache, Nginx eller FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Klicka för att visa webbserverlastmått"
@@ -39123,8 +39174,8 @@ msgstr "Klicka för att visa webbserverlastmått"
 msgid "Requires a local web server status module"
 msgstr "Kräver en lokal webbserverstatusmodul"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Webbserverlast läses från Apache mod_status eller Nginx stub_status endast på localhost. Statussidan måste tillåta begäran från 127.0.0.1 (eller ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Webbserverns belastning läses från Apache mod_status, Nginx stub_status eller FrankenPHP/Caddy-måttens slutpunkt, endast på localhost. Statussidan måste tillåta begäranden från 127.0.0.1 (eller ::1)."
 
 msgid "Paths scanned"
 msgstr "Skannade sökvägar"
@@ -39135,8 +39186,8 @@ msgstr "Upptäckta"
 msgid "Status path"
 msgstr "Statussökväg"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Webbserverlastmått är endast tillgängliga för Apache och Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Belastningsmått för webbservern är endast tillgängliga för Apache, Nginx och FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Ingen av de skannade statussökvägarna svarade på localhost."
@@ -39219,8 +39270,23 @@ msgstr "Accepterade"
 msgid "Handled"
 msgstr "Hanterade"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: aktivera mod_status (ExtendedStatus On) och tillåt localhost till /server-status. Nginx: aktivera stub_status på en plats som endast är tillgänglig från localhost, t.ex. /nginx_status eller /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: aktivera mod_status (ExtendedStatus On) och tillåt localhost till /server-status. Nginx: aktivera stub_status på en plats som endast är för localhost, t.ex. /nginx_status eller /stub_status. FrankenPHP: lägg till ett globalt \"metrics\"-alternativ i Caddyfile, som som standard exponerar Prometheus-mått på Caddys admin-API (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Totalt antal trådar"
+
+msgid "Busy threads"
+msgstr "Upptagna trådar"
+
+msgid "Queue depth"
+msgstr "Kö-djup"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Genomsnittlig begäranstid"
 
 msgid "Grade percentage distribution"
 msgstr "Betygsfördelning i procent"
@@ -39288,11 +39354,17 @@ msgstr "OPcache är installerat men inte aktiverat."
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache-tillägget är inte tillgängligt på den här servern."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache rapporterar inkonsekvent minnesstatistik (ett känt problem på vissa trådade PHP-runtime, t.ex. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu är installerat men inte aktiverat."
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu-tillägget är inte tillgängligt på den här servern."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu rapporterar inkonsekvent minnesstatistik (ett känt problem på vissa trådade PHP-runtime)."
 
 msgid "Constant"
 msgstr "Konstant"
@@ -40052,4 +40124,10 @@ msgstr "Använd sessionens åtkomstdatum"
 
 msgid "Use session access end date"
 msgstr "Använd sessionens slutdatum för åtkomst"
+
+msgid "Group report"
+msgstr "Grupprapport"
+
+msgid "Student follow-up"
+msgstr "Studentuppföljning"
 

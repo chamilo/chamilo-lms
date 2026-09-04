@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képlet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -7715,6 +7715,54 @@ msgstr "A teszt kérdéslistája"
 
 msgid "Recycle existing questions"
 msgstr "Tárolt kérdés kiválasztása"
+
+msgid "Add this question to the test: %s"
+msgstr "Kérdés hozzáadása a teszthez: %s"
+
+msgid "Edit question: %s"
+msgstr "Kérdés szerkesztése: %s"
+
+msgid "Add a question: %s"
+msgstr "Kérdés hozzáadása: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Észlelt üres helyek: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s kérdés, összes pontszám (minden kérdés): %s."
+
+msgid "Unique answer"
+msgstr "Egyetlen válasz"
+
+msgid "Multiple answer true/false"
+msgstr "Többszörös válasz igaz/hamis"
+
+msgid "Multiple answer combination true/false"
+msgstr "Többszörös válasz kombináció igaz/hamis"
+
+msgid "Unique answer with images"
+msgstr "Egyetlen válasz képekkel"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Többszörös válasz igaz/hamis bizonyossági fokkal"
+
+msgid "Answer in Office document"
+msgstr "Válasz Office-dokumentumban"
+
+msgid "Matching draggable"
+msgstr "Párosítás húzással"
+
+msgid "Matching draggable combination"
+msgstr "Párosítás húzással kombináció"
+
+msgid "Fill in blanks combination"
+msgstr "Kitöltős kombináció"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Többszörös válasz legördülő kombináció"
+
+msgid "Matching combination"
+msgstr "Párosítás kombináció"
 
 msgid "Correct test"
 msgstr "Teszt befejezése"
@@ -20540,6 +20588,9 @@ msgstr "A link lejárt, próbálja újra."
 
 msgid "Instructions for the password change procedure"
 msgstr "Utasítások a jelszóváltoztatási eljáráshoz"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Ezt az üzenetet azért kapja, mert Ön (vagy valaki, aki az Ön nevében próbál eljárni) új jelszó generálását kérte a fiókjához.<br/>Az új jelszó beállításához kövesse ezt a hivatkozást:<br/>%s<br/>Ha nem Ön kérte ezt, egyszerűen hagyja figyelmen kívül ezt az üzenetet. Ha továbbra is kapja ezeket az üzeneteket, lépjen kapcsolatba a portál adminisztrátorával."
 
 msgid "Remind Course Expiration cron"
 msgstr "Kurzus lejárat emlékeztető cron"
@@ -39112,8 +39163,8 @@ msgstr "Automatikus frissítés 5 másodpercenként"
 msgid "Web server load"
 msgstr "Webszerver terhelése"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Élő Apache- vagy Nginx-státusz mérőszámok"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Élő Apache, Nginx vagy FrankenPHP állapotmutatók"
 
 msgid "Click to show web server load metrics"
 msgstr "Kattintson a webszerver-terhelési mérőszámok megjelenítéséhez"
@@ -39121,8 +39172,8 @@ msgstr "Kattintson a webszerver-terhelési mérőszámok megjelenítéséhez"
 msgid "Requires a local web server status module"
 msgstr "Helyi webszerver-státusz modul szükséges"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "A webszerver-terhelés csak a localhost Apache mod_status vagy Nginx stub_status oldaláról olvasható. A státuszoldalnak engedélyeznie kell a 127.0.0.1 (vagy ::1) felől érkező kéréseket."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "A webszerver terhelése az Apache mod_status, az Nginx stub_status vagy a FrankenPHP/Caddy metrikavégpontjáról olvasható, csak localhoston. Az állapotoldalnak engedélyeznie kell a kéréseket a 127.0.0.1 (vagy ::1) címről."
 
 msgid "Paths scanned"
 msgstr "Beolvasott útvonalak"
@@ -39133,8 +39184,8 @@ msgstr "Észlelt"
 msgid "Status path"
 msgstr "Státusz útvonal"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "A webszerver-terhelési mérőszámok csak Apache és Nginx esetén érhetők el."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "A webszerver terhelési mutatói csak Apache, Nginx és FrankenPHP esetén érhetők el."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "A beolvasott státuszútvonalak egyike sem válaszolt a localhoston."
@@ -39217,8 +39268,23 @@ msgstr "Elfogadások"
 msgid "Handled"
 msgstr "Kezelések"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: engedélyezze a mod_status modult (ExtendedStatus On) és engedélyezze a localhost számára a /server-status elérést. Nginx: engedélyezze a stub_status modult egy localhost-only helyszínen, például /nginx_status vagy /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: engedélyezze a mod_status modult (ExtendedStatus On), és engedélyezze a localhost hozzáférését a /server-status oldalhoz. Nginx: engedélyezze a stub_status-t egy csak localhoston elérhető helyen, például /nginx_status vagy /stub_status. FrankenPHP: adjon hozzá egy globális \"metrics\" opciót a Caddyfile-hoz, amely alapértelmezés szerint Prometheus-metrikákat tesz közzé a Caddy admin API-ján (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Szálak összesen"
+
+msgid "Busy threads"
+msgstr "Foglalt szálak"
+
+msgid "Queue depth"
+msgstr "Várakozási sor mélysége"
+
+msgid "Worker"
+msgstr "Munkavégző"
+
+msgid "Average request time"
+msgstr "Átlagos kérésidő"
 
 msgid "Grade percentage distribution"
 msgstr "Osztályzat százalékos eloszlása"
@@ -39286,11 +39352,17 @@ msgstr "Az OPcache telepítve van, de nincs engedélyezve."
 msgid "OPcache extension is not available on this server."
 msgstr "Az OPcache kiterjesztés nem érhető el ezen a szerveren."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "Az OPcache inkonzisztens memóriastatisztikát jelent (ismert probléma egyes szálas PHP-futtatókörnyezetekben, pl. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "Az APCu telepítve van, de nincs engedélyezve."
 
 msgid "APCu extension is not available on this server."
 msgstr "Az APCu kiterjesztés nem érhető el ezen a szerveren."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "Az APCu inkonzisztens memóriastatisztikát jelent (ismert probléma egyes szálas PHP-futtatókörnyezetekben)."
 
 msgid "Constant"
 msgstr "Állandó"
@@ -40050,4 +40122,10 @@ msgstr "Szekció-hozzáférési dátumok használata"
 
 msgid "Use session access end date"
 msgstr "Szekció-hozzáférés záró dátumának használata"
+
+msgid "Group report"
+msgstr "Csoportjelentés"
+
+msgid "Student follow-up"
+msgstr "Hallgatói nyomon követés"
 

@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavaesimerkki: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavaesimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -7717,6 +7717,54 @@ msgstr "Harjoitukset kysymyslista"
 
 msgid "Recycle existing questions"
 msgstr "Etsi kysymys vanhoista kysymyksistä"
+
+msgid "Add this question to the test: %s"
+msgstr "Lisää tämä kysymys testiin: %s"
+
+msgid "Edit question: %s"
+msgstr "Muokkaa kysymystä: %s"
+
+msgid "Add a question: %s"
+msgstr "Lisää kysymys: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Havaitut aukot: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s kysymystä, kokonaispistemäärä (kaikki kysymykset) %s."
+
+msgid "Unique answer"
+msgstr "Yksittäinen vastaus"
+
+msgid "Multiple answer true/false"
+msgstr "Monivalinta tosi/epätosi"
+
+msgid "Multiple answer combination true/false"
+msgstr "Monivalintayhdistelmä tosi/epätosi"
+
+msgid "Unique answer with images"
+msgstr "Yksittäinen vastaus kuvilla"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Monivalinta tosi/epätosi varmuusasteella"
+
+msgid "Answer in Office document"
+msgstr "Vastaus Office-asiakirjassa"
+
+msgid "Matching draggable"
+msgstr "Raahattava yhdistäminen"
+
+msgid "Matching draggable combination"
+msgstr "Raahattava yhdistämisyhdistelmä"
+
+msgid "Fill in blanks combination"
+msgstr "Aukkotehtäväyhdistelmä"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Monivalinta pudotusvalikko -yhdistelmä"
+
+msgid "Matching combination"
+msgstr "Yhdistämistehtäväyhdistelmä"
 
 msgid "Correct test"
 msgstr "Lopeta harjoitus"
@@ -20542,6 +20590,9 @@ msgstr "Linkki on vanhentunut, yritä uudelleen."
 
 msgid "Instructions for the password change procedure"
 msgstr "Ohjeet salasanamuutokselle"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Tämä viesti lähetetään, koska sinä (tai joku, joka yrittää esiintyä sinuna) pyysi uuden salasanan luomista tilillesi.<br/>Aseta uusi salasana seuraamalla tätä linkkiä:<br/>%s<br/>Jos et tehnyt tätä pyyntöä, voit jättää viestin huomiotta. Jos saat näitä viestejä edelleen, ota yhteyttä portaalin ylläpitäjään."
 
 msgid "Remind Course Expiration cron"
 msgstr "Muistuta kurssin voimassaoloa cron"
@@ -39114,8 +39165,8 @@ msgstr "Automaattinen päivitys 5 sekunnin välein"
 msgid "Web server load"
 msgstr "Verkkopalvelimen kuorma"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Apache- tai Nginx-palvelimen reaaliaikaiset kuormitusmittarit"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Apache-, Nginx- tai FrankenPHP-tilamittarit reaaliaikaisesti"
 
 msgid "Click to show web server load metrics"
 msgstr "Napsauta näyttääksesi verkkopalvelimen kuormitusmittarit"
@@ -39123,8 +39174,8 @@ msgstr "Napsauta näyttääksesi verkkopalvelimen kuormitusmittarit"
 msgid "Requires a local web server status module"
 msgstr "Vaatii paikallisen verkkopalvelimen tilamoduulin"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Verkkopalvelimen kuormitus luetaan Apache mod_status- tai Nginx stub_status -tilasivulta vain localhostista. Tilasivun on sallittava pyynnöt osoitteesta 127.0.0.1 (tai ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Verkkopalvelimen kuorma luetaan Apache mod_statusista, Nginx stub_statusista tai FrankenPHP/Caddy-mittauspäätepisteestä vain localhostissa. Tilasivun on sallittava pyynnöt osoitteesta 127.0.0.1 (tai ::1)."
 
 msgid "Paths scanned"
 msgstr "Skannatut polut"
@@ -39135,8 +39186,8 @@ msgstr "Havaittu"
 msgid "Status path"
 msgstr "Tilapolku"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Verkkopalvelimen kuormitusmittarit ovat saatavilla vain Apache- ja Nginx-palvelimille."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Verkkopalvelimen kuormamittarit ovat saatavilla vain Apachelle, Nginxille ja FrankenPHP:lle."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Mikään skannatuista tilapoluista ei vastannut localhostista."
@@ -39219,8 +39270,23 @@ msgstr "Hyväksytyt"
 msgid "Handled"
 msgstr "Käsitellyt"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: ota käyttöön mod_status (ExtendedStatus On) ja salli localhost osoitteeseen /server-status. Nginx: ota käyttöön stub_status localhost-osoitteessa, kuten /nginx_status tai /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: ota käyttöön mod_status (ExtendedStatus On) ja salli localhost-osoite /server-status. Nginx: ota käyttöön stub_status vain localhost-sijainnissa, kuten /nginx_status tai /stub_status. FrankenPHP: lisää Caddyfileen globaali \"metrics\"-asetus, joka tarjoaa Prometheus-mittarit oletuksena Caddyn hallinta-APIssa (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Säikeitä yhteensä"
+
+msgid "Busy threads"
+msgstr "Varatut säikeet"
+
+msgid "Queue depth"
+msgstr "Jonon syvyys"
+
+msgid "Worker"
+msgstr "Työntekijä"
+
+msgid "Average request time"
+msgstr "Keskimääräinen pyyntöaika"
 
 msgid "Grade percentage distribution"
 msgstr "Arvosanojen prosentuaalinen jakauma"
@@ -39288,11 +39354,17 @@ msgstr "OPcache on asennettu, mutta ei käytössä."
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache-laajennus ei ole saatavilla tällä palvelimella."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache raportoi ristiriitaisia muistitilastoja (tunnettu ongelma joissakin säikeistetyissä PHP-ajoympäristöissä, esim. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu on asennettu, mutta ei käytössä."
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu-laajennus ei ole saatavilla tällä palvelimella."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu raportoi ristiriitaisia muistitilastoja (tunnettu ongelma joissakin säikeistetyissä PHP-ajoympäristöissä)."
 
 msgid "Constant"
 msgstr "Vakio"
@@ -40052,4 +40124,10 @@ msgstr "Käytä istunnon käyttöoikeuspäiviä"
 
 msgid "Use session access end date"
 msgstr "Käytä istunnon käyttöoikeuden päättymispäivää"
+
+msgid "Group report"
+msgstr "Ryhmäraportti"
+
+msgid "Student follow-up"
+msgstr "Opiskelijan seuranta"
 

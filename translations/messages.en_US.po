@@ -7718,20 +7718,20 @@ msgstr "Question list of the test"
 msgid "Recycle existing questions"
 msgstr "Recycle existing questions"
 
-msgid "Add this question to the test: {0}"
-msgstr "Add this question to the test: {0}"
+msgid "Add this question to the test: %s"
+msgstr "Add this question to the test: %s"
 
-msgid "Edit question: {0}"
-msgstr "Edit question: {0}"
+msgid "Edit question: %s"
+msgstr "Edit question: %s"
 
-msgid "Add a question: {0}"
-msgstr "Add a question: {0}"
+msgid "Add a question: %s"
+msgstr "Add a question: %s"
 
-msgid "Detected blanks: {0}"
-msgstr "Detected blanks: {0}"
+msgid "Detected blanks: %s"
+msgstr "Detected blanks: %s"
 
-msgid "{0} questions, for a total score (all questions) of {1}."
-msgstr "{0} questions, for a total score (all questions) of {1}."
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s questions, for a total score (all questions) of %s."
 
 msgid "Unique answer"
 msgstr "Unique answer"

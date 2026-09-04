@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "敬上"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式範例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式範例：sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "變數範圍"
@@ -7717,6 +7717,54 @@ msgstr "測驗的題目清單"
 
 msgid "Recycle existing questions"
 msgstr "從題庫選擇"
+
+msgid "Add this question to the test: %s"
+msgstr "將此題目加入測驗：%s"
+
+msgid "Edit question: %s"
+msgstr "編輯題目：%s"
+
+msgid "Add a question: %s"
+msgstr "新增題目：%s"
+
+msgid "Detected blanks: %s"
+msgstr "偵測到的空白：%s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s 題，總分（所有題目）為 %s。"
+
+msgid "Unique answer"
+msgstr "單選答案"
+
+msgid "Multiple answer true/false"
+msgstr "多選對／錯"
+
+msgid "Multiple answer combination true/false"
+msgstr "多選組合對／錯"
+
+msgid "Unique answer with images"
+msgstr "含圖片的單選題"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "含確定程度的多選對／錯"
+
+msgid "Answer in Office document"
+msgstr "以 Office 文件作答"
+
+msgid "Matching draggable"
+msgstr "可拖曳配對"
+
+msgid "Matching draggable combination"
+msgstr "可拖曳配對組合"
+
+msgid "Fill in blanks combination"
+msgstr "填空組合"
+
+msgid "Multiple answer dropdown combination"
+msgstr "下拉式多選組合"
+
+msgid "Matching combination"
+msgstr "配對組合"
 
 msgid "Correct test"
 msgstr "完成測驗"
@@ -20542,6 +20590,9 @@ msgstr "連結已過期，請再試一次。"
 
 msgid "Instructions for the password change procedure"
 msgstr "密碼變更程序指示"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "此訊息寄送給您，是因為您（或有人試圖冒充您）要求為您的帳號產生新密碼。<br/>若要設定新密碼，請點選此連結：<br/>%s<br/>如果您並未提出此要求，可以忽略此訊息。若持續收到這些訊息，請聯絡入口網站管理員。"
 
 msgid "Remind Course Expiration cron"
 msgstr "提醒課程到期排程工作"
@@ -39114,8 +39165,8 @@ msgstr "每 5 秒自動重新整理"
 msgid "Web server load"
 msgstr "網頁伺服器負載"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "即時 Apache 或 Nginx 狀態指標"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Apache、Nginx 或 FrankenPHP 即時狀態指標"
 
 msgid "Click to show web server load metrics"
 msgstr "點擊以顯示網頁伺服器負載指標"
@@ -39123,8 +39174,8 @@ msgstr "點擊以顯示網頁伺服器負載指標"
 msgid "Requires a local web server status module"
 msgstr "需要本機網頁伺服器狀態模組"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "網頁伺服器負載僅能從本機的 Apache mod_status 或 Nginx stub_status 讀取。狀態頁面必須允許來自 127.0.0.1（或 ::1）的請求。"
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "網頁伺服器負載僅從本機讀取 Apache mod_status、Nginx stub_status 或 FrankenPHP／Caddy 指標端點。狀態頁面必須允許來自 127.0.0.1（或 ::1）的請求。"
 
 msgid "Paths scanned"
 msgstr "已掃描的路徑"
@@ -39135,8 +39186,8 @@ msgstr "已偵測"
 msgid "Status path"
 msgstr "狀態路徑"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "網頁伺服器負載指標僅適用於 Apache 與 Nginx。"
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "網頁伺服器負載指標僅適用於 Apache、Nginx 與 FrankenPHP。"
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "本機上沒有任何已掃描的狀態路徑回應。"
@@ -39219,8 +39270,23 @@ msgstr "接受"
 msgid "Handled"
 msgstr "已處理"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache：啟用 mod_status（ExtendedStatus On）並允許本機存取 /server-status。Nginx：啟用 stub_status 於僅限本機的位置，例如 /nginx_status 或 /stub_status。"
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache：啟用 mod_status（ExtendedStatus On）並允許本機存取 /server-status。Nginx：在僅限本機的位置（例如 /nginx_status 或 /stub_status）啟用 stub_status。FrankenPHP：在 Caddyfile 加入全域 \"metrics\" 選項，預設會在 Caddy 管理 API（127.0.0.1:2019/metrics）公開 Prometheus 指標。"
+
+msgid "Total threads"
+msgstr "執行緒總數"
+
+msgid "Busy threads"
+msgstr "忙碌執行緒"
+
+msgid "Queue depth"
+msgstr "佇列深度"
+
+msgid "Worker"
+msgstr "工作程序"
+
+msgid "Average request time"
+msgstr "平均請求時間"
 
 msgid "Grade percentage distribution"
 msgstr "成績百分比分佈"
@@ -39288,11 +39354,17 @@ msgstr "已安裝 OPcache 但未啟用。"
 msgid "OPcache extension is not available on this server."
 msgstr "此伺服器上無法使用 OPcache 擴充功能。"
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache 回報的記憶體統計不一致（部分執行緒型 PHP 執行環境的已知問題，例如 FrankenPHP）。"
+
 msgid "APCu is installed but not enabled."
 msgstr "已安裝 APCu 但未啟用。"
 
 msgid "APCu extension is not available on this server."
 msgstr "此伺服器上無法使用 APCu 擴充功能。"
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu 回報的記憶體統計不一致（部分執行緒型 PHP 執行環境的已知問題）。"
 
 msgid "Constant"
 msgstr "常數"
@@ -40052,4 +40124,10 @@ msgstr "使用課程期程存取日期"
 
 msgid "Use session access end date"
 msgstr "使用課程期程存取結束日期"
+
+msgid "Group report"
+msgstr "群組報告"
+
+msgid "Student follow-up"
+msgstr "學生追蹤"
 

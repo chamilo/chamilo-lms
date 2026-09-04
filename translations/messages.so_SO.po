@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Tusaalaha qaaciddada: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaale foomulo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -7712,6 +7712,54 @@ msgstr "Liiska su'aalaha imtixaanka"
 
 msgid "Recycle existing questions"
 msgstr "Dib u warshadayn su'aalaha jira"
+
+msgid "Add this question to the test: %s"
+msgstr "Ku dar su'aashan imtixaanka: %s"
+
+msgid "Edit question: %s"
+msgstr "Wax ka beddel su'aasha: %s"
+
+msgid "Add a question: %s"
+msgstr "Ku dar su'aal: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Meelaha banaan ee la ogaaday: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s su'aalood, wadarta dhibcaha (dhammaan su'aalaha) %s."
+
+msgid "Unique answer"
+msgstr "Jawaab keli ah"
+
+msgid "Multiple answer true/false"
+msgstr "Jawaabo badan run/been"
+
+msgid "Multiple answer combination true/false"
+msgstr "Isku-darka jawaabaha badan run/been"
+
+msgid "Unique answer with images"
+msgstr "Jawaab keli ah oo sawirro leh"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Jawaabo badan run/been oo leh heerka hubinta"
+
+msgid "Answer in Office document"
+msgstr "Jawaab dukumentiga Office"
+
+msgid "Matching draggable"
+msgstr "Isku-xirka la jiidi karo"
+
+msgid "Matching draggable combination"
+msgstr "Isku-darka isku-xirka la jiidi karo"
+
+msgid "Fill in blanks combination"
+msgstr "Isku-darka buuxinta meelaha banaan"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Isku-darka jawaabaha badan ee hoos-u-dhaca"
+
+msgid "Matching combination"
+msgstr "Isku-darka isku-xirka"
 
 msgid "Correct test"
 msgstr "Sax imtixaanka"
@@ -20537,6 +20585,9 @@ msgstr "Xiriirka wuu dhacay, fadlan isku day mar kale."
 
 msgid "Instructions for the password change procedure"
 msgstr "Tilmaamaha nidaamka beddelka erayga sirta ah"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Fariintan waxaa laguu soo diray maxaa yeelay adiga (ama qof isku dayaya inuu kuu ekaado) ayaa codsaday in eray-sir cusub loo sameeyo akoonkaaga.<br/>Si aad u dejiso eray-sirkaaga cusub, fadlan raac xiriirkan:<br/>%s<br/>Haddii aadan adigu codsanka sameyn, fariintan iska dhaaf. Haddii aad sii hesho fariimahan, fadlan la xidhiidh maamulaha portal-ka."
 
 msgid "Remind Course Expiration cron"
 msgstr "Xusuusi dhammaadka koorska cron"
@@ -35530,7 +35581,7 @@ msgid "%s results"
 msgstr "%s natiijo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Tusaale: buuxi dhaqdhaqaaqa foomka : xisaabi Tusaha Cufka Jidhka</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Da'da</strong></td>            <td width=\"75%\" style=\"\">[25] sano jir</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Jinsiga</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ama F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Miisaanka</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Dhererka</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tusaha Cufka Jidhka</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Miisaanka/Dhererka<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Maqaalka Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Tusaale hawl buuxinta foomka : xisaabi Tusaha Cufnaanta Jidhka</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Da'da</strong></td>            <td width=\"75%\" style=\"\">[25] sano jir</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Jinsiga</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ama F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Miisaanka</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Dhererka</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Tusaha Cufnaanta Jidhka</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Miisaanka/Dhererka<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Maqaalka Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Laga saaray"
@@ -39108,8 +39159,8 @@ msgstr "Dib-u-cusboonaysiinta otomaatig ah 5 ilbiriqsi kasta"
 msgid "Web server load"
 msgstr "Culeyska server-ka webka"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Cabbirrada xaaladda tooska ah ee Apache ama Nginx"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Cabbiraadaha xaaladda Apache, Nginx ama FrankenPHP ee tooska ah"
 
 msgid "Click to show web server load metrics"
 msgstr "Guji si aad u muujiso cabbirrada culeyska server-ka webka"
@@ -39117,8 +39168,8 @@ msgstr "Guji si aad u muujiso cabbirrada culeyska server-ka webka"
 msgid "Requires a local web server status module"
 msgstr "Waxay u baahan tahay module xaaladda server-ka webka ee maxaliga ah"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Culeyska server-ka webka waxaa laga akhriyaa Apache mod_status ama Nginx stub_status oo keliya localhost. Bogga xaaladda waa inuu oggolaado codsiyada 127.0.0.1 (ama ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Culeyska serverka shabakadda waxaa laga akhriyaa Apache mod_status, Nginx stub_status, ama barta cabbiraadaha FrankenPHP/Caddy, localhost kaliya. Bogga xaaladda waa inuu oggolaadaa codsiyada 127.0.0.1 (ama ::1)."
 
 msgid "Paths scanned"
 msgstr "Waddooyinka la baadhay"
@@ -39129,8 +39180,8 @@ msgstr "La ogaaday"
 msgid "Status path"
 msgstr "Waddada xaaladda"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Cabbirrada culeyska server-ka webka waxay kaliya u diyaar yihiin Apache iyo Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Cabbiraadaha culeyska serverka shabakadda waxay heli karaan kaliya Apache, Nginx iyo FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Mid ka mid ah dariiqooyinka xaaladda la baadhay kama jawaabin localhost."
@@ -39213,8 +39264,23 @@ msgstr "Aqbalid"
 msgid "Handled"
 msgstr "Maamulid"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: karti mod_status (ExtendedStatus On) oo u oggol localhost inuu /server-status galo. Nginx: karti stub_status meel localhost-keliya ah sida /nginx_status ama /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: daaro mod_status (ExtendedStatus On) oo u oggolow localhost /server-status. Nginx: daaro stub_status meel localhost-kaliya ah sida /nginx_status ama /stub_status. FrankenPHP: ku dar doorashada caalamiga ah \"metrics\" Caddyfile-ka, taas oo soo bandhigta cabbiraadaha Prometheus API-ga maamulka Caddy (127.0.0.1:2019/metrics) si caadi ah."
+
+msgid "Total threads"
+msgstr "Wadarta xargaha"
+
+msgid "Busy threads"
+msgstr "Xargaha mashquulsan"
+
+msgid "Queue depth"
+msgstr "Qoto dheer ee safka"
+
+msgid "Worker"
+msgstr "Shaqaale"
+
+msgid "Average request time"
+msgstr "Celceliska wakhtiga codsiga"
 
 msgid "Grade percentage distribution"
 msgstr "Qaybinta boqolleyda darajada"
@@ -39282,11 +39348,17 @@ msgstr "OPcache waa la rakibay laakiin lama hawlgelin."
 msgid "OPcache extension is not available on this server."
 msgstr "Kordhinta OPcache lagama heli karo server-kan."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache wuxuu soo sheegayaa tirakoob xusuuseed oo is-khilaafsan (arrin la yaqaan oo ku dhacda qaar ka mid ah PHP-ga xargaha leh, tusaale FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu waa la rakibay laakiin lama hawlgelin."
 
 msgid "APCu extension is not available on this server."
 msgstr "Kordhinta APCu lagama heli karo server-kan."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu wuxuu soo sheegayaa tirakoob xusuuseed oo is-khilaafsan (arrin la yaqaan oo ku dhacda qaar ka mid ah PHP-ga xargaha leh)."
 
 msgid "Constant"
 msgstr "Joogto"
@@ -40046,4 +40118,10 @@ msgstr "Isticmaal taariikhaha gelitaanka kalfadhiga"
 
 msgid "Use session access end date"
 msgstr "Isticmaal taariikhda dhammaadka gelitaanka kalfadhiga"
+
+msgid "Group report"
+msgstr "Warbixinta kooxda"
+
+msgid "Student follow-up"
+msgstr "Raacitaanka ardayga"
 

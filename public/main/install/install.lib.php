@@ -1550,7 +1550,7 @@ function finishInstallationWithContainer(
     $siteName,
     $allowSelfReg,
     $allowSelfRegProf,
-    $installationProfile = '',
+    $installationProfile,
     $mailerDsn,
     $mailerFromEmail,
     $mailerFromName,

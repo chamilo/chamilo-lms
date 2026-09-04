@@ -7714,6 +7714,54 @@ msgstr ""
 msgid "Recycle existing questions"
 msgstr ""
 
+msgid "Add this question to the test: {0}"
+msgstr ""
+
+msgid "Edit question: {0}"
+msgstr ""
+
+msgid "Add a question: {0}"
+msgstr ""
+
+msgid "Detected blanks: {0}"
+msgstr ""
+
+msgid "{0} questions, for a total score (all questions) of {1}."
+msgstr ""
+
+msgid "Unique answer"
+msgstr ""
+
+msgid "Multiple answer true/false"
+msgstr ""
+
+msgid "Multiple answer combination true/false"
+msgstr ""
+
+msgid "Unique answer with images"
+msgstr ""
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr ""
+
+msgid "Answer in Office document"
+msgstr ""
+
+msgid "Matching draggable"
+msgstr ""
+
+msgid "Matching draggable combination"
+msgstr ""
+
+msgid "Fill in blanks combination"
+msgstr ""
+
+msgid "Multiple answer dropdown combination"
+msgstr ""
+
+msgid "Matching combination"
+msgstr ""
+
 msgid "Correct test"
 msgstr ""
 

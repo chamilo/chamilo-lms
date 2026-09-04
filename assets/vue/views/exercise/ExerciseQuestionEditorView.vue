@@ -2218,10 +2218,7 @@ function getEditorParams() {
 }
 
 function formatTranslatedText(key, replacements = []) {
-  return replacements.reduce(
-    (text, value, index) => String(text).split(`{${index}}`).join(String(value)),
-    t(key),
-  )
+  return t(key, replacements)
 }
 
 function formatReadingSpeed(speed) {
@@ -2316,11 +2313,15 @@ function getTypeLabel(type) {
   }
 
   if (DRAGGABLE === type) {
-    return "Draggable"
+    return "Sequence ordering"
   }
 
   if (MATCHING_DRAGGABLE === type) {
     return "Matching draggable"
+  }
+
+  if (MATCHING_COMBINATION === type) {
+    return "Matching combination"
   }
 
   if (MATCHING_DRAGGABLE_COMBINATION === type) {

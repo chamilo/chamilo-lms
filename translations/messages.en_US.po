@@ -7718,6 +7718,54 @@ msgstr "Question list of the test"
 msgid "Recycle existing questions"
 msgstr "Recycle existing questions"
 
+msgid "Add this question to the test: {0}"
+msgstr "Add this question to the test: {0}"
+
+msgid "Edit question: {0}"
+msgstr "Edit question: {0}"
+
+msgid "Add a question: {0}"
+msgstr "Add a question: {0}"
+
+msgid "Detected blanks: {0}"
+msgstr "Detected blanks: {0}"
+
+msgid "{0} questions, for a total score (all questions) of {1}."
+msgstr "{0} questions, for a total score (all questions) of {1}."
+
+msgid "Unique answer"
+msgstr "Unique answer"
+
+msgid "Multiple answer true/false"
+msgstr "Multiple answer true/false"
+
+msgid "Multiple answer combination true/false"
+msgstr "Multiple answer combination true/false"
+
+msgid "Unique answer with images"
+msgstr "Unique answer with images"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Multiple answer true/false with degree of certainty"
+
+msgid "Answer in Office document"
+msgstr "Answer in Office document"
+
+msgid "Matching draggable"
+msgstr "Matching draggable"
+
+msgid "Matching draggable combination"
+msgstr "Matching draggable combination"
+
+msgid "Fill in blanks combination"
+msgstr "Fill in blanks combination"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Multiple answer dropdown combination"
+
+msgid "Matching combination"
+msgstr "Matching combination"
+
 msgid "Correct test"
 msgstr "Correct test"
 

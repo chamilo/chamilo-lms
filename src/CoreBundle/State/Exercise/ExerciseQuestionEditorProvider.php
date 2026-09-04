@@ -930,7 +930,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => 'Multiple answer true/false with degree of certainty',
             self::UPLOAD_ANSWER => 'Upload answer',
             self::ANSWER_IN_OFFICE_DOC => 'Answer in Office document',
-            self::DRAGGABLE => 'Draggable',
+            self::DRAGGABLE => 'Sequence ordering',
             self::MATCHING_DRAGGABLE => 'Matching draggable',
             self::MATCHING_COMBINATION => 'Matching combination',
             self::MATCHING_DRAGGABLE_COMBINATION => 'Matching draggable combination',

@@ -764,10 +764,7 @@ function buildQueryString(params = {}) {
 }
 
 function formatTranslatedText(key, replacements = []) {
-  return replacements.reduce(
-    (text, value, index) => String(text).split(`{${index}}`).join(String(value)),
-    t(key),
-  )
+  return t(key, replacements)
 }
 
 function legacyUrl(path, params = {}) {

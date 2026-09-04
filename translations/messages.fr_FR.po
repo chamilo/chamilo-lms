@@ -7935,6 +7935,54 @@ msgstr "Liste des questions du test"
 msgid "Recycle existing questions"
 msgstr "Base de questions"
 
+msgid "Add this question to the test: {0}"
+msgstr "Ajouter la question au test : {0}"
+
+msgid "Edit question: {0}"
+msgstr "Modifier la question : {0}"
+
+msgid "Add a question: {0}"
+msgstr "Ajouter une question : {0}"
+
+msgid "Detected blanks: {0}"
+msgstr "Blancs détectés : {0}"
+
+msgid "{0} questions, for a total score (all questions) of {1}."
+msgstr "{0} questions, pour un score total (toutes questions) de {1}."
+
+msgid "Unique answer"
+msgstr "Question à réponse unique (QRU)"
+
+msgid "Multiple answer true/false"
+msgstr "Réponses multiples vrai/faux"
+
+msgid "Multiple answer combination true/false"
+msgstr "Combinaison de réponses multiples vrai/faux"
+
+msgid "Unique answer with images"
+msgstr "Sélection d'image"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Rép. multiples vrai/faux/degré de certitude"
+
+msgid "Answer in Office document"
+msgstr "Réponse dans un document Office"
+
+msgid "Matching draggable"
+msgstr "Correspondances glisser-déplacer"
+
+msgid "Matching draggable combination"
+msgstr "Combinaison de correspondances par glisser-déposer"
+
+msgid "Fill in blanks combination"
+msgstr "Combinaison de textes à trous"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Combinaison de listes déroulantes de réponses multiples"
+
+msgid "Matching combination"
+msgstr "Combinaison d'appariement"
+
 msgid "Correct test"
 msgstr "Terminer le Test"
 

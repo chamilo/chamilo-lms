@@ -1,6 +1,6 @@
 export default {
   path: "/resources/course_categories",
-  meta: { requiresAuth: true },
+  meta: { requiresAuth: true, breadcrumb: "Course categories" },
   name: "course_categories",
   component: () => import("../components/coursecategory/Layout.vue"),
   redirect: { name: "CourseCategoryList" },

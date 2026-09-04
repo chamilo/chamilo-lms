@@ -8791,6 +8791,9 @@ msgstr ""
 msgid "Personal agenda"
 msgstr ""
 
+msgid "Group agenda"
+msgstr ""
+
 msgid "Switch to teacher view"
 msgstr ""
 

@@ -1,6 +1,6 @@
 export default {
   path: "/resources/usergroups",
-  meta: { requiresAuth: true },
+  meta: { requiresAuth: true, breadcrumb: "Classes" },
   name: "usergroups",
   component: () => import("../components/usergroup/Layout.vue"),
   redirect: { name: "UserGroupList" },

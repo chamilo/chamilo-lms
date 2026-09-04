@@ -9,7 +9,11 @@ export default [
   },
   {
     languageOptions: {
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        // Webpack replaces process.env.NODE_ENV at build time.
+        process: "readonly",
+      },
     },
   },
   pluginJs.configs.recommended,

@@ -162,6 +162,31 @@ function isInCourseOrSessionContext() {
 }
 
 /**
+ * Resolve a crumb label from a route meta object.
+ *
+ * A route name is a technical identifier, not a translation key. When `meta.breadcrumb` is
+ * absent, the label falls back to the formatted route name and stays untranslated. The
+ * development warning exposes the missing declaration instead of hiding it in the interface.
+ *
+ * @param {object|undefined} meta - Route meta that can hold a `breadcrumb` label.
+ * @param {string} name - Route or tool name used to build the fallback label.
+ * @returns {string} Translated label, or the formatted route name.
+ */
+function resolveCrumbLabel(meta, name) {
+  const label = meta?.breadcrumb
+
+  if (label) {
+    return t(label)
+  }
+
+  if ("production" !== process.env.NODE_ENV) {
+    console.warn(`[Breadcrumb] Route "${name}" has no meta.breadcrumb. Declare it in the router.`)
+  }
+
+  return formatToolName(name)
+}
+
+/**
  * Build a hardcoded breadcrumb trail for the access-URL delete confirmation page.
  * Matches paths of the form `/resources/accessurl/<id>/delete`.
  *
@@ -196,7 +221,9 @@ function buildManualCrumbs() {
     if (isInCourseOrSessionContext()) {
       const rootRouteName = session.value?.id ? "MySessions" : "MyCourses"
 
-      items.push({ label: t(session.value?.id ? "My sessions" : "My courses"), route: { name: rootRouteName } })
+      const rootLabel = session.value?.id ? t("My sessions") : t("My courses")
+
+      items.push({ label: rootLabel, route: { name: rootRouteName } })
     }
 
     legacyItems.forEach((item) => {
@@ -235,23 +262,23 @@ function buildManualCrumbs() {
   }
 
   // /admin/usergroup-import, /admin/usergroup-user-import, /admin/usergroup-users/:id
-  if (["usergroup-import", "usergroup-user-import", "usergroup-users"].includes(pathSegments[1])
-    || (pathSegments[1] === "usergroups" && pathSegments[3] !== undefined)) {
-    const pageLabel = route.meta?.breadcrumb || formatToolName(route.name)
+  if (
+    ["usergroup-import", "usergroup-user-import", "usergroup-users"].includes(pathSegments[1]) ||
+    (pathSegments[1] === "usergroups" && pathSegments[3] !== undefined)
+  ) {
     return [
       { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
       { label: t("Classes"), route: { path: "/admin/usergroups" } },
-      { label: t(pageLabel) },
+      { label: resolveCrumbLabel(route.meta, route.name) },
     ]
   }
 
   // /admin/urls/users/:id, /admin/urls/courses/:id
   if (pathSegments[1] === "urls" && ["users", "courses"].includes(pathSegments[2])) {
-    const pageLabel = route.meta?.breadcrumb || formatToolName(route.name)
     return [
       { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
       { label: t("Multi URLs"), route: { path: "/admin/urls" } },
-      { label: t(pageLabel) },
+      { label: resolveCrumbLabel(route.meta, route.name) },
     ]
   }
 
@@ -266,12 +293,11 @@ function buildManualCrumbs() {
 
   // /admin/urls/assign-users, /admin/urls/assign-courses, /admin/urls/assign-usergroups, /admin/urls/assign-course-categories
   if (pathSegments[1] === "urls" && pathSegments[2]?.startsWith("assign-")) {
-    const pageLabel = route.meta?.breadcrumb || formatToolName(route.name)
     return [
       { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
       { label: t("Multi URLs"), route: { path: "/admin/urls" } },
       { label: t("Multiple access URL / Branding"), route: { path: "/admin/urls/manage" } },
-      { label: t(pageLabel) },
+      { label: resolveCrumbLabel(route.meta, route.name) },
     ]
   }
 
@@ -329,7 +355,7 @@ function buildCourseContextRootCrumb() {
   }
 
   const rootRouteName = session.value?.id ? "MySessions" : "MyCourses"
-  const rootLabel = t(session.value?.id ? "My sessions" : "My courses")
+  const rootLabel = session.value?.id ? t("My sessions") : t("My courses")
 
   return [{ label: rootLabel, route: { name: rootRouteName } }]
 }
@@ -405,14 +431,13 @@ function buildDocumentCrumbs() {
   })
 
   const currentMatched = route.matched.find((r) => r.name === route.name)
-  const label = currentMatched?.meta?.breadcrumb
 
-  if (label !== "") {
-    const finalLabel = label || formatToolName(currentMatched?.name)
+  if (currentMatched?.meta?.breadcrumb !== "") {
+    const finalLabel = resolveCrumbLabel(currentMatched?.meta, currentMatched?.name)
 
     if (!items.some((item) => item.label === finalLabel)) {
       items.push({
-        label: t(finalLabel),
+        label: finalLabel,
         route: { name: currentMatched.name, params: route.params, query: route.query },
       })
     }
@@ -456,10 +481,12 @@ function buildToolWithResourceCrumbs(toolName, listRouteName, detailRouteName) {
   }
 
   const currentMatched = route.matched.find((r) => r.name === route.name)
-  const label = currentMatched?.meta?.breadcrumb || formatToolName(route.name)
 
   if (route.name !== detailRouteName) {
-    items.push({ label: t(label), route: { name: route.name, params: route.params, query: route.query } })
+    items.push({
+      label: resolveCrumbLabel(currentMatched?.meta, route.name),
+      route: { name: route.name, params: route.params, query: route.query },
+    })
   }
 
   return items
@@ -505,26 +532,26 @@ function buildToolCrumbs() {
     const toolBase = matchedRoutes[0]
     const currentMatched = matchedRoutes[matchedRoutes.length - 1]
 
-    let toolLabel = toolBase.meta?.breadcrumb || formatToolName(mainToolName)
+    let toolLabel
 
     if (mainToolName === "ccalendarevent") {
       const cidVal = Number(route.query?.cid || 0)
       const gidVal = Number(route.query?.gid || 0)
 
-      toolLabel = gidVal > 0 ? "Group agenda" : cidVal > 0 ? "Agenda" : "Personal agenda"
+      toolLabel = gidVal > 0 ? t("Group agenda") : cidVal > 0 ? t("Agenda") : t("Personal agenda")
+    } else {
+      toolLabel = resolveCrumbLabel(toolBase.meta, mainToolName)
     }
 
     const toolBaseRouteName = toolBase.name === "admin" ? "AdminIndex" : toolBase.name
-    items.push({ label: t(toolLabel), route: { name: toolBaseRouteName, params: route.params, query: route.query } })
+    items.push({ label: toolLabel, route: { name: toolBaseRouteName, params: route.params, query: route.query } })
 
-    const label = currentMatched.meta?.breadcrumb
+    if (currentMatched.meta?.breadcrumb !== "") {
+      const finalLabel = resolveCrumbLabel(currentMatched.meta, currentMatched.name)
 
-    if (label !== "") {
-      const finalLabel = label || formatToolName(currentMatched.name)
-
-      if (!items.some((item) => item.label === t(finalLabel))) {
+      if (!items.some((item) => item.label === finalLabel)) {
         items.push({
-          label: t(finalLabel),
+          label: finalLabel,
           route: { name: currentMatched.name, params: route.params, query: route.query },
         })
       }
@@ -544,12 +571,14 @@ function buildToolCrumbs() {
  */
 function buildRemainingMatchedCrumbs() {
   return route.matched.slice(1).reduce((items, r) => {
-    const label = r.meta?.breadcrumb || formatToolName(r.name)
     const alreadyHasResource =
       resourceNode.value?.title && items.some((item) => item.label === resourceNode.value.title)
 
     if (!alreadyHasResource) {
-      items.push({ label: t(label), route: { name: r.name, params: route.params, query: route.query } })
+      items.push({
+        label: resolveCrumbLabel(r.meta, r.name),
+        route: { name: r.name, params: route.params, query: route.query },
+      })
     }
 
     return items

@@ -1,6 +1,6 @@
 export default {
   path: "/resources/ctoolintro/",
-  meta: { requiresAuth: true, showBreadcrumb: true },
+  meta: { requiresAuth: true, showBreadcrumb: true, breadcrumb: "Course introduction" },
   name: "ctoolintro",
   component: () => import("../components/ctoolintro/Layout.vue"),
   children: [

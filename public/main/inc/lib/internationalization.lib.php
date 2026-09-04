@@ -2174,7 +2174,7 @@ function api_get_human_date_time($date, $showTime = true, $humanForm = false)
  *               'quarter_end' => '2022-12-31',
  *               'quarter_title' => 'Q4 2022']
  */
-function getQuarterDates(string $date = null): array
+function getQuarterDates(?string $date = null): array
 {
     if (empty($date)) {
         $date = api_get_utc_datetime();

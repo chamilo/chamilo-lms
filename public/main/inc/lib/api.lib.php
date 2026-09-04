@@ -1665,12 +1665,8 @@ function api_get_user_info_from_entity(
     $result['firstName'] = $result['firstname'];
     $result['lastName'] = $result['lastname'];
 
-    $attributes = [
-        'picture_uri',
-        'last_login',
-        'user_is_online',
-    ];
-
+    $result['picture_uri'] = $user->getPictureUri();
+    $result['profile_completed'] = $user->isProfileCompleted();
     $result['phone'] = $user->getPhone();
     $result['address'] = $user->getAddress();
     $result['official_code'] = $user->getOfficialCode();
@@ -1678,7 +1674,8 @@ function api_get_user_info_from_entity(
     $result['auth_sources'] = $user->getAuthSourcesAuthentications(
         Container::getAccessUrlUtil()->getCurrent()
     );
-    $result['language'] = $user->getLocale();
+    $result['language'] = $result['locale'] = $user->getLocale();
+    $result['theme'] = $user->getTheme();
     $result['creator_id'] = $user->getCreatorId();
     $result['created_at'] = $user->getCreatedAt()->format('Y-m-d H:i:s');
     $result['hr_dept_id'] = $user->getHrDeptId();

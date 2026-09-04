@@ -5,6 +5,7 @@ export default {
     requiresCourseContext: true,
     showBreadcrumb: true,
     tool: "document",
+    breadcrumb: "Documents",
   },
   name: "documents",
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),

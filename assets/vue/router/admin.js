@@ -1,7 +1,7 @@
 export default {
   path: "/admin",
   name: "admin",
-  meta: { requiresAuth: true, showBreadcrumb: false },
+  meta: { requiresAuth: true, showBreadcrumb: false, breadcrumb: "Administration" },
   component: () => import("../components/admin/AdminLayout.vue"),
   children: [
     {

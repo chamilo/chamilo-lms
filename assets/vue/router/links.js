@@ -4,6 +4,7 @@ export default {
     requiresAuth: true,
     showBreadcrumb: true,
     tool: "link",
+    breadcrumb: "Links",
   },
   name: "links",
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),

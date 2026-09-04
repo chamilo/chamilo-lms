@@ -1,6 +1,6 @@
 export default {
   path: "/resources/branches",
-  meta: { requiresAuth: true, requiresAdmin: true, showBreadcrumb: true },
+  meta: { requiresAuth: true, requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Branches" },
   name: "branches",
   component: () => import("../components/branch/Layout.vue"),
   redirect: { name: "BranchList" },

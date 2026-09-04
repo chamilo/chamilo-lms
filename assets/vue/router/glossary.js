@@ -4,6 +4,7 @@ export default {
     requiresAuth: true,
     showBreadcrumb: true,
     tool: "glossary",
+    breadcrumb: "Glossary",
   },
   name: "glossary",
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),

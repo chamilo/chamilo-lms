@@ -1,6 +1,6 @@
 export default {
   path: "/resources/rooms",
-  meta: { requiresAuth: true, requiresAdmin: true, showBreadcrumb: true },
+  meta: { requiresAuth: true, requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Rooms" },
   name: "rooms",
   component: () => import("../components/room/Layout.vue"),
   redirect: { name: "RoomList" },

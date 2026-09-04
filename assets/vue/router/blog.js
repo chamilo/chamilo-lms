@@ -3,6 +3,7 @@ export default {
   meta: {
     requiresAuth: true,
     showBreadcrumb: true,
+    breadcrumb: "Projects",
   },
   name: "blog",
   component: () => import("../components/blog/BlogLayout.vue"),

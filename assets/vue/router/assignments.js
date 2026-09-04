@@ -4,6 +4,7 @@ export default {
     requiresAuth: true,
     showBreadcrumb: true,
     tool: "student_publication",
+    breadcrumb: "Assignments",
   },
   name: "assignments",
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),

@@ -37,7 +37,18 @@ abstract class CcAssesmentMaterialBase extends CcQuestionMetadataBase
         $this->setSettingWns(CcQtiTags::XML_LANG, CcXmlNamespace::XML, $value);
     }
 
-    public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
+    public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace): void
+    {
+        $this->generateMaterial($doc, $item, $namespace);
+    }
+
+    /**
+     * Same as generate(), but hands the created node back so subclasses can nest
+     * further content inside it.
+     *
+     * @param mixed $namespace
+     */
+    protected function generateMaterial(XMLGenericDocument &$doc, DOMNode &$item, $namespace): DOMNode
     {
         $material = $doc->appendNewElementNs($item, $namespace, $this->tagname);
         $this->generateAttributes($doc, $material, $namespace);

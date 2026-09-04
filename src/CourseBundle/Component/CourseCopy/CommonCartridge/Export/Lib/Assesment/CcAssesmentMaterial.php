@@ -32,7 +32,7 @@ class CcAssesmentMaterial extends CcAssesmentMaterialBase
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace): void
     {
-        $material = parent::generate($doc, $item, $namespace);
+        $material = $this->generateMaterial($doc, $item, $namespace);
         if (!empty($this->altmaterial)) {
             $this->altmaterial->generate($doc, $material, $namespace);
         }

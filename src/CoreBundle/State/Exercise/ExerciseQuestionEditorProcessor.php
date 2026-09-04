@@ -1698,7 +1698,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
                 ->setQuestion($question)
                 ->setAnswer((string) $item['answer'])
                 ->setCorrect((int) $item['targetPosition'])
-                ->setComment('')
+                ->setComment((string) $item['comment'])
                 ->setPonderation((float) $item['score'])
                 ->setPosition($position)
             ;
@@ -1708,7 +1708,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     }
 
     /**
-     * @return array<int, array{answer: string, targetPosition: int, score: float, position: int}>
+     * @return array<int, array{answer: string, targetPosition: int, comment: string, score: float, position: int}>
      */
     private function getCleanDraggableItems(ExerciseQuestionEditor $data): array
     {
@@ -1726,6 +1726,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             $items[] = [
                 'answer' => $answer,
                 'targetPosition' => max(1, (int) ($item['targetPosition'] ?? ($index + 1))),
+                'comment' => (string) ($item['comment'] ?? ''),
                 'score' => max(0.0, (float) ($item['score'] ?? 0.0)),
                 'position' => \count($items) + 1,
             ];
@@ -2899,6 +2900,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
                 'localId' => 'draggable-'.(int) $answer->getPosition(),
                 'answer' => $answer->getAnswer(),
                 'targetPosition' => $correct,
+                'comment' => (string) $answer->getComment(),
                 'score' => (float) $answer->getPonderation(),
                 'position' => \count($items) + 1,
             ];
@@ -2906,8 +2908,8 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
         if ([] === $items) {
             return [
-                ['id' => null, 'localId' => 'draggable-1', 'answer' => '', 'targetPosition' => 1, 'score' => 10.0, 'position' => 1],
-                ['id' => null, 'localId' => 'draggable-2', 'answer' => '', 'targetPosition' => 2, 'score' => 10.0, 'position' => 2],
+                ['id' => null, 'localId' => 'draggable-1', 'answer' => '', 'targetPosition' => 1, 'comment' => '', 'score' => 10.0, 'position' => 1],
+                ['id' => null, 'localId' => 'draggable-2', 'answer' => '', 'targetPosition' => 2, 'comment' => '', 'score' => 10.0, 'position' => 2],
             ];
         }
 

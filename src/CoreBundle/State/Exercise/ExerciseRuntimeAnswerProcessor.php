@@ -2456,6 +2456,13 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             }, $rows)));
         }
 
+        if (\in_array($type, self::DRAGGABLE_TYPES, true)) {
+            return array_values(array_filter(array_map(
+                static fn (array $row): int => (int) ($row['position'] ?? 0),
+                $rows
+            )));
+        }
+
         return $this->getRowAnswerIds($rows);
     }
 

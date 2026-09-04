@@ -2267,7 +2267,7 @@ function api_get_course_info_by_id(?int $id = 0)
  *
  * @todo eradicate the false "id"=code field of the $_course array and use the int id
  */
-function api_format_course_array(Course $course = null)
+function api_format_course_array(?Course $course = null)
 {
     if (empty($course)) {
         return [];
@@ -3734,7 +3734,7 @@ function api_is_anonymous()
  */
 function api_not_allowed(
     bool $printHeaders = false,
-    string $message = null,
+    ?string $message = null,
     int $responseCode = 0,
     string $severity = 'warning'
 ): never {
@@ -7342,7 +7342,7 @@ function api_mail_html(
     $data_file = [],
     $embeddedImage = false,
     $additionalParameters = [],
-    string $sendErrorTo = null
+    ?string $sendErrorTo = null
 ) {
     /* @var MailHelper $mailHelper */
     $mailHelper = Container::$container->get(MailHelper::class);

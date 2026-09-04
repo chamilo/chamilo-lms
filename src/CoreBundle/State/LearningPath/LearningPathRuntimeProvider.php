@@ -226,6 +226,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
                 foreach ($rows as $rowIndex => $row) {
                     if ((int) $row['id'] === $currentItemId) {
                         $rows[$rowIndex]['itemType'] = $currentRuntimeType;
+
                         break;
                     }
                 }

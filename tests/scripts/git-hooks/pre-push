@@ -1,58 +1,112 @@
 #!/bin/sh
+#
+# Chamilo pre-push hook: runs ECS (the same tool as "composer phpcs-fix") over
+# the PHP files contained in the commits being pushed, so the "PHP format code"
+# CI job never sees unformatted code.
+#
+# Enabled by "composer install" (ScriptHandler::installGitHooks sets
+# core.hooksPath to tests/scripts/git-hooks), or manually with:
+#     git config core.hooksPath tests/scripts/git-hooks
+#
+# Bypass once with "git push --no-verify".
+#
+# PHP runner: the host "php" when it can see vendor/, otherwise the Docker
+# container. Override with CHAMILO_PHP or CHAMILO_PHP_CONTAINER, e.g.
+#     export CHAMILO_PHP_CONTAINER=my-php-container
 
-# An example hook script to verify what is about to be pushed.  Called by "git
-# push" after it has checked the remote status, but before anything has been
-# pushed.  If this script exits with a non-zero status nothing will be pushed.
-#
-# This hook is called with the following parameters:
-#
-# $1 -- Name of the remote to which the push is being done
-# $2 -- URL to which the push is being done
-#
-# If pushing without using a named remote those arguments will be equal.
-#
-# Information about the commits which are being pushed is supplied as lines to
-# the standard input in the form:
-#
-#   <local ref> <local sha1> <remote ref> <remote sha1>
-#
-# This sample shows how to prevent push of commits where the log message starts
-# with "WIP" (work in progress).
+set -u
 
-remote="$1"
-url="$2"
+remote_name="${1:-origin}"
 
-z40=0000000000000000000000000000000000000000
-composer=${composer-'composer'}
+# Keep in sync with $ecsConfig->paths() in ecs.php.
+ECS_PATHS="src tests/CoreBundle tests/CourseBundle"
 
-while read local_ref local_sha remote_ref remote_sha
-do
-    if [ "$local_sha" = $z40 ]
-    then
-        # Handle delete
-        :
+is_zero_sha() {
+    case "$1" in
+        *[!0]*) return 1 ;;
+        *) return 0 ;;
+    esac
+}
+
+# Collect the PHP files touched by the commits about to be pushed. Git feeds
+# one "<local ref> <local sha> <remote ref> <remote sha>" line per ref on stdin.
+changed=""
+while read -r _local_ref local_sha _remote_ref remote_sha; do
+    if is_zero_sha "$local_sha"; then
+        continue # branch deletion, nothing to check
+    fi
+
+    if is_zero_sha "$remote_sha"; then
+        revs="$local_sha --not --remotes=$remote_name" # new branch
     else
-        if [ "$remote_sha" = $z40 ]
-        then
-            # New branch, examine all commits
-            range="$local_sha"
-        else
-            # Update to existing branch, examine new commits
-            range="$remote_sha..$local_sha"
-        fi
+        revs="$remote_sha..$local_sha"
+    fi
 
-        # Run coding standards check over modified files.
-        modified_files=$(git diff --diff-filter=d --name-only "$range" | grep -v '\.\(jpg\|jpeg\|png\|gif\|bmp\|svg\|webp\)$')
-        if [ -n "$modified_files" ]
-        then
-            $composer phpcs $modified_files
-            if [ $? -ne 0 ]
-            then
-                echo >&2 "A coding standards regression was introduced, please fix it before pushing."
-                exit 1
-            fi
-        fi
+    # shellcheck disable=SC2086 # $revs and $ECS_PATHS are deliberate word lists
+    changed="$changed
+$(git log --format='' --name-only --diff-filter=ACMR $revs -- $ECS_PATHS)"
+done
+
+# Paths in this repository never contain spaces, so a plain word list is safe.
+files=""
+for file in $(printf '%s\n' "$changed" | grep -E '\.php$' | sort -u); do
+    if [ -f "$file" ]; then
+        files="$files $file"
     fi
 done
 
-exit 0
+if [ -z "$files" ]; then
+    exit 0
+fi
+
+if [ -n "${CHAMILO_PHP:-}" ]; then
+    runner="$CHAMILO_PHP"
+elif command -v php >/dev/null 2>&1 && [ -f vendor/bin/ecs ]; then
+    runner="php"
+else
+    container="${CHAMILO_PHP_CONTAINER:-chamilo2-php83}"
+    if command -v docker >/dev/null 2>&1 && docker ps --format '{{.Names}}' 2>/dev/null | grep -qx "$container"; then
+        runner="docker exec -i -w /var/www/html $container php"
+    else
+        echo "pre-push: cannot run the code style check: no local PHP with vendor/ installed," >&2
+        echo "          and the container \"$container\" is not running." >&2
+        echo "          Start it, or set CHAMILO_PHP / CHAMILO_PHP_CONTAINER." >&2
+        exit 1
+    fi
+fi
+
+# shellcheck disable=SC2086 # $runner and $files are deliberate word lists
+check_output=$($runner vendor/bin/ecs check $files --no-interaction --no-progress-bar 2>&1)
+
+if [ $? -eq 0 ]; then
+    exit 0
+fi
+
+echo "pre-push: code style issues found, running the fixer..." >&2
+
+# shellcheck disable=SC2086
+before=$(git hash-object -- $files)
+# shellcheck disable=SC2086
+$runner vendor/bin/ecs check $files --fix --no-interaction --no-progress-bar --no-diffs
+fix_status=$?
+# shellcheck disable=SC2086
+after=$(git hash-object -- $files)
+
+echo "" >&2
+if [ "$before" != "$after" ]; then
+    echo "pre-push: ECS reformatted some of the files above in your working tree." >&2
+    echo "          Include the fix in your commits and push again, e.g.:" >&2
+    echo "              git add -u && git commit --amend --no-edit" >&2
+elif [ $fix_status -eq 0 ]; then
+    # The fixer changed nothing, so whatever the check complained about needs a
+    # human: show its output, it is the only diagnostic available.
+    echo "pre-push: the fixer changed nothing. ECS reported:" >&2
+    echo "$check_output" >&2
+fi
+if [ $fix_status -ne 0 ]; then
+    echo "pre-push: some issues cannot be fixed automatically. Fix them by hand," >&2
+    echo "          then run: composer phpcs" >&2
+fi
+echo "          Push aborted (bypass with --no-verify)." >&2
+
+exit 1

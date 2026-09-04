@@ -238,7 +238,7 @@ function handleForum($url)
  * @version may 2011, Chamilo 1.8.8
  * @throws Exception
  */
-function getForumCategoryAddForm(int $lp_id = null): string
+function getForumCategoryAddForm(?int $lp_id = null): string
 {
     $form = new FormValidator(
         'forumcategory',
@@ -300,7 +300,7 @@ function getForumCategoryAddForm(int $lp_id = null): string
 /**
  * Generates a forum creation or edition form
  */
-function forumForm(CForum $forum = null, int $lp_id = null): string
+function forumForm(?CForum $forum = null, ?int $lp_id = null): string
 {
     $_course = api_get_course_info();
     // The header for the form
@@ -1186,7 +1186,7 @@ function get_forums_in_category(int $categoryId, int $courseId = 0, int $session
  * @return CForum[]
  */
 function get_forums(
-    int $courseId = null,
+    ?int $courseId = null,
     int $sessionId = 0
 ) {
     $repo = Container::getForumRepository();
@@ -1206,7 +1206,7 @@ function get_forums(
  * Returns the given forum ID's forum instance
  */
 function getForum(
-    int $forumId = null
+    ?int $forumId = null
 ): CForum|bool {
     if (!empty($forumId)) {
         $repo = Container::getForumRepository();
@@ -1221,7 +1221,7 @@ function getForum(
 /**
  * Retrieves all the threads for a given forum or counts them.
  */
-function get_threads(int $forumId, int $courseId = null, int $sessionId = null, bool $count = false): array|int
+function get_threads(int $forumId, ?int $courseId = null, ?int $sessionId = null, bool $count = false): array|int
 {
     $repo = Container::getForumThreadRepository();
     $courseId = empty($courseId) ? api_get_course_int_id() : $courseId;
@@ -1289,7 +1289,7 @@ function getPosts(
     int $threadId,
     string $orderDirection = 'ASC',
     bool $recursive = false,
-    int $postId = null,
+    ?int $postId = null,
     int $depth = -1
 ): Array
 {
@@ -2000,7 +2000,7 @@ function saveThread(
  *
  * @return FormValidator
  */
-function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $post = null, $action, $form_values, $showPreview = true)
+function show_add_post_form(CForum $forum, CForumThread $thread, ?CForumPost $post, $action, $form_values, $showPreview = true)
 {
     $_user = api_get_user_info();
     $action = isset($action) ? Security::remove_XSS($action) : '';
@@ -3532,7 +3532,7 @@ function handle_mail_cue($content, $id)
 /**
  * This function sends the mails for the mail notification.
  */
-function send_mail($userInfo, CForum $forum, CForumThread $thread, CForumPost $postInfo = null)
+function send_mail($userInfo, CForum $forum, CForumThread $thread, ?CForumPost $postInfo = null)
 {
     if (empty($userInfo) || empty($forum) || empty($thread)) {
         return false;

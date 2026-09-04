@@ -61,6 +61,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
     use LearningPathStateHelperTrait;
 
     private const array AUDIO_EXTENSIONS = ['aac', 'm4a', 'mp3', 'ogg', 'wav', 'webm'];
+    private const array VIDEO_EXTENSIONS = ['avi', 'm4v', 'mov', 'mp4', 'ogv', 'webm'];
     private const array COMPLETED_STATUSES = ['completed', 'passed', 'succeeded', 'browsed', 'failed'];
     private const array ONLYOFFICE_SUPPORTED_EXTENSIONS = [
         'doc',
@@ -219,6 +220,17 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             $bypassPrerequisites,
         );
         $currentItem = $itemsById[$currentItemId] ?? null;
+        if ($currentItem instanceof CLpItem) {
+            $currentRuntimeType = $this->resolveRuntimeItemType($currentItem, $course, $session, $group);
+            if ($currentRuntimeType !== strtolower(trim($currentItem->getItemType()))) {
+                foreach ($rows as $rowIndex => $row) {
+                    if ((int) $row['id'] === $currentItemId) {
+                        $rows[$rowIndex]['itemType'] = $currentRuntimeType;
+                        break;
+                    }
+                }
+            }
+        }
 
         $runtime = new LearningPathRuntime();
         $runtime->lpId = (int) $lp->getIid();
@@ -832,6 +844,15 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             if (!$link instanceof CLink) {
                 return '';
             }
+
+            $externalVideo = $this->parseExternalVideoUrl((string) $link->getUrl());
+            if (null !== $externalVideo) {
+                $params['type'] = $externalVideo['type'];
+                $params['source'] = $externalVideo['source'];
+
+                return $this->appendQuery('/main/lp/embed.php', $params);
+            }
+
             $params['link_id'] = $resourceId;
 
             return $this->appendQuery('/main/link/link_goto.php', $params);
@@ -893,6 +914,113 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             $params['invitationCode'] = 'auto';
 
             return $this->appendQuery('/resources/survey/'.$courseNodeId.'/'.$resourceId.'/answer', $params);
+        }
+
+        return '';
+    }
+
+    private function resolveRuntimeItemType(
+        CLpItem $item,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+    ): string {
+        $type = strtolower(trim($item->getItemType()));
+        if ('document' !== $type) {
+            return $type;
+        }
+
+        $path = trim((string) $item->getPath());
+        $resourceId = ctype_digit($path) ? (int) $path : 0;
+        if ($resourceId <= 0) {
+            return $type;
+        }
+
+        $document = $this->findContextResource(CDocument::class, $resourceId, $course, $session, $group);
+        if (!$document instanceof CDocument) {
+            return $type;
+        }
+
+        $resourceFile = $document->getResourceNode()?->getFirstResourceFile();
+        $mimeType = strtolower(trim((string) $resourceFile?->getMimeType()));
+        $originalName = strtolower(trim((string) $resourceFile?->getOriginalName()));
+        $extension = strtolower((string) pathinfo($originalName, PATHINFO_EXTENSION));
+        if ('video' === strtolower(trim($document->getFiletype()))
+            || str_starts_with($mimeType, 'video/')
+            || \in_array($extension, self::VIDEO_EXTENSIONS, true)
+        ) {
+            return 'video';
+        }
+
+        return $type;
+    }
+
+    /**
+     * @return array{type: 'youtube'|'vimeo', source: string}|null
+     */
+    private function parseExternalVideoUrl(string $url): ?array
+    {
+        $youtubeId = $this->extractYoutubeVideoId($url);
+        if ('' !== $youtubeId) {
+            return ['type' => 'youtube', 'source' => $youtubeId];
+        }
+
+        $vimeoId = $this->extractVimeoVideoId($url);
+        if ('' !== $vimeoId) {
+            return ['type' => 'vimeo', 'source' => $vimeoId];
+        }
+
+        return null;
+    }
+
+    private function extractYoutubeVideoId(string $url): string
+    {
+        $parts = parse_url(trim($url));
+        if (!\is_array($parts)) {
+            return '';
+        }
+
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        $path = trim((string) ($parts['path'] ?? ''), '/');
+        $videoId = '';
+
+        if ('youtu.be' === $host || str_ends_with($host, '.youtu.be')) {
+            $videoId = explode('/', $path)[0] ?? '';
+        } elseif (\in_array(
+            $host,
+            ['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtube-nocookie.com', 'www.youtube-nocookie.com'],
+            true,
+        )) {
+            if ('watch' === $path) {
+                $query = [];
+                parse_str((string) ($parts['query'] ?? ''), $query);
+                $queryVideoId = $query['v'] ?? '';
+                $videoId = \is_scalar($queryVideoId) ? (string) $queryVideoId : '';
+            } elseif (preg_match('~^(?:embed|shorts|live)/([^/?#]+)~', $path, $matches)) {
+                $videoId = (string) ($matches[1] ?? '');
+            }
+        }
+
+        return preg_match('/^[A-Za-z0-9_-]{6,32}$/', $videoId) ? $videoId : '';
+    }
+
+    private function extractVimeoVideoId(string $url): string
+    {
+        $parts = parse_url(trim($url));
+        if (!\is_array($parts)) {
+            return '';
+        }
+
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        if (!\in_array($host, ['vimeo.com', 'www.vimeo.com', 'player.vimeo.com'], true)) {
+            return '';
+        }
+
+        $segments = array_values(array_filter(explode('/', trim((string) ($parts['path'] ?? ''), '/'))));
+        foreach (array_reverse($segments) as $segment) {
+            if (ctype_digit($segment)) {
+                return $segment;
+            }
         }
 
         return '';

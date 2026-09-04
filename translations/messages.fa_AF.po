@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "با احترام"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نمونهٔ فورمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نمونه فرمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "محدوده متغیرها"
@@ -7712,6 +7712,54 @@ msgstr "فهرست سؤالات آزمون"
 
 msgid "Recycle existing questions"
 msgstr "بازیافت سؤالات موجود"
+
+msgid "Add this question to the test: %s"
+msgstr "این سؤال را به آزمون اضافه کنید: %s"
+
+msgid "Edit question: %s"
+msgstr "ویرایش سؤال: %s"
+
+msgid "Add a question: %s"
+msgstr "افزودن سؤال: %s"
+
+msgid "Detected blanks: %s"
+msgstr "جاهای خالی تشخیص‌شده: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s سؤال، با مجموع نمره (همه سؤالات) %s."
+
+msgid "Unique answer"
+msgstr "پاسخ واحد"
+
+msgid "Multiple answer true/false"
+msgstr "چندپاسخی درست/نادرست"
+
+msgid "Multiple answer combination true/false"
+msgstr "ترکیب چندپاسخی درست/نادرست"
+
+msgid "Unique answer with images"
+msgstr "پاسخ واحد با تصاویر"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "چندپاسخی درست/نادرست با درجه اطمینان"
+
+msgid "Answer in Office document"
+msgstr "پاسخ در سند آفیس"
+
+msgid "Matching draggable"
+msgstr "تطبیق کشیدنی"
+
+msgid "Matching draggable combination"
+msgstr "ترکیب تطبیق کشیدنی"
+
+msgid "Fill in blanks combination"
+msgstr "ترکیب پر کردن جاهای خالی"
+
+msgid "Multiple answer dropdown combination"
+msgstr "ترکیب چندپاسخی کشویی"
+
+msgid "Matching combination"
+msgstr "ترکیب تطبیق"
 
 msgid "Correct test"
 msgstr "آزمون درست"
@@ -20537,6 +20585,9 @@ msgstr "لینک منقضی شده، لطفاً دوباره تلاش کنید."
 
 msgid "Instructions for the password change procedure"
 msgstr "دستورالعمل‌های فرآیند تغییر رمز عبور"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "این پیام به این دلیل برایتان فرستاده می‌شود که شما (یا کسی که سعی در جعل هویت شما دارد) درخواست تولید گذرواژه جدید برای حساب‌تان را کرده است.<br/>برای تنظیم گذرواژه جدید، لطفاً این پیوند را دنبال کنید:<br/>%s<br/>اگر این درخواست را نکرده‌اید، می‌توانید این پیام را نادیده بگیرید. اگر همچنان این پیام‌ها را دریافت می‌کنید، لطفاً با مدیر پورتال تماس بگیرید."
 
 msgid "Remind Course Expiration cron"
 msgstr "یادآوری انقضای دوره cron"
@@ -39108,8 +39159,8 @@ msgstr "تازه‌سازی خودکار هر ۵ ثانیه"
 msgid "Web server load"
 msgstr "بارگذاری وب‌سرور"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "معیارهای وضعیت زنده Apache یا Nginx"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "معیارهای وضعیت زنده Apache، Nginx یا FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "برای نمایش معیارهای بارگذاری وب‌سرور کلیک کنید"
@@ -39117,8 +39168,8 @@ msgstr "برای نمایش معیارهای بارگذاری وب‌سرور ک
 msgid "Requires a local web server status module"
 msgstr "نیاز به ماژول وضعیت وب‌سرور محلی دارد"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "بار سرور وب فقط از Apache mod_status یا Nginx stub_status در localhost خوانده می‌شود. صفحه وضعیت باید درخواست‌ها را از 127.0.0.1 (یا ::1) بپذیرد."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "بار سرور وب از Apache mod_status، Nginx stub_status، یا نقطه پایانی معیارهای FrankenPHP/Caddy، فقط روی localhost خوانده می‌شود. صفحه وضعیت باید درخواست‌ها از 127.0.0.1 (یا ::1) را اجازه دهد."
 
 msgid "Paths scanned"
 msgstr "مسیرهای اسکن‌شده"
@@ -39129,8 +39180,8 @@ msgstr "تشخیص‌داده‌شده"
 msgid "Status path"
 msgstr "مسیر وضعیت"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "معیارهای بار سرور وب فقط برای Apache و Nginx در دسترس است."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "معیارهای بار سرور وب فقط برای Apache، Nginx و FrankenPHP در دسترس است."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "هیچ‌کدام از مسیرهای وضعیت اسکن‌شده در localhost پاسخ ندادند."
@@ -39213,8 +39264,23 @@ msgstr "پذیرفته‌شده‌ها"
 msgid "Handled"
 msgstr "مدیریت‌شده‌ها"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: mod_status را فعال کنید (ExtendedStatus On) و localhost را برای /server-status مجاز کنید. Nginx: stub_status را در یک مکان فقط localhost مانند /nginx_status یا /stub_status فعال کنید."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status را فعال کنید (ExtendedStatus On) و localhost را به /server-status اجازه دهید. Nginx: stub_status را روی یک مکان فقط-localhost مانند /nginx_status یا /stub_status فعال کنید. FrankenPHP: گزینه سراسری \"metrics\" را به Caddyfile اضافه کنید، که به‌طور پیش‌فرض معیارهای Prometheus را روی API مدیریت Caddy (127.0.0.1:2019/metrics) در معرض قرار می‌دهد."
+
+msgid "Total threads"
+msgstr "مجموع رشته‌ها"
+
+msgid "Busy threads"
+msgstr "رشته‌های مشغول"
+
+msgid "Queue depth"
+msgstr "عمق صف"
+
+msgid "Worker"
+msgstr "کارگر"
+
+msgid "Average request time"
+msgstr "میانگین زمان درخواست"
 
 msgid "Grade percentage distribution"
 msgstr "توزیع درصد نمرات"
@@ -39282,11 +39348,17 @@ msgstr "OPcache نصب شده اما فعال نیست."
 msgid "OPcache extension is not available on this server."
 msgstr "افزونه OPcache در این سرور در دسترس نیست."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache آمار حافظه ناسازگار گزارش می‌کند (مشکل شناخته‌شده در برخی زمان‌اجراهای PHP چندرشته‌ای، مثلاً FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu نصب شده اما فعال نیست."
 
 msgid "APCu extension is not available on this server."
 msgstr "افزونه APCu در این سرور در دسترس نیست."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu آمار حافظه ناسازگار گزارش می‌کند (مشکل شناخته‌شده در برخی زمان‌اجراهای PHP چندرشته‌ای)."
 
 msgid "Constant"
 msgstr "ثابت"
@@ -40046,4 +40118,10 @@ msgstr "استفاده از تاریخ‌های دسترسی جلسه"
 
 msgid "Use session access end date"
 msgstr "استفاده از تاریخ پایان دسترسی جلسه"
+
+msgid "Group report"
+msgstr "گزارش گروه"
+
+msgid "Student follow-up"
+msgstr "پیگیری دانش‌آموز"
 

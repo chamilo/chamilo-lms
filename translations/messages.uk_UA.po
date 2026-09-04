@@ -7713,6 +7713,54 @@ msgstr "Список питань тесту"
 msgid "Recycle existing questions"
 msgstr "Збірка питань"
 
+msgid "Add this question to the test: %s"
+msgstr "Додати це запитання до тесту: %s"
+
+msgid "Edit question: %s"
+msgstr "Редагувати запитання: %s"
+
+msgid "Add a question: %s"
+msgstr "Додати запитання: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Виявлені пропуски: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s запитань, загальний бал (усі запитання) %s."
+
+msgid "Unique answer"
+msgstr "Єдина відповідь"
+
+msgid "Multiple answer true/false"
+msgstr "Множинна відповідь так\/ні"
+
+msgid "Multiple answer combination true/false"
+msgstr "Комбінація множинних відповідей так\/ні"
+
+msgid "Unique answer with images"
+msgstr "Єдина відповідь із зображеннями"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Множинна відповідь так\/ні зі ступенем упевненості"
+
+msgid "Answer in Office document"
+msgstr "Відповідь у документі Office"
+
+msgid "Matching draggable"
+msgstr "Відповідність з перетягуванням"
+
+msgid "Matching draggable combination"
+msgstr "Комбінація відповідності з перетягуванням"
+
+msgid "Fill in blanks combination"
+msgstr "Комбінація заповнення пропусків"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Комбінація множинних відповідей зі спадним списком"
+
+msgid "Matching combination"
+msgstr "Комбінація відповідності"
+
 msgid "Correct test"
 msgstr "Завершити тест"
 
@@ -20537,6 +20585,9 @@ msgstr "Посилання застаріло, будь ласка, спробу
 
 msgid "Instructions for the password change procedure"
 msgstr "Інструкції щодо процедури зміни пароля"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Це повідомлення надіслано вам, тому що ви (або хтось, хто намагається видати себе за вас) запросили згенерувати новий пароль для вашого облікового запису.<br\/>Щоб встановити новий пароль, перейдіть за цим посиланням:<br\/>%s<br\/>Якщо ви не робили цей запит, просто проігноруйте це повідомлення. Якщо ви продовжуєте отримувати такі повідомлення, зверніться до адміністратора порталу."
 
 msgid "Remind Course Expiration cron"
 msgstr "Нагадування про закінчення терміну курсу cron"
@@ -39108,8 +39159,8 @@ msgstr "Автооновлення кожні 5 секунд"
 msgid "Web server load"
 msgstr "Навантаження вебсервера"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Метрики стану Apache або Nginx у реальному часі"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Онлайн-метрики стану Apache, Nginx або FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Натисніть, щоб переглянути метрики навантаження вебсервера"
@@ -39117,8 +39168,8 @@ msgstr "Натисніть, щоб переглянути метрики нав�
 msgid "Requires a local web server status module"
 msgstr "Потрібен модуль статусу локального вебсервера"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Метрики навантаження вебсервера зчитуються лише з Apache mod_status або Nginx stub_status на localhost. Сторінка статусу має дозволяти запити з 127.0.0.1 (або ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Навантаження вебсервера зчитується з Apache mod_status, Nginx stub_status або кінцевої точки метрик FrankenPHP\/Caddy лише на localhost. Сторінка стану має дозволяти запити з 127.0.0.1 (або ::1)."
 
 msgid "Paths scanned"
 msgstr "Переглянуто шляхів"
@@ -39129,8 +39180,8 @@ msgstr "Виявлено"
 msgid "Status path"
 msgstr "Шлях статусу"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Метрики навантаження вебсервера доступні лише для Apache та Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Метрики навантаження вебсервера доступні лише для Apache, Nginx і FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Жоден зі шляхів статусу не відповів на localhost."
@@ -39213,8 +39264,23 @@ msgstr "Прийнято"
 msgid "Handled"
 msgstr "Оброблено"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: увімкніть mod_status (ExtendedStatus On) і дозвольте localhost доступ до /server-status. Nginx: увімкніть stub_status у локальній локації, наприклад /nginx_status або /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: увімкніть mod_status (ExtendedStatus On) і дозвольте localhost доступ до \/server-status. Nginx: увімкніть stub_status на розташуванні лише для localhost, наприклад \/nginx_status або \/stub_status. FrankenPHP: додайте глобальну опцію \"metrics\" до Caddyfile, яка за замовчуванням відкриває метрики Prometheus на адміністративному API Caddy (127.0.0.1:2019\/metrics)."
+
+msgid "Total threads"
+msgstr "Усього потоків"
+
+msgid "Busy threads"
+msgstr "Зайняті потоки"
+
+msgid "Queue depth"
+msgstr "Глибина черги"
+
+msgid "Worker"
+msgstr "Робочий процес"
+
+msgid "Average request time"
+msgstr "Середній час запиту"
 
 msgid "Grade percentage distribution"
 msgstr "Розподіл відсотків оцінок"
@@ -39282,11 +39348,17 @@ msgstr "OPcache встановлено, але не увімкнено."
 msgid "OPcache extension is not available on this server."
 msgstr "Розширення OPcache недоступне на цьому сервері."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache повідомляє про неузгоджену статистику пам'яті (відома проблема на деяких багатопотокових середовищах PHP, напр. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu встановлено, але не увімкнено."
 
 msgid "APCu extension is not available on this server."
 msgstr "Розширення APCu недоступне на цьому сервері."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu повідомляє про неузгоджену статистику пам'яті (відома проблема на деяких багатопотокових середовищах PHP)."
 
 msgid "Constant"
 msgstr "Константа"
@@ -40046,4 +40118,10 @@ msgstr "Використовувати дати доступу до сесії"
 
 msgid "Use session access end date"
 msgstr "Використовувати кінцеву дату доступу до сесії"
+
+msgid "Group report"
+msgstr "Звіт групи"
+
+msgid "Student follow-up"
+msgstr "Супровід студента"
 

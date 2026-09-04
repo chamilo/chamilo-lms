@@ -7718,6 +7718,54 @@ msgstr "Lista tal-mistoqsijiet tat-test"
 msgid "Recycle existing questions"
 msgstr "Irriċikla mistoqsijiet eżistenti"
 
+msgid "Add this question to the test: %s"
+msgstr ""
+
+msgid "Edit question: %s"
+msgstr ""
+
+msgid "Add a question: %s"
+msgstr ""
+
+msgid "Detected blanks: %s"
+msgstr ""
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr ""
+
+msgid "Unique answer"
+msgstr ""
+
+msgid "Multiple answer true/false"
+msgstr ""
+
+msgid "Multiple answer combination true/false"
+msgstr ""
+
+msgid "Unique answer with images"
+msgstr ""
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr ""
+
+msgid "Answer in Office document"
+msgstr ""
+
+msgid "Matching draggable"
+msgstr ""
+
+msgid "Matching draggable combination"
+msgstr ""
+
+msgid "Fill in blanks combination"
+msgstr ""
+
+msgid "Multiple answer dropdown combination"
+msgstr ""
+
+msgid "Matching combination"
+msgstr ""
+
 msgid "Correct test"
 msgstr "Ikkoreġi t-test"
 
@@ -15330,16 +15378,16 @@ msgid "Information about your webserver configuration"
 msgstr ""
 
 msgid "Paths"
-msgstr ""
+msgstr "Mogħdijiet"
 
 msgid "State of Chamilo requirements"
-msgstr ""
+msgstr "Stat tar-rekwiżiti ta' Chamilo"
 
 msgid "State of PHP settings on the server"
-msgstr ""
+msgstr "Stat tas-settings PHP fuq is-server"
 
 msgid "api_get_path() constants resolved on this portal"
-msgstr ""
+msgstr "Kostanti ta' api_get_path() riżolti fuq dan il-portal"
 
 msgid "Is writable"
 msgstr "Jista' jinkiteb"
@@ -20542,6 +20590,9 @@ msgstr "Link skadiet, jekk jogħġbok erġa' pprova."
 
 msgid "Instructions for the password change procedure"
 msgstr "Istruzzjonijiet għall-proċedura tal-bidla tal-password"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Dan il-messaġġ qed jintbagħatlek għax int (jew xi ħadd li qed jipprova jimpersonifikak) tlabt li tiġi ġġenerata password ġdida għall-kont tiegħek.<br/>Biex tissettja l-password il-ġdida tiegħek, jekk jogħġbok segwi din il-link:<br/>%s<br/>Jekk ma għamiltx din it-talba, tista' sempliċement tinjora dan il-messaġġ. Jekk tkompli tirċievi dawn il-messaġġi, jekk jogħġbok ikkuntattja lill-amministratur tal-portal."
 
 msgid "Remind Course Expiration cron"
 msgstr "Cron ta' Tfakkira ta' Skadenza tal-Kors"
@@ -39113,8 +39164,8 @@ msgstr "Aġġornament awtomatiku kull 5 sekondi"
 msgid "Web server load"
 msgstr "Tagħbija tas-server tal-web"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Metriċi ħajjin tal-istatus ta' Apache jew Nginx"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Metriċi tal-istatus live ta' Apache, Nginx jew FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Ikklikkja biex turi l-metriċi tat-tagħbija tas-server tal-web"
@@ -39122,8 +39173,8 @@ msgstr "Ikklikkja biex turi l-metriċi tat-tagħbija tas-server tal-web"
 msgid "Requires a local web server status module"
 msgstr "Jeħtieġ modulu tal-istatus tas-server tal-web lokali"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "It-tagħbija tas-server tal-web tinqara minn Apache mod_status jew Nginx stub_status biss fuq localhost. Il-paġna tal-istatus trid tippermetti talbiet minn 127.0.0.1 (jew ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "It-tagħbija tas-server tal-web tinqara minn Apache mod_status, Nginx stub_status, jew l-endpoint tal-metriċi ta' FrankenPHP/Caddy, fuq localhost biss. Il-paġna tal-istatus trid tippermetti t-talbiet minn 127.0.0.1 (jew ::1)."
 
 msgid "Paths scanned"
 msgstr "Paths skannjati"
@@ -39134,8 +39185,8 @@ msgstr "Skoperti"
 msgid "Status path"
 msgstr "Path tal-istatus"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Il-metriċi tat-tagħbija tas-server tal-web huma disponibbli biss għal Apache u Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Il-metriċi tat-tagħbija tas-server tal-web huma disponibbli biss għal Apache, Nginx u FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "L-ebda wieħed mill-paths tal-istatus skannjati ma wieġeb fuq localhost."
@@ -39218,8 +39269,23 @@ msgstr "Aċċetti"
 msgid "Handled"
 msgstr "Immaniġġjati"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: attiva mod_status (ExtendedStatus On) u ħalli localhost għal /server-status. Nginx: attiva stub_status f'post riservat għal localhost biss bħal /nginx_status jew /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: ippermetti mod_status (ExtendedStatus On) u ħalli localhost għal /server-status. Nginx: ippermetti stub_status fuq location għal localhost biss bħal /nginx_status jew /stub_status. FrankenPHP: żid opzjoni globali \"metrics\" fil-Caddyfile, li tesponi metriċi Prometheus fuq l-API tal-amministrazzjoni ta' Caddy (127.0.0.1:2019/metrics) b'mod default."
+
+msgid "Total threads"
+msgstr "Ħjut totali"
+
+msgid "Busy threads"
+msgstr "Ħjut okkupati"
+
+msgid "Queue depth"
+msgstr "Fond tal-kju"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Ħin medju tat-talba"
 
 msgid "Grade percentage distribution"
 msgstr "Distribuzzjoni tal-perċentwali tal-gradi"
@@ -39287,11 +39353,17 @@ msgstr "OPcache huwa installat iżda mhux attivat."
 msgid "OPcache extension is not available on this server."
 msgstr "L-estensjoni OPcache mhix disponibbli fuq dan is-server."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache qed jirrapporta statistika tal-memorja inkonsistenti (problema magħrufa fuq xi runtimes PHP threaded, eż. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu huwa installat iżda mhux attivat."
 
 msgid "APCu extension is not available on this server."
 msgstr "L-estensjoni APCu mhix disponibbli fuq dan is-server."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu qed jirrapporta statistika tal-memorja inkonsistenti (problema magħrufa fuq xi runtimes PHP threaded)."
 
 msgid "Constant"
 msgstr "Kostanti"
@@ -40051,4 +40123,10 @@ msgstr "Uża d-dati tal-aċċess tas-sessjoni"
 
 msgid "Use session access end date"
 msgstr "Uża d-data tat-tmiem tal-aċċess tas-sessjoni"
+
+msgid "Group report"
+msgstr "Rapport tal-grupp"
+
+msgid "Student follow-up"
+msgstr "Segwitu tal-istudent"
 

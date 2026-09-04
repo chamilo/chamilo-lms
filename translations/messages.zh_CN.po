@@ -7718,6 +7718,54 @@ msgstr "测验的题目列表"
 msgid "Recycle existing questions"
 msgstr "从题库选择"
 
+msgid "Add this question to the test: %s"
+msgstr "将此题目添加到测验：%s"
+
+msgid "Edit question: %s"
+msgstr "编辑题目：%s"
+
+msgid "Add a question: %s"
+msgstr "添加题目：%s"
+
+msgid "Detected blanks: %s"
+msgstr "检测到的填空：%s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s 道题目，所有题目总分 %s。"
+
+msgid "Unique answer"
+msgstr "单选题"
+
+msgid "Multiple answer true/false"
+msgstr "多项判断题"
+
+msgid "Multiple answer combination true/false"
+msgstr "多项判断组合题"
+
+msgid "Unique answer with images"
+msgstr "带图片的单选题"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "带确信度的多项判断题"
+
+msgid "Answer in Office document"
+msgstr "在 Office 文档中作答"
+
+msgid "Matching draggable"
+msgstr "可拖拽匹配题"
+
+msgid "Matching draggable combination"
+msgstr "可拖拽匹配组合题"
+
+msgid "Fill in blanks combination"
+msgstr "填空组合题"
+
+msgid "Multiple answer dropdown combination"
+msgstr "下拉多项选择组合题"
+
+msgid "Matching combination"
+msgstr "匹配组合题"
+
 msgid "Correct test"
 msgstr "完成测验"
 
@@ -20542,6 +20590,9 @@ msgstr "链接已过期，请重试。"
 
 msgid "Instructions for the password change procedure"
 msgstr "密码更改程序说明"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "此邮件发送给您，是因为您（或有人试图冒充您）请求为您的账户生成新密码。<br/>要设置新密码，请点击以下链接：<br/>%s<br/>如果您并未提出此请求，可忽略本邮件。如果您持续收到此类邮件，请联系门户管理员。"
 
 msgid "Remind Course Expiration cron"
 msgstr "提醒课程到期 cron"
@@ -39114,8 +39165,8 @@ msgstr "每 5 秒自动刷新"
 msgid "Web server load"
 msgstr "Web 服务器负载"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "实时 Apache 或 Nginx 状态指标"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Apache、Nginx 或 FrankenPHP 实时状态指标"
 
 msgid "Click to show web server load metrics"
 msgstr "点击显示 Web 服务器负载指标"
@@ -39123,8 +39174,8 @@ msgstr "点击显示 Web 服务器负载指标"
 msgid "Requires a local web server status module"
 msgstr "需要本地 Web 服务器状态模块"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Web 服务器负载仅从本地主机的 Apache mod_status 或 Nginx stub_status 读取。状态页面必须允许来自 127.0.0.1（或 ::1）的请求。"
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Web 服务器负载仅从本机读取 Apache mod_status、Nginx stub_status 或 FrankenPHP/Caddy 指标端点。状态页必须允许来自 127.0.0.1（或 ::1）的请求。"
 
 msgid "Paths scanned"
 msgstr "已扫描路径"
@@ -39135,8 +39186,8 @@ msgstr "已检测"
 msgid "Status path"
 msgstr "状态路径"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Web 服务器负载指标仅适用于 Apache 和 Nginx。"
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Web 服务器负载指标仅适用于 Apache、Nginx 和 FrankenPHP。"
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "本地主机上没有扫描到的状态路径有响应。"
@@ -39219,8 +39270,23 @@ msgstr "接受"
 msgid "Handled"
 msgstr "已处理"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache：启用 mod_status（ExtendedStatus On）并允许本地主机访问 /server-status。Nginx：在仅限本地主机的位置（如 /nginx_status 或 /stub_status）启用 stub_status。"
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache：启用 mod_status（ExtendedStatus On），并允许本机访问 /server-status。Nginx：在仅限本机的位置（如 /nginx_status 或 /stub_status）启用 stub_status。FrankenPHP：在 Caddyfile 中添加全局 \"metrics\" 选项，默认会在 Caddy 管理 API（127.0.0.1:2019/metrics）上公开 Prometheus 指标。"
+
+msgid "Total threads"
+msgstr "线程总数"
+
+msgid "Busy threads"
+msgstr "忙碌线程"
+
+msgid "Queue depth"
+msgstr "队列深度"
+
+msgid "Worker"
+msgstr "工作进程"
+
+msgid "Average request time"
+msgstr "平均请求时间"
 
 msgid "Grade percentage distribution"
 msgstr "成绩百分比分布"
@@ -39288,11 +39354,17 @@ msgstr "OPcache 已安装但未启用。"
 msgid "OPcache extension is not available on this server."
 msgstr "此服务器上没有 OPcache 扩展。"
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache 报告的内存统计不一致（部分线程化 PHP 运行时上的已知问题，例如 FrankenPHP）。"
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu 已安装但未启用。"
 
 msgid "APCu extension is not available on this server."
 msgstr "此服务器上没有 APCu 扩展。"
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu 报告的内存统计不一致（部分线程化 PHP 运行时上的已知问题）。"
 
 msgid "Constant"
 msgstr "常量"
@@ -40052,4 +40124,10 @@ msgstr "使用学期访问日期"
 
 msgid "Use session access end date"
 msgstr "使用学期访问结束日期"
+
+msgid "Group report"
+msgstr "小组报告"
+
+msgid "Student follow-up"
+msgstr "学生跟进"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Atentamente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Ranges de variables"
@@ -7717,6 +7717,54 @@ msgstr "Llistáu d'entrugues del exerciciu"
 
 msgid "Recycle existing questions"
 msgstr "Garrar una entruga del bancu d'entrugues"
+
+msgid "Add this question to the test: %s"
+msgstr "Amestar esta entruga a la prueba: %s"
+
+msgid "Edit question: %s"
+msgstr "Editar la entruga: %s"
+
+msgid "Add a question: %s"
+msgstr "Amestar una entruga: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Espacios en blancu detectaos: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s entrugues, pa una puntuación total (toles entrugues) de %s."
+
+msgid "Unique answer"
+msgstr "Respuesta única"
+
+msgid "Multiple answer true/false"
+msgstr "Respuesta múltiple verdá/falsu"
+
+msgid "Multiple answer combination true/false"
+msgstr "Combinación de respuesta múltiple verdá/falsu"
+
+msgid "Unique answer with images"
+msgstr "Respuesta única con imáxenes"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Respuesta múltiple verdá/falsu con grau de certeza"
+
+msgid "Answer in Office document"
+msgstr "Respuesta nun documentu d'Office"
+
+msgid "Matching draggable"
+msgstr "Empareyamientu arrastrable"
+
+msgid "Matching draggable combination"
+msgstr "Combinación d'empareyamientu arrastrable"
+
+msgid "Fill in blanks combination"
+msgstr "Combinación de rellenar espacios"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Combinación de desplegable de respuesta múltiple"
+
+msgid "Matching combination"
+msgstr "Combinación d'empareyamientu"
 
 msgid "Correct test"
 msgstr "Acaba l'exerciciu"
@@ -20542,6 +20590,9 @@ msgstr "Enllace caíu, por favor inténtalo de nuevu."
 
 msgid "Instructions for the password change procedure"
 msgstr "Instruiciones pal procesu de cambiu de contraseña"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Unviámoste esti mensaxe porque tu (o daquién que tenta facete pasar por ti) pidió que se xenerara una contraseña nueva pa la to cuenta.<br/>Pa configurar la to contraseña nueva, sigue esti enllaz:<br/>%s<br/>Si nun ficisti esta solicitú, pues inorar esti mensaxe. Si sigues recibiendo estos mensaxes, contauta col alministrador del portal."
 
 msgid "Remind Course Expiration cron"
 msgstr "Cron de recordatoriu de caducidá del cursu"
@@ -39114,8 +39165,8 @@ msgstr "Auto-anovamientu cada 5 segundos"
 msgid "Web server load"
 msgstr "Carga del sirvidor web"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Métriques d'estáu en vivu d'Apache o Nginx"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Métriques d'estáu n'en vivo d'Apache, Nginx o FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Calca pa amosar les métriques de carga del sirvidor web"
@@ -39123,8 +39174,8 @@ msgstr "Calca pa amosar les métriques de carga del sirvidor web"
 msgid "Requires a local web server status module"
 msgstr "Rique un módulu d'estáu del sirvidor web llocal"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "La carga del sirvidor web lléese dende Apache mod_status o Nginx stub_status namái en localhost. La páxina d'estáu tien de permitir peticiones dende 127.0.0.1 (o ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "La carga del sirvidor web lléese d'Apache mod_status, Nginx stub_status o del puntu final de métriques de FrankenPHP/Caddy, namái en localhost. La páxina d'estáu tien de permitir solicitúes dende 127.0.0.1 (o ::1)."
 
 msgid "Paths scanned"
 msgstr "Rutes escaneaes"
@@ -39135,8 +39186,8 @@ msgstr "Detectáu"
 msgid "Status path"
 msgstr "Camín d'estáu"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Les métriques de carga del sirvidor web namái tán disponibles pa Apache y Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Les métriques de carga del sirvidor web namái tán disponibles pa Apache, Nginx y FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Nengún de los caminos d'estáu escaneaos respondió en localhost."
@@ -39219,8 +39270,23 @@ msgstr "Aceutaes"
 msgid "Handled"
 msgstr "Xestionaes"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: activa mod_status (ExtendedStatus On) y permite a localhost acceder a /server-status. Nginx: activa stub_status nuna llocalización namái pa localhost como /nginx_status o /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: activa mod_status (ExtendedStatus On) y permite localhost en /server-status. Nginx: activa stub_status nuna llocalización namái de localhost como /nginx_status o /stub_status. FrankenPHP: amiesta una opción global \"metrics\" nel Caddyfile, que espón métriques Prometheus na API d'alministración de Caddy (127.0.0.1:2019/metrics) de forma predeterminada."
+
+msgid "Total threads"
+msgstr "Filos totales"
+
+msgid "Busy threads"
+msgstr "Filos ocupaos"
+
+msgid "Queue depth"
+msgstr "Fondura de la cola"
+
+msgid "Worker"
+msgstr "Trabayador"
+
+msgid "Average request time"
+msgstr "Tiempu mediu de solicitú"
 
 msgid "Grade percentage distribution"
 msgstr "Distribución de porcentaxes de notes"
@@ -39288,11 +39354,17 @@ msgstr "OPcache ta instaláu pero nun ta activáu."
 msgid "OPcache extension is not available on this server."
 msgstr "L'estensión OPcache nun ta disponible nesti sirvidor."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache ta informando estadístiques de memoria inconsistentes (un problema conocíu en dellos entornos PHP con filos, p. ex. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu ta instaláu pero nun ta activáu."
 
 msgid "APCu extension is not available on this server."
 msgstr "L'estensión APCu nun ta disponible nesti sirvidor."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu ta informando estadístiques de memoria inconsistentes (un problema conocíu en dellos entornos PHP con filos)."
 
 msgid "Constant"
 msgstr "Constante"
@@ -40052,4 +40124,10 @@ msgstr "Usar les dates d'accesu de la sesión"
 
 msgid "Use session access end date"
 msgstr "Usar la data final d'accesu de la sesión"
+
+msgid "Group report"
+msgstr "Informe de grupu"
+
+msgid "Student follow-up"
+msgstr "Seguimientu del estudiante"
 

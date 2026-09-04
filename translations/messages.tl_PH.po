@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Mangyaring i-type ang iyong text sa ibaba"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad sa pagpuno ng form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Taas<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad na punan ang form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Isulat ang address"
@@ -7712,6 +7712,54 @@ msgstr "Listahan ng mga tanong ng pagsusulit"
 
 msgid "Recycle existing questions"
 msgstr "I-recycle ang umiiral na mga tanong"
+
+msgid "Add this question to the test: %s"
+msgstr "Idagdag ang tanong na ito sa pagsusulit: %s"
+
+msgid "Edit question: %s"
+msgstr "I-edit ang tanong: %s"
+
+msgid "Add a question: %s"
+msgstr "Magdagdag ng tanong: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Natukoy na mga blanko: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s na tanong, para sa kabuuang iskor (lahat ng tanong) na %s."
+
+msgid "Unique answer"
+msgstr "Natatanging sagot"
+
+msgid "Multiple answer true/false"
+msgstr "Maramihang sagot tama/mali"
+
+msgid "Multiple answer combination true/false"
+msgstr "Kombinasyon ng maramihang sagot tama/mali"
+
+msgid "Unique answer with images"
+msgstr "Natatanging sagot na may mga imahe"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Maramihang sagot tama/mali na may antas ng katiyakan"
+
+msgid "Answer in Office document"
+msgstr "Sagot sa dokumento ng Office"
+
+msgid "Matching draggable"
+msgstr "Pagtutugma na maaaring i-drag"
+
+msgid "Matching draggable combination"
+msgstr "Kombinasyon ng pagtutugma na maaaring i-drag"
+
+msgid "Fill in blanks combination"
+msgstr "Kombinasyon ng pagpuno sa mga blanko"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Kombinasyon ng dropdown ng maramihang sagot"
+
+msgid "Matching combination"
+msgstr "Kombinasyon ng pagtutugma"
 
 msgid "Correct test"
 msgstr "Tamang pagsusulit"
@@ -20538,6 +20586,9 @@ msgstr "Nag-expire na ang link, subukan muli."
 msgid "Instructions for the password change procedure"
 msgstr "Mga tagubilin para sa password change procedure"
 
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Ipinapadala sa iyo ang mensaheng ito dahil ikaw (o may nagtangkang magpanggap bilang ikaw) ay humiling na gumawa ng bagong password para sa iyong account.<br/>Para itakda ang iyong bagong password, sundan ang link na ito:<br/>%s<br/>Kung hindi ikaw ang humiling nito, maaari mo lamang balewalain ang mensaheng ito. Kung patuloy kang tumatanggap ng mga ganitong mensahe, makipag-ugnayan sa administrador ng portal."
+
 msgid "Remind Course Expiration cron"
 msgstr "Pag-alala sa pagtatapos ng kurso cron"
 
@@ -25705,7 +25756,7 @@ msgid "Video player renderers"
 msgstr "Mga renderer ng video player"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "Paganahin ang player renderer para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
+msgstr "Paganahin ang mga player renderer para sa media ng YouTube, Vimeo, Facebook, DailyMotion, Twitch"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Payagan ang mga guro na mag-edit ng mga pagsusulit sa learning paths"
@@ -35530,7 +35581,7 @@ msgid "%s results"
 msgstr "%s resulta"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng pagpuno ng form na aktibidad: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad na punan ang form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Natanggal"
@@ -39108,8 +39159,8 @@ msgstr "Awtomatikong pag-refresh tuwing 5 segundo"
 msgid "Web server load"
 msgstr "Karga ng web server"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Mga live na sukatan ng katayuan ng Apache o Nginx"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Live na mga sukatan ng status ng Apache, Nginx o FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "I-click para ipakita ang mga sukatan ng karga ng web server"
@@ -39117,8 +39168,8 @@ msgstr "I-click para ipakita ang mga sukatan ng karga ng web server"
 msgid "Requires a local web server status module"
 msgstr "Nangangailangan ng lokal na module ng katayuan ng web server"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Ang karga ng web server ay binabasa mula sa Apache mod_status o Nginx stub_status sa localhost lamang. Dapat payagan ng pahina ng katayuan ang mga kahilingan mula sa 127.0.0.1 (o ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Binabasa ang load ng web server mula sa Apache mod_status, Nginx stub_status, o sa FrankenPHP/Caddy metrics endpoint, sa localhost lamang. Dapat payagan ng status page ang mga request mula sa 127.0.0.1 (o ::1)."
 
 msgid "Paths scanned"
 msgstr "Mga na-scan na landas"
@@ -39129,8 +39180,8 @@ msgstr "Natukoy"
 msgid "Status path"
 msgstr "Landas ng katayuan"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Ang mga sukatan ng karga ng web server ay magagamit lamang para sa Apache at Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Available lamang ang mga sukatan ng load ng web server para sa Apache, Nginx at FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Wala sa mga na-scan na landas ng katayuan ang tumugon sa localhost."
@@ -39213,8 +39264,23 @@ msgstr "Tumatanggap"
 msgid "Handled"
 msgstr "Hinahawakan"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: paganahin ang mod_status (ExtendedStatus On) at payagan ang localhost sa /server-status. Nginx: paganahin ang stub_status sa isang lokasyon na localhost lamang tulad ng /nginx_status o /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: paganahin ang mod_status (ExtendedStatus On) at payagan ang localhost sa /server-status. Nginx: paganahin ang stub_status sa isang location na para sa localhost lamang tulad ng /nginx_status o /stub_status. FrankenPHP: magdagdag ng global na opsyong \"metrics\" sa Caddyfile, na naglalabas ng Prometheus metrics sa admin API ng Caddy (127.0.0.1:2019/metrics) bilang default."
+
+msgid "Total threads"
+msgstr "Kabuuang mga thread"
+
+msgid "Busy threads"
+msgstr "Mga abalang thread"
+
+msgid "Queue depth"
+msgstr "Lalim ng pila"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Average na oras ng request"
 
 msgid "Grade percentage distribution"
 msgstr "Pamamahagi ng porsyento ng grado"
@@ -39282,11 +39348,17 @@ msgstr "Naka-install ang OPcache ngunit hindi naka-enable."
 msgid "OPcache extension is not available on this server."
 msgstr "Hindi available ang OPcache extension sa server na ito."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "Nag-uulat ang OPcache ng hindi magkatugmang istatistika ng memorya (kilalang isyu sa ilang threaded PHP runtime, hal. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "Naka-install ang APCu ngunit hindi naka-enable."
 
 msgid "APCu extension is not available on this server."
 msgstr "Hindi available ang APCu extension sa server na ito."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "Nag-uulat ang APCu ng hindi magkatugmang istatistika ng memorya (kilalang isyu sa ilang threaded PHP runtime)."
 
 msgid "Constant"
 msgstr "Constant"
@@ -40046,4 +40118,10 @@ msgstr "Gamitin ang mga petsa ng access sa session"
 
 msgid "Use session access end date"
 msgstr "Gamitin ang petsa ng pagtatapos ng access sa session"
+
+msgid "Group report"
+msgstr "Ulat ng grupo"
+
+msgid "Student follow-up"
+msgstr "Follow-up ng mag-aaral"
 

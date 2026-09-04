@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Բանաձևի օրինակ՝ sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Բանաձևի օրինակ. sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -7716,6 +7716,54 @@ msgstr "Փորձարկման հարցերի ցուցակ"
 
 msgid "Recycle existing questions"
 msgstr "Վերօգտագործել առկա հարցերը"
+
+msgid "Add this question to the test: %s"
+msgstr "Ավելացնել այս հարցը թեստին. %s"
+
+msgid "Edit question: %s"
+msgstr "Խմբագրել հարցը. %s"
+
+msgid "Add a question: %s"
+msgstr "Ավելացնել հարց. %s"
+
+msgid "Detected blanks: %s"
+msgstr "Հայտնաբերված դատարկ դաշտեր. %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s հարց՝ բոլոր հարցերի ընդհանուր միավորը %s։"
+
+msgid "Unique answer"
+msgstr "Եզակի պատասխան"
+
+msgid "Multiple answer true/false"
+msgstr "Բազմակի պատասխան ճիշտ\/սխալ"
+
+msgid "Multiple answer combination true/false"
+msgstr "Բազմակի պատասխանի համակցություն ճիշտ\/սխալ"
+
+msgid "Unique answer with images"
+msgstr "Եզակի պատասխան պատկերներով"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Բազմակի պատասխան ճիշտ\/սխալ վստահության աստիճանով"
+
+msgid "Answer in Office document"
+msgstr "Պատասխան Office փաստաթղթում"
+
+msgid "Matching draggable"
+msgstr "Համապատասխանեցում քաշելով"
+
+msgid "Matching draggable combination"
+msgstr "Համապատասխանեցման քաշվող համակցություն"
+
+msgid "Fill in blanks combination"
+msgstr "Դատարկ դաշտերի լրացման համակցություն"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Բազմակի պատասխանի բացվող ցանկի համակցություն"
+
+msgid "Matching combination"
+msgstr "Համապատասխանեցման համակցություն"
 
 msgid "Correct test"
 msgstr "Ճիշտ փորձարկում"
@@ -20541,6 +20589,9 @@ msgstr "Հղման ժամկետն ավարտվել է, խնդրում ենք փ�
 
 msgid "Instructions for the password change procedure"
 msgstr "Գաղտնաբառը փոխելու ընթացակարգի հրահանգներ"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Այս հաղորդագրությունն ուղարկվում է ձեզ, քանի որ դուք (կամ ինչ-որ մեկը, ով փորձում է ներկայանալ որպես դուք) խնդրել եք նոր գաղտնաբառ ստեղծել ձեր հաշվի համար։<br\/>Նոր գաղտնաբառը սահմանելու համար հետևեք այս հղմանը.<br\/>%s<br\/>Եթե դուք չեք կատարել այս հարցումը, կարող եք պարզապես անտեսել այս հաղորդագրությունը։ Եթե շարունակեք ստանալ նման հաղորդագրություններ, դիմեք պորտալի ադմինիստրատորին։"
 
 msgid "Remind Course Expiration cron"
 msgstr "Հիշեցնել դասընթացի ժամկետի ավարտի cron"
@@ -39112,8 +39163,8 @@ msgstr "Ինքնաթարմացում յուրաքանչյուր 5 վայրկյա
 msgid "Web server load"
 msgstr "Վեբ սերվերի բեռնվածություն"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Apache կամ Nginx-ի կենդանի կարգավիճակի ցուցանիշներ"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Apache, Nginx կամ FrankenPHP կենդանի կարգավիճակի ցուցանիշներ"
 
 msgid "Click to show web server load metrics"
 msgstr "Սեղմեք՝ վեբ սերվերի բեռնվածության ցուցանիշները ցուցադրելու համար"
@@ -39121,8 +39172,8 @@ msgstr "Սեղմեք՝ վեբ սերվերի բեռնվածության ցուց
 msgid "Requires a local web server status module"
 msgstr "Պահանջում է տեղային վեբ սերվերի կարգավիճակի մոդուլ"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Վեբ սերվերի բեռնվածությունը կարդացվում է միայն localhost-ից Apache mod_status կամ Nginx stub_status-ից։ Կարգավիճակի էջը պետք է թույլատրի հարցումներ 127.0.0.1 (կամ ::1) հասցեից։"
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Վեբ սերվերի ծանրաբեռնվածությունը կարդացվում է միայն localhost-ից՝ Apache mod_status-ից, Nginx stub_status-ից կամ FrankenPHP\/Caddy ցուցանիշների վերջնակետից։ Կարգավիճակի էջը պետք է թույլատրի հարցումներ 127.0.0.1-ից (կամ ::1-ից)։"
 
 msgid "Paths scanned"
 msgstr "Սկանավորված ուղիներ"
@@ -39133,8 +39184,8 @@ msgstr "Հայտնաբերված"
 msgid "Status path"
 msgstr "Կարգավիճակի ուղի"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Վեբ սերվերի բեռնվածության ցուցանիշները հասանելի են միայն Apache և Nginx-ի համար։"
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Վեբ սերվերի ծանրաբեռնվածության ցուցանիշները հասանելի են միայն Apache, Nginx և FrankenPHP-ի համար։"
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Սկանավորված կարգավիճակի ուղիներից ոչ մեկը չի պատասխանել localhost-ում։"
@@ -39217,8 +39268,23 @@ msgstr "Ընդունվածներ"
 msgid "Handled"
 msgstr "Մշակվածներ"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: միացրեք mod_status (ExtendedStatus On) և թույլատրեք localhost-ին /server-status: Nginx: միացրեք stub_status-ը միայն localhost-ի համար նախատեսված տեղում, օրինակ՝ /nginx_status կամ /stub_status:"
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache. միացրեք mod_status (ExtendedStatus On) և թույլատրեք localhost-ին մուտք դեպի \/server-status։ Nginx. միացրեք stub_status միայն localhost-ի համար նախատեսված տեղում, օրինակ՝ \/nginx_status կամ \/stub_status։ FrankenPHP. Caddyfile-ում ավելացրեք գլոբալ \"metrics\" տարբերակը, որը լռելյայն բացում է Prometheus ցուցանիշները Caddy-ի ադմինիստրատիվ API-ում (127.0.0.1:2019\/metrics)։"
+
+msgid "Total threads"
+msgstr "Ընդհանուր հոսքեր"
+
+msgid "Busy threads"
+msgstr "Զբաղված հոսքեր"
+
+msgid "Queue depth"
+msgstr "Հերթի խորություն"
+
+msgid "Worker"
+msgstr "Աշխատող"
+
+msgid "Average request time"
+msgstr "Հարցման միջին ժամանակ"
 
 msgid "Grade percentage distribution"
 msgstr "Գնահատականների տոկոսային բաշխում"
@@ -39286,11 +39352,17 @@ msgstr "OPcache-ը տեղադրված է, բայց միացված չէ։"
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache ընդլայնումը հասանելի չէ այս սերվերում։"
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache-ը հաղորդում է անհամապատասխան հիշողության վիճակագրություն (հայտնի խնդիր որոշ բազմահոսքային PHP միջավայրերում, օրինակ՝ FrankenPHP)։"
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu-ն տեղադրված է, բայց միացված չէ։"
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu ընդլայնումը հասանելի չէ այս սերվերում։"
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu-ն հաղորդում է անհամապատասխան հիշողության վիճակագրություն (հայտնի խնդիր որոշ բազմահոսքային PHP միջավայրերում)։"
 
 msgid "Constant"
 msgstr "Հաստատուն"
@@ -40050,4 +40122,10 @@ msgstr "Օգտագործել նիստի մուտքի ամսաթվերը"
 
 msgid "Use session access end date"
 msgstr "Օգտագործել նիստի մուտքի ավարտի ամսաթիվը"
+
+msgid "Group report"
+msgstr "Խմբի հաշվետվություն"
+
+msgid "Student follow-up"
+msgstr "Ուսանողի հետևում"
 

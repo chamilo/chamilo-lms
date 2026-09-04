@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ekzemplo de formulo: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ekzemplo de formulo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -7717,6 +7717,54 @@ msgstr "Demandaro de la ekzerco"
 
 msgid "Recycle existing questions"
 msgstr "Uzu demandon el la aro  XX"
+
+msgid "Add this question to the test: %s"
+msgstr "Aldonu ĉi tiun demandon al la testo: %s"
+
+msgid "Edit question: %s"
+msgstr "Redaktu demandon: %s"
+
+msgid "Add a question: %s"
+msgstr "Aldonu demandon: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Detektitaj malplenoj: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s demandoj, por totala poentaro (ĉiuj demandoj) de %s."
+
+msgid "Unique answer"
+msgstr "Unika respondo"
+
+msgid "Multiple answer true/false"
+msgstr "Multobla respondo vera/falsa"
+
+msgid "Multiple answer combination true/false"
+msgstr "Kombinaĵo de multobla respondo vera/falsa"
+
+msgid "Unique answer with images"
+msgstr "Unika respondo kun bildoj"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Multobla respondo vera/falsa kun grado de certeco"
+
+msgid "Answer in Office document"
+msgstr "Respondo en Office-dokumento"
+
+msgid "Matching draggable"
+msgstr "Ŝovebla kongruigo"
+
+msgid "Matching draggable combination"
+msgstr "Kombinaĵo de ŝovebla kongruigo"
+
+msgid "Fill in blanks combination"
+msgstr "Kombinaĵo de plenigo de malplenoj"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Kombinaĵo de multobla respondo per falmenuo"
+
+msgid "Matching combination"
+msgstr "Kombinaĵo de kongruigo"
 
 msgid "Correct test"
 msgstr "Fini la teston"
@@ -20542,6 +20590,9 @@ msgstr "Ligo eksvalidiĝis, bonvolu reprovi."
 
 msgid "Instructions for the password change procedure"
 msgstr "Instrukcioj por la procedo de ŝanĝo de pasvorto"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Ĉi tiu mesaĝo estas sendata al vi ĉar vi (aŭ iu kiu provas ŝajnigi vin) petis, ke nova pasvorto estu generita por via konto.<br/>Por agordi vian novan pasvorton, bonvolu sekvi ĉi tiun ligilon:<br/>%s<br/>Se vi ne faris ĉi tiun peton, vi povas simple ignori ĉi tiun mesaĝon. Se vi daŭre ricevas ĉi tiujn mesaĝojn, bonvolu kontakti la administranton de la portalo."
 
 msgid "Remind Course Expiration cron"
 msgstr "Rapeli finiĝon de kurso cron"
@@ -39114,8 +39165,8 @@ msgstr "Aŭtomata refreŝigo ĉiujn 5 sekundojn"
 msgid "Web server load"
 msgstr "Ŝarĝo de retservilo"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Vivaj metrikoj de Apache aŭ Nginx"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Vivaj statusaj metrikoj de Apache, Nginx aŭ FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Alklaku por montri ŝarĝajn metrikojn de retservilo"
@@ -39123,8 +39174,8 @@ msgstr "Alklaku por montri ŝarĝajn metrikojn de retservilo"
 msgid "Requires a local web server status module"
 msgstr "Postulas lokan retservilan statmodulon"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Ŝarĝo de retservilo estas legita nur el Apache mod_status aŭ Nginx stub_status sur localhost. La statpaĝo devas permesi petojn de 127.0.0.1 (aŭ ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "La ŝarĝo de la retservilo estas legata el Apache mod_status, Nginx stub_status aŭ la metrikoj-finpunkto de FrankenPHP/Caddy, nur sur localhost. La statuspaĝo devas permesi petojn de 127.0.0.1 (aŭ ::1)."
 
 msgid "Paths scanned"
 msgstr "Skanitaj vojoj"
@@ -39135,8 +39186,8 @@ msgstr "Detektita"
 msgid "Status path"
 msgstr "Statvojo"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Ŝarĝaj metrikoj de retservilo disponeblas nur por Apache kaj Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Metrikoj de ŝarĝo de retservilo estas haveblaj nur por Apache, Nginx kaj FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Neniu el la skanitaj statvojoj respondis sur localhost."
@@ -39219,8 +39270,23 @@ msgstr "Akceptitaj"
 msgid "Handled"
 msgstr "Traktitaj"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: ebligu mod_status (ExtendedStatus On) kaj permesu localhost al /server-status. Nginx: ebligu stub_status en loka nur-loko kiel /nginx_status aŭ /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: ebligu mod_status (ExtendedStatus On) kaj permesu localhost al /server-status. Nginx: ebligu stub_status sur loko nur por localhost kiel /nginx_status aŭ /stub_status. FrankenPHP: aldonu tutmondan \"metrics\" opcion al la Caddyfile, kiu elmontras Prometheus-metrikojn sur la admin-API de Caddy (127.0.0.1:2019/metrics) defaŭlte."
+
+msgid "Total threads"
+msgstr "Entute fadenoj"
+
+msgid "Busy threads"
+msgstr "Okupataj fadenoj"
+
+msgid "Queue depth"
+msgstr "Profundo de atendovico"
+
+msgid "Worker"
+msgstr "Laboristo"
+
+msgid "Average request time"
+msgstr "Meza tempo de peto"
 
 msgid "Grade percentage distribution"
 msgstr "Distribuo de notprocentoj"
@@ -39288,11 +39354,17 @@ msgstr "OPcache estas instalita sed ne ebligita."
 msgid "OPcache extension is not available on this server."
 msgstr "La etendaĵo OPcache ne disponeblas sur ĉi tiu servilo."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache raportas nekonsekvencajn memorstatistikojn (konata problemo ĉe iuj fadenaj PHP-rultempoj, ekz. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu estas instalita sed ne ebligita."
 
 msgid "APCu extension is not available on this server."
 msgstr "La etendaĵo APCu ne disponeblas sur ĉi tiu servilo."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu raportas nekonsekvencajn memorstatistikojn (konata problemo ĉe iuj fadenaj PHP-rultempoj)."
 
 msgid "Constant"
 msgstr "Konstanto"
@@ -40052,4 +40124,10 @@ msgstr "Uzi datojn de aliro al sesio"
 
 msgid "Use session access end date"
 msgstr "Uzi finodaton de aliro al sesio"
+
+msgid "Group report"
+msgstr "Grupraporto"
+
+msgid "Student follow-up"
+msgstr "Sekvado de studento"
 

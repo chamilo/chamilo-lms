@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sim:copyright,, não:sem copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Pasta,, application/msword:MsWord,, application/octet-stream:Fluxo de octetos,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Pasta,, application\/msword:MsWord,, application\/octet-stream:Fluxo de octetos,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercício,, simulation:simulação,, questionnaire:questionário,, diagram:diagrama,, figure:figura,, graph:gráfico,, index:índice,, slide:slide,, table:tabela,, narrative text:texto narrativo,, exam:teste,, experiment:experimento,, problem statement:problema proposto,, self assessment:auto ajuda,, lecture:leitura"
@@ -7725,6 +7725,54 @@ msgstr "Lista de questões do exercício"
 
 msgid "Recycle existing questions"
 msgstr "Reutilizar uma questão existente"
+
+msgid "Add this question to the test: %s"
+msgstr "Adicionar esta pergunta ao teste: %s"
+
+msgid "Edit question: %s"
+msgstr "Editar pergunta: %s"
+
+msgid "Add a question: %s"
+msgstr "Adicionar uma pergunta: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Lacunas detectadas: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s perguntas, para uma pontuação total (todas as perguntas) de %s."
+
+msgid "Unique answer"
+msgstr "Resposta única"
+
+msgid "Multiple answer true/false"
+msgstr "Múltipla escolha verdadeiro/falso"
+
+msgid "Multiple answer combination true/false"
+msgstr "Combinação de múltiplas respostas verdadeiro/falso"
+
+msgid "Unique answer with images"
+msgstr "Resposta única com imagens"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Múltipla escolha verdadeiro/falso com grau de certeza"
+
+msgid "Answer in Office document"
+msgstr "Resposta em documento do Office"
+
+msgid "Matching draggable"
+msgstr "Associação arrastável"
+
+msgid "Matching draggable combination"
+msgstr "Combinação de associação arrastável"
+
+msgid "Fill in blanks combination"
+msgstr "Combinação de preencher lacunas"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Combinação de múltiplas respostas em lista suspensa"
+
+msgid "Matching combination"
+msgstr "Combinação de associação"
 
 msgid "Correct test"
 msgstr "Finalizar Exercício"
@@ -20555,6 +20603,9 @@ msgstr "Link expirou, por favor, tente novamente."
 
 msgid "Instructions for the password change procedure"
 msgstr "Instruções para o procedimento de mudança de senha"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Esta mensagem está sendo enviada porque você (ou alguém tentando se passar por você) solicitou a geração de uma nova senha para sua conta.<br/>Para definir sua nova senha, siga este link:<br/>%s<br/>Se você não fez esta solicitação, pode simplesmente ignorar esta mensagem. Se continuar recebendo estas mensagens, entre em contato com o administrador do portal."
 
 msgid "Remind Course Expiration cron"
 msgstr "Lembre Course Vencimento cron"
@@ -39127,8 +39178,8 @@ msgstr "Atualização automática a cada 5 segundos"
 msgid "Web server load"
 msgstr "Carga do servidor web"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Métricas de status do Apache ou Nginx em tempo real"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Métricas de status ao vivo do Apache, Nginx ou FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Clique para exibir as métricas de carga do servidor web"
@@ -39136,8 +39187,8 @@ msgstr "Clique para exibir as métricas de carga do servidor web"
 msgid "Requires a local web server status module"
 msgstr "Requer um módulo de status do servidor web local"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "A carga do servidor web é lida do mod_status do Apache ou do stub_status do Nginx apenas no localhost. A página de status deve permitir solicitações de 127.0.0.1 (ou ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "A carga do servidor web é lida do Apache mod_status, Nginx stub_status ou do endpoint de métricas do FrankenPHP/Caddy, somente em localhost. A página de status deve permitir requisições de 127.0.0.1 (ou ::1)."
 
 msgid "Paths scanned"
 msgstr "Caminhos verificados"
@@ -39148,8 +39199,8 @@ msgstr "Detectado"
 msgid "Status path"
 msgstr "Caminho de status"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "As métricas de carga do servidor web estão disponíveis apenas para Apache e Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "As métricas de carga do servidor web estão disponíveis apenas para Apache, Nginx e FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Nenhum dos caminhos de status verificados respondeu no localhost."
@@ -39232,8 +39283,23 @@ msgstr "Aceitas"
 msgid "Handled"
 msgstr "Tratadas"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: habilite mod_status (ExtendedStatus On) e permita localhost em /server-status. Nginx: habilite stub_status em um local restrito a localhost, como /nginx_status ou /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: habilite o mod_status (ExtendedStatus On) e permita localhost em /server-status. Nginx: habilite stub_status em um local somente localhost, como /nginx_status ou /stub_status. FrankenPHP: adicione uma opção global \"metrics\" ao Caddyfile, que expõe métricas Prometheus na API de administração do Caddy (127.0.0.1:2019/metrics) por padrão."
+
+msgid "Total threads"
+msgstr "Total de threads"
+
+msgid "Busy threads"
+msgstr "Threads ocupadas"
+
+msgid "Queue depth"
+msgstr "Profundidade da fila"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Tempo médio de requisição"
 
 msgid "Grade percentage distribution"
 msgstr "Distribuição percentual de notas"
@@ -39301,11 +39367,17 @@ msgstr "O OPcache está instalado, mas não está ativado."
 msgid "OPcache extension is not available on this server."
 msgstr "A extensão OPcache não está disponível neste servidor."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "O OPcache está relatando estatísticas de memória inconsistentes (um problema conhecido em alguns runtimes PHP com threads, p. ex. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "O APCu está instalado, mas não está ativado."
 
 msgid "APCu extension is not available on this server."
 msgstr "A extensão APCu não está disponível neste servidor."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "O APCu está relatando estatísticas de memória inconsistentes (um problema conhecido em alguns runtimes PHP com threads)."
 
 msgid "Constant"
 msgstr "Constante"
@@ -40065,4 +40137,10 @@ msgstr "Usar datas de acesso da sessão"
 
 msgid "Use session access end date"
 msgstr "Usar data final de acesso da sessão"
+
+msgid "Group report"
+msgstr "Relatório do grupo"
+
+msgid "Student follow-up"
+msgstr "Acompanhamento do aluno"
 

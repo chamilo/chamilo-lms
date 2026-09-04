@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med venlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-eksempel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formelprøve: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervaller"
@@ -7717,6 +7717,54 @@ msgstr "Oversigt over øvelsens spørgsmål"
 
 msgid "Recycle existing questions"
 msgstr "Tag et spørgsmål fra en anden øvelse"
+
+msgid "Add this question to the test: %s"
+msgstr "Tilføj dette spørgsmål til testen: %s"
+
+msgid "Edit question: %s"
+msgstr "Rediger spørgsmål: %s"
+
+msgid "Add a question: %s"
+msgstr "Tilføj et spørgsmål: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Registrerede huller: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s spørgsmål, med en samlet score (alle spørgsmål) på %s."
+
+msgid "Unique answer"
+msgstr "Unikt svar"
+
+msgid "Multiple answer true/false"
+msgstr "Flere svar sandt/falsk"
+
+msgid "Multiple answer combination true/false"
+msgstr "Flere svar kombination sandt/falsk"
+
+msgid "Unique answer with images"
+msgstr "Unikt svar med billeder"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Flere svar sandt/falsk med sikkerhedsgrad"
+
+msgid "Answer in Office document"
+msgstr "Svar i Office-dokument"
+
+msgid "Matching draggable"
+msgstr "Matchning med træk og slip"
+
+msgid "Matching draggable combination"
+msgstr "Matchning med træk og slip, kombination"
+
+msgid "Fill in blanks combination"
+msgstr "Udfyld huller, kombination"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Flere svar rullemenu, kombination"
+
+msgid "Matching combination"
+msgstr "Matchning, kombination"
 
 msgid "Correct test"
 msgstr "Afslut øvelsen"
@@ -20542,6 +20590,9 @@ msgstr "Link udløbet, prøv igen."
 
 msgid "Instructions for the password change procedure"
 msgstr "Instruktioner til adgangskodeændringsproceduren"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Denne meddelelse sendes til dig, fordi du (eller nogen, der forsøger at udgive sig for at være dig) har anmodet om, at der genereres en ny adgangskode til din konto.<br/>For at angive din nye adgangskode skal du følge dette link:<br/>%s<br/>Hvis du ikke har sendt denne anmodning, kan du blot ignorere denne meddelelse. Hvis du fortsat modtager disse meddelelser, bedes du kontakte portaladministratoren."
 
 msgid "Remind Course Expiration cron"
 msgstr "Påmind kursusudløb cron"
@@ -39114,8 +39165,8 @@ msgstr "Auto-opdatering hvert 5. sekund"
 msgid "Web server load"
 msgstr "Webserverbelastning"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Live Apache- eller Nginx-statusmålinger"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Live Apache-, Nginx- eller FrankenPHP-statusmålinger"
 
 msgid "Click to show web server load metrics"
 msgstr "Klik for at vise webserverbelastningsmålinger"
@@ -39123,8 +39174,8 @@ msgstr "Klik for at vise webserverbelastningsmålinger"
 msgid "Requires a local web server status module"
 msgstr "Kræver et lokalt webserver-statusmodul"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Webserverbelastning læses kun fra Apache mod_status eller Nginx stub_status på localhost. Statussiden skal tillade anmodninger fra 127.0.0.1 (eller ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Webserverbelastning læses fra Apache mod_status, Nginx stub_status eller FrankenPHP/Caddy-målingsendepunktet, kun på localhost. Statussiden skal tillade anmodninger fra 127.0.0.1 (eller ::1)."
 
 msgid "Paths scanned"
 msgstr "Stier scannet"
@@ -39135,8 +39186,8 @@ msgstr "Fundet"
 msgid "Status path"
 msgstr "Statussti"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Webserverens belastningsmålinger er kun tilgængelige for Apache og Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Målinger af webserverbelastning er kun tilgængelige for Apache, Nginx og FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Ingen af de scannede statusstier svarede på localhost."
@@ -39219,8 +39270,23 @@ msgstr "Accepterer"
 msgid "Handled"
 msgstr "Håndteret"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: aktiver mod_status (ExtendedStatus On) og tillad localhost til /server-status. Nginx: aktiver stub_status på en kun-localhost-placering som /nginx_status eller /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: aktivér mod_status (ExtendedStatus On) og tillad localhost til /server-status. Nginx: aktivér stub_status på en placering kun for localhost, f.eks. /nginx_status eller /stub_status. FrankenPHP: tilføj en global \"metrics\"-indstilling i Caddyfile, som som standard eksponerer Prometheus-målinger på Caddys admin-API (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Tråde i alt"
+
+msgid "Busy threads"
+msgstr "Optagne tråde"
+
+msgid "Queue depth"
+msgstr "Kødybde"
+
+msgid "Worker"
+msgstr "Arbejder"
+
+msgid "Average request time"
+msgstr "Gennemsnitlig anmodningstid"
 
 msgid "Grade percentage distribution"
 msgstr "Fordeling af karakterprocenter"
@@ -39288,11 +39354,17 @@ msgstr "OPcache er installeret, men ikke aktiveret."
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache-udvidelsen er ikke tilgængelig på denne server."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache rapporterer inkonsistente hukommelsesstatistikker (et kendt problem på visse trådede PHP-runtimes, f.eks. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu er installeret, men ikke aktiveret."
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu-udvidelsen er ikke tilgængelig på denne server."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu rapporterer inkonsistente hukommelsesstatistikker (et kendt problem på visse trådede PHP-runtimes)."
 
 msgid "Constant"
 msgstr "Konstant"
@@ -40052,4 +40124,10 @@ msgstr "Brug sessionens adgangsdatoer"
 
 msgid "Use session access end date"
 msgstr "Brug sessionens adgangsslutdato"
+
+msgid "Group report"
+msgstr "Grupperapport"
+
+msgid "Student follow-up"
+msgstr "Studerendeopfølgning"
 

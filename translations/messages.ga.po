@@ -7717,6 +7717,54 @@ msgstr "Liosta ceisteanna na trialach"
 msgid "Recycle existing questions"
 msgstr "Athchúrsáil ceisteanna atá ann cheana"
 
+msgid "Add this question to the test: %s"
+msgstr "Cuir an cheist seo leis an tástáil: %s"
+
+msgid "Edit question: %s"
+msgstr "Cuir an cheist in eagar: %s"
+
+msgid "Add a question: %s"
+msgstr "Cuir ceist leis: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Bearnaí braite: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s ceist, le haghaidh scór iomlán (gach ceist) de %s."
+
+msgid "Unique answer"
+msgstr "Freagra uathúil"
+
+msgid "Multiple answer true/false"
+msgstr "Ilfhreagra fíor/bréagach"
+
+msgid "Multiple answer combination true/false"
+msgstr "Teaglaim ilfhreagra fíor/bréagach"
+
+msgid "Unique answer with images"
+msgstr "Freagra uathúil le híomhánna"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Ilfhreagra fíor/bréagach le céim chinnteachta"
+
+msgid "Answer in Office document"
+msgstr "Freagra i ndoiciméad Office"
+
+msgid "Matching draggable"
+msgstr "Meaitseáil tarraingthe"
+
+msgid "Matching draggable combination"
+msgstr "Teaglaim meaitseála tarraingthe"
+
+msgid "Fill in blanks combination"
+msgstr "Teaglaim líon na bearnaí"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Teaglaim anuas ilfhreagra"
+
+msgid "Matching combination"
+msgstr "Teaglaim meaitseála"
+
 msgid "Correct test"
 msgstr "Trialach cheart"
 
@@ -20541,6 +20589,9 @@ msgstr "Nasc imithe in éag, déan iarracht arís."
 
 msgid "Instructions for the password change procedure"
 msgstr "Treoracha do nós imeachta athrú pasfhocail"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Tá an teachtaireacht seo á seoladh chugat toisc gur iarr tú (nó duine éigin ag iarraidh aithris a dhéanamh ort) go nginfí pasfhocal nua do do chuntas.<br/>Chun do phasfhocal nua a shocrú, lean an nasc seo le do thoil:<br/>%s<br/>Mura ndearna tú an t-iarratas seo, is féidir leat neamhaird a dhéanamh den teachtaireacht seo. Má leanann tú ag fáil na dteachtaireachtaí seo, déan teagmháil le riarthóir an tairseach."
 
 msgid "Remind Course Expiration cron"
 msgstr "Meabhair cron Éaga Cúrsa"
@@ -39112,8 +39163,8 @@ msgstr "Uath-athnuachan gach 5 soicind"
 msgid "Web server load"
 msgstr "Ualach freastalaí gréasáin"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Méadrachtaí stádais Apache nó Nginx beo"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Méadrachtaí stádais Apache, Nginx nó FrankenPHP beo"
 
 msgid "Click to show web server load metrics"
 msgstr "Cliceáil chun méadrachtaí ualaigh freastalaí gréasáin a thaispeáint"
@@ -39121,8 +39172,8 @@ msgstr "Cliceáil chun méadrachtaí ualaigh freastalaí gréasáin a thaispeái
 msgid "Requires a local web server status module"
 msgstr "Teastaíonn modúl stádais freastalaí gréasáin áitiúil"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Léitear ualach freastalaí gréasáin ó Apache mod_status nó Nginx stub_status ar localhost amháin. Caithfidh an leathanach stádais cead a thabhairt d’iarratais ó 127.0.0.1 (nó ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Léitear ualach an fhreastalaí gréasáin ó Apache mod_status, Nginx stub_status, nó críochphointe méadrachtaí FrankenPHP/Caddy, ar localhost amháin. Ní mór don leathanach stádais iarratais ó 127.0.0.1 (nó ::1) a cheadú."
 
 msgid "Paths scanned"
 msgstr "Conairí scanta"
@@ -39133,8 +39184,8 @@ msgstr "Braite"
 msgid "Status path"
 msgstr "Conair stádais"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Níl méadrachtaí ualaigh freastalaí gréasáin ar fáil ach amháin do Apache agus Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Níl méadrachtaí ualaigh an fhreastalaí gréasáin ar fáil ach do Apache, Nginx agus FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Níor fhreagair aon cheann de na conairí stádais scanta ar localhost."
@@ -39217,8 +39268,23 @@ msgstr "Glactha"
 msgid "Handled"
 msgstr "Láimhseáilte"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: cumasaigh mod_status (ExtendedStatus On) agus ceadaigh localhost chuig /server-status. Nginx: cumasaigh stub_status ar shuíomh localhost amháin mar /nginx_status nó /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: cumasaigh mod_status (ExtendedStatus On) agus ceadaigh localhost chuig /server-status. Nginx: cumasaigh stub_status ar shuíomh localhost amháin mar /nginx_status nó /stub_status. FrankenPHP: cuir rogha dhomhanda \"metrics\" leis an Caddyfile, a nochtann méadrachtaí Prometheus ar API riaracháin Caddy (127.0.0.1:2019/metrics) de réir réamhshocraithe."
+
+msgid "Total threads"
+msgstr "Snáitheanna iomlána"
+
+msgid "Busy threads"
+msgstr "Snáitheanna gnóthacha"
+
+msgid "Queue depth"
+msgstr "Doimhneacht scuaine"
+
+msgid "Worker"
+msgstr "Oibrí"
+
+msgid "Average request time"
+msgstr "Meán-am iarratais"
 
 msgid "Grade percentage distribution"
 msgstr "Dáileadh céatadáin grád"
@@ -39286,11 +39352,17 @@ msgstr "Tá OPcache suiteáilte ach níl sé cumasaithe."
 msgid "OPcache extension is not available on this server."
 msgstr "Níl an eisínteacht OPcache ar fáil ar an bhfreastalaí seo."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "Tá OPcache ag tuairisciú staitisticí cuimhne neamhchomhsheasmhacha (fadhb aitheanta ar roinnt rith-ama PHP snáithithe, m.sh. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "Tá APCu suiteáilte ach níl sé cumasaithe."
 
 msgid "APCu extension is not available on this server."
 msgstr "Níl an eisínteacht APCu ar fáil ar an bhfreastalaí seo."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "Tá APCu ag tuairisciú staitisticí cuimhne neamhchomhsheasmhacha (fadhb aitheanta ar roinnt rith-ama PHP snáithithe)."
 
 msgid "Constant"
 msgstr "Tairiseach"
@@ -40050,4 +40122,10 @@ msgstr "Úsáid dátaí rochtana an tseisiúin"
 
 msgid "Use session access end date"
 msgstr "Úsáid dáta deiridh rochtana an tseisiúin"
+
+msgid "Group report"
+msgstr "Tuairisc ghrúpa"
+
+msgid "Student follow-up"
+msgstr "Leanúint mac léinn"
 

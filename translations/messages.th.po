@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ตัวอย่างสูตร: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "สูตรตัวอย่าง: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -7717,6 +7717,54 @@ msgstr "รายการคำถามของแบบทดสอบ"
 
 msgid "Recycle existing questions"
 msgstr "เลือกคำถามที่มีจากฐานข้อมูล"
+
+msgid "Add this question to the test: %s"
+msgstr "เพิ่มคำถามนี้ลงในการทดสอบ: %s"
+
+msgid "Edit question: %s"
+msgstr "แก้ไขคำถาม: %s"
+
+msgid "Add a question: %s"
+msgstr "เพิ่มคำถาม: %s"
+
+msgid "Detected blanks: %s"
+msgstr "ช่องว่างที่ตรวจพบ: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s คำถาม คะแนนรวม (ทุกคำถาม) %s"
+
+msgid "Unique answer"
+msgstr "คำตอบเดียว"
+
+msgid "Multiple answer true/false"
+msgstr "หลายคำตอบ จริง/เท็จ"
+
+msgid "Multiple answer combination true/false"
+msgstr "ชุดหลายคำตอบ จริง/เท็จ"
+
+msgid "Unique answer with images"
+msgstr "คำตอบเดียวพร้อมรูปภาพ"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "หลายคำตอบ จริง/เท็จ พร้อมระดับความมั่นใจ"
+
+msgid "Answer in Office document"
+msgstr "คำตอบในเอกสาร Office"
+
+msgid "Matching draggable"
+msgstr "จับคู่แบบลากวาง"
+
+msgid "Matching draggable combination"
+msgstr "ชุดจับคู่แบบลากวาง"
+
+msgid "Fill in blanks combination"
+msgstr "ชุดเติมช่องว่าง"
+
+msgid "Multiple answer dropdown combination"
+msgstr "ชุดหลายคำตอบแบบดรอปดาวน์"
+
+msgid "Matching combination"
+msgstr "ชุดจับคู่"
 
 msgid "Correct test"
 msgstr "สอบเสร็จ"
@@ -20542,6 +20590,9 @@ msgstr "ลิงก์หมดอายุแล้ว กรุณาลอ�
 
 msgid "Instructions for the password change procedure"
 msgstr "คำแนะนำสำหรับขั้นตอนการเปลี่ยนรหัสผ่าน"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "ข้อความนี้ถูกส่งถึงคุณเนื่องจากคุณ (หรือผู้ที่พยายามแอบอ้างเป็นคุณ) ได้ขอให้สร้างรหัสผ่านใหม่สำหรับบัญชีของคุณ<br/>หากต้องการตั้งรหัสผ่านใหม่ โปรดไปที่ลิงก์นี้:<br/>%s<br/>หากคุณไม่ได้เป็นผู้ขอ คุณสามารถเพิกเฉยต่อข้อความนี้ได้ หากคุณยังคงได้รับข้อความเหล่านี้ โปรดติดต่อผู้ดูแลพอร์ทัล"
 
 msgid "Remind Course Expiration cron"
 msgstr "เตือนการหมดอายุหลักสูตร cron"
@@ -39114,8 +39165,8 @@ msgstr "รีเฟรชอัตโนมัติทุก 5 วินาท
 msgid "Web server load"
 msgstr "โหลดเว็บเซิร์ฟเวอร์"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "เมตริกสถานะ Apache หรือ Nginx แบบเรียลไทม์"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "เมตริกสถานะ Apache, Nginx หรือ FrankenPHP แบบเรียลไทม์"
 
 msgid "Click to show web server load metrics"
 msgstr "คลิกเพื่อแสดงเมตริกโหลดเว็บเซิร์ฟเวอร์"
@@ -39123,8 +39174,8 @@ msgstr "คลิกเพื่อแสดงเมตริกโหลดเ
 msgid "Requires a local web server status module"
 msgstr "ต้องใช้โมดูลสถานะเว็บเซิร์ฟเวอร์ภายในเครื่อง"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "โหลดเว็บเซิร์ฟเวอร์อ่านจาก Apache mod_status หรือ Nginx stub_status บน localhost เท่านั้น หน้าสถานะต้องอนุญาตคำขอจาก 127.0.0.1 (หรือ ::1)"
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "โหลดเว็บเซิร์ฟเวอร์อ่านจาก Apache mod_status, Nginx stub_status หรือจุดปลายเมตริก FrankenPHP/Caddy บน localhost เท่านั้น หน้าสถานะต้องอนุญาตคำขอจาก 127.0.0.1 (หรือ ::1)"
 
 msgid "Paths scanned"
 msgstr "เส้นทางที่สแกน"
@@ -39135,8 +39186,8 @@ msgstr "ตรวจพบ"
 msgid "Status path"
 msgstr "เส้นทางสถานะ"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "เมตริกโหลดเว็บเซิร์ฟเวอร์ใช้ได้เฉพาะ Apache และ Nginx เท่านั้น"
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "เมตริกโหลดเว็บเซิร์ฟเวอร์ใช้ได้เฉพาะ Apache, Nginx และ FrankenPHP"
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "ไม่มีเส้นทางสถานะที่สแกนตอบสนองบน localhost"
@@ -39219,8 +39270,23 @@ msgstr "ยอมรับ"
 msgid "Handled"
 msgstr "จัดการแล้ว"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: เปิดใช้งาน mod_status (ExtendedStatus On) และอนุญาต localhost เข้าถึง /server-status. Nginx: เปิดใช้งาน stub_status บนตำแหน่งที่จำกัดเฉพาะ localhost เช่น /nginx_status หรือ /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: เปิด mod_status (ExtendedStatus On) และอนุญาต localhost ไปที่ /server-status Nginx: เปิด stub_status ที่ตำแหน่งเฉพาะ localhost เช่น /nginx_status หรือ /stub_status FrankenPHP: เพิ่มตัวเลือกส่วนกลาง \"metrics\" ใน Caddyfile ซึ่งเปิดเผยเมตริก Prometheus บน Caddy admin API (127.0.0.1:2019/metrics) ตามค่าเริ่มต้น"
+
+msgid "Total threads"
+msgstr "เธรดทั้งหมด"
+
+msgid "Busy threads"
+msgstr "เธรดที่ใช้งานอยู่"
+
+msgid "Queue depth"
+msgstr "ความลึกคิว"
+
+msgid "Worker"
+msgstr "เวิร์กเกอร์"
+
+msgid "Average request time"
+msgstr "เวลาคำขอเฉลี่ย"
 
 msgid "Grade percentage distribution"
 msgstr "การกระจายเปอร์เซ็นต์เกรด"
@@ -39288,11 +39354,17 @@ msgstr "OPcache ติดตั้งแล้วแต่ไม่ได้เ�
 msgid "OPcache extension is not available on this server."
 msgstr "ส่วนขยาย OPcache ไม่พร้อมใช้งานบนเซิร์ฟเวอร์นี้"
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache รายงานสถิติหน่วยความจำไม่สอดคล้องกัน (ปัญหาที่ทราบในรันไทม์ PHP แบบเธรดบางตัว เช่น FrankenPHP)"
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu ติดตั้งแล้วแต่ยังไม่ได้เปิดใช้งาน"
 
 msgid "APCu extension is not available on this server."
 msgstr "ส่วนขยาย APCu ไม่พร้อมใช้งานบนเซิร์ฟเวอร์นี้"
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu รายงานสถิติหน่วยความจำไม่สอดคล้องกัน (ปัญหาที่ทราบในรันไทม์ PHP แบบเธรดบางตัว)"
 
 msgid "Constant"
 msgstr "ค่าคงที่"
@@ -40052,4 +40124,10 @@ msgstr "ใช้วันที่เข้าถึงเซสชัน"
 
 msgid "Use session access end date"
 msgstr "ใช้วันที่สิ้นสุดการเข้าถึงเซสชัน"
+
+msgid "Group report"
+msgstr "รายงานกลุ่ม"
+
+msgid "Student follow-up"
+msgstr "การติดตามผู้เรียน"
 

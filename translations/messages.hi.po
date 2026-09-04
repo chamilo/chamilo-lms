@@ -7713,6 +7713,54 @@ msgstr "परीक्षण का प्रश्न सूची"
 msgid "Recycle existing questions"
 msgstr "मौजूदा प्रश्नों का पुनर्चक्रण करें"
 
+msgid "Add this question to the test: %s"
+msgstr "इस प्रश्न को परीक्षण में जोड़ें: %s"
+
+msgid "Edit question: %s"
+msgstr "प्रश्न संपादित करें: %s"
+
+msgid "Add a question: %s"
+msgstr "प्रश्न जोड़ें: %s"
+
+msgid "Detected blanks: %s"
+msgstr "पहचाने गए रिक्त स्थान: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s प्रश्न, सभी प्रश्नों का कुल स्कोर %s।"
+
+msgid "Unique answer"
+msgstr "अद्वितीय उत्तर"
+
+msgid "Multiple answer true/false"
+msgstr "बहु उत्तर सत्य/असत्य"
+
+msgid "Multiple answer combination true/false"
+msgstr "बहु उत्तर संयोजन सत्य/असत्य"
+
+msgid "Unique answer with images"
+msgstr "छवियों के साथ अद्वितीय उत्तर"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "निश्चितता की डिग्री के साथ बहु उत्तर सत्य/असत्य"
+
+msgid "Answer in Office document"
+msgstr "ऑफिस दस्तावेज़ में उत्तर"
+
+msgid "Matching draggable"
+msgstr "मेल खाने वाला खींचने योग्य"
+
+msgid "Matching draggable combination"
+msgstr "मेल खाने वाला खींचने योग्य संयोजन"
+
+msgid "Fill in blanks combination"
+msgstr "रिक्त स्थान भरें संयोजन"
+
+msgid "Multiple answer dropdown combination"
+msgstr "बहु उत्तर ड्रॉपडाउन संयोजन"
+
+msgid "Matching combination"
+msgstr "मेल संयोजन"
+
 msgid "Correct test"
 msgstr "सही परीक्षण"
 
@@ -20537,6 +20585,9 @@ msgstr "लिंक समाप्त हो गया, कृपया पु
 
 msgid "Instructions for the password change procedure"
 msgstr "पासवर्ड परिवर्तन प्रक्रिया के निर्देश"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "यह संदेश आपको इसलिए भेजा जा रहा है क्योंकि आपने (या किसी ने आपके रूप में प्रस्तुत होकर) आपके खाते के लिए नया पासवर्ड जनरेट करने का अनुरोध किया है।<br/>अपना नया पासवर्ड सेट करने के लिए, कृपया इस लिंक का अनुसरण करें:<br/>%s<br/>यदि आपने यह अनुरोध नहीं किया है, तो आप इस संदेश को अनदेखा कर सकते हैं। यदि आपको ये संदेश मिलते रहते हैं, तो कृपया पोर्टल व्यवस्थापक से संपर्क करें।"
 
 msgid "Remind Course Expiration cron"
 msgstr "कोर्स समाप्ति स्मरण क्रॉन"
@@ -39108,8 +39159,8 @@ msgstr "हर 5 सेकंड में ऑटो-रिफ्रेश"
 msgid "Web server load"
 msgstr "वेब सर्वर लोड"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "लाइव Apache या Nginx स्थिति मेट्रिक्स"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "लाइव Apache, Nginx या FrankenPHP स्थिति मेट्रिक्स"
 
 msgid "Click to show web server load metrics"
 msgstr "वेब सर्वर लोड मेट्रिक्स दिखाने के लिए क्लिक करें"
@@ -39117,8 +39168,8 @@ msgstr "वेब सर्वर लोड मेट्रिक्स दि�
 msgid "Requires a local web server status module"
 msgstr "स्थानीय वेब सर्वर स्थिति मॉड्यूल की आवश्यकता"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "वेब सर्वर लोड केवल localhost पर Apache mod_status या Nginx stub_status से पढ़ा जाता है। स्थिति पृष्ठ को 127.0.0.1 (या ::1) से अनुरोध की अनुमति देनी चाहिए।"
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "वेब सर्वर लोड Apache mod_status, Nginx stub_status, या FrankenPHP/Caddy मेट्रिक्स एंडपॉइंट से केवल localhost पर पढ़ा जाता है। स्टेटस पेज को 127.0.0.1 (या ::1) से अनुरोधों की अनुमति देनी चाहिए।"
 
 msgid "Paths scanned"
 msgstr "स्कैन किए गए पथ"
@@ -39129,8 +39180,8 @@ msgstr "पहचाना गया"
 msgid "Status path"
 msgstr "स्थिति पथ"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "वेब सर्वर लोड मेट्रिक्स केवल Apache और Nginx के लिए उपलब्ध हैं।"
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "वेब सर्वर लोड मेट्रिक्स केवल Apache, Nginx और FrankenPHP के लिए उपलब्ध हैं।"
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "स्कैन किए गए स्थिति पथों में से कोई भी localhost पर प्रतिक्रिया नहीं दे रहा।"
@@ -39213,8 +39264,23 @@ msgstr "स्वीकार"
 msgid "Handled"
 msgstr "हैंडल किया गया"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: mod_status सक्षम करें (ExtendedStatus On) और localhost को /server-status की अनुमति दें। Nginx: localhost-only स्थान जैसे /nginx_status या /stub_status पर stub_status सक्षम करें।"
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status सक्षम करें (ExtendedStatus On) और localhost को /server-status की अनुमति दें। Nginx: केवल localhost स्थान जैसे /nginx_status या /stub_status पर stub_status सक्षम करें। FrankenPHP: Caddyfile में एक वैश्विक \"metrics\" विकल्प जोड़ें, जो डिफ़ॉल्ट रूप से Caddy के एडमिन API (127.0.0.1:2019/metrics) पर Prometheus मेट्रिक्स उपलब्ध कराता है।"
+
+msgid "Total threads"
+msgstr "कुल थ्रेड्स"
+
+msgid "Busy threads"
+msgstr "व्यस्त थ्रेड्स"
+
+msgid "Queue depth"
+msgstr "कतार की गहराई"
+
+msgid "Worker"
+msgstr "वर्कर"
+
+msgid "Average request time"
+msgstr "औसत अनुरोध समय"
 
 msgid "Grade percentage distribution"
 msgstr "ग्रेड प्रतिशत वितरण"
@@ -39282,11 +39348,17 @@ msgstr "OPcache स्थापित है लेकिन सक्षम न
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache एक्सटेंशन इस सर्वर पर उपलब्ध नहीं है।"
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache असंगत मेमोरी आँकड़े रिपोर्ट कर रहा है (कुछ थ्रेडेड PHP रनटाइम, जैसे FrankenPHP, पर ज्ञात समस्या)।"
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu स्थापित है लेकिन सक्षम नहीं है।"
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu एक्सटेंशन इस सर्वर पर उपलब्ध नहीं है।"
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu असंगत मेमोरी आँकड़े रिपोर्ट कर रहा है (कुछ थ्रेडेड PHP रनटाइम पर ज्ञात समस्या)।"
 
 msgid "Constant"
 msgstr "स्थिरांक"
@@ -40046,4 +40118,10 @@ msgstr "सत्र पहुँच तिथियों का उपयो�
 
 msgid "Use session access end date"
 msgstr "सत्र पहुँच समाप्ति तिथि का उपयोग करें"
+
+msgid "Group report"
+msgstr "समूह रिपोर्ट"
+
+msgid "Student follow-up"
+msgstr "छात्र अनुवर्ती"
 

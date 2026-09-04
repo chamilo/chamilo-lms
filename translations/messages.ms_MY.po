@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Sekiranya ini"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Julat pembolehubah"
@@ -7715,6 +7715,54 @@ msgstr "Senarai soalan dalam latihan"
 
 msgid "Recycle existing questions"
 msgstr "Dapatkan soalan dari latihan lain"
+
+msgid "Add this question to the test: %s"
+msgstr "Tambah soalan ini ke ujian: %s"
+
+msgid "Edit question: %s"
+msgstr "Sunting soalan: %s"
+
+msgid "Add a question: %s"
+msgstr "Tambah soalan: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Ruang kosong dikesan: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s soalan, untuk jumlah skor (semua soalan) sebanyak %s."
+
+msgid "Unique answer"
+msgstr "Jawapan unik"
+
+msgid "Multiple answer true/false"
+msgstr "Berbilang jawapan benar/palsu"
+
+msgid "Multiple answer combination true/false"
+msgstr "Kombinasi berbilang jawapan benar/palsu"
+
+msgid "Unique answer with images"
+msgstr "Jawapan unik dengan imej"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Berbilang jawapan benar/palsu dengan tahap kepastian"
+
+msgid "Answer in Office document"
+msgstr "Jawapan dalam dokumen Office"
+
+msgid "Matching draggable"
+msgstr "Padanan boleh seret"
+
+msgid "Matching draggable combination"
+msgstr "Kombinasi padanan boleh seret"
+
+msgid "Fill in blanks combination"
+msgstr "Kombinasi isi tempat kosong"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Kombinasi berbilang jawapan juntai bawah"
+
+msgid "Matching combination"
+msgstr "Kombinasi padanan"
 
 msgid "Correct test"
 msgstr "Uji betul"
@@ -20540,6 +20588,9 @@ msgstr "Pautan tamat tempoh, sila cuba lagi."
 
 msgid "Instructions for the password change procedure"
 msgstr "Arahan untuk prosedur pertukaran kata laluan"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Mesej ini dihantar kepada anda kerana anda (atau seseorang yang cuba menyamar sebagai anda) meminta kata laluan baharu dijana untuk akaun anda.<br/>Untuk menetapkan kata laluan baharu anda, sila ikuti pautan ini:<br/>%s<br/>Jika anda tidak membuat permintaan ini, anda boleh abaikan mesej ini. Jika anda terus menerima mesej ini, sila hubungi pentadbir portal."
 
 msgid "Remind Course Expiration cron"
 msgstr "Peringatan tamat tempoh kursus cron"
@@ -39112,8 +39163,8 @@ msgstr "Segar semula automatik setiap 5 saat"
 msgid "Web server load"
 msgstr "Beban pelayan web"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Metrik status Apache atau Nginx secara langsung"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Metrik status Apache, Nginx atau FrankenPHP secara langsung"
 
 msgid "Click to show web server load metrics"
 msgstr "Klik untuk menunjukkan metrik beban pelayan web"
@@ -39121,8 +39172,8 @@ msgstr "Klik untuk menunjukkan metrik beban pelayan web"
 msgid "Requires a local web server status module"
 msgstr "Memerlukan modul status pelayan web tempatan"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Beban pelayan web dibaca daripada Apache mod_status atau Nginx stub_status hanya pada localhost. Halaman status mesti membenarkan permintaan daripada 127.0.0.1 (atau ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Beban pelayan web dibaca daripada Apache mod_status, Nginx stub_status, atau titik akhir metrik FrankenPHP/Caddy, pada localhost sahaja. Halaman status mesti membenarkan permintaan daripada 127.0.0.1 (atau ::1)."
 
 msgid "Paths scanned"
 msgstr "Laluan yang diimbas"
@@ -39133,8 +39184,8 @@ msgstr "Dikesan"
 msgid "Status path"
 msgstr "Laluan status"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Metrik beban pelayan web hanya tersedia untuk Apache dan Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Metrik beban pelayan web hanya tersedia untuk Apache, Nginx dan FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Tiada laluan status yang diimbas bertindak balas pada localhost."
@@ -39217,8 +39268,23 @@ msgstr "Terima"
 msgid "Handled"
 msgstr "Dikendalikan"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: aktifkan mod_status (ExtendedStatus On) dan benarkan localhost ke /server-status. Nginx: aktifkan stub_status pada lokasi localhost sahaja seperti /nginx_status atau /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: dayakan mod_status (ExtendedStatus On) dan benarkan localhost ke /server-status. Nginx: dayakan stub_status pada lokasi localhost sahaja seperti /nginx_status atau /stub_status. FrankenPHP: tambah pilihan global \"metrics\" ke Caddyfile, yang mendedahkan metrik Prometheus pada API pentadbir Caddy (127.0.0.1:2019/metrics) secara lalai."
+
+msgid "Total threads"
+msgstr "Jumlah thread"
+
+msgid "Busy threads"
+msgstr "Thread sibuk"
+
+msgid "Queue depth"
+msgstr "Kedalaman baris gilir"
+
+msgid "Worker"
+msgstr "Pekerja"
+
+msgid "Average request time"
+msgstr "Purata masa permintaan"
 
 msgid "Grade percentage distribution"
 msgstr "Taburan peratusan gred"
@@ -39286,11 +39352,17 @@ msgstr "OPcache dipasang tetapi tidak diaktifkan."
 msgid "OPcache extension is not available on this server."
 msgstr "Sambungan OPcache tidak tersedia pada pelayan ini."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache melaporkan statistik memori yang tidak konsisten (isu diketahui pada beberapa runtime PHP berthread, cth. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu dipasang tetapi tidak diaktifkan."
 
 msgid "APCu extension is not available on this server."
 msgstr "Sambungan APCu tidak tersedia pada pelayan ini."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu melaporkan statistik memori yang tidak konsisten (isu diketahui pada beberapa runtime PHP berthread)."
 
 msgid "Constant"
 msgstr "Pemalar"
@@ -40050,4 +40122,10 @@ msgstr "Guna tarikh akses sesi"
 
 msgid "Use session access end date"
 msgstr "Guna tarikh tamat akses sesi"
+
+msgid "Group report"
+msgstr "Laporan kumpulan"
+
+msgid "Student follow-up"
+msgstr "Susulan pelajar"
 

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্রের নমুনা: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -7712,6 +7712,54 @@ msgstr "পরীক্ষার প্রশ্ন তালিকা"
 
 msgid "Recycle existing questions"
 msgstr "বিদ্যমান প্রশ্ন পুনর্ব্যবহার করুন"
+
+msgid "Add this question to the test: %s"
+msgstr "এই প্রশ্নটি পরীক্ষায় যোগ করুন: %s"
+
+msgid "Edit question: %s"
+msgstr "প্রশ্ন সম্পাদনা করুন: %s"
+
+msgid "Add a question: %s"
+msgstr "একটি প্রশ্ন যোগ করুন: %s"
+
+msgid "Detected blanks: %s"
+msgstr "সনাক্তকৃত শূন্যস্থান: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%sটি প্রশ্ন, মোট স্কোর (সব প্রশ্ন) %s।"
+
+msgid "Unique answer"
+msgstr "একক উত্তর"
+
+msgid "Multiple answer true/false"
+msgstr "একাধিক উত্তর সত্য/মিথ্যা"
+
+msgid "Multiple answer combination true/false"
+msgstr "একাধিক উত্তর সমন্বয় সত্য/মিথ্যা"
+
+msgid "Unique answer with images"
+msgstr "ছবিসহ একক উত্তর"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "নিশ্চয়তার মাত্রাসহ একাধিক উত্তর সত্য/মিথ্যা"
+
+msgid "Answer in Office document"
+msgstr "অফিস নথিতে উত্তর"
+
+msgid "Matching draggable"
+msgstr "টেনে মিলানো"
+
+msgid "Matching draggable combination"
+msgstr "টেনে মিলানো সমন্বয়"
+
+msgid "Fill in blanks combination"
+msgstr "শূন্যস্থান পূরণ সমন্বয়"
+
+msgid "Multiple answer dropdown combination"
+msgstr "একাধিক উত্তর ড্রপডাউন সমন্বয়"
+
+msgid "Matching combination"
+msgstr "মিলানো সমন্বয়"
 
 msgid "Correct test"
 msgstr "সঠিক পরীক্ষা"
@@ -20537,6 +20585,9 @@ msgstr "লিঙ্কের মেয়াদ শেষ, আবার চে�
 
 msgid "Instructions for the password change procedure"
 msgstr "পাসওয়ার্ড পরিবর্তন প্রক্রিয়ার নির্দেশনা"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "এই বার্তাটি আপনাকে পাঠানো হয়েছে কারণ আপনি (বা কেউ আপনার পরিচয় ধারণ করে) আপনার অ্যাকাউন্টের জন্য একটি নতুন পাসওয়ার্ড তৈরি করার অনুরোধ করেছেন।<br/>আপনার নতুন পাসওয়ার্ড সেট করতে অনুগ্রহ করে এই লিঙ্কটি অনুসরণ করুন:<br/>%s<br/>আপনি যদি এই অনুরোধ না করে থাকেন, তবে এই বার্তাটি উপেক্ষা করতে পারেন। যদি আপনি এ ধরনের বার্তা পেতে থাকেন, অনুগ্রহ করে পোর্টাল প্রশাসকের সাথে যোগাযোগ করুন।"
 
 msgid "Remind Course Expiration cron"
 msgstr "কোর্স মেয়াদ শেষের স্মারক cron"
@@ -39108,8 +39159,8 @@ msgstr "প্রতি ৫ সেকেন্ডে স্বয়ংক্র
 msgid "Web server load"
 msgstr "ওয়েব সার্ভার লোড"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "লাইভ Apache বা Nginx স্ট্যাটাস মেট্রিক্স"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "লাইভ Apache, Nginx বা FrankenPHP স্ট্যাটাস মেট্রিক্স"
 
 msgid "Click to show web server load metrics"
 msgstr "ওয়েব সার্ভার লোড মেট্রিক্স দেখতে ক্লিক করুন"
@@ -39117,8 +39168,8 @@ msgstr "ওয়েব সার্ভার লোড মেট্রিক্
 msgid "Requires a local web server status module"
 msgstr "একটি স্থানীয় ওয়েব সার্ভার স্ট্যাটাস মডিউল প্রয়োজন"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "ওয়েব সার্ভার লোড শুধুমাত্র localhost-এ Apache mod_status বা Nginx stub_status থেকে পড়া হয়। স্ট্যাটাস পেজ অবশ্যই 127.0.0.1 (বা ::1) থেকে অনুরোধ অনুমোদন করবে।"
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "ওয়েব সার্ভার লোড শুধুমাত্র লোকালহোস্টে Apache mod_status, Nginx stub_status, অথবা FrankenPHP/Caddy মেট্রিক্স এন্ডপয়েন্ট থেকে পড়া হয়। স্ট্যাটাস পৃষ্ঠাটি অবশ্যই 127.0.0.1 (বা ::1) থেকে অনুরোধ অনুমোদন করতে হবে।"
 
 msgid "Paths scanned"
 msgstr "স্ক্যান করা পাথ"
@@ -39129,8 +39180,8 @@ msgstr "সনাক্তকৃত"
 msgid "Status path"
 msgstr "স্ট্যাটাস পাথ"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "ওয়েব সার্ভার লোড মেট্রিক্স শুধুমাত্র Apache এবং Nginx-এর জন্য উপলব্ধ।"
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "ওয়েব সার্ভার লোড মেট্রিক্স শুধুমাত্র Apache, Nginx এবং FrankenPHP-এর জন্য উপলব্ধ।"
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "স্ক্যান করা কোনো স্ট্যাটাস পাথ localhost-এ সাড়া দেয়নি।"
@@ -39213,8 +39264,23 @@ msgstr "গৃহীত"
 msgid "Handled"
 msgstr "হ্যান্ডেলকৃত"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: mod_status সক্রিয় করুন (ExtendedStatus On) এবং localhost-কে /server-status অনুমোদন করুন। Nginx: localhost-এর জন্য শুধুমাত্র একটি লোকেশনে যেমন /nginx_status বা /stub_status-এ stub_status সক্রিয় করুন।"
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status সক্রিয় করুন (ExtendedStatus On) এবং লোকালহোস্টকে /server-status-এ অনুমতি দিন। Nginx: /nginx_status বা /stub_status-এর মতো শুধুমাত্র লোকালহোস্ট লোকেশনে stub_status সক্রিয় করুন। FrankenPHP: Caddyfile-এ একটি গ্লোবাল \"metrics\" অপশন যোগ করুন, যা ডিফল্টভাবে Caddy-এর অ্যাডমিন API-তে (127.0.0.1:2019/metrics) Prometheus মেট্রিক্স প্রকাশ করে।"
+
+msgid "Total threads"
+msgstr "মোট থ্রেড"
+
+msgid "Busy threads"
+msgstr "ব্যস্ত থ্রেড"
+
+msgid "Queue depth"
+msgstr "কিউ গভীরতা"
+
+msgid "Worker"
+msgstr "ওয়ার্কার"
+
+msgid "Average request time"
+msgstr "গড় অনুরোধ সময়"
 
 msgid "Grade percentage distribution"
 msgstr "গ্রেড শতাংশ বিতরণ"
@@ -39282,11 +39348,17 @@ msgstr "OPcache ইনস্টল করা আছে কিন্তু সক
 msgid "OPcache extension is not available on this server."
 msgstr "এই সার্ভারে OPcache এক্সটেনশন উপলব্ধ নয়।"
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache অসঙ্গত মেমরি পরিসংখ্যান রিপোর্ট করছে (কিছু থ্রেডেড PHP রানটাইমে, যেমন FrankenPHP-এ, একটি পরিচিত সমস্যা)।"
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu ইনস্টল করা আছে কিন্তু সক্রিয় নয়।"
 
 msgid "APCu extension is not available on this server."
 msgstr "এই সার্ভারে APCu এক্সটেনশন উপলব্ধ নয়।"
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu অসঙ্গত মেমরি পরিসংখ্যান রিপোর্ট করছে (কিছু থ্রেডেড PHP রানটাইমে একটি পরিচিত সমস্যা)।"
 
 msgid "Constant"
 msgstr "ধ্রুবক"
@@ -40046,4 +40118,10 @@ msgstr "সেশন অ্যাক্সেসের তারিখ ব্য
 
 msgid "Use session access end date"
 msgstr "সেশন অ্যাক্সেসের শেষ তারিখ ব্যবহার করুন"
+
+msgid "Group report"
+msgstr "গ্রুপ রিপোর্ট"
+
+msgid "Student follow-up"
+msgstr "শিক্ষার্থী ফলো-আপ"
 

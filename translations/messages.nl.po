@@ -2048,7 +2048,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:geen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octetstream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:oefening,,      simulation:simulatie,,      questionnaire:enquête,,      diagram:diagram,,      figure:figuur,,      graph:grafiek,,      index:index,,      slide:dia,,      table:tabel,,      narrative text:vertellende tekst,,      exam:examen,,      experiment:experiment,,      problem statement:probleemstelling,,      self assessment:zelftest,,      lecture:voordracht"
@@ -7758,6 +7758,54 @@ msgstr "Vragenlijst van de oefening"
 
 msgid "Recycle existing questions"
 msgstr "Gebruik een vraag van de base."
+
+msgid "Add this question to the test: %s"
+msgstr "Voeg deze vraag toe aan de toets: %s"
+
+msgid "Edit question: %s"
+msgstr "Vraag bewerken: %s"
+
+msgid "Add a question: %s"
+msgstr "Vraag toevoegen: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Gedetecteerde invulvelden: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s vragen, voor een totaalscore (alle vragen) van %s."
+
+msgid "Unique answer"
+msgstr "Uniek antwoord"
+
+msgid "Multiple answer true/false"
+msgstr "Meerkeuze waar/onwaar"
+
+msgid "Multiple answer combination true/false"
+msgstr "Meerkeuzecombinatie waar/onwaar"
+
+msgid "Unique answer with images"
+msgstr "Uniek antwoord met afbeeldingen"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Meerkeuze waar/onwaar met zekerheidsgraad"
+
+msgid "Answer in Office document"
+msgstr "Antwoord in Office-document"
+
+msgid "Matching draggable"
+msgstr "Koppelen (verslepen)"
+
+msgid "Matching draggable combination"
+msgstr "Koppelen (verslepen) combinatie"
+
+msgid "Fill in blanks combination"
+msgstr "Invullen combinatie"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Meerkeuze dropdown combinatie"
+
+msgid "Matching combination"
+msgstr "Koppelen combinatie"
 
 msgid "Correct test"
 msgstr "Test eindigen"
@@ -20989,6 +21037,9 @@ msgstr "Link verlopen, probeer het opnieuw."
 
 msgid "Instructions for the password change procedure"
 msgstr "Instructies voor de procedure voor het wijzigen van wachtwoorden"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Dit bericht is naar u verzonden omdat u (of iemand die zich als u voordoet) heeft gevraagd een nieuw wachtwoord te genereren voor uw account.<br/>Om uw nieuwe wachtwoord in te stellen, volgt u deze link:<br/>%s<br/>Als u dit verzoek niet hebt gedaan, kunt u dit bericht negeren. Als u deze berichten blijft ontvangen, neem dan contact op met de portaalbeheerder."
 
 msgid "Remind Course Expiration cron"
 msgstr "Herinnering cursusverloop cron"
@@ -37612,7 +37663,7 @@ msgid "%s results"
 msgstr "%s resultaten"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Voorbeeld invulformulieractiviteit: bereken de body mass index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Leeftijd</strong></td>            <td width=\"75%\" style=\"\">[25] jaar</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Geslacht</strong></td>            <td style=\"\" text-align:=\"\">[M] (M of V)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Gewicht</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Lengte</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = gewicht/lengte<sup>2</sup> (zie <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Voorbeeld invulformulieractiviteit: bereken de Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Leeftijd</strong></td>            <td width=\"75%\" style=\"\">[25] jaar</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Geslacht</strong></td>            <td style=\"\" text-align:=\"\">[M] (M of V)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Gewicht</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Lengte</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = gewicht/lengte<sup>2</sup> (zie <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Verwijderd"
@@ -41190,8 +41241,8 @@ msgstr "Automatisch vernieuwen elke 5 seconden"
 msgid "Web server load"
 msgstr "Webserverbelasting"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Live Apache- of Nginx-statusstatistieken"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Live Apache-, Nginx- of FrankenPHP-statusstatistieken"
 
 msgid "Click to show web server load metrics"
 msgstr "Klik om de webserverbelastingsstatistieken te tonen"
@@ -41199,8 +41250,8 @@ msgstr "Klik om de webserverbelastingsstatistieken te tonen"
 msgid "Requires a local web server status module"
 msgstr "Vereist een lokale webserverstatusmodule"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "De webserverbelasting wordt alleen gelezen van Apache mod_status of Nginx stub_status op localhost. De statuspagina moet verzoeken van 127.0.0.1 (of ::1) toestaan."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "De webbelasting wordt alleen lokaal uitgelezen via Apache mod_status, Nginx stub_status of het FrankenPHP-/Caddy-metrics-eindpunt. De statuspagina moet verzoeken vanaf 127.0.0.1 (of ::1) toestaan."
 
 msgid "Paths scanned"
 msgstr "Gescande paden"
@@ -41211,8 +41262,8 @@ msgstr "Gedetecteerd"
 msgid "Status path"
 msgstr "Statuspad"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Webserverbelastingsstatistieken zijn alleen beschikbaar voor Apache en Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Statistieken over de webbelasting zijn alleen beschikbaar voor Apache, Nginx en FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Geen van de gescande statuspaden reageerde op localhost."
@@ -41295,8 +41346,23 @@ msgstr "Accepteert"
 msgid "Handled"
 msgstr "Afgehandeld"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: activeer mod_status (ExtendedStatus On) en sta localhost toe op /server-status. Nginx: activeer stub_status op een alleen-localhost-locatie zoals /nginx_status of /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: schakel mod_status in (ExtendedStatus On) en sta localhost toe tot /server-status. Nginx: schakel stub_status in op een alleen-localhost locatie zoals /nginx_status of /stub_status. FrankenPHP: voeg een globale \"metrics\"-optie toe aan het Caddyfile, die standaard Prometheus-metrics beschikbaar maakt via de admin-API van Caddy (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Totaal aantal threads"
+
+msgid "Busy threads"
+msgstr "Bezet aantal threads"
+
+msgid "Queue depth"
+msgstr "Wachtrijdiepte"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Gemiddelde verzoekduur"
 
 msgid "Grade percentage distribution"
 msgstr "Verdeling van cijferpercentages"
@@ -41364,11 +41430,17 @@ msgstr "OPcache is geïnstalleerd maar niet ingeschakeld."
 msgid "OPcache extension is not available on this server."
 msgstr "De OPcache-extensie is niet beschikbaar op deze server."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache rapporteert inconsistente geheugenstatistieken (een bekend probleem op sommige threaded PHP-runtimes, bijv. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu is geïnstalleerd maar niet ingeschakeld."
 
 msgid "APCu extension is not available on this server."
 msgstr "De APCu-extensie is niet beschikbaar op deze server."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu rapporteert inconsistente geheugenstatistieken (een bekend probleem op sommige threaded PHP-runtimes)."
 
 msgid "Constant"
 msgstr "Constante"
@@ -42128,4 +42200,10 @@ msgstr "Sessie-toegangsdata gebruiken"
 
 msgid "Use session access end date"
 msgstr "Einddatum sessietoegang gebruiken"
+
+msgid "Group report"
+msgstr "Groepsrapport"
+
+msgid "Student follow-up"
+msgstr "Studentopvolging"
 

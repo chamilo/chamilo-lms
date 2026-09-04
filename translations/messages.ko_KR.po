@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "감사합니다"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "수식 예제: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "수식 예제: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "변수 범위"
@@ -7715,6 +7715,54 @@ msgstr "테스트의 문제 목록"
 
 msgid "Recycle existing questions"
 msgstr "문제 풀에서 문제 가져오기"
+
+msgid "Add this question to the test: %s"
+msgstr "이 질문을 시험에 추가: %s"
+
+msgid "Edit question: %s"
+msgstr "질문 편집: %s"
+
+msgid "Add a question: %s"
+msgstr "질문 추가: %s"
+
+msgid "Detected blanks: %s"
+msgstr "감지된 빈칸: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "질문 %s개, 총점(모든 질문) %s."
+
+msgid "Unique answer"
+msgstr "단일 정답"
+
+msgid "Multiple answer true/false"
+msgstr "참/거짓 복수 정답"
+
+msgid "Multiple answer combination true/false"
+msgstr "참/거짓 복수 정답 조합"
+
+msgid "Unique answer with images"
+msgstr "이미지가 있는 단일 정답"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "확실성 정도가 있는 참/거짓 복수 정답"
+
+msgid "Answer in Office document"
+msgstr "Office 문서에 답변"
+
+msgid "Matching draggable"
+msgstr "드래그 가능한 짝짓기"
+
+msgid "Matching draggable combination"
+msgstr "드래그 가능한 짝짓기 조합"
+
+msgid "Fill in blanks combination"
+msgstr "빈칸 채우기 조합"
+
+msgid "Multiple answer dropdown combination"
+msgstr "드롭다운 복수 정답 조합"
+
+msgid "Matching combination"
+msgstr "짝짓기 조합"
 
 msgid "Correct test"
 msgstr "테스트 종료"
@@ -20540,6 +20588,9 @@ msgstr "링크가 만료되었습니다. 다시 시도하십시오."
 
 msgid "Instructions for the password change procedure"
 msgstr "비밀번호 변경 절차 지침"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "이 메시지는 귀하(또는 귀하를 사칭하려는 누군가)가 계정에 대한 새 비밀번호 생성을 요청했기 때문에 발송되었습니다.<br/>새 비밀번호를 설정하려면 다음 링크를 따르십시오:<br/>%s<br/>이 요청을 하지 않으셨다면 이 메시지를 무시하시면 됩니다. 계속해서 이러한 메시지를 받으신다면 포털 관리자에게 문의하십시오."
 
 msgid "Remind Course Expiration cron"
 msgstr "강좌 만료 알림 크론"
@@ -39112,8 +39163,8 @@ msgstr "5초마다 자동 새로고침"
 msgid "Web server load"
 msgstr "웹 서버 부하"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "실시간 Apache 또는 Nginx 상태 지표"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "실시간 Apache, Nginx 또는 FrankenPHP 상태 메트릭"
 
 msgid "Click to show web server load metrics"
 msgstr "웹 서버 부하 지표를 보려면 클릭"
@@ -39121,8 +39172,8 @@ msgstr "웹 서버 부하 지표를 보려면 클릭"
 msgid "Requires a local web server status module"
 msgstr "로컬 웹 서버 상태 모듈 필요"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "웹 서버 부하 지표는 localhost의 Apache mod_status 또는 Nginx stub_status에서만 읽어옵니다. 상태 페이지는 127.0.0.1(또는 ::1)에서의 요청을 허용해야 합니다."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "웹 서버 부하는 localhost에서만 Apache mod_status, Nginx stub_status 또는 FrankenPHP/Caddy 메트릭 엔드포인트에서 읽습니다. 상태 페이지는 127.0.0.1(또는 ::1)에서의 요청을 허용해야 합니다."
 
 msgid "Paths scanned"
 msgstr "스캔된 경로"
@@ -39133,8 +39184,8 @@ msgstr "감지됨"
 msgid "Status path"
 msgstr "상태 경로"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "웹 서버 부하 지표는 Apache 및 Nginx에서만 사용할 수 있습니다."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "웹 서버 부하 메트릭은 Apache, Nginx 및 FrankenPHP에서만 사용할 수 있습니다."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "스캔된 상태 경로 중 localhost에서 응답한 경로가 없습니다."
@@ -39217,8 +39268,23 @@ msgstr "수락"
 msgid "Handled"
 msgstr "처리됨"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: mod_status(ExtendedStatus On)를 활성화하고 localhost가 /server-status에 접근할 수 있도록 허용하세요. Nginx: /nginx_status 또는 /stub_status와 같은 localhost 전용 위치에서 stub_status를 활성화하세요."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status를 활성화하고(ExtendedStatus On) localhost가 /server-status에 접근하도록 허용하십시오. Nginx: /nginx_status 또는 /stub_status와 같이 localhost 전용 location에서 stub_status를 활성화하십시오. FrankenPHP: Caddyfile에 전역 \"metrics\" 옵션을 추가하면 기본적으로 Caddy 관리 API(127.0.0.1:2019/metrics)에 Prometheus 메트릭이 노출됩니다."
+
+msgid "Total threads"
+msgstr "총 스레드"
+
+msgid "Busy threads"
+msgstr "사용 중인 스레드"
+
+msgid "Queue depth"
+msgstr "대기열 깊이"
+
+msgid "Worker"
+msgstr "워커"
+
+msgid "Average request time"
+msgstr "평균 요청 시간"
 
 msgid "Grade percentage distribution"
 msgstr "성적 백분율 분포"
@@ -39286,11 +39352,17 @@ msgstr "OPcache가 설치되었으나 활성화되지 않았습니다."
 msgid "OPcache extension is not available on this server."
 msgstr "이 서버에서 OPcache 확장을 사용할 수 없습니다."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache가 일관성 없는 메모리 통계를 보고하고 있습니다(일부 스레드 PHP 런타임, 예: FrankenPHP에서 알려진 문제)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu가 설치되었으나 활성화되지 않았습니다."
 
 msgid "APCu extension is not available on this server."
 msgstr "이 서버에서 APCu 확장을 사용할 수 없습니다."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu가 일관성 없는 메모리 통계를 보고하고 있습니다(일부 스레드 PHP 런타임에서 알려진 문제)."
 
 msgid "Constant"
 msgstr "상수"
@@ -40050,4 +40122,10 @@ msgstr "세션 접근 날짜 사용"
 
 msgid "Use session access end date"
 msgstr "세션 접근 종료일 사용"
+
+msgid "Group report"
+msgstr "그룹 보고서"
+
+msgid "Student follow-up"
+msgstr "학생 후속 관리"
 

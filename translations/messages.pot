@@ -7714,19 +7714,19 @@ msgstr ""
 msgid "Recycle existing questions"
 msgstr ""
 
-msgid "Add this question to the test: {0}"
+msgid "Add this question to the test: %s"
 msgstr ""
 
-msgid "Edit question: {0}"
+msgid "Edit question: %s"
 msgstr ""
 
-msgid "Add a question: {0}"
+msgid "Add a question: %s"
 msgstr ""
 
-msgid "Detected blanks: {0}"
+msgid "Detected blanks: %s"
 msgstr ""
 
-msgid "{0} questions, for a total score (all questions) of {1}."
+msgid "%s questions, for a total score (all questions) of %s."
 msgstr ""
 
 msgid "Unique answer"

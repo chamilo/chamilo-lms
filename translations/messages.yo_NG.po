@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ fọ́múlà: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -7712,6 +7712,54 @@ msgstr "Akojọ awọn ibeere ti idanwo naa"
 
 msgid "Recycle existing questions"
 msgstr "Ṣàtúnṣe awọn ibeere ti o wa tẹlẹ"
+
+msgid "Add this question to the test: %s"
+msgstr "Fi ìbéèrè yìí kún ìdánwò náà: %s"
+
+msgid "Edit question: %s"
+msgstr "Ṣàtúnṣe ìbéèrè: %s"
+
+msgid "Add a question: %s"
+msgstr "Fi ìbéèrè kún: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Àwọn ààyè òfo tí a rí: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s ìbéèrè, fún àpapọ̀ àmì (gbogbo ìbéèrè) %s."
+
+msgid "Unique answer"
+msgstr "Ìdáhùn kan ṣoṣo"
+
+msgid "Multiple answer true/false"
+msgstr "Ìdáhùn púpọ̀ òtítọ́/irọ́"
+
+msgid "Multiple answer combination true/false"
+msgstr "Àkójọpọ̀ ìdáhùn púpọ̀ òtítọ́/irọ́"
+
+msgid "Unique answer with images"
+msgstr "Ìdáhùn kan ṣoṣo pẹ̀lú àwọn àwòrán"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Ìdáhùn púpọ̀ òtítọ́/irọ́ pẹ̀lú ìpele ìdánilójú"
+
+msgid "Answer in Office document"
+msgstr "Ìdáhùn nínú ìwé Office"
+
+msgid "Matching draggable"
+msgstr "Ìbámu tí a lè fa"
+
+msgid "Matching draggable combination"
+msgstr "Àkójọpọ̀ ìbámu tí a lè fa"
+
+msgid "Fill in blanks combination"
+msgstr "Àkójọpọ̀ kíkún àwọn ààyè òfo"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Àkójọpọ̀ ìdáhùn púpọ̀ tí a ń yàn sílẹ̀"
+
+msgid "Matching combination"
+msgstr "Àkójọpọ̀ ìbámu"
 
 msgid "Correct test"
 msgstr "Idanwo to tọ"
@@ -20537,6 +20585,9 @@ msgstr "Asopọ ti pari, jọwọ gbiyanju lẹẹkansi."
 
 msgid "Instructions for the password change procedure"
 msgstr "Awọn ilọsiwaju fun ilana iyipada ọrọigbaniwọle"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "A ń fi ìfiránṣẹ́ yìí ránṣẹ́ sí ọ nítorí pé ìwọ (tàbí ẹnìkan tó ń gbìyànjú láti ṣe ara rẹ) béèrè pé kí a ṣẹ̀dá ọ̀rọ̀ ìgbaniwọlé tuntun fún àkántì rẹ.<br/>Láti ṣètò ọ̀rọ̀ ìgbaniwọlé tuntun rẹ, jọ̀wọ́ tẹ̀lé ìtọ́kasí yìí:<br/>%s<br/>Tí o kò bá ṣe ìbéèrè yìí, o lè fo ìfiránṣẹ́ yìí sílẹ̀. Tí o bá ń tẹ̀síwájú láti gba àwọn ìfiránṣẹ́ wọ̀nyí, jọ̀wọ́ kàn sí olùṣàkóso póòtù náà."
 
 msgid "Remind Course Expiration cron"
 msgstr "Ṣe iranti cron Ipari Ẹkọ"
@@ -39108,8 +39159,8 @@ msgstr "Ìtúnṣe ara-ẹni ní gbogbo ìṣẹ́jú 5"
 msgid "Web server load"
 msgstr "Ìdárayá ẹ̀rọ ayélujára"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Àwọn ìwọ̀n ipò Apache tàbí Nginx ní àkókò gidi"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Àwọn ìwọ̀n ipò Apache, Nginx tàbí FrankenPHP lọ́wọ́lọ́wọ́"
 
 msgid "Click to show web server load metrics"
 msgstr "Tẹ láti fi àwọn ìwọ̀n ìdárayá ẹ̀rọ ayélujára hàn"
@@ -39117,8 +39168,8 @@ msgstr "Tẹ láti fi àwọn ìwọ̀n ìdárayá ẹ̀rọ ayélujára hàn"
 msgid "Requires a local web server status module"
 msgstr "Ó nílò mọ́dúlù ipò ẹ̀rọ ayélujára tó wà ní àdúgbò"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Ìdárayá ẹ̀rọ ayélujára ni a máa ń ka láti Apache mod_status tàbí Nginx stub_status ní localhost nìkan. Ojú-ìwé ipò gbọdọ̀ gba àwọn ìbéèrè láti 127.0.0.1 (tàbí ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "A ń ka ẹrù ẹ̀rọ ayélujára láti Apache mod_status, Nginx stub_status, tàbí ibi ìwọ̀n FrankenPHP/Caddy, lórí localhost nìkan. Ojú-ìwé ipò gbọ́dọ̀ gba ìbéèrè láti 127.0.0.1 (tàbí ::1)."
 
 msgid "Paths scanned"
 msgstr "Àwọn ọ̀nà tí a ṣàyẹ̀wò"
@@ -39129,8 +39180,8 @@ msgstr "Ti rí"
 msgid "Status path"
 msgstr "Ọ̀nà ipò"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Àwọn ìwọ̀n ìdárayá ẹ̀rọ ayélujára wà fún Apache àti Nginx nìkan."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Àwọn ìwọ̀n ẹrù ẹ̀rọ ayélujára wà fún Apache, Nginx àti FrankenPHP nìkan."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Kò sí ọ̀nà ipò tí a ṣàyẹ̀wò tí ó dáhùn ní localhost."
@@ -39213,8 +39264,23 @@ msgstr "Àwọn ìtẹ́wọ́gbà"
 msgid "Handled"
 msgstr "Àwọn tí a ti ṣètò"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: ṣe ìdàgbàsókè mod_status (ExtendedStatus On) kí o sì gba localhost láàyè sí /server-status. Nginx: ṣe ìdàgbàsókè stub_status ní ààyè localhost nìkan bíi /nginx_status tàbí /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: tan mod_status (ExtendedStatus On) kí o sì jẹ́ kí localhost wọlé sí /server-status. Nginx: tan stub_status lórí ibi localhost nìkan bíi /nginx_status tàbí /stub_status. FrankenPHP: fi àṣàyàn \"metrics\" àgbáyé kún Caddyfile, èyí tó ń ṣàfihàn àwọn ìwọ̀n Prometheus lórí API ìṣàkóso Caddy (127.0.0.1:2019/metrics) ní ìpìlẹ̀."
+
+msgid "Total threads"
+msgstr "Àpapọ̀ ìwọ̀n iṣẹ́"
+
+msgid "Busy threads"
+msgstr "Àwọn ìwọ̀n iṣẹ́ tó ń ṣiṣẹ́"
+
+msgid "Queue depth"
+msgstr "Ìjìnlẹ̀ ìlà ìdúró"
+
+msgid "Worker"
+msgstr "Olùṣiṣẹ́"
+
+msgid "Average request time"
+msgstr "Àkókò ìbéèrè àpapọ̀"
 
 msgid "Grade percentage distribution"
 msgstr "Pínpín ìdá ọgọ́rùn-ún ìwọ̀n"
@@ -39282,11 +39348,17 @@ msgstr "OPcache ti wà níbẹ̀ ṣùgbọ́n kò ṣiṣẹ́."
 msgid "OPcache extension is not available on this server."
 msgstr "Àfikún OPcache kò sí lórí ẹ̀rọ-ìpèsè yìí."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache ń jábọ̀ ìṣirò ìrántí tí kò bá ara mu (ìṣòro tí a mọ̀ lórí àwọn PHP threaded runtime, fún àpẹẹrẹ FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu ti wà níbẹ̀ ṣùgbọ́n kò ṣiṣẹ́."
 
 msgid "APCu extension is not available on this server."
 msgstr "Àfikún APCu kò sí lórí ẹ̀rọ-ìpèsè yìí."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu ń jábọ̀ ìṣirò ìrántí tí kò bá ara mu (ìṣòro tí a mọ̀ lórí àwọn PHP threaded runtime)."
 
 msgid "Constant"
 msgstr "Ìdúróṣinṣin"
@@ -40046,4 +40118,10 @@ msgstr "Lo àwọn ọjọ́ ìwọlé sẹ́ṣọ̀n"
 
 msgid "Use session access end date"
 msgstr "Lo ọjọ́ ìparí ìwọlé sẹ́ṣọ̀n"
+
+msgid "Group report"
+msgstr "Ìjábọ̀ ẹgbẹ́"
+
+msgid "Student follow-up"
+msgstr "Ìtẹ̀lé akẹ́kọ̀ọ́"
 

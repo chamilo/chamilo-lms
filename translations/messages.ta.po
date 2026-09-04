@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "சூத்திர மாதிரி: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "சூத்திர மாதிரி: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -7716,6 +7716,54 @@ msgstr "சோதனையின் கேள்வி பட்டியல்"
 
 msgid "Recycle existing questions"
 msgstr "இருக்கும் கேள்விகளை மீண்டும் பயன்படுத்தவும்"
+
+msgid "Add this question to the test: %s"
+msgstr "இந்தக் கேள்வியைத் தேர்வில் சேர்க்கவும்: %s"
+
+msgid "Edit question: %s"
+msgstr "கேள்வியைத் திருத்தவும்: %s"
+
+msgid "Add a question: %s"
+msgstr "ஒரு கேள்வியைச் சேர்க்கவும்: %s"
+
+msgid "Detected blanks: %s"
+msgstr "கண்டறியப்பட்ட வெற்றிடங்கள்: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s கேள்விகள், மொத்த மதிப்பெண் (அனைத்துக் கேள்விகளும்) %s."
+
+msgid "Unique answer"
+msgstr "தனிப்பட்ட விடை"
+
+msgid "Multiple answer true/false"
+msgstr "பல விடை உண்மை/பொய்"
+
+msgid "Multiple answer combination true/false"
+msgstr "பல விடை இணைப்பு உண்மை/பொய்"
+
+msgid "Unique answer with images"
+msgstr "படங்களுடன் தனிப்பட்ட விடை"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "உறுதிப்பாட்டு அளவுடன் பல விடை உண்மை/பொய்"
+
+msgid "Answer in Office document"
+msgstr "Office ஆவணத்தில் விடை"
+
+msgid "Matching draggable"
+msgstr "இழுத்துப் பொருத்தல்"
+
+msgid "Matching draggable combination"
+msgstr "இழுத்துப் பொருத்தல் இணைப்பு"
+
+msgid "Fill in blanks combination"
+msgstr "வெற்றிடங்களை நிரப்புதல் இணைப்பு"
+
+msgid "Multiple answer dropdown combination"
+msgstr "பல விடை கீழ்த்தோன்றல் இணைப்பு"
+
+msgid "Matching combination"
+msgstr "பொருத்தல் இணைப்பு"
 
 msgid "Correct test"
 msgstr "சரியான சோதனை"
@@ -20541,6 +20589,9 @@ msgstr "தொடர்பு காலாவதியானது, மீண்
 
 msgid "Instructions for the password change procedure"
 msgstr "கடவுச்சொல் மாற்ற நடைமுறைக்கான வழிமுறைகள்"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "உங்கள் கணக்கிற்கு புதிய கடவுச்சொல் உருவாக்க வேண்டும் என்று நீங்கள் (அல்லது உங்களைப் போல் நடிக்க முயன்ற ஒருவர்) கோரியதால் இந்தச் செய்தி உங்களுக்கு அனுப்பப்படுகிறது.<br/>உங்கள் புதிய கடவுச்சொல்லை அமைக்க, இந்த இணைப்பைப் பின்தொடரவும்:<br/>%s<br/>இந்தக் கோரிக்கையை நீங்கள் செய்யவில்லை என்றால், இந்தச் செய்தியைப் புறக்கணிக்கலாம். இந்தச் செய்திகள் தொடர்ந்து வந்தால், போர்டல் நிர்வாகியைத் தொடர்பு கொள்ளவும்."
 
 msgid "Remind Course Expiration cron"
 msgstr "பாடம் காலாவதியாகும் நினைவூட்டல் cron"
@@ -39112,8 +39163,8 @@ msgstr "ஒவ்வொரு 5 வினாடிகளுக்கும் �
 msgid "Web server load"
 msgstr "வலை சேவையக சுமை"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "நேரடி Apache அல்லது Nginx நிலை அளவீடுகள்"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "நேரடி Apache, Nginx அல்லது FrankenPHP நிலை அளவீடுகள்"
 
 msgid "Click to show web server load metrics"
 msgstr "வலை சேவையக சுமை அளவீடுகளைக் காட்ட கிளிக் செய்யவும்"
@@ -39121,8 +39172,8 @@ msgstr "வலை சேவையக சுமை அளவீடுகளைக
 msgid "Requires a local web server status module"
 msgstr "உள்ளூர் வலை சேவையக நிலை தொகுதி தேவை"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "வலை சேவையக சுமை Apache mod_status அல்லது Nginx stub_status இலிருந்து உள்ளூர் மட்டுமே படிக்கப்படுகிறது. நிலைப் பக்கம் 127.0.0.1 (அல்லது ::1) இலிருந்து கோரிக்கைகளை அனுமதிக்க வேண்டும்."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "வலை சேவையக சுமை localhost-இல் மட்டும் Apache mod_status, Nginx stub_status அல்லது FrankenPHP/Caddy அளவீட்டு முனையத்திலிருந்து படிக்கப்படுகிறது. நிலைப் பக்கம் 127.0.0.1 (அல்லது ::1) இலிருந்து கோரிக்கைகளை அனுமதிக்க வேண்டும்."
 
 msgid "Paths scanned"
 msgstr "ஸ்கேன் செய்யப்பட்ட பாதைகள்"
@@ -39133,8 +39184,8 @@ msgstr "கண்டறியப்பட்டது"
 msgid "Status path"
 msgstr "நிலைப் பாதை"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "வலை சேவையக சுமை அளவீடுகள் Apache மற்றும் Nginx க்கு மட்டுமே கிடைக்கும்."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "வலை சேவையக சுமை அளவீடுகள் Apache, Nginx மற்றும் FrankenPHP-க்கு மட்டுமே கிடைக்கும்."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "ஸ்கேன் செய்யப்பட்ட நிலைப் பாதைகள் எதுவும் உள்ளூரில் பதிலளிக்கவில்லை."
@@ -39217,8 +39268,23 @@ msgstr "ஏற்றுக்கொள்ளப்பட்டவை"
 msgid "Handled"
 msgstr "கையாளப்பட்டவை"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: mod_status ஐ இயக்கவும் (ExtendedStatus On) மற்றும் உள்ளூரிலிருந்து /server-status ஐ அனுமதிக்கவும். Nginx: /nginx_status அல்லது /stub_status போன்ற உள்ளூர் மட்டுமே உள்ள இடத்தில் stub_status ஐ இயக்கவும்."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status-ஐ இயக்கவும் (ExtendedStatus On) மற்றும் localhost-ஐ /server-status-க்கு அனுமதிக்கவும். Nginx: /nginx_status அல்லது /stub_status போன்ற localhost-மட்டும் இடத்தில் stub_status-ஐ இயக்கவும். FrankenPHP: Caddyfile-இல் உலகளாவிய \"metrics\" விருப்பத்தைச் சேர்க்கவும்; இது இயல்பாக Caddy நிர்வாக API-யில் (127.0.0.1:2019/metrics) Prometheus அளவீடுகளை வெளிப்படுத்தும்."
+
+msgid "Total threads"
+msgstr "மொத்த தொடர்கள்"
+
+msgid "Busy threads"
+msgstr "பணிமிகு தொடர்கள்"
+
+msgid "Queue depth"
+msgstr "வரிசை ஆழம்"
+
+msgid "Worker"
+msgstr "பணியாளர்"
+
+msgid "Average request time"
+msgstr "சராசரி கோரிக்கை நேரம்"
 
 msgid "Grade percentage distribution"
 msgstr "தர சதவீதப் பரவல்"
@@ -39286,11 +39352,17 @@ msgstr "OPcache நிறுவப்பட்டுள்ளது ஆனால
 msgid "OPcache extension is not available on this server."
 msgstr "OPcache நீட்டிப்பு இந்த சேவையகத்தில் கிடைக்கவில்லை."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache முரண்பட்ட நினைவக புள்ளிவிவரங்களை அறிவிக்கிறது (சில தொடர் PHP இயக்க நேரங்களில், எ.கா. FrankenPHP, அறியப்பட்ட சிக்கல்)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu நிறுவப்பட்டுள்ளது ஆனால் இயக்கப்படவில்லை."
 
 msgid "APCu extension is not available on this server."
 msgstr "APCu நீட்டிப்பு இந்த சேவையகத்தில் கிடைக்கவில்லை."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu முரண்பட்ட நினைவக புள்ளிவிவரங்களை அறிவிக்கிறது (சில தொடர் PHP இயக்க நேரங்களில் அறியப்பட்ட சிக்கல்)."
 
 msgid "Constant"
 msgstr "மாறிலி"
@@ -40050,4 +40122,10 @@ msgstr "அமர்வு அணுகல் தேதிகளைப் பய
 
 msgid "Use session access end date"
 msgstr "அமர்வு அணுகல் முடிவு தேதியைப் பயன்படுத்து"
+
+msgid "Group report"
+msgstr "குழு அறிக்கை"
+
+msgid "Student follow-up"
+msgstr "மாணவர் பின்தொடர்தல்"
 

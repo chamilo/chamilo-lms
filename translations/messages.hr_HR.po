@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Srdačan pozdrav"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primjer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primjer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rasponi varijabli"
@@ -7716,6 +7716,54 @@ msgstr "Popis pitanja date vježbe"
 
 msgid "Recycle existing questions"
 msgstr "Preuzmi pitanje iz druge vježbe"
+
+msgid "Add this question to the test: %s"
+msgstr "Dodaj ovo pitanje u test: %s"
+
+msgid "Edit question: %s"
+msgstr "Uredi pitanje: %s"
+
+msgid "Add a question: %s"
+msgstr "Dodaj pitanje: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Otkrivene praznine: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s pitanja, za ukupni rezultat (sva pitanja) od %s."
+
+msgid "Unique answer"
+msgstr "Jedinstveni odgovor"
+
+msgid "Multiple answer true/false"
+msgstr "Višestruki odgovor točno/netočno"
+
+msgid "Multiple answer combination true/false"
+msgstr "Kombinacija višestrukih odgovora točno/netočno"
+
+msgid "Unique answer with images"
+msgstr "Jedinstveni odgovor sa slikama"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Višestruki odgovor točno/netočno sa stupnjem sigurnosti"
+
+msgid "Answer in Office document"
+msgstr "Odgovor u Office dokumentu"
+
+msgid "Matching draggable"
+msgstr "Povezivanje povlačenjem"
+
+msgid "Matching draggable combination"
+msgstr "Kombinacija povezivanja povlačenjem"
+
+msgid "Fill in blanks combination"
+msgstr "Kombinacija popunjavanja praznina"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Kombinacija padajućih izbornika višestrukih odgovora"
+
+msgid "Matching combination"
+msgstr "Kombinacija povezivanja"
 
 msgid "Correct test"
 msgstr "Dovrši vježbu"
@@ -20541,6 +20589,9 @@ msgstr "Link je istekao, pokušajte ponovno."
 
 msgid "Instructions for the password change procedure"
 msgstr "Upute za postupak promjene lozinke"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Ova poruka vam se šalje jer ste vi (ili netko tko se pokušava predstaviti kao vi) zatražili generiranje nove lozinke za vaš račun.<br/>Za postavljanje nove lozinke slijedite ovu poveznicu:<br/>%s<br/>Ako niste podnijeli ovaj zahtjev, jednostavno zanemarite ovu poruku. Ako i dalje primate ove poruke, obratite se administratoru portala."
 
 msgid "Remind Course Expiration cron"
 msgstr "Podsjetnik isteka kursa cron"
@@ -39113,8 +39164,8 @@ msgstr "Automatsko osvježavanje svakih 5 sekundi"
 msgid "Web server load"
 msgstr "Opterećenje web-poslužitelja"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Mjerni podaci o statusu Apache ili Nginx poslužitelja"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Žive metrike statusa Apachea, Nginxa ili FrankenPHP-a"
 
 msgid "Click to show web server load metrics"
 msgstr "Kliknite za prikaz mjernih podataka o opterećenju web-poslužitelja"
@@ -39122,8 +39173,8 @@ msgstr "Kliknite za prikaz mjernih podataka o opterećenju web-poslužitelja"
 msgid "Requires a local web server status module"
 msgstr "Zahtijeva lokalni modul statusa web-poslužitelja"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Opterećenje web-poslužitelja očitava se s Apache mod_status ili Nginx stub_status samo na localhostu. Stranica statusa mora dopuštati zahtjeve s 127.0.0.1 (ili ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Opterećenje web poslužitelja čita se iz Apache mod_status, Nginx stub_status ili krajnje točke metrika FrankenPHP/Caddy, samo na localhostu. Stranica statusa mora dopuštati zahtjeve s 127.0.0.1 (ili ::1)."
 
 msgid "Paths scanned"
 msgstr "Skenirane staze"
@@ -39134,8 +39185,8 @@ msgstr "Otkriveno"
 msgid "Status path"
 msgstr "Staza statusa"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Mjerni podaci o opterećenju web-poslužitelja dostupni su samo za Apache i Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Metrike opterećenja web poslužitelja dostupne su samo za Apache, Nginx i FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Nijedan od skeniranih statusnih putova nije odgovorio na localhost."
@@ -39218,8 +39269,23 @@ msgstr "Prihvaćeno"
 msgid "Handled"
 msgstr "Obrađeno"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: omogućite mod_status (ExtendedStatus On) i dopustite localhost na /server-status. Nginx: omogućite stub_status na lokaciji samo za localhost poput /nginx_status ili /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: omogućite mod_status (ExtendedStatus On) i dopustite localhostu pristup /server-status. Nginx: omogućite stub_status na lokaciji samo za localhost, npr. /nginx_status ili /stub_status. FrankenPHP: dodajte globalnu \"metrics\" opciju u Caddyfile, koja prema zadanim postavkama izlaže Prometheus metrike na Caddyjevom admin API-ju (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Ukupno niti"
+
+msgid "Busy threads"
+msgstr "Zauzete niti"
+
+msgid "Queue depth"
+msgstr "Dubina reda"
+
+msgid "Worker"
+msgstr "Radnik"
+
+msgid "Average request time"
+msgstr "Prosječno vrijeme zahtjeva"
 
 msgid "Grade percentage distribution"
 msgstr "Distribucija postotaka ocjena"
@@ -39287,11 +39353,17 @@ msgstr "OPcache je instaliran, ali nije omogućen."
 msgid "OPcache extension is not available on this server."
 msgstr "Proširenje OPcache nije dostupno na ovom poslužitelju."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache prijavljuje nedosljedne statistike memorije (poznati problem na nekim PHP okruženjima s nitima, npr. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu je instaliran, ali nije omogućen."
 
 msgid "APCu extension is not available on this server."
 msgstr "Proširenje APCu nije dostupno na ovom poslužitelju."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu prijavljuje nedosljedne statistike memorije (poznati problem na nekim PHP okruženjima s nitima)."
 
 msgid "Constant"
 msgstr "Konstanta"
@@ -40051,4 +40123,10 @@ msgstr "Koristi datume pristupa sesiji"
 
 msgid "Use session access end date"
 msgstr "Koristi datum završetka pristupa sesiji"
+
+msgid "Group report"
+msgstr "Izvještaj grupe"
+
+msgid "Student follow-up"
+msgstr "Praćenje studenta"
 

@@ -7726,6 +7726,54 @@ msgstr "Κατάλογος ερωτήσεων της άσκησης"
 msgid "Recycle existing questions"
 msgstr "Ανακύκλωση - επαναχρησιμοποίηση από τις υπάρχουσες ερωτήσεις"
 
+msgid "Add this question to the test: %s"
+msgstr "Προσθήκη αυτής της ερώτησης στο τεστ: %s"
+
+msgid "Edit question: %s"
+msgstr "Επεξεργασία ερώτησης: %s"
+
+msgid "Add a question: %s"
+msgstr "Προσθήκη ερώτησης: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Εντοπισμένα κενά: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s ερωτήσεις, για συνολική βαθμολογία (όλες οι ερωτήσεις) %s."
+
+msgid "Unique answer"
+msgstr "Μοναδική απάντηση"
+
+msgid "Multiple answer true/false"
+msgstr "Πολλαπλή απάντηση σωστό\/λάθος"
+
+msgid "Multiple answer combination true/false"
+msgstr "Συνδυασμός πολλαπλής απάντησης σωστό\/λάθος"
+
+msgid "Unique answer with images"
+msgstr "Μοναδική απάντηση με εικόνες"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Πολλαπλή απάντηση σωστό\/λάθος με βαθμό βεβαιότητας"
+
+msgid "Answer in Office document"
+msgstr "Απάντηση σε έγγραφο Office"
+
+msgid "Matching draggable"
+msgstr "Αντιστοίχιση με σύρσιμο"
+
+msgid "Matching draggable combination"
+msgstr "Συνδυασμός αντιστοίχισης με σύρσιμο"
+
+msgid "Fill in blanks combination"
+msgstr "Συνδυασμός συμπλήρωσης κενών"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Συνδυασμός πολλαπλής απάντησης με αναπτυσσόμενη λίστα"
+
+msgid "Matching combination"
+msgstr "Συνδυασμός αντιστοίχισης"
+
 msgid "Correct test"
 msgstr "Διόρθωση της Εξέτασης"
 
@@ -20555,6 +20603,9 @@ msgstr "Ο σύνδεσμος έχει λήξει, παρακαλούμε δοκ
 
 msgid "Instructions for the password change procedure"
 msgstr "Οδηγίες για τη διαδικασία αλλαγής κωδικού πρόσβασης"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Αυτό το μήνυμα σας αποστέλλεται επειδή εσείς (ή κάποιος που προσπαθεί να σας μιμηθεί) ζητήσατε τη δημιουργία νέου κωδικού πρόσβασης για τον λογαριασμό σας.<br\/>Για να ορίσετε τον νέο σας κωδικό πρόσβασης, ακολουθήστε αυτόν τον σύνδεσμο:<br\/>%s<br\/>Αν δεν κάνατε αυτό το αίτημα, μπορείτε απλώς να αγνοήσετε αυτό το μήνυμα. Αν συνεχίσετε να λαμβάνετε αυτά τα μηνύματα, επικοινωνήστε με τον διαχειριστή της πύλης."
 
 msgid "Remind Course Expiration cron"
 msgstr "Υπενθύμιση λήξης μαθήματος cron"
@@ -39127,8 +39178,8 @@ msgstr "Αυτόματη ανανέωση κάθε 5 δευτερόλεπτα"
 msgid "Web server load"
 msgstr "Φόρτος διακομιστή ιστού"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Ζωντανές μετρικές κατάστασης Apache ή Nginx"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Ζωντανές μετρήσεις κατάστασης Apache, Nginx ή FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Κάντε κλικ για εμφάνιση μετρικών φόρτου διακομιστή ιστού"
@@ -39136,8 +39187,8 @@ msgstr "Κάντε κλικ για εμφάνιση μετρικών φόρτο�
 msgid "Requires a local web server status module"
 msgstr "Απαιτείται τοπική μονάδα κατάστασης διακομιστή ιστού"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Ο φόρτος διακομιστή ιστού διαβάζεται μόνο από το Apache mod_status ή το Nginx stub_status στον localhost. Η σελίδα κατάστασης πρέπει να επιτρέπει αιτήματα από 127.0.0.1 (ή ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Το φορτίο του διακομιστή ιστού διαβάζεται από το Apache mod_status, το Nginx stub_status ή το τελικό σημείο μετρήσεων FrankenPHP\/Caddy, μόνο στο localhost. Η σελίδα κατάστασης πρέπει να επιτρέπει αιτήματα από 127.0.0.1 (ή ::1)."
 
 msgid "Paths scanned"
 msgstr "Σαρωμένες διαδρομές"
@@ -39148,8 +39199,8 @@ msgstr "Εντοπίστηκαν"
 msgid "Status path"
 msgstr "Διαδρομή κατάστασης"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Οι μετρικές φόρτου διακομιστή ιστού είναι διαθέσιμες μόνο για Apache και Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Οι μετρήσεις φορτίου διακομιστή ιστού είναι διαθέσιμες μόνο για Apache, Nginx και FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Καμία από τις σαρωμένες διαδρομές κατάστασης δεν απάντησε στον localhost."
@@ -39232,8 +39283,23 @@ msgstr "Αποδοχές"
 msgid "Handled"
 msgstr "Διαχειρίστηκαν"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: ενεργοποιήστε το mod_status (ExtendedStatus On) και επιτρέψτε localhost στο /server-status. Nginx: ενεργοποιήστε το stub_status σε τοποθεσία μόνο για localhost όπως /nginx_status ή /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: ενεργοποιήστε το mod_status (ExtendedStatus On) και επιτρέψτε το localhost στο \/server-status. Nginx: ενεργοποιήστε το stub_status σε μια θέση μόνο για localhost όπως \/nginx_status ή \/stub_status. FrankenPHP: προσθέστε μια καθολική \"metrics\" επιλογή στο Caddyfile, η οποία εκθέτει μετρήσεις Prometheus στο admin API του Caddy (127.0.0.1:2019\/metrics) από προεπιλογή."
+
+msgid "Total threads"
+msgstr "Συνολικά νήματα"
+
+msgid "Busy threads"
+msgstr "Απασχολημένα νήματα"
+
+msgid "Queue depth"
+msgstr "Βάθος ουράς"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Μέσος χρόνος αιτήματος"
 
 msgid "Grade percentage distribution"
 msgstr "Κατανομή ποσοστών βαθμολογίας"
@@ -39301,11 +39367,17 @@ msgstr "Το OPcache είναι εγκατεστημένο αλλά δεν εί�
 msgid "OPcache extension is not available on this server."
 msgstr "Η επέκταση OPcache δεν είναι διαθέσιμη σε αυτόν τον διακομιστή."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "Το OPcache αναφέρει ασυνεπείς στατιστικές μνήμης (γνωστό πρόβλημα σε ορισμένα περιβάλλοντα PHP με νήματα, π.χ. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "Το APCu είναι εγκατεστημένο αλλά δεν είναι ενεργοποιημένο."
 
 msgid "APCu extension is not available on this server."
 msgstr "Η επέκταση APCu δεν είναι διαθέσιμη σε αυτόν τον διακομιστή."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "Το APCu αναφέρει ασυνεπείς στατιστικές μνήμης (γνωστό πρόβλημα σε ορισμένα περιβάλλοντα PHP με νήματα)."
 
 msgid "Constant"
 msgstr "Σταθερά"
@@ -40065,4 +40137,10 @@ msgstr "Χρήση ημερομηνιών πρόσβασης συνεδρίας"
 
 msgid "Use session access end date"
 msgstr "Χρήση ημερομηνίας λήξης πρόσβασης συνεδρίας"
+
+msgid "Group report"
+msgstr "Αναφορά ομάδας"
+
+msgid "Student follow-up"
+msgstr "Παρακολούθηση μαθητή"
 

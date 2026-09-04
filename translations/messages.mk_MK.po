@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример на формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример на формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -7715,6 +7715,54 @@ msgstr "Список со прашања на тестот"
 
 msgid "Recycle existing questions"
 msgstr "Преземи постоечко прашање"
+
+msgid "Add this question to the test: %s"
+msgstr "Додај го ова прашање во тестот: %s"
+
+msgid "Edit question: %s"
+msgstr "Уреди прашање: %s"
+
+msgid "Add a question: %s"
+msgstr "Додај прашање: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Откриени празни места: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s прашања, за вкупен резултат (сите прашања) од %s."
+
+msgid "Unique answer"
+msgstr "Единствен одговор"
+
+msgid "Multiple answer true/false"
+msgstr "Повеќекратен одговор точно/неточно"
+
+msgid "Multiple answer combination true/false"
+msgstr "Комбинација на повеќекратен одговор точно/неточно"
+
+msgid "Unique answer with images"
+msgstr "Единствен одговор со слики"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Повеќекратен одговор точно/неточно со степен на сигурност"
+
+msgid "Answer in Office document"
+msgstr "Одговор во Office документ"
+
+msgid "Matching draggable"
+msgstr "Поврзување со влечење"
+
+msgid "Matching draggable combination"
+msgstr "Комбинација на поврзување со влечење"
+
+msgid "Fill in blanks combination"
+msgstr "Комбинација пополнување празни места"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Комбинација паѓачко мени со повеќекратен одговор"
+
+msgid "Matching combination"
+msgstr "Комбинација на поврзување"
 
 msgid "Correct test"
 msgstr "Заврши го тестот"
@@ -20540,6 +20588,9 @@ msgstr "Линкот истече, ве молиме обидете се пов�
 
 msgid "Instructions for the password change procedure"
 msgstr "Инструкции за постапката за промена на лозинка"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Оваа порака ви е испратена затоа што вие (или некој што се обидува да се претстави како вас) побаравте да се генерира нова лозинка за вашата сметка.<br/>За да ја поставите новата лозинка, следете ја оваа врска:<br/>%s<br/>Ако не сте го направиле ова барање, едноставно игнорирајте ја оваа порака. Ако продолжите да ги примате овие пораки, контактирајте го администраторот на порталот."
 
 msgid "Remind Course Expiration cron"
 msgstr "Потсетник за истекување на курсот cron"
@@ -39112,8 +39163,8 @@ msgstr "Автоматско освежување на секои 5 секунд
 msgid "Web server load"
 msgstr "Оптоварување на веб-серверот"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Метрики за статус на Apache или Nginx во живо"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Метрики за статус во живо на Apache, Nginx или FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Кликнете за да ги прикажете метриките за оптоварување на веб-серверот"
@@ -39121,8 +39172,8 @@ msgstr "Кликнете за да ги прикажете метриките з
 msgid "Requires a local web server status module"
 msgstr "Потребен е локален модул за статус на веб-сервер"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Оптоварувањето на веб-серверот се чита од Apache mod_status или Nginx stub_status само на localhost. Страницата за статус мора да дозволува барања од 127.0.0.1 (или ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Оптоварувањето на веб-серверот се чита од Apache mod_status, Nginx stub_status или крајната точка за метрики на FrankenPHP/Caddy, само на localhost. Страницата за статус мора да дозволува барања од 127.0.0.1 (или ::1)."
 
 msgid "Paths scanned"
 msgstr "Сканирани патеки"
@@ -39133,8 +39184,8 @@ msgstr "Откриено"
 msgid "Status path"
 msgstr "Патека за статус"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Метриките за оптоварување на веб-серверот се достапни само за Apache и Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Метриките за оптоварување на веб-серверот се достапни само за Apache, Nginx и FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Ниедна од скенираните патеки за статус не одговори на localhost."
@@ -39217,8 +39268,23 @@ msgstr "Прифатени"
 msgid "Handled"
 msgstr "Обработени"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: овозможете mod_status (ExtendedStatus On) и дозволете localhost да пристапува до /server-status. Nginx: овозможете stub_status на локација достапна само од localhost, како /nginx_status или /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: овозможете mod_status (ExtendedStatus On) и дозволете localhost до /server-status. Nginx: овозможете stub_status на локација само за localhost како /nginx_status или /stub_status. FrankenPHP: додадете глобална \"metrics\" опција во Caddyfile, која стандардно ги изложува Prometheus метриките на административниот API на Caddy (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Вкупно нишки"
+
+msgid "Busy threads"
+msgstr "Зафатени нишки"
+
+msgid "Queue depth"
+msgstr "Длабочина на редица"
+
+msgid "Worker"
+msgstr "Работник"
+
+msgid "Average request time"
+msgstr "Просечно време на барање"
 
 msgid "Grade percentage distribution"
 msgstr "Распределба на проценти на оценки"
@@ -39286,11 +39352,17 @@ msgstr "OPcache е инсталиран, но не е овозможен."
 msgid "OPcache extension is not available on this server."
 msgstr "Проширувањето OPcache не е достапно на овој сервер."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache пријавува неконзистентни статистики за меморија (познат проблем на некои PHP извршувања со нишки, на пр. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu е инсталиран, но не е овозможен."
 
 msgid "APCu extension is not available on this server."
 msgstr "Проширувањето APCu не е достапно на овој сервер."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu пријавува неконзистентни статистики за меморија (познат проблем на некои PHP извршувања со нишки)."
 
 msgid "Constant"
 msgstr "Константа"
@@ -40050,4 +40122,10 @@ msgstr "Користи датуми за пристап до сесијата"
 
 msgid "Use session access end date"
 msgstr "Користи краен датум за пристап до сесијата"
+
+msgid "Group report"
+msgstr "Извештај за група"
+
+msgid "Student follow-up"
+msgstr "Следење на студенти"
 

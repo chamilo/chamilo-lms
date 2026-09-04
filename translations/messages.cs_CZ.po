@@ -7713,6 +7713,54 @@ msgstr "Seznam testových otázek"
 msgid "Recycle existing questions"
 msgstr "Zásobník otázek"
 
+msgid "Add this question to the test: %s"
+msgstr "Přidat tuto otázku do testu: %s"
+
+msgid "Edit question: %s"
+msgstr "Upravit otázku: %s"
+
+msgid "Add a question: %s"
+msgstr "Přidat otázku: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Zjištěné mezery: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s otázek, celkové skóre (všechny otázky) %s."
+
+msgid "Unique answer"
+msgstr "Jedinečná odpověď"
+
+msgid "Multiple answer true/false"
+msgstr "Více odpovědí pravda/nepravda"
+
+msgid "Multiple answer combination true/false"
+msgstr "Kombinace více odpovědí pravda/nepravda"
+
+msgid "Unique answer with images"
+msgstr "Jedinečná odpověď s obrázky"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Více odpovědí pravda/nepravda se stupněm jistoty"
+
+msgid "Answer in Office document"
+msgstr "Odpověď v dokumentu Office"
+
+msgid "Matching draggable"
+msgstr "Přiřazování přetažením"
+
+msgid "Matching draggable combination"
+msgstr "Kombinace přiřazování přetažením"
+
+msgid "Fill in blanks combination"
+msgstr "Kombinace doplňování mezer"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Kombinace více odpovědí v rozbalovacím seznamu"
+
+msgid "Matching combination"
+msgstr "Kombinace přiřazování"
+
 msgid "Correct test"
 msgstr "Ukončit test"
 
@@ -20537,6 +20585,9 @@ msgstr "Odkaz vypršel, zkuste to prosím znovu."
 
 msgid "Instructions for the password change procedure"
 msgstr "Pokyny pro proceduru změny hesla"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Tato zpráva vám byla odeslána, protože jste (nebo někdo, kdo se vás pokouší vydávat) požádali o vygenerování nového hesla k vašemu účtu.<br/>Pro nastavení nového hesla postupujte podle tohoto odkazu:<br/>%s<br/>Pokud jste o to nežádali, můžete tuto zprávu jednoduše ignorovat. Pokud tyto zprávy dostáváte opakovaně, kontaktujte prosím správce portálu."
 
 msgid "Remind Course Expiration cron"
 msgstr "Připomenutí vypršení kurzu cron"
@@ -39108,8 +39159,8 @@ msgstr "Automatické obnovení každých 5 sekund"
 msgid "Web server load"
 msgstr "Zátěž webového serveru"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "Metriky stavu Apache nebo Nginx v reálném čase"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Živé metriky stavu Apache, Nginx nebo FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "Kliknutím zobrazíte metriky zátěže webového serveru"
@@ -39117,8 +39168,8 @@ msgstr "Kliknutím zobrazíte metriky zátěže webového serveru"
 msgid "Requires a local web server status module"
 msgstr "Vyžaduje lokální modul stavu webového serveru"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "Zátěž webového serveru se čte pouze z Apache mod_status nebo Nginx stub_status na localhost. Stránka stavu musí povolit požadavky z 127.0.0.1 (nebo ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Zátěž webového serveru se čte z Apache mod_status, Nginx stub_status nebo z koncového bodu metrik FrankenPHP/Caddy, pouze na localhostu. Stránka stavu musí povolit požadavky z 127.0.0.1 (nebo ::1)."
 
 msgid "Paths scanned"
 msgstr "Prohledané cesty"
@@ -39129,8 +39180,8 @@ msgstr "Zjištěno"
 msgid "Status path"
 msgstr "Cesta stavu"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "Metriky zátěže webového serveru jsou dostupné pouze pro Apache a Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Metriky zátěže webového serveru jsou k dispozici pouze pro Apache, Nginx a FrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "Žádná z prohledaných cest stavu neodpověděla na localhost."
@@ -39213,8 +39264,23 @@ msgstr "Přijato"
 msgid "Handled"
 msgstr "Zpracováno"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: povolte mod_status (ExtendedStatus On) a umožněte localhost přístup k /server-status. Nginx: povolte stub_status na lokaci pouze pro localhost, např. /nginx_status nebo /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: povolte mod_status (ExtendedStatus On) a povolte localhost na /server-status. Nginx: povolte stub_status na umístění pouze pro localhost, například /nginx_status nebo /stub_status. FrankenPHP: přidejte globální volbu \"metrics\" do Caddyfile, která ve výchozím nastavení vystavuje metriky Prometheus na administračním API Caddy (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Celkem vláken"
+
+msgid "Busy threads"
+msgstr "Zaneprázdněná vlákna"
+
+msgid "Queue depth"
+msgstr "Hloubka fronty"
+
+msgid "Worker"
+msgstr "Pracovní proces"
+
+msgid "Average request time"
+msgstr "Průměrná doba požadavku"
 
 msgid "Grade percentage distribution"
 msgstr "Rozložení procentuálního hodnocení"
@@ -39282,11 +39348,17 @@ msgstr "OPcache je nainstalován, ale není povolen."
 msgid "OPcache extension is not available on this server."
 msgstr "Rozšíření OPcache není na tomto serveru dostupné."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache hlásí nekonzistentní statistiky paměti (známý problém u některých vícevláknových běhových prostředí PHP, např. FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu je nainstalován, ale není povolen."
 
 msgid "APCu extension is not available on this server."
 msgstr "Rozšíření APCu není na tomto serveru dostupné."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu hlásí nekonzistentní statistiky paměti (známý problém u některých vícevláknových běhových prostředí PHP)."
 
 msgid "Constant"
 msgstr "Konstanta"
@@ -40046,4 +40118,10 @@ msgstr "Použít data přístupu k relaci"
 
 msgid "Use session access end date"
 msgstr "Použít datum konce přístupu k relaci"
+
+msgid "Group report"
+msgstr "Skupinová zpráva"
+
+msgid "Student follow-up"
+msgstr "Sledování studenta"
 

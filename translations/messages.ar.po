@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "مثال الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نموذج الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -7726,6 +7726,54 @@ msgstr "قائمة أسئلة الأختبار"
 
 msgid "Recycle existing questions"
 msgstr "اعادة تدوير الاسئلة الحالية"
+
+msgid "Add this question to the test: %s"
+msgstr "أضف هذا السؤال إلى الاختبار: %s"
+
+msgid "Edit question: %s"
+msgstr "تعديل السؤال: %s"
+
+msgid "Add a question: %s"
+msgstr "إضافة سؤال: %s"
+
+msgid "Detected blanks: %s"
+msgstr "الفراغات المكتشفة: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s أسئلة، لمجموع درجات (جميع الأسئلة) يبلغ %s."
+
+msgid "Unique answer"
+msgstr "إجابة فريدة"
+
+msgid "Multiple answer true/false"
+msgstr "إجابات متعددة صح\/خطأ"
+
+msgid "Multiple answer combination true/false"
+msgstr "تركيبة إجابات متعددة صح\/خطأ"
+
+msgid "Unique answer with images"
+msgstr "إجابة فريدة مع صور"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "إجابات متعددة صح\/خطأ مع درجة اليقين"
+
+msgid "Answer in Office document"
+msgstr "إجابة في مستند أوفيس"
+
+msgid "Matching draggable"
+msgstr "مطابقة قابلة للسحب"
+
+msgid "Matching draggable combination"
+msgstr "تركيبة مطابقة قابلة للسحب"
+
+msgid "Fill in blanks combination"
+msgstr "تركيبة ملء الفراغات"
+
+msgid "Multiple answer dropdown combination"
+msgstr "تركيبة قائمة منسدلة لإجابات متعددة"
+
+msgid "Matching combination"
+msgstr "تركيبة مطابقة"
 
 msgid "Correct test"
 msgstr "انتهي الإختبار"
@@ -20555,6 +20603,9 @@ msgstr "انتهت صلاحية الرابط، يرجى المحاولة من ج
 
 msgid "Instructions for the password change procedure"
 msgstr "ارشادات تغيير رمز المرور"
+
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "تُرسل إليك هذه الرسالة لأنك (أو شخص يحاول انتحال شخصيتك) طلبت إنشاء كلمة مرور جديدة لحسابك.<br\/>لإعداد كلمة المرور الجديدة، يرجى اتباع هذا الرابط:<br\/>%s<br\/>إذا لم تقدّم هذا الطلب، يمكنك تجاهل هذه الرسالة. إذا استمررت في تلقي هذه الرسائل، يرجى الاتصال بمسؤول البوابة."
 
 msgid "Remind Course Expiration cron"
 msgstr "التذكير بجدولة انتهاء المقرر"
@@ -39126,8 +39177,8 @@ msgstr "التحديث التلقائي كل 5 ثوانٍ"
 msgid "Web server load"
 msgstr "حمل خادم الويب"
 
-msgid "Live Apache or Nginx status metrics"
-msgstr "مقاييس حالة Apache أو Nginx المباشرة"
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "مقاييس حالة Apache أو Nginx أو FrankenPHP المباشرة"
 
 msgid "Click to show web server load metrics"
 msgstr "انقر لعرض مقاييس حمل خادم الويب"
@@ -39135,8 +39186,8 @@ msgstr "انقر لعرض مقاييس حمل خادم الويب"
 msgid "Requires a local web server status module"
 msgstr "يتطلب وحدة حالة خادم ويب محلية"
 
-msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr "يُقرأ حمل خادم الويب من Apache mod_status أو Nginx stub_status على المضيف المحلي فقط. يجب أن تسمح صفحة الحالة بالطلبات من 127.0.0.1 (أو ::1)."
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "يُقرأ حمل خادم الويب من Apache mod_status أو Nginx stub_status أو نقطة نهاية مقاييس FrankenPHP\/Caddy، على المضيف المحلي فقط. يجب أن تسمح صفحة الحالة بالطلبات من 127.0.0.1 (أو ::1)."
 
 msgid "Paths scanned"
 msgstr "المسارات المفحوصة"
@@ -39147,8 +39198,8 @@ msgstr "تم الكشف"
 msgid "Status path"
 msgstr "مسار الحالة"
 
-msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr "مقاييس حمل خادم الويب متاحة فقط لـ Apache و Nginx."
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "مقاييس حمل خادم الويب متاحة فقط لـ Apache وNginx وFrankenPHP."
 
 msgid "None of the scanned status paths responded on localhost."
 msgstr "لم تستجب أي من مسارات الحالة المفحوصة على المضيف المحلي."
@@ -39231,8 +39282,23 @@ msgstr "مقبولات"
 msgid "Handled"
 msgstr "معالجة"
 
-msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
-msgstr "Apache: فعّل mod_status (ExtendedStatus On) وسمح للمضيف المحلي بالوصول إلى /server-status. Nginx: فعّل stub_status في موقع يقتصر على المضيف المحلي مثل /nginx_status أو /stub_status."
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: فعّل mod_status (ExtendedStatus On) واسمح للمضيف المحلي بالوصول إلى \/server-status. Nginx: فعّل stub_status في موقع مقتصر على المضيف المحلي مثل \/nginx_status أو \/stub_status. FrankenPHP: أضف خيار \"metrics\" عامًا إلى Caddyfile، وهو يعرض مقاييس Prometheus على واجهة إدارة Caddy (127.0.0.1:2019\/metrics) افتراضيًا."
+
+msgid "Total threads"
+msgstr "إجمالي الخيوط"
+
+msgid "Busy threads"
+msgstr "الخيوط المشغولة"
+
+msgid "Queue depth"
+msgstr "عمق قائمة الانتظار"
+
+msgid "Worker"
+msgstr "عامل"
+
+msgid "Average request time"
+msgstr "متوسط وقت الطلب"
 
 msgid "Grade percentage distribution"
 msgstr "توزيع النسب المئوية للدرجات"
@@ -39300,11 +39366,17 @@ msgstr "OPcache مثبت لكنه غير مفعّل."
 msgid "OPcache extension is not available on this server."
 msgstr "ملحق OPcache غير متوفر على هذا الخادم."
 
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "يُبلغ OPcache عن إحصائيات ذاكرة غير متسقة (مشكلة معروفة في بعض بيئات تشغيل PHP متعددة الخيوط، مثل FrankenPHP)."
+
 msgid "APCu is installed but not enabled."
 msgstr "APCu مثبت لكنه غير مفعّل."
 
 msgid "APCu extension is not available on this server."
 msgstr "ملحق APCu غير متوفر على هذا الخادم."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "يُبلغ APCu عن إحصائيات ذاكرة غير متسقة (مشكلة معروفة في بعض بيئات تشغيل PHP متعددة الخيوط)."
 
 msgid "Constant"
 msgstr "ثابت"
@@ -40064,4 +40136,10 @@ msgstr "استخدام تواريخ الوصول للجلسة"
 
 msgid "Use session access end date"
 msgstr "استخدام تاريخ نهاية الوصول للجلسة"
+
+msgid "Group report"
+msgstr "تقرير المجموعة"
+
+msgid "Student follow-up"
+msgstr "متابعة الطالب"
 

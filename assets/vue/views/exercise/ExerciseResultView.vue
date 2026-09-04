@@ -529,6 +529,11 @@
                   </div>
                 </div>
               </div>
+              <div
+                v-if="question.answer.comment"
+                class="exercise-result-html rounded bg-white/70 p-2 text-xs text-gray-700"
+                v-html="displayTranslatedHtml(question.answer.comment)"
+              />
             </template>
 
             <template v-else-if="question.answer.kind === 'matching'">
@@ -595,7 +600,14 @@
                       >
                         {{ index + 1 }}
                       </span>
-                      <span class="exercise-result-html" v-html="displayTranslatedHtml(item.answer)" />
+                      <div class="min-w-0 flex-1">
+                        <div class="exercise-result-html" v-html="displayTranslatedHtml(item.answer)" />
+                        <div
+                          v-if="item.comment && !question.answer.expectedItems?.length"
+                          class="exercise-result-html mt-2 rounded bg-white/70 p-2 text-xs text-gray-700"
+                          v-html="displayTranslatedHtml(item.comment)"
+                        />
+                      </div>
                     </li>
                   </ol>
                   <p v-if="!question.answer.studentItems?.length" class="text-sm text-gray-500">
@@ -626,7 +638,14 @@
                       >
                         {{ index + 1 }}
                       </span>
-                      <span class="exercise-result-html" v-html="displayTranslatedHtml(item.answer)" />
+                      <div class="min-w-0 flex-1">
+                        <div class="exercise-result-html" v-html="displayTranslatedHtml(item.answer)" />
+                        <div
+                          v-if="item.comment"
+                          class="exercise-result-html mt-2 rounded bg-white/70 p-2 text-xs text-gray-700"
+                          v-html="displayTranslatedHtml(item.comment)"
+                        />
+                      </div>
                     </li>
                   </ol>
                 </div>
@@ -656,6 +675,11 @@
                     {{ question.answer.expectedAnswer }}
                   </div>
                 </div>
+                <div
+                  v-if="question.answer.comment"
+                  class="exercise-result-html rounded bg-white/70 p-2 text-xs text-gray-700"
+                  v-html="displayTranslatedHtml(question.answer.comment)"
+                />
               </div>
             </template>
 
@@ -762,6 +786,11 @@
                       <span class="font-semibold">{{ displayText(zone.answer, t("Zone")) }}</span>
                       <span> · {{ zone.hotspotType }}</span>
                       <span v-if="zone.score !== null && zone.score !== undefined"> · {{ t("Score") }}: {{ formatNumber(zone.score) }}</span>
+                      <div
+                        v-if="zone.comment"
+                        class="exercise-result-html mt-2 rounded bg-white/70 p-2 text-xs text-gray-700"
+                        v-html="displayTranslatedHtml(zone.comment)"
+                      />
                     </li>
                   </ul>
                 </div>

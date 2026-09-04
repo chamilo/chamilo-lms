@@ -1137,6 +1137,7 @@
                 <th class="w-16 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
                 <th class="w-24 border-r border-gray-25 px-3 py-2 text-center font-semibold">{{ t("Expected") }}</th>
                 <th class="border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
+                <th class="min-w-[320px] border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Comment") }}</th>
                 <th
                   v-if="!isDropdownCombinationQuestion"
                   class="w-40 px-3 py-2 font-semibold"
@@ -1164,6 +1165,15 @@
                 </td>
                 <td class="border-r border-t border-gray-20 px-3 py-3 text-gray-90">
                   {{ displayText(answer.answer, t('Untitled')) }}
+                </td>
+                <td class="border-r border-t border-gray-20 px-2 py-3 align-top">
+                  <BaseTinyEditor
+                    :editor-id="`exercise-dropdown-comment-${answer.localId}`"
+                    v-model="answer.comment"
+                    :editor-config="answerEditorConfig"
+                    :full-page="false"
+                    :title="t('Comment')"
+                  />
                 </td>
                 <td
                   v-if="!isDropdownCombinationQuestion"
@@ -1375,6 +1385,7 @@
                 <th class="w-16 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
                 <th class="min-w-[520px] border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
                 <th class="w-52 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Matches To") }}</th>
+                <th class="min-w-[320px] border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Comment") }}</th>
                 <th class="w-36 px-3 py-2 font-semibold">{{ t("Score") }}</th>
               </tr>
             </thead>
@@ -1403,6 +1414,15 @@
                     :label="t('Matches To')"
                     :name="`draggable_target_${index}`"
                     :options="draggablePositionSelectOptions"
+                  />
+                </td>
+                <td class="border-r border-t border-gray-20 px-2 py-3 align-top">
+                  <BaseTinyEditor
+                    :editor-id="`exercise-draggable-comment-${item.localId}`"
+                    v-model="item.comment"
+                    :editor-config="answerEditorConfig"
+                    :full-page="false"
+                    :title="t('Comment')"
                   />
                 </td>
                 <td class="border-t border-gray-20 px-3 py-3 align-middle">
@@ -2386,6 +2406,7 @@ function createEmptyDraggableItem(index = 0) {
     localId: `draggable-${Date.now()}-${matchingPairCounter}`,
     answer: "",
     targetPosition: index + 1,
+    comment: "",
     score: 10,
     position: index + 1,
   }
@@ -2425,6 +2446,7 @@ function normalizeDraggableItems(items = []) {
     localId: item.localId || `draggable-${Date.now()}-${index + 1}`,
     answer: item.answer || "",
     targetPosition: Number(item.targetPosition || index + 1),
+    comment: item.comment || "",
     score: Number(item.score ?? 10),
     position: index + 1,
   }))
@@ -2625,7 +2647,7 @@ function fillForm(data) {
       answer: answer.answer || "",
       correct: true === answer.correct,
       correctChoice: null,
-      comment: "",
+      comment: answer.comment || "",
       score: isDropdownCombinationQuestion.value ? 0 : Number(answer.score || 0),
       position: Number(answer.position || index + 1),
       isUnknown: false,
@@ -2860,7 +2882,7 @@ function syncDropdownAnswersFromList() {
       answer: line,
       correct: true === previous.correct,
       correctChoice: null,
-      comment: "",
+      comment: previous.comment || "",
       score: isDropdownCombinationQuestion.value ? 0 : Number(previous.score || 0),
       position: index + 1,
       isUnknown: false,
@@ -3579,6 +3601,7 @@ function buildPayload() {
       ? form.draggableItems.map((item, index) => ({
           answer: item.answer,
           targetPosition: Number(item.targetPosition || index + 1),
+          comment: item.comment,
           score: Number(item.score || 0),
           position: index + 1,
         }))

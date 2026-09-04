@@ -33,7 +33,7 @@ $strings['host'] = 'BigBlueButton hostitel';
 $strings['host_help'] = 'Toto je název serveru, na kterém běží váš BigBlueButton server.
 Může to být localhost, IP adresa (např. http://192.168.13.54) nebo doménové jméno (např. http://my.video.com).';
 
-$strings['salt'] = 'BigBlueButton salt';
+$strings['salt'] = 'Sůl BigBlueButton';
 $strings['salt_help'] = 'Toto je bezpečnostní klíč vašeho BigBlueButton serveru, který umožní vašemu serveru ověřit instalaci Chamilo. Viz dokumentace BigBlueButton pro jeho nalezení. Zkuste bbb-conf --salt';
 
 $strings['big_blue_button_welcome_message'] = 'Přivítací zpráva';

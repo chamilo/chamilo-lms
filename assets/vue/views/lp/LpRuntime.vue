@@ -340,9 +340,15 @@
           @iframe-load="handleIframeLoad"
           @media-load="handleMediaLoad"
           @open-item="openItem"
+          @video-ended="handleVideoEnded"
+          @video-playing="hideVideoNextOverlay"
         />
 
-        <template v-else>
+        <div
+          v-else
+          :key="contentStageKey"
+          class="lp-runtime-content-stage"
+        >
           <div
             v-if="isChangingItem || iframeLoading"
             class="lp-runtime-loader"
@@ -358,7 +364,7 @@
 
           <video
             v-else-if="runtime.contentUrl && isVideoItem"
-            :key="`${runtime.currentItemId}-${runtime.contentUrl}-${iframeReloadKey}`"
+            ref="runtimeVideo"
             :src="runtime.contentUrl"
             :title="currentItem?.title || runtime.title"
             class="lp-runtime-video"
@@ -366,19 +372,50 @@
             playsinline
             preload="metadata"
             @loadedmetadata="handleMediaLoad"
+            @ended="handleVideoEnded"
+            @play="hideVideoNextOverlay"
+            @seeking="hideVideoNextOverlay"
           />
 
           <iframe
             v-else-if="runtime.contentUrl"
             ref="contentFrame"
-            :key="`${runtime.currentItemId}-${runtime.scorm?.itemViewId || runtime.currentItemAttempt}-${iframeReloadKey}`"
             :src="runtime.contentUrl"
             :title="currentItem?.title || runtime.title"
             allowfullscreen
             class="lp-runtime-iframe"
             @load="handleIframeLoad"
           />
-        </template>
+        </div>
+
+        <div
+          v-if="videoNextOverlayVisible && runtime.nextItemId && !isReportingMode"
+          class="lp-runtime-video-next-overlay"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="t('Complete')"
+        >
+          <div class="lp-runtime-video-next-card">
+            <BaseIcon
+              icon="file-video"
+              size="large"
+            />
+            <strong>{{ t("Complete") }}</strong>
+            <div class="lp-runtime-video-next-actions">
+              <BaseButton
+                :label="t('Next')"
+                icon="arrow-right"
+                type="primary"
+                @click="openNextItemAfterVideo"
+              />
+              <BaseButton
+                :label="t('Close')"
+                type="black"
+                @click="hideVideoNextOverlay"
+              />
+            </div>
+          </div>
+        </div>
       </main>
     </template>
   </div>
@@ -416,6 +453,8 @@ const isSyncingRuntime = ref(false)
 const isReturningToCStudio = ref(false)
 const iframeLoading = ref(false)
 const iframeReloadKey = ref(0)
+const runtimeVideo = ref(null)
+const videoNextOverlayVisible = ref(false)
 const previewImageFailed = ref(false)
 const errorMessage = ref("")
 const menuOpen = ref(false)
@@ -432,6 +471,9 @@ let lastBeaconAt = 0
 let scormRuntimeContext = null
 let scormRuntimeKey = ""
 let restoreTeacherViewPromise = null
+let youtubeApiPromise = null
+let embeddedVideoCleanup = []
+let embeddedVideoWatchGeneration = 0
 
 const lpId = computed(() => Number(route.params.lpId || 0))
 const hasCStudioEditorContext = computed(() => String(route.query.teachdoc || "").toLowerCase() === "edit")
@@ -535,6 +577,14 @@ const isFinalItem = computed(
   () => currentItem.value?.itemType === "final_item" && Boolean(runtime.value?.finalItem?.enabled),
 )
 const isVideoItem = computed(() => "video" === String(currentItem.value?.itemType || "").trim().toLowerCase())
+const contentStageKey = computed(() =>
+  [
+    Number(runtime.value?.currentItemId || 0),
+    String(currentItem.value?.itemType || ""),
+    String(runtime.value?.contentUrl || ""),
+    Number(iframeReloadKey.value || 0),
+  ].join(":"),
+)
 const previewImageUrl = computed(() => String(runtime.value?.previewImageUrl || ""))
 const shouldShowPreviewImage = computed(() => {
   const url = previewImageUrl.value.trim()
@@ -973,10 +1023,167 @@ async function returnToCStudio() {
   window.location.assign(cStudioEditorUrl.value)
 }
 
+function stopCurrentVideoPlayback() {
+  const video = runtimeVideo.value
+  if (!(video instanceof HTMLVideoElement)) {
+    return
+  }
+
+  try {
+    video.pause()
+  } catch (error) {
+    console.warn("Unable to stop the current LP video before changing item.", error)
+  }
+}
+
+function hideVideoNextOverlay() {
+  videoNextOverlayVisible.value = false
+}
+
+function showVideoNextOverlay() {
+  if (Number(runtime.value?.nextItemId || 0) > 0) {
+    videoNextOverlayVisible.value = true
+  }
+}
+
+async function leaveVideoFullscreen() {
+  if (document.fullscreenElement && typeof document.exitFullscreen === "function") {
+    await document.exitFullscreen().catch(() => {})
+  }
+}
+
+async function handleVideoEnded() {
+  await leaveVideoFullscreen()
+  showVideoNextOverlay()
+}
+
+function openNextItemAfterVideo() {
+  const nextItemId = Number(runtime.value?.nextItemId || 0)
+  hideVideoNextOverlay()
+  if (nextItemId > 0) {
+    void openItem(nextItemId)
+  }
+}
+
+function clearEmbeddedVideoWatchers() {
+  embeddedVideoWatchGeneration += 1
+  while (embeddedVideoCleanup.length) {
+    const cleanup = embeddedVideoCleanup.pop()
+    try {
+      cleanup?.()
+    } catch (error) {
+      console.warn("Unable to clean up the embedded LP video watcher.", error)
+    }
+  }
+}
+
+function loadYoutubeIframeApi() {
+  if (window.YT?.Player) {
+    return Promise.resolve(window.YT)
+  }
+  if (youtubeApiPromise) {
+    return youtubeApiPromise
+  }
+
+  youtubeApiPromise = new Promise((resolve, reject) => {
+    const previousReady = window.onYouTubeIframeAPIReady
+    window.onYouTubeIframeAPIReady = () => {
+      if (typeof previousReady === "function") {
+        previousReady()
+      }
+      resolve(window.YT)
+    }
+
+    const existingScript = document.querySelector('script[src="https://www.youtube.com/iframe_api"]')
+    if (!existingScript) {
+      const script = document.createElement("script")
+      script.src = "https://www.youtube.com/iframe_api"
+      script.async = true
+      script.onerror = () => reject(new Error("Unable to load the YouTube iframe API."))
+      document.head.appendChild(script)
+    }
+  }).catch((error) => {
+    youtubeApiPromise = null
+    throw error
+  })
+
+  return youtubeApiPromise
+}
+
+async function setupEmbeddedVideoWatchers(frame) {
+  clearEmbeddedVideoWatchers()
+  hideVideoNextOverlay()
+  if ("link" !== String(currentItem.value?.itemType || "").trim().toLowerCase()) {
+    return
+  }
+  const generation = embeddedVideoWatchGeneration
+
+  let frameDocument
+  try {
+    frameDocument = frame?.contentDocument || frame?.contentWindow?.document
+  } catch (error) {
+    return
+  }
+  if (!frameDocument) {
+    return
+  }
+
+  const youtubeFrames = Array.from(
+    frameDocument.querySelectorAll(
+      "iframe.youtube-player, iframe[src*='youtube.com/embed/'], iframe[src*='youtube-nocookie.com/embed/']",
+    ),
+  )
+  if (!youtubeFrames.length) {
+    return
+  }
+
+  for (const youtubeFrame of youtubeFrames) {
+    try {
+      const url = new URL(youtubeFrame.src, window.location.href)
+      url.searchParams.set("enablejsapi", "1")
+      url.searchParams.set("origin", window.location.origin)
+      youtubeFrame.src = url.toString()
+    } catch (error) {
+      console.warn("Unable to normalize the embedded YouTube URL.", error)
+    }
+  }
+
+  try {
+    const YT = await loadYoutubeIframeApi()
+    if (generation !== embeddedVideoWatchGeneration || contentFrame.value !== frame) {
+      return
+    }
+
+    for (const youtubeFrame of youtubeFrames) {
+      const player = new YT.Player(youtubeFrame, {
+        events: {
+          onStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+              void handleVideoEnded()
+            } else if (event.data === YT.PlayerState.PLAYING) {
+              hideVideoNextOverlay()
+            }
+          },
+        },
+      })
+      embeddedVideoCleanup.push(() => player?.destroy?.())
+    }
+  } catch (error) {
+    console.warn("Unable to watch the embedded YouTube player.", error)
+  }
+}
+
 function applyRuntime(data, { contentChanged = false } = {}) {
   if (!data.runtimeSupported && data.legacyFallbackUrl) {
     window.location.replace(data.legacyFallbackUrl)
     return false
+  }
+
+  if (contentChanged) {
+    stopCurrentVideoPlayback()
+    hideVideoNextOverlay()
+    clearEmbeddedVideoWatchers()
+    contentFrame.value = null
   }
 
   installScormRuntime(data, { forceRecreate: contentChanged })
@@ -1098,6 +1305,10 @@ async function openItem(itemId) {
   }
 
   impressActiveIsSection.value = false
+  stopCurrentVideoPlayback()
+  hideVideoNextOverlay()
+  clearEmbeddedVideoWatchers()
+  contentFrame.value = null
   isChangingItem.value = true
   iframeLoading.value = true
 
@@ -1130,12 +1341,14 @@ async function openItem(itemId) {
 function handleIframeLoad(event) {
   contentFrame.value = event?.target || contentFrame.value
   iframeLoading.value = false
+  void setupEmbeddedVideoWatchers(contentFrame.value)
   scormRuntimeContext?.logLms("Content iframe load event starts", 2)
   scormRuntimeContext?.logLms("Content type is SCO; skipping auto LMSInitialize()", 2)
   scheduleRuntimeRefresh()
 }
 
 function handleMediaLoad() {
+  clearEmbeddedVideoWatchers()
   contentFrame.value = null
   iframeLoading.value = false
   scheduleRuntimeRefresh()
@@ -1150,6 +1363,8 @@ function handleImpressActiveChange(item) {
 
   impressActiveIsSection.value = isSection
   if (isSection) {
+    hideVideoNextOverlay()
+    clearEmbeddedVideoWatchers()
     contentFrame.value = null
     iframeLoading.value = false
   }
@@ -1219,6 +1434,8 @@ onBeforeUnmount(() => {
   window.clearInterval(trackingTimer)
   window.clearTimeout(refreshTimer)
   scormRuntimeContext?.flushBeacon("unmount")
+  stopCurrentVideoPlayback()
+  clearEmbeddedVideoWatchers()
   clearScormRuntime()
 })
 </script>
@@ -1620,19 +1837,76 @@ body.lp-runtime-document {
   z-index: 180;
 }
 
-.lp-runtime-iframe {
+.lp-runtime-content-stage {
+  position: relative;
   display: block;
-  width: 100%;
+  width: 100% !important;
+  max-width: none !important;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.lp-runtime-iframe,
+.lp-runtime-video {
+  display: block;
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+
+.lp-runtime-iframe {
   border: 0;
   background: #ffffff;
 }
 
 .lp-runtime-video {
-  display: block;
-  width: 100%;
-  height: 100%;
   object-fit: contain;
+}
+
+.lp-runtime-video-next-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 140;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgb(15 23 42 / 45%);
+}
+
+.lp-runtime-video-next-card {
+  display: flex;
+  width: min(420px, 100%);
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 24px;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 18px;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 20px 50px rgb(15 23 42 / 35%);
+  color: #111827;
+  text-align: center;
+}
+
+.lp-runtime-video-next-card strong {
+  font-size: 20px;
+}
+
+.lp-runtime-video-next-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
 }
 
 .lp-runtime-loader {

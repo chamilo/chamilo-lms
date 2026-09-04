@@ -1269,6 +1269,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $studentInfo = $row instanceof TrackEAttempt ? $this->parseFillBlankAnswer($row->getAnswer(), true) : null;
         $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
         $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
+        $showFeedback = true === ($visibility['showFeedback'] ?? false);
         $blankCount = null !== $teacherInfo ? \count($teacherInfo['words']) : \count($studentInfo['student_answer'] ?? []);
         $blanks = [];
 
@@ -1292,6 +1293,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'kind' => 'fill_blanks',
             'text' => (string) ($teacherInfo['text'] ?? ''),
             'blanks' => $blanks,
+            'comment' => $showFeedback && $answer instanceof CQuizAnswer ? (string) $answer->getComment() : '',
             'showStudentAnswers' => $showStudentAnswers,
         ];
     }
@@ -1373,6 +1375,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $expectedItems = [];
         $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
         $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
+        $showFeedback = true === ($visibility['showFeedback'] ?? false);
 
         foreach ($this->getOrderedAnswers($question) as $answer) {
             $answerId = (int) $answer->getIid();
@@ -1388,6 +1391,9 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                 'selectedPosition' => $selectedPosition,
                 'correctPosition' => $showQuestionCorrection ? $targetPosition : null,
                 'isCorrect' => null !== $selectedPosition && $selectedPosition === $targetPosition,
+                'comment' => $showFeedback && ($showExpectedAnswers || null !== $selectedPosition)
+                    ? (string) $answer->getComment()
+                    : '',
             ];
 
             if ($showStudentAnswers && null !== $selectedPosition) {
@@ -1480,12 +1486,16 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
         $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
+        $showFeedback = true === ($visibility['showFeedback'] ?? false);
 
         return [
             'kind' => 'calculated',
             'text' => (string) ($parsedTeacherAnswer['text'] ?? ''),
             'studentAnswer' => $showStudentAnswers ? $studentAnswer : '',
             'expectedAnswer' => $showExpectedAnswers ? (string) ($parsedTeacherAnswer['expectedAnswer'] ?? '') : null,
+            'comment' => $showFeedback && $teacherAnswer instanceof CQuizAnswer
+                ? (string) $teacherAnswer->getComment()
+                : '',
         ];
     }
 
@@ -1544,6 +1554,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $row = $rows[0] ?? null;
         $showStudentAnswers = true === ($visibility['showStudentAnswers'] ?? true);
         $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
+        $showFeedback = true === ($visibility['showFeedback'] ?? false);
         $studentPoints = $showStudentAnswers && $row instanceof TrackEAttempt ? $this->parseHotspotCoordinates((string) $row->getAnswer()) : [];
         $zones = [];
         $isDelineation = self::HOTSPOT_DELINEATION === (int) $question->getType();
@@ -1560,7 +1571,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                 $zones[] = [
                     'id' => (int) $answer->getIid(),
                     'answer' => $answer->getAnswer(),
-                    'comment' => (string) $answer->getComment(),
+                    'comment' => $showFeedback ? (string) $answer->getComment() : '',
                     'score' => (float) $answer->getPonderation(),
                     'position' => (int) $answer->getPosition(),
                     'hotspotType' => $hotspotType,

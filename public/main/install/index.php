@@ -164,7 +164,11 @@ if (file_exists($envFile)) {
 $httpRequest = Request::createFromGlobals();
 $installationLanguage = 'en_US';
 
-$langParam = $httpRequest->get('language_list');
+// Request::get() is deprecated since symfony/http-foundation 7.4; check the
+// bags directly in the same attributes -> query -> request priority order.
+$langParam = $httpRequest->attributes->get('language_list')
+    ?? $httpRequest->query->get('language_list')
+    ?? $httpRequest->request->get('language_list');
 if ($langParam !== null && $langParam !== '') {
     $search = ['../', '\\0'];
     $installationLanguage = str_replace($search, '', urldecode($langParam));

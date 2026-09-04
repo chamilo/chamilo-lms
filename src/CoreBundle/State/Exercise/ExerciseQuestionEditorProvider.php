@@ -1555,6 +1555,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
                 'localId' => 'draggable-'.(int) $answer->getPosition(),
                 'answer' => $answer->getAnswer(),
                 'targetPosition' => $correct,
+                'comment' => (string) $answer->getComment(),
                 'score' => (float) $answer->getPonderation(),
                 'position' => \count($items) + 1,
             ];
@@ -1569,8 +1570,8 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     private function getDefaultDraggableItems(): array
     {
         return [
-            ['id' => null, 'localId' => 'draggable-1', 'answer' => '', 'targetPosition' => 1, 'score' => 10.0, 'position' => 1],
-            ['id' => null, 'localId' => 'draggable-2', 'answer' => '', 'targetPosition' => 2, 'score' => 10.0, 'position' => 2],
+            ['id' => null, 'localId' => 'draggable-1', 'answer' => '', 'targetPosition' => 1, 'comment' => '', 'score' => 10.0, 'position' => 1],
+            ['id' => null, 'localId' => 'draggable-2', 'answer' => '', 'targetPosition' => 2, 'comment' => '', 'score' => 10.0, 'position' => 2],
         ];
     }
 

@@ -361,17 +361,16 @@ if (!isset($_GET['running'])) {
         $installationProfile = htmlentities($_GET['profile']);
     }
 } else {
-    foreach ($_POST as $key => $val) {
+    // Walk the leaves only: trim() throws a TypeError on the intermediate arrays
+    // that a nested input such as a[b][c] produces.
+    array_walk_recursive($_POST, static function (&$val): void {
         if (is_string($val)) {
             $val = trim($val);
-            $_POST[$key] = $val;
-        } elseif (is_array($val)) {
-            foreach ($val as $key2 => $val2) {
-                $val2 = trim($val2);
-                $_POST[$key][$key2] = $val2;
-            }
         }
-        $GLOBALS[$key] = $_POST[$key];
+    });
+
+    foreach ($_POST as $key => $val) {
+        $GLOBALS[$key] = $val;
     }
 }
 

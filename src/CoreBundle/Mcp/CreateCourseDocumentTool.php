@@ -6,19 +6,15 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Mcp;
 
-use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
-use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
-use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Mcp\Dto\CourseDocumentInput;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -28,15 +24,11 @@ use Mcp\Capability\Attribute\McpTool;
 use Mcp\Exception\ToolCallException;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
-use const JSON_THROW_ON_ERROR;
 use const PREG_SPLIT_NO_EMPTY;
 
 final readonly class CreateCourseDocumentTool
@@ -50,14 +42,8 @@ final readonly class CreateCourseDocumentTool
         private AccessUrlHelper $accessUrlHelper,
         private CourseRelUserRepository $courseRelUserRepository,
         private CDocumentRepository $documentRepository,
-        private CreateDocumentFileAction $createDocumentFileAction,
+        private CourseDocumentCreator $documentCreator,
         private EntityManagerInterface $entityManager,
-        private KernelInterface $kernel,
-        private TranslatorInterface $translator,
-        private CourseRepository $courseRepository,
-        private CourseHelper $courseHelper,
-        private CidReqHelper $cidReqHelper,
-        private AiDisclosureHelper $aiDisclosureHelper,
         private LanguageRepository $languageRepository,
         private CourseDocumentContentService $documentContentService,
     ) {}
@@ -232,41 +218,19 @@ final readonly class CreateCourseDocumentTool
 
         /** @var CDocument $document */
         $document = $this->entityManager->wrapInTransaction(
-            function () use ($course, $courseId, $title, $topic, $content, $languageIsoCode, $visibility, $courseResourceNode): CDocument {
-                $request = Request::create(
-                    '/api/documents?cid='.$courseId,
-                    'POST',
-                    [
-                        'title' => $title,
-                        'filetype' => 'file',
-                        'comment' => $topic,
-                        'contentFile' => $content,
-                        'contentFileExtension' => 'html',
-                        'contentFileMimeType' => 'text/html',
-                        'language' => $languageIsoCode,
-                        'parentResourceNodeId' => (int) $courseResourceNode->getId(),
-                        'resourceLinkList' => json_encode(
-                            [['visibility' => $visibility]],
-                            JSON_THROW_ON_ERROR,
-                        ),
-                        'ai_assisted' => '1',
-                    ],
-                    [],
-                    [],
-                    [],
-                    '',
-                );
-
-                $document = ($this->createDocumentFileAction)(
-                    $request,
-                    $this->documentRepository,
-                    $this->entityManager,
-                    $this->kernel,
-                    $this->translator,
-                    $this->courseRepository,
-                    $this->courseHelper,
-                    $this->cidReqHelper,
-                    $this->aiDisclosureHelper,
+            function () use ($course, $title, $topic, $content, $languageIsoCode, $visibility, $courseResourceNode): CDocument {
+                $document = $this->documentCreator->create(
+                    new CourseDocumentInput(
+                        title: $title,
+                        comment: $topic,
+                        parentResourceNodeId: (int) $courseResourceNode->getId(),
+                        visibility: $visibility,
+                        contentFile: $content,
+                        contentFileExtension: 'html',
+                        contentFileMimeType: 'text/html',
+                        language: $languageIsoCode,
+                        aiAssisted: true,
+                    ),
                     $course,
                 );
 

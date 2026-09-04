@@ -6,24 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\Ai;
 
-use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
-use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
-use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\CourseHelper;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Mcp\CourseDocumentCreator;
+use Chamilo\CoreBundle\Mcp\Dto\CourseDocumentInput;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use finfo;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const DNS_A;
 use const DNS_AAAA;
@@ -31,7 +24,6 @@ use const FILEINFO_MIME_TYPE;
 use const FILTER_FLAG_NO_PRIV_RANGE;
 use const FILTER_FLAG_NO_RES_RANGE;
 use const FILTER_VALIDATE_IP;
-use const JSON_THROW_ON_ERROR;
 
 final readonly class GeneratedMediaStorageService
 {
@@ -50,15 +42,8 @@ final readonly class GeneratedMediaStorageService
 
     public function __construct(
         private HttpClientInterface $httpClient,
-        private CDocumentRepository $documentRepository,
-        private CreateDocumentFileAction $createDocumentFileAction,
+        private CourseDocumentCreator $documentCreator,
         private EntityManagerInterface $entityManager,
-        private KernelInterface $kernel,
-        private TranslatorInterface $translator,
-        private CourseRepository $courseRepository,
-        private CourseHelper $courseHelper,
-        private CidReqHelper $cidReqHelper,
-        private AiDisclosureHelper $aiDisclosureHelper,
     ) {}
 
     /**
@@ -114,11 +99,10 @@ final readonly class GeneratedMediaStorageService
                 ? ResourceLink::VISIBILITY_PUBLISHED
                 : ResourceLink::VISIBILITY_DRAFT;
 
-            /** @var CDocument $document */
+            /** @var CDocument */
             return $this->entityManager->wrapInTransaction(
                 function () use (
                     $course,
-                    $courseId,
                     $topic,
                     $language,
                     $visibility,
@@ -129,37 +113,15 @@ final readonly class GeneratedMediaStorageService
                         throw new RuntimeException('The course resource node could not be resolved.');
                     }
 
-                    $request = Request::create(
-                        '/api/documents?cid='.$courseId,
-                        'POST',
-                        [
-                            'filetype' => 'file',
-                            'comment' => $topic,
-                            'parentResourceNodeId' => (int) $courseResourceNode->getId(),
-                            'resourceLinkList' => json_encode(
-                                [['visibility' => $visibility]],
-                                JSON_THROW_ON_ERROR,
-                            ),
-                            'fileExistsOption' => 'rename',
-                            'language' => $language ?? '',
-                            'ai_assisted' => '1',
-                        ],
-                        [],
-                        ['uploadFile' => $uploadedFile],
-                        [],
-                        '',
-                    );
-
-                    return ($this->createDocumentFileAction)(
-                        $request,
-                        $this->documentRepository,
-                        $this->entityManager,
-                        $this->kernel,
-                        $this->translator,
-                        $this->courseRepository,
-                        $this->courseHelper,
-                        $this->cidReqHelper,
-                        $this->aiDisclosureHelper,
+                    return $this->documentCreator->create(
+                        new CourseDocumentInput(
+                            comment: $topic,
+                            parentResourceNodeId: (int) $courseResourceNode->getId(),
+                            visibility: $visibility,
+                            uploadFile: $uploadedFile,
+                            language: $language,
+                            aiAssisted: true,
+                        ),
                         $course,
                     );
                 }

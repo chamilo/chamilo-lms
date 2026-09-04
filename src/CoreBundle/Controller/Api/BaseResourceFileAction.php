@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
+use Chamilo\CoreBundle\Mcp\Dto\ResourceFileInput;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
@@ -360,6 +361,16 @@ class BaseResourceFileAction
      *
      * @return array<string, mixed>
      */
+    /**
+     * The request-shaped face of handleCreateFile(), for the API actions.
+     *
+     * @template TResource of object
+     *
+     * @param ResourceRepository<TResource> $resourceRepository
+     * @param ?array<int, mixed>            $resourceLinkListOverride the link bindings the controller forces from the gated context
+     *
+     * @return array<string, mixed>
+     */
     public function handleCreateFileRequest(
         AbstractResource $resource,
         ResourceRepository $resourceRepository,
@@ -373,6 +384,29 @@ class BaseResourceFileAction
         ?array $resourceLinkListOverride = null,
         ?Course $course = null
     ): array {
+        return $this->handleCreateFile(
+            $resource,
+            $resourceRepository,
+            $this->resourceFileInputFromRequest($request, $resourceLinkListOverride),
+            $em,
+            $cidReqHelper,
+            $fileExistsOption,
+            $translator,
+            $courseRepository,
+            $courseHelper,
+            $course
+        );
+    }
+
+    /**
+     * Reads a create-file request into the typed input handleCreateFile() takes.
+     *
+     * @param ?array<int, mixed> $resourceLinkListOverride
+     */
+    protected function resourceFileInputFromRequest(
+        Request $request,
+        ?array $resourceLinkListOverride = null
+    ): ResourceFileInput {
         $contentData = $request->getContent();
 
         if (!empty($contentData)) {
@@ -383,6 +417,9 @@ class BaseResourceFileAction
             $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
             $fileType = $contentData['filetype'] ?? '';
             $resourceLinkList = $contentData['resourceLinkList'] ?? [];
+            $language = \array_key_exists('language', (array) $contentData)
+                ? (string) $contentData['language']
+                : null;
         } else {
             $title = $request->request->get('title');
             $comment = $request->request->get('comment');
@@ -401,6 +438,9 @@ class BaseResourceFileAction
                     throw new InvalidArgumentException($message);
                 }
             }
+            $language = $request->request->has('language')
+                ? (string) $request->request->get('language')
+                : null;
         }
 
         // The controller may force the link context (cid/sid/gid) from the
@@ -408,6 +448,56 @@ class BaseResourceFileAction
         if (null !== $resourceLinkListOverride) {
             $resourceLinkList = $resourceLinkListOverride;
         }
+
+        $uploadFile = null;
+        if ($request->files->count() > 0) {
+            if (!$request->files->has('uploadFile')) {
+                throw new BadRequestHttpException('"uploadFile" is required');
+            }
+
+            $uploadFile = $request->files->get('uploadFile');
+        }
+
+        return new ResourceFileInput(
+            filetype: (string) $fileType,
+            parentResourceNodeId: $parentResourceNodeId,
+            title: null === $title ? null : (string) $title,
+            comment: (string) $comment,
+            resourceLinkList: \is_array($resourceLinkList) ? $resourceLinkList : [],
+            uploadFile: $uploadFile instanceof UploadedFile ? $uploadFile : null,
+            contentFile: $request->request->has('contentFile')
+                ? (string) $request->request->get('contentFile')
+                : null,
+            contentFileExtension: strtolower(trim((string) $request->request->get('contentFileExtension', 'html'))),
+            contentFileMimeType: strtolower(trim((string) $request->request->get('contentFileMimeType', 'text/html'))),
+            language: $language,
+        );
+    }
+
+    /**
+     * @template TResource of object
+     *
+     * @param ResourceRepository<TResource> $resourceRepository
+     *
+     * @return array<string, mixed>
+     */
+    public function handleCreateFile(
+        AbstractResource $resource,
+        ResourceRepository $resourceRepository,
+        ResourceFileInput $input,
+        EntityManager $em,
+        CidReqHelper $cidReqHelper,
+        string $fileExistsOption = '',
+        ?TranslatorInterface $translator = null,
+        ?CourseRepository $courseRepository = null,
+        ?CourseHelper $courseHelper = null,
+        ?Course $course = null
+    ): array {
+        $title = $input->title;
+        $comment = $input->comment;
+        $parentResourceNodeId = $input->parentResourceNodeId;
+        $fileType = $input->filetype;
+        $resourceLinkList = $input->resourceLinkList;
 
         if (empty($fileType)) {
             throw new Exception('filetype needed: folder or file');
@@ -426,21 +516,12 @@ class BaseResourceFileAction
         switch ($fileType) {
             case 'certificate':
             case 'file':
-                $content = '';
-                if ($request->request->has('contentFile')) {
-                    $content = (string) $request->request->get('contentFile');
-                }
+                $content = (string) $input->contentFile;
 
                 $fileParsed = false;
 
-                // Multipart upload
-                if ($request->files->count() > 0) {
-                    if (!$request->files->has('uploadFile')) {
-                        throw new BadRequestHttpException('"uploadFile" is required');
-                    }
-
-                    /** @var UploadedFile $uploadedFile */
-                    $uploadedFile = $request->files->get('uploadFile');
+                if ($input->uploadFile instanceof UploadedFile) {
+                    $uploadedFile = $input->uploadFile;
 
                     $title = (string) $uploadedFile->getClientOriginalName();
                     if (empty($title)) {
@@ -477,7 +558,7 @@ class BaseResourceFileAction
 
                                 $resourceNode->setUpdatedAt(new DateTime());
                                 $existingDocument->setResourceNode($resourceNode);
-                                $this->applyResourceLanguageFromRequest($existingDocument, $request, $em);
+                                $this->applyResourceLanguageFromInput($existingDocument, $input, $em, $course);
 
                                 $em->persist($existingDocument);
                                 $em->flush();
@@ -541,8 +622,8 @@ class BaseResourceFileAction
                 // HTML/SVG contentFile => create an UploadedFile from content.
                 // An HTML editor save always sends contentFile (possibly empty);
                 // treat that as a real create rather than requiring a binary upload.
-                if (!$fileParsed && $request->request->has('contentFile')) {
-                    $contentFileInfo = $this->getContentFileUploadInfo($request, (string) $title);
+                if (!$fileParsed && null !== $input->contentFile) {
+                    $contentFileInfo = $this->getContentFileUploadInfo($input, (string) $title);
                     $content = $this->sanitizeContentFile((string) $content, $contentFileInfo['extension']);
 
                     $newBytes = (int) \strlen((string) $content);
@@ -886,10 +967,13 @@ class BaseResourceFileAction
         return '' !== $currentMimeType ? $currentMimeType : 'text/plain';
     }
 
-    private function getContentFileUploadInfo(Request $request, string $title): array
+    /**
+     * @return array{extension: string, mimeType: string, fileName: string}
+     */
+    private function getContentFileUploadInfo(ResourceFileInput $input, string $title): array
     {
-        $extension = strtolower(trim((string) $request->request->get('contentFileExtension', 'html')));
-        $mimeType = strtolower(trim((string) $request->request->get('contentFileMimeType', 'text/html')));
+        $extension = $input->contentFileExtension;
+        $mimeType = $input->contentFileMimeType;
 
         $allowed = [
             'html' => 'text/html',
@@ -1046,6 +1130,106 @@ class BaseResourceFileAction
         $this->applyResourceLanguage($resource, $language, $em);
     }
 
+    /**
+     * The typed sibling of applyResourceLanguageFromRequest().
+     *
+     * A null $input->language means the caller said nothing, so the resource keeps
+     * what it has. An empty one means "the course's": that course is $course when
+     * an in-process caller supplied it, and otherwise the one the link list is
+     * already bound to -- which is the authorized course, not a raw query
+     * parameter.
+     */
+    protected function applyResourceLanguageFromInput(
+        AbstractResource $resource,
+        ResourceFileInput $input,
+        EntityManagerInterface $em,
+        ?Course $course = null
+    ): void {
+        $this->applyResourceLanguageCode(
+            $resource,
+            $input->language,
+            $em,
+            $course ?? $em->getRepository(Course::class)->find($input->courseIdFromLinks())
+        );
+    }
+
+    /**
+     * Same contract on a bare language code, for a caller that holds the course
+     * and the code but has no ResourceFileInput to hand.
+     */
+    protected function applyResourceLanguageCode(
+        AbstractResource $resource,
+        ?string $languageCode,
+        EntityManagerInterface $em,
+        ?Course $course = null
+    ): void {
+        if (null === $languageCode) {
+            return;
+        }
+
+        $this->applyResourceLanguage(
+            $resource,
+            $this->resolveResourceLanguage($languageCode, $em, $course),
+            $em
+        );
+    }
+
+    private function resolveResourceLanguage(
+        string $languageCode,
+        EntityManagerInterface $em,
+        ?Course $course
+    ): ?Language {
+        $languageCode = trim($languageCode);
+
+        if ('' === $languageCode) {
+            return $this->findDefaultCourseLanguage($course, $em);
+        }
+
+        if (preg_match('#/api/languages/(\d+)#', $languageCode, $matches)) {
+            $language = $em->getRepository(Language::class)->find((int) $matches[1]);
+
+            if ($language instanceof Language) {
+                return $language;
+            }
+
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9_-]{1,8}$/', $languageCode)) {
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        $language = $em->getRepository(Language::class)->findOneBy([
+            'isocode' => $languageCode,
+            'available' => true,
+        ]);
+
+        if ($language instanceof Language) {
+            return $language;
+        }
+
+        throw new BadRequestHttpException('Invalid resource language.');
+    }
+
+    private function findDefaultCourseLanguage(?Course $course, EntityManagerInterface $em): ?Language
+    {
+        if (!$course instanceof Course) {
+            return null;
+        }
+
+        $courseLanguage = trim((string) $course->getCourseLanguage());
+        if ('' === $courseLanguage) {
+            return null;
+        }
+
+        $language = $em->getRepository(Language::class)->findOneBy([
+            'isocode' => $courseLanguage,
+            'available' => true,
+        ]);
+
+        return $language instanceof Language ? $language : null;
+    }
+
     protected function applyResourceLanguage(AbstractResource $resource, ?Language $language, EntityManagerInterface $em): void
     {
         $resourceNode = $resource->getResourceNode();
@@ -1134,22 +1318,10 @@ class BaseResourceFileAction
             return null;
         }
 
-        $course = $em->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            return null;
-        }
-
-        $courseLanguage = trim((string) $course->getCourseLanguage());
-        if ('' === $courseLanguage) {
-            return null;
-        }
-
-        $language = $em->getRepository(Language::class)->findOneBy([
-            'isocode' => $courseLanguage,
-            'available' => true,
-        ]);
-
-        return $language instanceof Language ? $language : null;
+        return $this->findDefaultCourseLanguage(
+            $em->getRepository(Course::class)->find($courseId),
+            $em
+        );
     }
 
     private function resolveCourseIdFromRequest(Request $request): int

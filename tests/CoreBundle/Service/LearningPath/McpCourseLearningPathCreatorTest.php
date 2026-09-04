@@ -65,6 +65,37 @@ final class McpCourseLearningPathCreatorTest extends KernelTestCase
         );
     }
 
+    /**
+     * An MCP call has no session, so the course context that binds a resource link
+     * cannot come from CidReqHelper. Without the link the document exists but does
+     * not belong to the course: it is absent from the document tool, free of the
+     * quota, and invisible to the title-uniqueness check.
+     */
+    public function testCreatedDocumentsAreLinkedToTheCourse(): void
+    {
+        $result = $this->creator->create(
+            $this->course,
+            $this->user,
+            'MCP LP Course Link',
+            [['title' => 'MCP LP Linked Page', 'content' => '<p>Linked to its course.</p>']],
+            null,
+            false,
+        );
+
+        $document = $this->em->find(CDocument::class, $result['items'][0]['document_id']);
+        self::assertInstanceOf(CDocument::class, $document);
+
+        $links = $document->getResourceNode()->getResourceLinks();
+        self::assertCount(1, $links, 'The document must carry exactly one resource link.');
+
+        $link = $links->first();
+        self::assertSame((int) $this->course->getId(), (int) $link->getCourse()?->getId());
+
+        // Base-course content: an MCP call carries no session or group either.
+        self::assertNull($link->getSession());
+        self::assertNull($link->getGroup());
+    }
+
     public function testCreatesMixedPagesWithAndWithoutQuiz(): void
     {
         $pages = [

@@ -456,12 +456,32 @@ The `title` defaults to `t("Confirmation")` and `message` defaults to `t("Please
 
 ### Breadcrumbs
 
-Every new Vue page must have a breadcrumb. The breadcrumb is built automatically by `assets/vue/components/Breadcrumb.vue` from the route tree — no code is needed inside the view itself. What is required:
+**Authoritative reference: the `vue-breadcrumb` skill** (`.claude/skills/vue-breadcrumb/SKILL.md`).
+It auto-invokes whenever you add a Vue route, and documents each declaration, the translation-key
+rule, the traps and how to test a trail.
 
-1. Set `meta: { showBreadcrumb: true, breadcrumb: "Page title" }` on the route entry in the relevant router file (e.g. `assets/vue/router/admin.js`).
-2. If the page lives under a new top-level path (not `/admin/*`), add the path prefix to the `whitelist` array in `buildManualBreadcrumbIfNeeded` inside `Breadcrumb.vue`, and add a corresponding `if` block that pushes an "Administration" crumb (linked to `AdminIndex`) followed by the page label. See the `/admin/*` case as a reference.
+Every new Vue page must have a breadcrumb. `assets/vue/components/Breadcrumb.vue` builds it from
+the route tree, and **it holds no page name and no path** — never edit it to give a page its
+trail. Four declarations in the route's `meta` cover every shape:
+
+| Declaration                                                          | When                                                                                                                                                                                                                                                                            |
+|----------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `showBreadcrumb: true`                                               | always; without it `App.vue` does not mount the component. A function `(route) => bool` when a route only sometimes has a trail                                                                                                                                                 |
+| `breadcrumb: "Key"`                                                  | always, on the parent and on every leaf. A **translation key**, never translated text. `""` means "omit this crumb" (what a list page usually wants); an absent property is a bug and warns in the console. A function `(route) => "Key"` when the label depends on the request |
+| `breadcrumbParents: [{ label, route }]`                              | the page hangs from a list page. See `assets/vue/router/admin.js` for shared ancestor lists                                                                                                                                                                                     |
+| `breadcrumbResource: { trail, listRoute, detailRoute, detailParam }` | the trail names the resource the user opened. `trail: "self"` for one resource, `"ancestors"` for a folder chain. Also drives the resource-node fetch                                                                                                                           |
+
+A key that is new to the platform must be added by hand to `assets/locales/en_US.json`,
+`translations/messages.pot` and `translations/messages.en_US.po` — the translation command does
+not create keys.
 
 Admin pages should always show: **Administration** (linked) / **Page title** (plain text).
+
+`yarn check:breadcrumb-routes` fails when a route renders a breadcrumb
+without declaring its label. It is a manual command on purpose; do not wire it into CI.
+
+The one trail a route cannot declare is `/admin/settings/<namespace>`: its last crumb is read from
+the DOM, because the server already translated it.
 
 ### Forms
 

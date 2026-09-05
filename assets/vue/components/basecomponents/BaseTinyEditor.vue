@@ -406,6 +406,10 @@ const translateHtmlEnabled = computed(() => {
   return props.enableTranslateHtml && toBool(platformConfigStore.getSetting("editor.translate_html"))
 })
 
+const mathJaxEnabled = computed(() => {
+  return toBool(platformConfigStore.getSetting("editor.enabled_mathjax"))
+})
+
 const enableUploadImageInEditor = computed(() => {
   return (
     securityStore.isAuthenticated === true &&
@@ -659,6 +663,13 @@ const editorConfig = computed(() => {
       : {
           file_picker_callback: filePickerCallback,
         }),
+  }
+
+  // Declared before the builder runs, not after: buildTinyMceConfig is what adds
+  // the toolbar button (TOOLBAR_POLICY = "base" discards any toolbar sent from
+  // here) and the extended_valid_elements entry that keeps data-latex alive.
+  if (mathJaxEnabled.value) {
+    local.plugins = mergeTinyPlugins(local.plugins, ["mathjax"])
   }
 
   const built = builder ? builder(local) : local

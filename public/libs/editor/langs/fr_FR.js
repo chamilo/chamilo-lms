@@ -415,5 +415,8 @@ tinymce.addI18n('fr_FR',{
 "Whole words": "Mots entiers",
 "Spellcheck": "V\u00e9rification orthographique",
 "Caption": "Titre",
-"Insert template": "Ajouter un th\u00e8me"
+"Insert template": "Ajouter un th\u00e8me",
+"Insert formula": "Ins\u00e9rer une formule",
+"LaTeX code": "Code LaTeX",
+"Enter a formula": "Saisissez une formule"
 });

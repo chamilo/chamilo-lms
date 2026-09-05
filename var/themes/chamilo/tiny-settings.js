@@ -671,6 +671,19 @@
       )
     }
 
+    // "mathjax" is opt-in (the enabled_mathjax setting), so it reaches this
+    // point through localConfig.plugins, never through the base list. The
+    // toolbar cannot come from the caller either: TOOLBAR_POLICY = "base"
+    // discards it. Its span carries the formula source in data-latex, which
+    // TinyMCE would strip without this declaration.
+    if (pluginNames.has("mathjax")) {
+      merged.toolbar = appendToolbarCommand(merged.toolbar || localConfig.toolbar || base.toolbar || "", "mathjax")
+      merged.extended_valid_elements = appendExtendedValidElements(
+        merged.extended_valid_elements,
+        "span[class|data-latex|contenteditable]",
+      )
+    }
+
     var csBase = base.content_style || ""
     var csLocal = localConfig.content_style || ""
     merged.content_style = (csBase + " " + csLocal).trim()

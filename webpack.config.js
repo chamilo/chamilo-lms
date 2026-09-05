@@ -39,6 +39,7 @@ Encore.addEntry("legacy_app", "./assets/js/legacy/app.js")
   .addEntry("vue_installer", "./assets/vue/main_installer.js")
   .addEntry("translatehtml", "./assets/js/translatehtml.js")
   .addEntry("glossary_auto", "./assets/js/glossary-auto.js")
+  .addEntry("mathjax_render", "./assets/js/mathjax-render.js")
 
   .addStyleEntry("app", "./assets/css/app.scss")
   .addStyleEntry("css/chat", "./assets/css/chat.scss")
@@ -144,10 +145,36 @@ Encore.copyFiles({
   from: "./node_modules/mediaelement-plugins/dist",
   to: "libs/mediaelement/plugins/[path][name].[ext]",
 })
-/*Encore.copyFiles({
-  from: "./node_modules/mathjax/config",
-  to: "libs/mathjax/config/[path][name].[ext]",
-})*/
+// MathJax: only the SVG output bundle is served, plus its font package.
+// MathJax 4 ships fonts separately and falls back to cdn.jsdelivr.net, so the
+// font has to be copied too and pointed at from assets/js/mathjax-render.js.
+// includeSubdirectories is off on the two single-file rules to keep
+// require.context from walking the whole 50MB font package.
+Encore.copyFiles({
+  from: "./node_modules/mathjax",
+  pattern: /tex-svg\.js$/,
+  to: "libs/mathjax/[name].[ext]",
+  includeSubdirectories: false,
+})
+// Speech Rule Engine worker: MathJax spawns it on every typeset to build the
+// accessible description of a formula, and resolves it against its own
+// directory. Without this the browser logs a failed importScripts on each run.
+Encore.copyFiles({
+  from: "./node_modules/mathjax/sre",
+  pattern: /\.(js|json)$/,
+  to: "libs/mathjax/sre/[path][name].[ext]",
+})
+Encore.copyFiles({
+  from: "./node_modules/@mathjax/mathjax-newcm-font",
+  pattern: /svg\.js$/,
+  to: "libs/mathjax-fonts/mathjax-newcm-font/[name].[ext]",
+  includeSubdirectories: false,
+})
+Encore.copyFiles({
+  from: "./node_modules/@mathjax/mathjax-newcm-font/svg",
+  pattern: /\.js$/,
+  to: "libs/mathjax-fonts/mathjax-newcm-font/svg/[path][name].[ext]",
+})
 Encore.copyFiles({
   from: "node_modules/moment/locale",
   to: "libs/locale/[path][name].[ext]",

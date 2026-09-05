@@ -824,6 +824,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                     $content = $this->injectGlossaryJs($request, $content, $resourceNode);
                     $content = $this->appendLearningPathContextToEmbeddedDocumentUrls($content, $request);
+                    $content = $this->injectMathJaxRenderer($content);
 
                     $response = new Response();
                     $disposition = $response->headers->makeDisposition(
@@ -1072,6 +1073,40 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         return $mimeType;
+    }
+
+    /**
+     * Loads the MathJax renderer for HTML documents containing a stored formula.
+     *
+     * /r/document/files/{uuid}/view serves the document's stored HTML directly as a Response —
+     * it never renders head.html.twig, so the <script> that loads the renderer there (which is
+     * what turns a saved <span class="math-latex" data-latex="..."> back into a rendered
+     * formula) is never present on this route. Inject it here instead, the same way
+     * injectGlossaryJs() and the translate_html block above inject their own <script> tags.
+     * Skipped when MathJax is off platform-wide, and when the document has no formula, so
+     * plain documents pay nothing extra.
+     */
+    private function injectMathJaxRenderer(string $content): string
+    {
+        if ('true' !== $this->getSettingsManager()->getSetting('editor.enabled_mathjax')) {
+            return $content;
+        }
+
+        if (false === stripos($content, 'class="math-latex"')) {
+            return $content;
+        }
+
+        $script = $this->renderView('@ChamiloCore/MathJax/mathjax_render.html.twig');
+
+        if (false !== stripos($content, '</head>')) {
+            return str_ireplace('</head>', $script.'</head>', $content);
+        }
+
+        if (false !== stripos($content, '</body>')) {
+            return str_ireplace('</body>', $script.'</body>', $content);
+        }
+
+        return $content.$script;
     }
 
     /**

@@ -46,8 +46,6 @@ class Basic extends Toolbar
 
         if ('true' === api_get_setting('enabled_mathjax')) {
             $candidates[] = 'mathjax';
-            // MathJax library URL (used by your integration if needed)
-            $config['mathJaxLib'] = api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
         if ('true' === api_get_setting('enabled_asciisvg')) {

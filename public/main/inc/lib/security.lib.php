@@ -401,7 +401,9 @@ class Security
 
             // Set some HTML5 properties
             $config->set('HTML.DefinitionID', 'html5-definitions'); // unqiue id
-            $config->set('HTML.DefinitionRev', 1);
+            // Bump this whenever the definition below changes, or HTMLPurifier keeps
+            // serving the cached definition and the change never takes effect.
+            $config->set('HTML.DefinitionRev', 2);
             if ($def = $config->maybeGetRawHTMLDefinition()) {
                 // https://html.spec.whatwg.org/dev/media.html#the-video-element
                 $def->addElement(
@@ -441,6 +443,13 @@ class Security
                     'Common',
                     ['src' => 'URI', 'type' => 'Text']
                 );
+
+                // The "mathjax" TinyMCE plugin stores a formula's LaTeX source in
+                // <span class="math-latex" data-latex="...">. HTMLPurifier drops every
+                // data-* attribute it was not told about, which would erase the formula
+                // on save. The value is plain text and is only ever read back through
+                // getAttribute() and written with textContent, never innerHTML.
+                $def->addAttribute('span', 'data-latex', 'Text');
             }
 
             $purifier[$user_status] = new HTMLPurifier($config);

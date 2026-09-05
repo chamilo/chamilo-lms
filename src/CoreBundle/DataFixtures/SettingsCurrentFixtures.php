@@ -523,7 +523,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'enabled_mathjax',
                     'title' => 'Enable MathJax',
-                    'comment' => 'Enable the MathJax library to visualize mathematical formulas. This is only useful if either ASCIIMathML or ASCIISVG settings are enabled.',
+                    'comment' => 'Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX.',
                 ],
                 [
                     'name' => 'enabled_support_svg',

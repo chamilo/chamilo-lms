@@ -1,0 +1,5 @@
+{# Typesets stored LaTeX (span.math-latex, written by the "mathjax" TinyMCE plugin).
+   The bundle lazy-loads the MathJax library itself, and only when such content
+   is actually on the page. Every include of this template is gated on the
+   editor.enabled_mathjax setting. #}
+{{ encore_entry_script_tags('mathjax_render') }}

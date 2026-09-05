@@ -47,6 +47,8 @@
     {% set ai_disclosure_enabled = ai_disclosure_raw in ['true', '1', 'yes', 'on', 'enabled'] %}
     {% set disable_copy_paste_raw = chamilo_settings_get('platform.disable_copy_paste')|default('')|trim|lower %}
     {% set disable_copy_paste_enabled = disable_copy_paste_raw in ['true', '1', 'yes', 'on', 'enabled'] %}
+    {% set mathjax_raw = chamilo_settings_get('editor.enabled_mathjax')|default('')|trim|lower %}
+    {% set mathjax_enabled = mathjax_raw in ['true', '1', 'yes', 'on', 'enabled'] %}
 
     <script>
       window.CH_AI_DISCLOSURE_ENABLED = {{ ai_disclosure_enabled ? 'true' : 'false' }};
@@ -166,6 +168,10 @@
     {# Add third party js libraries that can't be loaded using webpack #}
     {# <script src="{{ asset('libs/readmore-js/readmore.js') }}"></script> #}
     {# <script src="{{ url('index') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script> #}
+
+    {% if mathjax_enabled %}
+        {% include "@ChamiloCore/MathJax/mathjax_render.html.twig" %}
+    {% endif %}
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 

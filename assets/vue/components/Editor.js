@@ -48,5 +48,6 @@ import "tinymce/plugins/visualblocks"
 import "tinymce/plugins/visualchars"
 import "tinymce/plugins/wordcount"
 import "../../../public/libs/editor/tinymce_plugins/translatehtml"
+import "../../../public/libs/editor/tinymce_plugins/mathjax"
 
 export default Editor

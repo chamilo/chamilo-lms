@@ -32,7 +32,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        // Must stay before the item Get, otherwise /c_tool_intros/{iid} matches "current" first.
+        // Must stay first: API Platform builds every CToolIntro IRI (@id) from the first
+        // item GET, and the "current" one below would make it /c_tool_intros/current.
+        // The iid requirement keeps "current" from matching this route.
+        new Get(
+            requirements: ['iid' => '\d+'],
+            security: "is_granted('VIEW', object.resourceNode)"
+        ),
         new Get(
             uriTemplate: '/c_tool_intros/current.{_format}',
             normalizationContext: [
@@ -63,7 +69,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ),
             ],
         ),
-        new Get(security: "is_granted('VIEW', object.resourceNode)"),
         new Put(
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             parameters: [

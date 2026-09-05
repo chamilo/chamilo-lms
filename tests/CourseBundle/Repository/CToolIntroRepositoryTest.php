@@ -264,6 +264,10 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $repo = self::getContainer()->get(CToolIntroRepository::class);
         $id = $response->toArray()['iid'];
 
+        // The IRI must point at the item route, not at the "current" one: the
+        // frontend sends its next PATCH to exactly this @id.
+        $this->assertSame('/api/c_tool_intros/'.$id, $response->toArray()['@id']);
+
         /** @var CToolIntro $toolIntro */
         $toolIntro = $repo->find($id);
         $this->assertNotNull($toolIntro);
@@ -320,6 +324,54 @@ class CToolIntroRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/CToolIntro',
             '@type' => 'CToolIntro',
             'introText' => 'MODIFIED',
+        ]);
+    }
+
+    public function testGetCurrentIntroApi(): void
+    {
+        $course = $this->createCourse('new');
+        $token = $this->getUserToken();
+
+        // Without an introduction the provider answers with a transient empty one.
+        $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_tool_intros/current',
+            [
+                'query' => ['cid' => $course->getId()],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@id' => '/api/c_tool_intros/current',
+            'introText' => '',
+        ]);
+
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/c_tool_intros?cid='.$course->getId(),
+            [
+                'json' => [
+                    'introText' => 'introduction here',
+                    'toolName' => 'course_homepage',
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(201);
+
+        // The item Get accepts a numeric iid only, so "current" keeps its own route
+        // even though it is declared after it.
+        $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_tool_intros/current',
+            [
+                'query' => ['cid' => $course->getId()],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@id' => '/api/c_tool_intros/current',
+            '@type' => 'CToolIntro',
+            'introText' => 'introduction here',
         ]);
     }
 }

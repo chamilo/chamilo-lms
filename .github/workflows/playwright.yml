@@ -11,9 +11,10 @@ name: Playwright tests 🎭
 on: [ push, pull_request ]
 
 # Cancel a still-running job when a newer commit lands on the same branch.
+# Pushes to master are exempt, so every commit there keeps its own result.
 concurrency:
     group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
-    cancel-in-progress: true
+    cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
 jobs:
     build:

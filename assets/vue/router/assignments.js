@@ -5,6 +5,12 @@ export default {
     showBreadcrumb: true,
     tool: "student_publication",
     breadcrumb: "Assignments",
+    breadcrumbResource: {
+      trail: "self",
+      listRoute: "AssignmentsList",
+      detailRoute: "AssignmentDetail",
+      detailParam: "id",
+    },
   },
   name: "assignments",
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),

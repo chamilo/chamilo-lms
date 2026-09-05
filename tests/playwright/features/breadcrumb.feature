@@ -35,6 +35,28 @@ Feature: Breadcrumb visibility
     Then I should see the ".app-breadcrumb a[href='/admin/urls']" element
     And I should see the ".app-breadcrumb a[href='/admin/urls/manage']" element
 
+  # The next two cover meta.breadcrumbResource. Only the course part of the trail
+  # is asserted: the tool crumb is the last one, and the component renders the last
+  # crumb as plain text, so it carries no href to match.
+  #
+  # These two need the long wait. A tool that declares breadcrumbResource renders its
+  # breadcrumb only after the resource-node fetch resolves, and that call takes well
+  # over the default 15 s here. The other scenarios need no fetch and appear at once.
+
+  Scenario: The document tool builds the whole course trail
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    When I click the "a[href*='/resources/document/'][href*='cid=']" element
+    And I wait up to 45 seconds for the element ".app-breadcrumb" to appear
+    Then I should see the ".app-breadcrumb a[href='/courses']" element
+
+  Scenario: The assignment tool builds the whole course trail
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    When I click the "a[href*='/resources/assignment/'][href*='cid=']" element
+    And I wait up to 45 seconds for the element ".app-breadcrumb" to appear
+    Then I should see the ".app-breadcrumb a[href='/courses']" element
+
   # A settings page is the one trail the router cannot declare: its last crumb is
   # read from the DOM, because the server already translated it.
   Scenario: A settings page links back to the settings list

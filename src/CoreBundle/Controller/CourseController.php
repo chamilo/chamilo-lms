@@ -85,6 +85,7 @@ use UserManager;
 
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
+use const PHP_QUERY_RFC3986;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>

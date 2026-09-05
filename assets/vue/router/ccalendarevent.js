@@ -2,6 +2,8 @@ export default {
   path: "/resources/ccalendarevent",
   meta: {
     requiresAuth: true,
+    // The personal agenda has no trail to show: it hangs from no course.
+    showBreadcrumb: (route) => Number(route.query?.cid || 0) > 0,
     // The agenda is named after the context it is opened in.
     breadcrumb: (route) => {
       const gid = Number(route.query?.gid || 0)

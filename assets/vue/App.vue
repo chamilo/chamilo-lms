@@ -160,7 +160,9 @@ const hideBreadcrumbIfNotAllowed = computed(() => {
 })
 
 const showBreadcrumb = computed(() => {
-  if (route.meta.showBreadcrumb === false) {
+  const value = route.meta.showBreadcrumb
+
+  if (value === false) {
     return false
   }
 
@@ -168,7 +170,12 @@ const showBreadcrumb = computed(() => {
     return false
   }
 
-  return route.meta.showBreadcrumb
+  // A route that only has a breadcrumb in some contexts declares a function.
+  if (typeof value === "function") {
+    return value(route)
+  }
+
+  return value
 })
 
 const showAccessUrlChosserLayout = computed(

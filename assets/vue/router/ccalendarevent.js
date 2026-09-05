@@ -1,6 +1,15 @@
 export default {
   path: "/resources/ccalendarevent",
-  meta: { requiresAuth: true },
+  meta: {
+    requiresAuth: true,
+    // The agenda is named after the context it is opened in.
+    breadcrumb: (route) => {
+      const gid = Number(route.query?.gid || 0)
+      const cid = Number(route.query?.cid || 0)
+
+      return gid > 0 ? "Group agenda" : cid > 0 ? "Agenda" : "Personal agenda"
+    },
+  },
   name: "ccalendarevent",
   redirect: { name: "CCalendarEventList" },
   component: () => import("../components/ccalendarevent/CCalendarEventLayout.vue"),

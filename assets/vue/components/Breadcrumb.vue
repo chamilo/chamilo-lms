@@ -168,15 +168,20 @@ function isInCourseOrSessionContext() {
  * absent, the label falls back to the formatted route name and stays untranslated. The
  * development warning exposes the missing declaration instead of hiding it in the interface.
  *
- * @param {object|undefined} meta - Route meta that can hold a `breadcrumb` label.
+ * `meta.breadcrumb` can also be a function that receives the current route and returns a
+ * translation key. Declare one when the label depends on the request context, as the agenda
+ * does with `cid` and `gid`.
+ *
+ * @param {object|undefined} meta - Route meta that can hold a `breadcrumb` label or resolver.
  * @param {string} name - Route or tool name used to build the fallback label.
  * @returns {string} Translated label, or the formatted route name.
  */
 function resolveCrumbLabel(meta, name) {
   const label = meta?.breadcrumb
+  const key = "function" === typeof label ? label(route) : label
 
-  if (label) {
-    return t(label)
+  if (key) {
+    return t(key)
   }
 
   if ("production" !== process.env.NODE_ENV) {
@@ -497,7 +502,6 @@ function buildToolWithResourceCrumbs(toolName, listRouteName, detailRouteName) {
  *
  * Handles documents, assignments, attendance, and generic tool routes.
  * For admin resource routes ("rooms", "branches"), prepends an Administration crumb.
- * For `ccalendarevent`, resolves the label dynamically from the `cid`/`gid` query params.
  *
  * @returns {Array|null} Array of crumb items if a builder handled the route; `null` otherwise.
  */
@@ -532,17 +536,7 @@ function buildToolCrumbs() {
     const toolBase = matchedRoutes[0]
     const currentMatched = matchedRoutes[matchedRoutes.length - 1]
 
-    let toolLabel
-
-    if (mainToolName === "ccalendarevent") {
-      const cidVal = Number(route.query?.cid || 0)
-      const gidVal = Number(route.query?.gid || 0)
-
-      toolLabel = gidVal > 0 ? t("Group agenda") : cidVal > 0 ? t("Agenda") : t("Personal agenda")
-    } else {
-      toolLabel = resolveCrumbLabel(toolBase.meta, mainToolName)
-    }
-
+    const toolLabel = resolveCrumbLabel(toolBase.meta, mainToolName)
     const toolBaseRouteName = toolBase.name === "admin" ? "AdminIndex" : toolBase.name
     items.push({ label: toolLabel, route: { name: toolBaseRouteName, params: route.params, query: route.query } })
 

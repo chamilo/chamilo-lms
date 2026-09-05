@@ -192,30 +192,39 @@ function resolveCrumbLabel(meta, name) {
 }
 
 /**
- * Build a hardcoded breadcrumb trail for the access-URL delete confirmation page.
- * Matches paths of the form `/resources/accessurl/<id>/delete`.
+ * Build the trail of a route that declares its own fixed ancestors.
  *
- * @returns {Array|null} Array of crumb items if the path matched; `null` otherwise.
+ * `meta.breadcrumbParents` holds the crumbs that always precede the page, each one a
+ * `{ label, route }` pair whose label is a translation key. The page's own crumb comes from
+ * `meta.breadcrumb`, so the route owns its whole trail and this file names no page.
+ *
+ * @returns {Array|null} Array of crumb items if the route declared ancestors; `null` otherwise.
  */
-function buildAccessUrlDeleteCrumbs() {
-  if (!/^\/resources\/accessurl\/[^/]+\/delete(?:\/|$)/u.test(route.path)) {
+function buildDeclaredParentCrumbs() {
+  const parents = route.meta?.breadcrumbParents
+
+  if (!Array.isArray(parents) || 0 === parents.length) {
     return null
   }
 
-  return [
-    { label: t("Administration"), route: { name: "AdminIndex" } },
-    { label: t("Multiple access URL / Branding"), route: { name: "AccessUrlManage" } },
-    { label: t("Delete access") },
-  ]
+  const items = parents.map((parent) => ({ label: t(parent.label), route: parent.route }))
+
+  items.push({ label: resolveCrumbLabel(route.meta, route.name) })
+
+  return items
 }
 
 /**
  * Build the breadcrumb trail from server-injected legacy items or from whitelisted path segments.
  *
- * Two cases are handled:
+ * Three cases are handled:
  * 1. `window.breadcrumb` was set by the PHP layer — consume those items directly.
- * 2. The URL starts with a whitelisted segment (e.g. `/admin`) that has no matching Vue route —
+ * 2. `/admin/settings/<namespace>`, whose last crumb is read from the DOM because the server
+ *    already translated it. This is the one trail a route cannot declare on its own.
+ * 3. The URL starts with a whitelisted segment (e.g. `/admin`) that has no matching Vue route —
  *    synthesize crumbs from path segments using the `overrides` map.
+ *
+ * Every other fixed trail lives in the router as `meta.breadcrumbParents`.
  *
  * @returns {Array|null} Array of crumb items if a manual trail was built; `null` to fall through.
  */
@@ -263,46 +272,6 @@ function buildManualCrumbs() {
       { label: t("Admin"), route: { name: overrides.admin, params: route.params, query: route.query } },
       { label: t("Settings"), route: { path: "/admin/settings" } },
       { label: resolveSettingsSectionLabel() },
-    ]
-  }
-
-  // /admin/usergroup-import, /admin/usergroup-user-import, /admin/usergroup-users/:id
-  if (
-    ["usergroup-import", "usergroup-user-import", "usergroup-users"].includes(pathSegments[1]) ||
-    (pathSegments[1] === "usergroups" && pathSegments[3] !== undefined)
-  ) {
-    return [
-      { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
-      { label: t("Classes"), route: { path: "/admin/usergroups" } },
-      { label: resolveCrumbLabel(route.meta, route.name) },
-    ]
-  }
-
-  // /admin/urls/users/:id, /admin/urls/courses/:id
-  if (pathSegments[1] === "urls" && ["users", "courses"].includes(pathSegments[2])) {
-    return [
-      { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
-      { label: t("Multi URLs"), route: { path: "/admin/urls" } },
-      { label: resolveCrumbLabel(route.meta, route.name) },
-    ]
-  }
-
-  // /admin/urls/manage
-  if (pathSegments[1] === "urls" && pathSegments[2] === "manage") {
-    return [
-      { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
-      { label: t("Multi URLs"), route: { path: "/admin/urls" } },
-      { label: t("Multiple access URL / Branding") },
-    ]
-  }
-
-  // /admin/urls/assign-users, /admin/urls/assign-courses, /admin/urls/assign-usergroups, /admin/urls/assign-course-categories
-  if (pathSegments[1] === "urls" && pathSegments[2]?.startsWith("assign-")) {
-    return [
-      { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
-      { label: t("Multi URLs"), route: { path: "/admin/urls" } },
-      { label: t("Multiple access URL / Branding"), route: { path: "/admin/urls/manage" } },
-      { label: resolveCrumbLabel(route.meta, route.name) },
     ]
   }
 
@@ -623,10 +592,10 @@ async function loadResourceNodeIfNeeded() {
  * Must be called only after async data (resource node) has been resolved.
  */
 function buildBreadcrumb() {
-  const accessUrlCrumbs = buildAccessUrlDeleteCrumbs()
+  const declaredParentCrumbs = buildDeclaredParentCrumbs()
 
-  if (accessUrlCrumbs !== null) {
-    calculatedList.value = accessUrlCrumbs
+  if (declaredParentCrumbs !== null) {
+    calculatedList.value = declaredParentCrumbs
     return
   }
 

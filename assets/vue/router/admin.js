@@ -1,3 +1,13 @@
+// Fixed breadcrumb ancestors, shared by the pages that hang from a list page.
+// Labels are translation keys; the breadcrumb component translates them.
+const adminCrumb = { label: "Administration", route: { name: "AdminIndex" } }
+const classesCrumbs = [adminCrumb, { label: "Classes", route: { name: "AdminUsergroupList" } }]
+const multiUrlCrumbs = [adminCrumb, { label: "Multi URLs", route: { name: "AdminMultiUrlList" } }]
+const accessUrlCrumbs = [
+  ...multiUrlCrumbs,
+  { label: "Multiple access URL / Branding", route: { name: "AccessUrlManage" } },
+]
+
 export default {
   path: "/admin",
   name: "admin",
@@ -120,43 +130,78 @@ export default {
     {
       name: "AdminUsergroupPreview",
       path: "usergroups/:id/preview",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Class overview" },
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Class overview",
+        breadcrumbParents: classesCrumbs,
+      },
       component: () => import("../views/admin/UsergroupPreview.vue"),
     },
     {
       name: "AdminUsergroupAddUsers",
       path: "usergroups/:id/add-users",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Subscribe users to class" },
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Subscribe users to class",
+        breadcrumbParents: classesCrumbs,
+      },
       component: () => import("../views/admin/UsergroupAddUsers.vue"),
     },
     {
       name: "AdminUsergroupAddCourses",
       path: "usergroups/:id/add-courses",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Subscribe class to courses" },
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Subscribe class to courses",
+        breadcrumbParents: classesCrumbs,
+      },
       component: () => import("../views/admin/UsergroupAddCourses.vue"),
     },
     {
       name: "AdminUsergroupAddSessions",
       path: "usergroups/:id/add-sessions",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Subscribe class to sessions" },
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Subscribe class to sessions",
+        breadcrumbParents: classesCrumbs,
+      },
       component: () => import("../views/admin/UsergroupAddSessions.vue"),
     },
     {
       name: "AdminUsergroupUsers",
       path: "usergroup-users/:id",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Class users" },
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Class users",
+        breadcrumbParents: classesCrumbs,
+      },
       component: () => import("../views/admin/UsergroupUsers.vue"),
     },
     {
       name: "AdminUsergroupImport",
       path: "usergroup-import",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Import class list via CSV" },
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Import class list via CSV",
+        breadcrumbParents: classesCrumbs,
+      },
       component: () => import("../views/admin/UsergroupImport.vue"),
     },
     {
       name: "AdminUsergroupUserImport",
       path: "usergroup-user-import",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Add users to a class" },
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Add users to a class",
+        breadcrumbParents: classesCrumbs,
+      },
       component: () => import("../views/admin/UsergroupUserImport.vue"),
     },
     {
@@ -168,43 +213,78 @@ export default {
     {
       name: "AccessUrlManage",
       path: "urls/manage",
-      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Multiple access URL / Branding" },
+      meta: {
+        requiresGlobalAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Multiple access URL / Branding",
+        breadcrumbParents: multiUrlCrumbs,
+      },
       component: () => import("../views/accessurl/AccessUrlManage.vue"),
     },
     {
       name: "AccessUrlUsers",
       path: "urls/assign-users",
-      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Manage users" },
+      meta: {
+        requiresGlobalAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Manage users",
+        breadcrumbParents: accessUrlCrumbs,
+      },
       component: () => import("../views/accessurl/AccessUrlUsers.vue"),
     },
     {
       name: "AccessUrlCourses",
       path: "urls/assign-courses",
-      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Manage courses" },
+      meta: {
+        requiresGlobalAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Manage courses",
+        breadcrumbParents: accessUrlCrumbs,
+      },
       component: () => import("../views/accessurl/AccessUrlCourses.vue"),
     },
     {
       name: "AccessUrlUserGroups",
       path: "urls/assign-usergroups",
-      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Manage user groups" },
+      meta: {
+        requiresGlobalAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Manage user groups",
+        breadcrumbParents: accessUrlCrumbs,
+      },
       component: () => import("../views/accessurl/AccessUrlUserGroups.vue"),
     },
     {
       name: "AccessUrlCourseCategories",
       path: "urls/assign-course-categories",
-      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Manage course categories" },
+      meta: {
+        requiresGlobalAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Manage course categories",
+        breadcrumbParents: accessUrlCrumbs,
+      },
       component: () => import("../views/accessurl/AccessUrlCourseCategories.vue"),
     },
     {
       name: "AdminMultiUrlUserDetail",
       path: "urls/users/:id(\\d+)",
-      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "User details" },
+      meta: {
+        requiresGlobalAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "User details",
+        breadcrumbParents: multiUrlCrumbs,
+      },
       component: () => import("../views/admin/MultiUrlUserDetail.vue"),
     },
     {
       name: "AdminMultiUrlCourseDetail",
       path: "urls/courses/:id(\\d+)",
-      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Course details" },
+      meta: {
+        requiresGlobalAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Course details",
+        breadcrumbParents: multiUrlCrumbs,
+      },
       component: () => import("../views/admin/MultiUrlCourseDetail.vue"),
     },
   ],

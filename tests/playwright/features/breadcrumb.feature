@@ -57,6 +57,26 @@ Feature: Breadcrumb visibility
     And I wait up to 45 seconds for the element ".app-breadcrumb" to appear
     Then I should see the ".app-breadcrumb a[href='/courses']" element
 
+  # Covers the "ancestors" trail: with a folder open, the tool crumb stops being the
+  # last one and becomes a link. The scenario creates the folder and deletes it again.
+  Scenario: A document folder adds its own crumb to the trail
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    When I click the "a[href*='/resources/document/'][href*='cid=']" element
+    And I wait up to 45 seconds for the element "button:has(.mdi-folder-plus)" to appear
+    And I click the "button:has(.mdi-folder-plus)" element
+    And I fill in "title" with "BcTmpFolder"
+    And I click the ".p-dialog button:has(.mdi-check)" element
+    And I wait up to 30 seconds for the element "a:has-text('BcTmpFolder')" to appear
+    And I follow "BcTmpFolder"
+    And I wait up to 45 seconds for the element ".app-breadcrumb a[href*='/resources/document/']" to appear
+    Then I should see the ".app-breadcrumb a[href*='/resources/document/']" element
+    And I click the ".app-breadcrumb a[href*='/resources/document/']" element
+    And I wait up to 45 seconds for the element "button:has(.mdi-delete)" to appear
+    And I click the "button:has(.mdi-delete)" element
+    And I click the ".p-dialog button:has(.mdi-check)" element
+    And I wait until I no longer see "BcTmpFolder"
+
   Scenario: A room page links back to the room list
     Given I am a platform administrator
     When I am on "/resources/rooms/new"

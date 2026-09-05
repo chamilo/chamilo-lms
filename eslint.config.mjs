@@ -16,6 +16,14 @@ export default [
       },
     },
   },
+  {
+    // CommonJS files are build and check scripts; they run under Node, not in a browser.
+    files: ["**/*.cjs"],
+    languageOptions: {
+      sourceType: "commonjs",
+      globals: globals.node,
+    },
+  },
   pluginJs.configs.recommended,
   ...pluginVue.configs["flat/essential"],
   pluginPrettierRecommended,

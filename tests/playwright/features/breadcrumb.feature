@@ -77,6 +77,16 @@ Feature: Breadcrumb visibility
     And I click the ".p-dialog button:has(.mdi-check)" element
     And I wait until I no longer see "BcTmpFolder"
 
+  # A wiki page is not a platform Page. The trail used to gain a "Pages" crumb
+  # pointing at /resources/pages, because the route name contains "Page".
+  Scenario: A wiki page does not link to the platform pages
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    When I click the "a[href*='/resources/wiki/'][href*='cid=']" element
+    And I wait up to 45 seconds for the element ".app-breadcrumb" to appear
+    Then I should not see the ".app-breadcrumb a[href='/resources/pages']" element
+    And I should see the ".app-breadcrumb a[href='/courses']" element
+
   Scenario: A room page links back to the room list
     Given I am a platform administrator
     When I am on "/resources/rooms/new"

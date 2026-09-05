@@ -57,16 +57,18 @@ const { t } = useI18n()
 const { course, session } = storeToRefs(cidReqStore)
 const store = useStore()
 
-const specialRouteNames = [
+// Personal pages that live outside any course. The cidReq store can still hold the course the
+// user came from, so these names keep that stale course out of their trail.
+const personalRouteNames = [
   "MyCourses",
   "MySessions",
   "MySessionsUpcoming",
   "MySessionsPast",
   "Home",
   "MessageList",
-  "MessageNew",
   "MessageShow",
   "MessageCreate",
+  "MessageReply",
 ]
 
 let legacyItems = []
@@ -154,7 +156,7 @@ function isInCourseOrSessionContext() {
     return true
   }
 
-  if (course.value?.id && !specialRouteNames.includes(routeName)) {
+  if (course.value?.id && !personalRouteNames.includes(routeName)) {
     return true
   }
 
@@ -297,25 +299,6 @@ function buildManualCrumbs() {
     const partialPath = "/" + pathSegments.slice(0, index + 1).join("/")
     return { label, route: { path: partialPath } }
   })
-}
-
-/**
- * Build the static category prefix crumbs ("Pages", "Messages") when the route name contains them.
- *
- * @returns {Array} Zero, one, or two crumb items.
- */
-function buildStaticCategoryPrefixes() {
-  const items = []
-
-  if (route.name?.includes("Page")) {
-    items.push({ label: t("Pages"), route: { path: "/resources/pages" } })
-  }
-
-  if (route.name?.includes("Message")) {
-    items.push({ label: t("Messages"), route: { path: "/resources/messages" } })
-  }
-
-  return items
 }
 
 /**
@@ -588,17 +571,9 @@ function buildBreadcrumb() {
     return
   }
 
-  const prefix = buildStaticCategoryPrefixes()
-
-  if (specialRouteNames.includes(route.name)) {
-    calculatedList.value = prefix
-    return
-  }
-
   const toolCrumbs = buildToolCrumbs()
 
   calculatedList.value = [
-    ...prefix,
     ...buildCourseContextRootCrumb(),
     ...buildCourseTitleCrumb(),
     ...buildGroupCrumb(),

@@ -40,7 +40,7 @@
     </div>
 
     <a id="3.0-stable"></a>
-    <h1>Chamilo 3.0 stable, 2026-09-05</h1>
+    <h1>Chamilo 3.0 stable, 2026-09-06</h1>
     <h3>Release notes - summary</h3>
     <p>
         The first release of the Chamilo 3.x branch, building on the stable 2.0 foundation.<br>
@@ -169,6 +169,9 @@
 
     <h3>Added</h3>
     <ul aria-live="off">
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/4beeff13a4ce">4beeff13</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8977">GH#8977</a>) WYSIWYG: Add MathJax formula support to the editor toolbar</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/f841d0bc74a6">f841d0bc</a>) Internal: Add a skill for the Vue breadcrumb declarations</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/d31f3488bc4f">d31f3488</a>) Documentation: Add example Nginx vhost block</li>
         <li>[2026-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/1d4b0d1d6159">1d4b0d1d</a>) MCP: add Student Success feedback tool</li>
         <li>[2026-09-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/79ad30257a4e">79ad3025</a>) AI tutor: add platform support mode</li>
         <li>[2026-09-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/6de2c82cf9de">6de2c82c</a>) Internal: Add command to upload bundled themes to the configured remote storage</li>
@@ -200,6 +203,24 @@
 
     <h3>Changed</h3>
     <ul aria-live="off">
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/4557c5eab23d">4557c5ea</a>) Internal: Bump version number</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/27006cbd2379">27006cbd</a>) API: Fix the IRI returned when a course tool introduction is created</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/3b5e6be43e0b">3b5e6be4</a>) CI: Repair the dependency caching of the workflows</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/4f7990ae8409">4f7990ae</a>) CI: Record why the group agenda label has no breadcrumb scenario</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/9c107ab100e2">9c107ab1</a>) Display: Stop adding a Pages crumb to every route whose name says Page</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/c43fb3538f25">c43fb353</a>) CI: Cover the folder trail of the document breadcrumb</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/78c26158b74b">78c26158</a>) CI: Fail the build when a route renders a breadcrumb with no label</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/b456b5299272">b456b529</a>) Display: Remove the last tool names from the breadcrumb component</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/d3f09463523e">d3f09463</a>) Display: Let a route declare how its resource trail is built</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/19d2e17eca25">19d2e17e</a>) Display: Move the fixed breadcrumb ancestors of admin pages into the router</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/f53004c6f1c5">f53004c6</a>) Calendar: Show the breadcrumb only when the agenda opens inside a course</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/273fa9aeab29">273fa9ae</a>) Display: Let a route declare its breadcrumb label as a function</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/a1f32c31ed88">a1f32c31</a>) Display: Declare the breadcrumb label of every tool route in the router</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/9ad183ba7499">9ad183ba</a>) Display: Fix untranslated tool names in the breadcrumb</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/1ae8d2cd2d98">1ae8d2cd</a>) Internal: API: Fix a 404 on the current course tool introduction endpoint</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/cd4076a419f8">cd4076a4</a>) Scripts: Apply optimizations from ai_translate.php to ai_translate_plugins.php</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/8c935cf602ca">8c935cf6</a>) Course: Show course room location on about page</li>
+        <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/3fdee3c4f985">3fdee3c4</a>) Scripts: Update plugin translation script to re-translate identical English vs {other-language} strings</li>
         <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/67c48cbdf6ac">67c48cbd</a>) Internal: Set picture, theme, locale and profile completion when user info comes from the entity</li>
         <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/58232404b398">58232404</a>) Internal: Drop three isset blocks in api_get_user_info_from_entity that assign a key to itself</li>
         <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/95b24fbedc3c">95b24fbe</a>) Exercise: fix missing translation in quiz tool</li>

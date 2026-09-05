@@ -19,6 +19,14 @@ Feature: Breadcrumb visibility
     And I wait for the element ".app-breadcrumb" to appear
     Then I should see the ".app-breadcrumb" element
 
+  # The agenda's third label, "Group agenda", has no scenario on purpose. It needs a
+  # real group — CidReqListener rejects an invented gid — and groups are created
+  # through the legacy PHP tool, whose buttons are matched by English text. The only
+  # thing that tells that label apart from "Agenda" is the crumb text itself, and the
+  # key has no French translation, so the assertion would pass or fail with the
+  # environment language. What is left uncovered is one term of a ternary in
+  # assets/vue/router/ccalendarevent.js.
+
   # The next two cover meta.breadcrumbParents: a page that hangs from a list page
   # links back to every ancestor the route declares.
 

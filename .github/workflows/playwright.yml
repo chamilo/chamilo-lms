@@ -86,20 +86,36 @@ jobs:
                 id: composer-cache
                 run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
+            -   name: Cache composer dependencies
+                uses: actions/cache@v6
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+                    restore-keys: ${{ runner.os }}-composer-
+
             -   name: Install dependencies with composer
                 run: composer install --no-progress
 
             -   name: Install assets
                 run: php bin/console assets:install
 
+            # corepack plus the committed .yarn/releases binary already pin the
+            # version declared in package.json, so nothing is installed here.
             -   name: Install Yarn
                 run: |
-                    sudo npm i -g npm
-                    node --version
-                    npm --version
                     sudo corepack enable
-                    yarn set version stable
                     yarn --version
+
+            -   name: Get yarn cache directory
+                id: yarn-cache-dir-path
+                run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+            -   name: Cache yarn dependencies
+                uses: actions/cache@v6
+                with:
+                    path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                    key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+                    restore-keys: ${{ runner.os }}-yarn-
 
             -   name: Install JS dependencies
                 run: yarn install
@@ -109,6 +125,17 @@ jobs:
 
             -   name: Start mysql service
                 run: sudo /etc/init.d/mysql start
+
+            # The browser binary is the single largest download of this job. The key
+            # follows yarn.lock, so it changes whenever the Playwright version does.
+            # `--with-deps` still runs on a hit: it installs the system libraries the
+            # browser needs, which apt handles in seconds.
+            -   name: Cache Playwright browsers
+                uses: actions/cache@v6
+                with:
+                    path: ~/.cache/ms-playwright
+                    key: ${{ runner.os }}-playwright-${{ hashFiles('yarn.lock') }}
+                    restore-keys: ${{ runner.os }}-playwright-
 
             -   name: Install Playwright browsers
                 run: yarn playwright install --with-deps chromium

@@ -57,6 +57,13 @@ Feature: Breadcrumb visibility
     And I wait up to 45 seconds for the element ".app-breadcrumb" to appear
     Then I should see the ".app-breadcrumb a[href='/courses']" element
 
+  Scenario: A room page links back to the room list
+    Given I am a platform administrator
+    When I am on "/resources/rooms/new"
+    And I wait for the element ".app-breadcrumb" to appear
+    Then I should see the ".app-breadcrumb a[href='/admin']" element
+    And I should see the ".app-breadcrumb a[href='/resources/rooms']" element
+
   # A settings page is the one trail the router cannot declare: its last crumb is
   # read from the DOM, because the server already translated it.
   Scenario: A settings page links back to the settings list

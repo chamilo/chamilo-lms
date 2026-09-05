@@ -477,7 +477,6 @@ function buildResourceToolCrumbs(toolBase) {
  *
  * A route that declares `meta.breadcrumbResource` and has its resource loaded gets the resource
  * trail; every other tool route gets the generic tool crumb plus its sub-page.
- * For admin resource routes ("rooms", "branches"), prepends an Administration crumb.
  *
  * @returns {Array|null} Array of crumb items if a builder handled the route; `null` otherwise.
  */
@@ -489,20 +488,13 @@ function buildToolCrumbs() {
     return buildResourceToolCrumbs(toolBase)
   }
 
-  const adminResourceRoutes = ["rooms", "branches"]
-  const items = []
-
-  if (adminResourceRoutes.includes(mainToolName)) {
-    items.push({ label: t("Administration"), route: { name: "AdminIndex" } })
-  }
-
   if (mainToolName) {
     const matchedRoutes = route.matched
     const currentMatched = matchedRoutes[matchedRoutes.length - 1]
 
     const toolLabel = resolveCrumbLabel(toolBase.meta, mainToolName)
     const toolBaseRouteName = toolBase.name === "admin" ? "AdminIndex" : toolBase.name
-    items.push({ label: toolLabel, route: { name: toolBaseRouteName, params: route.params, query: route.query } })
+    const items = [{ label: toolLabel, route: { name: toolBaseRouteName, params: route.params, query: route.query } }]
 
     if (currentMatched.meta?.breadcrumb !== "") {
       const finalLabel = resolveCrumbLabel(currentMatched.meta, currentMatched.name)
@@ -518,7 +510,7 @@ function buildToolCrumbs() {
     return items
   }
 
-  return items.length > 0 ? items : null
+  return null
 }
 
 /**

@@ -2,6 +2,11 @@ name: PHP static analysis ✨
 
 on: [push, pull_request]
 
+# Cancel a still-running job when a newer commit lands on the same branch.
+concurrency:
+    group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+    cancel-in-progress: true
+
 jobs:
     build:
         name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}

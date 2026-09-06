@@ -2378,7 +2378,7 @@ function buildExecutablePostApplyActions(actions) {
         key: "yarn_build",
         title: t("Yarn build"),
         description: t("Build production frontend assets."),
-        command: 'NODE_OPTIONS="--max-old-space-size=8192" yarn build',
+        command: 'NODE_OPTIONS="--experimental-global-webcrypto --max-old-space-size=8192" yarn build',
         severity: action.severity,
         advanced: true,
         category: "advanced",

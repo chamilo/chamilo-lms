@@ -2089,12 +2089,17 @@ async function buildApplyPlan() {
   } catch (error) {
     const responseData = error?.response?.data || null
 
-    setActionError("apply-plan", error)
     applyPlan.value = responseData?.applyPlan
       ? {
           applyPlan: responseData.applyPlan,
         }
       : null
+
+    if (applyPlan.value) {
+      clearActionError()
+    } else {
+      setActionError("apply-plan", error)
+    }
   } finally {
     isPlanningApply.value = false
   }

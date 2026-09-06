@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const PHP_URL_PATH;
 use const PHP_URL_SCHEME;
@@ -21,6 +22,7 @@ final readonly class UpdatePackageDownloader
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
         private UpdateConfiguration $updateConfiguration,
+        private TranslatorInterface $translator,
     ) {}
 
     public function download(string $url, ?string $targetDirectory = null): string
@@ -38,12 +40,12 @@ final readonly class UpdatePackageDownloader
         $statusCode = $response->getStatusCode();
 
         if ($statusCode < 200 || $statusCode >= 300) {
-            throw new RuntimeException('Unable to download update package. HTTP status: '.(string) $statusCode);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to download update package. HTTP status: %d'), $statusCode));
         }
 
         $handle = fopen($targetPath, 'wb');
         if (false === $handle) {
-            throw new RuntimeException('Unable to open update package target file: '.$targetPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to open update package target file: %s'), $targetPath));
         }
 
         foreach ($this->httpClient->stream($response) as $chunk) {
@@ -70,22 +72,22 @@ final readonly class UpdatePackageDownloader
 
     private function assertAllowedDownloadUrl(string $url): void
     {
-        $this->assertHttpsUrl($url, 'package');
+        $this->assertHttpsUrl($url);
 
         if (
             !$this->updateConfiguration->allowsDevelopmentUpdateTools()
             && !$this->updateConfiguration->isAllowedOfficialUpdateUrl($url)
         ) {
-            throw new InvalidArgumentException('Update downloads must use the official update origin '.$this->updateConfiguration->getOfficialManifestOrigin().'.');
+            throw new InvalidArgumentException(\sprintf($this->translator->trans('Update downloads must use the official update origin %s.'), $this->updateConfiguration->getOfficialManifestOrigin()));
         }
     }
 
-    private function assertHttpsUrl(string $url, string $label): void
+    private function assertHttpsUrl(string $url): void
     {
         $scheme = parse_url($url, PHP_URL_SCHEME);
 
         if ('https' !== $scheme) {
-            throw new InvalidArgumentException('The update '.$label.' URL must use HTTPS.');
+            throw new InvalidArgumentException($this->translator->trans('The update package URL must use HTTPS.'));
         }
     }
 
@@ -93,14 +95,14 @@ final readonly class UpdatePackageDownloader
     {
         if (is_dir($directory)) {
             if (!is_writable($directory)) {
-                throw new RuntimeException('Directory is not writable: '.$directory);
+                throw new RuntimeException(\sprintf($this->translator->trans('Directory is not writable: %s'), $directory));
             }
 
             return;
         }
 
         if (!mkdir($directory, 0775, true) && !is_dir($directory)) {
-            throw new RuntimeException('Unable to create directory: '.$directory);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to create directory: %s'), $directory));
         }
     }
 

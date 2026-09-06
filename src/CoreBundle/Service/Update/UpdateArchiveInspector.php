@@ -7,11 +7,16 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service\Update;
 
 use RuntimeException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use ZipArchive;
 
 final class UpdateArchiveInspector
 {
     private const int ZIP_OPSYS_UNIX = 3;
+
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {}
 
     /**
      * @return array{file_count: int, top_level_entries: string[]}
@@ -19,28 +24,28 @@ final class UpdateArchiveInspector
     public function inspect(string $packagePath): array
     {
         if (!is_file($packagePath) || !is_readable($packagePath)) {
-            throw new RuntimeException('Update package is not readable: '.$packagePath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Update package is not readable: %s'), $packagePath));
         }
 
         $zip = new ZipArchive();
         $openResult = $zip->open($packagePath);
 
         if (true !== $openResult) {
-            throw new RuntimeException('Update package is not a valid ZIP archive.');
+            throw new RuntimeException($this->translator->trans('Update package is not a valid ZIP archive.'));
         }
 
         $topLevelEntries = [];
 
         try {
             if (0 === $zip->numFiles) {
-                throw new RuntimeException('Update package ZIP archive is empty.');
+                throw new RuntimeException($this->translator->trans('Update package ZIP archive is empty.'));
             }
 
             for ($index = 0; $index < $zip->numFiles; $index++) {
                 $entryName = $zip->getNameIndex($index);
 
                 if (false === $entryName || '' === $entryName) {
-                    throw new RuntimeException('Update package contains an unreadable ZIP entry.');
+                    throw new RuntimeException($this->translator->trans('Update package contains an unreadable ZIP entry.'));
                 }
 
                 $this->assertSafeEntryName($entryName);
@@ -66,14 +71,14 @@ final class UpdateArchiveInspector
         $normalized = str_replace('\\', '/', $entryName);
 
         if (str_starts_with($normalized, '/') || str_contains($normalized, "\0")) {
-            throw new RuntimeException('Update package contains an unsafe absolute path: '.$entryName);
+            throw new RuntimeException(\sprintf($this->translator->trans('Update package contains an unsafe absolute path: %s'), $entryName));
         }
 
         $segments = explode('/', $normalized);
 
         foreach ($segments as $segment) {
             if ('..' === $segment) {
-                throw new RuntimeException('Update package contains a path traversal entry: '.$entryName);
+                throw new RuntimeException(\sprintf($this->translator->trans('Update package contains a path traversal entry: %s'), $entryName));
             }
         }
     }
@@ -98,7 +103,7 @@ final class UpdateArchiveInspector
         $fileType = ($attributes >> 16) & 0170000;
 
         if (0120000 === $fileType) {
-            throw new RuntimeException('Update package contains a symbolic link: '.$entryName);
+            throw new RuntimeException(\sprintf($this->translator->trans('Update package contains a symbolic link: %s'), $entryName));
         }
     }
 }

@@ -13,6 +13,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use ZipArchive;
 
@@ -27,6 +28,7 @@ final readonly class UpdateStagingManager
         private UpdatePackageRemovalManifest $packageRemovalManifest,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
+        private TranslatorInterface $translator,
     ) {}
 
     public function stage(UpdateManifest $manifest, string $packagePath): UpdateStagingResult
@@ -41,13 +43,13 @@ final readonly class UpdateStagingManager
         try {
             $archiveDetails = $this->archiveInspector->inspect($packagePath);
             $details['archive'] = $archiveDetails;
-            $this->addCheck($checks, 'archive_safety', 'passed', 'Update package archive safety checks passed.', $archiveDetails);
+            $this->addCheck($checks, 'archive_safety', 'passed', $this->translator->trans('Update package archive safety checks passed.'), $archiveDetails);
 
             $stagingDirectory = $this->createStagingDirectory($manifest);
             $details['staging_directory'] = $stagingDirectory;
 
             $this->extractZip($packagePath, $stagingDirectory);
-            $this->addCheck($checks, 'archive_extraction', 'passed', 'Update package was extracted to staging.', [
+            $this->addCheck($checks, 'archive_extraction', 'passed', $this->translator->trans('Update package was extracted to staging.'), [
                 'staging_directory' => $stagingDirectory,
             ]);
 
@@ -60,23 +62,23 @@ final readonly class UpdateStagingManager
             $details['package_metadata'] = $packageMetadata;
 
             if ($packageMetadata['present']) {
-                $this->addCheck($checks, 'package_metadata', 'passed', 'Signed package cleanup metadata was loaded.', [
+                $this->addCheck($checks, 'package_metadata', 'passed', $this->translator->trans('Signed package cleanup metadata was loaded.'), [
                     'file' => $packageMetadata['file'],
                     'remove_count' => \count($packageMetadata['remove']),
                     'sha256' => $packageMetadata['sha256'],
                 ]);
             } else {
-                $message = 'Update package does not contain '.UpdatePackageRemovalManifest::FILE_NAME.'. File application will be blocked until signed cleanup metadata is provided.';
+                $message = \sprintf($this->translator->trans('Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided.'), UpdatePackageRemovalManifest::FILE_NAME);
                 $warnings[] = $message;
                 $this->addCheck($checks, 'package_metadata', 'warning', $message);
             }
 
             $dryRunReport = $this->buildDryRunReport($applicationPath);
             $details['dry_run'] = $dryRunReport;
-            $this->addCheck($checks, 'dry_run_report', 'passed', 'Staged package dry-run report was generated.', $dryRunReport);
+            $this->addCheck($checks, 'dry_run_report', 'passed', $this->translator->trans('Staged package dry-run report was generated.'), $dryRunReport);
 
             $this->writeStagingMetadata($stagingDirectory, $manifest, $packagePath, $applicationPath, $archiveDetails, $dryRunReport, $packageMetadata);
-            $this->addCheck($checks, 'staging_metadata', 'passed', 'Staging metadata was written.', [
+            $this->addCheck($checks, 'staging_metadata', 'passed', $this->translator->trans('Staging metadata was written.'), [
                 'metadata_file' => $stagingDirectory.'/STAGING-INFO.json',
             ]);
 
@@ -113,12 +115,12 @@ final readonly class UpdateStagingManager
         $openResult = $zip->open($packagePath);
 
         if (true !== $openResult) {
-            throw new RuntimeException('Update package is not a valid ZIP archive.');
+            throw new RuntimeException($this->translator->trans('Update package is not a valid ZIP archive.'));
         }
 
         try {
             if (!$zip->extractTo($stagingDirectory)) {
-                throw new RuntimeException('Unable to extract update package to staging directory.');
+                throw new RuntimeException($this->translator->trans('Unable to extract update package to staging directory.'));
             }
         } finally {
             $zip->close();
@@ -149,7 +151,7 @@ final readonly class UpdateStagingManager
             }
         }
 
-        throw new RuntimeException('Unable to locate Chamilo application root in staged package.');
+        throw new RuntimeException($this->translator->trans('Unable to locate Chamilo application root in staged package.'));
     }
 
     /**
@@ -168,29 +170,29 @@ final readonly class UpdateStagingManager
             $valid = 'file' === $type ? is_file($path) : is_dir($path);
 
             if (!$valid) {
-                throw new RuntimeException('Staged package is missing required Chamilo entry: '.$entry);
+                throw new RuntimeException(\sprintf($this->translator->trans('Staged package is missing required Chamilo entry: %s'), $entry));
             }
         }
 
-        $this->addCheck($checks, 'package_structure', 'passed', 'Staged package contains the expected Chamilo structure.', [
+        $this->addCheck($checks, 'package_structure', 'passed', $this->translator->trans('Staged package contains the expected Chamilo structure.'), [
             'application_path' => $applicationPath,
             'required_entries' => array_keys($requiredEntries),
         ]);
 
         if (!is_file($applicationPath.'/composer.lock')) {
-            $this->addCheck($checks, 'composer_lock', 'warning', 'Staged package does not contain composer.lock.', [
+            $this->addCheck($checks, 'composer_lock', 'warning', $this->translator->trans('Staged package does not contain composer.lock.'), [
                 'application_path' => $applicationPath,
             ]);
         } else {
-            $this->addCheck($checks, 'composer_lock', 'passed', 'Staged package contains composer.lock.');
+            $this->addCheck($checks, 'composer_lock', 'passed', $this->translator->trans('Staged package contains composer.lock.'));
         }
 
         if (!is_file($applicationPath.'/yarn.lock')) {
-            $this->addCheck($checks, 'yarn_lock', 'warning', 'Staged package does not contain yarn.lock.', [
+            $this->addCheck($checks, 'yarn_lock', 'warning', $this->translator->trans('Staged package does not contain yarn.lock.'), [
                 'application_path' => $applicationPath,
             ]);
         } else {
-            $this->addCheck($checks, 'yarn_lock', 'passed', 'Staged package contains yarn.lock.');
+            $this->addCheck($checks, 'yarn_lock', 'passed', $this->translator->trans('Staged package contains yarn.lock.'));
         }
     }
 
@@ -308,11 +310,11 @@ final readonly class UpdateStagingManager
 
         $encoded = json_encode($metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         if (!\is_string($encoded)) {
-            throw new RuntimeException('Unable to encode staging metadata.');
+            throw new RuntimeException($this->translator->trans('Unable to encode staging metadata.'));
         }
 
         if (false === file_put_contents($stagingDirectory.'/STAGING-INFO.json', $encoded.PHP_EOL)) {
-            throw new RuntimeException('Unable to write staging metadata.');
+            throw new RuntimeException($this->translator->trans('Unable to write staging metadata.'));
         }
     }
 
@@ -320,14 +322,14 @@ final readonly class UpdateStagingManager
     {
         if (is_dir($directory)) {
             if (!is_writable($directory)) {
-                throw new RuntimeException('Directory is not writable: '.$directory);
+                throw new RuntimeException(\sprintf($this->translator->trans('Directory is not writable: %s'), $directory));
             }
 
             return;
         }
 
         if (!mkdir($directory, 0775, true) && !is_dir($directory)) {
-            throw new RuntimeException('Unable to create directory: '.$directory);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to create directory: %s'), $directory));
         }
     }
 

@@ -13,6 +13,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Translation\IdentityTranslator;
 
 use const JSON_THROW_ON_ERROR;
 
@@ -23,7 +24,7 @@ final class UpdateRemoteSourceSecurityTest extends TestCase
         $httpClient = new MockHttpClient(static function (): MockResponse {
             self::fail('HTTP request should not be executed for an external manifest origin.');
         });
-        $client = new UpdateManifestClient($httpClient, new UpdateConfiguration('prod'));
+        $client = new UpdateManifestClient($httpClient, new UpdateConfiguration('prod'), new IdentityTranslator());
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('official update origin');
@@ -36,7 +37,7 @@ final class UpdateRemoteSourceSecurityTest extends TestCase
         $httpClient = new MockHttpClient(static function (): MockResponse {
             self::fail('HTTP request should not be executed for an external package origin.');
         });
-        $downloader = new UpdatePackageDownloader($httpClient, sys_get_temp_dir(), new UpdateConfiguration('prod'));
+        $downloader = new UpdatePackageDownloader($httpClient, sys_get_temp_dir(), new UpdateConfiguration('prod'), new IdentityTranslator());
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('official update origin');
@@ -49,7 +50,7 @@ final class UpdateRemoteSourceSecurityTest extends TestCase
         $httpClient = new MockHttpClient(static function (): MockResponse {
             self::fail('HTTP request should not be executed while checking an external download origin.');
         });
-        $downloader = new UpdatePackageDownloader($httpClient, sys_get_temp_dir(), new UpdateConfiguration('prod'));
+        $downloader = new UpdatePackageDownloader($httpClient, sys_get_temp_dir(), new UpdateConfiguration('prod'), new IdentityTranslator());
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('official update origin');
@@ -69,7 +70,7 @@ final class UpdateRemoteSourceSecurityTest extends TestCase
             $httpClient = new MockHttpClient(static function (): MockResponse {
                 self::fail('HTTP request should not be executed when reusing a managed download.');
             });
-            $downloader = new UpdatePackageDownloader($httpClient, $projectDir, new UpdateConfiguration('prod'));
+            $downloader = new UpdatePackageDownloader($httpClient, $projectDir, new UpdateConfiguration('prod'), new IdentityTranslator());
 
             self::assertSame(
                 $expectedPath,
@@ -92,7 +93,7 @@ final class UpdateRemoteSourceSecurityTest extends TestCase
             $httpClient = new MockHttpClient(static function (): MockResponse {
                 self::fail('HTTP request should not be executed while checking for an existing managed download.');
             });
-            $downloader = new UpdatePackageDownloader($httpClient, $projectDir, new UpdateConfiguration('prod'));
+            $downloader = new UpdatePackageDownloader($httpClient, $projectDir, new UpdateConfiguration('prod'), new IdentityTranslator());
 
             self::assertNull(
                 $downloader->findExistingDownload('https://updates.chamilo.org/assets/chamilo-3.0.1.zip'),
@@ -121,7 +122,7 @@ final class UpdateRemoteSourceSecurityTest extends TestCase
 
             return new MockResponse($manifest);
         });
-        $client = new UpdateManifestClient($httpClient, new UpdateConfiguration('prod'));
+        $client = new UpdateManifestClient($httpClient, new UpdateConfiguration('prod'), new IdentityTranslator());
 
         $result = $client->load('https://updates.chamilo.org/latest-stable.json');
 
@@ -140,7 +141,7 @@ final class UpdateRemoteSourceSecurityTest extends TestCase
 
                 return new MockResponse('package-content');
             });
-            $downloader = new UpdatePackageDownloader($httpClient, sys_get_temp_dir(), new UpdateConfiguration('prod'));
+            $downloader = new UpdatePackageDownloader($httpClient, sys_get_temp_dir(), new UpdateConfiguration('prod'), new IdentityTranslator());
 
             $packagePath = $downloader->download(
                 'https://updates.chamilo.org/assets/chamilo-3.0.1.zip',

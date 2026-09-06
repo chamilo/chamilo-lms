@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Service\Update;
 
 use JsonException;
 use RuntimeException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const JSON_THROW_ON_ERROR;
 
@@ -30,6 +31,10 @@ final readonly class UpdatePackageRemovalManifest
         'public/courses',
         'public/upload',
     ];
+
+    public function __construct(
+        private TranslatorInterface $translator,
+    ) {}
 
     /**
      * @return array{
@@ -55,54 +60,54 @@ final readonly class UpdatePackageRemovalManifest
         }
 
         if (!is_readable($metadataPath)) {
-            throw new RuntimeException('Update package metadata is not readable: '.$metadataPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Update package metadata is not readable: %s'), $metadataPath));
         }
 
         $content = file_get_contents($metadataPath);
 
         if (false === $content) {
-            throw new RuntimeException('Unable to read update package metadata: '.$metadataPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to read update package metadata: %s'), $metadataPath));
         }
 
         try {
             $metadata = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            throw new RuntimeException('Update package metadata is not valid JSON: '.$exception->getMessage(), 0, $exception);
+            throw new RuntimeException(\sprintf($this->translator->trans('Update package metadata is not valid JSON: %s'), $exception->getMessage()), 0, $exception);
         }
 
         if (!\is_array($metadata)) {
-            throw new RuntimeException('Update package metadata must be a JSON object.');
+            throw new RuntimeException($this->translator->trans('Update package metadata must be a JSON object.'));
         }
 
         $format = $metadata['format'] ?? null;
 
         if (self::FORMAT_VERSION !== $format) {
-            throw new RuntimeException('Update package metadata format must be '.self::FORMAT_VERSION.'.');
+            throw new RuntimeException(\sprintf($this->translator->trans('Update package metadata format must be %d.'), self::FORMAT_VERSION));
         }
 
         $remove = $metadata['remove'] ?? null;
 
         if (!\is_array($remove)) {
-            throw new RuntimeException('Update package metadata field "remove" must be an array.');
+            throw new RuntimeException($this->translator->trans('Update package metadata field "remove" must be an array.'));
         }
 
         $removalPaths = [];
 
         foreach ($remove as $value) {
             if (!\is_string($value)) {
-                throw new RuntimeException('Update package removal paths must be strings.');
+                throw new RuntimeException($this->translator->trans('Update package removal paths must be strings.'));
             }
 
             $relativePath = $this->normalizeRemovalPath($value);
 
             if ($this->isProtectedPath($relativePath)) {
-                throw new RuntimeException('Update package metadata cannot remove protected path: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Update package metadata cannot remove protected path: %s'), $relativePath));
             }
 
             $stagedPath = rtrim($applicationPath, '/').'/'.$relativePath;
 
             if (file_exists($stagedPath) || is_link($stagedPath)) {
-                throw new RuntimeException('Update package cannot include and remove the same path: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Update package cannot include and remove the same path: %s'), $relativePath));
             }
 
             $removalPaths[$relativePath] = true;
@@ -111,7 +116,7 @@ final readonly class UpdatePackageRemovalManifest
         $sha256 = hash_file('sha256', $metadataPath);
 
         if (false === $sha256) {
-            throw new RuntimeException('Unable to calculate update package metadata sha256.');
+            throw new RuntimeException($this->translator->trans('Unable to calculate update package metadata sha256.'));
         }
 
         return [
@@ -129,22 +134,22 @@ final readonly class UpdatePackageRemovalManifest
         $relativePath = str_replace('\\', '/', $relativePath);
 
         if ('' === $relativePath) {
-            throw new RuntimeException('Update package removal path cannot be empty.');
+            throw new RuntimeException($this->translator->trans('Update package removal path cannot be empty.'));
         }
 
         if (str_contains($relativePath, "\0")) {
-            throw new RuntimeException('Update package removal path contains a null byte.');
+            throw new RuntimeException($this->translator->trans('Update package removal path contains a null byte.'));
         }
 
         if (str_starts_with($relativePath, '/') || str_starts_with($relativePath, '//') || 1 === preg_match('/^[A-Za-z]:\//', $relativePath)) {
-            throw new RuntimeException('Update package removal path must be relative: '.$relativePath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Update package removal path must be relative: %s'), $relativePath));
         }
 
         $segments = explode('/', $relativePath);
 
         foreach ($segments as $segment) {
             if ('' === $segment || '.' === $segment || '..' === $segment) {
-                throw new RuntimeException('Update package removal path contains an unsafe segment: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Update package removal path contains an unsafe segment: %s'), $relativePath));
             }
         }
 

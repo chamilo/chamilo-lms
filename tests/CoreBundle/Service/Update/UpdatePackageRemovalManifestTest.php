@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Service\Update;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageRemovalManifest;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Symfony\Component\Translation\IdentityTranslator;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
@@ -30,7 +31,7 @@ final class UpdatePackageRemovalManifestTest extends TestCase
 
     public function testMissingMetadataIsReportedAsAbsent(): void
     {
-        $metadata = (new UpdatePackageRemovalManifest())->load($this->applicationPath);
+        $metadata = (new UpdatePackageRemovalManifest(new IdentityTranslator()))->load($this->applicationPath);
 
         self::assertFalse($metadata['present']);
         self::assertSame([], $metadata['remove']);
@@ -48,7 +49,7 @@ final class UpdatePackageRemovalManifestTest extends TestCase
             ],
         ]);
 
-        $metadata = (new UpdatePackageRemovalManifest())->load($this->applicationPath);
+        $metadata = (new UpdatePackageRemovalManifest(new IdentityTranslator()))->load($this->applicationPath);
 
         self::assertTrue($metadata['present']);
         self::assertSame(1, $metadata['format']);
@@ -69,7 +70,7 @@ final class UpdatePackageRemovalManifestTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('cannot remove protected path');
 
-        (new UpdatePackageRemovalManifest())->load($this->applicationPath);
+        (new UpdatePackageRemovalManifest(new IdentityTranslator()))->load($this->applicationPath);
     }
 
     public function testTraversalRemovalPathIsRejected(): void
@@ -82,7 +83,7 @@ final class UpdatePackageRemovalManifestTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('unsafe segment');
 
-        (new UpdatePackageRemovalManifest())->load($this->applicationPath);
+        (new UpdatePackageRemovalManifest(new IdentityTranslator()))->load($this->applicationPath);
     }
 
     public function testPackageCannotIncludeAndRemoveSamePath(): void
@@ -99,7 +100,7 @@ final class UpdatePackageRemovalManifestTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('cannot include and remove the same path');
 
-        (new UpdatePackageRemovalManifest())->load($this->applicationPath);
+        (new UpdatePackageRemovalManifest(new IdentityTranslator()))->load($this->applicationPath);
     }
 
     /**

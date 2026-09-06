@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Service\Update\UpdateApplyPlanner;
 use Chamilo\CoreBundle\Service\Update\UpdateMigrationPolicy;
 use Chamilo\CoreBundle\Service\Update\UpdatePackageRemovalManifest;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\IdentityTranslator;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
@@ -26,7 +27,7 @@ final class UpdateApplyPlannerTest extends TestCase
         $this->projectDir = sys_get_temp_dir().'/chamilo-update-plan-'.bin2hex(random_bytes(8));
         $this->stagingPath = $this->projectDir.'/var/update/staging/test-package';
         $this->applicationPath = $this->stagingPath.'/chamilo';
-        $this->packageRemovalManifest = new UpdatePackageRemovalManifest();
+        $this->packageRemovalManifest = new UpdatePackageRemovalManifest(new IdentityTranslator());
 
         mkdir($this->projectDir.'/config/packages', 0777, true);
         mkdir($this->applicationPath.'/src', 0777, true);
@@ -94,6 +95,7 @@ final class UpdateApplyPlannerTest extends TestCase
         return new UpdateApplyPlanner(
             new UpdateMigrationPolicy(),
             $this->packageRemovalManifest,
+            new IdentityTranslator(),
             $this->projectDir,
         );
     }

@@ -8,11 +8,13 @@ namespace Chamilo\CoreBundle\Service\Update;
 
 use Chamilo\CoreBundle\Service\Update\Dto\UpdateAvailabilityResult;
 use Chamilo\CoreBundle\Service\Update\Dto\UpdateManifest;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class UpdateAvailabilityChecker
 {
     public function __construct(
         private InstalledChamiloVersionProvider $installedVersionProvider,
+        private TranslatorInterface $translator,
     ) {}
 
     public function check(UpdateManifest $manifest, ?string $installedVersion = null): UpdateAvailabilityResult
@@ -31,7 +33,7 @@ final readonly class UpdateAvailabilityChecker
                 false,
                 false,
                 'unknown_installed_version',
-                'Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible.',
+                $this->translator->trans('Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible.'),
                 'verify',
             );
         }
@@ -48,7 +50,7 @@ final readonly class UpdateAvailabilityChecker
                 false,
                 false,
                 'not_comparable',
-                'Installed or target version is not in a comparable semantic version format. Continue only after manual verification.',
+                $this->translator->trans('Installed or target version is not in a comparable semantic version format. Continue only after manual verification.'),
                 'verify',
             );
         }
@@ -64,7 +66,7 @@ final readonly class UpdateAvailabilityChecker
                 false,
                 false,
                 'update_available',
-                'An update is available.',
+                $this->translator->trans('An update is available.'),
                 'verify',
             );
         }
@@ -78,7 +80,7 @@ final readonly class UpdateAvailabilityChecker
                 true,
                 false,
                 'up_to_date',
-                'The installed version already matches the manifest version.',
+                $this->translator->trans('The installed version already matches the manifest version.'),
                 'done',
             );
         }
@@ -91,7 +93,7 @@ final readonly class UpdateAvailabilityChecker
             false,
             true,
             'downgrade_blocked',
-            'The manifest version is older than the installed version. Downgrades are blocked by default.',
+            $this->translator->trans('The manifest version is older than the installed version. Downgrades are blocked by default.'),
             'blocked',
         );
     }

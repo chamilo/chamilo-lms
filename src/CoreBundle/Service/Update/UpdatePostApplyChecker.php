@@ -13,6 +13,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
@@ -43,6 +44,7 @@ final readonly class UpdatePostApplyChecker
         private UpdateMigrationPolicy $migrationPolicy,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
+        private TranslatorInterface $translator,
     ) {}
 
     public function check(string $stagingPath): UpdatePostApplyCheckResult
@@ -57,33 +59,33 @@ final readonly class UpdatePostApplyChecker
         try {
             $stagingPath = $this->resolveSafeStagingPath($stagingPath);
             $details['staging_path'] = $stagingPath;
-            $this->addCheck($checks, 'staging_path', 'passed', 'Staging directory is inside the Chamilo update staging directory.', [
+            $this->addCheck($checks, 'staging_path', 'passed', $this->translator->trans('Staging directory is inside the Chamilo update staging directory.'), [
                 'staging_path' => $stagingPath,
             ]);
 
             $stagingMetadata = $this->readJsonFile($stagingPath.'/STAGING-INFO.json', 'staging metadata');
             $details['staging_metadata'] = $this->summarizeStagingMetadata($stagingMetadata);
-            $this->addCheck($checks, 'staging_metadata', 'passed', 'Staging metadata was read successfully.');
+            $this->addCheck($checks, 'staging_metadata', 'passed', $this->translator->trans('Staging metadata was read successfully.'));
 
             $applyPlan = $this->readJsonFile($stagingPath.'/APPLY-PLAN.json', 'apply plan metadata');
             $details['apply_plan'] = $this->summarizeApplyPlan($applyPlan);
-            $this->addCheck($checks, 'apply_plan_metadata', 'passed', 'Apply plan metadata was read successfully.');
+            $this->addCheck($checks, 'apply_plan_metadata', 'passed', $this->translator->trans('Apply plan metadata was read successfully.'));
 
             $applyResult = $this->readJsonFile($stagingPath.'/APPLY-RESULT.json', 'apply result metadata');
             $details['apply_result'] = $this->summarizeApplyResult($applyResult);
             if (true !== ($applyResult['success'] ?? false)) {
-                $this->addCheck($checks, 'apply_result_metadata', 'failed', 'Staged files were not applied successfully. Post-apply checks cannot continue.', [
+                $this->addCheck($checks, 'apply_result_metadata', 'failed', $this->translator->trans('Staged files were not applied successfully. Post-apply checks cannot continue.'), [
                     'apply_result_file' => $stagingPath.'/APPLY-RESULT.json',
                 ]);
 
                 return UpdatePostApplyCheckResult::failure($this->collectFailedCheckMessages($checks), $checks, $warnings, $details);
             }
 
-            $this->addCheck($checks, 'apply_result_metadata', 'passed', 'Apply result metadata was read successfully.');
+            $this->addCheck($checks, 'apply_result_metadata', 'passed', $this->translator->trans('Apply result metadata was read successfully.'));
 
             $applicationPath = $this->resolveApplicationPath($stagingPath, $applyPlan, $stagingMetadata);
             $details['application_path'] = $applicationPath;
-            $this->addCheck($checks, 'application_path', 'passed', 'Staged application path is valid.', [
+            $this->addCheck($checks, 'application_path', 'passed', $this->translator->trans('Staged application path is valid.'), [
                 'application_path' => $applicationPath,
             ]);
 
@@ -93,13 +95,13 @@ final readonly class UpdatePostApplyChecker
             $actions = $this->buildRecommendedActions($packageSignals);
             $details['recommended_actions_count'] = \count($actions);
 
-            $this->addCheck($checks, 'post_apply_actions', 'passed', 'Post-apply action recommendations were generated.', [
+            $this->addCheck($checks, 'post_apply_actions', 'passed', $this->translator->trans('Post-apply action recommendations were generated.'), [
                 'actions_count' => \count($actions),
                 'action_keys' => array_map(static fn (array $action): string => $action['key'], $actions),
             ]);
 
             if ($packageSignals['migrations_detected']) {
-                $warnings[] = 'Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists.';
+                $warnings[] = $this->translator->trans('Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists.');
             }
 
             $metadataPath = $this->writePostApplyMetadata($stagingPath, $checks, $warnings, $details, $actions);
@@ -115,23 +117,23 @@ final readonly class UpdatePostApplyChecker
         $stagingPath = rtrim(trim($stagingPath), '/');
 
         if ('' === $stagingPath) {
-            throw new RuntimeException('Staging path is required to run post-apply checks.');
+            throw new RuntimeException($this->translator->trans('Staging path is required to run post-apply checks.'));
         }
 
         $realStagingPath = realpath($stagingPath);
 
         if (false === $realStagingPath || !is_dir($realStagingPath)) {
-            throw new RuntimeException('Staging directory does not exist: '.$stagingPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Staging directory does not exist: %s'), $stagingPath));
         }
 
         $stagingBasePath = realpath($this->projectDir.'/var/update/staging');
 
         if (false === $stagingBasePath) {
-            throw new RuntimeException('Chamilo update staging base directory does not exist.');
+            throw new RuntimeException($this->translator->trans('Chamilo update staging base directory does not exist.'));
         }
 
         if (!$this->isPathInside($realStagingPath, $stagingBasePath)) {
-            throw new RuntimeException('Staging directory must be inside var/update/staging.');
+            throw new RuntimeException($this->translator->trans('Staging directory must be inside var/update/staging.'));
         }
 
         return $realStagingPath;
@@ -143,23 +145,23 @@ final readonly class UpdatePostApplyChecker
     private function readJsonFile(string $path, string $label): array
     {
         if (!is_file($path) || !is_readable($path)) {
-            throw new RuntimeException('Unable to read update '.$label.': '.$path);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to read update %s: %s'), $label, $path));
         }
 
         $content = file_get_contents($path);
 
         if (false === $content) {
-            throw new RuntimeException('Unable to read update '.$label.': '.$path);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to read update %s: %s'), $label, $path));
         }
 
         try {
             $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            throw new RuntimeException('Update '.$label.' is not valid JSON: '.$exception->getMessage(), 0, $exception);
+            throw new RuntimeException(\sprintf($this->translator->trans('Update %s is not valid JSON: %s'), $label, $exception->getMessage()), 0, $exception);
         }
 
         if (!\is_array($data)) {
-            throw new RuntimeException('Update '.$label.' must be a JSON object.');
+            throw new RuntimeException(\sprintf($this->translator->trans('Update %s must be a JSON object.'), $label));
         }
 
         return $data;
@@ -174,21 +176,21 @@ final readonly class UpdatePostApplyChecker
         $applicationPath = $applyPlan['application_path'] ?? $stagingMetadata['application_path'] ?? null;
 
         if (!\is_string($applicationPath) || '' === trim($applicationPath)) {
-            throw new RuntimeException('Update metadata is missing the staged application path.');
+            throw new RuntimeException($this->translator->trans('Update metadata is missing the staged application path.'));
         }
 
         $realApplicationPath = realpath($applicationPath);
 
         if (false === $realApplicationPath || !is_dir($realApplicationPath)) {
-            throw new RuntimeException('Staged application path is not readable: '.$applicationPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Staged application path is not readable: %s'), $applicationPath));
         }
 
         if (!$this->isPathInside($realApplicationPath, $stagingPath)) {
-            throw new RuntimeException('Staged application path must be inside the staging directory.');
+            throw new RuntimeException($this->translator->trans('Staged application path must be inside the staging directory.'));
         }
 
         if (!is_file($realApplicationPath.'/composer.json')) {
-            throw new RuntimeException('Staged application path is missing composer.json.');
+            throw new RuntimeException($this->translator->trans('Staged application path is missing composer.json.'));
         }
 
         return $realApplicationPath;
@@ -301,8 +303,8 @@ final readonly class UpdatePostApplyChecker
         if ($signals['composer_files_detected']) {
             $actions[] = [
                 'key' => 'composer_install',
-                'title' => 'Composer dependencies',
-                'description' => 'Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete.',
+                'title' => $this->translator->trans('Composer dependencies'),
+                'description' => $this->translator->trans('Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete.'),
                 'commands' => [
                     $this->getComposerInstallDisplayCommand(),
                 ],
@@ -314,8 +316,8 @@ final readonly class UpdatePostApplyChecker
         if ($signals['frontend_files_detected']) {
             $actions[] = [
                 'key' => 'frontend_build',
-                'title' => 'Frontend assets',
-                'description' => 'Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies.',
+                'title' => $this->translator->trans('Frontend assets'),
+                'description' => $this->translator->trans('Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies.'),
                 'commands' => [
                     'yarn install --frozen-lockfile',
                     'NODE_OPTIONS="--experimental-global-webcrypto --max-old-space-size=8192" yarn build',
@@ -328,8 +330,8 @@ final readonly class UpdatePostApplyChecker
         if ($signals['migrations_detected']) {
             $actions[] = [
                 'key' => 'database_migrations',
-                'title' => 'Database migrations',
-                'description' => 'Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations.',
+                'title' => $this->translator->trans('Database migrations'),
+                'description' => $this->translator->trans('Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations.'),
                 'commands' => [
                     'php bin/console doctrine:migrations:execute <staged-migration-class> --up --no-interaction',
                 ],
@@ -341,8 +343,8 @@ final readonly class UpdatePostApplyChecker
         if ($signals['cache_clear_recommended']) {
             $actions[] = [
                 'key' => 'cache_clear',
-                'title' => 'Symfony cache',
-                'description' => 'Clear Symfony cache after applying update files and running any required commands.',
+                'title' => $this->translator->trans('Symfony cache'),
+                'description' => $this->translator->trans('Clear Symfony cache after applying update files and running any required commands.'),
                 'commands' => [
                     'php bin/console cache:clear',
                 ],
@@ -408,7 +410,7 @@ final readonly class UpdatePostApplyChecker
         $relativePath = trim(str_replace('\\', '/', $relativePath), '/');
 
         if (str_contains($relativePath, "\0") || str_contains($relativePath, '../') || str_starts_with($relativePath, '../')) {
-            throw new RuntimeException('Unsafe staged relative path detected: '.$relativePath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unsafe staged relative path detected: %s'), $relativePath));
         }
 
         return $relativePath;
@@ -447,7 +449,7 @@ final readonly class UpdatePostApplyChecker
         $encoded = json_encode($metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
         if (false === file_put_contents($metadataPath, $encoded.PHP_EOL)) {
-            throw new RuntimeException('Unable to write post-apply checks metadata.');
+            throw new RuntimeException($this->translator->trans('Unable to write post-apply checks metadata.'));
         }
 
         return $metadataPath;
@@ -524,7 +526,7 @@ final readonly class UpdatePostApplyChecker
 
         foreach ($checks as $check) {
             if ('failed' === ($check['status'] ?? null)) {
-                $errors[] = (string) ($check['message'] ?? 'Post-apply check failed.');
+                $errors[] = (string) ($check['message'] ?? $this->translator->trans('Post-apply check failed.'));
             }
         }
 

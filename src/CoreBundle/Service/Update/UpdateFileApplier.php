@@ -13,6 +13,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 use const JSON_PRETTY_PRINT;
@@ -44,6 +45,7 @@ final readonly class UpdateFileApplier
         private UpdateOperationLogger $operationLogger,
         private UpdateConfiguration $updateConfiguration,
         private UpdatePackageRemovalManifest $packageRemovalManifest,
+        private TranslatorInterface $translator,
     ) {}
 
     public function apply(string $stagingPath, bool $confirmed, ?string $operationId = null): UpdateApplyFilesResult
@@ -59,14 +61,14 @@ final readonly class UpdateFileApplier
 
         if (null !== $operationId && '' !== trim($operationId)) {
             $operationId = $this->operationLogger->create($operationId);
-            $this->logOperation($operationId, 'info', 'start', 'Starting staged file application.');
+            $this->logOperation($operationId, 'info', 'start', $this->translator->trans('Starting staged file application.'));
         }
 
         if (!$confirmed) {
-            $this->logOperation($operationId, 'error', 'failed', 'Explicit confirmation is required to apply staged files.');
+            $this->logOperation($operationId, 'error', 'failed', $this->translator->trans('Explicit confirmation is required to apply staged files.'));
 
             return UpdateApplyFilesResult::failure([
-                'Applying staged update files requires an explicit confirmation.',
+                $this->translator->trans('Applying staged update files requires an explicit confirmation.'),
             ], $checks, $warnings, $details);
         }
 
@@ -82,22 +84,22 @@ final readonly class UpdateFileApplier
         try {
             $stagingPath = $this->resolveSafeStagingPath($stagingPath);
             $details['staging_path'] = $stagingPath;
-            $this->addCheck($checks, 'staging_path', 'passed', 'Staging directory is inside the Chamilo update staging directory.', [
+            $this->addCheck($checks, 'staging_path', 'passed', $this->translator->trans('Staging directory is inside the Chamilo update staging directory.'), [
                 'staging_path' => $stagingPath,
             ]);
-            $this->logOperation($operationId, 'success', 'staging_path', 'Staging directory was validated.');
+            $this->logOperation($operationId, 'success', 'staging_path', $this->translator->trans('Staging directory was validated.'));
 
             $applyPlan = $this->readApplyPlan($stagingPath);
             $details['apply_plan'] = $this->summarizeApplyPlan($applyPlan);
-            $this->addCheck($checks, 'apply_plan_metadata', 'passed', 'Apply plan metadata was read successfully.');
-            $this->logOperation($operationId, 'success', 'apply_plan', 'Apply plan metadata was read successfully.');
+            $this->addCheck($checks, 'apply_plan_metadata', 'passed', $this->translator->trans('Apply plan metadata was read successfully.'));
+            $this->logOperation($operationId, 'success', 'apply_plan', $this->translator->trans('Apply plan metadata was read successfully.'));
 
             $applicationPath = $this->resolveApplicationPath($stagingPath, $applyPlan);
             $details['application_path'] = $applicationPath;
-            $this->addCheck($checks, 'application_path', 'passed', 'Staged application path is valid.', [
+            $this->addCheck($checks, 'application_path', 'passed', $this->translator->trans('Staged application path is valid.'), [
                 'application_path' => $applicationPath,
             ]);
-            $this->logOperation($operationId, 'success', 'application_path', 'Staged application path is valid.');
+            $this->logOperation($operationId, 'success', 'application_path', $this->translator->trans('Staged application path is valid.'));
 
             $packageMetadata = $this->validatePackageMetadata($applicationPath, $applyPlan);
             $details['package_metadata'] = [
@@ -105,61 +107,61 @@ final readonly class UpdateFileApplier
                 'sha256' => $packageMetadata['sha256'],
                 'remove_count' => \count($packageMetadata['remove']),
             ];
-            $this->addCheck($checks, 'package_metadata', 'passed', 'Signed package cleanup metadata matches the reviewed apply plan.', [
+            $this->addCheck($checks, 'package_metadata', 'passed', $this->translator->trans('Signed package cleanup metadata matches the reviewed apply plan.'), [
                 'remove_count' => \count($packageMetadata['remove']),
             ]);
-            $this->logOperation($operationId, 'success', 'package_metadata', 'Signed package cleanup metadata was validated.');
+            $this->logOperation($operationId, 'success', 'package_metadata', $this->translator->trans('Signed package cleanup metadata was validated.'));
 
             $lockPath = $this->resolveLockPath($applyPlan);
             $details['lock_path'] = $lockPath;
             $this->acquireLock($lockPath);
             $lockAcquired = true;
-            $this->addCheck($checks, 'update_lock', 'passed', 'Update lock was acquired.', [
+            $this->addCheck($checks, 'update_lock', 'passed', $this->translator->trans('Update lock was acquired.'), [
                 'lock_path' => $lockPath,
             ]);
-            $this->logOperation($operationId, 'success', 'update_lock', 'Update lock was acquired.');
+            $this->logOperation($operationId, 'success', 'update_lock', $this->translator->trans('Update lock was acquired.'));
 
             $backupPath = $this->resolveBackupPath($applyPlan);
             $details['backup_path'] = $backupPath;
             $this->prepareBackupDirectory($backupPath);
-            $this->addCheck($checks, 'backup_directory', 'passed', 'Update backup directory was created.', [
+            $this->addCheck($checks, 'backup_directory', 'passed', $this->translator->trans('Update backup directory was created.'), [
                 'backup_path' => $backupPath,
             ]);
-            $this->logOperation($operationId, 'success', 'backup_directory', 'Update backup directory was created.');
+            $this->logOperation($operationId, 'success', 'backup_directory', $this->translator->trans('Update backup directory was created.'));
 
             $fileOperations = $this->collectFileOperations($applicationPath);
             $removalOperations = $this->collectRemovalOperations($packageMetadata['remove']);
             $details['file_operations'] = $this->summarizeFileOperations($fileOperations, $removalOperations);
-            $this->addCheck($checks, 'file_plan', 'passed', 'Update file operations were collected.', $details['file_operations']);
-            $this->logOperation($operationId, 'info', 'file_plan', 'Update file operations were collected.');
+            $this->addCheck($checks, 'file_plan', 'passed', $this->translator->trans('Update file operations were collected.'), $details['file_operations']);
+            $this->logOperation($operationId, 'info', 'file_plan', $this->translator->trans('Update file operations were collected.'));
 
             $this->backupExistingFiles($fileOperations, $removalOperations, $backupPath);
-            $this->addCheck($checks, 'file_backup', 'passed', 'Existing files planned for replacement or removal were backed up.', [
+            $this->addCheck($checks, 'file_backup', 'passed', $this->translator->trans('Existing files planned for replacement or removal were backed up.'), [
                 'files_backed_up' => ($details['file_operations']['files_to_replace'] ?? 0) + ($details['file_operations']['files_to_remove'] ?? 0),
             ]);
-            $this->logOperation($operationId, 'success', 'file_backup', 'Existing files planned for replacement or removal were backed up.');
+            $this->logOperation($operationId, 'success', 'file_backup', $this->translator->trans('Existing files planned for replacement or removal were backed up.'));
 
             $this->copyStagedFiles($fileOperations, $operationId, $appliedFiles);
-            $this->addCheck($checks, 'file_copy', 'passed', 'Staged update files were copied to the Chamilo installation.', [
+            $this->addCheck($checks, 'file_copy', 'passed', $this->translator->trans('Staged update files were copied to the Chamilo installation.'), [
                 'files_copied' => \count($appliedFiles),
             ]);
-            $this->logOperation($operationId, 'success', 'file_copy', 'Staged update files were copied to the Chamilo installation.');
+            $this->logOperation($operationId, 'success', 'file_copy', $this->translator->trans('Staged update files were copied to the Chamilo installation.'));
 
             $this->removeObsoleteFiles($removalOperations, $operationId, $removedFiles);
-            $this->addCheck($checks, 'file_remove', 'passed', 'Package-declared obsolete files were removed from the Chamilo installation.', [
+            $this->addCheck($checks, 'file_remove', 'passed', $this->translator->trans('Package-declared obsolete files were removed from the Chamilo installation.'), [
                 'files_removed' => \count($removedFiles),
             ]);
-            $this->logOperation($operationId, 'success', 'file_remove', 'Package-declared obsolete files were removed.');
+            $this->logOperation($operationId, 'success', 'file_remove', $this->translator->trans('Package-declared obsolete files were removed.'));
 
             $auditPath = $this->writeAuditFile($stagingPath, $backupPath, $lockPath, $checks, $warnings, $details, true);
-            $this->addCheck($checks, 'apply_audit', 'passed', 'Update apply audit metadata was written.', [
+            $this->addCheck($checks, 'apply_audit', 'passed', $this->translator->trans('Update apply audit metadata was written.'), [
                 'audit_path' => $auditPath,
             ]);
-            $this->logOperation($operationId, 'success', 'apply_audit', 'Update apply audit metadata was written.');
+            $this->logOperation($operationId, 'success', 'apply_audit', $this->translator->trans('Update apply audit metadata was written.'));
 
             $this->releaseLock($lockPath);
             $lockAcquired = false;
-            $this->logOperation($operationId, 'success', 'done', 'Staged files applied successfully.');
+            $this->logOperation($operationId, 'success', 'done', $this->translator->trans('Staged files applied successfully.'));
 
             return UpdateApplyFilesResult::success($stagingPath, $backupPath, $lockPath, $auditPath, $checks, $warnings, $details);
         } catch (Throwable $exception) {
@@ -174,7 +176,7 @@ final readonly class UpdateFileApplier
                     try {
                         $this->rollbackRemovedFiles($removedFiles, $backupPath);
                     } catch (Throwable $rollbackException) {
-                        $rollbackErrors[] = 'Unable to restore removed files: '.$rollbackException->getMessage();
+                        $rollbackErrors[] = \sprintf($this->translator->trans('Unable to restore removed files: %s'), $rollbackException->getMessage());
                     }
                 }
 
@@ -182,17 +184,17 @@ final readonly class UpdateFileApplier
                     try {
                         $this->rollbackAppliedFiles($appliedFiles, $backupPath);
                     } catch (Throwable $rollbackException) {
-                        $rollbackErrors[] = 'Unable to roll back copied files: '.$rollbackException->getMessage();
+                        $rollbackErrors[] = \sprintf($this->translator->trans('Unable to roll back copied files: %s'), $rollbackException->getMessage());
                     }
                 }
 
                 if ([] === $rollbackErrors) {
-                    $warnings[] = 'File rollback was executed after the update apply failure.';
+                    $warnings[] = $this->translator->trans('File rollback was executed after the update apply failure.');
                     $details['rollback_executed'] = true;
-                    $this->logOperation($operationId, 'warning', 'rollback', 'File rollback was executed after the update apply failure.');
+                    $this->logOperation($operationId, 'warning', 'rollback', $this->translator->trans('File rollback was executed after the update apply failure.'));
                 } else {
                     foreach ($rollbackErrors as $rollbackError) {
-                        $errors[] = 'Rollback failed: '.$rollbackError;
+                        $errors[] = \sprintf($this->translator->trans('Rollback failed: %s'), $rollbackError);
                     }
 
                     $details['rollback_errors'] = $rollbackErrors;
@@ -205,7 +207,7 @@ final readonly class UpdateFileApplier
                     $auditPath = $this->writeAuditFile($stagingPath, $backupPath, $lockPath, $checks, $warnings, $details, false, $errors);
                     $details['audit_path'] = $auditPath;
                 } catch (Throwable $auditException) {
-                    $warnings[] = 'Unable to write update apply audit metadata: '.$auditException->getMessage();
+                    $warnings[] = \sprintf($this->translator->trans('Unable to write update apply audit metadata: %s'), $auditException->getMessage());
                 }
             }
 
@@ -213,7 +215,7 @@ final readonly class UpdateFileApplier
                 try {
                     $this->releaseLock($lockPath);
                 } catch (Throwable $lockException) {
-                    $warnings[] = 'Unable to release update lock after failure: '.$lockException->getMessage();
+                    $warnings[] = \sprintf($this->translator->trans('Unable to release update lock after failure: %s'), $lockException->getMessage());
                 }
             }
 
@@ -226,27 +228,27 @@ final readonly class UpdateFileApplier
         $stagingPath = rtrim(trim($stagingPath), '/');
 
         if ('' === $stagingPath) {
-            throw new RuntimeException('Staging path is required to apply update files.');
+            throw new RuntimeException($this->translator->trans('Staging path is required to apply update files.'));
         }
 
         $realStagingPath = realpath($stagingPath);
 
         if (false === $realStagingPath || !is_dir($realStagingPath)) {
-            throw new RuntimeException('Staging directory does not exist: '.$stagingPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Staging directory does not exist: %s'), $stagingPath));
         }
 
         $stagingBasePath = realpath($this->projectDir.'/var/update/staging');
 
         if (false === $stagingBasePath) {
-            throw new RuntimeException('Chamilo update staging base directory does not exist.');
+            throw new RuntimeException($this->translator->trans('Chamilo update staging base directory does not exist.'));
         }
 
         if (!$this->isPathInside($realStagingPath, $stagingBasePath)) {
-            throw new RuntimeException('Staging directory must be inside var/update/staging.');
+            throw new RuntimeException($this->translator->trans('Staging directory must be inside var/update/staging.'));
         }
 
         if (!is_file($realStagingPath.'/APPLY-PLAN.json')) {
-            throw new RuntimeException('Staging directory is missing APPLY-PLAN.json.');
+            throw new RuntimeException($this->translator->trans('Staging directory is missing APPLY-PLAN.json.'));
         }
 
         return $realStagingPath;
@@ -261,17 +263,17 @@ final readonly class UpdateFileApplier
         $content = file_get_contents($applyPlanPath);
 
         if (false === $content) {
-            throw new RuntimeException('Unable to read update apply plan metadata: '.$applyPlanPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to read update apply plan metadata: %s'), $applyPlanPath));
         }
 
         try {
             $applyPlan = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            throw new RuntimeException('Update apply plan metadata is not valid JSON: '.$exception->getMessage(), 0, $exception);
+            throw new RuntimeException(\sprintf($this->translator->trans('Update apply plan metadata is not valid JSON: %s'), $exception->getMessage()), 0, $exception);
         }
 
         if (!\is_array($applyPlan)) {
-            throw new RuntimeException('Update apply plan metadata must be a JSON object.');
+            throw new RuntimeException($this->translator->trans('Update apply plan metadata must be a JSON object.'));
         }
 
         return $applyPlan;
@@ -285,21 +287,21 @@ final readonly class UpdateFileApplier
         $applicationPath = $applyPlan['application_path'] ?? null;
 
         if (!\is_string($applicationPath) || '' === trim($applicationPath)) {
-            throw new RuntimeException('Update apply plan is missing the application_path field.');
+            throw new RuntimeException($this->translator->trans('Update apply plan is missing the application_path field.'));
         }
 
         $realApplicationPath = realpath($applicationPath);
 
         if (false === $realApplicationPath || !is_dir($realApplicationPath)) {
-            throw new RuntimeException('Staged application path is not readable: '.$applicationPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Staged application path is not readable: %s'), $applicationPath));
         }
 
         if (!$this->isPathInside($realApplicationPath, $stagingPath)) {
-            throw new RuntimeException('Staged application path must be inside the staging directory.');
+            throw new RuntimeException($this->translator->trans('Staged application path must be inside the staging directory.'));
         }
 
         if (!is_file($realApplicationPath.'/composer.json')) {
-            throw new RuntimeException('Staged application path is missing composer.json.');
+            throw new RuntimeException($this->translator->trans('Staged application path is missing composer.json.'));
         }
 
         return $realApplicationPath;
@@ -321,26 +323,26 @@ final readonly class UpdateFileApplier
         $packageMetadata = $this->packageRemovalManifest->load($applicationPath);
 
         if (!$packageMetadata['present']) {
-            throw new RuntimeException('Update package is missing '.UpdatePackageRemovalManifest::FILE_NAME.'. Re-stage a verified package with signed cleanup metadata.');
+            throw new RuntimeException(\sprintf($this->translator->trans('Update package is missing %s. Re-stage a verified package with signed cleanup metadata.'), UpdatePackageRemovalManifest::FILE_NAME));
         }
 
         $plannedMetadata = $applyPlan['package_metadata'] ?? null;
 
         if (!\is_array($plannedMetadata) || true !== ($plannedMetadata['present'] ?? false)) {
-            throw new RuntimeException('Update apply plan is missing the reviewed package cleanup metadata.');
+            throw new RuntimeException($this->translator->trans('Update apply plan is missing the reviewed package cleanup metadata.'));
         }
 
         $plannedSha256 = $plannedMetadata['sha256'] ?? null;
         $actualSha256 = $packageMetadata['sha256'];
 
         if (!\is_string($plannedSha256) || !\is_string($actualSha256) || !hash_equals($plannedSha256, $actualSha256)) {
-            throw new RuntimeException('Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing.');
+            throw new RuntimeException($this->translator->trans('Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing.'));
         }
 
         $plannedRemovalPaths = $plannedMetadata['remove'] ?? null;
 
         if (!\is_array($plannedRemovalPaths)) {
-            throw new RuntimeException('Update apply plan contains an invalid package removal list.');
+            throw new RuntimeException($this->translator->trans('Update apply plan contains an invalid package removal list.'));
         }
 
         $expectedRemovalPaths = array_values($packageMetadata['remove']);
@@ -353,14 +355,14 @@ final readonly class UpdateFileApplier
         sort($plannedRemovalPaths);
 
         if ($expectedRemovalPaths !== $plannedRemovalPaths) {
-            throw new RuntimeException('Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing.');
+            throw new RuntimeException($this->translator->trans('Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing.'));
         }
 
         $filePlan = $applyPlan['file_plan'] ?? [];
         $declaredRemovalPaths = \is_array($filePlan) ? ($filePlan['removal_paths_declared'] ?? null) : null;
 
         if (!\is_array($declaredRemovalPaths)) {
-            throw new RuntimeException('Update apply plan is missing the reviewed removal path list.');
+            throw new RuntimeException($this->translator->trans('Update apply plan is missing the reviewed removal path list.'));
         }
 
         $declaredRemovalPaths = array_values(array_filter(
@@ -370,7 +372,7 @@ final readonly class UpdateFileApplier
         sort($declaredRemovalPaths);
 
         if ($expectedRemovalPaths !== $declaredRemovalPaths) {
-            throw new RuntimeException('Update apply plan removal paths do not match the signed package cleanup metadata.');
+            throw new RuntimeException($this->translator->trans('Update apply plan removal paths do not match the signed package cleanup metadata.'));
         }
 
         return $packageMetadata;
@@ -391,7 +393,7 @@ final readonly class UpdateFileApplier
         $lockDirectory = realpath(\dirname($lockPath));
 
         if (false === $lockDirectory || !$this->isPathInside($lockDirectory, $this->projectDir.'/var/update')) {
-            throw new RuntimeException('Update lock path must be inside var/update.');
+            throw new RuntimeException($this->translator->trans('Update lock path must be inside var/update.'));
         }
 
         return $lockPath;
@@ -405,13 +407,13 @@ final readonly class UpdateFileApplier
         $backupPath = $applyPlan['backup_path'] ?? null;
 
         if (!\is_string($backupPath) || '' === trim($backupPath)) {
-            throw new RuntimeException('Update apply plan is missing the backup_path field.');
+            throw new RuntimeException($this->translator->trans('Update apply plan is missing the backup_path field.'));
         }
 
         $backupPath = rtrim(str_replace('\\', '/', $backupPath), '/');
 
         if (str_contains($backupPath, "\0") || str_contains('/'.$backupPath.'/', '/../')) {
-            throw new RuntimeException('Update backup path contains unsafe path segments.');
+            throw new RuntimeException($this->translator->trans('Update backup path contains unsafe path segments.'));
         }
 
         $backupBasePath = realpath($this->projectDir.'/var/update/backups');
@@ -422,7 +424,7 @@ final readonly class UpdateFileApplier
         }
 
         if (false === $backupBasePath || !$this->isPathInside(\dirname($backupPath), $backupBasePath)) {
-            throw new RuntimeException('Update backup path must be inside var/update/backups.');
+            throw new RuntimeException($this->translator->trans('Update backup path must be inside var/update/backups.'));
         }
 
         return $backupPath;
@@ -435,7 +437,7 @@ final readonly class UpdateFileApplier
         $handle = @fopen($lockPath, 'x');
 
         if (false === $handle) {
-            throw new RuntimeException('Unable to acquire update lock. Another update may be in progress.');
+            throw new RuntimeException($this->translator->trans('Unable to acquire update lock. Another update may be in progress.'));
         }
 
         fwrite($handle, json_encode([
@@ -448,14 +450,14 @@ final readonly class UpdateFileApplier
     private function releaseLock(string $lockPath): void
     {
         if (is_file($lockPath) && !@unlink($lockPath)) {
-            throw new RuntimeException('Unable to release update lock: '.$lockPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to release update lock: %s'), $lockPath));
         }
     }
 
     private function prepareBackupDirectory(string $backupPath): void
     {
         if (is_dir($backupPath)) {
-            throw new RuntimeException('Update backup directory already exists: '.$backupPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Update backup directory already exists: %s'), $backupPath));
         }
 
         $this->ensureDirectory($backupPath.'/files');
@@ -483,7 +485,7 @@ final readonly class UpdateFileApplier
 
             if ($item->isDir()) {
                 if (!is_dir($targetPath) && !$this->canCreatePath($targetPath)) {
-                    throw new RuntimeException('Target directory cannot be created: '.$relativePath);
+                    throw new RuntimeException(\sprintf($this->translator->trans('Target directory cannot be created: %s'), $relativePath));
                 }
 
                 continue;
@@ -494,15 +496,15 @@ final readonly class UpdateFileApplier
             }
 
             if (is_link($targetPath)) {
-                throw new RuntimeException('The planned update would overwrite an existing symbolic link: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('The planned update would overwrite an existing symbolic link: %s'), $relativePath));
             }
 
             if (is_file($targetPath) && !is_writable($targetPath)) {
-                throw new RuntimeException('Target file is not writable: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Target file is not writable: %s'), $relativePath));
             }
 
             if (!is_file($targetPath) && !$this->canCreatePath($targetPath)) {
-                throw new RuntimeException('Target file cannot be created: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Target file cannot be created: %s'), $relativePath));
             }
 
             $operations[] = [
@@ -527,24 +529,24 @@ final readonly class UpdateFileApplier
         $realProjectDir = realpath($this->projectDir);
 
         if (false === $realProjectDir) {
-            throw new RuntimeException('Unable to resolve the Chamilo project directory before removing obsolete files.');
+            throw new RuntimeException($this->translator->trans('Unable to resolve the Chamilo project directory before removing obsolete files.'));
         }
 
         foreach ($removalPaths as $relativePath) {
             $relativePath = $this->normalizeRelativePath($relativePath);
 
             if ('' === $relativePath || $this->shouldSkipPath($relativePath)) {
-                throw new RuntimeException('Update cleanup cannot remove protected path: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Update cleanup cannot remove protected path: %s'), $relativePath));
             }
 
             $targetPath = $this->projectDir.'/'.$relativePath;
 
             if (is_link($targetPath)) {
-                throw new RuntimeException('The planned update would remove an existing symbolic link: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('The planned update would remove an existing symbolic link: %s'), $relativePath));
             }
 
             if (is_dir($targetPath)) {
-                throw new RuntimeException('Update cleanup supports files only, not directories: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Update cleanup supports files only, not directories: %s'), $relativePath));
             }
 
             if (!is_file($targetPath)) {
@@ -552,17 +554,17 @@ final readonly class UpdateFileApplier
             }
 
             if (!is_readable($targetPath)) {
-                throw new RuntimeException('Obsolete target file is not readable for backup: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Obsolete target file is not readable for backup: %s'), $relativePath));
             }
 
             if (!is_writable(\dirname($targetPath))) {
-                throw new RuntimeException('Obsolete target file cannot be removed with the current directory permissions: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Obsolete target file cannot be removed with the current directory permissions: %s'), $relativePath));
             }
 
             $realTargetPath = realpath($targetPath);
 
             if (false === $realTargetPath || !$this->isPathInside($realTargetPath, $realProjectDir)) {
-                throw new RuntimeException('Obsolete target file resolves outside the Chamilo project directory: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Obsolete target file resolves outside the Chamilo project directory: %s'), $relativePath));
             }
 
             $operations[] = [
@@ -643,7 +645,7 @@ final readonly class UpdateFileApplier
             $this->ensureDirectory(\dirname($backupFilePath));
 
             if (!copy($targetPath, $backupFilePath)) {
-                throw new RuntimeException('Unable to back up target file: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Unable to back up target file: %s'), $relativePath));
             }
         }
 
@@ -661,7 +663,7 @@ final readonly class UpdateFileApplier
         $encoded = json_encode($metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
         if (false === file_put_contents($backupPath.'/BACKUP-INFO.json', $encoded.PHP_EOL)) {
-            throw new RuntimeException('Unable to write update backup metadata.');
+            throw new RuntimeException($this->translator->trans('Unable to write update backup metadata.'));
         }
     }
 
@@ -679,7 +681,7 @@ final readonly class UpdateFileApplier
             $this->ensureDirectory(\dirname($operation['target_path']));
 
             if (!copy($operation['source_path'], $operation['target_path'])) {
-                throw new RuntimeException('Unable to copy staged update file: '.$operation['relative_path']);
+                throw new RuntimeException(\sprintf($this->translator->trans('Unable to copy staged update file: %s'), $operation['relative_path']));
             }
 
             $appliedFiles[] = [
@@ -694,7 +696,7 @@ final readonly class UpdateFileApplier
                     $operationId,
                     'info',
                     'file_copy_progress',
-                    'Copied '.$copiedFiles.' of '.$totalOperations.' staged files.'
+                    \sprintf($this->translator->trans('Copied %d of %d staged files.'), $copiedFiles, $totalOperations)
                 );
             }
 
@@ -719,7 +721,7 @@ final readonly class UpdateFileApplier
             }
 
             if (!unlink($operation['target_path'])) {
-                throw new RuntimeException('Unable to remove package-declared obsolete file: '.$operation['relative_path']);
+                throw new RuntimeException(\sprintf($this->translator->trans('Unable to remove package-declared obsolete file: %s'), $operation['relative_path']));
             }
 
             $removedFiles[] = [
@@ -733,7 +735,7 @@ final readonly class UpdateFileApplier
                     $operationId,
                     'info',
                     'file_remove_progress',
-                    'Removed '.$removedCount.' of '.$totalOperations.' package-declared obsolete files.'
+                    \sprintf($this->translator->trans('Removed %d of %d package-declared obsolete files.'), $removedCount, $totalOperations)
                 );
             }
         }
@@ -752,14 +754,14 @@ final readonly class UpdateFileApplier
                 $backupFilePath = $backupPath.'/files/'.$relativePath;
 
                 if (!is_file($backupFilePath) || !copy($backupFilePath, $targetPath)) {
-                    throw new RuntimeException('Unable to restore backed up file: '.$relativePath);
+                    throw new RuntimeException(\sprintf($this->translator->trans('Unable to restore backed up file: %s'), $relativePath));
                 }
 
                 continue;
             }
 
             if (is_file($targetPath) && !@unlink($targetPath)) {
-                throw new RuntimeException('Unable to remove newly copied file during rollback: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Unable to remove newly copied file during rollback: %s'), $relativePath));
             }
         }
     }
@@ -775,13 +777,13 @@ final readonly class UpdateFileApplier
             $backupFilePath = $backupPath.'/files/'.$relativePath;
 
             if (!is_file($backupFilePath)) {
-                throw new RuntimeException('Unable to restore removed file because its backup is missing: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Unable to restore removed file because its backup is missing: %s'), $relativePath));
             }
 
             $this->ensureDirectory(\dirname($targetPath));
 
             if (!copy($backupFilePath, $targetPath)) {
-                throw new RuntimeException('Unable to restore removed file from backup: '.$relativePath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Unable to restore removed file from backup: %s'), $relativePath));
             }
         }
     }
@@ -818,7 +820,7 @@ final readonly class UpdateFileApplier
         $auditPath = $stagingPath.'/'.self::AUDIT_FILE_NAME;
 
         if (false === file_put_contents($auditPath, $encoded.PHP_EOL)) {
-            throw new RuntimeException('Unable to write update apply audit metadata.');
+            throw new RuntimeException($this->translator->trans('Unable to write update apply audit metadata.'));
         }
 
         $this->writeGlobalAuditLog($audit);
@@ -838,7 +840,7 @@ final readonly class UpdateFileApplier
         $encoded = json_encode($audit, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
         if (false === file_put_contents($logPath, $encoded.PHP_EOL)) {
-            throw new RuntimeException('Unable to write global update apply log.');
+            throw new RuntimeException($this->translator->trans('Unable to write global update apply log.'));
         }
     }
 
@@ -862,7 +864,7 @@ final readonly class UpdateFileApplier
         $relativePath = trim(str_replace('\\', '/', $relativePath), '/');
 
         if (str_contains($relativePath, "\0") || str_contains($relativePath, '../') || str_starts_with($relativePath, '../')) {
-            throw new RuntimeException('Unsafe staged relative path detected: '.$relativePath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unsafe staged relative path detected: %s'), $relativePath));
         }
 
         return $relativePath;
@@ -896,14 +898,14 @@ final readonly class UpdateFileApplier
     {
         if (is_dir($directory)) {
             if (!is_writable($directory)) {
-                throw new RuntimeException('Directory is not writable: '.$directory);
+                throw new RuntimeException(\sprintf($this->translator->trans('Directory is not writable: %s'), $directory));
             }
 
             return;
         }
 
         if (!mkdir($directory, 0775, true) && !is_dir($directory)) {
-            throw new RuntimeException('Unable to create directory: '.$directory);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to create directory: %s'), $directory));
         }
     }
 

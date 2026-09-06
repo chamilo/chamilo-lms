@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Service\Update\Dto;
 
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Exclude;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Exclude]
 final readonly class UpdateManifest
@@ -27,32 +28,32 @@ final readonly class UpdateManifest
     /**
      * @param array<string, mixed> $data
      */
-    public static function fromArray(array $data): self
+    public static function fromArray(array $data, TranslatorInterface $translator): self
     {
         $package = $data['package'] ?? null;
 
         if (!\is_array($package)) {
-            throw new InvalidArgumentException('Update manifest is missing the package block.');
+            throw new InvalidArgumentException($translator->trans('Update manifest is missing the package block.'));
         }
 
         $signature = $data['signature'] ?? [];
         if (null !== $signature && !\is_array($signature)) {
-            throw new InvalidArgumentException('Update manifest signature block must be an object.');
+            throw new InvalidArgumentException($translator->trans('Update manifest signature block must be an object.'));
         }
 
         $requirements = $data['requirements'] ?? [];
         if (null !== $requirements && !\is_array($requirements)) {
-            throw new InvalidArgumentException('Update manifest requirements block must be an object.');
+            throw new InvalidArgumentException($translator->trans('Update manifest requirements block must be an object.'));
         }
 
-        $channel = self::readRequiredString($data, 'channel');
-        $version = self::readRequiredString($data, 'version');
-        $releasedAt = self::readRequiredString($data, 'released_at');
-        $packageUrl = self::readRequiredString($package, 'url');
-        $packageSha256 = strtolower(self::readRequiredString($package, 'sha256'));
+        $channel = self::readRequiredString($data, 'channel', $translator);
+        $version = self::readRequiredString($data, 'version', $translator);
+        $releasedAt = self::readRequiredString($data, 'released_at', $translator);
+        $packageUrl = self::readRequiredString($package, 'url', $translator);
+        $packageSha256 = strtolower(self::readRequiredString($package, 'sha256', $translator));
 
         if (1 !== preg_match('/^[a-f0-9]{64}$/', $packageSha256)) {
-            throw new InvalidArgumentException('Update package sha256 must be a 64-character hexadecimal string.');
+            throw new InvalidArgumentException($translator->trans('Update package sha256 must be a 64-character hexadecimal string.'));
         }
 
         return new self(
@@ -61,9 +62,9 @@ final readonly class UpdateManifest
             $releasedAt,
             $packageUrl,
             $packageSha256,
-            self::readOptionalString($signature, 'type'),
-            self::readOptionalString($signature, 'url'),
-            self::readOptionalString($signature, 'key_id'),
+            self::readOptionalString($signature, 'type', $translator),
+            self::readOptionalString($signature, 'url', $translator),
+            self::readOptionalString($signature, 'key_id', $translator),
             $requirements,
         );
     }
@@ -124,12 +125,12 @@ final readonly class UpdateManifest
     /**
      * @param array<string, mixed> $data
      */
-    private static function readRequiredString(array $data, string $key): string
+    private static function readRequiredString(array $data, string $key, TranslatorInterface $translator): string
     {
         $value = $data[$key] ?? null;
 
         if (!\is_string($value) || '' === trim($value)) {
-            throw new InvalidArgumentException('Update manifest is missing required string field "'.$key.'".');
+            throw new InvalidArgumentException(\sprintf($translator->trans('Update manifest is missing required string field "%s".'), $key));
         }
 
         return trim($value);
@@ -138,7 +139,7 @@ final readonly class UpdateManifest
     /**
      * @param array<string, mixed>|null $data
      */
-    private static function readOptionalString(?array $data, string $key): ?string
+    private static function readOptionalString(?array $data, string $key, TranslatorInterface $translator): ?string
     {
         if (null === $data) {
             return null;
@@ -151,7 +152,7 @@ final readonly class UpdateManifest
         }
 
         if (!\is_string($value)) {
-            throw new InvalidArgumentException('Update manifest field "'.$key.'" must be a string.');
+            throw new InvalidArgumentException(\sprintf($translator->trans('Update manifest field "%s" must be a string.'), $key));
         }
 
         $value = trim($value);

@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 #[IsGranted('ROLE_ADMIN')]
@@ -51,6 +52,7 @@ final class SystemUpdateController extends AbstractController
         private readonly UpdateOperationLogger $operationLogger,
         private readonly InstalledChamiloVersionProvider $installedVersionProvider,
         private readonly UpdateTrustedKeyring $trustedKeyring,
+        private readonly TranslatorInterface $translator,
     ) {}
 
     #[Route('/status', name: 'status', methods: ['GET'])]
@@ -208,7 +210,7 @@ final class SystemUpdateController extends AbstractController
 
             if (!$verificationResult->isValid()) {
                 return $this->json([
-                    'error' => 'Update package verification failed.',
+                    'error' => $this->translator->trans('Update package verification failed.'),
                     'manifestSource' => $manifestSource,
                     'manifest' => $this->manifestToArray($manifest),
                     'packagePath' => $packagePath,
@@ -221,7 +223,7 @@ final class SystemUpdateController extends AbstractController
 
             if (!$preflightResult->isValid()) {
                 return $this->json([
-                    'error' => 'Update preflight checks failed.',
+                    'error' => $this->translator->trans('Update preflight checks failed.'),
                     'manifestSource' => $manifestSource,
                     'manifest' => $this->manifestToArray($manifest),
                     'packagePath' => $packagePath,
@@ -235,7 +237,7 @@ final class SystemUpdateController extends AbstractController
 
             if (!$stagingResult->isValid()) {
                 return $this->json([
-                    'error' => 'Unable to stage update package.',
+                    'error' => $this->translator->trans('Unable to stage update package.'),
                     'manifestSource' => $manifestSource,
                     'manifest' => $this->manifestToArray($manifest),
                     'packagePath' => $packagePath,
@@ -364,7 +366,7 @@ final class SystemUpdateController extends AbstractController
 
         try {
             if (!$this->updateConfiguration->allowsUiPostApplyCommands()) {
-                throw new InvalidArgumentException('Running post-apply commands from the UI is disabled on this server.');
+                throw new InvalidArgumentException($this->translator->trans('Running post-apply commands from the UI is disabled on this server.'));
             }
 
             $stagingPath = $this->readRequiredString($payload, 'stagingPath');
@@ -418,7 +420,7 @@ final class SystemUpdateController extends AbstractController
         $value = $this->readNullableString($payload, $key);
 
         if (null === $value) {
-            throw new InvalidArgumentException('Missing required field: '.$key);
+            throw new InvalidArgumentException(\sprintf($this->translator->trans('Missing required field: %s'), $key));
         }
 
         return $value;
@@ -432,7 +434,7 @@ final class SystemUpdateController extends AbstractController
         $source = $this->readNullableString($payload, 'manifestSource') ?? $this->updateConfiguration->getDefaultManifestSource();
 
         if (null === $source) {
-            throw new InvalidArgumentException('No update manifest source was provided and no default update manifest URL is configured.');
+            throw new InvalidArgumentException($this->translator->trans('No update manifest source was provided and no default update manifest URL is configured.'));
         }
 
         return $this->normalizeLocalSource($source);
@@ -463,14 +465,14 @@ final class SystemUpdateController extends AbstractController
             ) {
                 $officialOrigin = $this->updateConfiguration->getOfficialManifestOrigin();
 
-                throw new InvalidArgumentException('Update manifest URL must use the official update origin '.$officialOrigin.'. Only the manifest path can be changed.');
+                throw new InvalidArgumentException(\sprintf($this->translator->trans('Update manifest URL must use the official update origin %s. Only the manifest path can be changed.'), $officialOrigin));
             }
 
             return $source;
         }
 
         if (!$this->updateConfiguration->allowsLocalPaths()) {
-            throw new InvalidArgumentException('Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests.');
+            throw new InvalidArgumentException($this->translator->trans('Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests.'));
         }
 
         if ($this->isAbsolutePath($source)) {
@@ -487,11 +489,11 @@ final class SystemUpdateController extends AbstractController
         }
 
         if ($this->isHttpUrl($path)) {
-            throw new InvalidArgumentException('Do not provide an HTTP '.$label.' path. Leave this field empty to download it from the update manifest.');
+            throw new InvalidArgumentException(\sprintf($this->translator->trans('Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest.'), $label));
         }
 
         if (!$this->updateConfiguration->allowsLocalPaths()) {
-            throw new InvalidArgumentException('Local update '.$label.' paths are disabled in this environment.');
+            throw new InvalidArgumentException(\sprintf($this->translator->trans('Local update %s paths are disabled in this environment.'), $label));
         }
 
         if ($this->isAbsolutePath($path)) {
@@ -513,7 +515,7 @@ final class SystemUpdateController extends AbstractController
         }
 
         if (!$this->updateConfiguration->allowsLocalPaths()) {
-            throw new InvalidArgumentException('Trusted update public keys must be configured on the server in this environment.');
+            throw new InvalidArgumentException($this->translator->trans('Trusted update public keys must be configured on the server in this environment.'));
         }
 
         return $payloadPublicKey;
@@ -527,7 +529,7 @@ final class SystemUpdateController extends AbstractController
         $skipSignature = true === ($payload['skipSignature'] ?? false);
 
         if ($skipSignature && !$this->updateConfiguration->allowsSkipSignature()) {
-            throw new InvalidArgumentException('Skipping update signature verification is disabled in this environment.');
+            throw new InvalidArgumentException($this->translator->trans('Skipping update signature verification is disabled in this environment.'));
         }
 
         return $skipSignature;
@@ -561,7 +563,7 @@ final class SystemUpdateController extends AbstractController
         $confirmationText = $this->readNullableString($payload, 'postApplyRunConfirmationText');
 
         if (!$confirmed || 'RUN POST UPDATE ACTIONS' !== $confirmationText) {
-            throw new InvalidArgumentException('Running post-apply update actions requires the confirmation text "RUN POST UPDATE ACTIONS".');
+            throw new InvalidArgumentException(\sprintf($this->translator->trans('Running post-apply update actions requires the confirmation text "%s".'), 'RUN POST UPDATE ACTIONS'));
         }
 
         return true;
@@ -600,7 +602,7 @@ final class SystemUpdateController extends AbstractController
         $confirmationText = $this->readNullableString($payload, 'confirmationText');
 
         if (!$confirmed || 'APPLY UPDATE FILES' !== $confirmationText) {
-            throw new InvalidArgumentException('Applying staged update files requires the confirmation text "APPLY UPDATE FILES".');
+            throw new InvalidArgumentException(\sprintf($this->translator->trans('Applying staged update files requires the confirmation text "%s".'), 'APPLY UPDATE FILES'));
         }
 
         return true;
@@ -629,7 +631,7 @@ final class SystemUpdateController extends AbstractController
         $projectDir = $this->getParameter('kernel.project_dir');
 
         if (!\is_string($projectDir)) {
-            throw new InvalidArgumentException('Unable to resolve project directory.');
+            throw new InvalidArgumentException($this->translator->trans('Unable to resolve project directory.'));
         }
 
         return rtrim($projectDir, '/');

@@ -11,6 +11,7 @@ use JsonException;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Process\Process;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 use const JSON_PRETTY_PRINT;
@@ -35,6 +36,7 @@ final readonly class UpdatePostApplyCommandRunner
         private UpdateMigrationPolicy $migrationPolicy,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
+        private TranslatorInterface $translator,
     ) {}
 
     /**
@@ -67,46 +69,46 @@ final readonly class UpdatePostApplyCommandRunner
         try {
             $operationId = $this->operationLogger->create($operationId);
             $details['operation_id'] = $operationId;
-            $this->logOperation($operationId, 'info', 'post_apply_start', 'Starting post-apply actions.');
+            $this->logOperation($operationId, 'info', 'post_apply_start', $this->translator->trans('Starting post-apply actions.'));
 
             if (!$confirmed) {
-                throw new RuntimeException('Post-apply command execution requires explicit confirmation.');
+                throw new RuntimeException($this->translator->trans('Post-apply command execution requires explicit confirmation.'));
             }
 
             $stagingPath = $this->resolveSafeStagingPath($stagingPath);
             $details['staging_path'] = $stagingPath;
-            $this->addCheck($checks, 'staging_path', 'passed', 'Staging directory is inside the Chamilo update staging directory.', [
+            $this->addCheck($checks, 'staging_path', 'passed', $this->translator->trans('Staging directory is inside the Chamilo update staging directory.'), [
                 'staging_path' => $stagingPath,
             ]);
-            $this->logOperation($operationId, 'success', 'staging_path', 'Staging directory was validated.');
+            $this->logOperation($operationId, 'success', 'staging_path', $this->translator->trans('Staging directory was validated.'));
 
             $postApplyChecks = $this->readJsonFile($stagingPath.'/POST-APPLY-CHECKS.json', 'post-apply checks');
             $recommendedActionKeys = $this->extractRecommendedActionKeys($postApplyChecks);
             $details['recommended_action_keys'] = $recommendedActionKeys;
-            $this->addCheck($checks, 'post_apply_metadata', 'passed', 'Post-apply recommendation metadata was read successfully.', [
+            $this->addCheck($checks, 'post_apply_metadata', 'passed', $this->translator->trans('Post-apply recommendation metadata was read successfully.'), [
                 'recommended_action_keys' => $recommendedActionKeys,
             ]);
-            $this->logOperation($operationId, 'success', 'post_apply_metadata', 'Post-apply recommendation metadata was read successfully.');
+            $this->logOperation($operationId, 'success', 'post_apply_metadata', $this->translator->trans('Post-apply recommendation metadata was read successfully.'));
 
             $selectedActions = $this->resolveRequestedActions($requestedActions, $recommendedActionKeys);
             $selectedActionKeys = array_keys($selectedActions);
             $details['selected_action_keys'] = $selectedActionKeys;
-            $this->addCheck($checks, 'selected_actions', 'passed', 'Post-apply actions were validated against the recommendation report.', [
+            $this->addCheck($checks, 'selected_actions', 'passed', $this->translator->trans('Post-apply actions were validated against the recommendation report.'), [
                 'selected_action_keys' => $selectedActionKeys,
             ]);
-            $this->logOperation($operationId, 'info', 'selected_actions', 'Post-apply actions were selected.', [
+            $this->logOperation($operationId, 'info', 'selected_actions', $this->translator->trans('Post-apply actions were selected.'), [
                 'actions' => $selectedActionKeys,
             ]);
 
             if ($this->containsAdvancedActions($selectedActionKeys)) {
                 if (!$confirmedAdvanced) {
-                    throw new RuntimeException('Advanced post-apply actions require explicit advanced confirmation.');
+                    throw new RuntimeException($this->translator->trans('Advanced post-apply actions require explicit advanced confirmation.'));
                 }
 
-                $this->addCheck($checks, 'advanced_actions_confirmation', 'passed', 'Advanced post-apply actions were explicitly confirmed.', [
+                $this->addCheck($checks, 'advanced_actions_confirmation', 'passed', $this->translator->trans('Advanced post-apply actions were explicitly confirmed.'), [
                     'advanced_action_keys' => $this->filterAdvancedActionKeys($selectedActionKeys),
                 ]);
-                $this->logOperation($operationId, 'warning', 'advanced_actions_confirmation', 'Advanced post-apply actions were explicitly confirmed.');
+                $this->logOperation($operationId, 'warning', 'advanced_actions_confirmation', $this->translator->trans('Advanced post-apply actions were explicitly confirmed.'));
             }
 
             if (isset($selectedActions['doctrine_migrations'])) {
@@ -145,27 +147,27 @@ final readonly class UpdatePostApplyCommandRunner
 
             $lockPath = $this->acquireLock();
             $details['lock_path'] = $lockPath;
-            $this->addCheck($checks, 'update_lock', 'passed', 'Update lock was acquired.', [
+            $this->addCheck($checks, 'update_lock', 'passed', $this->translator->trans('Update lock was acquired.'), [
                 'lock_path' => $lockPath,
             ]);
-            $this->logOperation($operationId, 'success', 'update_lock', 'Update lock was acquired.');
+            $this->logOperation($operationId, 'success', 'update_lock', $this->translator->trans('Update lock was acquired.'));
 
             try {
                 foreach ($selectedActions as $key => $definition) {
                     $actions[] = $this->runAction($key, $definition, $operationId);
                 }
 
-                $this->addCheck($checks, 'post_apply_commands', 'passed', 'Selected post-apply commands completed successfully.', [
+                $this->addCheck($checks, 'post_apply_commands', 'passed', $this->translator->trans('Selected post-apply commands completed successfully.'), [
                     'actions_count' => \count($actions),
                 ]);
-                $this->logOperation($operationId, 'success', 'post_apply_commands', 'Selected post-apply commands completed successfully.');
+                $this->logOperation($operationId, 'success', 'post_apply_commands', $this->translator->trans('Selected post-apply commands completed successfully.'));
 
                 $metadataPath = $this->writeRunMetadata($stagingPath, true, $checks, $actions, $warnings, $details);
-                $this->addCheck($checks, 'post_apply_run_metadata', 'passed', 'Post-apply command run metadata was written.', [
+                $this->addCheck($checks, 'post_apply_run_metadata', 'passed', $this->translator->trans('Post-apply command run metadata was written.'), [
                     'metadata_file' => $metadataPath,
                 ]);
                 $metadataPath = $this->writeRunMetadata($stagingPath, true, $checks, $actions, $warnings, $details);
-                $this->logOperation($operationId, 'success', 'done', 'Post-apply actions completed successfully.');
+                $this->logOperation($operationId, 'success', 'done', $this->translator->trans('Post-apply actions completed successfully.'));
 
                 return UpdatePostApplyRunResult::success($stagingPath, $metadataPath, $operationId, $checks, $actions, $warnings, $details);
             } finally {
@@ -209,16 +211,16 @@ final readonly class UpdatePostApplyCommandRunner
         }
 
         if ([] === $commandList) {
-            throw new RuntimeException('Invalid update post-apply command definition: '.$key);
+            throw new RuntimeException(\sprintf($this->translator->trans('Invalid update post-apply command definition: %s'), $key));
         }
 
         foreach ($commandList as $commandItem) {
             if (!\is_array($commandItem) || [] === $commandItem) {
-                throw new RuntimeException('Invalid update post-apply command definition: '.$key);
+                throw new RuntimeException(\sprintf($this->translator->trans('Invalid update post-apply command definition: %s'), $key));
             }
         }
 
-        $this->logOperation($operationId, 'info', $key, 'Running post-apply action: '.$title, [
+        $this->logOperation($operationId, 'info', $key, \sprintf($this->translator->trans('Running post-apply action: %s'), $title), [
             'command' => $displayCommand,
         ]);
 
@@ -240,7 +242,7 @@ final readonly class UpdatePostApplyCommandRunner
             }
 
             if (\count($commandList) > 1) {
-                $this->logOperation($operationId, 'info', $key, \sprintf('Running command %d of %d for %s.', $index + 1, \count($commandList), $title));
+                $this->logOperation($operationId, 'info', $key, \sprintf($this->translator->trans('Running command %d of %d for %s.'), $index + 1, \count($commandList), $title));
             }
 
             $exitCode = $process->run(function (string $type, string $buffer) use ($operationId, $key, &$outputBuffer): void {
@@ -259,14 +261,14 @@ final readonly class UpdatePostApplyCommandRunner
         $duration = round(microtime(true) - $startedAt, 3);
 
         if (0 !== $exitCode) {
-            $this->logOperation($operationId, 'error', $key, 'Post-apply action failed: '.$title, [
+            $this->logOperation($operationId, 'error', $key, \sprintf($this->translator->trans('Post-apply action failed: %s'), $title), [
                 'exit_code' => $exitCode,
             ]);
 
-            throw new RuntimeException(\sprintf('Post-apply action "%s" failed with exit code %d.', $title, $exitCode));
+            throw new RuntimeException(\sprintf($this->translator->trans('Post-apply action "%s" failed with exit code %d.'), $title, $exitCode));
         }
 
-        $this->logOperation($operationId, 'success', $key, 'Post-apply action completed: '.$title, [
+        $this->logOperation($operationId, 'success', $key, \sprintf($this->translator->trans('Post-apply action completed: %s'), $title), [
             'duration_seconds' => $duration,
         ]);
 
@@ -307,23 +309,23 @@ final readonly class UpdatePostApplyCommandRunner
         $stagingPath = rtrim(trim($stagingPath), '/');
 
         if ('' === $stagingPath) {
-            throw new RuntimeException('Staging path is required to run post-apply actions.');
+            throw new RuntimeException($this->translator->trans('Staging path is required to run post-apply actions.'));
         }
 
         $realStagingPath = realpath($stagingPath);
 
         if (false === $realStagingPath || !is_dir($realStagingPath)) {
-            throw new RuntimeException('Staging directory does not exist: '.$stagingPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Staging directory does not exist: %s'), $stagingPath));
         }
 
         $stagingBasePath = realpath($this->projectDir.'/var/update/staging');
 
         if (false === $stagingBasePath) {
-            throw new RuntimeException('Chamilo update staging base directory does not exist.');
+            throw new RuntimeException($this->translator->trans('Chamilo update staging base directory does not exist.'));
         }
 
         if (!$this->isPathInside($realStagingPath, $stagingBasePath)) {
-            throw new RuntimeException('Staging directory must be inside var/update/staging.');
+            throw new RuntimeException($this->translator->trans('Staging directory must be inside var/update/staging.'));
         }
 
         return $realStagingPath;
@@ -335,23 +337,23 @@ final readonly class UpdatePostApplyCommandRunner
     private function readJsonFile(string $path, string $label): array
     {
         if (!is_file($path) || !is_readable($path)) {
-            throw new RuntimeException('Unable to read update '.$label.': '.$path);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to read update %s: %s'), $label, $path));
         }
 
         $content = file_get_contents($path);
 
         if (false === $content) {
-            throw new RuntimeException('Unable to read update '.$label.': '.$path);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to read update %s: %s'), $label, $path));
         }
 
         try {
             $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            throw new RuntimeException('Update '.$label.' JSON is invalid: '.$exception->getMessage(), 0, $exception);
+            throw new RuntimeException(\sprintf($this->translator->trans('Update %s JSON is invalid: %s'), $label, $exception->getMessage()), 0, $exception);
         }
 
         if (!\is_array($data)) {
-            throw new RuntimeException('Update '.$label.' JSON must be an object.');
+            throw new RuntimeException(\sprintf($this->translator->trans('Update %s JSON must be an object.'), $label));
         }
 
         return $data;
@@ -367,7 +369,7 @@ final readonly class UpdatePostApplyCommandRunner
         $actions = $postApplyChecks['actions'] ?? [];
 
         if (!\is_array($actions)) {
-            throw new RuntimeException('Post-apply checks metadata does not contain a valid actions list.');
+            throw new RuntimeException($this->translator->trans('Post-apply checks metadata does not contain a valid actions list.'));
         }
 
         $keys = [];
@@ -384,7 +386,7 @@ final readonly class UpdatePostApplyCommandRunner
         }
 
         if ([] === $keys) {
-            throw new RuntimeException('There are no recommended post-apply actions to run.');
+            throw new RuntimeException($this->translator->trans('There are no recommended post-apply actions to run.'));
         }
 
         return array_values(array_unique($keys));
@@ -415,7 +417,7 @@ final readonly class UpdatePostApplyCommandRunner
 
         if ([] === $requestedActions || \in_array('__all__', $requestedActions, true)) {
             if ([] === $allowedExecutableActions) {
-                throw new RuntimeException('There are no allowed post-apply actions to run.');
+                throw new RuntimeException($this->translator->trans('There are no allowed post-apply actions to run.'));
             }
 
             return $allowedExecutableActions;
@@ -423,7 +425,7 @@ final readonly class UpdatePostApplyCommandRunner
 
         foreach ($requestedActions as $key) {
             if (!isset($allowedExecutableActions[$key])) {
-                throw new RuntimeException('Post-apply action is not allowed for this update: '.$key);
+                throw new RuntimeException(\sprintf($this->translator->trans('Post-apply action is not allowed for this update: %s'), $key));
             }
         }
 
@@ -586,29 +588,29 @@ final readonly class UpdatePostApplyCommandRunner
         $migrationSafetyPath = $stagingPath.'/MIGRATION-SAFETY-CHECKS.json';
 
         if (!is_file($migrationSafetyPath) || !is_readable($migrationSafetyPath)) {
-            throw new RuntimeException('Database migrations require a migration safety review before execution.');
+            throw new RuntimeException($this->translator->trans('Database migrations require a migration safety review before execution.'));
         }
 
         $migrationSafety = $this->readJsonFile($migrationSafetyPath, 'migration safety checks');
 
         if (true !== ($migrationSafety['success'] ?? false)) {
-            throw new RuntimeException('Database migrations cannot run because the migration safety review did not pass.');
+            throw new RuntimeException($this->translator->trans('Database migrations cannot run because the migration safety review did not pass.'));
         }
 
         $migrations = $migrationSafety['migrations'] ?? [];
         if (!\is_array($migrations) || [] === $migrations) {
-            throw new RuntimeException('Database migrations cannot run because the migration safety review did not list staged migrations.');
+            throw new RuntimeException($this->translator->trans('Database migrations cannot run because the migration safety review did not list staged migrations.'));
         }
 
         $migrationClasses = [];
         foreach ($migrations as $migration) {
             if (!\is_array($migration) || !\is_string($migration['class'] ?? null) || '' === trim($migration['class'])) {
-                throw new RuntimeException('Database migrations cannot run because the migration safety review contains an invalid migration entry.');
+                throw new RuntimeException($this->translator->trans('Database migrations cannot run because the migration safety review contains an invalid migration entry.'));
             }
 
             $migrationClass = trim($migration['class']);
             if (!$this->migrationPolicy->isSupportedMigrationClass($migrationClass)) {
-                throw new RuntimeException('Only staged '.$this->migrationPolicy->getMigrationSeries().' migrations can be executed by the update runner.');
+                throw new RuntimeException(\sprintf($this->translator->trans('Only staged %s migrations can be executed by the update runner.'), $this->migrationPolicy->getMigrationSeries()));
             }
 
             $migrationClasses[] = $migrationClass;
@@ -618,20 +620,20 @@ final readonly class UpdatePostApplyCommandRunner
         if (\is_array($baseline)) {
             $blockingErrors = $baseline['blocking_errors'] ?? [];
             if (\is_array($blockingErrors) && [] !== $blockingErrors) {
-                throw new RuntimeException('Database migrations cannot run because the staged migration safety review reported blocking errors.');
+                throw new RuntimeException($this->translator->trans('Database migrations cannot run because the staged migration safety review reported blocking errors.'));
             }
 
             if (true !== ($baseline['clean'] ?? false)) {
-                $warnings[] = 'Doctrine reports migration baseline warnings. Only staged '.$this->migrationPolicy->getMigrationSeries().' migration classes will be executed explicitly.';
+                $warnings[] = \sprintf($this->translator->trans('Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly.'), $this->migrationPolicy->getMigrationSeries());
             }
         }
 
         if (!$confirmedDatabaseBackup) {
-            throw new RuntimeException('Database migrations require confirmation that a database backup exists.');
+            throw new RuntimeException($this->translator->trans('Database migrations require confirmation that a database backup exists.'));
         }
 
         if (!$confirmedDatabaseMigrations) {
-            throw new RuntimeException('Database migrations require the confirmation text "RUN DATABASE MIGRATIONS".');
+            throw new RuntimeException($this->translator->trans('Database migrations require the confirmation text "RUN DATABASE MIGRATIONS".'));
         }
 
         $details['migration_safety'] = [
@@ -642,21 +644,21 @@ final readonly class UpdatePostApplyCommandRunner
             'dry_run_exit_code' => $migrationSafety['dry_run_exit_code'] ?? null,
         ];
 
-        $this->addCheck($checks, 'database_migration_safety', 'passed', 'Database migration safety review was completed before execution.', [
+        $this->addCheck($checks, 'database_migration_safety', 'passed', $this->translator->trans('Database migration safety review was completed before execution.'), [
             'metadata_file' => $migrationSafetyPath,
             'migration_count' => \count($migrationClasses),
             'migration_classes' => $migrationClasses,
             'execution_mode' => 'explicit_execute',
         ]);
-        $this->addCheck($checks, 'database_backup_confirmation', 'passed', 'Database backup existence was explicitly confirmed.');
-        $this->logOperation($operationId, 'warning', 'database_migration_safety', 'Database migration safety review and backup confirmation were provided.', [
+        $this->addCheck($checks, 'database_backup_confirmation', 'passed', $this->translator->trans('Database backup existence was explicitly confirmed.'));
+        $this->logOperation($operationId, 'warning', 'database_migration_safety', $this->translator->trans('Database migration safety review and backup confirmation were provided.'), [
             'metadata_file' => $migrationSafetyPath,
             'migration_count' => \count($migrationClasses),
             'migration_classes' => $migrationClasses,
             'execution_mode' => 'explicit_execute',
         ]);
 
-        $warnings[] = 'Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup.';
+        $warnings[] = $this->translator->trans('Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup.');
 
         return $migrationClasses;
     }
@@ -674,7 +676,7 @@ final readonly class UpdatePostApplyCommandRunner
         $permissionFixes = $this->normalizeExecutablePermissionsForSelectedActions($selectedActions, $operationId);
         if ([] !== $permissionFixes) {
             $details['normalized_executable_permissions'] = $permissionFixes;
-            $this->addCheck($checks, 'post_apply_executable_permissions', 'passed', 'Required post-apply executable permissions were normalized.', [
+            $this->addCheck($checks, 'post_apply_executable_permissions', 'passed', $this->translator->trans('Required post-apply executable permissions were normalized.'), [
                 'paths' => $permissionFixes,
             ]);
         }
@@ -716,16 +718,16 @@ final readonly class UpdatePostApplyCommandRunner
         }
 
         if (isset($selectedActions['doctrine_migrations']) && !is_file($this->projectDir.'/bin/console')) {
-            throw new RuntimeException('Unable to run database migrations because bin/console was not found.');
+            throw new RuntimeException($this->translator->trans('Unable to run database migrations because bin/console was not found.'));
         }
 
-        $this->addCheck($checks, 'post_apply_command_permissions', 'passed', 'Selected post-apply commands have the required writable paths.', [
+        $this->addCheck($checks, 'post_apply_command_permissions', 'passed', $this->translator->trans('Selected post-apply commands have the required writable paths.'), [
             'selected_action_keys' => $selectedActionKeys,
         ]);
-        $this->logOperation($operationId, 'success', 'post_apply_command_permissions', 'Post-apply command writable paths were validated.');
+        $this->logOperation($operationId, 'success', 'post_apply_command_permissions', $this->translator->trans('Post-apply command writable paths were validated.'));
 
         if ($this->containsAdvancedActions($selectedActionKeys)) {
-            $warning = 'Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing.';
+            $warning = $this->translator->trans('Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing.');
             $warnings[] = $warning;
             $this->logOperation($operationId, 'warning', 'advanced_actions', $warning);
         }
@@ -766,7 +768,7 @@ final readonly class UpdatePostApplyCommandRunner
 
             $relativePath = ltrim(substr($path, \strlen($this->projectDir)), '/');
 
-            throw new RuntimeException(\sprintf('Composer cannot run safely from the web updater because Composer-generated file "%s" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions.', $relativePath, $ownerUid, $effectiveUid));
+            throw new RuntimeException(\sprintf($this->translator->trans('Composer cannot run safely from the web updater because Composer-generated file "%s" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions.'), $relativePath, $ownerUid, $effectiveUid));
         }
     }
 
@@ -774,14 +776,14 @@ final readonly class UpdatePostApplyCommandRunner
     {
         if (is_dir($path) || is_file($path)) {
             if (!is_writable($path)) {
-                throw new RuntimeException(\sprintf('Path required by post-apply action "%s" is not writable: %s', $actionKey, $path));
+                throw new RuntimeException(\sprintf($this->translator->trans('Path required by post-apply action "%s" is not writable: %s'), $actionKey, $path));
             }
 
             return;
         }
 
         if (!is_dir($parentDirectory) || !is_writable($parentDirectory)) {
-            throw new RuntimeException(\sprintf('Parent directory required by post-apply action "%s" is not writable: %s', $actionKey, $parentDirectory));
+            throw new RuntimeException(\sprintf($this->translator->trans('Parent directory required by post-apply action "%s" is not writable: %s'), $actionKey, $parentDirectory));
         }
     }
 
@@ -826,23 +828,23 @@ final readonly class UpdatePostApplyCommandRunner
 
             $permissions = fileperms($realPath);
             if (false === $permissions) {
-                throw new RuntimeException('Unable to read permissions for required post-apply executable: '.$realPath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Unable to read permissions for required post-apply executable: %s'), $realPath));
             }
 
             $newPermissions = ($permissions & 0777) | 0110;
             if (!chmod($realPath, $newPermissions)) {
-                throw new RuntimeException('Unable to mark required post-apply executable as executable: '.$realPath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Unable to mark required post-apply executable as executable: %s'), $realPath));
             }
 
             clearstatcache(true, $realPath);
 
             if (!is_executable($realPath)) {
-                throw new RuntimeException('Required post-apply executable is still not executable after chmod: '.$realPath);
+                throw new RuntimeException(\sprintf($this->translator->trans('Required post-apply executable is still not executable after chmod: %s'), $realPath));
             }
 
             $relativePath = ltrim(substr($realPath, \strlen($this->projectDir)), '/');
             $normalized[] = $relativePath;
-            $this->logOperation($operationId, 'info', 'post_apply_executable_permission', 'Executable permission was normalized.', [
+            $this->logOperation($operationId, 'info', 'post_apply_executable_permission', $this->translator->trans('Executable permission was normalized.'), [
                 'path' => $relativePath,
             ]);
         }
@@ -859,7 +861,7 @@ final readonly class UpdatePostApplyCommandRunner
         $this->ensureDirectory($directory);
 
         if (false === file_put_contents($gitConfigPath, $content)) {
-            throw new RuntimeException('Unable to write isolated Git configuration for post-apply commands.');
+            throw new RuntimeException($this->translator->trans('Unable to write isolated Git configuration for post-apply commands.'));
         }
     }
 
@@ -893,7 +895,7 @@ final readonly class UpdatePostApplyCommandRunner
         $this->ensureDirectory($lockDirectory);
 
         if (is_file($lockPath)) {
-            throw new RuntimeException('Another update operation appears to be running. Remove var/update/update.lock only if no update is active.');
+            throw new RuntimeException($this->translator->trans('Another update operation appears to be running. Remove var/update/update.lock only if no update is active.'));
         }
 
         $content = json_encode([
@@ -903,7 +905,7 @@ final readonly class UpdatePostApplyCommandRunner
         ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         if (false === file_put_contents($lockPath, $content ?: '{}', LOCK_EX)) {
-            throw new RuntimeException('Unable to create update lock: '.$lockPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to create update lock: %s'), $lockPath));
         }
 
         return $lockPath;
@@ -920,14 +922,14 @@ final readonly class UpdatePostApplyCommandRunner
     {
         if (is_dir($directory)) {
             if (!is_writable($directory)) {
-                throw new RuntimeException('Directory is not writable: '.$directory);
+                throw new RuntimeException(\sprintf($this->translator->trans('Directory is not writable: %s'), $directory));
             }
 
             return;
         }
 
         if (!mkdir($directory, 0775, true) && !is_dir($directory)) {
-            throw new RuntimeException('Unable to create directory: '.$directory);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to create directory: %s'), $directory));
         }
     }
 
@@ -989,7 +991,7 @@ final readonly class UpdatePostApplyCommandRunner
         $encoded = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
         if (false === file_put_contents($metadataPath, $encoded)) {
-            throw new RuntimeException('Unable to write post-apply command run metadata: '.$metadataPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to write post-apply command run metadata: %s'), $metadataPath));
         }
 
         return $metadataPath;

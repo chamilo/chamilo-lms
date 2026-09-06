@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use JsonException;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 use const FILE_APPEND;
@@ -27,6 +28,7 @@ final readonly class UpdateOperationLogger
     public function __construct(
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
+        private TranslatorInterface $translator,
     ) {}
 
     public function create(?string $operationId = null): string
@@ -40,7 +42,7 @@ final readonly class UpdateOperationLogger
 
         $path = $this->getOperationPath($operationId);
         if (!is_file($path)) {
-            $this->append($operationId, 'info', 'operation', 'Update operation log created.');
+            $this->append($operationId, 'info', 'operation', $this->translator->trans('Update operation log created.'));
         }
 
         return $operationId;
@@ -68,7 +70,7 @@ final readonly class UpdateOperationLogger
         $encoded = json_encode($event, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
         if (false === file_put_contents($this->getOperationPath($operationId), $encoded.PHP_EOL, FILE_APPEND | LOCK_EX)) {
-            throw new RuntimeException('Unable to write update operation log.');
+            throw new RuntimeException($this->translator->trans('Unable to write update operation log.'));
         }
     }
 
@@ -137,7 +139,7 @@ final readonly class UpdateOperationLogger
     private function assertValidOperationId(string $operationId): void
     {
         if (1 !== preg_match(self::OPERATION_ID_PATTERN, $operationId)) {
-            throw new InvalidArgumentException('Invalid update operation id.');
+            throw new InvalidArgumentException($this->translator->trans('Invalid update operation id.'));
         }
     }
 
@@ -171,14 +173,14 @@ final readonly class UpdateOperationLogger
     {
         if (is_dir($directory)) {
             if (!is_writable($directory)) {
-                throw new RuntimeException('Directory is not writable: '.$directory);
+                throw new RuntimeException(\sprintf($this->translator->trans('Directory is not writable: %s'), $directory));
             }
 
             return;
         }
 
         if (!mkdir($directory, 0775, true) && !is_dir($directory)) {
-            throw new RuntimeException('Unable to create directory: '.$directory);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to create directory: %s'), $directory));
         }
     }
 }

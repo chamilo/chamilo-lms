@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Service\Update\Dto\UpdateManifest;
 use InvalidArgumentException;
 use JsonException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const JSON_THROW_ON_ERROR;
 use const PHP_URL_SCHEME;
@@ -19,6 +20,7 @@ final readonly class UpdateManifestClient
     public function __construct(
         private HttpClientInterface $httpClient,
         private UpdateConfiguration $updateConfiguration,
+        private TranslatorInterface $translator,
     ) {}
 
     public function load(string $source): UpdateManifest
@@ -28,14 +30,14 @@ final readonly class UpdateManifestClient
         try {
             $data = json_decode($rawManifest, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            throw new InvalidArgumentException('Update manifest is not valid JSON: '.$exception->getMessage(), 0, $exception);
+            throw new InvalidArgumentException(\sprintf($this->translator->trans('Update manifest is not valid JSON: %s'), $exception->getMessage()), 0, $exception);
         }
 
         if (!\is_array($data)) {
-            throw new InvalidArgumentException('Update manifest JSON must be an object.');
+            throw new InvalidArgumentException($this->translator->trans('Update manifest JSON must be an object.'));
         }
 
-        return UpdateManifest::fromArray($data);
+        return UpdateManifest::fromArray($data, $this->translator);
     }
 
     private function readSource(string $source): string
@@ -43,17 +45,17 @@ final readonly class UpdateManifestClient
         $source = trim($source);
 
         if ('' === $source) {
-            throw new InvalidArgumentException('Manifest source cannot be empty.');
+            throw new InvalidArgumentException($this->translator->trans('Manifest source cannot be empty.'));
         }
 
         if ($this->isHttpUrl($source)) {
-            $this->assertHttpsUrl($source, 'manifest');
+            $this->assertHttpsUrl($source);
 
             if (
                 !$this->updateConfiguration->allowsDevelopmentUpdateTools()
                 && !$this->updateConfiguration->isAllowedOfficialUpdateUrl($source)
             ) {
-                throw new InvalidArgumentException('Update manifest URL must use the official update origin '.$this->updateConfiguration->getOfficialManifestOrigin().'.');
+                throw new InvalidArgumentException(\sprintf($this->translator->trans('Update manifest URL must use the official update origin %s.'), $this->updateConfiguration->getOfficialManifestOrigin()));
             }
 
             $response = $this->httpClient->request('GET', $source, [
@@ -62,20 +64,20 @@ final readonly class UpdateManifestClient
             $statusCode = $response->getStatusCode();
 
             if ($statusCode < 200 || $statusCode >= 300) {
-                throw new InvalidArgumentException('Unable to download update manifest. HTTP status: '.(string) $statusCode);
+                throw new InvalidArgumentException(\sprintf($this->translator->trans('Unable to download update manifest. HTTP status: %d'), $statusCode));
             }
 
             return $response->getContent();
         }
 
         if (!is_file($source) || !is_readable($source)) {
-            throw new InvalidArgumentException('Manifest file is not readable: '.$source);
+            throw new InvalidArgumentException(\sprintf($this->translator->trans('Manifest file is not readable: %s'), $source));
         }
 
         $content = file_get_contents($source);
 
         if (false === $content) {
-            throw new InvalidArgumentException('Unable to read manifest file: '.$source);
+            throw new InvalidArgumentException(\sprintf($this->translator->trans('Unable to read manifest file: %s'), $source));
         }
 
         return $content;
@@ -86,12 +88,12 @@ final readonly class UpdateManifestClient
         return 1 === preg_match('/^https?:\/\//i', $source);
     }
 
-    private function assertHttpsUrl(string $url, string $label): void
+    private function assertHttpsUrl(string $url): void
     {
         $scheme = parse_url($url, PHP_URL_SCHEME);
 
         if ('https' !== $scheme) {
-            throw new InvalidArgumentException('The update '.$label.' URL must use HTTPS.');
+            throw new InvalidArgumentException($this->translator->trans('The update manifest URL must use HTTPS.'));
         }
     }
 }

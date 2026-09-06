@@ -14,6 +14,7 @@ use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Process\Process;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 use const JSON_PRETTY_PRINT;
@@ -33,14 +34,15 @@ final readonly class UpdateMigrationSafetyChecker
         private UpdateMigrationPolicy $migrationPolicy,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
+        private TranslatorInterface $translator,
     ) {}
 
     public function check(string $stagingPath): UpdateMigrationSafetyCheckResult
     {
         $checks = [];
         $warnings = [
-            'Database backup is not managed by this updater. Create and verify a database backup before running migrations.',
-            'Doctrine migration down() methods are not guaranteed to restore deleted or transformed data.',
+            $this->translator->trans('Database backup is not managed by this updater. Create and verify a database backup before running migrations.'),
+            $this->translator->trans('Doctrine migration down() methods are not guaranteed to restore deleted or transformed data.'),
         ];
         $details = [
             'project_dir' => $this->projectDir,
@@ -53,19 +55,19 @@ final readonly class UpdateMigrationSafetyChecker
         try {
             $stagingPath = $this->resolveSafeStagingPath($stagingPath);
             $details['staging_path'] = $stagingPath;
-            $this->addCheck($checks, 'staging_path', 'passed', 'Staging directory is inside the Chamilo update staging directory.', [
+            $this->addCheck($checks, 'staging_path', 'passed', $this->translator->trans('Staging directory is inside the Chamilo update staging directory.'), [
                 'staging_path' => $stagingPath,
             ]);
 
             $postApplyChecks = $this->readJsonFile($stagingPath.'/POST-APPLY-CHECKS.json', 'post-apply checks');
             $this->assertDatabaseMigrationsWereRecommended($postApplyChecks);
-            $this->addCheck($checks, 'post_apply_metadata', 'passed', 'Post-apply metadata recommends database migration review.');
+            $this->addCheck($checks, 'post_apply_metadata', 'passed', $this->translator->trans('Post-apply metadata recommends database migration review.'));
 
             $stagingMetadata = $this->readJsonFile($stagingPath.'/STAGING-INFO.json', 'staging metadata');
             $applyPlan = $this->readJsonFile($stagingPath.'/APPLY-PLAN.json', 'apply plan metadata');
             $applicationPath = $this->resolveApplicationPath($stagingPath, $applyPlan, $stagingMetadata);
             $details['application_path'] = $applicationPath;
-            $this->addCheck($checks, 'application_path', 'passed', 'Staged application path is valid.', [
+            $this->addCheck($checks, 'application_path', 'passed', $this->translator->trans('Staged application path is valid.'), [
                 'application_path' => $applicationPath,
             ]);
 
@@ -75,7 +77,7 @@ final readonly class UpdateMigrationSafetyChecker
             $details['migration_classes'] = $migrationClasses;
 
             if ([] === $migrations) {
-                $this->addCheck($checks, 'migration_files', 'failed', 'No migration files were found in the staged package.');
+                $this->addCheck($checks, 'migration_files', 'failed', $this->translator->trans('No migration files were found in the staged package.'));
 
                 return UpdateMigrationSafetyCheckResult::failure(
                     $this->collectFailedCheckMessages($checks),
@@ -90,14 +92,14 @@ final readonly class UpdateMigrationSafetyChecker
                 );
             }
 
-            $this->addCheck($checks, 'migration_files', 'passed', 'Staged Doctrine migration files were detected.', [
+            $this->addCheck($checks, 'migration_files', 'passed', $this->translator->trans('Staged Doctrine migration files were detected.'), [
                 'migration_count' => \count($migrations),
                 'migration_classes' => $migrationClasses,
             ]);
 
             $migrationTarget = $migrationClasses[\count($migrationClasses) - 1];
             $details['migration_target'] = $migrationTarget;
-            $this->addCheck($checks, 'migration_target', 'passed', 'Doctrine migration target was resolved from the staged package.', [
+            $this->addCheck($checks, 'migration_target', 'passed', $this->translator->trans('Doctrine migration target was resolved from the staged package.'), [
                 'migration_target' => $migrationTarget,
             ]);
 
@@ -110,7 +112,7 @@ final readonly class UpdateMigrationSafetyChecker
             }
 
             if ([] !== $baselineBlockingErrors) {
-                $this->addCheck($checks, 'migration_baseline', 'failed', 'Doctrine migration baseline has blocking issues for staged migrations.', [
+                $this->addCheck($checks, 'migration_baseline', 'failed', $this->translator->trans('Doctrine migration baseline has blocking issues for staged migrations.'), [
                     'migration_target' => $migrationTarget,
                     'blocking_errors' => $baselineBlockingErrors,
                     'staged_migrations_already_executed' => $baseline['staged_migrations_already_executed'] ?? [],
@@ -134,15 +136,15 @@ final readonly class UpdateMigrationSafetyChecker
             $historicalIssueCount = (int) ($baseline['historical_issue_count'] ?? 0);
             $targetRegistered = true === ($baseline['target_registered'] ?? false);
             if ($historicalIssueCount > 0 || !$targetRegistered) {
-                $this->addCheck($checks, 'migration_baseline', 'warning', 'Doctrine reports historical migration baseline warnings, but only staged '.$this->migrationPolicy->getMigrationSeries().' migrations will be reviewed and executed explicitly.', [
+                $this->addCheck($checks, 'migration_baseline', 'warning', \sprintf($this->translator->trans('Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly.'), $this->migrationPolicy->getMigrationSeries()), [
                     'migration_target' => $migrationTarget,
                     'executed_unavailable_count' => $baseline['executed_unavailable_count'] ?? null,
                     'pending_before_target_count' => \is_array($baseline['pending_before_target'] ?? null) ? \count($baseline['pending_before_target']) : null,
                     'target_registered' => $targetRegistered,
                 ]);
-                $warnings[] = 'Doctrine reports historical migration baseline warnings. The updater will execute only staged '.$this->migrationPolicy->getMigrationSeries().' migration classes after explicit confirmation.';
+                $warnings[] = \sprintf($this->translator->trans('Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation.'), $this->migrationPolicy->getMigrationSeries());
             } else {
-                $this->addCheck($checks, 'migration_baseline', 'passed', 'Doctrine baseline has no blocking issue for the staged '.$this->migrationPolicy->getMigrationSeries().' migrations.', [
+                $this->addCheck($checks, 'migration_baseline', 'passed', \sprintf($this->translator->trans('Doctrine baseline has no blocking issue for the staged %s migrations.'), $this->migrationPolicy->getMigrationSeries()), [
                     'migration_target' => $migrationTarget,
                     'current' => $baseline['current'] ?? null,
                     'next' => $baseline['next'] ?? null,
@@ -157,7 +159,7 @@ final readonly class UpdateMigrationSafetyChecker
             $details['migration_execution_mode'] = 'explicit_execute';
 
             if (0 !== $dryRunExitCode) {
-                $this->addCheck($checks, 'migration_dry_run', 'failed', 'Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed.', [
+                $this->addCheck($checks, 'migration_dry_run', 'failed', $this->translator->trans('Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed.'), [
                     'exit_code' => $dryRunExitCode,
                     'migration_target' => $migrationTarget,
                     'execution_mode' => 'explicit_execute',
@@ -178,7 +180,7 @@ final readonly class UpdateMigrationSafetyChecker
                 );
             }
 
-            $this->addCheck($checks, 'migration_dry_run', 'passed', 'Doctrine dry-run completed successfully for each staged migration class.', [
+            $this->addCheck($checks, 'migration_dry_run', 'passed', $this->translator->trans('Doctrine dry-run completed successfully for each staged migration class.'), [
                 'command' => $dryRunCommand,
                 'exit_code' => $dryRunExitCode,
                 'migration_target' => $migrationTarget,
@@ -186,7 +188,7 @@ final readonly class UpdateMigrationSafetyChecker
                 'migration_count' => \count($migrations),
             ]);
 
-            $this->addCheck($checks, 'database_backup_notice', 'warning', 'A database backup must be created outside this updater before running migrations.');
+            $this->addCheck($checks, 'database_backup_notice', 'warning', $this->translator->trans('A database backup must be created outside this updater before running migrations.'));
 
             $metadataPath = $this->writeMetadata($stagingPath, true, $checks, $warnings, $details, $migrations, $dryRunCommand, $dryRunExitCode, $dryRunOutput);
 
@@ -221,23 +223,23 @@ final readonly class UpdateMigrationSafetyChecker
         $stagingPath = rtrim(trim($stagingPath), '/');
 
         if ('' === $stagingPath) {
-            throw new RuntimeException('Staging path is required to review database migrations.');
+            throw new RuntimeException($this->translator->trans('Staging path is required to review database migrations.'));
         }
 
         $realStagingPath = realpath($stagingPath);
 
         if (false === $realStagingPath || !is_dir($realStagingPath)) {
-            throw new RuntimeException('Staging directory does not exist: '.$stagingPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Staging directory does not exist: %s'), $stagingPath));
         }
 
         $stagingBasePath = realpath($this->projectDir.'/var/update/staging');
 
         if (false === $stagingBasePath) {
-            throw new RuntimeException('Chamilo update staging base directory does not exist.');
+            throw new RuntimeException($this->translator->trans('Chamilo update staging base directory does not exist.'));
         }
 
         if (!$this->isPathInside($realStagingPath, $stagingBasePath)) {
-            throw new RuntimeException('Staging directory must be inside var/update/staging.');
+            throw new RuntimeException($this->translator->trans('Staging directory must be inside var/update/staging.'));
         }
 
         return $realStagingPath;
@@ -249,23 +251,23 @@ final readonly class UpdateMigrationSafetyChecker
     private function readJsonFile(string $path, string $label): array
     {
         if (!is_file($path) || !is_readable($path)) {
-            throw new RuntimeException('Unable to read update '.$label.': '.$path);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to read update %s: %s'), $label, $path));
         }
 
         $content = file_get_contents($path);
 
         if (false === $content) {
-            throw new RuntimeException('Unable to read update '.$label.': '.$path);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to read update %s: %s'), $label, $path));
         }
 
         try {
             $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            throw new RuntimeException('Update '.$label.' JSON is invalid: '.$exception->getMessage(), 0, $exception);
+            throw new RuntimeException(\sprintf($this->translator->trans('Update %s JSON is invalid: %s'), $label, $exception->getMessage()), 0, $exception);
         }
 
         if (!\is_array($data)) {
-            throw new RuntimeException('Update '.$label.' JSON must be an object.');
+            throw new RuntimeException(\sprintf($this->translator->trans('Update %s JSON must be an object.'), $label));
         }
 
         return $data;
@@ -279,7 +281,7 @@ final readonly class UpdateMigrationSafetyChecker
         $actions = $postApplyChecks['actions'] ?? null;
 
         if (!\is_array($actions)) {
-            throw new RuntimeException('Post-apply checks metadata does not contain a valid actions list.');
+            throw new RuntimeException($this->translator->trans('Post-apply checks metadata does not contain a valid actions list.'));
         }
 
         foreach ($actions as $action) {
@@ -288,7 +290,7 @@ final readonly class UpdateMigrationSafetyChecker
             }
         }
 
-        throw new RuntimeException('Database migrations were not recommended for this staged update.');
+        throw new RuntimeException($this->translator->trans('Database migrations were not recommended for this staged update.'));
     }
 
     /**
@@ -300,17 +302,17 @@ final readonly class UpdateMigrationSafetyChecker
         $applicationPath = $applyPlan['application_path'] ?? $stagingMetadata['application_path'] ?? null;
 
         if (!\is_string($applicationPath) || '' === trim($applicationPath)) {
-            throw new RuntimeException('Update metadata is missing the staged application path.');
+            throw new RuntimeException($this->translator->trans('Update metadata is missing the staged application path.'));
         }
 
         $realApplicationPath = realpath($applicationPath);
 
         if (false === $realApplicationPath || !is_dir($realApplicationPath)) {
-            throw new RuntimeException('Staged application path is not readable: '.$applicationPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Staged application path is not readable: %s'), $applicationPath));
         }
 
         if (!$this->isPathInside($realApplicationPath, $stagingPath)) {
-            throw new RuntimeException('Staged application path must be inside the staging directory.');
+            throw new RuntimeException($this->translator->trans('Staged application path must be inside the staging directory.'));
         }
 
         return $realApplicationPath;
@@ -330,7 +332,7 @@ final readonly class UpdateMigrationSafetyChecker
             foreach ($plannedMigrationPaths as $relativePath) {
                 $absolutePath = $applicationPath.'/'.$relativePath;
                 if (!is_file($absolutePath)) {
-                    throw new RuntimeException('Planned staged migration file was not found: '.$relativePath);
+                    throw new RuntimeException(\sprintf($this->translator->trans('Planned staged migration file was not found: %s'), $relativePath));
                 }
 
                 $migrations[] = $this->parseMigrationFile($absolutePath, $relativePath);
@@ -414,7 +416,7 @@ final readonly class UpdateMigrationSafetyChecker
         $content = file_get_contents($absolutePath);
 
         if (false === $content) {
-            throw new RuntimeException('Unable to read staged migration file: '.$relativePath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to read staged migration file: %s'), $relativePath));
         }
 
         $namespace = null;
@@ -429,7 +431,7 @@ final readonly class UpdateMigrationSafetyChecker
 
         $fullyQualifiedClass = null !== $namespace ? $namespace.'\\'.$class : $class;
 
-        $description = 'No description could be extracted from getDescription().';
+        $description = $this->translator->trans('No description could be extracted from getDescription().');
         if (preg_match('/function\s+getDescription\s*\([^)]*\)\s*:\s*string\s*\{(?P<body>.*?)\}/s', $content, $matches)) {
             $body = $matches['body'];
             if (preg_match('/return\s+[\'"](?P<description>.*?)[\'"]\s*;/s', $body, $descriptionMatches)) {
@@ -438,7 +440,7 @@ final readonly class UpdateMigrationSafetyChecker
         }
 
         if (!$this->migrationPolicy->isSupportedMigrationClass($fullyQualifiedClass)) {
-            throw new RuntimeException('Only '.$this->migrationPolicy->getMigrationSeries().' staged migrations are supported by the update runner: '.$relativePath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Only %s staged migrations are supported by the update runner: %s'), $this->migrationPolicy->getMigrationSeries(), $relativePath));
         }
 
         return [
@@ -796,7 +798,7 @@ final readonly class UpdateMigrationSafetyChecker
         $encoded = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
         if (false === file_put_contents($metadataPath, $encoded.PHP_EOL)) {
-            throw new RuntimeException('Unable to write migration safety metadata: '.$metadataPath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unable to write migration safety metadata: %s'), $metadataPath));
         }
 
         return $metadataPath;
@@ -813,11 +815,11 @@ final readonly class UpdateMigrationSafetyChecker
 
         foreach ($checks as $check) {
             if ('failed' === ($check['status'] ?? null)) {
-                $errors[] = (string) ($check['message'] ?? 'Migration safety check failed.');
+                $errors[] = (string) ($check['message'] ?? $this->translator->trans('Migration safety check failed.'));
             }
         }
 
-        return [] !== $errors ? $errors : ['Migration safety check failed.'];
+        return [] !== $errors ? $errors : [$this->translator->trans('Migration safety check failed.')];
     }
 
     /**
@@ -844,7 +846,7 @@ final readonly class UpdateMigrationSafetyChecker
         $relativePath = trim(str_replace('\\', '/', $relativePath), '/');
 
         if (str_contains($relativePath, "\0") || str_contains($relativePath, '../') || str_starts_with($relativePath, '../')) {
-            throw new RuntimeException('Unsafe staged relative migration path detected: '.$relativePath);
+            throw new RuntimeException(\sprintf($this->translator->trans('Unsafe staged relative migration path detected: %s'), $relativePath));
         }
 
         return $relativePath;

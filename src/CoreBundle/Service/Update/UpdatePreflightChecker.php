@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Service\Update\Dto\UpdateManifest;
 use Chamilo\CoreBundle\Service\Update\Dto\UpdatePreflightResult;
 use Composer\InstalledVersions;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 use const PATHINFO_EXTENSION;
@@ -24,6 +25,7 @@ final readonly class UpdatePreflightChecker
     public function __construct(
         private KernelInterface $kernel,
         private InstalledChamiloVersionProvider $installedVersionProvider,
+        private TranslatorInterface $translator,
     ) {}
 
     public function check(UpdateManifest $manifest, ?string $packagePath = null): UpdatePreflightResult
@@ -66,14 +68,14 @@ final readonly class UpdatePreflightChecker
     ): void {
         if (is_dir($updateDirectory)) {
             if (is_writable($updateDirectory)) {
-                $this->addCheck($checks, 'update_directory', 'passed', 'Update directory exists and is writable.', [
+                $this->addCheck($checks, 'update_directory', 'passed', $this->translator->trans('Update directory exists and is writable.'), [
                     'path' => $updateDirectory,
                 ]);
 
                 return;
             }
 
-            $message = 'Update directory exists but is not writable: '.$updateDirectory;
+            $message = \sprintf($this->translator->trans('Update directory exists but is not writable: %s'), $updateDirectory);
             $errors[] = $message;
             $this->addCheck($checks, 'update_directory', 'failed', $message, [
                 'path' => $updateDirectory,
@@ -85,7 +87,7 @@ final readonly class UpdatePreflightChecker
         $parentDirectory = \dirname($updateDirectory);
 
         if (is_dir($parentDirectory) && is_writable($parentDirectory)) {
-            $message = 'Update directory does not exist yet, but its parent directory is writable.';
+            $message = $this->translator->trans('Update directory does not exist yet, but its parent directory is writable.');
             $warnings[] = $message;
             $this->addCheck($checks, 'update_directory', 'warning', $message, [
                 'path' => $updateDirectory,
@@ -98,7 +100,7 @@ final readonly class UpdatePreflightChecker
         $varDirectory = $projectDir.'/var';
 
         if (is_dir($varDirectory) && is_writable($varDirectory)) {
-            $message = 'Update directory does not exist yet, but it can be created under var/.';
+            $message = $this->translator->trans('Update directory does not exist yet, but it can be created under var/.');
             $warnings[] = $message;
             $this->addCheck($checks, 'update_directory', 'warning', $message, [
                 'path' => $updateDirectory,
@@ -108,7 +110,7 @@ final readonly class UpdatePreflightChecker
             return;
         }
 
-        $message = 'Update directory does not exist and cannot be created with the current permissions.';
+        $message = $this->translator->trans('Update directory does not exist and cannot be created with the current permissions.');
         $errors[] = $message;
         $this->addCheck($checks, 'update_directory', 'failed', $message, [
             'path' => $updateDirectory,
@@ -132,7 +134,7 @@ final readonly class UpdatePreflightChecker
         $freeSpace = disk_free_space($diskPath);
 
         if (false === $freeSpace) {
-            $message = 'Unable to determine free disk space for update preflight.';
+            $message = $this->translator->trans('Unable to determine free disk space for update preflight.');
             $warnings[] = $message;
             $this->addCheck($checks, 'disk_space', 'warning', $message, [
                 'path' => $diskPath,
@@ -161,14 +163,14 @@ final readonly class UpdatePreflightChecker
         ];
 
         if ($freeSpace < $requiredSpace) {
-            $message = 'Not enough free disk space for a safe update staging operation.';
+            $message = $this->translator->trans('Not enough free disk space for a safe update staging operation.');
             $errors[] = $message;
             $this->addCheck($checks, 'disk_space', 'failed', $message, $details);
 
             return;
         }
 
-        $message = 'Free disk space is sufficient for this verification-stage update flow.';
+        $message = $this->translator->trans('Free disk space is sufficient for this verification-stage update flow.');
         $this->addCheck($checks, 'disk_space', 'passed', $message, $details);
     }
 
@@ -183,7 +185,7 @@ final readonly class UpdatePreflightChecker
         $phpRequirement = $requirements['php'] ?? null;
 
         if (!\is_string($phpRequirement) || '' === trim($phpRequirement)) {
-            $message = 'Update manifest does not define a PHP version requirement.';
+            $message = $this->translator->trans('Update manifest does not define a PHP version requirement.');
             $warnings[] = $message;
             $this->addCheck($checks, 'php_requirement', 'warning', $message, [
                 'php_version' => PHP_VERSION,
@@ -195,7 +197,7 @@ final readonly class UpdatePreflightChecker
         $matchResult = $this->matchesVersionRequirement(PHP_VERSION, $phpRequirement);
 
         if (null === $matchResult) {
-            $message = 'Unable to fully evaluate PHP requirement: '.$phpRequirement;
+            $message = \sprintf($this->translator->trans('Unable to fully evaluate PHP requirement: %s'), $phpRequirement);
             $warnings[] = $message;
             $this->addCheck($checks, 'php_requirement', 'warning', $message, [
                 'php_version' => PHP_VERSION,
@@ -206,7 +208,7 @@ final readonly class UpdatePreflightChecker
         }
 
         if (!$matchResult) {
-            $message = 'Current PHP version does not satisfy update requirement: '.$phpRequirement;
+            $message = \sprintf($this->translator->trans('Current PHP version does not satisfy update requirement: %s'), $phpRequirement);
             $errors[] = $message;
             $this->addCheck($checks, 'php_requirement', 'failed', $message, [
                 'php_version' => PHP_VERSION,
@@ -216,7 +218,7 @@ final readonly class UpdatePreflightChecker
             return;
         }
 
-        $this->addCheck($checks, 'php_requirement', 'passed', 'Current PHP version satisfies the update requirement.', [
+        $this->addCheck($checks, 'php_requirement', 'passed', $this->translator->trans('Current PHP version satisfies the update requirement.'), [
             'php_version' => PHP_VERSION,
             'requirement' => $phpRequirement,
         ]);
@@ -230,7 +232,7 @@ final readonly class UpdatePreflightChecker
     private function checkPackagePath(?string $packagePath, array &$checks, array &$errors, array &$warnings): void
     {
         if (null === $packagePath || '' === trim($packagePath)) {
-            $message = 'No local package path was provided. Downloaded packages can only be checked after download.';
+            $message = $this->translator->trans('No local package path was provided. Downloaded packages can only be checked after download.');
             $warnings[] = $message;
             $this->addCheck($checks, 'package_path', 'warning', $message);
 
@@ -238,7 +240,7 @@ final readonly class UpdatePreflightChecker
         }
 
         if (!is_file($packagePath) || !is_readable($packagePath)) {
-            $message = 'Local update package is not readable: '.$packagePath;
+            $message = \sprintf($this->translator->trans('Local update package is not readable: %s'), $packagePath);
             $errors[] = $message;
             $this->addCheck($checks, 'package_path', 'failed', $message, [
                 'path' => $packagePath,
@@ -248,7 +250,7 @@ final readonly class UpdatePreflightChecker
         }
 
         if ('zip' !== strtolower(pathinfo($packagePath, PATHINFO_EXTENSION))) {
-            $message = 'Local update package must be a ZIP archive.';
+            $message = $this->translator->trans('Local update package must be a ZIP archive.');
             $errors[] = $message;
             $this->addCheck($checks, 'package_path', 'failed', $message, [
                 'path' => $packagePath,
@@ -257,7 +259,7 @@ final readonly class UpdatePreflightChecker
             return;
         }
 
-        $this->addCheck($checks, 'package_path', 'passed', 'Local update package is readable.', [
+        $this->addCheck($checks, 'package_path', 'passed', $this->translator->trans('Local update package is readable.'), [
             'path' => $packagePath,
             'size_bytes' => filesize($packagePath) ?: null,
         ]);
@@ -274,7 +276,7 @@ final readonly class UpdatePreflightChecker
         $targetVersion = $manifest->getVersion();
 
         if ('unknown' === $installedVersion) {
-            $message = 'Installed Chamilo version could not be detected automatically. Version direction cannot be checked.';
+            $message = $this->translator->trans('Installed Chamilo version could not be detected automatically. Version direction cannot be checked.');
             $warnings[] = $message;
             $this->addCheck($checks, 'version_direction', 'warning', $message, [
                 'installed_version' => $installedVersion,
@@ -285,7 +287,7 @@ final readonly class UpdatePreflightChecker
         }
 
         if (!$this->isComparableVersion($installedVersion) || !$this->isComparableVersion($targetVersion)) {
-            $message = 'Installed or target version is not in a comparable semantic version format.';
+            $message = $this->translator->trans('Installed or target version is not in a comparable semantic version format.');
             $warnings[] = $message;
             $this->addCheck($checks, 'version_direction', 'warning', $message, [
                 'installed_version' => $installedVersion,
@@ -298,7 +300,7 @@ final readonly class UpdatePreflightChecker
         $compare = version_compare($targetVersion, $installedVersion);
 
         if ($compare < 0) {
-            $message = 'Target version is lower than the installed version. Downgrades are not allowed by default.';
+            $message = $this->translator->trans('Target version is lower than the installed version. Downgrades are not allowed by default.');
             $errors[] = $message;
             $this->addCheck($checks, 'version_direction', 'failed', $message, [
                 'installed_version' => $installedVersion,
@@ -309,7 +311,7 @@ final readonly class UpdatePreflightChecker
         }
 
         if (0 === $compare) {
-            $message = 'Target version matches the installed version.';
+            $message = $this->translator->trans('Target version matches the installed version.');
             $warnings[] = $message;
             $this->addCheck($checks, 'version_direction', 'warning', $message, [
                 'installed_version' => $installedVersion,
@@ -319,7 +321,7 @@ final readonly class UpdatePreflightChecker
             return;
         }
 
-        $this->addCheck($checks, 'version_direction', 'passed', 'Target version is newer than the installed version.', [
+        $this->addCheck($checks, 'version_direction', 'passed', $this->translator->trans('Target version is newer than the installed version.'), [
             'installed_version' => $installedVersion,
             'target_version' => $targetVersion,
         ]);
@@ -332,12 +334,12 @@ final readonly class UpdatePreflightChecker
     private function checkGitWorkingTree(string $projectDir, array &$checks, array &$warnings): void
     {
         if (!$this->hasGitMetadata($projectDir)) {
-            $this->addCheck($checks, 'git_working_tree', 'passed', 'Project is not a Git checkout or .git is not present.');
+            $this->addCheck($checks, 'git_working_tree', 'passed', $this->translator->trans('Project is not a Git checkout or .git is not present.'));
 
             return;
         }
 
-        $gitInstallationWarning = 'This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root.';
+        $gitInstallationWarning = $this->translator->trans('This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root.');
         $warnings[] = $gitInstallationWarning;
 
         if (!\function_exists('exec')) {
@@ -368,7 +370,7 @@ final readonly class UpdatePreflightChecker
                 $checks,
                 'git_working_tree',
                 'warning',
-                $gitInstallationWarning.' Local Git changes were also detected.',
+                $gitInstallationWarning.' '.$this->translator->trans('Local Git changes were also detected.'),
                 [
                     'inspection_status' => 'completed',
                     'working_tree_clean' => false,
@@ -400,7 +402,7 @@ final readonly class UpdatePreflightChecker
         }
 
         if ([] !== $missing) {
-            $message = 'Some project metadata files are missing. Later update stages may require manual dependency checks.';
+            $message = $this->translator->trans('Some project metadata files are missing. Later update stages may require manual dependency checks.');
             $warnings[] = $message;
             $this->addCheck($checks, 'project_metadata', 'warning', $message, [
                 'missing' => $missing,
@@ -409,7 +411,7 @@ final readonly class UpdatePreflightChecker
             return;
         }
 
-        $this->addCheck($checks, 'project_metadata', 'passed', 'Composer and Yarn metadata files are present.');
+        $this->addCheck($checks, 'project_metadata', 'passed', $this->translator->trans('Composer and Yarn metadata files are present.'));
     }
 
     private function findExistingDiskPath(string $updateDirectory, string $projectDir): string

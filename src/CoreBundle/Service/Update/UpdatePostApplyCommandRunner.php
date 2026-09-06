@@ -421,11 +421,17 @@ final readonly class UpdatePostApplyCommandRunner
             return $allowedExecutableActions;
         }
 
-        $selectedActions = [];
-
         foreach ($requestedActions as $key) {
             if (!isset($allowedExecutableActions[$key])) {
                 throw new RuntimeException('Post-apply action is not allowed for this update: '.$key);
+            }
+        }
+
+        $selectedActions = [];
+
+        foreach (array_keys($actionDefinitions) as $key) {
+            if (!\in_array($key, $requestedActions, true)) {
+                continue;
             }
 
             $selectedActions[$key] = $allowedExecutableActions[$key];

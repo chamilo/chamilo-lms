@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Mtiririko wa Octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Mtiririko wa okteti,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -8789,6 +8789,9 @@ msgstr "Tazama maendeleo yangu"
 
 msgid "Personal agenda"
 msgstr "Agendo la kibinafsi"
+
+msgid "Group agenda"
+msgstr "Ajenda ya kikundi"
 
 msgid "Switch to teacher view"
 msgstr "Badilisha kwenda kwenye mwonekano wa mwalimu"
@@ -40124,4 +40127,106 @@ msgstr "Ripoti ya kikundi"
 
 msgid "Student follow-up"
 msgstr "Ufuatiliaji wa mwanafunzi"
+
+msgid "Use system default certificate"
+msgstr "Tumia cheti chaguo-msingi cha mfumo"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Cheti kilichounganishwa hakipatikani. Cheti chaguo-msingi cha mfumo kitatumika."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Tumia cheti chaguo-msingi cha mfumo badala ya cheti kilichounganishwa?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Ubatilishaji wa hiari wa maendeleo ya ndani. Sasisho za uzalishaji hutumia ufunguo rasmi wa kuaminika wa Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Tengeneza mpango salama wa kutekeleza kutoka kwa kifurushi kilichowekwa. Hii hukagua faili za kubadilisha, kuongeza au kuondoa, ruhusa, njia ya nakala rudufu na hali ya kufunga. Haibadilishi usakinishaji."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Hatua hii huandaa ukaguzi tu. Ubadilishaji wa faili na usafishaji uliotangazwa na kifurushi hutokea baadaye katika hatua ya Tekeleza faili zilizowekwa, pamoja na kufunga, nakala rudufu na ulinzi wa kurudisha nyuma."
+
+msgid "Files to remove"
+msgstr "Faili za kuondoa"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Badilisha faili za Chamilo kutoka kwa kifurushi kilichowekwa na uondoe faili zilizopitwa na wakati zilizotangazwa wazi na metadata ya kifurushi kilichotiwa saini. Hii haiendeshi uhamishaji wa hifadhidata, Composer, Yarn au amri za kache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Kitendo hiki kinabadilisha na kinaweza kuondoa faili katika usakinishaji wa Chamilo. Hakikisha mpango wa kutekeleza umekaguliwa na nakala rudufu zimewashwa kabla ya kuendelea."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Ninaelewa kuwa hii itabadilisha faili na kuondoa faili zilizopitwa na wakati zilizotangazwa na kifurushi katika usakinishaji wa Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Andika maandishi kamili hapa chini ili kuthibitisha"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine itatekeleza tu uhamishaji wa V300 uliowekwa wazi baada ya ukaguzi wa usalama kupita."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine iliripoti maonyo ya msingi wa kihistoria. Kisasa bado kitatekeleza tu uhamishaji wa V300 uliowekwa baada ya uthibitisho wazi."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Njia ya manifesto pekee ndiyo inayoweza kubadilishwa. Itifaki ya HTTPS na kikoa rasmi cha sasisho vimewekwa."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Hali ya maendeleo inaruhusu URL ya manifesto ya HTTPS au njia ya manifesto ya ndani."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Manifesto rasmi ya sasisho imewekwa na seva."
+
+msgid "What feedback do you want about this course?"
+msgstr "Unataka maoni gani kuhusu kozi hii?"
+
+msgid "Analysis summary"
+msgstr "Muhtasari wa uchambuzi"
+
+msgid "Lessons included"
+msgstr "Masomo yaliyojumuishwa"
+
+msgid "Standalone documents included"
+msgstr "Nyaraka huru zilizojumuishwa"
+
+msgid "Standalone exercises included"
+msgstr "Mazoezi huru yaliyojumuishwa"
+
+msgid "General feedback"
+msgstr "Maoni ya jumla"
+
+msgid "Strengths"
+msgstr "Nguvu"
+
+msgid "Risks"
+msgstr "Hatari"
+
+msgid "Recommendations"
+msgstr "Mapendekezo"
+
+msgid "Lesson feedback"
+msgstr "Maoni ya somo"
+
+msgid "Standalone document feedback"
+msgstr "Maoni ya nyaraka huru"
+
+msgid "Standalone exercise feedback"
+msgstr "Maoni ya mazoezi huru"
+
+msgid "AI response"
+msgstr "Jibu la AI"
+
+msgid "Sequence feedback"
+msgstr "Maoni ya mfuatano"
+
+msgid "Purpose"
+msgstr "Kusudi"
+
+msgid "You"
+msgstr "Wewe"
+
+msgid "City of internship"
+msgstr "Jiji la mafunzo ya kazi"
+
+msgid "City"
+msgstr "Jiji"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "สูตรตัวอย่าง: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -8794,6 +8794,9 @@ msgstr "ดูสถิติการเข้าใช้งานระบบ
 
 msgid "Personal agenda"
 msgstr "กำหนดการของเรา"
+
+msgid "Group agenda"
+msgstr "วาระกลุ่ม"
 
 msgid "Switch to teacher view"
 msgstr "หน้าแสดงผลของผู้สอน"
@@ -40130,4 +40133,106 @@ msgstr "รายงานกลุ่ม"
 
 msgid "Student follow-up"
 msgstr "การติดตามผู้เรียน"
+
+msgid "Use system default certificate"
+msgstr "ใช้ใบรับรองเริ่มต้นของระบบ"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "ใบรับรองที่แนบมาไม่พร้อมใช้งาน จะใช้ใบรับรองเริ่มต้นของระบบ"
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "ใช้ใบรับรองเริ่มต้นของระบบแทนใบรับรองที่แนบมาหรือไม่?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "การแทนที่สำหรับการพัฒนาในเครื่อง (ไม่บังคับ) การอัปเดตในสภาพแวดล้อมจริงใช้คีย์ที่เชื่อถือได้ของ Chamilo อย่างเป็นทางการ"
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "สร้างแผนการนำไปใช้ที่ปลอดภัยจากแพ็กเกจที่จัดเตรียมไว้ ขั้นตอนนี้ตรวจสอบไฟล์ที่จะแทนที่ เพิ่ม หรือลบ สิทธิ์ เส้นทางสำรองข้อมูล และสถานะล็อก โดยไม่แก้ไขการติดตั้ง"
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "ขั้นตอนนี้เตรียมไว้เพื่อตรวจสอบเท่านั้น การแทนที่ไฟล์และการล้างข้อมูลตามที่แพ็กเกจประกาศจะเกิดขึ้นในขั้นตอนนำไปใช้ไฟล์ที่จัดเตรียม โดยมีการล็อก สำรองข้อมูล และการย้อนกลับ"
+
+msgid "Files to remove"
+msgstr "ไฟล์ที่จะลบ"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "แทนที่ไฟล์ Chamilo จากแพ็กเกจที่จัดเตรียม และลบไฟล์ที่ล้าสมัยตามที่เมทาดาทาของแพ็กเกจที่ลงนามประกาศไว้โดยชัดเจน ขั้นตอนนี้ไม่รันการย้ายฐานข้อมูล Composer Yarn หรือคำสั่งแคช"
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "การดำเนินการนี้จะแทนที่และอาจลบไฟล์ในการติดตั้ง Chamilo โปรดตรวจสอบว่าได้ตรวจทานแผนการนำไปใช้แล้ว และเปิดการสำรองข้อมูลก่อนดำเนินการต่อ"
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "ข้าพเจ้าเข้าใจว่าการดำเนินการนี้จะแทนที่ไฟล์และลบไฟล์ที่ล้าสมัยตามที่แพ็กเกจประกาศในการติดตั้ง Chamilo"
+
+msgid "Type the exact text below to confirm"
+msgstr "พิมพ์ข้อความด้านล่างให้ตรงทุกตัวอักษรเพื่อยืนยัน"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine จะรันเฉพาะการย้ายข้อมูล V300 ที่จัดเตรียมไว้ หลังจากผ่านการตรวจสอบความปลอดภัยแล้วเท่านั้น"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine รายงานคำเตือนเส้นฐานในอดีต ตัวอัปเดตจะยังรันเฉพาะการย้ายข้อมูล V300 ที่จัดเตรียมไว้ หลังการยืนยันอย่างชัดเจน"
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "เปลี่ยนได้เฉพาะเส้นทางของแมนิเฟสต์ โปรโตคอล HTTPS และโดเมนอัปเดตอย่างเป็นทางการถูกกำหนดไว้แล้ว"
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "โหมดพัฒนาอนุญาตให้ใช้ URL แมนิเฟสต์แบบ HTTPS หรือเส้นทางแมนิเฟสต์ในเครื่อง"
+
+msgid "The official update manifest is configured by the server."
+msgstr "แมนิเฟสต์อัปเดตอย่างเป็นทางการถูกกำหนดโดยเซิร์ฟเวอร์"
+
+msgid "What feedback do you want about this course?"
+msgstr "คุณต้องการข้อเสนอแนะเกี่ยวกับรายวิชานี้อย่างไร?"
+
+msgid "Analysis summary"
+msgstr "สรุปการวิเคราะห์"
+
+msgid "Lessons included"
+msgstr "บทเรียนที่รวมอยู่"
+
+msgid "Standalone documents included"
+msgstr "เอกสารแบบอิสระที่รวมอยู่"
+
+msgid "Standalone exercises included"
+msgstr "แบบฝึกหัดแบบอิสระที่รวมอยู่"
+
+msgid "General feedback"
+msgstr "ข้อเสนอแนะทั่วไป"
+
+msgid "Strengths"
+msgstr "จุดแข็ง"
+
+msgid "Risks"
+msgstr "ความเสี่ยง"
+
+msgid "Recommendations"
+msgstr "ข้อเสนอแนะ"
+
+msgid "Lesson feedback"
+msgstr "ข้อเสนอแนะบทเรียน"
+
+msgid "Standalone document feedback"
+msgstr "ข้อเสนอแนะเอกสารแบบอิสระ"
+
+msgid "Standalone exercise feedback"
+msgstr "ข้อเสนอแนะแบบฝึกหัดแบบอิสระ"
+
+msgid "AI response"
+msgstr "การตอบกลับของ AI"
+
+msgid "Sequence feedback"
+msgstr "ข้อเสนอแนะลำดับการเรียน"
+
+msgid "Purpose"
+msgstr "วัตถุประสงค์"
+
+msgid "You"
+msgstr "คุณ"
+
+msgid "City of internship"
+msgstr "เมืองที่ฝึกงาน"
+
+msgid "City"
+msgstr "เมือง"
 

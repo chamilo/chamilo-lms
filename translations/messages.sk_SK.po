@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ukážka vzorca: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukážka vzorca: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -8802,6 +8802,9 @@ msgstr "Pozrieť moju štatistiku"
 
 msgid "Personal agenda"
 msgstr "Moja agenda"
+
+msgid "Group agenda"
+msgstr "Agenda skupiny"
 
 msgid "Switch to teacher view"
 msgstr "Náhľad lektora"
@@ -40143,4 +40146,106 @@ msgstr "Skupinová správa"
 
 msgid "Student follow-up"
 msgstr "Sledovanie študenta"
+
+msgid "Use system default certificate"
+msgstr "Použiť predvolený systémový certifikát"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Pripojený certifikát nie je dostupný. Použije sa predvolený systémový certifikát."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Použiť predvolený systémový certifikát namiesto pripojeného certifikátu?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Voliteľné lokálne prepisovanie pre vývoj. Produkčné aktualizácie používajú oficiálny dôveryhodný kľúč Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Vytvoriť bezpečný plán aplikácie z pripraveného balíka. Skontroluje súbory na nahradenie, pridanie alebo odstránenie, oprávnenia, cestu zálohy a stav zámku. Inštaláciu nemení."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Tento krok pripravuje iba kontrolu. Nahradenie súborov a čistenie deklarované balíkom sa vykonajú neskôr v kroku Aplikovať pripravené súbory, so zámkom, zálohou a ochranou spätného vrátenia."
+
+msgid "Files to remove"
+msgstr "Súbory na odstránenie"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Nahradiť súbory Chamilo z pripraveného balíka a odstrániť zastarané súbory výslovne deklarované v podpísaných metadátach balíka. Nespúšťa migrácie databázy, Composer, Yarn ani príkazy vyrovnávacej pamäte."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Táto akcia nahradí a môže odstrániť súbory v inštalácii Chamilo. Pred pokračovaním sa uistite, že bol plán aplikácie skontrolovaný a zálohy sú zapnuté."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Rozumiem, že sa nahradia súbory a odstránia zastarané súbory deklarované balíkom v inštalácii Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Na potvrdenie zadajte presný text nižšie"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine vykoná iba pripravené migrácie V300 výslovne po úspešnej bezpečnostnej kontrole."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine nahlásil historické varovania základnej línie. Aktualizátor aj tak vykoná iba pripravené migrácie V300 po výslovnom potvrdení."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Zmeniť možno iba cestu manifestu. Protokol HTTPS a oficiálna aktualizačná doména sú pevne dané."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Vývojový režim umožňuje URL manifestu HTTPS alebo lokálnu cestu manifestu."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Oficiálny aktualizačný manifest je nakonfigurovaný serverom."
+
+msgid "What feedback do you want about this course?"
+msgstr "Akú spätnú väzbu chcete k tomuto kurzu?"
+
+msgid "Analysis summary"
+msgstr "Zhrnutie analýzy"
+
+msgid "Lessons included"
+msgstr "Zahrnuté lekcie"
+
+msgid "Standalone documents included"
+msgstr "Zahrnuté samostatné dokumenty"
+
+msgid "Standalone exercises included"
+msgstr "Zahrnuté samostatné cvičenia"
+
+msgid "General feedback"
+msgstr "Všeobecná spätná väzba"
+
+msgid "Strengths"
+msgstr "Silné stránky"
+
+msgid "Risks"
+msgstr "Riziká"
+
+msgid "Recommendations"
+msgstr "Odporúčania"
+
+msgid "Lesson feedback"
+msgstr "Spätná väzba k lekcii"
+
+msgid "Standalone document feedback"
+msgstr "Spätná väzba k samostatnému dokumentu"
+
+msgid "Standalone exercise feedback"
+msgstr "Spätná väzba k samostatnému cvičeniu"
+
+msgid "AI response"
+msgstr "Odpoveď AI"
+
+msgid "Sequence feedback"
+msgstr "Spätná väzba k sekvencii"
+
+msgid "Purpose"
+msgstr "Účel"
+
+msgid "You"
+msgstr "Vy"
+
+msgid "City of internship"
+msgstr "Mesto stáže"
+
+msgid "City"
+msgstr "Mesto"
 

@@ -8795,6 +8795,9 @@ msgstr "ເບິ່ງຄວາມຄືບໜ້າຂອງຂ້ອຍ"
 msgid "Personal agenda"
 msgstr "ວາລະສ່ວນຕົວ"
 
+msgid "Group agenda"
+msgstr "ວາລະກຸ່ມ"
+
 msgid "Switch to teacher view"
 msgstr "ປ່ຽນເປັນມຸມມອງຜູ້ສອນ"
 
@@ -40173,4 +40176,448 @@ msgstr "ລາຍງານກຸ່ມ"
 
 msgid "Student follow-up"
 msgstr "ການຕິດຕາມນັກຮຽນ"
+
+msgid "Use system default certificate"
+msgstr "ໃຊ້ໃບຢັ້ງຢືນເລີ່ມຕົ້ນຂອງລະບົບ"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "ໃບຢັ້ງຢືນທີ່ແນບມາບໍ່ສາມາດໃຊ້ໄດ້. ຈະໃຊ້ໃບຢັ້ງຢືນເລີ່ມຕົ້ນຂອງລະບົບ."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "ໃຊ້ໃບຢັ້ງຢືນເລີ່ມຕົ້ນຂອງລະບົບແທນໃບຢັ້ງຢືນທີ່ແນບມາບໍ?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "ການປົດລັອກພັດທະນາທ້ອງຖິ່ນແບບທາງເລືອກ. ການອັບເດດຜະລິດຈະໃຊ້ກະແຈທີ່ເຊື່ອຖືໄດ້ຢ່າງເປັນທາງການຂອງ Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "ສ້າງແຜນການນຳໃຊ້ທີ່ປອດໄພຈາກແພັກເກດທີ່ຈັດຂັ້ນ. ນີ້ກວດສອບໄຟລ໌ທີ່ຈະປ່ຽນ, ເພີ່ມ ຫຼື ລຶບ, ສິດອະນຸຍາດ, ເສັ້ນທາງສຳຮອງ ແລະ ສະຖານະລັອກ. ມັນບໍ່ແກ້ໄຂການຕິດຕັ້ງ."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "ຂັ້ນຕອນນີ້ກຽມການກວດທົບທວນເທົ່ານັ້ນ. ການປ່ຽນໄຟລ໌ ແລະ ການລ້າງທີ່ແພັກເກດປະກາດຈະເກີດຂຶ້ນຕໍ່ມາໃນຂັ້ນຕອນນຳໃຊ້ໄຟລ໌ທີ່ຈັດຂັ້ນ, ພ້ອມການລັອກ, ສຳຮອງ ແລະ ປ້ອງກັນການຍົກເລີກ."
+
+msgid "Files to remove"
+msgstr "ໄຟລ໌ທີ່ຈະລຶບ"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "ປ່ຽນໄຟລ໌ Chamilo ຈາກແພັກເກດທີ່ຈັດຂັ້ນ ແລະ ລຶບໄຟລ໌ທີ່ລ້າສະໄໝທີ່ຖືກປະກາດຢ່າງຊັດເຈນໂດຍເມຕາເດຕາຂອງແພັກເກດທີ່ລົງນາມ. ນີ້ບໍ່ແລ່ນການຍ້າຍຖານຂໍ້ມູນ, Composer, Yarn ຫຼື ຄຳສັ່ງແຄຊ."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "ການກະທຳນີ້ປ່ຽນ ແລະ ສາມາດລຶບໄຟລ໌ໃນການຕິດຕັ້ງ Chamilo. ໃຫ້ແນ່ໃຈວ່າແຜນການນຳໃຊ້ໄດ້ຖືກກວດທົບທວນແລ້ວ ແລະ ການສຳຮອງເປີດໃຊ້ກ່ອນດຳເນີນຕໍ່."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "ຂ້ອຍເຂົ້າໃຈວ່ານີ້ຈະປ່ຽນໄຟລ໌ ແລະ ລຶບໄຟລ໌ລ້າສະໄໝທີ່ແພັກເກດປະກາດໃນການຕິດຕັ້ງ Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "ພິມຂໍ້ຄວາມທີ່ກົງກັນຂ້າງລຸ່ມເພື່ອຢືນຢັນ"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine ຈະປະຕິບັດພຽງການຍ້າຍ V300 ທີ່ຈັດຂັ້ນເທົ່ານັ້ນຢ່າງຊັດເຈນຫຼັງການກວດຄວາມປອດໄພຜ່ານ."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine ລາຍງານຄຳເຕືອນພື້ນຖານປະຫວັດ. ຕົວອັບເດດຈະຍັງປະຕິບັດພຽງການຍ້າຍ V300 ທີ່ຈັດຂັ້ນຫຼັງການຢືນຢັນຢ່າງຊັດເຈນ."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "ສາມາດປ່ຽນໄດ້ພຽງເສັ້ນທາງ manifest. ໂປຣໂຕຄອນ HTTPS ແລະ ໂດເມນອັບເດດຢ່າງເປັນທາງການຖືກກຳນົດແລ້ວ."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "ໂໝດພັດທະນາອະນຸຍາດ URL manifest ແບບ HTTPS ຫຼື ເສັ້ນທາງ manifest ທ້ອງຖິ່ນ."
+
+msgid "The official update manifest is configured by the server."
+msgstr "manifest ອັບເດດຢ່າງເປັນທາງການຖືກຕັ້ງຄ່າໂດຍເຊີບເວີ."
+
+msgid "What feedback do you want about this course?"
+msgstr "ທ່ານຕ້ອງການຄຳຕິຊົມປະເພດໃດກ່ຽວກັບຫຼັກສູດນີ້?"
+
+msgid "Analysis summary"
+msgstr "ສະຫຼຸບການວິເຄາະ"
+
+msgid "Lessons included"
+msgstr "ບົດຮຽນທີ່ລວມ"
+
+msgid "Standalone documents included"
+msgstr "ເອກະສານແຍກທີ່ລວມ"
+
+msgid "Standalone exercises included"
+msgstr "ແບບຝຶກຫັດແຍກທີ່ລວມ"
+
+msgid "General feedback"
+msgstr "ຄຳຕິຊົມທົ່ວໄປ"
+
+msgid "Strengths"
+msgstr "ຈຸດແຂງ"
+
+msgid "Risks"
+msgstr "ຄວາມສ່ຽງ"
+
+msgid "Recommendations"
+msgstr "ຄຳແນະນຳ"
+
+msgid "Lesson feedback"
+msgstr "ຄຳຕິຊົມບົດຮຽນ"
+
+msgid "Standalone document feedback"
+msgstr "ຄຳຕິຊົມເອກະສານແຍກ"
+
+msgid "Standalone exercise feedback"
+msgstr "ຄຳຕິຊົມແບບຝຶກຫັດແຍກ"
+
+msgid "AI response"
+msgstr "ການຕອບຂອງ AI"
+
+msgid "Sequence feedback"
+msgstr "ຄຳຕິຊົມລຳດັບ"
+
+msgid "Purpose"
+msgstr "ຈຸດປະສົງ"
+
+msgid "You"
+msgstr "ທ່ານ"
+
+msgid "City of internship"
+msgstr "ເມືອງຝຶກງານ"
+
+msgid "City"
+msgstr "ເມືອງ"
+
+msgid "Update workflow restored after page refresh"
+msgstr "ກູ້ຄືນຂະບວນການອັບເດດຫຼັງໂຫຼດໜ້າໃໝ່"
+
+msgid "Last completed step"
+msgstr "ຂັ້ນຕອນສຸດທ້າຍທີ່ສຳເລັດ"
+
+msgid "Stage package"
+msgstr "ແພັກເກດຂັ້ນຕອນ"
+
+msgid "Package staging"
+msgstr "ການຈັດວາງແພັກເກດ"
+
+msgid "Apply plan"
+msgstr "ນຳໃຊ້ແຜນການ"
+
+msgid "Update workflow completed"
+msgstr "ຂະບວນການອັບເດດສຳເລັດແລ້ວ"
+
+msgid "Update directory exists and is writable."
+msgstr "ໂຟລເດີອັບເດດມີຢູ່ ແລະ ສາມາດຂຽນໄດ້."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "ໂຟລເດີອັບເດດມີຢູ່ ແຕ່ບໍ່ສາມາດຂຽນໄດ້: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "ໂຟລເດີອັບເດດຍັງບໍ່ມີ, ແຕ່ໂຟລເດີແມ່ສາມາດຂຽນໄດ້."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "ໂຟລເດີອັບເດດຍັງບໍ່ມີ, ແຕ່ສາມາດສ້າງພາຍໃຕ້ var/ ໄດ້."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "ໂຟລເດີອັບເດດບໍ່ມີ ແລະ ບໍ່ສາມາດສ້າງດ້ວຍສິດປັດຈຸບັນໄດ້."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "ບໍ່ສາມາດກຳນົດພື້ນທີ່ດິສກວ່າງສຳລັບການກວດກາກ່ອນອັບເດດໄດ້."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "ພື້ນທີ່ດິສກວ່າງບໍ່ພຽງພໍສຳລັບການຈັດວາງອັບເດດຢ່າງປອດໄພ."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "ພື້ນທີ່ດິສກວ່າງພຽງພໍສຳລັບຂະບວນການອັບເດດຂັ້ນກວດສອບນີ້."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "ແມນິເຟສອັບເດດບໍ່ໄດ້ກຳນົດຂໍ້ກຳນົດເວີຊັນ PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "ບໍ່ສາມາດປະເມີນຂໍ້ກຳນົດ PHP ໄດ້ຄົບຖ້ວນ: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "ເວີຊັນ PHP ປັດຈຸບັນບໍ່ຕົງຕາມຂໍ້ກຳນົດອັບເດດ: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "ເວີຊັນ PHP ປັດຈຸບັນຕົງຕາມຂໍ້ກຳນົດອັບເດດ."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "ບໍ່ໄດ້ລະບຸເສັ້ນທາງແພັກເກດທ້ອງຖິ່ນ. ແພັກເກດທີ່ດາວໂຫຼດສາມາດກວດໄດ້ຫຼັງດາວໂຫຼດເທົ່ານັ້ນ."
+
+msgid "Local update package is not readable: %s"
+msgstr "ແພັກເກດອັບເດດທ້ອງຖິ່ນອ່ານບໍ່ໄດ້: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "ແພັກເກດອັບເດດທ້ອງຖິ່ນຕ້ອງເປັນແຟ້ມ ZIP."
+
+msgid "Local update package is readable."
+msgstr "ແພັກເກດອັບເດດທ້ອງຖິ່ນອ່ານໄດ້."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "ບໍ່ສາມາດກວດພົບເວີຊັນ Chamilo ທີ່ຕິດຕັ້ງໂດຍອັດຕະໂນມັດ. ບໍ່ສາມາດກວດທິດທາງເວີຊັນໄດ້."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "ເວີຊັນທີ່ຕິດຕັ້ງ ຫຼື ເປົ້າໝາຍບໍ່ຢູ່ໃນຮູບແບບເວີຊັນເຊມານຕິກທີ່ປຽບທຽບໄດ້."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "ເວີຊັນເປົ້າໝາຍຕ່ຳກວ່າເວີຊັນທີ່ຕິດຕັ້ງ. ການຫຼຸດເວີຊັນບໍ່ອະນຸຍາດໂດຍຄ່າເລີ່ມຕົ້ນ."
+
+msgid "Target version matches the installed version."
+msgstr "ເວີຊັນເປົ້າໝາຍກົງກັບເວີຊັນທີ່ຕິດຕັ້ງ."
+
+msgid "Target version is newer than the installed version."
+msgstr "ເວີຊັນເປົ້າໝາຍໃໝ່ກວ່າເວີຊັນທີ່ຕິດຕັ້ງ."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "ໂຄງການບໍ່ແມ່ນ Git checkout ຫຼື ບໍ່ມີ .git."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "ລະບົບອັບເດດນີ້ມຸ່ງໝາຍສຳລັບການຕິດຕັ້ງທີ່ບໍ່ມີການຮອງຮັບ Git. ພວກເຮົາກວດພົບວ່າລະບົບທ້ອງຖິ່ນໃຊ້ Git. ການດຳເນີນອັບເດດອາດເຮັດໃຫ້ປະຫວັດ Git ເສຍຫາຍ. ສຳລັບລະບົບທີ່ຮອງຮັບ Git, ແນະນຳໃຫ້ໃຊ້ຂັ້ນຕອນ Git ທີ່ອະທິບາຍໃນ CONTRIBUTING.md ຢູ່ຮາກເວັບ."
+
+msgid "Local Git changes were also detected."
+msgstr "ກວດພົບການປ່ຽນແປງ Git ທ້ອງຖິ່ນນຳ."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "ໄຟລ໌ເມຕາເດຕາຂອງໂຄງການບາງສ່ວນຂາດຫາຍ. ຂັ້ນຕອນອັບເດດຕໍ່ໄປອາດຕ້ອງກວດຄວາມຂຶ້ນກັນດ້ວຍຕົນເອງ."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "ໄຟລ໌ເມຕາເດຕາ Composer ແລະ Yarn ມີຢູ່."
+
+msgid "Starting staged file application."
+msgstr "ເລີ່ມນຳໃຊ້ໄຟລ໌ທີ່ຈັດວາງແລ້ວ."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "ຕ້ອງຢືນຢັນຢ່າງຊັດເຈນເພື່ອນຳໃຊ້ໄຟລ໌ທີ່ຈັດວາງແລ້ວ."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "ການນຳໃຊ້ໄຟລ໌ອັບເດດທີ່ຈັດວາງແລ້ວຕ້ອງມີການຢືນຢັນຢ່າງຊັດເຈນ."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "ໂຟລເດີຈັດວາງຢູ່ພາຍໃນໂຟລເດີຈັດວາງອັບເດດຂອງ Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "ໂຟລເດີຈັດວາງຖືກກວດສອບແລ້ວ."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "ອ່ານເມຕາເດຕາແຜນການນຳໃຊ້ສຳເລັດແລ້ວ."
+
+msgid "Staged application path is valid."
+msgstr "ເສັ້ນທາງນຳໃຊ້ທີ່ຈັດວາງແລ້ວຖືກຕ້ອງ."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "ເມຕາເດຕາລ້າງແພັກເກດທີ່ລົງນາມກົງກັບແຜນການນຳໃຊ້ທີ່ກວດສອບແລ້ວ."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "ເມຕາເດຕາລ້າງແພັກເກດທີ່ລົງນາມຖືກກວດສອບແລ້ວ."
+
+msgid "Update lock was acquired."
+msgstr "ໄດ້ລັອກອັບເດດແລ້ວ."
+
+msgid "Update backup directory was created."
+msgstr "ສ້າງໂຟລເດີສຳຮອງອັບເດດແລ້ວ."
+
+msgid "Update file operations were collected."
+msgstr "ເກັບການດຳເນີນການໄຟລ໌ອັບເດດແລ້ວ."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "ສຳຮອງໄຟລ໌ທີ່ມີຢູ່ທີ່ວາງແຜນຈະປ່ຽນ ຫຼື ລຶບແລ້ວ."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "ສຳເນົາໄຟລ໌ອັບເດດທີ່ຈັດວາງແລ້ວໄປຍັງການຕິດຕັ້ງ Chamilo ແລ້ວ."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "ລຶບໄຟລ໌ທີ່ແພັກເກດລະບຸວ່າລ້າສະໄໝອອກຈາກການຕິດຕັ້ງ Chamilo ແລ້ວ."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "ລຶບໄຟລ໌ທີ່ແພັກເກດລະບຸວ່າລ້າສະໄໝແລ້ວ."
+
+msgid "Update apply audit metadata was written."
+msgstr "ຂຽນເມຕາເດຕາກວດສອບການນຳໃຊ້ອັບເດດແລ້ວ."
+
+msgid "Staged files applied successfully."
+msgstr "ນຳໃຊ້ໄຟລ໌ທີ່ຈັດຂັ້ນຕອນແລ້ວສຳເລັດ."
+
+msgid "Unable to restore removed files: %s"
+msgstr "ບໍ່ສາມາດກູ້ຄືນໄຟລ໌ທີ່ລຶບອອກໄດ້: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "ບໍ່ສາມາດຍົກເລີກການສຳເນົາໄຟລ໌ໄດ້: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "ໄດ້ປະຕິບັດການຍົກເລີກໄຟລ໌ຫຼັງຈາກການນຳໃຊ້ການອັບເດດລົ້ມເຫຼວ."
+
+msgid "Rollback failed: %s"
+msgstr "ການຍົກເລີກລົ້ມເຫຼວ: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "ບໍ່ສາມາດຂຽນຂໍ້ມູນເມຕາເດຕາການກວດສອບການນຳໃຊ້ການອັບເດດໄດ້: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "ບໍ່ສາມາດປ່ອຍລັອກການອັບເດດຫຼັງຈາກລົ້ມເຫຼວໄດ້: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "ຕ້ອງມີເສັ້ນທາງຈັດຂັ້ນຕອນເພື່ອນຳໃຊ້ໄຟລ໌ການອັບເດດ."
+
+msgid "Staging directory does not exist: %s"
+msgstr "ໄດເຣັກທໍລີຈັດຂັ້ນຕອນບໍ່ມີຢູ່: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "ໄດເຣັກທໍລີພື້ນຖານຈັດຂັ້ນຕອນການອັບເດດ Chamilo ບໍ່ມີຢູ່."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "ໄດເຣັກທໍລີຈັດຂັ້ນຕອນຕ້ອງຢູ່ໃນ var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "ໄດເຣັກທໍລີຈັດຂັ້ນຕອນຂາດ APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "ບໍ່ສາມາດອ່ານຂໍ້ມູນເມຕາເດຕາແຜນການນຳໃຊ້ການອັບເດດໄດ້: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "ຂໍ້ມູນເມຕາເດຕາແຜນການນຳໃຊ້ການອັບເດດບໍ່ແມ່ນ JSON ທີ່ຖືກຕ້ອງ: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "ຂໍ້ມູນເມຕາເດຕາແຜນການນຳໃຊ້ການອັບເດດຕ້ອງເປັນວັດຖຸ JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "ແຜນການນຳໃຊ້ການອັບເດດຂາດຊ່ອງ application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "ເສັ້ນທາງແອັບພລິເຄຊັນທີ່ຈັດຂັ້ນຕອນແລ້ວອ່ານບໍ່ໄດ້: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "ເສັ້ນທາງແອັບພລິເຄຊັນທີ່ຈັດຂັ້ນຕອນແລ້ວຕ້ອງຢູ່ໃນໄດເຣັກທໍລີຈັດຂັ້ນຕອນ."
+
+msgid "Staged application path is missing composer.json."
+msgstr "ເສັ້ນທາງແອັບພລິເຄຊັນທີ່ຈັດຂັ້ນຕອນແລ້ວຂາດ composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "ແພັກເກດການອັບເດດຂາດ %s. ຈັດຂັ້ນຕອນແພັກເກດທີ່ກວດສອບແລ້ວຄືນໃໝ່ພ້ອມຂໍ້ມູນເມຕາເດຕາການທຳຄວາມສະອາດທີ່ລົງນາມ."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "ແຜນການນຳໃຊ້ການອັບເດດຂາດຂໍ້ມູນເມຕາເດຕາການທຳຄວາມສະອາດແພັກເກດທີ່ກວດສອບແລ້ວ."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "ຂໍ້ມູນເມຕາເດຕາການທຳຄວາມສະອາດແພັກເກດການອັບເດດປ່ຽນແປງຫຼັງຈາກສ້າງແຜນການນຳໃຊ້. ສ້າງແຜນການນຳໃຊ້ຄືນໃໝ່ກ່ອນດຳເນີນຕໍ່."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "ແຜນການນຳໃຊ້ການອັບເດດມີລາຍການລຶບແພັກເກດທີ່ບໍ່ຖືກຕ້ອງ."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "ເສັ້ນທາງການທຳຄວາມສະອາດແພັກເກດການອັບເດດປ່ຽນແປງຫຼັງຈາກສ້າງແຜນການນຳໃຊ້. ສ້າງແຜນການນຳໃຊ້ຄືນໃໝ່ກ່ອນດຳເນີນຕໍ່."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "ແຜນການນຳໃຊ້ການອັບເດດຂາດລາຍການເສັ້ນທາງລຶບທີ່ກວດສອບແລ້ວ."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "ເສັ້ນທາງລຶບໃນແຜນການນຳໃຊ້ການອັບເດດບໍ່ກົງກັບຂໍ້ມູນເມຕາເດຕາການທຳຄວາມສະອາດແພັກເກດທີ່ລົງນາມ."
+
+msgid "Update lock path must be inside var/update."
+msgstr "ເສັ້ນທາງລັອກການອັບເດດຕ້ອງຢູ່ໃນ var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "ແຜນການນຳໃຊ້ການອັບເດດຂາດຊ່ອງ backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "ເສັ້ນທາງສຳຮອງການອັບເດດມີສ່ວນເສັ້ນທາງທີ່ບໍ່ປອດໄພ."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "ເສັ້ນທາງສຳຮອງການອັບເດດຕ້ອງຢູ່ໃນ var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "ບໍ່ສາມາດຮັບລັອກການອັບເດດໄດ້. ອາດມີການອັບເດດອື່ນກຳລັງດຳເນີນຢູ່."
+
+msgid "Unable to release update lock: %s"
+msgstr "ບໍ່ສາມາດປ່ອຍລັອກການອັບເດດໄດ້: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "ໄດເຣັກທໍລີສຳຮອງການອັບເດດມີຢູ່ແລ້ວ: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "ບໍ່ສາມາດສ້າງໄດເຣັກທໍລີເປົ້າໝາຍໄດ້: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "ການອັບເດດທີ່ວາງແຜນຈະຂຽນທັບລິ້ງສັນຍາລັກທີ່ມີຢູ່ແລ້ວ: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "ໄຟລ໌ເປົ້າໝາຍບໍ່ສາມາດຂຽນໄດ້: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "ບໍ່ສາມາດສ້າງໄຟລ໌ເປົ້າໝາຍໄດ້: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "ບໍ່ສາມາດກຳນົດໄດເຣັກທໍລີໂຄງການ Chamilo ກ່ອນລຶບໄຟລ໌ທີ່ລ້າສະໄໝ."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "ການທຳຄວາມສະອາດການອັບເດດບໍ່ສາມາດລຶບເສັ້ນທາງທີ່ປົກປ້ອງໄດ້: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "ການອັບເດດທີ່ວາງແຜນຈະລຶບລິ້ງສັນຍາລັກທີ່ມີຢູ່ແລ້ວ: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "ການທຳຄວາມສະອາດການອັບເດດຮອງຮັບສະເພາະໄຟລ໌, ບໍ່ແມ່ນໄດເຣັກທໍລີ: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "ໄຟລ໌ເປົ້າໝາຍທີ່ລ້າສະໄໝອ່ານບໍ່ໄດ້ເພື່ອສຳຮອງ: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "ບໍ່ສາມາດລຶບໄຟລ໌ເປົ້າໝາຍທີ່ລ້າສະໄໝດ້ວຍສິດໄດເຣັກທໍລີປັດຈຸບັນໄດ້: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "ໄຟລ໌ເປົ້າໝາຍທີ່ລ້າສະໄໝຊີ້ໄປນອກໄດເຣັກທໍລີໂຄງການ Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "ບໍ່ສາມາດສຳຮອງໄຟລ໌ເປົ້າໝາຍໄດ້: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "ບໍ່ສາມາດຂຽນຂໍ້ມູນເມຕາເດຕາສຳຮອງການອັບເດດໄດ້."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "ບໍ່ສາມາດສຳເນົາໄຟລ໌ການອັບເດດທີ່ຈັດຂັ້ນຕອນແລ້ວໄດ້: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "ສຳເນົາແລ້ວ %d ຈາກ %d ໄຟລ໌ທີ່ຈັດຂັ້ນຕອນ."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "ບໍ່ສາມາດລຶບໄຟລ໌ທີ່ລ້າສະໄໝທີ່ແພັກເກດປະກາດໄດ້: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "ລຶບແລ້ວ %d ຈາກ %d ໄຟລ໌ທີ່ລ້າສະໄໝທີ່ແພັກເກດປະກາດ."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "ບໍ່ສາມາດກູ້ຄືນໄຟລ໌ທີ່ສຳຮອງໄວ້: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "ບໍ່ສາມາດລຶບໄຟລ໌ທີ່ຄັດລອກໃໝ່ໃນລະຫວ່າງການຍົກເລີກ: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "ບໍ່ສາມາດກູ້ຄືນໄຟລ໌ທີ່ຖືກລຶບເພາະຂາດໄຟລ໌ສຳຮອງ: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "ບໍ່ສາມາດກູ້ຄືນໄຟລ໌ທີ່ຖືກລຶບຈາກການສຳຮອງ: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "ບໍ່ສາມາດຂຽນຂໍ້ມູນເມຕາເດຕາການກວດສອບການນຳໃຊ້ການອັບເດດ."
+
+msgid "Unable to write global update apply log."
+msgstr "ບໍ່ສາມາດຂຽນບັນທຶກການນຳໃຊ້ການອັບເດດທົ່ວໂລກ."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "ກວດພົບເສັ້ນທາງສຳພັນທີ່ບໍ່ປອດໄພໃນຂັ້ນຕອນກຽມ: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "ໄດເຣັກທໍຣີບໍ່ສາມາດຂຽນໄດ້: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "ບໍ່ສາມາດສ້າງໄດເຣັກທໍຣີ: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "ອ່ານຂໍ້ມູນເມຕາເດຕາຂັ້ນຕອນກຽມສຳເລັດແລ້ວ."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "ຂຽນຂໍ້ມູນເມຕາເດຕາແຜນການນຳໃຊ້ໄປຍັງໄດເຣັກທໍຣີຂັ້ນຕອນກຽມແລ້ວ."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "ໄຟລ໌ ແລະ ໄດເຣັກທໍຣີເປົ້າໝາຍເບິ່ງຄືວ່າສາມາດຂຽນໄດ້ສຳລັບການອັບເດດ ແລະ ການທຳຄວາມສະອາດທີ່ວາງແຜນໄວ້."
+
+msgid "Update apply plan check failed."
+msgstr "ການກວດສອບແຜນການນຳໃຊ້ການອັບເດດລົ້ມເຫລວ."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "ບາງໄຟລ໌ ຫຼື ໄດເຣັກທໍຣີເປົ້າໝາຍບໍ່ສາມາດຂຽນ ຫຼື ລຶບໄດ້."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "ເພື່ອແກ້ໄຂບັນຫານີ້, ປ່ຽນເຈົ້າຂອງໄດເຣັກທໍຣີ Chamilo ທັງໝົດເປັນ %s ຊົ່ວຄາວ (ຜູ້ໃຊ້ເວັບເຊີເວີ), ນຳໃຊ້ການອັບເດດ, ປ່ຽນເຈົ້າຂອງກັບເປັນ %s ຫຼັງຈາກນັ້ນ, ຈາກນັ້ນຕັ້ງເຈົ້າຂອງ var/ (ແລະເນື້ອໃນຂອງມັນ) ກັບເປັນ %s ເພື່ອໃຫ້ແອັບພລິເຄຊັນສາມາດຂຽນຕໍ່ໄດ້."
 

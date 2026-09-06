@@ -8790,6 +8790,9 @@ msgstr "Pogledaj moj napredak"
 msgid "Personal agenda"
 msgstr "Lični raspored"
 
+msgid "Group agenda"
+msgstr "Agenda grupe"
+
 msgid "Switch to teacher view"
 msgstr "Prebaci na prikaz nastavnika"
 
@@ -40124,4 +40127,448 @@ msgstr "Izvještaj grupe"
 
 msgid "Student follow-up"
 msgstr "Praćenje studenta"
+
+msgid "Use system default certificate"
+msgstr "Koristi zadani sistemski certifikat"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Priloženi certifikat nije dostupan. Koristit će se zadani sistemski certifikat."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Koristiti zadani sistemski certifikat umjesto priloženog certifikata?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Opcionalno lokalno preklapanje za razvoj. Produkcijska ažuriranja koriste službeni Chamilo pouzdani ključ."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Izgradi siguran plan primjene iz pripremljenog paketa. Ovo provjerava datoteke za zamjenu, dodavanje ili uklanjanje, dozvole, putanju sigurnosne kopije i status zaključavanja. Ne mijenja instalaciju."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ovaj korak priprema samo pregled. Zamjena datoteka i čišćenje deklarirano paketom događaju se kasnije u koraku Primijeni pripremljene datoteke, uz zaštitu zaključavanja, sigurnosne kopije i vraćanja."
+
+msgid "Files to remove"
+msgstr "Datoteke za uklanjanje"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Zamijeni Chamilo datoteke iz pripremljenog paketa i ukloni zastarjele datoteke eksplicitno deklarirane metapodacima potpisanog paketa. Ovo ne pokreće migracije baze podataka, Composer, Yarn ili naredbe keša."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ova radnja zamjenjuje i može ukloniti datoteke u Chamilo instalaciji. Provjerite da je plan primjene pregledan i da su sigurnosne kopije omogućene prije nastavka."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Razumijem da će ovo zamijeniti datoteke i ukloniti zastarjele datoteke deklarirane paketom u Chamilo instalaciji."
+
+msgid "Type the exact text below to confirm"
+msgstr "Unesite tačan tekst ispod za potvrdu"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine će izvršiti samo pripremljene V300 migracije eksplicitno nakon što sigurnosni pregled prođe."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine je prijavio historijska upozorenja osnovne linije. Ažuriranje će i dalje izvršiti samo pripremljene V300 migracije nakon eksplicitne potvrde."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Samo putanja manifesta se može promijeniti. HTTPS protokol i službena domena ažuriranja su fiksni."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Razvojni način omogućava HTTPS URL manifesta ili lokalnu putanju manifesta."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Službeni manifest ažuriranja konfigurira server."
+
+msgid "What feedback do you want about this course?"
+msgstr "Kakvu povratnu informaciju želite o ovom kursu?"
+
+msgid "Analysis summary"
+msgstr "Sažetak analize"
+
+msgid "Lessons included"
+msgstr "Uključene lekcije"
+
+msgid "Standalone documents included"
+msgstr "Uključeni samostalni dokumenti"
+
+msgid "Standalone exercises included"
+msgstr "Uključene samostalne vježbe"
+
+msgid "General feedback"
+msgstr "Opća povratna informacija"
+
+msgid "Strengths"
+msgstr "Snage"
+
+msgid "Risks"
+msgstr "Rizici"
+
+msgid "Recommendations"
+msgstr "Preporuke"
+
+msgid "Lesson feedback"
+msgstr "Povratna informacija o lekciji"
+
+msgid "Standalone document feedback"
+msgstr "Povratna informacija o samostalnom dokumentu"
+
+msgid "Standalone exercise feedback"
+msgstr "Povratna informacija o samostalnoj vježbi"
+
+msgid "AI response"
+msgstr "AI odgovor"
+
+msgid "Sequence feedback"
+msgstr "Povratna informacija o nizu"
+
+msgid "Purpose"
+msgstr "Svrha"
+
+msgid "You"
+msgstr "Vi"
+
+msgid "City of internship"
+msgstr "Grad prakse"
+
+msgid "City"
+msgstr "Grad"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Tok ažuriranja je obnovljen nakon osvježavanja stranice"
+
+msgid "Last completed step"
+msgstr "Posljednji završeni korak"
+
+msgid "Stage package"
+msgstr "Paket za pripremu"
+
+msgid "Package staging"
+msgstr "Priprema paketa"
+
+msgid "Apply plan"
+msgstr "Primijeni plan"
+
+msgid "Update workflow completed"
+msgstr "Tok ažuriranja je završen"
+
+msgid "Update directory exists and is writable."
+msgstr "Direktorij za ažuriranje postoji i moguće je pisati u njega."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Direktorij za ažuriranje postoji, ali nije moguće pisati u njega: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Direktorij za ažuriranje još ne postoji, ali je moguće pisati u nadređeni direktorij."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Direktorij za ažuriranje još ne postoji, ali se može kreirati pod var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Direktorij za ažuriranje ne postoji i ne može se kreirati s trenutnim dozvolama."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Nije moguće utvrditi slobodan prostor na disku za predprovjeru ažuriranja."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Nema dovoljno slobodnog prostora na disku za sigurnu pripremu ažuriranja."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Slobodan prostor na disku je dovoljan za ovaj tok ažuriranja u fazi verifikacije."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Manifest ažuriranja ne definiše zahtjev za PHP verziju."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Nije moguće u potpunosti procijeniti zahtjev za PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Trenutna PHP verzija ne zadovoljava zahtjev ažuriranja: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Trenutna PHP verzija zadovoljava zahtjev ažuriranja."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Nije navedena lokalna putanja paketa. Preuzeti paketi se mogu provjeriti tek nakon preuzimanja."
+
+msgid "Local update package is not readable: %s"
+msgstr "Lokalni paket ažuriranja nije čitljiv: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Lokalni paket ažuriranja mora biti ZIP arhiva."
+
+msgid "Local update package is readable."
+msgstr "Lokalni paket ažuriranja je čitljiv."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Instalirana Chamilo verzija nije mogla biti automatski otkrivena. Smjer verzije se ne može provjeriti."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Instalirana ili ciljna verzija nije u uporedivom semantičkom formatu verzije."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Ciljna verzija je niža od instalirane verzije. Unapređenja na stariju verziju nisu dozvoljena po defaultu."
+
+msgid "Target version matches the installed version."
+msgstr "Ciljna verzija odgovara instaliranoj verziji."
+
+msgid "Target version is newer than the installed version."
+msgstr "Ciljna verzija je novija od instalirane verzije."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Projekat nije Git checkout ili .git nije prisutan."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Ovaj sistem ažuriranja je namijenjen instalacijama bez Git podrške. Otkrili smo da lokalni sistem koristi Git. Nastavak ažuriranja može rezultirati oštećenom Git historijom. Za sisteme s Git podrškom preporučujemo Git proceduru opisanu u CONTRIBUTING.md u web korijenu."
+
+msgid "Local Git changes were also detected."
+msgstr "Također su otkrivene lokalne Git izmjene."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Nedostaju neki metapodaci projekta. Kasnije faze ažuriranja mogu zahtijevati ručne provjere zavisnosti."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Datoteke metapodataka za Composer i Yarn su prisutne."
+
+msgid "Starting staged file application."
+msgstr "Pokretanje primjene pripremljenih datoteka."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Za primjenu pripremljenih datoteka potrebna je izričita potvrda."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Primjena pripremljenih datoteka ažuriranja zahtijeva izričitu potvrdu."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Direktorij za pripremu nalazi se unutar Chamilo direktorija za pripremu ažuriranja."
+
+msgid "Staging directory was validated."
+msgstr "Direktorij za pripremu je validiran."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Metapodaci plana primjene su uspješno pročitani."
+
+msgid "Staged application path is valid."
+msgstr "Putanja pripremljene primjene je validna."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Metapodaci čišćenja potpisanog paketa odgovaraju pregledanom planu primjene."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Metapodaci čišćenja potpisanog paketa su validirani."
+
+msgid "Update lock was acquired."
+msgstr "Zaključavanje ažuriranja je preuzeto."
+
+msgid "Update backup directory was created."
+msgstr "Direktorij sigurnosne kopije ažuriranja je kreiran."
+
+msgid "Update file operations were collected."
+msgstr "Operacije nad datotekama ažuriranja su prikupljene."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Postojeće datoteke predviđene za zamjenu ili uklanjanje su sačuvane u sigurnosnoj kopiji."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Pripremljene datoteke ažuriranja su kopirane u Chamilo instalaciju."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Zastarjele datoteke navedene u paketu su uklonjene iz Chamilo instalacije."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Zastarjele datoteke navedene u paketu su uklonjene."
+
+msgid "Update apply audit metadata was written."
+msgstr "Metapodaci revizije primjene ažuriranja su zapisani."
+
+msgid "Staged files applied successfully."
+msgstr "Pripremljene datoteke su uspješno primijenjene."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Nije moguće vratiti uklonjene datoteke: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Nije moguće poništiti kopirane datoteke: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Povrat datoteka je izvršen nakon neuspjeha primjene ažuriranja."
+
+msgid "Rollback failed: %s"
+msgstr "Povrat nije uspio: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Nije moguće zapisati metapodatke revizije primjene ažuriranja: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Nije moguće osloboditi zaključavanje ažuriranja nakon neuspjeha: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Putanja pripreme je obavezna za primjenu datoteka ažuriranja."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Direktorij pripreme ne postoji: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Osnovni direktorij pripreme Chamilo ažuriranja ne postoji."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Direktorij pripreme mora biti unutar var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Direktoriju pripreme nedostaje APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Nije moguće pročitati metapodatke plana primjene ažuriranja: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metapodaci plana primjene ažuriranja nisu važeći JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metapodaci plana primjene ažuriranja moraju biti JSON objekat."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Planu primjene ažuriranja nedostaje polje application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Pripremljena putanja aplikacije nije čitljiva: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Pripremljena putanja aplikacije mora biti unutar direktorija pripreme."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Pripremljenoj putanji aplikacije nedostaje composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Paketu ažuriranja nedostaje %s. Ponovo pripremite provjereni paket s potpisanim metapodacima čišćenja."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Planu primjene ažuriranja nedostaju pregledani metapodaci čišćenja paketa."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Metapodaci čišćenja paketa ažuriranja su se promijenili nakon generisanja plana primjene. Ponovo izgradite plan primjene prije nastavka."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Plan primjene ažuriranja sadrži nevažeću listu uklanjanja paketa."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Putanje čišćenja paketa ažuriranja su se promijenile nakon generisanja plana primjene. Ponovo izgradite plan primjene prije nastavka."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Planu primjene ažuriranja nedostaje pregledana lista putanja uklanjanja."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Putanje uklanjanja u planu primjene ažuriranja ne odgovaraju potpisanim metapodacima čišćenja paketa."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Putanja zaključavanja ažuriranja mora biti unutar var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Planu primjene ažuriranja nedostaje polje backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Putanja sigurnosne kopije ažuriranja sadrži nesigurne segmente putanje."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Putanja sigurnosne kopije ažuriranja mora biti unutar var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Nije moguće preuzeti zaključavanje ažuriranja. Drugo ažuriranje je možda u toku."
+
+msgid "Unable to release update lock: %s"
+msgstr "Nije moguće osloboditi zaključavanje ažuriranja: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Direktorij sigurnosne kopije ažuriranja već postoji: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Ciljni direktorij se ne može kreirati: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Planirano ažuriranje bi prepisalo postojeću simboličku vezu: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Ciljna datoteka nije upisiva: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Ciljna datoteka se ne može kreirati: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Nije moguće razriješiti direktorij Chamilo projekta prije uklanjanja zastarjelih datoteka."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Čišćenje ažuriranja ne može ukloniti zaštićenu putanju: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Planirano ažuriranje bi uklonilo postojeću simboličku vezu: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Čišćenje ažuriranja podržava samo datoteke, ne direktorije: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Zastarjela ciljna datoteka nije čitljiva za sigurnosnu kopiju: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Zastarjela ciljna datoteka se ne može ukloniti s trenutnim dozvolama direktorija: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Zastarjela ciljna datoteka se razrješava izvan direktorija Chamilo projekta: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Nije moguće napraviti sigurnosnu kopiju ciljne datoteke: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Nije moguće zapisati metapodatke sigurnosne kopije ažuriranja."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Nije moguće kopirati pripremljenu datoteku ažuriranja: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Kopirano %d od %d pripremljenih datoteka."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Nije moguće ukloniti zastarjelu datoteku deklarisanu u paketu: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Uklonjeno %d od %d zastarjelih datoteka navedenih u paketu."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Nije moguće vratiti rezervnu kopiju datoteke: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Nije moguće ukloniti novo kopiranu datoteku tokom vraćanja: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Nije moguće vratiti uklonjenu datoteku jer nedostaje njena rezervna kopija: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Nije moguće vratiti uklonjenu datoteku iz rezervne kopije: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Nije moguće zapisati metapodatke revizije primjene ažuriranja."
+
+msgid "Unable to write global update apply log."
+msgstr "Nije moguće zapisati globalni dnevnik primjene ažuriranja."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Otkrivena je nesigurna relativna putanja u pripremnom direktoriju: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Direktorij nije upisiv: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Nije moguće kreirati direktorij: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Metapodaci pripremnog direktorija uspješno su pročitani."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metapodaci plana primjene zapisani su u pripremni direktorij."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Ciljne datoteke i direktoriji izgledaju upisivi za planirano ažuriranje i čišćenje."
+
+msgid "Update apply plan check failed."
+msgstr "Provjera plana primjene ažuriranja nije uspjela."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Neke ciljne datoteke ili direktoriji se ne mogu pisati ili ukloniti."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Da biste ovo popravili, privremeno promijenite vlasnika cijelog Chamilo direktorija na %s (korisnik web servera), primijenite ažuriranje, zatim vratite vlasnika na %s, a zatim postavite vlasnika var/ (i njegovog sadržaja) nazad na %s kako bi aplikacija mogla nastaviti da piše u njega."
 

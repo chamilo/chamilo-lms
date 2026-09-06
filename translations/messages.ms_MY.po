@@ -8793,6 +8793,9 @@ msgstr "Papar Statistik"
 msgid "Personal agenda"
 msgstr "Agenda peribadi"
 
+msgid "Group agenda"
+msgstr "Agenda kumpulan"
+
 msgid "Switch to teacher view"
 msgstr "Tukar ke pandangan guru"
 
@@ -40128,4 +40131,106 @@ msgstr "Laporan kumpulan"
 
 msgid "Student follow-up"
 msgstr "Susulan pelajar"
+
+msgid "Use system default certificate"
+msgstr "Gunakan sijil lalai sistem"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Sijil yang dilampirkan tidak tersedia. Sijil lalai sistem akan digunakan."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Gunakan sijil lalai sistem sebagai ganti sijil yang dilampirkan?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Penggantian pembangunan setempat pilihan. Kemas kini pengeluaran menggunakan kunci dipercayai rasmi Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Bina pelan aplikasi selamat daripada pakej berperingkat. Ini menyemak fail untuk diganti, ditambah atau dibuang, kebenaran, laluan sandaran dan status kunci. Ia tidak mengubah pemasangan."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Langkah ini menyediakan semakan sahaja. Penggantian fail dan pembersihan yang diisytiharkan pakej berlaku kemudian dalam langkah Gunakan fail berperingkat, dengan perlindungan kunci, sandaran dan undur."
+
+msgid "Files to remove"
+msgstr "Fail untuk dibuang"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Ganti fail Chamilo daripada pakej berperingkat dan buang fail lapuk yang diisytiharkan secara eksplisit oleh metadata pakej yang ditandatangani. Ini tidak menjalankan migrasi pangkalan data, Composer, Yarn atau arahan cache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Tindakan ini mengganti dan boleh membuang fail dalam pemasangan Chamilo. Pastikan pelan aplikasi telah disemak dan sandaran diaktifkan sebelum meneruskan."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Saya faham ini akan mengganti fail dan membuang fail lapuk yang diisytiharkan pakej dalam pemasangan Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Taip teks tepat di bawah untuk mengesahkan"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine akan melaksanakan hanya migrasi V300 berperingkat secara eksplisit selepas semakan keselamatan lulus."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine melaporkan amaran garis dasar sejarah. Pengemas kini masih akan melaksanakan hanya migrasi V300 berperingkat selepas pengesahan eksplisit."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Hanya laluan manifes boleh diubah. Protokol HTTPS dan domain kemas kini rasmi adalah tetap."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Mod pembangunan membenarkan URL manifes HTTPS atau laluan manifes setempat."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Manifes kemas kini rasmi dikonfigurasikan oleh pelayan."
+
+msgid "What feedback do you want about this course?"
+msgstr "Maklum balas apa yang anda inginkan tentang kursus ini?"
+
+msgid "Analysis summary"
+msgstr "Ringkasan analisis"
+
+msgid "Lessons included"
+msgstr "Pelajaran disertakan"
+
+msgid "Standalone documents included"
+msgstr "Dokumen berdiri sendiri disertakan"
+
+msgid "Standalone exercises included"
+msgstr "Latihan berdiri sendiri disertakan"
+
+msgid "General feedback"
+msgstr "Maklum balas umum"
+
+msgid "Strengths"
+msgstr "Kekuatan"
+
+msgid "Risks"
+msgstr "Risiko"
+
+msgid "Recommendations"
+msgstr "Cadangan"
+
+msgid "Lesson feedback"
+msgstr "Maklum balas pelajaran"
+
+msgid "Standalone document feedback"
+msgstr "Maklum balas dokumen berdiri sendiri"
+
+msgid "Standalone exercise feedback"
+msgstr "Maklum balas latihan berdiri sendiri"
+
+msgid "AI response"
+msgstr "Respons AI"
+
+msgid "Sequence feedback"
+msgstr "Maklum balas jujukan"
+
+msgid "Purpose"
+msgstr "Tujuan"
+
+msgid "You"
+msgstr "Anda"
+
+msgid "City of internship"
+msgstr "Bandar latihan industri"
+
+msgid "City"
+msgstr "Bandar"
 

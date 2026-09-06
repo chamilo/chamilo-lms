@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "சூத்திர மாதிரி: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "சூத்திர மாதிரி: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -8793,6 +8793,9 @@ msgstr "எனது முன்னேற்றத்தைப் பார்"
 
 msgid "Personal agenda"
 msgstr "தனிப்பட்ட அஜெண்டா"
+
+msgid "Group agenda"
+msgstr "குழு நிகழ்ச்சி நிரல்"
 
 msgid "Switch to teacher view"
 msgstr "ஆசிரியர் பார்வைக்கு மாற்று"
@@ -40128,4 +40131,106 @@ msgstr "குழு அறிக்கை"
 
 msgid "Student follow-up"
 msgstr "மாணவர் பின்தொடர்தல்"
+
+msgid "Use system default certificate"
+msgstr "கணினி இயல்புநிலை சான்றிதழைப் பயன்படுத்து"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "இணைக்கப்பட்ட சான்றிதழ் கிடைக்கவில்லை. கணினி இயல்புநிலை சான்றிதழ் பயன்படுத்தப்படும்."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "இணைக்கப்பட்ட சான்றிதழுக்குப் பதிலாக கணினி இயல்புநிலை சான்றிதழைப் பயன்படுத்தவா?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "விருப்ப உள்ளூர் மேம்பாட்டு மேலெழுதல். உற்பத்தி புதுப்பிப்புகள் அதிகாரப்பூர்வ Chamilo நம்பகமான விசையைப் பயன்படுத்துகின்றன."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "நிலைப்படுத்தப்பட்ட தொகுப்பிலிருந்து பாதுகாப்பான பயன்படுத்தல் திட்டத்தை உருவாக்கு. இது மாற்ற, சேர்க்க அல்லது நீக்க வேண்டிய கோப்புகள், அனுமதிகள், காப்புப் பாதை மற்றும் பூட்டு நிலையைச் சரிபார்க்கிறது. இது நிறுவலை மாற்றாது."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "இந்தப் படி மதிப்பாய்வை மட்டுமே தயாரிக்கிறது. கோப்பு மாற்றம் மற்றும் தொகுப்பு அறிவித்த சுத்தம் பின்னர் நிலைப்படுத்தப்பட்ட கோப்புகளைப் பயன்படுத்து படியில், பூட்டு, காப்பு மற்றும் மீளமைப்பு பாதுகாப்புடன் நடக்கும்."
+
+msgid "Files to remove"
+msgstr "நீக்க வேண்டிய கோப்புகள்"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "நிலைப்படுத்தப்பட்ட தொகுப்பிலிருந்து Chamilo கோப்புகளை மாற்றி, கையொப்பமிடப்பட்ட தொகுப்பு மெட்டாடேட்டாவால் தெளிவாக அறிவிக்கப்பட்ட காலாவதியான கோப்புகளை நீக்கு. இது தரவுத்தள இடம்பெயர்வுகள், Composer, Yarn அல்லது தற்காலிக சேமிப்பு கட்டளைகளை இயக்காது."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "இந்தச் செயல் Chamilo நிறுவலில் கோப்புகளை மாற்றி நீக்கக்கூடும். தொடர்வதற்கு முன் பயன்படுத்தல் திட்டம் மதிப்பாய்வு செய்யப்பட்டதையும் காப்புகள் இயக்கப்பட்டதையும் உறுதிப்படுத்துங்கள்."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "இது Chamilo நிறுவலில் கோப்புகளை மாற்றி தொகுப்பு அறிவித்த காலாவதியான கோப்புகளை நீக்கும் என்பதை நான் புரிந்துகொள்கிறேன்."
+
+msgid "Type the exact text below to confirm"
+msgstr "உறுதிப்படுத்த கீழே உள்ள சரியான உரையைத் தட்டச்சு செய்க"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "பாதுகாப்பு மதிப்பாய்வு கடந்த பிறகு Doctrine நிலைப்படுத்தப்பட்ட V300 இடம்பெயர்வுகளை மட்டுமே தெளிவாக இயக்கும்."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine வரலாற்று அடிப்படை எச்சரிக்கைகளை அறிவித்தது. புதுப்பிப்பாளர் வெளிப்படையான உறுதிப்படுத்தலுக்குப் பிறகும் நிலைப்படுத்தப்பட்ட V300 இடம்பெயர்வுகளை மட்டுமே இயக்கும்."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "மேனிஃபெஸ்ட் பாதையை மட்டுமே மாற்ற முடியும். HTTPS நெறிமுறை மற்றும் அதிகாரப்பூர்வ புதுப்பிப்பு டொமைன் நிலையானவை."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "மேம்பாட்டு முறை HTTPS மேனிஃபெஸ்ட் URL அல்லது உள்ளூர் மேனிஃபெஸ்ட் பாதையை அனுமதிக்கிறது."
+
+msgid "The official update manifest is configured by the server."
+msgstr "அதிகாரப்பூர்வ புதுப்பிப்பு மேனிஃபெஸ்ட் சேவையகத்தால் கட்டமைக்கப்பட்டுள்ளது."
+
+msgid "What feedback do you want about this course?"
+msgstr "இந்தப் பாடநெறி பற்றி எந்தக் கருத்தை விரும்புகிறீர்கள்?"
+
+msgid "Analysis summary"
+msgstr "பகுப்பாய்வு சுருக்கம்"
+
+msgid "Lessons included"
+msgstr "சேர்க்கப்பட்ட பாடங்கள்"
+
+msgid "Standalone documents included"
+msgstr "சேர்க்கப்பட்ட தனித்த ஆவணங்கள்"
+
+msgid "Standalone exercises included"
+msgstr "சேர்க்கப்பட்ட தனித்த பயிற்சிகள்"
+
+msgid "General feedback"
+msgstr "பொதுக் கருத்து"
+
+msgid "Strengths"
+msgstr "பலங்கள்"
+
+msgid "Risks"
+msgstr "ஆபத்துகள்"
+
+msgid "Recommendations"
+msgstr "பரிந்துரைகள்"
+
+msgid "Lesson feedback"
+msgstr "பாடக் கருத்து"
+
+msgid "Standalone document feedback"
+msgstr "தனித்த ஆவணக் கருத்து"
+
+msgid "Standalone exercise feedback"
+msgstr "தனித்த பயிற்சிக் கருத்து"
+
+msgid "AI response"
+msgstr "AI பதில்"
+
+msgid "Sequence feedback"
+msgstr "வரிசைக் கருத்து"
+
+msgid "Purpose"
+msgstr "நோக்கம்"
+
+msgid "You"
+msgstr "நீங்கள்"
+
+msgid "City of internship"
+msgstr "பயிற்சி நகரம்"
+
+msgid "City"
+msgstr "நகரம்"
 

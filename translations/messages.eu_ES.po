@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulako adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula lagina: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -8794,6 +8794,9 @@ msgstr "Ikusi nire estatistikak"
 
 msgid "Personal agenda"
 msgstr "Agenda pertsonala"
+
+msgid "Group agenda"
+msgstr "Taldearen agenda"
 
 msgid "Switch to teacher view"
 msgstr "Irakaslearen ikuspegia"
@@ -40135,4 +40138,448 @@ msgstr "Taldearen txostena"
 
 msgid "Student follow-up"
 msgstr "Ikaslearen jarraipena"
+
+msgid "Use system default certificate"
+msgstr "Erabili sistemaren ziurtagiri lehenetsia"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Erantsitako ziurtagiria ez dago erabilgarri. Sistemaren ziurtagiri lehenetsia erabiliko da."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Sistemaren ziurtagiri lehenetsia erabili erantsitakoaren ordez?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Garapen lokaleko gainidazketa aukerakoa. Produkzioko eguneratzeek Chamiloren gako ofizial fidagarria erabiltzen dute."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Eraiki aplikazio-plan segurua prestaturiko paketetik. Ordezkatu, gehitu edo kendu beharreko fitxategiak, baimenak, babeskopia-bidea eta blokeo-egoera egiaztatzen ditu. Ez du instalazioa aldatzen."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Urrats honek berrikuspena bakarrik prestatzen du. Fitxategien ordezkatzea eta paketeak adierazitako garbiketa geroago gertatzen dira Prestaturiko fitxategiak aplikatu urratsean, blokeo, babeskopia eta atzera-egite babesarekin."
+
+msgid "Files to remove"
+msgstr "Kendu beharreko fitxategiak"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Ordeztu Chamilo fitxategiak prestaturiko paketetik eta kendu sinatutako pakete-metadatuetan esplizituki adierazitako fitxategi zaharkituak. Honek ez du datu-base migraziorik, Composer, Yarn edo cache komandorik exekutatzen."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ekintza honek Chamilo instalazioko fitxategiak ordezkatzen ditu eta ken ditzake. Ziurtatu aplikazio-plana berrikusi dela eta babeskopiak gaituta daudela jarraitu aurretik."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Ulertzen dut honek fitxategiak ordezkatuko dituela eta paketeak adierazitako fitxategi zaharkituak kenduko dituela Chamilo instalazioan."
+
+msgid "Type the exact text below to confirm"
+msgstr "Idatzi beheko testu zehatza berresteko"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine-k prestaturiko V300 migrazioak bakarrik exekutatuko ditu esplizituki segurtasun-berrikuspena pasatu ondoren."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine-k oinarri historikoaren abisuak eman ditu. Eguneratzaileak prestaturiko V300 migrazioak bakarrik exekutatuko ditu berrespen esplizituaren ondoren."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Manifestuaren bidea bakarrik alda daiteke. HTTPS protokoloa eta eguneratze-domeinu ofiziala finkoak dira."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Garapen-moduan HTTPS manifestu-URL bat edo manifestu-bide lokal bat onartzen da."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Eguneratze-manifestu ofiziala zerbitzariak konfiguratzen du."
+
+msgid "What feedback do you want about this course?"
+msgstr "Zer iritzi nahi duzu ikastaro honi buruz?"
+
+msgid "Analysis summary"
+msgstr "Analisiaren laburpena"
+
+msgid "Lessons included"
+msgstr "Sartutako ikasgaiak"
+
+msgid "Standalone documents included"
+msgstr "Sartutako dokumentu autonomoak"
+
+msgid "Standalone exercises included"
+msgstr "Sartutako ariketa autonomoak"
+
+msgid "General feedback"
+msgstr "Iritzi orokorra"
+
+msgid "Strengths"
+msgstr "Indarguneak"
+
+msgid "Risks"
+msgstr "Arriskuak"
+
+msgid "Recommendations"
+msgstr "Gomendioak"
+
+msgid "Lesson feedback"
+msgstr "Ikasgaiaren iritzia"
+
+msgid "Standalone document feedback"
+msgstr "Dokumentu autonomoaren iritzia"
+
+msgid "Standalone exercise feedback"
+msgstr "Ariketa autonomoaren iritzia"
+
+msgid "AI response"
+msgstr "AAren erantzuna"
+
+msgid "Sequence feedback"
+msgstr "Sekuentziaren iritzia"
+
+msgid "Purpose"
+msgstr "Helburua"
+
+msgid "You"
+msgstr "Zu"
+
+msgid "City of internship"
+msgstr "Praktikaren hiria"
+
+msgid "City"
+msgstr "Hiria"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Eguneratze-lan-fluxua berrezarri da orria freskatu ondoren"
+
+msgid "Last completed step"
+msgstr "Amaitutako azken urratsa"
+
+msgid "Stage package"
+msgstr "Paketea prestatu"
+
+msgid "Package staging"
+msgstr "Paketeen prestatzea"
+
+msgid "Apply plan"
+msgstr "Aplikatu plana"
+
+msgid "Update workflow completed"
+msgstr "Eguneratze-lan-fluxua amaitu da"
+
+msgid "Update directory exists and is writable."
+msgstr "Eguneratze-direktorioa existitzen da eta idazgarria da."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Eguneratze-direktorioa existitzen da baina ez da idazgarria: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Eguneratze-direktorioa oraindik ez da existitzen, baina bere guraso-direktorioa idazgarria da."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Eguneratze-direktorioa oraindik ez da existitzen, baina var\/ azpian sor daiteke."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Eguneratze-direktorioa ez da existitzen eta ezin da sortu uneko baimenekin."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Ezin da zehaztu disko-espazio librea eguneratzearen aurreko egiaztapenerako."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Ez dago nahikoa disko-espazio libre eguneratzea segurtasunez prestatzeko."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Disko-espazio librea nahikoa da egiaztatze-fase honetako eguneratze-fluxurako."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Eguneratze-manifestuak ez du PHP bertsio-eskakizunik definitzen."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Ezin da PHP eskakizuna osorik ebaluatu: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Uneko PHP bertsioak ez du betetzen eguneratzearen eskakizuna: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Uneko PHP bertsioak betetzen du eguneratzearen eskakizuna."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Ez da pakete lokaleko biderik eman. Deskargatutako paketeak deskargatu ondoren bakarrik egiazta daitezke."
+
+msgid "Local update package is not readable: %s"
+msgstr "Eguneratze-pakete lokala ez da irakurgarria: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Eguneratze-pakete lokala ZIP artxiboa izan behar da."
+
+msgid "Local update package is readable."
+msgstr "Eguneratze-pakete lokala irakurgarria da."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Instalatutako Chamilo bertsioa ezin izan da automatikoki detektatu. Bertsio-norabidea ezin da egiaztatu."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Instalatutako edo helburuko bertsioa ez dago konparagarria den bertsio semantiko formatuan."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Helburuko bertsioa instalatutakoa baino baxuagoa da. Bertsio-jaitsierak ez daude baimenduta lehenespenez."
+
+msgid "Target version matches the installed version."
+msgstr "Helburuko bertsioa instalatutakoarekin bat dator."
+
+msgid "Target version is newer than the installed version."
+msgstr "Helburuko bertsioa instalatutakoa baino berriagoa da."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Proiektua ez da Git checkout bat edo .git ez dago."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Eguneratze-sistema hau Git euskarririk gabeko instalazioetarako da. Detektatu dugu sistema lokalak Git erabiltzen duela. Eguneratzearekin jarraitzeak Git historia hautsi dezake. Git euskarria duten sistemetarako, web erroko CONTRIBUTING.md fitxategian zehaztutako Git prozedura erabiltzea gomendatzen dugu."
+
+msgid "Local Git changes were also detected."
+msgstr "Git aldaketa lokalak ere detektatu dira."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Proiektuaren metadatu-fitxategi batzuk falta dira. Eguneratzearen hurrengo faseek mendekotasunen egiaztapen eskuzkoa eska dezakete."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer eta Yarn metadatu-fitxategiak presente daude."
+
+msgid "Starting staged file application."
+msgstr "Prestatutako fitxategien aplikazioa hasten."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Berrespen esplizitua behar da prestatutako fitxategiak aplikatzeko."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Prestatutako eguneratze-fitxategiak aplikatzeak berrespen esplizitua eskatzen du."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Prestatze-direktorioa Chamilo eguneratzearen prestatze-direktorioaren barruan dago."
+
+msgid "Staging directory was validated."
+msgstr "Prestatze-direktorioa balioztatu da."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Aplikazio-planaren metadatuak ongi irakurri dira."
+
+msgid "Staged application path is valid."
+msgstr "Prestatutako aplikazio-bidea baliozkoa da."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Sinatutako paketea garbitzeko metadatuak berrikusitako aplikazio-planarekin bat datoz."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Sinatutako paketea garbitzeko metadatuak balioztatu dira."
+
+msgid "Update lock was acquired."
+msgstr "Eguneratze-blokeoa eskuratu da."
+
+msgid "Update backup directory was created."
+msgstr "Eguneratzearen babeskopia-direktorioa sortu da."
+
+msgid "Update file operations were collected."
+msgstr "Eguneratze-fitxategien eragiketak bildu dira."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Ordezkatzeko edo kentzeko planifikatutako existitzen diren fitxategiak babeskopiatu dira."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Prestatutako eguneratze-fitxategiak Chamilo instalaziora kopiatu dira."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Paketeak zaharkitutzat jo dituen fitxategiak kendu dira Chamilo instalaziotik."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Paketeak zaharkitutzat jo dituen fitxategiak kendu dira."
+
+msgid "Update apply audit metadata was written."
+msgstr "Eguneratzea aplikatzeko auditoria-metadatuak idatzi dira."
+
+msgid "Staged files applied successfully."
+msgstr "Prestaketa-fitxategiak ongi aplikatu dira."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Ezin dira kendutako fitxategiak berreskuratu: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Ezin dira kopiatutako fitxategiak atzera bota: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Fitxategien atzera-botatzea egin da eguneraketa aplikatzeak huts egin ondoren."
+
+msgid "Rollback failed: %s"
+msgstr "Atzera-botatzeak huts egin du: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Ezin da idatzi eguneraketa aplikatzeko auditoria-metadatuak: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Ezin da askatu eguneraketa-blokeoa hutsegitearen ondoren: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Prestaketa-bidea beharrezkoa da eguneraketa-fitxategiak aplikatzeko."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Prestaketa-direktorioa ez da existitzen: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo eguneraketaren prestaketa-oinarri direktorioa ez da existitzen."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Prestaketa-direktorioak var/update/staging barruan egon behar du."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Prestaketa-direktorioari APPLY-PLAN.json falta zaio."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Ezin da irakurri eguneraketa aplikatzeko planaren metadatuak: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Eguneraketa aplikatzeko planaren metadatuak ez dira JSON baliodunak: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Eguneraketa aplikatzeko planaren metadatuak JSON objektu bat izan behar dira."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Eguneraketa aplikatzeko planari application_path eremua falta zaio."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Prestaketa-aplikazioaren bidea ezin da irakurri: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Prestaketa-aplikazioaren bideak prestaketa-direktorioaren barruan egon behar du."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Prestaketa-aplikazioaren bideari composer.json falta zaio."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Eguneraketa-paketeari %s falta zaio. Prestaketa berriro egin pakete egiaztatu batekin, sinatutako garbiketa-metadatuekin."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Eguneraketa aplikatzeko planari berrikusitako pakete-garbiketaren metadatuak falta zaizkio."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Eguneraketa-paketearen garbiketa-metadatuak aldatu dira aplikazio-plana sortu ondoren. Berreraiki aplikazio-plana jarraitu aurretik."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Eguneraketa aplikatzeko planak pakete-kentze zerrenda baliogabea du."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Eguneraketa-paketearen garbiketa-bideak aldatu dira aplikazio-plana sortu ondoren. Berreraiki aplikazio-plana jarraitu aurretik."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Eguneraketa aplikatzeko planari berrikusitako kentze-bideen zerrenda falta zaio."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Eguneraketa aplikatzeko planaren kentze-bideak ez datoz bat sinatutako pakete-garbiketaren metadatuekin."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Eguneraketa-blokeoaren bideak var/update barruan egon behar du."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Eguneraketa aplikatzeko planari backup_path eremua falta zaio."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Eguneraketa-babeskopiaren bideak bide-segmentu ez-seguruak ditu."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Eguneraketa-babeskopiaren bideak var/update/backups barruan egon behar du."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Ezin da eskuratu eguneraketa-blokeoa. Baliteke beste eguneraketa bat martxan egotea."
+
+msgid "Unable to release update lock: %s"
+msgstr "Ezin da askatu eguneraketa-blokeoa: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Eguneraketa-babeskopiaren direktorioa jada existitzen da: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Helburu-direktorioa ezin da sortu: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Planifikatutako eguneraketak lehendik dagoen esteka sinboliko bat gainidatziko luke: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Helburu-fitxategia ez da idazgarria: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Helburu-fitxategia ezin da sortu: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Ezin da ebatzi Chamilo proiektuaren direktorioa fitxategi zaharkituak kendu aurretik."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Eguneraketaren garbiketak ezin du kendu bide babestua: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Planifikatutako eguneraketak lehendik dagoen esteka sinboliko bat kenduko luke: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Eguneraketaren garbiketak fitxategiak bakarrik onartzen ditu, ez direktorioak: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Helburu-fitxategi zaharkitua ezin da irakurri babeskopiarako: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Helburu-fitxategi zaharkitua ezin da kendu uneko direktorio-baimenekin: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Helburu-fitxategi zaharkitua Chamilo proiektuaren direktoriotik kanpo ebazten da: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Ezin da egin helburu-fitxategiaren babeskopia: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Ezin dira idatzi eguneraketa-babeskopiaren metadatuak."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Ezin da kopiatu prestaketa-eguneraketako fitxategia: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d/%d prestaketa-fitxategi kopiatu dira."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Ezin da kendu paketeak adierazitako fitxategi zaharkitua: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Paketeak adierazitako %d/%d fitxategi zaharkitu kendu dira."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Ezin da berrezarri babeskopiatutako fitxategia: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Ezin da kendu kopiatu berri den fitxategia atzera egitean: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Ezin da berrezarri kendutako fitxategia, bere babeskopia falta delako: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Ezin da berrezarri kendutako fitxategia babeskopiatik: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Ezin dira idatzi eguneraketa aplikatzeko auditoria-metadatuak."
+
+msgid "Unable to write global update apply log."
+msgstr "Ezin da idatzi eguneraketa globala aplikatzeko erregistroa."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Bide erlatibo ez-segurua detektatu da prestaketa-fasean: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Direktorioa ez da idazgarria: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Ezin da sortu direktorioa: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Prestaketa-metadatuak ongi irakurri dira."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Aplikazio-planaren metadatuak prestaketa-direktoriora idatzi dira."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Helburuko fitxategiak eta direktorioak idazgarriak dirudite aurreikusitako eguneraketa eta garbiketarako."
+
+msgid "Update apply plan check failed."
+msgstr "Eguneraketa aplikatzeko planaren egiaztapenak huts egin du."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Helburuko fitxategi edo direktorio batzuk ezin dira idatzi edo kendu."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Hau konpontzeko, aldatu aldi baterako Chamilo direktorio osoaren jabea %s-ra (web-zerbitzariaren erabiltzailea), aplikatu eguneraketa, aldatu jabea berriro %s-ra ondoren, eta ezarri var\/-ren (eta bere edukien) jabea berriro %s-ra, aplikazioak bertan idazten jarraitu ahal izan dezan."
 

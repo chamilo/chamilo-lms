@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Ειλικρινά"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Δείγμα τύπου: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Δείγμα τύπου: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Μεταβλητά όρια"
@@ -8802,6 +8802,9 @@ msgstr "Προβολή των στατιστικών μου"
 
 msgid "Personal agenda"
 msgstr "Η αντζέντα μου"
+
+msgid "Group agenda"
+msgstr "Ημερολόγιο ομάδας"
 
 msgid "Switch to teacher view"
 msgstr "Όψη εκπαιδευτικού"
@@ -40143,4 +40146,448 @@ msgstr "Αναφορά ομάδας"
 
 msgid "Student follow-up"
 msgstr "Παρακολούθηση μαθητή"
+
+msgid "Use system default certificate"
+msgstr "Χρήση προεπιλεγμένου πιστοποιητικού συστήματος"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Το συνημμένο πιστοποιητικό δεν είναι διαθέσιμο. Θα χρησιμοποιηθεί το προεπιλεγμένο πιστοποιητικό συστήματος."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Να χρησιμοποιηθεί το προεπιλεγμένο πιστοποιητικό συστήματος αντί του συνημμένου;"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Προαιρετική παράκαμψη για τοπική ανάπτυξη. Οι ενημερώσεις παραγωγής χρησιμοποιούν το επίσημο αξιόπιστο κλειδί του Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Δημιουργία ασφαλούς σχεδίου εφαρμογής από το σταδιοποιημένο πακέτο. Ελέγχει αρχεία προς αντικατάσταση, προσθήκη ή αφαίρεση, δικαιώματα, διαδρομή αντιγράφου ασφαλείας και κατάσταση κλειδώματος. Δεν τροποποιεί την εγκατάσταση."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Αυτό το βήμα προετοιμάζει μόνο επισκόπηση. Η αντικατάσταση αρχείων και ο καθαρισμός που δηλώνεται από το πακέτο γίνονται αργότερα στο βήμα Εφαρμογή σταδιοποιημένων αρχείων, με προστασία κλειδώματος, αντιγράφου ασφαλείας και επαναφοράς."
+
+msgid "Files to remove"
+msgstr "Αρχεία προς αφαίρεση"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Αντικατάσταση αρχείων Chamilo από το σταδιοποιημένο πακέτο και αφαίρεση παρωχημένων αρχείων που δηλώνονται ρητά στα μεταδεδομένα του υπογεγραμμένου πακέτου. Δεν εκτελεί μεταναστεύσεις βάσης δεδομένων, εντολές Composer, Yarn ή κρυφής μνήμης."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Αυτή η ενέργεια αντικαθιστά και μπορεί να αφαιρέσει αρχεία στην εγκατάσταση Chamilo. Βεβαιωθείτε ότι το σχέδιο εφαρμογής έχει ελεγχθεί και ότι τα αντίγραφα ασφαλείας είναι ενεργά πριν συνεχίσετε."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Κατανοώ ότι αυτό θα αντικαταστήσει αρχεία και θα αφαιρέσει παρωχημένα αρχεία που δηλώνονται από το πακέτο στην εγκατάσταση Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Πληκτρολογήστε ακριβώς το παρακάτω κείμενο για επιβεβαίωση"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Το Doctrine θα εκτελέσει μόνο τις σταδιοποιημένες μεταναστεύσεις V300 ρητά μετά την επιτυχή επισκόπηση ασφαλείας."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Το Doctrine ανέφερε προειδοποιήσεις ιστορικής βάσης. Ο ενημερωτής θα εκτελέσει και πάλι μόνο τις σταδιοποιημένες μεταναστεύσεις V300 μετά ρητή επιβεβαίωση."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Μόνο η διαδρομή του manifest μπορεί να αλλάξει. Το πρωτόκολλο HTTPS και ο επίσημος τομέας ενημερώσεων είναι σταθερά."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Η λειτουργία ανάπτυξης επιτρέπει URL manifest μέσω HTTPS ή τοπική διαδρομή manifest."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Το επίσημο manifest ενημερώσεων ρυθμίζεται από τον διακομιστή."
+
+msgid "What feedback do you want about this course?"
+msgstr "Τι ανατροφοδότηση θέλετε για αυτό το μάθημα;"
+
+msgid "Analysis summary"
+msgstr "Σύνοψη ανάλυσης"
+
+msgid "Lessons included"
+msgstr "Μαθήματα που περιλαμβάνονται"
+
+msgid "Standalone documents included"
+msgstr "Αυτόνομα έγγραφα που περιλαμβάνονται"
+
+msgid "Standalone exercises included"
+msgstr "Αυτόνομες ασκήσεις που περιλαμβάνονται"
+
+msgid "General feedback"
+msgstr "Γενική ανατροφοδότηση"
+
+msgid "Strengths"
+msgstr "Δυνατά σημεία"
+
+msgid "Risks"
+msgstr "Κίνδυνοι"
+
+msgid "Recommendations"
+msgstr "Συστάσεις"
+
+msgid "Lesson feedback"
+msgstr "Ανατροφοδότηση μαθήματος"
+
+msgid "Standalone document feedback"
+msgstr "Ανατροφοδότηση αυτόνομου εγγράφου"
+
+msgid "Standalone exercise feedback"
+msgstr "Ανατροφοδότηση αυτόνομης άσκησης"
+
+msgid "AI response"
+msgstr "Απάντηση ΤΝ"
+
+msgid "Sequence feedback"
+msgstr "Ανατροφοδότηση ακολουθίας"
+
+msgid "Purpose"
+msgstr "Σκοπός"
+
+msgid "You"
+msgstr "Εσείς"
+
+msgid "City of internship"
+msgstr "Πόλη πρακτικής"
+
+msgid "City"
+msgstr "Πόλη"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Η ροή ενημέρωσης αποκαταστάθηκε μετά την ανανέωση της σελίδας"
+
+msgid "Last completed step"
+msgstr "Τελευταίο ολοκληρωμένο βήμα"
+
+msgid "Stage package"
+msgstr "Πακέτο σταδιοποίησης"
+
+msgid "Package staging"
+msgstr "Σταδιοποίηση πακέτου"
+
+msgid "Apply plan"
+msgstr "Εφαρμογή σχεδίου"
+
+msgid "Update workflow completed"
+msgstr "Η ροή ενημέρωσης ολοκληρώθηκε"
+
+msgid "Update directory exists and is writable."
+msgstr "Ο κατάλογος ενημέρωσης υπάρχει και είναι εγγράψιμος."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Ο κατάλογος ενημέρωσης υπάρχει αλλά δεν είναι εγγράψιμος: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Ο κατάλογος ενημέρωσης δεν υπάρχει ακόμη, αλλά ο γονικός κατάλογος είναι εγγράψιμος."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Ο κατάλογος ενημέρωσης δεν υπάρχει ακόμη, αλλά μπορεί να δημιουργηθεί στο var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Ο κατάλογος ενημέρωσης δεν υπάρχει και δεν μπορεί να δημιουργηθεί με τα τρέχοντα δικαιώματα."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Αδυναμία προσδιορισμού ελεύθερου χώρου δίσκου για τον προκαταρκτικό έλεγχο ενημέρωσης."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Δεν υπάρχει αρκετός ελεύθερος χώρος δίσκου για ασφαλή σταδιοποίηση ενημέρωσης."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Ο ελεύθερος χώρος δίσκου επαρκεί για αυτή τη ροή ενημέρωσης στο στάδιο επαλήθευσης."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Το μανιφέστο ενημέρωσης δεν ορίζει απαίτηση έκδοσης PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Αδυναμία πλήρους αξιολόγησης της απαίτησης PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Η τρέχουσα έκδοση PHP δεν πληροί την απαίτηση ενημέρωσης: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Η τρέχουσα έκδοση PHP πληροί την απαίτηση ενημέρωσης."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Δεν δόθηκε τοπική διαδρομή πακέτου. Τα ληφθέντα πακέτα μπορούν να ελεγχθούν μόνο μετά τη λήψη."
+
+msgid "Local update package is not readable: %s"
+msgstr "Το τοπικό πακέτο ενημέρωσης δεν είναι αναγνώσιμο: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Το τοπικό πακέτο ενημέρωσης πρέπει να είναι αρχείο ZIP."
+
+msgid "Local update package is readable."
+msgstr "Το τοπικό πακέτο ενημέρωσης είναι αναγνώσιμο."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Η εγκατεστημένη έκδοση του Chamilo δεν μπόρεσε να εντοπιστεί αυτόματα. Δεν μπορεί να ελεγχθεί η κατεύθυνση έκδοσης."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Η εγκατεστημένη ή η έκδοση προορισμού δεν είναι σε συγκρίσιμη μορφή σημασιολογικής έκδοσης."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Η έκδοση προορισμού είναι χαμηλότερη από την εγκατεστημένη. Οι υποβαθμίσεις δεν επιτρέπονται από προεπιλογή."
+
+msgid "Target version matches the installed version."
+msgstr "Η έκδοση προορισμού ταιριάζει με την εγκατεστημένη έκδοση."
+
+msgid "Target version is newer than the installed version."
+msgstr "Η έκδοση προορισμού είναι νεότερη από την εγκατεστημένη έκδοση."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Το έργο δεν είναι checkout Git ή το .git δεν υπάρχει."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Αυτό το σύστημα ενημέρωσης προορίζεται για εγκαταστάσεις χωρίς υποστήριξη Git. Εντοπίσαμε ότι το τοπικό σύστημα χρησιμοποιεί Git. Η συνέχιση της ενημέρωσης ενδέχεται να οδηγήσει σε κατεστραμμένο ιστορικό Git. Για συστήματα με υποστήριξη Git, συνιστούμε τη διαδικασία Git που περιγράφεται στο CONTRIBUTING.md στη ρίζα του ιστού."
+
+msgid "Local Git changes were also detected."
+msgstr "Εντοπίστηκαν επίσης τοπικές αλλαγές Git."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Λείπουν ορισμένα αρχεία μεταδεδομένων του έργου. Μεταγενέστερα στάδια ενημέρωσης ενδέχεται να απαιτούν χειροκίνητους ελέγχους εξαρτήσεων."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Τα αρχεία μεταδεδομένων Composer και Yarn υπάρχουν."
+
+msgid "Starting staged file application."
+msgstr "Έναρξη εφαρμογής σταδιοποιημένων αρχείων."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Απαιτείται ρητή επιβεβαίωση για την εφαρμογή σταδιοποιημένων αρχείων."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Η εφαρμογή σταδιοποιημένων αρχείων ενημέρωσης απαιτεί ρητή επιβεβαίωση."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Ο κατάλογος σταδιοποίησης βρίσκεται εντός του καταλόγου σταδιοποίησης ενημέρωσης του Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Ο κατάλογος σταδιοποίησης επικυρώθηκε."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Τα μεταδεδομένα του σχεδίου εφαρμογής διαβάστηκαν με επιτυχία."
+
+msgid "Staged application path is valid."
+msgstr "Η διαδρομή σταδιοποιημένης εφαρμογής είναι έγκυρη."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Τα μεταδεδομένα εκκαθάρισης υπογεγραμμένου πακέτου αντιστοιχούν στο αναθεωρημένο σχέδιο εφαρμογής."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Τα μεταδεδομένα εκκαθάρισης υπογεγραμμένου πακέτου επικυρώθηκαν."
+
+msgid "Update lock was acquired."
+msgstr "Αποκτήθηκε κλείδωμα ενημέρωσης."
+
+msgid "Update backup directory was created."
+msgstr "Δημιουργήθηκε ο κατάλογος αντιγράφου ασφαλείας ενημέρωσης."
+
+msgid "Update file operations were collected."
+msgstr "Συλλέχθηκαν οι λειτουργίες αρχείων ενημέρωσης."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Τα υπάρχοντα αρχεία που προγραμματίστηκαν για αντικατάσταση ή αφαίρεση αντιγράφηκαν ως αντίγραφο ασφαλείας."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Τα σταδιοποιημένα αρχεία ενημέρωσης αντιγράφηκαν στην εγκατάσταση του Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Τα αρχεία που δηλώθηκαν ως παρωχημένα από το πακέτο αφαιρέθηκαν από την εγκατάσταση του Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Τα αρχεία που δηλώθηκαν ως παρωχημένα από το πακέτο αφαιρέθηκαν."
+
+msgid "Update apply audit metadata was written."
+msgstr "Εγγράφηκαν τα μεταδεδομένα ελέγχου εφαρμογής ενημέρωσης."
+
+msgid "Staged files applied successfully."
+msgstr "Τα αρχεία σταδίου εφαρμόστηκαν με επιτυχία."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Αδυναμία επαναφοράς των αφαιρεθέντων αρχείων: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Αδυναμία επαναφοράς των αντιγραμμένων αρχείων: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Η επαναφορά αρχείων εκτελέστηκε μετά την αποτυχία εφαρμογής της ενημέρωσης."
+
+msgid "Rollback failed: %s"
+msgstr "Η επαναφορά απέτυχε: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Αδυναμία εγγραφής μεταδεδομένων ελέγχου εφαρμογής ενημέρωσης: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Αδυναμία απελευθέρωσης κλειδώματος ενημέρωσης μετά την αποτυχία: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Απαιτείται διαδρομή σταδίου για την εφαρμογή αρχείων ενημέρωσης."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Ο κατάλογος σταδίου δεν υπάρχει: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Ο βασικός κατάλογος σταδίου ενημέρωσης του Chamilo δεν υπάρχει."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Ο κατάλογος σταδίου πρέπει να βρίσκεται μέσα στο var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Στον κατάλογο σταδίου λείπει το APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Αδυναμία ανάγνωσης μεταδεδομένων σχεδίου εφαρμογής ενημέρωσης: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Τα μεταδεδομένα σχεδίου εφαρμογής ενημέρωσης δεν είναι έγκυρο JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Τα μεταδεδομένα σχεδίου εφαρμογής ενημέρωσης πρέπει να είναι αντικείμενο JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Στο σχέδιο εφαρμογής ενημέρωσης λείπει το πεδίο application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Η διαδρομή εφαρμογής σταδίου δεν είναι αναγνώσιμη: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Η διαδρομή εφαρμογής σταδίου πρέπει να βρίσκεται μέσα στον κατάλογο σταδίου."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Στη διαδρομή εφαρμογής σταδίου λείπει το composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Στο πακέτο ενημέρωσης λείπει το %s. Επανατοποθετήστε σε στάδιο ένα επαληθευμένο πακέτο με υπογεγραμμένα μεταδεδομένα εκκαθάρισης."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Στο σχέδιο εφαρμογής ενημέρωσης λείπουν τα ελεγμένα μεταδεδομένα εκκαθάρισης πακέτου."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Τα μεταδεδομένα εκκαθάρισης πακέτου ενημέρωσης άλλαξαν μετά τη δημιουργία του σχεδίου εφαρμογής. Αναδημιουργήστε το σχέδιο εφαρμογής πριν συνεχίσετε."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Το σχέδιο εφαρμογής ενημέρωσης περιέχει μη έγκυρη λίστα αφαίρεσης πακέτου."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Οι διαδρομές εκκαθάρισης πακέτου ενημέρωσης άλλαξαν μετά τη δημιουργία του σχεδίου εφαρμογής. Αναδημιουργήστε το σχέδιο εφαρμογής πριν συνεχίσετε."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Στο σχέδιο εφαρμογής ενημέρωσης λείπει η ελεγμένη λίστα διαδρομών αφαίρεσης."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Οι διαδρομές αφαίρεσης του σχεδίου εφαρμογής ενημέρωσης δεν αντιστοιχούν στα υπογεγραμμένα μεταδεδομένα εκκαθάρισης πακέτου."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Η διαδρομή κλειδώματος ενημέρωσης πρέπει να βρίσκεται μέσα στο var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Στο σχέδιο εφαρμογής ενημέρωσης λείπει το πεδίο backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Η διαδρομή αντιγράφου ασφαλείας ενημέρωσης περιέχει μη ασφαλή τμήματα διαδρομής."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Η διαδρομή αντιγράφου ασφαλείας ενημέρωσης πρέπει να βρίσκεται μέσα στο var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Αδυναμία απόκτησης κλειδώματος ενημέρωσης. Ενδέχεται να εκτελείται ήδη άλλη ενημέρωση."
+
+msgid "Unable to release update lock: %s"
+msgstr "Αδυναμία απελευθέρωσης κλειδώματος ενημέρωσης: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Ο κατάλογος αντιγράφου ασφαλείας ενημέρωσης υπάρχει ήδη: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Δεν είναι δυνατή η δημιουργία του καταλόγου προορισμού: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Η προγραμματισμένη ενημέρωση θα αντικαθιστούσε υπάρχον συμβολικό σύνδεσμο: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Το αρχείο προορισμού δεν είναι εγγράψιμο: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Δεν είναι δυνατή η δημιουργία του αρχείου προορισμού: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Αδυναμία επίλυσης του καταλόγου έργου Chamilo πριν από την αφαίρεση παρωχημένων αρχείων."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Η εκκαθάριση ενημέρωσης δεν μπορεί να αφαιρέσει προστατευμένη διαδρομή: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Η προγραμματισμένη ενημέρωση θα αφαιρούσε υπάρχον συμβολικό σύνδεσμο: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Η εκκαθάριση ενημέρωσης υποστηρίζει μόνο αρχεία, όχι καταλόγους: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Το παρωχημένο αρχείο προορισμού δεν είναι αναγνώσιμο για αντίγραφο ασφαλείας: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Το παρωχημένο αρχείο προορισμού δεν μπορεί να αφαιρεθεί με τα τρέχοντα δικαιώματα καταλόγου: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Το παρωχημένο αρχείο προορισμού επιλύεται εκτός του καταλόγου έργου Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Αδυναμία δημιουργίας αντιγράφου ασφαλείας του αρχείου προορισμού: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Αδυναμία εγγραφής μεταδεδομένων αντιγράφου ασφαλείας ενημέρωσης."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Αδυναμία αντιγραφής αρχείου ενημέρωσης σταδίου: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Αντιγράφηκαν %d από %d αρχεία σταδίου."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Αδυναμία αφαίρεσης παρωχημένου αρχείου που δηλώνεται στο πακέτο: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Αφαιρέθηκαν %d από %d παρωχημένα αρχεία που δηλώνονται στο πακέτο."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Αδυναμία επαναφοράς αντιγράφου ασφαλείας αρχείου: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Αδυναμία αφαίρεσης του νεοαντιγραμμένου αρχείου κατά την επαναφορά: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Αδυναμία επαναφοράς διαγραμμένου αρχείου επειδή λείπει το αντίγραφο ασφαλείας: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Αδυναμία επαναφοράς διαγραμμένου αρχείου από το αντίγραφο ασφαλείας: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Αδυναμία εγγραφής μεταδεδομένων ελέγχου εφαρμογής ενημέρωσης."
+
+msgid "Unable to write global update apply log."
+msgstr "Αδυναμία εγγραφής καθολικού αρχείου καταγραφής εφαρμογής ενημέρωσης."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Εντοπίστηκε μη ασφαλής σχετική διαδρομή σταδιοποίησης: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Ο κατάλογος δεν είναι εγγράψιμος: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Αδυναμία δημιουργίας καταλόγου: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Τα μεταδεδομένα σταδιοποίησης διαβάστηκαν με επιτυχία."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Τα μεταδεδομένα του σχεδίου εφαρμογής εγγράφηκαν στον κατάλογο σταδιοποίησης."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Τα αρχεία και οι κατάλογοι προορισμού φαίνεται να είναι εγγράψιμα για την προγραμματισμένη ενημέρωση και εκκαθάριση."
+
+msgid "Update apply plan check failed."
+msgstr "Ο έλεγχος του σχεδίου εφαρμογής ενημέρωσης απέτυχε."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Ορισμένα αρχεία ή κατάλογοι προορισμού δεν μπορούν να εγγραφούν ή να αφαιρεθούν."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Για να το διορθώσετε, αλλάξτε προσωρινά τον κάτοχο ολόκληρου του καταλόγου Chamilo σε %s (ο χρήστης του διακομιστή ιστού), εφαρμόστε την ενημέρωση, επαναφέρετε τον κάτοχο σε %s στη συνέχεια και ορίστε τον κάτοχο του var/ (και των περιεχομένων του) ξανά σε %s ώστε η εφαρμογή να μπορεί να συνεχίσει να γράφει σε αυτόν."
 

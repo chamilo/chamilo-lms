@@ -2048,7 +2048,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:geen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octetstream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:oefening,,      simulation:simulatie,,      questionnaire:enquête,,      diagram:diagram,,      figure:figuur,,      graph:grafiek,,      index:index,,      slide:dia,,      table:tabel,,      narrative text:vertellende tekst,,      exam:examen,,      experiment:experiment,,      problem statement:probleemstelling,,      self assessment:zelftest,,      lecture:voordracht"
@@ -8835,6 +8835,9 @@ msgstr "Toon mijn statistieken"
 
 msgid "Personal agenda"
 msgstr "Mijn agenda"
+
+msgid "Group agenda"
+msgstr "Groepsagenda"
 
 msgid "Switch to teacher view"
 msgstr "Zicht als cursusbeheerder"
@@ -37663,7 +37666,7 @@ msgid "%s results"
 msgstr "%s resultaten"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Voorbeeld invulformulieractiviteit: bereken de Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Leeftijd</strong></td>            <td width=\"75%\" style=\"\">[25] jaar</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Geslacht</strong></td>            <td style=\"\" text-align:=\"\">[M] (M of V)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Gewicht</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Lengte</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = gewicht/lengte<sup>2</sup> (zie <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Voorbeeld invuloefening: bereken de Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Leeftijd</strong></td>            <td width=\"75%\" style=\"\">[25] jaar</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Geslacht</strong></td>            <td style=\"\" text-align:=\"\">[M] (M of V)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Gewicht</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Lengte</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Gewicht/Lengte<sup>2</sup> (zie <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Verwijderd"
@@ -42206,4 +42209,106 @@ msgstr "Groepsrapport"
 
 msgid "Student follow-up"
 msgstr "Studentopvolging"
+
+msgid "Use system default certificate"
+msgstr "Standaardcertificaat van het systeem gebruiken"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Het bijgevoegde certificaat is niet beschikbaar. Het standaardcertificaat van het systeem wordt gebruikt."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Het standaardcertificaat van het systeem gebruiken in plaats van het bijgevoegde certificaat?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Optionele lokale ontwikkelingsoverride. Productie-updates gebruiken de officiële vertrouwde sleutel van Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Maak een veilig toepassingsplan van het voorbereide pakket. Dit controleert te vervangen, toe te voegen of te verwijderen bestanden, rechten, back-uppad en vergrendelingsstatus. Het wijzigt de installatie niet."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Deze stap bereidt alleen een beoordeling voor. Bestandsvervanging en door het pakket aangegeven opschoning gebeuren later in de stap Voorbereide bestanden toepassen, met vergrendeling, back-up en rollback-bescherming."
+
+msgid "Files to remove"
+msgstr "Te verwijderen bestanden"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Vervang Chamilo-bestanden uit het voorbereide pakket en verwijder verouderde bestanden die expliciet zijn aangegeven in de ondertekende pakketmetadata. Dit voert geen databasemigraties, Composer-, Yarn- of cachecommando's uit."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Deze actie vervangt en kan bestanden in de Chamilo-installatie verwijderen. Zorg dat het toepassingsplan is beoordeeld en dat back-ups zijn ingeschakeld voordat u doorgaat."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Ik begrijp dat dit bestanden vervangt en door het pakket aangegeven verouderde bestanden in de Chamilo-installatie verwijdert."
+
+msgid "Type the exact text below to confirm"
+msgstr "Typ de exacte tekst hieronder ter bevestiging"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine voert alleen de voorbereide V300-migraties uit nadat de veiligheidsbeoordeling is geslaagd."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine meldde waarschuwingen over de historische basislijn. De updater voert nog steeds alleen voorbereide V300-migraties uit na expliciete bevestiging."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Alleen het manifestpad kan worden gewijzigd. Het HTTPS-protocol en het officiële updatedomein zijn vast."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "De ontwikkelmodus staat een HTTPS-manifest-URL of een lokaal manifestpad toe."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Het officiële updatemanifest wordt door de server geconfigureerd."
+
+msgid "What feedback do you want about this course?"
+msgstr "Welke feedback wilt u over deze cursus?"
+
+msgid "Analysis summary"
+msgstr "Analysesamenvatting"
+
+msgid "Lessons included"
+msgstr "Inbegrepen lessen"
+
+msgid "Standalone documents included"
+msgstr "Inbegrepen zelfstandige documenten"
+
+msgid "Standalone exercises included"
+msgstr "Inbegrepen zelfstandige oefeningen"
+
+msgid "General feedback"
+msgstr "Algemene feedback"
+
+msgid "Strengths"
+msgstr "Sterke punten"
+
+msgid "Risks"
+msgstr "Risico's"
+
+msgid "Recommendations"
+msgstr "Aanbevelingen"
+
+msgid "Lesson feedback"
+msgstr "Feedback over les"
+
+msgid "Standalone document feedback"
+msgstr "Feedback over zelfstandig document"
+
+msgid "Standalone exercise feedback"
+msgstr "Feedback over zelfstandige oefening"
+
+msgid "AI response"
+msgstr "AI-antwoord"
+
+msgid "Sequence feedback"
+msgstr "Feedback over reeks"
+
+msgid "Purpose"
+msgstr "Doel"
+
+msgid "You"
+msgstr "U"
+
+msgid "City of internship"
+msgstr "Stad van stage"
+
+msgid "City"
+msgstr "Stad"
 

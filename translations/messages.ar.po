@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نموذج الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "مثال على الصيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -8803,6 +8803,9 @@ msgstr "معاينة إحصائياتي"
 
 msgid "Personal agenda"
 msgstr "التقويم الشخصي"
+
+msgid "Group agenda"
+msgstr "جدول أعمال المجموعة"
 
 msgid "Switch to teacher view"
 msgstr "معاينة منظور المدرس"
@@ -40142,4 +40145,448 @@ msgstr "تقرير المجموعة"
 
 msgid "Student follow-up"
 msgstr "متابعة الطالب"
+
+msgid "Use system default certificate"
+msgstr "استخدام شهادة النظام الافتراضية"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "الشهادة المرفقة غير متاحة. سيتم استخدام شهادة النظام الافتراضية."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "هل تريد استخدام شهادة النظام الافتراضية بدلاً من الشهادة المرفقة؟"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "تجاوز اختياري للتطوير المحلي. تستخدم تحديثات الإنتاج مفتاح Chamilo الرسمي الموثوق."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "إنشاء خطة تطبيق آمنة من الحزمة المرحّلة. يتحقق هذا من الملفات المراد استبدالها أو إضافتها أو إزالتها، والصلاحيات، ومسار النسخ الاحتياطي وحالة القفل. لا يعدّل التثبيت."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "هذه الخطوة تُعدّ مراجعة فقط. استبدال الملفات والتنظيف المعلن في الحزمة يحدث لاحقاً في خطوة تطبيق الملفات المرحّلة، مع حماية القفل والنسخ الاحتياطي والتراجع."
+
+msgid "Files to remove"
+msgstr "ملفات للإزالة"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "استبدال ملفات Chamilo من الحزمة المرحّلة وإزالة الملفات المهجورة المعلنة صراحة في بيانات تعريف الحزمة الموقّعة. لا يشغّل هذا ترحيلات قاعدة البيانات أو أوامر Composer أو Yarn أو ذاكرة التخزين المؤقت."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "يستبدل هذا الإجراء ملفات في تثبيت Chamilo ويمكنه إزالتها. تأكد من مراجعة خطة التطبيق وتمكين النسخ الاحتياطي قبل المتابعة."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "أفهم أن هذا سيستبدل الملفات ويزيل الملفات المهجورة المعلنة في الحزمة داخل تثبيت Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "اكتب النص التالي حرفياً للتأكيد"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "سينفّذ Doctrine ترحيلات V300 المرحّلة فقط وبشكل صريح بعد اجتياز مراجعة السلامة."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "أبلغ Doctrine عن تحذيرات خط أساس تاريخية. سيظل المحدّث ينفّذ ترحيلات V300 المرحّلة فقط بعد التأكيد الصريح."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "يمكن تغيير مسار البيان فقط. بروتوكول HTTPS ونطاق التحديث الرسمي ثابتان."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "وضع التطوير يسمح بعنوان URL لبيان HTTPS أو مسار بيان محلي."
+
+msgid "The official update manifest is configured by the server."
+msgstr "يتم تكوين بيان التحديث الرسمي بواسطة الخادم."
+
+msgid "What feedback do you want about this course?"
+msgstr "ما الملاحظات التي تريدها حول هذه الدورة؟"
+
+msgid "Analysis summary"
+msgstr "ملخص التحليل"
+
+msgid "Lessons included"
+msgstr "الدروس المضمّنة"
+
+msgid "Standalone documents included"
+msgstr "المستندات المستقلة المضمّنة"
+
+msgid "Standalone exercises included"
+msgstr "التمارين المستقلة المضمّنة"
+
+msgid "General feedback"
+msgstr "ملاحظات عامة"
+
+msgid "Strengths"
+msgstr "نقاط القوة"
+
+msgid "Risks"
+msgstr "المخاطر"
+
+msgid "Recommendations"
+msgstr "التوصيات"
+
+msgid "Lesson feedback"
+msgstr "ملاحظات الدرس"
+
+msgid "Standalone document feedback"
+msgstr "ملاحظات المستند المستقل"
+
+msgid "Standalone exercise feedback"
+msgstr "ملاحظات التمرين المستقل"
+
+msgid "AI response"
+msgstr "استجابة الذكاء الاصطناعي"
+
+msgid "Sequence feedback"
+msgstr "ملاحظات التسلسل"
+
+msgid "Purpose"
+msgstr "الغرض"
+
+msgid "You"
+msgstr "أنت"
+
+msgid "City of internship"
+msgstr "مدينة التدريب"
+
+msgid "City"
+msgstr "المدينة"
+
+msgid "Update workflow restored after page refresh"
+msgstr "تم استعادة سير عمل التحديث بعد تحديث الصفحة"
+
+msgid "Last completed step"
+msgstr "آخر خطوة مكتملة"
+
+msgid "Stage package"
+msgstr "حزمة التجهيز"
+
+msgid "Package staging"
+msgstr "تجهيز الحزمة"
+
+msgid "Apply plan"
+msgstr "تطبيق الخطة"
+
+msgid "Update workflow completed"
+msgstr "اكتمل سير عمل التحديث"
+
+msgid "Update directory exists and is writable."
+msgstr "دليل التحديث موجود وقابل للكتابة."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "دليل التحديث موجود لكنه غير قابل للكتابة: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "دليل التحديث غير موجود بعد، لكن الدليل الأب قابل للكتابة."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "دليل التحديث غير موجود بعد، لكن يمكن إنشاؤه ضمن var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "دليل التحديث غير موجود ولا يمكن إنشاؤه بالصلاحيات الحالية."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "تعذر تحديد مساحة القرص الحرة للتحقق المسبق من التحديث."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "لا توجد مساحة قرص حرة كافية لعملية تجهيز تحديث آمنة."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "مساحة القرص الحرة كافية لمسار التحديث في مرحلة التحقق هذه."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "بيان التحديث لا يحدد متطلب إصدار PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "تعذر تقييم متطلب PHP بالكامل: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "إصدار PHP الحالي لا يلبي متطلب التحديث: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "إصدار PHP الحالي يلبي متطلب التحديث."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "لم يُوفَّر مسار حزمة محلية. لا يمكن التحقق من الحزم التي تم تنزيلها إلا بعد التنزيل."
+
+msgid "Local update package is not readable: %s"
+msgstr "حزمة التحديث المحلية غير قابلة للقراءة: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "يجب أن تكون حزمة التحديث المحلية أرشيف ZIP."
+
+msgid "Local update package is readable."
+msgstr "حزمة التحديث المحلية قابلة للقراءة."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "تعذر اكتشاف إصدار Chamilo المثبَّت تلقائيًا. لا يمكن التحقق من اتجاه الإصدار."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "الإصدار المثبَّت أو المستهدف ليس بتنسيق إصدار دلالي قابل للمقارنة."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "الإصدار المستهدف أقل من الإصدار المثبَّت. التخفيض غير مسموح به افتراضيًا."
+
+msgid "Target version matches the installed version."
+msgstr "الإصدار المستهدف يطابق الإصدار المثبَّت."
+
+msgid "Target version is newer than the installed version."
+msgstr "الإصدار المستهدف أحدث من الإصدار المثبَّت."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "المشروع ليس نسخة Git أو مجلد .git غير موجود."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "نظام التحديث هذا مخصص للتثبيتات دون دعم Git. اكتشفنا أن النظام المحلي يستخدم Git. المتابعة بالتحديث قد تؤدي إلى تلف سجل Git. للأنظمة التي تدعم Git، نوصي باستخدام إجراء Git الموضح في CONTRIBUTING.md في جذر الويب."
+
+msgid "Local Git changes were also detected."
+msgstr "تم أيضًا اكتشاف تغييرات Git محلية."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "بعض ملفات بيانات تعريف المشروع مفقودة. قد تتطلب مراحل التحديث اللاحقة فحوصات يدوية للتبعيات."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "ملفات بيانات تعريف Composer وYarn موجودة."
+
+msgid "Starting staged file application."
+msgstr "بدء تطبيق الملفات المجهَّزة."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "يلزم تأكيد صريح لتطبيق الملفات المجهَّزة."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "يتطلب تطبيق ملفات التحديث المجهَّزة تأكيدًا صريحًا."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "دليل التجهيز داخل دليل تجهيز تحديث Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "تم التحقق من دليل التجهيز."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "تمت قراءة بيانات تعريف خطة التطبيق بنجاح."
+
+msgid "Staged application path is valid."
+msgstr "مسار التطبيق المجهَّز صالح."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "بيانات تعريف تنظيف الحزمة الموقَّعة تطابق خطة التطبيق المراجعة."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "تم التحقق من بيانات تعريف تنظيف الحزمة الموقَّعة."
+
+msgid "Update lock was acquired."
+msgstr "تم الحصول على قفل التحديث."
+
+msgid "Update backup directory was created."
+msgstr "تم إنشاء دليل النسخ الاحتياطي للتحديث."
+
+msgid "Update file operations were collected."
+msgstr "تم جمع عمليات ملفات التحديث."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "تم نسخ الملفات الحالية المخطَّط لاستبدالها أو إزالتها احتياطيًا."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "تم نسخ ملفات التحديث المجهَّزة إلى تثبيت Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "تمت إزالة الملفات القديمة المعلَن عنها في الحزمة من تثبيت Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "تمت إزالة الملفات القديمة المعلَن عنها في الحزمة."
+
+msgid "Update apply audit metadata was written."
+msgstr "تم كتابة بيانات تعريف تدقيق تطبيق التحديث."
+
+msgid "Staged files applied successfully."
+msgstr "تم تطبيق الملفات المرحّلة بنجاح."
+
+msgid "Unable to restore removed files: %s"
+msgstr "تعذّر استعادة الملفات المحذوفة: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "تعذّر التراجع عن الملفات المنسوخة: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "تم تنفيذ التراجع عن الملفات بعد فشل تطبيق التحديث."
+
+msgid "Rollback failed: %s"
+msgstr "فشل التراجع: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "تعذّر كتابة بيانات تدقيق تطبيق التحديث: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "تعذّر تحرير قفل التحديث بعد الفشل: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "مسار الترحيل مطلوب لتطبيق ملفات التحديث."
+
+msgid "Staging directory does not exist: %s"
+msgstr "دليل الترحيل غير موجود: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "دليل أساس ترحيل تحديث Chamilo غير موجود."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "يجب أن يكون دليل الترحيل داخل var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "دليل الترحيل يفتقد APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "تعذّر قراءة بيانات خطة تطبيق التحديث: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "بيانات خطة تطبيق التحديث ليست JSON صالحًا: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "يجب أن تكون بيانات خطة تطبيق التحديث كائن JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "خطة تطبيق التحديث تفتقد الحقل application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "مسار التطبيق المرحّل غير قابل للقراءة: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "يجب أن يكون مسار التطبيق المرحّل داخل دليل الترحيل."
+
+msgid "Staged application path is missing composer.json."
+msgstr "مسار التطبيق المرحّل يفتقد composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "حزمة التحديث تفتقد %s. أعد ترحيل حزمة موثّقة مع بيانات تنظيف موقّعة."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "خطة تطبيق التحديث تفتقد بيانات تنظيف الحزمة المراجعة."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "تغيّرت بيانات تنظيف حزمة التحديث بعد إنشاء خطة التطبيق. أعد بناء خطة التطبيق قبل المتابعة."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "خطة تطبيق التحديث تحتوي على قائمة إزالة حزمة غير صالحة."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "تغيّرت مسارات تنظيف حزمة التحديث بعد إنشاء خطة التطبيق. أعد بناء خطة التطبيق قبل المتابعة."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "خطة تطبيق التحديث تفتقد قائمة مسارات الإزالة المراجعة."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "مسارات الإزالة في خطة تطبيق التحديث لا تطابق بيانات تنظيف الحزمة الموقّعة."
+
+msgid "Update lock path must be inside var/update."
+msgstr "يجب أن يكون مسار قفل التحديث داخل var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "خطة تطبيق التحديث تفتقد الحقل backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "مسار نسخة احتياطية للتحديث يحتوي على أجزاء مسار غير آمنة."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "يجب أن يكون مسار النسخة الاحتياطية للتحديث داخل var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "تعذّر الحصول على قفل التحديث. قد يكون تحديث آخر قيد التنفيذ."
+
+msgid "Unable to release update lock: %s"
+msgstr "تعذّر تحرير قفل التحديث: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "دليل النسخة الاحتياطية للتحديث موجود مسبقًا: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "تعذّر إنشاء الدليل الهدف: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "التحديث المخطط سيستبدل رابطًا رمزيًا موجودًا: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "الملف الهدف غير قابل للكتابة: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "تعذّر إنشاء الملف الهدف: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "تعذّر تحديد دليل مشروع Chamilo قبل إزالة الملفات القديمة."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "لا يمكن لتنظيف التحديث إزالة مسار محمي: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "التحديث المخطط سيزيل رابطًا رمزيًا موجودًا: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "تنظيف التحديث يدعم الملفات فقط وليس الأدلة: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "الملف الهدف القديم غير قابل للقراءة للنسخ الاحتياطي: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "تعذّر إزالة الملف الهدف القديم بصلاحيات الدليل الحالية: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "الملف الهدف القديم يُحلّ خارج دليل مشروع Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "تعذّر نسخ الملف الهدف احتياطيًا: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "تعذّر كتابة بيانات النسخة الاحتياطية للتحديث."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "تعذّر نسخ ملف التحديث المرحّل: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "تم نسخ %d من %d ملفًا مرحّلًا."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "تعذّر إزالة الملف القديم المعلن في الحزمة: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "تم إزالة %d من %d ملفًا قديمًا معلنًا في الحزمة."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "تعذر استعادة الملف الاحتياطي: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "تعذر حذف الملف المنسوخ حديثًا أثناء التراجع: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "تعذر استعادة الملف المحذوف لأن نسخته الاحتياطية مفقودة: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "تعذر استعادة الملف المحذوف من النسخة الاحتياطية: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "تعذر كتابة بيانات تدقيق تطبيق التحديث."
+
+msgid "Unable to write global update apply log."
+msgstr "تعذر كتابة سجل تطبيق التحديث العام."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "تم اكتشاف مسار نسبي مرحلي غير آمن: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "الدليل غير قابل للكتابة: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "تعذر إنشاء الدليل: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "تمت قراءة بيانات التجهيز بنجاح."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "تمت كتابة بيانات خطة التطبيق إلى دليل التجهيز."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "يبدو أن الملفات والأدلة المستهدفة قابلة للكتابة للتحديث والتنظيف المخطط لهما."
+
+msgid "Update apply plan check failed."
+msgstr "فشل التحقق من خطة تطبيق التحديث."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "لا يمكن كتابة أو حذف بعض الملفات أو الأدلة المستهدفة."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "لإصلاح ذلك، غيّر مؤقتًا مالك دليل Chamilo بالكامل إلى %s (مستخدم خادم الويب)، طبّق التحديث، ثم أعد المالك إلى %s بعد ذلك، ثم عيّن مالك var/ (ومحتوياته) إلى %s حتى يتمكن التطبيق من مواصلة الكتابة فيه."
 

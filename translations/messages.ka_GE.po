@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "პატივისცემით"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ფორმულის ნიმუში: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ფორმულის ნიმუში: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ცვლადის დიაპაზონები"
@@ -8789,6 +8789,9 @@ msgstr "ჩემი პროგრესის ნახვა"
 
 msgid "Personal agenda"
 msgstr "პირადი კალენდარი"
+
+msgid "Group agenda"
+msgstr "ჯგუფის დღის წესრიგი"
 
 msgid "Switch to teacher view"
 msgstr "გადართვა მასწავლებლის ხედზე"
@@ -40124,4 +40127,448 @@ msgstr "ჯგუფის ანგარიში"
 
 msgid "Student follow-up"
 msgstr "სტუდენტის მონიტორინგი"
+
+msgid "Use system default certificate"
+msgstr "სისტემის ნაგულისხმევი სერტიფიკატის გამოყენება"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "მიმაგრებული სერტიფიკატი მიუწვდომელია. გამოყენებული იქნება სისტემის ნაგულისხმევი სერტიფიკატი."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "გამოვიყენოთ სისტემის ნაგულისხმევი სერტიფიკატი მიმაგრებულის ნაცვლად?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "არასავალდებულო ლოკალური განვითარების გადაფარვა. საწარმოო განახლებები იყენებს Chamilo-ს ოფიციალურ სანდო გასაღებს."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "უსაფრთხო გამოყენების გეგმის შექმნა დადგმული პაკეტიდან. ეს ამოწმებს შესაცვლელ, დასამატებელ ან წასაშლელ ფაილებს, უფლებებს, სარეზერვო გზას და დაბლოკვის სტატუსს. ინსტალაციას არ ცვლის."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "ეს ნაბიჯი მხოლოდ მიმოხილვას ამზადებს. ფაილების ჩანაცვლება და პაკეტში გამოცხადებული გაწმენდა მოგვიანებით ხდება დადგმული ფაილების გამოყენების ნაბიჯში, დაბლოკვით, სარეზერვო ასლით და უკან დაბრუნების დაცვით."
+
+msgid "Files to remove"
+msgstr "წასაშლელი ფაილები"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Chamilo-ს ფაილების ჩანაცვლება დადგმული პაკეტიდან და მოძველებული ფაილების წაშლა, რომლებიც აშკარად გამოცხადებულია ხელმოწერილი პაკეტის მეტამონაცემებში. ეს არ ასრულებს მონაცემთა ბაზის მიგრაციებს, Composer-ს, Yarn-ს ან ქეშის ბრძანებებს."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "ეს მოქმედება ცვლის და შეიძლება წაშალოს ფაილები Chamilo-ს ინსტალაციაში. დარწმუნდით, რომ გამოყენების გეგმა გადაიხედა და სარეზერვო ასლები ჩართულია გაგრძელებამდე."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "მესმის, რომ ეს ჩაანაცვლებს ფაილებს და წაშლის პაკეტში გამოცხადებულ მოძველებულ ფაილებს Chamilo-ს ინსტალაციაში."
+
+msgid "Type the exact text below to confirm"
+msgstr "დასადასტურებლად აკრიფეთ ზუსტი ტექსტი ქვემოთ"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine შეასრულებს მხოლოდ დადგმულ V300 მიგრაციებს აშკარად უსაფრთხოების მიმოხილვის გავლის შემდეგ."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine-მა შეატყობინა ისტორიული საბაზისო გაფრთხილებები. განახლების პროგრამა მაინც შეასრულებს მხოლოდ დადგმულ V300 მიგრაციებს აშკარა დადასტურების შემდეგ."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "შეიძლება შეიცვალოს მხოლოდ მანიფესტის გზა. HTTPS პროტოკოლი და ოფიციალური განახლების დომენი ფიქსირებულია."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "განვითარების რეჟიმი იძლევა HTTPS მანიფესტის URL-ს ან ლოკალური მანიფესტის გზას."
+
+msgid "The official update manifest is configured by the server."
+msgstr "ოფიციალური განახლების მანიფესტი კონფიგურირებულია სერვერის მიერ."
+
+msgid "What feedback do you want about this course?"
+msgstr "რა უკუკავშირი გსურთ ამ კურსის შესახებ?"
+
+msgid "Analysis summary"
+msgstr "ანალიზის შეჯამება"
+
+msgid "Lessons included"
+msgstr "ჩართული გაკვეთილები"
+
+msgid "Standalone documents included"
+msgstr "ჩართული დამოუკიდებელი დოკუმენტები"
+
+msgid "Standalone exercises included"
+msgstr "ჩართული დამოუკიდებელი სავარჯიშოები"
+
+msgid "General feedback"
+msgstr "ზოგადი უკუკავშირი"
+
+msgid "Strengths"
+msgstr "ძლიერი მხარეები"
+
+msgid "Risks"
+msgstr "რისკები"
+
+msgid "Recommendations"
+msgstr "რეკომენდაციები"
+
+msgid "Lesson feedback"
+msgstr "გაკვეთილის უკუკავშირი"
+
+msgid "Standalone document feedback"
+msgstr "დამოუკიდებელი დოკუმენტის უკუკავშირი"
+
+msgid "Standalone exercise feedback"
+msgstr "დამოუკიდებელი სავარჯიშოს უკუკავშირი"
+
+msgid "AI response"
+msgstr "AI პასუხი"
+
+msgid "Sequence feedback"
+msgstr "თანმიმდევრობის უკუკავშირი"
+
+msgid "Purpose"
+msgstr "მიზანი"
+
+msgid "You"
+msgstr "თქვენ"
+
+msgid "City of internship"
+msgstr "სტაჟირების ქალაქი"
+
+msgid "City"
+msgstr "ქალაქი"
+
+msgid "Update workflow restored after page refresh"
+msgstr "განახლების სამუშაო პროცესი აღდგა გვერდის განახლების შემდეგ"
+
+msgid "Last completed step"
+msgstr "ბოლო დასრულებული ნაბიჯი"
+
+msgid "Stage package"
+msgstr "სტეიჯინგის პაკეტი"
+
+msgid "Package staging"
+msgstr "პაკეტის სტეიჯინგი"
+
+msgid "Apply plan"
+msgstr "გეგმის გამოყენება"
+
+msgid "Update workflow completed"
+msgstr "განახლების სამუშაო პროცესი დასრულდა"
+
+msgid "Update directory exists and is writable."
+msgstr "განახლების დირექტორია არსებობს და ჩაწერადია."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "განახლების დირექტორია არსებობს, მაგრამ არ არის ჩაწერადი: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "განახლების დირექტორია ჯერ არ არსებობს, მაგრამ მისი მშობელი დირექტორია ჩაწერადია."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "განახლების დირექტორია ჯერ არ არსებობს, მაგრამ მისი შექმნა შესაძლებელია var/-ის ქვეშ."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "განახლების დირექტორია არ არსებობს და მიმდინარე უფლებებით ვერ შეიქმნება."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "განახლების წინასწარი შემოწმებისთვის თავისუფალი დისკის სივრცის განსაზღვრა შეუძლებელია."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "უსაფრთხო განახლების სტეიჯინგისთვის საკმარისი თავისუფალი დისკის სივრცე არ არის."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "ამ შემოწმების ეტაპის განახლების პროცესისთვის თავისუფალი დისკის სივრცე საკმარისია."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "განახლების მანიფესტი PHP-ის ვერსიის მოთხოვნას არ განსაზღვრავს."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "PHP-ის მოთხოვნის სრულად შეფასება შეუძლებელია: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "მიმდინარე PHP ვერსია არ აკმაყოფილებს განახლების მოთხოვნას: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "მიმდინარე PHP ვერსია აკმაყოფილებს განახლების მოთხოვნას."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "ლოკალური პაკეტის გზა არ არის მითითებული. ჩამოტვირთული პაკეტების შემოწმება მხოლოდ ჩამოტვირთვის შემდეგაა შესაძლებელი."
+
+msgid "Local update package is not readable: %s"
+msgstr "ლოკალური განახლების პაკეტი წაკითხვადი არ არის: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "ლოკალური განახლების პაკეტი ZIP არქივი უნდა იყოს."
+
+msgid "Local update package is readable."
+msgstr "ლოკალური განახლების პაკეტი წაკითხვადია."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "დაყენებული Chamilo-ს ვერსია ავტომატურად ვერ გამოვლინდა. ვერსიის მიმართულების შემოწმება შეუძლებელია."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "დაყენებული ან სამიზნე ვერსია შედარებადი სემანტიკური ვერსიის ფორმატში არ არის."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "სამიზნე ვერსია დაყენებულ ვერსიაზე დაბალია. დაქვეითება ნაგულისხმევად დაუშვებელია."
+
+msgid "Target version matches the installed version."
+msgstr "სამიზნე ვერსია ემთხვევა დაყენებულ ვერსიას."
+
+msgid "Target version is newer than the installed version."
+msgstr "სამიზნე ვერსია უფრო ახალია, ვიდრე დაყენებული ვერსია."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "პროექტი Git-ის checkout არ არის ან .git არ არსებობს."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "ეს განახლების სისტემა განკუთვნილია Git-ის მხარდაჭერის გარეშე ინსტალაციებისთვის. გამოვლენილია, რომ ლოკალური სისტემა Git-ს იყენებს. განახლების გაგრძელებამ შეიძლება დაარღვიოს Git-ის ისტორია. Git-ის მხარდაჭერის მქონე სისტემებისთვის რეკომენდებულია Git-ის პროცედურა, რომელიც აღწერილია CONTRIBUTING.md-ში ვებ-ფესვში."
+
+msgid "Local Git changes were also detected."
+msgstr "ასევე გამოვლინდა ლოკალური Git ცვლილებები."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "პროექტის ზოგიერთი მეტამონაცემის ფაილი აკლია. შემდგომი განახლების ეტაპები შეიძლება მოითხოვდეს დამოკიდებულებების ხელით შემოწმებას."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer-ისა და Yarn-ის მეტამონაცემების ფაილები არსებობს."
+
+msgid "Starting staged file application."
+msgstr "სტეიჯინგის ფაილების გამოყენება იწყება."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "სტეიჯინგის ფაილების გამოსაყენებლად საჭიროა ცალსახა დადასტურება."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "სტეიჯინგის განახლების ფაილების გამოყენება ცალსახა დადასტურებას მოითხოვს."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "სტეიჯინგის დირექტორია Chamilo-ს განახლების სტეიჯინგის დირექტორიაშია."
+
+msgid "Staging directory was validated."
+msgstr "სტეიჯინგის დირექტორია დადასტურდა."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "გამოყენების გეგმის მეტამონაცემები წარმატებით წაიკითხა."
+
+msgid "Staged application path is valid."
+msgstr "სტეიჯინგის გამოყენების გზა სწორია."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "ხელმოწერილი პაკეტის გასუფთავების მეტამონაცემები ემთხვევა განხილულ გამოყენების გეგმას."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "ხელმოწერილი პაკეტის გასუფთავების მეტამონაცემები დადასტურდა."
+
+msgid "Update lock was acquired."
+msgstr "განახლების ბლოკირება მიღებულია."
+
+msgid "Update backup directory was created."
+msgstr "განახლების სარეზერვო დირექტორია შეიქმნა."
+
+msgid "Update file operations were collected."
+msgstr "განახლების ფაილური ოპერაციები შეგროვდა."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "ჩანაცვლების ან წაშლისთვის დაგეგმილი არსებული ფაილები დარეზერვდა."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "სტეიჯინგის განახლების ფაილები Chamilo-ს ინსტალაციაში დაკოპირდა."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "პაკეტში გამოცხადებული მოძველებული ფაილები Chamilo-ს ინსტალაციიდან წაიშალა."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "პაკეტში გამოცხადებული მოძველებული ფაილები წაიშალა."
+
+msgid "Update apply audit metadata was written."
+msgstr "განახლების გამოყენების აუდიტის მეტამონაცემები ჩაიწერა."
+
+msgid "Staged files applied successfully."
+msgstr "დროებით შენახული ფაილები წარმატებით იქნა გამოყენებული."
+
+msgid "Unable to restore removed files: %s"
+msgstr "წაშლილი ფაილების აღდგენა შეუძლებელია: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "დაკოპირებული ფაილების უკან დაბრუნება შეუძლებელია: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "ფაილების უკან დაბრუნება შესრულდა განახლების გამოყენების წარუმატებლობის შემდეგ."
+
+msgid "Rollback failed: %s"
+msgstr "უკან დაბრუნება ვერ მოხერხდა: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "განახლების გამოყენების აუდიტის მეტამონაცემების ჩაწერა შეუძლებელია: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "განახლების ბლოკის გათავისუფლება წარუმატებლობის შემდეგ შეუძლებელია: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "განახლების ფაილების გამოსაყენებლად საჭიროა დროებითი შენახვის გზა."
+
+msgid "Staging directory does not exist: %s"
+msgstr "დროებითი შენახვის დირექტორია არ არსებობს: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo-ს განახლების დროებითი შენახვის საბაზისო დირექტორია არ არსებობს."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "დროებითი შენახვის დირექტორია უნდა იყოს var/update/staging-ის შიგნით."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "დროებითი შენახვის დირექტორიაში აკლია APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "განახლების გამოყენების გეგმის მეტამონაცემების წაკითხვა შეუძლებელია: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "განახლების გამოყენების გეგმის მეტამონაცემები არ არის სწორი JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "განახლების გამოყენების გეგმის მეტამონაცემები უნდა იყოს JSON ობიექტი."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "განახლების გამოყენების გეგმას აკლია ველი application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "დროებით შენახული აპლიკაციის გზა არ იკითხება: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "დროებით შენახული აპლიკაციის გზა უნდა იყოს დროებითი შენახვის დირექტორიის შიგნით."
+
+msgid "Staged application path is missing composer.json."
+msgstr "დროებით შენახულ აპლიკაციის გზას აკლია composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "განახლების პაკეტს აკლია %s. ხელახლა შეინახეთ დროებით დამოწმებული პაკეტი ხელმოწერილი გასუფთავების მეტამონაცემებით."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "განახლების გამოყენების გეგმას აკლია განხილული პაკეტის გასუფთავების მეტამონაცემები."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "განახლების პაკეტის გასუფთავების მეტამონაცემები შეიცვალა გამოყენების გეგმის შექმნის შემდეგ. გაგრძელებამდე ხელახლა შექმენით გამოყენების გეგმა."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "განახლების გამოყენების გეგმა შეიცავს პაკეტის წაშლის არასწორ სიას."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "განახლების პაკეტის გასუფთავების გზები შეიცვალა გამოყენების გეგმის შექმნის შემდეგ. გაგრძელებამდე ხელახლა შექმენით გამოყენების გეგმა."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "განახლების გამოყენების გეგმას აკლია განხილული წაშლის გზების სია."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "განახლების გამოყენების გეგმის წაშლის გზები არ ემთხვევა ხელმოწერილ პაკეტის გასუფთავების მეტამონაცემებს."
+
+msgid "Update lock path must be inside var/update."
+msgstr "განახლების ბლოკის გზა უნდა იყოს var/update-ის შიგნით."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "განახლების გამოყენების გეგმას აკლია ველი backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "განახლების სარეზერვო გზა შეიცავს არაუსაფრთხო გზის სეგმენტებს."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "განახლების სარეზერვო გზა უნდა იყოს var/update/backups-ის შიგნით."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "განახლების ბლოკის მიღება შეუძლებელია. შესაძლოა სხვა განახლება მიმდინარეობდეს."
+
+msgid "Unable to release update lock: %s"
+msgstr "განახლების ბლოკის გათავისუფლება შეუძლებელია: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "განახლების სარეზერვო დირექტორია უკვე არსებობს: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "სამიზნე დირექტორიის შექმნა შეუძლებელია: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "დაგეგმილი განახლება გადააწერს არსებულ სიმბოლურ ბმულს: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "სამიზნე ფაილი არ არის ჩაწერადი: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "სამიზნე ფაილის შექმნა შეუძლებელია: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "მოძველებული ფაილების წაშლამდე Chamilo-ს პროექტის დირექტორიის განსაზღვრა შეუძლებელია."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "განახლების გასუფთავება ვერ წაშლის დაცულ გზას: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "დაგეგმილი განახლება წაშლის არსებულ სიმბოლურ ბმულს: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "განახლების გასუფთავება მხარს უჭერს მხოლოდ ფაილებს და არა დირექტორიებს: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "მოძველებული სამიზნე ფაილი არ იკითხება სარეზერვო ასლისთვის: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "მოძველებული სამიზნე ფაილის წაშლა მიმდინარე დირექტორიის უფლებებით შეუძლებელია: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "მოძველებული სამიზნე ფაილი მდებარეობს Chamilo-ს პროექტის დირექტორიის გარეთ: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "სამიზნე ფაილის სარეზერვო ასლის შექმნა შეუძლებელია: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "განახლების სარეზერვო მეტამონაცემების ჩაწერა შეუძლებელია."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "დროებით შენახული განახლების ფაილის კოპირება შეუძლებელია: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "დაკოპირდა %d ფაილი %d დროებით შენახულიდან."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "პაკეტში მითითებული მოძველებული ფაილის წაშლა შეუძლებელია: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "წაიშალა %d ფაილი %d პაკეტში მითითებული მოძველებულიდან."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "სარეზერვო ფაილის აღდგენა ვერ მოხერხდა: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "უკან დაბრუნებისას ახლად კოპირებული ფაილის წაშლა ვერ მოხერხდა: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "წაშლილი ფაილის აღდგენა ვერ მოხერხდა, რადგან მისი სარეზერვო ასლი არ არსებობს: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "წაშლილი ფაილის სარეზერვო ასლიდან აღდგენა ვერ მოხერხდა: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "განახლების გამოყენების აუდიტის მეტამონაცემების ჩაწერა ვერ მოხერხდა."
+
+msgid "Unable to write global update apply log."
+msgstr "გლობალური განახლების გამოყენების ჟურნალის ჩაწერა ვერ მოხერხდა."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "აღმოჩენილია არაუსაფრთხო დადგმული შედარებითი გზა: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "დირექტორია არ არის ჩაწერადი: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "დირექტორიის შექმნა ვერ მოხერხდა: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "დადგმის მეტამონაცემები წარმატებით წაიკითხა."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "გამოყენების გეგმის მეტამონაცემები ჩაიწერა დადგმის დირექტორიაში."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "სამიზნე ფაილები და დირექტორიები ჩაწერადია დაგეგმილი განახლებისა და გასუფთავებისთვის."
+
+msgid "Update apply plan check failed."
+msgstr "განახლების გამოყენების გეგმის შემოწმება ვერ მოხერხდა."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "ზოგიერთი სამიზნე ფაილი ან დირექტორია ვერ ჩაიწერება ან ვერ წაიშლება."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "ამის გამოსასწორებლად დროებით შეცვალეთ მთელი Chamilo დირექტორიის მფლობელი %s-ზე (ვებ-სერვერის მომხმარებელი), გამოიყენეთ განახლება, შემდეგ დააბრუნეთ მფლობელი %s-ზე, შემდეგ კი დააყენეთ var/-ის (და მისი შიგთავსის) მფლობელი ისევ %s-ზე, რათა აპლიკაციამ შეძლოს მასში ჩაწერის გაგრძელება."
 

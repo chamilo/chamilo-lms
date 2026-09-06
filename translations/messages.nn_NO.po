@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Helsingar"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel-døme: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -8792,6 +8792,9 @@ msgstr "Vis min statistikk"
 
 msgid "Personal agenda"
 msgstr "Min agenda"
+
+msgid "Group agenda"
+msgstr "Gruppeagenda"
 
 msgid "Switch to teacher view"
 msgstr "Lærervisning"
@@ -40128,4 +40131,106 @@ msgstr "Grupperapport"
 
 msgid "Student follow-up"
 msgstr "Oppfølging av studentar"
+
+msgid "Use system default certificate"
+msgstr "Bruk systemets standardsertifikat"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Det vedlagde sertifikatet er ikkje tilgjengeleg. Systemets standardsertifikat vil bli brukt."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Bruke systemets standardsertifikat i staden for det vedlagde sertifikatet?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Valfri lokal overstyring for utvikling. Produksjonsoppdateringar brukar den offisielle, tillitsverdige Chamilo-nøkkelen."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Bygg ein trygg anvendingsplan frå den klargjorde pakken. Dette sjekkar filer som skal bytast ut, leggjast til eller fjernast, løyve, sikkerheitskopisti og låsestatus. Det endrar ikkje installasjonen."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Dette steget førebur berre ei gjennomgang. Filutskifting og opprydding som er deklarert i pakken skjer seinare i steget Bruk klargjorde filer, med lås, sikkerheitskopi og tilbakerulling."
+
+msgid "Files to remove"
+msgstr "Filer som skal fjernast"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Byt ut Chamilo-filer frå den klargjorde pakken og fjern utdaterte filer som er eksplisitt deklarerte i metadata for den signerte pakken. Dette køyrer ikkje databasmigrasjonar, Composer, Yarn eller cache-kommandoar."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Denne handlinga byter ut og kan fjerne filer i Chamilo-installasjonen. Sjå til at anvendingsplanen er gjennomgått og at sikkerheitskopiar er slått på før du held fram."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Eg forstår at dette vil byte ut filer og fjerne utdaterte filer som er deklarerte i pakken i Chamilo-installasjonen."
+
+msgid "Type the exact text below to confirm"
+msgstr "Skriv inn den nøyaktige teksten under for å stadfeste"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine vil berre køyre dei klargjorde V300-migrasjonane eksplisitt etter at tryggleiksgjennomgangen er godkjend."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine rapporterte historiske grunnlinjeåtvaringar. Oppdateraren vil likevel berre køyre klargjorde V300-migrasjonar etter eksplisitt stadfesting."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Berre manifeststien kan endrast. HTTPS-protokollen og det offisielle oppdateringsdomenet er faste."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Utviklingsmodus tillèt ein HTTPS-manifest-URL eller ein lokal manifeststi."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Det offisielle oppdateringsmanifestet er konfigurert av tenaren."
+
+msgid "What feedback do you want about this course?"
+msgstr "Kva tilbakemelding vil du ha om dette kurset?"
+
+msgid "Analysis summary"
+msgstr "Analysesamandrag"
+
+msgid "Lessons included"
+msgstr "Leksjonar inkluderte"
+
+msgid "Standalone documents included"
+msgstr "Sjølvstendige dokument inkluderte"
+
+msgid "Standalone exercises included"
+msgstr "Sjølvstendige øvingar inkluderte"
+
+msgid "General feedback"
+msgstr "Generell tilbakemelding"
+
+msgid "Strengths"
+msgstr "Styrkar"
+
+msgid "Risks"
+msgstr "Risikoar"
+
+msgid "Recommendations"
+msgstr "Tilrådingar"
+
+msgid "Lesson feedback"
+msgstr "Leksjonstilbakemelding"
+
+msgid "Standalone document feedback"
+msgstr "Tilbakemelding på sjølvstendige dokument"
+
+msgid "Standalone exercise feedback"
+msgstr "Tilbakemelding på sjølvstendige øvingar"
+
+msgid "AI response"
+msgstr "KI-svar"
+
+msgid "Sequence feedback"
+msgstr "Sekvenstilbakemelding"
+
+msgid "Purpose"
+msgstr "Føremål"
+
+msgid "You"
+msgstr "Du"
+
+msgid "City of internship"
+msgstr "Praksisby"
+
+msgid "City"
+msgstr "By"
 

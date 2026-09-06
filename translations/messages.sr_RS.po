@@ -8796,6 +8796,9 @@ msgstr "Pogled na moje statistike"
 msgid "Personal agenda"
 msgstr "Moja agenda"
 
+msgid "Group agenda"
+msgstr "Agenda grupe"
+
 msgid "Switch to teacher view"
 msgstr "Pogled predavača"
 
@@ -40131,4 +40134,106 @@ msgstr "Izveštaj grupe"
 
 msgid "Student follow-up"
 msgstr "Praćenje studenta"
+
+msgid "Use system default certificate"
+msgstr "Koristi podrazumevani sistemski sertifikat"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Priloženi sertifikat nije dostupan. Biće korišćen podrazumevani sistemski sertifikat."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Koristiti podrazumevani sistemski sertifikat umesto priloženog sertifikata?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Opcioni lokalni razvojni izuzetak. Produkciona ažuriranja koriste zvanični Chamilo pouzdani ključ."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Napravi bezbedan plan primene iz pripremljenog paketa. Ovo proverava datoteke za zamenu, dodavanje ili uklanjanje, dozvole, putanju rezervne kopije i status zaključavanja. Ne menja instalaciju."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ovaj korak priprema samo pregled. Zamena datoteka i čišćenje deklarisano paketom dešavaju se kasnije u koraku Primena pripremljenih datoteka, uz zaključavanje, rezervnu kopiju i zaštitu vraćanja."
+
+msgid "Files to remove"
+msgstr "Datoteke za uklanjanje"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Zameni Chamilo datoteke iz pripremljenog paketa i ukloni zastarele datoteke eksplicitno navedene u metapodacima potpisanog paketa. Ovo ne pokreće migracije baze podataka, Composer, Yarn ili komande keša."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ova radnja zamenjuje i može ukloniti datoteke u Chamilo instalaciji. Uverite se da je plan primene pregledan i da su rezervne kopije omogućene pre nastavka."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Razumem da će ovo zameniti datoteke i ukloniti zastarele datoteke deklarisane paketom u Chamilo instalaciji."
+
+msgid "Type the exact text below to confirm"
+msgstr "Unesite tačan tekst ispod da potvrdite"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine će izvršiti samo pripremljene V300 migracije eksplicitno nakon što prođe bezbednosni pregled."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine je prijavio istorijska upozorenja osnovne linije. Ažuriranje će i dalje izvršiti samo pripremljene V300 migracije nakon eksplicitne potvrde."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Može se promeniti samo putanja manifesta. HTTPS protokol i zvanični domen ažuriranja su fiksni."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Režim razvoja dozvoljava HTTPS URL manifesta ili lokalnu putanju manifesta."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Zvanični manifest ažuriranja konfiguriše server."
+
+msgid "What feedback do you want about this course?"
+msgstr "Kakve povratne informacije želite o ovom kursu?"
+
+msgid "Analysis summary"
+msgstr "Rezime analize"
+
+msgid "Lessons included"
+msgstr "Uključene lekcije"
+
+msgid "Standalone documents included"
+msgstr "Uključeni samostalni dokumenti"
+
+msgid "Standalone exercises included"
+msgstr "Uključene samostalne vežbe"
+
+msgid "General feedback"
+msgstr "Opšte povratne informacije"
+
+msgid "Strengths"
+msgstr "Prednosti"
+
+msgid "Risks"
+msgstr "Rizici"
+
+msgid "Recommendations"
+msgstr "Preporuke"
+
+msgid "Lesson feedback"
+msgstr "Povratne informacije o lekciji"
+
+msgid "Standalone document feedback"
+msgstr "Povratne informacije o samostalnom dokumentu"
+
+msgid "Standalone exercise feedback"
+msgstr "Povratne informacije o samostalnoj vežbi"
+
+msgid "AI response"
+msgstr "AI odgovor"
+
+msgid "Sequence feedback"
+msgstr "Povratne informacije o nizu"
+
+msgid "Purpose"
+msgstr "Svrha"
+
+msgid "You"
+msgstr "Vi"
+
+msgid "City of internship"
+msgstr "Grad prakse"
+
+msgid "City"
+msgstr "Grad"
 

@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Cordial"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de formulă: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu de formulă: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Domenii de variabile"
@@ -8803,6 +8803,9 @@ msgstr "Vezi statisticile"
 
 msgid "Personal agenda"
 msgstr "Agenda mea"
+
+msgid "Group agenda"
+msgstr "Agendă de grup"
 
 msgid "Switch to teacher view"
 msgstr "Modul de vizualizare al profesorului"
@@ -40144,4 +40147,106 @@ msgstr "Raport de grup"
 
 msgid "Student follow-up"
 msgstr "Urmărirea studentului"
+
+msgid "Use system default certificate"
+msgstr "Folosește certificatul implicit al sistemului"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Certificatul atașat nu este disponibil. Se va folosi certificatul implicit al sistemului."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Folosiți certificatul implicit al sistemului în locul certificatului atașat?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Suprascriere opțională pentru dezvoltare locală. Actualizările de producție folosesc cheia de încredere oficială Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Construiește un plan de aplicare sigur din pachetul pregătit. Verifică fișierele de înlocuit, adăugat sau șters, permisiunile, calea de backup și starea de blocare. Nu modifică instalarea."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Acest pas pregătește doar o revizuire. Înlocuirea fișierelor și curățarea declarată de pachet au loc ulterior, în pasul Aplică fișierele pregătite, cu protecție prin blocare, backup și rollback."
+
+msgid "Files to remove"
+msgstr "Fișiere de șters"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Înlocuiește fișierele Chamilo din pachetul pregătit și șterge fișierele obsolete declarate explicit în metadatele semnate ale pachetului. Nu rulează migrări de bază de date, Composer, Yarn sau comenzi de cache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Această acțiune înlocuiește și poate șterge fișiere din instalarea Chamilo. Asigurați-vă că planul de aplicare a fost revizuit și că backup-urile sunt activate înainte de a continua."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Înțeleg că aceasta va înlocui fișiere și va șterge fișierele obsolete declarate de pachet din instalarea Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Tastați textul exact de mai jos pentru confirmare"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine va executa doar migrările V300 pregătite, explicit, după ce revizuirea de siguranță trece."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine a raportat avertismente istorice de bază. Actualizatorul va executa totuși doar migrările V300 pregătite, după confirmare explicită."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Doar calea manifestului poate fi schimbată. Protocolul HTTPS și domeniul oficial de actualizare sunt fixe."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Modul de dezvoltare permite un URL de manifest HTTPS sau o cale locală de manifest."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Manifestul oficial de actualizare este configurat de server."
+
+msgid "What feedback do you want about this course?"
+msgstr "Ce feedback doriți despre acest curs?"
+
+msgid "Analysis summary"
+msgstr "Rezumatul analizei"
+
+msgid "Lessons included"
+msgstr "Lecții incluse"
+
+msgid "Standalone documents included"
+msgstr "Documente independente incluse"
+
+msgid "Standalone exercises included"
+msgstr "Exerciții independente incluse"
+
+msgid "General feedback"
+msgstr "Feedback general"
+
+msgid "Strengths"
+msgstr "Puncte forte"
+
+msgid "Risks"
+msgstr "Riscuri"
+
+msgid "Recommendations"
+msgstr "Recomandări"
+
+msgid "Lesson feedback"
+msgstr "Feedback pentru lecție"
+
+msgid "Standalone document feedback"
+msgstr "Feedback pentru document independent"
+
+msgid "Standalone exercise feedback"
+msgstr "Feedback pentru exercițiu independent"
+
+msgid "AI response"
+msgstr "Răspuns AI"
+
+msgid "Sequence feedback"
+msgstr "Feedback pentru secvență"
+
+msgid "Purpose"
+msgstr "Scop"
+
+msgid "You"
+msgstr "Dumneavoastră"
+
+msgid "City of internship"
+msgstr "Orașul stagiului"
+
+msgid "City"
+msgstr "Oraș"
 

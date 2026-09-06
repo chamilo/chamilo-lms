@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavaesimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -8794,6 +8794,9 @@ msgstr "Katso tilastojasi"
 
 msgid "Personal agenda"
 msgstr "Oma kalenteri"
+
+msgid "Group agenda"
+msgstr "Ryhmän agenda"
 
 msgid "Switch to teacher view"
 msgstr "Opettajanäkymä"
@@ -40130,4 +40133,448 @@ msgstr "Ryhmäraportti"
 
 msgid "Student follow-up"
 msgstr "Opiskelijan seuranta"
+
+msgid "Use system default certificate"
+msgstr "Käytä järjestelmän oletussertifikaattia"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Liitetty sertifikaatti ei ole käytettävissä. Järjestelmän oletussertifikaattia käytetään."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Käytetäänkö järjestelmän oletussertifikaattia liitetyn sertifikaatin sijaan?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Valinnainen paikallinen kehitysohitus. Tuotantopäivitykset käyttävät virallista Chamilo-luottamusavainta."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Luo turvallinen käyttöönottosuunnitelma valmistellusta paketista. Tämä tarkistaa korvattavat, lisättävät tai poistettavat tiedostot, käyttöoikeudet, varmuuskopiopolun ja lukitustilan. Se ei muuta asennusta."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Tämä vaihe valmistelee vain tarkistuksen. Tiedostojen korvaaminen ja paketin ilmoittama siivous tapahtuvat myöhemmin vaiheessa Käytä valmisteltuja tiedostoja, lukituksen, varmuuskopion ja palautuksen suojauksella."
+
+msgid "Files to remove"
+msgstr "Poistettavat tiedostot"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Korvaa Chamilo-tiedostot valmistellusta paketista ja poista vanhentuneet tiedostot, jotka on nimenomaisesti ilmoitettu allekirjoitetun paketin metatiedoissa. Tämä ei suorita tietokantamigraatioita, Composer-, Yarn- tai välimuistikomentoja."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Tämä toiminto korvaa ja voi poistaa tiedostoja Chamilo-asennuksesta. Varmista, että käyttöönottosuunnitelma on tarkistettu ja varmuuskopiot ovat käytössä ennen jatkamista."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Ymmärrän, että tämä korvaa tiedostoja ja poistaa paketin ilmoittamat vanhentuneet tiedostot Chamilo-asennuksesta."
+
+msgid "Type the exact text below to confirm"
+msgstr "Kirjoita alla oleva teksti täsmälleen vahvistaaksesi"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine suorittaa vain valmistellut V300-migraatiot nimenomaisesti sen jälkeen, kun turvallisuustarkistus on läpäisty."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine ilmoitti historiallisia perustason varoituksia. Päivittäjä suorittaa silti vain valmistellut V300-migraatiot nimenomaisen vahvistuksen jälkeen."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Vain manifestin polkua voi muuttaa. HTTPS-protokolla ja virallinen päivitysverkkotunnus ovat kiinteitä."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Kehitystila sallii HTTPS-manifesti-URL-osoitteen tai paikallisen manifestipolun."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Virallinen päivitysmanifesti on määritetty palvelimella."
+
+msgid "What feedback do you want about this course?"
+msgstr "Millaista palautetta haluat tästä kurssista?"
+
+msgid "Analysis summary"
+msgstr "Analyysin yhteenveto"
+
+msgid "Lessons included"
+msgstr "Sisällytetyt oppitunnit"
+
+msgid "Standalone documents included"
+msgstr "Sisällytetyt erilliset asiakirjat"
+
+msgid "Standalone exercises included"
+msgstr "Sisällytetyt erilliset harjoitukset"
+
+msgid "General feedback"
+msgstr "Yleinen palaute"
+
+msgid "Strengths"
+msgstr "Vahvuudet"
+
+msgid "Risks"
+msgstr "Riskit"
+
+msgid "Recommendations"
+msgstr "Suositukset"
+
+msgid "Lesson feedback"
+msgstr "Oppitunnin palaute"
+
+msgid "Standalone document feedback"
+msgstr "Erillisen asiakirjan palaute"
+
+msgid "Standalone exercise feedback"
+msgstr "Erillisen harjoituksen palaute"
+
+msgid "AI response"
+msgstr "Tekoälyn vastaus"
+
+msgid "Sequence feedback"
+msgstr "Jakson palaute"
+
+msgid "Purpose"
+msgstr "Tarkoitus"
+
+msgid "You"
+msgstr "Sinä"
+
+msgid "City of internship"
+msgstr "Harjoittelupaikan kaupunki"
+
+msgid "City"
+msgstr "Kaupunki"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Päivitystyönkulku palautettu sivun päivityksen jälkeen"
+
+msgid "Last completed step"
+msgstr "Viimeisin suoritettu vaihe"
+
+msgid "Stage package"
+msgstr "Vaiheistettu paketti"
+
+msgid "Package staging"
+msgstr "Paketin vaiheistus"
+
+msgid "Apply plan"
+msgstr "Käytä suunnitelmaa"
+
+msgid "Update workflow completed"
+msgstr "Päivitystyönkulku valmis"
+
+msgid "Update directory exists and is writable."
+msgstr "Päivityshakemisto on olemassa ja siihen voi kirjoittaa."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Päivityshakemisto on olemassa, mutta siihen ei voi kirjoittaa: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Päivityshakemistoa ei ole vielä, mutta sen ylähakemistoon voi kirjoittaa."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Päivityshakemistoa ei ole vielä, mutta se voidaan luoda var/-hakemistoon."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Päivityshakemistoa ei ole, eikä sitä voi luoda nykyisillä oikeuksilla."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Vapaata levytilaa ei voitu määrittää päivityksen esitarkistusta varten."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Vapaata levytilaa ei ole tarpeeksi turvalliseen päivityksen vaiheistukseen."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Vapaa levytila riittää tähän tarkistusvaiheen päivityskulkuun."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Päivitysmanifesti ei määritä PHP-version vaatimusta."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "PHP-vaatimusta ei voitu arvioida täysin: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Nykyinen PHP-versio ei täytä päivityksen vaatimusta: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Nykyinen PHP-versio täyttää päivityksen vaatimuksen."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Paikallista paketin polkua ei annettu. Ladattuja paketteja voidaan tarkistaa vasta latauksen jälkeen."
+
+msgid "Local update package is not readable: %s"
+msgstr "Paikallinen päivityspaketti ei ole luettavissa: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Paikallisen päivityspaketin on oltava ZIP-arkisto."
+
+msgid "Local update package is readable."
+msgstr "Paikallinen päivityspaketti on luettavissa."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Asennettua Chamilo-versiota ei voitu tunnistaa automaattisesti. Version suuntaa ei voida tarkistaa."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Asennettu tai kohdeversio ei ole vertailukelpoisessa semanttisen version muodossa."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Kohdeversio on alempi kuin asennettu versio. Alennuksia ei oletuksena sallita."
+
+msgid "Target version matches the installed version."
+msgstr "Kohdeversio vastaa asennettua versiota."
+
+msgid "Target version is newer than the installed version."
+msgstr "Kohdeversio on uudempi kuin asennettu versio."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Projekti ei ole Git-työkopio tai .git puuttuu."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Tämä päivitysjärjestelmä on tarkoitettu asennuksille ilman Git-tukea. Paikallinen järjestelmä käyttää Gitiä. Päivityksen jatkaminen voi rikkoa Git-historian. Git-tuetuissa järjestelmissä suosittelemme CONTRIBUTING.md-tiedostossa kuvattua Git-menettelyä verkkohakemiston juuressa."
+
+msgid "Local Git changes were also detected."
+msgstr "Paikallisia Git-muutoksia havaittiin myös."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Joitakin projektin metatiedostoja puuttuu. Myöhemmät päivitysvaiheet voivat vaatia manuaalisia riippuvuustarkistuksia."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer- ja Yarn-metatiedostot ovat olemassa."
+
+msgid "Starting staged file application."
+msgstr "Aloitetaan vaiheistettujen tiedostojen käyttöönotto."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Vaiheistettujen tiedostojen käyttöönotto vaatii nimenomaisen vahvistuksen."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Vaiheistettujen päivitystiedostojen käyttöönotto vaatii nimenomaisen vahvistuksen."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Vaiheistushakemisto on Chamilon päivityksen vaiheistushakemistossa."
+
+msgid "Staging directory was validated."
+msgstr "Vaiheistushakemisto tarkistettiin."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Käyttösuunnitelman metatiedot luettiin onnistuneesti."
+
+msgid "Staged application path is valid."
+msgstr "Vaiheistettu käyttöpolku on kelvollinen."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Allekirjoitetun paketin siivousmetatiedot vastaavat tarkistettua käyttösuunnitelmaa."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Allekirjoitetun paketin siivousmetatiedot tarkistettiin."
+
+msgid "Update lock was acquired."
+msgstr "Päivityslukitus hankittiin."
+
+msgid "Update backup directory was created."
+msgstr "Päivityksen varmuuskopiohakemisto luotiin."
+
+msgid "Update file operations were collected."
+msgstr "Päivityksen tiedosto-operaatiot kerättiin."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Korvattaviksi tai poistettaviksi suunnitellut olemassa olevat tiedostot varmuuskopioitiin."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Vaiheistetut päivitystiedostot kopioitiin Chamilo-asennukseen."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Paketin ilmoittamat vanhentuneet tiedostot poistettiin Chamilo-asennuksesta."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Paketin ilmoittamat vanhentuneet tiedostot poistettiin."
+
+msgid "Update apply audit metadata was written."
+msgstr "Päivityksen käyttöönoton auditointimetatiedot kirjoitettiin."
+
+msgid "Staged files applied successfully."
+msgstr "Vaiheistetut tiedostot otettiin käyttöön onnistuneesti."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Poistettuja tiedostoja ei voitu palauttaa: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Kopioituja tiedostoja ei voitu palauttaa: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Tiedostojen palautus suoritettiin päivityksen käyttöönoton epäonnistuttua."
+
+msgid "Rollback failed: %s"
+msgstr "Palautus epäonnistui: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Päivityksen käyttöönoton auditointimetatietoja ei voitu kirjoittaa: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Päivityslukitusta ei voitu vapauttaa virheen jälkeen: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Vaiheistuspolku vaaditaan päivitystiedostojen käyttöönottoon."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Vaiheistushakemistoa ei ole olemassa: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilon päivityksen vaiheistuksen juurihakemistoa ei ole olemassa."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Vaiheistushakemiston on oltava polussa var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Vaiheistushakemistosta puuttuu APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Päivityksen käyttöönottosuunnitelman metatietoja ei voitu lukea: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Päivityksen käyttöönottosuunnitelman metatiedot eivät ole kelvollista JSON-muotoa: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Päivityksen käyttöönottosuunnitelman metatietojen on oltava JSON-objekti."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Päivityksen käyttöönottosuunnitelmasta puuttuu kenttä application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Vaiheistettu sovelluspolku ei ole luettavissa: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Vaiheistetun sovelluspolun on oltava vaiheistushakemiston sisällä."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Vaiheistetusta sovelluspolusta puuttuu composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Päivityspaketista puuttuu %s. Vaiheista uudelleen varmennettu paketti, jossa on allekirjoitetut siivousmetatiedot."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Päivityksen käyttöönottosuunnitelmasta puuttuvat tarkistetut paketin siivousmetatiedot."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Päivityspaketin siivousmetatiedot muuttuivat käyttöönottosuunnitelman luomisen jälkeen. Luo käyttöönottosuunnitelma uudelleen ennen jatkamista."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Päivityksen käyttöönottosuunnitelma sisältää virheellisen paketin poistoluettelon."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Päivityspaketin siivouspolut muuttuivat käyttöönottosuunnitelman luomisen jälkeen. Luo käyttöönottosuunnitelma uudelleen ennen jatkamista."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Päivityksen käyttöönottosuunnitelmasta puuttuu tarkistettu poistopolkujen luettelo."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Päivityksen käyttöönottosuunnitelman poistopolut eivät vastaa allekirjoitettuja paketin siivousmetatietoja."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Päivityslukituksen polun on oltava hakemistossa var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Päivityksen käyttöönottosuunnitelmasta puuttuu kenttä backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Päivityksen varmuuskopiopolku sisältää turvattomia polun osia."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Päivityksen varmuuskopiopolun on oltava hakemistossa var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Päivityslukitusta ei voitu hankkia. Toinen päivitys saattaa olla käynnissä."
+
+msgid "Unable to release update lock: %s"
+msgstr "Päivityslukitusta ei voitu vapauttaa: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Päivityksen varmuuskopiohakemisto on jo olemassa: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Kohdehakemistoa ei voida luoda: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Suunniteltu päivitys ylikirjoittaisi olemassa olevan symbolisen linkin: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Kohdetiedosto ei ole kirjoitettavissa: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Kohdetiedostoa ei voida luoda: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Chamilon projektin hakemistoa ei voitu selvittää ennen vanhentuneiden tiedostojen poistamista."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Päivityksen siivous ei voi poistaa suojattua polkua: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Suunniteltu päivitys poistaisi olemassa olevan symbolisen linkin: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Päivityksen siivous tukee vain tiedostoja, ei hakemistoja: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Vanhentunut kohdetiedosto ei ole luettavissa varmuuskopiointia varten: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Vanhentunutta kohdetiedostoa ei voida poistaa nykyisillä hakemisto-oikeuksilla: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Vanhentunut kohdetiedosto osoittaa Chamilon projektin hakemiston ulkopuolelle: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Kohdetiedostoa ei voitu varmuuskopioida: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Päivityksen varmuuskopion metatietoja ei voitu kirjoittaa."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Vaiheistettua päivitystiedostoa ei voitu kopioida: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Kopioitiin %d / %d vaiheistettua tiedostoa."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Paketin ilmoittamaa vanhentunutta tiedostoa ei voitu poistaa: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Poistettiin %d / %d paketin ilmoittamaa vanhentunutta tiedostoa."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Varmuuskopioitua tiedostoa ei voitu palauttaa: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Uutta kopioitua tiedostoa ei voitu poistaa palautuksen aikana: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Poistettua tiedostoa ei voitu palauttaa, koska sen varmuuskopio puuttuu: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Poistettua tiedostoa ei voitu palauttaa varmuuskopiosta: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Päivityksen soveltamisen tarkastusmetatietoja ei voitu kirjoittaa."
+
+msgid "Unable to write global update apply log."
+msgstr "Globaalia päivityksen soveltamislokia ei voitu kirjoittaa."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Havaittiin turvaton valmisteltu suhteellinen polku: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Hakemisto ei ole kirjoitettavissa: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Hakemistoa ei voitu luoda: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Valmistelun metatiedot luettiin onnistuneesti."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Soveltamissuunnitelman metatiedot kirjoitettiin valmisteluhakemistoon."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Kohdetiedostot ja -hakemistot näyttävät olevan kirjoitettavissa suunniteltua päivitystä ja siivousta varten."
+
+msgid "Update apply plan check failed."
+msgstr "Päivityksen soveltamissuunnitelman tarkistus epäonnistui."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Joitakin kohdetiedostoja tai -hakemistoja ei voida kirjoittaa tai poistaa."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Korjaa tämä vaihtamalla tilapäisesti koko Chamilo-hakemiston omistajaksi %s (verkkopalvelimen käyttäjä), soveltamalla päivitys, vaihtamalla omistaja takaisin käyttäjäksi %s ja asettamalla sen jälkeen var\/-hakemiston (ja sen sisällön) omistajaksi %s, jotta sovellus voi jatkaa kirjoittamista siihen."
 

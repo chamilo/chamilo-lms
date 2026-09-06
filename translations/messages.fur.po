@@ -8790,6 +8790,9 @@ msgstr "Vêd il progress"
 msgid "Personal agenda"
 msgstr "Agende personâl"
 
+msgid "Group agenda"
+msgstr "Agenda di grup"
+
 msgid "Switch to teacher view"
 msgstr "Passâ a veade de djoç"
 
@@ -40124,4 +40127,448 @@ msgstr "Rapuart di grup"
 
 msgid "Student follow-up"
 msgstr "Seguiment dal studenti"
+
+msgid "Use system default certificate"
+msgstr "Dopre il certificât predefinît dal sisteme"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Il certificât tacât nol è disponibil. Si doprarà il certificât predefinît dal sisteme."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Dopre il certificât predefinît dal sisteme invezit di chel tacât?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Sovrascrizion opzionâl pal svilup locâl. I inzornaments di produzion doprin la clâf uficiâl di confiance di Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Cree un plan di aplicazion sigûr dal pachet preparât. Chest controle i files di sostituî, zontâ o gjavâ, i permès, il percors di backup e il stât di bloc. Nol modifiche la instalazion."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Chest pas prepare dome une revision. La sostituzion dai files e la pulizie declarade dal pachet a sucedin plui tart tal pas Apliche files preparâts, cun protezion di bloc, backup e rollback."
+
+msgid "Files to remove"
+msgstr "Files di gjavâ"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Sostituìs i files di Chamilo dal pachet preparât e gjave i files obsoletis declarâts in mût esplicit dai metadâts dal pachet firmât. Chest no execute migrazions di database, Composer, Yarn o comandis di cache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Cheste azion sostituìs e pues gjavâ files te instalazion di Chamilo. Siguriti che il plan di aplicazion sedi stât revisionât e che i backups sedin abilitâts prime di continuâ."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "O capìs che chest sostituirà files e gjavarà files obsoletis declarâts dal pachet te instalazion di Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Scrîf il test esat chi sot par confermâ"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine executarà dome lis migrazions V300 preparadis in mût esplicit dopo che la revision di sigurece e je passade."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine à segnalât avîs di baseline storiche. L'inzornadôr executarà distès dome lis migrazions V300 preparadis dopo conferme esplicite."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Si pues cambiâ dome il percors dal manifest. Il protocol HTTPS e il domini uficiâl di inzornament a son fis."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "La modalitât di svilup permet une URL di manifest HTTPS o un percors locâl di manifest."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Il manifest uficiâl di inzornament al è configurât dal servidôr."
+
+msgid "What feedback do you want about this course?"
+msgstr "Ce feedback desideristu su chest cors?"
+
+msgid "Analysis summary"
+msgstr "Sintesi de analisi"
+
+msgid "Lessons included"
+msgstr "Lezions includudis"
+
+msgid "Standalone documents included"
+msgstr "Documents indipendents includûts"
+
+msgid "Standalone exercises included"
+msgstr "Esercizis indipendents includûts"
+
+msgid "General feedback"
+msgstr "Feedback gjenerâl"
+
+msgid "Strengths"
+msgstr "Punts di fuarce"
+
+msgid "Risks"
+msgstr "Riscs"
+
+msgid "Recommendations"
+msgstr "Raccomandazions"
+
+msgid "Lesson feedback"
+msgstr "Feedback su lezion"
+
+msgid "Standalone document feedback"
+msgstr "Feedback su document indipendent"
+
+msgid "Standalone exercise feedback"
+msgstr "Feedback su esercizi indipendent"
+
+msgid "AI response"
+msgstr "Rispueste IA"
+
+msgid "Sequence feedback"
+msgstr "Feedback su sequenze"
+
+msgid "Purpose"
+msgstr "Finalitât"
+
+msgid "You"
+msgstr "Tu"
+
+msgid "City of internship"
+msgstr "Citât dal stage"
+
+msgid "City"
+msgstr "Citât"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Flus di lavorazion dal inzornament ripristinât dopo il rinfrescament de pagjine"
+
+msgid "Last completed step"
+msgstr "Ultin pas completât"
+
+msgid "Stage package"
+msgstr "Pachet di preparazion"
+
+msgid "Package staging"
+msgstr "Preparazion dal pachet"
+
+msgid "Apply plan"
+msgstr "Apliche il plan"
+
+msgid "Update workflow completed"
+msgstr "Flus di lavorazion dal inzornament completât"
+
+msgid "Update directory exists and is writable."
+msgstr "La cartele di inzornament e esist e e je scrivibile."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "La cartele di inzornament e esist ma no je scrivibile: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "La cartele di inzornament no esist ancjemò, ma la cartele genitôr e je scrivibile."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "La cartele di inzornament no esist ancjemò, ma e pues jessi creade sot di var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "La cartele di inzornament no esist e no si pues creâle cu lis permissis atuâls."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Impussibil determinâ il spazi libar sul disc pal precontrol dal inzornament."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "No vonde spazi libar sul disc par une operazion sigure di preparazion dal inzornament."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Il spazi libar sul disc al è suficent par chest flus di inzornament de fase di verifiche."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Il manifest dal inzornament nol definìs un recuisît di version PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Impussibil valutâ dal dut il recuisît PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "La version PHP atuâl no sodisfe il recuisît di inzornament: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "La version PHP atuâl e sodisfe il recuisît di inzornament."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Nol è stât furnît nissun percors di pachet locâl. I pachets discjamâts a puedin jessi controlâts dome dopo de discjame."
+
+msgid "Local update package is not readable: %s"
+msgstr "Il pachet di inzornament locâl nol è leiibil: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Il pachet di inzornament locâl al à di jessi un archivi ZIP."
+
+msgid "Local update package is readable."
+msgstr "Il pachet di inzornament locâl al è leiibil."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "La version di Chamilo instalade no si à podût rilevâle in automatic. No si pues controlâ la direzion de version."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "La version instalade o chê di destinazion no je intun formât di version semantiche confrontabil."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "La version di destinazion e je plui basse de version instalade. I declassaments no son permetûts in mût predefinît."
+
+msgid "Target version matches the installed version."
+msgstr "La version di destinazion e corispuint ae version instalade."
+
+msgid "Target version is newer than the installed version."
+msgstr "La version di destinazion e je plui gnove de version instalade."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Il progjet nol è un checkout Git o .git nol è presint."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Chest sisteme di inzornament al è pensât par instalazions cence supuart Git. O vin rilevât che il sisteme locâl al dopre Git. Continuâ cul inzornament al podarès puartâ a une storie Git ruvinade. Par sistemis cun supuart Git, o racomandìn di doprâ la procedure Git descritade in CONTRIBUTING.md te lidrîs web."
+
+msgid "Local Git changes were also detected."
+msgstr "A son stadis rilevadis ancje modifiche Git locâls."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "A mancjin cualchi file di metadâts dal progjet. Lis fasadis sucessivis di inzornament a podarès vê bisugne di controls manuâi des dipendencis."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "I file di metadâts di Composer e Yarn a son presints."
+
+msgid "Starting staged file application."
+msgstr "Scomence de aplicazion a fasadis dai file."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "E je necessarie une conferme esplicite par aplicâ i file preparâts."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Aplicâ i file di inzornament preparâts al domande une conferme esplicite."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "La cartele di preparazion e je dentri de cartele di preparazion di inzornament di Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "La cartele di preparazion e je stade convalidade."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "I metadâts dal plan di aplicazion a son stâts leûts cun sucès."
+
+msgid "Staged application path is valid."
+msgstr "Il percors di aplicazion preparât al è valit."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "I metadâts di netezze dal pachet firmât a corispuindin al plan di aplicazion revisionât."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "I metadâts di netezze dal pachet firmât a son stâts convalidâts."
+
+msgid "Update lock was acquired."
+msgstr "Il bloc dal inzornament al è stât otignût."
+
+msgid "Update backup directory was created."
+msgstr "La cartele di copie di sigurece dal inzornament e je stade creade."
+
+msgid "Update file operations were collected."
+msgstr "Lis operazions sui file di inzornament a son stadis racoltis."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "I file esistents previodûts pal sostituzion o pal gjavament a son stâts salvâts in copie di sigurece."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "I file di inzornament preparâts a son stâts copiâts te instalazion di Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "I file obsolet declarâts dal pachet a son stâts gjavâts de instalazion di Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "I file obsolet declarâts dal pachet a son stâts gjavâts."
+
+msgid "Update apply audit metadata was written."
+msgstr "I metadâts di audit de aplicazion dal inzornament a son stâts scrits."
+
+msgid "Staged files applied successfully."
+msgstr "I files in staging a son stâts aplicâts cun sucès."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Impussibil tornâ a meti i files gjavâts: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Impussibil fâ il rollback dai files copiâts: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Il rollback dai files al è stât eseguît dopo dal faliment de aplicazion dal inzornament."
+
+msgid "Rollback failed: %s"
+msgstr "Rollback falît: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Impussibil scrivi i metadâts di audit de aplicazion dal inzornament: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Impussibil liberâ il lock dal inzornament dopo dal faliment: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Il percors di staging al è necessari par aplicâ i files di inzornament."
+
+msgid "Staging directory does not exist: %s"
+msgstr "La cartele di staging no esist: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "La cartele base di staging pal inzornament di Chamilo no esist."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "La cartele di staging e à di jessi dentri di var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Te cartele di staging al mancje APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Impussibil lei i metadâts dal plan di aplicazion dal inzornament: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "I metadâts dal plan di aplicazion dal inzornament no son un JSON valit: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "I metadâts dal plan di aplicazion dal inzornament a àn di jessi un ogjet JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Al plan di aplicazion dal inzornament i mancje il cjamp application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Il percors de aplicazion in staging no si pues lei: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Il percors de aplicazion in staging al à di jessi dentri de cartele di staging."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Al percors de aplicazion in staging i mancje composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Al pachet di inzornament i mancje %s. Torne a meti in staging un pachet verificât cun metadâts di netezze firmâts."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Al plan di aplicazion dal inzornament i mancjin i metadâts di netezze dal pachet revisionâts."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "I metadâts di netezze dal pachet di inzornament a son cambiâts dopo de gjenerazion dal plan di aplicazion. Torne a costruî il plan di aplicazion prime di continuâ."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Il plan di aplicazion dal inzornament al conten une liste di rimozion dal pachet no valide."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "I percors di netezze dal pachet di inzornament a son cambiâts dopo de gjenerazion dal plan di aplicazion. Torne a costruî il plan di aplicazion prime di continuâ."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Al plan di aplicazion dal inzornament i mancje la liste dai percors di rimozion revisionade."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "I percors di rimozion dal plan di aplicazion dal inzornament no corispuindin ai metadâts di netezze dal pachet firmâts."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Il percors dal lock dal inzornament al à di jessi dentri di var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Al plan di aplicazion dal inzornament i mancje il cjamp backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Il percors di backup dal inzornament al conten segments di percors no sigûrs."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Il percors di backup dal inzornament al à di jessi dentri di var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Impussibil otignî il lock dal inzornament. Un altri inzornament al podarès jessi in cors."
+
+msgid "Unable to release update lock: %s"
+msgstr "Impussibil liberâ il lock dal inzornament: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "La cartele di backup dal inzornament e esist za: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "No si pues creâ la cartele di destinazion: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "L'inzornament planificât al sovrascrivarès un colegament simbolic esistint: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Il file di destinazion no si pues scrivi: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "No si pues creâ il file di destinazion: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Impussibil risolvi la cartele dal progjet Chamilo prime di gjavâ i files obsolets."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "La netezze dal inzornament no pues gjavâ il percors protet: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "L'inzornament planificât al gjavarès un colegament simbolic esistint: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "La netezze dal inzornament e supuarte dome files, no cartelis: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Il file di destinazion obsolet no si pues lei pal backup: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Il file di destinazion obsolet no si pues gjavâ cui permès de cartele atuâi: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Il file di destinazion obsolet al risolv fûr de cartele dal progjet Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Impussibil fâ il backup dal file di destinazion: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Impussibil scrivi i metadâts di backup dal inzornament."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Impussibil copiâ il file di inzornament in staging: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Copiâts %d di %d files in staging."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Impussibil gjavâ il file obsolet declarât dal pachet: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Gjavâts %d di %d files obsolets declarâts dal pachet."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Impussibil ripristinâ il file di backup: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Impussibil gjavâ il file copiât di resint dilunc il rollback: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Impussibil ripristinâ il file gjavât parcè che il so backup al mancje: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Impussibil ripristinâ il file gjavât dal backup: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Impussibil scrivi i metadâts di audit de aplicazion dal inzornament."
+
+msgid "Unable to write global update apply log."
+msgstr "Impussibil scrivi il regjistri globâl de aplicazion dal inzornament."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Rilevade une strade relative di staging no sigure: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "La cartele no je scrivibile: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Impussibil creâ la cartele: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "I metadâts di staging a son stâts leiûts cun sucès."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "I metadâts dal plan di aplicazion a son stâts scrits te cartele di staging."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "I files e lis cartelis di destinazion a somein scrivibii pal inzornament e pal netament planificâts."
+
+msgid "Update apply plan check failed."
+msgstr "Il control dal plan di aplicazion dal inzornament al è falît."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Cualchi file o cartele di destinazion no pues jessi scrit o gjavât."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Par comedi chest, cambie temporaneamentri il proprietari di dute la cartele di Chamilo a %s (l'utent dal servidôr web), apliche l'inzornament, torne a meti il proprietari a %s dopo, po met il proprietari di var/ (e dai siei contignûts) di gnûf a %s cussì che l'aplicazion e puedi continuâ a scrivi dentri."
 

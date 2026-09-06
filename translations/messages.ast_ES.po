@@ -8795,6 +8795,9 @@ msgstr "Ver les mios estadístiques"
 msgid "Personal agenda"
 msgstr "La mio axenda"
 
+msgid "Group agenda"
+msgstr "Axenda del grupu"
+
 msgid "Switch to teacher view"
 msgstr "Dir a vista del profesor"
 
@@ -40130,4 +40133,448 @@ msgstr "Informe de grupu"
 
 msgid "Student follow-up"
 msgstr "Seguimientu del estudiante"
+
+msgid "Use system default certificate"
+msgstr "Usar el certificáu predetermináu del sistema"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "El certificáu axuntu nun ta disponible. Usaráse'l certificáu predetermináu del sistema."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "¿Usar el certificáu predetermináu del sistema en cuenta del certificáu axuntu?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Sustitución opcional pal desenvolvimientu llocal. Les actualizaciones de producción usen la clave oficial de confianza de Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Crear un plan d'aplicación seguru dende'l paquete preparáu. Esto comprueba los ficheros a sustituyir, amestar o desaniciar, permisos, ruta de copia de seguridá y estáu de bloquéu. Nun modifica la instalación."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Esti pasu namái prepara una revisión. La sustitución de ficheros y la llimpieza declarada pol paquete asoceden dempués nel pasu Aplicar ficheros preparados, con proteición de bloquéu, copia de seguridá y reversión."
+
+msgid "Files to remove"
+msgstr "Ficheros a desaniciar"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Sustituyir los ficheros de Chamilo dende'l paquete preparáu y desaniciar los ficheros obsoletos declaraos esplicitamente polos metadatos del paquete firmáu. Esto nun executa migraciones de base de datos, nin comandos de Composer, Yarn o caché."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Esta aición sustituye y pue desaniciar ficheros na instalación de Chamilo. Asegúrate de que'l plan d'aplicación se revisó y que les copies de seguridá tán habilitaes enantes de siguir."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Entiendo que esto va sustituyir ficheros y desaniciar ficheros obsoletos declaraos pol paquete na instalación de Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Escribi'l testu exactu d'abaxo pa confirmar"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine namái va executar les migraciones V300 preparaes esplicitamente dempués de que la revisión de seguridá pase."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine informó d'avisos de llinia base histórica. L'actualizador entá namái va executar les migraciones V300 preparaes dempués d'una confirmación esplicita."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Namái pue camudase la ruta del manifiestu. El protocolu HTTPS y el dominiu oficial d'actualización tán fixos."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "El mou de desenvolvimientu permite una URL de manifiestu HTTPS o una ruta de manifiestu llocal."
+
+msgid "The official update manifest is configured by the server."
+msgstr "El manifiestu oficial d'actualización ta configuráu pol sirvidor."
+
+msgid "What feedback do you want about this course?"
+msgstr "¿Qué comentarios quies sobre esti cursu?"
+
+msgid "Analysis summary"
+msgstr "Resume del análisis"
+
+msgid "Lessons included"
+msgstr "Lleiciones incluyíes"
+
+msgid "Standalone documents included"
+msgstr "Documentos independientes incluyíos"
+
+msgid "Standalone exercises included"
+msgstr "Exercicios independientes incluyíos"
+
+msgid "General feedback"
+msgstr "Comentarios xenerales"
+
+msgid "Strengths"
+msgstr "Fortalezes"
+
+msgid "Risks"
+msgstr "Riesgos"
+
+msgid "Recommendations"
+msgstr "Recomendaciones"
+
+msgid "Lesson feedback"
+msgstr "Comentarios de la lleición"
+
+msgid "Standalone document feedback"
+msgstr "Comentarios del documentu independiente"
+
+msgid "Standalone exercise feedback"
+msgstr "Comentarios del exerciciu independiente"
+
+msgid "AI response"
+msgstr "Respuesta d'IA"
+
+msgid "Sequence feedback"
+msgstr "Comentarios de la secuencia"
+
+msgid "Purpose"
+msgstr "Propósitu"
+
+msgid "You"
+msgstr "Tu"
+
+msgid "City of internship"
+msgstr "Ciudá de práutiques"
+
+msgid "City"
+msgstr "Ciudá"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Fluxu d'anovación restauráu tres la recarga de la páxina"
+
+msgid "Last completed step"
+msgstr "Últimu pasu completáu"
+
+msgid "Stage package"
+msgstr "Paquete d'ensayu"
+
+msgid "Package staging"
+msgstr "Preparación del paquete"
+
+msgid "Apply plan"
+msgstr "Aplicar el plan"
+
+msgid "Update workflow completed"
+msgstr "Fluxu d'anovación completáu"
+
+msgid "Update directory exists and is writable."
+msgstr "El direutoriu d'anovación esiste y tien permisu d'escritura."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "El direutoriu d'anovación esiste pero nun tien permisu d'escritura: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "El direutoriu d'anovación entá nun esiste, pero'l direutoriu padre tien permisu d'escritura."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "El direutoriu d'anovación entá nun esiste, pero pue crease so var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "El direutoriu d'anovación nun esiste y nun pue crease colos permisos actuales."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Nun se pudo determinar l'espaciu llibre en discu pa la comprobación previa d'anovación."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Nun hai abondu espaciu llibre en discu pa una operación segura de preparación de l'anovación."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "L'espaciu llibre en discu ye suficiente pa esti fluxu d'anovación na etapa de verificación."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "El manifiestu d'anovación nun define un requisitu de versión de PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Nun se pudo evaluar dafechu'l requisitu de PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "La versión actual de PHP nun cumple'l requisitu d'anovación: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "La versión actual de PHP cumple'l requisitu d'anovación."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Nun se proporcionó nengún camín de paquete llocal. Los paquetes descargaos namái puen comprobase dempués de la descarga."
+
+msgid "Local update package is not readable: %s"
+msgstr "El paquete d'anovación llocal nun ye lleíble: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "El paquete d'anovación llocal tien de ser un archivu ZIP."
+
+msgid "Local update package is readable."
+msgstr "El paquete d'anovación llocal ye lleíble."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Nun se pudo detectar automáticamente la versión instalada de Chamilo. Nun se pue comprobar la direición de la versión."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "La versión instalada o de destín nun ta nun formatu de versión semántica comparable."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "La versión de destín ye inferior a la versión instalada. Les retrocesiones nun tán permitíes de forma predeterminada."
+
+msgid "Target version matches the installed version."
+msgstr "La versión de destín coincide cola versión instalada."
+
+msgid "Target version is newer than the installed version."
+msgstr "La versión de destín ye más nueva que la versión instalada."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "El proyeutu nun ye una copia Git o .git nun ta presente."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Esti sistema d'anovación ta pensáu pa instalaciones ensin soporte Git. Detectamos que'l sistema llocal usa Git. Siguir cola anovación podría romper l'historial de Git. Pa sistemes con soporte Git, recomendamos usar el procedimientu Git detalláu en CONTRIBUTING.md na raigaña web."
+
+msgid "Local Git changes were also detected."
+msgstr "Tamién se detectaron cambeos Git llocales."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Falten dalgunos ficheros de metadatos del proyeutu. Les etapes posteriores d'anovación puen riquir comprobaciones manuales de dependencies."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Los ficheros de metadatos de Composer y Yarn tán presentes."
+
+msgid "Starting staged file application."
+msgstr "Entamando l'aplicación por etapes de ficheros."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Ríquese una confirmación esplícita pa aplicar los ficheros preparaos."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Aplicar los ficheros d'anovación preparaos riquier una confirmación esplícita."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "El direutoriu de preparación ta dientro del direutoriu de preparación d'anovación de Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Validóse'l direutoriu de preparación."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Los metadatos del plan d'aplicación lleéronse correutamente."
+
+msgid "Staged application path is valid."
+msgstr "El camín d'aplicación preparáu ye válidu."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Los metadatos de llimpieza del paquete robláu coinciden col plan d'aplicación revisáu."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Validáronse los metadatos de llimpieza del paquete robláu."
+
+msgid "Update lock was acquired."
+msgstr "Adquirióse'l bloquéu d'anovación."
+
+msgid "Update backup directory was created."
+msgstr "Creóse'l direutoriu de copia de seguridá d'anovación."
+
+msgid "Update file operations were collected."
+msgstr "Recoyéronse les operaciones de ficheros d'anovación."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Fíxose copia de seguridá de los ficheros esistentes previstos pa reemplazu o desaniciu."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Los ficheros d'anovación preparaos copiáronse a la instalación de Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Desaniciáronse de la instalación de Chamilo los ficheros obsoletos declaraos pol paquete."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Desaniciáronse los ficheros obsoletos declaraos pol paquete."
+
+msgid "Update apply audit metadata was written."
+msgstr "Escribiéronse los metadatos d'auditoría d'aplicación d'anovación."
+
+msgid "Staged files applied successfully."
+msgstr "Los ficheros preparaos aplicáronse con ésitu."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Nun se pudieron restaurar los ficheros desaniciaos: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Nun se pudieron revertir los ficheros copiaos: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Revertiéronse los ficheros dempués del fallu al aplicar l'actualización."
+
+msgid "Rollback failed: %s"
+msgstr "Falló la reversión: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Nun se pudieron escribir los metadatos d'auditoría de l'aplicación de l'actualización: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Nun se pudo lliberar el bloquéu d'actualización dempués del fallu: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Ríquese la ruta de preparación pa aplicar los ficheros d'actualización."
+
+msgid "Staging directory does not exist: %s"
+msgstr "El direutoriu de preparación nun esiste: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "El direutoriu base de preparación d'actualización de Chamilo nun esiste."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "El direutoriu de preparación tien de tar dientro de var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Al direutoriu de preparación fálta-y APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Nun se pudieron lleer los metadatos del plan d'aplicación de l'actualización: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Los metadatos del plan d'aplicación de l'actualización nun son JSON válidu: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Los metadatos del plan d'aplicación de l'actualización tienen de ser un oxetu JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Al plan d'aplicación de l'actualización fálta-y el campu application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "La ruta de l'aplicación preparada nun ye lleíble: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "La ruta de l'aplicación preparada tien de tar dientro del direutoriu de preparación."
+
+msgid "Staged application path is missing composer.json."
+msgstr "A la ruta de l'aplicación preparada fálta-y composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Al paquete d'actualización fálta-y %s. Vuelva a preparar un paquete verificáu con metadatos de llimpieza firmaos."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Al plan d'aplicación de l'actualización fálten-y los metadatos revisaos de llimpieza del paquete."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Los metadatos de llimpieza del paquete d'actualización camudaron dempués de xenerar el plan d'aplicación. Reconstruya'l plan d'aplicación enantes de siguir."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "El plan d'aplicación de l'actualización contiene una llista de desaniciu de paquetes non válida."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Les rutes de llimpieza del paquete d'actualización camudaron dempués de xenerar el plan d'aplicación. Reconstruya'l plan d'aplicación enantes de siguir."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Al plan d'aplicación de l'actualización fálta-y la llista revisada de rutes de desaniciu."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Les rutes de desaniciu del plan d'aplicación de l'actualización nun coinciden colos metadatos firmaos de llimpieza del paquete."
+
+msgid "Update lock path must be inside var/update."
+msgstr "La ruta del bloquéu d'actualización tien de tar dientro de var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Al plan d'aplicación de l'actualización fálta-y el campu backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "La ruta de copia de seguridá de l'actualización contiene segmentos de ruta inseguros."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "La ruta de copia de seguridá de l'actualización tien de tar dientro de var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Nun se pudo adquirir el bloquéu d'actualización. Quiciabes hai otra actualización en cursu."
+
+msgid "Unable to release update lock: %s"
+msgstr "Nun se pudo lliberar el bloquéu d'actualización: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "El direutoriu de copia de seguridá de l'actualización yá esiste: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Nun se puede crear el direutoriu de destín: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "L'actualización planiada sobrescribiría un enllaz simbólicu esistente: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "El ficheru de destín nun ye escribible: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Nun se puede crear el ficheru de destín: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Nun se pudo resolver el direutoriu del proyeutu Chamilo enantes de desaniciar los ficheros obsoletos."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "La llimpieza de l'actualización nun puede desaniciar la ruta protexida: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "L'actualización planiada desaniciaría un enllaz simbólicu esistente: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "La llimpieza de l'actualización namái admite ficheros, non direutorios: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "El ficheru de destín obsoletu nun ye lleíble pa la copia de seguridá: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "El ficheru de destín obsoletu nun se puede desaniciar colos permisos actuales del direutoriu: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "El ficheru de destín obsoletu resuélvese fuera del direutoriu del proyeutu Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Nun se pudo facer copia de seguridá del ficheru de destín: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Nun se pudieron escribir los metadatos de copia de seguridá de l'actualización."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Nun se pudo copiar el ficheru d'actualización preparáu: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Copiaos %d de %d ficheros preparaos."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Nun se pudo desaniciar el ficheru obsoletu declaráu nel paquete: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Desaniciaos %d de %d ficheros obsoletos declaraos nel paquete."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Nun se pudo restaurar el ficheru de copia de seguridá: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Nun se pudo desaniciar el ficheru copiáu de nuevu durante la reversión: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Nun se pudo restaurar el ficheru desaniciáu porque falta la so copia de seguridá: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Nun se pudo restaurar el ficheru desaniciáu dende la copia de seguridá: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Nun se pudo escribir los metadatos d'auditoría de l'aplicación de l'actualización."
+
+msgid "Unable to write global update apply log."
+msgstr "Nun se pudo escribir el rexistru global d'aplicación de l'actualización."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Detectóse un camín relativu d'ensayu inseguru: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "El direutoriu nun ye escribible: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Nun se pudo crear el direutoriu: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Los metadatos d'ensayu lleéronse correutamente."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Los metadatos del plan d'aplicación escribieronse nel direutoriu d'ensayu."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Los ficheros y direutorios de destín paecen escribibles pa l'actualización y llimpieza planiaes."
+
+msgid "Update apply plan check failed."
+msgstr "Falló la comprobación del plan d'aplicación de l'actualización."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Dalgunos ficheros o direutorios de destín nun se pueden escribir o desaniciar."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Pa iguar esto, camuda temporalmente'l propietariu de too el direutoriu de Chamilo a %s (l'usuariu del sirvidor web), aplica l'actualización, vuelve a camudar el propietariu a %s dempués, y depués afita'l propietariu de var/ (y el so conteníu) otra vegada a %s pa que l'aplicación pueda siguir escribiendo nél."
 

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "S pozdravem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ukázka vzorce: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukázka vzorce: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy proměnných"
@@ -8789,6 +8789,9 @@ msgstr "Zobraz mou statistiku"
 
 msgid "Personal agenda"
 msgstr "Moje Agenda"
+
+msgid "Group agenda"
+msgstr "Skupinová agenda"
 
 msgid "Switch to teacher view"
 msgstr "Pohled učitele"
@@ -40124,4 +40127,448 @@ msgstr "Skupinová zpráva"
 
 msgid "Student follow-up"
 msgstr "Sledování studenta"
+
+msgid "Use system default certificate"
+msgstr "Použít výchozí certifikát systému"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Přiložený certifikát není k dispozici. Bude použit výchozí certifikát systému."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Použít výchozí certifikát systému místo přiloženého certifikátu?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Volitelné přepsání pro lokální vývoj. Produkční aktualizace používají oficiální důvěryhodný klíč Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Sestavit bezpečný plán aplikace ze staged balíčku. Kontroluje soubory k nahrazení, přidání nebo odebrání, oprávnění, cestu zálohy a stav zámku. Neupravuje instalaci."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Tento krok připravuje pouze kontrolu. Nahrazení souborů a úklid deklarovaný balíčkem probíhá později v kroku Aplikovat staged soubory, se zámkem, zálohou a ochranou rollback."
+
+msgid "Files to remove"
+msgstr "Soubory k odebrání"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Nahradit soubory Chamilo ze staged balíčku a odebrat zastaralé soubory výslovně deklarované v metadatech podepsaného balíčku. Nespouští migrace databáze, Composer, Yarn ani příkazy cache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Tato akce nahradí a může odebrat soubory v instalaci Chamilo. Před pokračováním se ujistěte, že byl plán aplikace zkontrolován a že jsou povoleny zálohy."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Rozumím, že se nahradí soubory a odeberou zastaralé soubory deklarované balíčkem v instalaci Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Pro potvrzení zadejte přesný text níže"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine spustí pouze staged migrace V300 výslovně po úspěšné bezpečnostní kontrole."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine nahlásil historická varování baseline. Aktualizátor i tak spustí pouze staged migrace V300 po výslovném potvrzení."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Lze změnit pouze cestu k manifestu. Protokol HTTPS a oficiální aktualizační doména jsou pevné."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Vývojový režim umožňuje URL manifestu HTTPS nebo lokální cestu k manifestu."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Oficiální aktualizační manifest je nakonfigurován serverem."
+
+msgid "What feedback do you want about this course?"
+msgstr "Jakou zpětnou vazbu k tomuto kurzu chcete?"
+
+msgid "Analysis summary"
+msgstr "Shrnutí analýzy"
+
+msgid "Lessons included"
+msgstr "Zahrnuté lekce"
+
+msgid "Standalone documents included"
+msgstr "Zahrnuté samostatné dokumenty"
+
+msgid "Standalone exercises included"
+msgstr "Zahrnutá samostatná cvičení"
+
+msgid "General feedback"
+msgstr "Obecná zpětná vazba"
+
+msgid "Strengths"
+msgstr "Silné stránky"
+
+msgid "Risks"
+msgstr "Rizika"
+
+msgid "Recommendations"
+msgstr "Doporučení"
+
+msgid "Lesson feedback"
+msgstr "Zpětná vazba k lekci"
+
+msgid "Standalone document feedback"
+msgstr "Zpětná vazba k samostatnému dokumentu"
+
+msgid "Standalone exercise feedback"
+msgstr "Zpětná vazba k samostatnému cvičení"
+
+msgid "AI response"
+msgstr "Odpověď AI"
+
+msgid "Sequence feedback"
+msgstr "Zpětná vazba k posloupnosti"
+
+msgid "Purpose"
+msgstr "Účel"
+
+msgid "You"
+msgstr "Vy"
+
+msgid "City of internship"
+msgstr "Město stáže"
+
+msgid "City"
+msgstr "Město"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Pracovní postup aktualizace obnoven po obnovení stránky"
+
+msgid "Last completed step"
+msgstr "Poslední dokončený krok"
+
+msgid "Stage package"
+msgstr "Balíček pro přípravu"
+
+msgid "Package staging"
+msgstr "Příprava balíčku"
+
+msgid "Apply plan"
+msgstr "Použít plán"
+
+msgid "Update workflow completed"
+msgstr "Pracovní postup aktualizace dokončen"
+
+msgid "Update directory exists and is writable."
+msgstr "Adresář aktualizace existuje a je zapisovatelný."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Adresář aktualizace existuje, ale není zapisovatelný: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Adresář aktualizace zatím neexistuje, ale jeho nadřazený adresář je zapisovatelný."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Adresář aktualizace zatím neexistuje, ale lze jej vytvořit v var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Adresář aktualizace neexistuje a s aktuálními oprávněními jej nelze vytvořit."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Nelze určit volné místo na disku pro předběžnou kontrolu aktualizace."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Nedostatek volného místa na disku pro bezpečnou přípravu aktualizace."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Volné místo na disku je pro tento ověřovací tok aktualizace dostatečné."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Manifest aktualizace neurčuje požadavek na verzi PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Nelze plně vyhodnotit požadavek na PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Aktuální verze PHP nesplňuje požadavek aktualizace: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Aktuální verze PHP splňuje požadavek aktualizace."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Nebyla zadána cesta k místnímu balíčku. Stažené balíčky lze zkontrolovat až po stažení."
+
+msgid "Local update package is not readable: %s"
+msgstr "Místní aktualizační balíček nelze číst: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Místní aktualizační balíček musí být archiv ZIP."
+
+msgid "Local update package is readable."
+msgstr "Místní aktualizační balíček je čitelný."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Nainstalovanou verzi Chamilo se nepodařilo automaticky zjistit. Směr verzí nelze zkontrolovat."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Nainstalovaná nebo cílová verze není ve srovnatelném formátu sémantické verze."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Cílová verze je nižší než nainstalovaná verze. Downgrady nejsou ve výchozím nastavení povoleny."
+
+msgid "Target version matches the installed version."
+msgstr "Cílová verze se shoduje s nainstalovanou verzí."
+
+msgid "Target version is newer than the installed version."
+msgstr "Cílová verze je novější než nainstalovaná verze."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Projekt není Git checkout nebo chybí .git."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Tento systém aktualizací je určen pro instalace bez podpory Gitu. Zjistili jsme, že místní systém Git používá. Pokračování v aktualizaci může narušit historii Gitu. U systémů s podporou Gitu doporučujeme použít postup Gitu popsaný v CONTRIBUTING.md v kořenovém adresáři webu."
+
+msgid "Local Git changes were also detected."
+msgstr "Byly také zjištěny místní změny v Gitu."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Chybí některé soubory metadat projektu. Pozdější fáze aktualizace mohou vyžadovat ruční kontrolu závislostí."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Soubory metadat Composer a Yarn jsou přítomny."
+
+msgid "Starting staged file application."
+msgstr "Zahajuje se aplikace připravených souborů."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "K použití připravených souborů je nutné výslovné potvrzení."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Použití připravených aktualizačních souborů vyžaduje výslovné potvrzení."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Adresář přípravy je uvnitř adresáře přípravy aktualizace Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Adresář přípravy byl ověřen."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Metadata plánu použití byla úspěšně načtena."
+
+msgid "Staged application path is valid."
+msgstr "Cesta k připravené aplikaci je platná."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Metadata úklidu podepsaného balíčku odpovídají zkontrolovanému plánu použití."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Metadata úklidu podepsaného balíčku byla ověřena."
+
+msgid "Update lock was acquired."
+msgstr "Zámek aktualizace byl získán."
+
+msgid "Update backup directory was created."
+msgstr "Byl vytvořen záložní adresář aktualizace."
+
+msgid "Update file operations were collected."
+msgstr "Operace se soubory aktualizace byly shromážděny."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Existující soubory určené k nahrazení nebo odstranění byly zálohovány."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Připravené aktualizační soubory byly zkopírovány do instalace Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Soubory označené v balíčku jako zastaralé byly z instalace Chamilo odstraněny."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Soubory označené v balíčku jako zastaralé byly odstraněny."
+
+msgid "Update apply audit metadata was written."
+msgstr "Metadata auditu použití aktualizace byla zapsána."
+
+msgid "Staged files applied successfully."
+msgstr "Připravené soubory byly úspěšně použity."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Nelze obnovit odstraněné soubory: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Nelze vrátit zkopírované soubory: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Po selhání použití aktualizace bylo provedeno vrácení souborů."
+
+msgid "Rollback failed: %s"
+msgstr "Vrácení selhalo: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Nelze zapsat auditní metadata použití aktualizace: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Nelze uvolnit zámek aktualizace po selhání: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Pro použití souborů aktualizace je vyžadována cesta ke stagingu."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Stagingový adresář neexistuje: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Základní stagingový adresář aktualizace Chamilo neexistuje."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Stagingový adresář musí být uvnitř var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Ve stagingovém adresáři chybí APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Nelze načíst metadata plánu použití aktualizace: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metadata plánu použití aktualizace nejsou platný JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metadata plánu použití aktualizace musí být objekt JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "V plánu použití aktualizace chybí pole application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Cesta k připravené aplikaci není čitelná: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Cesta k připravené aplikaci musí být uvnitř stagingového adresáře."
+
+msgid "Staged application path is missing composer.json."
+msgstr "V cestě k připravené aplikaci chybí composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "V balíčku aktualizace chybí %s. Znovu připravte ověřený balíček s podepsanými metadaty úklidu."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "V plánu použití aktualizace chybí zkontrolovaná metadata úklidu balíčku."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Metadata úklidu balíčku aktualizace se po vygenerování plánu použití změnila. Před pokračováním plán použití znovu sestavte."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Plán použití aktualizace obsahuje neplatný seznam odstranění z balíčku."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Cesty úklidu balíčku aktualizace se po vygenerování plánu použití změnily. Před pokračováním plán použití znovu sestavte."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "V plánu použití aktualizace chybí zkontrolovaný seznam cest k odstranění."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Cesty k odstranění v plánu použití aktualizace neodpovídají podepsaným metadatům úklidu balíčku."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Cesta k zámku aktualizace musí být uvnitř var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "V plánu použití aktualizace chybí pole backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Cesta k záloze aktualizace obsahuje nebezpečné segmenty cesty."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Cesta k záloze aktualizace musí být uvnitř var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Nelze získat zámek aktualizace. Možná již probíhá jiná aktualizace."
+
+msgid "Unable to release update lock: %s"
+msgstr "Nelze uvolnit zámek aktualizace: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Adresář zálohy aktualizace již existuje: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Cílový adresář nelze vytvořit: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Plánovaná aktualizace by přepsala existující symbolický odkaz: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Cílový soubor není zapisovatelný: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Cílový soubor nelze vytvořit: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Nelze určit adresář projektu Chamilo před odstraněním zastaralých souborů."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Úklid aktualizace nemůže odstranit chráněnou cestu: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Plánovaná aktualizace by odstranila existující symbolický odkaz: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Úklid aktualizace podporuje pouze soubory, nikoli adresáře: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Zastaralý cílový soubor není čitelný pro zálohu: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Zastaralý cílový soubor nelze odstranit s aktuálními oprávněními adresáře: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Zastaralý cílový soubor se nachází mimo adresář projektu Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Nelze zálohovat cílový soubor: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Nelze zapsat metadata zálohy aktualizace."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Nelze zkopírovat připravený soubor aktualizace: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Zkopírováno %d z %d připravených souborů."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Nelze odstranit zastaralý soubor deklarovaný v balíčku: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Odstraněno %d z %d zastaralých souborů deklarovaných v balíčku."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Nelze obnovit zálohovaný soubor: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Nelze odstranit nově zkopírovaný soubor během vrácení změn: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Nelze obnovit odstraněný soubor, protože chybí jeho záloha: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Nelze obnovit odstraněný soubor ze zálohy: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Nelze zapsat auditní metadata aplikace aktualizace."
+
+msgid "Unable to write global update apply log."
+msgstr "Nelze zapsat globální protokol aplikace aktualizace."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Zjištěna nebezpečná relativní cesta ve stagingu: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Do adresáře nelze zapisovat: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Nelze vytvořit adresář: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Metadata stagingu byla úspěšně načtena."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metadata plánu aplikace byla zapsána do stagingového adresáře."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Cílové soubory a adresáře se zdají být zapisovatelné pro plánovanou aktualizaci a úklid."
+
+msgid "Update apply plan check failed."
+msgstr "Kontrola plánu aplikace aktualizace selhala."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Do některých cílových souborů nebo adresářů nelze zapisovat nebo je nelze odstranit."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Pro nápravu dočasně změňte vlastníka celého adresáře Chamilo na %s (uživatel webového serveru), aplikujte aktualizaci, poté změňte vlastníka zpět na %s a nakonec nastavte vlastníka var/ (a jeho obsahu) zpět na %s, aby do něj aplikace mohla i nadále zapisovat."
 

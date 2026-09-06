@@ -7673,7 +7673,7 @@ msgid "Please type your text below"
 msgstr "သင့်စာသားကို အောက်တွင် ရိုက်ထည့်ပါ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ပုံစံဖြည့် လုပ်ဆောင်ချက် နမူနာ : ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း တွက်ချက်ရန်</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ဝီကီပီးဒီးယား ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ဖောင်ဖြည့် လှုပ်ရှားမှု နမူနာ : ကိုယ်အလေးချိန်ညွှန်းကိန်း (BMI) တွက်ချက်ခြင်း</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ကိုယ်အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ကိုယ်အလေးချိန်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "လိပ်စာကို မှတ်သားပါ"
@@ -8793,6 +8793,9 @@ msgstr "ကျွန်ုပ်၏တိုးတက်မှုကို က�
 
 msgid "Personal agenda"
 msgstr "ကိုယ်ပိုင်အစီအစဉ်"
+
+msgid "Group agenda"
+msgstr "အဖွဲ့ အစီအစဉ်"
 
 msgid "Switch to teacher view"
 msgstr "ဆရာမြင်ကွင်းသို့ ပြောင်းပါ"
@@ -35585,7 +35588,7 @@ msgid "%s results"
 msgstr "%s ရလဒ်များ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ပုံစံဖြည့် လုပ်ဆောင်ချက် နမူနာ : ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း တွက်ချက်ရန်</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ဝီကီပီးဒီးယား ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ဖောင်ဖြည့် လှုပ်ရှားမှု နမူနာ : ကိုယ်အလေးချိန်ညွှန်းကိန်း (BMI) တွက်ချက်ခြင်း</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ကိုယ်အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ကိုယ်အလေးချိန်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "ဖယ်ရှားပြီး"
@@ -40128,4 +40131,106 @@ msgstr "အုပ်စု အစီရင်ခံစာ"
 
 msgid "Student follow-up"
 msgstr "ကျောင်းသား နောက်ဆက်တွဲ"
+
+msgid "Use system default certificate"
+msgstr "စနစ်ပုံသေ လက်မှတ်ကို အသုံးပြုပါ"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "ပူးတွဲထားသော လက်မှတ်ကို မရရှိနိုင်ပါ။ စနစ်ပုံသေ လက်မှတ်ကို အသုံးပြုပါမည်။"
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "ပူးတွဲထားသော လက်မှတ်အစား စနစ်ပုံသေ လက်မှတ်ကို အသုံးပြုမလား။"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "ရွေးချယ်နိုင်သော ဒေသတွင်း ဖွံ့ဖြိုးရေး override။ ထုတ်လုပ်ရေး အပ်ဒိတ်များသည် တရားဝင် Chamilo ယုံကြည်ရသော သော့ကို အသုံးပြုသည်။"
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "စင်တင်ထားသော ပက်ကေ့ချ်မှ ဘေးကင်းသော အသုံးချ အစီအစဉ် တည်ဆောက်ပါ။ ဤသည်မှာ အစားထိုး၊ ထည့် သို့မဟုတ် ဖယ်ရှားမည့် ဖိုင်များ၊ ခွင့်ပြုချက်များ၊ အရန်လမ်းကြောင်းနှင့် လော့ခ် အခြေအနေကို စစ်ဆေးသည်။ တပ်ဆင်မှုကို မပြင်ဆင်ပါ။"
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "ဤအဆင့်သည် ပြန်လည်သုံးသပ်ရန်သာ ပြင်ဆင်သည်။ ဖိုင်အစားထိုးခြင်းနှင့် ပက်ကေ့ချ်ကြေညာထားသော ရှင်းလင်းခြင်းသည် နောက်ပိုင်း Apply staged files အဆင့်တွင် လော့ခ်၊ အရန်နှင့် ပြန်လည်ရုပ်သိမ်း ကာကွယ်မှုဖြင့် ဖြစ်ပေါ်သည်။"
+
+msgid "Files to remove"
+msgstr "ဖယ်ရှားမည့် ဖိုင်များ"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "စင်တင်ထားသော ပက်ကေ့ချ်မှ Chamilo ဖိုင်များကို အစားထိုးပြီး လက်မှတ်ထိုး ပက်ကေ့ချ် မက်တာဒေတာက ရှင်းလင်းကြေညာထားသော ဟောင်းနွမ်းဖိုင်များကို ဖယ်ရှားပါ။ ဤသည်မှာ ဒေတာဘေ့စ် မိုက်ဂရေးရှင်းများ၊ Composer၊ Yarn သို့မဟုတ် ကက်ရှ် ညွှန်ကြားချက်များကို မလုပ်ဆောင်ပါ။"
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "ဤလုပ်ဆောင်ချက်သည် Chamilo တပ်ဆင်မှုတွင် ဖိုင်များကို အစားထိုးပြီး ဖယ်ရှားနိုင်သည်။ ဆက်လက်မလုပ်မီ အသုံးချ အစီအစဉ်ကို ပြန်လည်သုံးသပ်ပြီး အရန်များကို ဖွင့်ထားကြောင်း သေချာပါစေ။"
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "ဤသည်မှာ Chamilo တပ်ဆင်မှုတွင် ဖိုင်များကို အစားထိုးပြီး ပက်ကေ့ချ်ကြေညာထားသော ဟောင်းနွမ်းဖိုင်များကို ဖယ်ရှားမည်ကို နားလည်ပါသည်။"
+
+msgid "Type the exact text below to confirm"
+msgstr "အတည်ပြုရန် အောက်ပါ စာသားအတိအကျကို ရိုက်ထည့်ပါ"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine သည် ဘေးကင်းရေး ပြန်လည်သုံးသပ်မှု အောင်မြင်ပြီးနောက် စင်တင်ထားသော V300 မိုက်ဂရေးရှင်းများကိုသာ ရှင်းလင်းစွာ လုပ်ဆောင်ပါမည်။"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine က သမိုင်းဆိုင်ရာ အခြေခံ သတိပေးချက်များကို သတင်းပို့ခဲ့သည်။ အပ်ဒိတ်လုပ်သူသည် ရှင်းလင်းသော အတည်ပြုချက်ပြီးနောက် စင်တင်ထားသော V300 မိုက်ဂရေးရှင်းများကိုသာ ဆက်လက်လုပ်ဆောင်ပါမည်။"
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "မန်နီဖက်စ် လမ်းကြောင်းကိုသာ ပြောင်းလဲနိုင်သည်။ HTTPS ပရိုတိုကောနှင့် တရားဝင် အပ်ဒိတ် ဒိုမိန်းမှာ ပုံသေဖြစ်သည်။"
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "ဖွံ့ဖြိုးရေးမုဒ်သည် HTTPS မန်နီဖက်စ် URL သို့မဟုတ် ဒေသတွင်း မန်နီဖက်စ် လမ်းကြောင်းကို ခွင့်ပြုသည်။"
+
+msgid "The official update manifest is configured by the server."
+msgstr "တရားဝင် အပ်ဒိတ် မန်နီဖက်စ်ကို ဆာဗာက ပြင်ဆင်ထားသည်။"
+
+msgid "What feedback do you want about this course?"
+msgstr "ဤသင်တန်းအကြောင်း မည်သည့် တုံ့ပြန်ချက်ကို လိုချင်သနည်း။"
+
+msgid "Analysis summary"
+msgstr "ခွဲခြမ်းစိတ်ဖြာမှု အနှစ်ချုပ်"
+
+msgid "Lessons included"
+msgstr "ပါဝင်သော သင်ခန်းစာများ"
+
+msgid "Standalone documents included"
+msgstr "ပါဝင်သော သီးခြား စာရွက်စာတမ်းများ"
+
+msgid "Standalone exercises included"
+msgstr "ပါဝင်သော သီးခြား လေ့ကျင့်ခန်းများ"
+
+msgid "General feedback"
+msgstr "အထွေထွေ တုံ့ပြန်ချက်"
+
+msgid "Strengths"
+msgstr "အားသာချက်များ"
+
+msgid "Risks"
+msgstr "အန္တရာယ်များ"
+
+msgid "Recommendations"
+msgstr "အကြံပြုချက်များ"
+
+msgid "Lesson feedback"
+msgstr "သင်ခန်းစာ တုံ့ပြန်ချက်"
+
+msgid "Standalone document feedback"
+msgstr "သီးခြား စာရွက်စာတမ်း တုံ့ပြန်ချက်"
+
+msgid "Standalone exercise feedback"
+msgstr "သီးခြား လေ့ကျင့်ခန်း တုံ့ပြန်ချက်"
+
+msgid "AI response"
+msgstr "AI တုံ့ပြန်ချက်"
+
+msgid "Sequence feedback"
+msgstr "အစဉ်လိုက် တုံ့ပြန်ချက်"
+
+msgid "Purpose"
+msgstr "ရည်ရွယ်ချက်"
+
+msgid "You"
+msgstr "သင်"
+
+msgid "City of internship"
+msgstr "အလုပ်သင်မြို့"
+
+msgid "City"
+msgstr "မြို့"
 

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول بېلګه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول نمونه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -8789,6 +8789,9 @@ msgstr "زما پرمختګ وګورئ"
 
 msgid "Personal agenda"
 msgstr "شخصي برنامه"
+
+msgid "Group agenda"
+msgstr "د ډلې اجنډا"
 
 msgid "Switch to teacher view"
 msgstr "د ښوونکي لید ته بدلون"
@@ -40124,4 +40127,106 @@ msgstr "د ډلې راپور"
 
 msgid "Student follow-up"
 msgstr "د زده‌کوونکي تعقیب"
+
+msgid "Use system default certificate"
+msgstr "د سیسټم ډیفالټ سند وکاروئ"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "ضمیمه شوی سند شتون نلري. د سیسټم ډیفالټ سند به وکارول شي."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "د ضمیمه شوي سند پر ځای د سیسټم ډیفالټ سند وکاروئ؟"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "اختیاري محلي پراختیایي اووررایډ. د تولید تازه معلومات د چامیلو رسمي باوري کیلي کاروي."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "د مرحلې شوي بسته څخه یو خوندي پلي کولو پلان جوړ کړئ. دا د بدلولو، اضافه کولو یا لرې کولو فایلونه، اجازې، بیک‌اپ لاره او لاک حالت چک کوي. دا نصب نه بدلوي."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "دا ګام یوازې بیاکتنه چمتو کوي. د فایل بدلول او د بسته اعلان شوي پاکول وروسته په د پلي کولو مرحلې فایلونو کې د لاک، بیک‌اپ او رول‌بیک ساتنې سره پیښیږي."
+
+msgid "Files to remove"
+msgstr "د لرې کولو فایلونه"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "د مرحلې شوي بسته څخه د چامیلو فایلونه بدل کړئ او هغه زوړ فایلونه لرې کړئ چې د لاسلیک شوي بسته میټاډاټا لخوا په ښکاره توګه اعلان شوي. دا د ډیټابیس مهاجرتونه، Composer، Yarn یا کیش کمانډونه نه چلوي."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "دا عمل په چامیلو نصب کې فایلونه بدلوي او کولی شي لرې کړي. ډاډ ترلاسه کړئ چې د پلي کولو پلان بیاکتنه شوې او بیک‌اپ فعال دي مخکې له دوام."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "زه پوهیږم چې دا به په چامیلو نصب کې فایلونه بدل کړي او د بسته اعلان شوي زوړ فایلونه لرې کړي."
+
+msgid "Type the exact text below to confirm"
+msgstr "د تایید لپاره لاندې دقیق متن ولیکئ"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine به یوازې مرحلې شوي V300 مهاجرتونه په ښکاره توګه د خوندیتوب بیاکتنې تیریدو وروسته اجرا کړي."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine تاریخي بنسټ خبرداری راپور کړ. تازه کوونکی به لاهم یوازې مرحلې شوي V300 مهاجرتونه د ښکاره تایید وروسته اجرا کړي."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "یوازې د منشور لاره بدلیدلی شي. د HTTPS پروتوکول او رسمي تازه ډومین ثابت دي."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "د پراختیا حالت د HTTPS منشور URL یا محلي منشور لاره اجازه ورکوي."
+
+msgid "The official update manifest is configured by the server."
+msgstr "رسمي تازه منشور د سرور لخوا تنظیم شوی."
+
+msgid "What feedback do you want about this course?"
+msgstr "تاسو د دې کورس په اړه کوم نظر غواړئ؟"
+
+msgid "Analysis summary"
+msgstr "د تحلیل لنډیز"
+
+msgid "Lessons included"
+msgstr "شامل درسونه"
+
+msgid "Standalone documents included"
+msgstr "شامل خپلواک اسناد"
+
+msgid "Standalone exercises included"
+msgstr "شامل خپلواک تمرینونه"
+
+msgid "General feedback"
+msgstr "عمومي نظر"
+
+msgid "Strengths"
+msgstr "ځواکونه"
+
+msgid "Risks"
+msgstr "خطرونه"
+
+msgid "Recommendations"
+msgstr "سپارښتنې"
+
+msgid "Lesson feedback"
+msgstr "د درس نظر"
+
+msgid "Standalone document feedback"
+msgstr "د خپلواک سند نظر"
+
+msgid "Standalone exercise feedback"
+msgstr "د خپلواک تمرین نظر"
+
+msgid "AI response"
+msgstr "د AI ځواب"
+
+msgid "Sequence feedback"
+msgstr "د سلسلې نظر"
+
+msgid "Purpose"
+msgstr "موخه"
+
+msgid "You"
+msgstr "تاسو"
+
+msgid "City of internship"
+msgstr "د انټرنشپ ښار"
+
+msgid "City"
+msgstr "ښار"
 

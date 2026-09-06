@@ -8795,6 +8795,9 @@ msgstr "Ara l-progress tiegħi"
 msgid "Personal agenda"
 msgstr "Aġenda personali"
 
+msgid "Group agenda"
+msgstr ""
+
 msgid "Switch to teacher view"
 msgstr "Aqleb għall-vista tal-għalliem"
 
@@ -15375,7 +15378,7 @@ msgid "Disk usage per course vs disk quota"
 msgstr ""
 
 msgid "Information about your webserver configuration"
-msgstr ""
+msgstr "Informazzjoni dwar il-konfigurazzjoni tas-webserver tiegħek"
 
 msgid "Paths"
 msgstr "Mogħdijiet"
@@ -40129,4 +40132,106 @@ msgstr "Rapport tal-grupp"
 
 msgid "Student follow-up"
 msgstr "Segwitu tal-istudent"
+
+msgid "Use system default certificate"
+msgstr "Uża ċ-ċertifikat default tas-sistema"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Iċ-ċertifikat mehmuż mhuwiex disponibbli. Se jintuża ċ-ċertifikat default tas-sistema."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Tuża ċ-ċertifikat default tas-sistema minflok iċ-ċertifikat mehmuż?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Override fakultattiv għall-iżvilupp lokali. L-aġġornamenti tal-produzzjoni jużaw iċ-ċavetta uffiċjali fdata ta’ Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Ibni pjan ta’ applikazzjoni sikur mill-pakkett ippreparat. Dan jiċċekkja fajls biex jinbidlu, jiżdiedu jew jitneħħew, permessi, mogħdija tal-backup u status tal-lock. Ma jimmodifikax l-installazzjoni."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Dan il-pass iħejji reviżjoni biss. Is-sostituzzjoni tal-fajls u t-tindif iddikjarat mill-pakkett iseħħu aktar tard fil-pass Applika l-fajls ippreparati, bi protezzjoni ta’ lock, backup u rollback."
+
+msgid "Files to remove"
+msgstr "Fajls li għandhom jitneħħew"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Ibdel il-fajls ta’ Chamilo mill-pakkett ippreparat u neħħi fajls obsoleti ddikjarati espliċitament mill-metadata ffirmata tal-pakkett. Dan ma jmexxix migrazzjonijiet tad-database, Composer, Yarn jew kmandi tal-cache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Din l-azzjoni tissostitwixxi u tista’ tneħħi fajls fl-installazzjoni ta’ Chamilo. Kun żgur li l-pjan ta’ applikazzjoni ġie rivedut u li l-backups huma attivi qabel tkompli."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Nifhem li dan se jissostitwixxi fajls u jneħħi fajls obsoleti ddikjarati mill-pakkett fl-installazzjoni ta’ Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Ikteb it-test eżatt hawn taħt biex tikkonferma"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine se jeżegwixxi biss il-migrazzjonijiet V300 ippreparati espliċitament wara li tgħaddi r-reviżjoni tas-sigurtà."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine irrappurtat twissijiet ta’ bażi storika. L-updater xorta se jeżegwixxi biss il-migrazzjonijiet V300 ippreparati wara konferma espliċita."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Tista’ tinbidel biss il-mogħdija tal-manifest. Il-protokoll HTTPS u d-dominju uffiċjali tal-aġġornament huma fissi."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Il-modalità tal-iżvilupp tippermetti URL ta’ manifest HTTPS jew mogħdija ta’ manifest lokali."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Il-manifest uffiċjali tal-aġġornament huwa kkonfigurat mis-server."
+
+msgid "What feedback do you want about this course?"
+msgstr "X’feedback trid dwar dan il-kors?"
+
+msgid "Analysis summary"
+msgstr "Sommarju tal-analiżi"
+
+msgid "Lessons included"
+msgstr "Lezzjonijiet inklużi"
+
+msgid "Standalone documents included"
+msgstr "Dokumenti indipendenti inklużi"
+
+msgid "Standalone exercises included"
+msgstr "Eżerċizzji indipendenti inklużi"
+
+msgid "General feedback"
+msgstr "Feedback ġenerali"
+
+msgid "Strengths"
+msgstr "Saħħiet"
+
+msgid "Risks"
+msgstr "Riskji"
+
+msgid "Recommendations"
+msgstr "Rakkomandazzjonijiet"
+
+msgid "Lesson feedback"
+msgstr "Feedback tal-lezzjoni"
+
+msgid "Standalone document feedback"
+msgstr "Feedback tad-dokument indipendenti"
+
+msgid "Standalone exercise feedback"
+msgstr "Feedback tal-eżerċizzju indipendenti"
+
+msgid "AI response"
+msgstr "Risposta tal-AI"
+
+msgid "Sequence feedback"
+msgstr "Feedback tas-sekwenza"
+
+msgid "Purpose"
+msgstr "Għan"
+
+msgid "You"
+msgstr "Int"
+
+msgid "City of internship"
+msgstr "Belt tal-internship"
+
+msgid "City"
+msgstr "Belt"
 

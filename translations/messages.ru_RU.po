@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "С уважением"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример формулы: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример формулы: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазоны переменных"
@@ -8795,6 +8795,9 @@ msgstr "Просмотреть мою статистику"
 
 msgid "Personal agenda"
 msgstr "Мой порядок дня (расписание)"
+
+msgid "Group agenda"
+msgstr "Повестка группы"
 
 msgid "Switch to teacher view"
 msgstr "Вид преподавателя"
@@ -40131,4 +40134,106 @@ msgstr "Отчёт группы"
 
 msgid "Student follow-up"
 msgstr "Сопровождение студента"
+
+msgid "Use system default certificate"
+msgstr "Использовать системный сертификат по умолчанию"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Прикреплённый сертификат недоступен. Будет использован системный сертификат по умолчанию."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Использовать системный сертификат по умолчанию вместо прикреплённого?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Необязательное переопределение для локальной разработки. Обновления в продакшене используют официальный доверенный ключ Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Составить безопасный план применения из подготовленного пакета. Проверяются файлы для замены, добавления или удаления, права доступа, путь резервной копии и статус блокировки. Установка не изменяется."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Этот шаг только готовит обзор. Замена файлов и очистка, объявленная пакетом, выполняются позже на шаге «Применить подготовленные файлы» с блокировкой, резервным копированием и откатом."
+
+msgid "Files to remove"
+msgstr "Файлы для удаления"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Заменить файлы Chamilo из подготовленного пакета и удалить устаревшие файлы, явно указанные в подписанных метаданных пакета. Миграции БД, Composer, Yarn и команды кэша не запускаются."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Это действие заменяет и может удалять файлы в установке Chamilo. Перед продолжением убедитесь, что план применения проверен и резервное копирование включено."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Я понимаю, что это заменит файлы и удалит устаревшие файлы, объявленные пакетом, в установке Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Введите точный текст ниже для подтверждения"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine выполнит только подготовленные миграции V300 явно после прохождения проверки безопасности."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine сообщил о предупреждениях исторической базовой линии. Обновлятор всё равно выполнит только подготовленные миграции V300 после явного подтверждения."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Можно изменить только путь манифеста. Протокол HTTPS и официальный домен обновлений фиксированы."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Режим разработки позволяет указать HTTPS URL манифеста или локальный путь к манифесту."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Официальный манифест обновлений настраивается сервером."
+
+msgid "What feedback do you want about this course?"
+msgstr "Какую обратную связь вы хотите по этому курсу?"
+
+msgid "Analysis summary"
+msgstr "Сводка анализа"
+
+msgid "Lessons included"
+msgstr "Включённые уроки"
+
+msgid "Standalone documents included"
+msgstr "Включённые отдельные документы"
+
+msgid "Standalone exercises included"
+msgstr "Включённые отдельные упражнения"
+
+msgid "General feedback"
+msgstr "Общая обратная связь"
+
+msgid "Strengths"
+msgstr "Сильные стороны"
+
+msgid "Risks"
+msgstr "Риски"
+
+msgid "Recommendations"
+msgstr "Рекомендации"
+
+msgid "Lesson feedback"
+msgstr "Обратная связь по уроку"
+
+msgid "Standalone document feedback"
+msgstr "Обратная связь по отдельному документу"
+
+msgid "Standalone exercise feedback"
+msgstr "Обратная связь по отдельному упражнению"
+
+msgid "AI response"
+msgstr "Ответ ИИ"
+
+msgid "Sequence feedback"
+msgstr "Обратная связь по последовательности"
+
+msgid "Purpose"
+msgstr "Цель"
+
+msgid "You"
+msgstr "Вы"
+
+msgid "City of internship"
+msgstr "Город стажировки"
+
+msgid "City"
+msgstr "Город"
 

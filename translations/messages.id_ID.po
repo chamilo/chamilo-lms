@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Hormat kami"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh rumus: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh rumus: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rentang variabel"
@@ -8792,6 +8792,9 @@ msgstr "Lihat statistik Ku"
 
 msgid "Personal agenda"
 msgstr "Agenda-ku"
+
+msgid "Group agenda"
+msgstr "Agenda kelompok"
 
 msgid "Switch to teacher view"
 msgstr "Jendela Pengajar"
@@ -40128,4 +40131,448 @@ msgstr "Laporan kelompok"
 
 msgid "Student follow-up"
 msgstr "Tindak lanjut siswa"
+
+msgid "Use system default certificate"
+msgstr "Gunakan sertifikat bawaan sistem"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Sertifikat terlampir tidak tersedia. Sertifikat bawaan sistem akan digunakan."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Gunakan sertifikat bawaan sistem sebagai pengganti sertifikat terlampir?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Penggantian pengembangan lokal opsional. Pembaruan produksi menggunakan kunci tepercaya resmi Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Buat rencana penerapan yang aman dari paket yang disiapkan. Ini memeriksa berkas yang akan diganti, ditambah, atau dihapus, izin, jalur cadangan, dan status kunci. Ini tidak mengubah instalasi."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Langkah ini hanya menyiapkan tinjauan. Penggantian berkas dan pembersihan yang dinyatakan paket terjadi nanti pada langkah Terapkan berkas yang disiapkan, dengan perlindungan kunci, cadangan, dan rollback."
+
+msgid "Files to remove"
+msgstr "Berkas yang akan dihapus"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Ganti berkas Chamilo dari paket yang disiapkan dan hapus berkas usang yang secara eksplisit dinyatakan oleh metadata paket yang ditandatangani. Ini tidak menjalankan migrasi basis data, Composer, Yarn, atau perintah cache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Tindakan ini mengganti dan dapat menghapus berkas dalam instalasi Chamilo. Pastikan rencana penerapan telah ditinjau dan cadangan diaktifkan sebelum melanjutkan."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Saya memahami bahwa ini akan mengganti berkas dan menghapus berkas usang yang dinyatakan paket dalam instalasi Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Ketik teks persis di bawah ini untuk mengonfirmasi"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine hanya akan menjalankan migrasi V300 yang disiapkan secara eksplisit setelah tinjauan keamanan lulus."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine melaporkan peringatan baseline historis. Pengelola pembaruan tetap hanya akan menjalankan migrasi V300 yang disiapkan setelah konfirmasi eksplisit."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Hanya jalur manifes yang dapat diubah. Protokol HTTPS dan domain pembaruan resmi bersifat tetap."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Mode pengembangan memungkinkan URL manifes HTTPS atau jalur manifes lokal."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Manifes pembaruan resmi dikonfigurasi oleh server."
+
+msgid "What feedback do you want about this course?"
+msgstr "Umpan balik apa yang Anda inginkan tentang kursus ini?"
+
+msgid "Analysis summary"
+msgstr "Ringkasan analisis"
+
+msgid "Lessons included"
+msgstr "Pelajaran yang disertakan"
+
+msgid "Standalone documents included"
+msgstr "Dokumen mandiri yang disertakan"
+
+msgid "Standalone exercises included"
+msgstr "Latihan mandiri yang disertakan"
+
+msgid "General feedback"
+msgstr "Umpan balik umum"
+
+msgid "Strengths"
+msgstr "Kekuatan"
+
+msgid "Risks"
+msgstr "Risiko"
+
+msgid "Recommendations"
+msgstr "Rekomendasi"
+
+msgid "Lesson feedback"
+msgstr "Umpan balik pelajaran"
+
+msgid "Standalone document feedback"
+msgstr "Umpan balik dokumen mandiri"
+
+msgid "Standalone exercise feedback"
+msgstr "Umpan balik latihan mandiri"
+
+msgid "AI response"
+msgstr "Respons AI"
+
+msgid "Sequence feedback"
+msgstr "Umpan balik urutan"
+
+msgid "Purpose"
+msgstr "Tujuan"
+
+msgid "You"
+msgstr "Anda"
+
+msgid "City of internship"
+msgstr "Kota magang"
+
+msgid "City"
+msgstr "Kota"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Alur kerja pembaruan dipulihkan setelah halaman dimuat ulang"
+
+msgid "Last completed step"
+msgstr "Langkah terakhir yang selesai"
+
+msgid "Stage package"
+msgstr "Paket staging"
+
+msgid "Package staging"
+msgstr "Staging paket"
+
+msgid "Apply plan"
+msgstr "Terapkan rencana"
+
+msgid "Update workflow completed"
+msgstr "Alur kerja pembaruan selesai"
+
+msgid "Update directory exists and is writable."
+msgstr "Direktori pembaruan ada dan dapat ditulis."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Direktori pembaruan ada tetapi tidak dapat ditulis: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Direktori pembaruan belum ada, tetapi direktori induknya dapat ditulis."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Direktori pembaruan belum ada, tetapi dapat dibuat di bawah var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Direktori pembaruan tidak ada dan tidak dapat dibuat dengan izin saat ini."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Tidak dapat menentukan ruang disk kosong untuk pemeriksaan awal pembaruan."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Ruang disk kosong tidak cukup untuk operasi staging pembaruan yang aman."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Ruang disk kosong mencukupi untuk alur pembaruan tahap verifikasi ini."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Manifest pembaruan tidak menentukan persyaratan versi PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Tidak dapat mengevaluasi persyaratan PHP secara penuh: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Versi PHP saat ini tidak memenuhi persyaratan pembaruan: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Versi PHP saat ini memenuhi persyaratan pembaruan."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Jalur paket lokal tidak diberikan. Paket yang diunduh hanya dapat diperiksa setelah unduhan."
+
+msgid "Local update package is not readable: %s"
+msgstr "Paket pembaruan lokal tidak dapat dibaca: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Paket pembaruan lokal harus berupa arsip ZIP."
+
+msgid "Local update package is readable."
+msgstr "Paket pembaruan lokal dapat dibaca."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Versi Chamilo yang terpasang tidak dapat dideteksi secara otomatis. Arah versi tidak dapat diperiksa."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Versi terpasang atau target tidak dalam format versi semantik yang dapat dibandingkan."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Versi target lebih rendah dari versi terpasang. Penurunan versi tidak diizinkan secara default."
+
+msgid "Target version matches the installed version."
+msgstr "Versi target sama dengan versi terpasang."
+
+msgid "Target version is newer than the installed version."
+msgstr "Versi target lebih baru dari versi terpasang."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Proyek bukan checkout Git atau .git tidak ada."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Sistem pembaruan ini ditujukan untuk instalasi tanpa dukungan Git. Kami mendeteksi bahwa sistem lokal menggunakan Git. Melanjutkan pembaruan dapat merusak riwayat Git. Untuk sistem dengan dukungan Git, kami merekomendasikan prosedur Git yang dijelaskan di CONTRIBUTING.md pada root web."
+
+msgid "Local Git changes were also detected."
+msgstr "Perubahan Git lokal juga terdeteksi."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Beberapa file metadata proyek hilang. Tahap pembaruan berikutnya mungkin memerlukan pemeriksaan dependensi secara manual."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "File metadata Composer dan Yarn ada."
+
+msgid "Starting staged file application."
+msgstr "Memulai penerapan file yang di-staging."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Konfirmasi eksplisit diperlukan untuk menerapkan file yang di-staging."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Menerapkan file pembaruan yang di-staging memerlukan konfirmasi eksplisit."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Direktori staging berada di dalam direktori staging pembaruan Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Direktori staging telah divalidasi."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Metadata rencana penerapan berhasil dibaca."
+
+msgid "Staged application path is valid."
+msgstr "Jalur penerapan yang di-staging valid."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Metadata pembersihan paket bertanda tangan sesuai dengan rencana penerapan yang telah ditinjau."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Metadata pembersihan paket bertanda tangan telah divalidasi."
+
+msgid "Update lock was acquired."
+msgstr "Kunci pembaruan telah diperoleh."
+
+msgid "Update backup directory was created."
+msgstr "Direktori cadangan pembaruan telah dibuat."
+
+msgid "Update file operations were collected."
+msgstr "Operasi file pembaruan telah dikumpulkan."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "File yang ada yang direncanakan untuk diganti atau dihapus telah dicadangkan."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "File pembaruan yang di-staging telah disalin ke instalasi Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "File usang yang dideklarasikan paket telah dihapus dari instalasi Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "File usang yang dideklarasikan paket telah dihapus."
+
+msgid "Update apply audit metadata was written."
+msgstr "Metadata audit penerapan pembaruan telah ditulis."
+
+msgid "Staged files applied successfully."
+msgstr "Berkas yang di-staging berhasil diterapkan."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Tidak dapat memulihkan berkas yang dihapus: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Tidak dapat mengembalikan berkas yang disalin: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Pengembalian berkas dijalankan setelah penerapan pembaruan gagal."
+
+msgid "Rollback failed: %s"
+msgstr "Pengembalian gagal: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Tidak dapat menulis metadata audit penerapan pembaruan: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Tidak dapat melepaskan kunci pembaruan setelah kegagalan: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Jalur staging diperlukan untuk menerapkan berkas pembaruan."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Direktori staging tidak ada: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Direktori dasar staging pembaruan Chamilo tidak ada."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Direktori staging harus berada di dalam var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Direktori staging tidak memiliki APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Tidak dapat membaca metadata rencana penerapan pembaruan: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metadata rencana penerapan pembaruan bukan JSON yang valid: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metadata rencana penerapan pembaruan harus berupa objek JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Rencana penerapan pembaruan tidak memiliki bidang application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Jalur aplikasi yang di-staging tidak dapat dibaca: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Jalur aplikasi yang di-staging harus berada di dalam direktori staging."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Jalur aplikasi yang di-staging tidak memiliki composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Paket pembaruan tidak memiliki %s. Staging ulang paket terverifikasi dengan metadata pembersihan yang ditandatangani."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Rencana penerapan pembaruan tidak memiliki metadata pembersihan paket yang telah ditinjau."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Metadata pembersihan paket pembaruan berubah setelah rencana penerapan dibuat. Bangun ulang rencana penerapan sebelum melanjutkan."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Rencana penerapan pembaruan berisi daftar penghapusan paket yang tidak valid."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Jalur pembersihan paket pembaruan berubah setelah rencana penerapan dibuat. Bangun ulang rencana penerapan sebelum melanjutkan."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Rencana penerapan pembaruan tidak memiliki daftar jalur penghapusan yang telah ditinjau."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Jalur penghapusan rencana penerapan pembaruan tidak cocok dengan metadata pembersihan paket yang ditandatangani."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Jalur kunci pembaruan harus berada di dalam var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Rencana penerapan pembaruan tidak memiliki bidang backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Jalur cadangan pembaruan berisi segmen jalur yang tidak aman."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Jalur cadangan pembaruan harus berada di dalam var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Tidak dapat memperoleh kunci pembaruan. Pembaruan lain mungkin sedang berlangsung."
+
+msgid "Unable to release update lock: %s"
+msgstr "Tidak dapat melepaskan kunci pembaruan: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Direktori cadangan pembaruan sudah ada: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Direktori target tidak dapat dibuat: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Pembaruan yang direncanakan akan menimpa tautan simbolik yang sudah ada: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Berkas target tidak dapat ditulis: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Berkas target tidak dapat dibuat: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Tidak dapat menyelesaikan direktori proyek Chamilo sebelum menghapus berkas usang."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Pembersihan pembaruan tidak dapat menghapus jalur yang dilindungi: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Pembaruan yang direncanakan akan menghapus tautan simbolik yang sudah ada: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Pembersihan pembaruan hanya mendukung berkas, bukan direktori: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Berkas target usang tidak dapat dibaca untuk cadangan: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Berkas target usang tidak dapat dihapus dengan izin direktori saat ini: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Berkas target usang terselesaikan di luar direktori proyek Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Tidak dapat mencadangkan berkas target: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Tidak dapat menulis metadata cadangan pembaruan."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Tidak dapat menyalin berkas pembaruan yang di-staging: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d dari %d berkas yang di-staging disalin."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Tidak dapat menghapus berkas usang yang dideklarasikan paket: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "%d dari %d berkas usang yang dideklarasikan paket dihapus."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Tidak dapat memulihkan berkas cadangan: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Tidak dapat menghapus berkas yang baru disalin saat rollback: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Tidak dapat memulihkan berkas yang dihapus karena cadangannya hilang: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Tidak dapat memulihkan berkas yang dihapus dari cadangan: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Tidak dapat menulis metadata audit penerapan pembaruan."
+
+msgid "Unable to write global update apply log."
+msgstr "Tidak dapat menulis log penerapan pembaruan global."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Jalur relatif staging yang tidak aman terdeteksi: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Direktori tidak dapat ditulis: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Tidak dapat membuat direktori: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Metadata staging berhasil dibaca."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metadata rencana penerapan telah ditulis ke direktori staging."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Berkas dan direktori target tampaknya dapat ditulis untuk pembaruan dan pembersihan yang direncanakan."
+
+msgid "Update apply plan check failed."
+msgstr "Pemeriksaan rencana penerapan pembaruan gagal."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Beberapa berkas atau direktori target tidak dapat ditulis atau dihapus."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Untuk memperbaikinya, ubah sementara pemilik seluruh direktori Chamilo menjadi %s (pengguna server web), terapkan pembaruan, ubah pemilik kembali ke %s setelahnya, lalu atur pemilik var/ (dan isinya) kembali ke %s agar aplikasi dapat terus menulis ke dalamnya."
 

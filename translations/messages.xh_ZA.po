@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo womsebenzi wokuzalisa ifomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>I-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -8789,6 +8789,9 @@ msgstr "Jonga inkqubela yam"
 
 msgid "Personal agenda"
 msgstr "I-agenda yam"
+
+msgid "Group agenda"
+msgstr "I-ajenda yeqela"
 
 msgid "Switch to teacher view"
 msgstr "Tshintshela kumbono wotitshala"
@@ -35581,7 +35584,7 @@ msgid "%s results"
 msgstr "%s iziphumo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo womsebenzi wokuzalisa ifomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>I-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Kususiwe"
@@ -40124,4 +40127,106 @@ msgstr "Ingxelo yeqela"
 
 msgid "Student follow-up"
 msgstr "Ukulandelela umfundi"
+
+msgid "Use system default certificate"
+msgstr "Sebenzisa isatifikethi esisiseko senkqubo"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Isatifikethi esincanyathiselweyo asikho. Kuzakusetyenziswa isatifikethi esisiseko senkqubo."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Sebenzisa isatifikethi esisiseko senkqubo endaweni yesatifikethi esincanyathiselweyo?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Ukugqithisa okukhethiweyo kophuhliso lwasekhaya. Uhlaziyo lwemveliso lusebenzisa isitshixo esithembekileyo se-Chamilo esisemthethweni."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Yakha icebo lokusetyenziswa elikhuselekileyo kwiphakheji elilungisiweyo. Oku kujonga iifayile eziza kutshintshwa, zongezwe okanye zisuswe, iimvume, indlela yogcino kunye nemeko yokutshixa. Ayilungisi ufakelo."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Eli nyathelo lilungisa uphononongo kuphela. Ukutshintshwa kweefayile nokucocwa okubhengezwe yiphakheji kwenzeka kamva kwinqanaba lokuSebenzisa iifayile ezilungisiweyo, ngokutshixa, ugcino kunye nokukhusela ukubuyisela umva."
+
+msgid "Files to remove"
+msgstr "Iifayile eziza kususwa"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Tshintsha iifayile ze-Chamilo kwiphakheji elilungisiweyo kwaye ususe iifayile ezingasasebenziyo ezibhengezwe ngokucacileyo yimetadata yephakheji esayiniweyo. Oku akuqhubi iinguqu zedatabase, i-Composer, i-Yarn okanye imiyalelo yecache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Esi senzo sitshintsha kwaye sinokususa iifayile kufakelo lwe-Chamilo. Qinisekisa ukuba icebo lokusetyenziswa liphononongiwe kwaye oogcino bavuliwe ngaphambi kokuqhubeka."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Ndiyaqonda ukuba oku kuya kutshintsha iifayile kwaye kususwe iifayile ezingasasebenziyo ezibhengezwe yiphakheji kufakelo lwe-Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Chwetheza umbhalo ochanekileyo ongezantsi ukuqinisekisa"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "I-Doctrine iya kuqhuba kuphela iinguqu ze-V300 ezilungisiweyo ngokucacileyo emva kokuba uphononongo lokhuseleko luphumelele."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "I-Doctrine inike ingxelo yezilumkiso zesiseko zembali. Umhlaziyi uya kuqhuba kuphela iinguqu ze-V300 ezilungisiweyo emva kokuqinisekiswa ngokucacileyo."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Kuphela indlela yemanifesti enokutshintshwa. Iprothokholi ye-HTTPS kunye nesizinda sohlaziyo olusemthethweni zizinzile."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Imowudi yophuhliso ivumela i-URL yemanifesti ye-HTTPS okanye indlela yemanifesti yasekhaya."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Imanifesti yohlaziyo olusemthethweni ilungiselelwe yiseva."
+
+msgid "What feedback do you want about this course?"
+msgstr "Yeyiphi ingxelo ofuna ngale khosi?"
+
+msgid "Analysis summary"
+msgstr "Isishwankathelo sohlalutyo"
+
+msgid "Lessons included"
+msgstr "Izifundo ezibandakanyiweyo"
+
+msgid "Standalone documents included"
+msgstr "Amaxwebhu azimeleyo abandakanyiweyo"
+
+msgid "Standalone exercises included"
+msgstr "Imithambo ezimeleyo ebandakanyiweyo"
+
+msgid "General feedback"
+msgstr "Ingxelo jikelele"
+
+msgid "Strengths"
+msgstr "Amandla"
+
+msgid "Risks"
+msgstr "Imingcipheko"
+
+msgid "Recommendations"
+msgstr "Iingcebiso"
+
+msgid "Lesson feedback"
+msgstr "Ingxelo yesifundo"
+
+msgid "Standalone document feedback"
+msgstr "Ingxelo yoxwebhu oluzimeleyo"
+
+msgid "Standalone exercise feedback"
+msgstr "Ingxelo yomthambo ozimeleyo"
+
+msgid "AI response"
+msgstr "Impendulo ye-AI"
+
+msgid "Sequence feedback"
+msgstr "Ingxelo yolandelelwano"
+
+msgid "Purpose"
+msgstr "Injongo"
+
+msgid "You"
+msgstr "Wena"
+
+msgid "City of internship"
+msgstr "Isixeko somsebenzi wokuqeqeshwa"
+
+msgid "City"
+msgstr "Isixeko"
 

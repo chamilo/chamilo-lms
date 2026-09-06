@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Me respekt"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Shembull formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Shembull formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Vargjet e variablave"
@@ -8793,6 +8793,9 @@ msgstr "Shih përparimin tim"
 
 msgid "Personal agenda"
 msgstr "Agjendë personale"
+
+msgid "Group agenda"
+msgstr "Agjenda e grupit"
 
 msgid "Switch to teacher view"
 msgstr "Kalo në pamjen e mësuesit"
@@ -40128,4 +40131,106 @@ msgstr "Raporti i grupit"
 
 msgid "Student follow-up"
 msgstr "Ndjekja e studentit"
+
+msgid "Use system default certificate"
+msgstr "Përdor certifikatën e parazgjedhur të sistemit"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Certifikata e bashkëngjitur nuk është e disponueshme. Do të përdoret certifikata e parazgjedhur e sistemit."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Të përdoret certifikata e parazgjedhur e sistemit në vend të certifikatës së bashkëngjitur?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Mbishkrim opsional për zhvillim lokal. Përditësimet në prodhim përdorin çelësin e besuar zyrtar të Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Ndërtoni një plan të sigurt zbatimi nga paketa e përgatitur. Kjo kontrollon skedarët për t'u zëvendësuar, shtuar ose hequr, lejet, shtegun e kopjes rezervë dhe statusin e bllokimit. Nuk ndryshon instalimin."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ky hap përgatit vetëm një rishikim. Zëvendësimi i skedarëve dhe pastrimi i deklaruar nga paketa ndodhin më vonë në hapin Zbato skedarët e përgatitur, me mbrojtje bllokimi, kopje rezervë dhe kthim mbrapsht."
+
+msgid "Files to remove"
+msgstr "Skedarë për t'u hequr"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Zëvendësoni skedarët e Chamilo nga paketa e përgatitur dhe hiqni skedarët e vjetëruar të deklaruar në mënyrë të qartë nga metadata e paketës së nënshkruar. Kjo nuk ekzekuton migrime të bazës së të dhënave, Composer, Yarn ose komanda cache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ky veprim zëvendëson dhe mund të heqë skedarë në instalimin e Chamilo. Sigurohuni që plani i zbatimit është rishikuar dhe kopjet rezervë janë të aktivizuara para se të vazhdoni."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "E kuptoj që kjo do të zëvendësojë skedarë dhe do të heqë skedarët e vjetëruar të deklaruar nga paketa në instalimin e Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Shkruani tekstin e saktë më poshtë për të konfirmuar"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine do të ekzekutojë vetëm migrimet e përgatitura V300 në mënyrë të qartë pasi të kalojë rishikimi i sigurisë."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine raportoi paralajmërime historike të bazës. Përditësuesi do të ekzekutojë prapë vetëm migrimet e përgatitura V300 pas konfirmimit të qartë."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Vetëm shtegu i manifestit mund të ndryshohet. Protokolli HTTPS dhe domeni zyrtar i përditësimit janë të fiksuar."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Modaliteti i zhvillimit lejon një URL manifesti HTTPS ose një shteg lokal manifesti."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Manifesti zyrtar i përditësimit konfigurohet nga serveri."
+
+msgid "What feedback do you want about this course?"
+msgstr "Çfarë komenti dëshironi për këtë kurs?"
+
+msgid "Analysis summary"
+msgstr "Përmbledhje e analizës"
+
+msgid "Lessons included"
+msgstr "Mësimet e përfshira"
+
+msgid "Standalone documents included"
+msgstr "Dokumentet e pavarura të përfshira"
+
+msgid "Standalone exercises included"
+msgstr "Ushtrimet e pavarura të përfshira"
+
+msgid "General feedback"
+msgstr "Koment i përgjithshëm"
+
+msgid "Strengths"
+msgstr "Pikat e forta"
+
+msgid "Risks"
+msgstr "Rreziqet"
+
+msgid "Recommendations"
+msgstr "Rekomandime"
+
+msgid "Lesson feedback"
+msgstr "Koment për mësimin"
+
+msgid "Standalone document feedback"
+msgstr "Koment për dokumentin e pavarur"
+
+msgid "Standalone exercise feedback"
+msgstr "Koment për ushtrimin e pavarur"
+
+msgid "AI response"
+msgstr "Përgjigje e IA"
+
+msgid "Sequence feedback"
+msgstr "Koment për sekuencën"
+
+msgid "Purpose"
+msgstr "Qëllimi"
+
+msgid "You"
+msgstr "Ju"
+
+msgid "City of internship"
+msgstr "Qyteti i praktikës"
+
+msgid "City"
+msgstr "Qyteti"
 

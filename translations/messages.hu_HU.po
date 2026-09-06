@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képlet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képlet példa: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -8792,6 +8792,9 @@ msgstr "Statisztikáim megtekintése"
 
 msgid "Personal agenda"
 msgstr "Az én naptáram"
+
+msgid "Group agenda"
+msgstr "Csoport napirend"
 
 msgid "Switch to teacher view"
 msgstr "Oktatói nézet"
@@ -40128,4 +40131,448 @@ msgstr "Csoportjelentés"
 
 msgid "Student follow-up"
 msgstr "Hallgatói nyomon követés"
+
+msgid "Use system default certificate"
+msgstr "Rendszer alapértelmezett tanúsítványának használata"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "A csatolt tanúsítvány nem érhető el. A rendszer alapértelmezett tanúsítványa lesz használva."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "A rendszer alapértelmezett tanúsítványát használja a csatolt tanúsítvány helyett?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Opcionális helyi fejlesztési felülírás. Az éles frissítések a hivatalos Chamilo megbízható kulcsot használják."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Biztonságos alkalmazási terv készítése az előkészített csomagból. Ez ellenőrzi a cserélendő, hozzáadandó vagy eltávolítandó fájlokat, a jogosultságokat, a biztonsági mentés útvonalát és a zárolás állapotát. Nem módosítja a telepítést."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ez a lépés csak áttekintést készít. A fájlcserére és a csomagban deklarált tisztításra később, az Előkészített fájlok alkalmazása lépésben kerül sor, zárolással, biztonsági mentéssel és visszaállítási védelemmel."
+
+msgid "Files to remove"
+msgstr "Eltávolítandó fájlok"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "A Chamilo fájlok cseréje az előkészített csomagból, és az aláírt csomag metaadataiban kifejezetten deklarált elavult fájlok eltávolítása. Nem futtat adatbázis-migrációkat, Composer, Yarn vagy gyorsítótár-parancsokat."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ez a művelet fájlokat cserél és eltávolíthat a Chamilo telepítésében. Folytatás előtt győződjön meg arról, hogy az alkalmazási tervet áttekintették, és a biztonsági mentések engedélyezve vannak."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Megértem, hogy ez fájlokat cserél, és eltávolítja a csomagban deklarált elavult fájlokat a Chamilo telepítésében."
+
+msgid "Type the exact text below to confirm"
+msgstr "A megerősítéshez írja be pontosan az alábbi szöveget"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "A Doctrine csak az előkészített V300 migrációkat hajtja végre, kifejezetten a biztonsági áttekintés sikeres teljesítése után."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "A Doctrine korábbi alapvonalra vonatkozó figyelmeztetéseket jelzett. A frissítő továbbra is csak az előkészített V300 migrációkat hajtja végre, kifejezett megerősítés után."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Csak a jegyzék útvonala módosítható. A HTTPS protokoll és a hivatalos frissítési tartomány rögzített."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Fejlesztői módban HTTPS jegyzék-URL vagy helyi jegyzékútvonal engedélyezett."
+
+msgid "The official update manifest is configured by the server."
+msgstr "A hivatalos frissítési jegyzéket a szerver konfigurálja."
+
+msgid "What feedback do you want about this course?"
+msgstr "Milyen visszajelzést szeretne erről a kurzusról?"
+
+msgid "Analysis summary"
+msgstr "Elemzés összefoglalója"
+
+msgid "Lessons included"
+msgstr "Tartalmazott leckék"
+
+msgid "Standalone documents included"
+msgstr "Tartalmazott önálló dokumentumok"
+
+msgid "Standalone exercises included"
+msgstr "Tartalmazott önálló gyakorlatok"
+
+msgid "General feedback"
+msgstr "Általános visszajelzés"
+
+msgid "Strengths"
+msgstr "Erősségek"
+
+msgid "Risks"
+msgstr "Kockázatok"
+
+msgid "Recommendations"
+msgstr "Ajánlások"
+
+msgid "Lesson feedback"
+msgstr "Lecke visszajelzése"
+
+msgid "Standalone document feedback"
+msgstr "Önálló dokumentum visszajelzése"
+
+msgid "Standalone exercise feedback"
+msgstr "Önálló gyakorlat visszajelzése"
+
+msgid "AI response"
+msgstr "MI-válasz"
+
+msgid "Sequence feedback"
+msgstr "Szekvencia visszajelzése"
+
+msgid "Purpose"
+msgstr "Cél"
+
+msgid "You"
+msgstr "Ön"
+
+msgid "City of internship"
+msgstr "Gyakorlat helyszíne (város)"
+
+msgid "City"
+msgstr "Város"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Frissítési munkafolyamat helyreállítva az oldal frissítése után"
+
+msgid "Last completed step"
+msgstr "Utolsó befejezett lépés"
+
+msgid "Stage package"
+msgstr "Előkészítési csomag"
+
+msgid "Package staging"
+msgstr "Csomag előkészítése"
+
+msgid "Apply plan"
+msgstr "Terv alkalmazása"
+
+msgid "Update workflow completed"
+msgstr "Frissítési munkafolyamat befejezve"
+
+msgid "Update directory exists and is writable."
+msgstr "A frissítési könyvtár létezik és írható."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "A frissítési könyvtár létezik, de nem írható: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "A frissítési könyvtár még nem létezik, de a szülőkönyvtára írható."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "A frissítési könyvtár még nem létezik, de létrehozható a var/ alatt."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "A frissítési könyvtár nem létezik, és a jelenlegi jogosultságokkal nem hozható létre."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Nem sikerült meghatározni a szabad lemezterületet a frissítés előzetes ellenőrzéséhez."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Nincs elég szabad lemezterület a biztonságos frissítési előkészítéshez."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "A szabad lemezterület elegendő ehhez az ellenőrzési szakaszú frissítési folyamathoz."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "A frissítési jegyzék nem határoz meg PHP-verziókövetelményt."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "A PHP-követelményt nem lehet teljesen kiértékelni: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "A jelenlegi PHP-verzió nem felel meg a frissítési követelménynek: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "A jelenlegi PHP-verzió megfelel a frissítési követelménynek."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Nem adtak meg helyi csomagútvonalat. A letöltött csomagok csak a letöltés után ellenőrizhetők."
+
+msgid "Local update package is not readable: %s"
+msgstr "A helyi frissítési csomag nem olvasható: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "A helyi frissítési csomagnak ZIP-archívumnak kell lennie."
+
+msgid "Local update package is readable."
+msgstr "A helyi frissítési csomag olvasható."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "A telepített Chamilo-verzió automatikusan nem volt felismerhető. A verzióirány nem ellenőrizhető."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "A telepített vagy a célverzió nem összehasonlítható szemantikus verzióformátumban van."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "A célverzió alacsonyabb, mint a telepített verzió. A visszafejlesztés alapértelmezés szerint nem engedélyezett."
+
+msgid "Target version matches the installed version."
+msgstr "A célverzió megegyezik a telepített verzióval."
+
+msgid "Target version is newer than the installed version."
+msgstr "A célverzió újabb, mint a telepített verzió."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "A projekt nem Git-munkapéldány, vagy a .git hiányzik."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Ez a frissítési rendszer Git-támogatás nélküli telepítésekhez készült. A helyi rendszer Git-et használ. A frissítés folytatása törött Git-előzményeket eredményezhet. Git-támogatással rendelkező rendszereknél a webgyökérben található CONTRIBUTING.md fájlban részletezett Git-eljárást javasoljuk."
+
+msgid "Local Git changes were also detected."
+msgstr "Helyi Git-módosításokat is észleltünk."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Néhány projekt-metaadatfájl hiányzik. A későbbi frissítési szakaszok kézi függőségellenőrzést igényelhetnek."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "A Composer- és Yarn-metaadatfájlok jelen vannak."
+
+msgid "Starting staged file application."
+msgstr "Előkészített fájlok alkalmazásának indítása."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Az előkészített fájlok alkalmazásához kifejezett megerősítés szükséges."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Az előkészített frissítési fájlok alkalmazásához kifejezett megerősítés szükséges."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Az előkészítési könyvtár a Chamilo frissítési előkészítési könyvtárán belül van."
+
+msgid "Staging directory was validated."
+msgstr "Az előkészítési könyvtár érvényesítve."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Az alkalmazási terv metaadatai sikeresen beolvasva."
+
+msgid "Staged application path is valid."
+msgstr "Az előkészített alkalmazási útvonal érvényes."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Az aláírt csomag tisztítási metaadatai megegyeznek az áttekintett alkalmazási tervvel."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Az aláírt csomag tisztítási metaadatai érvényesítve."
+
+msgid "Update lock was acquired."
+msgstr "A frissítési zárolás megszerezve."
+
+msgid "Update backup directory was created."
+msgstr "A frissítési biztonsági mentési könyvtár létrehozva."
+
+msgid "Update file operations were collected."
+msgstr "A frissítési fájlműveletek összegyűjtve."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "A cserére vagy eltávolításra tervezett meglévő fájlok biztonsági mentése elkészült."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Az előkészített frissítési fájlok a Chamilo-telepítésbe másolva."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "A csomagban elavultnak jelölt fájlok eltávolítva a Chamilo-telepítésből."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "A csomagban elavultnak jelölt fájlok eltávolítva."
+
+msgid "Update apply audit metadata was written."
+msgstr "A frissítés alkalmazásának audit-metaadatai kiírva."
+
+msgid "Staged files applied successfully."
+msgstr "Az előkészített fájlok sikeresen alkalmazva."
+
+msgid "Unable to restore removed files: %s"
+msgstr "A törölt fájlok visszaállítása sikertelen: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "A másolt fájlok visszavonása sikertelen: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "A fájlok visszavonása a frissítés alkalmazásának sikertelensége után történt."
+
+msgid "Rollback failed: %s"
+msgstr "A visszavonás sikertelen: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "A frissítés alkalmazásának audit-metaadatainak írása sikertelen: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "A frissítési zárolás feloldása hiba után sikertelen: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "A frissítési fájlok alkalmazásához szükséges az előkészítési útvonal."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Az előkészítési könyvtár nem létezik: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "A Chamilo frissítés előkészítési alapterülete nem létezik."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Az előkészítési könyvtárnak a var/update/staging mappán belül kell lennie."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Az előkészítési könyvtárból hiányzik az APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "A frissítés alkalmazási tervének metaadatai nem olvashatók: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "A frissítés alkalmazási tervének metaadatai nem érvényes JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "A frissítés alkalmazási tervének metaadatainak JSON-objektumnak kell lenniük."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "A frissítés alkalmazási tervéből hiányzik az application_path mező."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Az előkészített alkalmazásútvonal nem olvasható: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Az előkészített alkalmazásútvonalnak az előkészítési könyvtáron belül kell lennie."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Az előkészített alkalmazásútvonalból hiányzik a composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "A frissítési csomagból hiányzik: %s. Készítsen elő újra egy ellenőrzött csomagot aláírt tisztítási metaadatokkal."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "A frissítés alkalmazási tervéből hiányoznak a felülvizsgált csomagtisztítási metaadatok."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "A frissítési csomag tisztítási metaadatai megváltoztak az alkalmazási terv létrehozása után. Építse újra az alkalmazási tervet a folytatás előtt."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "A frissítés alkalmazási terve érvénytelen csomagtörlési listát tartalmaz."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "A frissítési csomag tisztítási útvonalai megváltoztak az alkalmazási terv létrehozása után. Építse újra az alkalmazási tervet a folytatás előtt."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "A frissítés alkalmazási tervéből hiányzik a felülvizsgált törlési útvonallista."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "A frissítés alkalmazási tervének törlési útvonalai nem egyeznek az aláírt csomagtisztítási metaadatokkal."
+
+msgid "Update lock path must be inside var/update."
+msgstr "A frissítési zárolás útvonalának a var/update mappán belül kell lennie."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "A frissítés alkalmazási tervéből hiányzik a backup_path mező."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "A frissítési biztonsági mentés útvonala nem biztonságos útvonalszegmenseket tartalmaz."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "A frissítési biztonsági mentés útvonalának a var/update/backups mappán belül kell lennie."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "A frissítési zárolás megszerzése sikertelen. Lehet, hogy egy másik frissítés van folyamatban."
+
+msgid "Unable to release update lock: %s"
+msgstr "A frissítési zárolás feloldása sikertelen: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "A frissítési biztonsági mentés könyvtára már létezik: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "A célkönyvtár nem hozható létre: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "A tervezett frissítés felülírna egy meglévő szimbolikus hivatkozást: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "A célfájl nem írható: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "A célfájl nem hozható létre: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "A Chamilo projektkönyvtár nem határozható meg az elavult fájlok eltávolítása előtt."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "A frissítés tisztítása nem távolíthatja el a védett útvonalat: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "A tervezett frissítés eltávolítana egy meglévő szimbolikus hivatkozást: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "A frissítés tisztítása csak fájlokat támogat, könyvtárakat nem: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Az elavult célfájl nem olvasható a biztonsági mentéshez: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Az elavult célfájl a jelenlegi könyvtárjogosultságokkal nem távolítható el: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Az elavult célfájl a Chamilo projektkönyvtáron kívülre mutat: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "A célfájl biztonsági mentése sikertelen: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "A frissítési biztonsági mentés metaadatainak írása sikertelen."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Az előkészített frissítési fájl másolása sikertelen: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d / %d előkészített fájl másolva."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "A csomagban megadott elavult fájl eltávolítása sikertelen: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "%d / %d csomagban megadott elavult fájl eltávolítva."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Nem sikerült visszaállítani a biztonsági másolatot: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Nem sikerült eltávolítani az újonnan másolt fájlt a visszaállítás során: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Nem sikerült visszaállítani a törölt fájlt, mert hiányzik a biztonsági másolata: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Nem sikerült visszaállítani a törölt fájlt a biztonsági másolatból: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Nem sikerült írni a frissítés alkalmazásának audit metaadatait."
+
+msgid "Unable to write global update apply log."
+msgstr "Nem sikerült írni a globális frissítésalkalmazási naplót."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Nem biztonságos előkészített relatív útvonal észlelve: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "A könyvtár nem írható: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Nem sikerült létrehozni a könyvtárat: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Az előkészítési metaadatok sikeresen beolvasva."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Az alkalmazási terv metaadatai kiírásra kerültek az előkészítési könyvtárba."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "A célfájlok és könyvtárak írhatónak tűnnek a tervezett frissítéshez és tisztításhoz."
+
+msgid "Update apply plan check failed."
+msgstr "A frissítés alkalmazási tervének ellenőrzése sikertelen."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Egyes célfájlok vagy könyvtárak nem írhatók vagy nem távolíthatók el."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "A javításhoz ideiglenesen változtassa a teljes Chamilo könyvtár tulajdonosát %s-re (a webszerver felhasználója), alkalmazza a frissítést, majd állítsa vissza a tulajdonost %s-re, végül állítsa a var/ (és tartalma) tulajdonosát %s-re, hogy az alkalmazás továbbra is írni tudjon oda."
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mẫu công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -8794,6 +8794,9 @@ msgstr "Xem thống kê"
 
 msgid "Personal agenda"
 msgstr "Lịch cá nhân"
+
+msgid "Group agenda"
+msgstr "Lịch nhóm"
 
 msgid "Switch to teacher view"
 msgstr "Chuyển sang chế độ giảng viên"
@@ -40130,4 +40133,106 @@ msgstr "Báo cáo nhóm"
 
 msgid "Student follow-up"
 msgstr "Theo dõi học viên"
+
+msgid "Use system default certificate"
+msgstr "Sử dụng chứng chỉ mặc định của hệ thống"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Chứng chỉ đính kèm không khả dụng. Chứng chỉ mặc định của hệ thống sẽ được sử dụng."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Sử dụng chứng chỉ mặc định của hệ thống thay cho chứng chỉ đính kèm?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Tùy chọn ghi đè cho phát triển cục bộ. Cập nhật môi trường sản xuất sử dụng khóa tin cậy chính thức của Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Tạo kế hoạch áp dụng an toàn từ gói đã chuẩn bị. Bước này kiểm tra các tệp cần thay thế, thêm hoặc xóa, quyền, đường dẫn sao lưu và trạng thái khóa. Nó không sửa đổi cài đặt."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Bước này chỉ chuẩn bị để xem xét. Việc thay thế tệp và dọn dẹp theo khai báo của gói diễn ra sau ở bước Áp dụng tệp đã chuẩn bị, với bảo vệ khóa, sao lưu và hoàn tác."
+
+msgid "Files to remove"
+msgstr "Tệp cần xóa"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Thay thế các tệp Chamilo từ gói đã chuẩn bị và xóa các tệp lỗi thời được khai báo rõ trong siêu dữ liệu gói đã ký. Bước này không chạy di chuyển cơ sở dữ liệu, Composer, Yarn hoặc lệnh bộ nhớ đệm."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Hành động này thay thế và có thể xóa tệp trong cài đặt Chamilo. Hãy đảm bảo kế hoạch áp dụng đã được xem xét và sao lưu đã được bật trước khi tiếp tục."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Tôi hiểu thao tác này sẽ thay thế tệp và xóa các tệp lỗi thời được khai báo bởi gói trong cài đặt Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Nhập chính xác văn bản bên dưới để xác nhận"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine sẽ chỉ thực thi các di chuyển V300 đã chuẩn bị sau khi vượt qua kiểm tra an toàn."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine đã báo cảnh báo đường cơ sở lịch sử. Trình cập nhật vẫn chỉ thực thi các di chuyển V300 đã chuẩn bị sau khi xác nhận rõ ràng."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Chỉ có thể thay đổi đường dẫn manifest. Giao thức HTTPS và miền cập nhật chính thức được cố định."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Chế độ phát triển cho phép URL manifest HTTPS hoặc đường dẫn manifest cục bộ."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Manifest cập nhật chính thức được cấu hình bởi máy chủ."
+
+msgid "What feedback do you want about this course?"
+msgstr "Bạn muốn phản hồi gì về khóa học này?"
+
+msgid "Analysis summary"
+msgstr "Tóm tắt phân tích"
+
+msgid "Lessons included"
+msgstr "Bài học được đưa vào"
+
+msgid "Standalone documents included"
+msgstr "Tài liệu độc lập được đưa vào"
+
+msgid "Standalone exercises included"
+msgstr "Bài tập độc lập được đưa vào"
+
+msgid "General feedback"
+msgstr "Phản hồi chung"
+
+msgid "Strengths"
+msgstr "Điểm mạnh"
+
+msgid "Risks"
+msgstr "Rủi ro"
+
+msgid "Recommendations"
+msgstr "Khuyến nghị"
+
+msgid "Lesson feedback"
+msgstr "Phản hồi bài học"
+
+msgid "Standalone document feedback"
+msgstr "Phản hồi tài liệu độc lập"
+
+msgid "Standalone exercise feedback"
+msgstr "Phản hồi bài tập độc lập"
+
+msgid "AI response"
+msgstr "Phản hồi AI"
+
+msgid "Sequence feedback"
+msgstr "Phản hồi chuỗi"
+
+msgid "Purpose"
+msgstr "Mục đích"
+
+msgid "You"
+msgstr "Bạn"
+
+msgid "City of internship"
+msgstr "Thành phố thực tập"
+
+msgid "City"
+msgstr "Thành phố"
 

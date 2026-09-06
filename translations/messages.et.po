@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Lugupidamisega"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Valemi näidis: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Valemi näide: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muutujate vahemikud"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:autoriõigus,, no:autoriõigus puudub"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Kaust,, application/msword:MsWord,, application/octet-stream:Okteetvoog,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Folder,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:harjutus,,      simulation:simulatsioon,,      questionnaire:küsimustik,,      diagram:diagramm,,      figure:joonis,,      graph:graafik,,      index:sisukord,,      slide:esitlus,,      table:tabel,,      narrative text:narratiivne tekst,,      exam:eksam,,      experiment:katse,,      problem statement:ülesande püstitus,,      self assessment:enesekontroll,,      lecture:loeng"
@@ -4143,7 +4143,7 @@ msgid "MySql Client"
 msgstr "MySQL klient"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "MySQL-server"
 
 msgid "Owner"
 msgstr "Omanik"
@@ -7719,52 +7719,52 @@ msgid "Recycle existing questions"
 msgstr "Taaskasuta olemasolevaid küsimusi"
 
 msgid "Add this question to the test: %s"
-msgstr ""
+msgstr "Lisa see küsimus testi: %s"
 
 msgid "Edit question: %s"
-msgstr ""
+msgstr "Muuda küsimust: %s"
 
 msgid "Add a question: %s"
-msgstr ""
+msgstr "Lisa küsimus: %s"
 
 msgid "Detected blanks: %s"
-msgstr ""
+msgstr "Tuvastatud tühikud: %s"
 
 msgid "%s questions, for a total score (all questions) of %s."
-msgstr ""
+msgstr "%s küsimust, koguskooriga (kõik küsimused) %s."
 
 msgid "Unique answer"
-msgstr ""
+msgstr "Üksikvastus"
 
 msgid "Multiple answer true/false"
-msgstr ""
+msgstr "Mitmikvastus tõene/väär"
 
 msgid "Multiple answer combination true/false"
-msgstr ""
+msgstr "Mitmikvastuste kombinatsioon tõene/väär"
 
 msgid "Unique answer with images"
-msgstr ""
+msgstr "Üksikvastus piltidega"
 
 msgid "Multiple answer true/false with degree of certainty"
-msgstr ""
+msgstr "Mitmikvastus tõene/väär kindlusastmega"
 
 msgid "Answer in Office document"
-msgstr ""
+msgstr "Vastus Office'i dokumendis"
 
 msgid "Matching draggable"
-msgstr ""
+msgstr "Sobitamine lohistamisega"
 
 msgid "Matching draggable combination"
-msgstr ""
+msgstr "Sobitamise lohistamise kombinatsioon"
 
 msgid "Fill in blanks combination"
-msgstr ""
+msgstr "Lünkade täitmise kombinatsioon"
 
 msgid "Multiple answer dropdown combination"
-msgstr ""
+msgstr "Mitmikvastuse rippmenüü kombinatsioon"
 
 msgid "Matching combination"
-msgstr ""
+msgstr "Sobitamise kombinatsioon"
 
 msgid "Correct test"
 msgstr "Paranda test"
@@ -8679,16 +8679,16 @@ msgid "."
 msgstr "."
 
 msgid "%b %d, %Y"
-msgstr "%b %d, %Y"
+msgstr "%d. %b %Y"
 
 msgid "%A %B %d, %Y"
-msgstr "%A %B %d, %Y"
+msgstr "%A, %d. %B %Y"
 
 msgid "%B %d, %Y at %I:%M %p"
 msgstr "%B %d, %Y kell %I:%M %p"
 
 msgid "%I:%M %p"
-msgstr "%I:%M %p"
+msgstr "%H:%M"
 
 msgid "Yes"
 msgstr "Jah"
@@ -8794,6 +8794,9 @@ msgstr "Vaata minu edenemist"
 
 msgid "Personal agenda"
 msgstr "Isiklik päevakava"
+
+msgid "Group agenda"
+msgstr "Rühma kalender"
 
 msgid "Switch to teacher view"
 msgstr "Lülitu õpetaja vaatesse"
@@ -9318,13 +9321,13 @@ msgid "Error"
 msgstr "Viga"
 
 msgid "The user was created, but one of the additional profile fields could not be saved."
-msgstr ""
+msgstr "Kasutaja loodi, kuid ühte täiendavat profiilivälja ei õnnestunud salvestada."
 
 msgid "The user was updated, but one of the additional profile fields could not be saved."
-msgstr ""
+msgstr "Kasutaja uuendati, kuid ühte täiendavat profiilivälja ei õnnestunud salvestada."
 
 msgid "One or more fields contain invalid values."
-msgstr ""
+msgstr "Üks või mitu välja sisaldavad kehtetuid väärtusi."
 
 msgid "Anonymous"
 msgstr "Anonüümne"
@@ -9534,7 +9537,7 @@ msgid "Not yet begun"
 msgstr "Pole veel alanud"
 
 msgid "%B %d, %Y"
-msgstr "%B %d, %Y"
+msgstr "%d. %B %Y"
 
 msgid "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
 msgstr "Vigane kaust: palun looge oma dokumentide tööriistas kaust nimega images, et pilte saaks sellesse kausta üles laadida"
@@ -12708,10 +12711,10 @@ msgid "Create the folder"
 msgstr "Loo kaust"
 
 msgid "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThis folder contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The folders can remain hidden."
-msgstr "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThis folder contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The folders can remain hidden."
+msgstr "AINULT ÕPETAJALE NÄHTAV TEAVE:\nSee kaust sisaldab vaikearhiive. Saate faile kustutada või uusi lisada, kuid kui fail on veebidokumenti lisamisel peidetud, ei näe õppijad seda selles dokumendis. Veebidokumenti faili lisades veenduge esmalt, et see on nähtav. Kaustad võivad jääda peidetuks."
 
 msgid "This folder contains the files that other learners (or yourself) sent into a course through the editor (if they didn't do it from the groups tool). By default, they will be visible by any trainer, but will be hidden from other learners (unless they access the files directly). If you make one user folder visible, other users will see all its content."
-msgstr "This folder contains the files that other learners (or yourself) sent into a course through the editor (if they didn't do it from the groups tool). By default, they will be visible by any trainer, but will be hidden from other learners (unless they access the files directly). If you make one user folder visible, other users will see all its content."
+msgstr "See kaust sisaldab faile, mille teised õppijad (või teie ise) saatsid kursusele redaktori kaudu (kui seda ei tehtud rühmade tööriistast). Vaikimisi on need nähtavad igale koolitajale, kuid teiste õppijate eest peidetud (kui nad ei ava faile otse). Kui muudate ühe kasutaja kausta nähtavaks, näevad teised kasutajad kogu selle sisu."
 
 msgid "Template's icon"
 msgstr "Malli ikoon"
@@ -14262,40 +14265,40 @@ msgid "URL of this company"
 msgstr "Selle ettevõtte URL"
 
 msgid "User DB"
-msgstr "User DB"
+msgstr "Kasutaja andmebaas"
 
 msgid "Please check these values"
-msgstr "Please check these values"
+msgstr "Palun kontrollige neid väärtusi"
 
 msgid "Please go back to step 1"
-msgstr "Please go back to step 1"
+msgstr "Palun minge tagasi 1. sammu juurde"
 
 msgid "<p><b>Adding users</b></p> <p>You can subscribe existing learners one by one to your course, by clicking on the link 'Subscribe users to this course'. Usually however it's better to open your course to self-registration and let learners register themselves. </p> <p><b>Description</b></p> <p>The description has no computer related function and does not indicate any particular rights or privileges within the system. It simply indicates who is who, in human terms. You can therefore modify this by clicking on the pencil, then typing whatever you want: professor, assistant, student, visitor, expert etc.</p><p><b>Admin rights</b></p><p>Admin rights, on the other hand, provide technical authorization to modify the content and organization of this course area. You can choose between allowing full admin rights or none.</p><p>To allow an assistant, for instance, to co-admin the area, you need to be sure he/she is already registered, then click on the pencil, then check 'Teacher', then 'Ok'.</p><p><b>Co-Trainers</b></p><p>To mention the name of a co-teacher in the heading (co-chairman, etc.), use the 'Course settings' tool. This modification does not automatically register your co-Trainer as a course member. The 'Teachers' field is completely independent of the 'Users' list.</p> <p><b>Tracking and Personal Home Pages</b></p> <p>In addition to showing the users list and modifying their rights, the Users tool also shows individual tracking and allows the teacher to define headings for personal home pages to be completed by users.</p>"
-msgstr "<p><b>Adding users</b></p> <p>You can subscribe existing learners one by one to your course, by clicking on the link 'Subscribe users to this course'. Usually however it's better to open your course to self-registration and let learners register themselves. </p> <p><b>Description</b></p> <p>The description has no computer related function and does not indicate any particular rights or privileges within the system. It simply indicates who is who, in human terms. You can therefore modify this by clicking on the pencil, then typing whatever you want: professor, assistant, student, visitor, expert etc.</p><p><b>Admin rights</b></p><p>Admin rights, on the other hand, provide technical authorization to modify the content and organization of this course area. You can choose between allowing full admin rights or none.</p><p>To allow an assistant, for instance, to co-admin the area, you need to be sure he/she is already registered, then click on the pencil, then check 'Teacher', then 'Ok'.</p><p><b>Co-Trainers</b></p><p>To mention the name of a co-teacher in the heading (co-chairman, etc.), use the 'Course settings' tool. This modification does not automatically register your co-Trainer as a course member. The 'Teachers' field is completely independent of the 'Users' list.</p> <p><b>Tracking and Personal Home Pages</b></p> <p>In addition to showing the users list and modifying their rights, the Users tool also shows individual tracking and allows the teacher to define headings for personal home pages to be completed by users.</p>"
+msgstr "<p><b>Kasutajate lisamine</b></p> <p>Olemasolevaid õppijaid saate kursusele ükshaaval registreerida, klõpsates lingil „Registreeri kasutajad sellele kursusele“. Tavaliselt on siiski parem avada kursus ise registreerimiseks ja lasta õppijatel end ise registreerida. </p> <p><b>Kirjeldus</b></p> <p>Kirjeldusel ei ole arvutiga seotud funktsiooni ega anna süsteemis erilisi õigusi. See näitab lihtsalt, kes on kes, inimkeeles. Seetõttu saate seda muuta, klõpsates pliiatsil ja kirjutades, mida soovite: professor, assistent, üliõpilane, külaline, ekspert jne.</p><p><b>Administraatoriõigused</b></p><p>Administraatoriõigused annavad seevastu tehnilise loa muuta selle kursuseala sisu ja korraldust. Saate valida täielike administraatoriõiguste või nende puudumise vahel.</p><p>Näiteks assistendile kaasadministraatori õiguste andmiseks peate veenduma, et ta on juba registreeritud, seejärel klõpsama pliiatsil, märkima „Õpetaja“ ja seejärel „OK“.</p><p><b>Kaaskoolitajad</b></p><p>Kaasõpetaja nime päisesse märkimiseks (kaasesimees jne) kasutage tööriista „Kursuse seaded“. See muudatus ei registreeri teie kaaskoolitajat automaatselt kursuse liikmeks. Väli „Õpetajad“ on täiesti sõltumatu loendist „Kasutajad“.</p> <p><b>Jälgimine ja isiklikud avalehed</b></p> <p>Lisaks kasutajate loendi kuvamisele ja nende õiguste muutmisele näitab tööriist Kasutajad ka individuaalset jälgimist ning võimaldab õpetajal määrata pealkirju isiklikele avalehtedele, mida kasutajad täidavad.</p>"
 
 msgid "<p><b>Introduction</b></p><p>This tool allows you to create and manage workgroups. On first creation (Create groups), groups are 'empty'. There are many ways to fill them:<ul><li>automatically ('Fill groups (random)'),</li><li>manually ('Edit'),</li><li>self-registration by users (Groups settings: 'Self registration allowed...').</li></ul>These three ways can be combined. You can, for instance, first ask users to self-register.Then if you find some of them didn't register, decide to fill groups automatically (random) in order to complete them. You can also edit each group to determine membership, user by user, after or before self-registration and/or automatically on registration.</p><p>Filling groups, whether automatically or manually, is possible only for users registered on the course. The users list is visible in <b>Users</b> tool. </p><hr noshade size=1><p><b>Create groups</b></p><p>To create new groups, click on 'Create new group(s)' and decide the number of groups to create.</p><hr noshade size=1><p><b>Group settings</b></p><p>You can determine Group settings globally (for all groups).<b>Users may self-register in groups</b>:<p>You create empty groups, users self-register.If you have defined a maximum number, full groups do not accept new members.This method is handy for trainers unfamiliar with the users list when creating groups.</p><b>Tools</b>:</p><p>Every group is assigned either a forum (private or public) or a Documents area(a shared file manager) or (in most cases) both.</p><hr noshade size=1><p><b>Manual editing</b></p><p>Once groups have been created (Create groups), you will see, at the bottom of the page, a list of groups along with with several options:<ul><li><b>Edit</b>Manually modify group name, description, tutor, members list.</li><li><b>Delete</b> Delete a group.</li></ul><hr noshade size=1>"
-msgstr "<p><b>Introduction</b></p><p>This tool allows you to create and manage workgroups. On first creation (Create groups), groups are 'empty'. There are many ways to fill them:<ul><li>automatically ('Fill groups (random)'),</li><li>manually ('Edit'),</li><li>self-registration by users (Groups settings: 'Self registration allowed...').</li></ul>These three ways can be combined. You can, for instance, first ask users to self-register.Then if you find some of them didn't register, decide to fill groups automatically (random) in order to complete them. You can also edit each group to determine membership, user by user, after or before self-registration and/or automatically on registration.</p><p>Filling groups, whether automatically or manually, is possible only for users registered on the course. The users list is visible in <b>Users</b> tool. </p><hr noshade size=1><p><b>Create groups</b></p><p>To create new groups, click on 'Create new group(s)' and decide the number of groups to create.</p><hr noshade size=1><p><b>Group settings</b></p><p>You can determine Group settings globally (for all groups).<b>Users may self-register in groups</b>:<p>You create empty groups, users self-register.If you have defined a maximum number, full groups do not accept new members.This method is handy for trainers unfamiliar with the users list when creating groups.</p><b>Tools</b>:</p><p>Every group is assigned either a forum (private or public) or a Documents area(a shared file manager) or (in most cases) both.</p><hr noshade size=1><p><b>Manual editing</b></p><p>Once groups have been created (Create groups), you will see, at the bottom of the page, a list of groups along with with several options:<ul><li><b>Edit</b>Manually modify group name, description, tutor, members list.</li><li><b>Delete</b> Delete a group.</li></ul><hr noshade size=1>"
+msgstr "<p><b>Sissejuhatus</b></p><p>See tööriist võimaldab luua ja hallata töörühmi. Esimesel loomisel (Loo rühmad) on rühmad „tühjad“. Neid saab täita mitmel viisil:<ul><li>automaatselt („Täida rühmad (juhuslikult)“),</li><li>käsitsi („Muuda“),</li><li>kasutajate ise registreerimisega (Rühma seaded: „Ise registreerimine lubatud...“).</li></ul>Neid kolme viisi saab kombineerida. Näiteks võite esmalt paluda kasutajatel end ise registreerida. Kui mõni neist ei registreerunud, saate rühmad automaatselt (juhuslikult) täita, et need lõpuni täita. Saate ka iga rühma muuta, et määrata liikmesus kasutaja kaupa, enne või pärast ise registreerimist ja/või automaatselt registreerimisel.</p><p>Rühmade täitmine, olgu automaatselt või käsitsi, on võimalik ainult kursusele registreeritud kasutajate puhul. Kasutajate loend on nähtav tööriistas <b>Kasutajad</b>. </p><hr noshade size=1><p><b>Rühmade loomine</b></p><p>Uute rühmade loomiseks klõpsake „Loo uus(ed) rühm(ad)“ ja määrake loodavate rühmade arv.</p><hr noshade size=1><p><b>Rühma seaded</b></p><p>Rühma seadeid saate määrata globaalselt (kõigile rühmadele).<b>Kasutajad võivad end rühmadesse ise registreerida</b>:<p>Loote tühjad rühmad, kasutajad registreerivad end ise. Kui olete määranud maksimumarvu, ei võta täis rühmad uusi liikmeid. See meetod on mugav koolitajatele, kes rühmade loomisel kasutajate loendit hästi ei tunne.</p><b>Tööriistad</b>:</p><p>Igal rühmal on kas foorum (privaatne või avalik) või dokumentide ala (jagatud failihaldur) või (enamasti) mõlemad.</p><hr noshade size=1><p><b>Käsitsi muutmine</b></p><p>Kui rühmad on loodud (Loo rühmad), näete lehe allosas rühmade loendit koos mitme valikuga:<ul><li><b>Muuda</b> Muutke käsitsi rühma nime, kirjeldust, juhendajat, liikmete loendit.</li><li><b>Kustuta</b> Kustutage rühm.</li></ul><hr noshade size=1>"
 
 msgid "<p>The tests tool allows you to create tests containing as many questions as you like.<br><br> You can choose from a range of question formats clearly displayed at the top of the page when you create a test including (for example):<br><br><ul>  <li>Multiple choice (single or multiple answers)</li>  <li>Matching</li>  <li>Fill in the blanks etc.</li></ul>A test can include any number and combination of questions and question formats.</p><hr><b>Test creation</b><p>To create a test, click on the \"New test\" link.<br><br>Type a name for the test, as well as an optional description.<br><br>You can add various elements to this, including audio or video files, e.g. for listening comprehension, but take care to make such files as small as possible to optimise download time (e.g. use mp3 rather than wav files - they're far smaller but perfectly good quality). <br><br>You can also choose between two modes of presentation:<br><br><ul>  <li>Questions on an single page</li>  <li>One question per page (sequentially)</li></ul>and opt for questions to be randomly organised when the test is run.<br><br>Finally, save your test. You will be taken to the question administration.</p><hr><b>Adding a question</b><p>You can now add a question to the newly created test. You can if you wish include a description and/or an image. To create the test types mentioned above, follow the following steps: </p><hr><b>Multiple choice</b><p>In order to create a MAQ / MCQ :<br><br><ul>  <li>Define the answers for your question. You can add or delete an answer by clicking on the right-hand button</li>  <li>Check the left box for the correct answer(s)</li>  <li>Add an optional comment. This comment won't be seen by the user until he/she has answered the question</li>  <li>Give a weighting to each answer. The weighting can be any positive or negative integer (or zero)</li>  <li>Save your answers</li></ul></p><hr><b>Fill in the blanks</b><p>This allows you to create a cloze passage. The purpose is to prompt the user to find words that you have removed from the text.<br><br>To remove a word from the text, and thus create a blank, put brackets [like this] around it.<br><br>Once the text has been typed and blanks defined, you can add a comment that will be seen by the learner depending on the reply to the question.<br><br>Save your text, and you will be taken to the next step allowing you to assign a weighting to each blank. For example, if the question is worth 10 points and you have 5 blanks, you can give a weighting of 2 points to each blank.</p><hr><b>Matching</b><p>This answer type can be chosen so as to create a question where the user will have to connect elements from list A with elements from list B.<br><br>It can also be used to ask the user to arrange elements in a given order.<br><br>First, define the options from which the user will be able to choose the best answer. Then, define the questions which will have to be linked to one of the options previously defined. Finally, connect elements from the first list with those of the second list via the drop-down menu.<br><br>Note: Several elements from the first unit might point to the same element in the second unit.<br><br>Assign a weighting to each correct match, and save your answer.</p><hr><b>Modifying a test</b><p>In order to modify a test, the principle is the same as for creating a test. Just click on the picture <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the test to modify, and follow the instructions above.</p><hr><b>Deleting a test</b><p>In order to delete a test, click on the picture <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> beside the test to delete it.</p><hr><b>Enabling a test</b><p>For a test can be used, you have to enable it by clicking on the picture <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the test name.</p><hr><b>Running the test</b><p>You can try out your test by clicking on its name in the tests list.</p><hr><b>Random questions</b><p>Whenever you create/modify a test, you can decide if you want questions to be drawn in a random order from amongst all test questions.<br><br>By enabling this option, questions will be drawn in a different order every time a user runs the test.<br><br>If you have got a large number of questions, you can opt to randomly draw only x-number of questions from the questions available.</p><hr><b>Questions pool</b><p>When you delete a test, its questions are not removed from the database, so they can be recycled back into another test via the questions pool.<br><br>The questions pool also allows you to re-use the same question in several tests.<br><br>By default, all the questions pertaining to your course are hidden. You can display the questions related to a test, by chosing 'filter' in the drop-down menu.<br><br>Orphan questions are questions that don not belong to any test.</p><hr><b>HotPotatoes Tests</b><p>You can import HotPotatoes tests into a Chamilo portal, to use in the Tests tool. The results of these tests are stored the same way as the results of Chamilo tests and as such can be readily monitored using the Reporting tool. In the case of simple tests, we recommend you use html or htm format; if your test contains pictures, a zip file upload is the most convenient way.</p><p>Note: You can also include HotPotatoes Tests as a step in the Learning Path.</p><b>Method of import</b><ul>  <li>Select the file on your computer using the Browse button <input type=submit value=Browse name=submit2>\ton the right of your screen.</li>\t\t<li>\t\t\tLaunch the upload with the Upload Button <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tYou can open the test by clicking onto its name.\t\t</li>\t</ul>\t<br><b>Useful link</b><br><ul><li>Hot Potatoes home page :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
-msgstr "<p>The tests tool allows you to create tests containing as many questions as you like.<br><br> You can choose from a range of question formats clearly displayed at the top of the page when you create a test including (for example):<br><br><ul>  <li>Multiple choice (single or multiple answers)</li>  <li>Matching</li>  <li>Fill in the blanks etc.</li></ul>A test can include any number and combination of questions and question formats.</p><hr><b>Test creation</b><p>To create a test, click on the \"New test\" link.<br><br>Type a name for the test, as well as an optional description.<br><br>You can add various elements to this, including audio or video files, e.g. for listening comprehension, but take care to make such files as small as possible to optimise download time (e.g. use mp3 rather than wav files - they're far smaller but perfectly good quality). <br><br>You can also choose between two modes of presentation:<br><br><ul>  <li>Questions on an single page</li>  <li>One question per page (sequentially)</li></ul>and opt for questions to be randomly organised when the test is run.<br><br>Finally, save your test. You will be taken to the question administration.</p><hr><b>Adding a question</b><p>You can now add a question to the newly created test. You can if you wish include a description and/or an image. To create the test types mentioned above, follow the following steps: </p><hr><b>Multiple choice</b><p>In order to create a MAQ / MCQ :<br><br><ul>  <li>Define the answers for your question. You can add or delete an answer by clicking on the right-hand button</li>  <li>Check the left box for the correct answer(s)</li>  <li>Add an optional comment. This comment won't be seen by the user until he/she has answered the question</li>  <li>Give a weighting to each answer. The weighting can be any positive or negative integer (or zero)</li>  <li>Save your answers</li></ul></p><hr><b>Fill in the blanks</b><p>This allows you to create a cloze passage. The purpose is to prompt the user to find words that you have removed from the text.<br><br>To remove a word from the text, and thus create a blank, put brackets [like this] around it.<br><br>Once the text has been typed and blanks defined, you can add a comment that will be seen by the learner depending on the reply to the question.<br><br>Save your text, and you will be taken to the next step allowing you to assign a weighting to each blank. For example, if the question is worth 10 points and you have 5 blanks, you can give a weighting of 2 points to each blank.</p><hr><b>Matching</b><p>This answer type can be chosen so as to create a question where the user will have to connect elements from list A with elements from list B.<br><br>It can also be used to ask the user to arrange elements in a given order.<br><br>First, define the options from which the user will be able to choose the best answer. Then, define the questions which will have to be linked to one of the options previously defined. Finally, connect elements from the first list with those of the second list via the drop-down menu.<br><br>Note: Several elements from the first unit might point to the same element in the second unit.<br><br>Assign a weighting to each correct match, and save your answer.</p><hr><b>Modifying a test</b><p>In order to modify a test, the principle is the same as for creating a test. Just click on the picture <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the test to modify, and follow the instructions above.</p><hr><b>Deleting a test</b><p>In order to delete a test, click on the picture <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> beside the test to delete it.</p><hr><b>Enabling a test</b><p>For a test can be used, you have to enable it by clicking on the picture <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the test name.</p><hr><b>Running the test</b><p>You can try out your test by clicking on its name in the tests list.</p><hr><b>Random questions</b><p>Whenever you create/modify a test, you can decide if you want questions to be drawn in a random order from amongst all test questions.<br><br>By enabling this option, questions will be drawn in a different order every time a user runs the test.<br><br>If you have got a large number of questions, you can opt to randomly draw only x-number of questions from the questions available.</p><hr><b>Questions pool</b><p>When you delete a test, its questions are not removed from the database, so they can be recycled back into another test via the questions pool.<br><br>The questions pool also allows you to re-use the same question in several tests.<br><br>By default, all the questions pertaining to your course are hidden. You can display the questions related to a test, by chosing 'filter' in the drop-down menu.<br><br>Orphan questions are questions that don not belong to any test.</p><hr><b>HotPotatoes Tests</b><p>You can import HotPotatoes tests into a Chamilo portal, to use in the Tests tool. The results of these tests are stored the same way as the results of Chamilo tests and as such can be readily monitored using the Reporting tool. In the case of simple tests, we recommend you use html or htm format; if your test contains pictures, a zip file upload is the most convenient way.</p><p>Note: You can also include HotPotatoes Tests as a step in the Learning Path.</p><b>Method of import</b><ul>  <li>Select the file on your computer using the Browse button <input type=submit value=Browse name=submit2>\ton the right of your screen.</li>\t\t<li>\t\t\tLaunch the upload with the Upload Button <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tYou can open the test by clicking onto its name.\t\t</li>\t</ul>\t<br><b>Useful link</b><br><ul><li>Hot Potatoes home page :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
+msgstr "<p>Testide tööriist võimaldab luua teste, mis sisaldavad nii palju küsimusi, kui soovite.<br><br> Testi loomisel saate valida mitme küsimusevormingu hulgast, mis on lehe ülaosas selgelt kuvatud, näiteks:<br><br><ul>  <li>Valikvastustega (üks või mitu vastust)</li>  <li>Sobitamine</li>  <li>Lünkade täitmine jne.</li></ul>Test võib sisaldada mis tahes arvu ja kombinatsiooni küsimusi ning küsimusevorminguid.</p><hr><b>Testi loomine</b><p>Testi loomiseks klõpsake lingil \"Uus test\".<br><br>Sisestage testi nimi ning soovi korral kirjeldus.<br><br>Saate lisada erinevaid elemente, sh heli- või videofaile, nt kuulamisülesannete jaoks, kuid hoidke failid võimalikult väikesed, et allalaadimine oleks kiirem (nt kasutage wav-failide asemel mp3-faile – need on palju väiksemad, kuid hea kvaliteediga). <br><br>Saate valida ka kahe esitlusrežiimi vahel:<br><br><ul>  <li>Küsimused ühel lehel</li>  <li>Üks küsimus lehel (järjestikku)</li></ul>ja valida, et küsimused oleksid testi käivitamisel juhuslikus järjekorras.<br><br>Lõpuks salvestage test. Teid suunatakse küsimuste haldamisse.</p><hr><b>Küsimuse lisamine</b><p>Nüüd saate äsja loodud testile küsimuse lisada. Soovi korral saate lisada kirjelduse ja/või pildi. Eespool nimetatud testitüüpide loomiseks järgige neid samme: </p><hr><b>Valikvastused</b><p>MAQ / MCQ loomiseks:<br><br><ul>  <li>Määrake küsimuse vastused. Vastuse saate lisada või kustutada, klõpsates parempoolsel nupul</li>  <li>Märkige vasakpoolne ruut õige(te) vastuse(te) jaoks</li>  <li>Lisage soovi korral kommentaar. Seda kommentaari ei näe kasutaja enne, kui ta on küsimusele vastanud</li>  <li>Andke igale vastusele kaal. Kaal võib olla mis tahes positiivne või negatiivne täisarv (või null)</li>  <li>Salvestage vastused</li></ul></p><hr><b>Lünkade täitmine</b><p>See võimaldab luua lünkteksti. Eesmärk on lasta kasutajal leida sõnad, mille olete tekstist eemaldanud.<br><br>Sõna tekstist eemaldamiseks ja lünga loomiseks pange selle ümber sulud [nagu nii].<br><br>Kui tekst on sisestatud ja lüngad määratud, saate lisada kommentaari, mida õppija näeb sõltuvalt küsimuse vastusest.<br><br>Salvestage tekst ja teid suunatakse järgmise sammu juurde, kus saate igale lüngale kaalu määrata. Näiteks kui küsimus on väärt 10 punkti ja teil on 5 lünka, saate anda igale lüngale kaalu 2 punkti.</p><hr><b>Sobitamine</b><p>Seda vastusetüüpi saab valida küsimuse jaoks, kus kasutaja peab ühendama loendi A elemendid loendi B elementidega.<br><br>Seda saab kasutada ka selleks, et paluda kasutajal elemendid kindlasse järjekorda seada.<br><br>Esmalt määrake valikud, millest kasutaja saab parima vastuse valida. Seejärel määrake küsimused, mis tuleb siduda ühega varem määratud valikutest. Lõpuks ühendage esimese loendi elemendid teise loendi omadega rippmenüü kaudu.<br><br>Märkus: mitu elementi esimesest ühikust võivad osutada samale elemendile teises ühikus.<br><br>Määrake igale õigele paarile kaal ja salvestage vastus.</p><hr><b>Testi muutmine</b><p>Testi muutmise põhimõte on sama mis loomisel. Klõpsake pildil <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> testi kõrval, mida soovite muuta, ja järgige ülaltoodud juhiseid.</p><hr><b>Testi kustutamine</b><p>Testi kustutamiseks klõpsake pildil <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> testi kõrval.</p><hr><b>Testi lubamine</b><p>Et testi saaks kasutada, peate selle lubama, klõpsates pildil <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> testi nime kõrval.</p><hr><b>Testi käivitamine</b><p>Saate testi proovida, klõpsates selle nimel testide loendis.</p><hr><b>Juhuslikud küsimused</b><p>Iga kord, kui loote/muudate testi, saate otsustada, kas küsimused tõmmatakse juhuslikus järjekorras kõigi testiküsimuste hulgast.<br><br>Selle valiku lubamisel tõmmatakse küsimused iga kord, kui kasutaja testi käivitab, erinevas järjekorras.<br><br>Kui küsimusi on palju, saate valida, et saadaolevate küsimuste hulgast tõmmatakse juhuslikult ainult x küsimust.</p><hr><b>Küsimuste kogum</b><p>Kui kustutate testi, ei eemaldata selle küsimusi andmebaasist, nii et neid saab küsimuste kogumi kaudu teise testi taaskasutada.<br><br>Küsimuste kogum võimaldab ka sama küsimust mitmes testis uuesti kasutada.<br><br>Vaikimisi on kõik teie kursusega seotud küsimused peidetud. Saate kuvada testiga seotud küsimused, valides rippmenüüst „filter“.<br><br>Orbküsimused on küsimused, mis ei kuulu ühegi testi juurde.</p><hr><b>HotPotatoes testid</b><p>Saate importida HotPotatoes teste Chamilo portaali, et kasutada neid testide tööriistas. Nende testide tulemused salvestatakse samamoodi nagu Chamilo testide tulemused ja neid saab seetõttu hõlpsasti jälgida aruandlustööriistaga. Lihtsate testide puhul soovitame kasutada html- või htm-vormingut; kui test sisaldab pilte, on zip-faili üleslaadimine kõige mugavam.</p><p>Märkus: HotPotatoes teste saate lisada ka õpitee sammuna.</p><b>Importimise meetod</b><ul>  <li>Valige fail arvutist nupuga Browse <input type=submit value=Browse name=submit2>\tekraani paremal.</li>\t\t<li>\t\t\tKäivitage üleslaadimine nupuga Upload <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tSaate testi avada, klõpsates selle nimel.\t\t</li>\t</ul>\t<br><b>Kasulik link</b><br><ul><li>Hot Potatoes koduleht :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
 
 msgid "The Course tool supports two approaches :<ul><li>Create a new course (allowing you to author your own content)</li><li>Import SCORM course</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path?</b></p><p>A Learning Path allows for the presentation of a sequence of learning experiences or activities arranged in distinct sections (in this sense, the Learning Path is what distinguishes a 'course' from a mere repository of random documents). It can be content-based (serving as a table of contents) or activities-based, serving as an agenda or program of action necessary to understand and apply a particular area of knowledge or skill.</p><p>In addition to being  structured, a Learning Path can also be <i>sequential</i>, meaning that the completion of certain steps constitute pre-requisites for accessing others (i.e. 'you cannot go to learning object 2 before learning object 1'). Your sequence can be <i>suggestive</i> (simply displaying steps one after the other) or <i>prescriptive</i> (involving pre-requisites so that learners are required to follow steps in a particular order).</p><p><b>How do I create my own Learning Path (Course)?</b></p><p>Proceed to the 'Learning Path' section.  There you can create as many courses/paths as you wish by clicking the <i>Create a new course</i> tool. You will need to choose a name for the course/path (e.g. <i>Unit 1</i> if you plan to create several units within the overall course). To begin with, the course is empty, waiting for you to add sections and learning objects to it.<br>If you set a course to Visible, it will appear as a new tool on the course homepage. This makes it easier and clearer for students to access.</p><p><b>What learning objects can I add?</b></p><p>All Chamilo tools, activities and content that you consider useful and relevant to your course can be added :<br><ul><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Forums as a whole</li><li>Topics</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note :tests made invisible on the homepage, but included in a path, become visible for learners only as they work through the course.)</li><li>Assignments</li><li>External links</li></ul></p><p><b>Other features</b></p><p>Learners can be asked to follow your course in a given order, as you can set <u>pre-requisites</u>. This means for example that learners cannot go to e.g. Quiz 2 until they have read e.g. Document 1. All learning objects have a status:<i>completed</i> or <i>incomplete</i>, so the progress of learners is clearly reported.</p><p>If you alter the original title of a learning object, the new name will appear in the course, but the original title will not be deleted. So if you want test8.doc to appear as 'Final Exam' in the path, you do not have to rename the file, you can use the new title in the path. It is also useful to give new titles to links which are too long.</p><p>When you're finished, don't forget to check Display mode, (showing, as in learner view, the table of contents on the left and the learning objects on the right,one at a time.)</p><br><p><b>What is a SCORM course and how do I import one?</b></p><p>The learning path tool allows you to upload SCORM-compliant courses.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning companies like NETg, Macromedia, Microsoft, Skillsoft, etc. They act at three levels:</p><ul><li><b>Economy</b> : SCORM renders whole courses or small content units reusable on different Learning Management Systems (LMS) through the separation of content and context,</li><li><b>Pedagogy</b> : SCORM integrates the notion of pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You cannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : SCORM generates a table of contents as an abstraction layer located outside the content and the LMS. It helps both communicate with each other. Mainly communicated are <i>bookmarks</i>(\"Where is John in the course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much time did John spent in chapter 1?\").</li></ul><b>How can I create a SCORM-compliant Learning Path?</b><br><br>The obvious way is to use the Chamilo Authoring tool. However, you may prefer to create complete SCORM compliant websites locally on your own computer before uploading it onto your Chamilo platform. In this case, we recommend the use of a sophisticated tool such as Lectora®, eXe Learning® or Reload®<br></p><p>"
-msgstr "The Course tool supports two approaches :<ul><li>Create a new course (allowing you to author your own content)</li><li>Import SCORM course</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path?</b></p><p>A Learning Path allows for the presentation of a sequence of learning experiences or activities arranged in distinct sections (in this sense, the Learning Path is what distinguishes a 'course' from a mere repository of random documents). It can be content-based (serving as a table of contents) or activities-based, serving as an agenda or program of action necessary to understand and apply a particular area of knowledge or skill.</p><p>In addition to being  structured, a Learning Path can also be <i>sequential</i>, meaning that the completion of certain steps constitute pre-requisites for accessing others (i.e. 'you cannot go to learning object 2 before learning object 1'). Your sequence can be <i>suggestive</i> (simply displaying steps one after the other) or <i>prescriptive</i> (involving pre-requisites so that learners are required to follow steps in a particular order).</p><p><b>How do I create my own Learning Path (Course)?</b></p><p>Proceed to the 'Learning Path' section.  There you can create as many courses/paths as you wish by clicking the <i>Create a new course</i> tool. You will need to choose a name for the course/path (e.g. <i>Unit 1</i> if you plan to create several units within the overall course). To begin with, the course is empty, waiting for you to add sections and learning objects to it.<br>If you set a course to Visible, it will appear as a new tool on the course homepage. This makes it easier and clearer for students to access.</p><p><b>What learning objects can I add?</b></p><p>All Chamilo tools, activities and content that you consider useful and relevant to your course can be added :<br><ul><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Forums as a whole</li><li>Topics</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note :tests made invisible on the homepage, but included in a path, become visible for learners only as they work through the course.)</li><li>Assignments</li><li>External links</li></ul></p><p><b>Other features</b></p><p>Learners can be asked to follow your course in a given order, as you can set <u>pre-requisites</u>. This means for example that learners cannot go to e.g. Quiz 2 until they have read e.g. Document 1. All learning objects have a status:<i>completed</i> or <i>incomplete</i>, so the progress of learners is clearly reported.</p><p>If you alter the original title of a learning object, the new name will appear in the course, but the original title will not be deleted. So if you want test8.doc to appear as 'Final Exam' in the path, you do not have to rename the file, you can use the new title in the path. It is also useful to give new titles to links which are too long.</p><p>When you're finished, don't forget to check Display mode, (showing, as in learner view, the table of contents on the left and the learning objects on the right,one at a time.)</p><br><p><b>What is a SCORM course and how do I import one?</b></p><p>The learning path tool allows you to upload SCORM-compliant courses.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning companies like NETg, Macromedia, Microsoft, Skillsoft, etc. They act at three levels:</p><ul><li><b>Economy</b> : SCORM renders whole courses or small content units reusable on different Learning Management Systems (LMS) through the separation of content and context,</li><li><b>Pedagogy</b> : SCORM integrates the notion of pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You cannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : SCORM generates a table of contents as an abstraction layer located outside the content and the LMS. It helps both communicate with each other. Mainly communicated are <i>bookmarks</i>(\"Where is John in the course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much time did John spent in chapter 1?\").</li></ul><b>How can I create a SCORM-compliant Learning Path?</b><br><br>The obvious way is to use the Chamilo Authoring tool. However, you may prefer to create complete SCORM compliant websites locally on your own computer before uploading it onto your Chamilo platform. In this case, we recommend the use of a sophisticated tool such as Lectora®, eXe Learning® or Reload®<br></p><p>"
+msgstr "<p>Kursuse tööriist toetab kahte lähenemist :<ul><li>Loo uus kursus (võimaldab luua oma sisu)</li><li>Impordi SCORM-kursus</li></ul><img src=\"../img/path_help.gif\"><p><b>Mis on õpitee?</b></p><p>Õpitee võimaldab esitada õpikogemuste või tegevuste jada, mis on jaotatud eraldi osadeks (selles mõttes eristab õpitee „kursust“ pelgalt juhuslike dokumentide hoidlast). See võib olla sisupõhine (sisukorrana) või tegevuspõhine, toimides päevakava või tegevusprogrammina, mis on vajalik teatud teadmiste või oskuste mõistmiseks ja rakendamiseks.</p><p>Lisaks struktuurile võib õpitee olla ka <i>järjestikune</i>, mis tähendab, et teatud sammude läbimine on eelduseks teistele juurdepääsuks (st „õpiobjekti 2 juurde ei saa minna enne õpiobjekti 1“). Teie jada võib olla <i>soovituslik</i> (sammud kuvatakse lihtsalt üksteise järel) või <i>ettekirjutav</i> (eeldustega, et õppijad peavad samme järgima kindlas järjekorras).</p><p><b>Kuidas luua oma õpitee (kursus)?</b></p><p>Minge jaotisse „Õpitee“. Seal saate luua nii palju kursusi/teid, kui soovite, klõpsates tööriistal <i>Loo uus kursus</i>. Peate valima kursuse/tee nime (nt <i>Üksus 1</i>, kui kavatsete luua mitu üksust kogu kursuse sees). Alguses on kursus tühi, oodates, et lisate sellele jaotisi ja õpiobjekte.<br>Kui määrate kursuse nähtavaks, ilmub see kursuse avalehele uue tööriistana. See teeb õppijatele juurdepääsu lihtsamaks ja selgemaks.</p><p><b>Milliseid õpiobjekte saan lisada?</b></p><p>Lisada saab kõiki Chamilo tööriistu, tegevusi ja sisu, mida peate kursuse jaoks kasulikuks ja asjakohaseks :<br><ul><li>Eraldi dokumendid (tekstid, pildid, Office'i dokumendid, ...)</li><li>Foorumid tervikuna</li><li>Teemad</li><li>Lingid</li><li>Chamilo testid</li><li>HotPotatoes testid<br />(märkus : avalehel nähtamatuks tehtud, kuid teele lisatud testid muutuvad õppijatele nähtavaks alles kursuse läbimisel.)</li><li>Ülesanded</li><li>Välised lingid</li></ul></p><p><b>Muud funktsioonid</b></p><p>Õppijatelt saab paluda järgida kursust kindlas järjekorras, kuna saate määrata <u>eeldused</u>. See tähendab näiteks, et õppijad ei saa minna nt viktoriini 2 juurde enne, kui nad on lugenud nt dokumenti 1. Kõigil õpiobjektidel on olek:<i>lõpetatud</i> või <i>lõpetamata</i>, nii et õppijate edenemine on selgelt aruandes.</p><p>Kui muudate õpiobjekti algset pealkirja, ilmub kursusel uus nimi, kuid algset pealkirja ei kustutata. Seega kui soovite, et test8.doc ilmuks teel kui „Lõpueksam“, ei pea te faili ümber nimetama, saate teel kasutada uut pealkirja. Kasulik on anda uued pealkirjad ka liiga pikkadele linkidele.</p><p>Kui olete valmis, ärge unustage kontrollida kuvarežiimi (nagu õppija vaates, vasakul sisukord ja paremal õpiobjektid, ükshaaval.)</p><br><p><b>Mis on SCORM-kursus ja kuidas seda importida?</b></p><p>Õpitee tööriist võimaldab üles laadida SCORM-ühilduvaid kursusi.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) on avalik standard, mida järgivad suured e-õppe ettevõtted nagu NETg, Macromedia, Microsoft, Skillsoft jne. See toimib kolmel tasandil:</p><ul><li><b>Majandus</b> : SCORM muudab terved kursused või väikesed sisuüksused taaskasutatavaks erinevatel õppehaldussüsteemidel (LMS), eraldades sisu ja konteksti,</li><li><b>Pedagoogika</b> : SCORM integreerib eelduse ehk <i>järjestamise</i> mõiste (<i>nt </i>\"2. peatüki juurde ei saa minna enne viktoriini 1 läbimist\"),</li><li><b>Tehnoloogia</b> : SCORM loob sisukorra abstraktsioonikihina, mis asub väljaspool sisu ja LMS-i. See aitab neil omavahel suhelda. Peamiselt edastatakse <i>järjehoidjad</i>(\"Kus on John kursusel?\"), <i>tulemused</i> (\"Kuidas John testi sooritas?\") ja <i>aeg</i> (\"Kui palju aega veetis John 1. peatükis?\").</li></ul><b>Kuidas luua SCORM-ühilduvat õpiteed?</b><br><br>Ilmselge viis on kasutada Chamilo autoritööriista. Võite aga eelistada luua täielikud SCORM-ühilduvad veebisaidid kohapeal oma arvutis enne nende üleslaadimist Chamilo platvormile. Sel juhul soovitame kasutada keerukat tööriista nagu Lectora®, eXe Learning® või Reload®<br></p><p>"
 
 msgid "<p>The Course Description tool prompts you to comprehensively describe your course in a systematic way. This description can be used to provide learners with an overview of what awaits them, and can be helpful when you review and evaluate your course. </p> The items merely offer suggestions. If you want to write your own course description, simply create your own headings and descriptions by selecting the  'Other' tool. </p> Otherwise, to complete a description of the course, click on each image, fill it with your text/content and submit. </p>"
-msgstr "<p>The Course Description tool prompts you to comprehensively describe your course in a systematic way. This description can be used to provide learners with an overview of what awaits them, and can be helpful when you review and evaluate your course. </p> The items merely offer suggestions. If you want to write your own course description, simply create your own headings and descriptions by selecting the  'Other' tool. </p> Otherwise, to complete a description of the course, click on each image, fill it with your text/content and submit. </p>"
+msgstr "<p>Kursuse kirjelduse tööriist palub teil kursust süsteemselt ja põhjalikult kirjeldada. Seda kirjeldust saab kasutada, et anda õppijatele ülevaade sellest, mis neid ootab, ning see võib olla abiks kursuse ülevaatamisel ja hindamisel. </p> Kirjed on vaid soovitused. Kui soovite kirjutada oma kursuse kirjelduse, looge lihtsalt oma pealkirjad ja kirjeldused, valides tööriista „Muu“. </p> Vastasel juhul klõpsake kursuse kirjelduse täitmiseks igal pildil, täitke see oma teksti/sisuga ja esitage. </p>"
 
 msgid "<p>The Links tool allows you to create a library of resources for your students, particularly of resources that you have not created yourself.</p><p>As the list grows, it might prove useful to organise it into categories to help your students find the right information at the right place. You can edit every link to re-assign it to a new category (you will need to create this category first).</p><p>The Description field can be used to provide advance-information on the target web pages but also to describe what you expect the student to do with the link. If, for instance, you point to a website on Aristotle, the description field may ask the student to study the difference between synthesis and analysis."
-msgstr "<p>The Links tool allows you to create a library of resources for your students, particularly of resources that you have not created yourself.</p><p>As the list grows, it might prove useful to organise it into categories to help your students find the right information at the right place. You can edit every link to re-assign it to a new category (you will need to create this category first).</p><p>The Description field can be used to provide advance-information on the target web pages but also to describe what you expect the student to do with the link. If, for instance, you point to a website on Aristotle, the description field may ask the student to study the difference between synthesis and analysis."
+msgstr "<p>Linkide tööriist võimaldab luua õppijatele ressursikogu, eriti ressurssidest, mida te ise ei ole loonud.</p><p>Kui loend kasvab, võib olla kasulik korraldada see kategooriatesse, et aidata õppijatel leida õige teave õigest kohast. Saate iga linki muuta, et määrata see uude kategooriasse (kategooria tuleb esmalt luua).</p><p>Kirjelduse välja saab kasutada sihtveebilehtede eelteabe andmiseks, aga ka selleks, et kirjeldada, mida ootate õppijalt lingiga tegema. Kui näiteks osutate Aristotelese veebisaidile, võib kirjelduse väli paluda õppijal uurida sünteesi ja analüüsi erinevust."
 
 msgid "<p> As soon as you log in to the system, you will be taken to your own main  page. Here you will see the following: <li> <b> My Courses </b> in the centre of the page, lists the courses in which you are enrolled, with an option for you to create new courses (using the button in the right menu) </li> In the header section, <b> My Profile </b> allows you to change your password, upload your photo to the system or change your username, </li> <b> My Calendar </b>: contains the events within the courses for which you are registered, </li> in the right menu: <b> Edit my list of courses </b> allows you to enroll in courses as learner, (provided the trainer/teacher has authorized entry. here you can also unsubscribe from a course, </li> Links <b> Support Forum </b> and <b> Documentation </b> refer you to the main Chamilo site, where you can ask questions or find up to date information about Chamilo. </li> </ ul> To enter a course (left side of the screen), click on its title. Your profile may vary from course to course. It could be that you are a teacher in one course and a learner in another. In courses for which you are responsible, you have access to the editing tools designed for authoring and managing students, while in courses where you learn, you access a more limited range of tools appropriate for undertaking the course.</p> The form  your own main page takes can vary from one platform to another depending on the options enabled by the system administrator. Thus, for example, there may be some cases where you do not have access to course creation even as a teacher, because this particular function is managed by others within your institution. </p>"
-msgstr "<p> As soon as you log in to the system, you will be taken to your own main  page. Here you will see the following: <li> <b> My Courses </b> in the centre of the page, lists the courses in which you are enrolled, with an option for you to create new courses (using the button in the right menu) </li> In the header section, <b> My Profile </b> allows you to change your password, upload your photo to the system or change your username, </li> <b> My Calendar </b>: contains the events within the courses for which you are registered, </li> in the right menu: <b> Edit my list of courses </b> allows you to enroll in courses as learner, (provided the trainer/teacher has authorized entry. here you can also unsubscribe from a course, </li> Links <b> Support Forum </b> and <b> Documentation </b> refer you to the main Chamilo site, where you can ask questions or find up to date information about Chamilo. </li> </ ul> To enter a course (left side of the screen), click on its title. Your profile may vary from course to course. It could be that you are a teacher in one course and a learner in another. In courses for which you are responsible, you have access to the editing tools designed for authoring and managing students, while in courses where you learn, you access a more limited range of tools appropriate for undertaking the course.</p> The form  your own main page takes can vary from one platform to another depending on the options enabled by the system administrator. Thus, for example, there may be some cases where you do not have access to course creation even as a teacher, because this particular function is managed by others within your institution. </p>"
+msgstr "<p> Niipea kui süsteemi sisse logite, suunatakse teid oma põhilehele. Siin näete järgmist: <li> <b> Minu kursused </b> lehe keskel loetleb kursused, kuhu olete registreeritud, koos võimalusega luua uusi kursusi (parempoolse menüü nupuga) </li> Päises võimaldab <b> Minu profiil </b> muuta parooli, laadida süsteemi oma foto või muuta kasutajanime, </li> <b> Minu kalender </b>: sisaldab sündmusi kursustel, kuhu olete registreeritud, </li> parempoolses menüüs: <b> Muuda minu kursuste loendit </b> võimaldab registreeruda kursustele õppijana (eeldusel, et koolitaja/õpetaja on sissepääsu lubanud; siin saate ka kursuselt lahkuda), </li> Lingid <b> Tugifoorum </b> ja <b> Dokumentatsioon </b> suunavad teid Chamilo peamisele saidile, kus saate esitada küsimusi või leida ajakohast teavet Chamilo kohta. </li> </ ul> Kursusele sisenemiseks (ekraani vasakul) klõpsake selle pealkirjal. Teie profiil võib kursuseti erineda. Võite olla ühel kursusel õpetaja ja teisel õppija. Kursustel, mille eest vastutate, on teil juurdepääs muutmistööriistadele autorluse ja õppijate haldamise jaoks, samas kui kursustel, kus õpite, on juurdepääs piiratumale tööriistade valikule, mis sobib kursuse läbimiseks.</p> Teie põhilehe kuju võib platvormiti erineda sõltuvalt süsteemiadministraatori lubatud valikutest. Näiteks võib olla juhtumeid, kus teil ei ole isegi õpetajana juurdepääsu kursuse loomisele, sest seda funktsiooni haldavad teie asutuses teised. </p>"
 
 msgid "<p> The Agenda tool appears both as a calendar within each course and as a personal diary tool for each student providing an overview of events in the courses in which they are enrolled. (Groups can also have their own Agenda.) </ p> Users can use the Agenda, which displays course content and activites, as a reference tool to organise their day to day or week to week learning.<p>In addition to being visible in the agenda, new events are indicated to the learner whenever he/she logs in. The system sees what has been added since his/her last visit and icons appear on the portal home page beside the courses indicating new events and announcements.</p> </p> If you want to organize students' work in a time-related way, it is best to use the Learning Paths tool as a way of charting a logical progression through various activites and content through the presentation of a formal table of contents.</p>"
-msgstr "<p> The Agenda tool appears both as a calendar within each course and as a personal diary tool for each student providing an overview of events in the courses in which they are enrolled. (Groups can also have their own Agenda.) </ p> Users can use the Agenda, which displays course content and activites, as a reference tool to organise their day to day or week to week learning.<p>In addition to being visible in the agenda, new events are indicated to the learner whenever he/she logs in. The system sees what has been added since his/her last visit and icons appear on the portal home page beside the courses indicating new events and announcements.</p> </p> If you want to organize students' work in a time-related way, it is best to use the Learning Paths tool as a way of charting a logical progression through various activites and content through the presentation of a formal table of contents.</p>"
+msgstr "<p> Kalendri tööriist ilmub nii kalendrina igal kursusel kui ka isikliku päeviku tööriistana igale õppijale, andes ülevaate sündmustest kursustel, kuhu nad on registreeritud. (Rühmadel võib olla ka oma kalender.) </ p> Kasutajad saavad kasutada kalendrit, mis kuvab kursuse sisu ja tegevusi, viitetööriistana oma igapäevase või iganädalase õppimise korraldamiseks.<p>Lisaks kalendris nähtavusele näidatakse uusi sündmusi õppijale iga kord, kui ta sisse logib. Süsteem näeb, mis on lisatud pärast tema viimast külastust, ja portaali avalehel ilmuvad kursuste kõrvale ikoonid, mis tähistavad uusi sündmusi ja teateid.</p> </p> Kui soovite õppijate tööd ajaliselt korraldada, on parim kasutada õpiteede tööriista, et kaardistada loogiline edenemine erinevate tegevuste ja sisu kaudu formaalse sisukorra esitamise kaudu.</p>"
 
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
-msgstr "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
+msgstr "<p> Teadete tööriist võimaldab saata e-kirja mõnele või kõigile oma õpilastele või konkreetsetele rühmadele. Võite soovida teavitada neid uue dokumendi lisamisest, meelde tuletada ülesande esitamise tähtaega või esile tõsta ja jagada eriti head tööd. Selliste e-posti teadete saatmine võib olla ka kasulik viis taas kaasata õpilasi, kes pole saidil mõnda aega käinud (kui seda ei tehta liiga sageli!). </p> <b> Konkreetsete kasutajate kontakteerimine </b> <p> Lisaks üldise teate saatmisele kõigile kursuse liikmetele saate saata e-kirja ühele või mitmele isikule/rühmale. Uue teate loomisel klõpsake lihtsalt <i>Nähtav</i> ja valige kasutajad vasakpoolsetest loenditest ning lisage nad saajateks noolte abil.</p>"
 
 msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 msgstr "<p>Vestlustööriist võimaldab teil õpilastega reaalajas vestelda. </p> Erinevalt enamikust kommertslikest vestlustööriistadest on Chamilo vestlus veebipõhine ega nõua täiendavat paigaldust (nt MSN®, Yahoo Messenger®, Skype® jne). Selle lahenduse peamine eelis on seega kohe kättesaadavus õpilastele, mis võimaldab vestluse hõlpsasti kursusesse integreerida. Lisaks arhiveerib Chamilo vestlustööriist arutelud automaatselt ja salvestab need hilisemaks hõlpsaks juurdepääsuks Dokumentide tööriista kaudu. (Olge teadlik, et sõnumi värskendamine võib iga vahetuse korral võtta 1 kuni 5 sekundit – see ei tähenda, et midagi oleks valesti!!). </p> Kui õppijad on üles laadinud profiilipildi, kuvatakse see (vähendatud suuruses) vasakus veerus – vastasel juhul kuvatakse vaikepilt. </p> Õpetaja vastutab lõimede kustutamise eest, millal ta seda asjakohaseks peab. </p> <b>Pedagoogiline kasutus</b> <p>Vestluse lisamine kursusele ei ole alati hea mõte. Selle tööriista parimaks kasutamiseks peate tagama, et arutelud jääksid kursuse sisule keskendunuks. Võite näiteks otsustada hoida vestlusvõimalus peidetuna, kuni on aeg „formaalseks“ planeeritud sessiooniks. Nii, kuigi arutelude vabadus võib küll olla piiratud, saate paremini tagada, et sellised reaalajas kohtumised oleksid kasulikud.</p>"
@@ -40129,4 +40132,448 @@ msgstr "Rühmaaruanne"
 
 msgid "Student follow-up"
 msgstr "Õpilase järelvalve"
+
+msgid "Use system default certificate"
+msgstr "Kasuta süsteemi vaikimisi sertifikaati"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Lisatud sertifikaat pole saadaval. Kasutatakse süsteemi vaikimisi sertifikaati."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Kasutada süsteemi vaikimisi sertifikaati lisatud sertifikaadi asemel?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Valikuline kohaliku arenduskeskkonna ülekirjutus. Tootmiskeskkonna uuendused kasutavad ametlikku Chamilo usaldusväärset võtit."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Koosta etapiviisilisest paketist ohutu rakendusplaan. See kontrollib asendatavaid, lisatavaid või eemaldatavaid faile, õigusi, varukoopia teed ja lukustuse olekut. See ei muuda paigaldust."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "See samm valmistab ette ainult ülevaate. Failide asendamine ja paketi deklareeritud puhastus toimuvad hiljem etapis „Rakenda etapiviisilised failid“, koos lukustuse, varukoopia ja tagasipööramise kaitsega."
+
+msgid "Files to remove"
+msgstr "Eemaldatavad failid"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Asenda Chamilo failid etapiviisilisest paketist ja eemalda vananenud failid, mis on allkirjastatud paketi metaandmetes selgelt deklareeritud. See ei käivita andmebaasi migratsioone ega Composer-, Yarn- või vahemälukäske."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "See toiming asendab ja võib eemaldada faile Chamilo paigalduses. Enne jätkamist veendu, et rakendusplaan on üle vaadatud ja varukoopiad on lubatud."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Saan aru, et see asendab faile ja eemaldab paketi deklareeritud vananenud failid Chamilo paigalduses."
+
+msgid "Type the exact text below to confirm"
+msgstr "Sisesta kinnitamiseks täpselt allolev tekst"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine käivitab pärast ohutusülevaate läbimist ainult etapiviisilised V300 migratsioonid."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine teatas ajaloolistest baasjoone hoiatustest. Uuendaja käivitab pärast selget kinnitust siiski ainult etapiviisilised V300 migratsioonid."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Muuta saab ainult manifesti teed. HTTPS-protokoll ja ametlik uuenduste domeen on fikseeritud."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Arendusrežiim lubab HTTPS-i manifesti URL-i või kohaliku manifesti tee."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Ametliku uuendusmanifesti määrab server."
+
+msgid "What feedback do you want about this course?"
+msgstr "Millist tagasisidet soovid selle kursuse kohta?"
+
+msgid "Analysis summary"
+msgstr "Analüüsi kokkuvõte"
+
+msgid "Lessons included"
+msgstr "Kaasatud tunnid"
+
+msgid "Standalone documents included"
+msgstr "Kaasatud eraldiseisvad dokumendid"
+
+msgid "Standalone exercises included"
+msgstr "Kaasatud eraldiseisvad harjutused"
+
+msgid "General feedback"
+msgstr "Üldine tagasiside"
+
+msgid "Strengths"
+msgstr "Tugevused"
+
+msgid "Risks"
+msgstr "Riskid"
+
+msgid "Recommendations"
+msgstr "Soovitused"
+
+msgid "Lesson feedback"
+msgstr "Tunni tagasiside"
+
+msgid "Standalone document feedback"
+msgstr "Eraldiseisva dokumendi tagasiside"
+
+msgid "Standalone exercise feedback"
+msgstr "Eraldiseisva harjutuse tagasiside"
+
+msgid "AI response"
+msgstr "AI vastus"
+
+msgid "Sequence feedback"
+msgstr "Järjestuse tagasiside"
+
+msgid "Purpose"
+msgstr "Eesmärk"
+
+msgid "You"
+msgstr "Sina"
+
+msgid "City of internship"
+msgstr "Praktika linn"
+
+msgid "City"
+msgstr "Linn"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Uuendamise töövoog taastati pärast lehe värskendamist"
+
+msgid "Last completed step"
+msgstr "Viimane lõpetatud samm"
+
+msgid "Stage package"
+msgstr "Paki ettevalmistamine"
+
+msgid "Package staging"
+msgstr "Paketi ettevalmistamine"
+
+msgid "Apply plan"
+msgstr "Rakenda plaan"
+
+msgid "Update workflow completed"
+msgstr "Uuendamise töövoog on lõpule viidud"
+
+msgid "Update directory exists and is writable."
+msgstr "Uuenduste kataloog on olemas ja kirjutatav."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Uuenduste kataloog on olemas, kuid pole kirjutatav: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Uuenduste kataloogi pole veel olemas, kuid selle ülemkataloog on kirjutatav."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Uuenduste kataloogi pole veel olemas, kuid selle saab luua kataloogi var/ alla."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Uuenduste kataloogi pole olemas ja seda ei saa praeguste õigustega luua."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Uuenduse eelkinnituse jaoks ei õnnestunud vaba kettaruumi määrata."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Turvaliseks uuenduse ettevalmistamiseks pole piisavalt vaba kettaruumi."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Vaba kettaruum on selle kontrollietapi uuendusvoo jaoks piisav."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Uuenduse manifest ei määra PHP versiooni nõuet."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "PHP nõuet ei õnnestunud täielikult hinnata: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Praegune PHP versioon ei vasta uuenduse nõudele: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Praegune PHP versioon vastab uuenduse nõudele."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Kohalikku paketi teed ei antud. Allalaaditud pakette saab kontrollida alles pärast allalaadimist."
+
+msgid "Local update package is not readable: %s"
+msgstr "Kohalik uuenduspakett ei ole loetav: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Kohalik uuenduspakett peab olema ZIP-arhiiv."
+
+msgid "Local update package is readable."
+msgstr "Kohalik uuenduspakett on loetav."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Paigaldatud Chamilo versiooni ei õnnestunud automaatselt tuvastada. Versiooni suunda ei saa kontrollida."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Paigaldatud või sihtversioon ei ole võrreldavas semantilise versiooni vormingus."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Sihtversioon on madalam kui paigaldatud versioon. Alandamine ei ole vaikimisi lubatud."
+
+msgid "Target version matches the installed version."
+msgstr "Sihtversioon ühtib paigaldatud versiooniga."
+
+msgid "Target version is newer than the installed version."
+msgstr "Sihtversioon on uuem kui paigaldatud versioon."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Projekt ei ole Git-väljavõte või .git puudub."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "See uuendussüsteem on mõeldud paigaldustele ilma Gitita. Tuvastasime, et kohalik süsteem kasutab Giti. Uuenduse jätkamine võib rikkuda Git-ajaloo. Gitiga süsteemide puhul soovitame kasutada veebijuure failis CONTRIBUTING.md kirjeldatud Git-protseduuri."
+
+msgid "Local Git changes were also detected."
+msgstr "Tuvastati ka kohalikud Git-muudatused."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Mõned projekti metaandmefailid puuduvad. Hilisemad uuendusetapid võivad nõuda käsitsi sõltuvuste kontrolli."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer’i ja Yarn’i metaandmefailid on olemas."
+
+msgid "Starting staged file application."
+msgstr "Alustatakse ettevalmistatud failide rakendamist."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Ettevalmistatud failide rakendamiseks on vaja selget kinnitust."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Ettevalmistatud uuendusfailide rakendamine nõuab selget kinnitust."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Ettevalmistuskataloog asub Chamilo uuenduse ettevalmistuskataloogis."
+
+msgid "Staging directory was validated."
+msgstr "Ettevalmistuskataloog on kinnitatud."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Rakendamisplaani metaandmed loeti edukalt."
+
+msgid "Staged application path is valid."
+msgstr "Ettevalmistatud rakenduse tee on kehtiv."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Allkirjastatud paketi puhastuse metaandmed vastavad ülevaadatud rakendamisplaanile."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Allkirjastatud paketi puhastuse metaandmed on kinnitatud."
+
+msgid "Update lock was acquired."
+msgstr "Uuenduse lukk on omandatud."
+
+msgid "Update backup directory was created."
+msgstr "Uuenduse varukoopia kataloog on loodud."
+
+msgid "Update file operations were collected."
+msgstr "Uuenduse failitoimingud on kogutud."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Asendamiseks või eemaldamiseks planeeritud olemasolevad failid on varundatud."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Ettevalmistatud uuendusfailid kopeeriti Chamilo paigaldusse."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Paketis deklareeritud vananenud failid eemaldati Chamilo paigaldusest."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Paketis deklareeritud vananenud failid eemaldati."
+
+msgid "Update apply audit metadata was written."
+msgstr "Uuenduse rakendamise auditi metaandmed kirjutati."
+
+msgid "Staged files applied successfully."
+msgstr "Ettevalmistatud failid rakendati edukalt."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Eemaldatud faile ei saa taastada: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Kopeeritud faile ei saa tagasi pöörata: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Failide tagasipööramine teostati pärast uuenduse rakendamise nurjumist."
+
+msgid "Rollback failed: %s"
+msgstr "Tagasipööramine nurjus: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Uuenduse rakendamise auditi metaandmeid ei saa kirjutada: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Uuenduse lukku ei saa pärast nurjumist vabastada: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Uuendusfailide rakendamiseks on ettevalmistustee nõutav."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Ettevalmistuskataloogi ei ole olemas: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo uuenduse ettevalmistuse baaskataloogi ei ole olemas."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Ettevalmistuskataloog peab asuma kataloogis var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Ettevalmistuskataloogis puudub APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Uuenduse rakendamisplaani metaandmeid ei saa lugeda: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Uuenduse rakendamisplaani metaandmed ei ole kehtiv JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Uuenduse rakendamisplaani metaandmed peavad olema JSON-objekt."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Uuenduse rakendamisplaanil puudub väli application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Ettevalmistatud rakenduse tee ei ole loetav: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Ettevalmistatud rakenduse tee peab asuma ettevalmistuskataloogis."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Ettevalmistatud rakenduse teel puudub composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Uuenduspaketis puudub %s. Valmistage uuesti ette kontrollitud pakett allkirjastatud puhastuse metaandmetega."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Uuenduse rakendamisplaanil puuduvad ülevaadatud paketi puhastuse metaandmed."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Uuenduspaketi puhastuse metaandmed muutusid pärast rakendamisplaani loomist. Enne jätkamist looge rakendamisplaan uuesti."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Uuenduse rakendamisplaan sisaldab kehtetut paketi eemaldamise loendit."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Uuenduspaketi puhastuse teed muutusid pärast rakendamisplaani loomist. Enne jätkamist looge rakendamisplaan uuesti."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Uuenduse rakendamisplaanil puudub ülevaadatud eemaldamisteede loend."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Uuenduse rakendamisplaani eemaldamisteed ei vasta allkirjastatud paketi puhastuse metaandmetele."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Uuenduse luku tee peab asuma kataloogis var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Uuenduse rakendamisplaanil puudub väli backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Uuenduse varukoopia tee sisaldab ohtlikke teeosi."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Uuenduse varukoopia tee peab asuma kataloogis var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Uuenduse lukku ei saa omandada. Teine uuendus võib olla pooleli."
+
+msgid "Unable to release update lock: %s"
+msgstr "Uuenduse lukku ei saa vabastada: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Uuenduse varukoopia kataloog on juba olemas: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Sihtkataloogi ei saa luua: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Planeeritud uuendus kirjutaks üle olemasoleva sümboolse lingi: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Sihtfail ei ole kirjutatav: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Sihtfaili ei saa luua: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Chamilo projekti kataloogi ei õnnestu enne aegunud failide eemaldamist määrata."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Uuenduse puhastus ei saa eemaldada kaitstud teed: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Planeeritud uuendus eemaldaks olemasoleva sümboolse lingi: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Uuenduse puhastus toetab ainult faile, mitte katalooge: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Aegunud sihtfail ei ole varundamiseks loetav: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Aegunud sihtfaili ei saa praeguste kataloogiloadega eemaldada: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Aegunud sihtfail osutab Chamilo projekti kataloogist väljapoole: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Sihtfaili ei õnnestu varundada: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Uuenduse varukoopia metaandmeid ei õnnestu kirjutada."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Ettevalmistatud uuendusfaili ei õnnestu kopeerida: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Kopeeritud %d / %d ettevalmistatud failist."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Paketi deklaratsioonis olevat aegunud faili ei õnnestu eemaldada: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Eemaldatud %d / %d paketi deklaratsioonis olevast aegunud failist."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Varundatud faili ei õnnestu taastada: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Äsja kopeeritud faili ei õnnestu tagasivõtmisel eemaldada: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Eemaldatud faili ei õnnestu taastada, sest selle varukoopia puudub: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Eemaldatud faili ei õnnestu varukoopiast taastada: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Uuenduse rakendamise auditi metaandmeid ei õnnestu kirjutada."
+
+msgid "Unable to write global update apply log."
+msgstr "Globaalset uuenduse rakendamise logi ei õnnestu kirjutada."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Tuvastati ohtlik ettevalmistatud suhteline tee: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Kataloog ei ole kirjutatav: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Kataloogi ei õnnestu luua: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Ettevalmistuse metaandmed loeti edukalt."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Rakendamise plaani metaandmed kirjutati ettevalmistuskataloogi."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Sihtfailid ja -kataloogid tunduvad planeeritud uuenduse ja puhastuse jaoks kirjutatavad."
+
+msgid "Update apply plan check failed."
+msgstr "Uuenduse rakendamise plaani kontroll ebaõnnestus."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Mõnda sihtfaili või -kataloogi ei saa kirjutada ega eemaldada."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Selle parandamiseks muutke ajutiselt kogu Chamilo kataloogi omanikuks %s (veebiserveri kasutaja), rakendage uuendus, muutke omanik pärast seda tagasi %s-ks ning määrake seejärel var/ (ja selle sisu) omanikuks taas %s, et rakendus saaks sinna edasi kirjutada."
 

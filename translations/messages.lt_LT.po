@@ -8795,6 +8795,9 @@ msgstr "Mano statistika"
 msgid "Personal agenda"
 msgstr "Mano darbotvarkė"
 
+msgid "Group agenda"
+msgstr "Grupės darbotvarkė"
+
 msgid "Switch to teacher view"
 msgstr "Dėstytojo sąsaja"
 
@@ -40129,4 +40132,448 @@ msgstr "Grupės ataskaita"
 
 msgid "Student follow-up"
 msgstr "Mokinio stebėsena"
+
+msgid "Use system default certificate"
+msgstr "Naudoti sistemos numatytąjį sertifikatą"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Pridėtas sertifikatas nepasiekiamas. Bus naudojamas sistemos numatytasis sertifikatas."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Naudoti sistemos numatytąjį sertifikatą vietoj pridėto sertifikato?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Pasirenkamas vietinės kūrimo aplinkos perrašymas. Gamybiniai atnaujinimai naudoja oficialų Chamilo patikimą raktą."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Sukurti saugų taikymo planą iš paruošto paketo. Tikrinami keistini, pridėtini ar šalintini failai, teisės, atsarginės kopijos kelias ir užrakinimo būsena. Diegimas nekeičiamas."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Šis žingsnis skirtas tik peržiūrai. Failų pakeitimas ir pakete nurodytas valymas vyksta vėliau žingsnyje „Taikyti paruoštus failus“, su užraktu, atsargine kopija ir atšaukimo apsauga."
+
+msgid "Files to remove"
+msgstr "Šalintini failai"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Pakeisti Chamilo failus iš paruošto paketo ir pašalinti pasenusius failus, aiškiai nurodytus pasirašyto paketo metaduomenyse. Duomenų bazės migracijos, Composer, Yarn ar talpyklos komandos nevykdomos."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Šis veiksmas pakeičia ir gali pašalinti failus Chamilo diegime. Prieš tęsdami įsitikinkite, kad taikymo planas peržiūrėtas ir atsarginės kopijos įjungtos."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Suprantu, kad tai pakeis failus ir pašalins pakete nurodytus pasenusius failus Chamilo diegime."
+
+msgid "Type the exact text below to confirm"
+msgstr "Patvirtinimui įveskite tikslų tekstą žemiau"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine vykdys tik paruoštas V300 migracijas, aiškiai po saugumo peržiūros."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine pranešė apie istorinius bazinės linijos įspėjimus. Atnaujintuvas vis tiek vykdys tik paruoštas V300 migracijas po aiškaus patvirtinimo."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Keisti galima tik manifesto kelią. HTTPS protokolas ir oficialus atnaujinimų domenas yra fiksuoti."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Kūrimo režimas leidžia HTTPS manifesto URL arba vietinį manifesto kelią."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Oficialus atnaujinimų manifestas sukonfigūruotas serveryje."
+
+msgid "What feedback do you want about this course?"
+msgstr "Kokio grįžtamojo ryšio norite apie šį kursą?"
+
+msgid "Analysis summary"
+msgstr "Analizės santrauka"
+
+msgid "Lessons included"
+msgstr "Įtrauktos pamokos"
+
+msgid "Standalone documents included"
+msgstr "Įtraukti atskiri dokumentai"
+
+msgid "Standalone exercises included"
+msgstr "Įtraukti atskiri pratimai"
+
+msgid "General feedback"
+msgstr "Bendras grįžtamasis ryšys"
+
+msgid "Strengths"
+msgstr "Stiprybės"
+
+msgid "Risks"
+msgstr "Rizikos"
+
+msgid "Recommendations"
+msgstr "Rekomendacijos"
+
+msgid "Lesson feedback"
+msgstr "Pamokos grįžtamasis ryšys"
+
+msgid "Standalone document feedback"
+msgstr "Atskiro dokumento grįžtamasis ryšys"
+
+msgid "Standalone exercise feedback"
+msgstr "Atskiro pratimo grįžtamasis ryšys"
+
+msgid "AI response"
+msgstr "DI atsakymas"
+
+msgid "Sequence feedback"
+msgstr "Sekos grįžtamasis ryšys"
+
+msgid "Purpose"
+msgstr "Paskirtis"
+
+msgid "You"
+msgstr "Jūs"
+
+msgid "City of internship"
+msgstr "Praktikos miestas"
+
+msgid "City"
+msgstr "Miestas"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Atnaujinimo eiga atkurta po puslapio perkrovimo"
+
+msgid "Last completed step"
+msgstr "Paskutinis užbaigtas žingsnis"
+
+msgid "Stage package"
+msgstr "Etapo paketas"
+
+msgid "Package staging"
+msgstr "Paketo paruošimas"
+
+msgid "Apply plan"
+msgstr "Taikyti planą"
+
+msgid "Update workflow completed"
+msgstr "Atnaujinimo eiga baigta"
+
+msgid "Update directory exists and is writable."
+msgstr "Atnaujinimo katalogas egzistuoja ir yra rašomas."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Atnaujinimo katalogas egzistuoja, bet nėra rašomas: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Atnaujinimo katalogas dar neegzistuoja, bet jo tėvinis katalogas yra rašomas."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Atnaujinimo katalogas dar neegzistuoja, bet jį galima sukurti po var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Atnaujinimo katalogas neegzistuoja ir negali būti sukurtas su dabartinėmis teisėmis."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Nepavyko nustatyti laisvos disko vietos atnaujinimo išankstinei patikrai."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Nepakanka laisvos disko vietos saugiam atnaujinimo paruošimui."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Laisvos disko vietos pakanka šiai patikros etapo atnaujinimo eigai."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Atnaujinimo manifeste nenurodytas PHP versijos reikalavimas."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Nepavyko visiškai įvertinti PHP reikalavimo: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Dabartinė PHP versija neatitinka atnaujinimo reikalavimo: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Dabartinė PHP versija atitinka atnaujinimo reikalavimą."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Nepateiktas vietinio paketo kelias. Atsisiųstus paketus galima tikrinti tik po atsisiuntimo."
+
+msgid "Local update package is not readable: %s"
+msgstr "Vietinis atnaujinimo paketas neskaitomas: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Vietinis atnaujinimo paketas turi būti ZIP archyvas."
+
+msgid "Local update package is readable."
+msgstr "Vietinis atnaujinimo paketas yra skaitomas."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Įdiegtos Chamilo versijos nepavyko nustatyti automatiškai. Versijos krypties patikrinti negalima."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Įdiegta arba tikslinė versija nėra palyginamo semantinio versijos formato."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Tikslinė versija yra senesnė už įdiegtą versiją. Pagal numatytuosius nustatymus pažeminimai neleidžiami."
+
+msgid "Target version matches the installed version."
+msgstr "Tikslinė versija sutampa su įdiegta versija."
+
+msgid "Target version is newer than the installed version."
+msgstr "Tikslinė versija yra naujesnė už įdiegtą versiją."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Projektas nėra Git kopija arba nėra .git."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Ši atnaujinimo sistema skirta diegimams be Git palaikymo. Nustatyta, kad vietinė sistema naudoja Git. Tęsiant atnaujinimą gali būti pažeista Git istorija. Sistemoms su Git palaikymu rekomenduojame naudoti Git procedūrą, aprašytą CONTRIBUTING.md žiniatinklio šaknyje."
+
+msgid "Local Git changes were also detected."
+msgstr "Taip pat aptikti vietiniai Git pakeitimai."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Trūksta kai kurių projekto metaduomenų failų. Vėlesniuose atnaujinimo etapuose gali prireikti rankinių priklausomybių patikrų."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer ir Yarn metaduomenų failai yra."
+
+msgid "Starting staged file application."
+msgstr "Pradedamas paruoštų failų taikymas."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Norint taikyti paruoštus failus, reikalingas aiškus patvirtinimas."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Paruoštų atnaujinimo failų taikymui reikalingas aiškus patvirtinimas."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Paruošimo katalogas yra Chamilo atnaujinimo paruošimo kataloge."
+
+msgid "Staging directory was validated."
+msgstr "Paruošimo katalogas patvirtintas."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Taikymo plano metaduomenys sėkmingai perskaityti."
+
+msgid "Staged application path is valid."
+msgstr "Paruošto taikymo kelias galioja."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Pasirašyto paketo valymo metaduomenys atitinka peržiūrėtą taikymo planą."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Pasirašyto paketo valymo metaduomenys patvirtinti."
+
+msgid "Update lock was acquired."
+msgstr "Atnaujinimo užraktas gautas."
+
+msgid "Update backup directory was created."
+msgstr "Atnaujinimo atsarginės kopijos katalogas sukurtas."
+
+msgid "Update file operations were collected."
+msgstr "Atnaujinimo failų operacijos surinktos."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Esami failai, kuriuos planuojama pakeisti arba pašalinti, nukopijuoti į atsarginę kopiją."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Paruošti atnaujinimo failai nukopijuoti į Chamilo diegimą."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Pakete nurodyti pasenę failai pašalinti iš Chamilo diegimo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Pakete nurodyti pasenę failai pašalinti."
+
+msgid "Update apply audit metadata was written."
+msgstr "Atnaujinimo taikymo audito metaduomenys įrašyti."
+
+msgid "Staged files applied successfully."
+msgstr ""
+
+msgid "Unable to restore removed files: %s"
+msgstr ""
+
+msgid "Unable to roll back copied files: %s"
+msgstr ""
+
+msgid "File rollback was executed after the update apply failure."
+msgstr ""
+
+msgid "Rollback failed: %s"
+msgstr ""
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr ""
+
+msgid "Unable to release update lock after failure: %s"
+msgstr ""
+
+msgid "Staging path is required to apply update files."
+msgstr ""
+
+msgid "Staging directory does not exist: %s"
+msgstr ""
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr ""
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr ""
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr ""
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr ""
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr ""
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr ""
+
+msgid "Update apply plan is missing the application_path field."
+msgstr ""
+
+msgid "Staged application path is not readable: %s"
+msgstr ""
+
+msgid "Staged application path must be inside the staging directory."
+msgstr ""
+
+msgid "Staged application path is missing composer.json."
+msgstr ""
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr ""
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr ""
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr ""
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr ""
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr ""
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr ""
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr ""
+
+msgid "Update lock path must be inside var/update."
+msgstr ""
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr ""
+
+msgid "Update backup path contains unsafe path segments."
+msgstr ""
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr ""
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr ""
+
+msgid "Unable to release update lock: %s"
+msgstr ""
+
+msgid "Update backup directory already exists: %s"
+msgstr ""
+
+msgid "Target directory cannot be created: %s"
+msgstr ""
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr ""
+
+msgid "Target file is not writable: %s"
+msgstr ""
+
+msgid "Target file cannot be created: %s"
+msgstr ""
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr ""
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr ""
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr ""
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr ""
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr ""
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr ""
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr ""
+
+msgid "Unable to back up target file: %s"
+msgstr ""
+
+msgid "Unable to write update backup metadata."
+msgstr ""
+
+msgid "Unable to copy staged update file: %s"
+msgstr ""
+
+msgid "Copied %d of %d staged files."
+msgstr ""
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr ""
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr ""
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Nepavyko atkurti atsarginės failo kopijos: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Nepavyko pašalinti naujai nukopijuoto failo atšaukimo metu: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Nepavyko atkurti pašalinto failo, nes trūksta jo atsarginės kopijos: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Nepavyko atkurti pašalinto failo iš atsarginės kopijos: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Nepavyko įrašyti atnaujinimo taikymo audito metaduomenų."
+
+msgid "Unable to write global update apply log."
+msgstr "Nepavyko įrašyti visuotinio atnaujinimo taikymo žurnalo."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Aptiktas nesaugus paruoštas santykinis kelias: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Katalogas nėra rašomas: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Nepavyko sukurti katalogo: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Paruošimo metaduomenys sėkmingai perskaityti."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Taikymo plano metaduomenys įrašyti į paruošimo katalogą."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Paskirties failai ir katalogai atrodo rašomi planuojamam atnaujinimui ir valymui."
+
+msgid "Update apply plan check failed."
+msgstr "Atnaujinimo taikymo plano patikra nepavyko."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Kai kurių paskirties failų ar katalogų negalima rašyti arba pašalinti."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Kad tai ištaisytumėte, laikinai pakeiskite viso Chamilo katalogo savininką į %s (žiniatinklio serverio naudotoją), pritaikykite atnaujinimą, po to pakeiskite savininką atgal į %s, tada nustatykite var/ (ir jo turinio) savininką atgal į %s, kad programa galėtų ir toliau į jį rašyti."
 

@@ -8794,6 +8794,9 @@ msgstr "Statistika par manām darbībām kursos"
 msgid "Personal agenda"
 msgstr "Mans plānotājs"
 
+msgid "Group agenda"
+msgstr "Grupas kalendārs"
+
 msgid "Switch to teacher view"
 msgstr "Skatīt, kā Lektoram"
 
@@ -40129,4 +40132,448 @@ msgstr "Grupas pārskats"
 
 msgid "Student follow-up"
 msgstr "Studenta uzraudzība"
+
+msgid "Use system default certificate"
+msgstr "Izmantot sistēmas noklusējuma sertifikātu"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Pievienotais sertifikāts nav pieejams. Tiks izmantots sistēmas noklusējuma sertifikāts."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Izmantot sistēmas noklusējuma sertifikātu pievienotā sertifikāta vietā?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Neobligāts lokālās izstrādes aizstājējs. Ražošanas atjauninājumi izmanto oficiālo Chamilo uzticamo atslēgu."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Izveidot drošu piemērošanas plānu no sagatavotās pakotnes. Tas pārbauda failus, ko aizstāt, pievienot vai noņemt, atļaujas, dublējuma ceļu un bloķēšanas statusu. Tas nemaina instalāciju."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Šis solis sagatavo tikai pārskatu. Failu aizstāšana un pakotnē deklarētā tīrīšana notiek vēlāk solī “Piemērot sagatavotos failus”, ar bloķēšanu, dublējumu un atcelšanas aizsardzību."
+
+msgid "Files to remove"
+msgstr "Faili, ko noņemt"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Aizstāt Chamilo failus no sagatavotās pakotnes un noņemt novecojušos failus, kas skaidri deklarēti parakstītās pakotnes metadatos. Tas neizpilda datubāzes migrācijas, Composer, Yarn vai kešatmiņas komandas."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Šī darbība aizstāj un var noņemt failus Chamilo instalācijā. Pirms turpināšanas pārliecinieties, ka piemērošanas plāns ir pārskatīts un dublējumi ir iespējoti."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Es saprotu, ka tas aizstās failus un noņems pakotnē deklarētos novecojušos failus Chamilo instalācijā."
+
+msgid "Type the exact text below to confirm"
+msgstr "Ierakstiet zemāk esošo precīzo tekstu, lai apstiprinātu"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine izpildīs tikai sagatavotās V300 migrācijas pēc drošības pārskata sekmīgas pabeigšanas."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine ziņoja par vēsturiskiem bāzes līnijas brīdinājumiem. Atjauninātājs joprojām izpildīs tikai sagatavotās V300 migrācijas pēc skaidra apstiprinājuma."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Mainīt var tikai manifesta ceļu. HTTPS protokols un oficiālais atjauninājumu domēns ir fiksēti."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Izstrādes režīms ļauj izmantot HTTPS manifesta URL vai lokālu manifesta ceļu."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Oficiālo atjauninājumu manifestu konfigurē serveris."
+
+msgid "What feedback do you want about this course?"
+msgstr "Kādu atgriezenisko saiti vēlaties par šo kursu?"
+
+msgid "Analysis summary"
+msgstr "Analīzes kopsavilkums"
+
+msgid "Lessons included"
+msgstr "Iekļautās nodarbības"
+
+msgid "Standalone documents included"
+msgstr "Iekļautie atsevišķie dokumenti"
+
+msgid "Standalone exercises included"
+msgstr "Iekļautie atsevišķie vingrinājumi"
+
+msgid "General feedback"
+msgstr "Vispārēja atgriezeniskā saite"
+
+msgid "Strengths"
+msgstr "Stiprās puses"
+
+msgid "Risks"
+msgstr "Riski"
+
+msgid "Recommendations"
+msgstr "Ieteikumi"
+
+msgid "Lesson feedback"
+msgstr "Nodarbības atgriezeniskā saite"
+
+msgid "Standalone document feedback"
+msgstr "Atsevišķā dokumenta atgriezeniskā saite"
+
+msgid "Standalone exercise feedback"
+msgstr "Atsevišķā vingrinājuma atgriezeniskā saite"
+
+msgid "AI response"
+msgstr "MI atbilde"
+
+msgid "Sequence feedback"
+msgstr "Secības atgriezeniskā saite"
+
+msgid "Purpose"
+msgstr "Mērķis"
+
+msgid "You"
+msgstr "Jūs"
+
+msgid "City of internship"
+msgstr "Prakses pilsēta"
+
+msgid "City"
+msgstr "Pilsēta"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Atjaunināšanas darbplūsma atjaunota pēc lapas atsvaidzināšanas"
+
+msgid "Last completed step"
+msgstr "Pēdējais pabeigtais solis"
+
+msgid "Stage package"
+msgstr "Pakotnes sagatavošana"
+
+msgid "Package staging"
+msgstr "Pakotnes sagatavošana"
+
+msgid "Apply plan"
+msgstr "Piemērot plānu"
+
+msgid "Update workflow completed"
+msgstr "Atjaunināšanas darbplūsma pabeigta"
+
+msgid "Update directory exists and is writable."
+msgstr "Atjaunināšanas direktorijs pastāv un ir rakstāms."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Atjaunināšanas direktorijs pastāv, bet nav rakstāms: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Atjaunināšanas direktorijs vēl nepastāv, bet tā vecāka direktorijs ir rakstāms."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Atjaunināšanas direktorijs vēl nepastāv, bet to var izveidot zem var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Atjaunināšanas direktorijs nepastāv un to nevar izveidot ar pašreizējām atļaujām."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Neizdevās noteikt brīvo diska vietu atjaunināšanas iepriekšējai pārbaudei."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Nepietiek brīvas diska vietas drošai atjaunināšanas sagatavošanas darbībai."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Brīvā diska vieta ir pietiekama šai verifikācijas posma atjaunināšanas plūsmai."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Atjaunināšanas manifests nenosaka PHP versijas prasību."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Neizdevās pilnībā novērtēt PHP prasību: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Pašreizējā PHP versija neatbilst atjaunināšanas prasībai: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Pašreizējā PHP versija atbilst atjaunināšanas prasībai."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Lokālais pakotnes ceļš netika norādīts. Lejupielādētās pakotnes var pārbaudīt tikai pēc lejupielādes."
+
+msgid "Local update package is not readable: %s"
+msgstr "Lokālā atjaunināšanas pakotne nav nolasāma: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Lokālajai atjaunināšanas pakotnei jābūt ZIP arhīvam."
+
+msgid "Local update package is readable."
+msgstr "Lokālā atjaunināšanas pakotne ir nolasāma."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Instalēto Chamilo versiju neizdevās noteikt automātiski. Versijas virzienu nevar pārbaudīt."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Instalētā vai mērķa versija nav salīdzināmā semantiskās versijas formātā."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Mērķa versija ir zemāka par instalēto versiju. Pazemināšana pēc noklusējuma nav atļauta."
+
+msgid "Target version matches the installed version."
+msgstr "Mērķa versija atbilst instalētajai versijai."
+
+msgid "Target version is newer than the installed version."
+msgstr "Mērķa versija ir jaunāka par instalēto versiju."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Projekts nav Git izraksts vai .git nav pieejams."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Šī atjaunināšanas sistēma ir paredzēta instalācijām bez Git atbalsta. Esam konstatējuši, ka lokālā sistēma izmanto Git. Atjaunināšanas turpināšana var izraisīt bojātu Git vēsturi. Sistēmām ar Git atbalstu iesakām izmantot Git procedūru, kas detalizēti aprakstīta failā CONTRIBUTING.md tīmekļa saknē."
+
+msgid "Local Git changes were also detected."
+msgstr "Tika konstatētas arī lokālās Git izmaiņas."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Trūkst dažu projekta metadatu failu. Vēlākos atjaunināšanas posmos var būt nepieciešamas manuālas atkarību pārbaudes."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer un Yarn metadatu faili ir pieejami."
+
+msgid "Starting staged file application."
+msgstr "Tiek sākta sagatavoto failu piemērošana."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Lai piemērotu sagatavotos failus, ir nepieciešams skaidrs apstiprinājums."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Sagatavoto atjaunināšanas failu piemērošanai ir nepieciešams skaidrs apstiprinājums."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Sagatavošanas direktorijs atrodas Chamilo atjaunināšanas sagatavošanas direktorijā."
+
+msgid "Staging directory was validated."
+msgstr "Sagatavošanas direktorijs tika pārbaudīts."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Piemērošanas plāna metadati tika veiksmīgi nolasīti."
+
+msgid "Staged application path is valid."
+msgstr "Sagatavotās piemērošanas ceļš ir derīgs."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Parakstītās pakotnes tīrīšanas metadati atbilst pārskatītajam piemērošanas plānam."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Parakstītās pakotnes tīrīšanas metadati tika pārbaudīti."
+
+msgid "Update lock was acquired."
+msgstr "Atjaunināšanas slēdzene tika iegūta."
+
+msgid "Update backup directory was created."
+msgstr "Atjaunināšanas dublējuma direktorijs tika izveidots."
+
+msgid "Update file operations were collected."
+msgstr "Atjaunināšanas failu operācijas tika apkopotas."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Esošie faili, kas plānoti aizstāšanai vai noņemšanai, tika dublēti."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Sagatavotie atjaunināšanas faili tika kopēti Chamilo instalācijā."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Pakotnē deklarētie novecojušie faili tika noņemti no Chamilo instalācijas."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Pakotnē deklarētie novecojušie faili tika noņemti."
+
+msgid "Update apply audit metadata was written."
+msgstr "Atjaunināšanas piemērošanas audita metadati tika ierakstīti."
+
+msgid "Staged files applied successfully."
+msgstr "Sagatavotie faili veiksmīgi piemēroti."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Neizdevās atjaunot noņemtos failus: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Neizdevās atcelt kopētos failus: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Pēc atjauninājuma piemērošanas kļūmes tika izpildīta failu atcelšana."
+
+msgid "Rollback failed: %s"
+msgstr "Atcelšana neizdevās: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Neizdevās ierakstīt atjauninājuma piemērošanas audita metadatus: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Neizdevās atbrīvot atjauninājuma slēdzeni pēc kļūmes: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Lai piemērotu atjauninājuma failus, ir nepieciešams sagatavošanas ceļš."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Sagatavošanas direktorijs neeksistē: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo atjauninājuma sagatavošanas bāzes direktorijs neeksistē."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Sagatavošanas direktorijam jābūt iekš var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Sagatavošanas direktorijā trūkst APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Neizdevās nolasīt atjauninājuma piemērošanas plāna metadatus: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Atjauninājuma piemērošanas plāna metadati nav derīgs JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Atjauninājuma piemērošanas plāna metadatiem jābūt JSON objektam."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Atjauninājuma piemērošanas plānā trūkst lauka application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Sagatavotais lietotnes ceļš nav nolasāms: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Sagatavotajam lietotnes ceļam jābūt sagatavošanas direktorijā."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Sagatavotajā lietotnes ceļā trūkst composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Atjauninājuma paketē trūkst %s. Sagatavojiet no jauna verificētu paketi ar parakstītiem tīrīšanas metadatiem."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Atjauninājuma piemērošanas plānā trūkst pārskatīto paketes tīrīšanas metadatu."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Atjauninājuma paketes tīrīšanas metadati ir mainījušies pēc piemērošanas plāna ģenerēšanas. Pirms turpināšanas atjaunojiet piemērošanas plānu."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Atjauninājuma piemērošanas plānā ir nederīgs paketes noņemšanas saraksts."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Atjauninājuma paketes tīrīšanas ceļi ir mainījušies pēc piemērošanas plāna ģenerēšanas. Pirms turpināšanas atjaunojiet piemērošanas plānu."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Atjauninājuma piemērošanas plānā trūkst pārskatītā noņemšanas ceļu saraksta."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Atjauninājuma piemērošanas plāna noņemšanas ceļi neatbilst parakstītajiem paketes tīrīšanas metadatiem."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Atjauninājuma slēdzenes ceļam jābūt iekš var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Atjauninājuma piemērošanas plānā trūkst lauka backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Atjauninājuma dublējuma ceļš satur nedrošus ceļa segmentus."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Atjauninājuma dublējuma ceļam jābūt iekš var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Neizdevās iegūt atjauninājuma slēdzeni. Iespējams, notiek cits atjauninājums."
+
+msgid "Unable to release update lock: %s"
+msgstr "Neizdevās atbrīvot atjauninājuma slēdzeni: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Atjauninājuma dublējuma direktorijs jau pastāv: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Mērķa direktoriju nevar izveidot: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Plānotais atjauninājums pārrakstītu esošu simbolisko saiti: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Mērķa fails nav rakstāms: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Mērķa failu nevar izveidot: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Neizdevās noteikt Chamilo projekta direktoriju pirms novecojušo failu noņemšanas."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Atjauninājuma tīrīšana nevar noņemt aizsargātu ceļu: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Plānotais atjauninājums noņemtu esošu simbolisko saiti: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Atjauninājuma tīrīšana atbalsta tikai failus, nevis direktorijus: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Novecojušais mērķa fails nav nolasāms dublēšanai: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Novecojušo mērķa failu nevar noņemt ar pašreizējām direktorija atļaujām: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Novecojušais mērķa fails tiek atrisināts ārpus Chamilo projekta direktorija: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Neizdevās dublēt mērķa failu: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Neizdevās ierakstīt atjauninājuma dublējuma metadatus."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Neizdevās kopēt sagatavoto atjauninājuma failu: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Kopēti %d no %d sagatavotajiem failiem."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Neizdevās noņemt paketē deklarēto novecojušo failu: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Noņemti %d no %d paketē deklarētajiem novecojušajiem failiem."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Neizdevās atjaunot dublēto failu: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Neizdevās noņemt jaunizkopēto failu atcelšanas laikā: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Neizdevās atjaunot noņemto failu, jo tā dublējums nav pieejams: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Neizdevās atjaunot noņemto failu no dublējuma: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Neizdevās ierakstīt atjauninājuma piemērošanas audita metadatus."
+
+msgid "Unable to write global update apply log."
+msgstr "Neizdevās ierakstīt globālo atjauninājuma piemērošanas žurnālu."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Konstatēts nedrošs sagatavotais relatīvais ceļš: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Katalogs nav rakstāms: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Neizdevās izveidot katalogu: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Sagatavošanas metadati tika veiksmīgi nolasīti."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Piemērošanas plāna metadati tika ierakstīti sagatavošanas katalogā."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Mērķa faili un katalogi šķiet rakstāmi plānotajam atjauninājumam un tīrīšanai."
+
+msgid "Update apply plan check failed."
+msgstr "Atjauninājuma piemērošanas plāna pārbaude neizdevās."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Dažus mērķa failus vai katalogus nevar rakstīt vai noņemt."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Lai to labotu, īslaicīgi mainiet visa Chamilo kataloga īpašnieku uz %s (tīmekļa servera lietotājs), piemērojiet atjauninājumu, pēc tam mainiet īpašnieku atpakaļ uz %s, pēc tam iestatiet var/ (un tā satura) īpašnieku atpakaļ uz %s, lai lietotne varētu turpināt tajā rakstīt."
 

@@ -8802,6 +8802,9 @@ msgstr "ההתקדמות שלי"
 msgid "Personal agenda"
 msgstr "האג'נדה שלי"
 
+msgid "Group agenda"
+msgstr "סדר יום הקבוצה"
+
 msgid "Switch to teacher view"
 msgstr "עבור לתצוגת מורה"
 
@@ -40141,4 +40144,448 @@ msgstr "דוח קבוצה"
 
 msgid "Student follow-up"
 msgstr "מעקב אחר תלמיד"
+
+msgid "Use system default certificate"
+msgstr "השתמש בתעודת ברירת המחדל של המערכת"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "התעודה המצורפת אינה זמינה. תיעשה שימוש בתעודת ברירת המחדל של המערכת."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "להשתמש בתעודת ברירת המחדל של המערכת במקום התעודה המצורפת?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "עקיפה אופציונלית לפיתוח מקומי. עדכוני ייצור משתמשים במפתח המהימן הרשמי של Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "בנה תוכנית החלה בטוחה מהחבילה המוכנה. זה בודק קבצים להחלפה, הוספה או הסרה, הרשאות, נתיב גיבוי ומצב נעילה. זה אינו משנה את ההתקנה."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "שלב זה מכין סקירה בלבד. החלפת קבצים וניקוי שהוצהר בחבילה מתרחשים מאוחר יותר בשלב החלת הקבצים המוכנים, עם הגנת נעילה, גיבוי וחזרה לאחור."
+
+msgid "Files to remove"
+msgstr "קבצים להסרה"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "החלף קבצי Chamilo מהחבילה המוכנה והסר קבצים מיושנים שהוצהרו במפורש במטא-נתונים החתומים של החבילה. זה אינו מריץ מיגרציות מסד נתונים, Composer, Yarn או פקודות מטמון."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "פעולה זו מחליפה ויכולה להסיר קבצים בהתקנת Chamilo. ודא שתוכנית ההחלה נסקרה וגיבויים מופעלים לפני המשך."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "אני מבין שפעולה זו תחליף קבצים ותסיר קבצים מיושנים שהוצהרו בחבילה בהתקנת Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "הקלד את הטקסט המדויק למטה לאישור"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine יבצע רק את מיגרציות V300 המוכנות במפורש לאחר מעבר סקירת הבטיחות."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine דיווח על אזהרות בסיס היסטוריות. המעדכן עדיין יבצע רק מיגרציות V300 מוכנות לאחר אישור מפורש."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "ניתן לשנות רק את נתיב המניפסט. פרוטוקול HTTPS ודומיין העדכון הרשמי קבועים."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "מצב פיתוח מאפשר כתובת URL של מניפסט HTTPS או נתיב מניפסט מקומי."
+
+msgid "The official update manifest is configured by the server."
+msgstr "מניפסט העדכון הרשמי מוגדר על ידי השרת."
+
+msgid "What feedback do you want about this course?"
+msgstr "איזה משוב ברצונך על קורס זה?"
+
+msgid "Analysis summary"
+msgstr "סיכום ניתוח"
+
+msgid "Lessons included"
+msgstr "שיעורים כלולים"
+
+msgid "Standalone documents included"
+msgstr "מסמכים עצמאיים כלולים"
+
+msgid "Standalone exercises included"
+msgstr "תרגילים עצמאיים כלולים"
+
+msgid "General feedback"
+msgstr "משוב כללי"
+
+msgid "Strengths"
+msgstr "חוזקות"
+
+msgid "Risks"
+msgstr "סיכונים"
+
+msgid "Recommendations"
+msgstr "המלצות"
+
+msgid "Lesson feedback"
+msgstr "משוב לשיעור"
+
+msgid "Standalone document feedback"
+msgstr "משוב למסמך עצמאי"
+
+msgid "Standalone exercise feedback"
+msgstr "משוב לתרגיל עצמאי"
+
+msgid "AI response"
+msgstr "תגובת בינה מלאכותית"
+
+msgid "Sequence feedback"
+msgstr "משוב לרצף"
+
+msgid "Purpose"
+msgstr "מטרה"
+
+msgid "You"
+msgstr "אתה"
+
+msgid "City of internship"
+msgstr "עיר ההתמחות"
+
+msgid "City"
+msgstr "עיר"
+
+msgid "Update workflow restored after page refresh"
+msgstr "תהליך העדכון שוחזר לאחר רענון הדף"
+
+msgid "Last completed step"
+msgstr "השלב האחרון שהושלם"
+
+msgid "Stage package"
+msgstr "הכנת חבילה"
+
+msgid "Package staging"
+msgstr "הכנת חבילה לשלב ביניים"
+
+msgid "Apply plan"
+msgstr "החלת תוכנית"
+
+msgid "Update workflow completed"
+msgstr "תהליך העדכון הושלם"
+
+msgid "Update directory exists and is writable."
+msgstr "תיקיית העדכון קיימת וניתנת לכתיבה."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "תיקיית העדכון קיימת אך אינה ניתנת לכתיבה: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "תיקיית העדכון עדיין אינה קיימת, אך תיקיית האב ניתנת לכתיבה."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "תיקיית העדכון עדיין אינה קיימת, אך ניתן ליצור אותה תחת var\/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "תיקיית העדכון אינה קיימת ולא ניתן ליצור אותה עם ההרשאות הנוכחיות."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "לא ניתן לקבוע את שטח הדיסק הפנוי לבדיקה מקדימה של העדכון."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "אין מספיק שטח דיסק פנוי לפעולת הכנת עדכון בטוחה."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "שטח הדיסק הפנוי מספיק לתהליך עדכון זה בשלב האימות."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "מניפסט העדכון אינו מגדיר דרישת גרסת PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "לא ניתן להעריך במלואה את דרישת PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "גרסת PHP הנוכחית אינה עומדת בדרישת העדכון: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "גרסת PHP הנוכחית עומדת בדרישת העדכון."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "לא סופק נתיב לחבילה מקומית. ניתן לבדוק חבילות שהורדו רק לאחר ההורדה."
+
+msgid "Local update package is not readable: %s"
+msgstr "חבילת העדכון המקומית אינה ניתנת לקריאה: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "חבילת העדכון המקומית חייבת להיות ארכיון ZIP."
+
+msgid "Local update package is readable."
+msgstr "חבילת העדכון המקומית ניתנת לקריאה."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "לא ניתן לזהות אוטומטית את גרסת Chamilo המותקנת. לא ניתן לבדוק את כיוון הגרסה."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "הגרסה המותקנת או גרסת היעד אינה בפורמט גרסה סמנטית הניתן להשוואה."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "גרסת היעד נמוכה מהגרסה המותקנת. שדרוג לאחור אינו מותר כברירת מחדל."
+
+msgid "Target version matches the installed version."
+msgstr "גרסת היעד תואמת לגרסה המותקנת."
+
+msgid "Target version is newer than the installed version."
+msgstr "גרסת היעד חדשה יותר מהגרסה המותקנת."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "הפרויקט אינו עותק Git או שתיקיית .git אינה קיימת."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "מערכת עדכון זו מיועדת להתקנות ללא תמיכה ב-Git. זיהינו שהמערכת המקומית משתמשת ב-Git. המשך העדכון עלול לגרום להיסטוריית Git פגומה. במערכות עם תמיכה ב-Git מומלץ להשתמש בהליך Git המתואר בקובץ CONTRIBUTING.md בשורש האתר."
+
+msgid "Local Git changes were also detected."
+msgstr "זוהו גם שינויי Git מקומיים."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "חלק מקבצי המטא-דאטה של הפרויקט חסרים. שלבי עדכון מאוחרים יותר עשויים לדרוש בדיקות תלויות ידניות."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "קבצי המטא-דאטה של Composer ו-Yarn קיימים."
+
+msgid "Starting staged file application."
+msgstr "מתחיל החלת קבצים שהוכנו."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "נדרש אישור מפורש להחלת קבצים שהוכנו."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "החלת קבצי עדכון שהוכנו דורשת אישור מפורש."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "תיקיית ההכנה נמצאת בתוך תיקיית הכנת העדכון של Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "תיקיית ההכנה אומתה."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "מטא-דאטה של תוכנית ההחלה נקרא בהצלחה."
+
+msgid "Staged application path is valid."
+msgstr "נתיב ההחלה שהוכן תקין."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "מטא-דאטה של ניקוי החבילה החתומה תואם לתוכנית ההחלה שנבדקה."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "מטא-דאטה של ניקוי החבילה החתומה אומת."
+
+msgid "Update lock was acquired."
+msgstr "נעילת העדכון נרכשה."
+
+msgid "Update backup directory was created."
+msgstr "תיקיית הגיבוי לעדכון נוצרה."
+
+msgid "Update file operations were collected."
+msgstr "פעולות קבצי העדכון נאספו."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "קבצים קיימים המיועדים להחלפה או להסרה גובו."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "קבצי העדכון שהוכנו הועתקו להתקנת Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "קבצים מיושנים שהוגדרו בחבילה הוסרו מהתקנת Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "קבצים מיושנים שהוגדרו בחבילה הוסרו."
+
+msgid "Update apply audit metadata was written."
+msgstr "מטא-דאטה של ביקורת החלת העדכון נכתב."
+
+msgid "Staged files applied successfully."
+msgstr "הקבצים המבוימים הוחלו בהצלחה."
+
+msgid "Unable to restore removed files: %s"
+msgstr "לא ניתן לשחזר קבצים שהוסרו: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "לא ניתן לבטל העתקת קבצים: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "בוצע שחזור קבצים לאחר כשל בהחלת העדכון."
+
+msgid "Rollback failed: %s"
+msgstr "השחזור נכשל: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "לא ניתן לכתוב מטא-נתוני ביקורת להחלת עדכון: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "לא ניתן לשחרר את נעילת העדכון לאחר כשל: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "נדרש נתיב בימוי כדי להחיל קבצי עדכון."
+
+msgid "Staging directory does not exist: %s"
+msgstr "תיקיית הבימוי אינה קיימת: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "תיקיית הבסיס לבימוי עדכון של Chamilo אינה קיימת."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "תיקיית הבימוי חייבת להיות בתוך var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "בתיקיית הבימוי חסר APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "לא ניתן לקרוא מטא-נתוני תוכנית החלת עדכון: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "מטא-נתוני תוכנית החלת העדכון אינם JSON תקין: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "מטא-נתוני תוכנית החלת העדכון חייבים להיות אובייקט JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "בתוכנית החלת העדכון חסר השדה application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "נתיב היישום המבוים אינו ניתן לקריאה: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "נתיב היישום המבוים חייב להיות בתוך תיקיית הבימוי."
+
+msgid "Staged application path is missing composer.json."
+msgstr "בנתיב היישום המבוים חסר composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "בחבילת העדכון חסר %s. בַיְּמוּ מחדש חבילה מאומתת עם מטא-נתוני ניקוי חתומים."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "בתוכנית החלת העדכון חסרים מטא-נתוני ניקוי החבילה שנבדקו."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "מטא-נתוני ניקוי חבילת העדכון השתנו לאחר יצירת תוכנית ההחלה. בנו מחדש את תוכנית ההחלה לפני ההמשך."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "תוכנית החלת העדכון מכילה רשימת הסרת חבילות לא תקינה."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "נתיבי ניקוי חבילת העדכון השתנו לאחר יצירת תוכנית ההחלה. בנו מחדש את תוכנית ההחלה לפני ההמשך."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "בתוכנית החלת העדכון חסרה רשימת נתיבי ההסרה שנבדקה."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "נתיבי ההסרה בתוכנית החלת העדכון אינם תואמים למטא-נתוני ניקוי החבילה החתומים."
+
+msgid "Update lock path must be inside var/update."
+msgstr "נתיב נעילת העדכון חייב להיות בתוך var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "בתוכנית החלת העדכון חסר השדה backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "נתיב גיבוי העדכון מכיל מקטעי נתיב לא בטוחים."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "נתיב גיבוי העדכון חייב להיות בתוך var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "לא ניתן לרכוש נעילת עדכון. ייתכן שעדכון אחר מתבצע."
+
+msgid "Unable to release update lock: %s"
+msgstr "לא ניתן לשחרר את נעילת העדכון: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "תיקיית גיבוי העדכון כבר קיימת: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "לא ניתן ליצור את תיקיית היעד: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "העדכון המתוכנן ידרוס קישור סימבולי קיים: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "קובץ היעד אינו ניתן לכתיבה: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "לא ניתן ליצור את קובץ היעד: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "לא ניתן לפתור את תיקיית פרויקט Chamilo לפני הסרת קבצים מיושנים."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "ניקוי העדכון אינו יכול להסיר נתיב מוגן: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "העדכון המתוכנן יסיר קישור סימבולי קיים: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "ניקוי העדכון תומך בקבצים בלבד, לא בתיקיות: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "קובץ היעד המיושן אינו ניתן לקריאה לצורך גיבוי: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "לא ניתן להסיר את קובץ היעד המיושן עם הרשאות התיקייה הנוכחיות: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "קובץ היעד המיושן מפוענח מחוץ לתיקיית פרויקט Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "לא ניתן לגבות את קובץ היעד: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "לא ניתן לכתוב מטא-נתוני גיבוי עדכון."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "לא ניתן להעתיק קובץ עדכון מבוים: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "הועתקו %d מתוך %d קבצים מבוימים."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "לא ניתן להסיר קובץ מיושן שהוגדר בחבילה: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "הוסרו %d מתוך %d קבצים מיושנים שהוגדרו בחבילה."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "לא ניתן לשחזר את הקובץ המגובה: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "לא ניתן להסיר את הקובץ שהועתק במהלך החזרה למצב קודם: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "לא ניתן לשחזר את הקובץ שהוסר מכיוון שהגיבוי שלו חסר: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "לא ניתן לשחזר את הקובץ שהוסר מהגיבוי: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "לא ניתן לכתוב מטא-נתונים של ביקורת החלת העדכון."
+
+msgid "Unable to write global update apply log."
+msgstr "לא ניתן לכתוב יומן החלת עדכון גלובלי."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "זוהה נתיב יחסי לא בטוח בשלב ההכנה: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "התיקייה אינה ניתנת לכתיבה: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "לא ניתן ליצור תיקייה: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "מטא-נתוני ההכנה נקראו בהצלחה."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "מטא-נתוני תוכנית ההחלה נכתבו לתיקיית ההכנה."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "הקבצים והתיקיות היעד נראים ניתנים לכתיבה עבור העדכון והניקוי המתוכננים."
+
+msgid "Update apply plan check failed."
+msgstr "בדיקת תוכנית החלת העדכון נכשלה."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "לא ניתן לכתוב או להסיר חלק מקבצי או תיקיות היעד."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "כדי לתקן זאת, שנו באופן זמני את הבעלים של כל תיקיית Chamilo ל-%s (משתמש שרת האינטרנט), החילו את העדכון, החזירו את הבעלים ל-%s לאחר מכן, ואז הגדירו את הבעלים של var/ (ותוכנו) חזרה ל-%s כדי שהיישום יוכל להמשיך לכתוב אליו."
 

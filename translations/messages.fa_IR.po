@@ -8793,6 +8793,9 @@ msgstr "دیدن روند پیشرفت"
 msgid "Personal agenda"
 msgstr "تقویم من"
 
+msgid "Group agenda"
+msgstr "تقویم گروه"
+
 msgid "Switch to teacher view"
 msgstr "نمای استاد"
 
@@ -40128,4 +40131,448 @@ msgstr "گزارش گروه"
 
 msgid "Student follow-up"
 msgstr "پیگیری دانشجو"
+
+msgid "Use system default certificate"
+msgstr "استفاده از گواهی پیش‌فرض سیستم"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "گواهی پیوست‌شده در دسترس نیست. از گواهی پیش‌فرض سیستم استفاده خواهد شد."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "از گواهی پیش‌فرض سیستم به‌جای گواهی پیوست‌شده استفاده شود؟"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "بازنویسی اختیاری برای توسعه محلی. به‌روزرسانی‌های محیط تولید از کلید مورد اعتماد رسمی Chamilo استفاده می‌کنند."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "ساخت یک طرح اعمال ایمن از بسته مرحله‌بندی‌شده. این مورد فایل‌های جایگزین، افزودن یا حذف، مجوزها، مسیر پشتیبان و وضعیت قفل را بررسی می‌کند. نصب را تغییر نمی‌دهد."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "این مرحله فقط یک بازبینی آماده می‌کند. جایگزینی فایل و پاکسازی اعلام‌شده در بسته بعداً در مرحله «اعمال فایل‌های مرحله‌بندی‌شده» با قفل، پشتیبان و حفاظت بازگشت انجام می‌شود."
+
+msgid "Files to remove"
+msgstr "فایل‌های قابل حذف"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "جایگزینی فایل‌های Chamilo از بسته مرحله‌بندی‌شده و حذف فایل‌های منسوخ که صریحاً در فراداده بسته امضاشده اعلام شده‌اند. این کار مهاجرت پایگاه داده، Composer، Yarn یا دستورات کش را اجرا نمی‌کند."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "این عمل فایل‌ها را در نصب Chamilo جایگزین می‌کند و می‌تواند حذف کند. پیش از ادامه، مطمئن شوید طرح اعمال بازبینی شده و پشتیبان‌گیری فعال است."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "متوجه هستم که این کار فایل‌ها را جایگزین کرده و فایل‌های منسوخ اعلام‌شده در بسته را در نصب Chamilo حذف می‌کند."
+
+msgid "Type the exact text below to confirm"
+msgstr "متن دقیق زیر را برای تأیید تایپ کنید"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine تنها مهاجرت‌های V300 مرحله‌بندی‌شده را پس از عبور از بازبینی ایمنی به‌صورت صریح اجرا خواهد کرد."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine هشدارهای پایه تاریخی گزارش کرد. به‌روزرسان همچنان تنها مهاجرت‌های V300 مرحله‌بندی‌شده را پس از تأیید صریح اجرا خواهد کرد."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "فقط مسیر مانیفست قابل تغییر است. پروتکل HTTPS و دامنه رسمی به‌روزرسانی ثابت هستند."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "حالت توسعه اجازه می‌دهد یک URL مانیفست HTTPS یا مسیر مانیفست محلی استفاده شود."
+
+msgid "The official update manifest is configured by the server."
+msgstr "مانیفست به‌روزرسانی رسمی توسط سرور پیکربندی شده است."
+
+msgid "What feedback do you want about this course?"
+msgstr "درباره این دوره چه بازخوردی می‌خواهید؟"
+
+msgid "Analysis summary"
+msgstr "خلاصه تحلیل"
+
+msgid "Lessons included"
+msgstr "درس‌های گنجانده‌شده"
+
+msgid "Standalone documents included"
+msgstr "اسناد مستقل گنجانده‌شده"
+
+msgid "Standalone exercises included"
+msgstr "تمرین‌های مستقل گنجانده‌شده"
+
+msgid "General feedback"
+msgstr "بازخورد کلی"
+
+msgid "Strengths"
+msgstr "نقاط قوت"
+
+msgid "Risks"
+msgstr "ریسک‌ها"
+
+msgid "Recommendations"
+msgstr "پیشنهادها"
+
+msgid "Lesson feedback"
+msgstr "بازخورد درس"
+
+msgid "Standalone document feedback"
+msgstr "بازخورد سند مستقل"
+
+msgid "Standalone exercise feedback"
+msgstr "بازخورد تمرین مستقل"
+
+msgid "AI response"
+msgstr "پاسخ هوش مصنوعی"
+
+msgid "Sequence feedback"
+msgstr "بازخورد توالی"
+
+msgid "Purpose"
+msgstr "هدف"
+
+msgid "You"
+msgstr "شما"
+
+msgid "City of internship"
+msgstr "شهر کارآموزی"
+
+msgid "City"
+msgstr "شهر"
+
+msgid "Update workflow restored after page refresh"
+msgstr "گردش‌کار به‌روزرسانی پس از تازه‌سازی صفحه بازیابی شد"
+
+msgid "Last completed step"
+msgstr "آخرین مرحله تکمیل‌شده"
+
+msgid "Stage package"
+msgstr "بسته مرحله‌بندی"
+
+msgid "Package staging"
+msgstr "مرحله‌بندی بسته"
+
+msgid "Apply plan"
+msgstr "اعمال طرح"
+
+msgid "Update workflow completed"
+msgstr "گردش‌کار به‌روزرسانی تکمیل شد"
+
+msgid "Update directory exists and is writable."
+msgstr "پوشه به‌روزرسانی وجود دارد و قابل نوشتن است."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "پوشه به‌روزرسانی وجود دارد اما قابل نوشتن نیست: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "پوشه به‌روزرسانی هنوز وجود ندارد، اما پوشه والد آن قابل نوشتن است."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "پوشه به‌روزرسانی هنوز وجود ندارد، اما می‌توان آن را زیر var/ ایجاد کرد."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "پوشه به‌روزرسانی وجود ندارد و با مجوزهای فعلی قابل ایجاد نیست."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "امکان تعیین فضای آزاد دیسک برای بررسی پیش از به‌روزرسانی وجود ندارد."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "فضای آزاد دیسک برای عملیات ایمن مرحله‌بندی به‌روزرسانی کافی نیست."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "فضای آزاد دیسک برای این جریان به‌روزرسانی در مرحله تأیید کافی است."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "مانیفست به‌روزرسانی الزام نسخه PHP را تعریف نمی‌کند."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "امکان ارزیابی کامل الزام PHP وجود ندارد: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "نسخه فعلی PHP الزام به‌روزرسانی را برآورده نمی‌کند: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "نسخه فعلی PHP الزام به‌روزرسانی را برآورده می‌کند."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "مسیر بسته محلی ارائه نشده است. بسته‌های دانلودشده فقط پس از دانلود قابل بررسی هستند."
+
+msgid "Local update package is not readable: %s"
+msgstr "بسته به‌روزرسانی محلی قابل خواندن نیست: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "بسته به‌روزرسانی محلی باید یک بایگانی ZIP باشد."
+
+msgid "Local update package is readable."
+msgstr "بسته به‌روزرسانی محلی قابل خواندن است."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "نسخه نصب‌شده Chamilo به‌صورت خودکار تشخیص داده نشد. جهت نسخه قابل بررسی نیست."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "نسخه نصب‌شده یا نسخه هدف در قالب نسخه معنایی قابل مقایسه نیست."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "نسخه هدف پایین‌تر از نسخه نصب‌شده است. کاهش نسخه به‌صورت پیش‌فرض مجاز نیست."
+
+msgid "Target version matches the installed version."
+msgstr "نسخه هدف با نسخه نصب‌شده مطابقت دارد."
+
+msgid "Target version is newer than the installed version."
+msgstr "نسخه هدف جدیدتر از نسخه نصب‌شده است."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "پروژه یک checkout گیت نیست یا .git وجود ندارد."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "این سامانه به‌روزرسانی برای نصب‌های بدون پشتیبانی گیت در نظر گرفته شده است. تشخیص داده شد که سامانه محلی از گیت استفاده می‌کند. ادامه به‌روزرسانی ممکن است تاریخچه گیت را خراب کند. برای سامانه‌های دارای پشتیبانی گیت، توصیه می‌شود از رویه گیت شرح‌داده‌شده در CONTRIBUTING.md در ریشه وب استفاده کنید."
+
+msgid "Local Git changes were also detected."
+msgstr "تغییرات محلی گیت نیز تشخیص داده شد."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "برخی فایل‌های فراداده پروژه موجود نیستند. مراحل بعدی به‌روزرسانی ممکن است نیازمند بررسی دستی وابستگی‌ها باشد."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "فایل‌های فراداده Composer و Yarn موجود هستند."
+
+msgid "Starting staged file application."
+msgstr "شروع اعمال فایل‌های مرحله‌بندی‌شده."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "برای اعمال فایل‌های مرحله‌بندی‌شده تأیید صریح لازم است."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "اعمال فایل‌های به‌روزرسانی مرحله‌بندی‌شده نیازمند تأیید صریح است."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "پوشه مرحله‌بندی داخل پوشه مرحله‌بندی به‌روزرسانی Chamilo است."
+
+msgid "Staging directory was validated."
+msgstr "پوشه مرحله‌بندی اعتبارسنجی شد."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "فراداده طرح اعمال با موفقیت خوانده شد."
+
+msgid "Staged application path is valid."
+msgstr "مسیر اعمال مرحله‌بندی‌شده معتبر است."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "فراداده پاکسازی بسته امضاشده با طرح اعمال بررسی‌شده مطابقت دارد."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "فراداده پاکسازی بسته امضاشده اعتبارسنجی شد."
+
+msgid "Update lock was acquired."
+msgstr "قفل به‌روزرسانی گرفته شد."
+
+msgid "Update backup directory was created."
+msgstr "پوشه پشتیبان به‌روزرسانی ایجاد شد."
+
+msgid "Update file operations were collected."
+msgstr "عملیات فایل به‌روزرسانی جمع‌آوری شد."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "از فایل‌های موجود که برای جایگزینی یا حذف برنامه‌ریزی شده بودند پشتیبان گرفته شد."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "فایل‌های به‌روزرسانی مرحله‌بندی‌شده در نصب Chamilo کپی شدند."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "فایل‌های منسوخ اعلام‌شده در بسته از نصب Chamilo حذف شدند."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "فایل‌های منسوخ اعلام‌شده در بسته حذف شدند."
+
+msgid "Update apply audit metadata was written."
+msgstr "فراداده ممیزی اعمال به‌روزرسانی نوشته شد."
+
+msgid "Staged files applied successfully."
+msgstr "فایل‌های مرحله‌بندی‌شده با موفقیت اعمال شدند."
+
+msgid "Unable to restore removed files: %s"
+msgstr "امکان بازیابی فایل‌های حذف‌شده وجود ندارد: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "امکان بازگردانی فایل‌های کپی‌شده وجود ندارد: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "پس از شکست اعمال به‌روزرسانی، بازگردانی فایل‌ها اجرا شد."
+
+msgid "Rollback failed: %s"
+msgstr "بازگردانی ناموفق بود: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "امکان نوشتن فرادادهٔ ممیزی اعمال به‌روزرسانی وجود ندارد: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "امکان آزادسازی قفل به‌روزرسانی پس از شکست وجود ندارد: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "برای اعمال فایل‌های به‌روزرسانی، مسیر مرحله‌بندی الزامی است."
+
+msgid "Staging directory does not exist: %s"
+msgstr "پوشهٔ مرحله‌بندی وجود ندارد: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "پوشهٔ پایهٔ مرحله‌بندی به‌روزرسانی Chamilo وجود ندارد."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "پوشهٔ مرحله‌بندی باید داخل var/update/staging باشد."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "پوشهٔ مرحله‌بندی فاقد APPLY-PLAN.json است."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "امکان خواندن فرادادهٔ طرح اعمال به‌روزرسانی وجود ندارد: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "فرادادهٔ طرح اعمال به‌روزرسانی JSON معتبر نیست: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "فرادادهٔ طرح اعمال به‌روزرسانی باید یک شیء JSON باشد."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "طرح اعمال به‌روزرسانی فاقد فیلد application_path است."
+
+msgid "Staged application path is not readable: %s"
+msgstr "مسیر برنامهٔ مرحله‌بندی‌شده قابل خواندن نیست: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "مسیر برنامهٔ مرحله‌بندی‌شده باید داخل پوشهٔ مرحله‌بندی باشد."
+
+msgid "Staged application path is missing composer.json."
+msgstr "مسیر برنامهٔ مرحله‌بندی‌شده فاقد composer.json است."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "بستهٔ به‌روزرسانی فاقد %s است. یک بستهٔ تأییدشده با فرادادهٔ پاکسازی امضاشده را دوباره مرحله‌بندی کنید."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "طرح اعمال به‌روزرسانی فاقد فرادادهٔ پاکسازی بستهٔ بررسی‌شده است."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "فرادادهٔ پاکسازی بستهٔ به‌روزرسانی پس از تولید طرح اعمال تغییر کرده است. پیش از ادامه، طرح اعمال را دوباره بسازید."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "طرح اعمال به‌روزرسانی شامل فهرست حذف بستهٔ نامعتبر است."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "مسیرهای پاکسازی بستهٔ به‌روزرسانی پس از تولید طرح اعمال تغییر کرده‌اند. پیش از ادامه، طرح اعمال را دوباره بسازید."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "طرح اعمال به‌روزرسانی فاقد فهرست مسیرهای حذف بررسی‌شده است."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "مسیرهای حذف طرح اعمال به‌روزرسانی با فرادادهٔ پاکسازی امضاشدهٔ بسته مطابقت ندارند."
+
+msgid "Update lock path must be inside var/update."
+msgstr "مسیر قفل به‌روزرسانی باید داخل var/update باشد."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "طرح اعمال به‌روزرسانی فاقد فیلد backup_path است."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "مسیر پشتیبان به‌روزرسانی شامل بخش‌های مسیر ناامن است."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "مسیر پشتیبان به‌روزرسانی باید داخل var/update/backups باشد."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "امکان گرفتن قفل به‌روزرسانی وجود ندارد. ممکن است به‌روزرسانی دیگری در حال اجرا باشد."
+
+msgid "Unable to release update lock: %s"
+msgstr "امکان آزادسازی قفل به‌روزرسانی وجود ندارد: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "پوشهٔ پشتیبان به‌روزرسانی از قبل وجود دارد: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "امکان ایجاد پوشهٔ مقصد وجود ندارد: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "به‌روزرسانی برنامه‌ریزی‌شده یک پیوند نمادین موجود را بازنویسی می‌کند: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "فایل مقصد قابل نوشتن نیست: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "امکان ایجاد فایل مقصد وجود ندارد: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "امکان تعیین پوشهٔ پروژهٔ Chamilo پیش از حذف فایل‌های منسوخ وجود ندارد."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "پاکسازی به‌روزرسانی نمی‌تواند مسیر محافظت‌شده را حذف کند: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "به‌روزرسانی برنامه‌ریزی‌شده یک پیوند نمادین موجود را حذف می‌کند: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "پاکسازی به‌روزرسانی فقط از فایل‌ها پشتیبانی می‌کند، نه پوشه‌ها: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "فایل مقصد منسوخ برای پشتیبان‌گیری قابل خواندن نیست: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "فایل مقصد منسوخ با مجوزهای فعلی پوشه قابل حذف نیست: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "فایل مقصد منسوخ خارج از پوشهٔ پروژهٔ Chamilo قرار می‌گیرد: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "امکان پشتیبان‌گیری از فایل مقصد وجود ندارد: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "امکان نوشتن فرادادهٔ پشتیبان به‌روزرسانی وجود ندارد."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "امکان کپی فایل به‌روزرسانی مرحله‌بندی‌شده وجود ندارد: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d از %d فایل مرحله‌بندی‌شده کپی شد."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "امکان حذف فایل منسوخ اعلام‌شده در بسته وجود ندارد: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "%d از %d فایل منسوخ اعلام‌شده در بسته حذف شد."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "ناتوان در بازیابی فایل پشتیبان‌گیری‌شده: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "ناتوان در حذف فایل تازه‌کپی‌شده هنگام بازگشت به حالت قبل: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "ناتوان در بازیابی فایل حذف‌شده زیرا پشتیبان آن موجود نیست: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "ناتوان در بازیابی فایل حذف‌شده از پشتیبان: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "ناتوان در نوشتن فرادادهٔ ممیزی اعمال به‌روزرسانی."
+
+msgid "Unable to write global update apply log."
+msgstr "ناتوان در نوشتن گزارش سراسری اعمال به‌روزرسانی."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "مسیر نسبی مرحله‌بندی‌شدهٔ ناامن شناسایی شد: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "پوشه قابل نوشتن نیست: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "ناتوان در ایجاد پوشه: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "فرادادهٔ مرحله‌بندی با موفقیت خوانده شد."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "فرادادهٔ برنامهٔ اعمال در پوشهٔ مرحله‌بندی نوشته شد."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "فایل‌ها و پوشه‌های مقصد برای به‌روزرسانی و پاکسازی برنامه‌ریزی‌شده قابل نوشتن به نظر می‌رسند."
+
+msgid "Update apply plan check failed."
+msgstr "بررسی برنامهٔ اعمال به‌روزرسانی ناموفق بود."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "برخی فایل‌ها یا پوشه‌های مقصد قابل نوشتن یا حذف نیستند."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "برای رفع این مشکل، موقتاً مالک کل پوشهٔ چامیلو را به %s (کاربر وب‌سرور) تغییر دهید، به‌روزرسانی را اعمال کنید، سپس مالک را دوباره به %s برگردانید و پس از آن مالک var/ (و محتویات آن) را دوباره به %s تنظیم کنید تا برنامه بتواند به نوشتن در آن ادامه دهد."
 

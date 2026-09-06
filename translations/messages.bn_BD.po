@@ -8790,6 +8790,9 @@ msgstr "আমার অগ্রগতি দেখুন"
 msgid "Personal agenda"
 msgstr "ব্যক্তিগত এজেন্ডা"
 
+msgid "Group agenda"
+msgstr "গ্রুপ এজেন্ডা"
+
 msgid "Switch to teacher view"
 msgstr "শিক্ষক দৃষ্টিভঙ্গিতে স্যুইচ করুন"
 
@@ -40124,4 +40127,448 @@ msgstr "গ্রুপ রিপোর্ট"
 
 msgid "Student follow-up"
 msgstr "শিক্ষার্থী ফলো-আপ"
+
+msgid "Use system default certificate"
+msgstr "সিস্টেমের ডিফল্ট সার্টিফিকেট ব্যবহার করুন"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "সংযুক্ত সার্টিফিকেট অনুপলব্ধ। সিস্টেমের ডিফল্ট সার্টিফিকেট ব্যবহার করা হবে।"
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "সংযুক্ত সার্টিফিকেটের পরিবর্তে সিস্টেমের ডিফল্ট সার্টিফিকেট ব্যবহার করবেন?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "ঐচ্ছিক স্থানীয় ডেভেলপমেন্ট ওভাররাইড। প্রোডাকশন আপডেট অফিসিয়াল Chamilo বিশ্বস্ত কী ব্যবহার করে।"
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "স্টেজড প্যাকেজ থেকে একটি নিরাপদ প্রয়োগ পরিকল্পনা তৈরি করুন। এটি প্রতিস্থাপন, যোগ বা অপসারণের ফাইল, অনুমতি, ব্যাকআপ পথ এবং লক স্ট্যাটাস পরীক্ষা করে। এটি ইনস্টলেশন পরিবর্তন করে না।"
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "এই ধাপ শুধুমাত্র পর্যালোচনার জন্য প্রস্তুত করে। ফাইল প্রতিস্থাপন এবং প্যাকেজ-ঘোষিত পরিষ্কারকরণ পরে Apply staged files ধাপে হয়, লক, ব্যাকআপ এবং রোলব্যাক সুরক্ষা সহ।"
+
+msgid "Files to remove"
+msgstr "অপসারণের ফাইল"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "স্টেজড প্যাকেজ থেকে Chamilo ফাইল প্রতিস্থাপন করুন এবং স্বাক্ষরিত প্যাকেজ মেটাডেটা দ্বারা স্পষ্টভাবে ঘোষিত অপ্রচলিত ফাইল অপসারণ করুন। এটি ডাটাবেস মাইগ্রেশন, Composer, Yarn বা ক্যাশ কমান্ড চালায় না।"
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "এই কাজ Chamilo ইনস্টলেশনে ফাইল প্রতিস্থাপন করে এবং অপসারণ করতে পারে। চালিয়ে যাওয়ার আগে নিশ্চিত করুন যে প্রয়োগ পরিকল্পনা পর্যালোচনা করা হয়েছে এবং ব্যাকআপ সক্রিয় আছে।"
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "আমি বুঝি যে এটি Chamilo ইনস্টলেশনে ফাইল প্রতিস্থাপন করবে এবং প্যাকেজ-ঘোষিত অপ্রচলিত ফাইল অপসারণ করবে।"
+
+msgid "Type the exact text below to confirm"
+msgstr "নিশ্চিত করতে নিচের সঠিক পাঠ্য টাইপ করুন"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine নিরাপত্তা পর্যালোচনা পাস করার পর স্পষ্টভাবে শুধুমাত্র স্টেজড V300 মাইগ্রেশন কার্যকর করবে।"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine ঐতিহাসিক বেসলাইন সতর্কতা জানিয়েছে। আপডেটার স্পষ্ট নিশ্চিতকরণের পরও শুধুমাত্র স্টেজড V300 মাইগ্রেশন কার্যকর করবে।"
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "শুধুমাত্র ম্যানিফেস্ট পাথ পরিবর্তন করা যায়। HTTPS প্রোটোকল এবং অফিসিয়াল আপডেট ডোমেইন স্থির।"
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "ডেভেলপমেন্ট মোড HTTPS ম্যানিফেস্ট URL বা স্থানীয় ম্যানিফেস্ট পাথ অনুমতি দেয়।"
+
+msgid "The official update manifest is configured by the server."
+msgstr "অফিসিয়াল আপডেট ম্যানিফেস্ট সার্ভার দ্বারা কনফিগার করা আছে।"
+
+msgid "What feedback do you want about this course?"
+msgstr "এই কোর্স সম্পর্কে আপনি কী প্রতিক্রিয়া চান?"
+
+msgid "Analysis summary"
+msgstr "বিশ্লেষণ সারসংক্ষেপ"
+
+msgid "Lessons included"
+msgstr "অন্তর্ভুক্ত পাঠ"
+
+msgid "Standalone documents included"
+msgstr "অন্তর্ভুক্ত স্বতন্ত্র নথি"
+
+msgid "Standalone exercises included"
+msgstr "অন্তর্ভুক্ত স্বতন্ত্র অনুশীলন"
+
+msgid "General feedback"
+msgstr "সাধারণ প্রতিক্রিয়া"
+
+msgid "Strengths"
+msgstr "শক্তি"
+
+msgid "Risks"
+msgstr "ঝুঁকি"
+
+msgid "Recommendations"
+msgstr "সুপারিশ"
+
+msgid "Lesson feedback"
+msgstr "পাঠের প্রতিক্রিয়া"
+
+msgid "Standalone document feedback"
+msgstr "স্বতন্ত্র নথির প্রতিক্রিয়া"
+
+msgid "Standalone exercise feedback"
+msgstr "স্বতন্ত্র অনুশীলনের প্রতিক্রিয়া"
+
+msgid "AI response"
+msgstr "এআই প্রতিক্রিয়া"
+
+msgid "Sequence feedback"
+msgstr "ক্রমের প্রতিক্রিয়া"
+
+msgid "Purpose"
+msgstr "উদ্দেশ্য"
+
+msgid "You"
+msgstr "আপনি"
+
+msgid "City of internship"
+msgstr "ইন্টার্নশিপের শহর"
+
+msgid "City"
+msgstr "শহর"
+
+msgid "Update workflow restored after page refresh"
+msgstr "পৃষ্ঠা রিফ্রেশের পর আপডেট ওয়ার্কফ্লো পুনরুদ্ধার হয়েছে"
+
+msgid "Last completed step"
+msgstr "সর্বশেষ সম্পন্ন ধাপ"
+
+msgid "Stage package"
+msgstr "স্টেজ প্যাকেজ"
+
+msgid "Package staging"
+msgstr "প্যাকেজ স্টেজিং"
+
+msgid "Apply plan"
+msgstr "পরিকল্পনা প্রয়োগ করুন"
+
+msgid "Update workflow completed"
+msgstr "আপডেট ওয়ার্কফ্লো সম্পন্ন হয়েছে"
+
+msgid "Update directory exists and is writable."
+msgstr "আপডেট ডিরেক্টরি বিদ্যমান এবং লেখার যোগ্য।"
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "আপডেট ডিরেক্টরি বিদ্যমান কিন্তু লেখার যোগ্য নয়: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "আপডেট ডিরেক্টরি এখনও নেই, তবে এর প্যারেন্ট ডিরেক্টরি লেখার যোগ্য।"
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "আপডেট ডিরেক্টরি এখনও নেই, তবে এটি var/ এর অধীনে তৈরি করা যায়।"
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "আপডেট ডিরেক্টরি নেই এবং বর্তমান অনুমতি দিয়ে তৈরি করা যায় না।"
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "আপডেট প্রিফ্লাইটের জন্য খালি ডিস্ক স্পেস নির্ধারণ করা যায়নি।"
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "নিরাপদ আপডেট স্টেজিংয়ের জন্য পর্যাপ্ত খালি ডিস্ক স্পেস নেই।"
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "এই যাচাইকরণ-পর্যায়ের আপডেট প্রবাহের জন্য খালি ডিস্ক স্পেস পর্যাপ্ত।"
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "আপডেট ম্যানিফেস্টে PHP সংস্করণের প্রয়োজনীয়তা নির্ধারিত নেই।"
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "PHP প্রয়োজনীয়তা সম্পূর্ণভাবে মূল্যায়ন করা যায়নি: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "বর্তমান PHP সংস্করণ আপডেটের প্রয়োজনীয়তা পূরণ করে না: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "বর্তমান PHP সংস্করণ আপডেটের প্রয়োজনীয়তা পূরণ করে।"
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "কোনো স্থানীয় প্যাকেজ পাথ দেওয়া হয়নি। ডাউনলোড করা প্যাকেজ শুধুমাত্র ডাউনলোডের পরে পরীক্ষা করা যায়।"
+
+msgid "Local update package is not readable: %s"
+msgstr "স্থানীয় আপডেট প্যাকেজ পড়া যায় না: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "স্থানীয় আপডেট প্যাকেজ অবশ্যই একটি ZIP আর্কাইভ হতে হবে।"
+
+msgid "Local update package is readable."
+msgstr "স্থানীয় আপডেট প্যাকেজ পড়া যায়।"
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "ইনস্টল করা Chamilo সংস্করণ স্বয়ংক্রিয়ভাবে শনাক্ত করা যায়নি। সংস্করণের দিক পরীক্ষা করা যায় না।"
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "ইনস্টল করা বা লক্ষ্য সংস্করণ তুলনীয় সেমান্টিক সংস্করণ বিন্যাসে নেই।"
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "লক্ষ্য সংস্করণ ইনস্টল করা সংস্করণের চেয়ে নিম্ন। ডিফল্টভাবে ডাউনগ্রেড অনুমোদিত নয়।"
+
+msgid "Target version matches the installed version."
+msgstr "লক্ষ্য সংস্করণ ইনস্টল করা সংস্করণের সাথে মিলে যায়।"
+
+msgid "Target version is newer than the installed version."
+msgstr "লক্ষ্য সংস্করণ ইনস্টল করা সংস্করণের চেয়ে নতুন।"
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "প্রকল্পটি Git চেকআউট নয় অথবা .git উপস্থিত নেই।"
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "এই আপডেট সিস্টেম Git সমর্থন ছাড়া ইনস্টলেশনের জন্য। স্থানীয় সিস্টেম Git ব্যবহার করে বলে শনাক্ত হয়েছে। আপডেট চালিয়ে গেলে Git ইতিহাস ক্ষতিগ্রস্ত হতে পারে। Git সমর্থনযুক্ত সিস্টেমের জন্য ওয়েব রুটের CONTRIBUTING.md-এ বর্ণিত Git পদ্ধতি ব্যবহার করার পরামর্শ দেওয়া হয়।"
+
+msgid "Local Git changes were also detected."
+msgstr "স্থানীয় Git পরিবর্তনও শনাক্ত হয়েছে।"
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "কিছু প্রকল্প মেটাডেটা ফাইল অনুপস্থিত। পরবর্তী আপডেট পর্যায়ে ম্যানুয়াল নির্ভরতা পরীক্ষা লাগতে পারে।"
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer এবং Yarn মেটাডেটা ফাইল উপস্থিত আছে।"
+
+msgid "Starting staged file application."
+msgstr "স্টেজ করা ফাইল প্রয়োগ শুরু হচ্ছে।"
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "স্টেজ করা ফাইল প্রয়োগ করতে স্পষ্ট নিশ্চিতকরণ প্রয়োজন।"
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "স্টেজ করা আপডেট ফাইল প্রয়োগ করতে স্পষ্ট নিশ্চিতকরণ প্রয়োজন।"
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "স্টেজিং ডিরেক্টরি Chamilo আপডেট স্টেজিং ডিরেক্টরির ভিতরে আছে।"
+
+msgid "Staging directory was validated."
+msgstr "স্টেজিং ডিরেক্টরি যাচাই করা হয়েছে।"
+
+msgid "Apply plan metadata was read successfully."
+msgstr "প্রয়োগ পরিকল্পনার মেটাডেটা সফলভাবে পড়া হয়েছে।"
+
+msgid "Staged application path is valid."
+msgstr "স্টেজ করা প্রয়োগ পাথ বৈধ।"
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "স্বাক্ষরিত প্যাকেজ পরিষ্কারকরণ মেটাডেটা পর্যালোচিত প্রয়োগ পরিকল্পনার সাথে মিলে যায়।"
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "স্বাক্ষরিত প্যাকেজ পরিষ্কারকরণ মেটাডেটা যাচাই করা হয়েছে।"
+
+msgid "Update lock was acquired."
+msgstr "আপডেট লক অর্জিত হয়েছে।"
+
+msgid "Update backup directory was created."
+msgstr "আপডেট ব্যাকআপ ডিরেক্টরি তৈরি করা হয়েছে।"
+
+msgid "Update file operations were collected."
+msgstr "আপডেট ফাইল অপারেশন সংগ্রহ করা হয়েছে।"
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "প্রতিস্থাপন বা অপসারণের জন্য পরিকল্পিত বিদ্যমান ফাইলগুলো ব্যাকআপ করা হয়েছে।"
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "স্টেজ করা আপডেট ফাইল Chamilo ইনস্টলেশনে কপি করা হয়েছে।"
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "প্যাকেজে ঘোষিত অপ্রচলিত ফাইল Chamilo ইনস্টলেশন থেকে সরানো হয়েছে।"
+
+msgid "Package-declared obsolete files were removed."
+msgstr "প্যাকেজে ঘোষিত অপ্রচলিত ফাইল সরানো হয়েছে।"
+
+msgid "Update apply audit metadata was written."
+msgstr "আপডেট প্রয়োগ অডিট মেটাডেটা লেখা হয়েছে।"
+
+msgid "Staged files applied successfully."
+msgstr "স্টেজ করা ফাইলগুলো সফলভাবে প্রয়োগ করা হয়েছে।"
+
+msgid "Unable to restore removed files: %s"
+msgstr "সরানো ফাইলগুলো পুনরুদ্ধার করা যায়নি: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "কপি করা ফাইলগুলো রোল ব্যাক করা যায়নি: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "আপডেট প্রয়োগ ব্যর্থ হওয়ার পর ফাইল রোলব্যাক সম্পাদিত হয়েছে।"
+
+msgid "Rollback failed: %s"
+msgstr "রোলব্যাক ব্যর্থ হয়েছে: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "আপডেট প্রয়োগের অডিট মেটাডেটা লেখা যায়নি: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "ব্যর্থতার পর আপডেট লক মুক্ত করা যায়নি: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "আপডেট ফাইল প্রয়োগ করতে স্টেজিং পাথ প্রয়োজন।"
+
+msgid "Staging directory does not exist: %s"
+msgstr "স্টেজিং ডিরেক্টরি বিদ্যমান নেই: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo আপডেট স্টেজিং বেস ডিরেক্টরি বিদ্যমান নেই।"
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "স্টেজিং ডিরেক্টরি অবশ্যই var/update/staging-এর ভিতরে থাকতে হবে।"
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "স্টেজিং ডিরেক্টরিতে APPLY-PLAN.json নেই।"
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "আপডেট প্রয়োগ পরিকল্পনার মেটাডেটা পড়া যায়নি: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "আপডেট প্রয়োগ পরিকল্পনার মেটাডেটা বৈধ JSON নয়: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "আপডেট প্রয়োগ পরিকল্পনার মেটাডেটা অবশ্যই একটি JSON অবজেক্ট হতে হবে।"
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "আপডেট প্রয়োগ পরিকল্পনায় application_path ক্ষেত্র নেই।"
+
+msgid "Staged application path is not readable: %s"
+msgstr "স্টেজ করা অ্যাপ্লিকেশন পাথ পড়া যায় না: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "স্টেজ করা অ্যাপ্লিকেশন পাথ অবশ্যই স্টেজিং ডিরেক্টরির ভিতরে থাকতে হবে।"
+
+msgid "Staged application path is missing composer.json."
+msgstr "স্টেজ করা অ্যাপ্লিকেশন পাথে composer.json নেই।"
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "আপডেট প্যাকেজে %s নেই। স্বাক্ষরিত ক্লিনআপ মেটাডেটাসহ যাচাইকৃত প্যাকেজ পুনরায় স্টেজ করুন।"
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "আপডেট প্রয়োগ পরিকল্পনায় পর্যালোচিত প্যাকেজ ক্লিনআপ মেটাডেটা নেই।"
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "আপডেট প্রয়োগ পরিকল্পনা তৈরি হওয়ার পর প্যাকেজ ক্লিনআপ মেটাডেটা পরিবর্তিত হয়েছে। চালিয়ে যাওয়ার আগে প্রয়োগ পরিকল্পনা পুনর্নির্মাণ করুন।"
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "আপডেট প্রয়োগ পরিকল্পনায় অবৈধ প্যাকেজ অপসারণ তালিকা রয়েছে।"
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "আপডেট প্রয়োগ পরিকল্পনা তৈরি হওয়ার পর প্যাকেজ ক্লিনআপ পাথ পরিবর্তিত হয়েছে। চালিয়ে যাওয়ার আগে প্রয়োগ পরিকল্পনা পুনর্নির্মাণ করুন।"
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "আপডেট প্রয়োগ পরিকল্পনায় পর্যালোচিত অপসারণ পাথ তালিকা নেই।"
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "আপডেট প্রয়োগ পরিকল্পনার অপসারণ পাথ স্বাক্ষরিত প্যাকেজ ক্লিনআপ মেটাডেটার সাথে মিলছে না।"
+
+msgid "Update lock path must be inside var/update."
+msgstr "আপডেট লক পাথ অবশ্যই var/update-এর ভিতরে থাকতে হবে।"
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "আপডেট প্রয়োগ পরিকল্পনায় backup_path ক্ষেত্র নেই।"
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "আপডেট ব্যাকআপ পাথে অনিরাপদ পাথ সেগমেন্ট রয়েছে।"
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "আপডেট ব্যাকআপ পাথ অবশ্যই var/update/backups-এর ভিতরে থাকতে হবে।"
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "আপডেট লক অর্জন করা যায়নি। অন্য একটি আপডেট চলমান থাকতে পারে।"
+
+msgid "Unable to release update lock: %s"
+msgstr "আপডেট লক মুক্ত করা যায়নি: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "আপডেট ব্যাকআপ ডিরেক্টরি ইতিমধ্যে বিদ্যমান: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "লক্ষ্য ডিরেক্টরি তৈরি করা যায়নি: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "পরিকল্পিত আপডেট একটি বিদ্যমান সিম্বলিক লিংক ওভাররাইট করবে: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "লক্ষ্য ফাইল লেখার যোগ্য নয়: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "লক্ষ্য ফাইল তৈরি করা যায়নি: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "অপ্রচলিত ফাইল সরানোর আগে Chamilo প্রকল্প ডিরেক্টরি নির্ধারণ করা যায়নি।"
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "আপডেট ক্লিনআপ সুরক্ষিত পাথ সরাতে পারে না: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "পরিকল্পিত আপডেট একটি বিদ্যমান সিম্বলিক লিংক সরাবে: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "আপডেট ক্লিনআপ শুধু ফাইল সমর্থন করে, ডিরেক্টরি নয়: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "অপ্রচলিত লক্ষ্য ফাইল ব্যাকআপের জন্য পড়া যায় না: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "বর্তমান ডিরেক্টরি অনুমতি দিয়ে অপ্রচলিত লক্ষ্য ফাইল সরানো যায় না: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "অপ্রচলিত লক্ষ্য ফাইল Chamilo প্রকল্প ডিরেক্টরির বাইরে নির্দেশ করে: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "লক্ষ্য ফাইল ব্যাকআপ করা যায়নি: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "আপডেট ব্যাকআপ মেটাডেটা লেখা যায়নি।"
+
+msgid "Unable to copy staged update file: %s"
+msgstr "স্টেজ করা আপডেট ফাইল কপি করা যায়নি: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d-এর মধ্যে %dটি স্টেজ করা ফাইল কপি করা হয়েছে।"
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "প্যাকেজ-ঘোষিত অপ্রচলিত ফাইল সরানো যায়নি: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "%d-এর মধ্যে %dটি প্যাকেজ-ঘোষিত অপ্রচলিত ফাইল সরানো হয়েছে।"
+
+msgid "Unable to restore backed up file: %s"
+msgstr "ব্যাকআপ করা ফাইল পুনরুদ্ধার করা যায়নি: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "রোলব্যাকের সময় নতুন কপি করা ফাইল সরানো যায়নি: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "সরানো ফাইল পুনরুদ্ধার করা যায়নি কারণ তার ব্যাকআপ নেই: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "ব্যাকআপ থেকে সরানো ফাইল পুনরুদ্ধার করা যায়নি: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "আপডেট প্রয়োগ অডিট মেটাডেটা লেখা যায়নি।"
+
+msgid "Unable to write global update apply log."
+msgstr "গ্লোবাল আপডেট প্রয়োগ লগ লেখা যায়নি।"
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "অনিরাপদ স্টেজ করা আপেক্ষিক পাথ সনাক্ত হয়েছে: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "ডিরেক্টরি লেখার যোগ্য নয়: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "ডিরেক্টরি তৈরি করা যায়নি: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "স্টেজিং মেটাডেটা সফলভাবে পড়া হয়েছে।"
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "প্রয়োগ পরিকল্পনার মেটাডেটা স্টেজিং ডিরেক্টরিতে লেখা হয়েছে।"
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "পরিকল্পিত আপডেট ও পরিষ্কারের জন্য লক্ষ্য ফাইল ও ডিরেক্টরি লেখার যোগ্য বলে মনে হচ্ছে।"
+
+msgid "Update apply plan check failed."
+msgstr "আপডেট প্রয়োগ পরিকল্পনা পরীক্ষা ব্যর্থ হয়েছে।"
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "কিছু লক্ষ্য ফাইল বা ডিরেক্টরি লেখা বা সরানো যায় না।"
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "এটি ঠিক করতে, সাময়িকভাবে পুরো Chamilo ডিরেক্টরির মালিককে %s (ওয়েব সার্ভার ব্যবহারকারী) এ পরিবর্তন করুন, আপডেট প্রয়োগ করুন, পরে মালিককে আবার %s এ ফিরিয়ে দিন, তারপর var\/ (এবং এর বিষয়বস্তু) এর মালিককে আবার %s এ সেট করুন যাতে অ্যাপ্লিকেশন সেখানে লিখতে পারে।"
 

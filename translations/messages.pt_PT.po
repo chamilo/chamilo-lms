@@ -8801,6 +8801,9 @@ msgstr "Visualizar o meu progresso"
 msgid "Personal agenda"
 msgstr "Agenda pessoal"
 
+msgid "Group agenda"
+msgstr "Agenda de grupo"
+
 msgid "Switch to teacher view"
 msgstr "Modo de visualização do Instrutor"
 
@@ -40136,4 +40139,106 @@ msgstr "Relatório de grupo"
 
 msgid "Student follow-up"
 msgstr "Acompanhamento do aluno"
+
+msgid "Use system default certificate"
+msgstr "Utilizar o certificado predefinido do sistema"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "O certificado anexado não está disponível. Será utilizado o certificado predefinido do sistema."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Utilizar o certificado predefinido do sistema em vez do certificado anexado?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Substituição opcional para desenvolvimento local. As atualizações de produção utilizam a chave oficial de confiança do Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Criar um plano de aplicação seguro a partir do pacote preparado. Isto verifica ficheiros a substituir, adicionar ou remover, permissões, caminho de cópia de segurança e estado de bloqueio. Não modifica a instalação."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Este passo prepara apenas uma revisão. A substituição de ficheiros e a limpeza declarada pelo pacote ocorrem mais tarde no passo Aplicar ficheiros preparados, com proteção de bloqueio, cópia de segurança e reversão."
+
+msgid "Files to remove"
+msgstr "Ficheiros a remover"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Substituir os ficheiros do Chamilo a partir do pacote preparado e remover ficheiros obsoletos explicitamente declarados pelos metadados do pacote assinado. Isto não executa migrações da base de dados nem comandos Composer, Yarn ou de cache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Esta ação substitui e pode remover ficheiros na instalação do Chamilo. Certifique-se de que o plano de aplicação foi revisto e de que as cópias de segurança estão ativadas antes de continuar."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Compreendo que isto substituirá ficheiros e removerá ficheiros obsoletos declarados pelo pacote na instalação do Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Escreva o texto exato abaixo para confirmar"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "O Doctrine executará apenas as migrações V300 preparadas, explicitamente após a revisão de segurança ser aprovada."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "O Doctrine reportou avisos de linha de base histórica. O atualizador continuará a executar apenas as migrações V300 preparadas após confirmação explícita."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Apenas o caminho do manifesto pode ser alterado. O protocolo HTTPS e o domínio oficial de atualização são fixos."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "O modo de desenvolvimento permite um URL de manifesto HTTPS ou um caminho de manifesto local."
+
+msgid "The official update manifest is configured by the server."
+msgstr "O manifesto oficial de atualização é configurado pelo servidor."
+
+msgid "What feedback do you want about this course?"
+msgstr "Que comentários pretende sobre este curso?"
+
+msgid "Analysis summary"
+msgstr "Resumo da análise"
+
+msgid "Lessons included"
+msgstr "Lições incluídas"
+
+msgid "Standalone documents included"
+msgstr "Documentos autónomos incluídos"
+
+msgid "Standalone exercises included"
+msgstr "Exercícios autónomos incluídos"
+
+msgid "General feedback"
+msgstr "Comentários gerais"
+
+msgid "Strengths"
+msgstr "Pontos fortes"
+
+msgid "Risks"
+msgstr "Riscos"
+
+msgid "Recommendations"
+msgstr "Recomendações"
+
+msgid "Lesson feedback"
+msgstr "Comentários da lição"
+
+msgid "Standalone document feedback"
+msgstr "Comentários do documento autónomo"
+
+msgid "Standalone exercise feedback"
+msgstr "Comentários do exercício autónomo"
+
+msgid "AI response"
+msgstr "Resposta da IA"
+
+msgid "Sequence feedback"
+msgstr "Comentários da sequência"
+
+msgid "Purpose"
+msgstr "Objetivo"
+
+msgid "You"
+msgstr "Você"
+
+msgid "City of internship"
+msgstr "Cidade do estágio"
+
+msgid "City"
+msgstr "Cidade"
 

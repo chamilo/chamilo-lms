@@ -8794,6 +8794,9 @@ msgstr "Féach ar mo dhul chun cinn"
 msgid "Personal agenda"
 msgstr "Agra phearsanta"
 
+msgid "Group agenda"
+msgstr "Clár an ghrúpa"
+
 msgid "Switch to teacher view"
 msgstr "Aistrigh go radharc an mhúinteora"
 
@@ -40128,4 +40131,448 @@ msgstr "Tuairisc ghrúpa"
 
 msgid "Student follow-up"
 msgstr "Leanúint mac léinn"
+
+msgid "Use system default certificate"
+msgstr "Úsáid teastas réamhshocraithe an chórais"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Níl an teastas ceangailte ar fáil. Úsáidfear teastas réamhshocraithe an chórais."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Úsáid teastas réamhshocraithe an chórais in ionad an teastais cheangailte?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Sárú roghnach d’fhorbairt áitiúil. Úsáideann nuashonruithe táirgeachta eochair iontaofa oifigiúil Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Tóg plean cur i bhfeidhm sábháilte ón bpacáiste céimnithe. Seiceálann sé seo comhaid le hathsholáthar, le cur leis nó le baint, ceadanna, conair cúltaca agus stádas glasála. Ní athraíonn sé an suiteáil."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ullmhaíonn an chéim seo athbhreithniú amháin. Tarlaíonn athsholáthar comhad agus glanadh dearbhaithe ag an bpacáiste níos déanaí sa chéim Cuir comhaid chéimnithe i bhfeidhm, le glas, cúltaca agus cosaint rolladh siar."
+
+msgid "Files to remove"
+msgstr "Comhaid le baint"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Athsholáthair comhaid Chamilo ón bpacáiste céimnithe agus bain comhaid as feidhm atá dearbhaithe go sainráite ag meiteashonraí an phacáiste sínithe. Ní ritheann sé seo imirce bunachar sonraí, Composer, Yarn ná orduithe taisce."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Athsholáthraíonn an gníomh seo agus is féidir leis comhaid a bhaint i suiteáil Chamilo. Cinntigh go ndearnadh athbhreithniú ar an bplean cur i bhfeidhm agus go bhfuil cúltacaí cumasaithe sula leanann tú ar aghaidh."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Tuigim go n-athsholáthróidh sé seo comhaid agus go mbainfidh sé comhaid as feidhm atá dearbhaithe ag an bpacáiste i suiteáil Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Clóscríobh an téacs beacht thíos chun deimhniú"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Rithfidh Doctrine na himircí V300 céimnithe amháin go sainráite tar éis don athbhreithniú sábháilteachta pas a fháil."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Thuairiscigh Doctrine rabhaidh bunlíne stairiúla. Rithfidh an nuashonraitheoir fós imircí V300 céimnithe amháin tar éis deimhnithe sainráite."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Ní féidir ach conair an fhorleagain a athrú. Tá an prótacal HTTPS agus fearann oifigiúil an nuashonraithe seasta."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Ligeann mód forbartha URL forleagan HTTPS nó conair forleagan áitiúil."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Tá forleagan oifigiúil an nuashonraithe cumraithe ag an bhfreastalaí."
+
+msgid "What feedback do you want about this course?"
+msgstr "Cén aiseolas atá uait faoin gcúrsa seo?"
+
+msgid "Analysis summary"
+msgstr "Achoimre anailíse"
+
+msgid "Lessons included"
+msgstr "Ceachtanna san áireamh"
+
+msgid "Standalone documents included"
+msgstr "Doiciméid neamhspleácha san áireamh"
+
+msgid "Standalone exercises included"
+msgstr "Cleachtaí neamhspleácha san áireamh"
+
+msgid "General feedback"
+msgstr "Aiseolas ginearálta"
+
+msgid "Strengths"
+msgstr "Láidreachtaí"
+
+msgid "Risks"
+msgstr "Rioscaí"
+
+msgid "Recommendations"
+msgstr "Moltaí"
+
+msgid "Lesson feedback"
+msgstr "Aiseolas ceachta"
+
+msgid "Standalone document feedback"
+msgstr "Aiseolas doiciméid neamhspleách"
+
+msgid "Standalone exercise feedback"
+msgstr "Aiseolas cleachtaidh neamhspleách"
+
+msgid "AI response"
+msgstr "Freagra AI"
+
+msgid "Sequence feedback"
+msgstr "Aiseolas seichimh"
+
+msgid "Purpose"
+msgstr "Cuspóir"
+
+msgid "You"
+msgstr "Tusa"
+
+msgid "City of internship"
+msgstr "Cathair na hintéirneachta"
+
+msgid "City"
+msgstr "Cathair"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Sreabhadh oibre nuashonraithe athchóirithe tar éis athnuachan leathanaigh"
+
+msgid "Last completed step"
+msgstr "An chéim dheireanach a críochnaíodh"
+
+msgid "Stage package"
+msgstr "Pacáiste stáitse"
+
+msgid "Package staging"
+msgstr "Stáitsiú pacáiste"
+
+msgid "Apply plan"
+msgstr "Cuir plean i bhfeidhm"
+
+msgid "Update workflow completed"
+msgstr "Sreabhadh oibre nuashonraithe críochnaithe"
+
+msgid "Update directory exists and is writable."
+msgstr "Tá an eolaire nuashonraithe ann agus is féidir scríobh chuige."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Tá an eolaire nuashonraithe ann ach níl sé inscríofa: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Níl an t-eolaire nuashonraithe ann fós, ach is féidir scríobh chuig a thuismitheoir."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Níl an t-eolaire nuashonraithe ann fós, ach is féidir é a chruthú faoi var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Níl an t-eolaire nuashonraithe ann agus ní féidir é a chruthú leis na ceadanna reatha."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Níorbh fhéidir spás diosca saor a chinneadh don réamhsheiceáil nuashonraithe."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Níl go leor spáis diosca saor ann le haghaidh oibríocht stáitsithe nuashonraithe sábháilte."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Tá go leor spáis diosca saor ann don sreabhadh nuashonraithe seo ag an gcéim fíoraithe."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Ní shainíonn an mainifest nuashonraithe riachtanas leagan PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Níorbh fhéidir riachtanas PHP a mheas go hiomlán: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Ní shásaíonn an leagan PHP reatha riachtanas an nuashonraithe: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Sásaíonn an leagan PHP reatha riachtanas an nuashonraithe."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Níor soláthraíodh conair phacáiste áitiúil. Ní féidir pacáistí íoslódáilte a sheiceáil ach tar éis íoslódála."
+
+msgid "Local update package is not readable: %s"
+msgstr "Níl an pacáiste nuashonraithe áitiúil inléite: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Ní mór don phacáiste nuashonraithe áitiúil a bheith ina chartlann ZIP."
+
+msgid "Local update package is readable."
+msgstr "Tá an pacáiste nuashonraithe áitiúil inléite."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Níorbh fhéidir leagan Chamilo suiteáilte a bhrath go huathoibríoch. Ní féidir treo an leagain a sheiceáil."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Níl an leagan suiteáilte nó sprice i bhformáid leagain shéimeantaigh inchomparáide."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Tá an leagan sprice níos ísle ná an leagan suiteáilte. Ní cheadaítear íosghrádú de réir réamhshocraithe."
+
+msgid "Target version matches the installed version."
+msgstr "Meaitseálann an leagan sprice an leagan suiteáilte."
+
+msgid "Target version is newer than the installed version."
+msgstr "Tá an leagan sprice níos nuaí ná an leagan suiteáilte."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Ní seiceáil Git é an tionscadal nó níl .git i láthair."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Tá an córas nuashonraithe seo i gceist do shuiteálacha gan tacaíocht Git. Tá sé braite againn go n-úsáideann an córas áitiúil Git. D’fhéadfadh stair Git briste a bheith mar thoradh ar leanúint leis an nuashonrú. Do chórais le tacaíocht Git, molaimid an nós imeachta Git atá mionsonraithe in CONTRIBUTING.md i bhfréamh an ghréasáin."
+
+msgid "Local Git changes were also detected."
+msgstr "Braitheadh athruithe Git áitiúla freisin."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Tá roinnt comhad meiteashonraí tionscadail in easnamh. D’fhéadfadh go mbeadh seiceálacha spleáchais láimhe ag teastáil ag céimeanna nuashonraithe níos déanaí."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Tá comhaid meiteashonraí Composer agus Yarn i láthair."
+
+msgid "Starting staged file application."
+msgstr "Ag tosú ar chur i bhfeidhm comhad stáitsithe."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Tá deimhniú follasach ag teastáil chun comhaid stáitsithe a chur i bhfeidhm."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Teastaíonn deimhniú follasach chun comhaid nuashonraithe stáitsithe a chur i bhfeidhm."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Tá an t-eolaire stáitsithe taobh istigh d’eolaire stáitsithe nuashonraithe Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Bailíodh an t-eolaire stáitsithe."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Léadh meiteashonraí an phlean cur i bhfeidhm go rathúil."
+
+msgid "Staged application path is valid."
+msgstr "Tá conair an chur i bhfeidhm stáitsithe bailí."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Meaitseálann meiteashonraí glantacháin an phacáiste sínithe an plean cur i bhfeidhm a athbhreithníodh."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Bailíodh meiteashonraí glantacháin an phacáiste sínithe."
+
+msgid "Update lock was acquired."
+msgstr "Fuair an glas nuashonraithe."
+
+msgid "Update backup directory was created."
+msgstr "Cruthaíodh eolaire cúltaca an nuashonraithe."
+
+msgid "Update file operations were collected."
+msgstr "Bailíodh oibríochtaí comhad nuashonraithe."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Rinneadh cúltaca de na comhaid atá ann cheana atá beartaithe le haghaidh athsholáthair nó bainte."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Cóipeáladh comhaid nuashonraithe stáitsithe chuig suiteáil Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Baineadh comhaid as feidhm a dhearbhaigh an pacáiste as suiteáil Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Baineadh comhaid as feidhm a dhearbhaigh an pacáiste."
+
+msgid "Update apply audit metadata was written."
+msgstr "Scríobhadh meiteashonraí iniúchta cur i bhfeidhm an nuashonraithe."
+
+msgid "Staged files applied successfully."
+msgstr "Cuireadh na comhaid chéimnithe i bhfeidhm go rathúil."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Níorbh fhéidir na comhaid a baineadh a athchóiriú: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Níorbh fhéidir na comhaid chóipeáilte a chur ar ais: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Rinneadh rolladh siar na gcomhad tar éis teip ar chur i bhfeidhm an nuashonraithe."
+
+msgid "Rollback failed: %s"
+msgstr "Theip ar an rolladh siar: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Níorbh fhéidir meiteashonraí iniúchta chur i bhfeidhm an nuashonraithe a scríobh: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Níorbh fhéidir glas an nuashonraithe a scaoileadh tar éis teipe: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Tá cosán céimnithe ag teastáil chun comhaid nuashonraithe a chur i bhfeidhm."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Níl an eolaire céimnithe ann: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Níl bun-eolaire céimnithe nuashonraithe Chamilo ann."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Ní mór don eolaire céimnithe a bheith taobh istigh de var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Tá APPLY-PLAN.json in easnamh ón eolaire céimnithe."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Níorbh fhéidir meiteashonraí phlean chur i bhfeidhm an nuashonraithe a léamh: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Ní JSON bailí iad meiteashonraí phlean chur i bhfeidhm an nuashonraithe: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Ní mór do mheiteashonraí phlean chur i bhfeidhm an nuashonraithe a bheith ina oibiacht JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Tá an réimse application_path in easnamh ó phlean chur i bhfeidhm an nuashonraithe."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Níl cosán an fheidhmchláir chéimnithe inléite: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Ní mór do chosán an fheidhmchláir chéimnithe a bheith taobh istigh den eolaire céimnithe."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Tá composer.json in easnamh ó chosán an fheidhmchláir chéimnithe."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Tá %s in easnamh ón bpacáiste nuashonraithe. Déan pacáiste fíoraithe a chéimniú arís le meiteashonraí glanta sínithe."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Tá meiteashonraí glanta an phacáiste athbhreithnithe in easnamh ó phlean chur i bhfeidhm an nuashonraithe."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Athraíodh meiteashonraí glanta an phacáiste nuashonraithe tar éis an plean cur i bhfeidhm a ghiniúint. Atóg an plean cur i bhfeidhm sula leanfar ar aghaidh."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Tá liosta bainte pacáiste neamhbhailí i bplean chur i bhfeidhm an nuashonraithe."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Athraíodh cosáin ghlanta an phacáiste nuashonraithe tar éis an plean cur i bhfeidhm a ghiniúint. Atóg an plean cur i bhfeidhm sula leanfar ar aghaidh."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Tá liosta na gcosán bainte athbhreithnithe in easnamh ó phlean chur i bhfeidhm an nuashonraithe."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Ní hionann cosáin bhainte phlean chur i bhfeidhm an nuashonraithe agus meiteashonraí glanta sínithe an phacáiste."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Ní mór do chosán ghlais an nuashonraithe a bheith taobh istigh de var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Tá an réimse backup_path in easnamh ó phlean chur i bhfeidhm an nuashonraithe."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Tá deighleoga cosáin neamhshábháilte i gcosán cúltaca an nuashonraithe."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Ní mór do chosán cúltaca an nuashonraithe a bheith taobh istigh de var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Níorbh fhéidir glas an nuashonraithe a fháil. Seans go bhfuil nuashonrú eile ar siúl."
+
+msgid "Unable to release update lock: %s"
+msgstr "Níorbh fhéidir glas an nuashonraithe a scaoileadh: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Tá eolaire cúltaca an nuashonraithe ann cheana: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Ní féidir an t-eolaire sprice a chruthú: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Sáróidh an nuashonrú beartaithe nasc siombalach atá ann cheana: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Níl an comhad sprice inscríofa: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Ní féidir an comhad sprice a chruthú: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Níorbh fhéidir eolaire tionscadail Chamilo a réiteach sula mbainfí comhaid as feidhm."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Ní féidir le glanadh an nuashonraithe cosán cosanta a bhaint: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Bhainfeadh an nuashonrú beartaithe nasc siombalach atá ann cheana: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Tacaíonn glanadh an nuashonraithe le comhaid amháin, ní le heolairí: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Níl an comhad sprice as feidhm inléite le haghaidh cúltaca: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Ní féidir an comhad sprice as feidhm a bhaint leis na ceadanna eolaire reatha: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Réitíonn an comhad sprice as feidhm lasmuigh d’eolaire tionscadail Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Níorbh fhéidir an comhad sprice a chúltacú: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Níorbh fhéidir meiteashonraí cúltaca an nuashonraithe a scríobh."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Níorbh fhéidir comhad nuashonraithe céimnithe a chóipeáil: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Cóipeáladh %d as %d comhad céimnithe."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Níorbh fhéidir comhad as feidhm a dhearbhaigh an pacáiste a bhaint: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Baineadh %d as %d comhad as feidhm a dhearbhaigh an pacáiste."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Ní féidir an comhad cúltaca a athchóiriú: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Ní féidir an comhad nua-chóipeáilte a bhaint le linn an rolladh siar: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Ní féidir an comhad bainte a athchóiriú toisc go bhfuil a chúltaca ar iarraidh: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Ní féidir an comhad bainte a athchóiriú ón gcúltaca: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Ní féidir meiteashonraí iniúchta feidhmithe an nuashonraithe a scríobh."
+
+msgid "Unable to write global update apply log."
+msgstr "Ní féidir loga feidhmithe nuashonraithe domhanda a scríobh."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Conair choibhneasta stáitse neamhshábháilte braite: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Níl an chomhadlann inscríofa: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Ní féidir comhadlann a chruthú: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Léadh meiteashonraí an stáitse go rathúil."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Scríobhadh meiteashonraí an phlean feidhme chuig an gcomhadlann stáitse."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Is cosúil go bhfuil na comhaid agus na comhadlanna sprice inscríofa don nuashonrú agus don ghlanadh pleanáilte."
+
+msgid "Update apply plan check failed."
+msgstr "Theip ar sheiceáil phlean feidhme an nuashonraithe."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Ní féidir roinnt comhad nó comhadlann sprice a scríobh ná a bhaint."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Chun é seo a réiteach, athraigh úinéir na comhadlainne Chamilo iomláine go sealadach go %s (úsáideoir an fhreastalaí gréasáin), cuir an nuashonrú i bhfeidhm, athraigh an t-úinéir ar ais go %s ina dhiaidh sin, ansin socraigh úinéir var/ (agus a bhfuil ann) ar ais go %s ionas gur féidir leis an bhfeidhmchlár leanúint ag scríobh chuige."
 

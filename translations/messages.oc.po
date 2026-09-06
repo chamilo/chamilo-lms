@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cordialament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de formula : sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -8789,6 +8789,9 @@ msgstr "Veire meis estadisticas"
 
 msgid "Personal agenda"
 msgstr "Mon agenda"
+
+msgid "Group agenda"
+msgstr "Agenda de grop"
 
 msgid "Switch to teacher view"
 msgstr "Vista dau professor"
@@ -40124,4 +40127,106 @@ msgstr "Rapòrt de grop"
 
 msgid "Student follow-up"
 msgstr "Seguiment de l'estudiant"
+
+msgid "Use system default certificate"
+msgstr "Utilizar lo certificat per defaut del sistèma"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Lo certificat estacat es pas disponible. Lo certificat per defaut del sistèma serà utilizat."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Utilizar lo certificat per defaut del sistèma a la plaça del certificat estacat ?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Substitucion opcionala pel desvolopament local. Las mesas a jorn de produccion utilizan la clau de fisança oficiala de Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Construire un plan d'aplicacion segur a partir del paquet preparat. Aquò verifica los fichièrs de remplaçar, apondre o levar, las permissions, lo camin de salvagarda e l'estatut de verrolhatge. Modifica pas l'installacion."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Aquesta etapa prepara sonque una revision. Lo remplaçament de fichièrs e lo netejatge declarat pel paquet se fan mai tard a l'etapa Aplicar los fichièrs preparats, amb proteccion de verrolhatge, salvagarda e retorn enrè."
+
+msgid "Files to remove"
+msgstr "Fichièrs de levar"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Remplaçar los fichièrs Chamilo a partir del paquet preparat e levar los fichièrs obsolets declarats explicitament per las metadonadas del paquet signat. Aquò lança pas de migracions de basa de donadas, ni de comanda Composer, Yarn o de cache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Aquesta accion remplaça e pòt levar de fichièrs dins l'installacion Chamilo. Asseguratz-vos que lo plan d'aplicacion es estat revisat e que las salvagardas son activadas abans de contunhar."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Compreni qu'aquò remplaçarà de fichièrs e levarà los fichièrs obsolets declarats pel paquet dins l'installacion Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Picatz lo tèxte exacte çai-jos per confirmar"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine executarà sonque las migracions V300 preparadas, explicitament après que la revision de seguretat siá passada."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine a senhalat d'avertiments istorics de linha de basa. Lo programa de mesa a jorn executarà totjorn sonque las migracions V300 preparadas après confirmacion explicita."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Sonque lo camin del manifèst se pòt cambiar. Lo protocòl HTTPS e lo domeni oficial de mesa a jorn son fixats."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Lo mòde desvolopament permet una URL de manifèst HTTPS o un camin de manifèst local."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Lo manifèst oficial de mesa a jorn es configurat pel servidor."
+
+msgid "What feedback do you want about this course?"
+msgstr "Quin retorn volètz sus aqueste cors ?"
+
+msgid "Analysis summary"
+msgstr "Resumit de l'analisi"
+
+msgid "Lessons included"
+msgstr "Lissons inclusas"
+
+msgid "Standalone documents included"
+msgstr "Documents independents incluses"
+
+msgid "Standalone exercises included"
+msgstr "Exercicis independents incluses"
+
+msgid "General feedback"
+msgstr "Retorn general"
+
+msgid "Strengths"
+msgstr "Punts fòrts"
+
+msgid "Risks"
+msgstr "Risques"
+
+msgid "Recommendations"
+msgstr "Recomandacions"
+
+msgid "Lesson feedback"
+msgstr "Retorn sus la lisson"
+
+msgid "Standalone document feedback"
+msgstr "Retorn sul document independent"
+
+msgid "Standalone exercise feedback"
+msgstr "Retorn sus l'exercici independent"
+
+msgid "AI response"
+msgstr "Responsa de l'IA"
+
+msgid "Sequence feedback"
+msgstr "Retorn sus la sequéncia"
+
+msgid "Purpose"
+msgstr "Finalitat"
+
+msgid "You"
+msgstr "Vos"
+
+msgid "City of internship"
+msgstr "Vila de l'estagi"
+
+msgid "City"
+msgstr "Vila"
 

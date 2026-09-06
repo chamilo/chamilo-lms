@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Með kveðju"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formúlu dæmi: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Dæmi um formúlu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Breytusvið"
@@ -8794,6 +8794,9 @@ msgstr "Skoða framvindu mína"
 
 msgid "Personal agenda"
 msgstr "Persónuleg dagskrá"
+
+msgid "Group agenda"
+msgstr "Dagskrá hóps"
 
 msgid "Switch to teacher view"
 msgstr "Skipta yfir í kennaraviðmót"
@@ -40129,4 +40132,448 @@ msgstr "Hópskýrsla"
 
 msgid "Student follow-up"
 msgstr "Eftirfylgni nemenda"
+
+msgid "Use system default certificate"
+msgstr "Nota sjálfgefið vottorð kerfisins"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Viðhengda vottorðið er ekki tiltækt. Sjálfgefið vottorð kerfisins verður notað."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Nota sjálfgefið vottorð kerfisins í stað viðhengda vottorðsins?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Valfrjáls yfirskrifun fyrir staðbundna þróun. Framleiðsluuppfærslur nota opinberan treystan lykil Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Byggja örugga framkvæmdaáætlun út frá undirbúnum pakka. Þetta athugar skrár sem á að skipta út, bæta við eða fjarlægja, heimildir, öryggisafritunarleið og læsingarstöðu. Það breytir ekki uppsetningunni."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Þetta skref undirbýr aðeins yfirferð. Skipti á skrám og hreinsun sem pakkinn lýsir yfir gerist síðar í skrefinu Beita undirbúnum skrám, með læsingu, öryggisafriti og afturköllunarvörn."
+
+msgid "Files to remove"
+msgstr "Skrár til að fjarlægja"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Skipta út Chamilo-skrám úr undirbúnum pakka og fjarlægja úreltar skrár sem undirritaðar pakkaupplýsingar lýsa yfir. Þetta keyrir ekki gagnagrunnsflutninga, Composer, Yarn eða skyndiminni-skipanir."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Þessi aðgerð skiptir út og getur fjarlægt skrár í Chamilo-uppsetningunni. Gakktu úr skugga um að framkvæmdaáætlunin hafi verið yfirfarin og að öryggisafrit séu virk áður en haldið er áfram."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Ég skil að þetta mun skipta út skrám og fjarlægja úreltar skrár sem pakkinn lýsir yfir í Chamilo-uppsetningunni."
+
+msgid "Type the exact text below to confirm"
+msgstr "Sláðu inn nákvæman texta hér að neðan til staðfestingar"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine mun aðeins keyra undirbúna V300-flutninga eftir að öryggisyfirferð stenst."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine tilkynnti sögulegar viðvaranir um grunnlínu. Uppfærsluforritið mun samt aðeins keyra undirbúna V300-flutninga eftir skýra staðfestingu."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Aðeins slóð birtingarskrárinnar má breyta. HTTPS-samskiptareglan og opinbert uppfærslulén eru föst."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Þróunarhamur leyfir HTTPS-slóð birtingarskrár eða staðbundna slóð birtingarskrár."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Opinbera uppfærslubirtingarskráin er stillt af þjóninum."
+
+msgid "What feedback do you want about this course?"
+msgstr "Hvaða endurgjöf viltu um þetta námskeið?"
+
+msgid "Analysis summary"
+msgstr "Samantekt greiningar"
+
+msgid "Lessons included"
+msgstr "Kennslustundir innifaldar"
+
+msgid "Standalone documents included"
+msgstr "Sjálfstæð skjöl innifalin"
+
+msgid "Standalone exercises included"
+msgstr "Sjálfstæðar æfingar innifaldar"
+
+msgid "General feedback"
+msgstr "Almenn endurgjöf"
+
+msgid "Strengths"
+msgstr "Styrkleikar"
+
+msgid "Risks"
+msgstr "Áhættur"
+
+msgid "Recommendations"
+msgstr "Tillögur"
+
+msgid "Lesson feedback"
+msgstr "Endurgjöf kennslustundar"
+
+msgid "Standalone document feedback"
+msgstr "Endurgjöf sjálfstæðs skjals"
+
+msgid "Standalone exercise feedback"
+msgstr "Endurgjöf sjálfstæðrar æfingar"
+
+msgid "AI response"
+msgstr "Svar gervigreindar"
+
+msgid "Sequence feedback"
+msgstr "Endurgjöf röðunar"
+
+msgid "Purpose"
+msgstr "Tilgangur"
+
+msgid "You"
+msgstr "Þú"
+
+msgid "City of internship"
+msgstr "Borg starfsnáms"
+
+msgid "City"
+msgstr "Borg"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Uppfærsluferli endurheimt eftir endurhleðslu síðu"
+
+msgid "Last completed step"
+msgstr "Síðasta lokið skref"
+
+msgid "Stage package"
+msgstr "Stigapakki"
+
+msgid "Package staging"
+msgstr "Pakkastöðun"
+
+msgid "Apply plan"
+msgstr "Beita áætlun"
+
+msgid "Update workflow completed"
+msgstr "Uppfærsluferli lokið"
+
+msgid "Update directory exists and is writable."
+msgstr "Uppfærslumappa er til og er skrifanleg."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Uppfærslumappa er til en er ekki skrifanleg: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Uppfærslumappa er ekki til enn, en yfirmappan er skrifanleg."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Uppfærslumappa er ekki til enn, en hægt er að búa hana til undir var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Uppfærslumappa er ekki til og ekki er hægt að búa hana til með núverandi heimildum."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Ekki tókst að ákvarða laust diskpláss fyrir forathugun uppfærslu."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Ekki nægilegt laust diskpláss fyrir örugga stöðunaraðgerð uppfærslu."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Laust diskpláss er nægilegt fyrir þetta staðfestingarstig uppfærsluferlis."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Uppfærsluyfirlit skilgreinir ekki PHP-útgáfukröfu."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Ekki tókst að meta PHP-kröfu að fullu: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Núverandi PHP-útgáfa uppfyllir ekki uppfærslukröfu: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Núverandi PHP-útgáfa uppfyllir uppfærslukröfuna."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Engin staðbundin pakkaslóð var gefin. Sóttir pakkar er aðeins hægt að athuga eftir niðurhal."
+
+msgid "Local update package is not readable: %s"
+msgstr "Staðbundinn uppfærslupakki er ekki lesanlegur: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Staðbundinn uppfærslupakki verður að vera ZIP-safnskrá."
+
+msgid "Local update package is readable."
+msgstr "Staðbundinn uppfærslupakki er lesanlegur."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Uppsett Chamilo-útgáfa fannst ekki sjálfkrafa. Ekki er hægt að athuga útgáfustefnu."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Uppsett eða markútgáfa er ekki á samanburðarhæfu merkingarútgáfuformi."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Markútgáfa er lægri en uppsett útgáfa. Niðurfærslur eru ekki leyfðar sjálfgefið."
+
+msgid "Target version matches the installed version."
+msgstr "Markútgáfa passar við uppsetta útgáfu."
+
+msgid "Target version is newer than the installed version."
+msgstr "Markútgáfa er nýrri en uppsett útgáfa."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Verkefnið er ekki Git-úttekt eða .git er ekki til staðar."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Þetta uppfærslukerfi er ætlað uppsetningum án Git-stuðnings. Við höfum greint að staðbundna kerfið notar Git. Áframhaldandi uppfærsla gæti leitt til brotinnar Git-sögu. Fyrir kerfi með Git-stuðning mælum við með Git-ferlinu sem lýst er í CONTRIBUTING.md í vefrótinni."
+
+msgid "Local Git changes were also detected."
+msgstr "Staðbundnar Git-breytingar fundust einnig."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Sumir lýsigagnaskrár verkefnisins vantar. Síðari uppfærslustig kunna að krefjast handvirkra háðleikaathugana."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer- og Yarn-lýsigagnaskrár eru til staðar."
+
+msgid "Starting staged file application."
+msgstr "Byrjar stigskipta skráarnotkun."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Skýr staðfesting er nauðsynleg til að beita stöðuðum skrám."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Beiting stöðudra uppfærsluskráa krefst skýrrar staðfestingar."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Stöðunarmappa er inni í stöðunarmöppu Chamilo-uppfærslu."
+
+msgid "Staging directory was validated."
+msgstr "Stöðunarmappa var staðfest."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Lýsigögn beitingaráætlunar voru lesin með góðum árangri."
+
+msgid "Staged application path is valid."
+msgstr "Stöðuð beitingarslóð er gild."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Lýsigögn hreinsunar undirritaðs pakka passa við yfirfarna beitingaráætlun."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Lýsigögn hreinsunar undirritaðs pakka voru staðfest."
+
+msgid "Update lock was acquired."
+msgstr "Uppfærslulás var fengin."
+
+msgid "Update backup directory was created."
+msgstr "Öryggisafritunarmappa uppfærslu var búin til."
+
+msgid "Update file operations were collected."
+msgstr "Skráaraðgerðir uppfærslu voru safnaðar."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Fyrirliggjandi skrár sem áætlaðar eru til skiptis eða fjarlægingar voru afritaðar."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Stöðuaðar uppfærsluskrár voru afritaðar í Chamilo-uppsetninguna."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Úreltar skrár sem pakkinn lýsir voru fjarlægðar úr Chamilo-uppsetningunni."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Úreltar skrár sem pakkinn lýsir voru fjarlægðar."
+
+msgid "Update apply audit metadata was written."
+msgstr "Endurskoðunarlýsigögn beitingar uppfærslu voru skrifuð."
+
+msgid "Staged files applied successfully."
+msgstr "Stigumskrár voru settar í notkun."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Ekki tókst að endurheimta fjarlægðar skrár: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Ekki tókst að afturkalla afritaðar skrár: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Afturköllun skráa var framkvæmd eftir að uppfærsla mistókst."
+
+msgid "Rollback failed: %s"
+msgstr "Afturköllun mistókst: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Ekki tókst að skrifa endurskoðunargögn um uppfærslu: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Ekki tókst að losa uppfærslulás eftir villu: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Stigunarleið er nauðsynleg til að setja uppfærsluskrár í notkun."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Stigunarskráasafn er ekki til: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Grunnskráasafn Chamilo-uppfærslustigunar er ekki til."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Stigunarskráasafn verður að vera innan var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Stigunarskráasafn vantar APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Ekki tókst að lesa lýsigögn um uppfærsluáætlun: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Lýsigögn um uppfærsluáætlun eru ekki gilt JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Lýsigögn um uppfærsluáætlun verða að vera JSON-hlutur."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Uppfærsluáætlun vantar reitinn application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Stigað forritaslóð er ekki lesanleg: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Stigað forritaslóð verður að vera innan stigunarskráasafnsins."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Stigað forritaslóð vantar composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Uppfærslupakka vantar %s. Stigið aftur staðfestan pakka með undirrituðum hreinsunarlýsigögnum."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Uppfærsluáætlun vantar yfirfarin hreinsunarlýsigögn pakkans."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Hreinsunarlýsigögn uppfærslupakka breyttust eftir að áætlunin var búin til. Byggið áætlunina upp á nýtt áður en haldið er áfram."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Uppfærsluáætlun inniheldur ógildan lista yfir fjarlægingu pakka."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Hreinsunarslóðir uppfærslupakka breyttust eftir að áætlunin var búin til. Byggið áætlunina upp á nýtt áður en haldið er áfram."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Uppfærsluáætlun vantar yfirfarinn lista yfir fjarlægingarslóðir."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Fjarlægingarslóðir uppfærsluáætlunar stemma ekki við undirrituð hreinsunarlýsigögn pakkans."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Uppfærslulásarleið verður að vera innan var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Uppfærsluáætlun vantar reitinn backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Öryggisafritunarslóð uppfærslu inniheldur óörugga slóðarhluta."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Öryggisafritunarslóð uppfærslu verður að vera innan var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Ekki tókst að ná uppfærslulás. Önnur uppfærsla gæti verið í gangi."
+
+msgid "Unable to release update lock: %s"
+msgstr "Ekki tókst að losa uppfærslulás: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Öryggisafritunarskráasafn uppfærslu er þegar til: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Ekki er hægt að búa til markskráasafn: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Fyrirhuguð uppfærsla myndi yfirskrifa fyrirliggjandi táknræna tengingu: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Markskrá er ekki skrifanleg: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Ekki er hægt að búa til markskrá: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Ekki tókst að leysa Chamilo-verkefnisskráasafn áður en úreltar skrár eru fjarlægðar."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Hreinsun uppfærslu getur ekki fjarlægt varið slóð: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Fyrirhuguð uppfærsla myndi fjarlægja fyrirliggjandi táknræna tengingu: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Hreinsun uppfærslu styður aðeins skrár, ekki skráasöfn: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Úrelt markskrá er ekki lesanleg fyrir öryggisafrit: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Ekki er hægt að fjarlægja úrelta markskrá með núverandi réttindum skráasafns: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Úrelt markskrá leysist utan Chamilo-verkefnisskráasafns: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Ekki tókst að taka öryggisafrit af markskrá: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Ekki tókst að skrifa lýsigögn um öryggisafrit uppfærslu."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Ekki tókst að afrita stigaða uppfærsluskrá: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Afritaðar %d af %d stiguðum skrám."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Ekki tókst að fjarlægja úrelta skrá sem pakkinn tilgreinir: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Fjarlægðar %d af %d úreltum skrám sem pakkinn tilgreinir."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Ekki tókst að endurheimta afritaða skrá: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Ekki tókst að fjarlægja nýlega afritaða skrá við afturköllun: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Ekki tókst að endurheimta fjarlægða skrá vegna þess að afrit vantar: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Ekki tókst að endurheimta fjarlægða skrá úr afriti: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Ekki tókst að skrifa endurskoðunarmetagögn fyrir beitingu uppfærslu."
+
+msgid "Unable to write global update apply log."
+msgstr "Ekki tókst að skrifa alþjóðlega atvikaskrá fyrir beitingu uppfærslu."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Óöruggur sviðsettur afstæður slóð greindur: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Skráasafn er ekki skrifanlegt: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Ekki tókst að búa til skráasafn: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Sviðsetningarmetagögn voru lesin með góðum árangri."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metagögn beitingaráætlunar voru skrifuð í sviðsetningarmöppuna."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Markskrár og möppur virðast skrifanlegar fyrir fyrirhugaða uppfærslu og hreinsun."
+
+msgid "Update apply plan check failed."
+msgstr "Athugun á beitingaráætlun uppfærslu mistókst."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Ekki er hægt að skrifa eða fjarlægja sumar markskrár eða möppur."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Til að laga þetta skaltu tímabundið breyta eiganda allrar Chamilo-möppunnar í %s (notanda vefþjónsins), beita uppfærslunni, breyta eigandanum aftur í %s eftir það og stilla síðan eiganda var/ (og innihalds hennar) aftur á %s svo forritið geti haldið áfram að skrifa í hana."
 

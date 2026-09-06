@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ekzemplo de formulo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulo-ekzemplo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -8794,6 +8794,9 @@ msgstr "Montru la statistikon"
 
 msgid "Personal agenda"
 msgstr "Mia agendo"
+
+msgid "Group agenda"
+msgstr "Gruptagordo"
 
 msgid "Switch to teacher view"
 msgstr "Kursmastrumanta vido"
@@ -40130,4 +40133,448 @@ msgstr "Grupraporto"
 
 msgid "Student follow-up"
 msgstr "Sekvado de studento"
+
+msgid "Use system default certificate"
+msgstr "Uzi la sisteman defaŭltan atestilon"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "La alkroĉita atestilo ne haveblas. La sistema defaŭlta atestilo estos uzata."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Ĉu uzi la sisteman defaŭltan atestilon anstataŭ la alkroĉitan atestilon?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Laŭvola loka disvolva anstataŭigo. Produktadaj ĝisdatigoj uzas la oficialan fidindan ŝlosilon de Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Konstrui sekuran aplikan planon el la preparita pakaĵo. Tio kontrolas dosierojn por anstataŭigi, aldoni aŭ forigi, permesojn, sekurkopian vojon kaj ŝlosan staton. Ĝi ne ŝanĝas la instalaĵon."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ĉi tiu paŝo preparas nur revizion. Dosieranstataŭigo kaj pakaĵ-deklarita purigo okazas poste en la paŝo Apliki preparitajn dosierojn, kun ŝloso, sekurkopio kaj restariga protekto."
+
+msgid "Files to remove"
+msgstr "Dosieroj forigendaj"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Anstataŭigi Chamilo-dosierojn el la preparita pakaĵo kaj forigi malnoviĝintajn dosierojn eksplicite deklaritajn de la subskribita pakaĵ-metadatumoj. Tio ne rulas datumbazajn migradojn, Composer, Yarn aŭ kaŝmemorajn komandojn."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ĉi tiu ago anstataŭigas kaj povas forigi dosierojn en la instalaĵo de Chamilo. Certigu ke la aplika plano estis reviziita kaj sekurkopioj estas ŝaltitaj antaŭ daŭrigi."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Mi komprenas ke tio anstataŭigos dosierojn kaj forigos pakaĵ-deklaritajn malnoviĝintajn dosierojn en la instalaĵo de Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Tajpu la ĝustan tekston sube por konfirmi"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine plenumos nur la preparitajn V300-migradojn eksplicite post kiam la sekureca revizio sukcesas."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine raportis historiajn bazliniajn avertojn. La ĝisdatigilo tamen plenumos nur preparitajn V300-migradojn post eksplicita konfirmo."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Nur la vojo de la manifesto povas esti ŝanĝita. La HTTPS-protokolo kaj la oficiala ĝisdatiga domajno estas fiksitaj."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Disvolva reĝimo permesas HTTPS-manifestan URL-on aŭ lokan manifestan vojon."
+
+msgid "The official update manifest is configured by the server."
+msgstr "La oficiala ĝisdatiga manifesto estas agordita de la servilo."
+
+msgid "What feedback do you want about this course?"
+msgstr "Kian reagon vi volas pri ĉi tiu kurso?"
+
+msgid "Analysis summary"
+msgstr "Analiza resumo"
+
+msgid "Lessons included"
+msgstr "Inkluditaj lecionoj"
+
+msgid "Standalone documents included"
+msgstr "Inkluditaj sendependaj dokumentoj"
+
+msgid "Standalone exercises included"
+msgstr "Inkluditaj sendependaj ekzercoj"
+
+msgid "General feedback"
+msgstr "Ĝenerala reago"
+
+msgid "Strengths"
+msgstr "Fortoj"
+
+msgid "Risks"
+msgstr "Riskoj"
+
+msgid "Recommendations"
+msgstr "Rekomendoj"
+
+msgid "Lesson feedback"
+msgstr "Leciona reago"
+
+msgid "Standalone document feedback"
+msgstr "Reago pri sendependa dokumento"
+
+msgid "Standalone exercise feedback"
+msgstr "Reago pri sendependa ekzerco"
+
+msgid "AI response"
+msgstr "AI-respondo"
+
+msgid "Sequence feedback"
+msgstr "Sekvenca reago"
+
+msgid "Purpose"
+msgstr "Celo"
+
+msgid "You"
+msgstr "Vi"
+
+msgid "City of internship"
+msgstr "Urbo de la staĝo"
+
+msgid "City"
+msgstr "Urbo"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Ĝisdatiga laborfluo restarigita post paĝa reŝargo"
+
+msgid "Last completed step"
+msgstr "Lasta kompletigita paŝo"
+
+msgid "Stage package"
+msgstr "Enscenigi pakaĵon"
+
+msgid "Package staging"
+msgstr "Pakaĵa enscenigado"
+
+msgid "Apply plan"
+msgstr "Apliki planon"
+
+msgid "Update workflow completed"
+msgstr "Ĝisdatiga laborfluo kompletigita"
+
+msgid "Update directory exists and is writable."
+msgstr "Ĝisdatiga dosierujo ekzistas kaj estas skribebla."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Ĝisdatiga dosierujo ekzistas sed ne estas skribebla: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Ĝisdatiga dosierujo ankoraŭ ne ekzistas, sed ĝia gepatra dosierujo estas skribebla."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Ĝisdatiga dosierujo ankoraŭ ne ekzistas, sed ĝi povas esti kreita sub var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Ĝisdatiga dosierujo ne ekzistas kaj ne povas esti kreita kun la nunaj permesoj."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Ne eblas determini liberan diskospacon por antaŭflugo de ĝisdatigo."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Ne sufiĉas libera diskospaco por sekura ensceniga operacio de ĝisdatigo."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Libera diskospaco sufiĉas por ĉi tiu ĝisdatiga fluo de kontrola stadio."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Ĝisdatiga manifesto ne difinas postulon pri PHP-versio."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Ne eblas plene taksi PHP-postulon: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Nuna PHP-versio ne plenumas la ĝisdatigan postulon: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Nuna PHP-versio plenumas la ĝisdatigan postulon."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Neniu loka pakaĵa vojo estis provizita. Elŝutitaj pakaĵoj povas esti kontrolitaj nur post elŝuto."
+
+msgid "Local update package is not readable: %s"
+msgstr "Loka ĝisdatiga pakaĵo ne estas legebla: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Loka ĝisdatiga pakaĵo devas esti ZIP-arkivo."
+
+msgid "Local update package is readable."
+msgstr "Loka ĝisdatiga pakaĵo estas legebla."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Instalita Chamilo-versio ne povis esti aŭtomate detektita. Versia direkto ne povas esti kontrolita."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Instalita aŭ cela versio ne estas en komparebla semantika versia formato."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Cela versio estas pli malalta ol la instalita versio. Malpromocioj ne estas permesitaj defaŭlte."
+
+msgid "Target version matches the installed version."
+msgstr "Cela versio kongruas kun la instalita versio."
+
+msgid "Target version is newer than the installed version."
+msgstr "Cela versio estas pli nova ol la instalita versio."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Projekto ne estas Git-elpreno aŭ .git ne ĉeestas."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Ĉi tiu ĝisdatiga sistemo estas destinita por instalaĵoj sen Git-subteno. Ni detektis ke la loka sistemo uzas Git. Daŭrigi la ĝisdatigon povus rezultigi rompitan Git-historion. Por sistemoj kun Git-subteno, ni rekomendas uzi la Git-proceduron detale priskribitan en CONTRIBUTING.md en la reta radiko."
+
+msgid "Local Git changes were also detected."
+msgstr "Lokaj Git-ŝanĝoj ankaŭ estis detektitaj."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Kelkaj projektaj metadatenaj dosieroj mankas. Postaj ĝisdatigaj stadioj eble postulos manajn kontrolojn de dependecoj."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Metadatenaj dosieroj de Composer kaj Yarn ĉeestas."
+
+msgid "Starting staged file application."
+msgstr "Komencante aplikon de enscenigitaj dosieroj."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Eksplicita konfirmo estas postulata por apliki enscenigitajn dosierojn."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Apliki enscenigitajn ĝisdatigajn dosierojn postulas eksplicitan konfirmon."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Ensceniga dosierujo estas ene de la ĝisdatiga ensceniga dosierujo de Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Ensceniga dosierujo estis validigita."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Metadatenoj de aplika plano estis sukcese legitaj."
+
+msgid "Staged application path is valid."
+msgstr "Enscenigita aplika vojo estas valida."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Metadatenoj de purigo de subskribita pakaĵo kongruas kun la reviziita aplika plano."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Metadatenoj de purigo de subskribita pakaĵo estis validigitaj."
+
+msgid "Update lock was acquired."
+msgstr "Ĝisdatiga ŝloso estis akirita."
+
+msgid "Update backup directory was created."
+msgstr "Ĝisdatiga sekurkopia dosierujo estis kreita."
+
+msgid "Update file operations were collected."
+msgstr "Ĝisdatigaj dosieraj operacioj estis kolektitaj."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Ekzistantaj dosieroj planitaj por anstataŭigo aŭ forigo estis sekurkopiitaj."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Enscenigitaj ĝisdatigaj dosieroj estis kopiitaj al la Chamilo-instalaĵo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Pakaĵe deklaritaj malnoviĝintaj dosieroj estis forigitaj el la Chamilo-instalaĵo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Pakaĵe deklaritaj malnoviĝintaj dosieroj estis forigitaj."
+
+msgid "Update apply audit metadata was written."
+msgstr "Metadatenoj de aŭdito de ĝisdatiga apliko estis skribitaj."
+
+msgid "Staged files applied successfully."
+msgstr "Enscenigitaj dosieroj sukcese aplikitaj."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Ne eblas restarigi forigitajn dosierojn: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Ne eblas malfari kopiitajn dosierojn: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Dosiera malfaro estis plenumita post malsukceso de apliko de ĝisdatigo."
+
+msgid "Rollback failed: %s"
+msgstr "Malfaro malsukcesis: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Ne eblas skribi revizian metadatumaron de apliko de ĝisdatigo: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Ne eblas liberigi ĝisdatigan ŝloson post malsukceso: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Ensceniga vojo estas bezonata por apliki ĝisdatigajn dosierojn."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Ensceniga dosierujo ne ekzistas: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Baza dosierujo de enscenigo de ĝisdatigo de Chamilo ne ekzistas."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Ensceniga dosierujo devas esti ene de var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Ensceniga dosierujo malhavas APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Ne eblas legi metadatumaron de plano de apliko de ĝisdatigo: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metadatumaro de plano de apliko de ĝisdatigo ne estas valida JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metadatumaro de plano de apliko de ĝisdatigo devas esti JSON-objekto."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Plano de apliko de ĝisdatigo malhavas la kampon application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Enscenigita aplika vojo ne estas legebla: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Enscenigita aplika vojo devas esti ene de la ensceniga dosierujo."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Enscenigita aplika vojo malhavas composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Ĝisdatiga pakaĵo malhavas %s. Reenscenigu kontrolitan pakaĵon kun subskribita puriga metadatumaro."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Plano de apliko de ĝisdatigo malhavas la reviziitan purigan metadatumaron de la pakaĵo."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Puriga metadatumaro de ĝisdatiga pakaĵo ŝanĝiĝis post kiam la aplika plano estis generita. Rekonstrui la aplikan planon antaŭ daŭrigi."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Plano de apliko de ĝisdatigo enhavas nevalidan liston de forigoj de pakaĵo."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Purigaj vojoj de ĝisdatiga pakaĵo ŝanĝiĝis post kiam la aplika plano estis generita. Rekonstrui la aplikan planon antaŭ daŭrigi."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Plano de apliko de ĝisdatigo malhavas la reviziitan liston de forigaj vojoj."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Forigaj vojoj de la plano de apliko de ĝisdatigo ne kongruas kun la subskribita puriga metadatumaro de la pakaĵo."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Vojo de ĝisdatiga ŝloso devas esti ene de var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Plano de apliko de ĝisdatigo malhavas la kampon backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Rezerva vojo de ĝisdatigo enhavas nesekurajn vojajn segmentojn."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Rezerva vojo de ĝisdatigo devas esti ene de var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Ne eblas akiri ĝisdatigan ŝloson. Alia ĝisdatigo eble estas en progreso."
+
+msgid "Unable to release update lock: %s"
+msgstr "Ne eblas liberigi ĝisdatigan ŝloson: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Rezerva dosierujo de ĝisdatigo jam ekzistas: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Celan dosierujon ne eblas krei: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "La planita ĝisdatigo anstataŭigus ekzistantan simbolan ligilon: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Cela dosiero ne estas skribebla: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Celan dosieron ne eblas krei: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Ne eblas solvi la projektan dosierujon de Chamilo antaŭ forigo de malnoviĝintaj dosieroj."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Purigo de ĝisdatigo ne povas forigi protektitan vojon: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "La planita ĝisdatigo forigus ekzistantan simbolan ligilon: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Purigo de ĝisdatigo subtenas nur dosierojn, ne dosierujojn: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Malnoviĝinta cela dosiero ne estas legebla por rezervo: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Malnoviĝintan celan dosieron ne eblas forigi kun la nunaj dosierujaj permesoj: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Malnoviĝinta cela dosiero solviĝas ekster la projekta dosierujo de Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Ne eblas rezerve kopii celan dosieron: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Ne eblas skribi rezervan metadatumaron de ĝisdatigo."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Ne eblas kopii enscenigitan ĝisdatigan dosieron: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Kopiitaj %d el %d enscenigitaj dosieroj."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Ne eblas forigi pakaĵe deklaritan malnoviĝintan dosieron: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Forigitaj %d el %d pakaĵe deklaritaj malnoviĝintaj dosieroj."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Ne eblas restarigi la sekurkopian dosieron: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Ne eblas forigi la ĵus kopiitan dosieron dum malfaro: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Ne eblas restarigi la forigitan dosieron ĉar ĝia sekurkopio mankas: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Ne eblas restarigi la forigitan dosieron el sekurkopio: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Ne eblas skribi revizian metadatenon pri aplikado de ĝisdatigo."
+
+msgid "Unable to write global update apply log."
+msgstr "Ne eblas skribi la tutmondan protokolon pri aplikado de ĝisdatigo."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Nesekura sceneja relativa vojo detektita: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "La dosierujo ne estas skribebla: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Ne eblas krei dosierujon: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Scenejaj metadatenoj estis sukcese legitaj."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metadatenoj de la aplika plano estis skribitaj al la sceneja dosierujo."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Celaj dosieroj kaj dosierujoj ŝajnas skribeblaj por la planita ĝisdatigo kaj purigo."
+
+msgid "Update apply plan check failed."
+msgstr "Kontrolo de la plano por apliki ĝisdatigon malsukcesis."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Kelkaj celaj dosieroj aŭ dosierujoj ne povas esti skribitaj aŭ forigitaj."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Por ripari tion, provizore ŝanĝu la posedanton de la tuta Chamilo-dosierujo al %s (la uzanto de la retservilo), apliku la ĝisdatigon, poste ŝanĝu la posedanton reen al %s, kaj poste agordu la posedanton de var/ (kaj ĝia enhavo) reen al %s por ke la aplikaĵo daŭre povu skribi al ĝi."
 

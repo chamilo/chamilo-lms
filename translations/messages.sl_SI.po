@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "S spoštovanjem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorec formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Obseg spremenljivk območja"
@@ -8803,6 +8803,9 @@ msgstr "Poglej moj napredek"
 
 msgid "Personal agenda"
 msgstr "Osebna agenda"
+
+msgid "Group agenda"
+msgstr "Agenda skupine"
 
 msgid "Switch to teacher view"
 msgstr "Učiteljev pogled"
@@ -40144,4 +40147,106 @@ msgstr "Poročilo skupine"
 
 msgid "Student follow-up"
 msgstr "Spremljanje študenta"
+
+msgid "Use system default certificate"
+msgstr "Uporabi privzeto sistemsko potrdilo"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Priloženo potrdilo ni na voljo. Uporabljeno bo privzeto sistemsko potrdilo."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Uporabiti privzeto sistemsko potrdilo namesto priloženega potrdila?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Izbirna lokalna razvojna preglasitev. Produkcijske posodobitve uporabljajo uradni zaupanja vreden ključ Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Sestavite varen načrt uporabe iz pripravljenega paketa. To preveri datoteke za zamenjavo, dodajanje ali odstranitev, dovoljenja, pot varnostne kopije in stanje zaklepa. Namestitve ne spreminja."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ta korak pripravi samo pregled. Zamenjava datotek in čiščenje, navedeno v paketu, se zgodita pozneje v koraku Uporabi pripravljene datoteke, z zaklepom, varnostno kopijo in zaščito pred povrnitvijo."
+
+msgid "Files to remove"
+msgstr "Datoteke za odstranitev"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Zamenjajte datoteke Chamilo iz pripravljenega paketa in odstranite zastarele datoteke, ki so izrecno navedene v metapodatkih podpisanega paketa. To ne izvaja migracij podatkovne zbirke, ukazov Composer, Yarn ali predpomnilnika."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "To dejanje zamenja in lahko odstrani datoteke v namestitvi Chamilo. Pred nadaljevanjem se prepričajte, da je načrt uporabe pregledan in da so varnostne kopije omogočene."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Razumem, da bo to zamenjalo datoteke in odstranilo zastarele datoteke, navedene v paketu, v namestitvi Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Za potrditev vnesite točno spodnje besedilo"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine bo izvedel samo pripravljene migracije V300 izrecno po uspešnem varnostnem pregledu."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine je sporočil zgodovinska opozorila o izhodišču. Posodabljalnik bo po izrecni potrditvi še vedno izvedel samo pripravljene migracije V300."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Spremeniti je mogoče samo pot manifesta. Protokol HTTPS in uradna domena posodobitev sta fiksna."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Razvojni način omogoča URL manifesta HTTPS ali lokalno pot manifesta."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Uradni manifest posodobitev konfigurira strežnik."
+
+msgid "What feedback do you want about this course?"
+msgstr "Kakšne povratne informacije želite o tem tečaju?"
+
+msgid "Analysis summary"
+msgstr "Povzetek analize"
+
+msgid "Lessons included"
+msgstr "Vključene učne enote"
+
+msgid "Standalone documents included"
+msgstr "Vključeni samostojni dokumenti"
+
+msgid "Standalone exercises included"
+msgstr "Vključene samostojne vaje"
+
+msgid "General feedback"
+msgstr "Splošne povratne informacije"
+
+msgid "Strengths"
+msgstr "Prednosti"
+
+msgid "Risks"
+msgstr "Tveganja"
+
+msgid "Recommendations"
+msgstr "Priporočila"
+
+msgid "Lesson feedback"
+msgstr "Povratne informacije o učni enoti"
+
+msgid "Standalone document feedback"
+msgstr "Povratne informacije o samostojnem dokumentu"
+
+msgid "Standalone exercise feedback"
+msgstr "Povratne informacije o samostojni vaji"
+
+msgid "AI response"
+msgstr "Odgovor UI"
+
+msgid "Sequence feedback"
+msgstr "Povratne informacije o zaporedju"
+
+msgid "Purpose"
+msgstr "Namen"
+
+msgid "You"
+msgstr "Vi"
+
+msgid "City of internship"
+msgstr "Mesto pripravništva"
+
+msgid "City"
+msgstr "Mesto"
 

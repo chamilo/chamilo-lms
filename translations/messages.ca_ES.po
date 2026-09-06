@@ -8803,6 +8803,9 @@ msgstr "Veure les meves estadístiques"
 msgid "Personal agenda"
 msgstr "Agenda personal"
 
+msgid "Group agenda"
+msgstr "Agenda de grup"
+
 msgid "Switch to teacher view"
 msgstr "Vista del professor"
 
@@ -40143,4 +40146,448 @@ msgstr "Informe de grup"
 
 msgid "Student follow-up"
 msgstr "Seguiment de l'estudiant"
+
+msgid "Use system default certificate"
+msgstr "Utilitza el certificat predeterminat del sistema"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "El certificat adjunt no està disponible. S'utilitzarà el certificat predeterminat del sistema."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Voleu utilitzar el certificat predeterminat del sistema en lloc del certificat adjunt?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Substitució opcional per a desenvolupament local. Les actualitzacions de producció utilitzen la clau de confiança oficial de Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Crea un pla d'aplicació segur a partir del paquet preparat. Comprova els fitxers a substituir, afegir o eliminar, els permisos, el camí de còpia de seguretat i l'estat de bloqueig. No modifica la instal·lació."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Aquest pas només prepara una revisió. La substitució de fitxers i la neteja declarada pel paquet es fan més tard al pas Aplica els fitxers preparats, amb protecció de bloqueig, còpia de seguretat i revertiment."
+
+msgid "Files to remove"
+msgstr "Fitxers a eliminar"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Substitueix els fitxers de Chamilo del paquet preparat i elimina els fitxers obsolets declarats explícitament per les metadades del paquet signat. Això no executa migracions de base de dades ni ordres de Composer, Yarn o de memòria cau."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Aquesta acció substitueix i pot eliminar fitxers de la instal·lació de Chamilo. Assegureu-vos que s'ha revisat el pla d'aplicació i que les còpies de seguretat estan habilitades abans de continuar."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Entenc que això substituirà fitxers i eliminarà els fitxers obsolets declarats pel paquet a la instal·lació de Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Escriviu el text exacte a continuació per confirmar"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine només executarà les migracions V300 preparades explícitament després que la revisió de seguretat superi."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine ha informat d'avisos de línia base històrica. L'actualitzador tot i així només executarà les migracions V300 preparades després d'una confirmació explícita."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Només es pot canviar el camí del manifest. El protocol HTTPS i el domini oficial d'actualització són fixos."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "El mode de desenvolupament permet un URL de manifest HTTPS o un camí de manifest local."
+
+msgid "The official update manifest is configured by the server."
+msgstr "El manifest d'actualització oficial el configura el servidor."
+
+msgid "What feedback do you want about this course?"
+msgstr "Quin comentari voleu sobre aquest curs?"
+
+msgid "Analysis summary"
+msgstr "Resum de l'anàlisi"
+
+msgid "Lessons included"
+msgstr "Lliçons incloses"
+
+msgid "Standalone documents included"
+msgstr "Documents independents inclosos"
+
+msgid "Standalone exercises included"
+msgstr "Exercicis independents inclosos"
+
+msgid "General feedback"
+msgstr "Comentari general"
+
+msgid "Strengths"
+msgstr "Punts forts"
+
+msgid "Risks"
+msgstr "Riscos"
+
+msgid "Recommendations"
+msgstr "Recomanacions"
+
+msgid "Lesson feedback"
+msgstr "Comentari de la lliçó"
+
+msgid "Standalone document feedback"
+msgstr "Comentari del document independent"
+
+msgid "Standalone exercise feedback"
+msgstr "Comentari de l'exercici independent"
+
+msgid "AI response"
+msgstr "Resposta de la IA"
+
+msgid "Sequence feedback"
+msgstr "Comentari de la seqüència"
+
+msgid "Purpose"
+msgstr "Finalitat"
+
+msgid "You"
+msgstr "Tu"
+
+msgid "City of internship"
+msgstr "Ciutat de les pràctiques"
+
+msgid "City"
+msgstr "Ciutat"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Flux d'actualització restaurat després de recarregar la pàgina"
+
+msgid "Last completed step"
+msgstr "Últim pas completat"
+
+msgid "Stage package"
+msgstr "Paquet de preparació"
+
+msgid "Package staging"
+msgstr "Preparació del paquet"
+
+msgid "Apply plan"
+msgstr "Aplicar el pla"
+
+msgid "Update workflow completed"
+msgstr "Flux d'actualització completat"
+
+msgid "Update directory exists and is writable."
+msgstr "El directori d'actualització existeix i té permisos d'escriptura."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "El directori d'actualització existeix però no té permisos d'escriptura: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "El directori d'actualització encara no existeix, però el directori pare té permisos d'escriptura."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "El directori d'actualització encara no existeix, però es pot crear a var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "El directori d'actualització no existeix i no es pot crear amb els permisos actuals."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "No s'ha pogut determinar l'espai lliure en disc per a la comprovació prèvia de l'actualització."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "No hi ha prou espai lliure en disc per a una operació segura de preparació de l'actualització."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "L'espai lliure en disc és suficient per a aquest flux d'actualització de verificació."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "El manifest d'actualització no defineix cap requisit de versió de PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "No s'ha pogut avaluar completament el requisit de PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "La versió actual de PHP no compleix el requisit d'actualització: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "La versió actual de PHP compleix el requisit d'actualització."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "No s'ha proporcionat cap camí de paquet local. Els paquets descarregats només es poden comprovar després de la descàrrega."
+
+msgid "Local update package is not readable: %s"
+msgstr "El paquet d'actualització local no és llegible: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "El paquet d'actualització local ha de ser un arxiu ZIP."
+
+msgid "Local update package is readable."
+msgstr "El paquet d'actualització local és llegible."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "No s'ha pogut detectar automàticament la versió instal·lada de Chamilo. No es pot comprovar la direcció de la versió."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "La versió instal·lada o de destinació no té un format de versió semàntica comparable."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "La versió de destinació és inferior a la versió instal·lada. Per defecte no es permeten els retrocés de versió."
+
+msgid "Target version matches the installed version."
+msgstr "La versió de destinació coincideix amb la versió instal·lada."
+
+msgid "Target version is newer than the installed version."
+msgstr "La versió de destinació és més nova que la versió instal·lada."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "El projecte no és una còpia de Git o no hi ha .git."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Aquest sistema d'actualització està pensat per a instal·lacions sense suport de Git. Hem detectat que el sistema local utilitza Git. Continuar amb l'actualització podria trencar l'historial de Git. Per a sistemes amb suport de Git, recomanem seguir el procediment de Git descrit a CONTRIBUTING.md a l'arrel web."
+
+msgid "Local Git changes were also detected."
+msgstr "També s'han detectat canvis locals de Git."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Falten alguns fitxers de metadades del projecte. Les etapes posteriors d'actualització poden requerir comprovacions manuals de dependències."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Els fitxers de metadades de Composer i Yarn hi són."
+
+msgid "Starting staged file application."
+msgstr "S'inicia l'aplicació de fitxers preparats."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Cal una confirmació explícita per aplicar els fitxers preparats."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "L'aplicació dels fitxers d'actualització preparats requereix una confirmació explícita."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "El directori de preparació és dins del directori de preparació d'actualitzacions de Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "S'ha validat el directori de preparació."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "S'han llegit correctament les metadades del pla d'aplicació."
+
+msgid "Staged application path is valid."
+msgstr "El camí d'aplicació preparat és vàlid."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Les metadades de neteja del paquet signat coincideixen amb el pla d'aplicació revisat."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "S'han validat les metadades de neteja del paquet signat."
+
+msgid "Update lock was acquired."
+msgstr "S'ha adquirit el bloqueig d'actualització."
+
+msgid "Update backup directory was created."
+msgstr "S'ha creat el directori de còpia de seguretat de l'actualització."
+
+msgid "Update file operations were collected."
+msgstr "S'han recollit les operacions de fitxers de l'actualització."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "S'ha fet una còpia de seguretat dels fitxers existents previstos per a substitució o eliminació."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "S'han copiat els fitxers d'actualització preparats a la instal·lació de Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "S'han eliminat de la instal·lació de Chamilo els fitxers obsolets declarats pel paquet."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "S'han eliminat els fitxers obsolets declarats pel paquet."
+
+msgid "Update apply audit metadata was written."
+msgstr "S'han escrit les metadades d'auditoria de l'aplicació de l'actualització."
+
+msgid "Staged files applied successfully."
+msgstr "Els fitxers en espera s'han aplicat correctament."
+
+msgid "Unable to restore removed files: %s"
+msgstr "No s'han pogut restaurar els fitxers eliminats: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "No s'han pogut desfer els fitxers copiats: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "S'ha executat la reversió de fitxers després de l'error en aplicar l'actualització."
+
+msgid "Rollback failed: %s"
+msgstr "La reversió ha fallat: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "No s'han pogut escriure les metadades d'auditoria de l'aplicació de l'actualització: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "No s'ha pogut alliberar el bloqueig d'actualització després de l'error: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Cal un camí d'espera per aplicar els fitxers d'actualització."
+
+msgid "Staging directory does not exist: %s"
+msgstr "El directori d'espera no existeix: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "El directori base d'espera d'actualització de Chamilo no existeix."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "El directori d'espera ha d'estar dins de var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Al directori d'espera falta APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "No s'han pogut llegir les metadades del pla d'aplicació de l'actualització: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Les metadades del pla d'aplicació de l'actualització no són JSON vàlid: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Les metadades del pla d'aplicació de l'actualització han de ser un objecte JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Al pla d'aplicació de l'actualització falta el camp application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "El camí de l'aplicació en espera no és llegible: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "El camí de l'aplicació en espera ha d'estar dins del directori d'espera."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Al camí de l'aplicació en espera falta composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Al paquet d'actualització falta %s. Torneu a posar en espera un paquet verificat amb metadades de neteja signades."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Al pla d'aplicació de l'actualització falten les metadades de neteja del paquet revisades."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Les metadades de neteja del paquet d'actualització han canviat després de generar el pla d'aplicació. Regenereu el pla d'aplicació abans de continuar."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "El pla d'aplicació de l'actualització conté una llista d'eliminació de paquets no vàlida."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Els camins de neteja del paquet d'actualització han canviat després de generar el pla d'aplicació. Regenereu el pla d'aplicació abans de continuar."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Al pla d'aplicació de l'actualització falta la llista de camins d'eliminació revisada."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Els camins d'eliminació del pla d'aplicació de l'actualització no coincideixen amb les metadades de neteja del paquet signades."
+
+msgid "Update lock path must be inside var/update."
+msgstr "El camí del bloqueig d'actualització ha d'estar dins de var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Al pla d'aplicació de l'actualització falta el camp backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "El camí de còpia de seguretat de l'actualització conté segments de camí no segurs."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "El camí de còpia de seguretat de l'actualització ha d'estar dins de var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "No s'ha pogut adquirir el bloqueig d'actualització. Pot ser que hi hagi una altra actualització en curs."
+
+msgid "Unable to release update lock: %s"
+msgstr "No s'ha pogut alliberar el bloqueig d'actualització: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "El directori de còpia de seguretat de l'actualització ja existeix: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "No es pot crear el directori de destinació: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "L'actualització planificada sobreescriuria un enllaç simbòlic existent: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "El fitxer de destinació no és escrivible: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "No es pot crear el fitxer de destinació: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "No s'ha pogut resoldre el directori del projecte Chamilo abans d'eliminar els fitxers obsolets."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "La neteja de l'actualització no pot eliminar el camí protegit: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "L'actualització planificada eliminaria un enllaç simbòlic existent: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "La neteja de l'actualització només admet fitxers, no directoris: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "El fitxer de destinació obsolet no és llegible per a la còpia de seguretat: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "El fitxer de destinació obsolet no es pot eliminar amb els permisos de directori actuals: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "El fitxer de destinació obsolet es resol fora del directori del projecte Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "No s'ha pogut fer còpia de seguretat del fitxer de destinació: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "No s'han pogut escriure les metadades de la còpia de seguretat de l'actualització."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "No s'ha pogut copiar el fitxer d'actualització en espera: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "S'han copiat %d de %d fitxers en espera."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "No s'ha pogut eliminar el fitxer obsolet declarat pel paquet: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "S'han eliminat %d de %d fitxers obsolets declarats pel paquet."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "No s'ha pogut restaurar el fitxer de còpia de seguretat: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "No s'ha pogut eliminar el fitxer copiat recentment durant la reversió: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "No s'ha pogut restaurar el fitxer eliminat perquè falta la seva còpia de seguretat: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "No s'ha pogut restaurar el fitxer eliminat des de la còpia de seguretat: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "No s'ha pogut escriure les metadades d'auditoria de l'aplicació de l'actualització."
+
+msgid "Unable to write global update apply log."
+msgstr "No s'ha pogut escriure el registre global d'aplicació de l'actualització."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "S'ha detectat un camí relatiu de preparació no segur: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "El directori no és escrivible: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "No s'ha pogut crear el directori: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Les metadades de preparació s'han llegit correctament."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Les metadades del pla d'aplicació s'han escrit al directori de preparació."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Els fitxers i directoris de destinació semblen escrivibles per a l'actualització i la neteja planificades."
+
+msgid "Update apply plan check failed."
+msgstr "Ha fallat la comprovació del pla d'aplicació de l'actualització."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Alguns fitxers o directoris de destinació no es poden escriure ni eliminar."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Per solucionar-ho, canvieu temporalment el propietari de tot el directori de Chamilo a %s (l'usuari del servidor web), apliqueu l'actualització, torneu a canviar el propietari a %s després i, tot seguit, establiu el propietari de var/ (i el seu contingut) de nou a %s perquè l'aplicació pugui continuar escrivint-hi."
 

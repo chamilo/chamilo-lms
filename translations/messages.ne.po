@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "शुभकामना"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चलहरूको दायरा"
@@ -8793,6 +8793,9 @@ msgstr "मेरो प्रगति हेर्नुहोस्"
 
 msgid "Personal agenda"
 msgstr "व्यक्तिगत एजेन्डा"
+
+msgid "Group agenda"
+msgstr "समूह एजेन्डा"
 
 msgid "Switch to teacher view"
 msgstr "शिक्षक दृश्यमा स्विच गर्नुहोस्"
@@ -40128,4 +40131,106 @@ msgstr "समूह प्रतिवेदन"
 
 msgid "Student follow-up"
 msgstr "विद्यार्थी अनुगमन"
+
+msgid "Use system default certificate"
+msgstr "प्रणालीको पूर्वनिर्धारित प्रमाणपत्र प्रयोग गर्नुहोस्"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "संलग्न प्रमाणपत्र उपलब्ध छैन। प्रणालीको पूर्वनिर्धारित प्रमाणपत्र प्रयोग गरिनेछ।"
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "संलग्न प्रमाणपत्रको सट्टा प्रणालीको पूर्वनिर्धारित प्रमाणपत्र प्रयोग गर्ने हो?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "वैकल्पिक स्थानीय विकास ओभरराइड। उत्पादन अपडेटहरूले आधिकारिक Chamilo विश्वसनीय कुञ्जी प्रयोग गर्छन्।"
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "स्टेज गरिएको प्याकेजबाट सुरक्षित लागू योजना बनाउनुहोस्। यसले प्रतिस्थापन, थप्न वा हटाउनका फाइलहरू, अनुमतिहरू, ब्याकअप पथ र लक स्थिति जाँच गर्छ। यसले स्थापना परिवर्तन गर्दैन।"
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "यो चरणले केवल समीक्षा तयार गर्छ। फाइल प्रतिस्थापन र प्याकेज-घोषित सफाई पछि स्टेज गरिएका फाइलहरू लागू गर्ने चरणमा लक, ब्याकअप र रोलब्याक सुरक्षा सहित हुन्छ।"
+
+msgid "Files to remove"
+msgstr "हटाउनुपर्ने फाइलहरू"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "स्टेज गरिएको प्याकेजबाट Chamilo फाइलहरू प्रतिस्थापन गर्नुहोस् र हस्ताक्षरित प्याकेज मेटाडेटामा स्पष्ट रूपमा घोषित पुराना फाइलहरू हटाउनुहोस्। यसले डाटाबेस माइग्रेसन, Composer, Yarn वा क्यास आदेशहरू चलाउँदैन।"
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "यो कार्यले Chamilo स्थापनामा फाइलहरू प्रतिस्थापन गर्छ र हटाउन सक्छ। जारी राख्नु अघि लागू योजना समीक्षा गरिएको र ब्याकअप सक्षम छन् भनी सुनिश्चित गर्नुहोस्।"
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "म बुझ्छु कि यसले Chamilo स्थापनामा फाइलहरू प्रतिस्थापन गर्नेछ र प्याकेज-घोषित पुराना फाइलहरू हटाउनेछ।"
+
+msgid "Type the exact text below to confirm"
+msgstr "पुष्टि गर्न तलको ठ्याक्कै पाठ टाइप गर्नुहोस्"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "सुरक्षा समीक्षा पास भएपछि Doctrine ले स्पष्ट रूपमा केवल स्टेज गरिएका V300 माइग्रेसनहरू कार्यान्वयन गर्नेछ।"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine ले ऐतिहासिक बेसलाइन चेतावनीहरू रिपोर्ट गर्‍यो। अपडेटरले स्पष्ट पुष्टि पछि पनि केवल स्टेज गरिएका V300 माइग्रेसनहरू कार्यान्वयन गर्नेछ।"
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "केवल म्यानिफेस्ट पथ परिवर्तन गर्न सकिन्छ। HTTPS प्रोटोकल र आधिकारिक अपडेट डोमेन निश्चित छन्।"
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "विकास मोडले HTTPS म्यानिफेस्ट URL वा स्थानीय म्यानिफेस्ट पथ अनुमति दिन्छ।"
+
+msgid "The official update manifest is configured by the server."
+msgstr "आधिकारिक अपडेट म्यानिफेस्ट सर्भरद्वारा कन्फिगर गरिएको छ।"
+
+msgid "What feedback do you want about this course?"
+msgstr "यो पाठ्यक्रमबारे तपाईं कस्तो प्रतिक्रिया चाहनुहुन्छ?"
+
+msgid "Analysis summary"
+msgstr "विश्लेषण सारांश"
+
+msgid "Lessons included"
+msgstr "समावेश पाठहरू"
+
+msgid "Standalone documents included"
+msgstr "समावेश स्वतन्त्र कागजातहरू"
+
+msgid "Standalone exercises included"
+msgstr "समावेश स्वतन्त्र अभ्यासहरू"
+
+msgid "General feedback"
+msgstr "सामान्य प्रतिक्रिया"
+
+msgid "Strengths"
+msgstr "शक्तिहरू"
+
+msgid "Risks"
+msgstr "जोखिमहरू"
+
+msgid "Recommendations"
+msgstr "सिफारिसहरू"
+
+msgid "Lesson feedback"
+msgstr "पाठ प्रतिक्रिया"
+
+msgid "Standalone document feedback"
+msgstr "स्वतन्त्र कागजात प्रतिक्रिया"
+
+msgid "Standalone exercise feedback"
+msgstr "स्वतन्त्र अभ्यास प्रतिक्रिया"
+
+msgid "AI response"
+msgstr "AI प्रतिक्रिया"
+
+msgid "Sequence feedback"
+msgstr "क्रम प्रतिक्रिया"
+
+msgid "Purpose"
+msgstr "उद्देश्य"
+
+msgid "You"
+msgstr "तपाईं"
+
+msgid "City of internship"
+msgstr "इन्टर्नशिपको शहर"
+
+msgid "City"
+msgstr "शहर"
 

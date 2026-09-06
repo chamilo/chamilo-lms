@@ -371,7 +371,7 @@ msgid "Sincerely"
 msgstr "敬具"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "数式の例: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "数式の例: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "変数範囲"
@@ -8858,6 +8858,9 @@ msgstr "進行状況を表示"
 
 msgid "Personal agenda"
 msgstr "個人用の予定表"
+
+msgid "Group agenda"
+msgstr "グループの予定"
 
 msgid "Switch to teacher view"
 msgstr "教員表示"
@@ -40194,4 +40197,448 @@ msgstr "グループレポート"
 
 msgid "Student follow-up"
 msgstr "学生フォローアップ"
+
+msgid "Use system default certificate"
+msgstr "システムのデフォルト証明書を使用"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "添付の証明書は利用できません。システムのデフォルト証明書が使用されます。"
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "添付の証明書の代わりにシステムのデフォルト証明書を使用しますか？"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "任意のローカル開発用オーバーライドです。本番の更新では公式の Chamilo 信頼キーを使用します。"
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "ステージ済みパッケージから安全な適用計画を作成します。置換・追加・削除するファイル、権限、バックアップパス、ロック状態を確認します。インストールは変更しません。"
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "この手順は確認用の準備のみです。ファイルの置換とパッケージで宣言されたクリーンアップは、ロック、バックアップ、ロールバック保護付きの「ステージ済みファイルの適用」ステップで後から行われます。"
+
+msgid "Files to remove"
+msgstr "削除するファイル"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "ステージ済みパッケージから Chamilo のファイルを置換し、署名済みパッケージメタデータで明示的に宣言された不要ファイルを削除します。データベースマイグレーション、Composer、Yarn、キャッシュコマンドは実行しません。"
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "この操作は Chamilo インストール内のファイルを置換し、削除する場合があります。続行する前に適用計画を確認し、バックアップが有効であることを確認してください。"
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Chamilo インストール内のファイルが置換され、パッケージで宣言された不要ファイルが削除されることを理解しました。"
+
+msgid "Type the exact text below to confirm"
+msgstr "確認のため、以下の文言を正確に入力してください"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "安全確認が通った後、Doctrine はステージ済みの V300 マイグレーションのみを明示的に実行します。"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine が過去のベースライン警告を報告しました。アップデーターは明示的な確認後も、ステージ済みの V300 マイグレーションのみを実行します。"
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "変更できるのはマニフェストのパスのみです。HTTPS プロトコルと公式更新ドメインは固定です。"
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "開発モードでは、HTTPS のマニフェスト URL またはローカルのマニフェストパスを使用できます。"
+
+msgid "The official update manifest is configured by the server."
+msgstr "公式の更新マニフェストはサーバーで設定されています。"
+
+msgid "What feedback do you want about this course?"
+msgstr "このコースについてどのようなフィードバックが必要ですか？"
+
+msgid "Analysis summary"
+msgstr "分析の概要"
+
+msgid "Lessons included"
+msgstr "含まれるレッスン"
+
+msgid "Standalone documents included"
+msgstr "含まれるスタンドアロン文書"
+
+msgid "Standalone exercises included"
+msgstr "含まれるスタンドアロン演習"
+
+msgid "General feedback"
+msgstr "全般的なフィードバック"
+
+msgid "Strengths"
+msgstr "強み"
+
+msgid "Risks"
+msgstr "リスク"
+
+msgid "Recommendations"
+msgstr "推奨事項"
+
+msgid "Lesson feedback"
+msgstr "レッスンのフィードバック"
+
+msgid "Standalone document feedback"
+msgstr "スタンドアロン文書のフィードバック"
+
+msgid "Standalone exercise feedback"
+msgstr "スタンドアロン演習のフィードバック"
+
+msgid "AI response"
+msgstr "AI の応答"
+
+msgid "Sequence feedback"
+msgstr "シーケンスのフィードバック"
+
+msgid "Purpose"
+msgstr "目的"
+
+msgid "You"
+msgstr "あなた"
+
+msgid "City of internship"
+msgstr "インターンシップの都市"
+
+msgid "City"
+msgstr "都市"
+
+msgid "Update workflow restored after page refresh"
+msgstr "ページ更新後に更新ワークフローを復元しました"
+
+msgid "Last completed step"
+msgstr "最後に完了したステップ"
+
+msgid "Stage package"
+msgstr "ステージパッケージ"
+
+msgid "Package staging"
+msgstr "パッケージのステージング"
+
+msgid "Apply plan"
+msgstr "計画を適用"
+
+msgid "Update workflow completed"
+msgstr "更新ワークフローが完了しました"
+
+msgid "Update directory exists and is writable."
+msgstr "更新ディレクトリは存在し、書き込み可能です。"
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "更新ディレクトリは存在しますが、書き込みできません: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "更新ディレクトリはまだ存在しませんが、親ディレクトリは書き込み可能です。"
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "更新ディレクトリはまだ存在しませんが、var/ 配下に作成できます。"
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "更新ディレクトリは存在せず、現在の権限では作成できません。"
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "更新の事前確認用に空きディスク容量を判定できません。"
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "安全な更新ステージング操作に十分な空きディスク容量がありません。"
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "この検証段階の更新フローには十分な空きディスク容量があります。"
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "更新マニフェストに PHP バージョン要件が定義されていません。"
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "PHP 要件を完全に評価できません: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "現在の PHP バージョンは更新要件を満たしていません: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "現在の PHP バージョンは更新要件を満たしています。"
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "ローカルパッケージのパスが指定されていません。ダウンロードしたパッケージは、ダウンロード後にのみ確認できます。"
+
+msgid "Local update package is not readable: %s"
+msgstr "ローカル更新パッケージを読み取れません: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "ローカル更新パッケージは ZIP アーカイブである必要があります。"
+
+msgid "Local update package is readable."
+msgstr "ローカル更新パッケージは読み取り可能です。"
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "インストール済みの Chamilo バージョンを自動検出できませんでした。バージョンの方向を確認できません。"
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "インストール済みまたは対象バージョンが比較可能なセマンティックバージョン形式ではありません。"
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "対象バージョンがインストール済みバージョンより低いです。ダウングレードは既定では許可されていません。"
+
+msgid "Target version matches the installed version."
+msgstr "対象バージョンはインストール済みバージョンと一致します。"
+
+msgid "Target version is newer than the installed version."
+msgstr "対象バージョンはインストール済みバージョンより新しいです。"
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "プロジェクトは Git チェックアウトではないか、.git が存在しません。"
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "この更新システムは Git 非対応のインストール向けです。ローカルシステムが Git を使用していることを検出しました。更新を続行すると Git 履歴が壊れる可能性があります。Git 対応のシステムでは、ウェブルートの CONTRIBUTING.md に記載の Git 手順の使用を推奨します。"
+
+msgid "Local Git changes were also detected."
+msgstr "ローカルの Git 変更も検出されました。"
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "一部のプロジェクトメタデータファイルがありません。以降の更新段階では依存関係の手動確認が必要になる場合があります。"
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer および Yarn のメタデータファイルが存在します。"
+
+msgid "Starting staged file application."
+msgstr "ステージ済みファイルの適用を開始しています。"
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "ステージ済みファイルの適用には明示的な確認が必要です。"
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "ステージ済み更新ファイルの適用には明示的な確認が必要です。"
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "ステージングディレクトリは Chamilo の更新ステージングディレクトリ内にあります。"
+
+msgid "Staging directory was validated."
+msgstr "ステージングディレクトリを検証しました。"
+
+msgid "Apply plan metadata was read successfully."
+msgstr "適用計画のメタデータを正常に読み取りました。"
+
+msgid "Staged application path is valid."
+msgstr "ステージ済み適用パスは有効です。"
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "署名済みパッケージのクリーンアップメタデータは、確認済みの適用計画と一致します。"
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "署名済みパッケージのクリーンアップメタデータを検証しました。"
+
+msgid "Update lock was acquired."
+msgstr "更新ロックを取得しました。"
+
+msgid "Update backup directory was created."
+msgstr "更新バックアップディレクトリを作成しました。"
+
+msgid "Update file operations were collected."
+msgstr "更新ファイル操作を収集しました。"
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "置換または削除予定の既存ファイルをバックアップしました。"
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "ステージ済み更新ファイルを Chamilo インストールにコピーしました。"
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "パッケージで宣言された不要ファイルを Chamilo インストールから削除しました。"
+
+msgid "Package-declared obsolete files were removed."
+msgstr "パッケージで宣言された不要ファイルを削除しました。"
+
+msgid "Update apply audit metadata was written."
+msgstr "更新適用の監査メタデータを書き込みました。"
+
+msgid "Staged files applied successfully."
+msgstr "ステージ済みファイルを正常に適用しました。"
+
+msgid "Unable to restore removed files: %s"
+msgstr "削除したファイルを復元できません: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "コピーしたファイルをロールバックできません: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "更新の適用に失敗したため、ファイルのロールバックを実行しました。"
+
+msgid "Rollback failed: %s"
+msgstr "ロールバックに失敗しました: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "更新適用の監査メタデータを書き込めません: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "失敗後に更新ロックを解除できません: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "更新ファイルを適用するにはステージングパスが必要です。"
+
+msgid "Staging directory does not exist: %s"
+msgstr "ステージングディレクトリが存在しません: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo の更新ステージング用ベースディレクトリが存在しません。"
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "ステージングディレクトリは var/update/staging 内である必要があります。"
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "ステージングディレクトリに APPLY-PLAN.json がありません。"
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "更新適用プランのメタデータを読み取れません: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "更新適用プランのメタデータが有効な JSON ではありません: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "更新適用プランのメタデータは JSON オブジェクトである必要があります。"
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "更新適用プランに application_path フィールドがありません。"
+
+msgid "Staged application path is not readable: %s"
+msgstr "ステージ済みアプリケーションパスを読み取れません: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "ステージ済みアプリケーションパスはステージングディレクトリ内である必要があります。"
+
+msgid "Staged application path is missing composer.json."
+msgstr "ステージ済みアプリケーションパスに composer.json がありません。"
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "更新パッケージに %s がありません。署名済みクリーンアップメタデータを含む検証済みパッケージを再ステージしてください。"
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "更新適用プランにレビュー済みパッケージのクリーンアップメタデータがありません。"
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "適用プラン生成後に更新パッケージのクリーンアップメタデータが変更されました。続行する前に適用プランを再生成してください。"
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "更新適用プランに無効なパッケージ削除リストが含まれています。"
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "適用プラン生成後に更新パッケージのクリーンアップパスが変更されました。続行する前に適用プランを再生成してください。"
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "更新適用プランにレビュー済みの削除パスリストがありません。"
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "更新適用プランの削除パスが、署名済みパッケージのクリーンアップメタデータと一致しません。"
+
+msgid "Update lock path must be inside var/update."
+msgstr "更新ロックパスは var/update 内である必要があります。"
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "更新適用プランに backup_path フィールドがありません。"
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "更新バックアップパスに安全でないパスセグメントが含まれています。"
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "更新バックアップパスは var/update/backups 内である必要があります。"
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "更新ロックを取得できません。別の更新が進行中の可能性があります。"
+
+msgid "Unable to release update lock: %s"
+msgstr "更新ロックを解除できません: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "更新バックアップディレクトリは既に存在します: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "対象ディレクトリを作成できません: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "計画された更新は既存のシンボリックリンクを上書きします: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "対象ファイルに書き込めません: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "対象ファイルを作成できません: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "不要ファイルを削除する前に、Chamilo プロジェクトディレクトリを解決できません。"
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "更新クリーンアップは保護されたパスを削除できません: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "計画された更新は既存のシンボリックリンクを削除します: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "更新クリーンアップはファイルのみを対象とし、ディレクトリは対象外です: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "バックアップのため、不要な対象ファイルを読み取れません: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "現在のディレクトリ権限では、不要な対象ファイルを削除できません: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "不要な対象ファイルが Chamilo プロジェクトディレクトリの外に解決されます: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "対象ファイルをバックアップできません: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "更新バックアップのメタデータを書き込めません。"
+
+msgid "Unable to copy staged update file: %s"
+msgstr "ステージ済み更新ファイルをコピーできません: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "ステージ済みファイル %d 件中 %d 件をコピーしました。"
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "パッケージで宣言された不要ファイルを削除できません: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "パッケージで宣言された不要ファイル %d 件中 %d 件を削除しました。"
+
+msgid "Unable to restore backed up file: %s"
+msgstr "バックアップファイルを復元できません: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "ロールバック中に新しくコピーしたファイルを削除できません: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "バックアップがないため、削除されたファイルを復元できません: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "バックアップから削除されたファイルを復元できません: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "更新適用の監査メタデータを書き込めません。"
+
+msgid "Unable to write global update apply log."
+msgstr "グローバルな更新適用ログを書き込めません。"
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "安全でないステージング相対パスが検出されました: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "ディレクトリに書き込めません: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "ディレクトリを作成できません: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "ステージングメタデータを正常に読み込みました。"
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "適用計画のメタデータをステージングディレクトリに書き込みました。"
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "対象のファイルとディレクトリは、計画された更新とクリーンアップに対して書き込み可能です。"
+
+msgid "Update apply plan check failed."
+msgstr "更新適用計画のチェックに失敗しました。"
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "一部の対象ファイルまたはディレクトリに書き込めないか、削除できません。"
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "これを修正するには、一時的にChamiloディレクトリ全体の所有者を%s（Webサーバーユーザー）に変更し、更新を適用した後、所有者を%sに戻し、その後var/（およびその内容）の所有者を%sに戻して、アプリケーションが引き続き書き込めるようにしてください。"
 

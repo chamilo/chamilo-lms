@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Fórmula qhawarina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Fórmula qhawarina: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -8794,6 +8794,9 @@ msgstr "Qhawariy yupanaykunata"
 
 msgid "Personal agenda"
 msgstr "Ruwanay"
+
+msgid "Group agenda"
+msgstr "Huñu agenda"
 
 msgid "Switch to teacher view"
 msgstr "Yachachiq qhawariynin"
@@ -40130,4 +40133,106 @@ msgstr "Huñu willakuy"
 
 msgid "Student follow-up"
 msgstr "Yachakuq qatiy"
+
+msgid "Use system default certificate"
+msgstr "Sistema paqarichisqa certificado-ta llamk'achiy"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Kuskachasqa certificado mana tarikunchu. Sistema paqarichisqa certificado llamk'achisqa kanqa."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "¿Sistema paqarichisqa certificado-ta llamk'achinkichu kuskachasqa certificado ranti?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Munaylla local wiñachiy qispichiy. Producción musuqyachiykuna Chamilo kamachisqa iñiysapa llave-ta llamk'achinku."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Wichq'asqa paquete-manta allin qhawaq ruway plan-ta ruway. Kayqa qhawachin ima willañiqikunata rantinapaq, yapaypaq utaq qichunapaq, saqichiykunata, waqaychasqa ñanta hinaspa wichq'ay kayninta. Mana hukchasunchu churayta."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Kay ruwayqa qhawariyllapaqmi wakichin. Willañiqi rantinay hinaspa paquete-pi willasqa pichayqa qhipamanmi ruwakun Wichq'asqa willañiqikunata ruway ruwaypi, wichq'ay, waqaychay hinaspa kutichiy amachaywan."
+
+msgid "Files to remove"
+msgstr "Qichuna willañiqikuna"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Wichq'asqa paquete-manta Chamilo willañiqikunata rantiy hinaspa firma-yuq paquete metadata-pi sut'ita willasqa mawk'a willañiqikunata qichuy. Kayqa mana ruwanqachu willañiqitaq migraciones, Composer, Yarn nitaq cache kamachiykunata."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Kay ruwayqa Chamilo churaypi willañiqikunata rantin hinaspa qichuyta atin. Qatiykachanaykipaqqa ruway plan qhawasqa kasqanta hinaspa waqaychaykuna kichasqa kasqanta yachay."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Hamutani kayqa Chamilo churaypi willañiqikunata rantinqa hinaspa paquete-pi willasqa mawk'a willañiqikunata qichunqa."
+
+msgid "Type the exact text below to confirm"
+msgstr "Takyachinaykipaq urapi kaq qillqata kikinmanta qillqay"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrineqa allin qhawariy pasasqan qhipallamanmi wichq'asqa V300 migracioneskunallata ruwanqa."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrineqa ñaupaq baseline yuyarichiykunata willarqan. Musuqyachiqqa sut'i takyachiy qhipallamanmi wichq'asqa V300 migracioneskunallata ruwanqa."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Manifest ñanllatam hukchayta atikun. HTTPS protocolo hinaspa kamachisqa musuqyachiy dominioqa takyasqam."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Wiñachiy modoqa HTTPS manifest URL-ta utaq local manifest ñanta saqin."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Kamachisqa musuqyachiy manifestqa servidor-wanmi allichasqa."
+
+msgid "What feedback do you want about this course?"
+msgstr "¿Ima kutichiyta munanki kay yachaykamaymanta?"
+
+msgid "Analysis summary"
+msgstr "T'aqwiriy huñusqa willakuy"
+
+msgid "Lessons included"
+msgstr "Yachachiykuna churasqa"
+
+msgid "Standalone documents included"
+msgstr "Sapaq qillqakuna churasqa"
+
+msgid "Standalone exercises included"
+msgstr "Sapaq ruwaykuna churasqa"
+
+msgid "General feedback"
+msgstr "Sapsi kutichiy"
+
+msgid "Strengths"
+msgstr "Kallpayuq kaykuna"
+
+msgid "Risks"
+msgstr "Chikikuna"
+
+msgid "Recommendations"
+msgstr "Yuyaychakuykuna"
+
+msgid "Lesson feedback"
+msgstr "Yachachiy kutichiy"
+
+msgid "Standalone document feedback"
+msgstr "Sapaq qillqa kutichiy"
+
+msgid "Standalone exercise feedback"
+msgstr "Sapaq ruway kutichiy"
+
+msgid "AI response"
+msgstr "IA kutichiy"
+
+msgid "Sequence feedback"
+msgstr "Qatiq kutichiy"
+
+msgid "Purpose"
+msgstr "Munaynin"
+
+msgid "You"
+msgstr "Qam"
+
+msgid "City of internship"
+msgstr "Practicas llaqta"
+
+msgid "City"
+msgstr "Llaqta"
 

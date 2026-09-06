@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med venlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formelprøve: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervaller"
@@ -8794,6 +8794,9 @@ msgstr "Se mine statistikker"
 
 msgid "Personal agenda"
 msgstr "Min kalender"
+
+msgid "Group agenda"
+msgstr "Gruppeagenda"
 
 msgid "Switch to teacher view"
 msgstr "Se kursusside som underviser"
@@ -40130,4 +40133,448 @@ msgstr "Grupperapport"
 
 msgid "Student follow-up"
 msgstr "Studerendeopfølgning"
+
+msgid "Use system default certificate"
+msgstr "Brug systemets standardcertifikat"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Det vedhæftede certifikat er ikke tilgængeligt. Systemets standardcertifikat vil blive brugt."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Brug systemets standardcertifikat i stedet for det vedhæftede certifikat?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Valgfri lokal udviklings-override. Produktionsopdateringer bruger den officielle betroede Chamilo-nøgle."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Opret en sikker anvendelsesplan ud fra den klargjorte pakke. Dette tjekker filer, der skal erstattes, tilføjes eller fjernes, tilladelser, sikkerhedskopieringssti og låsestatus. Det ændrer ikke installationen."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Dette trin forbereder kun en gennemgang. Filerstatning og pakkedeklareret oprydning sker senere i trinnet Anvend klargjorte filer, med lås, sikkerhedskopi og rollback-beskyttelse."
+
+msgid "Files to remove"
+msgstr "Filer der skal fjernes"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Erstat Chamilo-filer fra den klargjorte pakke og fjern forældede filer, der er eksplicit angivet i den signerede pakkes metadata. Dette kører ikke databasemigrationer, Composer, Yarn eller cache-kommandoer."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Denne handling erstatter og kan fjerne filer i Chamilo-installationen. Sørg for, at anvendelsesplanen er gennemgået, og at sikkerhedskopiering er aktiveret, før du fortsætter."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Jeg forstår, at dette vil erstatte filer og fjerne pakkedeklarerede forældede filer i Chamilo-installationen."
+
+msgid "Type the exact text below to confirm"
+msgstr "Skriv den nøjagtige tekst nedenfor for at bekræfte"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine vil kun udføre de klargjorte V300-migrationer eksplicit, efter at sikkerhedsgennemgangen er godkendt."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine rapporterede historiske baseline-advarsler. Opdateringsværktøjet vil stadig kun udføre klargjorte V300-migrationer efter eksplicit bekræftelse."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Kun manifeststien kan ændres. HTTPS-protokollen og det officielle opdateringsdomæne er faste."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Udviklingstilstand tillader en HTTPS-manifest-URL eller en lokal manifeststi."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Det officielle opdateringsmanifest konfigureres af serveren."
+
+msgid "What feedback do you want about this course?"
+msgstr "Hvilken feedback ønsker du om dette kursus?"
+
+msgid "Analysis summary"
+msgstr "Analyseoversigt"
+
+msgid "Lessons included"
+msgstr "Inkluderede lektioner"
+
+msgid "Standalone documents included"
+msgstr "Inkluderede selvstændige dokumenter"
+
+msgid "Standalone exercises included"
+msgstr "Inkluderede selvstændige øvelser"
+
+msgid "General feedback"
+msgstr "Generel feedback"
+
+msgid "Strengths"
+msgstr "Styrker"
+
+msgid "Risks"
+msgstr "Risici"
+
+msgid "Recommendations"
+msgstr "Anbefalinger"
+
+msgid "Lesson feedback"
+msgstr "Lektionsfeedback"
+
+msgid "Standalone document feedback"
+msgstr "Feedback til selvstændige dokumenter"
+
+msgid "Standalone exercise feedback"
+msgstr "Feedback til selvstændige øvelser"
+
+msgid "AI response"
+msgstr "AI-svar"
+
+msgid "Sequence feedback"
+msgstr "Sekvensfeedback"
+
+msgid "Purpose"
+msgstr "Formål"
+
+msgid "You"
+msgstr "Dig"
+
+msgid "City of internship"
+msgstr "Praktikby"
+
+msgid "City"
+msgstr "By"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Opdateringsarbejdsgang gendannet efter sideopdatering"
+
+msgid "Last completed step"
+msgstr "Sidst fuldførte trin"
+
+msgid "Stage package"
+msgstr "Klargør pakke"
+
+msgid "Package staging"
+msgstr "Pakke-klargøring"
+
+msgid "Apply plan"
+msgstr "Anvend plan"
+
+msgid "Update workflow completed"
+msgstr "Opdateringsarbejdsgang fuldført"
+
+msgid "Update directory exists and is writable."
+msgstr "Opdateringsmappen findes og er skrivbar."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Opdateringsmappen findes, men er ikke skrivbar: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Opdateringsmappen findes endnu ikke, men dens overordnede mappe er skrivbar."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Opdateringsmappen findes endnu ikke, men den kan oprettes under var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Opdateringsmappen findes ikke og kan ikke oprettes med de aktuelle tilladelser."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Kunne ikke bestemme ledig diskplads til opdateringsforhåndstjek."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Ikke nok ledig diskplads til en sikker klargøring af opdateringen."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Ledig diskplads er tilstrækkelig til denne verifikationsfase af opdateringsforløbet."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Opdateringsmanifestet definerer ikke et PHP-versionskrav."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Kunne ikke fuldt ud evaluere PHP-kravet: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Den aktuelle PHP-version opfylder ikke opdateringskravet: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Den aktuelle PHP-version opfylder opdateringskravet."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Der blev ikke angivet nogen lokal pakkesti. Downloadede pakker kan først tjekkes efter download."
+
+msgid "Local update package is not readable: %s"
+msgstr "Lokal opdateringspakke kan ikke læses: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Lokal opdateringspakke skal være et ZIP-arkiv."
+
+msgid "Local update package is readable."
+msgstr "Lokal opdateringspakke kan læses."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Den installerede Chamilo-version kunne ikke registreres automatisk. Versionsretning kan ikke tjekkes."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Installeret eller målversion er ikke i et sammenligneligt semantisk versionsformat."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Målversionen er lavere end den installerede version. Nedgraderinger er som standard ikke tilladt."
+
+msgid "Target version matches the installed version."
+msgstr "Målversionen matcher den installerede version."
+
+msgid "Target version is newer than the installed version."
+msgstr "Målversionen er nyere end den installerede version."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Projektet er ikke et Git-checkout, eller .git er ikke til stede."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Dette opdateringssystem er beregnet til installationer uden Git-understøttelse. Vi har registreret, at det lokale system bruger Git. Hvis du fortsætter med opdateringen, kan det resultere i ødelagt Git-historik. Til systemer med Git-understøttelse anbefaler vi at bruge Git-proceduren beskrevet i CONTRIBUTING.md i webroden."
+
+msgid "Local Git changes were also detected."
+msgstr "Der blev også registreret lokale Git-ændringer."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Nogle projektmetadatafiler mangler. Senere opdateringsfaser kan kræve manuelle afhængighedstjek."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer- og Yarn-metadatafiler er til stede."
+
+msgid "Starting staged file application."
+msgstr "Starter anvendelse af klargjorte filer."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Eksplicit bekræftelse er påkrævet for at anvende klargjorte filer."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Anvendelse af klargjorte opdateringsfiler kræver en eksplicit bekræftelse."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Klargøringsmappen ligger inde i Chamilo-opdateringens klargøringsmappe."
+
+msgid "Staging directory was validated."
+msgstr "Klargøringsmappen blev valideret."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Metadata for anvendelsesplanen blev læst."
+
+msgid "Staged application path is valid."
+msgstr "Stien til klargjort anvendelse er gyldig."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Oprydningsmetadata for underskrevet pakke matcher den gennemgåede anvendelsesplan."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Oprydningsmetadata for underskrevet pakke blev valideret."
+
+msgid "Update lock was acquired."
+msgstr "Opdateringslås blev erhvervet."
+
+msgid "Update backup directory was created."
+msgstr "Sikkerhedskopimappe til opdatering blev oprettet."
+
+msgid "Update file operations were collected."
+msgstr "Opdateringsfilhandlinger blev indsamlet."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Eksisterende filer planlagt til erstatning eller fjernelse blev sikkerhedskopieret."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Klargjorte opdateringsfiler blev kopieret til Chamilo-installationen."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Forældede filer angivet i pakken blev fjernet fra Chamilo-installationen."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Forældede filer angivet i pakken blev fjernet."
+
+msgid "Update apply audit metadata was written."
+msgstr "Revisionsmetadata for opdateringsanvendelse blev skrevet."
+
+msgid "Staged files applied successfully."
+msgstr "Klargjorte filer blev anvendt."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Kunne ikke gendanne fjernede filer: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Kunne ikke rulle kopierede filer tilbage: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Filtilbageførsel blev udført efter fejl ved anvendelse af opdateringen."
+
+msgid "Rollback failed: %s"
+msgstr "Tilbageførsel mislykkedes: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Kunne ikke skrive revisionsmetadata for anvendelse af opdatering: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Kunne ikke frigive opdateringslås efter fejl: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Klargøringssti er påkrævet for at anvende opdateringsfiler."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Klargøringsmappen findes ikke: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo-opdateringens grundlæggende klargøringsmappe findes ikke."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Klargøringsmappen skal ligge inde i var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Klargøringsmappen mangler APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Kunne ikke læse metadata for opdateringens anvendelsesplan: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metadata for opdateringens anvendelsesplan er ikke gyldig JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metadata for opdateringens anvendelsesplan skal være et JSON-objekt."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Opdateringens anvendelsesplan mangler feltet application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Klargjort applikationssti kan ikke læses: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Klargjort applikationssti skal ligge inde i klargøringsmappen."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Klargjort applikationssti mangler composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Opdateringspakken mangler %s. Klargør igen en verificeret pakke med underskrevet oprydningsmetadata."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Opdateringens anvendelsesplan mangler den gennemgåede pakkeoprydningsmetadata."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Opdateringspakkens oprydningsmetadata blev ændret, efter at anvendelsesplanen blev genereret. Genopbyg anvendelsesplanen, før du fortsætter."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Opdateringens anvendelsesplan indeholder en ugyldig liste over pakkefjernelser."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Opdateringspakkens oprydningsstier blev ændret, efter at anvendelsesplanen blev genereret. Genopbyg anvendelsesplanen, før du fortsætter."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Opdateringens anvendelsesplan mangler den gennemgåede liste over fjernelsesstier."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Fjernelsesstierne i opdateringens anvendelsesplan stemmer ikke overens med den underskrevne pakkeoprydningsmetadata."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Opdateringslåsens sti skal ligge inde i var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Opdateringens anvendelsesplan mangler feltet backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Opdateringens sikkerhedskopisti indeholder usikre stisegmenter."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Opdateringens sikkerhedskopisti skal ligge inde i var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Kunne ikke erhverve opdateringslås. En anden opdatering kan være i gang."
+
+msgid "Unable to release update lock: %s"
+msgstr "Kunne ikke frigive opdateringslås: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Opdateringens sikkerhedskopimappe findes allerede: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Målmappen kan ikke oprettes: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Den planlagte opdatering ville overskrive et eksisterende symbolsk link: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Målfilen er ikke skrivbar: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Målfilen kan ikke oprettes: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Kunne ikke finde Chamilo-projektmappen, før forældede filer fjernes."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Opdateringsoprydning kan ikke fjerne beskyttet sti: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Den planlagte opdatering ville fjerne et eksisterende symbolsk link: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Opdateringsoprydning understøtter kun filer, ikke mapper: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Forældet målfil kan ikke læses til sikkerhedskopiering: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Forældet målfil kan ikke fjernes med de aktuelle mappetilladelser: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Forældet målfil peger uden for Chamilo-projektmappen: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Kunne ikke sikkerhedskopiere målfil: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Kunne ikke skrive metadata for opdateringssikkerhedskopi."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Kunne ikke kopiere klargjort opdateringsfil: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Kopierede %d af %d klargjorte filer."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Kunne ikke fjerne pakkedeklareret forældet fil: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Fjernede %d af %d pakkedeklarerede forældede filer."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Kan ikke gendanne sikkerhedskopieret fil: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Kan ikke fjerne nyligt kopieret fil under tilbagerulning: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Kan ikke gendanne fjernet fil, fordi sikkerhedskopien mangler: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Kan ikke gendanne fjernet fil fra sikkerhedskopi: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Kan ikke skrive revisionsmetadata for opdateringsanvendelse."
+
+msgid "Unable to write global update apply log."
+msgstr "Kan ikke skrive global log for opdateringsanvendelse."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Usikker midlertidig relativ sti registreret: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Mappen er ikke skrivbar: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Kan ikke oprette mappe: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Staging-metadata blev læst uden fejl."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metadata for anvendelsesplan blev skrevet til staging-mappen."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Målfiler og -mapper ser ud til at være skrivbare til den planlagte opdatering og oprydning."
+
+msgid "Update apply plan check failed."
+msgstr "Kontrol af opdateringsanvendelsesplan mislykkedes."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Nogle målfiler eller -mapper kan ikke skrives eller fjernes."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "For at rette dette skal du midlertidigt ændre ejeren af hele Chamilo-mappen til %s (webserverbrugeren), anvende opdateringen, ændre ejeren tilbage til %s bagefter og derefter sætte ejeren af var/ (og dens indhold) tilbage til %s, så programmet fortsat kan skrive til den."
 

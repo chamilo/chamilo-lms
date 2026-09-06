@@ -8790,6 +8790,9 @@ msgstr "Переглянути мою статистику"
 msgid "Personal agenda"
 msgstr "Мій календар"
 
+msgid "Group agenda"
+msgstr "Порядок денний групи"
+
 msgid "Switch to teacher view"
 msgstr "Вид викладача"
 
@@ -40124,4 +40127,106 @@ msgstr "Звіт групи"
 
 msgid "Student follow-up"
 msgstr "Супровід студента"
+
+msgid "Use system default certificate"
+msgstr "Використовувати системний сертифікат за замовчуванням"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Прикріплений сертифікат недоступний. Буде використано системний сертифікат за замовчуванням."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Використовувати системний сертифікат за замовчуванням замість прикріпленого сертифіката?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Необов’язкове перевизначення для локальної розробки. Оновлення у робочому середовищі використовують офіційний довірений ключ Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Побудувати безпечний план застосування зі підготовленого пакета. Перевіряються файли для заміни, додавання або видалення, дозволи, шлях резервної копії та стан блокування. Встановлення не змінюється."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Цей крок лише готує перегляд. Заміна файлів і очищення, оголошене пакетом, відбуваються пізніше на кроці «Застосувати підготовлені файли» з захистом блокування, резервної копії та відкату."
+
+msgid "Files to remove"
+msgstr "Файли для видалення"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Замінити файли Chamilo зі підготовленого пакета та видалити застарілі файли, явно вказані в метаданих підписаного пакета. Це не запускає міграції бази даних, Composer, Yarn чи команди кешу."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ця дія замінює і може видаляти файли у встановленні Chamilo. Перед продовженням переконайтеся, що план застосування переглянуто, а резервне копіювання увімкнено."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Я розумію, що це замінить файли та видалить застарілі файли, оголошені пакетом, у встановленні Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Введіть точний текст нижче для підтвердження"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine виконає лише підготовлені міграції V300 явно після успішного перегляду безпеки."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine повідомив про історичні попередження базової лінії. Оновлювач усе одно виконає лише підготовлені міграції V300 після явного підтвердження."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Можна змінити лише шлях маніфесту. Протокол HTTPS і офіційний домен оновлень фіксовані."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Режим розробки дозволяє URL маніфесту HTTPS або локальний шлях маніфесту."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Офіційний маніфест оновлень налаштовується сервером."
+
+msgid "What feedback do you want about this course?"
+msgstr "Який відгук ви хочете про цей курс?"
+
+msgid "Analysis summary"
+msgstr "Підсумок аналізу"
+
+msgid "Lessons included"
+msgstr "Включені уроки"
+
+msgid "Standalone documents included"
+msgstr "Включені окремі документи"
+
+msgid "Standalone exercises included"
+msgstr "Включені окремі вправи"
+
+msgid "General feedback"
+msgstr "Загальний відгук"
+
+msgid "Strengths"
+msgstr "Сильні сторони"
+
+msgid "Risks"
+msgstr "Ризики"
+
+msgid "Recommendations"
+msgstr "Рекомендації"
+
+msgid "Lesson feedback"
+msgstr "Відгук про урок"
+
+msgid "Standalone document feedback"
+msgstr "Відгук про окремий документ"
+
+msgid "Standalone exercise feedback"
+msgstr "Відгук про окрему вправу"
+
+msgid "AI response"
+msgstr "Відповідь ШІ"
+
+msgid "Sequence feedback"
+msgstr "Відгук про послідовність"
+
+msgid "Purpose"
+msgstr "Мета"
+
+msgid "You"
+msgstr "Ви"
+
+msgid "City of internship"
+msgstr "Місто стажування"
+
+msgid "City"
+msgstr "Місто"
 

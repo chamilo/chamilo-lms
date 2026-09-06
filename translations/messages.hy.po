@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Բանաձևի օրինակ. sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Բանաձևի օրինակ. sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -8793,6 +8793,9 @@ msgstr "Դիտել իմ առաջընթացը"
 
 msgid "Personal agenda"
 msgstr "Անձնական օրացույց"
+
+msgid "Group agenda"
+msgstr "Խմբի օրակարգ"
 
 msgid "Switch to teacher view"
 msgstr "Փոխել դասախոսի տեսքին"
@@ -40128,4 +40131,448 @@ msgstr "Խմբի հաշվետվություն"
 
 msgid "Student follow-up"
 msgstr "Ուսանողի հետևում"
+
+msgid "Use system default certificate"
+msgstr "Օգտագործել համակարգի լռելյայն վկայականը"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Կցված վկայականը անհասանելի է։ Կօգտագործվի համակարգի լռելյայն վկայականը։"
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Օգտագործե՞լ համակարգի լռելյայն վկայականը կցված վկայականի փոխարեն։"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Ընտրովի տեղական մշակման վերագրում։ Արտադրական թարմացումներն օգտագործում են Chamilo-ի պաշտոնական վստահելի բանալին։"
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Կառուցել անվտանգ կիրառման պլան փուլային փաթեթից։ Սա ստուգում է փոխարինման, ավելացման կամ հեռացման ֆայլերը, թույլտվությունները, պահուստավորման ուղին և կողպման կարգավիճակը։ Այն չի փոփոխում տեղադրումը։"
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Այս քայլը պատրաստում է միայն վերանայում։ Ֆայլերի փոխարինումը և փաթեթով հայտարարված մաքրումը տեղի են ունենում ավելի ուշ՝ «Կիրառել փուլային ֆայլերը» քայլում՝ կողպման, պահուստավորման և հետգործարկման պաշտպանությամբ։"
+
+msgid "Files to remove"
+msgstr "Հեռացվող ֆայլեր"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Փոխարինել Chamilo ֆայլերը փուլային փաթեթից և հեռացնել հնացած ֆայլերը, որոնք հստակ հայտարարված են ստորագրված փաթեթի մետատվյալներում։ Սա չի գործարկում տվյալների բազայի միգրացիաներ, Composer, Yarn կամ քեշի հրամաններ։"
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Այս գործողությունը փոխարինում է և կարող է հեռացնել ֆայլեր Chamilo տեղադրումում։ Համոզվեք, որ կիրառման պլանը վերանայված է և պահուստավորումները միացված են շարունակելուց առաջ։"
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Ես հասկանում եմ, որ սա կփոխարինի ֆայլերը և կհեռացնի փաթեթով հայտարարված հնացած ֆայլերը Chamilo տեղադրումում։"
+
+msgid "Type the exact text below to confirm"
+msgstr "Հաստատելու համար մուտքագրեք ստորև նշված ճշգրիտ տեքստը"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine-ը կկատարի միայն փուլային V300 միգրացիաները՝ անվտանգության վերանայումն անցնելուց հետո։"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine-ը հաղորդել է պատմական բազային նախազգուշացումներ։ Թարմացնողը դեռևս կկատարի միայն փուլային V300 միգրացիաները՝ հստակ հաստատումից հետո։"
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Կարելի է փոխել միայն մանիֆեստի ուղին։ HTTPS արձանագրությունը և պաշտոնական թարմացման տիրույթը ֆիքսված են։"
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Մշակման ռեժիմը թույլ է տալիս HTTPS մանիֆեստի URL կամ տեղական մանիֆեստի ուղի։"
+
+msgid "The official update manifest is configured by the server."
+msgstr "Պաշտոնական թարմացման մանիֆեստը կազմաձևված է սերվերի կողմից։"
+
+msgid "What feedback do you want about this course?"
+msgstr "Ի՞նչ հետադարձ կապ եք ցանկանում այս դասընթացի վերաբերյալ։"
+
+msgid "Analysis summary"
+msgstr "Վերլուծության ամփոփում"
+
+msgid "Lessons included"
+msgstr "Ներառված դասեր"
+
+msgid "Standalone documents included"
+msgstr "Ներառված առանձին փաստաթղթեր"
+
+msgid "Standalone exercises included"
+msgstr "Ներառված առանձին վարժություններ"
+
+msgid "General feedback"
+msgstr "Ընդհանուր հետադարձ կապ"
+
+msgid "Strengths"
+msgstr "Ուժեղ կողմեր"
+
+msgid "Risks"
+msgstr "Ռիսկեր"
+
+msgid "Recommendations"
+msgstr "Առաջարկություններ"
+
+msgid "Lesson feedback"
+msgstr "Դասի հետադարձ կապ"
+
+msgid "Standalone document feedback"
+msgstr "Առանձին փաստաթղթի հետադարձ կապ"
+
+msgid "Standalone exercise feedback"
+msgstr "Առանձին վարժության հետադարձ կապ"
+
+msgid "AI response"
+msgstr "ԱԲ պատասխան"
+
+msgid "Sequence feedback"
+msgstr "Հաջորդականության հետադարձ կապ"
+
+msgid "Purpose"
+msgstr "Նպատակ"
+
+msgid "You"
+msgstr "Դուք"
+
+msgid "City of internship"
+msgstr "Պրակտիկայի քաղաք"
+
+msgid "City"
+msgstr "Քաղաք"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Թարմացման աշխատանքային հոսքը վերականգնվել է էջը թարմացնելուց հետո"
+
+msgid "Last completed step"
+msgstr "Վերջին ավարտված քայլը"
+
+msgid "Stage package"
+msgstr "Փաթեթի նախապատրաստում"
+
+msgid "Package staging"
+msgstr "Փաթեթի նախապատրաստում"
+
+msgid "Apply plan"
+msgstr "Կիրառել պլանը"
+
+msgid "Update workflow completed"
+msgstr "Թարմացման աշխատանքային հոսքն ավարտված է"
+
+msgid "Update directory exists and is writable."
+msgstr "Թարմացման գրացուցակը գոյություն ունի և գրելի է։"
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Թարմացման գրացուցակը գոյություն ունի, բայց գրելի չէ. %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Թարմացման գրացուցակը դեռ գոյություն չունի, բայց նրա ծնող գրացուցակը գրելի է։"
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Թարմացման գրացուցակը դեռ գոյություն չունի, բայց այն կարող է ստեղծվել var/-ի տակ։"
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Թարմացման գրացուցակը գոյություն չունի և չի կարող ստեղծվել ընթացիկ թույլտվություններով։"
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Հնարավոր չէ որոշել ազատ սկավառակային տարածքը թարմացման նախնական ստուգման համար։"
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Անվտանգ թարմացման նախապատրաստման համար բավարար ազատ սկավառակային տարածք չկա։"
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Ազատ սկավառակային տարածքը բավարար է այս ստուգման փուլի թարմացման հոսքի համար։"
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Թարմացման մանիֆեստը չի սահմանում PHP տարբերակի պահանջ։"
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Հնարավոր չէ լիովին գնահատել PHP պահանջը. %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Ընթացիկ PHP տարբերակը չի բավարարում թարմացման պահանջը. %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Ընթացիկ PHP տարբերակը բավարարում է թարմացման պահանջը։"
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Տեղական փաթեթի ուղի չի տրամադրվել։ Ներբեռնված փաթեթները կարող են ստուգվել միայն ներբեռնումից հետո։"
+
+msgid "Local update package is not readable: %s"
+msgstr "Տեղական թարմացման փաթեթը ընթեռնելի չէ. %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Տեղական թարմացման փաթեթը պետք է լինի ZIP արխիվ։"
+
+msgid "Local update package is readable."
+msgstr "Տեղական թարմացման փաթեթը ընթեռնելի է։"
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Տեղադրված Chamilo տարբերակը չհաջողվեց ավտոմատ հայտնաբերել։ Տարբերակի ուղղությունը չի կարող ստուգվել։"
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Տեղադրված կամ նպատակային տարբերակը համեմատելի սեմանտիկ տարբերակի ձևաչափով չէ։"
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Նպատակային տարբերակը ցածր է տեղադրված տարբերակից։ Նվազեցումները լռելյայն թույլատրված չեն։"
+
+msgid "Target version matches the installed version."
+msgstr "Նպատակային տարբերակը համընկնում է տեղադրված տարբերակի հետ։"
+
+msgid "Target version is newer than the installed version."
+msgstr "Նպատակային տարբերակը ավելի նոր է, քան տեղադրված տարբերակը։"
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Նախագիծը Git ստուգում չէ կամ .git-ը բացակայում է։"
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Այս թարմացման համակարգը նախատեսված է Git աջակցություն չունեցող տեղադրումների համար։ Հայտնաբերվել է, որ տեղական համակարգը օգտագործում է Git։ Թարմացումը շարունակելը կարող է վնասել Git պատմությունը։ Git աջակցությամբ համակարգերի համար խորհուրդ ենք տալիս օգտագործել CONTRIBUTING.md-ում նկարագրված Git ընթացակարգը վեբ արմատում։"
+
+msgid "Local Git changes were also detected."
+msgstr "Հայտնաբերվել են նաև տեղական Git փոփոխություններ։"
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Նախագծի որոշ մետատվյալների ֆայլեր բացակայում են։ Հետագա թարմացման փուլերը կարող են պահանջել կախվածությունների ձեռքով ստուգում։"
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer և Yarn մետատվյալների ֆայլերը առկա են։"
+
+msgid "Starting staged file application."
+msgstr "Սկսվում է նախապատրաստված ֆայլերի կիրառումը։"
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Նախապատրաստված ֆայլերը կիրառելու համար պահանջվում է հստակ հաստատում։"
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Նախապատրաստված թարմացման ֆայլերը կիրառելու համար պահանջվում է հստակ հաստատում։"
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Նախապատրաստման գրացուցակը գտնվում է Chamilo թարմացման նախապատրաստման գրացուցակի ներսում։"
+
+msgid "Staging directory was validated."
+msgstr "Նախապատրաստման գրացուցակը վավերացվել է։"
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Կիրառման պլանի մետատվյալները հաջողությամբ կարդացվել են։"
+
+msgid "Staged application path is valid."
+msgstr "Նախապատրաստված կիրառման ուղին վավեր է։"
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Ստորագրված փաթեթի մաքրման մետատվյալները համընկնում են վերանայված կիրառման պլանի հետ։"
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Ստորագրված փաթեթի մաքրման մետատվյալները վավերացվել են։"
+
+msgid "Update lock was acquired."
+msgstr "Թարմացման կողպեքը ձեռք է բերվել։"
+
+msgid "Update backup directory was created."
+msgstr "Թարմացման պահուստային գրացուցակը ստեղծվել է։"
+
+msgid "Update file operations were collected."
+msgstr "Թարմացման ֆայլային գործողությունները հավաքվել են։"
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Փոխարինման կամ հեռացման համար նախատեսված առկա ֆայլերը պահուստավորվել են։"
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Նախապատրաստված թարմացման ֆայլերը պատճենվել են Chamilo տեղադրում։"
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Փաթեթում հայտարարված հնացած ֆայլերը հեռացվել են Chamilo տեղադրումից։"
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Փաթեթում հայտարարված հնացած ֆայլերը հեռացվել են։"
+
+msgid "Update apply audit metadata was written."
+msgstr "Թարմացման կիրառման աուդիտի մետատվյալները գրվել են։"
+
+msgid "Staged files applied successfully."
+msgstr "Փուլավորված ֆայլերը հաջողությամբ կիրառվեցին։"
+
+msgid "Unable to restore removed files: %s"
+msgstr "Հնարավոր չէ վերականգնել հեռացված ֆայլերը. %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Հնարավոր չէ հետարկել պատճենված ֆայլերը. %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Ֆայլերի հետարկումը կատարվեց թարմացման կիրառման ձախողումից հետո։"
+
+msgid "Rollback failed: %s"
+msgstr "Հետարկումը ձախողվեց. %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Հնարավոր չէ գրել թարմացման կիրառման աուդիտի մետատվյալները. %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Հնարավոր չէ ազատել թարմացման կողպեքը ձախողումից հետո. %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Թարմացման ֆայլերը կիրառելու համար պահանջվում է փուլավորման ուղի։"
+
+msgid "Staging directory does not exist: %s"
+msgstr "Փուլավորման գրացուցակը գոյություն չունի. %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo-ի թարմացման փուլավորման հիմնական գրացուցակը գոյություն չունի։"
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Փուլավորման գրացուցակը պետք է լինի var/update/staging-ի ներսում։"
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Փուլավորման գրացուցակում բացակայում է APPLY-PLAN.json-ը։"
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Հնարավոր չէ կարդալ թարմացման կիրառման պլանի մետատվյալները. %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Թարմացման կիրառման պլանի մետատվյալները վավեր JSON չեն. %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Թարմացման կիրառման պլանի մետատվյալները պետք է լինեն JSON օբյեկտ։"
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Թարմացման կիրառման պլանում բացակայում է application_path դաշտը։"
+
+msgid "Staged application path is not readable: %s"
+msgstr "Փուլավորված հավելվածի ուղին ընթեռնելի չէ. %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Փուլավորված հավելվածի ուղին պետք է լինի փուլավորման գրացուցակի ներսում։"
+
+msgid "Staged application path is missing composer.json."
+msgstr "Փուլավորված հավելվածի ուղում բացակայում է composer.json-ը։"
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Թարմացման փաթեթում բացակայում է %s։ Կրկին փուլավորեք ստուգված փաթեթ՝ ստորագրված մաքրման մետատվյալներով։"
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Թարմացման կիրառման պլանում բացակայում են վերանայված փաթեթի մաքրման մետատվյալները։"
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Թարմացման փաթեթի մաքրման մետատվյալները փոխվել են կիրառման պլանի ստեղծումից հետո։ Շարունակելուց առաջ վերակառուցեք կիրառման պլանը։"
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Թարմացման կիրառման պլանը պարունակում է անվավեր փաթեթի հեռացման ցանկ։"
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Թարմացման փաթեթի մաքրման ուղիները փոխվել են կիրառման պլանի ստեղծումից հետո։ Շարունակելուց առաջ վերակառուցեք կիրառման պլանը։"
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Թարմացման կիրառման պլանում բացակայում է վերանայված հեռացման ուղիների ցանկը։"
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Թարմացման կիրառման պլանի հեռացման ուղիները չեն համընկնում ստորագրված փաթեթի մաքրման մետատվյալների հետ։"
+
+msgid "Update lock path must be inside var/update."
+msgstr "Թարմացման կողպեքի ուղին պետք է լինի var/update-ի ներսում։"
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Թարմացման կիրառման պլանում բացակայում է backup_path դաշտը։"
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Թարմացման պահուստի ուղին պարունակում է անապահով ուղու հատվածներ։"
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Թարմացման պահուստի ուղին պետք է լինի var/update/backups-ի ներսում։"
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Հնարավոր չէ ստանալ թարմացման կողպեք։ Հնարավոր է՝ մեկ այլ թարմացում ընթացքի մեջ է։"
+
+msgid "Unable to release update lock: %s"
+msgstr "Հնարավոր չէ ազատել թարմացման կողպեքը. %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Թարմացման պահուստի գրացուցակն արդեն գոյություն ունի. %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Նպատակային գրացուցակը հնարավոր չէ ստեղծել. %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Նախատեսված թարմացումը կվերագրի գոյություն ունեցող սիմվոլիկ հղումը. %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Նպատակային ֆայլը գրելի չէ. %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Նպատակային ֆայլը հնարավոր չէ ստեղծել. %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Հնարավոր չէ որոշել Chamilo նախագծի գրացուցակը հնացած ֆայլերը հեռացնելուց առաջ։"
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Թարմացման մաքրումը չի կարող հեռացնել պաշտպանված ուղին. %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Նախատեսված թարմացումը կհեռացնի գոյություն ունեցող սիմվոլիկ հղումը. %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Թարմացման մաքրումը աջակցում է միայն ֆայլեր, ոչ գրացուցակներ. %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Հնացած նպատակային ֆայլը պահուստավորման համար ընթեռնելի չէ. %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Հնացած նպատակային ֆայլը հնարավոր չէ հեռացնել ընթացիկ գրացուցակի թույլտվություններով. %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Հնացած նպատակային ֆայլը լուծվում է Chamilo նախագծի գրացուցակից դուրս. %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Հնարավոր չէ պահուստավորել նպատակային ֆայլը. %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Հնարավոր չէ գրել թարմացման պահուստի մետատվյալները։"
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Հնարավոր չէ պատճենել փուլավորված թարմացման ֆայլը. %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Պատճենվել է %d ֆայլ %d փուլավորված ֆայլերից։"
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Հնարավոր չէ հեռացնել փաթեթում հայտարարված հնացած ֆայլը. %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Հեռացվել է %d ֆայլ %d փաթեթում հայտարարված հնացած ֆայլերից։"
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Հնարավոր չէ վերականգնել պահուստավորված ֆայլը. %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Հնարավոր չէ հեռացնել նոր պատճենված ֆայլը հետգլորման ժամանակ. %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Հնարավոր չէ վերականգնել հեռացված ֆայլը, քանի որ դրա պահուստը բացակայում է. %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Հնարավոր չէ վերականգնել հեռացված ֆայլը պահուստից. %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Հնարավոր չէ գրել թարմացման կիրառման աուդիտի մետատվյալները։"
+
+msgid "Unable to write global update apply log."
+msgstr "Հնարավոր չէ գրել թարմացման կիրառման գլոբալ մատյանը։"
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Հայտնաբերվել է անվտանգ չհամարվող փուլավորված հարաբերական ուղի. %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Գրացուցակը գրելու համար հասանելի չէ. %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Հնարավոր չէ ստեղծել գրացուցակ. %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Փուլավորման մետատվյալները հաջողությամբ կարդացվել են։"
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Կիրառման պլանի մետատվյալները գրվել են փուլավորման գրացուցակում։"
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Նպատակային ֆայլերն ու գրացուցակները թվում են գրելու համար հասանելի նախատեսված թարմացման և մաքրման համար։"
+
+msgid "Update apply plan check failed."
+msgstr "Թարմացման կիրառման պլանի ստուգումը ձախողվեց։"
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Որոշ նպատակային ֆայլեր կամ գրացուցակներ հնարավոր չէ գրել կամ հեռացնել։"
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Սա շտկելու համար ժամանակավորապես փոխեք ամբողջ Chamilo գրացուցակի սեփականատիրոջը %s-ի (վեբ սերվերի օգտատեր), կիրառեք թարմացումը, այնուհետև սեփականատիրոջը վերադարձրեք %s-ի, ապա var/-ի (և դրա բովանդակության) սեփականատիրոջը կրկին սահմանեք %s, որպեսզի հավելվածը շարունակի կարողանալ գրել դրանում։"
 

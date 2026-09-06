@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "С уважение"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Примерна формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазони на променливите"
@@ -8794,6 +8794,9 @@ msgstr "Преглед на моите посещения"
 
 msgid "Personal agenda"
 msgstr "Моята програма"
+
+msgid "Group agenda"
+msgstr "Дневен ред на групата"
 
 msgid "Switch to teacher view"
 msgstr "Изглед за преподавателя"
@@ -40130,4 +40133,448 @@ msgstr "Групов отчет"
 
 msgid "Student follow-up"
 msgstr "Проследяване на студент"
+
+msgid "Use system default certificate"
+msgstr "Използване на системния сертификат по подразбиране"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Прикаченият сертификат не е наличен. Ще бъде използван системният сертификат по подразбиране."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Да се използва системният сертификат по подразбиране вместо прикачения сертификат?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Незадължително локално презаписване за разработка. Продукционните актуализации използват официалния доверен ключ на Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Създаване на безопасен план за прилагане от подготвения пакет. Това проверява файловете за замяна, добавяне или премахване, правата, пътя за резервно копие и състоянието на заключване. Не променя инсталацията."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Тази стъпка подготвя само преглед. Замяната на файлове и почистването, обявено в пакета, се извършват по-късно в стъпката „Прилагане на подготвените файлове“, със защита чрез заключване, резервно копие и връщане назад."
+
+msgid "Files to remove"
+msgstr "Файлове за премахване"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Замяна на файловете на Chamilo от подготвения пакет и премахване на остарели файлове, изрично обявени в подписаните метаданни на пакета. Това не изпълнява миграции на базата данни, Composer, Yarn или команди за кеш."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Това действие заменя и може да премахне файлове в инсталацията на Chamilo. Уверете се, че планът за прилагане е прегледан и резервните копия са активирани, преди да продължите."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Разбирам, че това ще замени файлове и ще премахне остарели файлове, обявени в пакета, в инсталацията на Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Въведете точния текст по-долу за потвърждение"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine ще изпълни само подготвените миграции V300 изрично след успешно преминаване на проверката за безопасност."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine съобщи предупреждения за историческа базова линия. Актуализаторът все пак ще изпълни само подготвените миграции V300 след изрично потвърждение."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Може да се промени само пътят към манифеста. HTTPS протоколът и официалният домейн за актуализации са фиксирани."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Режимът за разработка позволява HTTPS URL към манифест или локален път към манифест."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Официалният манифест за актуализации се конфигурира от сървъра."
+
+msgid "What feedback do you want about this course?"
+msgstr "Каква обратна връзка искате за този курс?"
+
+msgid "Analysis summary"
+msgstr "Обобщение на анализа"
+
+msgid "Lessons included"
+msgstr "Включени уроци"
+
+msgid "Standalone documents included"
+msgstr "Включени самостоятелни документи"
+
+msgid "Standalone exercises included"
+msgstr "Включени самостоятелни упражнения"
+
+msgid "General feedback"
+msgstr "Обща обратна връзка"
+
+msgid "Strengths"
+msgstr "Силни страни"
+
+msgid "Risks"
+msgstr "Рискове"
+
+msgid "Recommendations"
+msgstr "Препоръки"
+
+msgid "Lesson feedback"
+msgstr "Обратна връзка за урок"
+
+msgid "Standalone document feedback"
+msgstr "Обратна връзка за самостоятелен документ"
+
+msgid "Standalone exercise feedback"
+msgstr "Обратна връзка за самостоятелно упражнение"
+
+msgid "AI response"
+msgstr "Отговор на ИИ"
+
+msgid "Sequence feedback"
+msgstr "Обратна връзка за последователност"
+
+msgid "Purpose"
+msgstr "Цел"
+
+msgid "You"
+msgstr "Вие"
+
+msgid "City of internship"
+msgstr "Град на стажа"
+
+msgid "City"
+msgstr "Град"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Работният процес за обновяване е възстановен след опресняване на страницата"
+
+msgid "Last completed step"
+msgstr "Последна завършена стъпка"
+
+msgid "Stage package"
+msgstr "Пакет за подготвяне"
+
+msgid "Package staging"
+msgstr "Подготвяне на пакета"
+
+msgid "Apply plan"
+msgstr "Прилагане на плана"
+
+msgid "Update workflow completed"
+msgstr "Работният процес за обновяване е завършен"
+
+msgid "Update directory exists and is writable."
+msgstr "Директорията за обновяване съществува и е с права за запис."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Директорията за обновяване съществува, но няма права за запис: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Директорията за обновяване още не съществува, но родителската ѝ директория е с права за запис."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Директорията за обновяване още не съществува, но може да бъде създадена под var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Директорията за обновяване не съществува и не може да бъде създадена с текущите права."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Не може да се определи свободното дисково пространство за предварителна проверка на обновяването."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Няма достатъчно свободно дисково пространство за безопасно подготвяне на обновяването."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Свободното дисково пространство е достатъчно за този поток на обновяване на етапа на проверка."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Манифестът за обновяване не определя изискване за версия на PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Не може да се оцени напълно изискването за PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Текущата версия на PHP не отговаря на изискването за обновяване: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Текущата версия на PHP отговаря на изискването за обновяване."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Не е предоставен локален път към пакет. Изтеглените пакети могат да бъдат проверени едва след изтегляне."
+
+msgid "Local update package is not readable: %s"
+msgstr "Локалният пакет за обновяване не може да се чете: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Локалният пакет за обновяване трябва да бъде ZIP архив."
+
+msgid "Local update package is readable."
+msgstr "Локалният пакет за обновяване може да се чете."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Инсталираната версия на Chamilo не можа да бъде открита автоматично. Посоката на версиите не може да бъде проверена."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Инсталираната или целевата версия не е в сравним семантичен формат на версия."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Целевата версия е по-ниска от инсталираната. Понижаването на версията не е разрешено по подразбиране."
+
+msgid "Target version matches the installed version."
+msgstr "Целевата версия съвпада с инсталираната версия."
+
+msgid "Target version is newer than the installed version."
+msgstr "Целевата версия е по-нова от инсталираната версия."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Проектът не е Git checkout или .git липсва."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Тази система за обновяване е предназначена за инсталации без поддръжка на Git. Открихме, че локалната система използва Git. Продължаването с обновяването може да доведе до повредена Git история. За системи с поддръжка на Git препоръчваме Git процедурата, описана в CONTRIBUTING.md в уеб корена."
+
+msgid "Local Git changes were also detected."
+msgstr "Открити са и локални промени в Git."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Липсват някои файлове с метаданни на проекта. По-късните етапи на обновяване може да изискват ръчни проверки на зависимостите."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Файловете с метаданни на Composer и Yarn са налични."
+
+msgid "Starting staged file application."
+msgstr "Стартира се прилагане на подготвените файлове."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "За прилагане на подготвените файлове се изисква изрично потвърждение."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Прилагането на подготвените файлове за обновяване изисква изрично потвърждение."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Директорията за подготвяне е вътре в директорията за подготвяне на обновяване на Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Директорията за подготвяне беше валидирана."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Метаданните на плана за прилагане бяха прочетени успешно."
+
+msgid "Staged application path is valid."
+msgstr "Пътят за прилагане на подготвените файлове е валиден."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Метаданните за почистване на подписания пакет съответстват на прегледания план за прилагане."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Метаданните за почистване на подписания пакет бяха валидирани."
+
+msgid "Update lock was acquired."
+msgstr "Заключването за обновяване беше придобито."
+
+msgid "Update backup directory was created."
+msgstr "Директорията за резервно копие при обновяване беше създадена."
+
+msgid "Update file operations were collected."
+msgstr "Операциите с файлове за обновяване бяха събрани."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Съществуващите файлове, предвидени за замяна или премахване, бяха архивирани."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Подготвените файлове за обновяване бяха копирани в инсталацията на Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Обявените в пакета остарели файлове бяха премахнати от инсталацията на Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Обявените в пакета остарели файлове бяха премахнати."
+
+msgid "Update apply audit metadata was written."
+msgstr "Метаданните за одит на прилагането на обновяването бяха записани."
+
+msgid "Staged files applied successfully."
+msgstr "Подготвените файлове са приложени успешно."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Неуспешно възстановяване на премахнати файлове: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Неуспешен откат на копирани файлове: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Откатът на файловете беше изпълнен след неуспешно прилагане на актуализацията."
+
+msgid "Rollback failed: %s"
+msgstr "Откатът е неуспешен: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Неуспешен запис на одитни метаданни за прилагане на актуализацията: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Неуспешно освобождаване на заключването за актуализация след грешка: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "За прилагане на файловете за актуализация е необходим път за подготвяне."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Директорията за подготвяне не съществува: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Базовата директория за подготвяне на актуализации на Chamilo не съществува."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Директорията за подготвяне трябва да е вътре в var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "В директорията за подготвяне липсва APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Неуспешно четене на метаданните на плана за прилагане на актуализацията: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Метаданните на плана за прилагане на актуализацията не са валиден JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Метаданните на плана за прилагане на актуализацията трябва да са JSON обект."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "В плана за прилагане на актуализацията липсва полето application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Подготвеният път на приложението не е четим: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Подготвеният път на приложението трябва да е вътре в директорията за подготвяне."
+
+msgid "Staged application path is missing composer.json."
+msgstr "В подготвения път на приложението липсва composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "В пакета за актуализация липсва %s. Подгответе отново проверен пакет с подписани метаданни за почистване."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "В плана за прилагане на актуализацията липсват прегледаните метаданни за почистване на пакета."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Метаданните за почистване на пакета за актуализация са променени след генерирането на плана за прилагане. Създайте отново плана за прилагане преди да продължите."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Планът за прилагане на актуализацията съдържа невалиден списък за премахване от пакета."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Пътищата за почистване на пакета за актуализация са променени след генерирането на плана за прилагане. Създайте отново плана за прилагане преди да продължите."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "В плана за прилагане на актуализацията липсва прегледаният списък с пътища за премахване."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Пътищата за премахване в плана за прилагане на актуализацията не съвпадат с подписаните метаданни за почистване на пакета."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Пътят на заключването за актуализация трябва да е вътре в var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "В плана за прилагане на актуализацията липсва полето backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Пътят за резервно копие на актуализацията съдържа небезопасни сегменти."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Пътят за резервно копие на актуализацията трябва да е вътре в var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Неуспешно придобиване на заключване за актуализация. Възможно е друга актуализация да е в ход."
+
+msgid "Unable to release update lock: %s"
+msgstr "Неуспешно освобождаване на заключването за актуализация: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Директорията за резервно копие на актуализацията вече съществува: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Целевата директория не може да бъде създадена: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Планираната актуализация би презаписала съществуваща символна връзка: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Целевият файл не е записваем: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Целевият файл не може да бъде създаден: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Неуспешно определяне на директорията на проекта Chamilo преди премахване на остарели файлове."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Почистването при актуализация не може да премахне защитен път: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Планираната актуализация би премахнала съществуваща символна връзка: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Почистването при актуализация поддържа само файлове, не директории: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Остарелият целеви файл не е четим за резервно копие: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Остарелият целеви файл не може да бъде премахнат с текущите права на директорията: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Остарелият целеви файл сочи извън директорията на проекта Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Неуспешно създаване на резервно копие на целевия файл: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Неуспешен запис на метаданни за резервно копие на актуализацията."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Неуспешно копиране на подготвения файл за актуализация: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Копирани са %d от %d подготвени файла."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Неуспешно премахване на обявен в пакета остарял файл: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Премахнати са %d от %d обявени в пакета остарели файла."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Неуспешно възстановяване на архивирания файл: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Неуспешно премахване на новокопирания файл при връщане назад: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Неуспешно възстановяване на премахнатия файл, тъй като архивът му липсва: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Неуспешно възстановяване на премахнатия файл от архива: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Неуспешен запис на одитните метаданни за прилагане на актуализацията."
+
+msgid "Unable to write global update apply log."
+msgstr "Неуспешен запис на глобалния журнал за прилагане на актуализацията."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Открит е небезопасен относителен път в междинната област: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Директорията не е достъпна за запис: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Неуспешно създаване на директория: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Метаданните за междинната област бяха прочетени успешно."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Метаданните на плана за прилагане бяха записани в междинната директория."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Целевите файлове и директории изглеждат достъпни за запис за планираната актуализация и почистване."
+
+msgid "Update apply plan check failed."
+msgstr "Проверката на плана за прилагане на актуализацията не успя."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Някои целеви файлове или директории не могат да бъдат записани или премахнати."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "За да коригирате това, временно променете собственика на цялата директория на Chamilo на %s (потребителят на уеб сървъра), приложете актуализацията, след това върнете собственика на %s и задайте собственика на var/ (и съдържанието ѝ) отново на %s, за да може приложението да продължи да записва в нея."
 

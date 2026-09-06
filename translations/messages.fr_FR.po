@@ -9021,6 +9021,9 @@ msgstr "Mon parcours"
 msgid "Personal agenda"
 msgstr "Agenda perso"
 
+msgid "Group agenda"
+msgstr "Agenda de groupe"
+
 msgid "Switch to teacher view"
 msgstr "Passer en vue prof"
 
@@ -42010,4 +42013,448 @@ msgstr "Rapport de groupe"
 
 msgid "Student follow-up"
 msgstr "Suivi des étudiants"
+
+msgid "Use system default certificate"
+msgstr "Utiliser le certificat par défaut du système"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Le certificat joint est indisponible. Le certificat par défaut du système sera utilisé."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Utiliser le certificat par défaut du système à la place du certificat joint ?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Surcharge facultative pour le développement local. Les mises à jour en production utilisent la clé de confiance officielle de Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Élaborer un plan d’application sûr à partir du paquet préparé. Cela vérifie les fichiers à remplacer, ajouter ou supprimer, les permissions, le chemin de sauvegarde et l’état du verrou. Cela ne modifie pas l’installation."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Cette étape prépare uniquement une revue. Le remplacement des fichiers et le nettoyage déclaré par le paquet ont lieu plus tard à l’étape Appliquer les fichiers préparés, avec verrou, sauvegarde et protection de restauration."
+
+msgid "Files to remove"
+msgstr "Fichiers à supprimer"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Remplacer les fichiers Chamilo à partir du paquet préparé et supprimer les fichiers obsolètes explicitement déclarés par les métadonnées du paquet signé. Cela n’exécute pas les migrations de base de données, Composer, Yarn ni les commandes de cache."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Cette action remplace et peut supprimer des fichiers dans l’installation Chamilo. Assurez-vous que le plan d’application a été examiné et que les sauvegardes sont activées avant de continuer."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Je comprends que cela remplacera des fichiers et supprimera les fichiers obsolètes déclarés par le paquet dans l’installation Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Saisissez le texte exact ci-dessous pour confirmer"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine n’exécutera que les migrations V300 préparées, explicitement après validation de la revue de sécurité."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine a signalé des avertissements de référence historique. Le programme de mise à jour n’exécutera quand même que les migrations V300 préparées après confirmation explicite."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Seul le chemin du manifeste peut être modifié. Le protocole HTTPS et le domaine officiel de mise à jour sont fixes."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Le mode développement autorise une URL de manifeste HTTPS ou un chemin de manifeste local."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Le manifeste officiel de mise à jour est configuré par le serveur."
+
+msgid "What feedback do you want about this course?"
+msgstr "Quel retour souhaitez-vous sur ce cours ?"
+
+msgid "Analysis summary"
+msgstr "Résumé de l’analyse"
+
+msgid "Lessons included"
+msgstr "Leçons incluses"
+
+msgid "Standalone documents included"
+msgstr "Documents autonomes inclus"
+
+msgid "Standalone exercises included"
+msgstr "Exercices autonomes inclus"
+
+msgid "General feedback"
+msgstr "Retour général"
+
+msgid "Strengths"
+msgstr "Points forts"
+
+msgid "Risks"
+msgstr "Risques"
+
+msgid "Recommendations"
+msgstr "Recommandations"
+
+msgid "Lesson feedback"
+msgstr "Retour sur la leçon"
+
+msgid "Standalone document feedback"
+msgstr "Retour sur le document autonome"
+
+msgid "Standalone exercise feedback"
+msgstr "Retour sur l’exercice autonome"
+
+msgid "AI response"
+msgstr "Réponse de l’IA"
+
+msgid "Sequence feedback"
+msgstr "Retour sur la séquence"
+
+msgid "Purpose"
+msgstr "Objectif"
+
+msgid "You"
+msgstr "Vous"
+
+msgid "City of internship"
+msgstr "Ville du stage"
+
+msgid "City"
+msgstr "Ville"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Flux de mise à jour restauré après actualisation de la page"
+
+msgid "Last completed step"
+msgstr "Dernière étape terminée"
+
+msgid "Stage package"
+msgstr "Paquet de préparation"
+
+msgid "Package staging"
+msgstr "Préparation du paquet"
+
+msgid "Apply plan"
+msgstr "Appliquer le plan"
+
+msgid "Update workflow completed"
+msgstr "Flux de mise à jour terminé"
+
+msgid "Update directory exists and is writable."
+msgstr "Le répertoire de mise à jour existe et est accessible en écriture."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Le répertoire de mise à jour existe mais n’est pas accessible en écriture : %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Le répertoire de mise à jour n’existe pas encore, mais son répertoire parent est accessible en écriture."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Le répertoire de mise à jour n’existe pas encore, mais il peut être créé sous var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Le répertoire de mise à jour n’existe pas et ne peut pas être créé avec les permissions actuelles."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Impossible de déterminer l’espace disque libre pour le contrôle préalable de mise à jour."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Espace disque libre insuffisant pour une opération de préparation de mise à jour en toute sécurité."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "L’espace disque libre est suffisant pour ce flux de mise à jour en phase de vérification."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Le manifeste de mise à jour ne définit pas d’exigence de version PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Impossible d’évaluer pleinement l’exigence PHP : %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "La version PHP actuelle ne satisfait pas l’exigence de mise à jour : %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "La version PHP actuelle satisfait l’exigence de mise à jour."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Aucun chemin de paquet local n’a été fourni. Les paquets téléchargés ne peuvent être vérifiés qu’après le téléchargement."
+
+msgid "Local update package is not readable: %s"
+msgstr "Le paquet de mise à jour local n’est pas lisible : %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Le paquet de mise à jour local doit être une archive ZIP."
+
+msgid "Local update package is readable."
+msgstr "Le paquet de mise à jour local est lisible."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "La version de Chamilo installée n’a pas pu être détectée automatiquement. La direction de version ne peut pas être vérifiée."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "La version installée ou cible n’est pas dans un format de version sémantique comparable."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "La version cible est inférieure à la version installée. Les rétrogradations ne sont pas autorisées par défaut."
+
+msgid "Target version matches the installed version."
+msgstr "La version cible correspond à la version installée."
+
+msgid "Target version is newer than the installed version."
+msgstr "La version cible est plus récente que la version installée."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Le projet n’est pas une copie Git ou .git n’est pas présent."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Ce système de mise à jour est destiné aux installations sans prise en charge Git. Nous avons détecté que le système local utilise Git. Poursuivre la mise à jour pourrait corrompre l’historique Git. Pour les systèmes avec Git, nous recommandons d’utiliser la procédure Git détaillée dans CONTRIBUTING.md à la racine web."
+
+msgid "Local Git changes were also detected."
+msgstr "Des modifications Git locales ont également été détectées."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Certains fichiers de métadonnées du projet sont manquants. Les étapes ultérieures de mise à jour peuvent nécessiter des vérifications manuelles des dépendances."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Les fichiers de métadonnées Composer et Yarn sont présents."
+
+msgid "Starting staged file application."
+msgstr "Démarrage de l’application des fichiers préparés."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Une confirmation explicite est requise pour appliquer les fichiers préparés."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "L’application des fichiers de mise à jour préparés nécessite une confirmation explicite."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Le répertoire de préparation se trouve dans le répertoire de préparation de mise à jour de Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Le répertoire de préparation a été validé."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Les métadonnées du plan d’application ont été lues avec succès."
+
+msgid "Staged application path is valid."
+msgstr "Le chemin d’application préparé est valide."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Les métadonnées de nettoyage du paquet signé correspondent au plan d’application examiné."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Les métadonnées de nettoyage du paquet signé ont été validées."
+
+msgid "Update lock was acquired."
+msgstr "Le verrou de mise à jour a été acquis."
+
+msgid "Update backup directory was created."
+msgstr "Le répertoire de sauvegarde de mise à jour a été créé."
+
+msgid "Update file operations were collected."
+msgstr "Les opérations sur les fichiers de mise à jour ont été collectées."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Les fichiers existants prévus pour remplacement ou suppression ont été sauvegardés."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Les fichiers de mise à jour préparés ont été copiés vers l’installation Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Les fichiers obsolètes déclarés par le paquet ont été supprimés de l’installation Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Les fichiers obsolètes déclarés par le paquet ont été supprimés."
+
+msgid "Update apply audit metadata was written."
+msgstr "Les métadonnées d’audit d’application de mise à jour ont été écrites."
+
+msgid "Staged files applied successfully."
+msgstr "Fichiers préparés appliqués avec succès."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Impossible de restaurer les fichiers supprimés : %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Impossible d’annuler la copie des fichiers : %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "L’annulation des fichiers a été exécutée après l’échec de l’application de la mise à jour."
+
+msgid "Rollback failed: %s"
+msgstr "Échec de l’annulation : %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Impossible d’écrire les métadonnées d’audit d’application de la mise à jour : %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Impossible de libérer le verrou de mise à jour après l’échec : %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Le chemin de préparation est requis pour appliquer les fichiers de mise à jour."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Le répertoire de préparation n’existe pas : %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Le répertoire de base de préparation des mises à jour Chamilo n’existe pas."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Le répertoire de préparation doit se trouver dans var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Le répertoire de préparation ne contient pas APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Impossible de lire les métadonnées du plan d’application de la mise à jour : %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Les métadonnées du plan d’application de la mise à jour ne sont pas un JSON valide : %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Les métadonnées du plan d’application de la mise à jour doivent être un objet JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Le plan d’application de la mise à jour ne contient pas le champ application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Le chemin d’application préparé n’est pas lisible : %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Le chemin d’application préparé doit se trouver dans le répertoire de préparation."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Le chemin d’application préparé ne contient pas composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Le paquet de mise à jour ne contient pas %s. Préparez à nouveau un paquet vérifié avec des métadonnées de nettoyage signées."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Le plan d’application de la mise à jour ne contient pas les métadonnées de nettoyage du paquet examinées."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Les métadonnées de nettoyage du paquet de mise à jour ont changé après la génération du plan d’application. Reconstruisez le plan d’application avant de continuer."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Le plan d’application de la mise à jour contient une liste de suppressions de paquet non valide."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Les chemins de nettoyage du paquet de mise à jour ont changé après la génération du plan d’application. Reconstruisez le plan d’application avant de continuer."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Le plan d’application de la mise à jour ne contient pas la liste des chemins de suppression examinés."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Les chemins de suppression du plan d’application de la mise à jour ne correspondent pas aux métadonnées de nettoyage signées du paquet."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Le chemin du verrou de mise à jour doit se trouver dans var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Le plan d’application de la mise à jour ne contient pas le champ backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Le chemin de sauvegarde de la mise à jour contient des segments de chemin non sûrs."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Le chemin de sauvegarde de la mise à jour doit se trouver dans var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Impossible d’obtenir le verrou de mise à jour. Une autre mise à jour est peut-être en cours."
+
+msgid "Unable to release update lock: %s"
+msgstr "Impossible de libérer le verrou de mise à jour : %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Le répertoire de sauvegarde de la mise à jour existe déjà : %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Le répertoire cible ne peut pas être créé : %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "La mise à jour prévue écraserait un lien symbolique existant : %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Le fichier cible n’est pas accessible en écriture : %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Le fichier cible ne peut pas être créé : %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Impossible de résoudre le répertoire du projet Chamilo avant de supprimer les fichiers obsolètes."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Le nettoyage de la mise à jour ne peut pas supprimer le chemin protégé : %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "La mise à jour prévue supprimerait un lien symbolique existant : %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Le nettoyage de la mise à jour ne prend en charge que les fichiers, pas les répertoires : %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Le fichier cible obsolète n’est pas lisible pour la sauvegarde : %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Le fichier cible obsolète ne peut pas être supprimé avec les permissions actuelles du répertoire : %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Le fichier cible obsolète se résout en dehors du répertoire du projet Chamilo : %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Impossible de sauvegarder le fichier cible : %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Impossible d’écrire les métadonnées de sauvegarde de la mise à jour."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Impossible de copier le fichier de mise à jour préparé : %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d fichiers préparés sur %d copiés."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Impossible de supprimer le fichier obsolète déclaré par le paquet : %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "%d fichiers obsolètes déclarés par le paquet sur %d supprimés."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Impossible de restaurer le fichier sauvegardé : %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Impossible de supprimer le fichier nouvellement copié lors de l'annulation : %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Impossible de restaurer le fichier supprimé car sa sauvegarde est manquante : %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Impossible de restaurer le fichier supprimé à partir de la sauvegarde : %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Impossible d'écrire les métadonnées d'audit d'application de la mise à jour."
+
+msgid "Unable to write global update apply log."
+msgstr "Impossible d'écrire le journal global d'application de la mise à jour."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Chemin relatif intermédiaire non sécurisé détecté : %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Le répertoire n'est pas accessible en écriture : %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Impossible de créer le répertoire : %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Les métadonnées de préparation ont été lues avec succès."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Les métadonnées du plan d'application ont été écrites dans le répertoire de préparation."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Les fichiers et répertoires cibles semblent accessibles en écriture pour la mise à jour et le nettoyage prévus."
+
+msgid "Update apply plan check failed."
+msgstr "La vérification du plan d'application de la mise à jour a échoué."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Certains fichiers ou répertoires cibles ne peuvent pas être écrits ou supprimés."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Pour corriger cela, changez temporairement le propriétaire de tout le répertoire Chamilo en %s (l'utilisateur du serveur web), appliquez la mise à jour, rétablissez ensuite le propriétaire à %s, puis définissez le propriétaire de var/ (et de son contenu) à %s afin que l'application puisse continuer à y écrire."
 

@@ -8795,6 +8795,9 @@ msgstr "İstatistiklerimi Göster"
 msgid "Personal agenda"
 msgstr "Ajandam"
 
+msgid "Group agenda"
+msgstr "Grup ajandası"
+
 msgid "Switch to teacher view"
 msgstr "Öğretmen Görünümü"
 
@@ -40130,4 +40133,106 @@ msgstr "Grup raporu"
 
 msgid "Student follow-up"
 msgstr "Öğrenci takibi"
+
+msgid "Use system default certificate"
+msgstr "Sistem varsayılan sertifikasını kullan"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Ekli sertifika kullanılamıyor. Sistem varsayılan sertifikası kullanılacak."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Ekli sertifika yerine sistem varsayılan sertifikası kullanılsın mı?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "İsteğe bağlı yerel geliştirme geçersiz kılması. Üretim güncellemeleri resmi Chamilo güvenilir anahtarını kullanır."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Hazırlanan paketten güvenli bir uygulama planı oluşturun. Bu, değiştirilecek, eklenecek veya kaldırılacak dosyaları, izinleri, yedekleme yolunu ve kilit durumunu kontrol eder. Kurulumu değiştirmez."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Bu adım yalnızca bir inceleme hazırlar. Dosya değiştirme ve pakette belirtilen temizlik, kilit, yedekleme ve geri alma korumasıyla daha sonra Hazırlanan dosyaları uygula adımında gerçekleşir."
+
+msgid "Files to remove"
+msgstr "Kaldırılacak dosyalar"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Hazırlanan paketten Chamilo dosyalarını değiştirin ve imzalı paket meta verilerinde açıkça belirtilen eski dosyaları kaldırın. Bu, veritabanı geçişlerini, Composer, Yarn veya önbellek komutlarını çalıştırmaz."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Bu işlem Chamilo kurulumundaki dosyaları değiştirir ve kaldırabilir. Devam etmeden önce uygulama planının incelendiğinden ve yedeklemelerin etkin olduğundan emin olun."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Bunun Chamilo kurulumundaki dosyaları değiştireceğini ve pakette belirtilen eski dosyaları kaldıracağını anlıyorum."
+
+msgid "Type the exact text below to confirm"
+msgstr "Onaylamak için aşağıdaki metni tam olarak yazın"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine, güvenlik incelemesi geçtikten sonra yalnızca hazırlanan V300 geçişlerini açıkça çalıştıracaktır."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine geçmiş temel uyarılar bildirdi. Güncelleyici yine de açık onaydan sonra yalnızca hazırlanan V300 geçişlerini çalıştıracaktır."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Yalnızca manifesto yolu değiştirilebilir. HTTPS protokolü ve resmi güncelleme etki alanı sabittir."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Geliştirme modu bir HTTPS manifesto URL’sine veya yerel bir manifesto yoluna izin verir."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Resmi güncelleme manifestosu sunucu tarafından yapılandırılır."
+
+msgid "What feedback do you want about this course?"
+msgstr "Bu kurs hakkında ne tür geri bildirim istiyorsunuz?"
+
+msgid "Analysis summary"
+msgstr "Analiz özeti"
+
+msgid "Lessons included"
+msgstr "Dahil edilen dersler"
+
+msgid "Standalone documents included"
+msgstr "Dahil edilen bağımsız belgeler"
+
+msgid "Standalone exercises included"
+msgstr "Dahil edilen bağımsız alıştırmalar"
+
+msgid "General feedback"
+msgstr "Genel geri bildirim"
+
+msgid "Strengths"
+msgstr "Güçlü yönler"
+
+msgid "Risks"
+msgstr "Riskler"
+
+msgid "Recommendations"
+msgstr "Öneriler"
+
+msgid "Lesson feedback"
+msgstr "Ders geri bildirimi"
+
+msgid "Standalone document feedback"
+msgstr "Bağımsız belge geri bildirimi"
+
+msgid "Standalone exercise feedback"
+msgstr "Bağımsız alıştırma geri bildirimi"
+
+msgid "AI response"
+msgstr "Yapay zeka yanıtı"
+
+msgid "Sequence feedback"
+msgstr "Sıra geri bildirimi"
+
+msgid "Purpose"
+msgstr "Amaç"
+
+msgid "You"
+msgstr "Siz"
+
+msgid "City of internship"
+msgstr "Staj şehri"
+
+msgid "City"
+msgstr "Şehir"
 

@@ -8790,6 +8790,9 @@ msgstr "Wo ilọsiwaju mi"
 msgid "Personal agenda"
 msgstr "Eto ara ẹni"
 
+msgid "Group agenda"
+msgstr "Ìtòlẹ́sẹẹsẹ ẹgbẹ́"
+
 msgid "Switch to teacher view"
 msgstr "Yipada si wiwo olukọ"
 
@@ -40124,4 +40127,106 @@ msgstr "Ìjábọ̀ ẹgbẹ́"
 
 msgid "Student follow-up"
 msgstr "Ìtẹ̀lé akẹ́kọ̀ọ́"
+
+msgid "Use system default certificate"
+msgstr "Lo ìwé-ẹ̀rí àìpéye ètò"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Ìwé-ẹ̀rí tí a so mọ́ kò sí. Ìwé-ẹ̀rí àìpéye ètò ni a ó lò."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Lo ìwé-ẹ̀rí àìpéye ètò dípò ìwé-ẹ̀rí tí a so mọ́?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Ìyípadà ìdàgbàsókè agbègbè tí kò pọn dandan. Àwọn ìmúdójúìwọ̀n iṣelọ́pọ̀ n lo kọ́kọ́rọ́ Chamilo tó gbẹ́kẹ̀lé."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Kọ ètò ìmúlò tó dáàbò bò láti inú àpò tí a ti gbé sí ibi ìgbáradì. Èyí ń ṣàyẹ̀wò àwọn fáìlì tí a ó rọ́pò, fi kún tàbí yọ kúrò, ìyọ̀ǹda, ọ̀nà àwọn àfihàn àti ipò títì. Kò ṣe àyípadà sí ìgbékalẹ̀ náà."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ìgbésẹ̀ yìí ń múra àtúnyẹ̀wò nìkan. Ìrọ́pò fáìlì àti ìmọ́tọ́tọ́ tí àpò sọ ń ṣẹlẹ̀ lẹ́yìn nínú ìgbésẹ̀ Lo àwọn fáìlì tí a gbé sí ibi ìgbáradì, pẹ̀lú ààbò títì, àfihàn àti ìdápadà."
+
+msgid "Files to remove"
+msgstr "Àwọn fáìlì tí a ó yọ kúrò"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Rọ́pò àwọn fáìlì Chamilo láti inú àpò tí a gbé sí ibi ìgbáradì kí o sì yọ àwọn fáìlì àtijọ́ tí metadata àpò tí a fọwọ́sí sọ ní gbangba. Èyí kò ṣiṣẹ́ ìkópadà àkójọpọ̀ dátà, Composer, Yarn tàbí àwọn àṣẹ kàṣè."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Iṣẹ́ yìí ń rọ́pò ó sì lè yọ àwọn fáìlì nínú ìgbékalẹ̀ Chamilo. Rí i dájú pé a ti ṣàyẹ̀wò ètò ìmúlò náà àti pé àwọn àfihàn wà ní ṣíṣiṣẹ́ kí o tó tẹ̀síwájú."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Mo lóye pé èyí yóò rọ́pò àwọn fáìlì yóò sì yọ àwọn fáìlì àtijọ́ tí àpò sọ nínú ìgbékalẹ̀ Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Tẹ ọ̀rọ̀ gangan tí ó wà nísàlẹ̀ láti jẹ́rìí"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine yóò ṣiṣẹ́ àwọn ìkópadà V300 tí a gbé sí ibi ìgbáradì nìkan lẹ́yìn tí àtúnyẹ̀wò ààbò bá kọjá."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine ròyìn àwọn ìkìlọ̀ ìpìlẹ̀ ìtàn. Olùmúdójúìwọ̀n yóò ṣì ṣiṣẹ́ àwọn ìkópadà V300 tí a gbé sí ibi ìgbáradì nìkan lẹ́yìn ìjẹ́rìí gbangba."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Ọ̀nà manifest nìkan ni a lè yí. Ìlànà HTTPS àti agbègbè ìmúdójúìwọ̀n osise kò yí padà."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Ipo ìdàgbàsókè gba URL manifest HTTPS tàbí ọ̀nà manifest agbègbè."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Manifest ìmúdójúìwọ̀n osise ni olupin ṣètò."
+
+msgid "What feedback do you want about this course?"
+msgstr "Irú èsì wo ni o fẹ́ nípa kọ́ọ̀sì yìí?"
+
+msgid "Analysis summary"
+msgstr "Àkópọ̀ ìtúpalẹ̀"
+
+msgid "Lessons included"
+msgstr "Àwọn ẹ̀kọ́ tí a fi kún"
+
+msgid "Standalone documents included"
+msgstr "Àwọn ìwé òmìnira tí a fi kún"
+
+msgid "Standalone exercises included"
+msgstr "Àwọn ìdánwò òmìnira tí a fi kún"
+
+msgid "General feedback"
+msgstr "Èsì gbogbogbò"
+
+msgid "Strengths"
+msgstr "Àwọn agbára"
+
+msgid "Risks"
+msgstr "Àwọn ewu"
+
+msgid "Recommendations"
+msgstr "Àwọn ìmọ̀ràn"
+
+msgid "Lesson feedback"
+msgstr "Èsì ẹ̀kọ́"
+
+msgid "Standalone document feedback"
+msgstr "Èsì ìwé òmìnira"
+
+msgid "Standalone exercise feedback"
+msgstr "Èsì ìdánwò òmìnira"
+
+msgid "AI response"
+msgstr "Ìdáhùn AI"
+
+msgid "Sequence feedback"
+msgstr "Èsì ìtòlẹ́sẹẹsẹ"
+
+msgid "Purpose"
+msgstr "Èrè"
+
+msgid "You"
+msgstr "Ìwọ"
+
+msgid "City of internship"
+msgstr "Ìlú ìdánilẹ́kọ̀ọ́ iṣẹ́"
+
+msgid "City"
+msgstr "Ìlú"
 

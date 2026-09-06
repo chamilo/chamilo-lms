@@ -8795,6 +8795,9 @@ msgstr "檢視狀態"
 msgid "Personal agenda"
 msgstr "日程安排"
 
+msgid "Group agenda"
+msgstr "小組行事曆"
+
 msgid "Switch to teacher view"
 msgstr "教師界面"
 
@@ -40130,4 +40133,106 @@ msgstr "群組報告"
 
 msgid "Student follow-up"
 msgstr "學生追蹤"
+
+msgid "Use system default certificate"
+msgstr "使用系統預設憑證"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "附加的憑證無法使用。將改用系統預設憑證。"
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "改用系統預設憑證，而不使用附加的憑證？"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "選用的本機開發覆寫。正式環境更新會使用官方 Chamilo 信任金鑰。"
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "從暫存套件建立安全套用計畫。會檢查要取代、新增或移除的檔案、權限、備份路徑與鎖定狀態。不會修改安裝。"
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "此步驟僅準備審查。檔案取代與套件宣告的清理會在稍後的「套用暫存檔案」步驟執行，並受鎖定、備份與回復保護。"
+
+msgid "Files to remove"
+msgstr "要移除的檔案"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "從暫存套件取代 Chamilo 檔案，並移除已簽署套件中繼資料明確宣告的過時檔案。不會執行資料庫遷移、Composer、Yarn 或快取指令。"
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "此動作會取代並可能移除 Chamilo 安裝中的檔案。繼續前請確認已審查套用計畫並已啟用備份。"
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "我了解這將取代檔案，並移除套件宣告的過時檔案於 Chamilo 安裝中。"
+
+msgid "Type the exact text below to confirm"
+msgstr "請輸入下方完全相同的文字以確認"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine 僅會在安全審查通過後，明確執行暫存的 V300 遷移。"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine 回報歷史基準警告。更新程式仍會在明確確認後，僅執行暫存的 V300 遷移。"
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "僅可變更資訊清單路徑。HTTPS 通訊協定與官方更新網域為固定。"
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "開發模式允許 HTTPS 資訊清單網址或本機資訊清單路徑。"
+
+msgid "The official update manifest is configured by the server."
+msgstr "官方更新資訊清單由伺服器設定。"
+
+msgid "What feedback do you want about this course?"
+msgstr "您想針對此課程提供什麼回饋？"
+
+msgid "Analysis summary"
+msgstr "分析摘要"
+
+msgid "Lessons included"
+msgstr "包含的課程單元"
+
+msgid "Standalone documents included"
+msgstr "包含的獨立文件"
+
+msgid "Standalone exercises included"
+msgstr "包含的獨立練習"
+
+msgid "General feedback"
+msgstr "一般回饋"
+
+msgid "Strengths"
+msgstr "優點"
+
+msgid "Risks"
+msgstr "風險"
+
+msgid "Recommendations"
+msgstr "建議"
+
+msgid "Lesson feedback"
+msgstr "課程單元回饋"
+
+msgid "Standalone document feedback"
+msgstr "獨立文件回饋"
+
+msgid "Standalone exercise feedback"
+msgstr "獨立練習回饋"
+
+msgid "AI response"
+msgstr "AI 回應"
+
+msgid "Sequence feedback"
+msgstr "序列回饋"
+
+msgid "Purpose"
+msgstr "目的"
+
+msgid "You"
+msgstr "您"
+
+msgid "City of internship"
+msgstr "實習城市"
+
+msgid "City"
+msgstr "城市"
 

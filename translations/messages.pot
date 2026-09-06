@@ -40054,3 +40054,1050 @@ msgstr ""
 
 msgid "Student follow-up"
 msgstr ""
+
+msgid "Use system default certificate"
+msgstr ""
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr ""
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr ""
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr ""
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr ""
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr ""
+
+msgid "Files to remove"
+msgstr ""
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr ""
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr ""
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr ""
+
+msgid "Type the exact text below to confirm"
+msgstr ""
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr ""
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr ""
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr ""
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr ""
+
+msgid "The official update manifest is configured by the server."
+msgstr ""
+
+msgid "What feedback do you want about this course?"
+msgstr ""
+
+msgid "Analysis summary"
+msgstr ""
+
+msgid "Lessons included"
+msgstr ""
+
+msgid "Standalone documents included"
+msgstr ""
+
+msgid "Standalone exercises included"
+msgstr ""
+
+msgid "General feedback"
+msgstr ""
+
+msgid "Strengths"
+msgstr ""
+
+msgid "Risks"
+msgstr ""
+
+msgid "Recommendations"
+msgstr ""
+
+msgid "Lesson feedback"
+msgstr ""
+
+msgid "Standalone document feedback"
+msgstr ""
+
+msgid "Standalone exercise feedback"
+msgstr ""
+
+msgid "AI response"
+msgstr ""
+
+msgid "Sequence feedback"
+msgstr ""
+
+msgid "Purpose"
+msgstr ""
+
+msgid "You"
+msgstr ""
+
+msgid "City of internship"
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "Update workflow restored after page refresh"
+msgstr ""
+
+msgid "Last completed step"
+msgstr ""
+
+msgid "Stage package"
+msgstr ""
+
+msgid "Package staging"
+msgstr ""
+
+msgid "Apply plan"
+msgstr ""
+
+msgid "Update workflow completed"
+msgstr ""
+
+msgid "Update directory exists and is writable."
+msgstr ""
+
+msgid "Update directory exists but is not writable: %s"
+msgstr ""
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr ""
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr ""
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr ""
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr ""
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr ""
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr ""
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr ""
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr ""
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr ""
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr ""
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr ""
+
+msgid "Local update package is not readable: %s"
+msgstr ""
+
+msgid "Local update package must be a ZIP archive."
+msgstr ""
+
+msgid "Local update package is readable."
+msgstr ""
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr ""
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr ""
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr ""
+
+msgid "Target version matches the installed version."
+msgstr ""
+
+msgid "Target version is newer than the installed version."
+msgstr ""
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr ""
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr ""
+
+msgid "Local Git changes were also detected."
+msgstr ""
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr ""
+
+msgid "Composer and Yarn metadata files are present."
+msgstr ""
+
+msgid "Starting staged file application."
+msgstr ""
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr ""
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr ""
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr ""
+
+msgid "Staging directory was validated."
+msgstr ""
+
+msgid "Apply plan metadata was read successfully."
+msgstr ""
+
+msgid "Staged application path is valid."
+msgstr ""
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr ""
+
+msgid "Signed package cleanup metadata was validated."
+msgstr ""
+
+msgid "Update lock was acquired."
+msgstr ""
+
+msgid "Update backup directory was created."
+msgstr ""
+
+msgid "Update file operations were collected."
+msgstr ""
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr ""
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr ""
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr ""
+
+msgid "Package-declared obsolete files were removed."
+msgstr ""
+
+msgid "Update apply audit metadata was written."
+msgstr ""
+
+msgid "Staged files applied successfully."
+msgstr ""
+
+msgid "Unable to restore removed files: %s"
+msgstr ""
+
+msgid "Unable to roll back copied files: %s"
+msgstr ""
+
+msgid "File rollback was executed after the update apply failure."
+msgstr ""
+
+msgid "Rollback failed: %s"
+msgstr ""
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr ""
+
+msgid "Unable to release update lock after failure: %s"
+msgstr ""
+
+msgid "Staging path is required to apply update files."
+msgstr ""
+
+msgid "Staging directory does not exist: %s"
+msgstr ""
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr ""
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr ""
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr ""
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr ""
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr ""
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr ""
+
+msgid "Update apply plan is missing the application_path field."
+msgstr ""
+
+msgid "Staged application path is not readable: %s"
+msgstr ""
+
+msgid "Staged application path must be inside the staging directory."
+msgstr ""
+
+msgid "Staged application path is missing composer.json."
+msgstr ""
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr ""
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr ""
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr ""
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr ""
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr ""
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr ""
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr ""
+
+msgid "Update lock path must be inside var/update."
+msgstr ""
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr ""
+
+msgid "Update backup path contains unsafe path segments."
+msgstr ""
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr ""
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr ""
+
+msgid "Unable to release update lock: %s"
+msgstr ""
+
+msgid "Update backup directory already exists: %s"
+msgstr ""
+
+msgid "Target directory cannot be created: %s"
+msgstr ""
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr ""
+
+msgid "Target file is not writable: %s"
+msgstr ""
+
+msgid "Target file cannot be created: %s"
+msgstr ""
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr ""
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr ""
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr ""
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr ""
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr ""
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr ""
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr ""
+
+msgid "Unable to back up target file: %s"
+msgstr ""
+
+msgid "Unable to write update backup metadata."
+msgstr ""
+
+msgid "Unable to copy staged update file: %s"
+msgstr ""
+
+msgid "Copied %d of %d staged files."
+msgstr ""
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr ""
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr ""
+
+msgid "Unable to restore backed up file: %s"
+msgstr ""
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr ""
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr ""
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr ""
+
+msgid "Unable to write update apply audit metadata."
+msgstr ""
+
+msgid "Unable to write global update apply log."
+msgstr ""
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr ""
+
+msgid "Directory is not writable: %s"
+msgstr ""
+
+msgid "Unable to create directory: %s"
+msgstr ""
+
+msgid "Staging metadata was read successfully."
+msgstr ""
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr ""
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr ""
+
+msgid "Update apply plan check failed."
+msgstr ""
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr ""
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr ""
+
+msgid "Update package verification failed."
+msgstr ""
+
+msgid "Update preflight checks failed."
+msgstr ""
+
+msgid "Unable to stage update package."
+msgstr ""
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr ""
+
+msgid "Missing required field: %s"
+msgstr ""
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr ""
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr ""
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr ""
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr ""
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr ""
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr ""
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr ""
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr ""
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr ""
+
+msgid "Unable to resolve project directory."
+msgstr ""
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr ""
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr ""
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr ""
+
+msgid "No migration files were found in the staged package."
+msgstr ""
+
+msgid "Staged Doctrine migration files were detected."
+msgstr ""
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr ""
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr ""
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr ""
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr ""
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr ""
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr ""
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr ""
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr ""
+
+msgid "Staging path is required to review database migrations."
+msgstr ""
+
+msgid "Unable to read update %s: %s"
+msgstr ""
+
+msgid "Update %s JSON is invalid: %s"
+msgstr ""
+
+msgid "Update %s JSON must be an object."
+msgstr ""
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr ""
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr ""
+
+msgid "Update metadata is missing the staged application path."
+msgstr ""
+
+msgid "Planned staged migration file was not found: %s"
+msgstr ""
+
+msgid "Unable to read staged migration file: %s"
+msgstr ""
+
+msgid "No description could be extracted from getDescription()."
+msgstr ""
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr ""
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr ""
+
+msgid "Migration safety check failed."
+msgstr ""
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr ""
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr ""
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr ""
+
+msgid "An update is available."
+msgstr ""
+
+msgid "The installed version already matches the manifest version."
+msgstr ""
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr ""
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr ""
+
+msgid "Apply result metadata was read successfully."
+msgstr ""
+
+msgid "Post-apply action recommendations were generated."
+msgstr ""
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr ""
+
+msgid "Staging path is required to run post-apply checks."
+msgstr ""
+
+msgid "Update %s is not valid JSON: %s"
+msgstr ""
+
+msgid "Update %s must be a JSON object."
+msgstr ""
+
+msgid "Composer dependencies"
+msgstr ""
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr ""
+
+msgid "Frontend assets"
+msgstr ""
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr ""
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr ""
+
+msgid "Symfony cache"
+msgstr ""
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr ""
+
+msgid "Unable to write post-apply checks metadata."
+msgstr ""
+
+msgid "Post-apply check failed."
+msgstr ""
+
+msgid "Update package is not readable: %s"
+msgstr ""
+
+msgid "Update package is not a valid ZIP archive."
+msgstr ""
+
+msgid "Update package ZIP archive is empty."
+msgstr ""
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr ""
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr ""
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr ""
+
+msgid "Update package contains a symbolic link: %s"
+msgstr ""
+
+msgid "Starting post-apply actions."
+msgstr ""
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr ""
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr ""
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr ""
+
+msgid "Post-apply actions were selected."
+msgstr ""
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr ""
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr ""
+
+msgid "Selected post-apply commands completed successfully."
+msgstr ""
+
+msgid "Post-apply command run metadata was written."
+msgstr ""
+
+msgid "Post-apply actions completed successfully."
+msgstr ""
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr ""
+
+msgid "Running post-apply action: %s"
+msgstr ""
+
+msgid "Running command %d of %d for %s."
+msgstr ""
+
+msgid "Post-apply action failed: %s"
+msgstr ""
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr ""
+
+msgid "Post-apply action completed: %s"
+msgstr ""
+
+msgid "Staging path is required to run post-apply actions."
+msgstr ""
+
+msgid "There are no recommended post-apply actions to run."
+msgstr ""
+
+msgid "There are no allowed post-apply actions to run."
+msgstr ""
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr ""
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr ""
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr ""
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr ""
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr ""
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr ""
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr ""
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr ""
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr ""
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr ""
+
+msgid "Database migration safety review was completed before execution."
+msgstr ""
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr ""
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr ""
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr ""
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr ""
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr ""
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr ""
+
+msgid "Post-apply command writable paths were validated."
+msgstr ""
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr ""
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr ""
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr ""
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr ""
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr ""
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr ""
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr ""
+
+msgid "Executable permission was normalized."
+msgstr ""
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr ""
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr ""
+
+msgid "Unable to create update lock: %s"
+msgstr ""
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr ""
+
+msgid "Update manifest is missing the package block."
+msgstr ""
+
+msgid "Update manifest signature block must be an object."
+msgstr ""
+
+msgid "Update manifest requirements block must be an object."
+msgstr ""
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr ""
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr ""
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr ""
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr ""
+
+msgid "Update manifest JSON must be an object."
+msgstr ""
+
+msgid "Manifest source cannot be empty."
+msgstr ""
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr ""
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr ""
+
+msgid "Manifest file is not readable: %s"
+msgstr ""
+
+msgid "Unable to read manifest file: %s"
+msgstr ""
+
+msgid "The update manifest URL must use HTTPS."
+msgstr ""
+
+msgid "Update package metadata is not readable: %s"
+msgstr ""
+
+msgid "Unable to read update package metadata: %s"
+msgstr ""
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr ""
+
+msgid "Update package metadata must be a JSON object."
+msgstr ""
+
+msgid "Update package metadata format must be %d."
+msgstr ""
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr ""
+
+msgid "Update package removal paths must be strings."
+msgstr ""
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr ""
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr ""
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr ""
+
+msgid "Update package removal path cannot be empty."
+msgstr ""
+
+msgid "Update package removal path contains a null byte."
+msgstr ""
+
+msgid "Update package removal path must be relative: %s"
+msgstr ""
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr ""
+
+msgid "Staging path is required to build an update apply plan."
+msgstr ""
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr ""
+
+msgid "Unable to read staging metadata: %s"
+msgstr ""
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr ""
+
+msgid "Staging metadata must be a JSON object."
+msgstr ""
+
+msgid "Staging metadata is missing the application_path field."
+msgstr ""
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr ""
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr ""
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr ""
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr ""
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr ""
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr ""
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr ""
+
+msgid "Update lock directory is not writable."
+msgstr ""
+
+msgid "No update lock is currently active."
+msgstr ""
+
+msgid "Update backup directory is not writable."
+msgstr ""
+
+msgid "Update backup directory is writable."
+msgstr ""
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr ""
+
+msgid "Update backup directory can be created."
+msgstr ""
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr ""
+
+msgid "Update working directories are writable or can be created."
+msgstr ""
+
+msgid "Update apply file plan was generated."
+msgstr ""
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr ""
+
+msgid "Package-declared removal targets are safe."
+msgstr ""
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr ""
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr ""
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr ""
+
+msgid "New update migration files must be placed under %s."
+msgstr ""
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr ""
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr ""
+
+msgid "Unable to write update apply plan metadata."
+msgstr ""
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr ""
+
+msgid "Unable to open update package target file: %s"
+msgstr ""
+
+msgid "Update downloads must use the official update origin %s."
+msgstr ""
+
+msgid "The update package URL must use HTTPS."
+msgstr ""
+
+msgid "Update package archive safety checks passed."
+msgstr ""
+
+msgid "Update package was extracted to staging."
+msgstr ""
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr ""
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr ""
+
+msgid "Staged package dry-run report was generated."
+msgstr ""
+
+msgid "Staging metadata was written."
+msgstr ""
+
+msgid "Unable to extract update package to staging directory."
+msgstr ""
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr ""
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr ""
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr ""
+
+msgid "Staged package does not contain composer.lock."
+msgstr ""
+
+msgid "Staged package contains composer.lock."
+msgstr ""
+
+msgid "Staged package does not contain yarn.lock."
+msgstr ""
+
+msgid "Staged package contains yarn.lock."
+msgstr ""
+
+msgid "Unable to encode staging metadata."
+msgstr ""
+
+msgid "Unable to write staging metadata."
+msgstr ""
+
+msgid "Update operation log created."
+msgstr ""
+
+msgid "Unable to write update operation log."
+msgstr ""
+
+msgid "Invalid update operation id."
+msgstr ""

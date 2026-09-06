@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
@@ -36,6 +37,8 @@ use Throwable;
 #[Route('/admin/system-update', name: 'admin_system_update_')]
 final class SystemUpdateController extends AbstractController
 {
+    private readonly TranslatorInterface $translator;
+
     public function __construct(
         private readonly UpdateManifestClient $manifestClient,
         private readonly UpdatePackageDownloader $packageDownloader,
@@ -52,8 +55,10 @@ final class SystemUpdateController extends AbstractController
         private readonly UpdateOperationLogger $operationLogger,
         private readonly InstalledChamiloVersionProvider $installedVersionProvider,
         private readonly UpdateTrustedKeyring $trustedKeyring,
-        private readonly TranslatorInterface $translator,
-    ) {}
+        ?TranslatorInterface $translator = null,
+    ) {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     #[Route('/status', name: 'status', methods: ['GET'])]
     public function status(): JsonResponse

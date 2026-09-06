@@ -13,6 +13,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
@@ -39,14 +40,18 @@ final readonly class UpdateFileApplier
     ];
     private const string AUDIT_FILE_NAME = 'APPLY-RESULT.json';
 
+    private TranslatorInterface $translator;
+
     public function __construct(
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
         private UpdateOperationLogger $operationLogger,
         private UpdateConfiguration $updateConfiguration,
         private UpdatePackageRemovalManifest $packageRemovalManifest,
-        private TranslatorInterface $translator,
-    ) {}
+        ?TranslatorInterface $translator = null,
+    ) {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     public function apply(string $stagingPath, bool $confirmed, ?string $operationId = null): UpdateApplyFilesResult
     {

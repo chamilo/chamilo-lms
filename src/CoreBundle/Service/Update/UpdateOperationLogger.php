@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use JsonException;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
@@ -25,11 +26,15 @@ final readonly class UpdateOperationLogger
 {
     private const string OPERATION_ID_PATTERN = '/^[A-Za-z0-9._-]{8,80}$/';
 
+    private TranslatorInterface $translator;
+
     public function __construct(
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
-        private TranslatorInterface $translator,
-    ) {}
+        ?TranslatorInterface $translator = null,
+    ) {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     public function create(?string $operationId = null): string
     {

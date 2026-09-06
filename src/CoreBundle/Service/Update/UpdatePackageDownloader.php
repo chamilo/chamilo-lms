@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Service\Update;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -17,13 +18,17 @@ use const PHP_URL_SCHEME;
 
 final readonly class UpdatePackageDownloader
 {
+    private TranslatorInterface $translator;
+
     public function __construct(
         private HttpClientInterface $httpClient,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
         private UpdateConfiguration $updateConfiguration,
-        private TranslatorInterface $translator,
-    ) {}
+        ?TranslatorInterface $translator = null,
+    ) {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     public function download(string $url, ?string $targetDirectory = null): string
     {

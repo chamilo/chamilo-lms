@@ -8,14 +8,19 @@ namespace Chamilo\CoreBundle\Service\Update;
 
 use Chamilo\CoreBundle\Service\Update\Dto\UpdateAvailabilityResult;
 use Chamilo\CoreBundle\Service\Update\Dto\UpdateManifest;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class UpdateAvailabilityChecker
 {
+    private TranslatorInterface $translator;
+
     public function __construct(
         private InstalledChamiloVersionProvider $installedVersionProvider,
-        private TranslatorInterface $translator,
-    ) {}
+        ?TranslatorInterface $translator = null,
+    ) {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     public function check(UpdateManifest $manifest, ?string $installedVersion = null): UpdateAvailabilityResult
     {

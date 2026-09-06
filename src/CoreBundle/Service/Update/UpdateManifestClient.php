@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Service\Update;
 use Chamilo\CoreBundle\Service\Update\Dto\UpdateManifest;
 use InvalidArgumentException;
 use JsonException;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -17,11 +18,15 @@ use const PHP_URL_SCHEME;
 
 final readonly class UpdateManifestClient
 {
+    private TranslatorInterface $translator;
+
     public function __construct(
         private HttpClientInterface $httpClient,
         private UpdateConfiguration $updateConfiguration,
-        private TranslatorInterface $translator,
-    ) {}
+        ?TranslatorInterface $translator = null,
+    ) {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     public function load(string $source): UpdateManifest
     {

@@ -759,12 +759,7 @@ final readonly class UpdatePostApplyCommandRunner
     {
         $paths = [];
 
-        if (isset($selectedActions['cache_clear']) || isset($selectedActions['doctrine_migrations'])) {
-            $paths[] = $this->projectDir.'/bin/console';
-        }
-
         if (isset($selectedActions['composer_install'])) {
-            $paths[] = $this->projectDir.'/bin/console';
             $paths[] = $this->projectDir.'/vendor/bin/requirements-checker';
             $paths[] = $this->projectDir.'/vendor/symfony/requirements-checker/bin/requirements-checker';
 

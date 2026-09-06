@@ -155,6 +155,11 @@ final class SystemUpdateController extends AbstractController
             $manifestSource = $this->readManifestSource($payload);
             $packagePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'packagePath'), 'package');
             $manifest = $this->manifestClient->load($manifestSource);
+
+            if (null === $packagePath) {
+                $packagePath = $this->packageDownloader->findExistingDownload($manifest->getPackageUrl());
+            }
+
             $result = $this->preflightChecker->check($manifest, $packagePath);
 
             return $this->json([
@@ -184,11 +189,13 @@ final class SystemUpdateController extends AbstractController
             $manifest = $this->manifestClient->load($manifestSource);
 
             if (null === $packagePath) {
-                $packagePath = $this->packageDownloader->download($manifest->getPackageUrl());
+                $packagePath = $this->packageDownloader->findExistingDownload($manifest->getPackageUrl())
+                    ?? $this->packageDownloader->download($manifest->getPackageUrl());
             }
 
             if (!$skipSignature && null === $signaturePath && null !== $manifest->getSignatureUrl()) {
-                $signaturePath = $this->packageDownloader->download($manifest->getSignatureUrl());
+                $signaturePath = $this->packageDownloader->findExistingDownload($manifest->getSignatureUrl())
+                    ?? $this->packageDownloader->download($manifest->getSignatureUrl());
             }
 
             $verificationResult = $this->packageVerifier->verify(

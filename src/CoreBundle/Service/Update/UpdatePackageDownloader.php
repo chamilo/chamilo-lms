@@ -25,20 +25,12 @@ final readonly class UpdatePackageDownloader
 
     public function download(string $url, ?string $targetDirectory = null): string
     {
-        $this->assertHttpsUrl($url, 'package');
-
-        if (
-            !$this->updateConfiguration->allowsDevelopmentUpdateTools()
-            && !$this->updateConfiguration->isAllowedOfficialUpdateUrl($url)
-        ) {
-            throw new InvalidArgumentException('Update downloads must use the official update origin '.$this->updateConfiguration->getOfficialManifestOrigin().'.');
-        }
+        $this->assertAllowedDownloadUrl($url);
 
         $targetDirectory ??= $this->projectDir.'/var/update/downloads';
         $this->ensureDirectory($targetDirectory);
 
-        $fileName = $this->getSafeFileNameFromUrl($url);
-        $targetPath = $targetDirectory.'/'.$fileName;
+        $targetPath = $this->getTargetPath($url, $targetDirectory);
 
         $response = $this->httpClient->request('GET', $url, [
             'max_redirects' => 0,
@@ -63,6 +55,31 @@ final readonly class UpdatePackageDownloader
         return $targetPath;
     }
 
+    public function findExistingDownload(string $url): ?string
+    {
+        $this->assertAllowedDownloadUrl($url);
+
+        $targetPath = $this->getTargetPath($url, $this->projectDir.'/var/update/downloads');
+
+        if (!is_file($targetPath) || !is_readable($targetPath)) {
+            return null;
+        }
+
+        return $targetPath;
+    }
+
+    private function assertAllowedDownloadUrl(string $url): void
+    {
+        $this->assertHttpsUrl($url, 'package');
+
+        if (
+            !$this->updateConfiguration->allowsDevelopmentUpdateTools()
+            && !$this->updateConfiguration->isAllowedOfficialUpdateUrl($url)
+        ) {
+            throw new InvalidArgumentException('Update downloads must use the official update origin '.$this->updateConfiguration->getOfficialManifestOrigin().'.');
+        }
+    }
+
     private function assertHttpsUrl(string $url, string $label): void
     {
         $scheme = parse_url($url, PHP_URL_SCHEME);
@@ -85,6 +102,11 @@ final readonly class UpdatePackageDownloader
         if (!mkdir($directory, 0775, true) && !is_dir($directory)) {
             throw new RuntimeException('Unable to create directory: '.$directory);
         }
+    }
+
+    private function getTargetPath(string $url, string $targetDirectory): string
+    {
+        return rtrim($targetDirectory, '/').'/'.$this->getSafeFileNameFromUrl($url);
     }
 
     private function getSafeFileNameFromUrl(string $url): string

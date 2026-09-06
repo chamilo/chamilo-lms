@@ -741,7 +741,7 @@
 
       <div class="mt-4">
         <BaseButton
-          :disabled="isCheckingPostApply || !form.stagingPath || !applyFilesResult?.applyFiles?.valid"
+          :disabled="isCheckingPostApply || !form.stagingPath"
           :is-loading="isCheckingPostApply"
           :label="isCheckingPostApply ? t('Checking post-apply actions...') : t('Review post-apply actions')"
           icon="clipboard-check-outline"

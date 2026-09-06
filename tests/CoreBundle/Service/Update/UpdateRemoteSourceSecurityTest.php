@@ -44,6 +44,64 @@ final class UpdateRemoteSourceSecurityTest extends TestCase
         $downloader->download('https://example.org/chamilo-3.0.1.zip');
     }
 
+    public function testProductionExistingDownloadLookupRejectsExternalOrigin(): void
+    {
+        $httpClient = new MockHttpClient(static function (): MockResponse {
+            self::fail('HTTP request should not be executed while checking an external download origin.');
+        });
+        $downloader = new UpdatePackageDownloader($httpClient, sys_get_temp_dir(), new UpdateConfiguration('prod'));
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('official update origin');
+
+        $downloader->findExistingDownload('https://example.org/chamilo-3.0.1.zip');
+    }
+
+    public function testExistingOfficialDownloadCanBeReusedWithoutAnotherHttpRequest(): void
+    {
+        $projectDir = sys_get_temp_dir().'/chamilo-update-existing-'.bin2hex(random_bytes(6));
+        $downloadDirectory = $projectDir.'/var/update/downloads';
+        mkdir($downloadDirectory, 0775, true);
+        $expectedPath = $downloadDirectory.'/chamilo-3.0.1.zip';
+        file_put_contents($expectedPath, 'already-downloaded-package');
+
+        try {
+            $httpClient = new MockHttpClient(static function (): MockResponse {
+                self::fail('HTTP request should not be executed when reusing a managed download.');
+            });
+            $downloader = new UpdatePackageDownloader($httpClient, $projectDir, new UpdateConfiguration('prod'));
+
+            self::assertSame(
+                $expectedPath,
+                $downloader->findExistingDownload('https://updates.chamilo.org/assets/chamilo-3.0.1.zip'),
+            );
+        } finally {
+            @unlink($expectedPath);
+            @rmdir($downloadDirectory);
+            @rmdir($projectDir.'/var/update');
+            @rmdir($projectDir.'/var');
+            @rmdir($projectDir);
+        }
+    }
+
+    public function testMissingOfficialDownloadReturnsNullWithoutHttpRequest(): void
+    {
+        $projectDir = sys_get_temp_dir().'/chamilo-update-missing-'.bin2hex(random_bytes(6));
+
+        try {
+            $httpClient = new MockHttpClient(static function (): MockResponse {
+                self::fail('HTTP request should not be executed while checking for an existing managed download.');
+            });
+            $downloader = new UpdatePackageDownloader($httpClient, $projectDir, new UpdateConfiguration('prod'));
+
+            self::assertNull(
+                $downloader->findExistingDownload('https://updates.chamilo.org/assets/chamilo-3.0.1.zip'),
+            );
+        } finally {
+            @rmdir($projectDir);
+        }
+    }
+
     public function testOfficialManifestRequestDoesNotFollowRedirects(): void
     {
         $manifest = json_encode([

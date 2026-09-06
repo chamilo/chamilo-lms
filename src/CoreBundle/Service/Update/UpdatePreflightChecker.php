@@ -337,10 +337,14 @@ final readonly class UpdatePreflightChecker
             return;
         }
 
+        $gitInstallationWarning = 'This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root.';
+        $warnings[] = $gitInstallationWarning;
+
         if (!\function_exists('exec')) {
-            $message = 'Unable to check Git working tree because exec() is disabled.';
-            $warnings[] = $message;
-            $this->addCheck($checks, 'git_working_tree', 'warning', $message);
+            $this->addCheck($checks, 'git_working_tree', 'warning', $gitInstallationWarning, [
+                'inspection_status' => 'unavailable',
+                'reason' => 'exec_disabled',
+            ]);
 
             return;
         }
@@ -350,15 +354,8 @@ final readonly class UpdatePreflightChecker
         exec('git -C '.escapeshellarg($projectDir).' status --porcelain 2>&1', $output, $exitCode);
 
         if (0 !== $exitCode) {
-            $message = 'Unable to check Git working tree status.';
-            $summary = $this->summarizeCommandOutput($output);
-
-            if ('' !== $summary) {
-                $message .= ' Git output: '.$summary;
-            }
-
-            $warnings[] = $message;
-            $this->addCheck($checks, 'git_working_tree', 'warning', $message, [
+            $this->addCheck($checks, 'git_working_tree', 'warning', $gitInstallationWarning, [
+                'inspection_status' => 'unavailable',
                 'exit_code' => $exitCode,
                 'output' => $output,
             ]);
@@ -367,16 +364,25 @@ final readonly class UpdatePreflightChecker
         }
 
         if ([] !== $output) {
-            $message = 'Git working tree contains local changes. Automatic application should not proceed without explicit confirmation.';
-            $warnings[] = $message;
-            $this->addCheck($checks, 'git_working_tree', 'warning', $message, [
-                'changed_entries' => \count($output),
-            ]);
+            $this->addCheck(
+                $checks,
+                'git_working_tree',
+                'warning',
+                $gitInstallationWarning.' Local Git changes were also detected.',
+                [
+                    'inspection_status' => 'completed',
+                    'working_tree_clean' => false,
+                    'changed_entries' => \count($output),
+                ]
+            );
 
             return;
         }
 
-        $this->addCheck($checks, 'git_working_tree', 'passed', 'Git working tree is clean.');
+        $this->addCheck($checks, 'git_working_tree', 'warning', $gitInstallationWarning, [
+            'inspection_status' => 'completed',
+            'working_tree_clean' => true,
+        ]);
     }
 
     /**
@@ -514,20 +520,6 @@ final readonly class UpdatePreflightChecker
         }
 
         return null;
-    }
-
-    /**
-     * @param string[] $output
-     */
-    private function summarizeCommandOutput(array $output): string
-    {
-        $summary = trim(implode(' ', \array_slice($output, 0, 3)));
-
-        if (\strlen($summary) > 180) {
-            return substr($summary, 0, 177).'...';
-        }
-
-        return $summary;
     }
 
     private function isComparableVersion(string $version): bool

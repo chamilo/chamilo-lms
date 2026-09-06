@@ -140,6 +140,34 @@
       </div>
     </div>
 
+    <div
+      v-if="workflowResumeNotice"
+      class="rounded-3xl border border-primary bg-support-1 p-5 shadow-sm"
+    >
+      <div class="flex items-start gap-3">
+        <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-primary">
+          <i class="mdi mdi-progress-clock text-xl" />
+        </span>
+        <div>
+          <h2 class="text-body-1 font-semibold text-gray-90">
+            {{ t("Update workflow restored after page refresh") }}
+          </h2>
+          <p class="mt-1 text-body-2 text-gray-50">
+            {{ t("Last completed step") }}: <strong>{{ workflowResumeNotice.completed }}</strong>
+          </p>
+          <p class="mt-1 text-body-2 text-gray-50">
+            {{ t("Next step") }}: <strong>{{ workflowResumeNotice.next }}</strong>
+          </p>
+          <p
+            v-if="form.stagingPath"
+            class="mt-2 break-all font-mono text-caption text-gray-70"
+          >
+            {{ form.stagingPath }}
+          </p>
+        </div>
+      </div>
+    </div>
+
     <InlineError
       v-if="errorSection === 'entry'"
       :message="errorMessage"
@@ -1311,6 +1339,7 @@ const { t } = useI18n()
 const APPLY_FILES_CONFIRMATION_TEXT = "APPLY UPDATE FILES"
 const DATABASE_MIGRATIONS_CONFIRMATION_TEXT = "RUN DATABASE MIGRATIONS"
 const POST_APPLY_CONFIRMATION_TEXT = "RUN POST UPDATE ACTIONS"
+const WORKFLOW_STORAGE_KEY = "chamilo-system-update-workflow-v1"
 
 const status = reactive({
   installedVersion: "",
@@ -1377,6 +1406,7 @@ const postApplyRunProgress = ref(null)
 const postApplyRunProgressTimer = ref(null)
 const updateEntrySource = ref("")
 const updateEntryAutoCheck = ref(false)
+const lastCompletedWorkflowStep = ref("")
 
 const applyProgressEvents = computed(() => applyProgress.value?.events || [])
 const postApplyRunProgressEvents = computed(() => postApplyRunProgress.value?.events || [])
@@ -1411,6 +1441,26 @@ const localTestUpdateEntryPath = computed(() => {
   return "/admin/system-update?source=local-test&check=1"
 })
 
+
+const workflowResumeNotice = computed(() => {
+  if (!lastCompletedWorkflowStep.value) {
+    return null
+  }
+
+  const steps = {
+    manifest: { completed: t("Manifest"), next: t("Verify package") },
+    verification: { completed: t("Package verification"), next: t("Run preflight checks") },
+    preflight: { completed: t("Preflight checks"), next: t("Stage package") },
+    staging: { completed: t("Package staging"), next: t("Review apply plan") },
+    "apply-plan": { completed: t("Apply plan"), next: t("Review apply plan") },
+    "apply-files": { completed: t("Apply staged files"), next: t("Review post-apply actions") },
+    "post-apply": { completed: t("Post-apply checks"), next: t("Review post-apply actions") },
+    "migration-safety": { completed: t("Migration safety review ready"), next: t("Review post-apply actions") },
+    complete: { completed: t("Post-apply actions completed"), next: t("Update workflow completed") },
+  }
+
+  return steps[lastCompletedWorkflowStep.value] || null
+})
 const showTrustedPublicKeyInput = computed(() => {
   return status.allowLocalPaths
 })
@@ -1866,6 +1916,10 @@ onMounted(async () => {
 
     applyUpdateEntryQuery()
 
+    if (!updateEntryAutoCheck.value) {
+      restoreWorkflowState()
+    }
+
     if (!form.manifestSource && status.defaultManifestSource) {
       form.manifestSource = status.defaultManifestSource
     }
@@ -1876,6 +1930,8 @@ onMounted(async () => {
 
     if (updateEntryAutoCheck.value && form.manifestSource) {
       await checkManifest()
+    } else {
+      await resumeStoredOperations()
     }
   } catch (error) {
     console.error("[SystemUpdate] Failed to load update status:", error)
@@ -1929,8 +1985,89 @@ function applyUpdateEntryQuery() {
   setActionError("entry", t("Unknown update notice source."))
 }
 
+function persistWorkflowState() {
+  try {
+    window.sessionStorage.setItem(
+      WORKFLOW_STORAGE_KEY,
+      JSON.stringify({
+        manifestSource: form.manifestSource,
+        stagingPath: form.stagingPath,
+        lastCompletedStep: lastCompletedWorkflowStep.value,
+        applyOperationId: applyOperationId.value,
+        postApplyRunOperationId: postApplyRunOperationId.value,
+      }),
+    )
+  } catch (error) {
+    console.error("[SystemUpdate] Failed to persist update workflow:", error)
+  }
+}
+
+function restoreWorkflowState() {
+  try {
+    const rawState = window.sessionStorage.getItem(WORKFLOW_STORAGE_KEY)
+    if (!rawState) {
+      return
+    }
+
+    const state = JSON.parse(rawState)
+    if (!state || "object" !== typeof state) {
+      return
+    }
+
+    if ("string" === typeof state.manifestSource && state.manifestSource) {
+      form.manifestSource = state.manifestSource
+    }
+    if ("string" === typeof state.stagingPath) {
+      form.stagingPath = state.stagingPath
+    }
+    if ("string" === typeof state.lastCompletedStep) {
+      lastCompletedWorkflowStep.value = state.lastCompletedStep
+    }
+    if ("string" === typeof state.applyOperationId) {
+      applyOperationId.value = state.applyOperationId
+    }
+    if ("string" === typeof state.postApplyRunOperationId) {
+      postApplyRunOperationId.value = state.postApplyRunOperationId
+    }
+  } catch (error) {
+    window.sessionStorage.removeItem(WORKFLOW_STORAGE_KEY)
+    console.error("[SystemUpdate] Failed to restore update workflow:", error)
+  }
+}
+
+function clearPersistedWorkflowState() {
+  window.sessionStorage.removeItem(WORKFLOW_STORAGE_KEY)
+  lastCompletedWorkflowStep.value = ""
+}
+
+function markWorkflowStep(step) {
+  lastCompletedWorkflowStep.value = step
+  persistWorkflowState()
+}
+
+async function resumeStoredOperations() {
+  if (applyOperationId.value) {
+    await refreshApplyProgress()
+    if (applyProgress.value?.exists && !applyProgress.value?.completed) {
+      isApplyingFiles.value = true
+      startApplyProgressPolling()
+    }
+  }
+
+  if (postApplyRunOperationId.value) {
+    await refreshPostApplyRunProgress()
+    if (postApplyRunProgress.value?.exists && !postApplyRunProgress.value?.completed) {
+      isRunningPostApplyActions.value = true
+      startPostApplyRunProgressPolling()
+    }
+  }
+}
+
 async function checkManifest() {
   clearActionError()
+  clearPersistedWorkflowState()
+  form.stagingPath = ""
+  resetPostApplyRunProgress()
   availability.value = null
   verification.value = null
   preflight.value = null
@@ -1948,6 +2085,7 @@ async function checkManifest() {
 
     manifest.value = data.manifest
     availability.value = data.availability || null
+    markWorkflowStep("manifest")
   } catch (error) {
     setActionError("manifest", error)
     manifest.value = null
@@ -1969,6 +2107,7 @@ async function verifyPackage() {
 
     manifest.value = data.manifest
     verification.value = data
+    markWorkflowStep("verification")
   } catch (error) {
     setActionError("verification", error)
     verification.value = null
@@ -1993,6 +2132,7 @@ async function runPreflight() {
 
     manifest.value = data.manifest
     preflight.value = data
+    markWorkflowStep("preflight")
   } catch (error) {
     setActionError("preflight", error)
     preflight.value = null
@@ -2030,6 +2170,7 @@ async function stagePackage() {
     applyPlan.value = null
     applyFilesResult.value = null
     resetApplyProgress()
+    markWorkflowStep("staging")
   } catch (error) {
     const responseData = error?.response?.data || null
 
@@ -2086,6 +2227,7 @@ async function buildApplyPlan() {
     form.confirmApply = false
     form.confirmationText = ""
     resetApplyProgress()
+    markWorkflowStep("apply-plan")
   } catch (error) {
     const responseData = error?.response?.data || null
 
@@ -2120,6 +2262,7 @@ async function applyUpdateFiles() {
     events: [],
     completed: false,
   }
+  persistWorkflowState()
   startApplyProgressPolling()
 
   try {
@@ -2135,6 +2278,7 @@ async function applyUpdateFiles() {
       applyOperationId.value = data.operationId
     }
     await refreshApplyProgress()
+    markWorkflowStep("apply-files")
   } catch (error) {
     const responseData = error?.response?.data || null
 
@@ -2173,6 +2317,7 @@ async function runPostApplyChecks() {
     form.confirmDatabaseBackup = false
     form.databaseMigrationConfirmationText = ""
     form.postApplyRunConfirmationText = ""
+    markWorkflowStep("post-apply")
   } catch (error) {
     const responseData = error?.response?.data || null
 
@@ -2202,6 +2347,7 @@ async function runMigrationSafetyChecks() {
     migrationSafety.value = data
     form.confirmDatabaseBackup = false
     form.databaseMigrationConfirmationText = ""
+    markWorkflowStep("migration-safety")
   } catch (error) {
     const responseData = error?.response?.data || null
 
@@ -2228,6 +2374,7 @@ async function runPostApplyActions() {
     events: [],
     completed: false,
   }
+  persistWorkflowState()
   startPostApplyRunProgressPolling()
 
   try {
@@ -2247,6 +2394,7 @@ async function runPostApplyActions() {
       postApplyRunOperationId.value = data.operationId
     }
     await refreshPostApplyRunProgress()
+    markWorkflowStep("complete")
   } catch (error) {
     const responseData = error?.response?.data || null
 
@@ -2257,6 +2405,9 @@ async function runPostApplyActions() {
     if (recoveredResult) {
       postApplyRunResult.value = recoveredResult
       clearActionError()
+      if (recoveredResult.postApplyRun?.valid) {
+        markWorkflowStep("complete")
+      }
     } else {
       setActionError("post-apply-run", error)
       postApplyRunResult.value = responseData?.postApplyRun
@@ -2447,6 +2598,17 @@ async function refreshApplyProgress() {
   try {
     const data = await adminService.findSystemUpdateProgress(applyOperationId.value)
     applyProgress.value = data.progress
+
+    if (applyProgress.value?.completed) {
+      stopApplyProgressPolling()
+      isApplyingFiles.value = false
+      const lastEvent = applyProgressEvents.value[applyProgressEvents.value.length - 1] || null
+      if ("success" === lastEvent?.level || "done" === lastEvent?.step) {
+        markWorkflowStep("apply-files")
+      } else {
+        persistWorkflowState()
+      }
+    }
   } catch (error) {
     console.error("[SystemUpdate] Failed to refresh update progress:", error)
   }
@@ -2478,6 +2640,17 @@ async function refreshPostApplyRunProgress() {
   try {
     const data = await adminService.findSystemUpdateProgress(postApplyRunOperationId.value)
     postApplyRunProgress.value = data.progress
+
+    if (postApplyRunProgress.value?.completed) {
+      stopPostApplyRunProgressPolling()
+      isRunningPostApplyActions.value = false
+      const lastEvent = postApplyRunProgressEvents.value[postApplyRunProgressEvents.value.length - 1] || null
+      if ("success" === lastEvent?.level || "done" === lastEvent?.step) {
+        markWorkflowStep("complete")
+      } else {
+        persistWorkflowState()
+      }
+    }
   } catch (error) {
     console.error("[SystemUpdate] Failed to refresh post-apply progress:", error)
   }

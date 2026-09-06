@@ -14,6 +14,7 @@ use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
@@ -29,13 +30,17 @@ final readonly class UpdateMigrationSafetyChecker
     private const int DRY_RUN_OUTPUT_LIMIT = 20000;
     private const int BASELINE_OUTPUT_LIMIT = 30000;
 
+    private TranslatorInterface $translator;
+
     public function __construct(
         private UpdateConfiguration $updateConfiguration,
         private UpdateMigrationPolicy $migrationPolicy,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
-        private TranslatorInterface $translator,
-    ) {}
+        ?TranslatorInterface $translator = null,
+    ) {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     public function check(string $stagingPath): UpdateMigrationSafetyCheckResult
     {

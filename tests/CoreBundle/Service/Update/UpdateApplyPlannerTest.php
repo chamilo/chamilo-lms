@@ -95,8 +95,8 @@ final class UpdateApplyPlannerTest extends TestCase
         return new UpdateApplyPlanner(
             new UpdateMigrationPolicy(),
             $this->packageRemovalManifest,
-            new IdentityTranslator(),
             $this->projectDir,
+            new IdentityTranslator(),
         );
     }
 

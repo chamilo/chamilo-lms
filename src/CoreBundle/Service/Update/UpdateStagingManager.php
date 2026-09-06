@@ -13,6 +13,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use ZipArchive;
@@ -23,13 +24,17 @@ use const PHP_EOL;
 
 final readonly class UpdateStagingManager
 {
+    private TranslatorInterface $translator;
+
     public function __construct(
         private UpdateArchiveInspector $archiveInspector,
         private UpdatePackageRemovalManifest $packageRemovalManifest,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
-        private TranslatorInterface $translator,
-    ) {}
+        ?TranslatorInterface $translator = null,
+    ) {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     public function stage(UpdateManifest $manifest, string $packagePath): UpdateStagingResult
     {

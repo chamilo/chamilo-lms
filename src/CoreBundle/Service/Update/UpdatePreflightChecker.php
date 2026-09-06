@@ -331,7 +331,7 @@ final readonly class UpdatePreflightChecker
      */
     private function checkGitWorkingTree(string $projectDir, array &$checks, array &$warnings): void
     {
-        if (!is_dir($projectDir.'/.git')) {
+        if (!$this->hasGitMetadata($projectDir)) {
             $this->addCheck($checks, 'git_working_tree', 'passed', 'Project is not a Git checkout or .git is not present.');
 
             return;
@@ -479,7 +479,7 @@ final readonly class UpdatePreflightChecker
 
     private function getInstalledVersionFromGitTag(string $projectDir): ?string
     {
-        if (!is_dir($projectDir.'/.git') || !\function_exists('exec')) {
+        if (!$this->hasGitMetadata($projectDir) || !\function_exists('exec')) {
             return null;
         }
 
@@ -492,6 +492,13 @@ final readonly class UpdatePreflightChecker
         }
 
         return trim((string) $output[0]);
+    }
+
+    private function hasGitMetadata(string $projectDir): bool
+    {
+        $gitMetadataPath = rtrim($projectDir, '/').'/.git';
+
+        return is_dir($gitMetadataPath) || is_file($gitMetadataPath);
     }
 
     private function normalizeVersion(string $version): ?string

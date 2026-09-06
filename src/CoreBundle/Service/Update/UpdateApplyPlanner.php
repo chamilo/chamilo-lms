@@ -26,6 +26,7 @@ final readonly class UpdateApplyPlanner
         '.env',
         '.env.local',
         'app/config/configuration.php',
+        UpdatePackageRemovalManifest::FILE_NAME,
     ];
     private const array SKIPPED_PREFIXES = [
         '.git',
@@ -38,6 +39,7 @@ final readonly class UpdateApplyPlanner
 
     public function __construct(
         private UpdateMigrationPolicy $migrationPolicy,
+        private UpdatePackageRemovalManifest $packageRemovalManifest,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
     ) {}
@@ -68,6 +70,12 @@ final readonly class UpdateApplyPlanner
                 'application_path' => $applicationPath,
             ]);
 
+            $removalPaths = $this->validatePackageMetadata($applicationPath, $metadata, $checks);
+            $details['package_metadata'] = [
+                'file' => UpdatePackageRemovalManifest::FILE_NAME,
+                'remove_count' => \count($removalPaths),
+            ];
+
             $lockPath = $this->projectDir.'/var/update/update.lock';
             $this->checkUpdateLock($lockPath, $checks);
 
@@ -76,7 +84,7 @@ final readonly class UpdateApplyPlanner
             $this->checkBackupReadiness($backupPath, $checks);
             $this->checkUpdateWorkingDirectories($stagingPath, $lockPath, $backupPath, $checks);
 
-            $filePlan = $this->buildFilePlan($applicationPath);
+            $filePlan = $this->buildFilePlan($applicationPath, $removalPaths);
             $details['file_plan'] = $filePlan;
             $this->addFilePlanChecks($filePlan, $checks, $warnings);
 
@@ -179,6 +187,100 @@ final readonly class UpdateApplyPlanner
         }
 
         return $realApplicationPath;
+    }
+
+    /**
+     * @param array<string, mixed>                                                                            $stagingMetadata
+     * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
+     *
+     * @return string[]
+     */
+    private function validatePackageMetadata(string $applicationPath, array $stagingMetadata, array &$checks): array
+    {
+        $packageMetadata = $this->packageRemovalManifest->load($applicationPath);
+
+        if (!$packageMetadata['present']) {
+            $this->addCheck(
+                $checks,
+                'package_metadata',
+                'failed',
+                'Update package is missing '.UpdatePackageRemovalManifest::FILE_NAME.'. Signed cleanup metadata is required before files can be applied.'
+            );
+
+            return [];
+        }
+
+        $recordedMetadata = $stagingMetadata['package_metadata'] ?? null;
+
+        if (!\is_array($recordedMetadata) || true !== ($recordedMetadata['present'] ?? false)) {
+            $this->addCheck(
+                $checks,
+                'package_metadata',
+                'failed',
+                'Staging metadata does not contain the signed package cleanup metadata recorded during extraction.'
+            );
+
+            return [];
+        }
+
+        $recordedSha256 = $recordedMetadata['sha256'] ?? null;
+        $actualSha256 = $packageMetadata['sha256'];
+
+        if (!\is_string($recordedSha256) || !\is_string($actualSha256) || !hash_equals($recordedSha256, $actualSha256)) {
+            $this->addCheck(
+                $checks,
+                'package_metadata',
+                'failed',
+                'Update package cleanup metadata changed after staging. Re-stage the verified package before continuing.',
+                [
+                    'recorded_sha256' => \is_string($recordedSha256) ? $recordedSha256 : null,
+                    'actual_sha256' => $actualSha256,
+                ]
+            );
+
+            return [];
+        }
+
+        $recordedRemove = $recordedMetadata['remove'] ?? null;
+
+        if (!\is_array($recordedRemove)) {
+            $this->addCheck(
+                $checks,
+                'package_metadata',
+                'failed',
+                'Staging metadata does not contain a valid package removal list.'
+            );
+
+            return [];
+        }
+
+        $expectedRemovalPaths = array_values($packageMetadata['remove']);
+        $recordedRemovalPaths = array_values(array_filter(
+            $recordedRemove,
+            static fn (mixed $value): bool => \is_string($value),
+        ));
+
+        sort($expectedRemovalPaths);
+        sort($recordedRemovalPaths);
+
+        if ($expectedRemovalPaths !== $recordedRemovalPaths) {
+            $this->addCheck(
+                $checks,
+                'package_metadata',
+                'failed',
+                'Update package cleanup paths changed after staging. Re-stage the verified package before continuing.'
+            );
+
+            return [];
+        }
+
+        $this->addCheck($checks, 'package_metadata', 'passed', 'Signed package cleanup metadata is unchanged since staging.', [
+            'file' => UpdatePackageRemovalManifest::FILE_NAME,
+            'remove_count' => \count($packageMetadata['remove']),
+            'sha256' => $actualSha256,
+        ]);
+
+        return $packageMetadata['remove'];
     }
 
     /**
@@ -302,18 +404,25 @@ final readonly class UpdateApplyPlanner
     }
 
     /**
+     * @param string[] $removalPaths
+     *
      * @return array<string, mixed>
      */
-    private function buildFilePlan(string $applicationPath): array
+    private function buildFilePlan(string $applicationPath, array $removalPaths): array
     {
         $filesTotal = 0;
         $filesToReplace = 0;
         $filesNew = 0;
+        $filesToRemove = 0;
         $directoriesTotal = 0;
         $directoriesNew = 0;
         $skipped = [];
         $replaceSamples = [];
         $newSamples = [];
+        $removalSamples = [];
+        $removalMissingSamples = [];
+        $invalidRemovalTargets = [];
+        $filesToRemovePaths = [];
         $directorySamples = [];
         $unwritableTargets = [];
         $symlinkTargets = [];
@@ -404,15 +513,60 @@ final readonly class UpdateApplyPlanner
             }
         }
 
+        foreach ($removalPaths as $relativePath) {
+            $relativePath = $this->normalizeRelativePath($relativePath);
+
+            if ('' === $relativePath || $this->shouldSkipPath($relativePath)) {
+                $this->appendLimited($invalidRemovalTargets, $relativePath, $truncatedLists);
+
+                continue;
+            }
+
+            $targetPath = $this->projectDir.'/'.$relativePath;
+
+            if (is_link($targetPath)) {
+                $this->appendLimited($symlinkTargets, $relativePath, $truncatedLists);
+
+                continue;
+            }
+
+            if (is_dir($targetPath)) {
+                $this->appendLimited($invalidRemovalTargets, $relativePath, $truncatedLists);
+
+                continue;
+            }
+
+            if (!is_file($targetPath)) {
+                $this->appendLimited($removalMissingSamples, $relativePath, $truncatedLists);
+
+                continue;
+            }
+
+            $filesToRemove++;
+            $filesToRemovePaths[] = $relativePath;
+            $this->appendLimited($removalSamples, $relativePath, $truncatedLists);
+
+            if (!is_readable($targetPath) || !is_writable(\dirname($targetPath))) {
+                $this->appendLimited($unwritableTargets, $relativePath, $truncatedLists);
+            }
+        }
+
         return [
             'files_total' => $filesTotal,
             'files_to_replace' => $filesToReplace,
             'files_new' => $filesNew,
+            'files_to_remove' => $filesToRemove,
+            'file_operations_total' => $filesTotal + $filesToRemove,
             'directories_total' => $directoriesTotal,
             'directories_new' => $directoriesNew,
             'skipped_paths_sample' => $skipped,
             'files_to_replace_sample' => $replaceSamples,
             'files_new_sample' => $newSamples,
+            'files_to_remove_sample' => $removalSamples,
+            'files_to_remove_paths' => array_values(array_unique($filesToRemovePaths)),
+            'removal_paths_declared' => array_values(array_unique($removalPaths)),
+            'removal_paths_missing_sample' => $removalMissingSamples,
+            'invalid_removal_targets_sample' => $invalidRemovalTargets,
             'directories_new_sample' => $directorySamples,
             'unwritable_targets_sample' => array_values(array_unique($unwritableTargets)),
             'symlink_targets_sample' => array_values(array_unique($symlinkTargets)),
@@ -436,25 +590,40 @@ final readonly class UpdateApplyPlanner
             'files_total' => $filePlan['files_total'] ?? 0,
             'files_to_replace' => $filePlan['files_to_replace'] ?? 0,
             'files_new' => $filePlan['files_new'] ?? 0,
+            'files_to_remove' => $filePlan['files_to_remove'] ?? 0,
             'directories_new' => $filePlan['directories_new'] ?? 0,
         ]);
 
+        $invalidRemovalTargets = $filePlan['invalid_removal_targets_sample'] ?? [];
+        if (\is_array($invalidRemovalTargets) && [] !== $invalidRemovalTargets) {
+            $this->addCheck($checks, 'removal_targets', 'failed', 'Package cleanup metadata contains paths that cannot be removed safely.', [
+                'invalid_removal_targets_sample' => $invalidRemovalTargets,
+            ]);
+        } else {
+            $this->addCheck($checks, 'removal_targets', 'passed', 'Package-declared removal targets are safe.');
+        }
+
+        $missingRemovalTargets = $filePlan['removal_paths_missing_sample'] ?? [];
+        if (\is_array($missingRemovalTargets) && [] !== $missingRemovalTargets) {
+            $warnings[] = 'Some package-declared obsolete files are already absent from this installation.';
+        }
+
         $unwritableTargets = $filePlan['unwritable_targets_sample'] ?? [];
         if (\is_array($unwritableTargets) && [] !== $unwritableTargets) {
-            $this->addCheck($checks, 'write_permissions', 'failed', 'Some target files or directories are not writable.', [
+            $this->addCheck($checks, 'write_permissions', 'failed', 'Some target files or directories cannot be written or removed.', [
                 'unwritable_targets_sample' => $unwritableTargets,
             ]);
         } else {
-            $this->addCheck($checks, 'write_permissions', 'passed', 'Target files and directories appear writable for the planned update.');
+            $this->addCheck($checks, 'write_permissions', 'passed', 'Target files and directories appear writable for the planned update and cleanup.');
         }
 
         $symlinkTargets = $filePlan['symlink_targets_sample'] ?? [];
         if (\is_array($symlinkTargets) && [] !== $symlinkTargets) {
-            $this->addCheck($checks, 'symlink_targets', 'failed', 'The planned update would overwrite existing symbolic links.', [
+            $this->addCheck($checks, 'symlink_targets', 'failed', 'The planned update would overwrite or remove existing symbolic links.', [
                 'symlink_targets_sample' => $symlinkTargets,
             ]);
         } else {
-            $this->addCheck($checks, 'symlink_targets', 'passed', 'The planned update does not overwrite existing symbolic links.');
+            $this->addCheck($checks, 'symlink_targets', 'passed', 'The planned update does not overwrite or remove existing symbolic links.');
         }
 
         $unsupportedMigrationFiles = $filePlan['unsupported_migration_files_new'] ?? [];
@@ -568,12 +737,18 @@ final readonly class UpdateApplyPlanner
     private function summarizeStagingMetadata(array $metadata): array
     {
         $manifest = $metadata['manifest'] ?? [];
+        $packageMetadata = $metadata['package_metadata'] ?? [];
 
         return [
             'created_at' => $metadata['created_at'] ?? null,
             'manifest_version' => \is_array($manifest) ? ($manifest['version'] ?? null) : null,
             'manifest_channel' => \is_array($manifest) ? ($manifest['channel'] ?? null) : null,
             'package_path' => $metadata['package_path'] ?? null,
+            'package_metadata_present' => \is_array($packageMetadata) ? ($packageMetadata['present'] ?? false) : false,
+            'package_metadata_sha256' => \is_array($packageMetadata) ? ($packageMetadata['sha256'] ?? null) : null,
+            'package_removal_count' => \is_array($packageMetadata) && \is_array($packageMetadata['remove'] ?? null)
+                ? \count($packageMetadata['remove'])
+                : 0,
         ];
     }
 
@@ -595,6 +770,7 @@ final readonly class UpdateApplyPlanner
             'backup_path' => $backupPath,
             'lock_path' => $lockPath,
             'manifest' => $metadata['manifest'] ?? [],
+            'package_metadata' => $metadata['package_metadata'] ?? [],
             'file_plan' => $filePlan,
             'note' => 'This file is an apply plan only. No update files have been copied to the Chamilo installation.',
         ];

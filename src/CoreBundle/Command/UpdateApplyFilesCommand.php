@@ -21,7 +21,7 @@ use const JSON_UNESCAPED_SLASHES;
 
 #[AsCommand(
     name: 'chamilo:update:apply-files',
-    description: 'Apply staged Chamilo update files using the generated apply plan, backup and lock.',
+    description: 'Apply staged Chamilo update files and package-declared cleanup using the generated apply plan, backup and lock.',
 )]
 final class UpdateApplyFilesCommand extends Command
 {
@@ -35,7 +35,7 @@ final class UpdateApplyFilesCommand extends Command
     {
         $this
             ->addArgument('staging-path', InputArgument::REQUIRED, 'Staging directory containing APPLY-PLAN.json.')
-            ->addOption('confirm', null, InputOption::VALUE_NONE, 'Required confirmation to replace files in the Chamilo installation.')
+            ->addOption('confirm', null, InputOption::VALUE_NONE, 'Required confirmation to replace and remove files in the Chamilo installation.')
             ->addOption('operation-id', null, InputOption::VALUE_REQUIRED, 'Optional operation id used to write live progress logs.')
             ->setHelp(
                 <<<'HELP'
@@ -44,10 +44,11 @@ Applies staged update files to the Chamilo installation.
 This command:
   - reads APPLY-PLAN.json from the staging directory;
   - acquires var/update/update.lock;
-  - backs up files that will be replaced;
+  - backs up files that will be replaced or removed;
   - copies staged files to the installation;
+  - removes obsolete files explicitly declared by signed package metadata;
   - writes apply audit metadata;
-  - rolls back copied files if the file-copy step fails.
+  - rolls back copied and removed files if the file application step fails.
 
 It does not run database migrations, Composer, Yarn, cache clear or maintenance mode.
 

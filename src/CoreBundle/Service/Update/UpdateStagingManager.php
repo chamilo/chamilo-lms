@@ -24,6 +24,7 @@ final readonly class UpdateStagingManager
 {
     public function __construct(
         private UpdateArchiveInspector $archiveInspector,
+        private UpdatePackageRemovalManifest $packageRemovalManifest,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
     ) {}
@@ -55,11 +56,26 @@ final readonly class UpdateStagingManager
 
             $this->validateChamiloPackageStructure($applicationPath, $checks);
 
+            $packageMetadata = $this->packageRemovalManifest->load($applicationPath);
+            $details['package_metadata'] = $packageMetadata;
+
+            if ($packageMetadata['present']) {
+                $this->addCheck($checks, 'package_metadata', 'passed', 'Signed package cleanup metadata was loaded.', [
+                    'file' => $packageMetadata['file'],
+                    'remove_count' => \count($packageMetadata['remove']),
+                    'sha256' => $packageMetadata['sha256'],
+                ]);
+            } else {
+                $message = 'Update package does not contain '.UpdatePackageRemovalManifest::FILE_NAME.'. File application will be blocked until signed cleanup metadata is provided.';
+                $warnings[] = $message;
+                $this->addCheck($checks, 'package_metadata', 'warning', $message);
+            }
+
             $dryRunReport = $this->buildDryRunReport($applicationPath);
             $details['dry_run'] = $dryRunReport;
             $this->addCheck($checks, 'dry_run_report', 'passed', 'Staged package dry-run report was generated.', $dryRunReport);
 
-            $this->writeStagingMetadata($stagingDirectory, $manifest, $packagePath, $applicationPath, $archiveDetails, $dryRunReport);
+            $this->writeStagingMetadata($stagingDirectory, $manifest, $packagePath, $applicationPath, $archiveDetails, $dryRunReport, $packageMetadata);
             $this->addCheck($checks, 'staging_metadata', 'passed', 'Staging metadata was written.', [
                 'metadata_file' => $stagingDirectory.'/STAGING-INFO.json',
             ]);
@@ -240,12 +256,19 @@ final readonly class UpdateStagingManager
             'sample_existing_files' => $sampleExistingFiles,
             'sample_new_files' => $sampleNewFiles,
             'skipped_top_level_entries' => ['.git', 'node_modules', 'vendor', 'var'],
+            'skipped_exact_paths' => [UpdatePackageRemovalManifest::FILE_NAME],
         ];
     }
 
     private function isSkippedDryRunPath(string $relativePath): bool
     {
-        $firstSegment = explode('/', str_replace('\\', '/', $relativePath))[0] ?? '';
+        $relativePath = str_replace('\\', '/', $relativePath);
+
+        if (UpdatePackageRemovalManifest::FILE_NAME === $relativePath) {
+            return true;
+        }
+
+        $firstSegment = explode('/', $relativePath)[0] ?? '';
 
         return \in_array($firstSegment, ['.git', 'node_modules', 'vendor', 'var'], true);
     }
@@ -253,6 +276,7 @@ final readonly class UpdateStagingManager
     /**
      * @param array<string, mixed> $archiveDetails
      * @param array<string, mixed> $dryRunReport
+     * @param array<string, mixed> $packageMetadata
      */
     private function writeStagingMetadata(
         string $stagingDirectory,
@@ -260,7 +284,8 @@ final readonly class UpdateStagingManager
         string $packagePath,
         string $applicationPath,
         array $archiveDetails,
-        array $dryRunReport
+        array $dryRunReport,
+        array $packageMetadata
     ): void {
         $metadata = [
             'created_at' => gmdate('c'),
@@ -278,6 +303,7 @@ final readonly class UpdateStagingManager
             'application_path' => $applicationPath,
             'archive' => $archiveDetails,
             'dry_run' => $dryRunReport,
+            'package_metadata' => $packageMetadata,
         ];
 
         $encoded = json_encode($metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

@@ -487,6 +487,7 @@ final readonly class UpdatePostApplyChecker
             'files_total' => \is_array($filePlan) ? ($filePlan['files_total'] ?? null) : null,
             'files_to_replace' => \is_array($filePlan) ? ($filePlan['files_to_replace'] ?? null) : null,
             'files_new' => \is_array($filePlan) ? ($filePlan['files_new'] ?? null) : null,
+            'files_to_remove' => \is_array($filePlan) ? ($filePlan['files_to_remove'] ?? null) : null,
         ];
     }
 
@@ -508,6 +509,7 @@ final readonly class UpdatePostApplyChecker
             'files_total' => \is_array($applyPlan) ? ($applyPlan['files_total'] ?? null) : null,
             'files_to_replace' => \is_array($applyPlan) ? ($applyPlan['files_to_replace'] ?? null) : null,
             'files_new' => \is_array($applyPlan) ? ($applyPlan['files_new'] ?? null) : null,
+            'files_to_remove' => \is_array($applyPlan) ? ($applyPlan['files_to_remove'] ?? null) : null,
         ];
     }
 

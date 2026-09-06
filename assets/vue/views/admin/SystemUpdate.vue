@@ -140,6 +140,11 @@
       </div>
     </div>
 
+    <InlineError
+      v-if="errorSection === 'entry'"
+      :message="errorMessage"
+    />
+
     <div class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm">
       <div class="flex items-center gap-3">
         <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-support-1 text-primary">
@@ -153,12 +158,30 @@
       <div class="mt-5 space-y-4">
         <label class="block">
           <span class="text-body-2 font-semibold text-gray-90">{{ t("Manifest source") }}</span>
+
+          <div
+            v-if="lockManifestOrigin"
+            class="mt-2 flex overflow-hidden rounded-xl border border-gray-25 bg-white shadow-sm focus-within:border-primary focus-within:ring-1 focus-within:ring-primary"
+          >
+            <span class="flex shrink-0 items-center border-r border-gray-20 bg-support-2 px-3 font-mono text-caption text-gray-70">
+              {{ manifestSourceOrigin }}/
+            </span>
+            <input
+              v-model.trim="manifestSourcePath"
+              class="min-w-0 flex-1 border-0 px-3 py-2 text-body-2 text-gray-90 focus:ring-0"
+              placeholder="latest-stable.json"
+              type="text"
+            />
+          </div>
+
           <input
+            v-else
             v-model.trim="form.manifestSource"
             class="mt-2 w-full rounded-xl border border-gray-25 px-3 py-2 text-body-2 text-gray-90 shadow-sm focus:border-primary focus:ring-primary"
             :placeholder="manifestSourcePlaceholder"
             type="text"
           />
+
           <span class="mt-2 block text-caption text-gray-50">
             {{ manifestSourceHelp }}
           </span>
@@ -171,6 +194,11 @@
           icon="search"
           type="primary"
           @click="checkManifest"
+        />
+
+        <InlineError
+          v-if="errorSection === 'manifest'"
+          :message="errorMessage"
         />
       </div>
 
@@ -281,7 +309,7 @@
             type="text"
           />
           <span class="mt-2 block text-caption text-gray-50">
-            {{ t("Use this only for local development tests. Production updates must use the server configured key.") }}
+            {{ t("Optional local development override. Production updates use the official Chamilo trusted key.") }}
           </span>
         </label>
       </div>
@@ -325,6 +353,11 @@
         />
       </div>
 
+      <InlineError
+        v-if="errorSection === 'verification'"
+        :message="errorMessage"
+      />
+
       <ResultPanel
         v-if="verification"
         :details-label="t('Verification details')"
@@ -361,6 +394,11 @@
           @click="runPreflight"
         />
       </div>
+
+      <InlineError
+        v-if="errorSection === 'preflight'"
+        :message="errorMessage"
+      />
 
       <ResultPanel
         v-if="preflight"
@@ -404,6 +442,11 @@
           @click="stagePackage"
         />
       </div>
+
+      <InlineError
+        v-if="errorSection === 'staging'"
+        :message="errorMessage"
+      />
 
       <ResultPanel
         v-if="staging"
@@ -449,7 +492,7 @@
             {{ t("Apply preparation") }}
           </h2>
           <p class="mt-1 text-body-2 text-gray-50">
-            {{ t("Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files.") }}
+            {{ t("Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation.") }}
           </p>
         </div>
       </div>
@@ -474,7 +517,7 @@
 
       <div class="mt-4 rounded-2xl border border-warning bg-support-2 p-3 text-caption text-warning">
         <span class="mdi mdi-alert-outline mr-1" />
-        {{ t("This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection.") }}
+        {{ t("This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection.") }}
       </div>
 
       <div class="mt-4">
@@ -488,6 +531,11 @@
         />
       </div>
 
+      <InlineError
+        v-if="errorSection === 'apply-plan'"
+        :message="errorMessage"
+      />
+
       <ResultPanel
         v-if="applyPlan"
         :details-label="t('Apply plan details')"
@@ -499,7 +547,7 @@
       >
         <dl
           v-if="applyPlan.applyPlan.valid"
-          class="mb-4 grid gap-3 text-body-2 md:grid-cols-2 xl:grid-cols-4"
+          class="mb-4 grid gap-3 text-body-2 md:grid-cols-2 xl:grid-cols-5"
         >
           <div class="rounded-2xl border border-gray-20 bg-support-2 p-4">
             <dt class="font-semibold text-gray-50">{{ t("Files to replace") }}</dt>
@@ -509,6 +557,11 @@
           <div class="rounded-2xl border border-gray-20 bg-support-2 p-4">
             <dt class="font-semibold text-gray-50">{{ t("New files") }}</dt>
             <dd class="mt-1 font-mono text-caption text-gray-90">{{ applyPlanFilePlan.files_new || 0 }}</dd>
+          </div>
+
+          <div class="rounded-2xl border border-gray-20 bg-support-2 p-4">
+            <dt class="font-semibold text-gray-50">{{ t("Files to remove") }}</dt>
+            <dd class="mt-1 font-mono text-caption text-gray-90">{{ applyPlanFilePlan.files_to_remove || 0 }}</dd>
           </div>
 
           <div class="rounded-2xl border border-gray-20 bg-support-2 p-4">
@@ -541,14 +594,14 @@
             {{ t("Apply staged files") }}
           </h2>
           <p class="mt-1 text-body-2 text-gray-50">
-            {{ t("Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands.") }}
+            {{ t("Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands.") }}
           </p>
         </div>
       </div>
 
       <div class="mt-4 rounded-2xl border border-danger bg-white p-4 text-body-2 text-danger">
         <span class="mdi mdi-alert-outline mr-1" />
-        {{ t("This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing.") }}
+        {{ t("This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing.") }}
       </div>
 
       <div class="mt-5 space-y-4">
@@ -559,18 +612,21 @@
             type="checkbox"
           />
           <span>
-            {{ t("I understand this will replace files in the Chamilo installation.") }}
+            {{ t("I understand this will replace files and remove package-declared obsolete files in the Chamilo installation.") }}
           </span>
         </label>
 
         <label class="block">
           <span class="text-body-2 font-semibold text-gray-90">
-            {{ t("Type APPLY UPDATE FILES to confirm") }}
+            {{ t("Type the exact text below to confirm") }}
           </span>
+          <code class="mt-2 block w-fit rounded-lg border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+            {{ APPLY_FILES_CONFIRMATION_TEXT }}
+          </code>
           <input
             v-model.trim="form.confirmationText"
+            :placeholder="APPLY_FILES_CONFIRMATION_TEXT"
             class="mt-2 w-full rounded-xl border border-gray-25 px-3 py-2 font-mono text-body-2 text-gray-90 shadow-sm focus:border-danger focus:ring-danger"
-            placeholder="APPLY UPDATE FILES"
             type="text"
           />
         </label>
@@ -584,6 +640,11 @@
           @click="applyUpdateFiles"
         />
       </div>
+
+      <InlineError
+        v-if="errorSection === 'apply-files'"
+        :message="errorMessage"
+      />
 
       <div
         v-if="applyOperationId || applyProgressEvents.length"
@@ -680,7 +741,7 @@
 
       <div class="mt-4">
         <BaseButton
-          :disabled="isCheckingPostApply || !form.stagingPath || !applyFilesResult?.applyFiles?.valid"
+          :disabled="isCheckingPostApply || !form.stagingPath"
           :is-loading="isCheckingPostApply"
           :label="isCheckingPostApply ? t('Checking post-apply actions...') : t('Review post-apply actions')"
           icon="clipboard-check-outline"
@@ -688,6 +749,11 @@
           @click="runPostApplyChecks"
         />
       </div>
+
+      <InlineError
+        v-if="errorSection === 'post-apply-checks'"
+        :message="errorMessage"
+      />
 
       <ResultPanel
         v-if="postApplyChecks"
@@ -778,6 +844,11 @@
           />
         </div>
 
+        <InlineError
+          v-if="errorSection === 'migration-safety'"
+          :message="errorMessage"
+        />
+
         <ResultPanel
           v-if="migrationSafety"
           :details-label="t('Migration safety details')"
@@ -817,7 +888,7 @@
               {{ t("Migration target") }}
             </h4>
             <p class="mt-1 text-caption text-gray-90">
-              {{ t("Doctrine will execute only the staged V210 migrations explicitly after the safety review passes.") }}
+              {{ t("Doctrine will execute only the staged V300 migrations explicitly after the safety review passes.") }}
             </p>
             <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
               {{ migrationSafetyTarget }}
@@ -837,7 +908,7 @@
                   {{
                     migrationSafetyBaseline.clean
                       ? t("The database migration baseline is clean.")
-                      : t("Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation.")
+                      : t("Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation.")
                   }}
                 </p>
               </div>
@@ -1104,12 +1175,15 @@
 
             <label class="block">
               <span class="text-body-2 font-semibold text-gray-90">
-                {{ t("Type RUN DATABASE MIGRATIONS to confirm database migrations") }}
+                {{ t("Type the exact text below to confirm") }}
               </span>
+              <code class="mt-2 block w-fit rounded-lg border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+                {{ DATABASE_MIGRATIONS_CONFIRMATION_TEXT }}
+              </code>
               <input
                 v-model.trim="form.databaseMigrationConfirmationText"
+                :placeholder="DATABASE_MIGRATIONS_CONFIRMATION_TEXT"
                 class="mt-2 w-full rounded-xl border border-gray-20 px-3 py-2 font-mono text-caption text-gray-90 focus:border-primary focus:ring-primary"
-                placeholder="RUN DATABASE MIGRATIONS"
                 type="text"
               />
             </label>
@@ -1136,12 +1210,15 @@
 
           <label class="block">
             <span class="text-body-2 font-semibold text-gray-90">
-              {{ t("Type RUN POST UPDATE ACTIONS to confirm") }}
+              {{ t("Type the exact text below to confirm") }}
             </span>
+            <code class="mt-2 block w-fit rounded-lg border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+              {{ POST_APPLY_CONFIRMATION_TEXT }}
+            </code>
             <input
               v-model.trim="form.postApplyRunConfirmationText"
+              :placeholder="POST_APPLY_CONFIRMATION_TEXT"
               class="mt-2 w-full rounded-xl border border-gray-25 px-3 py-2 font-mono text-body-2 text-gray-90 shadow-sm focus:border-danger focus:ring-danger"
-              placeholder="RUN POST UPDATE ACTIONS"
               type="text"
             />
           </label>
@@ -1155,6 +1232,11 @@
             @click="runPostApplyActions"
           />
         </div>
+
+        <InlineError
+          v-if="errorSection === 'post-apply-run'"
+          :message="errorMessage"
+        />
 
         <div
           v-if="postApplyRunOperationId || postApplyRunProgressEvents.length"
@@ -1215,13 +1297,6 @@
       </div>
     </div>
 
-    <div
-      v-if="errorMessage"
-      class="rounded-2xl border border-danger bg-white p-4 text-body-2 text-danger"
-    >
-      <span class="mdi mdi-alert-circle-outline mr-2" />
-      {{ errorMessage }}
-    </div>
   </section>
 </template>
 
@@ -1232,6 +1307,10 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import adminService from "../../services/adminService"
 
 const { t } = useI18n()
+
+const APPLY_FILES_CONFIRMATION_TEXT = "APPLY UPDATE FILES"
+const DATABASE_MIGRATIONS_CONFIRMATION_TEXT = "RUN DATABASE MIGRATIONS"
+const POST_APPLY_CONFIRMATION_TEXT = "RUN POST UPDATE ACTIONS"
 
 const status = reactive({
   installedVersion: "",
@@ -1280,6 +1359,7 @@ const postApplyChecks = ref(null)
 const migrationSafety = ref(null)
 const postApplyRunResult = ref(null)
 const errorMessage = ref("")
+const errorSection = ref("")
 const isChecking = ref(false)
 const isVerifying = ref(false)
 const isRunningPreflight = ref(false)
@@ -1332,7 +1412,51 @@ const localTestUpdateEntryPath = computed(() => {
 })
 
 const showTrustedPublicKeyInput = computed(() => {
-  return status.allowLocalPaths && !status.trustedPublicKeyConfigured
+  return status.allowLocalPaths
+})
+
+const manifestSourceOrigin = computed(() => {
+  const source = status.officialManifestSource || status.defaultManifestSource
+
+  if (!source) {
+    return ""
+  }
+
+  try {
+    return new URL(source).origin
+  } catch {
+    return ""
+  }
+})
+
+const lockManifestOrigin = computed(() => {
+  return Boolean(!status.allowLocalPaths && manifestSourceOrigin.value)
+})
+
+const manifestSourcePath = computed({
+  get() {
+    if (!form.manifestSource) {
+      return ""
+    }
+
+    try {
+      const url = new URL(form.manifestSource)
+
+      return url.pathname.replace(/^\/+/, "")
+    } catch {
+      return form.manifestSource.replace(/^\/+/, "")
+    }
+  },
+  set(value) {
+    const path = String(value || "").trim().replace(/^\/+/, "")
+
+    if (!manifestSourceOrigin.value) {
+      form.manifestSource = path
+      return
+    }
+
+    form.manifestSource = path ? `${manifestSourceOrigin.value}/${path}` : `${manifestSourceOrigin.value}/`
+  },
 })
 
 const manifestSourcePlaceholder = computed(() => {
@@ -1341,22 +1465,22 @@ const manifestSourcePlaceholder = computed(() => {
   }
 
   if (status.allowLocalPaths) {
-    return "https://download.example.org/chamilo/stable.json or /path/to/manifest.json"
+    return "https://updates.chamilo.org/latest-stable.json or /path/to/manifest.json"
   }
 
-  return "https://download.example.org/chamilo/stable.json"
+  return "https://updates.chamilo.org/latest-stable.json"
 })
 
 const manifestSourceHelp = computed(() => {
-  if (status.defaultManifestSource) {
-    return t("The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed.")
+  if (lockManifestOrigin.value) {
+    return t("Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed.")
   }
 
   if (status.allowLocalPaths) {
-    return t("No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests.")
+    return t("Development mode allows an HTTPS manifest URL or a local manifest path.")
   }
 
-  return t("Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL.")
+  return t("The official update manifest is configured by the server.")
 })
 
 const manifestRows = computed(() => {
@@ -1546,8 +1670,8 @@ const canRunPostApplyActions = computed(() => {
       (!hasSelectedDatabaseMigrationAction.value ||
         (migrationSafety.value?.migrationSafety?.valid &&
           form.confirmDatabaseBackup &&
-          "RUN DATABASE MIGRATIONS" === form.databaseMigrationConfirmationText)) &&
-      "RUN POST UPDATE ACTIONS" === form.postApplyRunConfirmationText,
+          DATABASE_MIGRATIONS_CONFIRMATION_TEXT === form.databaseMigrationConfirmationText)) &&
+      POST_APPLY_CONFIRMATION_TEXT === form.postApplyRunConfirmationText,
   )
 })
 
@@ -1559,8 +1683,32 @@ const canApplyFiles = computed(() => {
   return Boolean(
     applyPlan.value?.applyPlan?.valid &&
       form.confirmApply &&
-      "APPLY UPDATE FILES" === form.confirmationText,
+      APPLY_FILES_CONFIRMATION_TEXT === form.confirmationText,
   )
+})
+
+const InlineError = defineComponent({
+  name: "SystemUpdateInlineError",
+  props: {
+    message: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    return () =>
+      h(
+        "div",
+        {
+          class: "mt-4 rounded-2xl border border-danger bg-white p-3 text-body-2 text-danger",
+          role: "alert",
+        },
+        [
+          h("span", { class: "mdi mdi-alert-circle-outline mr-1", "aria-hidden": "true" }),
+          props.message,
+        ],
+      )
+  },
 })
 
 const ResultPanel = defineComponent({
@@ -1764,7 +1912,7 @@ function applyUpdateEntryQuery() {
     updateEntrySource.value = "local-test"
 
     if (!status.allowLocalPaths) {
-      errorMessage.value = t("Local update notice simulation is only available in development mode.")
+      setActionError("entry", t("Local update notice simulation is only available in development mode."))
       return
     }
 
@@ -1778,11 +1926,11 @@ function applyUpdateEntryQuery() {
     return
   }
 
-  errorMessage.value = t("Unknown update notice source.")
+  setActionError("entry", t("Unknown update notice source."))
 }
 
 async function checkManifest() {
-  errorMessage.value = ""
+  clearActionError()
   availability.value = null
   verification.value = null
   preflight.value = null
@@ -1801,14 +1949,15 @@ async function checkManifest() {
     manifest.value = data.manifest
     availability.value = data.availability || null
   } catch (error) {
-    errorMessage.value = getErrorMessage(error)
+    setActionError("manifest", error)
+    manifest.value = null
   } finally {
     isChecking.value = false
   }
 }
 
 async function verifyPackage() {
-  errorMessage.value = ""
+  clearActionError()
   applyPlan.value = null
   applyFilesResult.value = null
   postApplyChecks.value = null
@@ -1821,7 +1970,7 @@ async function verifyPackage() {
     manifest.value = data.manifest
     verification.value = data
   } catch (error) {
-    errorMessage.value = getErrorMessage(error)
+    setActionError("verification", error)
     verification.value = null
   } finally {
     isVerifying.value = false
@@ -1829,7 +1978,7 @@ async function verifyPackage() {
 }
 
 async function runPreflight() {
-  errorMessage.value = ""
+  clearActionError()
   applyPlan.value = null
   applyFilesResult.value = null
   postApplyChecks.value = null
@@ -1845,7 +1994,7 @@ async function runPreflight() {
     manifest.value = data.manifest
     preflight.value = data
   } catch (error) {
-    errorMessage.value = getErrorMessage(error)
+    setActionError("preflight", error)
     preflight.value = null
   } finally {
     isRunningPreflight.value = false
@@ -1853,7 +2002,7 @@ async function runPreflight() {
 }
 
 async function stagePackage() {
-  errorMessage.value = ""
+  clearActionError()
   applyFilesResult.value = null
   postApplyChecks.value = null
   migrationSafety.value = null
@@ -1884,7 +2033,7 @@ async function stagePackage() {
   } catch (error) {
     const responseData = error?.response?.data || null
 
-    errorMessage.value = getErrorMessage(error)
+    setActionError("staging", error)
     applyPlan.value = null
 
     if (responseData?.verification) {
@@ -1921,7 +2070,7 @@ async function stagePackage() {
 
 
 async function buildApplyPlan() {
-  errorMessage.value = ""
+  clearActionError()
   isPlanningApply.value = true
 
   try {
@@ -1940,12 +2089,17 @@ async function buildApplyPlan() {
   } catch (error) {
     const responseData = error?.response?.data || null
 
-    errorMessage.value = getErrorMessage(error)
     applyPlan.value = responseData?.applyPlan
       ? {
           applyPlan: responseData.applyPlan,
         }
       : null
+
+    if (applyPlan.value) {
+      clearActionError()
+    } else {
+      setActionError("apply-plan", error)
+    }
   } finally {
     isPlanningApply.value = false
   }
@@ -1953,7 +2107,7 @@ async function buildApplyPlan() {
 
 
 async function applyUpdateFiles() {
-  errorMessage.value = ""
+  clearActionError()
   isApplyingFiles.value = true
   applyFilesResult.value = null
   postApplyChecks.value = null
@@ -1984,7 +2138,7 @@ async function applyUpdateFiles() {
   } catch (error) {
     const responseData = error?.response?.data || null
 
-    errorMessage.value = getErrorMessage(error)
+    setActionError("apply-files", error)
     applyFilesResult.value = responseData?.applyFiles
       ? {
           applyFiles: responseData.applyFiles,
@@ -1999,7 +2153,7 @@ async function applyUpdateFiles() {
 
 
 async function runPostApplyChecks() {
-  errorMessage.value = ""
+  clearActionError()
   isCheckingPostApply.value = true
 
   try {
@@ -2022,7 +2176,7 @@ async function runPostApplyChecks() {
   } catch (error) {
     const responseData = error?.response?.data || null
 
-    errorMessage.value = getErrorMessage(error)
+    setActionError("post-apply-checks", error)
     postApplyChecks.value = responseData?.postApply
       ? {
           postApply: responseData.postApply,
@@ -2036,7 +2190,7 @@ async function runPostApplyChecks() {
 
 
 async function runMigrationSafetyChecks() {
-  errorMessage.value = ""
+  clearActionError()
   isCheckingMigrationSafety.value = true
   migrationSafety.value = null
 
@@ -2051,7 +2205,7 @@ async function runMigrationSafetyChecks() {
   } catch (error) {
     const responseData = error?.response?.data || null
 
-    errorMessage.value = getErrorMessage(error)
+    setActionError("migration-safety", error)
     migrationSafety.value = responseData?.migrationSafety
       ? {
           migrationSafety: responseData.migrationSafety,
@@ -2064,7 +2218,7 @@ async function runMigrationSafetyChecks() {
 
 
 async function runPostApplyActions() {
-  errorMessage.value = ""
+  clearActionError()
   isRunningPostApplyActions.value = true
   postApplyRunResult.value = null
   postApplyRunOperationId.value = createOperationId()
@@ -2102,9 +2256,9 @@ async function runPostApplyActions() {
 
     if (recoveredResult) {
       postApplyRunResult.value = recoveredResult
-      errorMessage.value = ""
+      clearActionError()
     } else {
-      errorMessage.value = getErrorMessage(error)
+      setActionError("post-apply-run", error)
       postApplyRunResult.value = responseData?.postApplyRun
         ? {
             postApplyRun: responseData.postApplyRun,
@@ -2115,6 +2269,16 @@ async function runPostApplyActions() {
     stopPostApplyRunProgressPolling()
     isRunningPostApplyActions.value = false
   }
+}
+
+function clearActionError() {
+  errorMessage.value = ""
+  errorSection.value = ""
+}
+
+function setActionError(section, error) {
+  errorMessage.value = typeof error === "string" ? error : getErrorMessage(error)
+  errorSection.value = section
 }
 
 function buildRecoveredPostApplyRunResult(error, responseData) {
@@ -2214,7 +2378,7 @@ function buildExecutablePostApplyActions(actions) {
         key: "yarn_build",
         title: t("Yarn build"),
         description: t("Build production frontend assets."),
-        command: 'NODE_OPTIONS="--max-old-space-size=8192" yarn build',
+        command: 'NODE_OPTIONS="--experimental-global-webcrypto --max-old-space-size=8192" yarn build',
         severity: action.severity,
         advanced: true,
         category: "advanced",

@@ -20,7 +20,7 @@ use const JSON_UNESCAPED_SLASHES;
 
 #[AsCommand(
     name: 'chamilo:update:apply-plan',
-    description: 'Build a safe apply plan from a staged Chamilo update package without replacing files.',
+    description: 'Build a safe apply plan from a staged Chamilo update package without modifying installation files.',
 )]
 final class UpdateApplyPlanCommand extends Command
 {
@@ -41,11 +41,11 @@ Builds an apply plan from a staged Chamilo update package.
 This command does not replace files, run migrations, enable maintenance mode or modify the database.
 It checks:
   - staging directory safety;
-  - staging metadata;
+  - staging metadata and signed package cleanup metadata;
   - update lock status;
   - planned backup path;
-  - target write permissions;
-  - files that would be replaced or created.
+  - target write/remove permissions;
+  - files that would be replaced, created or removed.
 
 Example:
   php bin/console chamilo:update:apply-plan var/update/staging/2.1.0-20260603163014-bc4b52a8

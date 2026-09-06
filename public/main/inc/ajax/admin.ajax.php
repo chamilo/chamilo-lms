@@ -6,6 +6,9 @@ use Chamilo\CoreBundle\Entity\BranchSync;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\BranchSyncRepository;
 use Chamilo\CoreBundle\Service\Update\InstalledChamiloVersionProvider;
+use Chamilo\CoreBundle\Service\Update\UpdateAvailabilityChecker;
+use Chamilo\CoreBundle\Service\Update\UpdateConfiguration;
+use Chamilo\CoreBundle\Service\Update\UpdateManifestClient;
 use GuzzleHttp\Client;
 use League\Flysystem\Filesystem;
 
@@ -85,9 +88,9 @@ switch ($action) {
             $data = json_decode($json, true);
             $latestNews = Security::remove_XSS($data['text'] ?? '', COURSEMANAGER);
 
-            echo appendLocalSystemUpdateNotice($latestNews);
+            echo appendSystemUpdateNotice($latestNews);
         } catch (\Throwable $e) {
-            echo appendLocalSystemUpdateNotice(
+            echo appendSystemUpdateNotice(
                 Security::remove_XSS(get_lang('Could not load latest news at this time.'), COURSEMANAGER)
             );
         }
@@ -330,35 +333,98 @@ function getLatestNews(): string
 }
 
 /**
- * Appends a local update notice link for development tests.
+ * Appends an update notice when the configured manifest reports a newer version.
+ *
+ * Development environments may use the local test manifest when development
+ * update tools are explicitly enabled. Normal installations use the configured
+ * HTTPS manifest source.
  */
-function appendLocalSystemUpdateNotice(string $html): string
+function appendSystemUpdateNotice(string $html): string
 {
-    $environment = (string) api_get_env_variable('APP_ENV', 'prod');
+    try {
+        /** @var UpdateConfiguration $configuration */
+        $configuration = Container::$container->get(UpdateConfiguration::class);
 
-    if (!in_array($environment, ['dev', 'test'], true)) {
+        /** @var UpdateManifestClient $manifestClient */
+        $manifestClient = Container::$container->get(UpdateManifestClient::class);
+
+        /** @var UpdateAvailabilityChecker $availabilityChecker */
+        $availabilityChecker = Container::$container->get(UpdateAvailabilityChecker::class);
+
+        $manifestSource = $configuration->getDefaultManifestSource();
+        $noticeSource = 'official';
+
+        if ($configuration->allowsDevelopmentUpdateTools()) {
+            $localManifestSource = $configuration->getLocalTestManifestSource();
+
+            if (
+                null !== $localManifestSource
+                && is_file($localManifestSource)
+                && is_readable($localManifestSource)
+            ) {
+                $manifestSource = $localManifestSource;
+                $noticeSource = 'local-test';
+            }
+        }
+
+        if (null === $manifestSource || '' === trim($manifestSource)) {
+            return $html;
+        }
+
+        $manifest = $manifestClient->load($manifestSource);
+        $availability = $availabilityChecker->check($manifest)->toArray();
+
+        if (true !== ($availability['updateAvailable'] ?? false)) {
+            return $html;
+        }
+
+        if ('local-test' === $noticeSource) {
+            $updateUrl = api_get_path(WEB_PATH).'admin/system-update?'.http_build_query([
+                'source' => 'local-test',
+                'check' => '1',
+            ]);
+
+            $title = 'Test update available';
+            $description = 'A local update package is available for testing the new update workflow.';
+            $buttonLabel = 'Review test update';
+        } else {
+            $updateUrl = api_get_path(WEB_PATH).'admin/system-update?'.http_build_query([
+                'source' => 'official',
+                'check' => '1',
+            ]);
+
+            $targetVersion = htmlspecialchars(
+                (string) ($availability['targetVersion'] ?? $manifest->getVersion()),
+                ENT_QUOTES,
+                'UTF-8'
+            );
+
+            $title = get_lang('Your version is not up-to-date');
+            $description = get_lang('The latest version is').' <b>Chamilo '.$targetVersion.'</b>.';
+            $buttonLabel = get_lang('System update');
+        }
+
+        $safeUpdateUrl = htmlspecialchars($updateUrl, ENT_QUOTES, 'UTF-8');
+        $safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+        $safeButtonLabel = htmlspecialchars($buttonLabel, ENT_QUOTES, 'UTF-8');
+
+        return $html.'
+            <div style="margin-top: 1rem; padding: 0.75rem; border: 1px solid #2563eb; border-radius: 0.5rem; background: #eff6ff;">
+                <div style="font-weight: 600; color: #1e3a8a; margin-bottom: 0.35rem;">
+                    '.$safeTitle.'
+                </div>
+                <div style="color: #1e40af; margin-bottom: 0.6rem;">
+                    '.$description.'
+                </div>
+                <a href="'.$safeUpdateUrl.'" style="display: inline-block; padding: 0.45rem 0.8rem; border-radius: 0.35rem; background: #2563eb; color: #ffffff; text-decoration: none; font-weight: 600;">
+                    '.$safeButtonLabel.'
+                </a>
+            </div>
+        ';
+    } catch (\Throwable) {
+        // An unavailable update server must never break the administration dashboard.
         return $html;
     }
-
-    $updateUrl = api_get_path(WEB_PATH).'admin/system-update?'.http_build_query([
-        'source' => 'local-test',
-        'check' => '1',
-    ]);
-    $safeUpdateUrl = htmlspecialchars($updateUrl, ENT_QUOTES, 'UTF-8');
-
-    return $html.'
-        <div style="margin-top: 1rem; padding: 0.75rem; border: 1px solid #2563eb; border-radius: 0.5rem; background: #eff6ff;">
-            <div style="font-weight: 600; color: #1e3a8a; margin-bottom: 0.35rem;">
-                Test update available
-            </div>
-            <div style="color: #1e40af; margin-bottom: 0.6rem;">
-                A local update package is available for testing the new update workflow.
-            </div>
-            <a href="'.$safeUpdateUrl.'" style="display: inline-block; padding: 0.45rem 0.8rem; border-radius: 0.35rem; background: #2563eb; color: #ffffff; text-decoration: none; font-weight: 600;">
-                Review test update
-            </a>
-        </div>
-    ';
 }
 
 /**

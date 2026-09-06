@@ -71,8 +71,8 @@ final class SystemUpdateController extends AbstractController
             'allowLocalPaths' => $this->updateConfiguration->allowsLocalPaths(),
             'allowSkipSignature' => $this->updateConfiguration->allowsSkipSignature(),
             'productionMode' => $this->updateConfiguration->isProduction(),
-            'trustedPublicKeyConfigured' => $this->trustedKeyring->hasTrustedPublicKeys() || $this->updateConfiguration->hasTrustedPublicKey(),
-            'trustedPublicKeyFingerprint' => $this->trustedKeyring->getTrustedPublicKeyFingerprint() ?? $this->updateConfiguration->getTrustedPublicKeyFingerprint(),
+            'trustedPublicKeyConfigured' => $this->trustedKeyring->hasTrustedPublicKeys(),
+            'trustedPublicKeyFingerprint' => $this->trustedKeyring->getTrustedPublicKeyFingerprint(),
             'trustedKeyIds' => $this->trustedKeyring->getTrustedKeyIds(),
             'allowUiPostApplyCommands' => $this->updateConfiguration->allowsUiPostApplyCommands(),
             'commandTimeout' => $this->updateConfiguration->getCommandTimeoutSeconds(),
@@ -135,7 +135,7 @@ final class SystemUpdateController extends AbstractController
                 'manifest' => $this->manifestToArray($manifest),
                 'packagePath' => $packagePath,
                 'signaturePath' => $signaturePath,
-                'trustedPublicKeyConfigured' => $this->trustedKeyring->hasTrustedPublicKeys() || $this->updateConfiguration->hasTrustedPublicKey(),
+                'trustedPublicKeyConfigured' => $this->trustedKeyring->hasTrustedPublicKeys(),
                 'skipSignature' => $skipSignature,
                 'result' => $result->toArray(),
             ]);
@@ -244,7 +244,7 @@ final class SystemUpdateController extends AbstractController
                 'manifest' => $this->manifestToArray($manifest),
                 'packagePath' => $packagePath,
                 'signaturePath' => $signaturePath,
-                'trustedPublicKeyConfigured' => $this->trustedKeyring->hasTrustedPublicKeys() || $this->updateConfiguration->hasTrustedPublicKey(),
+                'trustedPublicKeyConfigured' => $this->trustedKeyring->hasTrustedPublicKeys(),
                 'skipSignature' => $skipSignature,
                 'verification' => $verificationResult->toArray(),
                 'preflight' => $preflightResult->toArray(),
@@ -450,11 +450,20 @@ final class SystemUpdateController extends AbstractController
     private function normalizeLocalSource(string $source): string
     {
         if ($this->isHttpUrl($source)) {
+            if (
+                !$this->updateConfiguration->allowsDevelopmentUpdateTools()
+                && !$this->updateConfiguration->isAllowedOfficialManifestUrl($source)
+            ) {
+                $officialOrigin = $this->updateConfiguration->getOfficialManifestOrigin();
+
+                throw new InvalidArgumentException('Update manifest URL must use the official update origin '.$officialOrigin.'. Only the manifest path can be changed.');
+            }
+
             return $source;
         }
 
         if (!$this->updateConfiguration->allowsLocalPaths()) {
-            throw new InvalidArgumentException('Local update manifest paths are disabled. Use an HTTPS manifest URL or enable development update tools in UpdateConfiguration for local tests.');
+            throw new InvalidArgumentException('Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests.');
         }
 
         if ($this->isAbsolutePath($source)) {
@@ -490,12 +499,6 @@ final class SystemUpdateController extends AbstractController
      */
     private function resolveTrustedPublicKey(array $payload): ?string
     {
-        $configuredPublicKey = $this->updateConfiguration->getTrustedPublicKey();
-
-        if (null !== $configuredPublicKey) {
-            return $configuredPublicKey;
-        }
-
         $payloadPublicKey = $this->readNullableString($payload, 'trustedPublicKey');
 
         if (null === $payloadPublicKey) {

@@ -18,6 +18,7 @@ final readonly class UpdateManifestClient
 {
     public function __construct(
         private HttpClientInterface $httpClient,
+        private UpdateConfiguration $updateConfiguration,
     ) {}
 
     public function load(string $source): UpdateManifest
@@ -48,7 +49,16 @@ final readonly class UpdateManifestClient
         if ($this->isHttpUrl($source)) {
             $this->assertHttpsUrl($source, 'manifest');
 
-            $response = $this->httpClient->request('GET', $source);
+            if (
+                !$this->updateConfiguration->allowsDevelopmentUpdateTools()
+                && !$this->updateConfiguration->isAllowedOfficialUpdateUrl($source)
+            ) {
+                throw new InvalidArgumentException('Update manifest URL must use the official update origin '.$this->updateConfiguration->getOfficialManifestOrigin().'.');
+            }
+
+            $response = $this->httpClient->request('GET', $source, [
+                'max_redirects' => 0,
+            ]);
             $statusCode = $response->getStatusCode();
 
             if ($statusCode < 200 || $statusCode >= 300) {

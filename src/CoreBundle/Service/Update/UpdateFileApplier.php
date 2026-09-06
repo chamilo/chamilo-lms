@@ -26,6 +26,7 @@ final readonly class UpdateFileApplier
         '.env',
         '.env.local',
         'app/config/configuration.php',
+        UpdatePackageRemovalManifest::FILE_NAME,
     ];
     private const array SKIPPED_PREFIXES = [
         '.git',
@@ -42,6 +43,7 @@ final readonly class UpdateFileApplier
         private string $projectDir,
         private UpdateOperationLogger $operationLogger,
         private UpdateConfiguration $updateConfiguration,
+        private UpdatePackageRemovalManifest $packageRemovalManifest,
     ) {}
 
     public function apply(string $stagingPath, bool $confirmed, ?string $operationId = null): UpdateApplyFilesResult
@@ -72,7 +74,9 @@ final readonly class UpdateFileApplier
         $lockPath = null;
         $backupPath = null;
         $appliedFiles = [];
+        $removedFiles = [];
         $fileOperations = [];
+        $removalOperations = [];
         $auditPath = null;
 
         try {
@@ -95,6 +99,17 @@ final readonly class UpdateFileApplier
             ]);
             $this->logOperation($operationId, 'success', 'application_path', 'Staged application path is valid.');
 
+            $packageMetadata = $this->validatePackageMetadata($applicationPath, $applyPlan);
+            $details['package_metadata'] = [
+                'file' => $packageMetadata['file'],
+                'sha256' => $packageMetadata['sha256'],
+                'remove_count' => \count($packageMetadata['remove']),
+            ];
+            $this->addCheck($checks, 'package_metadata', 'passed', 'Signed package cleanup metadata matches the reviewed apply plan.', [
+                'remove_count' => \count($packageMetadata['remove']),
+            ]);
+            $this->logOperation($operationId, 'success', 'package_metadata', 'Signed package cleanup metadata was validated.');
+
             $lockPath = $this->resolveLockPath($applyPlan);
             $details['lock_path'] = $lockPath;
             $this->acquireLock($lockPath);
@@ -113,21 +128,28 @@ final readonly class UpdateFileApplier
             $this->logOperation($operationId, 'success', 'backup_directory', 'Update backup directory was created.');
 
             $fileOperations = $this->collectFileOperations($applicationPath);
-            $details['file_operations'] = $this->summarizeFileOperations($fileOperations);
+            $removalOperations = $this->collectRemovalOperations($packageMetadata['remove']);
+            $details['file_operations'] = $this->summarizeFileOperations($fileOperations, $removalOperations);
             $this->addCheck($checks, 'file_plan', 'passed', 'Update file operations were collected.', $details['file_operations']);
             $this->logOperation($operationId, 'info', 'file_plan', 'Update file operations were collected.');
 
-            $this->backupExistingFiles($fileOperations, $backupPath);
-            $this->addCheck($checks, 'file_backup', 'passed', 'Existing files planned for replacement were backed up.', [
-                'files_backed_up' => $details['file_operations']['files_to_replace'] ?? 0,
+            $this->backupExistingFiles($fileOperations, $removalOperations, $backupPath);
+            $this->addCheck($checks, 'file_backup', 'passed', 'Existing files planned for replacement or removal were backed up.', [
+                'files_backed_up' => ($details['file_operations']['files_to_replace'] ?? 0) + ($details['file_operations']['files_to_remove'] ?? 0),
             ]);
-            $this->logOperation($operationId, 'success', 'file_backup', 'Existing files planned for replacement were backed up.');
+            $this->logOperation($operationId, 'success', 'file_backup', 'Existing files planned for replacement or removal were backed up.');
 
-            $appliedFiles = $this->copyStagedFiles($fileOperations, $operationId);
+            $this->copyStagedFiles($fileOperations, $operationId, $appliedFiles);
             $this->addCheck($checks, 'file_copy', 'passed', 'Staged update files were copied to the Chamilo installation.', [
                 'files_copied' => \count($appliedFiles),
             ]);
             $this->logOperation($operationId, 'success', 'file_copy', 'Staged update files were copied to the Chamilo installation.');
+
+            $this->removeObsoleteFiles($removalOperations, $operationId, $removedFiles);
+            $this->addCheck($checks, 'file_remove', 'passed', 'Package-declared obsolete files were removed from the Chamilo installation.', [
+                'files_removed' => \count($removedFiles),
+            ]);
+            $this->logOperation($operationId, 'success', 'file_remove', 'Package-declared obsolete files were removed.');
 
             $auditPath = $this->writeAuditFile($stagingPath, $backupPath, $lockPath, $checks, $warnings, $details, true);
             $this->addCheck($checks, 'apply_audit', 'passed', 'Update apply audit metadata was written.', [
@@ -145,15 +167,35 @@ final readonly class UpdateFileApplier
             $details['exception'] = $exception::class;
             $this->logOperation($operationId, 'error', 'failed', $exception->getMessage());
 
-            if ([] !== $appliedFiles && null !== $backupPath) {
-                try {
-                    $this->rollbackAppliedFiles($appliedFiles, $backupPath);
+            if (([] !== $appliedFiles || [] !== $removedFiles) && null !== $backupPath) {
+                $rollbackErrors = [];
+
+                if ([] !== $removedFiles) {
+                    try {
+                        $this->rollbackRemovedFiles($removedFiles, $backupPath);
+                    } catch (Throwable $rollbackException) {
+                        $rollbackErrors[] = 'Unable to restore removed files: '.$rollbackException->getMessage();
+                    }
+                }
+
+                if ([] !== $appliedFiles) {
+                    try {
+                        $this->rollbackAppliedFiles($appliedFiles, $backupPath);
+                    } catch (Throwable $rollbackException) {
+                        $rollbackErrors[] = 'Unable to roll back copied files: '.$rollbackException->getMessage();
+                    }
+                }
+
+                if ([] === $rollbackErrors) {
                     $warnings[] = 'File rollback was executed after the update apply failure.';
                     $details['rollback_executed'] = true;
                     $this->logOperation($operationId, 'warning', 'rollback', 'File rollback was executed after the update apply failure.');
-                } catch (Throwable $rollbackException) {
-                    $errors[] = 'Rollback failed: '.$rollbackException->getMessage();
-                    $details['rollback_exception'] = $rollbackException::class;
+                } else {
+                    foreach ($rollbackErrors as $rollbackError) {
+                        $errors[] = 'Rollback failed: '.$rollbackError;
+                    }
+
+                    $details['rollback_errors'] = $rollbackErrors;
                     $details['rollback_executed'] = false;
                 }
             }
@@ -261,6 +303,77 @@ final readonly class UpdateFileApplier
         }
 
         return $realApplicationPath;
+    }
+
+    /**
+     * @param array<string, mixed> $applyPlan
+     *
+     * @return array{
+     *     present: bool,
+     *     file: string,
+     *     format: ?int,
+     *     sha256: ?string,
+     *     remove: string[]
+     * }
+     */
+    private function validatePackageMetadata(string $applicationPath, array $applyPlan): array
+    {
+        $packageMetadata = $this->packageRemovalManifest->load($applicationPath);
+
+        if (!$packageMetadata['present']) {
+            throw new RuntimeException('Update package is missing '.UpdatePackageRemovalManifest::FILE_NAME.'. Re-stage a verified package with signed cleanup metadata.');
+        }
+
+        $plannedMetadata = $applyPlan['package_metadata'] ?? null;
+
+        if (!\is_array($plannedMetadata) || true !== ($plannedMetadata['present'] ?? false)) {
+            throw new RuntimeException('Update apply plan is missing the reviewed package cleanup metadata.');
+        }
+
+        $plannedSha256 = $plannedMetadata['sha256'] ?? null;
+        $actualSha256 = $packageMetadata['sha256'];
+
+        if (!\is_string($plannedSha256) || !\is_string($actualSha256) || !hash_equals($plannedSha256, $actualSha256)) {
+            throw new RuntimeException('Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing.');
+        }
+
+        $plannedRemovalPaths = $plannedMetadata['remove'] ?? null;
+
+        if (!\is_array($plannedRemovalPaths)) {
+            throw new RuntimeException('Update apply plan contains an invalid package removal list.');
+        }
+
+        $expectedRemovalPaths = array_values($packageMetadata['remove']);
+        $plannedRemovalPaths = array_values(array_filter(
+            $plannedRemovalPaths,
+            static fn (mixed $value): bool => \is_string($value),
+        ));
+
+        sort($expectedRemovalPaths);
+        sort($plannedRemovalPaths);
+
+        if ($expectedRemovalPaths !== $plannedRemovalPaths) {
+            throw new RuntimeException('Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing.');
+        }
+
+        $filePlan = $applyPlan['file_plan'] ?? [];
+        $declaredRemovalPaths = \is_array($filePlan) ? ($filePlan['removal_paths_declared'] ?? null) : null;
+
+        if (!\is_array($declaredRemovalPaths)) {
+            throw new RuntimeException('Update apply plan is missing the reviewed removal path list.');
+        }
+
+        $declaredRemovalPaths = array_values(array_filter(
+            $declaredRemovalPaths,
+            static fn (mixed $value): bool => \is_string($value),
+        ));
+        sort($declaredRemovalPaths);
+
+        if ($expectedRemovalPaths !== $declaredRemovalPaths) {
+            throw new RuntimeException('Update apply plan removal paths do not match the signed package cleanup metadata.');
+        }
+
+        return $packageMetadata;
     }
 
     /**
@@ -404,16 +517,76 @@ final readonly class UpdateFileApplier
     }
 
     /**
+     * @param string[] $removalPaths
+     *
+     * @return array<int, array{relative_path: string, target_path: string}>
+     */
+    private function collectRemovalOperations(array $removalPaths): array
+    {
+        $operations = [];
+        $realProjectDir = realpath($this->projectDir);
+
+        if (false === $realProjectDir) {
+            throw new RuntimeException('Unable to resolve the Chamilo project directory before removing obsolete files.');
+        }
+
+        foreach ($removalPaths as $relativePath) {
+            $relativePath = $this->normalizeRelativePath($relativePath);
+
+            if ('' === $relativePath || $this->shouldSkipPath($relativePath)) {
+                throw new RuntimeException('Update cleanup cannot remove protected path: '.$relativePath);
+            }
+
+            $targetPath = $this->projectDir.'/'.$relativePath;
+
+            if (is_link($targetPath)) {
+                throw new RuntimeException('The planned update would remove an existing symbolic link: '.$relativePath);
+            }
+
+            if (is_dir($targetPath)) {
+                throw new RuntimeException('Update cleanup supports files only, not directories: '.$relativePath);
+            }
+
+            if (!is_file($targetPath)) {
+                continue;
+            }
+
+            if (!is_readable($targetPath)) {
+                throw new RuntimeException('Obsolete target file is not readable for backup: '.$relativePath);
+            }
+
+            if (!is_writable(\dirname($targetPath))) {
+                throw new RuntimeException('Obsolete target file cannot be removed with the current directory permissions: '.$relativePath);
+            }
+
+            $realTargetPath = realpath($targetPath);
+
+            if (false === $realTargetPath || !$this->isPathInside($realTargetPath, $realProjectDir)) {
+                throw new RuntimeException('Obsolete target file resolves outside the Chamilo project directory: '.$relativePath);
+            }
+
+            $operations[] = [
+                'relative_path' => $relativePath,
+                'target_path' => $targetPath,
+            ];
+        }
+
+        return $operations;
+    }
+
+    /**
      * @param array<int, array{relative_path: string, source_path: string, target_path: string, exists: bool}> $operations
+     * @param array<int, array{relative_path: string, target_path: string}>                                    $removalOperations
      *
      * @return array<string, int|string[]|bool>
      */
-    private function summarizeFileOperations(array $operations): array
+    private function summarizeFileOperations(array $operations, array $removalOperations): array
     {
         $filesToReplace = 0;
         $filesNew = 0;
         $replaceSamples = [];
         $newSamples = [];
+        $removalSamples = [];
 
         foreach ($operations as $operation) {
             if ($operation['exists']) {
@@ -427,31 +600,50 @@ final readonly class UpdateFileApplier
             $this->appendSample($newSamples, $operation['relative_path']);
         }
 
+        foreach ($removalOperations as $operation) {
+            $this->appendSample($removalSamples, $operation['relative_path']);
+        }
+
         return [
             'files_total' => \count($operations),
             'files_to_replace' => $filesToReplace,
             'files_new' => $filesNew,
+            'files_to_remove' => \count($removalOperations),
+            'file_operations_total' => \count($operations) + \count($removalOperations),
             'files_to_replace_sample' => $replaceSamples,
             'files_new_sample' => $newSamples,
-            'samples_truncated' => \count($replaceSamples) + \count($newSamples) < \count($operations),
+            'files_to_remove_sample' => $removalSamples,
+            'samples_truncated' => \count($replaceSamples) + \count($newSamples) < \count($operations)
+                || \count($removalSamples) < \count($removalOperations),
         ];
     }
 
     /**
      * @param array<int, array{relative_path: string, source_path: string, target_path: string, exists: bool}> $operations
+     * @param array<int, array{relative_path: string, target_path: string}>                                    $removalOperations
      */
-    private function backupExistingFiles(array $operations, string $backupPath): void
+    private function backupExistingFiles(array $operations, array $removalOperations, string $backupPath): void
     {
+        $backupTargets = [];
+
         foreach ($operations as $operation) {
             if (!$operation['exists']) {
                 continue;
             }
 
-            $backupFilePath = $backupPath.'/files/'.$operation['relative_path'];
+            $backupTargets[$operation['relative_path']] = $operation['target_path'];
+        }
+
+        foreach ($removalOperations as $operation) {
+            $backupTargets[$operation['relative_path']] = $operation['target_path'];
+        }
+
+        foreach ($backupTargets as $relativePath => $targetPath) {
+            $backupFilePath = $backupPath.'/files/'.$relativePath;
             $this->ensureDirectory(\dirname($backupFilePath));
 
-            if (!copy($operation['target_path'], $backupFilePath)) {
-                throw new RuntimeException('Unable to back up target file: '.$operation['relative_path']);
+            if (!copy($targetPath, $backupFilePath)) {
+                throw new RuntimeException('Unable to back up target file: '.$relativePath);
             }
         }
 
@@ -459,8 +651,11 @@ final readonly class UpdateFileApplier
             'created_at' => gmdate('c'),
             'project_dir' => $this->projectDir,
             'files_total' => \count($operations),
+            'file_operations_total' => \count($operations) + \count($removalOperations),
             'files_to_replace' => \count(array_filter($operations, static fn (array $operation): bool => true === $operation['exists'])),
             'files_new' => \count(array_filter($operations, static fn (array $operation): bool => false === $operation['exists'])),
+            'files_to_remove' => \count($removalOperations),
+            'files_backed_up' => \count($backupTargets),
         ];
 
         $encoded = json_encode($metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
@@ -472,12 +667,10 @@ final readonly class UpdateFileApplier
 
     /**
      * @param array<int, array{relative_path: string, source_path: string, target_path: string, exists: bool}> $operations
-     *
-     * @return array<int, array{relative_path: string, target_path: string, existed: bool}>
+     * @param array<int, array{relative_path: string, target_path: string, existed: bool}>                     $appliedFiles
      */
-    private function copyStagedFiles(array $operations, ?string $operationId): array
+    private function copyStagedFiles(array $operations, ?string $operationId, array &$appliedFiles): void
     {
-        $appliedFiles = [];
         $totalOperations = \count($operations);
         $copiedFiles = 0;
         $debugSlowCopyMilliseconds = $this->updateConfiguration->getDebugSlowCopyMilliseconds();
@@ -509,8 +702,41 @@ final readonly class UpdateFileApplier
                 usleep($debugSlowCopyMilliseconds * 1000);
             }
         }
+    }
 
-        return $appliedFiles;
+    /**
+     * @param array<int, array{relative_path: string, target_path: string}> $operations
+     * @param array<int, array{relative_path: string, target_path: string}> $removedFiles
+     */
+    private function removeObsoleteFiles(array $operations, ?string $operationId, array &$removedFiles): void
+    {
+        $totalOperations = \count($operations);
+        $removedCount = 0;
+
+        foreach ($operations as $operation) {
+            if (!is_file($operation['target_path'])) {
+                continue;
+            }
+
+            if (!unlink($operation['target_path'])) {
+                throw new RuntimeException('Unable to remove package-declared obsolete file: '.$operation['relative_path']);
+            }
+
+            $removedFiles[] = [
+                'relative_path' => $operation['relative_path'],
+                'target_path' => $operation['target_path'],
+            ];
+            $removedCount++;
+
+            if (1 === $removedCount || $removedCount === $totalOperations || 0 === $removedCount % 25) {
+                $this->logOperation(
+                    $operationId,
+                    'info',
+                    'file_remove_progress',
+                    'Removed '.$removedCount.' of '.$totalOperations.' package-declared obsolete files.'
+                );
+            }
+        }
     }
 
     /**
@@ -534,6 +760,28 @@ final readonly class UpdateFileApplier
 
             if (is_file($targetPath) && !@unlink($targetPath)) {
                 throw new RuntimeException('Unable to remove newly copied file during rollback: '.$relativePath);
+            }
+        }
+    }
+
+    /**
+     * @param array<int, array{relative_path: string, target_path: string}> $removedFiles
+     */
+    private function rollbackRemovedFiles(array $removedFiles, string $backupPath): void
+    {
+        foreach (array_reverse($removedFiles) as $removedFile) {
+            $relativePath = $removedFile['relative_path'];
+            $targetPath = $removedFile['target_path'];
+            $backupFilePath = $backupPath.'/files/'.$relativePath;
+
+            if (!is_file($backupFilePath)) {
+                throw new RuntimeException('Unable to restore removed file because its backup is missing: '.$relativePath);
+            }
+
+            $this->ensureDirectory(\dirname($targetPath));
+
+            if (!copy($backupFilePath, $targetPath)) {
+                throw new RuntimeException('Unable to restore removed file from backup: '.$relativePath);
             }
         }
     }
@@ -564,7 +812,7 @@ final readonly class UpdateFileApplier
             'lock_path' => $lockPath,
             'checks' => $checks,
             'details' => $details,
-            'note' => 'This file records the file-copy step only. Database migrations, Composer, Yarn and cache commands are not executed here.',
+            'note' => 'This file records the staged file application and package-declared cleanup step only. Database migrations, Composer, Yarn and cache commands are not executed here.',
         ];
         $encoded = json_encode($audit, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
         $auditPath = $stagingPath.'/'.self::AUDIT_FILE_NAME;
@@ -704,6 +952,7 @@ final readonly class UpdateFileApplier
             'files_total' => \is_array($filePlan) ? ($filePlan['files_total'] ?? null) : null,
             'files_to_replace' => \is_array($filePlan) ? ($filePlan['files_to_replace'] ?? null) : null,
             'files_new' => \is_array($filePlan) ? ($filePlan['files_new'] ?? null) : null,
+            'files_to_remove' => \is_array($filePlan) ? ($filePlan['files_to_remove'] ?? null) : null,
         ];
     }
 

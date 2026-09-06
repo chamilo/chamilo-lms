@@ -20,11 +20,19 @@ final readonly class UpdatePackageDownloader
         private HttpClientInterface $httpClient,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
+        private UpdateConfiguration $updateConfiguration,
     ) {}
 
     public function download(string $url, ?string $targetDirectory = null): string
     {
         $this->assertHttpsUrl($url, 'package');
+
+        if (
+            !$this->updateConfiguration->allowsDevelopmentUpdateTools()
+            && !$this->updateConfiguration->isAllowedOfficialUpdateUrl($url)
+        ) {
+            throw new InvalidArgumentException('Update downloads must use the official update origin '.$this->updateConfiguration->getOfficialManifestOrigin().'.');
+        }
 
         $targetDirectory ??= $this->projectDir.'/var/update/downloads';
         $this->ensureDirectory($targetDirectory);
@@ -32,7 +40,9 @@ final readonly class UpdatePackageDownloader
         $fileName = $this->getSafeFileNameFromUrl($url);
         $targetPath = $targetDirectory.'/'.$fileName;
 
-        $response = $this->httpClient->request('GET', $url);
+        $response = $this->httpClient->request('GET', $url, [
+            'max_redirects' => 0,
+        ]);
         $statusCode = $response->getStatusCode();
 
         if ($statusCode < 200 || $statusCode >= 300) {

@@ -14,19 +14,23 @@ final readonly class UpdateTrustedKeyring
      * Public release keys trusted by Chamilo for official update packages.
      *
      * The private keys must never be committed. They are kept only on the
-     * release-signing infrastructure. Add the official Chamilo 2.x release
-     * public key here before enabling signed production updates.
+     * release-signing infrastructure. Official public keys may be committed
+     * here so every Chamilo installation can verify signed release packages.
      *
      * @var array<string, array{keyId: string, publicKey: string}>
      */
     private const array OFFICIAL_MINISIGN_PUBLIC_KEYS = [
+        'chamilo-release-2026' => [
+            'keyId' => 'A158EB4EFF622FB3',
+            'publicKey' => 'RWSzL2L/TutYoT4l8BsZxjjvH3yf7fpQE0XfkZpOT1TL6mExtsf6TbAG',
+        ],
     ];
 
     /**
      * Development-only public keys used to simulate the official update server.
      *
-     * These keys are trusted only when UpdateConfiguration::ENABLE_DEVELOPMENT_UPDATE_TOOLS
-     * is enabled locally.
+     * These keys are trusted only when CHAMILO_UPDATE_DEVELOPMENT_TOOLS is enabled
+     * in the server environment.
      *
      * @var array<string, array{keyId: string, publicKey: string}>
      */

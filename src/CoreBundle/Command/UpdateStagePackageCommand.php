@@ -68,7 +68,7 @@ HELP
         $manifestSource = (string) $input->getArgument('manifest');
         $packagePath = $this->readNullableStringOption($input, 'package-path');
         $signaturePath = $this->readNullableStringOption($input, 'signature-path');
-        $trustedPublicKey = $this->readNullableStringOption($input, 'trusted-public-key') ?? $this->updateConfiguration->getTrustedPublicKey();
+        $trustedPublicKey = $this->readNullableStringOption($input, 'trusted-public-key');
         $skipSignature = (bool) $input->getOption('skip-signature');
 
         if ($skipSignature && !$this->updateConfiguration->allowsSkipSignature()) {

@@ -421,11 +421,17 @@ final readonly class UpdatePostApplyCommandRunner
             return $allowedExecutableActions;
         }
 
-        $selectedActions = [];
-
         foreach ($requestedActions as $key) {
             if (!isset($allowedExecutableActions[$key])) {
                 throw new RuntimeException('Post-apply action is not allowed for this update: '.$key);
+            }
+        }
+
+        $selectedActions = [];
+
+        foreach (array_keys($actionDefinitions) as $key) {
+            if (!\in_array($key, $requestedActions, true)) {
+                continue;
             }
 
             $selectedActions[$key] = $allowedExecutableActions[$key];
@@ -683,6 +689,7 @@ final readonly class UpdatePostApplyCommandRunner
 
         if (isset($selectedActions['composer_install'])) {
             $this->assertWritablePathForAction($this->projectDir.'/vendor', $this->projectDir, 'composer_install');
+            $this->assertComposerRuntimeOwnershipCompatibility();
         }
 
         if (isset($selectedActions['yarn_install'])) {
@@ -729,6 +736,40 @@ final readonly class UpdatePostApplyCommandRunner
         ];
     }
 
+    private function assertComposerRuntimeOwnershipCompatibility(): void
+    {
+        if (!\function_exists('posix_geteuid')) {
+            return;
+        }
+
+        $effectiveUid = posix_geteuid();
+
+        if (0 === $effectiveUid) {
+            return;
+        }
+
+        $generatedFiles = [
+            $this->projectDir.'/vendor/autoload.php',
+            $this->projectDir.'/vendor/composer/autoload_real.php',
+        ];
+
+        foreach ($generatedFiles as $path) {
+            if (!is_file($path)) {
+                continue;
+            }
+
+            $ownerUid = fileowner($path);
+
+            if (false === $ownerUid || $ownerUid === $effectiveUid) {
+                continue;
+            }
+
+            $relativePath = ltrim(substr($path, \strlen($this->projectDir)), '/');
+
+            throw new RuntimeException(\sprintf('Composer cannot run safely from the web updater because Composer-generated file "%s" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions.', $relativePath, $ownerUid, $effectiveUid));
+        }
+    }
+
     private function assertWritablePathForAction(string $path, string $parentDirectory, string $actionKey): void
     {
         if (is_dir($path) || is_file($path)) {
@@ -753,12 +794,7 @@ final readonly class UpdatePostApplyCommandRunner
     {
         $paths = [];
 
-        if (isset($selectedActions['cache_clear']) || isset($selectedActions['doctrine_migrations'])) {
-            $paths[] = $this->projectDir.'/bin/console';
-        }
-
         if (isset($selectedActions['composer_install'])) {
-            $paths[] = $this->projectDir.'/bin/console';
             $paths[] = $this->projectDir.'/vendor/bin/requirements-checker';
             $paths[] = $this->projectDir.'/vendor/symfony/requirements-checker/bin/requirements-checker';
 

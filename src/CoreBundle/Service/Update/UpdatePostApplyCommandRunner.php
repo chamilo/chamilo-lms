@@ -766,12 +766,7 @@ final readonly class UpdatePostApplyCommandRunner
 
             $relativePath = ltrim(substr($path, \strlen($this->projectDir)), '/');
 
-            throw new RuntimeException(\sprintf(
-                'Composer cannot run safely from the web updater because Composer-generated file "%s" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions.',
-                $relativePath,
-                $ownerUid,
-                $effectiveUid
-            ));
+            throw new RuntimeException(\sprintf('Composer cannot run safely from the web updater because Composer-generated file "%s" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions.', $relativePath, $ownerUid, $effectiveUid));
         }
     }
 

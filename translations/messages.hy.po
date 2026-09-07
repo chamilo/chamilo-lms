@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Բանաձևի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Բանաձևի օրինակ՝ sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -37009,15 +37009,6 @@ msgstr "Վստահելի հանրային բանալի"
 msgid "Trusted signing key"
 msgstr "Վստահելի ստորագրման բանալի"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Հաստատելու համար մուտքագրեք APPLY UPDATE FILES"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Տվյալների բազայի միգրացիաները հաստատելու համար մուտքագրեք RUN DATABASE MIGRATIONS"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Հաստատելու համար մուտքագրեք RUN POST UPDATE ACTIONS"
-
 msgid "Unknown update notice source."
 msgstr "Թարմացման ծանուցման անհայտ աղբյուր։"
 
@@ -40815,6 +40806,9 @@ msgstr "Կիրառումից հետո հրամանի գործարկման մետ
 
 msgid "Post-apply actions completed successfully."
 msgstr "Կիրառումից հետո գործողությունները հաջողությամբ ավարտվեցին։"
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Հիշեք վերականգնել ձեր ֆայլերի և գրացուցակների թույլտվությունները այն վիճակին, որը եղել է այս թարմացումից առաջ։ Վեբ սերվերին Chamilo-ի կոդին գրելու հասանելիություն թողնելը ցանկացած ապագա խոցելիությունը վերածում է ձեր հարթակի ֆայլերը փոփոխելու միջոցի։"
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Անվավեր թարմացման կիրառումից հետո հրամանի սահմանում․ %s"

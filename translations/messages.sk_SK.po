@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Príklad vzorca: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Príklad vzorca: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -37024,15 +37024,6 @@ msgstr "Dôveryhodný verejný kľúč"
 msgid "Trusted signing key"
 msgstr "Dôveryhodný podpisový kľúč"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Na potvrdenie zadajte APPLY UPDATE FILES"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Na potvrdenie migrácií databázy zadajte RUN DATABASE MIGRATIONS"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Na potvrdenie zadajte RUN POST UPDATE ACTIONS"
-
 msgid "Unknown update notice source."
 msgstr "Neznámy zdroj oznámenia o aktualizácii."
 
@@ -40830,6 +40821,9 @@ msgstr "Metadáta spustenia príkazov po aplikovaní boli zapísané."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Akcie po aplikovaní boli úspešne dokončené."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Nezabudnite obnoviť oprávnenia súborov a adresárov do stavu pred touto aktualizáciou. Ak webový server ponecháte s právom zápisu do kódu Chamilo, akákoľvek budúca zraniteľnosť sa stane spôsobom, ako upraviť súbory vašej platformy."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Neplatná definícia príkazu aktualizácie po aplikovaní: %s"

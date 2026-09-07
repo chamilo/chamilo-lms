@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول بېلګه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول بېلګه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -37005,15 +37005,6 @@ msgstr "د باور وړ عامه کیلي"
 msgid "Trusted signing key"
 msgstr "د باور وړ لاسلیک کیلي"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "د تایید لپاره APPLY UPDATE FILES ولیکئ"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "د ډیټابیس مهاجرتونو د تایید لپاره RUN DATABASE MIGRATIONS ولیکئ"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "د تایید لپاره RUN POST UPDATE ACTIONS ولیکئ"
-
 msgid "Unknown update notice source."
 msgstr "د تازه کولو خبر سرچینه نامعلومه ده."
 
@@ -40811,6 +40802,9 @@ msgstr "د پلي کولو وروسته د قوماندې چلولو میټاډ�
 
 msgid "Post-apply actions completed successfully."
 msgstr "د پلي کولو وروسته کړنې په بریالیتوب سره بشپړې شوې."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "په یاد ولرئ چې د فایل او ډایرکټرۍ اجازې د دې تازه کولو دمخه حالت ته بیرته راوګرځوئ. د ویب سرور ته د چامیلو کوډ ته د لیکلو لاسرسي پریښودل هر راتلونکی زیانمنتیا په داسې لاره بدلوي چې ستاسو د پلیټفارم فایلونه بدل کړي."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "د تازه کولو د پلي کولو وروسته د قوماندې ناسم تعریف: %s"

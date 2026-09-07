@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ตัวอย่างสูตร: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -37011,15 +37011,6 @@ msgstr "กุญแจสาธารณะที่เชื่อถือไ
 msgid "Trusted signing key"
 msgstr "กุญแจลายเซ็นที่เชื่อถือได้"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "พิมพ์ APPLY UPDATE FILES เพื่อยืนยัน"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "พิมพ์ RUN DATABASE MIGRATIONS เพื่อยืนยันการย้ายฐานข้อมูล"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "พิมพ์ RUN POST UPDATE ACTIONS เพื่อยืนยัน"
-
 msgid "Unknown update notice source."
 msgstr "ไม่ทราบแหล่งที่มาของประกาศการอัปเดต"
 
@@ -40817,6 +40808,9 @@ msgstr "เขียนข้อมูลเมตาการรันคำส
 
 msgid "Post-apply actions completed successfully."
 msgstr "การดำเนินการหลังนำไปใช้เสร็จสมบูรณ์แล้ว"
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "โปรดคืนค่าสิทธิ์ของไฟล์และไดเรกทอรีให้เป็นสถานะก่อนการอัปเดตนี้ การปล่อยให้เว็บเซิร์ฟเวอร์มีสิทธิ์เขียนไปยังโค้ดของ Chamilo จะทำให้ช่องโหว่ในอนาคตกลายเป็นช่องทางในการแก้ไขไฟล์ของแพลตฟอร์มของคุณ"
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "คำจำกัดความคำสั่งหลังนำไปใช้ของการอัปเดตไม่ถูกต้อง: %s"

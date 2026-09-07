@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "감사합니다"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "수식 예: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "수식 예시: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "변수 범위"
@@ -37009,15 +37009,6 @@ msgstr "신뢰할 수 있는 공개 키"
 msgid "Trusted signing key"
 msgstr "신뢰할 수 있는 서명 키"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "확인하려면 APPLY UPDATE FILES를 입력하세요"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "데이터베이스 마이그레이션을 확인하려면 RUN DATABASE MIGRATIONS를 입력하세요"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "확인하려면 RUN POST UPDATE ACTIONS를 입력하세요"
-
 msgid "Unknown update notice source."
 msgstr "알 수 없는 업데이트 알림 소스입니다."
 
@@ -40815,6 +40806,9 @@ msgstr "적용 후 명령 실행 메타데이터가 기록되었습니다."
 
 msgid "Post-apply actions completed successfully."
 msgstr "적용 후 작업이 성공적으로 완료되었습니다."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "이 업데이트 이전에 파일 및 디렉터리 권한을 원래 상태로 복원하는 것을 잊지 마십시오. 웹 서버가 Chamilo 코드에 쓰기 권한을 가진 채로 두면 향후 취약점이 플랫폼 파일을 수정하는 수단이 됩니다."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "잘못된 업데이트 적용 후 명령 정의: %s"

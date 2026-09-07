@@ -37005,15 +37005,6 @@ msgstr "Ufunguo wa umma unaoaminika"
 msgid "Trusted signing key"
 msgstr "Ufunguo wa kusaini unaoaminika"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Andika APPLY UPDATE FILES ili kuthibitisha"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Andika RUN DATABASE MIGRATIONS ili kuthibitisha uhamishaji wa hifadhidata"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Andika RUN POST UPDATE ACTIONS ili kuthibitisha"
-
 msgid "Unknown update notice source."
 msgstr "Chanzo cha taarifa ya sasisho hakijulikani."
 
@@ -40811,6 +40802,9 @@ msgstr "Metadata ya kuendesha amri baada ya kutumia iliandikwa."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Vitendo baada ya kutumia vilikamilika kwa mafanikio."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Kumbuka kurejesha ruhusa za faili na saraka zako katika hali yake kabla ya sasisho hili. Kuacha seva ya wavuti ikiwa na ufikiaji wa kuandika kwenye msimbo wa Chamilo hugeuza udhaifu wowote wa baadaye kuwa njia ya kubadilisha faili za jukwaa lako."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Ufafanuzi batili wa amri ya sasisho baada ya kutumia: %s"

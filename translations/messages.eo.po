@@ -37011,15 +37011,6 @@ msgstr "Fidinda publika ŝlosilo"
 msgid "Trusted signing key"
 msgstr "Fidinda subskriba ŝlosilo"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Tajpu APPLY UPDATE FILES por konfirmi"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Tajpu RUN DATABASE MIGRATIONS por konfirmi datumbazajn migradojn"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Tajpu RUN POST UPDATE ACTIONS por konfirmi"
-
 msgid "Unknown update notice source."
 msgstr "Nekonata fonto de ĝisdatiga avizo."
 
@@ -40817,6 +40808,9 @@ msgstr "Metadatumoj de rulado de post-aplikaj komandoj estis skribitaj."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Post-aplikaj agoj kompletigis sukcese."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Memoru restarigi la permesojn de viaj dosieroj kaj dosierujoj al ilia stato antaŭ ĉi tiu ĝisdatigo. Lasante la retservilon kun skrib-alira rajto al la kodo de Chamilo, iu ajn estonta vundebleco fariĝas maniero modifi la dosierojn de via platformo."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Nevalida difino de post-aplika ĝisdatiga komando: %s"

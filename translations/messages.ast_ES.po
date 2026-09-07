@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Atentamente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Ranges de variables"
@@ -40808,6 +40808,9 @@ msgstr "Escribiéronse los metadatos d'execución de comandos post-aplicación."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Les aiciones post-aplicación completáronse correutamente."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Recuerde restaurar los permisos de ficheros y directorios al estáu anterior a esta actualización. Dexar el sirvidor web con accesu d'escritura al códigu de Chamilo convierte cualquier vulnerabilidá futura nuna forma de modificar los ficheros de la so plataforma."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Definición inválida de comandu post-aplicación d'actualización: %s"

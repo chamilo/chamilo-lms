@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Helsingar"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formeleksempel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -37009,15 +37009,6 @@ msgstr "Tilliten offentleg nøkkel"
 msgid "Trusted signing key"
 msgstr "Tilliten signeringsnøkkel"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Skriv APPLY UPDATE FILES for å stadfeste"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Skriv RUN DATABASE MIGRATIONS for å stadfeste databasemigrasjonar"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Skriv RUN POST UPDATE ACTIONS for å stadfeste"
-
 msgid "Unknown update notice source."
 msgstr "Ukjend kjelde for oppdateringsvarsel."
 
@@ -40815,6 +40806,9 @@ msgstr "Metadata for køyring av etter-installasjonskommando vart skrivne."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Etter-installasjonshandlingar vart fullførte vellukka."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Hugs å gjenopprette fil- og katalogløyva til tilstanden dei hadde før denne oppdateringa. Å la vevtenaren ha skrivetilgang til Chamilo-koden gjer at ei framtidig sårbarheit blir ein måte å endre filene på plattforma di."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Ugyldig definisjon av etter-installasjonskommando for oppdatering: %s"

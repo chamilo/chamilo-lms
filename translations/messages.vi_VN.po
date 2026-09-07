@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ví dụ công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -37011,15 +37011,6 @@ msgstr "Khóa công khai đáng tin cậy"
 msgid "Trusted signing key"
 msgstr "Khóa ký đáng tin cậy"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Nhập APPLY UPDATE FILES để xác nhận"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Nhập RUN DATABASE MIGRATIONS để xác nhận di chuyển cơ sở dữ liệu"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Nhập RUN POST UPDATE ACTIONS để xác nhận"
-
 msgid "Unknown update notice source."
 msgstr "Nguồn thông báo cập nhật không xác định."
 
@@ -40817,6 +40808,9 @@ msgstr "Đã ghi siêu dữ liệu chạy lệnh sau khi áp dụng."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Các hành động sau khi áp dụng hoàn tất thành công."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Hãy nhớ khôi phục quyền của tệp và thư mục về trạng thái trước bản cập nhật này. Việc để máy chủ web có quyền ghi vào mã nguồn Chamilo sẽ biến mọi lỗ hổng trong tương lai thành cách để sửa đổi các tệp của nền tảng."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Định nghĩa lệnh sau khi áp dụng cập nhật không hợp lệ: %s"

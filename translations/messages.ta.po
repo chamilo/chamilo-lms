@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "சூத்திர மாதிரி: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "சூத்திர மாதிரி: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -37009,15 +37009,6 @@ msgstr "நம்பகமான பொது விசை"
 msgid "Trusted signing key"
 msgstr "நம்பகமான கையொப்ப விசை"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "உறுதிப்படுத்த APPLY UPDATE FILES என தட்டச்சு செய்யவும்"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "தரவுத்தள இடம்பெயர்வுகளை உறுதிப்படுத்த RUN DATABASE MIGRATIONS என தட்டச்சு செய்யவும்"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "உறுதிப்படுத்த RUN POST UPDATE ACTIONS என தட்டச்சு செய்யவும்"
-
 msgid "Unknown update notice source."
 msgstr "தெரியாத புதுப்பிப்பு அறிவிப்பு மூலம்."
 
@@ -40815,6 +40806,9 @@ msgstr "பின்-பயன்பாட்டு கட்டளை இயக
 
 msgid "Post-apply actions completed successfully."
 msgstr "பின்-பயன்பாட்டு செயல்கள் வெற்றிகரமாக முடிந்தன."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "இந்த புதுப்பிப்புக்கு முன் உங்கள் கோப்பு மற்றும் அடைவு அனுமதிகளை அவற்றின் முந்தைய நிலைக்கு மீட்டமைக்க நினைவில் கொள்ளுங்கள். Chamilo குறியீட்டிற்கு எழுதும் அணுகலை வலை சேவையகத்திற்கு விட்டுவிடுவது, எதிர்காலத்தில் ஏற்படும் எந்த பாதிப்பையும் உங்கள் தளத்தின் கோப்புகளை மாற்றும் வழியாக மாற்றிவிடும்."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "செல்லாத புதுப்பிப்பு பின்-பயன்பாட்டு கட்டளை வரையறை: %s"

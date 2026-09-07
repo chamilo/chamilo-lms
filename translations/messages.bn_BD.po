@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্রের নমুনা: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -40802,6 +40802,9 @@ msgstr "প্রয়োগ-পরবর্তী কমান্ড চাল
 
 msgid "Post-apply actions completed successfully."
 msgstr "প্রয়োগ-পরবর্তী কর্ম সফলভাবে সম্পন্ন হয়েছে।"
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "এই আপডেটের আগে আপনার ফাইল ও ডিরেক্টরির অনুমতিসমূহ তাদের পূর্ববর্তী অবস্থায় ফিরিয়ে আনতে মনে রাখবেন। ওয়েব সার্ভারকে চামিলো কোডে লেখার অ্যাক্সেস দিয়ে রাখলে ভবিষ্যতের যেকোনো দুর্বলতা আপনার প্ল্যাটফর্মের ফাইল পরিবর্তন করার একটি উপায়ে পরিণত হয়।"
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "অবৈধ আপডেট প্রয়োগ-পরবর্তী কমান্ড সংজ্ঞা: %s"

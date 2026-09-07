@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Me respekt"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Shembull formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Shembull formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Vargjet e variablave"
@@ -37009,15 +37009,6 @@ msgstr "Çelës publik i besuar"
 msgid "Trusted signing key"
 msgstr "Çelës nënshkrimi i besuar"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Shkruani APPLY UPDATE FILES për të konfirmuar"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Shkruani RUN DATABASE MIGRATIONS për të konfirmuar migrimet e bazës së të dhënave"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Shkruani RUN POST UPDATE ACTIONS për të konfirmuar"
-
 msgid "Unknown update notice source."
 msgstr "Burim i panjohur njoftimi përditësimi."
 
@@ -40815,6 +40806,9 @@ msgstr "U shkruan metadatat e ekzekutimit të komandave pas zbatimit."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Veprimet pas zbatimit përfunduan me sukses."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Mos harroni të rivendosni lejet e skedarëve dhe drejtorive në gjendjen e tyre para këtij përditësimi. Lënia e serverit të uebit me akses shkrimi në kodin e Chamilo e kthen çdo dobësi të ardhshme në një mënyrë për të ndryshuar skedarët e platformës suaj."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Përkufizim i pavlefshëm i komandës pas zbatimit të përditësimit: %s"

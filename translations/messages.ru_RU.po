@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "С уважением"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример формулы: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример формулы: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазоны переменных"
@@ -37012,15 +37012,6 @@ msgstr "Доверенный открытый ключ"
 msgid "Trusted signing key"
 msgstr "Доверенный ключ подписи"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Введите APPLY UPDATE FILES для подтверждения"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Введите RUN DATABASE MIGRATIONS для подтверждения миграций базы данных"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Введите RUN POST UPDATE ACTIONS для подтверждения"
-
 msgid "Unknown update notice source."
 msgstr "Неизвестный источник уведомления об обновлении."
 
@@ -40818,6 +40809,9 @@ msgstr "Метаданные запуска команд после примен
 
 msgid "Post-apply actions completed successfully."
 msgstr "Действия после применения успешно завершены."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Не забудьте восстановить права доступа к файлам и каталогам в состояние, которое было до этого обновления. Если веб-сервер сохранит право записи к коду Chamilo, любая будущая уязвимость позволит изменять файлы вашей платформы."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Недопустимое определение команды после применения обновления: %s"

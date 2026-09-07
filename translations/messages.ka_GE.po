@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "პატივისცემით"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ფორმულის ნიმუში: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ფორმულის ნიმუში: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ცვლადის დიაპაზონები"
@@ -37005,15 +37005,6 @@ msgstr "სანდო საჯარო გასაღები"
 msgid "Trusted signing key"
 msgstr "სანდო ხელმოწერის გასაღები"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "დასადასტურებლად აკრიფეთ APPLY UPDATE FILES"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "მონაცემთა ბაზის მიგრაციების დასადასტურებლად აკრიფეთ RUN DATABASE MIGRATIONS"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "დასადასტურებლად აკრიფეთ RUN POST UPDATE ACTIONS"
-
 msgid "Unknown update notice source."
 msgstr "განახლების შეტყობინების წყარო უცნობია."
 
@@ -40811,6 +40802,9 @@ msgstr "გამოყენების შემდგომი ბრძა�
 
 msgid "Post-apply actions completed successfully."
 msgstr "გამოყენების შემდგომი მოქმედებები წარმატებით დასრულდა."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "გახსოვდეთ, რომ ფაილებისა და დირექტორიების უფლებები უნდა აღადგინოთ იმ მდგომარეობაში, რაც განახლებამდე იყო. თუ ვებ-სერვერს დარჩება ჩაწერის წვდომა Chamilo-ს კოდზე, ნებისმიერი მომავალი დაუცველობა პლატფორმის ფაილების შეცვლის საშუალებად იქცევა."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "განახლების გამოყენების შემდგომი ბრძანების არასწორი განსაზღვრება: %s"

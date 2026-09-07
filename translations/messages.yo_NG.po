@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ fọ́múlà: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -37005,15 +37005,6 @@ msgstr "Kóòdù ìbẹ̀rẹ̀ tí a gbẹ́kẹ̀lé"
 msgid "Trusted signing key"
 msgstr "Kóòdù ìbẹ̀rẹ̀ tí a gbẹ́kẹ̀lé"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Tẹ APPLY UPDATE FILES láti jẹ́rìí"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Tẹ RUN DATABASE MIGRATIONS láti jẹ́rìí ìkópadà àkójọpọ̀ dátàbéesì"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Tẹ RUN POST UPDATE ACTIONS láti jẹ́rìí"
-
 msgid "Unknown update notice source."
 msgstr "Orísun ìkéde ìmúdójútó tí a kò mọ̀."
 
@@ -40811,6 +40802,9 @@ msgstr "A kọ metadata ṣíṣe àṣẹ lẹ́yìn-ìfìsì."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì parí dáadáa."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Rántí láti dá ìyọ̀ǹda fáìlì àti fódà rẹ padà sí ipò wọn ṣáájú ìmúdójúìwọ̀n yìí. Fífi ẹ̀rọ ìtàkùn sílẹ̀ pẹ̀lú ìwọ́lé kíkọ sí kóòdù Chamilo ń sọ àìlágbára èyíkéyìí lọ́jọ́ iwájú di ọ̀nà láti yí fáìlì pẹpẹ rẹ padà."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Ìtumọ̀ àṣẹ lẹ́yìn-ìfìsì ìmúdójúìwọ̀n kò tọ́: %s"

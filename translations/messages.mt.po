@@ -37010,15 +37010,6 @@ msgstr "Ċavetta pubblika fdata"
 msgid "Trusted signing key"
 msgstr "Ċavetta tal-firma fdata"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Ikteb APPLY UPDATE FILES biex tikkonferma"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Ikteb RUN DATABASE MIGRATIONS biex tikkonferma l-migrazzjonijiet tad-database"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Ikteb RUN POST UPDATE ACTIONS biex tikkonferma"
-
 msgid "Unknown update notice source."
 msgstr "Sors tal-avviż tal-aġġornament mhux magħruf."
 
@@ -40816,6 +40807,9 @@ msgstr "Inkiteb il-metadejta tal-eżekuzzjoni tal-kmand wara l-applikazzjoni."
 
 msgid "Post-apply actions completed successfully."
 msgstr "L-azzjonijiet wara l-applikazzjoni tlestew b’suċċess."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Ftakar li treġġa' lura l-permessi tal-fajls u tad-direttorji għall-istat tagħhom qabel din l-aġġornament. Jekk tħalli lis-server tal-web b'aċċess ta' kitba għall-kodiċi ta' Chamilo, kwalunkwe vulnerabbiltà futura ssir mod biex timmodifika l-fajls tal-pjattaforma tiegħek."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Definizzjoni invalida tal-kmand wara l-applikazzjoni tal-aġġornament: %s"

@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "ရိုးသားစွာ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ဖော်မြူလာ နမူနာ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ဖော်မြူလာ နမူနာ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ပြောင်းလဲနိုင်သော အကွာအဝေးများ"
@@ -37009,15 +37009,6 @@ msgstr "ယုံကြည်ရသော အများပြည်သူ သ�
 msgid "Trusted signing key"
 msgstr "ယုံကြည်ရသော လက်မှတ်ရေးထိုး သော့"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "အတည်ပြုရန် APPLY UPDATE FILES ဟု ရိုက်ထည့်ပါ"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများကို အတည်ပြုရန် RUN DATABASE MIGRATIONS ဟု ရိုက်ထည့်ပါ"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "အတည်ပြုရန် RUN POST UPDATE ACTIONS ဟု ရိုက်ထည့်ပါ"
-
 msgid "Unknown update notice source."
 msgstr "အပ်ဒိတ် အသိပေးချက် အရင်းအမြစ် မသိရှိပါ။"
 
@@ -40815,6 +40806,9 @@ msgstr "အသုံးပြုပြီးနောက် အမိန့် �
 
 msgid "Post-apply actions completed successfully."
 msgstr "အသုံးပြုပြီးနောက် လုပ်ဆောင်ချက်များ အောင်မြင်စွာ ပြီးဆုံးပါပြီ။"
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "ဤအပ်ဒိတ်မတိုင်မီ သင့်ဖိုင်နှင့် ဒါရိုက်ထရီ ခွင့်ပြုချက်များကို မူလအခြေအနေသို့ ပြန်လည်သတ်မှတ်ရန် သတိရပါ။ ဝဘ်ဆာဗာအား Chamilo ကုဒ်ကို ရေးသားဝင်ရောက်ခွင့် ပေးထားခြင်းသည် အနာဂတ် အားနည်းချက် မည်သည့်အရာကိုမဆို သင့်ပလက်ဖောင်း၏ ဖိုင်များကို ပြင်ဆင်နိုင်သည့် နည်းလမ်းအဖြစ် ပြောင်းလဲစေပါသည်။"
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "မမှန်ကန်သော အပ်ဒိတ် post-apply အမိန့် သတ်မှတ်ချက်: %s"

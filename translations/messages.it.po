@@ -37025,15 +37025,6 @@ msgstr "Chiave pubblica attendibile"
 msgid "Trusted signing key"
 msgstr "Chiave di firma attendibile"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Digitare APPLY UPDATE FILES per confermare"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Digitare RUN DATABASE MIGRATIONS per confermare le migrazioni del database"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Digitare RUN POST UPDATE ACTIONS per confermare"
-
 msgid "Unknown update notice source."
 msgstr "Origine della notifica di aggiornamento sconosciuta."
 
@@ -40831,6 +40822,9 @@ msgstr "I metadati dell'esecuzione dei comandi post-applicazione sono stati scri
 
 msgid "Post-apply actions completed successfully."
 msgstr "Le azioni post-applicazione sono state completate correttamente."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Ricorda di ripristinare i permessi di file e directory allo stato precedente a questo aggiornamento. Lasciare al server web l'accesso in scrittura al codice di Chamilo trasforma qualsiasi futura vulnerabilità in un modo per modificare i file della piattaforma."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Definizione del comando post-applicazione dell'aggiornamento non valida: %s"

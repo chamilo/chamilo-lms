@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Le meas"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Sampla foirmle: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Sampla foirmle: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raonta athróg"
@@ -37009,15 +37009,6 @@ msgstr "Eochair phoiblí iontaofa"
 msgid "Trusted signing key"
 msgstr "Eochair shínithe iontaofa"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Clóscríobh APPLY UPDATE FILES chun deimhniú"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Clóscríobh RUN DATABASE MIGRATIONS chun imirce bunachar sonraí a dheimhniú"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Clóscríobh RUN POST UPDATE ACTIONS chun deimhniú"
-
 msgid "Unknown update notice source."
 msgstr "Foinse fógra nuashonraithe anaithnid."
 
@@ -40815,6 +40806,9 @@ msgstr "Scríobhadh meiteashonraí rith ordaithe iar-chur i bhfeidhm."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Críochnaíodh gníomhartha iar-chur i bhfeidhm go rathúil."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Cuimhnigh do cheadanna comhad agus eolaire a chur ar ais chuig an staid ina raibh siad roimh an nuashonrú seo. Má fhágtar rochtain scríofa ag an bhfreastalaí gréasáin ar chód Chamilo, déantar aon leochaileacht amach anseo ina bhealach chun comhaid d’ardáin a mhodhnú."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Sainmhíniú neamhbhailí ar ordú iar-chur i bhfeidhm nuashonraithe: %s"

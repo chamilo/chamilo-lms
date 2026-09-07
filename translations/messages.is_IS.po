@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Með kveðju"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Dæmi um formúlu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formúludæmi: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Breytusvið"
@@ -37010,15 +37010,6 @@ msgstr "Traustur opinber lykill"
 msgid "Trusted signing key"
 msgstr "Traustur undirritunarlykill"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Sláðu inn APPLY UPDATE FILES til að staðfesta"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Sláðu inn RUN DATABASE MIGRATIONS til að staðfesta gagnagrunnsflutninga"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Sláðu inn RUN POST UPDATE ACTIONS til að staðfesta"
-
 msgid "Unknown update notice source."
 msgstr "Óþekkt uppruni uppfærslutilkynningar."
 
@@ -40816,6 +40807,9 @@ msgstr "Lýsigögn um keyrslu skipana eftir beitingu voru skrifuð."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Aðgerðir eftir beitingu tókust."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Mundu að endurheimta réttindi skráa og mappa í það ástand sem þau voru í fyrir þessa uppfærslu. Ef vefþjónninn er látinn hafa skrifaðgang að Chamilo-kóðanum verður hvaða framtíðarveikleiki sem er leið til að breyta skrám kerfisins."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Ógild skilgreining skipunar eftir beitingu uppfærslu: %s"

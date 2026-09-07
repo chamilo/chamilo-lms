@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Hormat kami"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh rumus: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh rumus: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rentang variabel"
@@ -37009,15 +37009,6 @@ msgstr "Kunci publik tepercaya"
 msgid "Trusted signing key"
 msgstr "Kunci penandatanganan tepercaya"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Ketik APPLY UPDATE FILES untuk mengonfirmasi"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Ketik RUN DATABASE MIGRATIONS untuk mengonfirmasi migrasi basis data"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Ketik RUN POST UPDATE ACTIONS untuk mengonfirmasi"
-
 msgid "Unknown update notice source."
 msgstr "Sumber pemberitahuan pembaruan tidak diketahui."
 
@@ -40815,6 +40806,9 @@ msgstr "Metadata eksekusi perintah pasca-penerapan telah ditulis."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Tindakan pasca-penerapan selesai dengan sukses."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Jangan lupa mengembalikan izin berkas dan direktori ke kondisi semula sebelum pembaruan ini. Membiarkan server web memiliki akses tulis ke kode Chamilo akan mengubah kerentanan di masa depan menjadi cara untuk memodifikasi berkas platform Anda."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Definisi perintah pasca-penerapan pembaruan tidak valid: %s"

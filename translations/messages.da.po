@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med venlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-eksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel-eksempel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervaller"
@@ -37011,15 +37011,6 @@ msgstr "Betroet offentlig nøgle"
 msgid "Trusted signing key"
 msgstr "Betroet signeringsnøgle"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Skriv APPLY UPDATE FILES for at bekræfte"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Skriv RUN DATABASE MIGRATIONS for at bekræfte databasemigreringer"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Skriv RUN POST UPDATE ACTIONS for at bekræfte"
-
 msgid "Unknown update notice source."
 msgstr "Ukendt kilde til opdateringsmeddelelse."
 
@@ -40817,6 +40808,9 @@ msgstr "Metadata for kørsel af kommandoer efter anvendelse blev skrevet."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Handlinger efter anvendelse blev fuldført korrekt."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Husk at gendanne dine fil- og mappetilladelser til deres tilstand før denne opdatering. Hvis webserveren har skriveadgang til Chamilo-koden, bliver enhver fremtidig sårbarhed en måde at ændre din platforms filer på."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Ugyldig definition af kommando efter opdateringsanvendelse: %s"

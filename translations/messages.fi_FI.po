@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavaesimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavaesimerkki: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -37011,15 +37011,6 @@ msgstr "Luotettu julkinen avain"
 msgid "Trusted signing key"
 msgstr "Luotettu allekirjoitusavain"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Kirjoita APPLY UPDATE FILES vahvistaaksesi"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Kirjoita RUN DATABASE MIGRATIONS vahvistaaksesi tietokantamigraatiot"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Kirjoita RUN POST UPDATE ACTIONS vahvistaaksesi"
-
 msgid "Unknown update notice source."
 msgstr "Tuntematon päivitysilmoituksen lähde."
 
@@ -40817,6 +40808,9 @@ msgstr "Soveltamisen jälkeisten komentojen suoritusmetatiedot kirjoitettiin."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Soveltamisen jälkeiset toiminnot suoritettiin onnistuneesti."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Muista palauttaa tiedostojen ja hakemistojen käyttöoikeudet siihen tilaan, jossa ne olivat ennen tätä päivitystä. Jos web-palvelimella on kirjoitusoikeus Chamilo-koodiin, mikä tahansa tuleva haavoittuvuus voi mahdollistaa alustan tiedostojen muokkaamisen."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Virheellinen päivityksen soveltamisen jälkeinen komentomääritelmä: %s"

@@ -361,7 +361,7 @@ msgid "Sincerely"
 msgstr "Cordialement"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de formule : sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de formule : sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Plages de valeurs des variables"
@@ -38891,15 +38891,6 @@ msgstr "Clé publique de confiance"
 msgid "Trusted signing key"
 msgstr "Clé de signature de confiance"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Saisissez APPLY UPDATE FILES pour confirmer"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Saisissez RUN DATABASE MIGRATIONS pour confirmer les migrations de base de données"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Saisissez RUN POST UPDATE ACTIONS pour confirmer"
-
 msgid "Unknown update notice source."
 msgstr "Source de notification de mise à jour inconnue."
 
@@ -42697,6 +42688,9 @@ msgstr "Les métadonnées d’exécution des commandes post-application ont ét�
 
 msgid "Post-apply actions completed successfully."
 msgstr "Les actions post-application se sont terminées avec succès."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "N'oubliez pas de rétablir les permissions de vos fichiers et répertoires à l'état d'avant cette mise à jour. Laisser le serveur web avec un accès en écriture au code de Chamilo transforme toute vulnérabilité future en un moyen de modifier les fichiers de votre plateforme."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Définition de commande post-application de mise à jour invalide : %s"

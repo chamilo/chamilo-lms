@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primjer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primjer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raspon varijabli"
@@ -26704,7 +26704,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfiguracija LDAP konekcije"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] <\/pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Postavi datum isteka pri prvoj prijavi"
@@ -40802,6 +40802,9 @@ msgstr "Metapodaci pokretanja naredbi nakon primjene su zapisani."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Radnje nakon primjene uspješno su završene."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Ne zaboravite vratiti dozvole datoteka i direktorija na stanje prije ovog ažuriranja. Ako web server ostane s pravom pisanja na Chamilo kod, svaka buduća ranjivost postaje način za izmjenu datoteka vaše platforme."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Nevažeća definicija naredbe ažuriranja nakon primjene: %s"

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Ειλικρινά"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Δείγμα τύπου: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Δείγμα τύπου: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Μεταβλητά όρια"
@@ -37024,15 +37024,6 @@ msgstr "Έμπιστο δημόσιο κλειδί"
 msgid "Trusted signing key"
 msgstr "Έμπιστο κλειδί υπογραφής"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Πληκτρολογήστε APPLY UPDATE FILES για επιβεβαίωση"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Πληκτρολογήστε RUN DATABASE MIGRATIONS για επιβεβαίωση των μεταναστεύσεων βάσης δεδομένων"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Πληκτρολογήστε RUN POST UPDATE ACTIONS για επιβεβαίωση"
-
 msgid "Unknown update notice source."
 msgstr "Άγνωστη πηγή ειδοποίησης ενημέρωσης."
 
@@ -40830,6 +40821,9 @@ msgstr "Τα μεταδεδομένα εκτέλεσης εντολών μετά
 
 msgid "Post-apply actions completed successfully."
 msgstr "Οι ενέργειες μετά την εφαρμογή ολοκληρώθηκαν επιτυχώς."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Θυμηθείτε να επαναφέρετε τα δικαιώματα αρχείων και καταλόγων στην κατάσταση που είχαν πριν από αυτή την ενημέρωση. Αν αφήσετε τον διακομιστή ιστού με δικαίωμα εγγραφής στον κώδικα του Chamilo, οποιαδήποτε μελλοντική ευπάθεια μετατρέπεται σε τρόπο τροποποίησης των αρχείων της πλατφόρμας σας."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Μη έγκυρος ορισμός εντολής μετά την εφαρμογή ενημέρωσης: %s"

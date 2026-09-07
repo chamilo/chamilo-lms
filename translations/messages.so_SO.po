@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Tusaale qaacido: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaale foomula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -37005,15 +37005,6 @@ msgstr "Furaha dadweynaha ee la aamino"
 msgid "Trusted signing key"
 msgstr "Furaha saxeexa ee la aamino"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Qor APPLY UPDATE FILES si aad u xaqiijiso"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Qor RUN DATABASE MIGRATIONS si aad u xaqiijiso wareejinta xogta"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Qor RUN POST UPDATE ACTIONS si aad u xaqiijiso"
-
 msgid "Unknown update notice source."
 msgstr "Isha ogeysiiska cusboonaysiinta lama yaqaan."
 
@@ -40811,6 +40802,9 @@ msgstr "Xogta orodka amarka ka-dib-codsiga waa la qoray."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Falalka ka-dib-codsiga si guul leh ayay u dhammaadeen."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Xasuuso inaad dib ugu soo celiso oggolaanshaha faylkaaga iyo hagaha xaaladdoodii ka hor cusboonaysiintaan. Ka tagista server-ka web-ka oo leh marin qoraal koodhka Chamilo waxay u rogi kartaa nuglaansho kasta oo mustaqbalka ah hab lagu beddelo faylasha madaladaada."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Qeexid amarka ka-dib-codsiga ee cusboonaysiinta aan sax ahayn: %s"

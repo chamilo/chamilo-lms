@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Við kærleika"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formuldømi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formuludømi: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablumørk"
@@ -37005,15 +37005,6 @@ msgstr "Treyst almennur lykil"
 msgid "Trusted signing key"
 msgstr "Treyst undirskrivanar lykil"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Skriva APPLY UPDATE FILES fyri at vátta"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Skriva RUN DATABASE MIGRATIONS fyri at vátta dátugrunnsflytingar"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Skriva RUN POST UPDATE ACTIONS fyri at vátta"
-
 msgid "Unknown update notice source."
 msgstr "Ókend uppdatering kunngerð kelda."
 
@@ -40811,6 +40802,9 @@ msgstr "Metadáta fyri koyring av eftir-nýtslu skipan vórðu skrivað."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Eftir-nýtslu átøk vórðu fullfíggjað við góðum úrsliti."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Minst til at seta fílu- og mappuloyvini aftur til tað støðið, tey høvdu áðrenn hesa dagføringina. Um vevtænastan framvegis hevur skrivirættindi til Chamilo-kotuna, gerst ein framtíðar veikleiki ein máti at broyta fílurnar á pallinum."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Ógildug skipanardefinering fyri eftir-nýtslu uppdatering: %s"

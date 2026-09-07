@@ -37005,15 +37005,6 @@ msgstr "Clâf publiche fidade"
 msgid "Trusted signing key"
 msgstr "Clâf di firme fidade"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Scrîf APPLY UPDATE FILES par confermâ"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Scrîf RUN DATABASE MIGRATIONS par confermâ lis migrazions de base di dâts"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Scrîf RUN POST UPDATE ACTIONS par confermâ"
-
 msgid "Unknown update notice source."
 msgstr "Sorzint dal avîs di inzornament no cognossude."
 
@@ -40811,6 +40802,9 @@ msgstr "I metadâts de esecuzion dai comants post-aplicazion a son stâts scrits
 
 msgid "Post-apply actions completed successfully."
 msgstr "Lis azions post-aplicazion a son stadis completadis cun sucès."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Visâsi di ripristinâ i permès dai files e des cartelis al lôr stât di prime di chest aggiornament. Lassâ il server web cun acès in scriture al codiç di Chamilo al transforme cualsisei vulnerabilitât future intune maniere par modificâ i files de vestre plateforme."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Definizion di comant post-aplicazion di inzornament no valide: %s"

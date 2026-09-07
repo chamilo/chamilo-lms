@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "此致敬礼"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式示例：sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式示例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "变量范围"
@@ -37011,15 +37011,6 @@ msgstr "受信任的公钥"
 msgid "Trusted signing key"
 msgstr "受信任的签名密钥"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "输入 APPLY UPDATE FILES 以确认"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "输入 RUN DATABASE MIGRATIONS 以确认数据库迁移"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "输入 RUN POST UPDATE ACTIONS 以确认"
-
 msgid "Unknown update notice source."
 msgstr "未知的更新通知来源。"
 
@@ -40817,6 +40808,9 @@ msgstr "已写入应用后命令运行元数据。"
 
 msgid "Post-apply actions completed successfully."
 msgstr "应用后操作已成功完成。"
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "请记得将文件和目录权限恢复到本次更新之前的状态。如果 Web 服务器对 Chamilo 代码保持写入权限，未来任何漏洞都可能被用来修改您平台的文件。"
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "无效的更新应用后命令定义：%s"

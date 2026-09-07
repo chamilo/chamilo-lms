@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "शुभकामना"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चलहरूको दायरा"
@@ -37009,15 +37009,6 @@ msgstr "विश्वसनीय सार्वजनिक कुञ्ज�
 msgid "Trusted signing key"
 msgstr "विश्वसनीय हस्ताक्षर कुञ्जी"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "पुष्टि गर्न APPLY UPDATE FILES टाइप गर्नुहोस्"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "डाटाबेस माइग्रेसन पुष्टि गर्न RUN DATABASE MIGRATIONS टाइप गर्नुहोस्"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "पुष्टि गर्न RUN POST UPDATE ACTIONS टाइप गर्नुहोस्"
-
 msgid "Unknown update notice source."
 msgstr "अज्ञात अपडेट सूचना स्रोत।"
 
@@ -40815,6 +40806,9 @@ msgstr "पोस्ट-एप्लाई कमाण्ड चलाउने
 
 msgid "Post-apply actions completed successfully."
 msgstr "पोस्ट-एप्लाई कार्यहरू सफलतापूर्वक पूरा भए।"
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "यो अद्यावधिक गर्नुअघिको अवस्थामा आफ्ना फाइल र डाइरेक्टरी अनुमतिहरू पुनर्स्थापना गर्न नबिर्सनुहोस्। वेब सर्भरलाई चामिलो कोडमा लेख्ने पहुँच छोड्दा भविष्यको कुनै पनि कमजोरी तपाईंको प्लेटफर्मका फाइलहरू परिमार्जन गर्ने माध्यम बन्न सक्छ।"
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "अमान्य अद्यावधिक पोस्ट-एप्लाई कमाण्ड परिभाषा: %s"

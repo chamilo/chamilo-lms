@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Fórmula qhawarina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Fórmula qhawarina: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -37011,15 +37011,6 @@ msgstr "Allin qhaway public key"
 msgid "Trusted signing key"
 msgstr "Allin qhaway signing key"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Taqyachinaykipaq APPLY UPDATE FILES qillqay"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Willañiqisuyu migraciones ruwanaykipaq RUN DATABASE MIGRATIONS qillqay"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Taqyachinaykipaq RUN POST UPDATE ACTIONS qillqay"
-
 msgid "Unknown update notice source."
 msgstr "Mana riqsisqa musuqchay willay qallariy."
 
@@ -40817,6 +40808,9 @@ msgstr "Qhipa-churay kamachi purichiy metadata qillqasqa karqan."
 
 msgid "Post-apply actions completed successfully."
 msgstr "Qhipa-churay ruwaykuna allinta tukuq karqan."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Yuyariy willaykikunap hinallataq directorio permisoyninkunata kay musuqyachiy ñawpaq kaqman kutichinaykita. Web servidor Chamilo código nisqaman qillqay atiywan saqispaqa, hamuq pisiyaykuna plataforma willaykikunata tikray ñanman tukun."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Mana allin musuqyachiy qhipa-churay kamachi nishay: %s"

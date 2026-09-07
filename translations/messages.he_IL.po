@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "בכנות"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "דוגמת נוסחה: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "דוגמת נוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "טווחים משתנים"
@@ -37022,15 +37022,6 @@ msgstr "מפתח ציבורי מהימן"
 msgid "Trusted signing key"
 msgstr "מפתח חתימה מהימן"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "הקלידו APPLY UPDATE FILES לאישור"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "הקלידו RUN DATABASE MIGRATIONS לאישור מיגרציות מסד הנתונים"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "הקלידו RUN POST UPDATE ACTIONS לאישור"
-
 msgid "Unknown update notice source."
 msgstr "מקור הודעת העדכון אינו ידוע."
 
@@ -40828,6 +40819,9 @@ msgstr "מטא-נתוני הרצת פקודות לאחר ההחלה נכתבו."
 
 msgid "Post-apply actions completed successfully."
 msgstr "פעולות לאחר ההחלה הושלמו בהצלחה."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "זכור לשחזר את הרשאות הקבצים והתיקיות למצבן שלפני עדכון זה. השארת שרת האינטרנט עם גישת כתיבה לקוד של Chamilo הופכת כל פגיעות עתידית לדרך לשנות את קבצי הפלטפורמה שלך."
 
 msgid "Invalid update post-apply command definition: %s"
 msgstr "הגדרת פקודת עדכון לאחר ההחלה אינה תקינה: %s"

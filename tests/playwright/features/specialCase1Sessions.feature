@@ -56,10 +56,22 @@
 #   text "Choose one correct answer.").
 # - "Image selection question" has no literal modern equivalent named
 #   "image selection" — mapped to "Unique answer with images" (single
-#   choice using images), confirmed live to be structurally IDENTICAL to
-#   "Multiple choice"'s own answer-table shape (same "fill in the answer N
-#   text/comment", "mark answer N as correct", "Save the question" steps
-#   apply unchanged) — the closest real, working equivalent, not a guess.
+#   choice using images), structurally IDENTICAL to "Multiple choice"'s own
+#   answer-table shape (same "fill in the answer N text/comment", "Save the
+#   question" steps apply unchanged) — the closest real, working equivalent,
+#   not a guess.
+# - **Real CI failure, root-caused (not guessed): both this and the "Multiple
+#   choice" question above are single-correct-answer types ("Choose one
+#   correct answer.") — NEITHER uses "mark answer N as correct" (that step is
+#   for "Multiple answer"'s checkbox-style answers only, confirmed against
+#   toolExerciseAdmin.feature's own working "Multiple choice"/"Unique answer
+#   with unknown" scenarios). The correct answer is instead assigned a
+#   nonzero score, same as those scenarios: fill every answer's own comment,
+#   then "I fill in "exercise-answer-score-0" with "10"" for answer 1's
+#   score. Omitting this — a real CI run had it omitted — leaves no answer
+#   marked correct, and "Save the question" stays disabled forever: the
+#   scenario ran for the full 15-minute @long-scenario budget waiting for a
+#   button that could never become clickable.
 #
 # FORUM — RESTORED, NOT LEFT COMMENTED OUT:
 # - The Behat source has this whole section commented out with a
@@ -330,6 +342,11 @@ Feature: Special case 1 — course/session creation
     And I fill in the answer 2 text with "Option B"
     And I fill in the answer 3 text with "Option C"
     And I fill in the answer 4 text with "Option D"
+    And I fill in the answer 1 comment with "Comment true"
+    And I fill in the answer 2 comment with "Comment false"
+    And I fill in the answer 3 comment with "Comment false"
+    And I fill in the answer 4 comment with "Comment false"
+    And I fill in "exercise-answer-score-0" with "10"
     And I press "Save the question"
     And I wait for the page content to settle
     Then I should see "QRU Question"
@@ -341,6 +358,11 @@ Feature: Special case 1 — course/session creation
     And I fill in the answer 2 text with "Image B"
     And I fill in the answer 3 text with "Image C"
     And I fill in the answer 4 text with "Image D"
+    And I fill in the answer 1 comment with "Comment true"
+    And I fill in the answer 2 comment with "Comment false"
+    And I fill in the answer 3 comment with "Comment false"
+    And I fill in the answer 4 comment with "Comment false"
+    And I fill in "exercise-answer-score-0" with "10"
     And I press "Save the question"
     And I wait for the page content to settle
     Then I should see "Image selection question"

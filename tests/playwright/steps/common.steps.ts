@@ -1,3 +1,4 @@
+import fs from "node:fs"
 import path from "node:path"
 import { expect, Page, test } from "@playwright/test"
 import { createBdd, DataTable } from "playwright-bdd"
@@ -3233,18 +3234,43 @@ Given("I am on the attendance page {string}", async ({ page }, pathTemplate: str
 
 // Ported from FeatureContext::saveCurrentUrlWithName() / visitUrlSavedWithName().
 // toolGroup.feature's cross-user access-check scenario creates several
-// announcements as one user, captures each one's own URL, logs in as a
-// DIFFERENT user, then revisits those exact URLs to check access. A plain
-// module-level Map is enough — every save/visit pair happens within the
-// same scenario, and each scenario file gets a fresh module instance.
-const savedUrls = new Map<string, string>()
+// announcements as one user, captures each one's own URL across FIVE separate
+// "Create an announcement ..." scenarios, then TWO LATER scenarios ("Check
+// fapple's/acostea's access to group announcements") revisit those exact URLs
+// under a different login.
+//
+// A plain module-level Map is NOT enough, despite that being the obvious first
+// instinct — a real CI run proved it: "Create an announcement as acostea and
+// send only to fapple" (a scenario between the saves and the visits) failed on
+// its first attempt (the loginAs() session-settling race) and passed on retry,
+// and BOTH later "Check ... access" scenarios then failed with "No URL was
+// saved under the name ...", even though the saving scenarios had already
+// passed earlier in this SAME file. Playwright Test discards the worker
+// process after any failed attempt and runs the retry (and everything the
+// runner schedules onto that worker afterwards) in a fresh one — module-level
+// state, including this Map, does not survive that. It is a coincidence this
+// hadn't surfaced before: it only bites when some OTHER scenario between the
+// save and the visit fails-and-retries, which is exactly what happened here.
+// Persisting to disk survives a worker restart; an in-memory Map does not.
+const savedUrlsFile = path.join(repoRoot, "var/test-results/playwright/saved-urls.json")
+
+function readSavedUrls(): Record<string, string> {
+  try {
+    return JSON.parse(fs.readFileSync(savedUrlsFile, "utf-8"))
+  } catch {
+    return {}
+  }
+}
 
 Then("I save current URL with name {string}", async ({ page }, name: string) => {
-  savedUrls.set(name, page.url())
+  const urls = readSavedUrls()
+  urls[name] = page.url()
+  fs.mkdirSync(path.dirname(savedUrlsFile), { recursive: true })
+  fs.writeFileSync(savedUrlsFile, JSON.stringify(urls))
 })
 
 Then("I visit URL saved with name {string}", async ({ page }, name: string) => {
-  const url = savedUrls.get(name)
+  const url = readSavedUrls()[name]
   if (!url) {
     throw new Error(`No URL was saved under the name "${name}"`)
   }

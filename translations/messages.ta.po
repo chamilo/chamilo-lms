@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "சூத்திர மாதிரி: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "சூத்திர மாதிரி: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -37010,13 +37010,13 @@ msgid "Trusted signing key"
 msgstr "நம்பகமான கையொப்ப விசை"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "உறுதிப்படுத்த %s புதுப்பிப்பு கோப்புகளைப் பயன்படுத்தவும்"
+msgstr "உறுதிப்படுத்த APPLY UPDATE FILES என தட்டச்சு செய்யவும்"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "தரவுத்தள இடம்பெயர்வுகளை உறுதிப்படுத்த %s தரவுத்தள இடம்பெயர்வுகளை இயக்கவும்"
+msgstr "தரவுத்தள இடம்பெயர்வுகளை உறுதிப்படுத்த RUN DATABASE MIGRATIONS என தட்டச்சு செய்யவும்"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "உறுதிப்படுத்த %s புதுப்பிப்புக்குப் பிந்தைய செயல்களை இயக்கவும்"
+msgstr "உறுதிப்படுத்த RUN POST UPDATE ACTIONS என தட்டச்சு செய்யவும்"
 
 msgid "Unknown update notice source."
 msgstr "தெரியாத புதுப்பிப்பு அறிவிப்பு மூலம்."
@@ -40233,4 +40233,949 @@ msgstr "பயிற்சி நகரம்"
 
 msgid "City"
 msgstr "நகரம்"
+
+msgid "Update workflow restored after page refresh"
+msgstr "பக்கம் புதுப்பித்த பிறகு புதுப்பிப்பு பணிப்பாய்வு மீட்டமைக்கப்பட்டது"
+
+msgid "Last completed step"
+msgstr "கடைசியாக முடிக்கப்பட்ட படி"
+
+msgid "Stage package"
+msgstr "தொகுப்பை தயார்படுத்து"
+
+msgid "Package staging"
+msgstr "தொகுப்பு தயாரிப்பு"
+
+msgid "Apply plan"
+msgstr "திட்டத்தை பயன்படுத்து"
+
+msgid "Update workflow completed"
+msgstr "புதுப்பிப்பு பணிப்பாய்வு முடிந்தது"
+
+msgid "Update directory exists and is writable."
+msgstr "புதுப்பிப்பு அடைவு உள்ளது மற்றும் எழுதக்கூடியது."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "புதுப்பிப்பு அடைவு உள்ளது ஆனால் எழுதக்கூடியதல்ல: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "புதுப்பிப்பு அடைவு இன்னும் இல்லை, ஆனால் அதன் பெற்றோர் அடைவு எழுதக்கூடியது."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "புதுப்பிப்பு அடைவு இன்னும் இல்லை, ஆனால் அதை var/ கீழ் உருவாக்க முடியும்."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "புதுப்பிப்பு அடைவு இல்லை மற்றும் தற்போதைய அனுமதிகளால் உருவாக்க முடியாது."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "புதுப்பிப்பு முன் சோதனைக்கான காலி வட்டு இடத்தை தீர்மானிக்க முடியவில்லை."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "பாதுகாப்பான புதுப்பிப்பு தயாரிப்பு செயல்பாட்டிற்கு போதிய காலி வட்டு இடம் இல்லை."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "இந்த சரிபார்ப்பு-நிலை புதுப்பிப்பு ஓட்டத்திற்கு காலி வட்டு இடம் போதுமானது."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "புதுப்பிப்பு அறிக்கை PHP பதிப்பு தேவையை வரையறுக்கவில்லை."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "PHP தேவையை முழுமையாக மதிப்பிட முடியவில்லை: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "தற்போதைய PHP பதிப்பு புதுப்பிப்பு தேவையை பூர்த்தி செய்யவில்லை: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "தற்போதைய PHP பதிப்பு புதுப்பிப்பு தேவையை பூர்த்தி செய்கிறது."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "உள்ளூர் தொகுப்பு பாதை வழங்கப்படவில்லை. பதிவிறக்கப்பட்ட தொகுப்புகளை பதிவிறக்கத்திற்குப் பிறகு மட்டுமே சரிபார்க்க முடியும்."
+
+msgid "Local update package is not readable: %s"
+msgstr "உள்ளூர் புதுப்பிப்பு தொகுப்பை படிக்க முடியவில்லை: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "உள்ளூர் புதுப்பிப்பு தொகுப்பு ZIP காப்பகமாக இருக்க வேண்டும்."
+
+msgid "Local update package is readable."
+msgstr "உள்ளூர் புதுப்பிப்பு தொகுப்பு படிக்கக்கூடியது."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "நிறுவப்பட்ட Chamilo பதிப்பை தானாக கண்டறிய முடியவில்லை. பதிப்பு திசையை சரிபார்க்க முடியாது."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "நிறுவப்பட்ட அல்லது இலக்கு பதிப்பு ஒப்பிடக்கூடிய சொற்பொருள் பதிப்பு வடிவத்தில் இல்லை."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "இலக்கு பதிப்பு நிறுவப்பட்ட பதிப்பை விட குறைவு. இயல்பாக தரமிறக்கங்கள் அனுமதிக்கப்படாது."
+
+msgid "Target version matches the installed version."
+msgstr "இலக்கு பதிப்பு நிறுவப்பட்ட பதிப்புடன் பொருந்துகிறது."
+
+msgid "Target version is newer than the installed version."
+msgstr "இலக்கு பதிப்பு நிறுவப்பட்ட பதிப்பை விட புதியது."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "திட்டம் Git செக்அவுட் அல்ல அல்லது .git இல்லை."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "இந்த புதுப்பிப்பு அமைப்பு Git ஆதரவு இல்லாத நிறுவல்களுக்கானது. உள்ளூர் அமைப்பு Git பயன்படுத்துவதை நாங்கள் கண்டறிந்துள்ளோம். புதுப்பிப்பைத் தொடர்வது Git வரலாற்றை உடைக்கலாம். Git ஆதரவுள்ள அமைப்புகளுக்கு, வலை மூலத்தில் உள்ள CONTRIBUTING.md இல் விவரிக்கப்பட்ட Git நடைமுறையைப் பயன்படுத்த பரிந்துரைக்கிறோம்."
+
+msgid "Local Git changes were also detected."
+msgstr "உள்ளூர் Git மாற்றங்களும் கண்டறியப்பட்டன."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "சில திட்ட மெட்டாடேட்டா கோப்புகள் இல்லை. பிந்தைய புதுப்பிப்பு நிலைகளுக்கு கைமுறை சார்பு சரிபார்ப்புகள் தேவைப்படலாம்."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer மற்றும் Yarn மெட்டாடேட்டா கோப்புகள் உள்ளன."
+
+msgid "Starting staged file application."
+msgstr "தயாரிக்கப்பட்ட கோப்பு பயன்பாட்டைத் தொடங்குகிறது."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "தயாரிக்கப்பட்ட கோப்புகளைப் பயன்படுத்த வெளிப்படையான உறுதிப்படுத்தல் தேவை."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "தயாரிக்கப்பட்ட புதுப்பிப்பு கோப்புகளைப் பயன்படுத்த வெளிப்படையான உறுதிப்படுத்தல் தேவை."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "தயாரிப்பு அடைவு Chamilo புதுப்பிப்பு தயாரிப்பு அடைவிற்குள் உள்ளது."
+
+msgid "Staging directory was validated."
+msgstr "தயாரிப்பு அடைவு சரிபார்க்கப்பட்டது."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "பயன்பாட்டுத் திட்ட மெட்டாடேட்டா வெற்றிகரமாக படிக்கப்பட்டது."
+
+msgid "Staged application path is valid."
+msgstr "தயாரிக்கப்பட்ட பயன்பாட்டு பாதை செல்லுபடியாகும்."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "கையொப்பமிடப்பட்ட தொகுப்பு சுத்தம் மெட்டாடேட்டா மதிப்பாய்வு செய்யப்பட்ட பயன்பாட்டுத் திட்டத்துடன் பொருந்துகிறது."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "கையொப்பமிடப்பட்ட தொகுப்பு சுத்தம் மெட்டாடேட்டா சரிபார்க்கப்பட்டது."
+
+msgid "Update lock was acquired."
+msgstr "புதுப்பிப்பு பூட்டு பெறப்பட்டது."
+
+msgid "Update backup directory was created."
+msgstr "புதுப்பிப்பு காப்பு அடைவு உருவாக்கப்பட்டது."
+
+msgid "Update file operations were collected."
+msgstr "புதுப்பிப்பு கோப்பு செயல்பாடுகள் சேகரிக்கப்பட்டன."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "மாற்று அல்லது நீக்க திட்டமிடப்பட்ட இருக்கும் கோப்புகள் காப்புப் பிரதி எடுக்கப்பட்டன."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "தயாரிக்கப்பட்ட புதுப்பிப்பு கோப்புகள் Chamilo நிறுவலுக்கு நகலெடுக்கப்பட்டன."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "தொகுப்பில் அறிவிக்கப்பட்ட காலாவதியான கோப்புகள் சாமிலோ நிறுவலில் இருந்து அகற்றப்பட்டன."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "தொகுப்பில் அறிவிக்கப்பட்ட காலாவதியான கோப்புகள் அகற்றப்பட்டன."
+
+msgid "Update apply audit metadata was written."
+msgstr "புதுப்பிப்பு பயன்பாட்டு தணிக்கை மெட்டாடேட்டா எழுதப்பட்டது."
+
+msgid "Staged files applied successfully."
+msgstr "தயாரிக்கப்பட்ட கோப்புகள் வெற்றிகரமாக பயன்படுத்தப்பட்டன."
+
+msgid "Unable to restore removed files: %s"
+msgstr "அகற்றப்பட்ட கோப்புகளை மீட்டெடுக்க முடியவில்லை: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "நகலெடுக்கப்பட்ட கோப்புகளை பின்னிழுக்க முடியவில்லை: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "புதுப்பிப்பு பயன்பாடு தோல்வியடைந்த பிறகு கோப்பு பின்னிழுப்பு செயல்படுத்தப்பட்டது."
+
+msgid "Rollback failed: %s"
+msgstr "பின்னிழுப்பு தோல்வியடைந்தது: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "புதுப்பிப்பு பயன்பாட்டு தணிக்கை மெட்டாடேட்டாவை எழுத முடியவில்லை: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "தோல்விக்குப் பிறகு புதுப்பிப்பு பூட்டை விடுவிக்க முடியவில்லை: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "புதுப்பிப்பு கோப்புகளைப் பயன்படுத்த தயாரிப்பு பாதை தேவை."
+
+msgid "Staging directory does not exist: %s"
+msgstr "தயாரிப்பு அடைவு இல்லை: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "சாமிலோ புதுப்பிப்பு தயாரிப்பு அடிப்படை அடைவு இல்லை."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "தயாரிப்பு அடைவு var/update/staging உள்ளே இருக்க வேண்டும்."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "தயாரிப்பு அடைவில் APPLY-PLAN.json இல்லை."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "புதுப்பிப்பு பயன்பாட்டு திட்ட மெட்டாடேட்டாவைப் படிக்க முடியவில்லை: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "புதுப்பிப்பு பயன்பாட்டு திட்ட மெட்டாடேட்டா செல்லுபடியான JSON அல்ல: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "புதுப்பிப்பு பயன்பாட்டு திட்ட மெட்டாடேட்டா JSON பொருளாக இருக்க வேண்டும்."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "புதுப்பிப்பு பயன்பாட்டு திட்டத்தில் application_path புலம் இல்லை."
+
+msgid "Staged application path is not readable: %s"
+msgstr "தயாரிக்கப்பட்ட பயன்பாட்டு பாதையைப் படிக்க முடியவில்லை: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "தயாரிக்கப்பட்ட பயன்பாட்டு பாதை தயாரிப்பு அடைவுக்குள் இருக்க வேண்டும்."
+
+msgid "Staged application path is missing composer.json."
+msgstr "தயாரிக்கப்பட்ட பயன்பாட்டு பாதையில் composer.json இல்லை."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "புதுப்பிப்பு தொகுப்பில் %s இல்லை. கையொப்பமிடப்பட்ட சுத்தம் மெட்டாடேட்டாவுடன் சரிபார்க்கப்பட்ட தொகுப்பை மீண்டும் தயாரிக்கவும்."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "புதுப்பிப்பு பயன்பாட்டு திட்டத்தில் மதிப்பாய்வு செய்யப்பட்ட தொகுப்பு சுத்தம் மெட்டாடேட்டா இல்லை."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "பயன்பாட்டு திட்டம் உருவாக்கப்பட்ட பிறகு புதுப்பிப்பு தொகுப்பு சுத்தம் மெட்டாடேட்டா மாறியது. தொடர்வதற்கு முன் பயன்பாட்டு திட்டத்தை மீண்டும் உருவாக்கவும்."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "புதுப்பிப்பு பயன்பாட்டு திட்டத்தில் செல்லாத தொகுப்பு அகற்றல் பட்டியல் உள்ளது."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "பயன்பாட்டு திட்டம் உருவாக்கப்பட்ட பிறகு புதுப்பிப்பு தொகுப்பு சுத்தம் பாதைகள் மாறின. தொடர்வதற்கு முன் பயன்பாட்டு திட்டத்தை மீண்டும் உருவாக்கவும்."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "புதுப்பிப்பு பயன்பாட்டு திட்டத்தில் மதிப்பாய்வு செய்யப்பட்ட அகற்றல் பாதை பட்டியல் இல்லை."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "புதுப்பிப்பு பயன்பாட்டு திட்ட அகற்றல் பாதைகள் கையொப்பமிடப்பட்ட தொகுப்பு சுத்தம் மெட்டாடேட்டாவுடன் பொருந்தவில்லை."
+
+msgid "Update lock path must be inside var/update."
+msgstr "புதுப்பிப்பு பூட்டு பாதை var/update உள்ளே இருக்க வேண்டும்."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "புதுப்பிப்பு பயன்பாட்டு திட்டத்தில் backup_path புலம் இல்லை."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "புதுப்பிப்பு காப்புப் பாதையில் பாதுகாப்பற்ற பாதை பிரிவுகள் உள்ளன."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "புதுப்பிப்பு காப்புப் பாதை var/update/backups உள்ளே இருக்க வேண்டும்."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "புதுப்பிப்பு பூட்டைப் பெற முடியவில்லை. மற்றொரு புதுப்பிப்பு நடைபெற்றுக் கொண்டிருக்கலாம்."
+
+msgid "Unable to release update lock: %s"
+msgstr "புதுப்பிப்பு பூட்டை விடுவிக்க முடியவில்லை: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "புதுப்பிப்பு காப்பு அடைவு ஏற்கனவே உள்ளது: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "இலக்கு அடைவை உருவாக்க முடியவில்லை: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "திட்டமிடப்பட்ட புதுப்பிப்பு ஏற்கனவே உள்ள குறியீட்டு இணைப்பை மேலெழுதும்: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "இலக்கு கோப்பை எழுத முடியவில்லை: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "இலக்கு கோப்பை உருவாக்க முடியவில்லை: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "காலாவதியான கோப்புகளை அகற்றுவதற்கு முன் சாமிலோ திட்ட அடைவைத் தீர்க்க முடியவில்லை."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "புதுப்பிப்பு சுத்தம் பாதுகாக்கப்பட்ட பாதையை அகற்ற முடியாது: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "திட்டமிடப்பட்ட புதுப்பிப்பு ஏற்கனவே உள்ள குறியீட்டு இணைப்பை அகற்றும்: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "புதுப்பிப்பு சுத்தம் கோப்புகளை மட்டுமே ஆதரிக்கிறது, அடைவுகளை அல்ல: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "காலாவதியான இலக்கு கோப்பை காப்புக்குப் படிக்க முடியவில்லை: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "தற்போதைய அடைவு அனுமதிகளுடன் காலாவதியான இலக்கு கோப்பை அகற்ற முடியவில்லை: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "காலாவதியான இலக்கு கோப்பு சாமிலோ திட்ட அடைவுக்கு வெளியே தீர்கிறது: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "இலக்கு கோப்பை காப்புப் பிரதி எடுக்க முடியவில்லை: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "புதுப்பிப்பு காப்பு மெட்டாடேட்டாவை எழுத முடியவில்லை."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "தயாரிக்கப்பட்ட புதுப்பிப்பு கோப்பை நகலெடுக்க முடியவில்லை: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d இல் %d நிலைப்படுத்தப்பட்ட கோப்புகள் நகலெடுக்கப்பட்டன."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "தொகுப்பில் அறிவிக்கப்பட்ட காலாவதியான கோப்பை நீக்க முடியவில்லை: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "%d இல் %d தொகுப்பில் அறிவிக்கப்பட்ட காலாவதியான கோப்புகள் நீக்கப்பட்டன."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "காப்புப்பிரதி கோப்பை மீட்டெடுக்க முடியவில்லை: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "பின்வாங்கலின் போது புதிதாக நகலெடுக்கப்பட்ட கோப்பை நீக்க முடியவில்லை: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "காப்புப்பிரதி இல்லாததால் நீக்கப்பட்ட கோப்பை மீட்டெடுக்க முடியவில்லை: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "காப்புப்பிரதியிலிருந்து நீக்கப்பட்ட கோப்பை மீட்டெடுக்க முடியவில்லை: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "புதுப்பிப்பு பயன்பாட்டு தணிக்கை மெட்டாடேட்டாவை எழுத முடியவில்லை."
+
+msgid "Unable to write global update apply log."
+msgstr "உலகளாவிய புதுப்பிப்பு பயன்பாட்டு பதிவை எழுத முடியவில்லை."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "பாதுகாப்பற்ற நிலைப்படுத்தப்பட்ட தொடர்புடைய பாதை கண்டறியப்பட்டது: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "அடைவு எழுதக்கூடியதல்ல: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "அடைவை உருவாக்க முடியவில்லை: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "நிலைப்படுத்தல் மெட்டாடேட்டா வெற்றிகரமாக படிக்கப்பட்டது."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "பயன்பாட்டு திட்ட மெட்டாடேட்டா நிலைப்படுத்தல் அடைவில் எழுதப்பட்டது."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "திட்டமிடப்பட்ட புதுப்பிப்பு மற்றும் சுத்தம் செய்வதற்கு இலக்கு கோப்புகளும் அடைவுகளும் எழுதக்கூடியதாகத் தெரிகிறது."
+
+msgid "Update apply plan check failed."
+msgstr "புதுப்பிப்பு பயன்பாட்டு திட்ட சரிபார்ப்பு தோல்வியடைந்தது."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "சில இலக்கு கோப்புகள் அல்லது அடைவுகளை எழுதவோ நீக்கவோ முடியாது."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "இதை சரிசெய்ய, முழு Chamilo அடைவின் உரிமையாளரை தற்காலிகமாக %s (வலை சேவையக பயனர்) ஆக மாற்றி, புதுப்பிப்பைப் பயன்படுத்தி, பின்னர் உரிமையாளரை மீண்டும் %s ஆக மாற்றி, பிறகு var\/ (மற்றும் அதன் உள்ளடக்கங்கள்) உரிமையாளரை மீண்டும் %s ஆக அமைக்கவும், இதனால் பயன்பாடு தொடர்ந்து எழுத முடியும்."
+
+msgid "Update package verification failed."
+msgstr "புதுப்பிப்பு தொகுப்பு சரிபார்ப்பு தோல்வியடைந்தது."
+
+msgid "Update preflight checks failed."
+msgstr "புதுப்பிப்பு முன் சரிபார்ப்புகள் தோல்வியடைந்தன."
+
+msgid "Unable to stage update package."
+msgstr "புதுப்பிப்பு தொகுப்பை நிலைப்படுத்த முடியவில்லை."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "இந்த சேவையகத்தில் UI இலிருந்து பயன்பாட்டிற்குப் பின் கட்டளைகளை இயக்குவது முடக்கப்பட்டுள்ளது."
+
+msgid "Missing required field: %s"
+msgstr "தேவையான புலம் இல்லை: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "புதுப்பிப்பு மேனிஃபெஸ்ட் மூலம் வழங்கப்படவில்லை மற்றும் இயல்புநிலை புதுப்பிப்பு மேனிஃபெஸ்ட் URL கட்டமைக்கப்படவில்லை."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "புதுப்பிப்பு மேனிஃபெஸ்ட் URL அதிகாரப்பூர்வ புதுப்பிப்பு மூலமான %s ஐப் பயன்படுத்த வேண்டும். மேனிஃபெஸ்ட் பாதையை மட்டுமே மாற்ற முடியும்."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "உள்ளூர் புதுப்பிப்பு மேனிஃபெஸ்ட் பாதைகள் முடக்கப்பட்டுள்ளன. HTTPS மேனிஃபெஸ்ட் URL ஐப் பயன்படுத்தவும் அல்லது உள்ளூர் சோதனைகளுக்கு சேவையக சூழலில் CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 அமைக்கவும்."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "HTTP %s பாதையை வழங்க வேண்டாம். புதுப்பிப்பு மேனிஃபெஸ்டிலிருந்து பதிவிறக்க இந்த புலத்தை காலியாக விடவும்."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "இந்த சூழலில் உள்ளூர் புதுப்பிப்பு %s பாதைகள் முடக்கப்பட்டுள்ளன."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "இந்த சூழலில் நம்பகமான புதுப்பிப்பு பொது விசைகள் சேவையகத்தில் கட்டமைக்கப்பட வேண்டும்."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "இந்த சூழலில் புதுப்பிப்பு கையொப்ப சரிபார்ப்பைத் தவிர்ப்பது முடக்கப்பட்டுள்ளது."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "பயன்பாட்டிற்குப் பின் புதுப்பிப்பு செயல்களை இயக்க உறுதிப்படுத்தும் உரை \"%s\" தேவை."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "நிலைப்படுத்தப்பட்ட புதுப்பிப்பு கோப்புகளைப் பயன்படுத்த உறுதிப்படுத்தும் உரை \"%s\" தேவை."
+
+msgid "Unable to resolve project directory."
+msgstr "திட்ட அடைவைத் தீர்க்க முடியவில்லை."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "தரவுத்தள காப்புப்பிரதி இந்த புதுப்பிப்பியால் நிர்வகிக்கப்படவில்லை. இடம்பெயர்வுகளை இயக்குவதற்கு முன் தரவுத்தள காப்புப்பிரதியை உருவாக்கி சரிபார்க்கவும்."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine இடம்பெயர்வு down() முறைகள் நீக்கப்பட்ட அல்லது மாற்றப்பட்ட தரவை மீட்டெடுப்பதை உறுதி செய்யாது."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "பயன்பாட்டிற்குப் பின் மெட்டாடேட்டா தரவுத்தள இடம்பெயர்வு மதிப்பாய்வைப் பரிந்துரைக்கிறது."
+
+msgid "No migration files were found in the staged package."
+msgstr "நிலைப்படுத்தப்பட்ட தொகுப்பில் இடம்பெயர்வு கோப்புகள் எதுவும் காணப்படவில்லை."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "நிலைப்படுத்தப்பட்ட Doctrine இடம்பெயர்வு கோப்புகள் கண்டறியப்பட்டன."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "நிலைப்படுத்தப்பட்ட தொகுப்பிலிருந்து Doctrine இடம்பெயர்வு இலக்கு தீர்க்கப்பட்டது."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "நிலைப்படுத்தப்பட்ட இடம்பெயர்வுகளுக்கு Doctrine இடம்பெயர்வு அடிப்படை தடுக்கும் சிக்கல்களைக் கொண்டுள்ளது."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine வரலாற்று இடம்பெயர்வு அடிப்படை எச்சரிக்கைகளை அறிவிக்கிறது, ஆனால் நிலைப்படுத்தப்பட்ட %s இடம்பெயர்வுகள் மட்டுமே வெளிப்படையாக மதிப்பாய்வு செய்யப்பட்டு இயக்கப்படும்."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine வரலாற்று இடம்பெயர்வு அடிப்படை எச்சரிக்கைகளை அறிவிக்கிறது. வெளிப்படையான உறுதிப்படுத்தலுக்குப் பிறகு புதுப்பிப்பி நிலைப்படுத்தப்பட்ட %s இடம்பெயர்வு வகுப்புகளை மட்டுமே இயக்கும்."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "நிலைப்படுத்தப்பட்ட %s இடம்பெயர்வுகளுக்கு Doctrine அடிப்படைக்கு தடுக்கும் சிக்கல் இல்லை."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "குறைந்தது ஒரு நிலைப்படுத்தப்பட்ட இடம்பெயர்வுக்கு Doctrine இடம்பெயர்வு உலர் ஓட்டம் தோல்வியடைந்தது. இது சரிசெய்யப்படும் வரை தரவுத்தள இடம்பெயர்வுகளை இயக்க வேண்டாம்."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "ஒவ்வொரு நிலைப்படுத்தப்பட்ட இடம்பெயர்வு வகுப்பிற்கும் Doctrine உலர் ஓட்டம் வெற்றிகரமாக முடிந்தது."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "இடம்பெயர்வுகளை இயக்குவதற்கு முன் இந்த புதுப்பிப்பிக்கு வெளியே தரவுத்தள காப்புப்பிரதி உருவாக்கப்பட வேண்டும்."
+
+msgid "Staging path is required to review database migrations."
+msgstr "தரவுத்தள இடம்பெயர்வுகளை மதிப்பாய்வு செய்ய நிலைப்படுத்தல் பாதை தேவை."
+
+msgid "Unable to read update %s: %s"
+msgstr "புதுப்பிப்பு %s ஐப் படிக்க முடியவில்லை: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "புதுப்பிப்பு %s JSON செல்லாதது: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "புதுப்பிப்பு %s JSON ஒரு பொருளாக இருக்க வேண்டும்."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "பின்-பயன்பாட்டு சரிபார்ப்பு மெட்டாடேட்டாவில் செல்லுபடியான செயல்கள் பட்டியல் இல்லை."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "இந்த நிலைப்படுத்தப்பட்ட புதுப்பிப்புக்கு தரவுத்தள இடம்பெயர்வுகள் பரிந்துரைக்கப்படவில்லை."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "புதுப்பிப்பு மெட்டாடேட்டாவில் நிலைப்படுத்தப்பட்ட பயன்பாட்டு பாதை இல்லை."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "திட்டமிடப்பட்ட நிலைப்படுத்தப்பட்ட இடம்பெயர்வு கோப்பு கிடைக்கவில்லை: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "நிலைப்படுத்தப்பட்ட இடம்பெயர்வு கோப்பை படிக்க முடியவில்லை: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "getDescription() இலிருந்து விளக்கத்தை பிரித்தெடுக்க முடியவில்லை."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "புதுப்பிப்பு இயக்கியால் ஆதரிக்கப்படும் நிலைப்படுத்தப்பட்ட இடம்பெயர்வுகள் %s மட்டுமே: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "இடம்பெயர்வு பாதுகாப்பு மெட்டாடேட்டாவை எழுத முடியவில்லை: %s"
+
+msgid "Migration safety check failed."
+msgstr "இடம்பெயர்வு பாதுகாப்பு சரிபார்ப்பு தோல்வியடைந்தது."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "பாதுகாப்பற்ற நிலைப்படுத்தப்பட்ட தொடர்புடைய இடம்பெயர்வு பாதை கண்டறியப்பட்டது: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "நிறுவப்பட்ட Chamilo பதிப்பை தானாக கண்டறிய முடியவில்லை. இந்த புதுப்பிப்பு இணக்கமானது என்பதை உறுதிசெய்த பின்னரே தொடரவும்."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "நிறுவப்பட்ட அல்லது இலக்கு பதிப்பு ஒப்பிடக்கூடிய சொற்பொருள் பதிப்பு வடிவத்தில் இல்லை. கைமுறை சரிபார்ப்புக்குப் பிறகே தொடரவும்."
+
+msgid "An update is available."
+msgstr "ஒரு புதுப்பிப்பு கிடைக்கிறது."
+
+msgid "The installed version already matches the manifest version."
+msgstr "நிறுவப்பட்ட பதிப்பு ஏற்கனவே மேனிஃபெஸ்ட் பதிப்புடன் பொருந்துகிறது."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "மேனிஃபெஸ்ட் பதிப்பு நிறுவப்பட்ட பதிப்பை விட பழையது. இயல்பாக தரமிறக்கங்கள் தடுக்கப்பட்டுள்ளன."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "நிலைப்படுத்தப்பட்ட கோப்புகள் வெற்றிகரமாக பயன்படுத்தப்படவில்லை. பின்-பயன்பாட்டு சரிபார்ப்புகளை தொடர முடியாது."
+
+msgid "Apply result metadata was read successfully."
+msgstr "பயன்பாட்டு முடிவு மெட்டாடேட்டா வெற்றிகரமாக படிக்கப்பட்டது."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "பின்-பயன்பாட்டு செயல் பரிந்துரைகள் உருவாக்கப்பட்டன."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "நிலைப்படுத்தப்பட்ட தொகுப்பில் தரவுத்தள இடம்பெயர்வுகள் கண்டறியப்பட்டன. கோப்பு புதுப்பிப்பு சரியானது மற்றும் தரவுத்தள காப்பு உள்ளது என்பதை உறுதிசெய்த பின்னரே அவற்றை இயக்கவும்."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "பின்-பயன்பாட்டு சரிபார்ப்புகளை இயக்க நிலைப்படுத்தல் பாதை தேவை."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "புதுப்பிப்பு %s செல்லுபடியான JSON அல்ல: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "புதுப்பிப்பு %s ஒரு JSON பொருளாக இருக்க வேண்டும்."
+
+msgid "Composer dependencies"
+msgstr "Composer சார்புகள்"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "நிலைப்படுத்தப்பட்ட தொகுப்பில் Composer மெட்டாடேட்டா சேர்க்கப்பட்டுள்ளது. புதுப்பிப்பு முடிந்ததாகக் கருதுவதற்கு முன் பயன்பாட்டு மூலத்திலிருந்து Composer install இயக்கவும்."
+
+msgid "Frontend assets"
+msgstr "முன்பக்கம் சொத்துகள்"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "நிலைப்படுத்தப்பட்ட தொகுப்பில் முன்பக்கம் தொடர்பான கோப்புகள் சேர்க்கப்பட்டுள்ளன. சார்புகளை நிறுவிய பின் உற்பத்தி சொத்துகளை மீண்டும் உருவாக்கவும்."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "நிலைப்படுத்தப்பட்ட தொகுப்பில் Doctrine இடம்பெயர்வு கோப்புகள் கண்டறியப்பட்டன. இடம்பெயர்வுகளை இயக்குவதற்கு முன் தரவுத்தள காப்பு உள்ளது என்பதை உறுதிசெய்யவும்."
+
+msgid "Symfony cache"
+msgstr "Symfony தற்காலிக சேமிப்பு"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "புதுப்பிப்பு கோப்புகளைப் பயன்படுத்திய பிறகும் தேவையான கட்டளைகளை இயக்கிய பிறகும் Symfony தற்காலிக சேமிப்பை அழிக்கவும்."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "பின்-பயன்பாட்டு சரிபார்ப்பு மெட்டாடேட்டாவை எழுத முடியவில்லை."
+
+msgid "Post-apply check failed."
+msgstr "பின்-பயன்பாட்டு சரிபார்ப்பு தோல்வியடைந்தது."
+
+msgid "Update package is not readable: %s"
+msgstr "புதுப்பிப்பு தொகுப்பை படிக்க முடியவில்லை: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "புதுப்பிப்பு தொகுப்பு செல்லுபடியான ZIP காப்பகம் அல்ல."
+
+msgid "Update package ZIP archive is empty."
+msgstr "புதுப்பிப்பு தொகுப்பு ZIP காப்பகம் காலியாக உள்ளது."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "புதுப்பிப்பு தொகுப்பில் படிக்க முடியாத ZIP உள்ளீடு உள்ளது."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "புதுப்பிப்பு தொகுப்பில் பாதுகாப்பற்ற முழுமையான பாதை உள்ளது: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "புதுப்பிப்பு தொகுப்பில் பாதை கடப்பு உள்ளீடு உள்ளது: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "புதுப்பிப்பு தொகுப்பில் குறியீட்டு இணைப்பு உள்ளது: %s"
+
+msgid "Starting post-apply actions."
+msgstr "பின்-பயன்பாட்டு செயல்கள் தொடங்குகின்றன."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "பின்-பயன்பாட்டு கட்டளை இயக்கத்திற்கு வெளிப்படையான உறுதிப்படுத்தல் தேவை."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "பின்-பயன்பாட்டு பரிந்துரை மெட்டாடேட்டா வெற்றிகரமாக படிக்கப்பட்டது."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "பின்-பயன்பாட்டு செயல்கள் பரிந்துரை அறிக்கையுடன் சரிபார்க்கப்பட்டன."
+
+msgid "Post-apply actions were selected."
+msgstr "பின்-பயன்பாட்டு செயல்கள் தேர்ந்தெடுக்கப்பட்டன."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "மேம்பட்ட பின்-பயன்பாட்டு செயல்களுக்கு வெளிப்படையான மேம்பட்ட உறுதிப்படுத்தல் தேவை."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "மேம்பட்ட பின்-பயன்பாட்டு செயல்கள் வெளிப்படையாக உறுதிசெய்யப்பட்டன."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "தேர்ந்தெடுக்கப்பட்ட பின்-பயன்பாட்டு கட்டளைகள் வெற்றிகரமாக முடிந்தன."
+
+msgid "Post-apply command run metadata was written."
+msgstr "பின்-பயன்பாட்டு கட்டளை இயக்க மெட்டாடேட்டா எழுதப்பட்டது."
+
+msgid "Post-apply actions completed successfully."
+msgstr "பின்-பயன்பாட்டு செயல்கள் வெற்றிகரமாக முடிந்தன."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "செல்லாத புதுப்பிப்பு பின்-பயன்பாட்டு கட்டளை வரையறை: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "பின்-பயன்பாட்டு செயல் இயக்கப்படுகிறது: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "%s-க்கான %d இல் %d ஆவது கட்டளை இயக்கப்படுகிறது."
+
+msgid "Post-apply action failed: %s"
+msgstr "பின்-பயன்பாட்டு செயல் தோல்வியடைந்தது: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "பின்-பயன்பாட்டு செயல் \"%s\" வெளியேறும் குறியீடு %d உடன் தோல்வியடைந்தது."
+
+msgid "Post-apply action completed: %s"
+msgstr "பின்-பயன்பாட்டு செயல் முடிந்தது: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "பின்-பயன்பாட்டு செயல்களை இயக்க நிலைப்படுத்தும் பாதை தேவை."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "இயக்க பரிந்துரைக்கப்பட்ட பின்-பயன்பாட்டு செயல்கள் எதுவும் இல்லை."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "இயக்க அனுமதிக்கப்பட்ட பின்-பயன்பாட்டு செயல்கள் எதுவும் இல்லை."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "இந்த புதுப்பிப்புக்கு பின்-பயன்பாட்டு செயல் அனுமதிக்கப்படவில்லை: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "தரவுத்தள இடம்பெயர்வுகளுக்கு செயல்படுத்துவதற்கு முன் இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வு தேவை."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வு தேர்ச்சி பெறாததால் தரவுத்தள இடம்பெயர்வுகளை இயக்க முடியாது."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வு நிலைப்படுத்தப்பட்ட இடம்பெயர்வுகளை பட்டியலிடாததால் தரவுத்தள இடம்பெயர்வுகளை இயக்க முடியாது."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வில் செல்லாத இடம்பெயர்வு உள்ளீடு இருப்பதால் தரவுத்தள இடம்பெயர்வுகளை இயக்க முடியாது."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "புதுப்பிப்பு இயக்கியால் நிலைப்படுத்தப்பட்ட %s இடம்பெயர்வுகளை மட்டுமே செயல்படுத்த முடியும்."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "நிலைப்படுத்தப்பட்ட இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வு தடுக்கும் பிழைகளை அறிவித்ததால் தரவுத்தள இடம்பெயர்வுகளை இயக்க முடியாது."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine இடம்பெயர்வு அடிப்படை எச்சரிக்கைகளை அறிவிக்கிறது. நிலைப்படுத்தப்பட்ட %s இடம்பெயர்வு வகுப்புகள் மட்டுமே வெளிப்படையாக செயல்படுத்தப்படும்."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "தரவுத்தள இடம்பெயர்வுகளுக்கு தரவுத்தள காப்புப்பிரதி உள்ளது என்பதற்கான உறுதிப்படுத்தல் தேவை."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "தரவுத்தள இடம்பெயர்வுகளுக்கு உறுதிப்படுத்தல் உரை \"RUN DATABASE MIGRATIONS\" தேவை."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "தரவுத்தள இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வு செயல்படுத்துவதற்கு முன் முடிக்கப்பட்டது."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "தரவுத்தள காப்புப்பிரதி இருப்பது வெளிப்படையாக உறுதிப்படுத்தப்பட்டது."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "தரவுத்தள இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வு மற்றும் காப்புப்பிரதி உறுதிப்படுத்தல் வழங்கப்பட்டன."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "வெளிப்படையான தரவுத்தள காப்புப்பிரதி உறுதிப்படுத்தலுக்குப் பிறகு தரவுத்தள இடம்பெயர்வுகள் செயல்படுத்தப்பட்டன. புதுப்பிப்பான் தரவுத்தள காப்புப்பிரதியை உருவாக்கவில்லை."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "தேவையான பின்-பயன்பாட்டு இயக்கக்கூடிய அனுமதிகள் இயல்பாக்கப்பட்டன."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "bin/console கிடைக்காததால் தரவுத்தள இடம்பெயர்வுகளை இயக்க முடியவில்லை."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "தேர்ந்தெடுக்கப்பட்ட பின்-பயன்பாட்டு கட்டளைகளுக்கு தேவையான எழுதக்கூடிய பாதைகள் உள்ளன."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "பின்-பயன்பாட்டு கட்டளை எழுதக்கூடிய பாதைகள் சரிபார்க்கப்பட்டன."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "மேம்பட்ட பின்-பயன்பாட்டு செயல்கள் சார்புகள், உருவாக்கப்பட்ட சொத்துகள் அல்லது தரவுத்தளத்தை மாற்றலாம். தொடர்வதற்கு முன் காப்புப்பிரதிகளை மதிப்பாய்வு செய்யவும்."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer உருவாக்கிய கோப்பு \"%s\" UID %d-க்கு சொந்தமானது, PHP இயக்க நேரம் UID %d-ஐப் பயன்படுத்துவதால் வலை புதுப்பிப்பாளரிலிருந்து Composer-ஐ பாதுகாப்பாக இயக்க முடியாது. வரிசைப்படுத்தல் உரிமையாளராக Composer-ஐ கைமுறையாக இயக்கி, மீதமுள்ள பின்-பயன்பாட்டு செயல்களுடன் தொடரவும்."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "பின்-பயன்பாட்டு செயல் \"%s\"-க்கு தேவையான பாதை எழுதக்கூடியதல்ல: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "பின்-பயன்பாட்டு செயல் \"%s\"-க்கு தேவையான பெற்றோர் அடைவு எழுதக்கூடியதல்ல: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "தேவையான பின்-பயன்பாட்டு இயக்கக்கூடியதற்கான அனுமதிகளைப் படிக்க முடியவில்லை: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "தேவையான பின்-பயன்பாட்டு இயக்கக்கூடியதை இயக்கக்கூடியதாக குறிக்க முடியவில்லை: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "chmod-க்குப் பிறகும் தேவையான பின்-பயன்பாட்டு இயக்கக்கூடியது இன்னும் இயக்கக்கூடியதல்ல: %s"
+
+msgid "Executable permission was normalized."
+msgstr "இயக்கக்கூடிய அனுமதி இயல்பாக்கப்பட்டது."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "பின்-பயன்பாட்டு கட்டளைகளுக்கான தனிமைப்படுத்தப்பட்ட Git உள்ளமைவை எழுத முடியவில்லை."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "மற்றொரு புதுப்பிப்பு செயல்பாடு இயங்குவதாகத் தெரிகிறது. எந்த புதுப்பிப்பும் செயலில் இல்லையென்றால் மட்டுமே var/update/update.lock-ஐ அகற்றவும்."
+
+msgid "Unable to create update lock: %s"
+msgstr "புதுப்பிப்பு பூட்டை உருவாக்க முடியவில்லை: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "பின்-பயன்பாட்டு கட்டளை இயக்க மெட்டாடேட்டாவை எழுத முடியவில்லை: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "புதுப்பிப்பு அறிக்கையில் தொகுப்பு தொகுதி இல்லை."
+
+msgid "Update manifest signature block must be an object."
+msgstr "புதுப்பிப்பு அறிக்கை கையொப்பத் தொகுதி ஒரு பொருளாக இருக்க வேண்டும்."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "புதுப்பிப்பு அறிக்கை தேவைகள் தொகுதி ஒரு பொருளாக இருக்க வேண்டும்."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "புதுப்பிப்பு தொகுப்பு sha256 64 எழுத்துகள் கொண்ட பதினாறுமடி சரமாக இருக்க வேண்டும்."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "புதுப்பிப்பு அறிக்கையில் தேவையான சரப் புலம் \"%s\" இல்லை."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "புதுப்பிப்பு அறிக்கை புலம் \"%s\" ஒரு சரமாக இருக்க வேண்டும்."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "புதுப்பிப்பு அறிக்கை செல்லுபடியாகும் JSON அல்ல: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "புதுப்பிப்பு அறிக்கை JSON ஒரு பொருளாக இருக்க வேண்டும்."
+
+msgid "Manifest source cannot be empty."
+msgstr "அறிக்கை மூலம் காலியாக இருக்க முடியாது."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "புதுப்பிப்பு அறிக்கை URL அதிகாரப்பூர்வ புதுப்பிப்பு மூலமான %s-ஐப் பயன்படுத்த வேண்டும்."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "புதுப்பிப்பு அறிக்கையைப் பதிவிறக்க முடியவில்லை. HTTP நிலை: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "அறிக்கை கோப்பு படிக்கக்கூடியதல்ல: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "அறிக்கை கோப்பைப் படிக்க முடியவில்லை: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "புதுப்பிப்பு மேனிஃபெஸ்ட் URL HTTPS-ஐப் பயன்படுத்த வேண்டும்."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "புதுப்பிப்பு தொகுப்பு மெட்டாடேட்டாவைப் படிக்க முடியவில்லை: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "புதுப்பிப்பு தொகுப்பு மெட்டாடேட்டாவைப் படிக்க இயலவில்லை: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "புதுப்பிப்பு தொகுப்பு மெட்டாடேட்டா செல்லுபடியான JSON அல்ல: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "புதுப்பிப்பு தொகுப்பு மெட்டாடேட்டா ஒரு JSON பொருளாக இருக்க வேண்டும்."
+
+msgid "Update package metadata format must be %d."
+msgstr "புதுப்பிப்பு தொகுப்பு மெட்டாடேட்டா வடிவம் %d ஆக இருக்க வேண்டும்."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "புதுப்பிப்பு தொகுப்பு மெட்டாடேட்டா புலம் \"remove\" ஒரு அணியாக இருக்க வேண்டும்."
+
+msgid "Update package removal paths must be strings."
+msgstr "புதுப்பிப்பு தொகுப்பு நீக்கப் பாதைகள் சரங்களாக இருக்க வேண்டும்."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "புதுப்பிப்பு தொகுப்பு மெட்டாடேட்டா பாதுகாக்கப்பட்ட பாதையை நீக்க முடியாது: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "புதுப்பிப்பு தொகுப்பு ஒரே பாதையைச் சேர்க்கவும் நீக்கவும் முடியாது: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "புதுப்பிப்பு தொகுப்பு மெட்டாடேட்டா sha256-ஐக் கணக்கிட இயலவில்லை."
+
+msgid "Update package removal path cannot be empty."
+msgstr "புதுப்பிப்பு தொகுப்பு நீக்கப் பாதை காலியாக இருக்கக்கூடாது."
+
+msgid "Update package removal path contains a null byte."
+msgstr "புதுப்பிப்பு தொகுப்பு நீக்கப் பாதையில் null பைட் உள்ளது."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "புதுப்பிப்பு தொகுப்பு நீக்கப் பாதை தொடர்புடையதாக இருக்க வேண்டும்: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "புதுப்பிப்பு தொகுப்பு நீக்கப் பாதையில் பாதுகாப்பற்ற பகுதி உள்ளது: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "புதுப்பிப்பு பயன்படுத்தல் திட்டத்தை உருவாக்க ஸ்டேஜிங் பாதை தேவை."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "ஸ்டேஜிங் அடைவில் STAGING-INFO.json இல்லை."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "ஸ்டேஜிங் மெட்டாடேட்டாவைப் படிக்க இயலவில்லை: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "ஸ்டேஜிங் மெட்டாடேட்டா செல்லுபடியான JSON அல்ல: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "ஸ்டேஜிங் மெட்டாடேட்டா ஒரு JSON பொருளாக இருக்க வேண்டும்."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "ஸ்டேஜிங் மெட்டாடேட்டாவில் application_path புலம் இல்லை."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "புதுப்பிப்பு தொகுப்பில் %s இல்லை. கோப்புகளைப் பயன்படுத்துவதற்கு முன் கையொப்பமிடப்பட்ட சுத்தம் செய்யும் மெட்டாடேட்டா தேவை."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "ஸ்டேஜிங் மெட்டாடேட்டாவில் பிரித்தெடுத்தலின் போது பதிவுசெய்யப்பட்ட கையொப்பமிடப்பட்ட தொகுப்பு சுத்தம் செய்யும் மெட்டாடேட்டா இல்லை."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "ஸ்டேஜிங்கிற்குப் பிறகு புதுப்பிப்பு தொகுப்பு சுத்தம் செய்யும் மெட்டாடேட்டா மாறியுள்ளது. தொடர்வதற்கு முன் சரிபார்க்கப்பட்ட தொகுப்பை மீண்டும் ஸ்டேஜ் செய்யவும்."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "ஸ்டேஜிங் மெட்டாடேட்டாவில் செல்லுபடியான தொகுப்பு நீக்கப் பட்டியல் இல்லை."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "ஸ்டேஜிங்கிற்குப் பிறகு புதுப்பிப்பு தொகுப்பு சுத்தம் செய்யும் பாதைகள் மாறியுள்ளன. தொடர்வதற்கு முன் சரிபார்க்கப்பட்ட தொகுப்பை மீண்டும் ஸ்டேஜ் செய்யவும்."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "கையொப்பமிடப்பட்ட தொகுப்பு சுத்தம் செய்யும் மெட்டாடேட்டா ஸ்டேஜிங்கிலிருந்து மாறவில்லை."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "ஒரு புதுப்பிப்பு பூட்டுக் கோப்பு ஏற்கனவே உள்ளது. மற்றொரு புதுப்பிப்பு நடைபெற்றுக் கொண்டிருக்கலாம்."
+
+msgid "Update lock directory is not writable."
+msgstr "புதுப்பிப்பு பூட்டு அடைவு எழுதக்கூடியதல்ல."
+
+msgid "No update lock is currently active."
+msgstr "தற்போது செயலில் உள்ள புதுப்பிப்பு பூட்டு இல்லை."
+
+msgid "Update backup directory is not writable."
+msgstr "புதுப்பிப்பு காப்பு அடைவு எழுதக்கூடியதல்ல."
+
+msgid "Update backup directory is writable."
+msgstr "புதுப்பிப்பு காப்பு அடைவு எழுதக்கூடியது."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "தற்போதைய செயல்முறையால் புதுப்பிப்பு காப்பு அடைவை உருவாக்க முடியாது."
+
+msgid "Update backup directory can be created."
+msgstr "புதுப்பிப்பு காப்பு அடைவை உருவாக்க முடியும்."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "சில புதுப்பிப்பு பணி அடைவுகள் எழுதக்கூடியவை அல்ல அல்லது தற்போதைய செயல்முறையால் உருவாக்க முடியாது."
+
+msgid "Update working directories are writable or can be created."
+msgstr "புதுப்பிப்பு பணி அடைவுகள் எழுதக்கூடியவை அல்லது உருவாக்கக்கூடியவை."
+
+msgid "Update apply file plan was generated."
+msgstr "புதுப்பிப்பு பயன்படுத்தல் கோப்புத் திட்டம் உருவாக்கப்பட்டது."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "தொகுப்பு சுத்தம் செய்யும் மெட்டாடேட்டாவில் பாதுகாப்பாக நீக்க முடியாத பாதைகள் உள்ளன."
+
+msgid "Package-declared removal targets are safe."
+msgstr "தொகுப்பால் அறிவிக்கப்பட்ட நீக்க இலக்குகள் பாதுகாப்பானவை."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "தொகுப்பால் அறிவிக்கப்பட்ட சில காலாவதியான கோப்புகள் இந்த நிறுவலில் ஏற்கனவே இல்லை."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "திட்டமிடப்பட்ட புதுப்பிப்பு ஏற்கனவே உள்ள குறியீட்டு இணைப்புகளை மேலெழுதும் அல்லது நீக்கும்."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "திட்டமிடப்பட்ட புதுப்பிப்பு ஏற்கனவே உள்ள குறியீட்டு இணைப்புகளை மேலெழுதாது அல்லது நீக்காது."
+
+msgid "New update migration files must be placed under %s."
+msgstr "புதிய புதுப்பிப்பு இடம்பெயர்வுக் கோப்புகள் %s கீழ் வைக்கப்பட வேண்டும்."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "புதிய %s Doctrine இடம்பெயர்வுக் கோப்புகள் கண்டறியப்பட்டன. கோப்புகளைப் பயன்படுத்திய பிறகு அவை தரவுத்தள இடம்பெயர்வு பாதுகாப்பு மதிப்பாய்வைத் தேவைப்படும்."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "சில புதுப்பிப்பு பயன்படுத்தல் திட்டக் கோப்புப் பட்டியல்கள் JSON பதிலில் வெட்டப்பட்டன."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "புதுப்பிப்பு பயன்படுத்தல் திட்ட மெட்டாடேட்டாவை எழுத இயலவில்லை."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "புதுப்பிப்பு தொகுப்பைப் பதிவிறக்க இயலவில்லை. HTTP நிலை: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "புதுப்பிப்பு தொகுப்பு இலக்குக் கோப்பைத் திறக்க இயலவில்லை: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "புதுப்பிப்பு பதிவிறக்கங்கள் அதிகாரப்பூர்வ புதுப்பிப்பு மூலமான %s-ஐப் பயன்படுத்த வேண்டும்."
+
+msgid "The update package URL must use HTTPS."
+msgstr "புதுப்பிப்பு தொகுப்பு URL HTTPS-ஐப் பயன்படுத்த வேண்டும்."
+
+msgid "Update package archive safety checks passed."
+msgstr "புதுப்பிப்பு தொகுப்பு காப்பக பாதுகாப்பு சோதனைகள் வெற்றிகரமாக முடிந்தன."
+
+msgid "Update package was extracted to staging."
+msgstr "புதுப்பிப்பு தொகுப்பு இடைநிலைக்கு பிரித்தெடுக்கப்பட்டது."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "கையொப்பமிடப்பட்ட தொகுப்பு சுத்தம் செய்யும் மெட்டாடேட்டா ஏற்றப்பட்டது."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "புதுப்பிப்பு தொகுப்பில் %s இல்லை. கையொப்பமிடப்பட்ட சுத்தம் செய்யும் மெட்டாடேட்டா வழங்கப்படும் வரை கோப்பு பயன்பாடு தடுக்கப்படும்."
+
+msgid "Staged package dry-run report was generated."
+msgstr "இடைநிலை தொகுப்பின் சோதனை இயக்க அறிக்கை உருவாக்கப்பட்டது."
+
+msgid "Staging metadata was written."
+msgstr "இடைநிலை மெட்டாடேட்டா எழுதப்பட்டது."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "புதுப்பிப்பு தொகுப்பை இடைநிலை கோப்பகத்திற்கு பிரித்தெடுக்க முடியவில்லை."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "இடைநிலை தொகுப்பில் Chamilo பயன்பாட்டு மூலத்தை கண்டறிய முடியவில்லை."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "இடைநிலை தொகுப்பில் தேவையான Chamilo உள்ளீடு இல்லை: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "இடைநிலை தொகுப்பில் எதிர்பார்க்கப்படும் Chamilo அமைப்பு உள்ளது."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "இடைநிலை தொகுப்பில் composer.lock இல்லை."
+
+msgid "Staged package contains composer.lock."
+msgstr "இடைநிலை தொகுப்பில் composer.lock உள்ளது."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "இடைநிலை தொகுப்பில் yarn.lock இல்லை."
+
+msgid "Staged package contains yarn.lock."
+msgstr "இடைநிலை தொகுப்பில் yarn.lock உள்ளது."
+
+msgid "Unable to encode staging metadata."
+msgstr "இடைநிலை மெட்டாடேட்டாவை குறியாக்கம் செய்ய முடியவில்லை."
+
+msgid "Unable to write staging metadata."
+msgstr "இடைநிலை மெட்டாடேட்டாவை எழுத முடியவில்லை."
+
+msgid "Update operation log created."
+msgstr "புதுப்பிப்பு செயல்பாட்டு பதிவு உருவாக்கப்பட்டது."
+
+msgid "Unable to write update operation log."
+msgstr "புதுப்பிப்பு செயல்பாட்டு பதிவை எழுத முடியவில்லை."
+
+msgid "Invalid update operation id."
+msgstr "தவறான புதுப்பிப்பு செயல்பாட்டு அடையாளம்."
 

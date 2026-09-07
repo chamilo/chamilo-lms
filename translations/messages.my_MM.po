@@ -7673,7 +7673,7 @@ msgid "Please type your text below"
 msgstr "သင့်စာသားကို အောက်တွင် ရိုက်ထည့်ပါ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ဖောင်ဖြည့် လှုပ်ရှားမှု နမူနာ : ကိုယ်အလေးချိန်ညွှန်းကိန်း (BMI) တွက်ချက်ခြင်း</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ကိုယ်အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ကိုယ်အလေးချိန်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ဖောင်ဖြည့် လှုပ်ရှားမှု နမူနာ : ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း တွက်ချက်ရန်</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">၉၅ ကီလိုဂရမ်</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">၁.၈၁ မီတာ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ဝီကီပီးဒီးယား ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "လိပ်စာကို မှတ်သားပါ"
@@ -35588,7 +35588,7 @@ msgid "%s results"
 msgstr "%s ရလဒ်များ"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ဖောင်ဖြည့် လှုပ်ရှားမှု နမူနာ : ကိုယ်အလေးချိန်ညွှန်းကိန်း (BMI) တွက်ချက်ခြင်း</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>ကိုယ်အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ကိုယ်အလေးချိန်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ဖောင်ဖြည့် လှုပ်ရှားမှု နမူနာ : ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း တွက်ချက်ရန်</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">၉၅ ကီလိုဂရမ်</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">၁.၈၁ မီတာ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ဝီကီပီးဒီးယား ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "ဖယ်ရှားပြီး"
@@ -40233,4 +40233,949 @@ msgstr "အလုပ်သင်မြို့"
 
 msgid "City"
 msgstr "မြို့"
+
+msgid "Update workflow restored after page refresh"
+msgstr "စာမျက်နှာ ပြန်လည်စတင်ပြီးနောက် အပ်ဒိတ် လုပ်ငန်းစဉ် ပြန်လည်ရရှိသည်"
+
+msgid "Last completed step"
+msgstr "နောက်ဆုံး ပြီးစီးသော အဆင့်"
+
+msgid "Stage package"
+msgstr "အဆင့်သတ်မှတ် ပက်ကေ့ချ်"
+
+msgid "Package staging"
+msgstr "ပက်ကေ့ချ် အဆင့်သတ်မှတ်ခြင်း"
+
+msgid "Apply plan"
+msgstr "အစီအစဉ် အသုံးပြုရန်"
+
+msgid "Update workflow completed"
+msgstr "အပ်ဒိတ် လုပ်ငန်းစဉ် ပြီးစီးပါပြီ"
+
+msgid "Update directory exists and is writable."
+msgstr "အပ်ဒိတ် ဖိုင်တွဲ ရှိပြီး ရေးသားနိုင်သည်။"
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "အပ်ဒိတ် ဖိုင်တွဲ ရှိသော်လည်း ရေးသား၍ မရပါ: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "အပ်ဒိတ် ဖိုင်တွဲ မရှိသေးသော်လည်း မိဘ ဖိုင်တွဲကို ရေးသားနိုင်သည်။"
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "အပ်ဒိတ် ဖိုင်တွဲ မရှိသေးသော်လည်း var/ အောက်တွင် ဖန်တီးနိုင်သည်။"
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "အပ်ဒိတ် ဖိုင်တွဲ မရှိသေးဘဲ လက်ရှိ ခွင့်ပြုချက်များဖြင့် ဖန်တီး၍ မရပါ။"
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "အပ်ဒိတ် ကြိုတင်စစ်ဆေးမှုအတွက် ကျန်ရှိသော ဒစ်ခ်နေရာကို ဆုံးဖြတ်၍ မရပါ။"
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "ဘေးကင်းသော အပ်ဒိတ် အဆင့်သတ်မှတ် လုပ်ဆောင်မှုအတွက် ကျန်ရှိသော ဒစ်ခ်နေရာ မလုံလောက်ပါ။"
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "ဤ အတည်ပြုအဆင့် အပ်ဒိတ် စီးဆင်းမှုအတွက် ကျန်ရှိသော ဒစ်ခ်နေရာ လုံလောက်သည်။"
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "အပ်ဒိတ် မန်နီဖက်စ်တွင် PHP ဗားရှင်း လိုအပ်ချက် သတ်မှတ်မထားပါ။"
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "PHP လိုအပ်ချက်ကို အပြည့်အဝ အကဲဖြတ်၍ မရပါ: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "လက်ရှိ PHP ဗားရှင်းသည် အပ်ဒိတ် လိုအပ်ချက်နှင့် မကိုက်ညီပါ: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "လက်ရှိ PHP ဗားရှင်းသည် အပ်ဒိတ် လိုအပ်ချက်နှင့် ကိုက်ညီသည်။"
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "ဒေသတွင်း ပက်ကေ့ချ် လမ်းကြောင်း ပေးမထားပါ။ ဒေါင်းလုဒ်လုပ်ထားသော ပက်ကေ့ချ်များကို ဒေါင်းလုဒ်ပြီးမှသာ စစ်ဆေးနိုင်သည်။"
+
+msgid "Local update package is not readable: %s"
+msgstr "ဒေသတွင်း အပ်ဒိတ် ပက်ကေ့ချ်ကို ဖတ်၍ မရပါ: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "ဒေသတွင်း အပ်ဒိတ် ပက်ကေ့ချ်သည် ZIP မော်ကွန်း ဖြစ်ရမည်။"
+
+msgid "Local update package is readable."
+msgstr "ဒေသတွင်း အပ်ဒိတ် ပက်ကေ့ချ်ကို ဖတ်နိုင်သည်။"
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "ထည့်သွင်းထားသော Chamilo ဗားရှင်းကို အလိုအလျောက် ရှာမတွေ့ပါ။ ဗားရှင်း ဦးတည်ချက်ကို စစ်ဆေး၍ မရပါ။"
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "ထည့်သွင်းထားသော သို့မဟုတ် ပစ်မှတ် ဗားရှင်းသည် နှိုင်းယှဉ်နိုင်သော semantic ဗားရှင်း ပုံစံ မဟုတ်ပါ။"
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "ပစ်မှတ် ဗားရှင်းသည် ထည့်သွင်းထားသော ဗားရှင်းထက် နိမ့်သည်။ ပုံမှန်အားဖြင့် အဆင့်လျှော့ခြင်းကို ခွင့်မပြုပါ။"
+
+msgid "Target version matches the installed version."
+msgstr "ပစ်မှတ် ဗားရှင်းသည် ထည့်သွင်းထားသော ဗားရှင်းနှင့် တူညီသည်။"
+
+msgid "Target version is newer than the installed version."
+msgstr "ပစ်မှတ် ဗားရှင်းသည် ထည့်သွင်းထားသော ဗားရှင်းထက် အသစ်ဖြစ်သည်။"
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "ပရောဂျက်သည် Git checkout မဟုတ်ပါ သို့မဟုတ် .git မရှိပါ။"
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "ဤ အပ်ဒိတ် စနစ်သည် Git ပံ့ပိုးမှု မရှိသော တပ်ဆင်မှုများအတွက် ရည်ရွယ်သည်။ ဒေသတွင်း စနစ်တွင် Git အသုံးပြုနေကြောင်း တွေ့ရှိရသည်။ အပ်ဒိတ် ဆက်လုပ်ပါက Git မှတ်တမ်း ပျက်စီးနိုင်သည်။ Git ပံ့ပိုးမှုရှိသော စနစ်များအတွက် ဝဘ် ရုဒ်ရှိ CONTRIBUTING.md တွင် ဖော်ပြထားသော Git လုပ်ထုံးလုပ်နည်းကို အသုံးပြုရန် အကြံပြုပါသည်။"
+
+msgid "Local Git changes were also detected."
+msgstr "ဒေသတွင်း Git ပြောင်းလဲမှုများကိုလည်း တွေ့ရှိရသည်။"
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "ပရောဂျက် မက်တာဒေတာ ဖိုင်အချို့ ပျောက်နေသည်။ နောက်ပိုင်း အပ်ဒိတ် အဆင့်များတွင် မှီခိုမှုများကို ကိုယ်တိုင် စစ်ဆေးရန် လိုအပ်နိုင်သည်။"
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer နှင့် Yarn မက်တာဒေတာ ဖိုင်များ ရှိနေသည်။"
+
+msgid "Starting staged file application."
+msgstr "အဆင့်သတ်မှတ် ဖိုင် အသုံးပြုမှု စတင်နေသည်။"
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "အဆင့်သတ်မှတ် ဖိုင်များကို အသုံးပြုရန် ရှင်းလင်းသော အတည်ပြုချက် လိုအပ်သည်။"
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "အဆင့်သတ်မှတ် အပ်ဒိတ် ဖိုင်များကို အသုံးပြုရန် ရှင်းလင်းသော အတည်ပြုချက် လိုအပ်သည်။"
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "အဆင့်သတ်မှတ် ဖိုင်တွဲသည် Chamilo အပ်ဒိတ် အဆင့်သတ်မှတ် ဖိုင်တွဲအတွင်း ရှိသည်။"
+
+msgid "Staging directory was validated."
+msgstr "အဆင့်သတ်မှတ် ဖိုင်တွဲကို အတည်ပြုပြီးပါပြီ။"
+
+msgid "Apply plan metadata was read successfully."
+msgstr "အစီအစဉ် အသုံးပြုရန် မက်တာဒေတာကို အောင်မြင်စွာ ဖတ်ပြီးပါပြီ။"
+
+msgid "Staged application path is valid."
+msgstr "အဆင့်သတ်မှတ် အသုံးပြုမှု လမ်းကြောင်း မှန်ကန်သည်။"
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "လက်မှတ်ထိုး ပက်ကေ့ချ် ရှင်းလင်းမှု မက်တာဒေတာသည် သုံးသပ်ထားသော အသုံးပြုမှု အစီအစဉ်နှင့် ကိုက်ညီသည်။"
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "လက်မှတ်ထိုး ပက်ကေ့ချ် ရှင်းလင်းမှု မက်တာဒေတာကို အတည်ပြုပြီးပါပြီ။"
+
+msgid "Update lock was acquired."
+msgstr "အပ်ဒိတ် လော့ခ် ရရှိပြီးပါပြီ။"
+
+msgid "Update backup directory was created."
+msgstr "အပ်ဒိတ် အရန်သိမ်း ဖိုင်တွဲကို ဖန်တီးပြီးပါပြီ။"
+
+msgid "Update file operations were collected."
+msgstr "အပ်ဒိတ် ဖိုင် လုပ်ဆောင်ချက်များကို စုဆောင်းပြီးပါပြီ။"
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "အစားထိုးရန် သို့မဟုတ် ဖယ်ရှားရန် စီစဉ်ထားသော ရှိပြီးသား ဖိုင်များကို အရန်သိမ်းထားပြီးဖြစ်သည်။"
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "စင်တင်ထားသော အပ်ဒိတ်ဖိုင်များကို Chamilo တပ်ဆင်မှုသို့ ကူးယူပြီးဖြစ်သည်။"
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "ပက်ကေ့ချ်တွင် ကြေညာထားသော ခေတ်မမီတော့သော ဖိုင်များကို Chamilo တပ်ဆင်မှုမှ ဖယ်ရှားပြီးဖြစ်သည်။"
+
+msgid "Package-declared obsolete files were removed."
+msgstr "ပက်ကေ့ချ်တွင် ကြေညာထားသော ခေတ်မမီတော့သော ဖိုင်များကို ဖယ်ရှားပြီးဖြစ်သည်။"
+
+msgid "Update apply audit metadata was written."
+msgstr "အပ်ဒိတ် အသုံးချ စစ်ဆေးမှု မက်တာဒေတာကို ရေးသားပြီးဖြစ်သည်။"
+
+msgid "Staged files applied successfully."
+msgstr "စင်တင်ထားသော ဖိုင်များကို အောင်မြင်စွာ အသုံးချပြီးဖြစ်သည်။"
+
+msgid "Unable to restore removed files: %s"
+msgstr "ဖယ်ရှားထားသော ဖိုင်များကို ပြန်လည်ထားရှိ၍ မရပါ: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "ကူးယူထားသော ဖိုင်များကို ပြန်လှည့်၍ မရပါ: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "အပ်ဒိတ် အသုံးချမှု မအောင်မြင်ပြီးနောက် ဖိုင် ပြန်လှည့်မှုကို ဆောင်ရွက်ခဲ့သည်။"
+
+msgid "Rollback failed: %s"
+msgstr "ပြန်လှည့်မှု မအောင်မြင်ပါ: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "အပ်ဒိတ် အသုံးချ စစ်ဆေးမှု မက်တာဒေတာကို ရေးသား၍ မရပါ: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "မအောင်မြင်ပြီးနောက် အပ်ဒိတ် လော့ခ်ကို လွှတ်၍ မရပါ: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "အပ်ဒိတ်ဖိုင်များကို အသုံးချရန် စင်တင်လမ်းကြောင်း လိုအပ်သည်။"
+
+msgid "Staging directory does not exist: %s"
+msgstr "စင်တင် ဖိုင်တွဲ မရှိပါ: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo အပ်ဒိတ် စင်တင် အခြေခံ ဖိုင်တွဲ မရှိပါ။"
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "စင်တင် ဖိုင်တွဲသည် var/update/staging အတွင်း ရှိရမည်။"
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "စင်တင် ဖိုင်တွဲတွင် APPLY-PLAN.json ပျောက်နေသည်။"
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ် မက်တာဒေတာကို ဖတ်၍ မရပါ: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ် မက်တာဒေတာသည် မှန်ကန်သော JSON မဟုတ်ပါ: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ် မက်တာဒေတာသည် JSON အရာဝတ္ထု ဖြစ်ရမည်။"
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ်တွင် application_path ကွက်လပ် ပျောက်နေသည်။"
+
+msgid "Staged application path is not readable: %s"
+msgstr "စင်တင်ထားသော အပလီကေးရှင်း လမ်းကြောင်းကို ဖတ်၍ မရပါ: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "စင်တင်ထားသော အပလီကေးရှင်း လမ်းကြောင်းသည် စင်တင် ဖိုင်တွဲအတွင်း ရှိရမည်။"
+
+msgid "Staged application path is missing composer.json."
+msgstr "စင်တင်ထားသော အပလီကေးရှင်း လမ်းကြောင်းတွင် composer.json ပျောက်နေသည်။"
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ်တွင် %s ပျောက်နေသည်။ လက်မှတ်ထိုးထားသော ရှင်းလင်းမှု မက်တာဒေတာပါသော အတည်ပြုပြီး ပက်ကေ့ချ်ကို ပြန်လည် စင်တင်ပါ။"
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ်တွင် သုံးသပ်ပြီး ပက်ကေ့ချ် ရှင်းလင်းမှု မက်တာဒေတာ ပျောက်နေသည်။"
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "အသုံးချ အစီအစဉ် ထုတ်ပြီးနောက် အပ်ဒိတ် ပက်ကေ့ချ် ရှင်းလင်းမှု မက်တာဒေတာ ပြောင်းလဲသွားသည်။ ဆက်မလုပ်မီ အသုံးချ အစီအစဉ်ကို ပြန်တည်ဆောက်ပါ။"
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ်တွင် မမှန်ကန်သော ပက်ကေ့ချ် ဖယ်ရှားစာရင်း ပါရှိသည်။"
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "အသုံးချ အစီအစဉ် ထုတ်ပြီးနောက် အပ်ဒိတ် ပက်ကေ့ချ် ရှင်းလင်းမှု လမ်းကြောင်းများ ပြောင်းလဲသွားသည်။ ဆက်မလုပ်မီ အသုံးချ အစီအစဉ်ကို ပြန်တည်ဆောက်ပါ။"
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ်တွင် သုံးသပ်ပြီး ဖယ်ရှားလမ်းကြောင်း စာရင်း ပျောက်နေသည်။"
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ် ဖယ်ရှားလမ်းကြောင်းများသည် လက်မှတ်ထိုးထားသော ပက်ကေ့ချ် ရှင်းလင်းမှု မက်တာဒေတာနှင့် မကိုက်ညီပါ။"
+
+msgid "Update lock path must be inside var/update."
+msgstr "အပ်ဒိတ် လော့ခ် လမ်းကြောင်းသည် var/update အတွင်း ရှိရမည်။"
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ်တွင် backup_path ကွက်လပ် ပျောက်နေသည်။"
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "အပ်ဒိတ် အရန်လမ်းကြောင်းတွင် မလုံခြုံသော လမ်းကြောင်း အပိုင်းများ ပါရှိသည်။"
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "အပ်ဒိတ် အရန်လမ်းကြောင်းသည် var/update/backups အတွင်း ရှိရမည်။"
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "အပ်ဒိတ် လော့ခ် ရယူ၍ မရပါ။ အခြား အပ်ဒိတ်တစ်ခု လုပ်ဆောင်နေနိုင်သည်။"
+
+msgid "Unable to release update lock: %s"
+msgstr "အပ်ဒိတ် လော့ခ်ကို လွှတ်၍ မရပါ: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "အပ်ဒိတ် အရန် ဖိုင်တွဲ ရှိပြီးသားဖြစ်သည်: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "ပစ်မှတ် ဖိုင်တွဲကို ဖန်တီး၍ မရပါ: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "စီစဉ်ထားသော အပ်ဒိတ်သည် ရှိပြီးသား သင်္ကေတလင့်ခ်ကို ထပ်ရေးမည်: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "ပစ်မှတ် ဖိုင်ကို ရေး၍ မရပါ: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "ပစ်မှတ် ဖိုင်ကို ဖန်တီး၍ မရပါ: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "ခေတ်မမီတော့သော ဖိုင်များကို ဖယ်ရှားမီ Chamilo ပရောဂျက် ဖိုင်တွဲကို ဖြေရှင်း၍ မရပါ။"
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "အပ်ဒိတ် ရှင်းလင်းမှုသည် ကာကွယ်ထားသော လမ်းကြောင်းကို ဖယ်ရှား၍ မရပါ: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "စီစဉ်ထားသော အပ်ဒိတ်သည် ရှိပြီးသား သင်္ကေတလင့်ခ်ကို ဖယ်ရှားမည်: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "အပ်ဒိတ် ရှင်းလင်းမှုသည် ဖိုင်များကိုသာ ပံ့ပိုးသည်၊ ဖိုင်တွဲများကို မပံ့ပိုးပါ: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "ခေတ်မမီတော့သော ပစ်မှတ် ဖိုင်ကို အရန်သိမ်းရန် ဖတ်၍ မရပါ: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "လက်ရှိ ဖိုင်တွဲ ခွင့်ပြုချက်များဖြင့် ခေတ်မမီတော့သော ပစ်မှတ် ဖိုင်ကို ဖယ်ရှား၍ မရပါ: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "ခေတ်မမီတော့သော ပစ်မှတ် ဖိုင်သည် Chamilo ပရောဂျက် ဖိုင်တွဲအပြင်ဘက်သို့ ဖြေရှင်းသည်: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "ပစ်မှတ် ဖိုင်ကို အရန်သိမ်း၍ မရပါ: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "အပ်ဒိတ် အရန်သိမ်း မက်တာဒေတာကို ရေးမရပါ။"
+
+msgid "Unable to copy staged update file: %s"
+msgstr "စတိတ်လုပ်ထားသော အပ်ဒိတ်ဖိုင်ကို ကူးယူမရပါ: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "စတိတ်လုပ်ထားသော ဖိုင် %d ခုအနက် %d ခုကို ကူးယူပြီးပါပြီ။"
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "ပက်ကေ့ချ်တွင် ကြေညာထားသော ခေတ်မမီတော့သော ဖိုင်ကို ဖယ်ရှားမရပါ: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "ပက်ကေ့ချ်တွင် ကြေညာထားသော ခေတ်မမီတော့သော ဖိုင် %d ခုအနက် %d ခုကို ဖယ်ရှားပြီးပါပြီ။"
+
+msgid "Unable to restore backed up file: %s"
+msgstr "အရန်သိမ်းထားသော ဖိုင်ကို ပြန်ထားမရပါ: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "ပြန်လှည့်စဉ် အသစ်ကူးယူထားသော ဖိုင်ကို ဖယ်ရှားမရပါ: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "အရန်သိမ်း မရှိသောကြောင့် ဖယ်ရှားထားသော ဖိုင်ကို ပြန်ထားမရပါ: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "အရန်သိမ်းမှ ဖယ်ရှားထားသော ဖိုင်ကို ပြန်ထားမရပါ: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "အပ်ဒိတ် အသုံးချ စစ်ဆေးမှု မက်တာဒေတာကို ရေးမရပါ။"
+
+msgid "Unable to write global update apply log."
+msgstr "ကမ္ဘာလုံးဆိုင်ရာ အပ်ဒိတ် အသုံးချ မှတ်တမ်းကို ရေးမရပါ။"
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "မလုံခြုံသော စတိတ် ဆက်စပ်လမ်းကြောင်း တွေ့ရှိသည်: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "လမ်းညွှန်သည် ရေးလို့မရပါ: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "လမ်းညွှန် ဖန်တီးမရပါ: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "စတိတ် မက်တာဒေတာကို အောင်မြင်စွာ ဖတ်ပြီးပါပြီ။"
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "အသုံးချ အစီအစဉ် မက်တာဒေတာကို စတိတ်လမ်းညွှန်သို့ ရေးပြီးပါပြီ။"
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "စီစဉ်ထားသော အပ်ဒိတ်နှင့် ရှင်းလင်းမှုအတွက် ပစ်မှတ်ဖိုင်များနှင့် လမ်းညွှန်များသည် ရေးလို့ရပုံပေါ်သည်။"
+
+msgid "Update apply plan check failed."
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ် စစ်ဆေးမှု မအောင်မြင်ပါ။"
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "ပစ်မှတ်ဖိုင် သို့မဟုတ် လမ်းညွှန်အချို့ကို ရေးခြင်း သို့မဟုတ် ဖယ်ရှားခြင်း မပြုနိုင်ပါ။"
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "ဤအရာကို ပြင်ရန် Chamilo လမ်းညွှန်တစ်ခုလုံး၏ ပိုင်ရှင်ကို ယာယီအားဖြင့် %s (ဝဘ်ဆာဗာ အသုံးပြုသူ) သို့ ပြောင်းပါ၊ အပ်ဒိတ်ကို အသုံးချပါ၊ ထို့နောက် ပိုင်ရှင်ကို %s သို့ ပြန်ပြောင်းပြီး var/ (နှင့် ၎င်း၏ အကြောင်းအရာများ) ၏ ပိုင်ရှင်ကို %s သို့ ပြန်သတ်မှတ်ပါ၊ သို့မှသာ အပလီကေးရှင်းက ဆက်လက်ရေးနိုင်မည်။"
+
+msgid "Update package verification failed."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် အတည်ပြုမှု မအောင်မြင်ပါ။"
+
+msgid "Update preflight checks failed."
+msgstr "အပ်ဒိတ် ကြိုတင်စစ်ဆေးမှုများ မအောင်မြင်ပါ။"
+
+msgid "Unable to stage update package."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ်ကို စတိတ်လုပ်မရပါ။"
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "ဤဆာဗာတွင် UI မှ အသုံးချပြီးနောက် အမိန့်များကို လုပ်ဆောင်ခြင်းကို ပိတ်ထားသည်။"
+
+msgid "Missing required field: %s"
+msgstr "လိုအပ်သော အကွက် ပျောက်နေသည်: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "အပ်ဒိတ် မန်နီဖက်စ် ရင်းမြစ် မပေးထားသလို ပုံသေ အပ်ဒိတ် မန်နီဖက်စ် URL ကိုလည်း သတ်မှတ်မထားပါ။"
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "အပ်ဒိတ် မန်နီဖက်စ် URL သည် တရားဝင် အပ်ဒိတ် မူလ %s ကို သုံးရမည်။ မန်နီဖက်စ် လမ်းကြောင်းကိုသာ ပြောင်းနိုင်သည်။"
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "ဒေသတွင်း အပ်ဒိတ် မန်နီဖက်စ် လမ်းကြောင်းများကို ပိတ်ထားသည်။ HTTPS မန်နီဖက်စ် URL ကို သုံးပါ သို့မဟုတ် ဒေသတွင်း စမ်းသပ်ရန် ဆာဗာ ပတ်ဝန်းကျင်တွင် CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 ကို သတ်မှတ်ပါ။"
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "HTTP %s လမ်းကြောင်း မပေးပါနှင့်။ အပ်ဒိတ် မန်နီဖက်စ်မှ ဒေါင်းလုဒ်လုပ်ရန် ဤအကွက်ကို ဗလာထားပါ။"
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "ဤပတ်ဝန်းကျင်တွင် ဒေသတွင်း အပ်ဒိတ် %s လမ်းကြောင်းများကို ပိတ်ထားသည်။"
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "ဤပတ်ဝန်းကျင်တွင် ယုံကြည်ရသော အပ်ဒိတ် အများပြည်သူ့သော့များကို ဆာဗာတွင် သတ်မှတ်ထားရမည်။"
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "ဤပတ်ဝန်းကျင်တွင် အပ်ဒိတ် လက်မှတ် အတည်ပြုမှု ကျော်ခြင်းကို ပိတ်ထားသည်။"
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "အသုံးချပြီးနောက် အပ်ဒိတ် လုပ်ဆောင်ချက်များ လုပ်ရန် အတည်ပြုစာသား \"%s\" လိုအပ်သည်။"
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "စတိတ်လုပ်ထားသော အပ်ဒိတ်ဖိုင်များကို အသုံးချရန် အတည်ပြုစာသား \"%s\" လိုအပ်သည်။"
+
+msgid "Unable to resolve project directory."
+msgstr "ပရောဂျက် လမ်းညွှန်ကို ဖြေရှင်းမရပါ။"
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "ဒေတာဘေ့စ် အရန်သိမ်းကို ဤအပ်ဒိတ်ကိရိယာက စီမံမထားပါ။ မိုက်ဂရေးရှင်းများ မလုပ်မီ ဒေတာဘေ့စ် အရန်သိမ်း ဖန်တီးပြီး စစ်ဆေးပါ။"
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine မိုက်ဂရေးရှင်း down() နည်းလမ်းများသည် ဖျက်ပြီး သို့မဟုတ် ပြောင်းလဲထားသော ဒေတာကို ပြန်ထားပေးမည်ဟု အာမခံမထားပါ။"
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "အသုံးချပြီးနောက် မက်တာဒေတာက ဒေတာဘေ့စ် မိုက်ဂရေးရှင်း ပြန်လည်သုံးသပ်ရန် အကြံပြုသည်။"
+
+msgid "No migration files were found in the staged package."
+msgstr "စတိတ်လုပ်ထားသော ပက်ကေ့ချ်တွင် မိုက်ဂရေးရှင်း ဖိုင်များ မတွေ့ပါ။"
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "စတိတ်လုပ်ထားသော Doctrine မိုက်ဂရေးရှင်း ဖိုင်များကို တွေ့ရှိသည်။"
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine မိုက်ဂရေးရှင်း ပစ်မှတ်ကို စတိတ်လုပ်ထားသော ပက်ကေ့ချ်မှ ဖြေရှင်းပြီးပါပြီ။"
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine မိုက်ဂရေးရှင်း အခြေခံလိုင်းတွင် စတိတ်လုပ်ထားသော မိုက်ဂရေးရှင်းများအတွက် ပိတ်ဆို့မှု ပြဿနာများ ရှိသည်။"
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine က သမိုင်းဝင် မိုက်ဂရေးရှင်း အခြေခံလိုင်း သတိပေးချက်များ ရှိကြောင်း ဖော်ပြသည်၊ သို့သော် စတိတ်လုပ်ထားသော %s မိုက်ဂရေးရှင်းများကိုသာ ပြန်လည်သုံးသပ်ပြီး တိကျစွာ လုပ်ဆောင်မည်။"
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine က သမိုင်းဝင် မိုက်ဂရေးရှင်း အခြေခံလိုင်း သတိပေးချက်များ ရှိကြောင်း ဖော်ပြသည်။ အပ်ဒိတ်ကိရိယာသည် တိကျသော အတည်ပြုပြီးနောက် စတိတ်လုပ်ထားသော %s မိုက်ဂရေးရှင်း ကလပ်များကိုသာ လုပ်ဆောင်မည်။"
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine အခြေခံလိုင်းတွင် စတိတ်လုပ်ထားသော %s မိုက်ဂရေးရှင်းများအတွက် ပိတ်ဆို့မှု ပြဿနာ မရှိပါ။"
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "စတိတ်လုပ်ထားသော မိုက်ဂရေးရှင်း အနည်းဆုံး တစ်ခုအတွက် Doctrine မိုက်ဂရေးရှင်း dry-run မအောင်မြင်ပါ။ ဤအရာ မပြင်မီ ဒေတာဘေ့စ် မိုက်ဂရေးရှင်းများ မလုပ်ပါနှင့်။"
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "စတိတ်လုပ်ထားသော မိုက်ဂရေးရှင်း ကလပ် တစ်ခုချင်းစီအတွက် Doctrine dry-run အောင်မြင်စွာ ပြီးဆုံးပါပြီ။"
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "မိုက်ဂရေးရှင်းများ မလုပ်မီ ဤအပ်ဒိတ်ကိရိယာ အပြင်ဘက်တွင် ဒေတာဘေ့စ် အရန်သိမ်း ဖန်တီးရမည်။"
+
+msgid "Staging path is required to review database migrations."
+msgstr "ဒေတာဘေ့စ် မိုက်ဂရေးရှင်းများကို ပြန်လည်သုံးသပ်ရန် စတိတ်လမ်းကြောင်း လိုအပ်သည်။"
+
+msgid "Unable to read update %s: %s"
+msgstr "အပ်ဒိတ် %s ကို ဖတ်မရပါ: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "%s JSON ကို အပ်ဒိတ်လုပ်ခြင်း မမှန်ကန်ပါ: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "%s JSON ကို အပ်ဒိတ်လုပ်ရာတွင် အရာဝတ္ထုတစ်ခု ဖြစ်ရမည်။"
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "အသုံးပြုပြီးနောက် စစ်ဆေးမှု မက်တာဒေတာတွင် တရားဝင် လုပ်ဆောင်ချက်စာရင်း မပါဝင်ပါ။"
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "ဤအဆင့်လိုက် အပ်ဒိတ်အတွက် ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများကို အကြံပြုမထားပါ။"
+
+msgid "Update metadata is missing the staged application path."
+msgstr "အပ်ဒိတ် မက်တာဒေတာတွင် အဆင့်လိုက် အသုံးပြုမည့် လမ်းကြောင်း ပျောက်နေပါသည်။"
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "စီစဉ်ထားသော အဆင့်လိုက် ရွှေ့ပြောင်းမှု ဖိုင်ကို မတွေ့ပါ: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "အဆင့်လိုက် ရွှေ့ပြောင်းမှု ဖိုင်ကို ဖတ်၍ မရပါ: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "getDescription() မှ ဖော်ပြချက် ထုတ်ယူ၍ မရခဲ့ပါ။"
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "အပ်ဒိတ် ရန်နာက အဆင့်လိုက် ရွှေ့ပြောင်းမှု %s ခုသာ ပံ့ပိုးသည်: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "ရွှေ့ပြောင်းမှု ဘေးကင်းရေး မက်တာဒေတာ ရေး၍ မရပါ: %s"
+
+msgid "Migration safety check failed."
+msgstr "ရွှေ့ပြောင်းမှု ဘေးကင်းရေး စစ်ဆေးမှု မအောင်မြင်ပါ။"
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "မလုံခြုံသော အဆင့်လိုက် ဆက်စပ် ရွှေ့ပြောင်းမှု လမ်းကြောင်း တွေ့ရှိသည်: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "ထည့်သွင်းထားသော Chamilo ဗားရှင်းကို အလိုအလျောက် ရှာမတွေ့ပါ။ ဤအပ်ဒိတ် ကိုက်ညီကြောင်း အတည်ပြုပြီးမှသာ ဆက်လုပ်ပါ။"
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "ထည့်သွင်းထားသော သို့မဟုတ် ပစ်မှတ် ဗားရှင်းသည် နှိုင်းယှဉ်နိုင်သော semantic ဗားရှင်း ပုံစံ မဟုတ်ပါ။ လက်ဖြင့် စစ်ဆေးပြီးမှသာ ဆက်လုပ်ပါ။"
+
+msgid "An update is available."
+msgstr "အပ်ဒိတ် ရရှိနိုင်ပါသည်။"
+
+msgid "The installed version already matches the manifest version."
+msgstr "ထည့်သွင်းထားသော ဗားရှင်းသည် မန်နီဖက်စ် ဗားရှင်းနှင့် ကိုက်ညီပြီးဖြစ်သည်။"
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "မန်နီဖက်စ် ဗားရှင်းသည် ထည့်သွင်းထားသော ဗားရှင်းထက် ဟောင်းနေပါသည်။ ဗားရှင်းလျှော့ချမှုများကို ပုံမှန်အားဖြင့် ပိတ်ထားသည်။"
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "အဆင့်လိုက် ဖိုင်များကို အောင်မြင်စွာ အသုံးမပြုနိုင်ပါ။ အသုံးပြုပြီးနောက် စစ်ဆေးမှုများ ဆက်လုပ်၍ မရပါ။"
+
+msgid "Apply result metadata was read successfully."
+msgstr "အသုံးပြုမှု ရလဒ် မက်တာဒေတာကို အောင်မြင်စွာ ဖတ်ပြီးပါပြီ။"
+
+msgid "Post-apply action recommendations were generated."
+msgstr "အသုံးပြုပြီးနောက် လုပ်ဆောင်ချက် အကြံပြုချက်များကို ထုတ်ပေးပြီးပါပြီ။"
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "အဆင့်လိုက် ပက်ကေ့ချ်တွင် ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများ တွေ့ရှိသည်။ ဖိုင်အပ်ဒိတ် မှန်ကန်ပြီး ဒေတာဘေ့စ် အရန်သိမ်းရှိကြောင်း အတည်ပြုပြီးမှသာ ၎င်းတို့ကို လုပ်ဆောင်ပါ။"
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "အသုံးပြုပြီးနောက် စစ်ဆေးမှုများ လုပ်ရန် အဆင့်လိုက် လမ်းကြောင်း လိုအပ်သည်။"
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "%s အပ်ဒိတ်သည် တရားဝင် JSON မဟုတ်ပါ: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "%s အပ်ဒိတ်သည် JSON အရာဝတ္ထု ဖြစ်ရမည်။"
+
+msgid "Composer dependencies"
+msgstr "Composer မှီခိုမှုများ"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "အဆင့်လိုက် ပက်ကေ့ချ်တွင် Composer မက်တာဒေတာ ပါဝင်သည်။ အပ်ဒိတ် ပြီးမြောက်သည်ဟု မယူဆမီ အပလီကေးရှင်း အမြစ်မှ Composer install ကို လုပ်ဆောင်ပါ။"
+
+msgid "Frontend assets"
+msgstr "ရှေ့ပိုင်း ပိုင်ဆိုင်မှုများ"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "အဆင့်လိုက် ပက်ကေ့ချ်တွင် ရှေ့ပိုင်းဆိုင်ရာ ဖိုင်များ ပါဝင်သည်။ မှီခိုမှုများ ထည့်သွင်းပြီးနောက် ထုတ်လုပ်မှု ပိုင်ဆိုင်မှုများကို ပြန်တည်ဆောက်ပါ။"
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "အဆင့်လိုက် ပက်ကေ့ချ်တွင် Doctrine ရွှေ့ပြောင်းမှု ဖိုင်များ တွေ့ရှိသည်။ ရွှေ့ပြောင်းမှုများ မလုပ်မီ ဒေတာဘေ့စ် အရန်သိမ်းရှိကြောင်း အတည်ပြုပါ။"
+
+msgid "Symfony cache"
+msgstr "Symfony ကက်ရှ်"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "အပ်ဒိတ် ဖိုင်များ အသုံးပြုပြီး လိုအပ်သော အမိန့်များကို လုပ်ဆောင်ပြီးနောက် Symfony ကက်ရှ်ကို ရှင်းလင်းပါ။"
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "အသုံးပြုပြီးနောက် စစ်ဆေးမှု မက်တာဒေတာ ရေး၍ မရပါ။"
+
+msgid "Post-apply check failed."
+msgstr "အသုံးပြုပြီးနောက် စစ်ဆေးမှု မအောင်မြင်ပါ။"
+
+msgid "Update package is not readable: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ်ကို ဖတ်၍ မရပါ: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ်သည် တရားဝင် ZIP မော်ကွန်း မဟုတ်ပါ။"
+
+msgid "Update package ZIP archive is empty."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် ZIP မော်ကွန်းသည် ဗလာဖြစ်သည်။"
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ်တွင် ဖတ်၍မရသော ZIP မှတ်တမ်း ပါဝင်သည်။"
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ်တွင် မလုံခြုံသော ပကတိ လမ်းကြောင်း ပါဝင်သည်: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ်တွင် လမ်းကြောင်း ကျော်ဖြတ် မှတ်တမ်း ပါဝင်သည်: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ်တွင် သင်္ကေတ လင့်ခ် ပါဝင်သည်: %s"
+
+msgid "Starting post-apply actions."
+msgstr "အသုံးပြုပြီးနောက် လုပ်ဆောင်ချက်များ စတင်နေသည်။"
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "အသုံးပြုပြီးနောက် အမိန့် လုပ်ဆောင်ရန် ရှင်းလင်းသော အတည်ပြုချက် လိုအပ်သည်။"
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "အသုံးပြုပြီးနောက် အကြံပြုချက် မက်တာဒေတာကို အောင်မြင်စွာ ဖတ်ပြီးပါပြီ။"
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "အသုံးပြုပြီးနောက် လုပ်ဆောင်ချက်များကို အကြံပြုချက် အစီရင်ခံစာနှင့် ကိုက်ညီအောင် စစ်ဆေးပြီးပါပြီ။"
+
+msgid "Post-apply actions were selected."
+msgstr "အသုံးပြုပြီးနောက် လုပ်ဆောင်ချက်များကို ရွေးချယ်ပြီးပါပြီ။"
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "အဆင့်မြင့် အသုံးပြုပြီးနောက် လုပ်ဆောင်ချက်များအတွက် ရှင်းလင်းသော အဆင့်မြင့် အတည်ပြုချက် လိုအပ်သည်။"
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "အဆင့်မြင့် အသုံးပြုပြီးနောက် လုပ်ဆောင်ချက်များကို ရှင်းလင်းစွာ အတည်ပြုပြီးပါပြီ။"
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "ရွေးချယ်ထားသော အသုံးပြုပြီးနောက် အမိန့်များ အောင်မြင်စွာ ပြီးဆုံးပါပြီ။"
+
+msgid "Post-apply command run metadata was written."
+msgstr "အသုံးပြုပြီးနောက် အမိန့် လုပ်ဆောင်မှု မက်တာဒေတာကို ရေးပြီးပါပြီ။"
+
+msgid "Post-apply actions completed successfully."
+msgstr "အသုံးပြုပြီးနောက် လုပ်ဆောင်ချက်များ အောင်မြင်စွာ ပြီးဆုံးပါပြီ။"
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "မမှန်ကန်သော အပ်ဒိတ် post-apply အမိန့် သတ်မှတ်ချက်: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "post-apply လုပ်ဆောင်ချက်ကို လုပ်ဆောင်နေသည်: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "%s အတွက် အမိန့် %d မှ %d ကို လုပ်ဆောင်နေသည်။"
+
+msgid "Post-apply action failed: %s"
+msgstr "post-apply လုပ်ဆောင်ချက် မအောင်မြင်ပါ: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "post-apply လုပ်ဆောင်ချက် \"%s\" သည် ထွက်ကုဒ် %d ဖြင့် မအောင်မြင်ပါ။"
+
+msgid "Post-apply action completed: %s"
+msgstr "post-apply လုပ်ဆောင်ချက် ပြီးစီးပါပြီ: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "post-apply လုပ်ဆောင်ချက်များ လုပ်ဆောင်ရန် staging လမ်းကြောင်း လိုအပ်သည်။"
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "လုပ်ဆောင်ရန် အကြံပြုထားသော post-apply လုပ်ဆောင်ချက်များ မရှိပါ။"
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "လုပ်ဆောင်ရန် ခွင့်ပြုထားသော post-apply လုပ်ဆောင်ချက်များ မရှိပါ။"
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "ဤအပ်ဒိတ်အတွက် post-apply လုပ်ဆောင်ချက်ကို ခွင့်မပြုပါ: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများသည် လုပ်ဆောင်မီ ရွှေ့ပြောင်းမှု ဘေးကင်းရေး စစ်ဆေးမှု လိုအပ်သည်။"
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "ရွှေ့ပြောင်းမှု ဘေးကင်းရေး စစ်ဆေးမှု မအောင်မြင်သောကြောင့် ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများကို လုပ်ဆောင်၍ မရပါ။"
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "ရွှေ့ပြောင်းမှု ဘေးကင်းရေး စစ်ဆေးမှုတွင် staged ရွှေ့ပြောင်းမှုများ မပါသောကြောင့် ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများကို လုပ်ဆောင်၍ မရပါ။"
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "ရွှေ့ပြောင်းမှု ဘေးကင်းရေး စစ်ဆေးမှုတွင် မမှန်ကန်သော ရွှေ့ပြောင်းမှု မှတ်တမ်း ပါသောကြောင့် ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများကို လုပ်ဆောင်၍ မရပါ။"
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "update runner က staged %s ရွှေ့ပြောင်းမှုများကိုသာ လုပ်ဆောင်နိုင်သည်။"
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "staged ရွှေ့ပြောင်းမှု ဘေးကင်းရေး စစ်ဆေးမှုတွင် ပိတ်ဆို့သော အမှားများ ရှိသောကြောင့် ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများကို လုပ်ဆောင်၍ မရပါ။"
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine က ရွှေ့ပြောင်းမှု အခြေခံသတိပေးချက်များ သတင်းပို့သည်။ staged %s ရွှေ့ပြောင်းမှု အတန်းများကိုသာ ရှင်းလင်းစွာ လုပ်ဆောင်မည်။"
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများသည် ဒေတာဘေ့စ် အရန်သိမ်းရှိကြောင်း အတည်ပြုချက် လိုအပ်သည်။"
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများသည် အတည်ပြုစာသား \"RUN DATABASE MIGRATIONS\" လိုအပ်သည်။"
+
+msgid "Database migration safety review was completed before execution."
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှု ဘေးကင်းရေး စစ်ဆေးမှုကို လုပ်ဆောင်မီ ပြီးစီးခဲ့သည်။"
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "ဒေတာဘေ့စ် အရန်သိမ်းရှိကြောင်းကို ရှင်းလင်းစွာ အတည်ပြုခဲ့သည်။"
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှု ဘေးကင်းရေး စစ်ဆေးမှုနှင့် အရန်သိမ်း အတည်ပြုချက် ပေးခဲ့သည်။"
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "ဒေတာဘေ့စ် အရန်သိမ်းကို ရှင်းလင်းစွာ အတည်ပြုပြီးနောက် ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများကို လုပ်ဆောင်ခဲ့သည်။ အပ်ဒိတ်လုပ်သူက ဒေတာဘေ့စ် အရန်သိမ်းကို မဖန်တီးခဲ့ပါ။"
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "လိုအပ်သော post-apply executable ခွင့်ပြုချက်များကို ပုံမှန်ဖြစ်အောင် ပြုလုပ်ခဲ့သည်။"
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "bin/console မတွေ့သောကြောင့် ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှုများကို လုပ်ဆောင်၍ မရပါ။"
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "ရွေးချယ်ထားသော post-apply အမိန့်များတွင် လိုအပ်သော ရေးနိုင်သော လမ်းကြောင်းများ ရှိသည်။"
+
+msgid "Post-apply command writable paths were validated."
+msgstr "post-apply အမိန့် ရေးနိုင်သော လမ်းကြောင်းများကို စစ်ဆေးအတည်ပြုခဲ့သည်။"
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "အဆင့်မြင့် post-apply လုပ်ဆောင်ချက်များသည် မှီခိုမှုများ၊ ထုတ်လုပ်ထားသော အရင်းအမြစ်များ သို့မဟုတ် ဒေတာဘေ့စ်ကို ပြင်ဆင်နိုင်သည်။ ဆက်မလုပ်မီ အရန်သိမ်းများကို စစ်ဆေးပါ။"
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer ထုတ်လုပ်သော ဖိုင် \"%s\" ကို UID %d က ပိုင်ဆိုင်ပြီး PHP runtime က UID %d ကို အသုံးပြုသောကြောင့် ဝဘ်အပ်ဒိတ်လုပ်သူမှ Composer ကို ဘေးကင်းစွာ လုပ်ဆောင်၍ မရပါ။ ဖြန့်ကျက်ပိုင်ရှင်အဖြစ် Composer ကို ကိုယ်တိုင် လုပ်ဆောင်ပြီး ကျန် post-apply လုပ်ဆောင်ချက်များနှင့် ဆက်လုပ်ပါ။"
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "post-apply လုပ်ဆောင်ချက် \"%s\" အတွက် လိုအပ်သော လမ်းကြောင်းကို ရေး၍ မရပါ: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "post-apply လုပ်ဆောင်ချက် \"%s\" အတွက် လိုအပ်သော မိဘ ဖိုင်တွဲကို ရေး၍ မရပါ: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "လိုအပ်သော post-apply executable အတွက် ခွင့်ပြုချက်များကို ဖတ်၍ မရပါ: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "လိုအပ်သော post-apply executable ကို executable အဖြစ် မှတ်သား၍ မရပါ: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "chmod ပြီးနောက် လိုအပ်သော post-apply executable သည် executable မဖြစ်သေးပါ: %s"
+
+msgid "Executable permission was normalized."
+msgstr "executable ခွင့်ပြုချက်ကို ပုံမှန်ဖြစ်အောင် ပြုလုပ်ခဲ့သည်။"
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "post-apply အမိန့်များအတွက် သီးခြား Git ဖွဲ့စည်းမှုကို ရေး၍ မရပါ။"
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "အခြား အပ်ဒိတ် လုပ်ဆောင်မှု တစ်ခု လုပ်ဆောင်နေပုံရသည်။ အပ်ဒိတ် မလုပ်ဆောင်နေမှသာ var/update/update.lock ကို ဖယ်ရှားပါ။"
+
+msgid "Unable to create update lock: %s"
+msgstr "အပ်ဒိတ် lock ဖန်တီး၍ မရပါ: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "post-apply အမိန့် လုပ်ဆောင်မှု မက်တာဒေတာကို ရေး၍ မရပါ: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "အပ်ဒိတ် မန်နီးဖက်စ်တွင် ပက်ကေ့ချ် ဘလောက် ပျောက်နေသည်။"
+
+msgid "Update manifest signature block must be an object."
+msgstr "အပ်ဒိတ် မန်နီးဖက်စ် လက်မှတ် ဘလောက်သည် object ဖြစ်ရမည်။"
+
+msgid "Update manifest requirements block must be an object."
+msgstr "အပ်ဒိတ် မန်နီးဖက်စ် လိုအပ်ချက်များ ဘလောက်သည် object ဖြစ်ရမည်။"
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် sha256 သည် စာလုံး ၆၄ လုံးပါ hexadecimal စာကြောင်း ဖြစ်ရမည်။"
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "အပ်ဒိတ် မန်နီးဖက်စ်တွင် လိုအပ်သော စာကြောင်း ဖิลด์ \"%s\" ပျောက်နေသည်။"
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "အပ်ဒိတ် မန်နီးဖက်စ် ဖิลด์ \"%s\" သည် စာကြောင်း ဖြစ်ရမည်။"
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "အပ်ဒိတ် မန်နီးဖက်စ်သည် မှန်ကန်သော JSON မဟုတ်ပါ: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "အပ်ဒိတ် မန်နီးဖက်စ် JSON သည် object ဖြစ်ရမည်။"
+
+msgid "Manifest source cannot be empty."
+msgstr "မန်နီးဖက်စ် ရင်းမြစ်သည် ဗလာ မဖြစ်ရပါ။"
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "အပ်ဒိတ် မန်နီးဖက်စ် URL သည် တရားဝင် အပ်ဒိတ် မူလ %s ကို အသုံးပြုရမည်။"
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "အပ်ဒိတ် မန်နီးဖက်စ် ဒေါင်းလုဒ် မရပါ။ HTTP အခြေအနေ: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Manifest ဖိုင်ကို ဖတ်၍မရပါ: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Manifest ဖိုင်ကို ဖတ်၍မရပါ: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "အပ်ဒိတ် manifest URL သည် HTTPS ကို အသုံးပြုရမည်။"
+
+msgid "Update package metadata is not readable: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် မက်တာဒေတာကို ဖတ်၍မရပါ: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် မက်တာဒေတာကို ဖတ်၍မရပါ: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် မက်တာဒေတာသည် တရားဝင် JSON မဟုတ်ပါ: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် မက်တာဒေတာသည် JSON object ဖြစ်ရမည်။"
+
+msgid "Update package metadata format must be %d."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် မက်တာဒေတာ ပုံစံသည် %d ဖြစ်ရမည်။"
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် မက်တာဒေတာ အကွက် \"remove\" သည် array ဖြစ်ရမည်။"
+
+msgid "Update package removal paths must be strings."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် ဖယ်ရှားမည့် လမ်းကြောင်းများသည် စာကြောင်းများ ဖြစ်ရမည်။"
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် မက်တာဒေတာသည် ကာကွယ်ထားသော လမ်းကြောင်းကို ဖယ်ရှား၍မရပါ: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ်သည် တူညီသော လမ်းကြောင်းကို ထည့်သွင်းပြီး ဖယ်ရှား၍မရပါ: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် မက်တာဒေတာ sha256 ကို တွက်ချက်၍မရပါ။"
+
+msgid "Update package removal path cannot be empty."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် ဖယ်ရှားမည့် လမ်းကြောင်းသည် ဗလာမဖြစ်ရပါ။"
+
+msgid "Update package removal path contains a null byte."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် ဖယ်ရှားမည့် လမ်းကြောင်းတွင် null byte ပါရှိသည်။"
+
+msgid "Update package removal path must be relative: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် ဖယ်ရှားမည့် လမ်းကြောင်းသည် ဆက်စပ်လမ်းကြောင်း ဖြစ်ရမည်: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် ဖယ်ရှားမည့် လမ်းကြောင်းတွင် မလုံခြုံသော အပိုင်း ပါရှိသည်: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ် တည်ဆောက်ရန် staging လမ်းကြောင်း လိုအပ်သည်။"
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Staging ဖိုင်တွဲတွင် STAGING-INFO.json မရှိပါ။"
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Staging မက်တာဒေတာကို ဖတ်၍မရပါ: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Staging မက်တာဒေတာသည် တရားဝင် JSON မဟုတ်ပါ: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Staging မက်တာဒေတာသည် JSON object ဖြစ်ရမည်။"
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Staging မက်တာဒေတာတွင် application_path အကွက် မရှိပါ။"
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ်တွင် %s မရှိပါ။ ဖိုင်များကို အသုံးချမီ လက်မှတ်ထိုးထားသော ရှင်းလင်းမှု မက်တာဒေတာ လိုအပ်သည်။"
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Staging မက်တာဒေတာတွင် ထုတ်ယူစဉ် မှတ်တမ်းတင်ထားသော လက်မှတ်ထိုး ပက်ကေ့ချ် ရှင်းလင်းမှု မက်တာဒေတာ မပါရှိပါ။"
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Staging ပြီးနောက် အပ်ဒိတ် ပက်ကေ့ချ် ရှင်းလင်းမှု မက်တာဒေတာ ပြောင်းလဲသွားသည်။ ဆက်လုပ်မီ အတည်ပြုပြီး ပက်ကေ့ချ်ကို ပြန်လည် staging လုပ်ပါ။"
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Staging မက်တာဒေတာတွင် တရားဝင် ပက်ကေ့ချ် ဖယ်ရှားစာရင်း မပါရှိပါ။"
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Staging ပြီးနောက် အပ်ဒိတ် ပက်ကေ့ချ် ရှင်းလင်းမှု လမ်းကြောင်းများ ပြောင်းလဲသွားသည်။ ဆက်လုပ်မီ အတည်ပြုပြီး ပက်ကေ့ချ်ကို ပြန်လည် staging လုပ်ပါ။"
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "လက်မှတ်ထိုး ပက်ကေ့ချ် ရှင်းလင်းမှု မက်တာဒေတာသည် staging ကတည်းက မပြောင်းလဲပါ။"
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "အပ်ဒိတ် lock ဖိုင် ရှိပြီးသားဖြစ်သည်။ အခြား အပ်ဒိတ်တစ်ခု လုပ်ဆောင်နေနိုင်သည်။"
+
+msgid "Update lock directory is not writable."
+msgstr "အပ်ဒိတ် lock ဖိုင်တွဲကို ရေးသား၍မရပါ။"
+
+msgid "No update lock is currently active."
+msgstr "လက်ရှိတွင် အပ်ဒိတ် lock မရှိပါ။"
+
+msgid "Update backup directory is not writable."
+msgstr "အပ်ဒိတ် အရန်သိမ်း ဖိုင်တွဲကို ရေးသား၍မရပါ။"
+
+msgid "Update backup directory is writable."
+msgstr "အပ်ဒိတ် အရန်သိမ်း ဖိုင်တွဲကို ရေးသားနိုင်သည်။"
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "လက်ရှိ လုပ်ငန်းစဉ်ဖြင့် အပ်ဒိတ် အရန်သိမ်း ဖိုင်တွဲကို ဖန်တီး၍မရပါ။"
+
+msgid "Update backup directory can be created."
+msgstr "အပ်ဒိတ် အရန်သိမ်း ဖိုင်တွဲကို ဖန်တီးနိုင်သည်။"
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "အချို့ အပ်ဒိတ် အလုပ်လုပ် ဖိုင်တွဲများကို ရေးသား၍မရ သို့မဟုတ် လက်ရှိ လုပ်ငန်းစဉ်ဖြင့် ဖန်တီး၍မရပါ။"
+
+msgid "Update working directories are writable or can be created."
+msgstr "အပ်ဒိတ် အလုပ်လုပ် ဖိုင်တွဲများကို ရေးသားနိုင် သို့မဟုတ် ဖန်တီးနိုင်သည်။"
+
+msgid "Update apply file plan was generated."
+msgstr "အပ်ဒိတ် ဖိုင် အသုံးချ အစီအစဉ်ကို ထုတ်ပေးပြီးပါပြီ။"
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "ပက်ကေ့ချ် ရှင်းလင်းမှု မက်တာဒေတာတွင် ဘေးကင်းစွာ ဖယ်ရှား၍မရသော လမ်းကြောင်းများ ပါရှိသည်။"
+
+msgid "Package-declared removal targets are safe."
+msgstr "ပက်ကေ့ချ်ကြေညာထားသော ဖယ်ရှားပစ်မှတ်များသည် ဘေးကင်းသည်။"
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "ပက်ကေ့ချ်ကြေညာထားသော အချို့ ဟောင်းနွမ်းဖိုင်များသည် ဤတပ်ဆင်မှုတွင် မရှိတော့ပါ။"
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "စီစဉ်ထားသော အပ်ဒိတ်သည် ရှိပြီးသား symbolic links များကို ထပ်ရေး သို့မဟုတ် ဖယ်ရှားမည်။"
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "စီစဉ်ထားသော အပ်ဒိတ်သည် ရှိပြီးသား symbolic links များကို ထပ်ရေး သို့မဟုတ် ဖယ်ရှားမည်မဟုတ်ပါ။"
+
+msgid "New update migration files must be placed under %s."
+msgstr "အသစ်သော အပ်ဒိတ် ရွှေ့ပြောင်း ဖိုင်များကို %s အောက်တွင် ထားရှိရမည်။"
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "အသစ်သော %s Doctrine ရွှေ့ပြောင်း ဖိုင်များကို တွေ့ရှိသည်။ ဖိုင်များ အသုံးချပြီးနောက် ဒေတာဘေ့စ် ရွှေ့ပြောင်းမှု ဘေးကင်းရေး စစ်ဆေးရန် လိုအပ်မည်။"
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "အချို့ အပ်ဒိတ် အသုံးချ အစီအစဉ် ဖိုင်စာရင်းများကို JSON တုံ့ပြန်ချက်တွင် ဖြတ်တောက်ထားသည်။"
+
+msgid "Unable to write update apply plan metadata."
+msgstr "အပ်ဒိတ် အသုံးချ အစီအစဉ် မက်တာဒေတာကို ရေးသား၍မရပါ။"
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ်ကို ဒေါင်းလုဒ်လုပ်၍မရပါ။ HTTP အခြေအနေ: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "အပ်ဒိတ် ပက်ကေ့ချ် ပစ်မှတ်ဖိုင်ကို ဖွင့်၍မရပါ: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "အပ်ဒိတ်ဒေါင်းလုဒ်များသည် တရားဝင်အပ်ဒိတ်မူလ %s ကို အသုံးပြုရမည်။"
+
+msgid "The update package URL must use HTTPS."
+msgstr "အပ်ဒိတ်ပက်ကေ့ချ် URL သည် HTTPS ကို အသုံးပြုရမည်။"
+
+msgid "Update package archive safety checks passed."
+msgstr "အပ်ဒိတ်ပက်ကေ့ချ် မော်ကွန်းဘေးကင်းရေးစစ်ဆေးမှုများ အောင်မြင်ခဲ့သည်။"
+
+msgid "Update package was extracted to staging."
+msgstr "အပ်ဒိတ်ပက်ကေ့ချ်ကို စတေးဂျင်းသို့ ထုတ်ယူပြီးဖြစ်သည်။"
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "လက်မှတ်ထိုးထားသော ပက်ကေ့ချ် ရှင်းလင်းမှု မက်တာဒေတာကို ဖတ်တင်ပြီးဖြစ်သည်။"
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "အပ်ဒိတ်ပက်ကေ့ချ်တွင် %s မပါဝင်ပါ။ လက်မှတ်ထိုးထားသော ရှင်းလင်းမှု မက်တာဒေတာ မပေးမချင်း ဖိုင်အသုံးချမှုကို ပိတ်ပင်ထားမည်။"
+
+msgid "Staged package dry-run report was generated."
+msgstr "စတေးဂျင်းပက်ကေ့ချ် စမ်းသပ်လည်ပတ်မှု အစီရင်ခံစာကို ဖန်တီးပြီးဖြစ်သည်။"
+
+msgid "Staging metadata was written."
+msgstr "စတေးဂျင်း မက်တာဒေတာကို ရေးသားပြီးဖြစ်သည်။"
+
+msgid "Unable to extract update package to staging directory."
+msgstr "အပ်ဒိတ်ပက်ကေ့ချ်ကို စတေးဂျင်းလမ်းညွှန်သို့ ထုတ်ယူ၍ မရပါ။"
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "စတေးဂျင်းပက်ကေ့ချ်တွင် Chamilo အပလီကေးရှင်းအမြစ်ကို ရှာမတွေ့ပါ။"
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "စတေးဂျင်းပက်ကေ့ချ်တွင် လိုအပ်သော Chamilo ဝင်ရောက်မှု %s ပျောက်နေသည်"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "စတေးဂျင်းပက်ကေ့ချ်တွင် မျှော်လင့်ထားသော Chamilo ဖွဲ့စည်းပုံ ပါဝင်သည်။"
+
+msgid "Staged package does not contain composer.lock."
+msgstr "စတေးဂျင်းပက်ကေ့ချ်တွင် composer.lock မပါဝင်ပါ။"
+
+msgid "Staged package contains composer.lock."
+msgstr "စတေးဂျင်းပက်ကေ့ချ်တွင် composer.lock ပါဝင်သည်။"
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "စတေးဂျင်းပက်ကေ့ချ်တွင် yarn.lock မပါဝင်ပါ။"
+
+msgid "Staged package contains yarn.lock."
+msgstr "စတေးဂျင်းပက်ကေ့ချ်တွင် yarn.lock ပါဝင်သည်။"
+
+msgid "Unable to encode staging metadata."
+msgstr "စတေးဂျင်း မက်တာဒေတာကို ကုဒ်ပြောင်း၍ မရပါ။"
+
+msgid "Unable to write staging metadata."
+msgstr "စတေးဂျင်း မက်တာဒေတာကို ရေးသား၍ မရပါ။"
+
+msgid "Update operation log created."
+msgstr "အပ်ဒိတ်လုပ်ဆောင်မှု မှတ်တမ်းကို ဖန်တီးပြီးဖြစ်သည်။"
+
+msgid "Unable to write update operation log."
+msgstr "အပ်ဒိတ်လုပ်ဆောင်မှု မှတ်တမ်းကို ရေးသား၍ မရပါ။"
+
+msgid "Invalid update operation id."
+msgstr "မမှန်ကန်သော အပ်ဒိတ်လုပ်ဆောင်မှု id။"
 

@@ -40237,3 +40237,948 @@ msgstr "Город стажировки"
 msgid "City"
 msgstr "Город"
 
+msgid "Update workflow restored after page refresh"
+msgstr "Процесс обновления восстановлен после обновления страницы"
+
+msgid "Last completed step"
+msgstr "Последний завершённый шаг"
+
+msgid "Stage package"
+msgstr "Пакет для подготовки"
+
+msgid "Package staging"
+msgstr "Подготовка пакета"
+
+msgid "Apply plan"
+msgstr "План применения"
+
+msgid "Update workflow completed"
+msgstr "Процесс обновления завершён"
+
+msgid "Update directory exists and is writable."
+msgstr "Каталог обновления существует и доступен для записи."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Каталог обновления существует, но недоступен для записи: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Каталог обновления ещё не существует, но родительский каталог доступен для записи."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Каталог обновления ещё не существует, но его можно создать в var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Каталог обновления не существует и не может быть создан при текущих правах доступа."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Не удалось определить свободное место на диске для предварительной проверки обновления."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Недостаточно свободного места на диске для безопасной подготовки обновления."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Свободного места на диске достаточно для этого этапа проверки обновления."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Манифест обновления не задаёт требование к версии PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Не удалось полностью проверить требование к PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Текущая версия PHP не соответствует требованию обновления: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Текущая версия PHP соответствует требованию обновления."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Локальный путь к пакету не указан. Загруженные пакеты можно проверить только после загрузки."
+
+msgid "Local update package is not readable: %s"
+msgstr "Локальный пакет обновления недоступен для чтения: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Локальный пакет обновления должен быть ZIP-архивом."
+
+msgid "Local update package is readable."
+msgstr "Локальный пакет обновления доступен для чтения."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Установленную версию Chamilo не удалось определить автоматически. Направление версии проверить нельзя."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Установленная или целевая версия не в сопоставимом формате семантического версионирования."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Целевая версия ниже установленной. Понижение версии по умолчанию не разрешено."
+
+msgid "Target version matches the installed version."
+msgstr "Целевая версия совпадает с установленной."
+
+msgid "Target version is newer than the installed version."
+msgstr "Целевая версия новее установленной."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Проект не является Git-репозиторием или отсутствует .git."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Эта система обновления предназначена для установок без поддержки Git. Обнаружено, что локальная система использует Git. Продолжение обновления может привести к повреждению истории Git. Для систем с поддержкой Git рекомендуется процедура Git, описанная в CONTRIBUTING.md в корне веб-сайта."
+
+msgid "Local Git changes were also detected."
+msgstr "Также обнаружены локальные изменения Git."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Отсутствуют некоторые файлы метаданных проекта. На последующих этапах обновления может потребоваться ручная проверка зависимостей."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Файлы метаданных Composer и Yarn присутствуют."
+
+msgid "Starting staged file application."
+msgstr "Начало применения подготовленных файлов."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Для применения подготовленных файлов требуется явное подтверждение."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Применение подготовленных файлов обновления требует явного подтверждения."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Каталог подготовки находится внутри каталога подготовки обновления Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Каталог подготовки проверен."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Метаданные плана применения успешно прочитаны."
+
+msgid "Staged application path is valid."
+msgstr "Путь применения подготовленных файлов действителен."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Метаданные очистки подписанного пакета соответствуют проверенному плану применения."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Метаданные очистки подписанного пакета проверены."
+
+msgid "Update lock was acquired."
+msgstr "Блокировка обновления получена."
+
+msgid "Update backup directory was created."
+msgstr "Каталог резервной копии обновления создан."
+
+msgid "Update file operations were collected."
+msgstr "Операции с файлами обновления собраны."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Существующие файлы, запланированные к замене или удалению, сохранены в резервной копии."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Подготовленные файлы обновления скопированы в установку Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Устаревшие файлы, указанные в пакете, удалены из установки Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Устаревшие файлы, указанные в пакете, удалены."
+
+msgid "Update apply audit metadata was written."
+msgstr "Метаданные аудита применения обновления записаны."
+
+msgid "Staged files applied successfully."
+msgstr "Подготовленные файлы успешно применены."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Не удалось восстановить удалённые файлы: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Не удалось откатить скопированные файлы: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Откат файлов выполнен после сбоя применения обновления."
+
+msgid "Rollback failed: %s"
+msgstr "Откат не выполнен: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Не удалось записать метаданные аудита применения обновления: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Не удалось снять блокировку обновления после сбоя: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Для применения файлов обновления требуется путь к промежуточному каталогу."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Промежуточный каталог не существует: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Базовый промежуточный каталог обновления Chamilo не существует."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Промежуточный каталог должен находиться внутри var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "В промежуточном каталоге отсутствует APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Не удалось прочитать метаданные плана применения обновления: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Метаданные плана применения обновления не являются корректным JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Метаданные плана применения обновления должны быть JSON-объектом."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "В плане применения обновления отсутствует поле application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Подготовленный путь приложения недоступен для чтения: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Подготовленный путь приложения должен находиться внутри промежуточного каталога."
+
+msgid "Staged application path is missing composer.json."
+msgstr "В подготовленном пути приложения отсутствует composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "В пакете обновления отсутствует %s. Повторно подготовьте проверенный пакет с подписанными метаданными очистки."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "В плане применения обновления отсутствуют проверенные метаданные очистки пакета."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Метаданные очистки пакета обновления изменились после создания плана применения. Пересоберите план применения перед продолжением."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "План применения обновления содержит недопустимый список удаления пакета."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Пути очистки пакета обновления изменились после создания плана применения. Пересоберите план применения перед продолжением."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "В плане применения обновления отсутствует проверенный список путей удаления."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Пути удаления в плане применения обновления не соответствуют подписанным метаданным очистки пакета."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Путь блокировки обновления должен находиться внутри var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "В плане применения обновления отсутствует поле backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Путь резервной копии обновления содержит небезопасные сегменты пути."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Путь резервной копии обновления должен находиться внутри var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Не удалось получить блокировку обновления. Возможно, выполняется другое обновление."
+
+msgid "Unable to release update lock: %s"
+msgstr "Не удалось снять блокировку обновления: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Каталог резервной копии обновления уже существует: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Не удалось создать целевой каталог: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Планируемое обновление перезапишет существующую символическую ссылку: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Целевой файл недоступен для записи: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Не удалось создать целевой файл: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Не удалось определить каталог проекта Chamilo перед удалением устаревших файлов."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Очистка обновления не может удалить защищённый путь: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Планируемое обновление удалит существующую символическую ссылку: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Очистка обновления поддерживает только файлы, а не каталоги: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Устаревший целевой файл недоступен для чтения при резервном копировании: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Устаревший целевой файл нельзя удалить при текущих правах каталога: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Устаревший целевой файл разрешается за пределы каталога проекта Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Не удалось создать резервную копию целевого файла: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Не удалось записать метаданные резервной копии обновления."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Не удалось скопировать подготовленный файл обновления: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Скопировано %d из %d подготовленных файлов."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Не удалось удалить устаревший файл, указанный в пакете: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Удалено %d из %d устаревших файлов, указанных в пакете."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Не удалось восстановить резервную копию файла: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Не удалось удалить только что скопированный файл при откате: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Не удалось восстановить удалённый файл: отсутствует резервная копия: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Не удалось восстановить удалённый файл из резервной копии: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Не удалось записать метаданные аудита применения обновления."
+
+msgid "Unable to write global update apply log."
+msgstr "Не удалось записать глобальный журнал применения обновления."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Обнаружен небезопасный относительный путь в подготовке: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Каталог недоступен для записи: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Не удалось создать каталог: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Метаданные подготовки успешно прочитаны."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Метаданные плана применения записаны в каталог подготовки."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Целевые файлы и каталоги доступны для записи для запланированного обновления и очистки."
+
+msgid "Update apply plan check failed."
+msgstr "Проверка плана применения обновления не удалась."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Некоторые целевые файлы или каталоги нельзя записать или удалить."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Чтобы исправить это, временно смените владельца всего каталога Chamilo на %s (пользователь веб-сервера), примените обновление, затем верните владельца %s и снова назначьте владельцем var/ (и его содержимого) %s, чтобы приложение могло продолжать в него писать."
+
+msgid "Update package verification failed."
+msgstr "Проверка пакета обновления не удалась."
+
+msgid "Update preflight checks failed."
+msgstr "Предварительные проверки обновления не удались."
+
+msgid "Unable to stage update package."
+msgstr "Не удалось подготовить пакет обновления."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Запуск команд после применения из интерфейса на этом сервере отключён."
+
+msgid "Missing required field: %s"
+msgstr "Отсутствует обязательное поле: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Источник манифеста обновления не указан, и URL манифеста по умолчанию не настроен."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL манифеста обновления должен использовать официальный источник обновлений %s. Можно изменить только путь манифеста."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Локальные пути манифеста обновления отключены. Используйте HTTPS URL манифеста или задайте CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 в окружении сервера для локальных тестов."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Не указывайте HTTP-путь %s. Оставьте поле пустым, чтобы скачать его из манифеста обновления."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Локальные пути обновления %s в этой среде отключены."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "В этой среде на сервере должны быть настроены доверенные открытые ключи обновлений."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Пропуск проверки подписи обновления в этой среде отключён."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Для запуска действий после применения обновления требуется текст подтверждения \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Для применения подготовленных файлов обновления требуется текст подтверждения \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Не удалось определить каталог проекта."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Резервное копирование базы данных этим установщиком обновлений не выполняется. Создайте и проверьте резервную копию БД перед запуском миграций."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Методы down() миграций Doctrine не гарантируют восстановление удалённых или преобразованных данных."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Метаданные после применения рекомендуют проверить миграции базы данных."
+
+msgid "No migration files were found in the staged package."
+msgstr "В подготовленном пакете файлы миграций не найдены."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Обнаружены подготовленные файлы миграций Doctrine."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Цель миграции Doctrine определена из подготовленного пакета."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Базовая линия миграций Doctrine содержит блокирующие проблемы для подготовленных миграций."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine сообщает о предупреждениях исторической базовой линии миграций, но явно будут проверены и выполнены только подготовленные миграции %s."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine сообщает о предупреждениях исторической базовой линии миграций. Установщик выполнит только подготовленные классы миграций %s после явного подтверждения."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Базовая линия Doctrine не содержит блокирующих проблем для подготовленных миграций %s."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Пробный запуск миграции Doctrine не удался хотя бы для одной подготовленной миграции. Не запускайте миграции БД, пока это не исправлено."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Пробный запуск Doctrine успешно завершён для каждого подготовленного класса миграции."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Перед запуском миграций необходимо создать резервную копию базы данных вне этого установщика."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Для проверки миграций базы данных требуется путь подготовки."
+
+msgid "Unable to read update %s: %s"
+msgstr "Не удалось прочитать обновление %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON обновления %s недействителен: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON обновления %s должен быть объектом."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Метаданные проверок после применения не содержат допустимый список действий."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Миграции базы данных не рекомендовались для этого поэтапного обновления."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "В метаданных обновления отсутствует путь поэтапного применения."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Запланированный файл поэтапной миграции не найден: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Не удалось прочитать файл поэтапной миграции: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Не удалось извлечь описание из getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Средство запуска обновления поддерживает только %s поэтапных миграций: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Не удалось записать метаданные безопасности миграции: %s"
+
+msgid "Migration safety check failed."
+msgstr "Проверка безопасности миграции не пройдена."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Обнаружен небезопасный относительный путь поэтапной миграции: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Установленную версию Chamilo не удалось определить автоматически. Продолжайте только после подтверждения совместимости этого обновления."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Установленная или целевая версия не в сопоставимом формате семантического версионирования. Продолжайте только после ручной проверки."
+
+msgid "An update is available."
+msgstr "Доступно обновление."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Установленная версия уже совпадает с версией манифеста."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Версия манифеста старше установленной. Понижение версии по умолчанию заблокировано."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Поэтапные файлы не были успешно применены. Проверки после применения не могут быть продолжены."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Метаданные результата применения успешно прочитаны."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Сформированы рекомендации по действиям после применения."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "В поэтапном пакете обнаружены миграции базы данных. Запускайте их только после подтверждения корректности обновления файлов и наличия резервной копии базы данных."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Для запуска проверок после применения требуется путь промежуточного размещения."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Обновление %s не является допустимым JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Обновление %s должно быть JSON-объектом."
+
+msgid "Composer dependencies"
+msgstr "Зависимости Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Метаданные Composer включены в поэтапный пакет. Перед тем как считать обновление завершённым, выполните Composer install из корня приложения."
+
+msgid "Frontend assets"
+msgstr "Фронтенд-ресурсы"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "В поэтапный пакет включены файлы, связанные с фронтендом. После установки зависимостей пересоберите производственные ресурсы."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "В поэтапном пакете обнаружены файлы миграций Doctrine. Перед запуском миграций убедитесь, что есть резервная копия базы данных."
+
+msgid "Symfony cache"
+msgstr "Кэш Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Очистите кэш Symfony после применения файлов обновления и выполнения необходимых команд."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Не удалось записать метаданные проверок после применения."
+
+msgid "Post-apply check failed."
+msgstr "Проверка после применения не пройдена."
+
+msgid "Update package is not readable: %s"
+msgstr "Пакет обновления недоступен для чтения: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Пакет обновления не является допустимым ZIP-архивом."
+
+msgid "Update package ZIP archive is empty."
+msgstr "ZIP-архив пакета обновления пуст."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Пакет обновления содержит нечитаемую запись ZIP."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Пакет обновления содержит небезопасный абсолютный путь: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Пакет обновления содержит запись с обходом пути: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Пакет обновления содержит символическую ссылку: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Запуск действий после применения."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Выполнение команд после применения требует явного подтверждения."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Метаданные рекомендаций после применения успешно прочитаны."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Действия после применения проверены по отчёту рекомендаций."
+
+msgid "Post-apply actions were selected."
+msgstr "Выбраны действия после применения."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Расширенные действия после применения требуют явного расширенного подтверждения."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Расширенные действия после применения явно подтверждены."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Выбранные команды после применения успешно выполнены."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Метаданные запуска команд после применения записаны."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Действия после применения успешно завершены."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Недопустимое определение команды после применения обновления: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Выполняется действие после применения: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Выполнение команды %d из %d для %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Действие после применения не удалось: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Действие после применения \"%s\" завершилось с кодом выхода %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Действие после применения выполнено: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Для выполнения действий после применения требуется путь промежуточного размещения."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Нет рекомендуемых действий после применения для выполнения."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Нет разрешённых действий после применения для выполнения."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Действие после применения не разрешено для этого обновления: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Миграции базы данных требуют проверки безопасности миграций перед выполнением."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Миграции базы данных не могут быть выполнены, так как проверка безопасности миграций не пройдена."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Миграции базы данных не могут быть выполнены, так как проверка безопасности миграций не содержит список подготовленных миграций."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Миграции базы данных не могут быть выполнены, так как проверка безопасности миграций содержит недопустимую запись миграции."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Средство обновления может выполнять только подготовленные миграции %s."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Миграции базы данных не могут быть выполнены, так как проверка безопасности подготовленных миграций сообщила о блокирующих ошибках."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine сообщает предупреждения базовой линии миграций. Будут явно выполнены только подготовленные классы миграций %s."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Миграции базы данных требуют подтверждения наличия резервной копии базы данных."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Миграции базы данных требуют текст подтверждения \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Проверка безопасности миграций базы данных была завершена до выполнения."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Наличие резервной копии базы данных было явно подтверждено."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Предоставлены проверка безопасности миграций базы данных и подтверждение резервной копии."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Миграции базы данных были выполнены после явного подтверждения наличия резервной копии. Средство обновления не создавало резервную копию базы данных."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Необходимые права на исполняемые файлы после применения были нормализованы."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Не удалось выполнить миграции базы данных: файл bin/console не найден."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Выбранные команды после применения имеют необходимые пути с правом записи."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Пути с правом записи для команд после применения проверены."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Расширенные действия после применения могут изменять зависимости, сгенерированные ресурсы или базу данных. Перед продолжением проверьте резервные копии."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer нельзя безопасно запускать из веб-средства обновления, так как файл, созданный Composer, \"%s\" принадлежит UID %d, а среда PHP использует UID %d. Запустите Composer вручную от имени владельца развёртывания, затем продолжите остальные действия после применения."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Путь, требуемый действием после применения \"%s\", недоступен для записи: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Родительский каталог, требуемый действием после применения \"%s\", недоступен для записи: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Не удалось прочитать права необходимого исполняемого файла после применения: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Не удалось сделать необходимый исполняемый файл после применения исполняемым: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Необходимый исполняемый файл после применения всё ещё не исполняемый после chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Права на исполнение были нормализованы."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Не удалось записать изолированную конфигурацию Git для команд после применения."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Похоже, выполняется другая операция обновления. Удаляйте var/update/update.lock только если обновление не активно."
+
+msgid "Unable to create update lock: %s"
+msgstr "Не удалось создать блокировку обновления: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Не удалось записать метаданные запуска команды после применения: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "В манифесте обновления отсутствует блок пакета."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Блок подписи манифеста обновления должен быть объектом."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Блок требований манифеста обновления должен быть объектом."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 пакета обновления должен быть 64-символьной шестнадцатеричной строкой."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "В манифесте обновления отсутствует обязательное строковое поле \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Поле манифеста обновления \"%s\" должно быть строкой."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Манифест обновления не является корректным JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON манифеста обновления должен быть объектом."
+
+msgid "Manifest source cannot be empty."
+msgstr "Источник манифеста не может быть пустым."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL манифеста обновления должен использовать официальный источник обновлений %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Не удалось загрузить манифест обновления. HTTP-статус: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Файл манифеста недоступен для чтения: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Не удалось прочитать файл манифеста: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL манифеста обновления должен использовать HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Метаданные пакета обновления недоступны для чтения: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Не удалось прочитать метаданные пакета обновления: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Метаданные пакета обновления не являются корректным JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Метаданные пакета обновления должны быть JSON-объектом."
+
+msgid "Update package metadata format must be %d."
+msgstr "Формат метаданных пакета обновления должен быть %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Поле метаданных пакета обновления \"remove\" должно быть массивом."
+
+msgid "Update package removal paths must be strings."
+msgstr "Пути удаления пакета обновления должны быть строками."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Метаданные пакета обновления не могут удалять защищённый путь: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Пакет обновления не может одновременно включать и удалять один и тот же путь: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Не удалось вычислить sha256 метаданных пакета обновления."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Путь удаления пакета обновления не может быть пустым."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Путь удаления пакета обновления содержит нулевой байт."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Путь удаления пакета обновления должен быть относительным: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Путь удаления пакета обновления содержит небезопасный сегмент: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Для построения плана применения обновления требуется путь промежуточного каталога."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "В промежуточном каталоге отсутствует STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Не удалось прочитать метаданные промежуточного каталога: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Метаданные промежуточного каталога не являются корректным JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Метаданные промежуточного каталога должны быть JSON-объектом."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "В метаданных промежуточного каталога отсутствует поле application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "В пакете обновления отсутствует %s. Перед применением файлов требуются подписанные метаданные очистки."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Метаданные промежуточного каталога не содержат подписанные метаданные очистки пакета, записанные при распаковке."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Метаданные очистки пакета обновления изменились после размещения в промежуточном каталоге. Перед продолжением повторно разместите проверенный пакет."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Метаданные промежуточного каталога не содержат корректный список удаления пакета."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Пути очистки пакета обновления изменились после размещения в промежуточном каталоге. Перед продолжением повторно разместите проверенный пакет."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Подписанные метаданные очистки пакета не изменились с момента размещения в промежуточном каталоге."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Файл блокировки обновления уже существует. Возможно, выполняется другое обновление."
+
+msgid "Update lock directory is not writable."
+msgstr "Каталог блокировки обновления недоступен для записи."
+
+msgid "No update lock is currently active."
+msgstr "В данный момент активная блокировка обновления отсутствует."
+
+msgid "Update backup directory is not writable."
+msgstr "Каталог резервных копий обновления недоступен для записи."
+
+msgid "Update backup directory is writable."
+msgstr "Каталог резервных копий обновления доступен для записи."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Текущий процесс не может создать каталог резервных копий обновления."
+
+msgid "Update backup directory can be created."
+msgstr "Каталог резервных копий обновления может быть создан."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Некоторые рабочие каталоги обновления недоступны для записи или не могут быть созданы текущим процессом."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Рабочие каталоги обновления доступны для записи или могут быть созданы."
+
+msgid "Update apply file plan was generated."
+msgstr "Сформирован план применения файлов обновления."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Метаданные очистки пакета содержат пути, которые нельзя безопасно удалить."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Цели удаления, объявленные в пакете, безопасны."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Некоторые устаревшие файлы, объявленные в пакете, уже отсутствуют в этой установке."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Запланированное обновление перезапишет или удалит существующие символические ссылки."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Запланированное обновление не перезаписывает и не удаляет существующие символические ссылки."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Новые файлы миграции обновления должны размещаться в %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Обнаружены новые файлы миграции Doctrine %s. После применения файлов потребуется проверка безопасности миграции базы данных."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Некоторые списки файлов плана применения обновления были усечены в JSON-ответе."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Не удалось записать метаданные плана применения обновления."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Не удалось загрузить пакет обновления. HTTP-статус: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Не удалось открыть целевой файл пакета обновления: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Загрузки обновлений должны использовать официальный источник обновлений %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL пакета обновления должен использовать HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Проверки безопасности архива пакета обновления пройдены."
+
+msgid "Update package was extracted to staging."
+msgstr "Пакет обновления извлечён в промежуточный каталог."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Метаданные очистки подписанного пакета загружены."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Пакет обновления не содержит %s. Применение файлов будет заблокировано, пока не будут предоставлены подписанные метаданные очистки."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Сформирован отчёт пробного запуска промежуточного пакета."
+
+msgid "Staging metadata was written."
+msgstr "Метаданные промежуточного этапа записаны."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Не удалось извлечь пакет обновления в промежуточный каталог."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Не удалось найти корень приложения Chamilo в промежуточном пакете."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "В промежуточном пакете отсутствует обязательный элемент Chamilo: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Промежуточный пакет содержит ожидаемую структуру Chamilo."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Промежуточный пакет не содержит composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Промежуточный пакет содержит composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Промежуточный пакет не содержит yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Промежуточный пакет содержит yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Не удалось закодировать метаданные промежуточного этапа."
+
+msgid "Unable to write staging metadata."
+msgstr "Не удалось записать метаданные промежуточного этапа."
+
+msgid "Update operation log created."
+msgstr "Журнал операции обновления создан."
+
+msgid "Unable to write update operation log."
+msgstr "Не удалось записать журнал операции обновления."
+
+msgid "Invalid update operation id."
+msgstr "Недопустимый идентификатор операции обновления."
+

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ fọ́múlà: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -37006,13 +37006,13 @@ msgid "Trusted signing key"
 msgstr "Kóòdù ìbẹ̀rẹ̀ tí a gbẹ́kẹ̀lé"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Tẹ APPLY UPDATE FILES láti fìdájọ́"
+msgstr "Tẹ APPLY UPDATE FILES láti jẹ́rìí"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Tẹ RUN DATABASE MIGRATIONS láti fìdájọ́ àwọn ìyípadà ibùdó data"
+msgstr "Tẹ RUN DATABASE MIGRATIONS láti jẹ́rìí ìkópadà àkójọpọ̀ dátàbéesì"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Tẹ RUN POST UPDATE ACTIONS láti fìdájọ́"
+msgstr "Tẹ RUN POST UPDATE ACTIONS láti jẹ́rìí"
 
 msgid "Unknown update notice source."
 msgstr "Orísun ìkéde ìmúdójútó tí a kò mọ̀."
@@ -40229,4 +40229,949 @@ msgstr "Ìlú ìdánilẹ́kọ̀ọ́ iṣẹ́"
 
 msgid "City"
 msgstr "Ìlú"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Ìlànà ìmúdójúìwọ̀n ti padà sí ipò rẹ̀ lẹ́yìn ìmúkúrò ojú-ewé"
+
+msgid "Last completed step"
+msgstr "Ìgbésẹ̀ tó parí kẹ́yìn"
+
+msgid "Stage package"
+msgstr "Ìkójọ ìpele"
+
+msgid "Package staging"
+msgstr "Ìpele ìkójọ"
+
+msgid "Apply plan"
+msgstr "Lo ètò"
+
+msgid "Update workflow completed"
+msgstr "Ìlànà ìmúdójúìwọ̀n ti parí"
+
+msgid "Update directory exists and is writable."
+msgstr "Àpò ìmúdójúìwọ̀n wà, ó sì ṣeé kọ̀ sí."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Àpò ìmúdójúìwọ̀n wà ṣùgbọ́n kò ṣeé kọ̀ sí: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Àpò ìmúdójúìwọ̀n kò tíì sí, ṣùgbọ́n àpò òbí rẹ̀ ṣeé kọ̀ sí."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Àpò ìmúdójúìwọ̀n kò tíì sí, ṣùgbọ́n a lè ṣẹ̀dá rẹ̀ lábẹ́ var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Àpò ìmúdójúìwọ̀n kò sí, a kò sì lè ṣẹ̀dá rẹ̀ pẹ̀lú ìyọ̀ǹda lọ́wọ́lọ́wọ́."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Kò ṣeé pinnu àyè díìsìkì tó ṣófo fún ìṣàyẹ̀wò ìmúdójúìwọ̀n ṣáájú."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Àyè díìsìkì tó ṣófo kò tó fún iṣẹ́ ìpele ìmúdójúìwọ̀n tó dáàbòbo."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Àyè díìsìkì tó ṣófo tó fún ìlànà ìmúdójúìwọ̀n ìpele ìjẹ́rìí yìí."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Àkọsílẹ̀ ìmúdójúìwọ̀n kò sọ ìbéèrè ẹ̀yà PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Kò ṣeé ṣe ìgbéléwọ̀n ìbéèrè PHP ní kíkún: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Ẹ̀yà PHP lọ́wọ́lọ́wọ́ kò bá ìbéèrè ìmúdójúìwọ̀n mu: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Ẹ̀yà PHP lọ́wọ́lọ́wọ́ bá ìbéèrè ìmúdójúìwọ̀n mu."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "A kò pèsè ọ̀nà ìkójọ àgbègbè. Àwọn ìkójọ tí a ṣàgbàsílẹ̀ ni a lè ṣàyẹ̀wò lẹ́yìn ìṣàgbàsílẹ̀ nìkan."
+
+msgid "Local update package is not readable: %s"
+msgstr "Ìkójọ ìmúdójúìwọ̀n àgbègbè kò ṣeé kà: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Ìkójọ ìmúdójúìwọ̀n àgbègbè gbọ́dọ̀ jẹ́ àkójọ ZIP."
+
+msgid "Local update package is readable."
+msgstr "Ìkójọ ìmúdójúìwọ̀n àgbègbè ṣeé kà."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "A kò lè rí ẹ̀yà Chamilo tí a fi sórí ẹ̀rọ láìfọwọ́sowọ́pọ̀. A kò lè ṣàyẹ̀wò ìtọ́sọ́nà ẹ̀yà."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Ẹ̀yà tí a fi sórí ẹ̀rọ tàbí ẹ̀yà ìfojúsùn kò wà nínú ọ̀nà ẹ̀yà ìtumọ̀ tí a lè fiwé ara wọn."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Ẹ̀yà ìfojúsùn kéré ju ẹ̀yà tí a fi sórí ẹ̀rọ lọ. A kò fàyè gba ìsọkalẹ̀ ní ìpìlẹ̀."
+
+msgid "Target version matches the installed version."
+msgstr "Ẹ̀yà ìfojúsùn bà ẹ̀yà tí a fi sórí ẹ̀rọ mu."
+
+msgid "Target version is newer than the installed version."
+msgstr "Ẹ̀yà ìfojúsùn tuntun ju ẹ̀yà tí a fi sórí ẹ̀rọ lọ."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Iṣẹ́-àkànṣe kì í ṣe ìyọkúrò Git tàbí .git kò sí."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Ètò ìmúdójúìwọ̀n yìí wà fún ìfi sórí ẹ̀rọ tí kò ní àtìlẹ́yìn Git. A ti rí i pé ètò àgbègbè nlo Git. Tí a bá tẹ̀síwájú pẹ̀lú ìmúdójúìwọ̀n, ìtàn Git lè bàjẹ́. Fún àwọn ètò tí ó ní àtìlẹ́yìn Git, a dábàá lílo ìlànà Git tí a ṣàlàyé nínú CONTRIBUTING.md ní gbòǹgbò wẹ́ẹ̀bù."
+
+msgid "Local Git changes were also detected."
+msgstr "A tún rí àwọn àyípadà Git àgbègbè."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Àwọn fáìlì ìwífún iṣẹ́-àkànṣe kan kò sí. Àwọn ìpele ìmúdójúìwọ̀n tó tẹ̀lé lè nílò ìṣàyẹ̀wò ìgbẹ́kẹ̀lé pẹ̀lú ọwọ́."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Àwọn fáìlì ìwífún Composer àti Yarn wà."
+
+msgid "Starting staged file application."
+msgstr "Bẹ̀rẹ̀ lílo fáìlì ìpele."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Ìjẹ́rìí tó ṣe kedere ṣe pàtàkì láti lo àwọn fáìlì ìpele."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Lílo àwọn fáìlì ìmúdójúìwọ̀n ìpele nílò ìjẹ́rìí tó ṣe kedere."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Àpò ìpele wà nínú àpò ìpele ìmúdójúìwọ̀n Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "A ti ṣe ìjẹ́rìí àpò ìpele."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "A ka ìwífún ètò lílo ní àṣeyọrí."
+
+msgid "Staged application path is valid."
+msgstr "Ọ̀nà ìlò ìpele wà ní ìbámu."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Ìwífún ìmọ́toto ìkójọ tí a fọwọ́sí bà ètò lílo tí a ṣàyẹ̀wò mu."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "A ti ṣe ìjẹ́rìí ìwífún ìmọ́toto ìkójọ tí a fọwọ́sí."
+
+msgid "Update lock was acquired."
+msgstr "A ti gba títì ìmúdójúìwọ̀n."
+
+msgid "Update backup directory was created."
+msgstr "A ti ṣẹ̀dá àpò àfipamọ́ ìmúdójúìwọ̀n."
+
+msgid "Update file operations were collected."
+msgstr "A ti kó àwọn iṣẹ́ fáìlì ìmúdójúìwọ̀n jọ."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "A ti ṣàfipamọ́ àwọn fáìlì tó wà tí a gbero láti rọ́pò tàbí yọ kúrò."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "A ti da àwọn fáìlì ìmúdójúìwọ̀n ìpele kọ́ sí ìfi sórí ẹ̀rọ Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "A yọ àwọn fáìlì àtijọ́ tí ìdìpọ̀ kédé kúrò nínú ìfihàn Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "A yọ àwọn fáìlì àtijọ́ tí ìdìpọ̀ kédé kúrò."
+
+msgid "Update apply audit metadata was written."
+msgstr "A kọ metadata ìṣàyẹ̀wò ìmúṣẹ ìmúdójúìwọ̀n sílẹ̀."
+
+msgid "Staged files applied successfully."
+msgstr "A fi àwọn fáìlì tí a gbé sí ibi ìgbáradì sílẹ̀ ní àṣeyọrí."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Kò ṣeé ṣe láti dá àwọn fáìlì tí a yọ padà: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Kò ṣeé ṣe láti yí àwọn fáìlì tí a dà padà: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "A ṣe ìyípadà fáìlì lẹ́yìn ikùnà ìmúṣẹ ìmúdójúìwọ̀n."
+
+msgid "Rollback failed: %s"
+msgstr "Ìyípadà kùnà: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Kò ṣeé ṣe láti kọ metadata ìṣàyẹ̀wò ìmúṣẹ ìmúdójúìwọ̀n: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Kò ṣeé ṣe láti tú títì ìmúdójúìwọ̀n lẹ́yìn ikùnà: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "A nílò ọ̀nà ibi ìgbáradì láti fi àwọn fáìlì ìmúdójúìwọ̀n sílẹ̀."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Àpò ibi ìgbáradì kò sí: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Àpò ìpìlẹ̀ ibi ìgbáradì ìmúdójúìwọ̀n Chamilo kò sí."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Àpò ibi ìgbáradì gbọ́dọ̀ wà nínú var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Àpò ibi ìgbáradì kò ní APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Kò ṣeé ṣe láti ka metadata ètò ìmúṣẹ ìmúdójúìwọ̀n: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metadata ètò ìmúṣẹ ìmúdójúìwọ̀n kì í ṣe JSON tó tọ́: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metadata ètò ìmúṣẹ ìmúdójúìwọ̀n gbọ́dọ̀ jẹ́ ohun JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Ètò ìmúṣẹ ìmúdójúìwọ̀n kò ní pápá application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Ọ̀nà ohun èlò tí a gbé sí ibi ìgbáradì kò ṣeé kà: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Ọ̀nà ohun èlò tí a gbé sí ibi ìgbáradì gbọ́dọ̀ wà nínú àpò ibi ìgbáradì."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Ọ̀nà ohun èlò tí a gbé sí ibi ìgbáradì kò ní composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Ìdìpọ̀ ìmúdójúìwọ̀n kò ní %s. Tún gbé ìdìpọ̀ tí a jẹ́rìí sí ibi ìgbáradì pẹ̀lú metadata ìmọ́tọ́ tí a fọwọ́sí."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Ètò ìmúṣẹ ìmúdójúìwọ̀n kò ní metadata ìmọ́tọ́ ìdìpọ̀ tí a ṣàyẹ̀wò."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Metadata ìmọ́tọ́ ìdìpọ̀ ìmúdójúìwọ̀n yí padà lẹ́yìn tí a ti ṣẹ̀dá ètò ìmúṣẹ. Tún kọ́ ètò ìmúṣẹ kí o tó tẹ̀síwájú."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Ètò ìmúṣẹ ìmúdójúìwọ̀n ní àtòkọ ìyọkúrò ìdìpọ̀ tí kò tọ́."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Àwọn ọ̀nà ìmọ́tọ́ ìdìpọ̀ ìmúdójúìwọ̀n yí padà lẹ́yìn tí a ti ṣẹ̀dá ètò ìmúṣẹ. Tún kọ́ ètò ìmúṣẹ kí o tó tẹ̀síwájú."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Ètò ìmúṣẹ ìmúdójúìwọ̀n kò ní àtòkọ ọ̀nà ìyọkúrò tí a ṣàyẹ̀wò."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Àwọn ọ̀nà ìyọkúrò ètò ìmúṣẹ ìmúdójúìwọ̀n kò bá metadata ìmọ́tọ́ ìdìpọ̀ tí a fọwọ́sí mu."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Ọ̀nà títì ìmúdójúìwọ̀n gbọ́dọ̀ wà nínú var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Ètò ìmúṣẹ ìmúdójúìwọ̀n kò ní pápá backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Ọ̀nà ìfipamọ́ ìmúdójúìwọ̀n ní àwọn apá ọ̀nà tí kò dáàbòbo."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Ọ̀nà ìfipamọ́ ìmúdójúìwọ̀n gbọ́dọ̀ wà nínú var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Kò ṣeé ṣe láti gba títì ìmúdójúìwọ̀n. Ìmúdójúìwọ̀n mìíràn lè ń lọ lọ́wọ́."
+
+msgid "Unable to release update lock: %s"
+msgstr "Kò ṣeé ṣe láti tú títì ìmúdójúìwọ̀n: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Àpò ìfipamọ́ ìmúdójúìwọ̀n ti wà tẹ́lẹ̀: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Kò ṣeé ṣe láti ṣẹ̀dá àpò ibi àfojúsùn: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Ìmúdójúìwọ̀n tí a gbèrò yóò kọ ìjápọ̀ àmì tó wà tẹ́lẹ̀ lórí: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Fáìlì ibi àfojúsùn kò ṣeé kọ sí: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Kò ṣeé ṣe láti ṣẹ̀dá fáìlì ibi àfojúsùn: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Kò ṣeé ṣe láti pinnu àpò iṣẹ́ Chamilo kí a tó yọ àwọn fáìlì àtijọ́."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Ìmọ́tọ́ ìmúdójúìwọ̀n kò lè yọ ọ̀nà tí a dáàbòbo: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Ìmúdójúìwọ̀n tí a gbèrò yóò yọ ìjápọ̀ àmì tó wà tẹ́lẹ̀: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Ìmọ́tọ́ ìmúdójúìwọ̀n ṣe àtìlẹ́yìn fáìlì nìkan, kì í ṣe àpò: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Fáìlì àfojúsùn àtijọ́ kò ṣeé kà fún ìfipamọ́: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Kò ṣeé ṣe láti yọ fáìlì àfojúsùn àtijọ́ pẹ̀lú ìyọ̀ǹda àpò lọ́wọ́lọ́wọ́: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Fáìlì àfojúsùn àtijọ́ yanjú sí ìta àpò iṣẹ́ Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Kò ṣeé ṣe láti fi fáìlì ibi àfojúsùn pamọ́: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Kò ṣeé ṣe láti kọ metadata ìfipamọ́ ìmúdójúìwọ̀n."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Kò ṣeé ṣe láti dà fáìlì ìmúdójúìwọ̀n tí a gbé sí ibi ìgbáradì: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "A da %d ninu %d faili ti a gbe sori ipele kọ."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Kò ṣeé ṣe láti yọ faili àtijọ́ tí pákéèjì kéde: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "A yọ %d ninu %d faili àtijọ́ tí pákéèjì kéde."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Kò ṣeé ṣe láti dá faili tí a ṣe àfipamọ́ padà: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Kò ṣeé ṣe láti yọ faili tuntun tí a da kọ nígbà ìdápadà: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Kò ṣeé ṣe láti dá faili tí a yọ padà nítorí àfipamọ́ rẹ̀ kò sí: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Kò ṣeé ṣe láti dá faili tí a yọ padà láti inú àfipamọ́: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Kò ṣeé ṣe láti kọ metadata ìṣàyẹ̀wò ìmúlò ìmúdójúìwọ̀n."
+
+msgid "Unable to write global update apply log."
+msgstr "Kò ṣeé ṣe láti kọ àkọsílẹ̀ ìmúlò ìmúdójúìwọ̀n gbogbogbò."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "A rí ọ̀nà ìbátan tí kò dáa lórí ipele: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "A kò le kọ sí fòdírẹ́sì: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Kò ṣeé ṣe láti ṣẹ̀dá fòdírẹ́sì: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "A ka metadata ipele ní àṣeyọrí."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "A kọ metadata ètò ìmúlò sínú fòdírẹ́sì ipele."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Àwọn faili àti fòdírẹ́sì ìfojúsùn dára láti kọ sí fún ìmúdójúìwọ̀n àti ìmọ́tọ́ tí a gbé kalẹ̀."
+
+msgid "Update apply plan check failed."
+msgstr "Ìyẹ̀wò ètò ìmúlò ìmúdójúìwọ̀n kùnà."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Àwọn faili tàbí fòdírẹ́sì ìfojúsùn kan kò ṣeé kọ sí tàbí yọ."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Láti tún èyí ṣe, yí olùní gbogbo fòdírẹ́sì Chamilo padà sí %s (olùmúlò ẹ̀rọ ayélujára) fún ìgbà díẹ̀, lo ìmúdójúìwọ̀n, yí olùní padà sí %s lẹ́yìn náà, kí o sì tún fi olùní var/ (àti ohun inú rẹ̀) sí %s kí ohun èlò lè máa kọ sí i."
+
+msgid "Update package verification failed."
+msgstr "Ìjẹ́rìísí pákéèjì ìmúdójúìwọ̀n kùnà."
+
+msgid "Update preflight checks failed."
+msgstr "Àwọn ìyẹ̀wò ṣáájú ìmúdójúìwọ̀n kùnà."
+
+msgid "Unable to stage update package."
+msgstr "Kò ṣeé ṣe láti gbé pákéèjì ìmúdójúìwọ̀n sórí ipele."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Ṣíṣe àwọn àṣẹ lẹ́yìn ìmúlò láti UI kò ṣiṣẹ́ lórí sẹ́fá yìí."
+
+msgid "Missing required field: %s"
+msgstr "Pápá pàtàkì kò sí: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "A kò pèsè orísun ìwé-ìtọ́sọ́nà ìmúdójúìwọ̀n, bẹ́ẹ̀ sì ni a kò ṣètò URL ìwé-ìtọ́sọ́nà ìmúdójúìwọ̀n àìkọjá."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL ìwé-ìtọ́sọ́nà ìmúdójúìwọ̀n gbọ́dọ̀ lo orísun ìmúdójúìwọ̀n osise %s. Ọ̀nà ìwé-ìtọ́sọ́nà nìkan ni a lè yí padà."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Àwọn ọ̀nà ìwé-ìtọ́sọ́nà ìmúdójúìwọ̀n agbègbè kò ṣiṣẹ́. Lo URL ìwé-ìtọ́sọ́nà HTTPS tàbí ṣètò CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 nínú àyíká sẹ́fá fún ìdánwò agbègbè."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Má ṣe pèsè ọ̀nà HTTP %s. Fi pápá yìí sílẹ̀ lásán kí a lè gba a láti ìwé-ìtọ́sọ́nà ìmúdójúìwọ̀n."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Àwọn ọ̀nà ìmúdójúìwọ̀n agbègbè %s kò ṣiṣẹ́ nínú àyíká yìí."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "A gbọ́dọ̀ ṣètò àwọn kọ́kọ́rọ́ ìmúdójúìwọ̀n tí a gbẹ́kẹ̀lé lórí sẹ́fá nínú àyíká yìí."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Fífi ìjẹ́rìísí ìtọwọ́bọ̀wé ìmúdójúìwọ̀n sílẹ̀ kò ṣiṣẹ́ nínú àyíká yìí."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Ṣíṣe àwọn ìgbésẹ̀ ìmúdójúìwọ̀n lẹ́yìn ìmúlò nílò ọ̀rọ̀ ìmúdájú \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Ìmúlò àwọn faili ìmúdójúìwọ̀n lórí ipele nílò ọ̀rọ̀ ìmúdájú \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Kò ṣeé ṣe láti rí fòdírẹ́sì iṣẹ́-àkànṣe."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Àfipamọ́ àkójọpọ̀-dátà kì í ṣe iṣẹ́ olùmúdójúìwọ̀n yìí. Ṣẹ̀dá kí o sì jẹ́rìísí àfipamọ́ àkójọpọ̀-dátà kí o tó ṣe àwọn ìkópa."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Àwọn ọ̀nà down() ìkópa Doctrine kò ní ẹ̀rí pé wọn yóò dá dátà tí a pa tàbí tí a yí padà."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Metadata lẹ́yìn ìmúlò ṣe àbá ìyẹ̀wò ìkópa àkójọpọ̀-dátà."
+
+msgid "No migration files were found in the staged package."
+msgstr "A kò rí faili ìkópa nínú pákéèjì lórí ipele."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "A rí àwọn faili ìkópa Doctrine lórí ipele."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "A yanjú ìfojúsùn ìkópa Doctrine láti pákéèjì lórí ipele."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Ìpìlẹ̀ ìkópa Doctrine ní àwọn ìṣòro tí ń dí ìkópa lórí ipele lọ́wọ́."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine ń ròyìn ìkìlọ̀ ìpìlẹ̀ ìkópa ìtàn, ṣùgbọ́n àwọn ìkópa %s lórí ipele nìkan ni a ó yẹ̀wò kí a sì ṣe ní pàtó."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine ń ròyìn ìkìlọ̀ ìpìlẹ̀ ìkópa ìtàn. Olùmúdójúìwọ̀n yóò ṣe àwọn kíláàsì ìkópa %s lórí ipele nìkan lẹ́yìn ìmúdájú gbangba."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Ìpìlẹ̀ Doctrine kò ní ìṣòro tí ń dí ìkópa %s lórí ipele lọ́wọ́."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Ìdánwò ìkópa Doctrine kùnà fún ó kéré tán ìkópa kan lórí ipele. Má ṣe ṣe ìkópa àkójọpọ̀-dátà títí a ó fi tún èyí ṣe."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Ìdánwò Doctrine parí ní àṣeyọrí fún kíláàsì ìkópa kọ̀ọ̀kan lórí ipele."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "A gbọ́dọ̀ ṣẹ̀dá àfipamọ́ àkójọpọ̀-dátà lóde olùmúdójúìwọ̀n yìí kí a tó ṣe àwọn ìkópa."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Ọ̀nà ipele ṣe pàtàkì láti yẹ̀wò àwọn ìkópa àkójọpọ̀-dátà."
+
+msgid "Unable to read update %s: %s"
+msgstr "Kò ṣeé ṣe láti ka ìmúdójúìwọ̀n %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON ìmúdójúìwọ̀n %s kò tọ́: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON ìmúdójúìwọ̀n %s gbọ́dọ̀ jẹ́ ohun (object)."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Metadata àwọn ìyẹ̀wò lẹ́yìn-ìfìsì kò ní àtòkọ ìgbésẹ̀ tó tọ́."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "A kò ṣe ìṣedúrò ìkópadà àkójọpọ̀ dátà fún ìmúdójúìwọ̀n tí a pèsè yìí."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Metadata ìmúdójúìwọ̀n kò ní ọ̀nà ìfìsì tí a pèsè."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "A kò rí fáìlì ìkópadà tí a pèsè: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Kò ṣeé ṣe láti ka fáìlì ìkópadà tí a pèsè: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "A kò le yọ àpèjúwe kúrò nínú getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Olùṣiṣẹ́ ìmúdójúìwọ̀n ṣe àtìlẹ́yìn fún %s ìkópadà tí a pèsè nìkan: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Kò ṣeé ṣe láti kọ metadata ààbò ìkópadà: %s"
+
+msgid "Migration safety check failed."
+msgstr "Ìyẹ̀wò ààbò ìkópadà kùnà."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "A rí ọ̀nà ìkópadà ìbátan tí kò dáa tí a pèsè: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "A kò le mọ ẹ̀yà Chamilo tí a fi sórí ẹ̀rọ fúnra rẹ̀. Tẹ̀síwájú nìkan lẹ́yìn tí o ti jẹ́rìí pé ìmúdójúìwọ̀n yìí báamu."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Ẹ̀yà tí a fi sórí ẹ̀rọ tàbí ẹ̀yà ìfojúsùn kò wà ní ọ̀nà ẹ̀yà semantic tí a lè fi wé. Tẹ̀síwájú nìkan lẹ́yìn ìjẹ́rìí ọwọ́."
+
+msgid "An update is available."
+msgstr "Ìmúdójúìwọ̀n wà."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Ẹ̀yà tí a fi sórí ẹ̀rọ ti báamu pẹ̀lú ẹ̀yà manifest."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Ẹ̀yà manifest ti pẹ́ ju ẹ̀yà tí a fi sórí ẹ̀rọ lọ. A dínà ìsọkalẹ̀ ní ìpìlẹ̀."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "A kò fi àwọn fáìlì tí a pèsè sílẹ̀ dáadáa. Àwọn ìyẹ̀wò lẹ́yìn-ìfìsì kò le tẹ̀síwájú."
+
+msgid "Apply result metadata was read successfully."
+msgstr "A ka metadata èsì ìfìsì dáadáa."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "A ṣẹ̀dá àwọn ìmọ̀ràn ìgbésẹ̀ lẹ́yìn-ìfìsì."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "A rí àwọn ìkópadà àkójọpọ̀ dátà nínú ìdìpọ̀ tí a pèsè. Ṣiṣẹ́ wọn nìkan lẹ́yìn tí o ti jẹ́rìí pé ìmúdójúìwọ̀n fáìlì tọ́ àti pé àwọn ẹ̀dà àkójọpọ̀ dátà wà."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Ọ̀nà ìpèsè ṣe pàtàkì láti ṣiṣẹ́ àwọn ìyẹ̀wò lẹ́yìn-ìfìsì."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Ìmúdójúìwọ̀n %s kì í ṣe JSON tó tọ́: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Ìmúdójúìwọ̀n %s gbọ́dọ̀ jẹ́ ohun JSON."
+
+msgid "Composer dependencies"
+msgstr "Àwọn ìgbẹ́kẹ̀lé Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "A fi metadata Composer sínú ìdìpọ̀ tí a pèsè. Ṣiṣẹ́ Composer install láti gbòngbò ohun èlò kí o tó ka ìmúdójúìwọ̀n sí pípé."
+
+msgid "Frontend assets"
+msgstr "Àwọn ohun-ìní iwájú"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "A fi àwọn fáìlì tó jẹ mọ́ iwájú sínú ìdìpọ̀ tí a pèsè. Tún kọ àwọn ohun-ìní iṣelọ́pọ̀ lẹ́yìn fífi àwọn ìgbẹ́kẹ̀lé sílẹ̀."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "A rí àwọn fáìlì ìkópadà Doctrine nínú ìdìpọ̀ tí a pèsè. Jẹ́rìí pé àwọn ẹ̀dà àkójọpọ̀ dátà wà kí o tó ṣiṣẹ́ àwọn ìkópadà."
+
+msgid "Symfony cache"
+msgstr "Ìkànnì Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Pa ìkànnì Symfony mọ́ lẹ́yìn fífi àwọn fáìlì ìmúdójúìwọ̀n sílẹ̀ àti ṣíṣe àwọn àṣẹ tí ó nílò."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Kò ṣeé ṣe láti kọ metadata àwọn ìyẹ̀wò lẹ́yìn-ìfìsì."
+
+msgid "Post-apply check failed."
+msgstr "Ìyẹ̀wò lẹ́yìn-ìfìsì kùnà."
+
+msgid "Update package is not readable: %s"
+msgstr "Ìdìpọ̀ ìmúdójúìwọ̀n kò ṣeé kà: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Ìdìpọ̀ ìmúdójúìwọ̀n kì í ṣe àkójọ ZIP tó tọ́."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Àkójọ ZIP ìdìpọ̀ ìmúdójúìwọ̀n ṣófo."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Ìdìpọ̀ ìmúdójúìwọ̀n ní ìwọlé ZIP tí kò ṣeé kà."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Ìdìpọ̀ ìmúdójúìwọ̀n ní ọ̀nà pípé tí kò dáa: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Ìdìpọ̀ ìmúdójúìwọ̀n ní ìwọlé ìrìnkèrindò ọ̀nà: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Ìdìpọ̀ ìmúdójúìwọ̀n ní ìsopọ̀ àmì: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Ń bẹ̀rẹ̀ àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Ṣíṣe àṣẹ lẹ́yìn-ìfìsì nílò ìjẹ́rìí tó ṣe kedere."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "A ka metadata ìmọ̀ràn lẹ́yìn-ìfìsì dáadáa."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "A ṣe ìjẹ́rìí àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì sí ìròyìn ìmọ̀ràn."
+
+msgid "Post-apply actions were selected."
+msgstr "A yan àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì tó jinlẹ̀ nílò ìjẹ́rìí tó jinlẹ̀ tó ṣe kedere."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "A jẹ́rìí àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì tó jinlẹ̀ kedere."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Àwọn àṣẹ lẹ́yìn-ìfìsì tí a yàn parí dáadáa."
+
+msgid "Post-apply command run metadata was written."
+msgstr "A kọ metadata ṣíṣe àṣẹ lẹ́yìn-ìfìsì."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì parí dáadáa."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Ìtumọ̀ àṣẹ lẹ́yìn-ìfìsì ìmúdójúìwọ̀n kò tọ́: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Ń ṣiṣẹ́ ìgbésẹ̀ lẹ́yìn-ìfìsì: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "N ṣiṣẹ àṣẹ %d nínú %d fún %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Ìgbésẹ̀ lẹ́yìn-ìfìsì kùnà: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Ìgbésẹ̀ lẹ́yìn-ìfìsì \"%s\" kùnà pẹ̀lú kóòdù ìjáde %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Ìgbésẹ̀ lẹ́yìn-ìfìsì parí: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Ọ̀nà ìgbékalẹ̀ jẹ́ dandan láti ṣiṣẹ àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Kò sí àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì tí a ṣe ìgbàníyànjú láti ṣiṣẹ."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Kò sí àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì tí a fàyè gba láti ṣiṣẹ."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "A kò fàyè gba ìgbésẹ̀ lẹ́yìn-ìfìsì fún ìmúdójúìwọ̀n yìí: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Àwọn ìṣípòpàdé àkójọpọ̀-ẹ̀kọ́ dábàá àtúnyẹ̀wò ààbò ìṣípòpàdé kí a tó ṣe é."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Àwọn ìṣípòpàdé àkójọpọ̀-ẹ̀kọ́ kò le ṣiṣẹ nítorí àtúnyẹ̀wò ààbò ìṣípòpàdé kò kọjá."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Àwọn ìṣípòpàdé àkójọpọ̀-ẹ̀kọ́ kò le ṣiṣẹ nítorí àtúnyẹ̀wò ààbò ìṣípòpàdé kò ṣe àtòkọ àwọn ìṣípòpàdé tí a gbékalẹ̀."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Àwọn ìṣípòpàdé àkójọpọ̀-ẹ̀kọ́ kò le ṣiṣẹ nítorí àtúnyẹ̀wò ààbò ìṣípòpàdé ní àkọsílẹ̀ ìṣípòpàdé tí kò tọ́."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Àwọn ìṣípòpàdé %s tí a gbékalẹ̀ nìkan ni olùṣiṣẹ̀ ìmúdójúìwọ̀n le ṣe."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Àwọn ìṣípòpàdé àkójọpọ̀-ẹ̀kọ́ kò le ṣiṣẹ nítorí àtúnyẹ̀wò ààbò ìṣípòpàdé tí a gbékalẹ̀ ròyìn àwọn àṣìṣe tí ń díwọ́."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine ròyìn àwọn ìkìlọ̀ ìpìlẹ̀ ìṣípòpàdé. Àwọn kíláàsì ìṣípòpàdé %s tí a gbékalẹ̀ nìkan ni a ó ṣe ní gbangba."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Àwọn ìṣípòpàdé àkójọpọ̀-ẹ̀kọ́ nílò ìjẹ́rìísí pé àwáríwá àkójọpọ̀-ẹ̀kọ́ wà."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Àwọn ìṣípòpàdé àkójọpọ̀-ẹ̀kọ́ nílò ọ̀rọ̀ ìjẹ́rìísí \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "A parí àtúnyẹ̀wò ààbò ìṣípòpàdé àkójọpọ̀-ẹ̀kọ́ kí a tó ṣe é."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "A jẹ́rìísí ní gbangba pé àwáríwá àkójọpọ̀-ẹ̀kọ́ wà."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "A pèsè àtúnyẹ̀wò ààbò ìṣípòpàdé àkójọpọ̀-ẹ̀kọ́ àti ìjẹ́rìísí àwáríwá."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "A ṣe àwọn ìṣípòpàdé àkójọpọ̀-ẹ̀kọ́ lẹ́yìn ìjẹ́rìísí àwáríwá àkójọpọ̀-ẹ̀kọ́ ní gbangba. Olùmúdójúìwọ̀n kò ṣẹ̀dá àwáríwá àkójọpọ̀-ẹ̀kọ́ náà."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "A ṣe ìṣọ̀kan àwọn ìyọ̀ǹda ìṣiṣẹ́ lẹ́yìn-ìfìsì tí a nílò."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Kò ṣeé ṣe láti ṣiṣẹ àwọn ìṣípòpàdé àkójọpọ̀-ẹ̀kọ́ nítorí a kò rí bin/console."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Àwọn àṣẹ lẹ́yìn-ìfìsì tí a yàn ní àwọn ọ̀nà kíkọ tí a nílò."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "A ṣe ìfidímúlẹ̀ àwọn ọ̀nà kíkọ fún àṣẹ lẹ́yìn-ìfìsì."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì tó jinlẹ̀ le yí àwọn ìgbẹ́kẹ̀lé, àwọn ohun-ìní tí a ṣẹ̀dá tàbí àkójọpọ̀-ẹ̀kọ́ padà. Ṣàyẹ̀wò àwọn àwáríwá kí o tó tẹ̀síwájú."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer kò le ṣiṣẹ láìléwu láti olùmúdójúìwọ̀n wẹ́ẹ̀bù nítorí fáìlì tí Composer ṣẹ̀dá \"%s\" jẹ́ ti UID %d nígbà tí PHP ń ṣiṣẹ pẹ̀lú UID %d. Ṣiṣẹ Composer fúnra rẹ gẹ́gẹ́ bí olóhun ìgbékalẹ̀, lẹ́yìn náà tẹ̀síwájú pẹ̀lú àwọn ìgbésẹ̀ lẹ́yìn-ìfìsì tó kù."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Ọ̀nà tí ìgbésẹ̀ lẹ́yìn-ìfìsì \"%s\" nílò kò ṣeé kọ sí: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Àtẹ̀jáde òbí tí ìgbésẹ̀ lẹ́yìn-ìfìsì \"%s\" nílò kò ṣeé kọ sí: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Kò ṣeé ṣe láti ka àwọn ìyọ̀ǹda fún ìṣiṣẹ́ lẹ́yìn-ìfìsì tí a nílò: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Kò ṣeé ṣe láti samisi ìṣiṣẹ́ lẹ́yìn-ìfìsì tí a nílò gẹ́gẹ́ bí ohun tí ṣeé ṣiṣẹ́: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Ìṣiṣẹ́ lẹ́yìn-ìfìsì tí a nílò kò ṣì ṣeé ṣiṣẹ́ lẹ́yìn chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "A ṣe ìṣọ̀kan ìyọ̀ǹda ìṣiṣẹ́."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Kò ṣeé ṣe láti kọ ìṣètò Git tí a yà sọ́tọ̀ fún àwọn àṣẹ lẹ́yìn-ìfìsì."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Ó dà bíi pé iṣẹ́ ìmúdójúìwọ̀n mìíràn ń ṣiṣẹ. Yọ var/update/update.lock kìkì bí kò bá sí ìmúdójúìwọ̀n tó ń ṣiṣẹ."
+
+msgid "Unable to create update lock: %s"
+msgstr "Kò ṣeé ṣe láti ṣẹ̀dá títì ìmúdójúìwọ̀n: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Kò ṣeé ṣe láti kọ metadata ìṣiṣẹ́ àṣẹ lẹ́yìn-ìfìsì: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Ìwé-ìfihàn ìmúdójúìwọ̀n kò ní àkójọpọ̀ pákéèjì."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Àkójọpọ̀ ìbùwọ́lé ìwé-ìfihàn ìmúdójúìwọ̀n gbọ́dọ̀ jẹ́ nǹkan (object)."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Àkójọpọ̀ àwọn ìbéèrè ìwé-ìfihàn ìmúdójúìwọ̀n gbọ́dọ̀ jẹ́ nǹkan (object)."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 pákéèjì ìmúdójúìwọ̀n gbọ́dọ̀ jẹ́ ọ̀rọ̀ hexadecimal oní-àmì 64."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Ìwé-ìfihàn ìmúdójúìwọ̀n kò ní pápá ọ̀rọ̀ dandan \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Pápá ìwé-ìfihàn ìmúdójúìwọ̀n \"%s\" gbọ́dọ̀ jẹ́ ọ̀rọ̀."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Ìwé-ìfihàn ìmúdójúìwọ̀n kì í ṣe JSON tó tọ́: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON ìwé-ìfihàn ìmúdójúìwọ̀n gbọ́dọ̀ jẹ́ nǹkan (object)."
+
+msgid "Manifest source cannot be empty."
+msgstr "Orísun ìwé-ìfihàn kò le ṣófo."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL ìwé-ìfihàn ìmúdójúìwọ̀n gbọ́dọ̀ lo orísun ìmúdójúìwọ̀n òṣìṣẹ́ %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Kò ṣeé ṣe láti ṣe ìgbàsílẹ̀ ìwé-ìfihàn ìmúdójúìwọ̀n. Ipò HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Fáìlì ìwé-ìfihàn kò ṣeé kà: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Kò ṣeé ṣe láti ka fáìlì ìwé-ìfihàn: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL àkọsílẹ̀ ìmúdójúìwọ̀n gbọ́dọ̀ lo HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Àlàyé ìdíẹ̀ ẹ̀rọ ìmúdójúìwọ̀n kò ṣeé kà: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Kò ṣeé kà àlàyé ìdíẹ̀ ẹ̀rọ ìmúdójúìwọ̀n: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Àlàyé ìdíẹ̀ ẹ̀rọ ìmúdójúìwọ̀n kì í ṣe JSON tó tọ́: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Àlàyé ìdíẹ̀ ẹ̀rọ ìmúdójúìwọ̀n gbọ́dọ̀ jẹ́ ohun JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Ọ̀nà àlàyé ìdíẹ̀ ẹ̀rọ ìmúdójúìwọ̀n gbọ́dọ̀ jẹ́ %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Pápá àlàyé ìdíẹ̀ ẹ̀rọ ìmúdójúìwọ̀n \"remove\" gbọ́dọ̀ jẹ́ àkójọ."
+
+msgid "Update package removal paths must be strings."
+msgstr "Àwọn ọ̀nà ìyọkúrò ẹ̀rọ ìmúdójúìwọ̀n gbọ́dọ̀ jẹ́ ọ̀rọ̀."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Àlàyé ìdíẹ̀ ẹ̀rọ ìmúdójúìwọ̀n kò lè yọ ọ̀nà tí a dáàbò bò: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Ẹ̀rọ ìmúdójúìwọ̀n kò lè ní àti yọ ọ̀nà kan náà: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Kò ṣeé ṣe ìṣírò sha256 àlàyé ìdíẹ̀ ẹ̀rọ ìmúdójúìwọ̀n."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Ọ̀nà ìyọkúrò ẹ̀rọ ìmúdójúìwọ̀n kò lè ṣófo."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Ọ̀nà ìyọkúrò ẹ̀rọ ìmúdójúìwọ̀n ní báìtì null."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Ọ̀nà ìyọkúrò ẹ̀rọ ìmúdójúìwọ̀n gbọ́dọ̀ jẹ́ ìbátan: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Ọ̀nà ìyọkúrò ẹ̀rọ ìmúdójúìwọ̀n ní apá tí kò dáa: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Ọ̀nà ìgbékalẹ̀ ṣe pàtàkì láti kọ ètò ìmúlò ìmúdójúìwọ̀n."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Àpò ìgbékalẹ̀ kò ní STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Kò ṣeé kà àlàyé ìgbékalẹ̀: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Àlàyé ìgbékalẹ̀ kì í ṣe JSON tó tọ́: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Àlàyé ìgbékalẹ̀ gbọ́dọ̀ jẹ́ ohun JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Àlàyé ìgbékalẹ̀ kò ní pápá application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Ẹ̀rọ ìmúdójúìwọ̀n kò ní %s. Àlàyé ìmọ́tọ́jú tí a fọwọ́sí ṣe pàtàkì kí a tó lè lo àwọn fáìlì."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Àlàyé ìgbékalẹ̀ kò ní àlàyé ìmọ́tọ́jú ẹ̀rọ tí a fọwọ́sí tí a kọ sílẹ̀ nígbà ìyọjáde."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Àlàyé ìmọ́tọ́jú ẹ̀rọ ìmúdójúìwọ̀n yí padà lẹ́yìn ìgbékalẹ̀. Tún gbé ẹ̀rọ tí a fọwọ́sí kalẹ̀ kí o tó tẹ̀síwájú."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Àlàyé ìgbékalẹ̀ kò ní àkójọ ìyọkúrò ẹ̀rọ tó tọ́."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Àwọn ọ̀nà ìmọ́tọ́jú ẹ̀rọ ìmúdójúìwọ̀n yí padà lẹ́yìn ìgbékalẹ̀. Tún gbé ẹ̀rọ tí a fọwọ́sí kalẹ̀ kí o tó tẹ̀síwájú."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Àlàyé ìmọ́tọ́jú ẹ̀rọ tí a fọwọ́sí kò yí padà láti ìgbékalẹ̀."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Fáìlì títì ìmúdójúìwọ̀n ti wà tẹ́lẹ̀. Ìmúdójúìwọ̀n mìíràn lè ń lọ lọ́wọ́."
+
+msgid "Update lock directory is not writable."
+msgstr "Àpò títì ìmúdójúìwọ̀n kò ṣeé kọ sí."
+
+msgid "No update lock is currently active."
+msgstr "Kò sí títì ìmúdójúìwọ̀n tó ń ṣiṣẹ́ lọ́wọ́."
+
+msgid "Update backup directory is not writable."
+msgstr "Àpò àfihàn ìmúdójúìwọ̀n kò ṣeé kọ sí."
+
+msgid "Update backup directory is writable."
+msgstr "Àpò àfihàn ìmúdójúìwọ̀n ṣeé kọ sí."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Ìlànà lọ́wọ́lọ́wọ́ kò lè ṣẹ̀dá àpò àfihàn ìmúdójúìwọ̀n."
+
+msgid "Update backup directory can be created."
+msgstr "A lè ṣẹ̀dá àpò àfihàn ìmúdójúìwọ̀n."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Àwọn àpò iṣẹ́ ìmúdójúìwọ̀n kan kò ṣeé kọ sí tàbí ìlànà lọ́wọ́lọ́wọ́ kò lè ṣẹ̀dá wọn."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Àwọn àpò iṣẹ́ ìmúdójúìwọ̀n ṣeé kọ sí tàbí a lè ṣẹ̀dá wọn."
+
+msgid "Update apply file plan was generated."
+msgstr "A ti ṣẹ̀dá ètò fáìlì ìmúlò ìmúdójúìwọ̀n."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Àlàyé ìmọ́tọ́jú ẹ̀rọ ní àwọn ọ̀nà tí kò ṣeé yọ láìléwu."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Àwọn ibi ìyọkúrò tí ẹ̀rọ sọ dáa."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Àwọn fáìlì àtijọ́ tí ẹ̀rọ sọ ti kò sí nínú ìgbékalẹ̀ yìí tẹ́lẹ̀."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Ìmúdójúìwọ̀n tí a gbèrò yóò kọ lórí tàbí yọ àwọn ọ̀nà àmì tó wà tẹ́lẹ̀."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Ìmúdójúìwọ̀n tí a gbèrò kì í kọ lórí tàbí yọ àwọn ọ̀nà àmì tó wà tẹ́lẹ̀."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Àwọn fáìlì ìkópadà ìmúdójúìwọ̀n tuntun gbọ́dọ̀ wà lábẹ́ %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "A rí àwọn fáìlì ìkópadà Doctrine %s tuntun. Wọn yóò nílò àyẹ̀wò ààbò ìkópadà ìkànnì dátà lẹ́yìn ìmúlò fáìlì."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Àwọn àkójọ fáìlì ètò ìmúlò ìmúdójúìwọ̀n kan ni a gé nínú ìdáhùn JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Kò ṣeé kọ àlàyé ètò ìmúlò ìmúdójúìwọ̀n."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Kò ṣeé ṣe ìgbàsílẹ̀ ẹ̀rọ ìmúdójúìwọ̀n. Ipò HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Kò ṣeé ṣí fáìlì ibi ẹ̀rọ ìmúdójúìwọ̀n: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Àwọn ìgbàsílẹ̀ ìmúdójúìwọ̀n gbọ́dọ̀ lo orísun ìmúdójúìwọ̀n òṣèlú %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL ẹ̀rọ ìmúdójúìwọ̀n gbọ́dọ̀ lo HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Àwọn ìyẹ̀wò ààbò àkójọpọ̀ ìdàgbàsókè ti kọjá."
+
+msgid "Update package was extracted to staging."
+msgstr "A ti yọ àkójọpọ̀ ìdàgbàsókè sí ibi ìṣètò."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "A ti kó metadata ìmọ́tọ́jú àkójọpọ̀ tí a fọwọ́sí wọlé."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Àkójọpọ̀ ìdàgbàsókè kò ní %s. A ó dí ìfilọ́lẹ̀ fáìlì títí tí a ó fi pèsè metadata ìmọ́tọ́jú tí a fọwọ́sí."
+
+msgid "Staged package dry-run report was generated."
+msgstr "A ti ṣẹ̀dá ìròyìn ìdánwò-gbẹ́ àkójọpọ̀ tí a gbé sí ibi ìṣètò."
+
+msgid "Staging metadata was written."
+msgstr "A ti kọ metadata ibi ìṣètò."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Kò ṣeé ṣe láti yọ àkójọpọ̀ ìdàgbàsókè sí fódà ibi ìṣètò."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Kò ṣeé ṣe láti rí gbòngbò ìfilọ́lẹ̀ Chamilo nínú àkójọpọ̀ tí a gbé sí ibi ìṣètò."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Àkójọpọ̀ tí a gbé sí ibi ìṣètò kò ní ìwọlé Chamilo tí a nílò: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Àkójọpọ̀ tí a gbé sí ibi ìṣètò ní ìtòlẹ́sẹẹsẹ Chamilo tí a nírètí."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Àkójọpọ̀ tí a gbé sí ibi ìṣètò kò ní composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Àkójọpọ̀ tí a gbé sí ibi ìṣètò ní composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Àkójọpọ̀ tí a gbé sí ibi ìṣètò kò ní yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Àkójọpọ̀ tí a gbé sí ibi ìṣètò ní yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Kò ṣeé ṣe láti ṣe kóòdù metadata ibi ìṣètò."
+
+msgid "Unable to write staging metadata."
+msgstr "Kò ṣeé ṣe láti kọ metadata ibi ìṣètò."
+
+msgid "Update operation log created."
+msgstr "A ti ṣẹ̀dá àkọsílẹ̀ iṣẹ́ ìdàgbàsókè."
+
+msgid "Unable to write update operation log."
+msgstr "Kò ṣeé ṣe láti kọ àkọsílẹ̀ iṣẹ́ ìdàgbàsókè."
+
+msgid "Invalid update operation id."
+msgstr "Id iṣẹ́ ìdàgbàsókè kò tọ́."
 

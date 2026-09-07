@@ -37011,13 +37011,13 @@ msgid "Trusted signing key"
 msgstr "Patikimas pasirašymo raktas"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Įveskite APPLY UPDATE FILES patvirtinimui"
+msgstr "Patvirtinimui įveskite APPLY UPDATE FILES"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Įveskite RUN DATABASE MIGRATIONS duomenų bazės migracijoms patvirtinti"
+msgstr "Duomenų bazės migracijoms patvirtinti įveskite RUN DATABASE MIGRATIONS"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Įveskite RUN POST UPDATE ACTIONS patvirtinimui"
+msgstr "Patvirtinimui įveskite RUN POST UPDATE ACTIONS"
 
 msgid "Unknown update notice source."
 msgstr "Nežinomas atnaujinimo pranešimo šaltinis."
@@ -40383,154 +40383,154 @@ msgid "Update apply audit metadata was written."
 msgstr "Atnaujinimo taikymo audito metaduomenys įrašyti."
 
 msgid "Staged files applied successfully."
-msgstr ""
+msgstr "Paruošti failai sėkmingai pritaikyti."
 
 msgid "Unable to restore removed files: %s"
-msgstr ""
+msgstr "Nepavyko atkurti pašalintų failų: %s"
 
 msgid "Unable to roll back copied files: %s"
-msgstr ""
+msgstr "Nepavyko atšaukti nukopijuotų failų: %s"
 
 msgid "File rollback was executed after the update apply failure."
-msgstr ""
+msgstr "Po atnaujinimo pritaikymo nesėkmės buvo atliktas failų atšaukimas."
 
 msgid "Rollback failed: %s"
-msgstr ""
+msgstr "Atšaukimas nepavyko: %s"
 
 msgid "Unable to write update apply audit metadata: %s"
-msgstr ""
+msgstr "Nepavyko įrašyti atnaujinimo pritaikymo audito metaduomenų: %s"
 
 msgid "Unable to release update lock after failure: %s"
-msgstr ""
+msgstr "Nepavyko paleisti atnaujinimo užrakto po nesėkmės: %s"
 
 msgid "Staging path is required to apply update files."
-msgstr ""
+msgstr "Atnaujinimo failams pritaikyti reikalingas paruošimo kelias."
 
 msgid "Staging directory does not exist: %s"
-msgstr ""
+msgstr "Paruošimo katalogas neegzistuoja: %s"
 
 msgid "Chamilo update staging base directory does not exist."
-msgstr ""
+msgstr "Chamilo atnaujinimo paruošimo bazinis katalogas neegzistuoja."
 
 msgid "Staging directory must be inside var/update/staging."
-msgstr ""
+msgstr "Paruošimo katalogas turi būti kataloge var/update/staging."
 
 msgid "Staging directory is missing APPLY-PLAN.json."
-msgstr ""
+msgstr "Paruošimo kataloge trūksta APPLY-PLAN.json."
 
 msgid "Unable to read update apply plan metadata: %s"
-msgstr ""
+msgstr "Nepavyko perskaityti atnaujinimo pritaikymo plano metaduomenų: %s"
 
 msgid "Update apply plan metadata is not valid JSON: %s"
-msgstr ""
+msgstr "Atnaujinimo pritaikymo plano metaduomenys nėra galiojantis JSON: %s"
 
 msgid "Update apply plan metadata must be a JSON object."
-msgstr ""
+msgstr "Atnaujinimo pritaikymo plano metaduomenys turi būti JSON objektas."
 
 msgid "Update apply plan is missing the application_path field."
-msgstr ""
+msgstr "Atnaujinimo pritaikymo plane trūksta lauko application_path."
 
 msgid "Staged application path is not readable: %s"
-msgstr ""
+msgstr "Paruoštas programos kelias neskaitomas: %s"
 
 msgid "Staged application path must be inside the staging directory."
-msgstr ""
+msgstr "Paruoštas programos kelias turi būti paruošimo kataloge."
 
 msgid "Staged application path is missing composer.json."
-msgstr ""
+msgstr "Paruoštame programos kelyje trūksta composer.json."
 
 msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
-msgstr ""
+msgstr "Atnaujinimo pakete trūksta %s. Iš naujo paruoškite patikrintą paketą su pasirašytais valymo metaduomenimis."
 
 msgid "Update apply plan is missing the reviewed package cleanup metadata."
-msgstr ""
+msgstr "Atnaujinimo pritaikymo plane trūksta peržiūrėtų paketo valymo metaduomenų."
 
 msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
-msgstr ""
+msgstr "Atnaujinimo paketo valymo metaduomenys pasikeitė po to, kai buvo sugeneruotas pritaikymo planas. Prieš tęsdami iš naujo sukurkite pritaikymo planą."
 
 msgid "Update apply plan contains an invalid package removal list."
-msgstr ""
+msgstr "Atnaujinimo pritaikymo plane yra netinkamas paketo šalinimo sąrašas."
 
 msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
-msgstr ""
+msgstr "Atnaujinimo paketo valymo keliai pasikeitė po to, kai buvo sugeneruotas pritaikymo planas. Prieš tęsdami iš naujo sukurkite pritaikymo planą."
 
 msgid "Update apply plan is missing the reviewed removal path list."
-msgstr ""
+msgstr "Atnaujinimo pritaikymo plane trūksta peržiūrėto šalinimo kelių sąrašo."
 
 msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
-msgstr ""
+msgstr "Atnaujinimo pritaikymo plano šalinimo keliai nesutampa su pasirašytais paketo valymo metaduomenimis."
 
 msgid "Update lock path must be inside var/update."
-msgstr ""
+msgstr "Atnaujinimo užrakto kelias turi būti kataloge var/update."
 
 msgid "Update apply plan is missing the backup_path field."
-msgstr ""
+msgstr "Atnaujinimo pritaikymo plane trūksta lauko backup_path."
 
 msgid "Update backup path contains unsafe path segments."
-msgstr ""
+msgstr "Atnaujinimo atsarginės kopijos kelyje yra nesaugių kelio segmentų."
 
 msgid "Update backup path must be inside var/update/backups."
-msgstr ""
+msgstr "Atnaujinimo atsarginės kopijos kelias turi būti kataloge var/update/backups."
 
 msgid "Unable to acquire update lock. Another update may be in progress."
-msgstr ""
+msgstr "Nepavyko gauti atnaujinimo užrakto. Gali vykti kitas atnaujinimas."
 
 msgid "Unable to release update lock: %s"
-msgstr ""
+msgstr "Nepavyko paleisti atnaujinimo užrakto: %s"
 
 msgid "Update backup directory already exists: %s"
-msgstr ""
+msgstr "Atnaujinimo atsarginės kopijos katalogas jau egzistuoja: %s"
 
 msgid "Target directory cannot be created: %s"
-msgstr ""
+msgstr "Paskirties katalogo sukurti nepavyksta: %s"
 
 msgid "The planned update would overwrite an existing symbolic link: %s"
-msgstr ""
+msgstr "Planuojamas atnaujinimas perrašytų esamą simbolinę nuorodą: %s"
 
 msgid "Target file is not writable: %s"
-msgstr ""
+msgstr "Paskirties failas nerašomas: %s"
 
 msgid "Target file cannot be created: %s"
-msgstr ""
+msgstr "Paskirties failo sukurti nepavyksta: %s"
 
 msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
-msgstr ""
+msgstr "Nepavyko nustatyti Chamilo projekto katalogo prieš šalinant pasenusius failus."
 
 msgid "Update cleanup cannot remove protected path: %s"
-msgstr ""
+msgstr "Atnaujinimo valymas negali pašalinti apsaugoto kelio: %s"
 
 msgid "The planned update would remove an existing symbolic link: %s"
-msgstr ""
+msgstr "Planuojamas atnaujinimas pašalintų esamą simbolinę nuorodą: %s"
 
 msgid "Update cleanup supports files only, not directories: %s"
-msgstr ""
+msgstr "Atnaujinimo valymas palaiko tik failus, ne katalogus: %s"
 
 msgid "Obsolete target file is not readable for backup: %s"
-msgstr ""
+msgstr "Pasenęs paskirties failas neskaitomas atsarginei kopijai: %s"
 
 msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
-msgstr ""
+msgstr "Pasenusio paskirties failo negalima pašalinti su dabartinėmis katalogo teisėmis: %s"
 
 msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
-msgstr ""
+msgstr "Pasenęs paskirties failas nurodo už Chamilo projekto katalogo ribų: %s"
 
 msgid "Unable to back up target file: %s"
-msgstr ""
+msgstr "Nepavyko sukurti paskirties failo atsarginės kopijos: %s"
 
 msgid "Unable to write update backup metadata."
-msgstr ""
+msgstr "Nepavyko įrašyti atnaujinimo atsarginės kopijos metaduomenų."
 
 msgid "Unable to copy staged update file: %s"
-msgstr ""
+msgstr "Nepavyko nukopijuoti paruošto naujinimo failo: %s"
 
 msgid "Copied %d of %d staged files."
-msgstr ""
+msgstr "Nukopijuota %d iš %d paruoštų failų."
 
 msgid "Unable to remove package-declared obsolete file: %s"
-msgstr ""
+msgstr "Nepavyko pašalinti pakete nurodyto pasenusio failo: %s"
 
 msgid "Removed %d of %d package-declared obsolete files."
-msgstr ""
+msgstr "Pašalinta %d iš %d pakete nurodytų pasenusių failų."
 
 msgid "Unable to restore backed up file: %s"
 msgstr "Nepavyko atkurti atsarginės failo kopijos: %s"
@@ -40576,4 +40576,607 @@ msgstr "Kai kurių paskirties failų ar katalogų negalima rašyti arba pašalin
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Kad tai ištaisytumėte, laikinai pakeiskite viso Chamilo katalogo savininką į %s (žiniatinklio serverio naudotoją), pritaikykite atnaujinimą, po to pakeiskite savininką atgal į %s, tada nustatykite var/ (ir jo turinio) savininką atgal į %s, kad programa galėtų ir toliau į jį rašyti."
+
+msgid "Update package verification failed."
+msgstr "Naujinimo paketo patikra nepavyko."
+
+msgid "Update preflight checks failed."
+msgstr "Išankstiniai naujinimo patikrinimai nepavyko."
+
+msgid "Unable to stage update package."
+msgstr "Nepavyko paruošti naujinimo paketo."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Šiame serveryje po pritaikymo komandų vykdymas iš vartotojo sąsajos yra išjungtas."
+
+msgid "Missing required field: %s"
+msgstr "Trūksta privalomo lauko: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Nenurodytas naujinimo manifesto šaltinis ir nesukonfigūruotas numatytasis naujinimo manifesto URL."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Naujinimo manifesto URL turi naudoti oficialią naujinimų kilmę %s. Keisti galima tik manifesto kelią."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Vietiniai naujinimo manifesto keliai yra išjungti. Naudokite HTTPS manifesto URL arba vietiniams bandymams serveryje nustatykite CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Nenurodykite HTTP %s kelio. Palikite šį lauką tuščią, kad jis būtų atsisiųstas iš naujinimo manifesto."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Šioje aplinkoje vietiniai naujinimo %s keliai yra išjungti."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Šioje aplinkoje serveryje turi būti sukonfigūruoti patikimi naujinimų viešieji raktai."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Šioje aplinkoje naujinimo parašo tikrinimo praleidimas yra išjungtas."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Po pritaikymo naujinimo veiksmams vykdyti reikia patvirtinimo teksto \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Paruoštiems naujinimo failams pritaikyti reikia patvirtinimo teksto \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Nepavyko nustatyti projekto katalogo."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Duomenų bazės atsarginės kopijos šis naujinimo įrankis netvarko. Prieš vykdydami migracijas sukurkite ir patikrinkite duomenų bazės atsarginę kopiją."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine migracijų down() metodai negarantuoja ištrintų ar pakeistų duomenų atkūrimo."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Po pritaikymo metaduomenys rekomenduoja peržiūrėti duomenų bazės migracijas."
+
+msgid "No migration files were found in the staged package."
+msgstr "Paruoštame pakete migracijos failų nerasta."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Aptikti paruošti Doctrine migracijos failai."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine migracijos tikslas nustatytas pagal paruoštą paketą."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine migracijos bazinė linija turi blokuojančių problemų paruoštoms migracijoms."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine praneša apie istorinius migracijos bazinės linijos įspėjimus, tačiau bus peržiūrimos ir aiškiai vykdomos tik paruoštos %s migracijos."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine praneša apie istorinius migracijos bazinės linijos įspėjimus. Naujinimo įrankis po aiškaus patvirtinimo vykdys tik paruoštas %s migracijos klases."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine bazinė linija neturi blokuojančių problemų paruoštoms %s migracijoms."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Doctrine bandomasis vykdymas nepavyko bent vienai paruoštai migracijai. Kol tai neištaisyta, duomenų bazės migracijų nevykdykite."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Doctrine bandomasis vykdymas sėkmingai baigtas kiekvienai paruoštai migracijos klasei."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Prieš vykdant migracijas duomenų bazės atsarginė kopija turi būti sukurta už šio naujinimo įrankio ribų."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Duomenų bazės migracijoms peržiūrėti būtinas paruošimo kelias."
+
+msgid "Unable to read update %s: %s"
+msgstr "Nepavyko perskaityti naujinimo %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Naujinimo %s JSON neteisingas: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Naujinimo %s JSON turi būti objektas."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Po pritaikymo patikrinimų metaduomenyse nėra galiojančio veiksmų sąrašo."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Šiam paruoštam naujinimui duomenų bazės migracijos nebuvo rekomenduotos."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Naujinimo metaduomenyse trūksta paruošto programos kelio."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Planuotas paruoštos migracijos failas nerastas: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Nepavyko perskaityti paruošto migracijos failo: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Iš getDescription() nepavyko išgauti aprašymo."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Naujinimo vykdyklė palaiko tik %s paruoštas migracijas: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Nepavyko įrašyti migracijos saugos metaduomenų: %s"
+
+msgid "Migration safety check failed."
+msgstr "Migracijos saugos patikra nepavyko."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Aptiktas nesaugus paruoštos migracijos santykinis kelias: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Įdiegtos Chamilo versijos nepavyko nustatyti automatiškai. Tęskite tik patvirtinę, kad šis naujinimas yra suderinamas."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Įdiegta arba tikslinė versija nėra palyginamo semantinio versijos formato. Tęskite tik po rankinio patikrinimo."
+
+msgid "An update is available."
+msgstr "Yra naujinimas."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Įdiegta versija jau sutampa su manifesto versija."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Manifesto versija senesnė nei įdiegta versija. Versijos sumažinimas pagal numatytuosius nustatymus blokuojamas."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Paruošti failai nebuvo sėkmingai pritaikyti. Patikros po pritaikymo negali būti tęsiamos."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Pritaikymo rezultato metaduomenys sėkmingai nuskaityti."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Rekomendacijos dėl veiksmų po pritaikymo sugeneruotos."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Paruoštame pakete aptiktos duomenų bazės migracijos. Paleiskite jas tik patvirtinę, kad failų atnaujinimas teisingas ir yra duomenų bazės atsarginė kopija."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Norint paleisti patikras po pritaikymo, būtinas paruošimo kelias."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Atnaujinimas %s nėra galiojantis JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Atnaujinimas %s turi būti JSON objektas."
+
+msgid "Composer dependencies"
+msgstr "Composer priklausomybės"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Composer metaduomenys buvo įtraukti į paruoštą paketą. Paleiskite Composer install iš programos šaknies prieš laikydami atnaujinimą baigtu."
+
+msgid "Frontend assets"
+msgstr "Priekinės dalies ištekliai"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Su priekine dalimi susiję failai buvo įtraukti į paruoštą paketą. Po priklausomybių įdiegimo iš naujo sukurkite gamybinius išteklius."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Paruoštame pakete aptikti Doctrine migracijos failai. Prieš paleisdami migracijas patvirtinkite, kad yra duomenų bazės atsarginė kopija."
+
+msgid "Symfony cache"
+msgstr "Symfony podėlis"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Išvalykite Symfony podėlį po atnaujinimo failų pritaikymo ir visų reikalingų komandų paleidimo."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Nepavyko įrašyti patikrų po pritaikymo metaduomenų."
+
+msgid "Post-apply check failed."
+msgstr "Patikra po pritaikymo nepavyko."
+
+msgid "Update package is not readable: %s"
+msgstr "Atnaujinimo paketas neskaitomas: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Atnaujinimo paketas nėra galiojantis ZIP archyvas."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Atnaujinimo paketo ZIP archyvas tuščias."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Atnaujinimo pakete yra neskaitomas ZIP įrašas."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Atnaujinimo pakete yra nesaugus absoliutus kelias: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Atnaujinimo pakete yra kelio perėjimo įrašas: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Atnaujinimo pakete yra simbolinė nuoroda: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Pradedami veiksmai po pritaikymo."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Komandų po pritaikymo vykdymui reikalingas aiškus patvirtinimas."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Rekomendacijų po pritaikymo metaduomenys sėkmingai nuskaityti."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Veiksmai po pritaikymo patvirtinti pagal rekomendacijų ataskaitą."
+
+msgid "Post-apply actions were selected."
+msgstr "Veiksmai po pritaikymo pasirinkti."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Išplėstiniams veiksmams po pritaikymo reikalingas aiškus išplėstinis patvirtinimas."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Išplėstiniai veiksmai po pritaikymo aiškiai patvirtinti."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Pasirinktos komandos po pritaikymo sėkmingai įvykdytos."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Komandų po pritaikymo paleidimo metaduomenys įrašyti."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Veiksmai po pritaikymo sėkmingai baigti."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Netinkamas atnaujinimo komandos po pritaikymo apibrėžimas: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Vykdomas veiksmas po pritaikymo: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Vykdoma komanda %d iš %d veiksmui %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Veiksmas po pritaikymo nepavyko: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Veiksmas po pritaikymo \"%s\" nepavyko su išėjimo kodu %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Veiksmas po pritaikymo baigtas: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Norint paleisti veiksmus po pritaikymo, būtinas paruošimo kelias."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Nėra rekomenduojamų veiksmų po pritaikymo, kuriuos būtų galima paleisti."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Nėra leistinų veiksmų po pritaikymo, kuriuos būtų galima paleisti."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Šiam atnaujinimui veiksmas po pritaikymo neleidžiamas: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Duomenų bazės migracijoms prieš vykdymą reikalinga migracijos saugos peržiūra."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Duomenų bazės migracijų negalima paleisti, nes migracijos saugos peržiūra nepraėjo."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Duomenų bazės migracijų negalima paleisti, nes migracijos saugos peržiūroje nėra paruoštų migracijų sąrašo."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Duomenų bazės migracijų negalima paleisti, nes migracijos saugos peržiūroje yra netinkamas migracijos įrašas."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Atnaujinimo vykdytojas gali vykdyti tik paruoštas %s migracijas."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Duomenų bazės migracijų negalima paleisti, nes paruoštų migracijų saugos peržiūra pranešė apie blokuojančias klaidas."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine praneša apie migracijų bazinės linijos įspėjimus. Bus aiškiai vykdomos tik paruoštos %s migracijų klasės."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Duomenų bazės migracijoms reikia patvirtinimo, kad egzistuoja duomenų bazės atsarginė kopija."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Duomenų bazės migracijoms reikia patvirtinimo teksto \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Duomenų bazės migracijos saugos peržiūra buvo atlikta prieš vykdymą."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Duomenų bazės atsarginės kopijos egzistavimas buvo aiškiai patvirtintas."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Buvo pateikta duomenų bazės migracijos saugos peržiūra ir atsarginės kopijos patvirtinimas."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Duomenų bazės migracijos buvo vykdomos po aiškaus duomenų bazės atsarginės kopijos patvirtinimo. Atnaujintuvas nesukūrė duomenų bazės atsarginės kopijos."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Reikiami vykdomųjų failų leidimai po pritaikymo buvo suvienodinti."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Nepavyko paleisti duomenų bazės migracijų, nes nerastas bin/console."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Pasirinktos po pritaikymo komandos turi reikiamus rašomus kelius."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Po pritaikymo komandų rašomi keliai buvo patikrinti."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Išplėstiniai veiksmai po pritaikymo gali keisti priklausomybes, sugeneruotus išteklius arba duomenų bazę. Prieš tęsdami peržiūrėkite atsargines kopijas."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer negali būti saugiai paleistas iš žiniatinklio atnaujintuvo, nes Composer sugeneruotą failą \"%s\" valdo UID %d, o PHP vykdymo aplinka naudoja UID %d. Paleiskite Composer rankiniu būdu kaip diegimo savininkas, tada tęskite likusius veiksmus po pritaikymo."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Kelias, reikalingas veiksmui po pritaikymo \"%s\", nėra rašomas: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Tėvinis katalogas, reikalingas veiksmui po pritaikymo \"%s\", nėra rašomas: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Nepavyko nuskaityti reikiamo vykdomojo failo po pritaikymo leidimų: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Nepavyko pažymėti reikiamo vykdomojo failo po pritaikymo kaip vykdomojo: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Reikiamas vykdomasis failas po pritaikymo vis dar nėra vykdomasis po chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Vykdymo leidimas buvo suvienodintas."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Nepavyko įrašyti izoliuotos Git konfigūracijos po pritaikymo komandoms."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Panašu, kad jau vykdoma kita atnaujinimo operacija. Pašalinkite var/update/update.lock tik jei joks atnaujinimas nėra aktyvus."
+
+msgid "Unable to create update lock: %s"
+msgstr "Nepavyko sukurti atnaujinimo užrakto: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Nepavyko įrašyti po pritaikymo komandos vykdymo metaduomenų: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Atnaujinimo manifeste trūksta paketo bloko."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Atnaujinimo manifesto parašo blokas turi būti objektas."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Atnaujinimo manifesto reikalavimų blokas turi būti objektas."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Atnaujinimo paketo sha256 turi būti 64 simbolių šešioliktainė eilutė."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Atnaujinimo manifeste trūksta privalomo eilutės lauko \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Atnaujinimo manifesto laukas \"%s\" turi būti eilutė."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Atnaujinimo manifestas nėra galiojantis JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Atnaujinimo manifesto JSON turi būti objektas."
+
+msgid "Manifest source cannot be empty."
+msgstr "Manifesto šaltinis negali būti tuščias."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Atnaujinimo manifesto URL turi naudoti oficialią atnaujinimo kilmę %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Nepavyko atsisiųsti atnaujinimo manifesto. HTTP būsena: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Manifesto failas neskaitomas: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Nepavyko nuskaityti manifesto failo: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Atnaujinimo manifesto URL turi naudoti HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Atnaujinimo paketo metaduomenys neskaitomi: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Nepavyko nuskaityti atnaujinimo paketo metaduomenų: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Atnaujinimo paketo metaduomenys nėra galiojantis JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Atnaujinimo paketo metaduomenys turi būti JSON objektas."
+
+msgid "Update package metadata format must be %d."
+msgstr "Atnaujinimo paketo metaduomenų formatas turi būti %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Atnaujinimo paketo metaduomenų laukas \"remove\" turi būti masyvas."
+
+msgid "Update package removal paths must be strings."
+msgstr "Atnaujinimo paketo šalinimo keliai turi būti eilutės."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Atnaujinimo paketo metaduomenys negali pašalinti apsaugoto kelio: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Atnaujinimo paketas negali įtraukti ir pašalinti to paties kelio: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Nepavyko apskaičiuoti atnaujinimo paketo metaduomenų sha256."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Atnaujinimo paketo šalinimo kelias negali būti tuščias."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Atnaujinimo paketo šalinimo kelyje yra nulinis baitas."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Atnaujinimo paketo šalinimo kelias turi būti santykinis: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Atnaujinimo paketo šalinimo kelias turi nesaugią dalį: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Atnaujinimo taikymo planui sudaryti reikalingas paruošimo kelias."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Paruošimo kataloge trūksta STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Nepavyko perskaityti paruošimo metaduomenų: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Paruošimo metaduomenys nėra galiojantis JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Paruošimo metaduomenys turi būti JSON objektas."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Paruošimo metaduomenyse trūksta lauko application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Atnaujinimo pakete trūksta %s. Prieš taikant failus reikalingi pasirašyti valymo metaduomenys."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Paruošimo metaduomenyse nėra pasirašytų paketo valymo metaduomenų, užfiksuotų išskleidimo metu."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Atnaujinimo paketo valymo metaduomenys pasikeitė po paruošimo. Prieš tęsdami iš naujo paruoškite patikrintą paketą."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Paruošimo metaduomenyse nėra galiojančio paketo šalinimo sąrašo."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Atnaujinimo paketo valymo keliai pasikeitė po paruošimo. Prieš tęsdami iš naujo paruoškite patikrintą paketą."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Pasirašyti paketo valymo metaduomenys nuo paruošimo nepasikeitė."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Atnaujinimo užrakto failas jau egzistuoja. Gali vykti kitas atnaujinimas."
+
+msgid "Update lock directory is not writable."
+msgstr "Atnaujinimo užrakto katalogas nėra rašomas."
+
+msgid "No update lock is currently active."
+msgstr "Šiuo metu nėra aktyvaus atnaujinimo užrakto."
+
+msgid "Update backup directory is not writable."
+msgstr "Atnaujinimo atsarginės kopijos katalogas nėra rašomas."
+
+msgid "Update backup directory is writable."
+msgstr "Atnaujinimo atsarginės kopijos katalogas yra rašomas."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Dabartinis procesas negali sukurti atnaujinimo atsarginės kopijos katalogo."
+
+msgid "Update backup directory can be created."
+msgstr "Atnaujinimo atsarginės kopijos katalogą galima sukurti."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Kai kurie atnaujinimo darbiniai katalogai nėra rašomi arba dabartinis procesas jų negali sukurti."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Atnaujinimo darbiniai katalogai yra rašomi arba juos galima sukurti."
+
+msgid "Update apply file plan was generated."
+msgstr "Atnaujinimo failų taikymo planas sugeneruotas."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Paketo valymo metaduomenyse yra kelių, kurių negalima saugiai pašalinti."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Pakete nurodyti šalinimo tikslai yra saugūs."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Kai kurių pakete nurodytų pasenusių failų šioje diegimoje jau nėra."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Planuojamas atnaujinimas perrašytų arba pašalintų esamas simbolines nuorodas."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Planuojamas atnaujinimas neperrašo ir nepašalina esamų simbolinių nuorodų."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Nauji atnaujinimo migracijos failai turi būti patalpinti po %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Aptikti nauji %s Doctrine migracijos failai. Po failų taikymo jiems reikės duomenų bazės migracijos saugos peržiūros."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Kai kurie atnaujinimo taikymo plano failų sąrašai JSON atsakyme buvo sutrumpinti."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Nepavyko įrašyti atnaujinimo taikymo plano metaduomenų."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Nepavyko atsisiųsti atnaujinimo paketo. HTTP būsena: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Nepavyko atidaryti atnaujinimo paketo paskirties failo: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Atnaujinimai turi būti atsisiunčiami iš oficialaus atnaujinimų šaltinio %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "Atnaujinimo paketo URL turi naudoti HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Atnaujinimo paketo archyvo saugos patikros sėkmingos."
+
+msgid "Update package was extracted to staging."
+msgstr "Atnaujinimo paketas išskleistas į paruošimą."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Pasirašyti paketo valymo metaduomenys įkelti."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Atnaujinimo pakete nėra %s. Failų taikymas bus blokuojamas, kol bus pateikti pasirašyti valymo metaduomenys."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Paruošto paketo bandomojo paleidimo ataskaita sugeneruota."
+
+msgid "Staging metadata was written."
+msgstr "Paruošimo metaduomenys įrašyti."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Nepavyko išskleisti atnaujinimo paketo į paruošimo katalogą."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Paruoštame pakete nepavyko rasti Chamilo programos šaknies."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Paruoštame pakete trūksta privalomo Chamilo įrašo: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Paruoštame pakete yra numatyta Chamilo struktūra."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Paruoštame pakete nėra composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Paruoštame pakete yra composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Paruoštame pakete nėra yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Paruoštame pakete yra yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Nepavyko užkoduoti paruošiamųjų metaduomenų."
+
+msgid "Unable to write staging metadata."
+msgstr "Nepavyko įrašyti paruošiamųjų metaduomenų."
+
+msgid "Update operation log created."
+msgstr "Atnaujinimo operacijos žurnalas sukurtas."
+
+msgid "Unable to write update operation log."
+msgstr "Nepavyko įrašyti atnaujinimo operacijos žurnalo."
+
+msgid "Invalid update operation id."
+msgstr "Neteisingas atnaujinimo operacijos id."
 

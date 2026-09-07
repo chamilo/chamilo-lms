@@ -37010,15 +37010,6 @@ msgstr "Trusted public key"
 msgid "Trusted signing key"
 msgstr "Trusted signing key"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Type APPLY UPDATE FILES to confirm"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Type RUN POST UPDATE ACTIONS to confirm"
-
 msgid "Unknown update notice source."
 msgstr "Unknown update notice source."
 

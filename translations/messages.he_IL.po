@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "בכנות"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "דוגמת נוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "דוגמת נוסחה: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "טווחים משתנים"
@@ -37023,13 +37023,13 @@ msgid "Trusted signing key"
 msgstr "מפתח חתימה מהימן"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "הקלד APPLY UPDATE FILES לאישור"
+msgstr "הקלידו APPLY UPDATE FILES לאישור"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "הקלד RUN DATABASE MIGRATIONS לאישור מיגרציות מסד הנתונים"
+msgstr "הקלידו RUN DATABASE MIGRATIONS לאישור מיגרציות מסד הנתונים"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "הקלד RUN POST UPDATE ACTIONS לאישור"
+msgstr "הקלידו RUN POST UPDATE ACTIONS לאישור"
 
 msgid "Unknown update notice source."
 msgstr "מקור הודעת העדכון אינו ידוע."
@@ -40588,4 +40588,607 @@ msgstr "לא ניתן לכתוב או להסיר חלק מקבצי או תיקי
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "כדי לתקן זאת, שנו באופן זמני את הבעלים של כל תיקיית Chamilo ל-%s (משתמש שרת האינטרנט), החילו את העדכון, החזירו את הבעלים ל-%s לאחר מכן, ואז הגדירו את הבעלים של var/ (ותוכנו) חזרה ל-%s כדי שהיישום יוכל להמשיך לכתוב אליו."
+
+msgid "Update package verification failed."
+msgstr "אימות חבילת העדכון נכשל."
+
+msgid "Update preflight checks failed."
+msgstr "בדיקות מקדימות לעדכון נכשלו."
+
+msgid "Unable to stage update package."
+msgstr "לא ניתן להכין את חבילת העדכון לשלב הביניים."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "הרצת פקודות לאחר החלה מממשק המשתמש מושבתת בשרת זה."
+
+msgid "Missing required field: %s"
+msgstr "שדה חובה חסר: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "לא סופק מקור למניפסט העדכון ולא הוגדר כתובת URL ברירת מחדל למניפסט עדכון."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "כתובת URL של מניפסט העדכון חייבת להשתמש במקור העדכון הרשמי %s. ניתן לשנות רק את נתיב המניפסט."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "נתיבי מניפסט עדכון מקומיים מושבתים. השתמשו בכתובת HTTPS למניפסט או הגדירו CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 בסביבת השרת לבדיקות מקומיות."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "אל תספקו נתיב HTTP %s. השאירו שדה זה ריק כדי להוריד אותו ממניפסט העדכון."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "נתיבי עדכון מקומיים מסוג %s מושבתים בסביבה זו."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "יש להגדיר בשרת מפתחות ציבוריים מהימנים לעדכון בסביבה זו."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "דילוג על אימות חתימת העדכון מושבת בסביבה זו."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "הרצת פעולות עדכון לאחר החלה דורשת את טקסט האישור \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "החלת קבצי עדכון בשלב הביניים דורשת את טקסט האישור \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "לא ניתן לפתור את תיקיית הפרויקט."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "גיבוי מסד הנתונים אינו מנוהל על ידי מעדכן זה. צרו ואמתו גיבוי של מסד הנתונים לפני הרצת מיגרציות."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "שיטות down() של מיגרציות Doctrine אינן מבטיחות שחזור של נתונים שנמחקו או שעברו טרנספורמציה."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "מטא-נתונים לאחר החלה ממליצים על סקירת מיגרציות מסד הנתונים."
+
+msgid "No migration files were found in the staged package."
+msgstr "לא נמצאו קובצי מיגרציה בחבילה שבשלב הביניים."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "זוהו קובצי מיגרציה של Doctrine בשלב הביניים."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "יעד מיגרציית Doctrine נפתר מהחבילה שבשלב הביניים."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "לבסיס מיגרציות Doctrine יש בעיות חוסמות עבור מיגרציות שבשלב הביניים."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine מדווח על אזהרות היסטוריות בבסיס המיגרציות, אך רק מיגרציות %s שבשלב הביניים ייסקרו ויופעלו במפורש."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine מדווח על אזהרות היסטוריות בבסיס המיגרציות. המעדכן יפעיל רק מחלקות מיגרציה %s שבשלב הביניים לאחר אישור מפורש."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "לבסיס Doctrine אין בעיה חוסמת עבור מיגרציות %s שבשלב הביניים."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "הרצת ניסיון (dry-run) של מיגרציית Doctrine נכשלה עבור מיגרציה אחת לפחות שבשלב הביניים. אל תריצו מיגרציות מסד נתונים עד שזה יתוקן."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "הרצת ניסיון (dry-run) של Doctrine הושלמה בהצלחה עבור כל מחלקת מיגרציה שבשלב הביניים."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "יש ליצור גיבוי של מסד הנתונים מחוץ למעדכן זה לפני הרצת מיגרציות."
+
+msgid "Staging path is required to review database migrations."
+msgstr "נתיב שלב הביניים נדרש לסקירת מיגרציות מסד הנתונים."
+
+msgid "Unable to read update %s: %s"
+msgstr "לא ניתן לקרוא את %s של העדכון: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON של %s בעדכון אינו תקין: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON של %s בעדכון חייב להיות אובייקט."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "מטא-נתוני בדיקות לאחר החלה אינם מכילים רשימת פעולות תקפה."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "מיגרציות מסד נתונים לא הומלצו עבור עדכון זה שבשלב הביניים."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "במטא-נתוני העדכון חסר נתיב היישום שבשלב הביניים."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "קובץ המיגרציה המתוכנן שבשלב הביניים לא נמצא: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "לא ניתן לקרוא את קובץ המיגרציה שבשלב הביניים: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "לא ניתן היה לחלץ תיאור מ-getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "רק מיגרציות %s שבשלב הביניים נתמכות על ידי מריץ העדכון: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "לא ניתן לכתוב מטא-נתוני בטיחות למיגרציה: %s"
+
+msgid "Migration safety check failed."
+msgstr "בדיקת בטיחות המיגרציה נכשלה."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "זוהה נתיב מיגרציה יחסי לא בטוח בשלב הביניים: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "לא ניתן היה לזהות אוטומטית את גרסת Chamilo המותקנת. המשיכו רק לאחר אישור שעדכון זה תואם."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "הגרסה המותקנת או גרסת היעד אינן בפורמט גרסה סמנטית בר-השוואה. המשיכו רק לאחר אימות ידני."
+
+msgid "An update is available."
+msgstr "יש עדכון זמין."
+
+msgid "The installed version already matches the manifest version."
+msgstr "הגרסה המותקנת כבר תואמת לגרסת המניפסט."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "גרסת המניפסט ישנה יותר מהגרסה המותקנת. שדרוגים לאחור חסומים כברירת מחדל."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "הקבצים המבוימים לא הוחלו בהצלחה. לא ניתן להמשיך בבדיקות לאחר ההחלה."
+
+msgid "Apply result metadata was read successfully."
+msgstr "מטא-נתוני תוצאת ההחלה נקראו בהצלחה."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "נוצרו המלצות לפעולות לאחר ההחלה."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "זוהו מיגרציות מסד נתונים בחבילה המבוימת. הפעילו אותן רק לאחר אישור שהעדכון לקבצים תקין ושקיים גיבוי למסד הנתונים."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "נדרש נתיב בימוי כדי להריץ בדיקות לאחר ההחלה."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "העדכון %s אינו JSON תקין: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "העדכון %s חייב להיות אובייקט JSON."
+
+msgid "Composer dependencies"
+msgstr "תלויות Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "מטא-נתוני Composer נכללו בחבילה המבוימת. הריצו Composer install משורש היישום לפני שתחשבו את העדכון כהושלם."
+
+msgid "Frontend assets"
+msgstr "נכסי חזית"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "קבצים הקשורים לחזית נכללו בחבילה המבוימת. בנו מחדש נכסי ייצור לאחר התקנת התלויות."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "זוהו קבצי מיגרציה של Doctrine בחבילה המבוימת. ודאו שקיים גיבוי למסד הנתונים לפני הרצת המיגרציות."
+
+msgid "Symfony cache"
+msgstr "מטמון Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "נקו את מטמון Symfony לאחר החלת קבצי העדכון והרצת כל הפקודות הנדרשות."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "לא ניתן לכתוב מטא-נתונים של בדיקות לאחר ההחלה."
+
+msgid "Post-apply check failed."
+msgstr "בדיקה לאחר ההחלה נכשלה."
+
+msgid "Update package is not readable: %s"
+msgstr "חבילת העדכון אינה ניתנת לקריאה: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "חבילת העדכון אינה ארכיון ZIP תקין."
+
+msgid "Update package ZIP archive is empty."
+msgstr "ארכיון ZIP של חבילת העדכון ריק."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "חבילת העדכון מכילה רשומת ZIP שאינה ניתנת לקריאה."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "חבילת העדכון מכילה נתיב מוחלט לא בטוח: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "חבילת העדכון מכילה רשומת מעבר נתיב: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "חבילת העדכון מכילה קישור סימבולי: %s"
+
+msgid "Starting post-apply actions."
+msgstr "מתחיל פעולות לאחר ההחלה."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "הרצת פקודות לאחר ההחלה דורשת אישור מפורש."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "מטא-נתוני המלצות לאחר ההחלה נקראו בהצלחה."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "פעולות לאחר ההחלה אומתו מול דוח ההמלצות."
+
+msgid "Post-apply actions were selected."
+msgstr "נבחרו פעולות לאחר ההחלה."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "פעולות מתקדמות לאחר ההחלה דורשות אישור מתקדם מפורש."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "פעולות מתקדמות לאחר ההחלה אושרו במפורש."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "הפקודות שנבחרו לאחר ההחלה הושלמו בהצלחה."
+
+msgid "Post-apply command run metadata was written."
+msgstr "מטא-נתוני הרצת פקודות לאחר ההחלה נכתבו."
+
+msgid "Post-apply actions completed successfully."
+msgstr "פעולות לאחר ההחלה הושלמו בהצלחה."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "הגדרת פקודת עדכון לאחר ההחלה אינה תקינה: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "מריץ פעולה לאחר ההחלה: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "מריץ פקודה %d מתוך %d עבור %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "פעולה לאחר ההחלה נכשלה: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "פעולת לאחר ההחלה \"%s\" נכשלה עם קוד יציאה %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "פעולה לאחר ההחלה הושלמה: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "נדרש נתיב בימוי כדי להריץ פעולות לאחר ההחלה."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "אין פעולות מומלצות לאחר ההחלה להרצה."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "אין פעולות מותרות לאחר ההחלה להרצה."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "פעולה לאחר ההחלה אינה מותרת עבור עדכון זה: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "מיגרציות מסד נתונים דורשות סקירת בטיחות מיגרציה לפני הביצוע."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "לא ניתן להריץ מיגרציות מסד נתונים כי סקירת בטיחות המיגרציה לא עברה."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "לא ניתן להריץ מיגרציות מסד נתונים כי סקירת בטיחות המיגרציה לא רשמה מיגרציות מבוימות."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "לא ניתן להריץ מיגרציות מסד נתונים כי סקירת בטיחות המיגרציה מכילה רשומת מיגרציה לא תקינה."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "רק מיגרציות %s מבוימות יכולות להתבצע על ידי מריץ העדכון."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "לא ניתן להריץ מיגרציות מסד נתונים כי סקירת בטיחות המיגרציה המבוימת דיווחה על שגיאות חוסמות."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine מדווח על אזהרות קו בסיס להגירות. רק מחלקות ההגירה המבוימות %s יבוצעו במפורש."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "הגירות מסד הנתונים דורשות אישור שקיים גיבוי של מסד הנתונים."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "הגירות מסד הנתונים דורשות את טקסט האישור \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "סקירת הבטיחות של הגירת מסד הנתונים הושלמה לפני הביצוע."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "קיום גיבוי מסד הנתונים אושר במפורש."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "סופקו סקירת בטיחות להגירת מסד הנתונים ואישור גיבוי."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "הגירות מסד הנתונים בוצעו לאחר אישור מפורש לקיום גיבוי מסד הנתונים. המעדכן לא יצר את גיבוי מסד הנתונים."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "הרשאות ההרצה הנדרשות לאחר היישום הותאמו."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "לא ניתן להריץ הגירות מסד נתונים כי bin/console לא נמצא."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "לפקודות שנבחרו לאחר היישום יש את הנתיבים הניתנים לכתיבה הנדרשים."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "נתיבים הניתנים לכתיבה לפקודות לאחר היישום אומתו."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "פעולות מתקדמות לאחר היישום יכולות לשנות תלויות, נכסים שנוצרו או את מסד הנתונים. בדקו גיבויים לפני ההמשך."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "לא ניתן להריץ את Composer בבטחה ממעדכן האינטרנט כי הקובץ שנוצר על ידי Composer \"%s\" בבעלות UID %d בעוד שזמן הריצה של PHP משתמש ב-UID %d. הריצו את Composer ידנית כבעל הפריסה, ואז המשיכו עם שאר הפעולות לאחר היישום."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "הנתיב הנדרש לפעולה לאחר היישום \"%s\" אינו ניתן לכתיבה: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "תיקיית האב הנדרשת לפעולה לאחר היישום \"%s\" אינה ניתנת לכתיבה: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "לא ניתן לקרוא הרשאות לקובץ ההרצה הנדרש לאחר היישום: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "לא ניתן לסמן את קובץ ההרצה הנדרש לאחר היישום כניתן להרצה: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "קובץ ההרצה הנדרש לאחר היישום עדיין אינו ניתן להרצה לאחר chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "הרשאת ההרצה הותאמה."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "לא ניתן לכתוב תצורת Git מבודדת לפקודות לאחר היישום."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "נראה שפעולת עדכון אחרת רצה. הסירו את var/update/update.lock רק אם אין עדכון פעיל."
+
+msgid "Unable to create update lock: %s"
+msgstr "לא ניתן ליצור נעילת עדכון: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "לא ניתן לכתוב מטא-נתונים של הרצת פקודה לאחר היישום: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "במניפסט העדכון חסר בלוק החבילה."
+
+msgid "Update manifest signature block must be an object."
+msgstr "בלוק החתימה במניפסט העדכון חייב להיות אובייקט."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "בלוק הדרישות במניפסט העדכון חייב להיות אובייקט."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 של חבילת העדכון חייב להיות מחרוזת הקסדצימלית בת 64 תווים."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "במניפסט העדכון חסר שדה מחרוזת נדרש \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "שדה מניפסט העדכון \"%s\" חייב להיות מחרוזת."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "מניפסט העדכון אינו JSON תקין: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON של מניפסט העדכון חייב להיות אובייקט."
+
+msgid "Manifest source cannot be empty."
+msgstr "מקור המניפסט אינו יכול להיות ריק."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "כתובת ה-URL של מניפסט העדכון חייבת להשתמש במקור העדכון הרשמי %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "לא ניתן להוריד את מניפסט העדכון. סטטוס HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "קובץ המניפסט אינו ניתן לקריאה: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "לא ניתן לקרוא את קובץ המניפסט: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "כתובת ה-URL של מניפסט העדכון חייבת להשתמש ב-HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "מטא-נתוני חבילת העדכון אינם ניתנים לקריאה: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "לא ניתן לקרוא מטא-נתונים של חבילת העדכון: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "מטא-נתוני חבילת העדכון אינם JSON תקין: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "מטא-נתוני חבילת העדכון חייבים להיות אובייקט JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "פורמט מטא-נתוני חבילת העדכון חייב להיות %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "שדה המטא-נתונים \"remove\" בחבילת העדכון חייב להיות מערך."
+
+msgid "Update package removal paths must be strings."
+msgstr "נתיבי ההסרה בחבילת העדכון חייבים להיות מחרוזות."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "מטא-נתוני חבילת העדכון אינם יכולים להסיר נתיב מוגן: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "חבילת העדכון אינה יכולה לכלול ולהסיר את אותו נתיב: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "לא ניתן לחשב sha256 של מטא-נתוני חבילת העדכון."
+
+msgid "Update package removal path cannot be empty."
+msgstr "נתיב ההסרה בחבילת העדכון אינו יכול להיות ריק."
+
+msgid "Update package removal path contains a null byte."
+msgstr "נתיב ההסרה בחבילת העדכון מכיל בית null."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "נתיב ההסרה בחבילת העדכון חייב להיות יחסי: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "נתיב הסרת חבילת העדכון מכיל מקטע לא בטוח: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "נתיב הביניים נדרש לבניית תוכנית החלת עדכון."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "בתיקיית הביניים חסר הקובץ STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "לא ניתן לקרוא מטא-נתונים של הביניים: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "מטא-נתוני הביניים אינם JSON תקין: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "מטא-נתוני הביניים חייבים להיות אובייקט JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "במטא-נתוני הביניים חסר השדה application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "בחבילת העדכון חסר %s. נדרשים מטא-נתוני ניקוי חתומים לפני שניתן להחיל קבצים."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "מטא-נתוני הביניים אינם מכילים את מטא-נתוני ניקוי החבילה החתומים שנרשמו במהלך החילוץ."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "מטא-נתוני ניקוי חבילת העדכון השתנו לאחר הביניים. יש לבצע שוב ביניים לחבילה המאומתת לפני המשך."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "מטא-נתוני הביניים אינם מכילים רשימת הסרת חבילה תקפה."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "נתיבי ניקוי חבילת העדכון השתנו לאחר הביניים. יש לבצע שוב ביניים לחבילה המאומתת לפני המשך."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "מטא-נתוני ניקוי החבילה החתומים לא השתנו מאז הביניים."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "קובץ נעילת עדכון כבר קיים. ייתכן שעדכון אחר מתבצע."
+
+msgid "Update lock directory is not writable."
+msgstr "תיקיית נעילת העדכון אינה ניתנת לכתיבה."
+
+msgid "No update lock is currently active."
+msgstr "אין כרגע נעילת עדכון פעילה."
+
+msgid "Update backup directory is not writable."
+msgstr "תיקיית גיבוי העדכון אינה ניתנת לכתיבה."
+
+msgid "Update backup directory is writable."
+msgstr "תיקיית גיבוי העדכון ניתנת לכתיבה."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "לא ניתן ליצור את תיקיית גיבוי העדכון על ידי התהליך הנוכחי."
+
+msgid "Update backup directory can be created."
+msgstr "ניתן ליצור את תיקיית גיבוי העדכון."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "חלק מתיקיות העבודה של העדכון אינן ניתנות לכתיבה או לא ניתן ליצור אותן על ידי התהליך הנוכחי."
+
+msgid "Update working directories are writable or can be created."
+msgstr "תיקיות העבודה של העדכון ניתנות לכתיבה או שניתן ליצור אותן."
+
+msgid "Update apply file plan was generated."
+msgstr "תוכנית קבצי החלת העדכון נוצרה."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "מטא-נתוני ניקוי החבילה מכילים נתיבים שלא ניתן להסיר בבטחה."
+
+msgid "Package-declared removal targets are safe."
+msgstr "יעדי ההסרה שהוגדרו בחבילה בטוחים."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "חלק מהקבצים המיושנים שהוגדרו בחבילה כבר אינם קיימים בהתקנה זו."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "העדכון המתוכנן ידרוס או יסיר קישורים סימבוליים קיימים."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "העדכון המתוכנן אינו דורס או מסיר קישורים סימבוליים קיימים."
+
+msgid "New update migration files must be placed under %s."
+msgstr "קבצי מיגרציה חדשים של עדכון חייבים להיות ממוקמים תחת %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "זוהו קבצי מיגרציית Doctrine חדשים מסוג %s. יידרש סקירת בטיחות למיגרציית מסד הנתונים לאחר החלת הקבצים."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "חלק מרשימות הקבצים בתוכנית החלת העדכון קוצצו בתגובת ה-JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "לא ניתן לכתוב מטא-נתונים של תוכנית החלת העדכון."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "לא ניתן להוריד את חבילת העדכון. סטטוס HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "לא ניתן לפתוח את קובץ היעד של חבילת העדכון: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "הורדות עדכון חייבות להשתמש במקור העדכון הרשמי %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "כתובת ה-URL של חבילת העדכון חייבת להשתמש ב-HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "בדיקות הבטיחות של ארכיון חבילת העדכון עברו."
+
+msgid "Update package was extracted to staging."
+msgstr "חבילת העדכון חולצה לביניים."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "מטא-נתוני ניקוי החבילה החתומים נטענו."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "חבילת העדכון אינה מכילה %s. החלת הקבצים תיחסם עד שיסופקו מטא-נתוני ניקוי חתומים."
+
+msgid "Staged package dry-run report was generated."
+msgstr "דוח הרצה יבשה של החבילה בביניים נוצר."
+
+msgid "Staging metadata was written."
+msgstr "מטא-נתוני הביניים נכתבו."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "לא ניתן לחלץ את חבילת העדכון לתיקיית הביניים."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "לא ניתן לאתר את שורש יישום Chamilo בחבילה שבביניים."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "בחבילה שבביניים חסרה רשומת Chamilo נדרשת: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "החבילה שבביניים מכילה את מבנה Chamilo הצפוי."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "החבילה שבביניים אינה מכילה composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "החבילה שבביניים מכילה composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "החבילה שבביניים אינה מכילה yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "החבילה שבביניים מכילה yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "לא ניתן לקודד מטא-נתוני ביניים."
+
+msgid "Unable to write staging metadata."
+msgstr "לא ניתן לכתוב מטא-נתוני ביניים."
+
+msgid "Update operation log created."
+msgstr "יומן פעולת העדכון נוצר."
+
+msgid "Unable to write update operation log."
+msgstr "לא ניתן לכתוב את יומן פעולת העדכון."
+
+msgid "Invalid update operation id."
+msgstr "מזהה פעולת עדכון לא חוקי."
 

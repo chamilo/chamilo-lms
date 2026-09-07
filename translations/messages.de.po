@@ -38576,13 +38576,13 @@ msgid "Trusted signing key"
 msgstr "Vertrauenswürdiger Signaturschlüssel"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Geben Sie APPLY UPDATE FILES ein, um zu bestätigen"
+msgstr "Geben Sie APPLY UPDATE FILES zur Bestätigung ein"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Geben Sie RUN DATABASE MIGRATIONS ein, um Datenbankmigrationen zu bestätigen"
+msgstr "Geben Sie RUN DATABASE MIGRATIONS zur Bestätigung der Datenbankmigrationen ein"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Geben Sie RUN POST UPDATE ACTIONS ein, um zu bestätigen"
+msgstr "Geben Sie RUN POST UPDATE ACTIONS zur Bestätigung ein"
 
 msgid "Unknown update notice source."
 msgstr "Unbekannte Update-Hinweisquelle."
@@ -42141,4 +42141,607 @@ msgstr "Einige Zieldateien oder -verzeichnisse können nicht geschrieben oder en
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Um dies zu beheben, ändern Sie vorübergehend den Besitzer des gesamten Chamilo-Verzeichnisses auf %s (den Webserver-Benutzer), wenden Sie das Update an, ändern Sie den Besitzer anschließend wieder auf %s und setzen Sie dann den Besitzer von var/ (und dessen Inhalt) wieder auf %s, damit die Anwendung weiterhin darin schreiben kann."
+
+msgid "Update package verification failed."
+msgstr "Überprüfung des Update-Pakets fehlgeschlagen."
+
+msgid "Update preflight checks failed."
+msgstr "Vorabprüfungen für das Update fehlgeschlagen."
+
+msgid "Unable to stage update package."
+msgstr "Update-Paket konnte nicht bereitgestellt werden."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Das Ausführen von Post-Apply-Befehlen über die Benutzeroberfläche ist auf diesem Server deaktiviert."
+
+msgid "Missing required field: %s"
+msgstr "Erforderliches Feld fehlt: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Es wurde keine Quelle für das Update-Manifest angegeben und es ist keine Standard-URL für das Update-Manifest konfiguriert."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Die URL des Update-Manifests muss den offiziellen Update-Ursprung %s verwenden. Nur der Manifest-Pfad darf geändert werden."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Lokale Pfade für Update-Manifeste sind deaktiviert. Verwenden Sie eine HTTPS-Manifest-URL oder setzen Sie CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in der Serverumgebung für lokale Tests."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Geben Sie keinen HTTP-%s-Pfad an. Lassen Sie dieses Feld leer, um ihn aus dem Update-Manifest herunterzuladen."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Lokale Update-%s-Pfade sind in dieser Umgebung deaktiviert."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Vertrauenswürdige öffentliche Update-Schlüssel müssen auf dem Server in dieser Umgebung konfiguriert sein."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Das Überspringen der Signaturprüfung für Updates ist in dieser Umgebung deaktiviert."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Das Ausführen von Post-Apply-Update-Aktionen erfordert den Bestätigungstext \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Das Anwenden bereitgestellter Update-Dateien erfordert den Bestätigungstext \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Projektverzeichnis konnte nicht ermittelt werden."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Die Datenbanksicherung wird von diesem Updater nicht verwaltet. Erstellen und prüfen Sie eine Datenbanksicherung, bevor Sie Migrationen ausführen."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine-Migrationsmethoden down() stellen gelöschte oder umgewandelte Daten nicht zuverlässig wieder her."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Die Post-Apply-Metadaten empfehlen eine Prüfung der Datenbankmigrationen."
+
+msgid "No migration files were found in the staged package."
+msgstr "Im bereitgestellten Paket wurden keine Migrationsdateien gefunden."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Bereitgestellte Doctrine-Migrationsdateien wurden erkannt."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Das Doctrine-Migrationsziel wurde aus dem bereitgestellten Paket ermittelt."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Die Doctrine-Migrationsbasislinie weist blockierende Probleme für bereitgestellte Migrationen auf."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine meldet Warnungen zur historischen Migrationsbasislinie, aber nur bereitgestellte %s-Migrationen werden geprüft und ausdrücklich ausgeführt."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine meldet Warnungen zur historischen Migrationsbasislinie. Der Updater führt nach ausdrücklicher Bestätigung nur bereitgestellte %s-Migrationsklassen aus."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Die Doctrine-Basislinie hat kein blockierendes Problem für die bereitgestellten %s-Migrationen."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Der Doctrine-Probelauf ist für mindestens eine bereitgestellte Migration fehlgeschlagen. Führen Sie keine Datenbankmigrationen aus, bis dies behoben ist."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Der Doctrine-Probelauf wurde für jede bereitgestellte Migrationsklasse erfolgreich abgeschlossen."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Vor dem Ausführen von Migrationen muss außerhalb dieses Updaters eine Datenbanksicherung erstellt werden."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Zum Prüfen der Datenbankmigrationen ist ein Bereitstellungspfad erforderlich."
+
+msgid "Unable to read update %s: %s"
+msgstr "Update %s konnte nicht gelesen werden: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Update-%s-JSON ist ungültig: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Update-%s-JSON muss ein Objekt sein."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Die Metadaten der Post-Apply-Prüfungen enthalten keine gültige Aktionsliste."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Für dieses bereitgestellte Update wurden keine Datenbankmigrationen empfohlen."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "In den Update-Metadaten fehlt der Pfad der bereitgestellten Anwendung."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Geplante bereitgestellte Migrationsdatei wurde nicht gefunden: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Bereitgestellte Migrationsdatei konnte nicht gelesen werden: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Aus getDescription() konnte keine Beschreibung extrahiert werden."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Der Update-Runner unterstützt nur %s bereitgestellte Migrationen: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Migrations-Sicherheitsmetadaten konnten nicht geschrieben werden: %s"
+
+msgid "Migration safety check failed."
+msgstr "Sicherheitsprüfung der Migration fehlgeschlagen."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Unsicherer relativer Pfad einer bereitgestellten Migration erkannt: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Die installierte Chamilo-Version konnte nicht automatisch erkannt werden. Fahren Sie nur fort, nachdem Sie die Kompatibilität dieses Updates bestätigt haben."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Die installierte oder Zielversion liegt nicht in einem vergleichbaren semantischen Versionsformat vor. Fahren Sie nur nach manueller Prüfung fort."
+
+msgid "An update is available."
+msgstr "Ein Update ist verfügbar."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Die installierte Version entspricht bereits der Manifest-Version."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Die Manifestversion ist älter als die installierte Version. Downgrades sind standardmäßig blockiert."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Die bereitgestellten Dateien wurden nicht erfolgreich angewendet. Nachfolgende Prüfungen können nicht fortgesetzt werden."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Die Metadaten des Anwendungsergebnisses wurden erfolgreich gelesen."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Empfehlungen für Aktionen nach dem Anwenden wurden erzeugt."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Im bereitgestellten Paket wurden Datenbankmigrationen erkannt. Führen Sie diese erst aus, nachdem Sie bestätigt haben, dass die Dateiaktualisierung korrekt ist und eine Datenbanksicherung vorliegt."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Zum Ausführen der Prüfungen nach dem Anwenden ist ein Staging-Pfad erforderlich."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Update %s ist kein gültiges JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Update %s muss ein JSON-Objekt sein."
+
+msgid "Composer dependencies"
+msgstr "Composer-Abhängigkeiten"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Composer-Metadaten waren im bereitgestellten Paket enthalten. Führen Sie Composer install im Anwendungsstammverzeichnis aus, bevor Sie das Update als abgeschlossen betrachten."
+
+msgid "Frontend assets"
+msgstr "Frontend-Assets"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Frontend-bezogene Dateien waren im bereitgestellten Paket enthalten. Erstellen Sie die Produktions-Assets nach der Installation der Abhängigkeiten neu."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Im bereitgestellten Paket wurden Doctrine-Migrationsdateien erkannt. Bestätigen Sie, dass eine Datenbanksicherung vorliegt, bevor Sie Migrationen ausführen."
+
+msgid "Symfony cache"
+msgstr "Symfony-Cache"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Leeren Sie den Symfony-Cache, nachdem Sie die Updatedateien angewendet und alle erforderlichen Befehle ausgeführt haben."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Metadaten der Prüfungen nach dem Anwenden können nicht geschrieben werden."
+
+msgid "Post-apply check failed."
+msgstr "Prüfung nach dem Anwenden fehlgeschlagen."
+
+msgid "Update package is not readable: %s"
+msgstr "Updatepaket ist nicht lesbar: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Updatepaket ist kein gültiges ZIP-Archiv."
+
+msgid "Update package ZIP archive is empty."
+msgstr "ZIP-Archiv des Updatepakets ist leer."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Updatepaket enthält einen unlesbaren ZIP-Eintrag."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Updatepaket enthält einen unsicheren absoluten Pfad: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Updatepaket enthält einen Pfad-Traversal-Eintrag: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Updatepaket enthält einen symbolischen Link: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Aktionen nach dem Anwenden werden gestartet."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Die Ausführung von Befehlen nach dem Anwenden erfordert eine ausdrückliche Bestätigung."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Metadaten der Empfehlungen nach dem Anwenden wurden erfolgreich gelesen."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Aktionen nach dem Anwenden wurden anhand des Empfehlungsberichts validiert."
+
+msgid "Post-apply actions were selected."
+msgstr "Aktionen nach dem Anwenden wurden ausgewählt."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Erweiterte Aktionen nach dem Anwenden erfordern eine ausdrückliche erweiterte Bestätigung."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Erweiterte Aktionen nach dem Anwenden wurden ausdrücklich bestätigt."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Ausgewählte Befehle nach dem Anwenden wurden erfolgreich abgeschlossen."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Metadaten der Befehlsausführung nach dem Anwenden wurden geschrieben."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Aktionen nach dem Anwenden wurden erfolgreich abgeschlossen."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Ungültige Definition des Update-Befehls nach dem Anwenden: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Aktion nach dem Anwenden wird ausgeführt: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Befehl %d von %d für %s wird ausgeführt."
+
+msgid "Post-apply action failed: %s"
+msgstr "Aktion nach dem Anwenden fehlgeschlagen: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Aktion nach dem Anwenden \"%s\" ist mit Exit-Code %d fehlgeschlagen."
+
+msgid "Post-apply action completed: %s"
+msgstr "Aktion nach dem Anwenden abgeschlossen: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Zum Ausführen der Aktionen nach dem Anwenden ist ein Staging-Pfad erforderlich."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Es gibt keine empfohlenen Aktionen nach dem Anwenden."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Es gibt keine zulässigen Aktionen nach dem Anwenden."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Aktion nach dem Anwenden ist für dieses Update nicht zulässig: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Datenbankmigrationen erfordern vor der Ausführung eine Sicherheitsprüfung der Migration."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Datenbankmigrationen können nicht ausgeführt werden, weil die Sicherheitsprüfung der Migration nicht bestanden wurde."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Datenbankmigrationen können nicht ausgeführt werden, weil die Sicherheitsprüfung der Migration keine bereitgestellten Migrationen aufgeführt hat."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Datenbankmigrationen können nicht ausgeführt werden, weil die Sicherheitsprüfung der Migration einen ungültigen Migrationseintrag enthält."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Nur bereitgestellte %s-Migrationen können vom Update-Runner ausgeführt werden."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Datenbankmigrationen können nicht ausgeführt werden, weil die Sicherheitsprüfung der bereitgestellten Migration blockierende Fehler gemeldet hat."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine meldet Warnungen zur Migrations-Baseline. Es werden nur bereitgestellte %s-Migrationsklassen explizit ausgeführt."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Datenbankmigrationen erfordern die Bestätigung, dass eine Datenbanksicherung vorhanden ist."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Datenbankmigrationen erfordern den Bestätigungstext \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Die Sicherheitsprüfung der Datenbankmigration wurde vor der Ausführung abgeschlossen."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Das Vorhandensein einer Datenbanksicherung wurde ausdrücklich bestätigt."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Sicherheitsprüfung der Datenbankmigration und Bestätigung der Sicherung wurden bereitgestellt."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Datenbankmigrationen wurden nach ausdrücklicher Bestätigung einer Datenbanksicherung ausgeführt. Der Updater hat die Datenbanksicherung nicht erstellt."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Erforderliche Ausführungsberechtigungen nach dem Anwenden wurden normalisiert."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Datenbankmigrationen können nicht ausgeführt werden, weil bin/console nicht gefunden wurde."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Ausgewählte Befehle nach dem Anwenden verfügen über die erforderlichen beschreibbaren Pfade."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Beschreibbare Pfade der Befehle nach dem Anwenden wurden geprüft."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Erweiterte Aktionen nach dem Anwenden können Abhängigkeiten, generierte Assets oder die Datenbank ändern. Prüfen Sie Sicherungen, bevor Sie fortfahren."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer kann vom Web-Updater nicht sicher ausgeführt werden, weil die von Composer erzeugte Datei \"%s\" dem UID %d gehört, während die PHP-Laufzeit UID %d verwendet. Führen Sie Composer manuell als Bereitstellungsbesitzer aus und setzen Sie dann die übrigen Aktionen nach dem Anwenden fort."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Der von der Aktion nach dem Anwenden \"%s\" benötigte Pfad ist nicht beschreibbar: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Das von der Aktion nach dem Anwenden \"%s\" benötigte übergeordnete Verzeichnis ist nicht beschreibbar: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Berechtigungen für die erforderliche ausführbare Datei nach dem Anwenden können nicht gelesen werden: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Die erforderliche ausführbare Datei nach dem Anwenden kann nicht als ausführbar markiert werden: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Die erforderliche ausführbare Datei nach dem Anwenden ist nach chmod weiterhin nicht ausführbar: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Die Ausführungsberechtigung wurde normalisiert."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Isolierte Git-Konfiguration für Befehle nach dem Anwenden kann nicht geschrieben werden."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Es scheint bereits ein anderer Update-Vorgang zu laufen. Entfernen Sie var/update/update.lock nur, wenn kein Update aktiv ist."
+
+msgid "Unable to create update lock: %s"
+msgstr "Update-Sperre kann nicht erstellt werden: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Metadaten zum Ausführen der Befehle nach dem Anwenden können nicht geschrieben werden: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Im Update-Manifest fehlt der Paketblock."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Der Signaturblock des Update-Manifests muss ein Objekt sein."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Der Anforderungsblock des Update-Manifests muss ein Objekt sein."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Der sha256-Wert des Update-Pakets muss eine 64-stellige hexadezimale Zeichenkette sein."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Im Update-Manifest fehlt das erforderliche Zeichenkettenfeld \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Das Update-Manifest-Feld \"%s\" muss eine Zeichenkette sein."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Das Update-Manifest ist kein gültiges JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Das JSON des Update-Manifests muss ein Objekt sein."
+
+msgid "Manifest source cannot be empty."
+msgstr "Die Manifestquelle darf nicht leer sein."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Die Update-Manifest-URL muss den offiziellen Update-Ursprung %s verwenden."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Update-Manifest kann nicht heruntergeladen werden. HTTP-Status: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Die Manifestdatei ist nicht lesbar: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Manifestdatei kann nicht gelesen werden: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Die Update-Manifest-URL muss HTTPS verwenden."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Die Metadaten des Update-Pakets sind nicht lesbar: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Metadaten des Update-Pakets können nicht gelesen werden: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Die Metadaten des Update-Pakets sind kein gültiges JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Die Metadaten des Update-Pakets müssen ein JSON-Objekt sein."
+
+msgid "Update package metadata format must be %d."
+msgstr "Das Format der Metadaten des Update-Pakets muss %d sein."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Das Metadatenfeld \"remove\" des Update-Pakets muss ein Array sein."
+
+msgid "Update package removal paths must be strings."
+msgstr "Entfernungspfade des Update-Pakets müssen Zeichenketten sein."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Die Metadaten des Update-Pakets dürfen keinen geschützten Pfad entfernen: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Das Update-Paket darf denselben Pfad nicht gleichzeitig enthalten und entfernen: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "sha256 der Metadaten des Update-Pakets kann nicht berechnet werden."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Der Entfernungspfad des Update-Pakets darf nicht leer sein."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Der Entfernungspfad des Update-Pakets enthält ein Null-Byte."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Der Entfernungspfad des Update-Pakets muss relativ sein: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Der Entfernungspfad des Update-Pakets enthält ein unsicheres Segment: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Ein Staging-Pfad ist erforderlich, um einen Update-Anwendungsplan zu erstellen."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Im Staging-Verzeichnis fehlt STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Staging-Metadaten können nicht gelesen werden: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Staging-Metadaten sind kein gültiges JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Staging-Metadaten müssen ein JSON-Objekt sein."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "In den Staging-Metadaten fehlt das Feld application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Im Update-Paket fehlt %s. Signierte Bereinigungsmetadaten sind erforderlich, bevor Dateien angewendet werden können."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Die Staging-Metadaten enthalten nicht die während der Extraktion aufgezeichneten signierten Paket-Bereinigungsmetadaten."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Die Bereinigungsmetadaten des Update-Pakets haben sich nach dem Staging geändert. Stellen Sie das verifizierte Paket erneut bereit, bevor Sie fortfahren."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Die Staging-Metadaten enthalten keine gültige Paket-Entfernungsliste."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Die Bereinigungspfade des Update-Pakets haben sich nach dem Staging geändert. Stellen Sie das verifizierte Paket erneut bereit, bevor Sie fortfahren."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Die signierten Paket-Bereinigungsmetadaten sind seit dem Staging unverändert."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Eine Update-Sperrdatei existiert bereits. Möglicherweise läuft ein anderes Update."
+
+msgid "Update lock directory is not writable."
+msgstr "Das Update-Sperrverzeichnis ist nicht beschreibbar."
+
+msgid "No update lock is currently active."
+msgstr "Derzeit ist keine Update-Sperre aktiv."
+
+msgid "Update backup directory is not writable."
+msgstr "Das Update-Sicherungsverzeichnis ist nicht beschreibbar."
+
+msgid "Update backup directory is writable."
+msgstr "Das Update-Sicherungsverzeichnis ist beschreibbar."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Das Update-Sicherungsverzeichnis kann vom aktuellen Prozess nicht erstellt werden."
+
+msgid "Update backup directory can be created."
+msgstr "Das Update-Sicherungsverzeichnis kann erstellt werden."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Einige Update-Arbeitsverzeichnisse sind nicht beschreibbar oder können vom aktuellen Prozess nicht erstellt werden."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Die Update-Arbeitsverzeichnisse sind beschreibbar oder können erstellt werden."
+
+msgid "Update apply file plan was generated."
+msgstr "Der Dateiplan für die Update-Anwendung wurde erzeugt."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Die Paket-Bereinigungsmetadaten enthalten Pfade, die nicht sicher entfernt werden können."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Die im Paket deklarierten Entfernungsziele sind sicher."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Einige im Paket deklarierte veraltete Dateien fehlen in dieser Installation bereits."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Das geplante Update würde vorhandene symbolische Links überschreiben oder entfernen."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Das geplante Update überschreibt oder entfernt keine vorhandenen symbolischen Links."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Neue Update-Migrationsdateien müssen unter %s abgelegt werden."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Es wurden neue Doctrine-Migrationsdateien %s erkannt. Nach dem Anwenden der Dateien ist eine Sicherheitsprüfung der Datenbankmigration erforderlich."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Einige Dateilisten des Update-Anwendungsplans wurden in der JSON-Antwort gekürzt."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Die Metadaten des Update-Anwendungsplans können nicht geschrieben werden."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Update-Paket kann nicht heruntergeladen werden. HTTP-Status: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Zieldatei des Update-Pakets kann nicht geöffnet werden: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Update-Downloads müssen die offizielle Update-Quelle %s verwenden."
+
+msgid "The update package URL must use HTTPS."
+msgstr "Die URL des Update-Pakets muss HTTPS verwenden."
+
+msgid "Update package archive safety checks passed."
+msgstr "Die Sicherheitsprüfungen des Update-Paketarchivs wurden bestanden."
+
+msgid "Update package was extracted to staging."
+msgstr "Das Update-Paket wurde ins Staging extrahiert."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Die signierten Paket-Bereinigungsmetadaten wurden geladen."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Das Update-Paket enthält nicht %s. Das Anwenden von Dateien wird blockiert, bis signierte Bereinigungsmetadaten vorliegen."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Der Dry-Run-Bericht des bereitgestellten Pakets wurde erzeugt."
+
+msgid "Staging metadata was written."
+msgstr "Die Staging-Metadaten wurden geschrieben."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Das Update-Paket kann nicht ins Staging-Verzeichnis extrahiert werden."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Das Chamilo-Anwendungsstammverzeichnis im bereitgestellten Paket kann nicht gefunden werden."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Im bereitgestellten Paket fehlt der erforderliche Chamilo-Eintrag: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Das bereitgestellte Paket enthält die erwartete Chamilo-Struktur."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Das bereitgestellte Paket enthält keine composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Das bereitgestellte Paket enthält composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Das bereitgestellte Paket enthält keine yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Das bereitgestellte Paket enthält yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Staging-Metadaten konnten nicht kodiert werden."
+
+msgid "Unable to write staging metadata."
+msgstr "Staging-Metadaten konnten nicht geschrieben werden."
+
+msgid "Update operation log created."
+msgstr "Protokoll der Aktualisierungsoperation erstellt."
+
+msgid "Unable to write update operation log."
+msgstr "Protokoll der Aktualisierungsoperation konnte nicht geschrieben werden."
+
+msgid "Invalid update operation id."
+msgstr "Ungültige ID der Aktualisierungsoperation."
 

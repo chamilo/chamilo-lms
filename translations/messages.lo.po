@@ -40621,3 +40621,606 @@ msgstr "ບາງໄຟລ໌ ຫຼື ໄດເຣັກທໍຣີເປົ�
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "ເພື່ອແກ້ໄຂບັນຫານີ້, ປ່ຽນເຈົ້າຂອງໄດເຣັກທໍຣີ Chamilo ທັງໝົດເປັນ %s ຊົ່ວຄາວ (ຜູ້ໃຊ້ເວັບເຊີເວີ), ນຳໃຊ້ການອັບເດດ, ປ່ຽນເຈົ້າຂອງກັບເປັນ %s ຫຼັງຈາກນັ້ນ, ຈາກນັ້ນຕັ້ງເຈົ້າຂອງ var/ (ແລະເນື້ອໃນຂອງມັນ) ກັບເປັນ %s ເພື່ອໃຫ້ແອັບພລິເຄຊັນສາມາດຂຽນຕໍ່ໄດ້."
 
+msgid "Update package verification failed."
+msgstr "ການກວດສອບແພັກເກດອັບເດດລົ້ມເຫຼວ."
+
+msgid "Update preflight checks failed."
+msgstr "ການກວດສອບກ່ອນອັບເດດລົ້ມເຫຼວ."
+
+msgid "Unable to stage update package."
+msgstr "ບໍ່ສາມາດຈັດວາງແພັກເກດອັບເດດໄດ້."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "ການຮັນຄຳສັ່ງຫຼັງນຳໃຊ້ຜ່ານ UI ຖືກປິດໃຊ້ງານໃນເຊີບເວີນີ້."
+
+msgid "Missing required field: %s"
+msgstr "ຂາດຊ່ອງຂໍ້ມູນທີ່ຈຳເປັນ: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "ບໍ່ໄດ້ລະບຸແຫຼ່ງ manifest ອັບເດດ ແລະ ບໍ່ໄດ້ຕັ້ງຄ່າ URL manifest ອັບເດດເລີ່ມຕົ້ນ."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL ຂອງ manifest ອັບເດດຕ້ອງໃຊ້ແຫຼ່ງອັບເດດທາງການ %s. ສາມາດປ່ຽນໄດ້ພຽງເສັ້ນທາງ manifest ເທົ່ານັ້ນ."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "ເສັ້ນທາງ manifest ອັບເດດໃນເຄື່ອງຖືກປິດໃຊ້ງານ. ໃຊ້ URL manifest ແບບ HTTPS ຫຼື ຕັ້ງ CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 ໃນສະພາບແວດລ້ອມເຊີບເວີສຳລັບການທົດສອບໃນເຄື່ອງ."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "ຢ່າລະບຸເສັ້ນທາງ HTTP %s. ປ່ອຍຊ່ອງນີ້ວ່າງເພື່ອດາວໂຫຼດຈາກ manifest ອັບເດດ."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "ເສັ້ນທາງອັບເດດໃນເຄື່ອງ %s ຖືກປິດໃຊ້ງານໃນສະພາບແວດລ້ອມນີ້."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "ຕ້ອງຕັ້ງຄ່າກະແຈສາທາລະນະອັບເດດທີ່ເຊື່ອຖືໄດ້ໃນເຊີບເວີໃນສະພາບແວດລ້ອມນີ້."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "ການຂ້າມການກວດສອບລາຍເຊັນອັບເດດຖືກປິດໃຊ້ງານໃນສະພາບແວດລ້ອມນີ້."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "ການຮັນການກະທຳຫຼັງນຳໃຊ້ອັບເດດຕ້ອງໃສ່ຂໍ້ຄວາມຢືນຢັນ \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "ການນຳໃຊ້ໄຟລ໌ອັບເດດທີ່ຈັດວາງແລ້ວຕ້ອງໃສ່ຂໍ້ຄວາມຢືນຢັນ \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "ບໍ່ສາມາດລະບຸໄດເຣັກທໍຣີໂປຣເຈັກໄດ້."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "ການສຳຮອງຖານຂໍ້ມູນບໍ່ໄດ້ຈັດການໂດຍໂຕອັບເດດນີ້. ສ້າງ ແລະ ກວດສອບການສຳຮອງຖານຂໍ້ມູນກ່ອນຮັນການຍ້າຍ."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "ວິທີ down() ຂອງ Doctrine migration ບໍ່ຮັບປະກັນວ່າຈະກູ້ຂໍ້ມູນທີ່ຖືກລຶບ ຫຼື ປ່ຽນແປງຄືນໄດ້."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "ເມຕາເດຕາຫຼັງນຳໃຊ້ແນະນຳໃຫ້ກວດສອບການຍ້າຍຖານຂໍ້ມູນ."
+
+msgid "No migration files were found in the staged package."
+msgstr "ບໍ່ພົບໄຟລ໌ຍ້າຍໃນແພັກເກດທີ່ຈັດວາງ."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "ກວດພົບໄຟລ໌ Doctrine migration ທີ່ຈັດວາງແລ້ວ."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "ເປົ້າໝາຍ Doctrine migration ຖືກລະບຸຈາກແພັກເກດທີ່ຈັດວາງ."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "ເສັ້ນຖານ Doctrine migration ມີບັນຫາທີ່ຂັດຂວາງສຳລັບການຍ້າຍທີ່ຈັດວາງ."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine ລາຍງານຄຳເຕືອນເສັ້ນຖານການຍ້າຍປະຫວັດ, ແຕ່ຈະກວດສອບ ແລະ ຮັນສະເພາະການຍ້າຍ %s ທີ່ຈັດວາງແລ້ວເທົ່ານັ້ນ."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine ລາຍງານຄຳເຕືອນເສັ້ນຖານການຍ້າຍປະຫວັດ. ໂຕອັບເດດຈະຮັນສະເພາະຄລາສການຍ້າຍ %s ທີ່ຈັດວາງແລ້ວຫຼັງຢືນຢັນຢ່າງຊັດເຈນ."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "ເສັ້ນຖານ Doctrine ບໍ່ມີບັນຫາທີ່ຂັດຂວາງສຳລັບການຍ້າຍ %s ທີ່ຈັດວາງ."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "ການທົດຮັນ Doctrine ລົ້ມເຫຼວສຳລັບຢ່າງໜ້ອຍໜຶ່ງການຍ້າຍທີ່ຈັດວາງ. ຢ່າຮັນການຍ້າຍຖານຂໍ້ມູນຈົນກວ່າຈະແກ້ບັນຫານີ້."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "ການທົດຮັນ Doctrine ສຳເລັດສຳລັບແຕ່ລະຄລາສການຍ້າຍທີ່ຈັດວາງ."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "ຕ້ອງສ້າງການສຳຮອງຖານຂໍ້ມູນພາຍນອກໂຕອັບເດດນີ້ກ່ອນຮັນການຍ້າຍ."
+
+msgid "Staging path is required to review database migrations."
+msgstr "ຕ້ອງມີເສັ້ນທາງຈັດວາງເພື່ອກວດສອບການຍ້າຍຖານຂໍ້ມູນ."
+
+msgid "Unable to read update %s: %s"
+msgstr "ບໍ່ສາມາດອ່ານອັບເດດ %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON ອັບເດດ %s ບໍ່ຖືກຕ້ອງ: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON ອັບເດດ %s ຕ້ອງເປັນ object."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "ເມຕາເດຕາກວດສອບຫຼັງນຳໃຊ້ບໍ່ມີລາຍການການກະທຳທີ່ຖືກຕ້ອງ."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "ບໍ່ໄດ້ແນະນຳການຍ້າຍຖານຂໍ້ມູນສຳລັບອັບເດດທີ່ຈັດວາງນີ້."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "ເມຕາເດຕາອັບເດດຂາດເສັ້ນທາງແອັບພລິເຄຊັນທີ່ຈັດວາງ."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "ບໍ່ພົບໄຟລ໌ຍ້າຍທີ່ວາງແຜນໄວ້: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "ບໍ່ສາມາດອ່ານໄຟລ໌ຍ້າຍທີ່ຈັດວາງ: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "ບໍ່ສາມາດດຶງຄຳອະທິບາຍຈາກ getDescription() ໄດ້."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "ໂຕຮັນອັບເດດຮອງຮັບພຽງການຍ້າຍທີ່ຈັດວາງແບບ %s: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "ບໍ່ສາມາດຂຽນເມຕາເດຕາຄວາມປອດໄພຂອງການຍ້າຍ: %s"
+
+msgid "Migration safety check failed."
+msgstr "ການກວດຄວາມປອດໄພຂອງການຍ້າຍລົ້ມເຫຼວ."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "ກວດພົບເສັ້ນທາງຍ້າຍທີ່ຈັດວາງແບບພີ່ນ້ອງທີ່ບໍ່ປອດໄພ: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "ບໍ່ສາມາດກວດພົບເວີຊັນ Chamilo ທີ່ຕິດຕັ້ງໂດຍອັດຕະໂນມັດ. ດຳເນີນຕໍ່ຫຼັງຢືນຢັນວ່າອັບເດດນີ້ເຂົ້າກັນໄດ້."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "ເວີຊັນທີ່ຕິດຕັ້ງ ຫຼື ເປົ້າໝາຍບໍ່ຢູ່ໃນຮູບແບບເວີຊັນ semantic ທີ່ປຽບທຽບໄດ້. ດຳເນີນຕໍ່ຫຼັງກວດສອບດ້ວຍຕົນເອງ."
+
+msgid "An update is available."
+msgstr "ມີອັບເດດພ້ອມໃຊ້."
+
+msgid "The installed version already matches the manifest version."
+msgstr "ເວີຊັນທີ່ຕິດຕັ້ງກົງກັບເວີຊັນໃນ manifest ແລ້ວ."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "ເວີຊັນຂອງແມນິເຟສຕ໌ເກົ່າກວ່າເວີຊັນທີ່ຕິດຕັ້ງຢູ່. ການຫຼຸດເວີຊັນຖືກບລັອກໂດຍຄ່າເລີ່ມຕົ້ນ."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "ໄຟລ໌ທີ່ຈັດວາງບໍ່ໄດ້ຖືກນຳໃຊ້ສຳເລັດ. ບໍ່ສາມາດສືບຕໍ່ການກວດສອບຫຼັງນຳໃຊ້ໄດ້."
+
+msgid "Apply result metadata was read successfully."
+msgstr "ອ່ານເມຕາເດຕາຜົນການນຳໃຊ້ສຳເລັດແລ້ວ."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "ສ້າງຄຳແນະນຳການດຳເນີນການຫຼັງນຳໃຊ້ແລ້ວ."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "ພົບການໂອນຍ້າຍຖານຂໍ້ມູນໃນແພັກເກັດທີ່ຈັດວາງ. ໃຫ້ຮັນເມື່ອຢືນຢັນວ່າການອັບເດດໄຟລ໌ຖືກຕ້ອງ ແລະມີການສຳຮອງຖານຂໍ້ມູນແລ້ວເທົ່ານັ້ນ."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "ຕ້ອງມີເສັ້ນທາງຈັດວາງເພື່ອຮັນການກວດສອບຫຼັງນຳໃຊ້."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "ການອັບເດດ %s ບໍ່ແມ່ນ JSON ທີ່ຖືກຕ້ອງ: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "ການອັບເດດ %s ຕ້ອງເປັນ JSON object."
+
+msgid "Composer dependencies"
+msgstr "ຂຶ້ນກັບ Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "ມີເມຕາເດຕາ Composer ໃນແພັກເກັດທີ່ຈັດວາງ. ໃຫ້ຮັນ Composer install ຈາກຮາກຂອງແອັບພລິເຄຊັນກ່ອນຈະຖືວ່າການອັບເດດສຳເລັດ."
+
+msgid "Frontend assets"
+msgstr "ຊັບສິນ Frontend"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "ມີໄຟລ໌ທີ່ກ່ຽວກັບ Frontend ໃນແພັກເກັດທີ່ຈັດວາງ. ສ້າງຊັບສິນຜະລິດຄືນໃໝ່ຫຼັງຕິດຕັ້ງຂຶ້ນກັບ."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "ພົບໄຟລ໌ Doctrine migration ໃນແພັກເກັດທີ່ຈັດວາງ. ຢືນຢັນວ່າມີການສຳຮອງຖານຂໍ້ມູນກ່ອນຮັນ migrations."
+
+msgid "Symfony cache"
+msgstr "ແຄຊ Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "ລຶບແຄຊ Symfony ຫຼັງນຳໃຊ້ໄຟລ໌ອັບເດດ ແລະຮັນຄຳສັ່ງທີ່ຈຳເປັນ."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "ບໍ່ສາມາດຂຽນເມຕາເດຕາການກວດສອບຫຼັງນຳໃຊ້ໄດ້."
+
+msgid "Post-apply check failed."
+msgstr "ການກວດສອບຫຼັງນຳໃຊ້ລົ້ມເຫຼວ."
+
+msgid "Update package is not readable: %s"
+msgstr "ແພັກເກັດອັບເດດອ່ານບໍ່ໄດ້: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "ແພັກເກັດອັບເດດບໍ່ແມ່ນ ZIP archive ທີ່ຖືກຕ້ອງ."
+
+msgid "Update package ZIP archive is empty."
+msgstr "ZIP archive ຂອງແພັກເກັດອັບເດດວ່າງເປົ່າ."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "ແພັກເກັດອັບເດດມີລາຍການ ZIP ທີ່ອ່ານບໍ່ໄດ້."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "ແພັກເກັດອັບເດດມີເສັ້ນທາງແອບໂຊລູດທີ່ບໍ່ປອດໄພ: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "ແພັກເກັດອັບເດດມີລາຍການ path traversal: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "ແພັກເກັດອັບເດດມີສັນຍາລັກລິງ: %s"
+
+msgid "Starting post-apply actions."
+msgstr "ກຳລັງເລີ່ມການດຳເນີນການຫຼັງນຳໃຊ້."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "ການຮັນຄຳສັ່ງຫຼັງນຳໃຊ້ຕ້ອງມີການຢືນຢັນຢ່າງຊັດເຈນ."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "ອ່ານເມຕາເດຕາຄຳແນະນຳຫຼັງນຳໃຊ້ສຳເລັດແລ້ວ."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "ກວດສອບການດຳເນີນການຫຼັງນຳໃຊ້ກັບລາຍງານຄຳແນະນຳແລ້ວ."
+
+msgid "Post-apply actions were selected."
+msgstr "ເລືອກການດຳເນີນການຫຼັງນຳໃຊ້ແລ້ວ."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "ການດຳເນີນການຫຼັງນຳໃຊ້ຂັ້ນສູງຕ້ອງມີການຢືນຢັນຂັ້ນສູງຢ່າງຊັດເຈນ."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "ຢືນຢັນການດຳເນີນການຫຼັງນຳໃຊ້ຂັ້ນສູງຢ່າງຊັດເຈນແລ້ວ."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "ຄຳສັ່ງຫຼັງນຳໃຊ້ທີ່ເລືອກສຳເລັດແລ້ວ."
+
+msgid "Post-apply command run metadata was written."
+msgstr "ຂຽນເມຕາເດຕາການຮັນຄຳສັ່ງຫຼັງນຳໃຊ້ແລ້ວ."
+
+msgid "Post-apply actions completed successfully."
+msgstr "ການດຳເນີນການຫຼັງນຳໃຊ້ສຳເລັດແລ້ວ."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "ນິຍາມຄຳສັ່ງຫຼັງນຳໃຊ້ການອັບເດດບໍ່ຖືກຕ້ອງ: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "ກຳລັງຮັນການດຳເນີນການຫຼັງນຳໃຊ້: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "ກຳລັງຮັນຄຳສັ່ງ %d ຈາກ %d ສຳລັບ %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "ການດຳເນີນການຫຼັງນຳໃຊ້ລົ້ມເຫຼວ: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "ການດຳເນີນການຫຼັງນຳໃຊ້ \"%s\" ລົ້ມເຫຼວດ້ວຍລະຫັດອອກ %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "ການດຳເນີນການຫຼັງນຳໃຊ້ສຳເລັດ: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "ຕ້ອງມີເສັ້ນທາງຈັດວາງເພື່ອຮັນການດຳເນີນການຫຼັງນຳໃຊ້."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "ບໍ່ມີການດຳເນີນການຫຼັງນຳໃຊ້ທີ່ແນະນຳໃຫ້ຮັນ."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "ບໍ່ມີການດຳເນີນການຫຼັງນຳໃຊ້ທີ່ອະນຸຍາດໃຫ້ຮັນ."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "ການດຳເນີນການຫຼັງນຳໃຊ້ບໍ່ອະນຸຍາດສຳລັບການອັບເດດນີ້: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "ການໂອນຍ້າຍຖານຂໍ້ມູນຕ້ອງມີການກວດຄວາມປອດໄພກ່ອນປະຕິບັດ."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "ບໍ່ສາມາດຮັນການໂອນຍ້າຍຖານຂໍ້ມູນໄດ້ ເພາະການກວດຄວາມປອດໄພບໍ່ຜ່ານ."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "ບໍ່ສາມາດຮັນການໂອນຍ້າຍຖານຂໍ້ມູນໄດ້ ເພາະການກວດຄວາມປອດໄພບໍ່ໄດ້ລາຍການ migrations ທີ່ຈັດວາງ."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "ບໍ່ສາມາດຮັນການໂອນຍ້າຍຖານຂໍ້ມູນໄດ້ ເພາະການກວດຄວາມປອດໄພມີລາຍການ migration ທີ່ບໍ່ຖືກຕ້ອງ."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "ຕົວຮັນອັບເດດສາມາດປະຕິບັດໄດ້ພຽງ migrations %s ທີ່ຈັດວາງເທົ່ານັ້ນ."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "ບໍ່ສາມາດຮັນການໂອນຍ້າຍຖານຂໍ້ມູນໄດ້ ເພາະການກວດຄວາມປອດໄພຂອງ migration ທີ່ຈັດວາງລາຍງານຂໍ້ຜິດພາດທີ່ບລັອກ."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine ລາຍງານຄຳເຕືອນຖານການເຄື່ອນຍ້າຍ. ຈະປະຕິບັດສະເພາະຄລາສການເຄື່ອນຍ້າຍ %s ທີ່ຖືກຈັດຄິວເທົ່ານັ້ນ."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "ການເຄື່ອນຍ້າຍຖານຂໍ້ມູນຕ້ອງຢືນຢັນວ່າມີການສຳຮອງຖານຂໍ້ມູນແລ້ວ."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "ການເຄື່ອນຍ້າຍຖານຂໍ້ມູນຕ້ອງໃສ່ຂໍ້ຄວາມຢືນຢັນ \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "ການກວດສອບຄວາມປອດໄພຂອງການເຄື່ອນຍ້າຍຖານຂໍ້ມູນໄດ້ສຳເລັດກ່ອນປະຕິບັດ."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "ໄດ້ຢືນຢັນຢ່າງຊັດເຈນວ່າມີການສຳຮອງຖານຂໍ້ມູນແລ້ວ."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "ໄດ້ສະໜອງການກວດສອບຄວາມປອດໄພຂອງການເຄື່ອນຍ້າຍຖານຂໍ້ມູນ ແລະ ການຢືນຢັນການສຳຮອງແລ້ວ."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "ການເຄື່ອນຍ້າຍຖານຂໍ້ມູນໄດ້ຖືກປະຕິບັດຫຼັງຈາກຢືນຢັນການສຳຮອງຖານຂໍ້ມູນຢ່າງຊັດເຈນ. ໂປຣແກຣມອັບເດດບໍ່ໄດ້ສ້າງການສຳຮອງຖານຂໍ້ມູນ."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "ສິດການເປີດໃຊ້ງານຂອງໄຟລ໌ທີ່ຕ້ອງການຫຼັງນຳໃຊ້ໄດ້ຖືກປັບໃຫ້ປົກກະຕິແລ້ວ."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "ບໍ່ສາມາດເຮັດການເຄື່ອນຍ້າຍຖານຂໍ້ມູນໄດ້ ເພາະບໍ່ພົບ bin/console."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "ຄຳສັ່ງຫຼັງນຳໃຊ້ທີ່ເລືອກມີເສັ້ນທາງທີ່ຂຽນໄດ້ຕາມທີ່ຕ້ອງການ."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "ເສັ້ນທາງທີ່ຂຽນໄດ້ຂອງຄຳສັ່ງຫຼັງນຳໃຊ້ໄດ້ຖືກກວດສອບແລ້ວ."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "ການດຳເນີນການຫຼັງນຳໃຊ້ແບບຂັ້ນສູງສາມາດແກ້ໄຂຂຶ້ນກັບ, ແອັດສະເຊັດທີ່ສ້າງ ຫຼື ຖານຂໍ້ມູນ. ກວດສອບການສຳຮອງກ່ອນດຳເນີນຕໍ່."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer ບໍ່ສາມາດເຮັດວຽກຢ່າງປອດໄພຈາກໂປຣແກຣມອັບເດດເວັບ ເພາະໄຟລ໌ທີ່ Composer ສ້າງ \"%s\" ເປັນເຈົ້າຂອງໂດຍ UID %d ໃນຂະນະທີ່ PHP runtime ໃຊ້ UID %d. ໃຫ້ເຮັດ Composer ດ້ວຍຕົນເອງໃນນາມເຈົ້າຂອງການນຳໃຊ້ ແລ້ວສືບຕໍ່ການດຳເນີນການຫຼັງນຳໃຊ້ທີ່ເຫຼືອ."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "ເສັ້ນທາງທີ່ຕ້ອງການໂດຍການດຳເນີນການຫຼັງນຳໃຊ້ \"%s\" ບໍ່ສາມາດຂຽນໄດ້: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "ໂຟລເດີແມ່ທີ່ຕ້ອງການໂດຍການດຳເນີນການຫຼັງນຳໃຊ້ \"%s\" ບໍ່ສາມາດຂຽນໄດ້: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "ບໍ່ສາມາດອ່ານສິດສຳລັບໄຟລ໌ທີ່ຕ້ອງການຫຼັງນຳໃຊ້: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "ບໍ່ສາມາດໝາຍໄຟລ໌ທີ່ຕ້ອງການຫຼັງນຳໃຊ້ໃຫ້ເປັນ executable: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "ໄຟລ໌ທີ່ຕ້ອງການຫຼັງນຳໃຊ້ຍັງບໍ່ສາມາດປະຕິບັດໄດ້ຫຼັງ chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "ສິດການປະຕິບັດໄດ້ຖືກປັບໃຫ້ປົກກະຕິແລ້ວ."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "ບໍ່ສາມາດຂຽນການຕັ້ງຄ່າ Git ແຍກສຳລັບຄຳສັ່ງຫຼັງນຳໃຊ້."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "ເບິ່ງຄືວ່າມີການອັບເດດອື່ນກຳລັງເຮັດວຽກ. ລຶບ var/update/update.lock ເມື່ອບໍ່ມີການອັບເດດທີ່ກຳລັງດຳເນີນເທົ່ານັ້ນ."
+
+msgid "Unable to create update lock: %s"
+msgstr "ບໍ່ສາມາດສ້າງລັອກການອັບເດດ: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "ບໍ່ສາມາດຂຽນເມຕາເດຕາການເຮັດວຽກຂອງຄຳສັ່ງຫຼັງນຳໃຊ້: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "ແມນິເຟສການອັບເດດຂາດບລັອກແພັກເກດ."
+
+msgid "Update manifest signature block must be an object."
+msgstr "ບລັອກລາຍເຊັນແມນິເຟສການອັບເດດຕ້ອງເປັນວັດຖຸ."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "ບລັອກຄວາມຕ້ອງການແມນິເຟສການອັບເດດຕ້ອງເປັນວັດຖຸ."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 ຂອງແພັກເກດອັບເດດຕ້ອງເປັນສະຕຣິງຫົກສິບສີ່ຕົວອັກສອນເຮັກຊະເດຊິມອນ."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "ແມນິເຟສການອັບເດດຂາດຟິວສະຕຣິງທີ່ຕ້ອງການ \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "ຟິວແມນິເຟສການອັບເດດ \"%s\" ຕ້ອງເປັນສະຕຣິງ."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "ແມນິເຟສການອັບເດດບໍ່ແມ່ນ JSON ທີ່ຖືກຕ້ອງ: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON ແມນິເຟສການອັບເດດຕ້ອງເປັນວັດຖຸ."
+
+msgid "Manifest source cannot be empty."
+msgstr "ແຫຼ່ງແມນິເຟສບໍ່ສາມາດວ່າງເປົ່າໄດ້."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL ແມນິເຟສການອັບເດດຕ້ອງໃຊ້ຕົ້ນທາງອັບເດດທາງການ %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "ບໍ່ສາມາດດາວໂຫຼດແມນິເຟສການອັບເດດ. ສະຖານະ HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "ໄຟລ໌ແມນິເຟສອ່ານບໍ່ໄດ້: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "ບໍ່ສາມາດອ່ານໄຟລ໌ແມນິເຟສ: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL ແມນິເຟສການອັບເດດຕ້ອງໃຊ້ HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "ເມຕາເດຕາແພັກເກດອັບເດດອ່ານບໍ່ໄດ້: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "ບໍ່ສາມາດອ່ານເມຕາເດຕາແພັກເກດອັບເດດ: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "ເມຕາເດຕາແພັກເກດອັບເດດບໍ່ແມ່ນ JSON ທີ່ຖືກຕ້ອງ: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "ເມຕາເດຕາແພັກເກດອັບເດດຕ້ອງເປັນວັດຖຸ JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "ຮູບແບບເມຕາເດຕາແພັກເກດອັບເດດຕ້ອງເປັນ %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "ຟິວເມຕາເດຕາແພັກເກດອັບເດດ \"remove\" ຕ້ອງເປັນອາເຣ."
+
+msgid "Update package removal paths must be strings."
+msgstr "ເສັ້ນທາງລຶບຂອງແພັກເກດອັບເດດຕ້ອງເປັນສະຕຣິງ."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "ເມຕາເດຕາແພັກເກດອັບເດດບໍ່ສາມາດລຶບເສັ້ນທາງທີ່ປົກປ້ອງ: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "ແພັກເກດອັບເດດບໍ່ສາມາດລວມ ແລະ ລຶບເສັ້ນທາງດຽວກັນ: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "ບໍ່ສາມາດຄຳນວນ sha256 ຂອງເມຕາເດຕາແພັກເກດອັບເດດ."
+
+msgid "Update package removal path cannot be empty."
+msgstr "ເສັ້ນທາງລຶບຂອງແພັກເກດອັບເດດບໍ່ສາມາດວ່າງເປົ່າໄດ້."
+
+msgid "Update package removal path contains a null byte."
+msgstr "ເສັ້ນທາງລຶບຂອງແພັກເກດອັບເດດມີໄບຕ໌ວ່າງ."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "ເສັ້ນທາງລຶບຂອງແພັກເກດອັບເດດຕ້ອງເປັນເສັ້ນທາງສາຍພີ່ນ້ອງ: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "ເສັ້ນທາງການລຶບແພັກເກດອັບເດດມີສ່ວນທີ່ບໍ່ປອດໄພ: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "ຕ້ອງມີເສັ້ນທາງສະເຕຈິງເພື່ອສ້າງແຜນການນຳໃຊ້ອັບເດດ."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "ໂຟລເດີສະເຕຈິງຂາດ STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "ບໍ່ສາມາດອ່ານເມຕາເດຕາສະເຕຈິງ: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "ເມຕາເດຕາສະເຕຈິງບໍ່ແມ່ນ JSON ທີ່ຖືກຕ້ອງ: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "ເມຕາເດຕາສະເຕຈິງຕ້ອງເປັນວັດຖຸ JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "ເມຕາເດຕາສະເຕຈິງຂາດຟິວ application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "ແພັກເກດອັບເດດຂາດ %s. ຕ້ອງມີເມຕາເດຕາການທຳຄວາມສະອາດທີ່ລົງນາມກ່ອນຈະນຳໃຊ້ໄຟລ໌ໄດ້."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "ເມຕາເດຕາສະເຕຈິງບໍ່ມີເມຕາເດຕາການທຳຄວາມສະອາດແພັກເກດທີ່ລົງນາມທີ່ບັນທຶກໄວ້ລະຫວ່າງການຖອດ."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "ເມຕາເດຕາການທຳຄວາມສະອາດແພັກເກດອັບເດດປ່ຽນແປງຫຼັງສະເຕຈິງ. ກະລຸນາສະເຕຈິງແພັກເກດທີ່ກວດສອບແລ້ວອີກຄັ້ງກ່ອນດຳເນີນຕໍ່."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "ເມຕາເດຕາສະເຕຈິງບໍ່ມີລາຍການລຶບແພັກເກດທີ່ຖືກຕ້ອງ."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "ເສັ້ນທາງການທຳຄວາມສະອາດແພັກເກດອັບເດດປ່ຽນແປງຫຼັງສະເຕຈິງ. ກະລຸນາສະເຕຈິງແພັກເກດທີ່ກວດສອບແລ້ວອີກຄັ້ງກ່ອນດຳເນີນຕໍ່."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "ເມຕາເດຕາການທຳຄວາມສະອາດແພັກເກດທີ່ລົງນາມບໍ່ປ່ຽນແປງນັບຕັ້ງແຕ່ສະເຕຈິງ."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "ມີໄຟລ໌ລັອກອັບເດດຢູ່ແລ້ວ. ອາດມີການອັບເດດອື່ນກຳລັງດຳເນີນຢູ່."
+
+msgid "Update lock directory is not writable."
+msgstr "ໂຟລເດີລັອກອັບເດດບໍ່ສາມາດຂຽນໄດ້."
+
+msgid "No update lock is currently active."
+msgstr "ບໍ່ມີລັອກອັບເດດທີ່ໃຊ້ງານຢູ່ໃນຂະນະນີ້."
+
+msgid "Update backup directory is not writable."
+msgstr "ໂຟລເດີສຳຮອງອັບເດດບໍ່ສາມາດຂຽນໄດ້."
+
+msgid "Update backup directory is writable."
+msgstr "ໂຟລເດີສຳຮອງອັບເດດສາມາດຂຽນໄດ້."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "ໂຟລເດີສຳຮອງອັບເດດບໍ່ສາມາດສ້າງໄດ້ໂດຍໂປຣເຊສປັດຈຸບັນ."
+
+msgid "Update backup directory can be created."
+msgstr "ສາມາດສ້າງໂຟລເດີສຳຮອງອັບເດດໄດ້."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "ບາງໂຟລເດີເຮັດວຽກອັບເດດບໍ່ສາມາດຂຽນໄດ້ ຫຼື ບໍ່ສາມາດສ້າງໄດ້ໂດຍໂປຣເຊສປັດຈຸບັນ."
+
+msgid "Update working directories are writable or can be created."
+msgstr "ໂຟລເດີເຮັດວຽກອັບເດດສາມາດຂຽນໄດ້ ຫຼື ສາມາດສ້າງໄດ້."
+
+msgid "Update apply file plan was generated."
+msgstr "ສ້າງແຜນໄຟລ໌ນຳໃຊ້ອັບເດດແລ້ວ."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "ເມຕາເດຕາການທຳຄວາມສະອາດແພັກເກດມີເສັ້ນທາງທີ່ບໍ່ສາມາດລຶບໄດ້ຢ່າງປອດໄພ."
+
+msgid "Package-declared removal targets are safe."
+msgstr "ເປົ້າໝາຍການລຶບທີ່ແພັກເກດປະກາດແມ່ນປອດໄພ."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "ບາງໄຟລ໌ເກົ່າທີ່ແພັກເກດປະກາດບໍ່ມີຢູ່ໃນການຕິດຕັ້ງນີ້ແລ້ວ."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "ອັບເດດທີ່ວາງແຜນຈະຂຽນທັບ ຫຼື ລຶບລິ້ງສັນຍາລັກທີ່ມີຢູ່."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "ອັບເດດທີ່ວາງແຜນບໍ່ຂຽນທັບ ຫຼື ລຶບລິ້ງສັນຍາລັກທີ່ມີຢູ່."
+
+msgid "New update migration files must be placed under %s."
+msgstr "ໄຟລ໌ການຍ້າຍຂໍ້ມູນອັບເດດໃໝ່ຕ້ອງວາງພາຍໃຕ້ %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "ພົບໄຟລ໌ການຍ້າຍຂໍ້ມູນ Doctrine %s ໃໝ່. ຈະຕ້ອງກວດສອບຄວາມປອດໄພຂອງການຍ້າຍຖານຂໍ້ມູນຫຼັງນຳໃຊ້ໄຟລ໌."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "ບາງລາຍການໄຟລ໌ໃນແຜນນຳໃຊ້ອັບເດດຖືກຕັດສັ້ນໃນການຕອບກັບ JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "ບໍ່ສາມາດຂຽນເມຕາເດຕາແຜນນຳໃຊ້ອັບເດດໄດ້."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "ບໍ່ສາມາດດາວໂຫຼດແພັກເກດອັບເດດໄດ້. ສະຖານະ HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "ບໍ່ສາມາດເປີດໄຟລ໌ເປົ້າໝາຍແພັກເກດອັບເດດ: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "ການດາວໂຫຼດອັບເດດຕ້ອງໃຊ້ແຫຼ່ງອັບເດດທາງການ %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL ແພັກເກດອັບເດດຕ້ອງໃຊ້ HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "ການກວດຄວາມປອດໄພຂອງແຟ້ມແພັກເກດອັບເດດຜ່ານແລ້ວ."
+
+msgid "Update package was extracted to staging."
+msgstr "ແພັກເກດອັບເດດຖືກຖອດໄປສະເຕຈິງແລ້ວ."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "ໂຫຼດເມຕາເດຕາການທຳຄວາມສະອາດແພັກເກດທີ່ລົງນາມແລ້ວ."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "ແພັກເກດອັບເດດບໍ່ມີ %s. ການນຳໃຊ້ໄຟລ໌ຈະຖືກບລັອກຈົນກວ່າຈະມີເມຕາເດຕາການທຳຄວາມສະອາດທີ່ລົງນາມ."
+
+msgid "Staged package dry-run report was generated."
+msgstr "ສ້າງລາຍງານ dry-run ຂອງແພັກເກດສະເຕຈິງແລ້ວ."
+
+msgid "Staging metadata was written."
+msgstr "ຂຽນເມຕາເດຕາສະເຕຈິງແລ້ວ."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "ບໍ່ສາມາດຖອດແພັກເກດອັບເດດໄປໂຟລເດີສະເຕຈິງໄດ້."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "ບໍ່ສາມາດຊອກຫາຮາກແອັບພລິເຄຊັນ Chamilo ໃນແພັກເກດສະເຕຈິງໄດ້."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "ແພັກເກດສະເຕຈິງຂາດລາຍການ Chamilo ທີ່ຈຳເປັນ: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "ແພັກເກດສະເຕຈິງມີໂຄງສ້າງ Chamilo ທີ່ຄາດໄວ້."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "ແພັກເກດສະເຕຈິງບໍ່ມີ composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "ແພັກເກດສະເຕຈິງມີ composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "ແພັກເກດສະເຕຈິງບໍ່ມີ yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "ແພັກເກດສະເຕຈິງມີ yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "ບໍ່ສາມາດເຂົ້າລະຫັດເມຕາເດຕາຂັ້ນກຽມໄດ້."
+
+msgid "Unable to write staging metadata."
+msgstr "ບໍ່ສາມາດຂຽນເມຕາເດຕາຂັ້ນກຽມໄດ້."
+
+msgid "Update operation log created."
+msgstr "ສ້າງບັນທຶກການດຳເນີນການອັບເດດແລ້ວ."
+
+msgid "Unable to write update operation log."
+msgstr "ບໍ່ສາມາດຂຽນບັນທຶກການດຳເນີນການອັບເດດໄດ້."
+
+msgid "Invalid update operation id."
+msgstr "ລະຫັດການດຳເນີນການອັບເດດບໍ່ຖືກຕ້ອງ."
+

@@ -37011,13 +37011,13 @@ msgid "Trusted signing key"
 msgstr "Ċavetta tal-firma fdata"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Ittajpja APPLY UPDATE FILES biex tikkonferma"
+msgstr "Ikteb APPLY UPDATE FILES biex tikkonferma"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Ittajpja RUN DATABASE MIGRATIONS biex tikkonferma l-migrazzjonijiet tad-database"
+msgstr "Ikteb RUN DATABASE MIGRATIONS biex tikkonferma l-migrazzjonijiet tad-database"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Ittajpja RUN POST UPDATE ACTIONS biex tikkonferma"
+msgstr "Ikteb RUN POST UPDATE ACTIONS biex tikkonferma"
 
 msgid "Unknown update notice source."
 msgstr "Sors tal-avviż tal-aġġornament mhux magħruf."
@@ -40234,4 +40234,949 @@ msgstr "Belt tal-internship"
 
 msgid "City"
 msgstr "Belt"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Il-fluss tax-xogħol tal-aġġornament ġie restawrat wara r-rifrexx tal-paġna"
+
+msgid "Last completed step"
+msgstr "L-aħħar pass komplut"
+
+msgid "Stage package"
+msgstr "Pakket tal-istadju"
+
+msgid "Package staging"
+msgstr "Stadjar tal-pakket"
+
+msgid "Apply plan"
+msgstr "Pjan ta' applikazzjoni"
+
+msgid "Update workflow completed"
+msgstr "Il-fluss tax-xogħol tal-aġġornament tlesta"
+
+msgid "Update directory exists and is writable."
+msgstr "Id-direttorju tal-aġġornament jeżisti u jista' jinkiteb fih."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Id-direttorju tal-aġġornament jeżisti iżda ma jistax jinkiteb fih: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Id-direttorju tal-aġġornament għadu ma jeżistix, iżda d-direttorju ġenitur tiegħu jista' jinkiteb fih."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Id-direttorju tal-aġġornament għadu ma jeżistix, iżda jista' jinħoloq taħt var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Id-direttorju tal-aġġornament ma jeżistix u ma jistax jinħoloq bil-permessi attwali."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Ma setax jiġi determinat l-ispazju ħieles fuq id-diska għall-preflight tal-aġġornament."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "M'hemmx biżżejjed spazju ħieles fuq id-diska għal operazzjoni sigura ta' stadjar tal-aġġornament."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "L-ispazju ħieles fuq id-diska huwa biżżejjed għal dan il-fluss ta' aġġornament fl-istadju tal-verifika."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Il-manifest tal-aġġornament ma jiddefinixxix rekwiżit tal-verżjoni PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Ma setax jiġi evalwat kompletament ir-rekwiżit PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Il-verżjoni attwali ta' PHP ma tissodisfax ir-rekwiżit tal-aġġornament: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Il-verżjoni attwali ta' PHP tissodisfa r-rekwiżit tal-aġġornament."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Ma ġietx ipprovduta mogħdija ta' pakket lokali. Il-pakketti mniżżla jistgħu jiġu kkontrollati biss wara t-tniżżil."
+
+msgid "Local update package is not readable: %s"
+msgstr "Il-pakket tal-aġġornament lokali ma jistax jinqara: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Il-pakket tal-aġġornament lokali jrid ikun arkivju ZIP."
+
+msgid "Local update package is readable."
+msgstr "Il-pakket tal-aġġornament lokali jista' jinqara."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Il-verżjoni installata ta' Chamilo ma setgħetx tiġi rrilevata awtomatikament. Id-direzzjoni tal-verżjoni ma tistax tiġi kkontrollata."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Il-verżjoni installata jew dik fil-mira mhijiex f'format ta' verżjoni semantika komparabbli."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Il-verżjoni fil-mira hija aktar baxxa mill-verżjoni installata. It-tnaqqis tal-verżjoni mhuwiex permess b'mod awtomatiku."
+
+msgid "Target version matches the installed version."
+msgstr "Il-verżjoni fil-mira taqbel mal-verżjoni installata."
+
+msgid "Target version is newer than the installed version."
+msgstr "Il-verżjoni fil-mira hija aktar ġdida mill-verżjoni installata."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Il-proġett mhuwiex checkout ta' Git jew .git mhux preżenti."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Dan is-sistema ta' aġġornament hija maħsuba għal installazzjonijiet mingħajr appoġġ Git. Rilevajna li s-sistema lokali tuża Git. Jekk tkompli bl-aġġornament jista' jirriżulta f'kronoloġija Git miksura. Għal sistemi b'appoġġ Git, nirrakkomandaw li tuża l-proċedura Git deskritta f'CONTRIBUTING.md fir-root tal-web."
+
+msgid "Local Git changes were also detected."
+msgstr "Ġew irrilevati wkoll bidliet Git lokali."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Xi fajls ta' metadata tal-proġett huma neqsin. Stadji ta' aġġornament aktar tard jistgħu jeħtieġu kontrolli manwali tad-dipendenzi."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Il-fajls ta' metadata ta' Composer u Yarn huma preżenti."
+
+msgid "Starting staged file application."
+msgstr "Qed tinbeda l-applikazzjoni tal-fajls fl-istadju."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Hija meħtieġa konferma espliċita biex jiġu applikati l-fajls fl-istadju."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "L-applikazzjoni tal-fajls tal-aġġornament fl-istadju teħtieġ konferma espliċita."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Id-direttorju tal-istadjar jinsab ġewwa d-direttorju tal-istadjar tal-aġġornament ta' Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Id-direttorju tal-istadjar ġie vvalidat."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Il-metadata tal-pjan ta' applikazzjoni nqrat b'suċċess."
+
+msgid "Staged application path is valid."
+msgstr "Il-mogħdija tal-applikazzjoni fl-istadju hija valida."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Il-metadata tat-tindif tal-pakket iffirmat taqbel mal-pjan ta' applikazzjoni rivedut."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Il-metadata tat-tindif tal-pakket iffirmat ġiet ivvalidata."
+
+msgid "Update lock was acquired."
+msgstr "Il-lock tal-aġġornament inkiseb."
+
+msgid "Update backup directory was created."
+msgstr "Id-direttorju tal-backup tal-aġġornament inħoloq."
+
+msgid "Update file operations were collected."
+msgstr "L-operazzjonijiet tal-fajls tal-aġġornament inġabru."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Il-fajls eżistenti ppjanati għas-sostituzzjoni jew tneħħija ġew issalvati b'backup."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Il-fajls tal-aġġornament fl-istadju ġew ikkupjati fl-installazzjoni ta' Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Il-fajls obsoleti dikjarati mill-pakket tneħħew mill-installazzjoni ta' Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Il-fajls obsoleti dikjarati mill-pakkett tneħħew."
+
+msgid "Update apply audit metadata was written."
+msgstr "Il-metadejta tal-awditjar tal-applikazzjoni tal-aġġornament inkiteb."
+
+msgid "Staged files applied successfully."
+msgstr "Il-fajls ippreparati ġew applikati b'suċċess."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Ma setax jiġi restawrat il-fajls imneħħija: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Ma setax jiġi rritornat il-fajls ikkupjati: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Ir-rollback tal-fajls ġie eżegwit wara l-falliment tal-applikazzjoni tal-aġġornament."
+
+msgid "Rollback failed: %s"
+msgstr "Ir-rollback falliet: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Ma setax jinkiteb il-metadejta tal-awditjar tal-applikazzjoni tal-aġġornament: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Ma setax jinħeles il-lock tal-aġġornament wara l-falliment: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Il-mogħdija tal-istadjar hija meħtieġa biex jiġu applikati l-fajls tal-aġġornament."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Id-direttorju tal-istadjar ma jeżistix: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Id-direttorju bażi tal-istadjar tal-aġġornament ta' Chamilo ma jeżistix."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Id-direttorju tal-istadjar irid ikun ġewwa var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Id-direttorju tal-istadjar nieqes minn APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Ma setax jinqara l-metadejta tal-pjan tal-applikazzjoni tal-aġġornament: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Il-metadejta tal-pjan tal-applikazzjoni tal-aġġornament mhuwiex JSON validu: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Il-metadejta tal-pjan tal-applikazzjoni tal-aġġornament irid ikun oġġett JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Il-pjan tal-applikazzjoni tal-aġġornament nieqes mill-qasam application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Il-mogħdija tal-applikazzjoni ppreparata mhix tista' tinqara: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Il-mogħdija tal-applikazzjoni ppreparata trid tkun ġewwa d-direttorju tal-istadjar."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Il-mogħdija tal-applikazzjoni ppreparata nieqsa minn composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Il-pakkett tal-aġġornament nieqes minn %s. Erġa' pprepara pakkett verifikat b'metadejta tal-tindif iffirmata."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Il-pjan tal-applikazzjoni tal-aġġornament nieqes mill-metadejta riveduta tat-tindif tal-pakkett."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Il-metadejta tat-tindif tal-pakkett tal-aġġornament inbidlet wara li ġie ġġenerat il-pjan tal-applikazzjoni. Erġa' ibni l-pjan tal-applikazzjoni qabel tkompli."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Il-pjan tal-applikazzjoni tal-aġġornament fih lista invalida tat-tneħħija tal-pakkett."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Il-mogħdijiet tat-tindif tal-pakkett tal-aġġornament inbidlu wara li ġie ġġenerat il-pjan tal-applikazzjoni. Erġa' ibni l-pjan tal-applikazzjoni qabel tkompli."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Il-pjan tal-applikazzjoni tal-aġġornament nieqes mil-lista riveduta tal-mogħdijiet tat-tneħħija."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Il-mogħdijiet tat-tneħħija tal-pjan tal-applikazzjoni tal-aġġornament ma jaqblux mal-metadejta iffirmata tat-tindif tal-pakkett."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Il-mogħdija tal-lock tal-aġġornament trid tkun ġewwa var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Il-pjan tal-applikazzjoni tal-aġġornament nieqes mill-qasam backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Il-mogħdija tal-backup tal-aġġornament fiha segmenti ta' mogħdija mhux sikuri."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Il-mogħdija tal-backup tal-aġġornament trid tkun ġewwa var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Ma setax jinkiseb il-lock tal-aġġornament. Jista' jkun hemm aġġornament ieħor għaddej."
+
+msgid "Unable to release update lock: %s"
+msgstr "Ma setax jinħeles il-lock tal-aġġornament: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Id-direttorju tal-backup tal-aġġornament diġà jeżisti: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Id-direttorju fil-mira ma jistax jinħoloq: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "L-aġġornament ippjanat jikteb fuq link simboliku eżistenti: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Il-fajl fil-mira mhuwiex jista' jinkiteb: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Il-fajl fil-mira ma jistax jinħoloq: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Ma setax jiġi riżolt id-direttorju tal-proġett Chamilo qabel ma jitneħħew il-fajls obsoleti."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "It-tindif tal-aġġornament ma jistax ineħħi mogħdija protetta: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "L-aġġornament ippjanat ineħħi link simboliku eżistenti: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "It-tindif tal-aġġornament jappoġġja fajls biss, mhux direttorji: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Il-fajl obsolet fil-mira mhuwiex jista' jinqara għall-backup: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Il-fajl obsolet fil-mira ma jistax jitneħħa bil-permessi attwali tad-direttorju: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Il-fajl obsolet fil-mira jirriżolvi barra d-direttorju tal-proġett Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Ma setax isir backup tal-fajl fil-mira: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Ma setax jinkiteb il-metadejta tal-backup tal-aġġornament."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Ma setax jiġi kkupjat il-fajl tal-aġġornament ippreparat: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Ikkupjati %d minn %d fajls ippreparati."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Ma setax jitneħħa l-fajl skadut iddikjarat mill-pakkett: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Tneħħew %d minn %d fajls skaduti ddikjarati mill-pakkett."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Ma setax jiġi restawrat il-fajl tal-backup: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Ma setax jitneħħa l-fajl ikkupjat ġdid waqt ir-rollback: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Ma setax jiġi restawrat il-fajl imneħħi għax il-backup tiegħu huwa nieqes: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Ma setax jiġi restawrat il-fajl imneħħi mill-backup: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Ma setax jinkiteb il-metadata tal-awditjar tal-applikazzjoni tal-aġġornament."
+
+msgid "Unable to write global update apply log."
+msgstr "Ma setax jinkiteb il-log globali tal-applikazzjoni tal-aġġornament."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Instab mogħdija relattiva mhux sikura fl-istadju: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Id-direttorju mhuwiex writable: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Ma setax jinħoloq id-direttorju: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Il-metadata tal-istadju nqrat b’suċċess."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Il-metadata tal-pjan tal-applikazzjoni nkitbet fid-direttorju tal-istadju."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Il-fajls u d-direttorji fil-mira jidhru writable għall-aġġornament u t-tindif ippjanati."
+
+msgid "Update apply plan check failed."
+msgstr "Il-verifika tal-pjan tal-applikazzjoni tal-aġġornament falliet."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Xi fajls jew direttorji fil-mira ma jistgħux jinkitbu jew jitneħħew."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Biex tissewwa dan, ibdel temporanjament is-sid tad-direttorju sħiħ ta’ Chamilo għal %s (l-utent tas-server tal-web), applika l-aġġornament, ibdel is-sid lura għal %s wara, imbagħad issettja s-sid ta’ var/ (u l-kontenut tiegħu) lura għal %s biex l-applikazzjoni tkun tista’ tkompli tikteb fih."
+
+msgid "Update package verification failed."
+msgstr "Il-verifika tal-pakkett tal-aġġornament falliet."
+
+msgid "Update preflight checks failed."
+msgstr "Il-verifiki preflight tal-aġġornament fallew."
+
+msgid "Unable to stage update package."
+msgstr "Ma setax jiġi stadjat il-pakkett tal-aġġornament."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "It-tmexxija tal-kmandi post-apply mill-UI hija diżattivata fuq dan is-server."
+
+msgid "Missing required field: %s"
+msgstr "Qasam meħtieġ nieqes: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Ma ġiet ipprovduta l-ebda sors tal-manifest tal-aġġornament u l-ebda URL default tal-manifest tal-aġġornament mhuwa kkonfigurat."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "L-URL tal-manifest tal-aġġornament irid juża l-oriġini uffiċjali tal-aġġornament %s. Jista’ jinbidel biss il-mogħdija tal-manifest."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Il-mogħdijiet lokali tal-manifest tal-aġġornament huma diżattivati. Uża URL HTTPS tal-manifest jew issettja CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 fl-ambjent tas-server għal testijiet lokali."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Tipprovdix mogħdija HTTP %s. Ħalli dan il-qasam vojt biex tniżżlu mill-manifest tal-aġġornament."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Il-mogħdijiet lokali tal-aġġornament %s huma diżattivati f’dan l-ambjent."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Iċ-ċwievet pubbliċi f’dati tal-aġġornament iridu jkunu kkonfigurati fuq is-server f’dan l-ambjent."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "It-tħabbira tal-verifika tal-firma tal-aġġornament hija diżattivata f’dan l-ambjent."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "It-tmexxija tal-azzjonijiet tal-aġġornament post-apply teħtieġ it-test ta’ konferma \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "L-applikazzjoni tal-fajls tal-aġġornament stadjati teħtieġ it-test ta’ konferma \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Ma setax jiġi riżolt id-direttorju tal-proġett."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Il-backup tad-database mhuwiex ġestit minn dan l-updater. Oħloq u vverifika backup tad-database qabel tmexxi l-migrazzjonijiet."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Il-metodi down() tal-migrazzjoni Doctrine mhumiex garantiti li jirrestawraw data mħassra jew trasformata."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Il-metadata post-apply tirrakkomanda reviżjoni tal-migrazzjoni tad-database."
+
+msgid "No migration files were found in the staged package."
+msgstr "Ma nstabu l-ebda fajls ta’ migrazzjoni fil-pakkett stadjat."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Instabu fajls ta’ migrazzjoni Doctrine stadjati."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Il-mira tal-migrazzjoni Doctrine ġiet riżolta mill-pakkett stadjat."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Il-linja bażi tal-migrazzjoni Doctrine għandha problemi li jimblukkaw għall-migrazzjonijiet stadjati."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine jirrapporta twissijiet storiċi tal-linja bażi tal-migrazzjoni, iżda se jiġu riveduti u eżegwiti b’mod espliċitu biss il-migrazzjonijiet stadjati %s."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine jirrapporta twissijiet storiċi tal-linja bażi tal-migrazzjoni. L-updater se jeżegwixxi biss il-klassijiet ta’ migrazzjoni stadjati %s wara konferma espliċita."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Il-linja bażi ta’ Doctrine m’għandha l-ebda problema li timblokka għall-migrazzjonijiet stadjati %s."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Id-dry-run tal-migrazzjoni Doctrine falliet għal mill-inqas migrazzjoni stadjata waħda. Tmexxix migrazzjonijiet tad-database sakemm dan jiġi msewwi."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Id-dry-run ta’ Doctrine tlesta b’suċċess għal kull klassi ta’ migrazzjoni stadjata."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Backup tad-database irid jinħoloq barra minn dan l-updater qabel tmexxi l-migrazzjonijiet."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Il-mogħdija tal-istadju hija meħtieġa biex jiġu riveduti l-migrazzjonijiet tad-database."
+
+msgid "Unable to read update %s: %s"
+msgstr "Ma setax jinqara l-aġġornament %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Il-JSON tal-aġġornament %s huwa invalidu: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Il-JSON tal-aġġornament %s irid ikun oġġett."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Il-metadata tal-verifiki post-apply ma fiha lista valida ta’ azzjonijiet."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Il-migrazzjonijiet tad-database ma ġewx rakkomandati għal din l-aġġornament f’fażijiet."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Il-metadejta tal-aġġornament nieqsa mill-mogħdija tal-applikazzjoni f’fażijiet."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Il-fajl tal-migrazzjoni ppjanata f’fażijiet ma nstabx: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Ma jistax jinqara l-fajl tal-migrazzjoni f’fażijiet: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "L-ebda deskrizzjoni ma setgħet tiġi estratta minn getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Il-runner tal-aġġornament jappoġġja biss %s migrazzjonijiet f’fażijiet: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Ma jistax jinkiteb il-metadejta tas-sikurezza tal-migrazzjoni: %s"
+
+msgid "Migration safety check failed."
+msgstr "Il-verifika tas-sikurezza tal-migrazzjoni falliet."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Instabet mogħdija relattiva mhux sikura tal-migrazzjoni f’fażijiet: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Il-verżjoni installata ta’ Chamilo ma setgħetx tiġi identifikata awtomatikament. Kompli biss wara li tikkonferma li dan l-aġġornament huwa kompatibbli."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Il-verżjoni installata jew dik fil-mira mhijiex f’format ta’ verżjoni semantika komparabbli. Kompli biss wara verifika manwali."
+
+msgid "An update is available."
+msgstr "Hemm aġġornament disponibbli."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Il-verżjoni installata diġà taqbel mal-verżjoni tal-manifest."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Il-verżjoni tal-manifest hija eqdem mill-verżjoni installata. It-tnaqqis tal-verżjoni huwa mblukkat b’mod awtomatiku."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Il-fajls f’fażijiet ma ġewx applikati b’suċċess. Il-verifiki wara l-applikazzjoni ma jistgħux jkomplu."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Il-metadejta tar-riżultat tal-applikazzjoni nqrat b’suċċess."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Ġew iġġenerati r-rakkomandazzjonijiet tal-azzjonijiet wara l-applikazzjoni."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Instabu migrazzjonijiet tad-database fil-pakkett f’fażijiet. Mexxihom biss wara li tikkonferma li l-aġġornament tal-fajls huwa korrett u li teżisti kopja ta’ riżerva tad-database."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Il-mogħdija tal-istadju hija meħtieġa biex jitmexxew il-verifiki wara l-applikazzjoni."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "L-aġġornament %s mhuwiex JSON validu: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "L-aġġornament %s irid ikun oġġett JSON."
+
+msgid "Composer dependencies"
+msgstr "Dipendenzi Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Il-metadejta ta’ Composer kienet inkluża fil-pakkett f’fażijiet. Mexxi Composer install mill-għerq tal-applikazzjoni qabel ma tqis l-aġġornament bħala komplut."
+
+msgid "Frontend assets"
+msgstr "Assi tal-frontend"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Fajls relatati mal-frontend kienu inklużi fil-pakkett f’fażijiet. Ibni mill-ġdid l-assi tal-produzzjoni wara l-installazzjoni tad-dipendenzi."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Instabu fajls ta’ migrazzjoni Doctrine fil-pakkett f’fażijiet. Ikkonferma li teżisti kopja ta’ riżerva tad-database qabel ma tmexxi l-migrazzjonijiet."
+
+msgid "Symfony cache"
+msgstr "Cache ta’ Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Iċċara l-cache ta’ Symfony wara li tapplika l-fajls tal-aġġornament u tmexxi kwalunkwe kmand meħtieġ."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Ma jistax jinkiteb il-metadejta tal-verifiki wara l-applikazzjoni."
+
+msgid "Post-apply check failed."
+msgstr "Il-verifika wara l-applikazzjoni falliet."
+
+msgid "Update package is not readable: %s"
+msgstr "Il-pakkett tal-aġġornament mhuwiex jinqara: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Il-pakkett tal-aġġornament mhuwiex arkivju ZIP validu."
+
+msgid "Update package ZIP archive is empty."
+msgstr "L-arkivju ZIP tal-pakkett tal-aġġornament huwa vojt."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Il-pakkett tal-aġġornament fih daħla ZIP li ma tistax tinqara."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Il-pakkett tal-aġġornament fih mogħdija assoluta mhux sikura: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Il-pakkett tal-aġġornament fih daħla ta’ path traversal: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Il-pakkett tal-aġġornament fih link simboliku: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Qed jinbdew l-azzjonijiet wara l-applikazzjoni."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "L-eżekuzzjoni tal-kmand wara l-applikazzjoni teħtieġ konferma espliċita."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Il-metadejta tar-rakkomandazzjoni wara l-applikazzjoni nqrat b’suċċess."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "L-azzjonijiet wara l-applikazzjoni ġew ivvalidati kontra r-rapport tar-rakkomandazzjoni."
+
+msgid "Post-apply actions were selected."
+msgstr "Intgħażlu l-azzjonijiet wara l-applikazzjoni."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "L-azzjonijiet avvanzati wara l-applikazzjoni jeħtieġu konferma avvanzata espliċita."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "L-azzjonijiet avvanzati wara l-applikazzjoni ġew ikkonfermati espliċitament."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Il-kmandi magħżula wara l-applikazzjoni tlestew b’suċċess."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Inkiteb il-metadejta tal-eżekuzzjoni tal-kmand wara l-applikazzjoni."
+
+msgid "Post-apply actions completed successfully."
+msgstr "L-azzjonijiet wara l-applikazzjoni tlestew b’suċċess."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Definizzjoni invalida tal-kmand wara l-applikazzjoni tal-aġġornament: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Qed titmexxa l-azzjoni wara l-applikazzjoni: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Qed jitmexxa l-kmand %d minn %d għal %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Azzjoni wara l-applikazzjoni falliet: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "L-azzjoni wara l-applikazzjoni \"%s\" falliet b'kodiċi ta' ħruġ %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Azzjoni wara l-applikazzjoni tlestiet: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Il-mogħdija ta' staging hija meħtieġa biex jitmexxew azzjonijiet wara l-applikazzjoni."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "M'hemm l-ebda azzjoni wara l-applikazzjoni rakkomandata biex titmexxa."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "M'hemm l-ebda azzjoni wara l-applikazzjoni permessa biex titmexxa."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "L-azzjoni wara l-applikazzjoni mhix permessa għal dan l-aġġornament: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Il-migrazzjonijiet tad-database jeħtieġu reviżjoni tas-sikurezza tal-migrazzjoni qabel l-eżekuzzjoni."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Il-migrazzjonijiet tad-database ma jistgħux jitmexxew għax ir-reviżjoni tas-sikurezza tal-migrazzjoni ma għaddietx."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Il-migrazzjonijiet tad-database ma jistgħux jitmexxew għax ir-reviżjoni tas-sikurezza tal-migrazzjoni ma elenkatx migrazzjonijiet staged."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Il-migrazzjonijiet tad-database ma jistgħux jitmexxew għax ir-reviżjoni tas-sikurezza tal-migrazzjoni fiha daħla ta' migrazzjoni invalida."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Jistgħu jiġu eżegwiti biss migrazzjonijiet %s staged mill-update runner."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Il-migrazzjonijiet tad-database ma jistgħux jitmexxew għax ir-reviżjoni tas-sikurezza tal-migrazzjoni staged irrapportat żbalji li jimblukkaw."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine jirrapporta twissijiet ta' linja bażi tal-migrazzjoni. Se jiġu eżegwiti b'mod espliċitu biss klassijiet ta' migrazzjoni %s staged."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Il-migrazzjonijiet tad-database jeħtieġu konferma li teżisti backup tad-database."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Il-migrazzjonijiet tad-database jeħtieġu t-test ta' konferma \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Ir-reviżjoni tas-sikurezza tal-migrazzjoni tad-database tlestiet qabel l-eżekuzzjoni."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "L-eżistenza tal-backup tad-database ġiet ikkonfermata b'mod espliċitu."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Ir-reviżjoni tas-sikurezza tal-migrazzjoni tad-database u l-konferma tal-backup ġew ipprovduti."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Il-migrazzjonijiet tad-database ġew eżegwiti wara konferma espliċita tal-backup tad-database. L-aġġornatur ma ħoloqx il-backup tad-database."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Il-permessi eżegwibbli meħtieġa wara l-applikazzjoni ġew innormalizzati."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Ma jistgħux jitmexxew il-migrazzjonijiet tad-database għax bin/console ma nstabx."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Il-kmandi wara l-applikazzjoni magħżula għandhom il-mogħdijiet li jistgħu jinkitbu meħtieġa."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Il-mogħdijiet li jistgħu jinkitbu tal-kmandi wara l-applikazzjoni ġew ivvalidati."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Azzjonijiet avvanzati wara l-applikazzjoni jistgħu jimmodifikaw dipendenzi, assi ġenerati jew id-database. Irrevedi l-backups qabel tkompli."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer ma jistax jaħdem b'mod sikur mill-aġġornatur tal-web għax il-fajl ġenerat minn Composer \"%s\" huwa proprjetà tal-UID %d filwaqt li l-runtime PHP juża l-UID %d. Mexxi Composer manwalment bħala s-sid tad-deployment, imbagħad kompli bil-bqija tal-azzjonijiet wara l-applikazzjoni."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Il-mogħdija meħtieġa mill-azzjoni wara l-applikazzjoni \"%s\" mhix tista' tinkiteb: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Id-direttorju ġenitur meħtieġ mill-azzjoni wara l-applikazzjoni \"%s\" mhux jista' jinkiteb: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Ma jistgħux jinqraw il-permessi għall-eżegwibbli meħtieġ wara l-applikazzjoni: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Ma jistax jiġi mmarkat l-eżegwibbli meħtieġ wara l-applikazzjoni bħala eżegwibbli: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "L-eżegwibbli meħtieġ wara l-applikazzjoni xorta mhuwiex eżegwibbli wara chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Il-permess eżegwibbli ġie nnormalizzat."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Ma tistax tinkiteb konfigurazzjoni Git iżolata għall-kmandi wara l-applikazzjoni."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Jidher li operazzjoni oħra ta' aġġornament qed taħdem. Neħħi var/update/update.lock biss jekk l-ebda aġġornament mhu attiv."
+
+msgid "Unable to create update lock: %s"
+msgstr "Ma jistax jinħoloq lock tal-aġġornament: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Ma tistax tinkiteb metadata tat-tmexxija tal-kmand wara l-applikazzjoni: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Il-manifest tal-aġġornament nieqes mill-blokk tal-pakkett."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Il-blokk tal-firma tal-manifest tal-aġġornament irid ikun oġġett."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Il-blokk tar-rekwiżiti tal-manifest tal-aġġornament irid ikun oġġett."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "L-sha256 tal-pakkett tal-aġġornament irid ikun stringa eżadeċimali ta' 64 karattru."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Il-manifest tal-aġġornament nieqes mill-qasam stringa meħtieġ \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Il-qasam tal-manifest tal-aġġornament \"%s\" irid ikun stringa."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Il-manifest tal-aġġornament mhuwiex JSON validu: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Il-JSON tal-manifest tal-aġġornament irid ikun oġġett."
+
+msgid "Manifest source cannot be empty."
+msgstr "Is-sors tal-manifest ma jistax ikun vojt."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "L-URL tal-manifest tal-aġġornament irid juża l-oriġini uffiċjali tal-aġġornament %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Ma jistax jitniżżel il-manifest tal-aġġornament. Status HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Il-fajl tal-manifest mhuwiex jinqara: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Ma jistax jinqara l-fajl tal-manifest: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "L-URL tal-manifest tal-aġġornament irid juża HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Il-metadejta tal-pakkett tal-aġġornament mhix tista' tinqara: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Ma jistax jinqara l-metadejta tal-pakkett tal-aġġornament: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Il-metadejta tal-pakkett tal-aġġornament mhix JSON validu: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Il-metadejta tal-pakkett tal-aġġornament trid tkun oġġett JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Il-format tal-metadejta tal-pakkett tal-aġġornament irid ikun %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Il-qasam tal-metadejta tal-pakkett tal-aġġornament \"remove\" irid ikun array."
+
+msgid "Update package removal paths must be strings."
+msgstr "Il-mogħdijiet tat-tneħħija tal-pakkett tal-aġġornament iridu jkunu strings."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Il-metadejta tal-pakkett tal-aġġornament ma tistax tneħħi mogħdija protetta: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Il-pakkett tal-aġġornament ma jistax jinkludi u jneħħi l-istess mogħdija: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Ma jistax jiġi kkalkulat is-sha256 tal-metadejta tal-pakkett tal-aġġornament."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Il-mogħdija tat-tneħħija tal-pakkett tal-aġġornament ma tistax tkun vojta."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Il-mogħdija tat-tneħħija tal-pakkett tal-aġġornament fiha byte null."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Il-mogħdija tat-tneħħija tal-pakkett tal-aġġornament trid tkun relattiva: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Il-mogħdija tat-tneħħija tal-pakkett tal-aġġornament fiha segment mhux sikur: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Il-mogħdija tal-istadju hija meħtieġa biex jinbena pjan ta' applikazzjoni tal-aġġornament."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Id-direttorju tal-istadju nieqes STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Ma jistax jinqara l-metadejta tal-istadju: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Il-metadejta tal-istadju mhix JSON validu: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Il-metadejta tal-istadju trid tkun oġġett JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Il-metadejta tal-istadju nieqsa mill-qasam application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Il-pakkett tal-aġġornament nieqes %s. Metadejta ta' tindif iffirmata hija meħtieġa qabel ma l-fajls jistgħu jiġu applikati."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Il-metadejta tal-istadju ma fiha l-metadejta tat-tindif tal-pakkett iffirmata rreġistrata waqt l-estrazzjoni."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Il-metadejta tat-tindif tal-pakkett tal-aġġornament inbidlet wara l-istadju. Erġa' poġġi fl-istadju l-pakkett ivverifikat qabel tkompli."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Il-metadejta tal-istadju ma fiha lista valida ta' tneħħija tal-pakkett."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Il-mogħdijiet tat-tindif tal-pakkett tal-aġġornament inbidlu wara l-istadju. Erġa' poġġi fl-istadju l-pakkett ivverifikat qabel tkompli."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Il-metadejta tat-tindif tal-pakkett iffirmata ma nbidlitx mill-istadju."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Fajl ta' lock tal-aġġornament diġà jeżisti. Jista' jkun hemm aġġornament ieħor għaddej."
+
+msgid "Update lock directory is not writable."
+msgstr "Id-direttorju tal-lock tal-aġġornament mhux jista' jinkiteb."
+
+msgid "No update lock is currently active."
+msgstr "Ebda lock tal-aġġornament mhu attiv bħalissa."
+
+msgid "Update backup directory is not writable."
+msgstr "Id-direttorju tal-backup tal-aġġornament mhux jista' jinkiteb."
+
+msgid "Update backup directory is writable."
+msgstr "Id-direttorju tal-backup tal-aġġornament jista' jinkiteb."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Id-direttorju tal-backup tal-aġġornament ma jistax jinħoloq mill-proċess attwali."
+
+msgid "Update backup directory can be created."
+msgstr "Id-direttorju tal-backup tal-aġġornament jista' jinħoloq."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Xi direttorji tax-xogħol tal-aġġornament mhumiex jistgħu jinkitbu jew ma jistgħux jinħolqu mill-proċess attwali."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Id-direttorji tax-xogħol tal-aġġornament jistgħu jinkitbu jew jistgħu jinħolqu."
+
+msgid "Update apply file plan was generated."
+msgstr "Il-pjan tal-fajls tal-applikazzjoni tal-aġġornament ġie ġġenerat."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Il-metadejta tat-tindif tal-pakkett fiha mogħdijiet li ma jistgħux jitneħħew b'mod sikur."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Il-miri tat-tneħħija dikjarati mill-pakkett huma sikuri."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Xi fajls obsoleti dikjarati mill-pakkett diġà mhumiex preżenti f'din l-installazzjoni."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "L-aġġornament ippjanat jikteb fuq jew ineħħi links simboliċi eżistenti."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "L-aġġornament ippjanat ma jiktebx fuq jew ma jneħħix links simboliċi eżistenti."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Fajls ġodda ta' migrazzjoni tal-aġġornament iridu jitqiegħdu taħt %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Instabu fajls ġodda ta' migrazzjoni Doctrine %s. Se jeħtieġu reviżjoni tas-sikurezza tal-migrazzjoni tad-database wara l-applikazzjoni tal-fajls."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Xi listi ta' fajls tal-pjan tal-applikazzjoni tal-aġġornament ġew imqassra fir-risposta JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Ma jistax jinkiteb il-metadejta tal-pjan tal-applikazzjoni tal-aġġornament."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Ma jistax jitniżżel il-pakkett tal-aġġornament. Status HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Ma jistax jinfetaħ il-fajl destinazzjoni tal-pakkett tal-aġġornament: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "It-tniżżil tal-aġġornamenti jrid juża l-oriġini uffiċjali tal-aġġornament %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "L-URL tal-pakkett tal-aġġornament irid juża HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Il-kontrolli tas-sikurezza tal-arkivju tal-pakkett tal-aġġornament għaddew."
+
+msgid "Update package was extracted to staging."
+msgstr "Il-pakkett tal-aġġornament ġie estratt lejn l-istadju."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Il-metadata tat-tindif tal-pakkett iffirmat ġiet mgħobbija."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Il-pakkett tal-aġġornament ma fihx %s. L-applikazzjoni tal-fajls se tiġi mblukkata sakemm tiġi pprovduta l-metadata tat-tindif iffirmata."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Ir-rapport tal-prova (dry-run) tal-pakkett fl-istadju ġie ġġenerat."
+
+msgid "Staging metadata was written."
+msgstr "Il-metadata tal-istadju ġiet miktuba."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Ma jistax jiġi estratt il-pakkett tal-aġġornament lejn id-direttorju tal-istadju."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Ma jistax jinstab l-għerq tal-applikazzjoni Chamilo fil-pakkett fl-istadju."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Il-pakkett fl-istadju nieqes mill-entrata Chamilo meħtieġa: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Il-pakkett fl-istadju fih l-istruttura Chamilo mistennija."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Il-pakkett fl-istadju ma fihx composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Il-pakkett fl-istadju fih composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Il-pakkett fl-istadju ma fihx yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Il-pakkett fl-istadju fih yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Ma jistax jiġi kkodifikat il-metadata tal-istadju."
+
+msgid "Unable to write staging metadata."
+msgstr "Ma jistax jinkiteb il-metadata tal-istadju."
+
+msgid "Update operation log created."
+msgstr "Inħoloq ir-reġistru tal-operazzjoni tal-aġġornament."
+
+msgid "Unable to write update operation log."
+msgstr "Ma jistax jinkiteb ir-reġistru tal-operazzjoni tal-aġġornament."
+
+msgid "Invalid update operation id."
+msgstr "ID tal-operazzjoni tal-aġġornament invalidu."
 

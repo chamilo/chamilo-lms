@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Mangyaring i-type ang iyong text sa ibaba"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad na punan ang form : kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad na pagpuno ng form : kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Isulat ang address"
@@ -26716,7 +26716,7 @@ msgid "Selective display of roles"
 msgstr "Piliin ang pagpapakita ng mga role"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Isang array ng role => true/false na tumutukoy kung dapat ipakita o itago ang role na iyon.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Isang array ng role => true/false na tumutukoy kung ipapakita o itatago ang naturang role.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Mga opsyon sa pagpapakita ng mga role"
@@ -35584,7 +35584,7 @@ msgid "%s results"
 msgstr "%s resulta"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad na punan ang form : kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad na pagpuno ng form : kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Natanggal"
@@ -37006,13 +37006,13 @@ msgid "Trusted signing key"
 msgstr "Pinagkakatiwalaang signing key"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "I-type ang APPLY UPDATE FILES upang kumpirmahin"
+msgstr "I-type ang APPLY UPDATE FILES para kumpirmahin"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "I-type ang RUN DATABASE MIGRATIONS upang kumpirmahin ang mga migration ng database"
+msgstr "I-type ang RUN DATABASE MIGRATIONS para kumpirmahin ang mga migrasyon ng database"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "I-type ang RUN POST UPDATE ACTIONS upang kumpirmahin"
+msgstr "I-type ang RUN POST UPDATE ACTIONS para kumpirmahin"
 
 msgid "Unknown update notice source."
 msgstr "Hindi kilalang pinagmulan ng abiso ng update."
@@ -39163,7 +39163,7 @@ msgid "Web server load"
 msgstr "Karga ng web server"
 
 msgid "Live Apache, Nginx or FrankenPHP status metrics"
-msgstr "Live na mga sukatan ng status ng Apache, Nginx o FrankenPHP"
+msgstr "Mga live na status metric ng Apache, Nginx o FrankenPHP"
 
 msgid "Click to show web server load metrics"
 msgstr "I-click para ipakita ang mga sukatan ng karga ng web server"
@@ -40229,4 +40229,949 @@ msgstr "Lungsod ng internship"
 
 msgid "City"
 msgstr "Lungsod"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Naibalik ang workflow ng update pagkatapos mag-refresh ng page"
+
+msgid "Last completed step"
+msgstr "Huling natapos na hakbang"
+
+msgid "Stage package"
+msgstr "I-stage ang package"
+
+msgid "Package staging"
+msgstr "Pag-stage ng package"
+
+msgid "Apply plan"
+msgstr "Ilapat ang plano"
+
+msgid "Update workflow completed"
+msgstr "Natapos ang workflow ng update"
+
+msgid "Update directory exists and is writable."
+msgstr "Umiiral ang direktoryo ng update at writable ito."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Umiiral ang direktoryo ng update ngunit hindi writable: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Wala pa ang direktoryo ng update, ngunit writable ang parent directory nito."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Wala pa ang direktoryo ng update, ngunit maaari itong likhain sa ilalim ng var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Wala ang direktoryo ng update at hindi ito malilikha gamit ang kasalukuyang mga permiso."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Hindi matukoy ang libreng disk space para sa update preflight."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Hindi sapat ang libreng disk space para sa ligtas na pag-stage ng update."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Sapat ang libreng disk space para sa verification-stage update flow na ito."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Hindi tumutukoy ang update manifest ng kinakailangang bersyon ng PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Hindi ganap na ma-evaluate ang kinakailangan sa PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Hindi natutugunan ng kasalukuyang bersyon ng PHP ang kinakailangan sa update: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Natutugunan ng kasalukuyang bersyon ng PHP ang kinakailangan sa update."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Walang ibinigay na lokal na path ng package. Ang mga na-download na package ay masusuri lamang pagkatapos ng download."
+
+msgid "Local update package is not readable: %s"
+msgstr "Hindi mabasa ang lokal na update package: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Dapat na ZIP archive ang lokal na update package."
+
+msgid "Local update package is readable."
+msgstr "Nababasa ang lokal na update package."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Hindi awtomatikong natukoy ang naka-install na bersyon ng Chamilo. Hindi masusuri ang direksyon ng bersyon."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Ang naka-install o target na bersyon ay wala sa maihahambing na semantic version format."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Mas mababa ang target na bersyon kaysa sa naka-install na bersyon. Hindi pinapayagan ang mga downgrade bilang default."
+
+msgid "Target version matches the installed version."
+msgstr "Tugma ang target na bersyon sa naka-install na bersyon."
+
+msgid "Target version is newer than the installed version."
+msgstr "Mas bago ang target na bersyon kaysa sa naka-install na bersyon."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Hindi Git checkout ang proyekto o wala ang .git."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Ang sistema ng update na ito ay para sa mga instalasyon na walang suporta sa Git. Natukoy namin na gumagamit ng Git ang lokal na sistema. Ang pagpapatuloy sa update ay maaaring magresulta sa sirang Git history. Para sa mga sistemang may suporta sa Git, inirerekomenda naming gamitin ang prosedura ng Git na detalyado sa CONTRIBUTING.md sa web root."
+
+msgid "Local Git changes were also detected."
+msgstr "Natukoy din ang mga lokal na pagbabago sa Git."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Nawawala ang ilang metadata file ng proyekto. Maaaring kailanganin ng mga susunod na yugto ng update ang manu-manong pagsusuri ng dependency."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Naroon ang mga metadata file ng Composer at Yarn."
+
+msgid "Starting staged file application."
+msgstr "Sinisimulan ang staged na paglalapat ng file."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Kailangan ng tahasang kumpirmasyon upang ilapat ang mga staged na file."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Ang paglalapat ng mga staged na update file ay nangangailangan ng tahasang kumpirmasyon."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Nasa loob ng Chamilo update staging directory ang staging directory."
+
+msgid "Staging directory was validated."
+msgstr "Na-validate ang staging directory."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Matagumpay na nabasa ang metadata ng apply plan."
+
+msgid "Staged application path is valid."
+msgstr "Wasto ang path ng staged application."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Tugma ang signed package cleanup metadata sa narebyung apply plan."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Na-validate ang metadata ng paglilinis ng naka-sign na package."
+
+msgid "Update lock was acquired."
+msgstr "Nakuha ang lock ng update."
+
+msgid "Update backup directory was created."
+msgstr "Nagawa ang direktoryo ng backup ng update."
+
+msgid "Update file operations were collected."
+msgstr "Nakolekta ang mga file operation ng update."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Na-backup ang mga umiiral na file na nakaplano para palitan o alisin."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Nakopya ang mga naka-stage na file ng update sa instalasyon ng Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Inalis mula sa instalasyon ng Chamilo ang mga lipas na file na idineklara ng package."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Inalis ang mga lipas na file na idineklara ng package."
+
+msgid "Update apply audit metadata was written."
+msgstr "Naisulat ang metadata ng audit ng paglalapat ng update."
+
+msgid "Staged files applied successfully."
+msgstr "Matagumpay na nailapat ang mga naka-stage na file."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Hindi maibalik ang mga inalis na file: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Hindi ma-roll back ang mga nakopyang file: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Isinagawa ang rollback ng file pagkatapos mabigo ang paglalapat ng update."
+
+msgid "Rollback failed: %s"
+msgstr "Nabigo ang rollback: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Hindi maisulat ang metadata ng audit ng paglalapat ng update: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Hindi mailabas ang lock ng update pagkatapos ng pagkabigo: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Kailangan ang staging path para ilapat ang mga file ng update."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Walang staging directory: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Walang base directory ng Chamilo update staging."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Dapat nasa loob ng var/update/staging ang staging directory."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Walang APPLY-PLAN.json ang staging directory."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Hindi mabasa ang metadata ng plano ng paglalapat ng update: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Hindi valid na JSON ang metadata ng plano ng paglalapat ng update: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Dapat JSON object ang metadata ng plano ng paglalapat ng update."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Walang field na application_path ang plano ng paglalapat ng update."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Hindi mabasa ang naka-stage na application path: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Dapat nasa loob ng staging directory ang naka-stage na application path."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Walang composer.json ang naka-stage na application path."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Walang %s ang update package. I-stage muli ang na-verify na package na may naka-sign na metadata ng paglilinis."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Walang narebyung metadata ng paglilinis ng package ang plano ng paglalapat ng update."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Nagbago ang metadata ng paglilinis ng update package pagkatapos gawin ang plano ng paglalapat. Buuin muli ang plano ng paglalapat bago magpatuloy."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "May invalid na listahan ng pag-alis ng package ang plano ng paglalapat ng update."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Nagbago ang mga path ng paglilinis ng update package pagkatapos gawin ang plano ng paglalapat. Buuin muli ang plano ng paglalapat bago magpatuloy."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Walang narebyung listahan ng path ng pag-alis ang plano ng paglalapat ng update."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Hindi tumutugma ang mga path ng pag-alis sa plano ng paglalapat ng update sa naka-sign na metadata ng paglilinis ng package."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Dapat nasa loob ng var/update ang path ng lock ng update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Walang field na backup_path ang plano ng paglalapat ng update."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "May hindi ligtas na mga segment ng path ang backup path ng update."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Dapat nasa loob ng var/update/backups ang backup path ng update."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Hindi makuha ang lock ng update. Maaaring may ibang update na isinasagawa."
+
+msgid "Unable to release update lock: %s"
+msgstr "Hindi mailabas ang lock ng update: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Mayroon nang direktoryo ng backup ng update: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Hindi magawa ang target directory: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Papangibabawan ng nakaplanong update ang umiiral na symbolic link: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Hindi writable ang target file: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Hindi magawa ang target file: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Hindi ma-resolve ang direktoryo ng proyekto ng Chamilo bago alisin ang mga lipas na file."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Hindi maaaring alisin ng paglilinis ng update ang protektadong path: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Aalisin ng nakaplanong update ang umiiral na symbolic link: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Mga file lamang ang sinusuportahan ng paglilinis ng update, hindi mga direktoryo: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Hindi mabasa ang lipas na target file para sa backup: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Hindi maalis ang lipas na target file dahil sa kasalukuyang mga permiso ng direktoryo: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Ang lipas na target file ay nalutas sa labas ng direktoryo ng proyekto ng Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Hindi ma-back up ang target file: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Hindi maisulat ang metadata ng backup ng update."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Hindi makopya ang naka-stage na update file: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Nakopya ang %d sa %d naka-stage na file."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Hindi maalis ang lipas na file na idineklara ng package: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Naalis ang %d sa %d lipas na file na idineklara ng package."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Hindi maibalik ang naka-back up na file: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Hindi maalis ang bagong nakopyang file sa panahon ng rollback: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Hindi maibalik ang inalis na file dahil nawawala ang backup nito: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Hindi maibalik ang inalis na file mula sa backup: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Hindi maisulat ang metadata ng audit ng paglalapat ng update."
+
+msgid "Unable to write global update apply log."
+msgstr "Hindi maisulat ang pandaigdigang log ng paglalapat ng update."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Natukoy ang hindi ligtas na naka-stage na relatibong path: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Hindi writable ang direktoryo: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Hindi malikha ang direktoryo: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Matagumpay na nabasa ang metadata ng staging."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Naisulat ang metadata ng plano ng paglalapat sa staging directory."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Mukhang writable ang mga target na file at direktoryo para sa planadong update at paglilinis."
+
+msgid "Update apply plan check failed."
+msgstr "Nabigo ang pagsusuri ng plano ng paglalapat ng update."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Hindi maisulat o maalis ang ilang target na file o direktoryo."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Para ayusin ito, pansamantalang palitan ang may-ari ng buong direktoryo ng Chamilo sa %s (ang user ng web server), ilapat ang update, ibalik ang may-ari sa %s pagkatapos, pagkatapos ay itakda ang may-ari ng var/ (at ang mga nilalaman nito) pabalik sa %s upang patuloy na makasulat dito ang application."
+
+msgid "Update package verification failed."
+msgstr "Nabigo ang beripikasyon ng update package."
+
+msgid "Update preflight checks failed."
+msgstr "Nabigo ang mga preflight check ng update."
+
+msgid "Unable to stage update package."
+msgstr "Hindi ma-stage ang update package."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Naka-disable sa server na ito ang pagpapatakbo ng mga post-apply na command mula sa UI."
+
+msgid "Missing required field: %s"
+msgstr "Nawawalang kinakailangang field: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Walang ibinigay na pinagmulan ng update manifest at walang naka-configure na default na URL ng update manifest."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Dapat gamitin ng URL ng update manifest ang opisyal na pinagmulan ng update na %s. Ang path ng manifest lamang ang maaaring baguhin."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Naka-disable ang mga lokal na path ng update manifest. Gumamit ng HTTPS na URL ng manifest o itakda ang CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 sa environment ng server para sa mga lokal na pagsubok."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Huwag magbigay ng HTTP %s path. Iwanang walang laman ang field na ito upang i-download ito mula sa update manifest."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Naka-disable sa environment na ito ang mga lokal na path ng update %s."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Dapat naka-configure sa server ang mga pinagkakatiwalaang pampublikong key ng update sa environment na ito."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Naka-disable sa environment na ito ang paglaktaw sa beripikasyon ng lagda ng update."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Ang pagpapatakbo ng mga post-apply na aksyon ng update ay nangangailangan ng tekstong kumpirmasyon na \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Ang paglalapat ng mga naka-stage na update file ay nangangailangan ng tekstong kumpirmasyon na \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Hindi malutas ang direktoryo ng proyekto."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Hindi pinamamahalaan ng updater na ito ang backup ng database. Lumikha at beripikahin ang backup ng database bago magpatakbo ng mga migration."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Hindi garantisado na ibabalik ng mga Doctrine migration down() method ang tinanggal o binagong data."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Inirerekomenda ng post-apply metadata ang pagsusuri ng migration ng database."
+
+msgid "No migration files were found in the staged package."
+msgstr "Walang nahanap na migration file sa naka-stage na package."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Natukoy ang mga naka-stage na Doctrine migration file."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Nalutas ang target ng Doctrine migration mula sa naka-stage na package."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "May mga blocking issue ang Doctrine migration baseline para sa mga naka-stage na migration."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Nag-uulat ang Doctrine ng mga babala sa historical migration baseline, ngunit ang mga naka-stage na %s migration lamang ang susuriin at isasagawa nang tahasan."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Nag-uulat ang Doctrine ng mga babala sa historical migration baseline. Isasagawa ng updater ang mga naka-stage na %s migration class lamang pagkatapos ng tahasang kumpirmasyon."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Walang blocking issue ang Doctrine baseline para sa mga naka-stage na %s migration."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Nabigo ang Doctrine migration dry-run para sa kahit isang naka-stage na migration. Huwag magpatakbo ng mga migration ng database hangga't hindi ito naaayos."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Matagumpay na natapos ang Doctrine dry-run para sa bawat staged migration class."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Dapat gumawa ng backup ng database sa labas ng updater na ito bago patakbuhin ang mga migration."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Kailangan ang staging path upang suriin ang mga database migration."
+
+msgid "Unable to read update %s: %s"
+msgstr "Hindi mabasa ang update %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Hindi wasto ang JSON ng update %s: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Dapat ay object ang JSON ng update %s."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Walang wastong listahan ng mga aksyon ang metadata ng post-apply checks."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Hindi inirerekomenda ang mga database migration para sa staged update na ito."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Nawawala sa metadata ng update ang staged application path."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Hindi nahanap ang nakaplanong staged migration file: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Hindi mabasa ang staged migration file: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Walang deskripsyon na nakuha mula sa getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Tanging %s staged migrations ang sinusuportahan ng update runner: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Hindi maisulat ang migration safety metadata: %s"
+
+msgid "Migration safety check failed."
+msgstr "Nabigo ang pagsusuri sa kaligtasan ng migration."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Natukoy ang hindi ligtas na staged relative migration path: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Hindi awtomatikong natukoy ang naka-install na bersyon ng Chamilo. Magpatuloy lamang pagkatapos kumpirmahin na compatible ang update na ito."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Ang naka-install o target na bersyon ay wala sa maihahambing na semantic version format. Magpatuloy lamang pagkatapos ng manu-manong beripikasyon."
+
+msgid "An update is available."
+msgstr "May available na update."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Tugma na ang naka-install na bersyon sa bersyon ng manifest."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Mas luma ang bersyon ng manifest kaysa sa naka-install na bersyon. Naka-block bilang default ang mga downgrade."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Hindi matagumpay na na-apply ang mga staged file. Hindi maaaring magpatuloy ang post-apply checks."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Matagumpay na nabasa ang apply result metadata."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Nabuo ang mga rekomendasyon sa post-apply action."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Natukoy ang mga database migration sa staged package. Patakbuhin lamang ang mga ito pagkatapos kumpirmahin na tama ang file update at may backup ng database."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Kailangan ang staging path upang patakbuhin ang post-apply checks."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Hindi wastong JSON ang update %s: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Dapat ay JSON object ang update %s."
+
+msgid "Composer dependencies"
+msgstr "Mga dependency ng Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Kasama ang Composer metadata sa staged package. Patakbuhin ang Composer install mula sa application root bago ituring na kumpleto ang update."
+
+msgid "Frontend assets"
+msgstr "Mga frontend asset"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Kasama ang mga file na may kaugnayan sa frontend sa staged package. I-rebuild ang production assets pagkatapos i-install ang mga dependency."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Natukoy ang mga Doctrine migration file sa staged package. Kumpirmahin na may backup ng database bago patakbuhin ang mga migration."
+
+msgid "Symfony cache"
+msgstr "Cache ng Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "I-clear ang Symfony cache pagkatapos i-apply ang mga update file at patakbuhin ang anumang kinakailangang command."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Hindi maisulat ang post-apply checks metadata."
+
+msgid "Post-apply check failed."
+msgstr "Nabigo ang post-apply check."
+
+msgid "Update package is not readable: %s"
+msgstr "Hindi mabasa ang update package: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Hindi wastong ZIP archive ang update package."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Walang laman ang ZIP archive ng update package."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "May hindi mabasang ZIP entry ang update package."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "May hindi ligtas na absolute path ang update package: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "May path traversal entry ang update package: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "May symbolic link ang update package: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Sinisimulan ang mga post-apply action."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Kailangan ng tahasang kumpirmasyon ang pagpapatakbo ng post-apply command."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Matagumpay na nabasa ang post-apply recommendation metadata."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Na-validate ang mga post-apply action laban sa recommendation report."
+
+msgid "Post-apply actions were selected."
+msgstr "Napili ang mga post-apply action."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Kailangan ng tahasang advanced na kumpirmasyon ang mga advanced post-apply action."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Malinaw na nakumpirma ang mga advanced na aksyon pagkatapos mag-apply."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Matagumpay na natapos ang mga napiling utos pagkatapos mag-apply."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Naisulat ang metadata ng pagpapatakbo ng utos pagkatapos mag-apply."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Matagumpay na natapos ang mga aksyon pagkatapos mag-apply."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Hindi wastong depinisyon ng utos pagkatapos mag-apply sa update: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Pinapatakbo ang aksyon pagkatapos mag-apply: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Pinapatakbo ang utos %d ng %d para sa %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Nabigo ang aksyon pagkatapos mag-apply: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Nabigo ang aksyon pagkatapos mag-apply \"%s\" na may exit code %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Natapos ang aksyon pagkatapos mag-apply: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Kailangan ang staging path upang patakbuhin ang mga aksyon pagkatapos mag-apply."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Walang inirerekomendang aksyon pagkatapos mag-apply na patatakbuhin."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Walang pinapayagang aksyon pagkatapos mag-apply na patatakbuhin."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Hindi pinapayagan ang aksyon pagkatapos mag-apply para sa update na ito: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Kailangan ng pagsusuri sa kaligtasan ng migrasyon bago isagawa ang mga migrasyon ng database."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Hindi maisagawa ang mga migrasyon ng database dahil hindi pumasa ang pagsusuri sa kaligtasan ng migrasyon."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Hindi maisagawa ang mga migrasyon ng database dahil hindi naka-lista ang mga naka-stage na migrasyon sa pagsusuri sa kaligtasan ng migrasyon."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Hindi maisagawa ang mga migrasyon ng database dahil may hindi wastong entry ng migrasyon sa pagsusuri sa kaligtasan ng migrasyon."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Tanging mga naka-stage na migrasyon na %s ang maaaring isagawa ng update runner."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Hindi maisagawa ang mga migrasyon ng database dahil may mga hadlang na error sa naka-stage na pagsusuri sa kaligtasan ng migrasyon."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "May mga babala sa baseline ng migrasyon ayon sa Doctrine. Tanging mga naka-stage na klase ng migrasyon na %s ang isasagawa nang tahasan."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Kailangan ng kumpirmasyon na may backup ng database bago ang mga migrasyon ng database."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Kailangan ng tekstong kumpirmasyon na \"RUN DATABASE MIGRATIONS\" para sa mga migrasyon ng database."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Natapos ang pagsusuri sa kaligtasan ng migrasyon ng database bago isagawa."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Malinaw na nakumpirma ang pagkakaroon ng backup ng database."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Ibinigay ang pagsusuri sa kaligtasan ng migrasyon ng database at kumpirmasyon ng backup."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Isinagawa ang mga migrasyon ng database pagkatapos ng tahasang kumpirmasyon ng backup ng database. Hindi gumawa ng backup ng database ang updater."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Na-normalize ang kinakailangang mga pahintulot na executable pagkatapos mag-apply."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Hindi mapatakbo ang mga migrasyon ng database dahil hindi natagpuan ang bin/console."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "May mga kinakailangang writable path ang mga napiling utos pagkatapos mag-apply."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Na-validate ang mga writable path ng utos pagkatapos mag-apply."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Maaaring baguhin ng mga advanced na aksyon pagkatapos mag-apply ang mga dependency, nabuong asset o ang database. Suriin ang mga backup bago magpatuloy."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Hindi ligtas na mapatakbo ang Composer mula sa web updater dahil ang file na ginawa ng Composer na \"%s\" ay pag-aari ng UID %d samantalang gumagamit ang PHP runtime ng UID %d. Patakbuhin nang manu-mano ang Composer bilang may-ari ng deployment, pagkatapos ay magpatuloy sa natitirang mga aksyon pagkatapos mag-apply."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Hindi writable ang path na kailangan ng aksyon pagkatapos mag-apply na \"%s\": %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Hindi writable ang parent directory na kailangan ng aksyon pagkatapos mag-apply na \"%s\": %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Hindi mabasa ang mga pahintulot para sa kinakailangang executable pagkatapos mag-apply: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Hindi ma-markahan bilang executable ang kinakailangang executable pagkatapos mag-apply: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Hindi pa rin executable ang kinakailangang executable pagkatapos mag-apply kahit pagkatapos ng chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Na-normalize ang pahintulot na executable."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Hindi maisulat ang nakahiwalay na configuration ng Git para sa mga utos pagkatapos mag-apply."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Mukhang may ibang operasyon ng update na tumatakbo. Alisin ang var/update/update.lock kung walang aktibong update."
+
+msgid "Unable to create update lock: %s"
+msgstr "Hindi malikha ang lock ng update: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Hindi maisulat ang metadata ng pagpapatakbo ng utos pagkatapos mag-apply: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Nawawala ang package block sa update manifest."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Dapat ay object ang signature block ng update manifest."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Dapat ay object ang requirements block ng update manifest."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Dapat ay 64-character na hexadecimal string ang sha256 ng update package."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Nawawala sa update manifest ang kinakailangang string field na \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Dapat ay string ang field na \"%s\" ng update manifest."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Hindi wastong JSON ang update manifest: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Ang JSON ng update manifest ay dapat na object."
+
+msgid "Manifest source cannot be empty."
+msgstr "Hindi maaaring walang laman ang pinagmulan ng manifest."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Ang URL ng update manifest ay dapat gumamit ng opisyal na update origin %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Hindi ma-download ang update manifest. HTTP status: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Hindi mabasa ang manifest file: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Hindi mabasa ang manifest file: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Ang URL ng update manifest ay dapat gumamit ng HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Hindi mabasa ang metadata ng update package: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Hindi mabasa ang metadata ng update package: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Hindi wastong JSON ang metadata ng update package: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Ang metadata ng update package ay dapat na JSON object."
+
+msgid "Update package metadata format must be %d."
+msgstr "Ang format ng metadata ng update package ay dapat na %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Ang field na \"remove\" sa metadata ng update package ay dapat na array."
+
+msgid "Update package removal paths must be strings."
+msgstr "Ang mga path ng pagtanggal sa update package ay dapat na string."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Hindi maaaring tanggalin ng metadata ng update package ang protektadong path: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Hindi maaaring isama at tanggalin ng update package ang parehong path: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Hindi makalkula ang sha256 ng metadata ng update package."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Hindi maaaring walang laman ang path ng pagtanggal sa update package."
+
+msgid "Update package removal path contains a null byte."
+msgstr "May null byte ang path ng pagtanggal sa update package."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Ang path ng pagtanggal sa update package ay dapat na relative: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "May hindi ligtas na segment ang path ng pagtanggal sa update package: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Kailangan ang staging path upang makabuo ng update apply plan."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Nawawala ang STAGING-INFO.json sa staging directory."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Hindi mabasa ang staging metadata: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Hindi wastong JSON ang staging metadata: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Ang staging metadata ay dapat na JSON object."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Nawawala ang field na application_path sa staging metadata."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Nawawala ang %s sa update package. Kailangan ang naka-sign na cleanup metadata bago ma-apply ang mga file."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Walang naka-sign na package cleanup metadata sa staging metadata na naitala noong extraction."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Nagbago ang cleanup metadata ng update package pagkatapos ng staging. I-stage muli ang na-verify na package bago magpatuloy."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Walang wastong listahan ng pagtanggal ng package sa staging metadata."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Nagbago ang mga cleanup path ng update package pagkatapos ng staging. I-stage muli ang na-verify na package bago magpatuloy."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Hindi nagbago ang naka-sign na package cleanup metadata mula noong staging."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "May umiiral nang update lock file. Maaaring may update na isinasagawa."
+
+msgid "Update lock directory is not writable."
+msgstr "Hindi writable ang update lock directory."
+
+msgid "No update lock is currently active."
+msgstr "Walang kasalukuyang aktibong update lock."
+
+msgid "Update backup directory is not writable."
+msgstr "Hindi writable ang update backup directory."
+
+msgid "Update backup directory is writable."
+msgstr "Writable ang update backup directory."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Hindi malikha ng kasalukuyang proseso ang update backup directory."
+
+msgid "Update backup directory can be created."
+msgstr "Malilikha ang update backup directory."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Ang ilang update working directory ay hindi writable o hindi malilikha ng kasalukuyang proseso."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Writable o malilikha ang mga update working directory."
+
+msgid "Update apply file plan was generated."
+msgstr "Nabuo ang update apply file plan."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "May mga path sa package cleanup metadata na hindi ligtas na matatanggal."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Ligtas ang mga target ng pagtanggal na idineklara ng package."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Ang ilang obsolete file na idineklara ng package ay wala na sa instalasyong ito."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Ang nakaplanong update ay mag-o-overwrite o magtatanggal ng umiiral na symbolic link."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Ang nakaplanong update ay hindi mag-o-overwrite o magtatanggal ng umiiral na symbolic link."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Ang mga bagong update migration file ay dapat ilagay sa ilalim ng %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "May natukoy na bagong %s Doctrine migration file. Kakailanganin nila ng pagsusuri sa kaligtasan ng database migration pagkatapos i-apply ang mga file."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "May ilang listahan ng file sa plano ng pag-apply ng update na pinutol sa JSON response."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Hindi maisulat ang metadata ng plano ng pag-apply ng update."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Hindi ma-download ang update package. HTTP status: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Hindi mabuksan ang target file ng update package: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Dapat gamitin ng mga download ng update ang opisyal na origin ng update na %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "Dapat gumamit ng HTTPS ang URL ng update package."
+
+msgid "Update package archive safety checks passed."
+msgstr "Nakapasa ang mga safety check ng archive ng update package."
+
+msgid "Update package was extracted to staging."
+msgstr "Na-extract ang update package sa staging."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Na-load ang signed package cleanup metadata."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Walang %s ang update package. Mahaharang ang pag-apply ng file hanggang maibigay ang signed cleanup metadata."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Nagawa ang dry-run report ng staged package."
+
+msgid "Staging metadata was written."
+msgstr "Naisulat ang staging metadata."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Hindi ma-extract ang update package sa staging directory."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Hindi mahanap ang Chamilo application root sa staged package."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Kulang ang required Chamilo entry sa staged package: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "May inaasahang istruktura ng Chamilo ang staged package."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Walang composer.lock ang staged package."
+
+msgid "Staged package contains composer.lock."
+msgstr "May composer.lock ang staged package."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Walang yarn.lock ang staged package."
+
+msgid "Staged package contains yarn.lock."
+msgstr "May yarn.lock ang staged package."
+
+msgid "Unable to encode staging metadata."
+msgstr "Hindi ma-encode ang staging metadata."
+
+msgid "Unable to write staging metadata."
+msgstr "Hindi maisulat ang staging metadata."
+
+msgid "Update operation log created."
+msgstr "Nagawa ang log ng operasyon ng update."
+
+msgid "Unable to write update operation log."
+msgstr "Hindi maisulat ang log ng operasyon ng update."
+
+msgid "Invalid update operation id."
+msgstr "Hindi wasto ang update operation id."
 

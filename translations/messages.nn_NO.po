@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Helsingar"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-døme: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -40233,4 +40233,949 @@ msgstr "Praksisby"
 
 msgid "City"
 msgstr "By"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Oppdateringsarbeidsflyt gjenoppretta etter sideoppdatering"
+
+msgid "Last completed step"
+msgstr "Siste fullførte steg"
+
+msgid "Stage package"
+msgstr "Klargjer pakke"
+
+msgid "Package staging"
+msgstr "Pakke-klargjering"
+
+msgid "Apply plan"
+msgstr "Bruk plan"
+
+msgid "Update workflow completed"
+msgstr "Oppdateringsarbeidsflyt fullført"
+
+msgid "Update directory exists and is writable."
+msgstr "Oppdateringsmappa finst og er skrivbar."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Oppdateringsmappa finst, men er ikkje skrivbar: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Oppdateringsmappa finst ikkje enno, men overordna mappe er skrivbar."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Oppdateringsmappa finst ikkje enno, men ho kan opprettast under var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Oppdateringsmappa finst ikkje og kan ikkje opprettast med gjeldande løyve."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Klarte ikkje å fastsetje ledig diskplass for førehandskontroll av oppdatering."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Ikkje nok ledig diskplass for ei trygg klargjeringsoperasjon for oppdatering."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Ledig diskplass er tilstrekkeleg for denne verifiseringsfasen av oppdateringsflyten."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Oppdateringsmanifestet definerer ikkje eit PHP-versjonskrav."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Klarte ikkje å evaluere PHP-kravet fullt ut: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Gjeldande PHP-versjon oppfyller ikkje oppdateringskravet: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Gjeldande PHP-versjon oppfyller oppdateringskravet."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Ingen lokal pakkesti vart oppgjeven. Nedlasta pakkar kan berre sjekkast etter nedlasting."
+
+msgid "Local update package is not readable: %s"
+msgstr "Lokal oppdateringspakke er ikkje lesbar: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Lokal oppdateringspakke må vere eit ZIP-arkiv."
+
+msgid "Local update package is readable."
+msgstr "Lokal oppdateringspakke er lesbar."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Installert Chamilo-versjon kunne ikkje oppdagast automatisk. Versjonsretning kan ikkje sjekkast."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Installert eller målversjon er ikkje i eit samanliknbart semantisk versjonsformat."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Målversjonen er lågare enn den installerte versjonen. Nedgraderingar er ikkje tillatne som standard."
+
+msgid "Target version matches the installed version."
+msgstr "Målversjonen samsvarar med den installerte versjonen."
+
+msgid "Target version is newer than the installed version."
+msgstr "Målversjonen er nyare enn den installerte versjonen."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Prosjektet er ikkje ei Git-utsjekking, eller .git finst ikkje."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Dette oppdateringssystemet er meint for installasjonar utan Git-støtte. Vi har oppdaga at det lokale systemet brukar Git. Å halde fram med oppdateringa kan føre til øydelagd Git-historikk. For system med Git-støtte tilrår vi å bruke Git-prosedyren som er skildra i CONTRIBUTING.md i vevrota."
+
+msgid "Local Git changes were also detected."
+msgstr "Lokale Git-endringar vart òg oppdaga."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Nokre prosjektmetadatafiler manglar. Seinare oppdateringssteg kan krevje manuelle avhengigheitssjekkar."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer- og Yarn-metadatafiler er til stades."
+
+msgid "Starting staged file application."
+msgstr "Startar bruk av klargjorde filer."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Eksplisitt stadfesting er påkravd for å bruke klargjorde filer."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Å bruke klargjorde oppdateringsfiler krev ei eksplisitt stadfesting."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Klargjeringsmappa er inne i Chamilo-oppdateringsklargjeringsmappa."
+
+msgid "Staging directory was validated."
+msgstr "Klargjeringsmappa vart validert."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Metadata for bruksplanen vart lesne."
+
+msgid "Staged application path is valid."
+msgstr "Stien for klargjord bruk er gyldig."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Oppryddingsmetadata for signert pakke samsvarar med den gjennomgåtte bruksplanen."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Oppryddingsmetadata for signert pakke vart validert."
+
+msgid "Update lock was acquired."
+msgstr "Oppdateringslås vart teke."
+
+msgid "Update backup directory was created."
+msgstr "Sikkerheitskopimappa for oppdatering vart oppretta."
+
+msgid "Update file operations were collected."
+msgstr "Filoperasjonar for oppdatering vart samla."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Eksisterande filer planlagde for erstatning eller fjerning vart sikkerheitskopierte."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Klargjorde oppdateringsfiler vart kopierte til Chamilo-installasjonen."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Utdaterte filer deklarerte i pakken vart fjerna frå Chamilo-installasjonen."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Utdaterte filer deklarerte i pakken vart fjerna."
+
+msgid "Update apply audit metadata was written."
+msgstr "Revisjonsmetadata for oppdateringspåføring vart skrive."
+
+msgid "Staged files applied successfully."
+msgstr "Førebuingsfiler vart påførte utan feil."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Kan ikkje gjenopprette fjerna filer: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Kan ikkje rulle tilbake kopierte filer: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Filtilbakerulling vart utført etter at påføringa av oppdateringa feila."
+
+msgid "Rollback failed: %s"
+msgstr "Tilbakerulling feila: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Kan ikkje skrive revisjonsmetadata for oppdateringspåføring: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Kan ikkje sleppe oppdateringslåsen etter feil: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Førebuingssti er påkravd for å påføre oppdateringsfiler."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Førebuingskatalogen finst ikkje: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Grunnkatalogen for Chamilo-oppdateringsførebuing finst ikkje."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Førebuingskatalogen må liggje i var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Førebuingskatalogen manglar APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Kan ikkje lese metadata for oppdateringspåføringsplanen: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metadata for oppdateringspåføringsplanen er ikkje gyldig JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metadata for oppdateringspåføringsplanen må vere eit JSON-objekt."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Oppdateringspåføringsplanen manglar feltet application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Førebuingsstien for programmet er ikkje lesbar: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Førebuingsstien for programmet må liggje i førebuingskatalogen."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Førebuingsstien for programmet manglar composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Oppdateringspakken manglar %s. Førebu på nytt ein stadfesta pakke med signert oppryddingsmetadata."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Oppdateringspåføringsplanen manglar den gjennomgåtte oppryddingsmetadataen for pakken."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Oppryddingsmetadata for oppdateringspakken vart endra etter at påføringsplanen vart generert. Bygg påføringsplanen på nytt før du held fram."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Oppdateringspåføringsplanen inneheld ei ugyldig liste over pakkefjerningar."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Oppryddingsstiar for oppdateringspakken vart endra etter at påføringsplanen vart generert. Bygg påføringsplanen på nytt før du held fram."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Oppdateringspåføringsplanen manglar den gjennomgåtte lista over fjerningsstiar."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Fjerningsstiane i oppdateringspåføringsplanen samsvarar ikkje med den signerte oppryddingsmetadataen for pakken."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Stien til oppdateringslåsen må liggje i var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Oppdateringspåføringsplanen manglar feltet backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Sikkerheitskopistien for oppdateringa inneheld utrygge stisegment."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Sikkerheitskopistien for oppdateringa må liggje i var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Kan ikkje ta oppdateringslåsen. Ei anna oppdatering kan vere i gang."
+
+msgid "Unable to release update lock: %s"
+msgstr "Kan ikkje sleppe oppdateringslåsen: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Sikkerheitskopikatalogen for oppdateringa finst allereie: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Målkatalogen kan ikkje opprettast: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Den planlagde oppdateringa ville overskrive ei eksisterande symbolsk lenkje: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Målfila er ikkje skrivbar: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Målfila kan ikkje opprettast: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Kan ikkje løyse Chamilo-prosjektkatalogen før utdaterte filer vert fjerna."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Oppdateringsopprydding kan ikkje fjerne verna sti: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Den planlagde oppdateringa ville fjerne ei eksisterande symbolsk lenkje: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Oppdateringsopprydding støttar berre filer, ikkje katalogar: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Utdatert målfil er ikkje lesbar for sikkerheitskopi: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Utdatert målfil kan ikkje fjernast med gjeldande katalogløyve: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Utdatert målfil løyser seg utanfor Chamilo-prosjektkatalogen: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Kan ikkje ta sikkerheitskopi av målfila: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Kan ikkje skrive metadata for oppdateringssikkerheitskopi."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Kan ikkje kopiere førebuingsfil for oppdatering: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Kopierte %d av %d førebuande filer."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Klarte ikkje å fjerne pakkedeklarert utdatert fil: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Fjerna %d av %d pakkedeklarerte utdaterte filer."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Klarte ikkje å gjenopprette sikkerheitskopiert fil: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Klarte ikkje å fjerne nyleg kopiert fil under tilbakerulling: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Klarte ikkje å gjenopprette fjerna fil fordi sikkerheitskopien manglar: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Klarte ikkje å gjenopprette fjerna fil frå sikkerheitskopi: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Klarte ikkje å skrive revisjonsmetadata for oppdateringsbruk."
+
+msgid "Unable to write global update apply log."
+msgstr "Klarte ikkje å skrive global logg for oppdateringsbruk."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Utrygg relativ førebuingssti oppdaga: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Mappa er ikkje skrivbar: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Klarte ikkje å opprette mappe: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Førebuingsmetadata vart lesne utan problem."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metadata for brukplan vart skrivne til førebuingsmappa."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Målfiler og -mapper ser ut til å vere skrivbare for den planlagde oppdateringa og oppryddinga."
+
+msgid "Update apply plan check failed."
+msgstr "Sjekk av oppdateringsbrukplan feila."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Nokre målfiler eller mapper kan ikkje skrivast til eller fjernast."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "For å rette dette, endra eigaren av heile Chamilo-mappa mellombels til %s (vebtenarbrukaren), bruk oppdateringa, endra eigaren tilbake til %s etterpå, og set deretter eigaren av var/ (og innhaldet) tilbake til %s slik at applikasjonen kan halde fram med å skrive dit."
+
+msgid "Update package verification failed."
+msgstr "Stadfesting av oppdateringspakke feila."
+
+msgid "Update preflight checks failed."
+msgstr "Førehandsjekkar for oppdatering feila."
+
+msgid "Unable to stage update package."
+msgstr "Klarte ikkje å førebu oppdateringspakke."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Køyring av kommandoar etter bruk frå brukargrensesnittet er slått av på denne tenaren."
+
+msgid "Missing required field: %s"
+msgstr "Påkravd felt manglar: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Ingen kjelde for oppdateringsmanifest vart gjeven, og ingen standard URL for oppdateringsmanifest er sett opp."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL for oppdateringsmanifest må bruke den offisielle oppdateringskjelda %s. Berre manifeststien kan endrast."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Lokale stiar til oppdateringsmanifest er slått av. Bruk ein HTTPS-manifest-URL eller set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 i tenarmiljøet for lokale testar."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Ikkje gje ein HTTP-%s-sti. Lat dette feltet vere tomt for å laste det ned frå oppdateringsmanifestet."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Lokale oppdaterings-%s-stiar er slått av i dette miljøet."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Pålitelege offentlege nøklar for oppdatering må vere sette opp på tenaren i dette miljøet."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Å hoppe over stadfesting av oppdateringssignatur er slått av i dette miljøet."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Køyring av oppdateringshandlingar etter bruk krev stadfestingsteksten \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Å bruke førebuande oppdateringsfiler krev stadfestingsteksten \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Klarte ikkje å finne prosjektmappa."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Sikkerheitskopi av databasen vert ikkje handsama av denne oppdateraren. Opprett og stadfest ein databasesikkerheitskopi før du køyrer migreringar."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine-metodane down() er ikkje garanterte å gjenopprette sletta eller omforma data."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Metadata etter bruk tilrår gjennomgang av databasemigrering."
+
+msgid "No migration files were found in the staged package."
+msgstr "Ingen migreringsfiler vart funne i den førebuande pakka."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Førebuande Doctrine-migreringsfiler vart oppdaga."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine-migreringsmål vart funne frå den førebuande pakka."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine-migreringsgrunnlinja har blokkerande problem for førebuande migreringar."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine rapporterer historiske åtvaringar for migreringsgrunnlinje, men berre førebuande %s-migreringar vil verte gjennomgåtte og køyrde eksplisitt."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine rapporterer historiske åtvaringar for migreringsgrunnlinje. Oppdateraren vil berre køyre førebuande %s-migreringsklassar etter eksplisitt stadfesting."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine-grunnlinja har ingen blokkerande problem for dei førebuande %s-migreringane."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Doctrine-prøvekøyring feila for minst éi førebuande migrering. Ikkje køyr databasemigreringar før dette er retta."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Doctrine-prøvekøyring vart fullført utan problem for kvar førebuande migreringsklasse."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Ein databasesikkerheitskopi må opprettast utanfor denne oppdateraren før migreringar vert køyrde."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Førebuingssti er påkravd for å gjennomgå databasemigreringar."
+
+msgid "Unable to read update %s: %s"
+msgstr "Klarte ikkje å lese oppdatering %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Oppdatering %s JSON er ugyldig: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Oppdatering %s JSON må vere eit objekt."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Metadata for etter-installasjonskontrollar inneheld ikkje ei gyldig handlingsliste."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Databasemigreringar vart ikkje tilrådde for denne trinnvise oppdateringa."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Oppdateringsmetadata manglar stien til den trinnvise installasjonen."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Planlagd trinnvis migreringsfil vart ikkje funnen: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Kan ikkje lese trinnvis migreringsfil: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Inga skildring kunne hentast frå getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Berre %s trinnvise migreringar er støtta av oppdateringskøyraren: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Kan ikkje skrive sikkerheitsmetadata for migrering: %s"
+
+msgid "Migration safety check failed."
+msgstr "Sikkerheitskontroll for migrering feila."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Utrygg relativ trinnvis migreringssti oppdaga: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Installert Chamilo-versjon kunne ikkje oppdagast automatisk. Hald fram berre etter at du har stadfesta at denne oppdateringa er kompatibel."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Installert eller målversjon er ikkje i eit samanliknbart semantisk versjonsformat. Hald fram berre etter manuell stadfesting."
+
+msgid "An update is available."
+msgstr "Ei oppdatering er tilgjengeleg."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Den installerte versjonen samsvarar allereie med manifestversjonen."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Manifestversjonen er eldre enn den installerte versjonen. Nedgraderingar er blokkerte som standard."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Trinnvise filer vart ikkje brukte vellukka. Etter-installasjonskontrollar kan ikkje halde fram."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Metadata for installasjonsresultat vart lesne vellukka."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Tilrådingar for etter-installasjonshandlingar vart genererte."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Databasemigreringar vart oppdaga i den trinnvise pakken. Køyr dei berre etter at du har stadfesta at filoppdateringa er korrekt og at det finst ein databasekopi."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Trinnvis sti er påkravd for å køyre etter-installasjonskontrollar."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Oppdatering %s er ikkje gyldig JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Oppdatering %s må vere eit JSON-objekt."
+
+msgid "Composer dependencies"
+msgstr "Composer-avhengigheiter"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Composer-metadata var inkluderte i den trinnvise pakken. Køyr Composer install frå programrotsystemet før du reknar oppdateringa som ferdig."
+
+msgid "Frontend assets"
+msgstr "Frontend-ressursar"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Frontend-relaterte filer var inkluderte i den trinnvise pakken. Bygg produksjonsressursar på nytt etter at avhengigheiter er installerte."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Doctrine-migreringsfiler vart oppdaga i den trinnvise pakken. Stadfest at det finst ein databasekopi før du køyrer migreringar."
+
+msgid "Symfony cache"
+msgstr "Symfony-cache"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Tøm Symfony-cache etter at oppdateringsfiler er brukte og eventuelle påkravde kommandoar er køyrde."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Kan ikkje skrive metadata for etter-installasjonskontrollar."
+
+msgid "Post-apply check failed."
+msgstr "Etter-installasjonskontroll feila."
+
+msgid "Update package is not readable: %s"
+msgstr "Oppdateringspakken er ikkje lesbar: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Oppdateringspakken er ikkje eit gyldig ZIP-arkiv."
+
+msgid "Update package ZIP archive is empty."
+msgstr "ZIP-arkivet til oppdateringspakken er tomt."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Oppdateringspakken inneheld ein uleseleg ZIP-oppføring."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Oppdateringspakken inneheld ein utrygg absolutt sti: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Oppdateringspakken inneheld ei sti-traverseringsoppføring: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Oppdateringspakken inneheld ei symbolsk lenkje: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Startar etter-installasjonshandlingar."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Køyring av etter-installasjonskommando krev eksplisitt stadfesting."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Metadata for etter-installasjonstilrådingar vart lesne vellukka."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Etter-installasjonshandlingar vart validerte mot tilrådingsrapporten."
+
+msgid "Post-apply actions were selected."
+msgstr "Etter-installasjonshandlingar vart valde."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Avanserte etter-installasjonshandlingar krev eksplisitt avansert stadfesting."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Avanserte etter-installasjonshandlingar vart eksplisitt stadfesta."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Valde etter-installasjonskommandoar vart fullførte vellukka."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Metadata for køyring av etter-installasjonskommando vart skrivne."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Etter-installasjonshandlingar vart fullførte vellukka."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Ugyldig definisjon av etter-installasjonskommando for oppdatering: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Køyrer etter-installasjonshandling: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Køyrer kommando %d av %d for %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Etter-bruk-handling feila: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Etter-bruk-handling \"%s\" feila med avsluttingskode %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Etter-bruk-handling fullført: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Mellomlagringssti er påkravd for å køyra etter-bruk-handlingar."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Det er ingen tilrådde etter-bruk-handlingar å køyra."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Det er ingen tillatne etter-bruk-handlingar å køyra."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Etter-bruk-handling er ikkje tillaten for denne oppdateringa: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Databasemigrasjonar krev ei tryggleiksvurdering av migrasjonen før køyring."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Databasemigrasjonar kan ikkje køyrast fordi tryggleiksvurderinga av migrasjonen ikkje vart godkjend."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Databasemigrasjonar kan ikkje køyrast fordi tryggleiksvurderinga av migrasjonen ikkje lista mellomlagra migrasjonar."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Databasemigrasjonar kan ikkje køyrast fordi tryggleiksvurderinga av migrasjonen inneheld ein ugyldig migrasjonspost."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Berre mellomlagra %s-migrasjonar kan køyrast av oppdateringskøyraren."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Databasemigrasjonar kan ikkje køyrast fordi tryggleiksvurderinga av mellomlagra migrasjonar rapporterte blokkerande feil."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine rapporterer åtvaringar om migrasjonsgrunnlinje. Berre mellomlagra %s-migrasjonsklassar vil verta køyrde eksplisitt."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Databasemigrasjonar krev stadfesting av at det finst ein databasebackup."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Databasemigrasjonar krev stadfestingsteksten \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Tryggleiksvurdering av databasemigrasjonar vart fullført før køyring."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Eksistens av databasebackup vart eksplisitt stadfesta."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Tryggleiksvurdering av databasemigrasjonar og stadfesting av backup vart gjevne."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Databasemigrasjonar vart køyrde etter eksplisitt stadfesting av databasebackup. Oppdateraren laga ikkje databasebackupen."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Påkravde køyrerettsløyve for etter-bruk vart normaliserte."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Kan ikkje køyra databasemigrasjonar fordi bin/console ikkje vart funnen."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Valde etter-bruk-kommandoar har dei påkravde skrivbare stiane."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Skrivbare stiar for etter-bruk-kommandoar vart validerte."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Avanserte etter-bruk-handlingar kan endra avhengnader, genererte ressursar eller databasen. Gå gjennom backupar før du held fram."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer kan ikkje køyrast trygt frå nett-oppdateraren fordi Composer-generert fil \"%s\" er eigd av UID %d medan PHP-køyringsmiljøet brukar UID %d. Køyr Composer manuelt som utplasserings-eigaren, og hald deretter fram med dei resterande etter-bruk-handlingane."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Sti som er påkravd av etter-bruk-handling \"%s\" er ikkje skrivbar: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Foreldermappe som er påkravd av etter-bruk-handling \"%s\" er ikkje skrivbar: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Kan ikkje lesa løyve for påkravd etter-bruk-køyrbar fil: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Kan ikkje merkja påkravd etter-bruk-køyrbar fil som køyrbar: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Påkravd etter-bruk-køyrbar fil er framleis ikkje køyrbar etter chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Køyrerettsløyve vart normalisert."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Kan ikkje skriva isolert Git-oppsett for etter-bruk-kommandoar."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Ei anna oppdateringsoperasjon ser ut til å køyra. Fjern var/update/update.lock berre dersom inga oppdatering er aktiv."
+
+msgid "Unable to create update lock: %s"
+msgstr "Kan ikkje oppretta oppdateringslås: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Kan ikkje skriva køyringsmetadata for etter-bruk-kommando: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Oppdateringsmanifestet manglar pakkeblokka."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Signaturblokka i oppdateringsmanifestet må vera eit objekt."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Kravblokka i oppdateringsmanifestet må vera eit objekt."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 for oppdateringspakke må vera ein 64 teikn lang heksadesimal streng."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Oppdateringsmanifestet manglar påkravd strengfelt \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Feltet \"%s\" i oppdateringsmanifestet må vera ein streng."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Oppdateringsmanifestet er ikkje gyldig JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON i oppdateringsmanifestet må vera eit objekt."
+
+msgid "Manifest source cannot be empty."
+msgstr "Manifestkjelda kan ikkje vera tom."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL for oppdateringsmanifest må bruka den offisielle oppdateringskjelda %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Kan ikkje lasta ned oppdateringsmanifest. HTTP-status: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Manifestfila er ikkje lesbar: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Kan ikkje lesa manifestfila: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL-en til oppdateringsmanifestet må bruke HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Metadata for oppdateringspakken er ikkje lesbar: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Kan ikkje lese metadata for oppdateringspakken: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Metadata for oppdateringspakken er ikkje gyldig JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Metadata for oppdateringspakken må vere eit JSON-objekt."
+
+msgid "Update package metadata format must be %d."
+msgstr "Formatet for metadata i oppdateringspakken må vere %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Metadatafeltet \"remove\" i oppdateringspakken må vere eit array."
+
+msgid "Update package removal paths must be strings."
+msgstr "Fjerningsstiar i oppdateringspakken må vere strengar."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Metadata for oppdateringspakken kan ikkje fjerne verna sti: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Oppdateringspakken kan ikkje både inkludere og fjerne same sti: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Kan ikkje berekne sha256 for metadata i oppdateringspakken."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Fjerningssti i oppdateringspakken kan ikkje vere tom."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Fjerningssti i oppdateringspakken inneheld ein null-byte."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Fjerningssti i oppdateringspakken må vere relativ: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Fjerningssti i oppdateringspakken inneheld eit utrygt segment: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Mellomlagringssti er naudsynt for å byggje ein plan for å bruke oppdateringa."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Mellomlagringsmappa manglar STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Kan ikkje lese mellomlagringsmetadata: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Mellomlagringsmetadata er ikkje gyldig JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Mellomlagringsmetadata må vere eit JSON-objekt."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Mellomlagringsmetadata manglar feltet application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Oppdateringspakken manglar %s. Signert oppryddingsmetadata er naudsynt før filer kan brukast."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Mellomlagringsmetadata inneheld ikkje den signerte oppryddingsmetadataen for pakken som vart registrert under utpakking."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Oppryddingsmetadata for oppdateringspakken vart endra etter mellomlagring. Mellomlagre den stadfesta pakken på nytt før du held fram."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Mellomlagringsmetadata inneheld ikkje ei gyldig fjerningsliste for pakken."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Oppryddingsstiar for oppdateringspakken vart endra etter mellomlagring. Mellomlagre den stadfesta pakken på nytt før du held fram."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Signert oppryddingsmetadata for pakken er uendra sidan mellomlagring."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Ei oppdateringslåsefil finst allereie. Ei anna oppdatering kan vere i gang."
+
+msgid "Update lock directory is not writable."
+msgstr "Oppdateringslåsemappa er ikkje skrivbar."
+
+msgid "No update lock is currently active."
+msgstr "Inga oppdateringslås er aktiv no."
+
+msgid "Update backup directory is not writable."
+msgstr "Sikkerheitskopimappa for oppdatering er ikkje skrivbar."
+
+msgid "Update backup directory is writable."
+msgstr "Sikkerheitskopimappa for oppdatering er skrivbar."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Sikkerheitskopimappa for oppdatering kan ikkje opprettast av den gjeldande prosessen."
+
+msgid "Update backup directory can be created."
+msgstr "Sikkerheitskopimappa for oppdatering kan opprettast."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Nokre arbeidsmapper for oppdatering er ikkje skrivbare eller kan ikkje opprettast av den gjeldande prosessen."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Arbeidsmapper for oppdatering er skrivbare eller kan opprettast."
+
+msgid "Update apply file plan was generated."
+msgstr "Plan for å bruke oppdateringsfiler vart generert."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Oppryddingsmetadata for pakken inneheld stiar som ikkje kan fjernast trygt."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Fjerningsmål som er oppgjevne i pakken er trygge."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Nokre utdaterte filer som er oppgjevne i pakken manglar allereie i denne installasjonen."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Den planlagde oppdateringa ville overskrive eller fjerne eksisterande symbolske lenkjer."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Den planlagde oppdateringa overskriv eller fjernar ikkje eksisterande symbolske lenkjer."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Nye migreringsfiler for oppdatering må plasserast under %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Nye %s Doctrine-migreringsfiler vart oppdaga. Dei vil krevje ein tryggleiksgjennomgang av databasemigrering etter at filene er brukte."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Nokre fillister i planen for å bruke oppdateringa vart avkorta i JSON-svaret."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Kan ikkje skrive metadata for planen for å bruke oppdateringa."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Kan ikkje laste ned oppdateringspakken. HTTP-status: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Kan ikkje opne målfila for oppdateringspakken: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Nedlastingar av oppdateringar må bruke den offisielle oppdateringskjelda %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL-en til oppdateringspakken må bruke HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Tryggleikskontrollane for oppdateringspakke-arkivet vart godkjende."
+
+msgid "Update package was extracted to staging."
+msgstr "Oppdateringspakka vart pakka ut til mellomlagring."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Metadata for opprydding av signert pakke vart lasta inn."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Oppdateringspakka inneheld ikkje %s. Filbruk vil bli blokkert til signert oppryddingsmetadata er gitt."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Tørrkøyringsrapport for mellomlagra pakke vart generert."
+
+msgid "Staging metadata was written."
+msgstr "Mellomlagringsmetadata vart skrive."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Klarte ikkje å pakke ut oppdateringspakka til mellomlagringsmappa."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Klarte ikkje å finne Chamilo-applikasjonsrota i den mellomlagra pakka."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Den mellomlagra pakka manglar påkravd Chamilo-oppføring: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Den mellomlagra pakka inneheld den venta Chamilo-strukturen."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Den mellomlagra pakka inneheld ikkje composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Den mellomlagra pakka inneheld composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Den mellomlagra pakka inneheld ikkje yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Den mellomlagra pakka inneheld yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Klarte ikkje å koda mellomlagringsmetadata."
+
+msgid "Unable to write staging metadata."
+msgstr "Klarte ikkje å skrive mellomlagringsmetadata."
+
+msgid "Update operation log created."
+msgstr "Logg for oppdateringsoperasjon oppretta."
+
+msgid "Unable to write update operation log."
+msgstr "Klarte ikkje å skrive logg for oppdateringsoperasjon."
+
+msgid "Invalid update operation id."
+msgstr "Ugyldig ID for oppdateringsoperasjon."
 

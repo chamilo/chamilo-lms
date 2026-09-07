@@ -37026,13 +37026,13 @@ msgid "Trusted signing key"
 msgstr "Zaupanja vreden podpisni ključ"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Za potrditev vpišite UPORABI DATOTEKE POSODOBITVE"
+msgstr "Za potrditev vnesite APPLY UPDATE FILES"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Za potrditev migracij podatkovne baze vpišite IZVEDI MIGRACIJE PODATKOVNE BAZE"
+msgstr "Za potrditev migracij podatkovne zbirke vnesite RUN DATABASE MIGRATIONS"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Za potrditev vpišite IZVEDI DEJANJA PO POSODOBITVI"
+msgstr "Za potrditev vnesite RUN POST UPDATE ACTIONS"
 
 msgid "Unknown update notice source."
 msgstr "Neznan vir obvestila o posodobitvi."
@@ -40249,4 +40249,949 @@ msgstr "Mesto pripravništva"
 
 msgid "City"
 msgstr "Mesto"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Potek posodobitve je po osvežitvi strani obnovljen"
+
+msgid "Last completed step"
+msgstr "Zadnji zaključeni korak"
+
+msgid "Stage package"
+msgstr "Pripravi paket"
+
+msgid "Package staging"
+msgstr "Priprava paketa"
+
+msgid "Apply plan"
+msgstr "Uveljavi načrt"
+
+msgid "Update workflow completed"
+msgstr "Potek posodobitve je zaključen"
+
+msgid "Update directory exists and is writable."
+msgstr "Mapa za posodobitev obstaja in je zapisljiva."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Mapa za posodobitev obstaja, vendar ni zapisljiva: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Mapa za posodobitev še ne obstaja, vendar je nadrejena mapa zapisljiva."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Mapa za posodobitev še ne obstaja, vendar jo je mogoče ustvariti pod var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Mapa za posodobitev ne obstaja in je z trenutnimi dovoljenji ni mogoče ustvariti."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Ni mogoče določiti prostega prostora na disku za predhodni pregled posodobitve."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Ni dovolj prostega prostora na disku za varno pripravo posodobitve."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Prostega prostora na disku je dovolj za ta potek posodobitve v fazi preverjanja."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Manifest posodobitve ne določa zahteve glede različice PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Zahteve PHP ni mogoče v celoti oceniti: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Trenutna različica PHP ne izpolnjuje zahteve posodobitve: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Trenutna različica PHP izpolnjuje zahtevo posodobitve."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Lokalna pot do paketa ni bila podana. Prenesene pakete je mogoče preveriti šele po prenosu."
+
+msgid "Local update package is not readable: %s"
+msgstr "Lokalnega paketa posodobitve ni mogoče prebrati: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Lokalni paket posodobitve mora biti arhiv ZIP."
+
+msgid "Local update package is readable."
+msgstr "Lokalni paket posodobitve je berljiv."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Nameščene različice Chamilo ni bilo mogoče samodejno zaznati. Smer različice ni mogoče preveriti."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Nameščena ali ciljna različica ni v primerljivi obliki semantične različice."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Ciljna različica je nižja od nameščene. Znižanje različice privzeto ni dovoljeno."
+
+msgid "Target version matches the installed version."
+msgstr "Ciljna različica se ujema z nameščeno različico."
+
+msgid "Target version is newer than the installed version."
+msgstr "Ciljna različica je novejša od nameščene."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Projekt ni Git izvleček ali .git ni prisoten."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Ta sistem posodobitev je namenjen namestitvam brez podpore Git. Zaznali smo, da lokalni sistem uporablja Git. Nadaljevanje posodobitve lahko povzroči pokvarjeno zgodovino Git. Za sisteme s podporo Git priporočamo postopek Git, opisan v CONTRIBUTING.md v korenu spletnega mesta."
+
+msgid "Local Git changes were also detected."
+msgstr "Zaznane so bile tudi lokalne spremembe Git."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Manjkajo nekatere metapodatkovne datoteke projekta. Poznejše faze posodobitve lahko zahtevajo ročno preverjanje odvisnosti."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Metapodatkovne datoteke Composer in Yarn so prisotne."
+
+msgid "Starting staged file application."
+msgstr "Začenjam uveljavljanje pripravljenih datotek."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Za uveljavitev pripravljenih datotek je potrebna izrecna potrditev."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Uveljavitev pripravljenih datotek posodobitve zahteva izrecno potrditev."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Mapa za pripravo je znotraj mape za pripravo posodobitev Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Mapa za pripravo je bila preverjena."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Metapodatki načrta uveljavitve so bili uspešno prebrani."
+
+msgid "Staged application path is valid."
+msgstr "Pot pripravljenega uveljavljanja je veljavna."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Metapodatki čiščenja podpisanega paketa se ujemajo s pregledanim načrtom uveljavitve."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Metapodatki čiščenja podpisanega paketa so bili preverjeni."
+
+msgid "Update lock was acquired."
+msgstr "Zaklep posodobitve je bil pridobljen."
+
+msgid "Update backup directory was created."
+msgstr "Mapa varnostne kopije posodobitve je bila ustvarjena."
+
+msgid "Update file operations were collected."
+msgstr "Operacije datotek posodobitve so bile zbrane."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Obstoječe datoteke, predvidene za zamenjavo ali odstranitev, so bile varnostno kopirane."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Pripravljene datoteke posodobitve so bile kopirane v namestitev Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Zastarele datoteke, navedene v paketu, so bile odstranjene iz namestitve Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Zastarele datoteke, navedene v paketu, so bile odstranjene."
+
+msgid "Update apply audit metadata was written."
+msgstr "Revizijski metapodatki uporabe posodobitve so bili zapisani."
+
+msgid "Staged files applied successfully."
+msgstr "Pripravljene datoteke so bile uspešno uporabljene."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Odstranjenih datotek ni mogoče obnoviti: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Kopiranih datotek ni mogoče razveljaviti: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Po neuspešni uporabi posodobitve je bilo izvedeno razveljavljanje datotek."
+
+msgid "Rollback failed: %s"
+msgstr "Razveljavitev ni uspela: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Revizijskih metapodatkov uporabe posodobitve ni mogoče zapisati: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Po napaki ni mogoče sprostiti zaklepa posodobitve: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Za uporabo datotek posodobitve je potrebna pot priprave."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Mapa za pripravo ne obstaja: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Osnovna mapa za pripravo posodobitve Chamilo ne obstaja."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Mapa za pripravo mora biti znotraj var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "V mapi za pripravo manjka APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Metapodatkov načrta uporabe posodobitve ni mogoče prebrati: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metapodatki načrta uporabe posodobitve niso veljaven JSON: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metapodatki načrta uporabe posodobitve morajo biti JSON-objekt."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "V načrtu uporabe posodobitve manjka polje application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Pripravljene poti aplikacije ni mogoče brati: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Pripravljena pot aplikacije mora biti znotraj mape za pripravo."
+
+msgid "Staged application path is missing composer.json."
+msgstr "V pripravljeni poti aplikacije manjka composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "V paketu posodobitve manjka %s. Ponovno pripravite preverjen paket s podpisanimi metapodatki čiščenja."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "V načrtu uporabe posodobitve manjkajo pregledani metapodatki čiščenja paketa."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Metapodatki čiščenja paketa posodobitve so se spremenili po ustvarjanju načrta uporabe. Pred nadaljevanjem ponovno zgradite načrt uporabe."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Načrt uporabe posodobitve vsebuje neveljaven seznam odstranitev paketa."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Poti čiščenja paketa posodobitve so se spremenile po ustvarjanju načrta uporabe. Pred nadaljevanjem ponovno zgradite načrt uporabe."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "V načrtu uporabe posodobitve manjka pregledani seznam poti za odstranitev."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Poti za odstranitev v načrtu uporabe posodobitve se ne ujemajo s podpisanimi metapodatki čiščenja paketa."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Pot zaklepa posodobitve mora biti znotraj var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "V načrtu uporabe posodobitve manjka polje backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Pot varnostne kopije posodobitve vsebuje nevarne segmente poti."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Pot varnostne kopije posodobitve mora biti znotraj var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Zaklepa posodobitve ni mogoče pridobiti. Morda poteka druga posodobitev."
+
+msgid "Unable to release update lock: %s"
+msgstr "Zaklepa posodobitve ni mogoče sprostiti: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Mapa varnostne kopije posodobitve že obstaja: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Ciljne mape ni mogoče ustvariti: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Načrtovana posodobitev bi prepisala obstoječo simbolno povezavo: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Ciljna datoteka ni zapisljiva: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Ciljne datoteke ni mogoče ustvariti: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Mape projekta Chamilo ni mogoče razrešiti pred odstranitvijo zastarelih datotek."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Čiščenje posodobitve ne more odstraniti zaščitene poti: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Načrtovana posodobitev bi odstranila obstoječo simbolno povezavo: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Čiščenje posodobitve podpira samo datoteke, ne map: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Zastarele ciljne datoteke ni mogoče brati za varnostno kopijo: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Zastarele ciljne datoteke ni mogoče odstraniti s trenutnimi dovoljenji mape: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Zastarela ciljna datoteka se razreši zunaj mape projekta Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Ciljne datoteke ni mogoče varnostno kopirati: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Metapodatkov varnostne kopije posodobitve ni mogoče zapisati."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Pripravljene datoteke posodobitve ni mogoče kopirati: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Kopiranih %d od %d pripravljenih datotek."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Ni mogoče odstraniti zastarele datoteke, navedene v paketu: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Odstranjenih %d od %d zastarelih datotek, navedenih v paketu."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Ni mogoče obnoviti varnostne kopije datoteke: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Ni mogoče odstraniti na novo kopirane datoteke med razveljavitvijo: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Ni mogoče obnoviti odstranjene datoteke, ker manjka njena varnostna kopija: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Ni mogoče obnoviti odstranjene datoteke iz varnostne kopije: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Ni mogoče zapisati revizijskih metapodatkov uporabe posodobitve."
+
+msgid "Unable to write global update apply log."
+msgstr "Ni mogoče zapisati globalnega dnevnika uporabe posodobitve."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Zaznana je nevarna relativna pot v pripravljalnem imeniku: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Imenik ni zapisljiv: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Ni mogoče ustvariti imenika: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Metapodatki priprave so bili uspešno prebrani."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metapodatki načrta uporabe so bili zapisani v pripravljalni imenik."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Ciljne datoteke in imeniki so videti zapisljivi za načrtovano posodobitev in čiščenje."
+
+msgid "Update apply plan check failed."
+msgstr "Preverjanje načrta uporabe posodobitve ni uspelo."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Nekaterih ciljnih datotek ali imenikov ni mogoče zapisati ali odstraniti."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Za odpravo tega začasno spremenite lastnika celotnega imenika Chamilo na %s (uporabnik spletnega strežnika), uporabite posodobitev, nato lastnika spremenite nazaj na %s in lastnika imenika var/ (ter njegove vsebine) nastavite nazaj na %s, da bo aplikacija vanj še naprej lahko pisala."
+
+msgid "Update package verification failed."
+msgstr "Preverjanje paketa posodobitve ni uspelo."
+
+msgid "Update preflight checks failed."
+msgstr "Predhodna preverjanja posodobitve niso uspela."
+
+msgid "Unable to stage update package."
+msgstr "Paketa posodobitve ni mogoče pripraviti."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Izvajanje ukazov po uporabi iz uporabniškega vmesnika je na tem strežniku onemogočeno."
+
+msgid "Missing required field: %s"
+msgstr "Manjka obvezno polje: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Vir manifesta posodobitve ni bil podan in privzeti URL manifesta posodobitve ni nastavljen."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL manifesta posodobitve mora uporabljati uradni izvor posodobitev %s. Spremeniti je mogoče samo pot manifesta."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Lokalne poti manifesta posodobitve so onemogočene. Uporabite URL manifesta HTTPS ali za lokalne teste v okolju strežnika nastavite CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Ne podajajte poti HTTP %s. Pustite to polje prazno, da se prenese iz manifesta posodobitve."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Lokalne poti posodobitve %s so v tem okolju onemogočene."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "V tem okolju morajo biti na strežniku nastavljeni zaupanja vredni javni ključi posodobitev."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Preskakovanje preverjanja podpisa posodobitve je v tem okolju onemogočeno."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Za izvajanje dejanj posodobitve po uporabi je potrebno potrditveno besedilo \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Za uporabo pripravljenih datotek posodobitve je potrebno potrditveno besedilo \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Ni mogoče razrešiti imenika projekta."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Varnostne kopije zbirke podatkov ta posodabljalnik ne upravlja. Pred zagonom migracij ustvarite in preverite varnostno kopijo zbirke podatkov."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Metode Doctrine migration down() ne zagotavljajo obnovitve izbrisanih ali preoblikovanih podatkov."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Metapodatki po uporabi priporočajo pregled migracij zbirke podatkov."
+
+msgid "No migration files were found in the staged package."
+msgstr "V pripravljenem paketu ni bilo najdenih datotek migracij."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Zaznane so bile pripravljene datoteke migracij Doctrine."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Cilj migracije Doctrine je bil razrešen iz pripravljenega paketa."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Osnovna črta migracij Doctrine ima blokirajoče težave za pripravljene migracije."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine sporoča opozorila zgodovinske osnovne črte migracij, vendar bodo pregledane in izrecno izvedene samo pripravljene migracije %s."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine sporoča opozorila zgodovinske osnovne črte migracij. Posodabljalnik bo po izrecni potrditvi izvedel samo pripravljene razrede migracij %s."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Osnovna črta Doctrine nima blokirajoče težave za pripravljene migracije %s."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Preizkusno izvajanje migracije Doctrine ni uspelo za vsaj eno pripravljeno migracijo. Migracij zbirke podatkov ne zaganjajte, dokler to ni odpravljeno."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Preizkusno izvajanje Doctrine je bilo uspešno zaključeno za vsak pripravljen razred migracije."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Pred zagonom migracij je treba varnostno kopijo zbirke podatkov ustvariti zunaj tega posodabljalnika."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Za pregled migracij zbirke podatkov je potrebna pot priprave."
+
+msgid "Unable to read update %s: %s"
+msgstr "Ni mogoče prebrati posodobitve %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON posodobitve %s ni veljaven: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON posodobitve %s mora biti objekt."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Metapodatki preverjanj po uporabi ne vsebujejo veljavnega seznama dejanj."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Za to fazno posodobitev selitve podatkovne zbirke niso bile priporočene."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "V metapodatkih posodobitve manjka pot fazne namestitve."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Načrtovana datoteka fazne selitve ni bila najdena: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Fazne datoteke selitve ni mogoče prebrati: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Iz getDescription() ni bilo mogoče izluščiti opisa."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Zaganjalnik posodobitev podpira samo %s faznih selitev: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Metapodatkov varnosti selitve ni mogoče zapisati: %s"
+
+msgid "Migration safety check failed."
+msgstr "Preverjanje varnosti selitve ni uspelo."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Zaznana je bila nevarna relativna pot fazne selitve: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Nameščene različice Chamilo ni bilo mogoče samodejno zaznati. Nadaljujte šele, ko potrdite, da je ta posodobitev združljiva."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Nameščena ali ciljna različica ni v primerljivi obliki semantične različice. Nadaljujte šele po ročnem preverjanju."
+
+msgid "An update is available."
+msgstr "Na voljo je posodobitev."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Nameščena različica se že ujema z različico manifesta."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Različica manifesta je starejša od nameščene različice. Znižanja različice so privzeto blokirana."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Fazne datoteke niso bile uspešno uporabljene. Preverjanj po uporabi ni mogoče nadaljevati."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Metapodatki rezultata uporabe so bili uspešno prebrani."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Priporočila dejanj po uporabi so bila ustvarjena."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "V faznem paketu so bile zaznane selitve podatkovne zbirke. Zaženite jih šele, ko potrdite, da je posodobitev datotek pravilna in da obstaja varnostna kopija podatkovne zbirke."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Za izvajanje preverjanj po uporabi je potrebna pot faznega območja."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Posodobitev %s ni veljaven JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Posodobitev %s mora biti JSON objekt."
+
+msgid "Composer dependencies"
+msgstr "Odvisnosti Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "V fazni paket so bili vključeni metapodatki Composer. Preden posodobitev štejete za dokončano, v korenu aplikacije zaženite Composer install."
+
+msgid "Frontend assets"
+msgstr "Sredstva vmesnika"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "V fazni paket so bile vključene datoteke, povezane z vmesnikom. Po namestitvi odvisnosti znova zgradite produkcijska sredstva."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "V faznem paketu so bile zaznane datoteke selitev Doctrine. Pred zagonom selitev potrdite, da obstaja varnostna kopija podatkovne zbirke."
+
+msgid "Symfony cache"
+msgstr "Predpomnilnik Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Po uporabi datotek posodobitve in zagonu morebitnih zahtevanih ukazov počistite predpomnilnik Symfony."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Metapodatkov preverjanj po uporabi ni mogoče zapisati."
+
+msgid "Post-apply check failed."
+msgstr "Preverjanje po uporabi ni uspelo."
+
+msgid "Update package is not readable: %s"
+msgstr "Paketa posodobitve ni mogoče prebrati: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Paket posodobitve ni veljaven arhiv ZIP."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Arhiv ZIP paketa posodobitve je prazen."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Paket posodobitve vsebuje neberljiv vnos ZIP."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Paket posodobitve vsebuje nevarno absolutno pot: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Paket posodobitve vsebuje vnos s prehodom po poti: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Paket posodobitve vsebuje simbolno povezavo: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Začenjanje dejanj po uporabi."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Izvajanje ukazov po uporabi zahteva izrecno potrditev."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Metapodatki priporočil po uporabi so bili uspešno prebrani."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Dejanja po uporabi so bila preverjena glede na poročilo s priporočili."
+
+msgid "Post-apply actions were selected."
+msgstr "Dejanja po uporabi so bila izbrana."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Napredna dejanja po uporabi zahtevajo izrecno napredno potrditev."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Napredna dejanja po uporabi so bila izrecno potrjena."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Izbrani ukazi po uporabi so se uspešno zaključili."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Metapodatki zagona ukazov po uporabi so bili zapisani."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Dejanja po uporabi so se uspešno zaključila."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Neveljavna definicija ukaza posodobitve po uporabi: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Izvajanje dejanja po uporabi: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Izvajanje ukaza %d od %d za %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Dejanje po uporabi ni uspelo: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Dejanje po uporabi \"%s\" ni uspelo z izhodno kodo %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Dejanje po uporabi je končano: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Za izvajanje dejanj po uporabi je potrebna pot za pripravo."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Ni priporočenih dejanj po uporabi za izvajanje."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Ni dovoljenih dejanj po uporabi za izvajanje."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Dejanje po uporabi za to posodobitev ni dovoljeno: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Migracije podatkovne zbirke pred izvajanjem zahtevajo pregled varnosti migracije."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Migracij podatkovne zbirke ni mogoče izvesti, ker pregled varnosti migracije ni uspel."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Migracij podatkovne zbirke ni mogoče izvesti, ker pregled varnosti migracije ni navedel pripravljenih migracij."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Migracij podatkovne zbirke ni mogoče izvesti, ker pregled varnosti migracije vsebuje neveljaven vnos migracije."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Posodobitveni izvajalec lahko izvede samo pripravljene migracije %s."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Migracij podatkovne zbirke ni mogoče izvesti, ker je pregled varnosti pripravljenih migracij sporočil blokirajoče napake."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine sporoča opozorila o izhodišču migracij. Izrecno bodo izvedeni samo pripravljeni razredi migracij %s."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Migracije podatkovne zbirke zahtevajo potrditev, da obstaja varnostna kopija podatkovne zbirke."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Migracije podatkovne zbirke zahtevajo potrditveno besedilo \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Pregled varnosti migracije podatkovne zbirke je bil pred izvajanjem zaključen."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Obstoj varnostne kopije podatkovne zbirke je bil izrecno potrjen."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Pregled varnosti migracije podatkovne zbirke in potrditev varnostne kopije sta bila zagotovljena."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Migracije podatkovne zbirke so bile izvedene po izrecni potrditvi varnostne kopije podatkovne zbirke. Posodobitveni program varnostne kopije podatkovne zbirke ni ustvaril."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Zahtevana dovoljenja za izvajanje po uporabi so bila normalizirana."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Migracij podatkovne zbirke ni mogoče izvesti, ker bin/console ni bil najden."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Izbrani ukazi po uporabi imajo zahtevane zapisljive poti."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Zapisljive poti ukazov po uporabi so bile preverjene."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Napredna dejanja po uporabi lahko spremenijo odvisnosti, ustvarjene vire ali podatkovno zbirko. Pred nadaljevanjem preglejte varnostne kopije."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composerja ni mogoče varno zagnati iz spletnega posodobitvenega programa, ker je datoteka, ki jo je ustvaril Composer, \"%s\" v lasti UID %d, medtem ko izvajalno okolje PHP uporablja UID %d. Composer zaženite ročno kot lastnik namestitve, nato nadaljujte s preostalimi dejanji po uporabi."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Pot, ki jo zahteva dejanje po uporabi \"%s\", ni zapisljiva: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Nadrejeni imenik, ki ga zahteva dejanje po uporabi \"%s\", ni zapisljiv: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Ni mogoče prebrati dovoljenj za zahtevani izvršljivi program po uporabi: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Zahtevanega izvršljivega programa po uporabi ni mogoče označiti kot izvršljivega: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Zahtevani izvršljivi program po uporabi po chmod še vedno ni izvršljiv: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Dovoljenje za izvajanje je bilo normalizirano."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Ni mogoče zapisati izolirane konfiguracije Git za ukaze po uporabi."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Zdi se, da se izvaja druga operacija posodobitve. Odstranite var/update/update.lock samo, če posodobitev ni aktivna."
+
+msgid "Unable to create update lock: %s"
+msgstr "Ni mogoče ustvariti zaklepa posodobitve: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Ni mogoče zapisati metapodatkov izvajanja ukaza po uporabi: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "V manifestu posodobitve manjka blok paketa."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Blok podpisa manifesta posodobitve mora biti objekt."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Blok zahtev manifesta posodobitve mora biti objekt."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Sha256 paketa posodobitve mora biti 64-mestni šestnajstiški niz."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "V manifestu posodobitve manjka obvezno nizovno polje \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Polje manifesta posodobitve \"%s\" mora biti niz."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Manifest posodobitve ni veljaven JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON manifesta posodobitve mora biti objekt."
+
+msgid "Manifest source cannot be empty."
+msgstr "Vir manifesta ne sme biti prazen."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL manifesta posodobitve mora uporabljati uradni izvor posodobitev %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Manifesta posodobitve ni mogoče prenesti. Stanje HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Datoteke manifesta ni mogoče brati: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Datoteke manifesta ni mogoče prebrati: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL manifesta posodobitve mora uporabljati HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Metapodatki paketa posodobitve niso berljivi: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Metapodatkov paketa posodobitve ni mogoče prebrati: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Metapodatki paketa posodobitve niso veljaven JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Metapodatki paketa posodobitve morajo biti JSON objekt."
+
+msgid "Update package metadata format must be %d."
+msgstr "Oblika metapodatkov paketa posodobitve mora biti %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Polje metapodatkov paketa posodobitve \"remove\" mora biti polje."
+
+msgid "Update package removal paths must be strings."
+msgstr "Poti za odstranitev v paketu posodobitve morajo biti nizi."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Metapodatki paketa posodobitve ne smejo odstraniti zaščitene poti: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Paket posodobitve ne sme hkrati vključevati in odstraniti iste poti: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Ni mogoče izračunati sha256 metapodatkov paketa posodobitve."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Pot za odstranitev v paketu posodobitve ne sme biti prazna."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Pot za odstranitev v paketu posodobitve vsebuje ničelni bajt."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Pot za odstranitev v paketu posodobitve mora biti relativna: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Pot za odstranitev v paketu posodobitve vsebuje nevaren segment: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Za izdelavo načrta uporabe posodobitve je potrebna pripravljalna pot."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "V pripravljalnem imeniku manjka STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Pripravljalnih metapodatkov ni mogoče prebrati: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Pripravljalni metapodatki niso veljaven JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Pripravljalni metapodatki morajo biti JSON objekt."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "V pripravljalnih metapodatkih manjka polje application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "V paketu posodobitve manjka %s. Pred uporabo datotek so potrebni podpisani metapodatki za čiščenje."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Pripravljalni metapodatki ne vsebujejo podpisanih metapodatkov za čiščenje paketa, zabeleženih med razširjanjem."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Metapodatki za čiščenje paketa posodobitve so se po pripravi spremenili. Pred nadaljevanjem znova pripravite preverjeni paket."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Pripravljalni metapodatki ne vsebujejo veljavnega seznama odstranitev paketa."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Poti za čiščenje paketa posodobitve so se po pripravi spremenile. Pred nadaljevanjem znova pripravite preverjeni paket."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Podpisani metapodatki za čiščenje paketa so od priprave nespremenjeni."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Datoteka zaklepa posodobitve že obstaja. Morda poteka druga posodobitev."
+
+msgid "Update lock directory is not writable."
+msgstr "Imenik zaklepa posodobitve ni zapisljiv."
+
+msgid "No update lock is currently active."
+msgstr "Trenutno ni aktivnega zaklepa posodobitve."
+
+msgid "Update backup directory is not writable."
+msgstr "Imenik varnostne kopije posodobitve ni zapisljiv."
+
+msgid "Update backup directory is writable."
+msgstr "Imenik varnostne kopije posodobitve je zapisljiv."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Trenutni proces ne more ustvariti imenika varnostne kopije posodobitve."
+
+msgid "Update backup directory can be created."
+msgstr "Imenik varnostne kopije posodobitve je mogoče ustvariti."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Nekateri delovni imeniki posodobitve niso zapisljivi ali jih trenutni proces ne more ustvariti."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Delovni imeniki posodobitve so zapisljivi ali jih je mogoče ustvariti."
+
+msgid "Update apply file plan was generated."
+msgstr "Načrt datotek za uporabo posodobitve je bil ustvarjen."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Metapodatki za čiščenje paketa vsebujejo poti, ki jih ni mogoče varno odstraniti."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Cilji odstranitve, navedeni v paketu, so varni."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Nekatere zastarele datoteke, navedene v paketu, v tej namestitvi že manjkajo."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Načrtovana posodobitev bi prepisala ali odstranila obstoječe simbolne povezave."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Načrtovana posodobitev ne prepiše in ne odstrani obstoječih simbolnih povezav."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Nove datoteke migracij posodobitve morajo biti v %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Zaznane so bile nove datoteke Doctrine migracij %s. Po uporabi datotek bodo zahtevale varnostni pregled migracije podatkovne zbirke."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Nekateri seznami datotek v načrtu uporabe posodobitve so bili v JSON odgovoru skrajšani."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Metapodatkov načrta uporabe posodobitve ni mogoče zapisati."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Paketa posodobitve ni mogoče prenesti. HTTP status: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Ciljne datoteke paketa posodobitve ni mogoče odpreti: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Prenosi posodobitev morajo uporabljati uradni izvor posodobitev %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL paketa posodobitve mora uporabljati HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Varnostna preverjanja arhiva posodobitvenega paketa so uspešno opravljena."
+
+msgid "Update package was extracted to staging."
+msgstr "Posodobitveni paket je bil razširjen v pripravljalno okolje."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Metapodatki za čiščenje podpisanega paketa so bili naloženi."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Posodobitveni paket ne vsebuje %s. Uporaba datotek bo blokirana, dokler niso na voljo podpisani metapodatki za čiščenje."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Poročilo preizkusnega zagona pripravljenega paketa je bilo ustvarjeno."
+
+msgid "Staging metadata was written."
+msgstr "Metapodatki pripravljalnega okolja so bili zapisani."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Posodobitvenega paketa ni mogoče razširiti v pripravljalni imenik."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Korena aplikacije Chamilo v pripravljenem paketu ni mogoče najti."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Pripravljenemu paketu manjka zahtevani vnos Chamilo: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Pripravljeni paket vsebuje pričakovano strukturo Chamilo."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Pripravljeni paket ne vsebuje composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Pripravljeni paket vsebuje composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Pripravljeni paket ne vsebuje yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Pripravljeni paket vsebuje yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Metapodatkov pripravljalnega okolja ni mogoče kodirati."
+
+msgid "Unable to write staging metadata."
+msgstr "Metapodatkov pripravljalnega okolja ni mogoče zapisati."
+
+msgid "Update operation log created."
+msgstr "Dnevnik posodobitvene operacije je ustvarjen."
+
+msgid "Unable to write update operation log."
+msgstr "Dnevnika posodobitvene operacije ni mogoče zapisati."
+
+msgid "Invalid update operation id."
+msgstr "Neveljaven ID posodobitvene operacije."
 

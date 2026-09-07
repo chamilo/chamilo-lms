@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Բանաձևի օրինակ. sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Բանաձևի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -40575,4 +40575,607 @@ msgstr "Որոշ նպատակային ֆայլեր կամ գրացուցակնե
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Սա շտկելու համար ժամանակավորապես փոխեք ամբողջ Chamilo գրացուցակի սեփականատիրոջը %s-ի (վեբ սերվերի օգտատեր), կիրառեք թարմացումը, այնուհետև սեփականատիրոջը վերադարձրեք %s-ի, ապա var/-ի (և դրա բովանդակության) սեփականատիրոջը կրկին սահմանեք %s, որպեսզի հավելվածը շարունակի կարողանալ գրել դրանում։"
+
+msgid "Update package verification failed."
+msgstr "Թարմացման փաթեթի ստուգումը ձախողվեց։"
+
+msgid "Update preflight checks failed."
+msgstr "Թարմացման նախնական ստուգումները ձախողվեցին։"
+
+msgid "Unable to stage update package."
+msgstr "Հնարավոր չէ պատրաստել թարմացման փաթեթը։"
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Այս սերվերում միջերեսից հետկիրառման հրամանների գործարկումը անջատված է։"
+
+msgid "Missing required field: %s"
+msgstr "Բացակայում է պարտադիր դաշտը՝ %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Թարմացման մանիֆեստի աղբյուր չի տրամադրվել, և լռելյայն թարմացման մանիֆեստի URL կարգավորված չէ։"
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Թարմացման մանիֆեստի URL-ը պետք է օգտագործի պաշտոնական թարմացման աղբյուրը՝ %s։ Կարելի է փոխել միայն մանիֆեստի ուղին։"
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Տեղային թարմացման մանիֆեստի ուղիներն անջատված են։ Օգտագործեք HTTPS մանիֆեստի URL կամ սերվերի միջավայրում տեղային փորձարկումների համար սահմանեք CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1։"
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Մի նշեք HTTP %s ուղի։ Թողեք այս դաշտը դատարկ՝ այն թարմացման մանիֆեստից ներբեռնելու համար։"
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Այս միջավայրում տեղային թարմացման %s ուղիներն անջատված են։"
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Այս միջավայրում սերվերում պետք է կարգավորված լինեն վստահելի թարմացման հանրային բանալիները։"
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Այս միջավայրում թարմացման ստորագրության ստուգումը բաց թողնելն անջատված է։"
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Հետկիրառման թարմացման գործողությունները գործարկելու համար պահանջվում է հաստատման տեքստը՝ \"%s\"։"
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Պատրաստված թարմացման ֆայլերը կիրառելու համար պահանջվում է հաստատման տեքստը՝ \"%s\"։"
+
+msgid "Unable to resolve project directory."
+msgstr "Հնարավոր չէ որոշել նախագծի գրացուցակը։"
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Տվյալների բազայի պահուստը այս թարմացնողով չի կառավարվում։ Միգրացիաներ գործարկելուց առաջ ստեղծեք և ստուգեք տվյալների բազայի պահուստը։"
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine-ի migration down() մեթոդները երաշխավորված չեն վերականգնել ջնջված կամ փոխակերպված տվյալները։"
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Հետկիրառման մետատվյալները խորհուրդ են տալիս վերանայել տվյալների բազայի միգրացիաները։"
+
+msgid "No migration files were found in the staged package."
+msgstr "Պատրաստված փաթեթում միգրացիայի ֆայլեր չեն գտնվել։"
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Հայտնաբերվել են պատրաստված Doctrine միգրացիայի ֆայլեր։"
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine միգրացիայի նպատակը որոշվել է պատրաստված փաթեթից։"
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine միգրացիայի ելակետն ունի արգելափակող խնդիրներ պատրաստված միգրացիաների համար։"
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine-ը հաղորդում է պատմական միգրացիայի ելակետի նախազգուշացումներ, սակայն վերանայվելու և հստակորեն կատարվելու են միայն պատրաստված %s միգրացիաները։"
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine-ը հաղորդում է պատմական միգրացիայի ելակետի նախազգուշացումներ։ Թարմացնողը հստակ հաստատումից հետո կկատարի միայն պատրաստված %s միգրացիայի դասերը։"
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine ելակետը պատրաստված %s միգրացիաների համար արգելափակող խնդիր չունի։"
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Doctrine միգրացիայի փորձնական գործարկումը ձախողվեց առնվազն մեկ պատրաստված միգրացիայի համար։ Մի գործարկեք տվյալների բազայի միգրացիաներ, մինչև սա շտկվի։"
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Doctrine-ի փորձնական գործարկումը հաջողությամբ ավարտվեց յուրաքանչյուր պատրաստված միգրացիայի դասի համար։"
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Միգրացիաներ գործարկելուց առաջ տվյալների բազայի պահուստը պետք է ստեղծվի այս թարմացնողից դուրս։"
+
+msgid "Staging path is required to review database migrations."
+msgstr "Տվյալների բազայի միգրացիաները վերանայելու համար պահանջվում է պատրաստման ուղի։"
+
+msgid "Unable to read update %s: %s"
+msgstr "Հնարավոր չէ կարդալ թարմացման %s՝ %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Թարմացման %s JSON-ն անվավեր է՝ %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Թարմացման %s JSON-ը պետք է լինի օբյեկտ։"
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Հետկիրառման ստուգումների մետատվյալները չեն պարունակում վավեր գործողությունների ցանկ։"
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Այս պատրաստված թարմացման համար տվյալների բազայի միգրացիաներ խորհուրդ չեն տրվել։"
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Թարմացման մետատվյալներում բացակայում է պատրաստված հավելվածի ուղին։"
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Պլանավորված պատրաստված միգրացիայի ֆայլը չի գտնվել՝ %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Հնարավոր չէ կարդալ պատրաստված միգրացիայի ֆայլը՝ %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "getDescription()-ից նկարագրություն հնարավոր չեղավ ստանալ։"
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Թարմացման գործարկիչը աջակցում է միայն %s պատրաստված միգրացիաներ՝ %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Հնարավոր չէ գրել միգրացիայի անվտանգության մետատվյալները՝ %s"
+
+msgid "Migration safety check failed."
+msgstr "Միգրացիայի անվտանգության ստուգումը ձախողվեց։"
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Հայտնաբերվել է անապահով պատրաստված հարաբերական միգրացիայի ուղի՝ %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Տեղադրված Chamilo տարբերակը ավտոմատ կերպով հնարավոր չեղավ հայտնաբերել։ Շարունակեք միայն այն բանից հետո, երբ հաստատեք, որ այս թարմացումը համատեղելի է։"
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Տեղադրված կամ նպատակային տարբերակը համեմատելի իմաստային տարբերակի ձևաչափով չէ։ Շարունակեք միայն ձեռքով ստուգումից հետո։"
+
+msgid "An update is available."
+msgstr "Հասանելի է թարմացում։"
+
+msgid "The installed version already matches the manifest version."
+msgstr "Տեղադրված տարբերակն արդեն համընկնում է մանիֆեստի տարբերակի հետ։"
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Մանիֆեստի տարբերակը ավելի հին է, քան տեղադրված տարբերակը։ Նվազեցումները լռելյայն արգելված են։"
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Նախապատրաստված ֆայլերը հաջողությամբ չկիրառվեցին։ Կիրառումից հետո ստուգումները չեն կարող շարունակվել։"
+
+msgid "Apply result metadata was read successfully."
+msgstr "Կիրառման արդյունքի մետատվյալները հաջողությամբ կարդացվեցին։"
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Կիրառումից հետո գործողությունների առաջարկները ստեղծվեցին։"
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Նախապատրաստված փաթեթում հայտնաբերվել են տվյալների բազայի միգրացիաներ։ Գործարկեք դրանք միայն այն բանից հետո, երբ հաստատեք, որ ֆայլերի թարմացումը ճիշտ է և տվյալների բազայի պահուստային պատճեն գոյություն ունի։"
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Կիրառումից հետո ստուգումներ գործարկելու համար պահանջվում է նախապատրաստման ուղի։"
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Թարմացումը %s վավեր JSON չէ․ %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Թարմացումը %s պետք է լինի JSON օբյեկտ։"
+
+msgid "Composer dependencies"
+msgstr "Composer կախվածություններ"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Նախապատրաստված փաթեթում ներառված էին Composer մետատվյալներ։ Թարմացումը ավարտված համարելուց առաջ գործարկեք Composer install հավելվածի արմատից։"
+
+msgid "Frontend assets"
+msgstr "Առջևի մասի ռեսուրսներ"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Նախապատրաստված փաթեթում ներառված էին առջևի մասի հետ կապված ֆայլեր։ Կախվածությունները տեղադրելուց հետո վերակառուցեք արտադրական ռեսուրսները։"
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Նախապատրաստված փաթեթում հայտնաբերվել են Doctrine միգրացիայի ֆայլեր։ Միգրացիաները գործարկելուց առաջ հաստատեք, որ տվյալների բազայի պահուստային պատճեն գոյություն ունի։"
+
+msgid "Symfony cache"
+msgstr "Symfony քեշ"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Թարմացման ֆայլերը կիրառելուց և անհրաժեշտ հրամանները գործարկելուց հետո մաքրեք Symfony քեշը։"
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Հնարավոր չէ գրել կիրառումից հետո ստուգումների մետատվյալները։"
+
+msgid "Post-apply check failed."
+msgstr "Կիրառումից հետո ստուգումը ձախողվեց։"
+
+msgid "Update package is not readable: %s"
+msgstr "Թարմացման փաթեթը ընթեռնելի չէ․ %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Թարմացման փաթեթը վավեր ZIP արխիվ չէ։"
+
+msgid "Update package ZIP archive is empty."
+msgstr "Թարմացման փաթեթի ZIP արխիվը դատարկ է։"
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Թարմացման փաթեթը պարունակում է անընթեռնելի ZIP գրառում։"
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Թարմացման փաթեթը պարունակում է անվտանգ չհամարվող բացարձակ ուղի․ %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Թարմացման փաթեթը պարունակում է ուղու շրջանցման գրառում․ %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Թարմացման փաթեթը պարունակում է սիմվոլիկ հղում․ %s"
+
+msgid "Starting post-apply actions."
+msgstr "Սկսվում են կիրառումից հետո գործողությունները։"
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Կիրառումից հետո հրամանի կատարումը պահանջում է հստակ հաստատում։"
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Կիրառումից հետո առաջարկների մետատվյալները հաջողությամբ կարդացվեցին։"
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Կիրառումից հետո գործողությունները վավերացվեցին առաջարկների հաշվետվության համեմատ։"
+
+msgid "Post-apply actions were selected."
+msgstr "Կիրառումից հետո գործողությունները ընտրվեցին։"
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Ընդլայնված կիրառումից հետո գործողությունները պահանջում են հստակ ընդլայնված հաստատում։"
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Ընդլայնված կիրառումից հետո գործողությունները հստակ հաստատվեցին։"
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Ընտրված կիրառումից հետո հրամանները հաջողությամբ ավարտվեցին։"
+
+msgid "Post-apply command run metadata was written."
+msgstr "Կիրառումից հետո հրամանի գործարկման մետատվյալները գրվեցին։"
+
+msgid "Post-apply actions completed successfully."
+msgstr "Կիրառումից հետո գործողությունները հաջողությամբ ավարտվեցին։"
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Անվավեր թարմացման կիրառումից հետո հրամանի սահմանում․ %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Գործարկվում է կիրառումից հետո գործողություն․ %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Գործարկվում է %d հրամանը %d-ից՝ %s-ի համար։"
+
+msgid "Post-apply action failed: %s"
+msgstr "Կիրառումից հետո գործողությունը ձախողվեց․ %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Կիրառումից հետո գործողությունը \"%s\" ձախողվեց ելքի կոդով %d։"
+
+msgid "Post-apply action completed: %s"
+msgstr "Կիրառումից հետո գործողությունը ավարտվեց․ %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Կիրառումից հետո գործողություններ գործարկելու համար պահանջվում է նախապատրաստման ուղի։"
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Գործարկելու համար առաջարկվող կիրառումից հետո գործողություններ չկան։"
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Գործարկելու համար թույլատրված կիրառումից հետո գործողություններ չկան։"
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Կիրառումից հետո գործողությունը թույլատրված չէ այս թարմացման համար․ %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Տվյալների բազայի միգրացիաները կատարումից առաջ պահանջում են միգրացիայի անվտանգության վերանայում։"
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Տվյալների բազայի միգրացիաները չեն կարող գործարկվել, քանի որ միգրացիայի անվտանգության վերանայումը չի անցել։"
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Տվյալների բազայի միգրացիաները չեն կարող գործարկվել, քանի որ միգրացիայի անվտանգության վերանայումը չի նշել նախապատրաստված միգրացիաները։"
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Տվյալների բազայի միգրացիաները չեն կարող գործարկվել, քանի որ միգրացիայի անվտանգության վերանայումը պարունակում է անվավեր միգրացիայի գրառում։"
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Թարմացման գործարկիչը կարող է կատարել միայն նախապատրաստված %s միգրացիաներ։"
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Տվյալների բազայի միգրացիաները չեն կարող գործարկվել, քանի որ նախապատրաստված միգրացիայի անվտանգության վերանայումը հայտնել է արգելափակող սխալներ։"
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine-ը զգուշացնում է միգրացիայի ելակետի մասին։ Կկատարվեն միայն նախապատրաստված %s միգրացիայի դասերը։"
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Տվյալների բազայի միգրացիաները պահանջում են հաստատում, որ տվյալների բազայի պահուստային պատճեն գոյություն ունի։"
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Տվյալների բազայի միգրացիաները պահանջում են հաստատման տեքստը \"RUN DATABASE MIGRATIONS\"։"
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Տվյալների բազայի միգրացիայի անվտանգության ստուգումը կատարվել է գործարկումից առաջ։"
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Տվյալների բազայի պահուստային պատճենի գոյությունը հստակ հաստատվել է։"
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Տրամադրվել են տվյալների բազայի միգրացիայի անվտանգության ստուգումը և պահուստի հաստատումը։"
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Տվյալների բազայի միգրացիաները կատարվել են պահուստային պատճենի հստակ հաստատումից հետո։ Թարմացնողը պահուստը չի ստեղծել։"
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Կիրառումից հետո պահանջվող գործարկելի ֆայլերի թույլտվությունները նորմալացվել են։"
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Հնարավոր չէ գործարկել տվյալների բազայի միգրացիաները, քանի որ bin/console-ը չի գտնվել։"
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Ընտրված կիրառումից հետո հրամաններն ունեն պահանջվող գրելու թույլտվությամբ ուղիները։"
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Կիրառումից հետո հրամանների գրելու թույլտվությամբ ուղիները ստուգվել են։"
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Կիրառումից հետո առաջադեմ գործողությունները կարող են փոխել կախվածությունները, գեներացված ռեսուրսները կամ տվյալների բազան։ Շարունակելուց առաջ ստուգեք պահուստները։"
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer-ը չի կարող անվտանգ գործարկվել վեբ թարմացնողից, քանի որ Composer-ի գեներացված ֆայլը \"%s\" պատկանում է UID %d-ին, մինչդեռ PHP-ի գործարկման միջավայրը օգտագործում է UID %d։ Գործարկեք Composer-ը ձեռքով որպես տեղակայման սեփականատեր, ապա շարունակեք մնացած կիրառումից հետո գործողությունները։"
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Կիրառումից հետո գործողության \"%s\" համար պահանջվող ուղին գրելու թույլտվություն չունի․ %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Կիրառումից հետո գործողության \"%s\" համար պահանջվող ծնող թղթապանակը գրելու թույլտվություն չունի․ %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Հնարավոր չէ կարդալ կիրառումից հետո պահանջվող գործարկելի ֆայլի թույլտվությունները․ %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Հնարավոր չէ կիրառումից հետո պահանջվող գործարկելի ֆայլը նշել որպես գործարկելի․ %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Կիրառումից հետո պահանջվող գործարկելի ֆայլը chmod-ից հետո դեռ գործարկելի չէ․ %s"
+
+msgid "Executable permission was normalized."
+msgstr "Գործարկման թույլտվությունը նորմալացվել է։"
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Հնարավոր չէ գրել մեկուսացված Git կազմաձևումը կիրառումից հետո հրամանների համար։"
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Թվում է, թե մեկ այլ թարմացման գործողություն է ընթանում։ Հեռացրեք var/update/update.lock-ը միայն եթե թարմացում չի ընթանում։"
+
+msgid "Unable to create update lock: %s"
+msgstr "Հնարավոր չէ ստեղծել թարմացման կողպեք․ %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Հնարավոր չէ գրել կիրառումից հետո հրամանի գործարկման մետատվյալները․ %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Թարմացման մանիֆեստում բացակայում է փաթեթի բլոկը։"
+
+msgid "Update manifest signature block must be an object."
+msgstr "Թարմացման մանիֆեստի ստորագրության բլոկը պետք է լինի օբյեկտ։"
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Թարմացման մանիֆեստի պահանջների բլոկը պետք է լինի օբյեկտ։"
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Թարմացման փաթեթի sha256-ը պետք է լինի 64 նիշանոց տասնվեցական տող։"
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Թարմացման մանիֆեստում բացակայում է պահանջվող տողային դաշտը \"%s\"։"
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Թարմացման մանիֆեստի դաշտը \"%s\" պետք է լինի տող։"
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Թարմացման մանիֆեստը վավեր JSON չէ․ %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Թարմացման մանիֆեստի JSON-ը պետք է լինի օբյեկտ։"
+
+msgid "Manifest source cannot be empty."
+msgstr "Մանիֆեստի աղբյուրը չի կարող դատարկ լինել։"
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Թարմացման մանիֆեստի URL-ը պետք է օգտագործի պաշտոնական թարմացման ծագումը %s։"
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Հնարավոր չէ ներբեռնել թարմացման մանիֆեստը։ HTTP կարգավիճակ․ %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Մանիֆեստի ֆայլը ընթեռնելի չէ․ %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Հնարավոր չէ կարդալ մանիֆեստի ֆայլը․ %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Թարմացման մանիֆեստի URL-ը պետք է օգտագործի HTTPS։"
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Թարմացման փաթեթի մետատվյալները ընթեռնելի չեն․ %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Հնարավոր չէ կարդալ թարմացման փաթեթի մետատվյալները․ %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Թարմացման փաթեթի մետատվյալները վավեր JSON չեն․ %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Թարմացման փաթեթի մետատվյալները պետք է լինեն JSON օբյեկտ։"
+
+msgid "Update package metadata format must be %d."
+msgstr "Թարմացման փաթեթի մետատվյալների ձևաչափը պետք է լինի %d։"
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Թարմացման փաթեթի մետատվյալների դաշտը \"remove\" պետք է լինի զանգված։"
+
+msgid "Update package removal paths must be strings."
+msgstr "Թարմացման փաթեթի հեռացման ուղիները պետք է լինեն տողեր։"
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Թարմացման փաթեթի մետատվյալները չեն կարող հեռացնել պաշտպանված ուղին․ %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Թարմացման փաթեթը չի կարող միաժամանակ ներառել և հեռացնել նույն ուղին․ %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Հնարավոր չէ հաշվարկել թարմացման փաթեթի մետատվյալների sha256-ը։"
+
+msgid "Update package removal path cannot be empty."
+msgstr "Թարմացման փաթեթի հեռացման ուղին չի կարող դատարկ լինել։"
+
+msgid "Update package removal path contains a null byte."
+msgstr "Թարմացման փաթեթի հեռացման ուղին պարունակում է զրոյական բայթ։"
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Թարմացման փաթեթի հեռացման ուղին պետք է լինի հարաբերական․ %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Թարմացման փաթեթի հեռացման ուղին պարունակում է անվտանգ չհամարվող հատված՝ %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Թարմացման կիրառման պլան կառուցելու համար պահանջվում է նախապատրաստման ուղի։"
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Նախապատրաստման գրացուցակում բացակայում է STAGING-INFO.json ֆայլը։"
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Հնարավոր չէ կարդալ նախապատրաստման մետատվյալները՝ %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Նախապատրաստման մետատվյալները վավեր JSON չեն՝ %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Նախապատրաստման մետատվյալները պետք է լինեն JSON օբյեկտ։"
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Նախապատրաստման մետատվյալներում բացակայում է application_path դաշտը։"
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Թարմացման փաթեթում բացակայում է %s։ Ստորագրված մաքրման մետատվյալները պարտադիր են՝ նախքան ֆայլերի կիրառումը։"
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Նախապատրաստման մետատվյալները չեն պարունակում արդյունահանման ընթացքում գրանցված ստորագրված փաթեթի մաքրման մետատվյալները։"
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Թարմացման փաթեթի մաքրման մետատվյալները փոխվել են նախապատրաստումից հետո։ Շարունակելուց առաջ կրկին նախապատրաստեք ստուգված փաթեթը։"
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Նախապատրաստման մետատվյալները չեն պարունակում վավեր փաթեթի հեռացման ցանկ։"
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Թարմացման փաթեթի մաքրման ուղիները փոխվել են նախապատրաստումից հետո։ Շարունակելուց առաջ կրկին նախապատրաստեք ստուգված փաթեթը։"
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Ստորագրված փաթեթի մաքրման մետատվյալները նախապատրաստումից ի վեր չեն փոխվել։"
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Թարմացման կողպման ֆայլն արդեն գոյություն ունի։ Հնարավոր է՝ մեկ այլ թարմացում ընթացքի մեջ է։"
+
+msgid "Update lock directory is not writable."
+msgstr "Թարմացման կողպման գրացուցակը գրելի չէ։"
+
+msgid "No update lock is currently active."
+msgstr "Ներկայումս ակտիվ թարմացման կողպ չկա։"
+
+msgid "Update backup directory is not writable."
+msgstr "Թարմացման պահուստային գրացուցակը գրելի չէ։"
+
+msgid "Update backup directory is writable."
+msgstr "Թարմացման պահուստային գրացուցակը գրելի է։"
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Ընթացիկ գործընթացը չի կարող ստեղծել թարմացման պահուստային գրացուցակը։"
+
+msgid "Update backup directory can be created."
+msgstr "Թարմացման պահուստային գրացուցակը կարող է ստեղծվել։"
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Թարմացման որոշ աշխատանքային գրացուցակներ գրելի չեն կամ չեն կարող ստեղծվել ընթացիկ գործընթացի կողմից։"
+
+msgid "Update working directories are writable or can be created."
+msgstr "Թարմացման աշխատանքային գրացուցակները գրելի են կամ կարող են ստեղծվել։"
+
+msgid "Update apply file plan was generated."
+msgstr "Թարմացման կիրառման ֆայլերի պլանը ստեղծվել է։"
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Փաթեթի մաքրման մետատվյալները պարունակում են ուղիներ, որոնք չեն կարող անվտանգ հեռացվել։"
+
+msgid "Package-declared removal targets are safe."
+msgstr "Փաթեթում հայտարարված հեռացման թիրախներն անվտանգ են։"
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Փաթեթում հայտարարված որոշ հնացած ֆայլեր արդեն բացակայում են այս տեղադրումից։"
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Նախատեսված թարմացումը կվերագրի կամ կհեռացնի առկա սիմվոլիկ հղումները։"
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Նախատեսված թարմացումը չի վերագրում և չի հեռացնում առկա սիմվոլիկ հղումները։"
+
+msgid "New update migration files must be placed under %s."
+msgstr "Թարմացման նոր միգրացիոն ֆայլերը պետք է տեղադրվեն %s տակ։"
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Հայտնաբերվել են Doctrine-ի նոր %s միգրացիոն ֆայլեր։ Ֆայլերը կիրառելուց հետո դրանք կպահանջեն տվյալների բազայի միգրացիայի անվտանգության ստուգում։"
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Թարմացման կիրառման պլանի որոշ ֆայլերի ցանկեր JSON պատասխանում կրճատվել են։"
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Հնարավոր չէ գրել թարմացման կիրառման պլանի մետատվյալները։"
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Հնարավոր չէ ներբեռնել թարմացման փաթեթը։ HTTP կարգավիճակ՝ %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Հնարավոր չէ բացել թարմացման փաթեթի նպատակային ֆայլը՝ %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Թարմացումների ներբեռնումները պետք է օգտագործեն պաշտոնական թարմացման աղբյուրը՝ %s։"
+
+msgid "The update package URL must use HTTPS."
+msgstr "Թարմացման փաթեթի URL-ը պետք է օգտագործի HTTPS։"
+
+msgid "Update package archive safety checks passed."
+msgstr "Թարմացման փաթեթի արխիվի անվտանգության ստուգումներն անցել են։"
+
+msgid "Update package was extracted to staging."
+msgstr "Թարմացման փաթեթը արդյունահանվել է նախապատրաստման գրացուցակ։"
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Ստորագրված փաթեթի մաքրման մետատվյալները բեռնվել են։"
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Թարմացման փաթեթը չի պարունակում %s։ Ֆայլերի կիրառումը կարգելափակվի, մինչև տրամադրվեն ստորագրված մաքրման մետատվյալներ։"
+
+msgid "Staged package dry-run report was generated."
+msgstr "Նախապատրաստված փաթեթի փորձնական գործարկման հաշվետվությունը ստեղծվել է։"
+
+msgid "Staging metadata was written."
+msgstr "Նախապատրաստման մետատվյալները գրվել են։"
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Հնարավոր չէ արդյունահանել թարմացման փաթեթը նախապատրաստման գրացուցակ։"
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Հնարավոր չէ գտնել Chamilo հավելվածի արմատը նախապատրաստված փաթեթում։"
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Նախապատրաստված փաթեթում բացակայում է պահանջվող Chamilo մուտքը՝ %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Նախապատրաստված փաթեթը պարունակում է սպասվող Chamilo կառուցվածքը։"
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Նախապատրաստված փաթեթը չի պարունակում composer.lock։"
+
+msgid "Staged package contains composer.lock."
+msgstr "Նախապատրաստված փաթեթը պարունակում է composer.lock։"
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Նախապատրաստված փաթեթը չի պարունակում yarn.lock։"
+
+msgid "Staged package contains yarn.lock."
+msgstr "Նախապատրաստված փաթեթը պարունակում է yarn.lock։"
+
+msgid "Unable to encode staging metadata."
+msgstr "Հնարավոր չէ կոդավորել նախապատրաստման մետատվյալները։"
+
+msgid "Unable to write staging metadata."
+msgstr "Հնարավոր չէ գրել նախապատրաստման մետատվյալները։"
+
+msgid "Update operation log created."
+msgstr "Թարմացման գործողության մատյանը ստեղծված է։"
+
+msgid "Unable to write update operation log."
+msgstr "Հնարավոր չէ գրել թարմացման գործողության մատյանը։"
+
+msgid "Invalid update operation id."
+msgstr "Թարմացման գործողության անվավեր նույնացուցիչ։"
 

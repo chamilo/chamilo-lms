@@ -37013,7 +37013,7 @@ msgid "Type APPLY UPDATE FILES to confirm"
 msgstr "Clóscríobh APPLY UPDATE FILES chun deimhniú"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Clóscríobh RUN DATABASE MIGRATIONS chun imirceanna bunachar sonraí a dheimhniú"
+msgstr "Clóscríobh RUN DATABASE MIGRATIONS chun imirce bunachar sonraí a dheimhniú"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
 msgstr "Clóscríobh RUN POST UPDATE ACTIONS chun deimhniú"
@@ -40575,4 +40575,607 @@ msgstr "Ní féidir roinnt comhad nó comhadlann sprice a scríobh ná a bhaint.
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Chun é seo a réiteach, athraigh úinéir na comhadlainne Chamilo iomláine go sealadach go %s (úsáideoir an fhreastalaí gréasáin), cuir an nuashonrú i bhfeidhm, athraigh an t-úinéir ar ais go %s ina dhiaidh sin, ansin socraigh úinéir var/ (agus a bhfuil ann) ar ais go %s ionas gur féidir leis an bhfeidhmchlár leanúint ag scríobh chuige."
+
+msgid "Update package verification failed."
+msgstr "Theip ar fhíorú an phacáiste nuashonraithe."
+
+msgid "Update preflight checks failed."
+msgstr "Theip ar sheiceálacha réamheitilte an nuashonraithe."
+
+msgid "Unable to stage update package."
+msgstr "Níorbh fhéidir an pacáiste nuashonraithe a chur ar stáitse."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Tá rith orduithe iar-chur i bhfeidhm ón gcomhéadan úsáideora díchumasaithe ar an bhfreastalaí seo."
+
+msgid "Missing required field: %s"
+msgstr "Réimse riachtanach in easnamh: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Níor soláthraíodh foinse léirithe nuashonraithe agus níl URL léirithe nuashonraithe réamhshocraithe cumraithe."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Ní mór do URL an léirithe nuashonraithe bunús oifigiúil an nuashonraithe %s a úsáid. Ní féidir ach cosán an léirithe a athrú."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Tá cosáin áitiúla léirithe nuashonraithe díchumasaithe. Úsáid URL léirithe HTTPS nó socraigh CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 i dtimpeallacht an fhreastalaí le haghaidh tástálacha áitiúla."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Ná soláthair cosán HTTP %s. Fág an réimse seo folamh chun é a íoslódáil ón léiriú nuashonraithe."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Tá cosáin áitiúla nuashonraithe %s díchumasaithe sa timpeallacht seo."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Ní mór eochracha poiblí iontaofa nuashonraithe a chumrú ar an bhfreastalaí sa timpeallacht seo."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Tá scipeáil fíorú sínithe nuashonraithe díchumasaithe sa timpeallacht seo."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Teastaíonn an téacs deimhnithe \"%s\" chun gníomhartha iar-chur i bhfeidhm an nuashonraithe a rith."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Teastaíonn an téacs deimhnithe \"%s\" chun comhaid nuashonraithe ar stáitse a chur i bhfeidhm."
+
+msgid "Unable to resolve project directory."
+msgstr "Níorbh fhéidir eolaire an tionscadail a réiteach."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Ní bhainistíonn an nuashonraitheoir seo cúltaca bunachar sonraí. Cruthaigh agus fíoraigh cúltaca bunachar sonraí sula rithfidh tú imircí."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Ní ráthaítear go n-athshlánóidh modhanna down() imirce Doctrine sonraí scriosta nó claochlaithe."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Molann meiteashonraí iar-chur i bhfeidhm athbhreithniú ar imirce bunachar sonraí."
+
+msgid "No migration files were found in the staged package."
+msgstr "Níor aimsíodh aon chomhaid imirce sa phacáiste ar stáitse."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Braitheadh comhaid imirce Doctrine ar stáitse."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Réitíodh sprioc imirce Doctrine ón bpacáiste ar stáitse."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Tá saincheisteanna bacainne ag bunlíne imirce Doctrine do na himircí ar stáitse."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Tuairiscíonn Doctrine rabhaidh bunlíne imirce stairiúla, ach ní dhéanfar ach imircí %s ar stáitse a athbhreithniú agus a rith go sainráite."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Tuairiscíonn Doctrine rabhaidh bunlíne imirce stairiúla. Ní rithfidh an nuashonraitheoir ach aicmí imirce %s ar stáitse tar éis deimhnithe sainráite."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Níl aon saincheist bhacainne ag bunlíne Doctrine do na himircí %s ar stáitse."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Theip ar thriail thirim imirce Doctrine ar a laghad imirce amháin ar stáitse. Ná rith imircí bunachar sonraí go dtí go ndéanfar é seo a réiteach."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Críochnaíodh triail thirim Doctrine go rathúil do gach aicme imirce ar stáitse."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Ní mór cúltaca bunachar sonraí a chruthú lasmuigh den nuashonraitheoir seo sula rithfear imircí."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Teastaíonn cosán stáitse chun imircí bunachar sonraí a athbhreithniú."
+
+msgid "Unable to read update %s: %s"
+msgstr "Níorbh fhéidir nuashonrú %s a léamh: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Tá JSON nuashonraithe %s neamhbhailí: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Ní mór do JSON nuashonraithe %s a bheith ina oibiacht."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Níl liosta gníomhartha bailí i meiteashonraí seiceálacha iar-chur i bhfeidhm."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Níor moladh imircí bunachar sonraí don nuashonrú seo ar stáitse."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Tá cosán an fheidhmchláir ar stáitse in easnamh ó mheiteashonraí an nuashonraithe."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Níor aimsíodh an comhad imirce pleanáilte ar stáitse: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Níorbh fhéidir an comhad imirce ar stáitse a léamh: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Níorbh fhéidir aon chur síos a bhaint as getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Ní thacaíonn rádala an nuashonraithe ach le himircí %s ar stáitse: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Níorbh fhéidir meiteashonraí sábháilteachta imirce a scríobh: %s"
+
+msgid "Migration safety check failed."
+msgstr "Theip ar sheiceáil sábháilteachta imirce."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Braitheadh cosán imirce coibhneasta neamhshábháilte ar stáitse: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Níorbh fhéidir leagan suiteáilte Chamilo a bhrath go huathoibríoch. Lean ar aghaidh ach amháin tar éis a dheimhniú go bhfuil an nuashonrú seo comhoiriúnach."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Níl an leagan suiteáilte nó sprice i bhformáid leagain shéimeantaigh inchomparáide. Lean ar aghaidh ach amháin tar éis fíorú láimhe."
+
+msgid "An update is available."
+msgstr "Tá nuashonrú ar fáil."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Meaitseálann an leagan suiteáilte leagan an léirithe cheana féin."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Tá leagan an fhorógra níos sine ná an leagan suiteáilte. Tá íosghrádú bacáilte de réir réamhshocraithe."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Níor cuireadh na comhaid chéimnithe i bhfeidhm go rathúil. Ní féidir le seiceálacha iar-chur i bhfeidhm leanúint."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Léadh meiteashonraí toraidh an chur i bhfeidhm go rathúil."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Gineadh moltaí gnímh iar-chur i bhfeidhm."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Braitheadh imirce bunachar sonraí sa phacáiste céimnithe. Ná rith iad ach tar éis deimhniú go bhfuil nuashonrú na gcomhad ceart agus go bhfuil cúltaca bunachar sonraí ann."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Tá cosán céimnithe ag teastáil chun seiceálacha iar-chur i bhfeidhm a rith."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Ní JSON bailí é nuashonrú %s: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Caithfidh nuashonrú %s a bheith ina oibiacht JSON."
+
+msgid "Composer dependencies"
+msgstr "Spleáchais Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Áiríodh meiteashonraí Composer sa phacáiste céimnithe. Rith Composer install ó fhréamh an fheidhmchláir sula measfar an nuashonrú a bheith críochnaithe."
+
+msgid "Frontend assets"
+msgstr "Sócmhainní tosaigh"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Áiríodh comhaid a bhaineann leis an tosaigh sa phacáiste céimnithe. Atóg sócmhainní táirgeachta tar éis spleáchais a shuiteáil."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Braitheadh comhaid imirce Doctrine sa phacáiste céimnithe. Deimhnigh go bhfuil cúltaca bunachar sonraí ann sula rithfear imircí."
+
+msgid "Symfony cache"
+msgstr "Taisce Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Glan taisce Symfony tar éis comhaid nuashonraithe a chur i bhfeidhm agus aon orduithe riachtanacha a rith."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Ní féidir meiteashonraí seiceálacha iar-chur i bhfeidhm a scríobh."
+
+msgid "Post-apply check failed."
+msgstr "Theip ar sheiceáil iar-chur i bhfeidhm."
+
+msgid "Update package is not readable: %s"
+msgstr "Ní féidir pacáiste nuashonraithe a léamh: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Ní cartlann ZIP bhailí é an pacáiste nuashonraithe."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Tá cartlann ZIP an phacáiste nuashonraithe folamh."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Tá iontráil ZIP nach féidir a léamh sa phacáiste nuashonraithe."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Tá cosán iomlán neamhshábháilte sa phacáiste nuashonraithe: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Tá iontráil trasnaíochta cosáin sa phacáiste nuashonraithe: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Tá nasc siombalach sa phacáiste nuashonraithe: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Ag tosú gníomhartha iar-chur i bhfeidhm."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Teastaíonn deimhniú sainráite chun orduithe iar-chur i bhfeidhm a rith."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Léadh meiteashonraí moltaí iar-chur i bhfeidhm go rathúil."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Bailíodh gníomhartha iar-chur i bhfeidhm i gcoinne thuairisc na moltaí."
+
+msgid "Post-apply actions were selected."
+msgstr "Roghnaíodh gníomhartha iar-chur i bhfeidhm."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Teastaíonn deimhniú ardleibhéil sainráite le haghaidh gníomhartha iar-chur i bhfeidhm ardleibhéil."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Deimhníodh gníomhartha iar-chur i bhfeidhm ardleibhéil go sainráite."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Críochnaíodh na horduithe iar-chur i bhfeidhm roghnaithe go rathúil."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Scríobhadh meiteashonraí rith ordaithe iar-chur i bhfeidhm."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Críochnaíodh gníomhartha iar-chur i bhfeidhm go rathúil."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Sainmhíniú neamhbhailí ar ordú iar-chur i bhfeidhm nuashonraithe: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Ag rith gníomh iar-chur i bhfeidhm: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Ag rith ordú %d as %d le haghaidh %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Theip ar ghníomh iar-chur i bhfeidhm: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Theip ar ghníomh iar-chur i bhfeidhm \"%s\" le cód scoir %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Críochnaíodh gníomh iar-chur i bhfeidhm: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Tá cosán céimnithe ag teastáil chun gníomhartha iar-chur i bhfeidhm a rith."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Níl aon ghníomhartha iar-chur i bhfeidhm molta le rith."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Níl aon ghníomhartha iar-chur i bhfeidhm ceadaithe le rith."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Níl gníomh iar-chur i bhfeidhm ceadaithe don nuashonrú seo: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Teastaíonn athbhreithniú sábháilteachta imirce sula rithfear imircí bunachar sonraí."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Ní féidir imircí bunachar sonraí a rith mar nár éirigh leis an athbhreithniú sábháilteachta imirce."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Ní féidir imircí bunachar sonraí a rith mar nár liostáil an t-athbhreithniú sábháilteachta imirce imircí céimnithe."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Ní féidir imircí bunachar sonraí a rith mar tá iontráil imirce neamhbhailí san athbhreithniú sábháilteachta imirce."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Ní féidir leis an rádala nuashonraithe ach imircí %s céimnithe a rith."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Ní féidir imircí bunachar sonraí a rith mar thuairiscigh an t-athbhreithniú sábháilteachta imirce céimnithe earráidí bacála."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Tuairiscíonn Doctrine rabhaidh bhonnlíne imirce. Ní dhéanfar ach aicmí imirce %s atá céimnithe a rith go sainráite."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Teastaíonn deimhniú go bhfuil cúltaca bunachar sonraí ann le haghaidh imircí bunachar sonraí."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Teastaíonn an téacs deimhnithe \"RUN DATABASE MIGRATIONS\" le haghaidh imircí bunachar sonraí."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Críochnaíodh athbhreithniú sábháilteachta imirce bunachar sonraí roimh fhorghníomhú."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Deimhníodh go sainráite go bhfuil cúltaca bunachar sonraí ann."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Soláthraíodh athbhreithniú sábháilteachta imirce bunachar sonraí agus deimhniú cúltaca."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Rinneadh imircí bunachar sonraí a rith tar éis deimhniú sainráite cúltaca bunachar sonraí. Níor chruthaigh an nuashonraitheoir an cúltaca bunachar sonraí."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Normalaíodh na ceadanna inrite riachtanacha tar éis cur i bhfeidhm."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Ní féidir imircí bunachar sonraí a rith toisc nár aimsíodh bin/console."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Tá na cosáin inscríofa riachtanacha ag na horduithe tar éis cur i bhfeidhm atá roghnaithe."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Bailíodh cosáin inscríofa orduithe tar éis cur i bhfeidhm."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Is féidir le gníomhartha ardleibhéil tar éis cur i bhfeidhm spleáchais, sócmhainní ginte nó an bunachar sonraí a athrú. Athbhreithnigh cúltacaí sula leanann tú ar aghaidh."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Ní féidir le Composer rith go sábháilte ón nuashonraitheoir gréasáin toisc go bhfuil an comhad a ghineann Composer \"%s\" faoi úinéireacht UID %d agus úsáideann an rith-am PHP UID %d. Rith Composer de láimh mar úinéir an imlonnaithe, ansin lean ar aghaidh leis na gníomhartha tar éis cur i bhfeidhm atá fágtha."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Níl an cosán atá ag teastáil ón ngníomh tar éis cur i bhfeidhm \"%s\" inscríofa: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Níl an tuismitheoir-eolaire atá ag teastáil ón ngníomh tar éis cur i bhfeidhm \"%s\" inscríofa: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Ní féidir ceadanna a léamh don inrite riachtanach tar éis cur i bhfeidhm: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Ní féidir an t-inrite riachtanach tar éis cur i bhfeidhm a mharcáil mar inrite: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Níl an t-inrite riachtanach tar éis cur i bhfeidhm inrite fós tar éis chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Normalaíodh an cead inrite."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Ní féidir cumraíocht Git iargúlta a scríobh le haghaidh orduithe tar éis cur i bhfeidhm."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Is cosúil go bhfuil oibríocht nuashonraithe eile ag rith. Bain var/update/update.lock amháin mura bhfuil aon nuashonrú gníomhach."
+
+msgid "Unable to create update lock: %s"
+msgstr "Ní féidir glas nuashonraithe a chruthú: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Ní féidir meiteashonraí rith ordaithe tar éis cur i bhfeidhm a scríobh: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Tá an bloc pacáiste in easnamh ar an bhforógra nuashonraithe."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Caithfidh bloc sínithe an fhorógra nuashonraithe a bheith ina oibiacht."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Caithfidh bloc riachtanas an fhorógra nuashonraithe a bheith ina oibiacht."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Caithfidh sha256 an phacáiste nuashonraithe a bheith ina teaghrán heicsidheachúlach 64 carachtar."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Tá réimse teaghráin riachtanach \"%s\" in easnamh ar an bhforógra nuashonraithe."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Caithfidh réimse an fhorógra nuashonraithe \"%s\" a bheith ina teaghrán."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Ní JSON bailí é an forógra nuashonraithe: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Caithfidh JSON an fhorógra nuashonraithe a bheith ina oibiacht."
+
+msgid "Manifest source cannot be empty."
+msgstr "Ní féidir foinse an fhorógra a bheith folamh."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Caithfidh URL an fhorógra nuashonraithe bunús oifigiúil an nuashonraithe %s a úsáid."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Ní féidir an forógra nuashonraithe a íoslódáil. Stádas HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Níl comhad an fhorógra inléite: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Ní féidir comhad an fhorógra a léamh: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Caithfidh URL an fhorógra nuashonraithe HTTPS a úsáid."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Níl meiteashonraí an phacáiste nuashonraithe inléite: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Ní féidir meiteashonraí an phacáiste nuashonraithe a léamh: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Ní JSON bailí iad meiteashonraí an phacáiste nuashonraithe: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Caithfidh meiteashonraí an phacáiste nuashonraithe a bheith ina oibiacht JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Caithfidh formáid meiteashonraí an phacáiste nuashonraithe a bheith %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Caithfidh réimse meiteashonraí an phacáiste nuashonraithe \"remove\" a bheith ina eagar."
+
+msgid "Update package removal paths must be strings."
+msgstr "Caithfidh cosáin bhainte an phacáiste nuashonraithe a bheith ina dteaghráin."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Ní féidir le meiteashonraí an phacáiste nuashonraithe cosán cosanta a bhaint: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Ní féidir leis an bpacáiste nuashonraithe an cosán céanna a áireamh agus a bhaint: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Ní féidir sha256 meiteashonraí an phacáiste nuashonraithe a ríomh."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Ní féidir cosán bainte an phacáiste nuashonraithe a bheith folamh."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Tá beart nialasach i gcosán bainte an phacáiste nuashonraithe."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Caithfidh cosán bainte an phacáiste nuashonraithe a bheith coibhneasta: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Tá deighleog neamhshábháilte i gconair bhaint an phacáiste nuashonraithe: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Tá conair stáitseála riachtanach chun plean feidhmithe nuashonraithe a thógáil."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Tá STAGING-INFO.json in easnamh ón eolaire stáitseála."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Ní féidir meiteashonraí stáitseála a léamh: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Ní JSON bailí iad na meiteashonraí stáitseála: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Ní mór do mheiteashonraí stáitseála a bheith ina oibiacht JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Tá an réimse application_path in easnamh ó mheiteashonraí stáitseála."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Tá %s in easnamh ón bpacáiste nuashonraithe. Tá meiteashonraí glantacháin sínithe riachtanach sular féidir comhaid a chur i bhfeidhm."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Níl na meiteashonraí glantacháin pacáiste sínithe a taifeadadh le linn eastósctha sna meiteashonraí stáitseála."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "D’athraigh meiteashonraí glantacháin an phacáiste nuashonraithe tar éis stáitseála. Stáitseáil an pacáiste fíoraithe arís sula leanfar ar aghaidh."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Níl liosta bailí bainte pacáiste sna meiteashonraí stáitseála."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "D’athraigh conairí glantacháin an phacáiste nuashonraithe tar éis stáitseála. Stáitseáil an pacáiste fíoraithe arís sula leanfar ar aghaidh."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Níor athraigh meiteashonraí glantacháin an phacáiste sínithe ó stáitseáil."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Tá comhad glasála nuashonraithe ann cheana. D’fhéadfadh nuashonrú eile a bheith ar siúl."
+
+msgid "Update lock directory is not writable."
+msgstr "Níl an t-eolaire glasála nuashonraithe inscríofa."
+
+msgid "No update lock is currently active."
+msgstr "Níl aon ghlas nuashonraithe gníomhach faoi láthair."
+
+msgid "Update backup directory is not writable."
+msgstr "Níl an t-eolaire cúltaca nuashonraithe inscríofa."
+
+msgid "Update backup directory is writable."
+msgstr "Tá an t-eolaire cúltaca nuashonraithe inscríofa."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Ní féidir leis an bpróiseas reatha an t-eolaire cúltaca nuashonraithe a chruthú."
+
+msgid "Update backup directory can be created."
+msgstr "Is féidir an t-eolaire cúltaca nuashonraithe a chruthú."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Níl roinnt eolairí oibre nuashonraithe inscríofa nó ní féidir leis an bpróiseas reatha iad a chruthú."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Tá eolairí oibre nuashonraithe inscríofa nó is féidir iad a chruthú."
+
+msgid "Update apply file plan was generated."
+msgstr "Gineadh plean comhad feidhmithe nuashonraithe."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Tá conairí i meiteashonraí glantacháin an phacáiste nach féidir a bhaint go sábháilte."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Tá spriocanna bainte atá dearbhaithe ag an bpacáiste sábháilte."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Tá roinnt comhad as feidhm atá dearbhaithe ag an bpacáiste as láthair ón suiteáil seo cheana."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Sáróidh nó bainfidh an nuashonrú pleanáilte naisc shiombalacha atá ann cheana."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Ní sháraíonn ná ní bhaineann an nuashonrú pleanáilte naisc shiombalacha atá ann cheana."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Ní mór comhaid nua imirce nuashonraithe a chur faoi %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Braitheadh comhaid nua imirce Doctrine %s. Beidh athbhreithniú sábháilteachta imirce bunachar sonraí ag teastáil uathu tar éis comhaid a chur i bhfeidhm."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Gearradh siar roinnt liostaí comhad plean feidhmithe nuashonraithe sa fhreagra JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Ní féidir meiteashonraí plean feidhmithe nuashonraithe a scríobh."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Ní féidir pacáiste nuashonraithe a íoslódáil. Stádas HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Ní féidir comhad sprice an phacáiste nuashonraithe a oscailt: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Ní mór d’íoslódálacha nuashonraithe bunús oifigiúil an nuashonraithe %s a úsáid."
+
+msgid "The update package URL must use HTTPS."
+msgstr "Ní mór do URL an phacáiste nuashonraithe HTTPS a úsáid."
+
+msgid "Update package archive safety checks passed."
+msgstr "D’éirigh le seiceálacha sábháilteachta cartlainne an phacáiste nuashonraithe."
+
+msgid "Update package was extracted to staging."
+msgstr "Eastósclaíodh an pacáiste nuashonraithe chuig stáitseáil."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Lódáladh meiteashonraí glantacháin an phacáiste sínithe."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Níl %s sa phacáiste nuashonraithe. Cuirfear bac ar fheidhmiú comhad go dtí go gcuirfear meiteashonraí glantacháin sínithe ar fáil."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Gineadh tuairisc thriail rith an phacáiste stáitseáilte."
+
+msgid "Staging metadata was written."
+msgstr "Scríobhadh meiteashonraí stáitseála."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Ní féidir an pacáiste nuashonraithe a eastóscadh chuig an eolaire stáitseála."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Ní féidir fréamh fheidhmchláir Chamilo a aimsiú sa phacáiste stáitseáilte."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Tá iontráil riachtanach Chamilo in easnamh ón bpacáiste stáitseáilte: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Tá an struchtúr Chamilo a bhfuiltear ag súil leis sa phacáiste stáitseáilte."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Níl composer.lock sa phacáiste stáitseáilte."
+
+msgid "Staged package contains composer.lock."
+msgstr "Tá composer.lock sa phacáiste stáitseáilte."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Níl yarn.lock sa phacáiste stáitseáilte."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Tá yarn.lock sa phacáiste stáitseáilte."
+
+msgid "Unable to encode staging metadata."
+msgstr "Ní féidir meiteashonraí stáitse a ionchódú."
+
+msgid "Unable to write staging metadata."
+msgstr "Ní féidir meiteashonraí stáitse a scríobh."
+
+msgid "Update operation log created."
+msgstr "Cruthaíodh log oibríochta nuashonraithe."
+
+msgid "Unable to write update operation log."
+msgstr "Ní féidir log oibríochta nuashonraithe a scríobh."
+
+msgid "Invalid update operation id."
+msgstr "ID oibríochta nuashonraithe neamhbhailí."
 

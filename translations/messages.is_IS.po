@@ -37011,13 +37011,13 @@ msgid "Trusted signing key"
 msgstr "Traustur undirritunarlykill"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Sláið inn APPLY UPDATE FILES til að staðfesta"
+msgstr "Sláðu inn APPLY UPDATE FILES til að staðfesta"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Sláið inn RUN DATABASE MIGRATIONS til að staðfesta gagnagrunnsflutninga"
+msgstr "Sláðu inn RUN DATABASE MIGRATIONS til að staðfesta gagnagrunnsflutninga"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Sláið inn RUN POST UPDATE ACTIONS til að staðfesta"
+msgstr "Sláðu inn RUN POST UPDATE ACTIONS til að staðfesta"
 
 msgid "Unknown update notice source."
 msgstr "Óþekkt uppruni uppfærslutilkynningar."
@@ -40576,4 +40576,607 @@ msgstr "Ekki er hægt að skrifa eða fjarlægja sumar markskrár eða möppur."
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Til að laga þetta skaltu tímabundið breyta eiganda allrar Chamilo-möppunnar í %s (notanda vefþjónsins), beita uppfærslunni, breyta eigandanum aftur í %s eftir það og stilla síðan eiganda var/ (og innihalds hennar) aftur á %s svo forritið geti haldið áfram að skrifa í hana."
+
+msgid "Update package verification failed."
+msgstr "Staðfesting uppfærslupakka mistókst."
+
+msgid "Update preflight checks failed."
+msgstr "Forathuganir uppfærslu mistókust."
+
+msgid "Unable to stage update package."
+msgstr "Ekki tókst að undirbúa uppfærslupakka."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Keyrsla skipana eftir beitingu úr notendaviðmóti er óvirk á þessum þjóni."
+
+msgid "Missing required field: %s"
+msgstr "Nauðsynlegur reitur vantar: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Engin uppspretta uppfærsluyfirlits var gefin og engin sjálfgefin slóð á uppfærsluyfirlit er stillt."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Slóð á uppfærsluyfirlit verður að nota opinbera uppfærsluupprunann %s. Aðeins slóð yfirlitsins má breyta."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Staðbundnar slóðir á uppfærsluyfirlit eru óvirkar. Notaðu HTTPS-slóð á yfirlit eða stilltu CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 í umhverfi þjónsins fyrir staðbundnar prófanir."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Ekki gefa upp HTTP %s slóð. Skildu þennan reit eftir auðan til að sækja það úr uppfærsluyfirlitinu."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Staðbundnar uppfærslu %s slóðir eru óvirkar í þessu umhverfi."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Traustir opinberir lyklar fyrir uppfærslur verða að vera stilltir á þjóninum í þessu umhverfi."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Að sleppa staðfestingu undirskriftar uppfærslu er óvirkt í þessu umhverfi."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Keyrsla aðgerða eftir beitingu uppfærslu krefst staðfestingartextans \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Beiting undirbúinna uppfærsluskráa krefst staðfestingartextans \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Ekki tókst að finna verkefnismöppu."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Öryggisafrit gagnagrunns er ekki stýrt af þessum uppfærsluaðila. Búðu til og staðfestu öryggisafrit gagnagrunns áður en flutningar eru keyrðir."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "down() aðferðir Doctrine-flutninga eru ekki ábyrgðar til að endurheimta eydd eða umbreytt gögn."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Lýsigögn eftir beitingu mæla með yfirferð gagnagrunnsflutninga."
+
+msgid "No migration files were found in the staged package."
+msgstr "Engar flutningsskrár fundust í undirbúna pakkanum."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Undirbúnar Doctrine-flutningsskrár fundust."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Markmið Doctrine-flutnings var ákvarðað út frá undirbúna pakkanum."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Grunnlína Doctrine-flutninga hefur hindrandi vandamál fyrir undirbúna flutninga."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine tilkynnir sögulegar viðvaranir um grunnlínu flutninga, en aðeins undirbúnir %s flutningar verða yfirfarnir og keyrðir sérstaklega."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine tilkynnir sögulegar viðvaranir um grunnlínu flutninga. Uppfærsluaðilinn mun aðeins keyra undirbúnar %s flutningsklasa eftir sérstaka staðfestingu."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Grunnlína Doctrine hefur ekkert hindrandi vandamál fyrir undirbúna %s flutninga."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Prufukeyrsla Doctrine-flutnings mistókst fyrir að minnsta kosti einn undirbúinn flutning. Ekki keyra gagnagrunnsflutninga fyrr en þetta er lagað."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Prufukeyrsla Doctrine tókst fyrir hvern undirbúinn flutningsklasa."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Öryggisafrit gagnagrunns verður að búa til utan þessa uppfærsluaðila áður en flutningar eru keyrðir."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Undirbúningsslóð er nauðsynleg til að yfirfara gagnagrunnsflutninga."
+
+msgid "Unable to read update %s: %s"
+msgstr "Ekki tókst að lesa uppfærslu %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Uppfærsla %s JSON er ógild: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Uppfærsla %s JSON verður að vera hlutur."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Lýsigögn athugana eftir beitingu innihalda ekki gildan lista yfir aðgerðir."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Gagnagrunnsflutningar voru ekki ráðlagðir fyrir þessa undirbúnu uppfærslu."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Lýsigögn uppfærslu vantar slóð á undirbúna forritið."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Áætluð undirbúin flutningsskrá fannst ekki: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Ekki tókst að lesa undirbúna flutningsskrá: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Engin lýsing tókst að draga út úr getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Aðeins %s undirbúnir flutningar eru studdir af uppfærslukeyrslunni: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Ekki tókst að skrifa öryggislýsigögn flutnings: %s"
+
+msgid "Migration safety check failed."
+msgstr "Öryggisathugun flutnings mistókst."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Óörugg undirbúin hlutfallsleg flutningsslóð fannst: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Uppsetta Chamilo-útgáfan tókst ekki að greina sjálfkrafa. Haltu aðeins áfram eftir að hafa staðfest að þessi uppfærsla sé samhæf."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Uppsett eða markútgáfa er ekki á samanburðarhæfu merkingarútgáfuformi. Haltu aðeins áfram eftir handvirka staðfestingu."
+
+msgid "An update is available."
+msgstr "Uppfærsla er í boði."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Uppsetta útgáfan passar þegar við útgáfu yfirlitsins."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Útgáfa birtingarskrárinnar er eldri en uppsetta útgáfan. Niðurfærslur eru sjálfgefið lokaðar."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Sviðsettar skrár voru ekki beittar með góðum árangri. Eftir-beitingarprófanir geta ekki haldið áfram."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Lýsigögn um niðurstöðu beitingar voru lesin með góðum árangri."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Tillögur um aðgerðir eftir beitingu voru búnar til."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Gagnagrunnsflutningar fundust í sviðsetta pakkanum. Keyrðu þá aðeins eftir að staðfesta að skráaruppfærslan sé rétt og að afrit af gagnagrunninum sé til."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Sviðsetningarslóð er nauðsynleg til að keyra eftir-beitingarprófanir."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Uppfærsla %s er ekki gilt JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Uppfærsla %s verður að vera JSON-hlutur."
+
+msgid "Composer dependencies"
+msgstr "Composer-háðanir"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Composer-lýsigögn voru innifalin í sviðsetta pakkanum. Keyrðu Composer install frá rót forritsins áður en uppfærslan er talin lokið."
+
+msgid "Frontend assets"
+msgstr "Framendaauðlindir"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Skrár tengdar framenda voru innifaldar í sviðsetta pakkanum. Byggðu framleiðsluaðlindir upp aftur eftir að háðanir hafa verið settar upp."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Doctrine-flutningsskrár fundust í sviðsetta pakkanum. Staðfestu að afrit af gagnagrunninum sé til áður en flutningar eru keyrðir."
+
+msgid "Symfony cache"
+msgstr "Symfony-skyndiminni"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Hreinsaðu Symfony-skyndiminni eftir að uppfærsluskrár hafa verið beittar og nauðsynlegar skipanir keyrðar."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Ekki tókst að skrifa lýsigögn um eftir-beitingarprófanir."
+
+msgid "Post-apply check failed."
+msgstr "Eftir-beitingarprófun mistókst."
+
+msgid "Update package is not readable: %s"
+msgstr "Uppfærslupakki er ekki lesanlegur: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Uppfærslupakki er ekki gilt ZIP-safn."
+
+msgid "Update package ZIP archive is empty."
+msgstr "ZIP-safn uppfærslupakka er tómt."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Uppfærslupakki inniheldur ólæsilega ZIP-færslu."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Uppfærslupakki inniheldur óörugga algilda slóð: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Uppfærslupakki inniheldur slóðarferðarfærslu: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Uppfærslupakki inniheldur táknræna slóð: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Byrja aðgerðir eftir beitingu."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Keyrsla skipana eftir beitingu krefst skýrrar staðfestingar."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Lýsigögn um tillögur eftir beitingu voru lesin með góðum árangri."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Aðgerðir eftir beitingu voru staðfestar miðað við tillöguskýrsluna."
+
+msgid "Post-apply actions were selected."
+msgstr "Aðgerðir eftir beitingu voru valdar."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Ítarlegar aðgerðir eftir beitingu krefjast skýrrar ítarlegrar staðfestingar."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Ítarlegar aðgerðir eftir beitingu voru staðfestar skýrt."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Valdar skipanir eftir beitingu tókust."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Lýsigögn um keyrslu skipana eftir beitingu voru skrifuð."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Aðgerðir eftir beitingu tókust."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Ógild skilgreining skipunar eftir beitingu uppfærslu: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Keyri aðgerð eftir beitingu: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Keyri skipun %d af %d fyrir %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Aðgerð eftir beitingu mistókst: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Aðgerð eftir beitingu \"%s\" mistókst með útgöngukóða %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Aðgerð eftir beitingu lokið: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Sviðsetningarslóð er nauðsynleg til að keyra aðgerðir eftir beitingu."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Engar ráðlagðar aðgerðir eftir beitingu eru til að keyra."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Engar leyfðar aðgerðir eftir beitingu eru til að keyra."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Aðgerð eftir beitingu er ekki leyfð fyrir þessa uppfærslu: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Gagnagrunnsflutningar krefjast öryggisskoðunar flutninga áður en þeir eru keyrðir."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Gagnagrunnsflutningar geta ekki keyrt vegna þess að öryggisskoðun flutninga stóðst ekki."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Gagnagrunnsflutningar geta ekki keyrt vegna þess að öryggisskoðun flutninga taldi ekki upp sviðsetta flutninga."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Gagnagrunnsflutningar geta ekki keyrt vegna þess að öryggisskoðun flutninga inniheldur ógilda flutningsfærslu."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Aðeins sviðsettir %s-flutningar geta verið keyrðir af uppfærslukeyraranum."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Gagnagrunnsflutningar geta ekki keyrt vegna þess að öryggisskoðun sviðsettra flutninga greindi frá hindrandi villum."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine tilkynnir viðvaranir um grunnlínu flutninga. Aðeins undirbúnar %s flutningsklasar verða keyrðar sérstaklega."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Gagnagrunnsflutningar krefjast staðfestingar á að afrit af gagnagrunni sé til."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Gagnagrunnsflutningar krefjast staðfestingartextans \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Öryggisyfirferð gagnagrunnsflutninga var lokið fyrir keyrslu."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Tilvist afrits af gagnagrunni var staðfest sérstaklega."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Öryggisyfirferð gagnagrunnsflutninga og staðfesting afrits voru veitt."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Gagnagrunnsflutningar voru keyrðir eftir sérstaka staðfestingu á afriti gagnagrunns. Uppfærsluforritið bjó ekki til afritið."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Nauðsynlegar keyrsluheimildir eftir beitingu voru staðlaðar."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Ekki tókst að keyra gagnagrunnsflutninga vegna þess að bin/console fannst ekki."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Valdar skipanir eftir beitingu hafa nauðsynlegar skrifanlegar slóðir."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Skrifanlegar slóðir skipana eftir beitingu voru staðfestar."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Ítarlegar aðgerðir eftir beitingu geta breytt háðum, mynduðum eignum eða gagnagrunninum. Farðu yfir afrit áður en haldið er áfram."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer getur ekki keyrt örugglega úr vefuppfærslunni vegna þess að Composer-mynduð skrá \"%s\" er í eigu UID %d á meðan PHP-keyrslan notar UID %d. Keyrðu Composer handvirkt sem eigandi dreifingarinnar og haltu síðan áfram með aðrar aðgerðir eftir beitingu."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Slóð sem aðgerð eftir beitingu \"%s\" krefst er ekki skrifanleg: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Yfirmappa sem aðgerð eftir beitingu \"%s\" krefst er ekki skrifanleg: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Ekki tókst að lesa heimildir fyrir nauðsynlega keyrsluskrá eftir beitingu: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Ekki tókst að merkja nauðsynlega keyrsluskrá eftir beitingu sem keyranlega: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Nauðsynleg keyrsluskrá eftir beitingu er enn ekki keyranleg eftir chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Keyrsluheimild var staðlað."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Ekki tókst að skrifa einangraða Git-stillingar fyrir skipanir eftir beitingu."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Önnur uppfærsluaðgerð virðist vera í gangi. Fjarlægðu var/update/update.lock aðeins ef engin uppfærsla er virk."
+
+msgid "Unable to create update lock: %s"
+msgstr "Ekki tókst að búa til uppfærslulás: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Ekki tókst að skrifa lýsigögn um keyrslu skipana eftir beitingu: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Uppfærslumanifest vantar pakkablokkina."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Undirskriftarblokk uppfærslumanifests verður að vera hlutur."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Kröfublokk uppfærslumanifests verður að vera hlutur."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 uppfærslupakka verður að vera 64 stafa sextándakerfisstrengur."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Uppfærslumanifest vantar nauðsynlegan strengreit \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Reitur uppfærslumanifests \"%s\" verður að vera strengur."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Uppfærslumanifest er ekki gilt JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON uppfærslumanifests verður að vera hlutur."
+
+msgid "Manifest source cannot be empty."
+msgstr "Uppruni manifests má ekki vera tómur."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Vefslóð uppfærslumanifests verður að nota opinbera uppfærsluupprunann %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Ekki tókst að sækja uppfærslumanifest. HTTP-staða: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Manifestskrá er ekki lesanleg: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Ekki tókst að lesa manifestskrá: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Vefslóð uppfærslumanifests verður að nota HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Lýsigögn uppfærslupakka eru ekki lesanleg: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Ekki tókst að lesa lýsigögn uppfærslupakka: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Lýsigögn uppfærslupakka eru ekki gilt JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Lýsigögn uppfærslupakka verða að vera JSON-hlutur."
+
+msgid "Update package metadata format must be %d."
+msgstr "Snið lýsigagna uppfærslupakka verður að vera %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Reiturinn \"remove\" í lýsigögnum uppfærslupakka verður að vera fylki."
+
+msgid "Update package removal paths must be strings."
+msgstr "Fjarlægingarslóðir uppfærslupakka verða að vera strengir."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Lýsigögn uppfærslupakka mega ekki fjarlægja varða slóð: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Uppfærslupakki má ekki bæði innihalda og fjarlægja sömu slóð: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Ekki tókst að reikna sha256 fyrir lýsigögn uppfærslupakka."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Fjarlægingarslóð uppfærslupakka má ekki vera tóm."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Fjarlægingarslóð uppfærslupakka inniheldur núllbæti."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Fjarlægingarslóð uppfærslupakka verður að vera afstæð: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Uppfærslupakka-fjarlægingarslóð inniheldur óöruggan hluta: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Stigunarleið er nauðsynleg til að búa til áætlun um að beita uppfærslu."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Stigunarskráasafn vantar STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Ekki tókst að lesa stigunarmetagögn: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Stigunarmetagögn eru ekki gilt JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Stigunarmetagögn verða að vera JSON-hlutur."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Stigunarmetagögn vantar reitinn application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Uppfærslupakka vantar %s. Undirritaðar hreinsunarmetagögn eru nauðsynleg áður en hægt er að beita skrám."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Stigunarmetagögn innihalda ekki undirritaðar hreinsunarmetagögn pakkans sem voru skráðar við útdrátt."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Hreinsunarmetagögn uppfærslupakka breyttust eftir stigun. Stigið staðfesta pakkann aftur áður en haldið er áfram."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Stigunarmetagögn innihalda ekki gildan lista yfir fjarlægingu pakka."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Hreinsunarslóðir uppfærslupakka breyttust eftir stigun. Stigið staðfesta pakkann aftur áður en haldið er áfram."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Undirritaðar hreinsunarmetagögn pakka eru óbreytt frá stigun."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Uppfærslulásarskrá er þegar til. Önnur uppfærsla gæti verið í gangi."
+
+msgid "Update lock directory is not writable."
+msgstr "Uppfærslulásarmappa er ekki skrifanleg."
+
+msgid "No update lock is currently active."
+msgstr "Engin uppfærslulás er virk sem stendur."
+
+msgid "Update backup directory is not writable."
+msgstr "Uppfærsluöryggisafritarmappa er ekki skrifanleg."
+
+msgid "Update backup directory is writable."
+msgstr "Uppfærsluöryggisafritarmappa er skrifanleg."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Núverandi ferli getur ekki búið til uppfærsluöryggisafritarmöppu."
+
+msgid "Update backup directory can be created."
+msgstr "Hægt er að búa til uppfærsluöryggisafritarmöppu."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Sumar vinnuskráasöfn uppfærslu eru ekki skrifanleg eða núverandi ferli getur ekki búið þau til."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Vinnuskráasöfn uppfærslu eru skrifanleg eða hægt er að búa þau til."
+
+msgid "Update apply file plan was generated."
+msgstr "Skráaáætlun um að beita uppfærslu var búin til."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Hreinsunarmetagögn pakka innihalda slóðir sem ekki er hægt að fjarlægja á öruggan hátt."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Fjarlægingarmarkmið sem pakkinn lýsir eru örugg."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Sumar úreltar skrár sem pakkinn lýsir eru þegar fjarverandi í þessari uppsetningu."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Fyrirhuguð uppfærsla myndi yfirskrifa eða fjarlægja núverandi táknrænar tengingar."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Fyrirhuguð uppfærsla yfirskrifar eða fjarlægir ekki núverandi táknrænar tengingar."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Nýjar flutningsskrár uppfærslu verða að vera undir %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Nýjar %s Doctrine-flutningsskrár fundust. Þær krefjast öryggisyfirferðar gagnagrunnsflutnings eftir að skrám er beitt."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Sumir skráalistar í áætlun um að beita uppfærslu voru styttir í JSON-svarinu."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Ekki tókst að skrifa metagögn áætlunar um að beita uppfærslu."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Ekki tókst að sækja uppfærslupakka. HTTP-staða: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Ekki tókst að opna markskrá uppfærslupakka: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Uppfærslusóknir verða að nota opinbera uppfærsluupprunann %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "Vefslóð uppfærslupakka verður að nota HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Öryggisathuganir á safnskrá uppfærslupakka stóðust."
+
+msgid "Update package was extracted to staging."
+msgstr "Uppfærslupakki var dreginn út í stigun."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Undirritaðar hreinsunarmetagögn pakka voru hlaðin."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Uppfærslupakki inniheldur ekki %s. Beiting skráa verður lokuð uns undirritaðar hreinsunarmetagögn eru veitt."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Prófunarskýrsla stigunarpakka var búin til."
+
+msgid "Staging metadata was written."
+msgstr "Stigunarmetagögn voru skrifuð."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Ekki tókst að draga uppfærslupakka út í stigunarskráasafn."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Ekki tókst að finna rót Chamilo-forritsins í stigunarpakka."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Stigunarpakka vantar nauðsynlega Chamilo-færslu: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Stigunarpakki inniheldur vænta Chamilo-byggingu."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Stigunarpakki inniheldur ekki composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Stigunarpakki inniheldur composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Stigunarpakki inniheldur ekki yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Stigunarpakki inniheldur yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Ekki tókst að kóða sviðsetningarmetagögn."
+
+msgid "Unable to write staging metadata."
+msgstr "Ekki tókst að skrifa sviðsetningarmetagögn."
+
+msgid "Update operation log created."
+msgstr "Aðgerðarannáll uppfærslu búinn til."
+
+msgid "Unable to write update operation log."
+msgstr "Ekki tókst að skrifa aðgerðarannál uppfærslu."
+
+msgid "Invalid update operation id."
+msgstr "Ógilt auðkenni uppfærsluaðgerðar."
 

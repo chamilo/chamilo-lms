@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Tusaale foomula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaale qaacido: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -37006,13 +37006,13 @@ msgid "Trusted signing key"
 msgstr "Furaha saxeexa ee la aamino"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Qor APPLY UPDATE FILES si loo xaqiijiyo"
+msgstr "Qor APPLY UPDATE FILES si aad u xaqiijiso"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Qor RUN DATABASE MIGRATIONS si loo xaqiijiyo guuritaanka xogta"
+msgstr "Qor RUN DATABASE MIGRATIONS si aad u xaqiijiso wareejinta xogta"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Qor RUN POST UPDATE ACTIONS si loo xaqiijiyo"
+msgstr "Qor RUN POST UPDATE ACTIONS si aad u xaqiijiso"
 
 msgid "Unknown update notice source."
 msgstr "Isha ogeysiiska cusboonaysiinta lama yaqaan."
@@ -40229,4 +40229,949 @@ msgstr "Magaalada tababarka shaqada"
 
 msgid "City"
 msgstr "Magaalo"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Habka cusboonaysiinta ayaa dib loo soo celiyey ka dib cusboonaysiinta bogga"
+
+msgid "Last completed step"
+msgstr "Tallaabadii ugu dambaysay ee la dhammeeyey"
+
+msgid "Stage package"
+msgstr "Xirmada marxaladda"
+
+msgid "Package staging"
+msgstr "Marxaladaynta xirmada"
+
+msgid "Apply plan"
+msgstr "Codso qorshaha"
+
+msgid "Update workflow completed"
+msgstr "Habka cusboonaysiinta waa la dhammeeyey"
+
+msgid "Update directory exists and is writable."
+msgstr "Galalka cusboonaysiinta wuu jiraa waana la qori karaa."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Galalka cusboonaysiinta wuu jiraa laakiin lama qori karo: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Galalka cusboonaysiinta weli ma jiro, laakiin galalka waalidka waa la qori karaa."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Galalka cusboonaysiinta weli ma jiro, laakiin waxaa lagu abuuri karaa var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Galalka cusboonaysiinta ma jiro lagumana abuuri karo oggolaanshaha hadda jira."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Lama go'aamin karo booska diskiga ee xor ah ee baaritaanka horudhaca ah ee cusboonaysiinta."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Booska diskiga ee xor ah kuma filna hawlgalka marxaladaynta cusboonaysiinta ee ammaan ah."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Booska diskiga ee xor ah waa ku filan yahay habkan cusboonaysiinta marxaladda xaqiijinta."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Manifest-ka cusboonaysiinta ma qeexayo shuruud nooca PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Lama si buuxda u qiimeyn karo shuruudda PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Nooca PHP ee hadda jira kuma qancinayo shuruudda cusboonaysiinta: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Nooca PHP ee hadda jira wuu qancinayaa shuruudda cusboonaysiinta."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Waddo xirmo maxalli ah lama bixin. Xirmadaha la soo dejiyey waxaa la hubin karaa kaliya ka dib soo dejinta."
+
+msgid "Local update package is not readable: %s"
+msgstr "Xirmada cusboonaysiinta maxalliga ah lama akhriyi karo: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Xirmada cusboonaysiinta maxalliga ah waa inay noqotaa kayd ZIP."
+
+msgid "Local update package is readable."
+msgstr "Xirmada cusboonaysiinta maxalliga ah waa la akhriyi karaa."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Nooca Chamilo ee rakiban si toos ah looma ogaan karin. Jihada nooca lama hubin karo."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Nooca rakiban ama bartilmaameedka kuma jiro qaab nooc semantic la barbar dhigi karo."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Nooca bartilmaameedka wuu ka hooseeyaa nooca rakiban. Hoos u dhigista lama oggola si caadi ah."
+
+msgid "Target version matches the installed version."
+msgstr "Nooca bartilmaameedka wuxuu u dhigmaa nooca rakiban."
+
+msgid "Target version is newer than the installed version."
+msgstr "Nooca bartilmaameedka wuu ka cusub yahay nooca rakiban."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Mashruucu ma aha Git checkout ama .git ma jiro."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Nidaamkan cusboonaysiinta waxaa loogu talagalay rakibaadaha aan lahayn taageero Git. Waxaan ogaanay in nidaamka maxalliga ah uu isticmaalo Git. Sii wadista cusboonaysiinta waxay keeni kartaa taariikh Git oo jabtay. Nidaamyada leh taageero Git, waxaan kugula talineynaa inaad isticmaasho habka Git ee lagu faahfaahiyey CONTRIBUTING.md ee xididka shabakadda."
+
+msgid "Local Git changes were also detected."
+msgstr "Isbeddellada Git ee maxalliga ah ayaa sidoo kale la ogaaday."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Qaar ka mid ah faylasha xogta mashruuca ayaa maqan. Marxaladaha cusboonaysiinta dambe waxay u baahan karaan hubinno ku tiirsanaanta gacanta."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Faylasha xogta Composer iyo Yarn way jiraan."
+
+msgid "Starting staged file application."
+msgstr "Bilaabayaa codsiga faylasha marxaladaysan."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Xaqiijin cad ayaa loo baahan yahay si loo dabaqo faylasha marxaladaysan."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Codsiga faylasha cusboonaysiinta ee marxaladaysan wuxuu u baahan yahay xaqiijin cad."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Galalka marxaladaynta wuxuu ku dhex jiraa galalka marxaladaynta cusboonaysiinta Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Galalka marxaladaynta waa la ansixiyey."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Xogta qorshaha codsiga si guul leh ayaa loo akhriyey."
+
+msgid "Staged application path is valid."
+msgstr "Waddada codsiga marxaladaysan waa sax."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Xogta nadiifinta xirmada saxeexan waxay u dhigantaa qorshaha codsiga ee la eegay."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Xogta nadiifinta xirmada saxeexan waa la ansixiyey."
+
+msgid "Update lock was acquired."
+msgstr "Qufulka cusboonaysiinta waa la helay."
+
+msgid "Update backup directory was created."
+msgstr "Galalka kaydinta cusboonaysiinta waa la abuuray."
+
+msgid "Update file operations were collected."
+msgstr "Hawlgallada faylasha cusboonaysiinta waa la ururiyey."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Faylasha jira ee loo qorsheeyey beddel ama tirtirid waa la kaydiyey."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Faylasha cusboonaysiinta ee marxaladaysan waxaa loo koobiyey rakibaadda Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Faylasha duugga ah ee xirmada lagu caddeeyay ayaa laga saaray rakibaadda Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Faylasha duugga ah ee xirmada lagu caddeeyay ayaa laga saaray."
+
+msgid "Update apply audit metadata was written."
+msgstr "Xogta kormeerka ee dhaqangelinta cusboonaysiinta waa la qoray."
+
+msgid "Staged files applied successfully."
+msgstr "Faylasha la diyaariyay si guul leh ayaa loo dhaqangeliyay."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Lama soo celin karo faylasha la saaray: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Lama dib u celin karo faylasha la koobiyay: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Dib-u-celinta faylasha ayaa la fuliyay ka dib markii dhaqangelinta cusboonaysiinta ay fashilantay."
+
+msgid "Rollback failed: %s"
+msgstr "Dib-u-celintu way fashilantay: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Lama qori karo xogta kormeerka ee dhaqangelinta cusboonaysiinta: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Lama sii deyn karo qufulka cusboonaysiinta ka dib fashilka: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Jidka diyaarinta ayaa loo baahan yahay si loo dhaqangeliyo faylasha cusboonaysiinta."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Hagaha diyaarintu ma jiro: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Hagaha aasaasiga ah ee diyaarinta cusboonaysiinta Chamilo ma jiro."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Hagaha diyaarintu waa inuu ku jiraa var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Hagaha diyaarintu wuxuu ka maqan yahay APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Lama akhriyi karo xogta qorshaha dhaqangelinta cusboonaysiinta: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Xogta qorshaha dhaqangelinta cusboonaysiinta ma aha JSON sax ah: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Xogta qorshaha dhaqangelinta cusboonaysiinta waa inay noqotaa shay JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Qorshaha dhaqangelinta cusboonaysiinta wuxuu ka maqan yahay goobta application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Jidka barnaamijka ee la diyaariyay lama akhriyi karo: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Jidka barnaamijka ee la diyaariyay waa inuu ku jiraa hagaha diyaarinta."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Jidka barnaamijka ee la diyaariyay wuxuu ka maqan yahay composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Xirmada cusboonaysiinta waxaa ka maqan %s. Dib u diyaari xirmo la xaqiijiyay oo leh xog nadiifin saxeexan."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Qorshaha dhaqangelinta cusboonaysiinta wuxuu ka maqan yahay xogta nadiifinta xirmada ee la eegay."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Xogta nadiifinta xirmada cusboonaysiinta way isbedeshay ka dib markii qorshaha dhaqangelinta la sameeyay. Dib u dhis qorshaha dhaqangelinta ka hor intaadan sii wadin."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Qorshaha dhaqangelinta cusboonaysiinta wuxuu ka kooban yahay liis saarid xirmo oo aan sax ahayn."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Jidadka nadiifinta xirmada cusboonaysiinta way isbedesheen ka dib markii qorshaha dhaqangelinta la sameeyay. Dib u dhis qorshaha dhaqangelinta ka hor intaadan sii wadin."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Qorshaha dhaqangelinta cusboonaysiinta wuxuu ka maqan yahay liiska jidadka saaridda ee la eegay."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Jidadka saaridda ee qorshaha dhaqangelinta cusboonaysiinta kuma waafaqsana xogta nadiifinta xirmada ee saxeexan."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Jidka qufulka cusboonaysiinta waa inuu ku jiraa var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Qorshaha dhaqangelinta cusboonaysiinta wuxuu ka maqan yahay goobta backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Jidka kaydinta cusboonaysiinta wuxuu ka kooban yahay qaybo jid oo aan ammaan ahayn."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Jidka kaydinta cusboonaysiinta waa inuu ku jiraa var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Lama heli karo qufulka cusboonaysiinta. Waxaa laga yaabaa in cusboonaysiin kale ay socoto."
+
+msgid "Unable to release update lock: %s"
+msgstr "Lama sii deyn karo qufulka cusboonaysiinta: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Hagaha kaydinta cusboonaysiinta mar hore wuu jiraa: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Hagaha bartilmaameedka lama abuuri karo: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Cusboonaysiinta la qorsheeyay waxay ku qori lahayd isku xirka calaamadaha ee jira: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Faylka bartilmaameedka lama qori karo: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Faylka bartilmaameedka lama abuuri karo: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Lama xallin karo hagaha mashruuca Chamilo ka hor inta aan la saarin faylasha duugga ah."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Nadiifinta cusboonaysiinta ma saari karto jidka la ilaaliyo: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Cusboonaysiinta la qorsheeyay waxay saari lahayd isku xirka calaamadaha ee jira: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Nadiifinta cusboonaysiinta waxay taageertaa faylasha oo keliya, ma aha hageyaasha: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Faylka bartilmaameedka ee duugga ah lama akhriyi karo si loo kaydiyo: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Faylka bartilmaameedka ee duugga ah lama saari karo oggolaanshaha hagaha hadda: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Faylka bartilmaameedka ee duugga ah wuxuu ku xallinayaa meel ka baxsan hagaha mashruuca Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Lama kaydin karo faylka bartilmaameedka: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Lama qori karo xogta kaydinta cusboonaysiinta."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Lama koobiyeeyin karo faylka cusboonaysiinta ee la diyaariyay: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Waxaa la koobiyeeyay %d ka mid ah %d fayl oo la diyaariyay."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Lama saari karo faylka duugga ah ee xirmada ku caddeysay: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Waxaa la saaray %d ka mid ah %d fayl oo duug ah oo xirmada ku caddeysay."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Lama soo celin karo faylka la kaydiyay: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Lama saari karo faylka cusub ee la koobiyeeyay inta lagu jiro dib-u-celinta: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Lama soo celin karo faylka la saaray maxaa yeelay kaydkiisu waa maqan yahay: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Lama soo celin karo faylka la saaray ka soo kaydka: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Lama qori karo xogta baaritaanka ee dhaqangelinta cusboonaysiinta."
+
+msgid "Unable to write global update apply log."
+msgstr "Lama qori karo diiwaanka guud ee dhaqangelinta cusboonaysiinta."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Waddo qaraabo ah oo aan ammaan ahayn ayaa la ogaaday: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Galalka lama qori karo: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Lama abuurin karo galal: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Xogta diyaarinta si guul leh ayaa loo akhriyay."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Xogta qorshaha dhaqangelinta waxaa lagu qoray galalka diyaarinta."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Faylasha iyo galalka bartilmaameedka ah waxay u muuqdaan in la qori karo cusboonaysiinta iyo nadiifinta la qorsheeyay."
+
+msgid "Update apply plan check failed."
+msgstr "Hubinta qorshaha dhaqangelinta cusboonaysiinta waa fashilantay."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Qaar ka mid ah faylasha ama galalka bartilmaameedka ah lama qori karo ama lama saari karo."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Si tan loo saxo, si ku meel gaar ah u beddel milkiilaha galalka Chamilo oo dhan %s (isticmaalaha serverka shabakadda), dhaqan geli cusboonaysiinta, milkiilaha dib ugu celi %s ka dib, ka dibna milkiilaha var/ (iyo waxa ku jira) dib ugu celi %s si barnaamijku u sii qori karo."
+
+msgid "Update package verification failed."
+msgstr "Xaqiijinta xirmada cusboonaysiinta waa fashilantay."
+
+msgid "Update preflight checks failed."
+msgstr "Hubinta horudhaca cusboonaysiinta waa fashilantay."
+
+msgid "Unable to stage update package."
+msgstr "Lama diyaarin karo xirmada cusboonaysiinta."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Socodsiinta amarrada ka dib dhaqangelinta ka soo UI waa la joojiyay serverkan."
+
+msgid "Missing required field: %s"
+msgstr "Goobta loo baahan yahay waa maqan tahay: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Isha muuqaalka cusboonaysiinta lama bixin, URL-ka muuqaalka cusboonaysiinta ee caadiga ahna lama habayn."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL-ka muuqaalka cusboonaysiinta waa inuu isticmaalaa asalka rasmiga ah %s. Kaliya waddada muuqaalka ayaa la beddeli karaa."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Waddooyinka muuqaalka cusboonaysiinta ee maxalliga ah waa la joojiyay. Isticmaal URL muuqaal HTTPS ah ama deji CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 deegaanka serverka si loo tijaabiyo maxalliga."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Ha bixin waddo HTTP %s. Goobtan ka tag madhan si looga soo dejiyo muuqaalka cusboonaysiinta."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Waddooyinka maxalliga ah ee cusboonaysiinta %s waa la joojiyay deegaankan."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Furayaasha dadweynaha ee cusboonaysiinta la aamini karo waa in lagu habeeyaa serverka deegaankan."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Ka boodista xaqiijinta saxeexa cusboonaysiinta waa la joojiyay deegaankan."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Socodsiinta falalka cusboonaysiinta ka dib dhaqangelinta waxay u baahan tahay qoraalka xaqiijinta \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Dhaqangelinta faylasha cusboonaysiinta ee la diyaariyay waxay u baahan tahay qoraalka xaqiijinta \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Lama xallin karo galalka mashruuca."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Kaydinta kaydka xogta kuma maamulo cusbooneeyahan. Abuur oo xaqiiji kaydka xogta ka hor intaadan socodsiin dhaq-dhaqaaqyada."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Hababka Doctrine migration down() lama dammaanad qaado inay soo celiyaan xogta la tirtiray ama la beddelay."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Xogta ka dib dhaqangelinta waxay ku talinaysaa dib u eegis dhaq-dhaqaaqa kaydka xogta."
+
+msgid "No migration files were found in the staged package."
+msgstr "Faylasha dhaq-dhaqaaqa lagama helin xirmada la diyaariyay."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Faylasha dhaq-dhaqaaqa Doctrine ee la diyaariyay ayaa la ogaaday."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Bartilmaameedka dhaq-dhaqaaqa Doctrine waxaa laga xalliyay xirmada la diyaariyay."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Aasaaska dhaq-dhaqaaqa Doctrine wuxuu leeyahay arrimo xannibaya dhaq-dhaqaaqyada la diyaariyay."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine waxay soo sheegtaa digniino aasaas taariikheed, laakiin kaliya dhaq-dhaqaaqyada %s ee la diyaariyay ayaa si cad loo eegi doonaa oo loo fulin doonaa."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine waxay soo sheegtaa digniino aasaas taariikheed. Cusbooneeyuhu wuxuu fulin doonaa kaliya fasallada dhaq-dhaqaaqa %s ee la diyaariyay ka dib xaqiijin cad."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Aasaaska Doctrine ma laha arrin xannibaysa dhaq-dhaqaaqyada %s ee la diyaariyay."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Tijaabada qallalan ee dhaq-dhaqaaqa Doctrine way fashilantay ugu yaraan hal dhaq-dhaqaaq oo la diyaariyay. Ha socodsiin dhaq-dhaqaaqyada kaydka xogta ilaa tan la saxo."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Tijaabada qallalan ee Doctrine si guul leh ayay ugu dhammaatay fasal kasta oo dhaq-dhaqaaq la diyaariyay."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Kaydka kaydka xogta waa in laga abuurmaa ka baxsan cusbooneeyahan ka hor inta aan la socodsiin dhaq-dhaqaaqyada."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Waddada diyaarinta ayaa loo baahan yahay si loo eego dhaq-dhaqaaqyada kaydka xogta."
+
+msgid "Unable to read update %s: %s"
+msgstr "Lama akhriyi karo cusboonaysiinta %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON-ka cusboonaysiinta %s waa khaldan: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON-ka cusboonaysiinta %s waa inuu noqdaa shay."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Xogta hubinta ka-dib-codsiga kuma jirto liis falal sax ah."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Socodka xogta (migrations) laguma talinayn cusboonaysiigan marxaladda ah."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Xogta cusboonaysiinta waxaa ka maqan waddada codsiga marxaladda."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Faylka socodka marxaladda ee qorshaysan lama helin: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Lama akhriyin faylka socodka marxaladda: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Sharaxaad lagama soo saari karin getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Kaliya %s socod marxaladeed ayaa taageera orodyahanka cusboonaysiinta: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Lama qori karin xogta badbaadada socodka: %s"
+
+msgid "Migration safety check failed."
+msgstr "Hubinta badbaadada socodka way fashilantay."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Waddo socod marxaladeed oo aan ammaan ahayn ayaa la ogaaday: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Nooca Chamilo ee rakiban si toos ah looma ogaan karin. Sii wad kaliya ka dib markaad xaqiijiso in cusboonaysiintaan la jaanqaadayso."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Nooca rakiban ama bartilmaameedka kuma jiro qaab nooc macne ah oo la barbar dhigi karo. Sii wad kaliya ka dib xaqiijin gacanta ah."
+
+msgid "An update is available."
+msgstr "Cusboonaysiin ayaa diyaar ah."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Nooca rakiban wuxuu horey ugu dhigmaa nooca muujinta."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Nooca muujinta wuu ka da' weyn yahay nooca rakiban. Hoos-u-dhigista waa la xannibay sida caadiga ah."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Faylasha marxaladda si guul leh looma dabaqin. Hubinta ka-dib-codsiga ma sii wadi karto."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Xogta natiijada dabaqista si guul leh ayaa loo akhriyay."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Talooyin falal ka-dib-codsi ayaa la soo saaray."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Socodka xogta ayaa laga helay xirmada marxaladda. Ku orod kaliya ka dib markaad xaqiijiso in cusboonaysiinta faylka sax tahay iyo in kayd xogta jiro."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Waddada marxaladda ayaa loo baahan yahay si loo ordo hubinta ka-dib-codsiga."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Cusboonaysiinta %s ma aha JSON sax ah: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Cusboonaysiinta %s waa inay noqotaa shay JSON."
+
+msgid "Composer dependencies"
+msgstr "Ku-tiirsanaanta Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Xogta Composer waxaa lagu daray xirmada marxaladda. Ka orod Composer install xididka barnaamijka ka hor intaadan u arkin cusboonaysiinta dhammaatay."
+
+msgid "Frontend assets"
+msgstr "Hantida hor-dhexda"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Faylal hor-dhexda la xiriira ayaa lagu daray xirmada marxaladda. Dib u dhis hantida wax-soo-saarka ka dib rakibida ku-tiirsanaanta."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Faylasha socodka Doctrine ayaa laga helay xirmada marxaladda. Xaqiiji in kayd xogta jiro ka hor orodka socodka."
+
+msgid "Symfony cache"
+msgstr "Kaynta Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Nadiifi kaynta Symfony ka dib dabaqida faylasha cusboonaysiinta iyo orodka amarrada loo baahan yahay."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Lama qori karin xogta hubinta ka-dib-codsiga."
+
+msgid "Post-apply check failed."
+msgstr "Hubinta ka-dib-codsiga way fashilantay."
+
+msgid "Update package is not readable: %s"
+msgstr "Xirmada cusboonaysiinta lama akhriyi karo: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Xirmada cusboonaysiinta ma aha kayd ZIP sax ah."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Kaydka ZIP ee xirmada cusboonaysiinta waa madhan."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Xirmada cusboonaysiinta waxaa ku jira gelitaan ZIP aan la akhriyi karin."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Xirmada cusboonaysiinta waxaa ku jira waddo dhammaystiran oo aan ammaan ahayn: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Xirmada cusboonaysiinta waxaa ku jira gelitaan marin-goyn waddo: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Xirmada cusboonaysiinta waxaa ku jira xiriir calaamad: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Bilaabaya falalka ka-dib-codsiga."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Fulinta amarka ka-dib-codsiga waxay u baahan tahay xaqiijin cad."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Xogta talada ka-dib-codsiga si guul leh ayaa loo akhriyay."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Falalka ka-dib-codsiga waa la xaqiijiyay marka loo eego warbixinta talada."
+
+msgid "Post-apply actions were selected."
+msgstr "Falalka ka-dib-codsiga waa la doortay."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Falalka ka-dib-codsiga ee horumarsan waxay u baahan yihiin xaqiijin horumarsan oo cad."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Falalka ka-dib-codsiga ee horumarsan si cad ayaa loo xaqiijiyay."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Amarrada ka-dib-codsiga ee la doortay si guul leh ayay u dhammaadeen."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Xogta orodka amarka ka-dib-codsiga waa la qoray."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Falalka ka-dib-codsiga si guul leh ayay u dhammaadeen."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Qeexid amarka ka-dib-codsiga ee cusboonaysiinta aan sax ahayn: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Waa la ordayaa fal ka-dib-codsi: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Amarka %d ee %d ayaa loo wadaa %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Ficilka ka-dib-codsiga wuu fashilmay: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Ficilka ka-dib-codsiga \"%s\" wuu fashilmay koodhka bixitaanka %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Ficilka ka-dib-codsiga waa la dhammeeyey: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Jidka staging-ka ayaa loo baahan yahay si loo fuliyo ficillada ka-dib-codsiga."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Ma jiraan ficillo ka-dib-codsi oo la soo jeediyey oo la fuliyo."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Ma jiraan ficillo ka-dib-codsi oo la oggol yahay oo la fuliyo."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Ficilka ka-dib-codsiga looma oggola cusboonaysiintaan: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Socodka xogta (migrations) waxay u baahan yihiin dib-u-eegis ammaan ka hor fulinta."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Socodka xogta lama fulin karo sababtoo ah dib-u-eegista ammaanka ma gudbin."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Socodka xogta lama fulin karo sababtoo ah dib-u-eegista ammaanka ma liis gareyn migrations-ka la dhigay."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Socodka xogta lama fulin karo sababtoo ah dib-u-eegista ammaanka waxay ka kooban tahay gelin migration aan sax ahayn."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Kaliya migrations-ka %s ee la dhigay ayaa fuliyi kara orodyahanka cusboonaysiinta."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Socodka xogta lama fulin karo sababtoo ah dib-u-eegista ammaanka ee migrations-ka la dhigay waxay soo sheegtay khaladaad xannibaya."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine waxay soo sheegtaa digniino aasaas migration. Kaliya fasallada migration %s ee la dhigay ayaa si cad loo fulin doonaa."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Socodka xogta waxay u baahan yihiin xaqiijin in kayd xogta uu jiro."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Socodka xogta waxay u baahan yihiin qoraalka xaqiijinta \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Dib-u-eegista ammaanka ee socodka xogta waa la dhammeeyey ka hor fulinta."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Jiritaanka kaydka xogta si cad ayaa loo xaqiijiyey."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Dib-u-eegista ammaanka ee socodka xogta iyo xaqiijinta kaydka waa la bixiyey."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Socodka xogta waa la fuliyey ka dib xaqiijin cad oo kayd xogta. Cusbooneysiyuhu ma abuurin kaydka xogta."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Ogolaanshaha fulinta ee ka-dib-codsiga ee loo baahan yahay waa la caadiyeeyey."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Lama fulin karo socodka xogta sababtoo ah bin/console lama helin."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Amarrada ka-dib-codsiga ee la doortay waxay leeyihiin jidadka qorista ee loo baahan yahay."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Jidadka qorista ee amarka ka-dib-codsiga waa la xaqiijiyey."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Ficillada ka-dib-codsiga ee horumarsan waxay beddeli karaan ku-tiirsanaanta, hantida la soo saaray ama xogta. Dib u eeg kaydadka ka hor intaadan sii wadin."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer si nabad ah uga ma shaqeyn karo cusbooneysiyaha shabakadda sababtoo ah faylka Composer-ka soo saaray \"%s\" waxaa iska leh UID %d halka PHP runtime-ku isticmaalo UID %d. Composer gacanta ugu shaqee sidii milkiilaha geedinta, ka dibna ku sii wad ficillada ka-dib-codsiga ee haray."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Jidka uu u baahan yahay ficilka ka-dib-codsiga \"%s\" lama qori karo: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Aabaha tusaha uu u baahan yahay ficilka ka-dib-codsiga \"%s\" lama qori karo: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Lama akhriyi karo ogolaanshaha fulinta ee ka-dib-codsiga ee loo baahan yahay: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Lama calaamadin karo fuliyaha ka-dib-codsiga ee loo baahan yahay inuu noqdo mid la fulin karo: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Fuliyaha ka-dib-codsiga ee loo baahan yahay weli lama fulin karo ka dib chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Ogolaanshaha fulinta waa la caadiyeeyey."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Lama qori karo habaynta Git ee go'doonsan ee amarrada ka-dib-codsiga."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Hawl cusboonaysiin kale ayaa u muuqata inay socoto. Ka saar var/update/update.lock kaliya haddii aanay jirin cusboonaysiin firfircoon."
+
+msgid "Unable to create update lock: %s"
+msgstr "Lama abuurin karo qufulka cusboonaysiinta: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Lama qori karo xogta orodka amarka ka-dib-codsiga: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Manifest-ka cusboonaysiinta waxaa ka maqan qaybta xirmada."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Qaybta saxeexa ee manifest-ka cusboonaysiinta waa inay noqotaa shay."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Qaybta shuruudaha ee manifest-ka cusboonaysiinta waa inay noqotaa shay."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 ee xirmada cusboonaysiinta waa inay noqotaa xadhig hexadecimal 64 xaraf ah."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Manifest-ka cusboonaysiinta waxaa ka maqan goobta xadhigga ee loo baahan yahay \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Goobta manifest-ka cusboonaysiinta \"%s\" waa inay noqotaa xadhig."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Manifest-ka cusboonaysiinta ma aha JSON sax ah: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON-ka manifest-ka cusboonaysiinta waa inuu noqdaa shay."
+
+msgid "Manifest source cannot be empty."
+msgstr "Isha manifest-ka ma noqon karto mid madhan."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL-ka manifest-ka cusboonaysiinta waa inuu isticmaalaa asalka rasmiga ah ee cusboonaysiinta %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Lama soo dejin karo manifest-ka cusboonaysiinta. Xaaladda HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Faylka manifest-ka lama akhriyi karo: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Lama akhriyi karo faylka manifest-ka: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL-ka muujinta cusboonaysiinta waa inuu isticmaalaa HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Xogta xirmada cusboonaysiinta lama akhriyi karo: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Lama akhriyi karo xogta xirmada cusboonaysiinta: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Xogta xirmada cusboonaysiinta ma aha JSON sax ah: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Xogta xirmada cusboonaysiinta waa inay noqotaa shay JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Qaabka xogta xirmada cusboonaysiinta waa inuu noqdaa %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Goobta xogta xirmada cusboonaysiinta \"remove\" waa inay noqotaa array."
+
+msgid "Update package removal paths must be strings."
+msgstr "Waddooyinka ka saarista xirmada cusboonaysiinta waa inay noqdaan xarfo."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Xogta xirmada cusboonaysiinta kama saari karto waddo la ilaaliyo: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Xirmada cusboonaysiinta kuma dari karo oo kama saari karo isla waddada: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Lama xisaabin karo sha256 ee xogta xirmada cusboonaysiinta."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Waddada ka saarista xirmada cusboonaysiinta ma noqon karto mid madhan."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Waddada ka saarista xirmada cusboonaysiinta waxay ka kooban tahay byte null."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Waddada ka saarista xirmada cusboonaysiinta waa inay noqotaa mid qaraabo ah: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Waddada ka saarista xirmada cusboonaysiinta waxay ka kooban tahay qayb aan ammaan ahayn: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Waddada staging waa lagama maarmaan si loo dhiso qorshe dabaqida cusboonaysiinta."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Gal-galka staging wuxuu ka maqan yahay STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Lama akhriyi karo xogta staging: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Xogta staging ma aha JSON sax ah: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Xogta staging waa inay noqotaa shay JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Xogta staging waxaa ka maqan goobta application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Xirmada cusboonaysiinta waxaa ka maqan %s. Xogta nadiifinta saxeexan waa lagama maarmaan ka hor inta aan faylasha la dabaqin."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Xogta staging kuma jirto xogta nadiifinta xirmada saxeexan ee la diiwaangeliyey intii la soo saarayay."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Xogta nadiifinta xirmada cusboonaysiinta way isbedeshay ka dib staging. Dib u dhig xirmada la xaqiijiyey ka hor intaadan sii wadin."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Xogta staging kuma jirto liis ka saaris xirmo oo sax ah."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Waddooyinka nadiifinta xirmada cusboonaysiinta way isbeddeleen ka dib staging. Dib u dhig xirmada la xaqiijiyey ka hor intaadan sii wadin."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Xogta nadiifinta xirmada saxeexan lama beddelin tan iyo staging."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Fayl quful cusboonaysiin ayaa hore u jira. Cusboonaysiin kale ayaa laga yaabaa inay socoto."
+
+msgid "Update lock directory is not writable."
+msgstr "Gal-galka qufulka cusboonaysiinta lama qori karo."
+
+msgid "No update lock is currently active."
+msgstr "Ma jiro quful cusboonaysiin oo hadda firfircoon."
+
+msgid "Update backup directory is not writable."
+msgstr "Gal-galka kaydka cusboonaysiinta lama qori karo."
+
+msgid "Update backup directory is writable."
+msgstr "Gal-galka kaydka cusboonaysiinta waa la qori karaa."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Gal-galka kaydka cusboonaysiinta lama abuuri karo habka hadda jira."
+
+msgid "Update backup directory can be created."
+msgstr "Gal-galka kaydka cusboonaysiinta waa la abuuri karaa."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Qaar ka mid ah gal-galka shaqada cusboonaysiinta lama qori karo ama lama abuuri karo habka hadda jira."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Gal-galka shaqada cusboonaysiinta waa la qori karaa ama waa la abuuri karaa."
+
+msgid "Update apply file plan was generated."
+msgstr "Qorshaha dabaqida faylasha cusboonaysiinta waa la sameeyay."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Xogta nadiifinta xirmada waxay ka kooban tahay waddooyin aan si ammaan ah looga saari karin."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Yoolalka ka saarista ee xirmadu sheegtay waa ammaan."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Qaar ka mid ah faylasha duugoobay ee xirmadu sheegtay ayaa hore uga maqan rakibidan."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Cusboonaysiinta la qorsheeyay waxay qarinaysaa ama ka saaraysaa isku xirka calaamadaha ee jira."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Cusboonaysiinta la qorsheeyay ma qarinayso mana saarayso isku xirka calaamadaha ee jira."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Faylasha socdaalka cusboonaysiinta cusub waa in lagu dhigaa hoosta %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Faylasha socdaalka Doctrine ee %s cusub ayaa la ogaaday. Waxay u baahan doonaan dib u eegis ammaan socdaal xog-ururin ka dib dabaqida faylasha."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Qaar ka mid ah liisaska faylasha qorshaha dabaqida cusboonaysiinta ayaa la soo gaabiyey jawaabta JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Lama qori karo xogta qorshaha dabaqida cusboonaysiinta."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Lama soo dejin karo xirmada cusboonaysiinta. Xaaladda HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Lama furi karo faylka bartilmaameedka xirmada cusboonaysiinta: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Soo dejinta cusboonaysiinta waa inay isticmaashaa asalka rasmiga ah ee cusboonaysiinta %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL-ka xirmada cusboonaysiinta waa inuu isticmaalaa HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Hubinta badbaadada kaydka xirmada cusboonaysiinta waa la dhaafay."
+
+msgid "Update package was extracted to staging."
+msgstr "Xirmada cusboonaysiinta waxaa laga soo saaray goobta diyaarinta."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Xogta nadiifinta xirmada saxeexan waa la soo raray."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Xirmada cusboonaysiinta kuma jirto %s. Codsiga faylka waa la xannibi doonaa ilaa xogta nadiifinta saxeexan la keeno."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Warbixinta tijaabada qalalan ee xirmada diyaarinta waa la sameeyay."
+
+msgid "Staging metadata was written."
+msgstr "Xogta diyaarinta waa la qoray."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Lama soo saari karo xirmada cusboonaysiinta galalka diyaarinta."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Lama heli karo xididka barnaamijka Chamilo ee xirmada diyaarinta."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Xirmada diyaarinta waxaa ka maqan gelitaanka Chamilo ee loo baahan yahay: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Xirmada diyaarinta waxay ka kooban tahay qaabdhismeedka Chamilo ee la filayo."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Xirmada diyaarinta kuma jirto composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Xirmada diyaarinta waxaa ku jira composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Xirmada diyaarinta kuma jirto yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Xirmada diyaarinta waxaa ku jira yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Lama koodayn karo xogta diyaarinta."
+
+msgid "Unable to write staging metadata."
+msgstr "Lama qori karo xogta diyaarinta."
+
+msgid "Update operation log created."
+msgstr "Diiwaanka hawlgalka cusboonaysiinta waa la sameeyay."
+
+msgid "Unable to write update operation log."
+msgstr "Lama qori karo diiwaanka hawlgalka cusboonaysiinta."
+
+msgid "Invalid update operation id."
+msgstr "Aqoonsiga hawlgalka cusboonaysiinta waa khaldan."
 

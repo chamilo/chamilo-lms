@@ -40591,3 +40591,606 @@ msgstr "Ορισμένα αρχεία ή κατάλογοι προορισμού
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Για να το διορθώσετε, αλλάξτε προσωρινά τον κάτοχο ολόκληρου του καταλόγου Chamilo σε %s (ο χρήστης του διακομιστή ιστού), εφαρμόστε την ενημέρωση, επαναφέρετε τον κάτοχο σε %s στη συνέχεια και ορίστε τον κάτοχο του var/ (και των περιεχομένων του) ξανά σε %s ώστε η εφαρμογή να μπορεί να συνεχίσει να γράφει σε αυτόν."
 
+msgid "Update package verification failed."
+msgstr "Η επαλήθευση του πακέτου ενημέρωσης απέτυχε."
+
+msgid "Update preflight checks failed."
+msgstr "Οι προκαταρκτικοί έλεγχοι ενημέρωσης απέτυχαν."
+
+msgid "Unable to stage update package."
+msgstr "Αδυναμία προετοιμασίας του πακέτου ενημέρωσης."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Η εκτέλεση εντολών μετά την εφαρμογή από το περιβάλλον χρήστη είναι απενεργοποιημένη σε αυτόν τον διακομιστή."
+
+msgid "Missing required field: %s"
+msgstr "Λείπει υποχρεωτικό πεδίο: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Δεν δόθηκε πηγή μανιφέστου ενημέρωσης και δεν έχει ρυθμιστεί προεπιλεγμένο URL μανιφέστου ενημέρωσης."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Το URL του μανιφέστου ενημέρωσης πρέπει να χρησιμοποιεί την επίσημη προέλευση ενημέρωσης %s. Μόνο η διαδρομή του μανιφέστου μπορεί να αλλάξει."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Οι τοπικές διαδρομές μανιφέστου ενημέρωσης είναι απενεργοποιημένες. Χρησιμοποιήστε HTTPS URL μανιφέστου ή ορίστε CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 στο περιβάλλον του διακομιστή για τοπικές δοκιμές."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Μην παρέχετε διαδρομή HTTP %s. Αφήστε αυτό το πεδίο κενό για λήψη από το μανιφέστο ενημέρωσης."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Οι τοπικές διαδρομές ενημέρωσης %s είναι απενεργοποιημένες σε αυτό το περιβάλλον."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Σε αυτό το περιβάλλον πρέπει να έχουν ρυθμιστεί αξιόπιστα δημόσια κλειδιά ενημέρωσης στον διακομιστή."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Η παράλειψη επαλήθευσης υπογραφής ενημέρωσης είναι απενεργοποιημένη σε αυτό το περιβάλλον."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Η εκτέλεση ενεργειών ενημέρωσης μετά την εφαρμογή απαιτεί το κείμενο επιβεβαίωσης \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Η εφαρμογή των προετοιμασμένων αρχείων ενημέρωσης απαιτεί το κείμενο επιβεβαίωσης \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Αδυναμία εντοπισμού του καταλόγου του έργου."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Το αντίγραφο ασφαλείας της βάσης δεδομένων δεν διαχειρίζεται αυτός ο ενημερωτής. Δημιουργήστε και επαληθεύστε αντίγραφο ασφαλείας βάσης δεδομένων πριν εκτελέσετε μεταναστεύσεις."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Οι μέθοδοι down() μεταναστεύσεων Doctrine δεν εγγυώνται την επαναφορά διαγραμμένων ή μετασχηματισμένων δεδομένων."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Τα μεταδεδομένα μετά την εφαρμογή συνιστούν έλεγχο μεταναστεύσεων βάσης δεδομένων."
+
+msgid "No migration files were found in the staged package."
+msgstr "Δεν βρέθηκαν αρχεία μετανάστευσης στο προετοιμασμένο πακέτο."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Εντοπίστηκαν προετοιμασμένα αρχεία μετανάστευσης Doctrine."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Ο στόχος μετανάστευσης Doctrine επιλύθηκε από το προετοιμασμένο πακέτο."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Η γραμμή βάσης μετανάστευσης Doctrine έχει αποκλειστικά προβλήματα για τις προετοιμασμένες μεταναστεύσεις."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Το Doctrine αναφέρει προειδοποιήσεις ιστορικής γραμμής βάσης μετανάστευσης, αλλά μόνο οι προετοιμασμένες μεταναστεύσεις %s θα εξεταστούν και θα εκτελεστούν ρητά."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Το Doctrine αναφέρει προειδοποιήσεις ιστορικής γραμμής βάσης μετανάστευσης. Ο ενημερωτής θα εκτελέσει μόνο τις προετοιμασμένες κλάσεις μετανάστευσης %s μετά ρητή επιβεβαίωση."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Η γραμμή βάσης Doctrine δεν έχει αποκλειστικό πρόβλημα για τις προετοιμασμένες μεταναστεύσεις %s."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Η δοκιμαστική εκτέλεση μετανάστευσης Doctrine απέτυχε για τουλάχιστον μία προετοιμασμένη μετανάστευση. Μην εκτελείτε μεταναστεύσεις βάσης δεδομένων μέχρι να διορθωθεί αυτό."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Η δοκιμαστική εκτέλεση Doctrine ολοκληρώθηκε επιτυχώς για κάθε προετοιμασμένη κλάση μετανάστευσης."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Πρέπει να δημιουργηθεί αντίγραφο ασφαλείας βάσης δεδομένων εκτός αυτού του ενημερωτή πριν από την εκτέλεση μεταναστεύσεων."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Απαιτείται διαδρομή προετοιμασίας για έλεγχο μεταναστεύσεων βάσης δεδομένων."
+
+msgid "Unable to read update %s: %s"
+msgstr "Αδυναμία ανάγνωσης ενημέρωσης %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Το JSON ενημέρωσης %s δεν είναι έγκυρο: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Το JSON ενημέρωσης %s πρέπει να είναι αντικείμενο."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Τα μεταδεδομένα ελέγχων μετά την εφαρμογή δεν περιέχουν έγκυρη λίστα ενεργειών."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Δεν συνιστώνται μεταναστεύσεις βάσης δεδομένων για αυτή την προετοιμασμένη ενημέρωση."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Στα μεταδεδομένα ενημέρωσης λείπει η διαδρομή της προετοιμασμένης εφαρμογής."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Το προγραμματισμένο προετοιμασμένο αρχείο μετανάστευσης δεν βρέθηκε: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Αδυναμία ανάγνωσης προετοιμασμένου αρχείου μετανάστευσης: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Δεν ήταν δυνατή η εξαγωγή περιγραφής από το getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Ο εκτελεστής ενημέρωσης υποστηρίζει μόνο προετοιμασμένες μεταναστεύσεις %s: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Αδυναμία εγγραφής μεταδεδομένων ασφάλειας μετανάστευσης: %s"
+
+msgid "Migration safety check failed."
+msgstr "Ο έλεγχος ασφάλειας μετανάστευσης απέτυχε."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Εντοπίστηκε μη ασφαλής σχετική διαδρομή προετοιμασμένης μετανάστευσης: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Η εγκατεστημένη έκδοση του Chamilo δεν εντοπίστηκε αυτόματα. Συνεχίστε μόνο αφού επιβεβαιώσετε ότι αυτή η ενημέρωση είναι συμβατή."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Η εγκατεστημένη ή η έκδοση-στόχος δεν είναι σε συγκρίσιμη μορφή σημασιολογικής έκδοσης. Συνεχίστε μόνο μετά από χειροκίνητη επαλήθευση."
+
+msgid "An update is available."
+msgstr "Υπάρχει διαθέσιμη ενημέρωση."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Η εγκατεστημένη έκδοση αντιστοιχεί ήδη στην έκδοση του μανιφέστου."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Η έκδοση του manifest είναι παλαιότερη από την εγκατεστημένη έκδοση. Οι υποβαθμίσεις αποκλείονται από προεπιλογή."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Τα σταδιοποιημένα αρχεία δεν εφαρμόστηκαν επιτυχώς. Οι έλεγχοι μετά την εφαρμογή δεν μπορούν να συνεχιστούν."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Τα μεταδεδομένα αποτελέσματος εφαρμογής διαβάστηκαν επιτυχώς."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Δημιουργήθηκαν συστάσεις ενεργειών μετά την εφαρμογή."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Εντοπίστηκαν μεταναστεύσεις βάσης δεδομένων στο σταδιοποιημένο πακέτο. Εκτελέστε τις μόνο αφού επιβεβαιώσετε ότι η ενημέρωση αρχείων είναι σωστή και υπάρχει αντίγραφο ασφαλείας της βάσης δεδομένων."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Απαιτείται διαδρομή σταδιοποίησης για την εκτέλεση ελέγχων μετά την εφαρμογή."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Η ενημέρωση %s δεν είναι έγκυρο JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Η ενημέρωση %s πρέπει να είναι αντικείμενο JSON."
+
+msgid "Composer dependencies"
+msgstr "Εξαρτήσεις Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Τα μεταδεδομένα Composer συμπεριλήφθηκαν στο σταδιοποιημένο πακέτο. Εκτελέστε Composer install από τη ρίζα της εφαρμογής πριν θεωρήσετε την ενημέρωση ολοκληρωμένη."
+
+msgid "Frontend assets"
+msgstr "Πόροι διεπαφής"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Αρχεία σχετικά με τη διεπαφή συμπεριλήφθηκαν στο σταδιοποιημένο πακέτο. Αναδημιουργήστε τους πόρους παραγωγής μετά την εγκατάσταση των εξαρτήσεων."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Εντοπίστηκαν αρχεία μετανάστευσης Doctrine στο σταδιοποιημένο πακέτο. Επιβεβαιώστε ότι υπάρχει αντίγραφο ασφαλείας της βάσης δεδομένων πριν εκτελέσετε τις μεταναστεύσεις."
+
+msgid "Symfony cache"
+msgstr "Cache Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Καθαρίστε την cache του Symfony μετά την εφαρμογή των αρχείων ενημέρωσης και την εκτέλεση τυχόν απαιτούμενων εντολών."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Αδυναμία εγγραφής μεταδεδομένων ελέγχων μετά την εφαρμογή."
+
+msgid "Post-apply check failed."
+msgstr "Ο έλεγχος μετά την εφαρμογή απέτυχε."
+
+msgid "Update package is not readable: %s"
+msgstr "Το πακέτο ενημέρωσης δεν είναι αναγνώσιμο: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Το πακέτο ενημέρωσης δεν είναι έγκυρο αρχείο ZIP."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Το αρχείο ZIP του πακέτου ενημέρωσης είναι κενό."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Το πακέτο ενημέρωσης περιέχει μη αναγνώσιμη καταχώριση ZIP."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Το πακέτο ενημέρωσης περιέχει μη ασφαλή απόλυτη διαδρομή: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Το πακέτο ενημέρωσης περιέχει καταχώριση διαδρομής με traversal: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Το πακέτο ενημέρωσης περιέχει συμβολικό σύνδεσμο: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Έναρξη ενεργειών μετά την εφαρμογή."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Η εκτέλεση εντολών μετά την εφαρμογή απαιτεί ρητή επιβεβαίωση."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Τα μεταδεδομένα συστάσεων μετά την εφαρμογή διαβάστηκαν επιτυχώς."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Οι ενέργειες μετά την εφαρμογή επικυρώθηκαν βάσει της αναφοράς συστάσεων."
+
+msgid "Post-apply actions were selected."
+msgstr "Επιλέχθηκαν ενέργειες μετά την εφαρμογή."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Οι προηγμένες ενέργειες μετά την εφαρμογή απαιτούν ρητή προηγμένη επιβεβαίωση."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Οι προηγμένες ενέργειες μετά την εφαρμογή επιβεβαιώθηκαν ρητά."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Οι επιλεγμένες εντολές μετά την εφαρμογή ολοκληρώθηκαν επιτυχώς."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Τα μεταδεδομένα εκτέλεσης εντολών μετά την εφαρμογή εγγράφηκαν."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Οι ενέργειες μετά την εφαρμογή ολοκληρώθηκαν επιτυχώς."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Μη έγκυρος ορισμός εντολής μετά την εφαρμογή ενημέρωσης: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Εκτέλεση ενέργειας μετά την εφαρμογή: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Εκτέλεση εντολής %d από %d για %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Η ενέργεια μετά την εφαρμογή απέτυχε: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Η ενέργεια μετά την εφαρμογή \"%s\" απέτυχε με κωδικό εξόδου %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Η ενέργεια μετά την εφαρμογή ολοκληρώθηκε: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Απαιτείται διαδρομή σταδιοποίησης για την εκτέλεση ενεργειών μετά την εφαρμογή."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Δεν υπάρχουν συνιστώμενες ενέργειες μετά την εφαρμογή προς εκτέλεση."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Δεν υπάρχουν επιτρεπόμενες ενέργειες μετά την εφαρμογή προς εκτέλεση."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Η ενέργεια μετά την εφαρμογή δεν επιτρέπεται για αυτή την ενημέρωση: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Οι μεταναστεύσεις βάσης δεδομένων απαιτούν έλεγχο ασφαλείας μετανάστευσης πριν την εκτέλεση."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Οι μεταναστεύσεις βάσης δεδομένων δεν μπορούν να εκτελεστούν επειδή ο έλεγχος ασφαλείας μετανάστευσης δεν πέρασε."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Οι μεταναστεύσεις βάσης δεδομένων δεν μπορούν να εκτελεστούν επειδή ο έλεγχος ασφαλείας μετανάστευσης δεν περιλάμβανε σταδιοποιημένες μεταναστεύσεις."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Οι μεταναστεύσεις βάσης δεδομένων δεν μπορούν να εκτελεστούν επειδή ο έλεγχος ασφαλείας μετανάστευσης περιέχει μη έγκυρη καταχώριση μετανάστευσης."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Μόνο σταδιοποιημένες μεταναστεύσεις %s μπορούν να εκτελεστούν από τον εκτελεστή ενημέρωσης."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Οι μεταναστεύσεις βάσης δεδομένων δεν μπορούν να εκτελεστούν επειδή ο έλεγχος ασφαλείας σταδιοποιημένων μεταναστεύσεων ανέφερε σφάλματα αποκλεισμού."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Το Doctrine αναφέρει προειδοποιήσεις βασικής γραμμής μεταναστεύσεων. Θα εκτελεστούν ρητά μόνο οι σταδιοποιημένες κλάσεις μεταναστεύσεων %s."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Οι μεταναστεύσεις βάσης δεδομένων απαιτούν επιβεβαίωση ότι υπάρχει αντίγραφο ασφαλείας της βάσης δεδομένων."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Οι μεταναστεύσεις βάσης δεδομένων απαιτούν το κείμενο επιβεβαίωσης \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Η ανασκόπηση ασφαλείας μεταναστεύσεων βάσης δεδομένων ολοκληρώθηκε πριν την εκτέλεση."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Η ύπαρξη αντιγράφου ασφαλείας βάσης δεδομένων επιβεβαιώθηκε ρητά."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Παρέχθηκαν ανασκόπηση ασφαλείας μεταναστεύσεων βάσης δεδομένων και επιβεβαίωση αντιγράφου ασφαλείας."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Οι μεταναστεύσεις βάσης δεδομένων εκτελέστηκαν μετά από ρητή επιβεβαίωση αντιγράφου ασφαλείας. Ο ενημερωτής δεν δημιούργησε το αντίγραφο ασφαλείας της βάσης δεδομένων."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Τα απαιτούμενα δικαιώματα εκτέλεσης μετά την εφαρμογή κανονικοποιήθηκαν."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Αδυναμία εκτέλεσης μεταναστεύσεων βάσης δεδομένων επειδή δεν βρέθηκε το bin/console."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Οι επιλεγμένες εντολές μετά την εφαρμογή έχουν τις απαιτούμενες εγγράψιμες διαδρομές."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Οι εγγράψιμες διαδρομές εντολών μετά την εφαρμογή επικυρώθηκαν."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Οι προηγμένες ενέργειες μετά την εφαρμογή μπορούν να τροποποιήσουν εξαρτήσεις, παραγόμενα στοιχεία ή τη βάση δεδομένων. Ελέγξτε τα αντίγραφα ασφαλείας πριν συνεχίσετε."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Το Composer δεν μπορεί να εκτελεστεί με ασφάλεια από τον διαδικτυακό ενημερωτή επειδή το αρχείο που δημιουργήθηκε από το Composer \"%s\" ανήκει στο UID %d ενώ το περιβάλλον PHP χρησιμοποιεί UID %d. Εκτελέστε το Composer χειροκίνητα ως ο κάτοχος ανάπτυξης και συνεχίστε με τις υπόλοιπες ενέργειες μετά την εφαρμογή."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Η διαδρομή που απαιτείται από την ενέργεια μετά την εφαρμογή \"%s\" δεν είναι εγγράψιμη: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Ο γονικός κατάλογος που απαιτείται από την ενέργεια μετά την εφαρμογή \"%s\" δεν είναι εγγράψιμος: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Αδυναμία ανάγνωσης δικαιωμάτων για το απαιτούμενο εκτελέσιμο μετά την εφαρμογή: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Αδυναμία σήμανσης του απαιτούμενου εκτελέσιμου μετά την εφαρμογή ως εκτελέσιμου: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Το απαιτούμενο εκτελέσιμο μετά την εφαρμογή εξακολουθεί να μην είναι εκτελέσιμο μετά το chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Το δικαίωμα εκτέλεσης κανονικοποιήθηκε."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Αδυναμία εγγραφής απομονωμένης διαμόρφωσης Git για εντολές μετά την εφαρμογή."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Φαίνεται ότι εκτελείται άλλη λειτουργία ενημέρωσης. Αφαιρέστε το var/update/update.lock μόνο αν δεν είναι ενεργή καμία ενημέρωση."
+
+msgid "Unable to create update lock: %s"
+msgstr "Αδυναμία δημιουργίας κλειδώματος ενημέρωσης: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Αδυναμία εγγραφής μεταδεδομένων εκτέλεσης εντολής μετά την εφαρμογή: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Το μανιφέστο ενημέρωσης δεν περιέχει το μπλοκ πακέτου."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Το μπλοκ υπογραφής του μανιφέστου ενημέρωσης πρέπει να είναι αντικείμενο."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Το μπλοκ απαιτήσεων του μανιφέστου ενημέρωσης πρέπει να είναι αντικείμενο."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Το sha256 του πακέτου ενημέρωσης πρέπει να είναι δεκαεξαδική συμβολοσειρά 64 χαρακτήρων."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Το μανιφέστο ενημέρωσης δεν περιέχει το απαιτούμενο πεδίο συμβολοσειράς \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Το πεδίο μανιφέστου ενημέρωσης \"%s\" πρέπει να είναι συμβολοσειρά."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Το μανιφέστο ενημέρωσης δεν είναι έγκυρο JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Το JSON του μανιφέστου ενημέρωσης πρέπει να είναι αντικείμενο."
+
+msgid "Manifest source cannot be empty."
+msgstr "Η πηγή μανιφέστου δεν μπορεί να είναι κενή."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Η διεύθυνση URL του μανιφέστου ενημέρωσης πρέπει να χρησιμοποιεί την επίσημη προέλευση ενημέρωσης %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Αδυναμία λήψης μανιφέστου ενημέρωσης. Κατάσταση HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Το αρχείο μανιφέστου δεν είναι αναγνώσιμο: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Αδυναμία ανάγνωσης αρχείου μανιφέστου: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Η διεύθυνση URL του μανιφέστου ενημέρωσης πρέπει να χρησιμοποιεί HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Τα μεταδεδομένα πακέτου ενημέρωσης δεν είναι αναγνώσιμα: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Αδυναμία ανάγνωσης μεταδεδομένων πακέτου ενημέρωσης: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Τα μεταδεδομένα πακέτου ενημέρωσης δεν είναι έγκυρο JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Τα μεταδεδομένα πακέτου ενημέρωσης πρέπει να είναι αντικείμενο JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Η μορφή μεταδεδομένων πακέτου ενημέρωσης πρέπει να είναι %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Το πεδίο μεταδεδομένων πακέτου ενημέρωσης \"remove\" πρέπει να είναι πίνακας."
+
+msgid "Update package removal paths must be strings."
+msgstr "Οι διαδρομές αφαίρεσης πακέτου ενημέρωσης πρέπει να είναι συμβολοσειρές."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Τα μεταδεδομένα πακέτου ενημέρωσης δεν μπορούν να αφαιρέσουν προστατευμένη διαδρομή: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Το πακέτο ενημέρωσης δεν μπορεί να περιλαμβάνει και να αφαιρεί την ίδια διαδρομή: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Αδυναμία υπολογισμού sha256 μεταδεδομένων πακέτου ενημέρωσης."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Η διαδρομή αφαίρεσης πακέτου ενημέρωσης δεν μπορεί να είναι κενή."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Η διαδρομή αφαίρεσης πακέτου ενημέρωσης περιέχει byte null."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Η διαδρομή αφαίρεσης πακέτου ενημέρωσης πρέπει να είναι σχετική: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Η διαδρομή αφαίρεσης του πακέτου ενημέρωσης περιέχει μη ασφαλές τμήμα: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Απαιτείται διαδρομή σταδιοποίησης για τη δημιουργία σχεδίου εφαρμογής ενημέρωσης."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Ο κατάλογος σταδιοποίησης δεν περιέχει το STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Αδυναμία ανάγνωσης μεταδεδομένων σταδιοποίησης: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Τα μεταδεδομένα σταδιοποίησης δεν είναι έγκυρο JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Τα μεταδεδομένα σταδιοποίησης πρέπει να είναι αντικείμενο JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Στα μεταδεδομένα σταδιοποίησης λείπει το πεδίο application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Το πακέτο ενημέρωσης δεν περιέχει το %s. Απαιτούνται υπογεγραμμένα μεταδεδομένα εκκαθάρισης πριν την εφαρμογή αρχείων."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Τα μεταδεδομένα σταδιοποίησης δεν περιέχουν τα υπογεγραμμένα μεταδεδομένα εκκαθάρισης πακέτου που καταγράφηκαν κατά την εξαγωγή."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Τα μεταδεδομένα εκκαθάρισης του πακέτου ενημέρωσης άλλαξαν μετά τη σταδιοποίηση. Επανασταδιοποιήστε το επαληθευμένο πακέτο πριν συνεχίσετε."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Τα μεταδεδομένα σταδιοποίησης δεν περιέχουν έγκυρη λίστα αφαίρεσης πακέτου."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Οι διαδρομές εκκαθάρισης του πακέτου ενημέρωσης άλλαξαν μετά τη σταδιοποίηση. Επανασταδιοποιήστε το επαληθευμένο πακέτο πριν συνεχίσετε."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Τα υπογεγραμμένα μεταδεδομένα εκκαθάρισης πακέτου δεν έχουν αλλάξει από τη σταδιοποίηση."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Υπάρχει ήδη αρχείο κλειδώματος ενημέρωσης. Ενδέχεται να εκτελείται άλλη ενημέρωση."
+
+msgid "Update lock directory is not writable."
+msgstr "Ο κατάλογος κλειδώματος ενημέρωσης δεν είναι εγγράψιμος."
+
+msgid "No update lock is currently active."
+msgstr "Δεν υπάρχει ενεργό κλείδωμα ενημέρωσης."
+
+msgid "Update backup directory is not writable."
+msgstr "Ο κατάλογος αντιγράφου ασφαλείας ενημέρωσης δεν είναι εγγράψιμος."
+
+msgid "Update backup directory is writable."
+msgstr "Ο κατάλογος αντιγράφου ασφαλείας ενημέρωσης είναι εγγράψιμος."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Ο κατάλογος αντιγράφου ασφαλείας ενημέρωσης δεν μπορεί να δημιουργηθεί από την τρέχουσα διεργασία."
+
+msgid "Update backup directory can be created."
+msgstr "Ο κατάλογος αντιγράφου ασφαλείας ενημέρωσης μπορεί να δημιουργηθεί."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Ορισμένοι κατάλογοι εργασίας ενημέρωσης δεν είναι εγγράψιμοι ή δεν μπορούν να δημιουργηθούν από την τρέχουσα διεργασία."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Οι κατάλογοι εργασίας ενημέρωσης είναι εγγράψιμοι ή μπορούν να δημιουργηθούν."
+
+msgid "Update apply file plan was generated."
+msgstr "Δημιουργήθηκε το σχέδιο αρχείων εφαρμογής ενημέρωσης."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Τα μεταδεδομένα εκκαθάρισης πακέτου περιέχουν διαδρομές που δεν μπορούν να αφαιρεθούν με ασφάλεια."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Οι δηλωμένοι στόχοι αφαίρεσης του πακέτου είναι ασφαλείς."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Ορισμένα δηλωμένα ως παρωχημένα αρχεία του πακέτου ήδη απουσιάζουν από αυτή την εγκατάσταση."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Η προγραμματισμένη ενημέρωση θα αντικαταστήσει ή θα αφαιρέσει υπάρχοντες συμβολικούς συνδέσμους."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Η προγραμματισμένη ενημέρωση δεν αντικαθιστά ούτε αφαιρεί υπάρχοντες συμβολικούς συνδέσμους."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Τα νέα αρχεία μετεγκατάστασης ενημέρωσης πρέπει να τοποθετούνται στο %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Εντοπίστηκαν νέα αρχεία μετεγκατάστασης Doctrine %s. Θα απαιτηθεί έλεγχος ασφάλειας μετεγκατάστασης βάσης δεδομένων μετά την εφαρμογή των αρχείων."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Ορισμένες λίστες αρχείων του σχεδίου εφαρμογής ενημέρωσης περικόπηκαν στην απόκριση JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Αδυναμία εγγραφής μεταδεδομένων σχεδίου εφαρμογής ενημέρωσης."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Αδυναμία λήψης πακέτου ενημέρωσης. Κατάσταση HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Αδυναμία ανοίγματος αρχείου προορισμού πακέτου ενημέρωσης: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Οι λήψεις ενημερώσεων πρέπει να χρησιμοποιούν την επίσημη προέλευση ενημέρωσης %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "Η διεύθυνση URL του πακέτου ενημέρωσης πρέπει να χρησιμοποιεί HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Οι έλεγχοι ασφάλειας αρχείου πακέτου ενημέρωσης ολοκληρώθηκαν επιτυχώς."
+
+msgid "Update package was extracted to staging."
+msgstr "Το πακέτο ενημέρωσης εξαγάχθηκε στη σταδιοποίηση."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Φορτώθηκαν τα υπογεγραμμένα μεταδεδομένα εκκαθάρισης πακέτου."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Το πακέτο ενημέρωσης δεν περιέχει το %s. Η εφαρμογή αρχείων θα αποκλειστεί έως ότου παρασχεθούν υπογεγραμμένα μεταδεδομένα εκκαθάρισης."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Δημιουργήθηκε η αναφορά δοκιμαστικής εκτέλεσης του σταδιοποιημένου πακέτου."
+
+msgid "Staging metadata was written."
+msgstr "Εγγράφηκαν τα μεταδεδομένα σταδιοποίησης."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Αδυναμία εξαγωγής πακέτου ενημέρωσης στον κατάλογο σταδιοποίησης."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Αδυναμία εντοπισμού της ρίζας εφαρμογής Chamilo στο σταδιοποιημένο πακέτο."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Στο σταδιοποιημένο πακέτο λείπει η απαιτούμενη καταχώριση Chamilo: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Το σταδιοποιημένο πακέτο περιέχει την αναμενόμενη δομή Chamilo."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Το σταδιοποιημένο πακέτο δεν περιέχει composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Το σταδιοποιημένο πακέτο περιέχει composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Το σταδιοποιημένο πακέτο δεν περιέχει yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Το σταδιοποιημένο πακέτο περιέχει yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Αδυναμία κωδικοποίησης μεταδεδομένων σταδιοποίησης."
+
+msgid "Unable to write staging metadata."
+msgstr "Αδυναμία εγγραφής μεταδεδομένων σταδιοποίησης."
+
+msgid "Update operation log created."
+msgstr "Δημιουργήθηκε αρχείο καταγραφής λειτουργίας ενημέρωσης."
+
+msgid "Unable to write update operation log."
+msgstr "Αδυναμία εγγραφής αρχείου καταγραφής λειτουργίας ενημέρωσης."
+
+msgid "Invalid update operation id."
+msgstr "Μη έγκυρο αναγνωριστικό λειτουργίας ενημέρωσης."
+

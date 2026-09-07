@@ -37076,13 +37076,13 @@ msgid "Trusted signing key"
 msgstr "信頼された署名鍵"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "確認のため「APPLY UPDATE FILES」と入力してください"
+msgstr "確認するには APPLY UPDATE FILES と入力してください"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "データベースマイグレーションを確認するため「RUN DATABASE MIGRATIONS」と入力してください"
+msgstr "データベースマイグレーションを実行するには RUN DATABASE MIGRATIONS と入力してください"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "確認のため「RUN POST UPDATE ACTIONS」と入力してください"
+msgstr "確認するには RUN POST UPDATE ACTIONS と入力してください"
 
 msgid "Unknown update notice source."
 msgstr "不明な更新通知ソースです。"
@@ -40641,4 +40641,607 @@ msgstr "一部の対象ファイルまたはディレクトリに書き込めな
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "これを修正するには、一時的にChamiloディレクトリ全体の所有者を%s（Webサーバーユーザー）に変更し、更新を適用した後、所有者を%sに戻し、その後var/（およびその内容）の所有者を%sに戻して、アプリケーションが引き続き書き込めるようにしてください。"
+
+msgid "Update package verification failed."
+msgstr "更新パッケージの検証に失敗しました。"
+
+msgid "Update preflight checks failed."
+msgstr "更新の事前チェックに失敗しました。"
+
+msgid "Unable to stage update package."
+msgstr "更新パッケージをステージングできません。"
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "このサーバーでは、UI からの適用後コマンドの実行は無効です。"
+
+msgid "Missing required field: %s"
+msgstr "必須項目がありません: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "更新マニフェストのソースが指定されておらず、既定の更新マニフェスト URL も設定されていません。"
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "更新マニフェスト URL は公式の更新オリジン %s を使用する必要があります。変更できるのはマニフェストのパスのみです。"
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "ローカルの更新マニフェストパスは無効です。HTTPS のマニフェスト URL を使用するか、ローカルテスト用にサーバー環境で CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 を設定してください。"
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "HTTP の %s パスは指定しないでください。更新マニフェストからダウンロードする場合は、この項目を空のままにしてください。"
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "この環境では、ローカルの更新 %s パスは無効です。"
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "この環境では、信頼できる更新用公開鍵をサーバーに設定する必要があります。"
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "この環境では、更新署名の検証のスキップは無効です。"
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "適用後の更新アクションを実行するには、確認テキスト「%s」が必要です。"
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "ステージング済みの更新ファイルを適用するには、確認テキスト「%s」が必要です。"
+
+msgid "Unable to resolve project directory."
+msgstr "プロジェクトディレクトリを解決できません。"
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "データベースのバックアップはこのアップデーターでは管理されません。マイグレーションを実行する前に、データベースのバックアップを作成して確認してください。"
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine の migration down() メソッドは、削除または変換されたデータを復元することを保証しません。"
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "適用後メタデータは、データベースマイグレーションの確認を推奨しています。"
+
+msgid "No migration files were found in the staged package."
+msgstr "ステージング済みパッケージにマイグレーションファイルが見つかりませんでした。"
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "ステージング済みの Doctrine マイグレーションファイルが検出されました。"
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine マイグレーションの対象は、ステージング済みパッケージから解決されました。"
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine マイグレーションのベースラインに、ステージング済みマイグレーションを妨げる問題があります。"
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine は過去のマイグレーションベースラインに関する警告を報告していますが、確認および明示的に実行されるのはステージング済みの %s マイグレーションのみです。"
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine は過去のマイグレーションベースラインに関する警告を報告しています。アップデーターは、明示的な確認後にステージング済みの %s マイグレーションクラスのみを実行します。"
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine のベースラインには、ステージング済みの %s マイグレーションを妨げる問題はありません。"
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "少なくとも 1 つのステージング済みマイグレーションで Doctrine のドライランに失敗しました。修正するまでデータベースマイグレーションを実行しないでください。"
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "各ステージング済みマイグレーションクラスの Doctrine ドライランは正常に完了しました。"
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "マイグレーションを実行する前に、このアップデーターの外でデータベースのバックアップを作成する必要があります。"
+
+msgid "Staging path is required to review database migrations."
+msgstr "データベースマイグレーションを確認するには、ステージングパスが必要です。"
+
+msgid "Unable to read update %s: %s"
+msgstr "更新 %s を読み取れません: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "更新 %s の JSON が無効です: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "更新 %s の JSON はオブジェクトである必要があります。"
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "適用後チェックのメタデータに有効なアクション一覧が含まれていません。"
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "このステージング済み更新では、データベースマイグレーションは推奨されませんでした。"
+
+msgid "Update metadata is missing the staged application path."
+msgstr "更新メタデータにステージング済みアプリケーションパスがありません。"
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "計画されたステージング済みマイグレーションファイルが見つかりませんでした: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "ステージング済みマイグレーションファイルを読み取れません: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "getDescription() から説明を抽出できませんでした。"
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "更新ランナーがサポートするステージング済みマイグレーションは %s のみです: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "マイグレーション安全性メタデータを書き込めません: %s"
+
+msgid "Migration safety check failed."
+msgstr "マイグレーションの安全性チェックに失敗しました。"
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "安全でないステージング済み相対マイグレーションパスが検出されました: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "インストール済みの Chamilo バージョンを自動検出できませんでした。この更新が互換性があることを確認してから続行してください。"
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "インストール済みまたは対象のバージョンが比較可能なセマンティックバージョン形式ではありません。手動で確認してから続行してください。"
+
+msgid "An update is available."
+msgstr "利用可能な更新があります。"
+
+msgid "The installed version already matches the manifest version."
+msgstr "インストール済みバージョンはマニフェストのバージョンと既に一致しています。"
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "マニフェストのバージョンがインストール済みバージョンより古いです。ダウングレードは既定でブロックされます。"
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "ステージ済みファイルの適用に失敗しました。適用後チェックを続行できません。"
+
+msgid "Apply result metadata was read successfully."
+msgstr "適用結果のメタデータを正常に読み取りました。"
+
+msgid "Post-apply action recommendations were generated."
+msgstr "適用後アクションの推奨事項を生成しました。"
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "ステージ済みパッケージでデータベースマイグレーションが検出されました。ファイル更新が正しく、データベースのバックアップがあることを確認してから実行してください。"
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "適用後チェックを実行するにはステージングパスが必要です。"
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "更新 %s は有効な JSON ではありません: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "更新 %s は JSON オブジェクトである必要があります。"
+
+msgid "Composer dependencies"
+msgstr "Composer 依存関係"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "ステージ済みパッケージに Composer メタデータが含まれています。更新完了とみなす前に、アプリケーションルートで Composer install を実行してください。"
+
+msgid "Frontend assets"
+msgstr "フロントエンドアセット"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "ステージ済みパッケージにフロントエンド関連ファイルが含まれています。依存関係のインストール後に本番アセットを再ビルドしてください。"
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "ステージ済みパッケージで Doctrine マイグレーションファイルが検出されました。マイグレーション実行前にデータベースのバックアップがあることを確認してください。"
+
+msgid "Symfony cache"
+msgstr "Symfony キャッシュ"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "更新ファイルの適用と必要なコマンドの実行後に、Symfony キャッシュをクリアしてください。"
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "適用後チェックのメタデータを書き込めません。"
+
+msgid "Post-apply check failed."
+msgstr "適用後チェックに失敗しました。"
+
+msgid "Update package is not readable: %s"
+msgstr "更新パッケージを読み取れません: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "更新パッケージは有効な ZIP アーカイブではありません。"
+
+msgid "Update package ZIP archive is empty."
+msgstr "更新パッケージの ZIP アーカイブが空です。"
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "更新パッケージに読み取れない ZIP エントリが含まれています。"
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "更新パッケージに安全でない絶対パスが含まれています: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "更新パッケージにパストラバーサルのエントリが含まれています: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "更新パッケージにシンボリックリンクが含まれています: %s"
+
+msgid "Starting post-apply actions."
+msgstr "適用後アクションを開始しています。"
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "適用後コマンドの実行には明示的な確認が必要です。"
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "適用後推奨のメタデータを正常に読み取りました。"
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "適用後アクションを推奨レポートに対して検証しました。"
+
+msgid "Post-apply actions were selected."
+msgstr "適用後アクションを選択しました。"
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "高度な適用後アクションには、明示的な高度な確認が必要です。"
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "高度な適用後アクションが明示的に確認されました。"
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "選択した適用後コマンドが正常に完了しました。"
+
+msgid "Post-apply command run metadata was written."
+msgstr "適用後コマンド実行のメタデータを書き込みました。"
+
+msgid "Post-apply actions completed successfully."
+msgstr "適用後アクションが正常に完了しました。"
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "無効な更新の適用後コマンド定義です: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "適用後アクションを実行中: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "%s のコマンド %d / %d を実行中です。"
+
+msgid "Post-apply action failed: %s"
+msgstr "適用後アクションに失敗しました: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "適用後アクション \"%s\" が終了コード %d で失敗しました。"
+
+msgid "Post-apply action completed: %s"
+msgstr "適用後アクションが完了しました: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "適用後アクションを実行するにはステージングパスが必要です。"
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "実行する推奨の適用後アクションはありません。"
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "実行が許可された適用後アクションはありません。"
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "この更新では適用後アクションは許可されていません: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "データベースマイグレーションは、実行前にマイグレーション安全性レビューが必要です。"
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "マイグレーション安全性レビューに合格していないため、データベースマイグレーションを実行できません。"
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "マイグレーション安全性レビューにステージ済みマイグレーションが記載されていないため、データベースマイグレーションを実行できません。"
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "マイグレーション安全性レビューに無効なマイグレーションエントリが含まれているため、データベースマイグレーションを実行できません。"
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "更新ランナーが実行できるのは、ステージ済みの %s マイグレーションのみです。"
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "ステージ済みマイグレーションの安全性レビューでブロッキングエラーが報告されたため、データベースマイグレーションを実行できません。"
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine はマイグレーションのベースライン警告を報告しています。ステージ済みの %s マイグレーションクラスのみが明示的に実行されます。"
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "データベースマイグレーションには、データベースのバックアップが存在することの確認が必要です。"
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "データベースマイグレーションには、確認テキスト \"RUN DATABASE MIGRATIONS\" が必要です。"
+
+msgid "Database migration safety review was completed before execution."
+msgstr "実行前にデータベースマイグレーションの安全確認が完了しました。"
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "データベースバックアップの存在が明示的に確認されました。"
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "データベースマイグレーションの安全確認とバックアップ確認が提供されました。"
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "データベースバックアップの明示的な確認後にデータベースマイグレーションが実行されました。アップデーターはデータベースバックアップを作成していません。"
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "適用後に必要な実行可能ファイルの権限が正規化されました。"
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "bin/console が見つからないため、データベースマイグレーションを実行できません。"
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "選択された適用後コマンドには、必要な書き込み可能なパスがあります。"
+
+msgid "Post-apply command writable paths were validated."
+msgstr "適用後コマンドの書き込み可能なパスが検証されました。"
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "高度な適用後アクションは、依存関係、生成されたアセット、またはデータベースを変更する場合があります。続行する前にバックアップを確認してください。"
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer が生成したファイル \"%s\" の所有者 UID が %d である一方、PHP ランタイムの UID は %d のため、Web アップデーターから Composer を安全に実行できません。デプロイ所有者として Composer を手動実行してから、残りの適用後アクションを続行してください。"
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "適用後アクション \"%s\" に必要なパスに書き込めません: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "適用後アクション \"%s\" に必要な親ディレクトリに書き込めません: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "必要な適用後実行可能ファイルの権限を読み取れません: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "必要な適用後実行可能ファイルを実行可能としてマークできません: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "chmod 後も必要な適用後実行可能ファイルが実行可能になっていません: %s"
+
+msgid "Executable permission was normalized."
+msgstr "実行権限が正規化されました。"
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "適用後コマンド用の分離された Git 設定を書き込めません。"
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "別の更新操作が実行中のようです。更新が実行中でない場合にのみ var/update/update.lock を削除してください。"
+
+msgid "Unable to create update lock: %s"
+msgstr "更新ロックを作成できません: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "適用後コマンド実行のメタデータを書き込めません: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "更新マニフェストにパッケージブロックがありません。"
+
+msgid "Update manifest signature block must be an object."
+msgstr "更新マニフェストの署名ブロックはオブジェクトである必要があります。"
+
+msgid "Update manifest requirements block must be an object."
+msgstr "更新マニフェストの要件ブロックはオブジェクトである必要があります。"
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "更新パッケージの sha256 は 64 文字の 16 進文字列である必要があります。"
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "更新マニフェストに必須の文字列フィールド \"%s\" がありません。"
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "更新マニフェストのフィールド \"%s\" は文字列である必要があります。"
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "更新マニフェストが有効な JSON ではありません: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "更新マニフェストの JSON はオブジェクトである必要があります。"
+
+msgid "Manifest source cannot be empty."
+msgstr "マニフェストのソースを空にすることはできません。"
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "更新マニフェストの URL は公式の更新オリジン %s を使用する必要があります。"
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "更新マニフェストをダウンロードできません。HTTP ステータス: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "マニフェストファイルを読み取れません: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "マニフェストファイルを読み込めません: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "更新マニフェストの URL は HTTPS を使用する必要があります。"
+
+msgid "Update package metadata is not readable: %s"
+msgstr "更新パッケージのメタデータを読み取れません: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "更新パッケージのメタデータを読み込めません: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "更新パッケージのメタデータが有効な JSON ではありません: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "更新パッケージのメタデータは JSON オブジェクトである必要があります。"
+
+msgid "Update package metadata format must be %d."
+msgstr "更新パッケージのメタデータ形式は %d である必要があります。"
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "更新パッケージのメタデータフィールド \"remove\" は配列である必要があります。"
+
+msgid "Update package removal paths must be strings."
+msgstr "更新パッケージの削除パスは文字列である必要があります。"
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "更新パッケージのメタデータは保護されたパスを削除できません: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "更新パッケージは同一パスを含めて削除することはできません: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "更新パッケージメタデータの sha256 を計算できません。"
+
+msgid "Update package removal path cannot be empty."
+msgstr "更新パッケージの削除パスを空にすることはできません。"
+
+msgid "Update package removal path contains a null byte."
+msgstr "更新パッケージの削除パスにヌルバイトが含まれています。"
+
+msgid "Update package removal path must be relative: %s"
+msgstr "更新パッケージの削除パスは相対パスである必要があります: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "更新パッケージの削除パスに安全でないセグメントが含まれています: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "更新適用プランを作成するにはステージングパスが必要です。"
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "ステージングディレクトリに STAGING-INFO.json がありません。"
+
+msgid "Unable to read staging metadata: %s"
+msgstr "ステージングメタデータを読み取れません: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "ステージングメタデータが有効な JSON ではありません: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "ステージングメタデータは JSON オブジェクトである必要があります。"
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "ステージングメタデータに application_path フィールドがありません。"
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "更新パッケージに %s がありません。ファイルを適用する前に、署名済みのクリーンアップメタデータが必要です。"
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "ステージングメタデータに、展開時に記録された署名済みパッケージクリーンアップメタデータが含まれていません。"
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "ステージング後に更新パッケージのクリーンアップメタデータが変更されました。続行する前に、検証済みパッケージを再ステージしてください。"
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "ステージングメタデータに有効なパッケージ削除リストが含まれていません。"
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "ステージング後に更新パッケージのクリーンアップパスが変更されました。続行する前に、検証済みパッケージを再ステージしてください。"
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "署名済みパッケージクリーンアップメタデータはステージング以降変更されていません。"
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "更新ロックファイルが既に存在します。別の更新が進行中の可能性があります。"
+
+msgid "Update lock directory is not writable."
+msgstr "更新ロックディレクトリに書き込めません。"
+
+msgid "No update lock is currently active."
+msgstr "現在有効な更新ロックはありません。"
+
+msgid "Update backup directory is not writable."
+msgstr "更新バックアップディレクトリに書き込めません。"
+
+msgid "Update backup directory is writable."
+msgstr "更新バックアップディレクトリに書き込めます。"
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "現在のプロセスでは更新バックアップディレクトリを作成できません。"
+
+msgid "Update backup directory can be created."
+msgstr "更新バックアップディレクトリを作成できます。"
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "一部の更新作業ディレクトリに書き込めないか、現在のプロセスでは作成できません。"
+
+msgid "Update working directories are writable or can be created."
+msgstr "更新作業ディレクトリに書き込めるか、作成できます。"
+
+msgid "Update apply file plan was generated."
+msgstr "更新適用ファイルプランが生成されました。"
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "パッケージクリーンアップメタデータに、安全に削除できないパスが含まれています。"
+
+msgid "Package-declared removal targets are safe."
+msgstr "パッケージで宣言された削除対象は安全です。"
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "パッケージで宣言された一部の不要ファイルは、このインストールに既に存在しません。"
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "計画された更新は、既存のシンボリックリンクを上書きまたは削除します。"
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "計画された更新は、既存のシンボリックリンクを上書きまたは削除しません。"
+
+msgid "New update migration files must be placed under %s."
+msgstr "新しい更新マイグレーションファイルは %s 以下に配置する必要があります。"
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "新しい %s Doctrine マイグレーションファイルが検出されました。ファイル適用後にデータベースマイグレーションの安全性レビューが必要です。"
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "一部の更新適用プランのファイルリストが JSON 応答で切り詰められました。"
+
+msgid "Unable to write update apply plan metadata."
+msgstr "更新適用プランのメタデータを書き込めません。"
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "更新パッケージをダウンロードできません。HTTP ステータス: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "更新パッケージの対象ファイルを開けません: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "更新のダウンロードは公式の更新元 %s を使用する必要があります。"
+
+msgid "The update package URL must use HTTPS."
+msgstr "更新パッケージの URL は HTTPS を使用する必要があります。"
+
+msgid "Update package archive safety checks passed."
+msgstr "更新パッケージアーカイブの安全性チェックに合格しました。"
+
+msgid "Update package was extracted to staging."
+msgstr "更新パッケージをステージングに展開しました。"
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "署名済みパッケージクリーンアップメタデータを読み込みました。"
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "更新パッケージに %s が含まれていません。署名済みクリーンアップメタデータが提供されるまで、ファイルの適用はブロックされます。"
+
+msgid "Staged package dry-run report was generated."
+msgstr "ステージ済みパッケージのドライランレポートが生成されました。"
+
+msgid "Staging metadata was written."
+msgstr "ステージングメタデータを書き込みました。"
+
+msgid "Unable to extract update package to staging directory."
+msgstr "更新パッケージをステージングディレクトリに展開できません。"
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "ステージ済みパッケージ内で Chamilo アプリケーションルートを特定できません。"
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "ステージ済みパッケージに必要な Chamilo エントリがありません: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "ステージ済みパッケージには想定どおりの Chamilo 構造が含まれています。"
+
+msgid "Staged package does not contain composer.lock."
+msgstr "ステージ済みパッケージに composer.lock が含まれていません。"
+
+msgid "Staged package contains composer.lock."
+msgstr "ステージ済みパッケージに composer.lock が含まれています。"
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "ステージ済みパッケージに yarn.lock が含まれていません。"
+
+msgid "Staged package contains yarn.lock."
+msgstr "ステージ済みパッケージに yarn.lock が含まれています。"
+
+msgid "Unable to encode staging metadata."
+msgstr "ステージングメタデータをエンコードできません。"
+
+msgid "Unable to write staging metadata."
+msgstr "ステージングメタデータを書き込めません。"
+
+msgid "Update operation log created."
+msgstr "更新操作ログが作成されました。"
+
+msgid "Unable to write update operation log."
+msgstr "更新操作ログを書き込めません。"
+
+msgid "Invalid update operation id."
+msgstr "無効な更新操作IDです。"
 

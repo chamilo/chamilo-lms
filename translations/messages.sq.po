@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Me respekt"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Shembull formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Shembull formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Vargjet e variablave"
@@ -40233,4 +40233,949 @@ msgstr "Qyteti i praktikës"
 
 msgid "City"
 msgstr "Qyteti"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Rrjedha e përditësimit u rivendos pas rifreskimit të faqes"
+
+msgid "Last completed step"
+msgstr "Hapi i fundit i përfunduar"
+
+msgid "Stage package"
+msgstr "Paketa e përgatitjes"
+
+msgid "Package staging"
+msgstr "Përgatitja e paketës"
+
+msgid "Apply plan"
+msgstr "Apliko planin"
+
+msgid "Update workflow completed"
+msgstr "Rrjedha e përditësimit u përfundua"
+
+msgid "Update directory exists and is writable."
+msgstr "Direktoria e përditësimit ekziston dhe është e shkrueshme."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Direktoria e përditësimit ekziston, por nuk është e shkrueshme: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Direktoria e përditësimit nuk ekziston ende, por direktoria prind është e shkrueshme."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Direktoria e përditësimit nuk ekziston ende, por mund të krijohet nën var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Direktoria e përditësimit nuk ekziston dhe nuk mund të krijohet me lejet aktuale."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Nuk mund të përcaktohet hapësira e lirë e diskut për kontrollin paraprak të përditësimit."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Nuk ka hapësirë të mjaftueshme të lirë në disk për një operacion të sigurt përgatitjeje të përditësimit."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Hapësira e lirë e diskut është e mjaftueshme për këtë rrjedhë përditësimi në fazën e verifikimit."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Manifesti i përditësimit nuk përcakton një kërkesë për versionin e PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Nuk mund të vlerësohet plotësisht kërkesa e PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Versioni aktual i PHP nuk plotëson kërkesën e përditësimit: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Versioni aktual i PHP plotëson kërkesën e përditësimit."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Nuk u dha asnjë shteg lokal i paketës. Paketat e shkarkuara mund të kontrollohen vetëm pas shkarkimit."
+
+msgid "Local update package is not readable: %s"
+msgstr "Paketa lokale e përditësimit nuk është e lexueshme: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Paketa lokale e përditësimit duhet të jetë një arkiv ZIP."
+
+msgid "Local update package is readable."
+msgstr "Paketa lokale e përditësimit është e lexueshme."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Versioni i instaluar i Chamilo nuk mund të zbulohej automatikisht. Drejtimi i versionit nuk mund të kontrollohet."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Versioni i instaluar ose ai i synuar nuk është në një format të krahasueshëm të versionit semantik."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Versioni i synuar është më i ulët se versioni i instaluar. Uljet e versionit nuk lejohen si parazgjedhje."
+
+msgid "Target version matches the installed version."
+msgstr "Versioni i synuar përputhet me versionin e instaluar."
+
+msgid "Target version is newer than the installed version."
+msgstr "Versioni i synuar është më i ri se versioni i instaluar."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Projekti nuk është një kopje Git ose .git nuk është i pranishëm."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Ky sistem përditësimi është i destinuar për instalime pa mbështetje Git. Kemi zbuluar se sistemi lokal përdor Git. Vazhdimi i përditësimit mund të rezultojë në histori Git të dëmtuar. Për sistemet me mbështetje Git, rekomandojmë procedurën Git të përshkruar në CONTRIBUTING.md në rrënjën e uebit."
+
+msgid "Local Git changes were also detected."
+msgstr "U zbuluan gjithashtu ndryshime lokale Git."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Disa skedarë të metadatave të projektit mungojnë. Fazat e mëvonshme të përditësimit mund të kërkojnë kontrolle manuale të varësive."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Skedarët e metadatave të Composer dhe Yarn janë të pranishëm."
+
+msgid "Starting staged file application."
+msgstr "Po niset aplikimi i skedarëve të përgatitur."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Kërkohet konfirmim i qartë për të aplikuar skedarët e përgatitur."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Aplikimi i skedarëve të përditësimit të përgatitur kërkon një konfirmim të qartë."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Direktoria e përgatitjes është brenda direktorisë së përgatitjes së përditësimit të Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Direktoria e përgatitjes u vlerësua."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Metadatat e planit të aplikimit u lexuan me sukses."
+
+msgid "Staged application path is valid."
+msgstr "Shtegu i aplikimit të përgatitur është i vlefshëm."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Metadatat e pastrimit të paketës së nënshkruar përputhen me planin e rishikuar të aplikimit."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Metadatat e pastrimit të paketës së nënshkruar u vlerësuan."
+
+msgid "Update lock was acquired."
+msgstr "Kyçi i përditësimit u mor."
+
+msgid "Update backup directory was created."
+msgstr "Direktoria e kopjes rezervë të përditësimit u krijua."
+
+msgid "Update file operations were collected."
+msgstr "Operacionet e skedarëve të përditësimit u mblodhën."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Skedarët ekzistues të planifikuar për zëvendësim ose heqje u kopjuan si rezervë."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Skedarët e përditësimit të përgatitur u kopjuan në instalimin e Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Skedarët e vjetëruar të deklaruar nga paketa u hoqën nga instalimi i Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Skedarët e vjetëruar të deklaruar nga paketa u hoqën."
+
+msgid "Update apply audit metadata was written."
+msgstr "U shkruajtën metadatat e auditimit të zbatimit të përditësimit."
+
+msgid "Staged files applied successfully."
+msgstr "Skedarët e përgatitur u zbatuan me sukses."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Nuk mund të rikthehen skedarët e hequr: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Nuk mund të kthehen mbrapsht skedarët e kopjuar: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Kthimi mbrapsht i skedarëve u ekzekutua pas dështimit të zbatimit të përditësimit."
+
+msgid "Rollback failed: %s"
+msgstr "Kthimi mbrapsht dështoi: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Nuk mund të shkruhen metadatat e auditimit të zbatimit të përditësimit: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Nuk mund të lëshohet kyçi i përditësimit pas dështimit: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Kërkohet shtegu i përgatitjes për të zbatuar skedarët e përditësimit."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Direktoria e përgatitjes nuk ekziston: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Direktoria bazë e përgatitjes së përditësimit të Chamilo nuk ekziston."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Direktoria e përgatitjes duhet të jetë brenda var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Direktoria e përgatitjes nuk ka APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Nuk mund të lexohen metadatat e planit të zbatimit të përditësimit: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metadatat e planit të zbatimit të përditësimit nuk janë JSON i vlefshëm: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metadatat e planit të zbatimit të përditësimit duhet të jenë një objekt JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Plani i zbatimit të përditësimit nuk ka fushën application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Shtegu i aplikacionit të përgatitur nuk është i lexueshëm: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Shtegu i aplikacionit të përgatitur duhet të jetë brenda direktorisë së përgatitjes."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Shtegu i aplikacionit të përgatitur nuk ka composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Paketa e përditësimit nuk ka %s. Përgatitni sërish një paketë të verifikuar me metadata të nënshkruara të pastrimit."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Plani i zbatimit të përditësimit nuk ka metadatat e rishikuara të pastrimit të paketës."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Metadatat e pastrimit të paketës së përditësimit ndryshuan pas gjenerimit të planit të zbatimit. Rindërtoni planin e zbatimit para se të vazhdoni."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Plani i zbatimit të përditësimit përmban një listë të pavlefshme heqjeje të paketës."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Shtigjet e pastrimit të paketës së përditësimit ndryshuan pas gjenerimit të planit të zbatimit. Rindërtoni planin e zbatimit para se të vazhdoni."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Plani i zbatimit të përditësimit nuk ka listën e rishikuar të shtigjeve të heqjes."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Shtigjet e heqjes së planit të zbatimit të përditësimit nuk përputhen me metadatat e nënshkruara të pastrimit të paketës."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Shtegu i kyçit të përditësimit duhet të jetë brenda var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Plani i zbatimit të përditësimit nuk ka fushën backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Shtegu i kopjes rezervë të përditësimit përmban segmente të pasigurta shtegu."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Shtegu i kopjes rezervë të përditësimit duhet të jetë brenda var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Nuk mund të merret kyçi i përditësimit. Një përditësim tjetër mund të jetë në vazhdim."
+
+msgid "Unable to release update lock: %s"
+msgstr "Nuk mund të lëshohet kyçi i përditësimit: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Direktoria e kopjes rezervë të përditësimit ekziston tashmë: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Direktoria e synuar nuk mund të krijohet: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Përditësimi i planifikuar do të mbishkruante një lidhje simbolike ekzistuese: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Skedari i synuar nuk është i shkrueshëm: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Skedari i synuar nuk mund të krijohet: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Nuk mund të përcaktohet direktoria e projektit Chamilo para heqjes së skedarëve të vjetëruar."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Pastrimi i përditësimit nuk mund të heqë shtegun e mbrojtur: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Përditësimi i planifikuar do të hiqte një lidhje simbolike ekzistuese: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Pastrimi i përditësimit mbështet vetëm skedarë, jo direktori: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Skedari i synuar i vjetëruar nuk është i lexueshëm për kopje rezervë: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Skedari i synuar i vjetëruar nuk mund të hiqet me lejet aktuale të direktorisë: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Skedari i synuar i vjetëruar zgjidhet jashtë direktorisë së projektit Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Nuk mund të bëhet kopje rezervë e skedarit të synuar: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Nuk mund të shkruhen metadatat e kopjes rezervë të përditësimit."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Nuk mund të kopjohet skedari i përditësimit i përgatitur: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "U kopjuan %d nga %d skedarë të përgatitur."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Nuk mund të hiqet skedari i vjetëruar i deklaruar nga paketa: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "U hoqën %d nga %d skedarë të vjetëruar të deklaruar nga paketa."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Nuk mund të rikthehet skedari i rezervuar: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Nuk mund të hiqet skedari i sapokopjuar gjatë kthimit prapa: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Nuk mund të rikthehet skedari i hequr sepse rezervimi mungon: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Nuk mund të rikthehet skedari i hequr nga rezervimi: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Nuk mund të shkruhen metadatat e auditimit të zbatimit të përditësimit."
+
+msgid "Unable to write global update apply log."
+msgstr "Nuk mund të shkruhet regjistri global i zbatimit të përditësimit."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "U zbulua shteg relativ i pasigurt i përgatitur: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Drejtoria nuk është e shkrueshme: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Nuk mund të krijohet drejtoria: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Metadatat e përgatitjes u lexuan me sukses."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metadatat e planit të zbatimit u shkruan në drejtorinë e përgatitjes."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Skedarët dhe drejtoritë e synuara duken të shkrueshme për përditësimin dhe pastrimin e planifikuar."
+
+msgid "Update apply plan check failed."
+msgstr "Kontrolli i planit të zbatimit të përditësimit dështoi."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Disa skedarë ose drejtori të synuara nuk mund të shkruhen ose të hiqen."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Për ta rregulluar këtë, ndryshoni përkohësisht pronarin e gjithë drejtorisë Chamilo në %s (përdoruesi i serverit web), zbatoni përditësimin, ktheni pronarin përsëri në %s, pastaj vendosni pronarin e var/ (dhe përmbajtjes së saj) përsëri në %s që aplikacioni të vazhdojë të shkruajë aty."
+
+msgid "Update package verification failed."
+msgstr "Verifikimi i paketës së përditësimit dështoi."
+
+msgid "Update preflight checks failed."
+msgstr "Kontrollet paraprake të përditësimit dështuan."
+
+msgid "Unable to stage update package."
+msgstr "Nuk mund të përgatitet paketa e përditësimit."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Ekzekutimi i komandave pas zbatimit nga ndërfaqja është i çaktivizuar në këtë server."
+
+msgid "Missing required field: %s"
+msgstr "Mungon fusha e kërkuar: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Nuk u dha burim manifesti përditësimi dhe nuk është konfiguruar URL e parazgjedhur e manifestit të përditësimit."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL-ja e manifestit të përditësimit duhet të përdorë origjinën zyrtare të përditësimit %s. Mund të ndryshohet vetëm shtegu i manifestit."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Shtigjet lokale të manifestit të përditësimit janë të çaktivizuara. Përdorni një URL HTTPS të manifestit ose vendosni CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 në mjedisin e serverit për teste lokale."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Mos jepni një shteg HTTP %s. Lëreni këtë fushë bosh për ta shkarkuar nga manifesti i përditësimit."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Shtigjet lokale të përditësimit %s janë të çaktivizuara në këtë mjedis."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Çelësat publikë të besuar të përditësimit duhet të konfigurohen në server në këtë mjedis."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Anashkalimi i verifikimit të nënshkrimit të përditësimit është i çaktivizuar në këtë mjedis."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Ekzekutimi i veprimeve të përditësimit pas zbatimit kërkon tekstin e konfirmimit \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Zbatimi i skedarëve të përditësimit të përgatitur kërkon tekstin e konfirmimit \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Nuk mund të përcaktohet drejtoria e projektit."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Rezervimi i bazës së të dhënave nuk menaxhohet nga ky përditësues. Krijoni dhe verifikoni një rezervim të bazës së të dhënave para se të ekzekutoni migrimet."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Metodat down() të migrimit Doctrine nuk garantojnë rikthimin e të dhënave të fshira ose të transformuara."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Metadatat pas zbatimit rekomandojnë rishikimin e migrimit të bazës së të dhënave."
+
+msgid "No migration files were found in the staged package."
+msgstr "Nuk u gjetën skedarë migrimi në paketën e përgatitur."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "U zbuluan skedarë migrimi Doctrine të përgatitur."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Objektivi i migrimit Doctrine u përcaktua nga paketa e përgatitur."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Linja bazë e migrimit Doctrine ka probleme bllokuese për migrimet e përgatitura."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine raporton paralajmërime historike të linjës bazë të migrimit, por do të rishikohen dhe ekzekutohen në mënyrë të qartë vetëm migrimet e përgatitura %s."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine raporton paralajmërime historike të linjës bazë të migrimit. Përditësuesi do të ekzekutojë vetëm klasat e migrimit të përgatitura %s pas konfirmimit të qartë."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Linja bazë Doctrine nuk ka problem bllokues për migrimet e përgatitura %s."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Prova e thatë e migrimit Doctrine dështoi për të paktën një migrim të përgatitur. Mos ekzekutoni migrimet e bazës së të dhënave derisa kjo të rregullohet."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Prova e thatë Doctrine përfundoi me sukses për çdo klasë migrimi të përgatitur."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Duhet të krijohet një rezervim i bazës së të dhënave jashtë këtij përditësuesi para se të ekzekutohen migrimet."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Shtegu i përgatitjes kërkohet për të rishikuar migrimet e bazës së të dhënave."
+
+msgid "Unable to read update %s: %s"
+msgstr "Nuk mund të lexohet përditësimi %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON i përditësimit %s është i pavlefshëm: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON i përditësimit %s duhet të jetë një objekt."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Metadatat e kontrolleve pas zbatimit nuk përmbajnë një listë të vlefshme veprimesh."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Migrimet e bazës së të dhënave nuk u rekomanduan për këtë përditësim të fazuar."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Metadatat e përditësimit nuk përmbajnë shtegun e aplikimit të fazuar."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Skedari i planifikuar i migrimit të fazuar nuk u gjet: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Nuk mund të lexohet skedari i migrimit të fazuar: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Nuk mund të nxirrej asnjë përshkrim nga getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Ekzekutuesi i përditësimit mbështet vetëm %s migrime të fazuara: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Nuk mund të shkruhen metadatat e sigurisë së migrimit: %s"
+
+msgid "Migration safety check failed."
+msgstr "Kontrolli i sigurisë së migrimit dështoi."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "U zbulua një shteg relativ i pasigurt i migrimit të fazuar: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Versioni i instaluar i Chamilo nuk mund të zbulohej automatikisht. Vazhdoni vetëm pasi të konfirmoni që ky përditësim është i përputhshëm."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Versioni i instaluar ose ai i synuar nuk është në një format të krahasueshëm të versionit semantik. Vazhdoni vetëm pas verifikimit manual."
+
+msgid "An update is available."
+msgstr "Është i disponueshëm një përditësim."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Versioni i instaluar tashmë përputhet me versionin e manifestit."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Versioni i manifestit është më i vjetër se versioni i instaluar. Uljet e versionit bllokohen si parazgjedhje."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Skedarët e fazuar nuk u zbatuan me sukses. Kontrollet pas zbatimit nuk mund të vazhdojnë."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Metadatat e rezultatit të zbatimit u lexuan me sukses."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "U gjeneruan rekomandimet e veprimeve pas zbatimit."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Në paketën e fazuar u zbuluan migrime të bazës së të dhënave. Ekzekutojini ato vetëm pasi të konfirmoni që përditësimi i skedarëve është i saktë dhe ekziston një kopje rezervë e bazës së të dhënave."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Shtegu i fazimit kërkohet për të ekzekutuar kontrollet pas zbatimit."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Përditësimi %s nuk është JSON i vlefshëm: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Përditësimi %s duhet të jetë një objekt JSON."
+
+msgid "Composer dependencies"
+msgstr "Varësitë e Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Metadatat e Composer u përfshinë në paketën e fazuar. Ekzekutoni Composer install nga rrënja e aplikacionit para se ta konsideroni përditësimin të përfunduar."
+
+msgid "Frontend assets"
+msgstr "Asetet e ndërfaqes"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Në paketën e fazuar u përfshinë skedarë të lidhur me ndërfaqen. Rindërtoni asetet e prodhimit pas instalimit të varësive."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Në paketën e fazuar u zbuluan skedarë migrimi Doctrine. Konfirmoni që ekziston një kopje rezervë e bazës së të dhënave para se të ekzekutoni migrimet."
+
+msgid "Symfony cache"
+msgstr "Cache e Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Pastroni cache-in e Symfony pas zbatimit të skedarëve të përditësimit dhe ekzekutimit të çdo komande të kërkuar."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Nuk mund të shkruhen metadatat e kontrolleve pas zbatimit."
+
+msgid "Post-apply check failed."
+msgstr "Kontrolli pas zbatimit dështoi."
+
+msgid "Update package is not readable: %s"
+msgstr "Paketa e përditësimit nuk mund të lexohet: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Paketa e përditësimit nuk është një arkiv ZIP i vlefshëm."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Arkivi ZIP i paketës së përditësimit është bosh."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Paketa e përditësimit përmban një hyrje ZIP të palexueshme."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Paketa e përditësimit përmban një shteg absolut të pasigurt: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Paketa e përditësimit përmban një hyrje me kalim të shtegut: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Paketa e përditësimit përmban një lidhje simbolike: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Po nisin veprimet pas zbatimit."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Ekzekutimi i komandave pas zbatimit kërkon konfirmim të qartë."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Metadatat e rekomandimeve pas zbatimit u lexuan me sukses."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Veprimet pas zbatimit u vlerësuan kundrejt raportit të rekomandimeve."
+
+msgid "Post-apply actions were selected."
+msgstr "U zgjodhën veprimet pas zbatimit."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Veprimet e avancuara pas zbatimit kërkojnë konfirmim të qartë të avancuar."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Veprimet e avancuara pas zbatimit u konfirmuan në mënyrë të qartë."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Komandat e zgjedhura pas zbatimit përfunduan me sukses."
+
+msgid "Post-apply command run metadata was written."
+msgstr "U shkruan metadatat e ekzekutimit të komandave pas zbatimit."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Veprimet pas zbatimit përfunduan me sukses."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Përkufizim i pavlefshëm i komandës pas zbatimit të përditësimit: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Po ekzekutohet veprimi pas zbatimit: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Po ekzekutohet komanda %d nga %d për %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Veprimi pas zbatimit dështoi: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Veprimi pas zbatimit \"%s\" dështoi me kodin e daljes %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Veprimi pas zbatimit u përfundua: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Kërkohet shtegu i staging për të ekzekutuar veprimet pas zbatimit."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Nuk ka veprime të rekomanduara pas zbatimit për t’u ekzekutuar."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Nuk ka veprime të lejuara pas zbatimit për t’u ekzekutuar."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Veprimi pas zbatimit nuk lejohet për këtë përditësim: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Migrimet e bazës së të dhënave kërkojnë një rishikim sigurie të migrimit para ekzekutimit."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Migrimet e bazës së të dhënave nuk mund të ekzekutohen sepse rishikimi i sigurisë së migrimit nuk kaloi."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Migrimet e bazës së të dhënave nuk mund të ekzekutohen sepse rishikimi i sigurisë së migrimit nuk listoi migrimet e staged."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Migrimet e bazës së të dhënave nuk mund të ekzekutohen sepse rishikimi i sigurisë së migrimit përmban një hyrje të pavlefshme migrimi."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Vetëm migrimet e staged %s mund të ekzekutohen nga ekzekutuesi i përditësimit."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Migrimet e bazës së të dhënave nuk mund të ekzekutohen sepse rishikimi i sigurisë së migrimit të staged raportoi gabime bllokuese."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine raporton paralajmërime të bazës së migrimit. Vetëm klasat e migrimit të staged %s do të ekzekutohen në mënyrë të qartë."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Migrimet e bazës së të dhënave kërkojnë konfirmimin se ekziston një kopje rezervë e bazës së të dhënave."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Migrimet e bazës së të dhënave kërkojnë tekstin e konfirmimit \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Rishikimi i sigurisë së migrimit të bazës së të dhënave u përfundua para ekzekutimit."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Ekzistenca e kopjes rezervë të bazës së të dhënave u konfirmua në mënyrë të qartë."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "U dhanë rishikimi i sigurisë së migrimit të bazës së të dhënave dhe konfirmimi i kopjes rezervë."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Migrimet e bazës së të dhënave u ekzekutuan pas një konfirmimi të qartë të kopjes rezervë të bazës së të dhënave. Përditësuesi nuk krijoi kopjen rezervë të bazës së të dhënave."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Lejet e kërkuara të ekzekutueshme pas zbatimit u normalizuan."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Nuk mund të ekzekutohen migrimet e bazës së të dhënave sepse bin/console nuk u gjet."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Komandat e zgjedhura pas zbatimit kanë shtigjet e kërkuara të shkrueshme."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Shtigjet e shkrueshme të komandave pas zbatimit u vlerësuan."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Veprimet e avancuara pas zbatimit mund të ndryshojnë varësitë, burimet e gjeneruara ose bazën e të dhënave. Rishikoni kopjet rezervë para se të vazhdoni."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer nuk mund të ekzekutohet në mënyrë të sigurt nga përditësuesi në ueb sepse skedari i gjeneruar nga Composer \"%s\" i përket UID %d ndërsa mjedisi PHP përdor UID %d. Ekzekutoni Composer manualisht si pronari i vendosjes, pastaj vazhdoni me veprimet e mbetura pas zbatimit."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Shtegu i kërkuar nga veprimi pas zbatimit \"%s\" nuk është i shkrueshëm: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Drejtoria prind e kërkuar nga veprimi pas zbatimit \"%s\" nuk është e shkrueshme: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Nuk mund të lexohen lejet për ekzekutuesin e kërkuar pas zbatimit: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Nuk mund të shënohet ekzekutuesi i kërkuar pas zbatimit si i ekzekutueshëm: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Ekzekutuesi i kërkuar pas zbatimit ende nuk është i ekzekutueshëm pas chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Leja e ekzekutimit u normalizua."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Nuk mund të shkruhet konfigurimi i izoluar i Git për komandat pas zbatimit."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Duket se po ekzekutohet një operacion tjetër përditësimi. Hiqni var/update/update.lock vetëm nëse asnjë përditësim nuk është aktiv."
+
+msgid "Unable to create update lock: %s"
+msgstr "Nuk mund të krijohet kyçi i përditësimit: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Nuk mund të shkruhen metadatat e ekzekutimit të komandës pas zbatimit: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Manifesti i përditësimit i mungon blloku i paketës."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Blloku i nënshkrimit të manifestit të përditësimit duhet të jetë një objekt."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Blloku i kërkesave të manifestit të përditësimit duhet të jetë një objekt."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 e paketës së përditësimit duhet të jetë një varg heksadecimal me 64 karaktere."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Manifestit të përditësimit i mungon fusha e kërkuar e vargut \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Fusha e manifestit të përditësimit \"%s\" duhet të jetë një varg."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Manifesti i përditësimit nuk është JSON i vlefshëm: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON i manifestit të përditësimit duhet të jetë një objekt."
+
+msgid "Manifest source cannot be empty."
+msgstr "Burimi i manifestit nuk mund të jetë bosh."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL-ja e manifestit të përditësimit duhet të përdorë origjinën zyrtare të përditësimit %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Nuk mund të shkarkohet manifesti i përditësimit. Statusi HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Skedari i manifestit nuk është i lexueshëm: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Nuk mund të lexohet skedari i manifestit: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL-ja e manifestit të përditësimit duhet të përdorë HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Metadatat e paketës së përditësimit nuk janë të lexueshme: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Nuk mund të lexohen metadatat e paketës së përditësimit: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Metadatat e paketës së përditësimit nuk janë JSON i vlefshëm: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Metadatat e paketës së përditësimit duhet të jenë një objekt JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Formati i metadateve të paketës së përditësimit duhet të jetë %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Fusha e metadateve të paketës së përditësimit \"remove\" duhet të jetë një varg."
+
+msgid "Update package removal paths must be strings."
+msgstr "Shtigjet e heqjes së paketës së përditësimit duhet të jenë vargje tekstuale."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Metadatat e paketës së përditësimit nuk mund të heqin shtegun e mbrojtur: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Paketa e përditësimit nuk mund të përfshijë dhe të heqë të njëjtin shteg: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Nuk mund të llogaritet sha256 i metadateve të paketës së përditësimit."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Shtegu i heqjes së paketës së përditësimit nuk mund të jetë bosh."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Shtegu i heqjes së paketës së përditësimit përmban një bajt null."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Shtegu i heqjes së paketës së përditësimit duhet të jetë relativ: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Shtegu i heqjes së paketës së përditësimit përmban një segment të pasigurt: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Shtegu i staging-ut kërkohet për të ndërtuar një plan zbatimi të përditësimit."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Direktorisë së staging-ut i mungon STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Nuk mund të lexohen metadatat e staging-ut: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Metadatat e staging-ut nuk janë JSON i vlefshëm: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Metadatat e staging-ut duhet të jenë një objekt JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Metadatave të staging-ut u mungon fusha application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Paketës së përditësimit i mungon %s. Metadatat e nënshkruara të pastrimit kërkohen para se skedarët të mund të zbatohen."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Metadatat e staging-ut nuk përmbajnë metadatat e nënshkruara të pastrimit të paketës të regjistruara gjatë nxjerrjes."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Metadatat e pastrimit të paketës së përditësimit ndryshuan pas staging-ut. Ri-stagingoni paketën e verifikuar para se të vazhdoni."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Metadatat e staging-ut nuk përmbajnë një listë të vlefshme heqjeje të paketës."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Shtigjet e pastrimit të paketës së përditësimit ndryshuan pas staging-ut. Ri-stagingoni paketën e verifikuar para se të vazhdoni."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Metadatat e nënshkruara të pastrimit të paketës janë të pandryshuara që nga staging-u."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Një skedar kyçjeje e përditësimit ekziston tashmë. Një përditësim tjetër mund të jetë në vazhdim."
+
+msgid "Update lock directory is not writable."
+msgstr "Direktorja e kyçjes së përditësimit nuk është e shkrueshme."
+
+msgid "No update lock is currently active."
+msgstr "Asnjë kyçje e përditësimit nuk është aktualisht aktive."
+
+msgid "Update backup directory is not writable."
+msgstr "Direktorja e kopjes rezervë të përditësimit nuk është e shkrueshme."
+
+msgid "Update backup directory is writable."
+msgstr "Direktorja e kopjes rezervë të përditësimit është e shkrueshme."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Direktorja e kopjes rezervë të përditësimit nuk mund të krijohet nga procesi aktual."
+
+msgid "Update backup directory can be created."
+msgstr "Direktorja e kopjes rezervë të përditësimit mund të krijohet."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Disa direktori pune të përditësimit nuk janë të shkrueshme ose nuk mund të krijohen nga procesi aktual."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Direktoritë e punës së përditësimit janë të shkrueshme ose mund të krijohen."
+
+msgid "Update apply file plan was generated."
+msgstr "Plani i skedarëve për zbatimin e përditësimit u gjenerua."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Metadatat e pastrimit të paketës përmbajnë shtigje që nuk mund të hiqen në mënyrë të sigurt."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Objektivat e heqjes të deklaruara nga paketa janë të sigurta."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Disa skedarë të vjetëruar të deklaruar nga paketa mungojnë tashmë në këtë instalim."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Përditësimi i planifikuar do të mbishkruante ose heqte lidhjet simbolike ekzistuese."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Përditësimi i planifikuar nuk mbishkruan ose heq lidhjet simbolike ekzistuese."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Skedarët e rinj të migrimit të përditësimit duhet të vendosen nën %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "U zbuluan skedarë të rinj migrimi Doctrine %s. Ata do të kërkojnë një rishikim sigurie të migrimit të bazës së të dhënave pas zbatimit të skedarëve."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Disa lista skedarësh të planit të zbatimit të përditësimit u shkurtuan në përgjigjen JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Nuk mund të shkruhen metadatat e planit të zbatimit të përditësimit."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Nuk mund të shkarkohet paketa e përditësimit. Statusi HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Nuk mund të hapet skedari destinacion i paketës së përditësimit: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Shkarkimet e përditësimit duhet të përdorin origjinën zyrtare të përditësimit %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL-ja e paketës së përditësimit duhet të përdorë HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Kontrollet e sigurisë së arkivit të paketës së përditësimit kaluan."
+
+msgid "Update package was extracted to staging."
+msgstr "Paketa e përditësimit u nxorr në staging."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Metadatat e pastrimit të paketës së nënshkruar u ngarkuan."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Paketa e përditësimit nuk përmban %s. Aplikimi i skedarëve do të bllokohet derisa të jepen metadatat e nënshkruara të pastrimit."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Raporti i provës së paketës së staged u gjenerua."
+
+msgid "Staging metadata was written."
+msgstr "Metadatat e staging u shkruan."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Nuk mund të nxirret paketa e përditësimit në direktorinë e staging."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Nuk mund të gjendet rrënja e aplikacionit Chamilo në paketën e staged."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Paketës së staged i mungon hyrja e kërkuar e Chamilo: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Paketa e staged përmban strukturën e pritur të Chamilo."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Paketa e staged nuk përmban composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Paketa e staged përmban composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Paketa e staged nuk përmban yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Paketa e staged përmban yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Nuk mund të kodohen metadatat e staging."
+
+msgid "Unable to write staging metadata."
+msgstr "Nuk mund të shkruhen metadatat e staging."
+
+msgid "Update operation log created."
+msgstr "Regjistri i operacionit të përditësimit u krijua."
+
+msgid "Unable to write update operation log."
+msgstr "Nuk mund të shkruhet regjistri i operacionit të përditësimit."
+
+msgid "Invalid update operation id."
+msgstr "ID e pavlefshme e operacionit të përditësimit."
 

@@ -37006,13 +37006,13 @@ msgid "Trusted signing key"
 msgstr "विश्वसनीय हस्ताक्षर कुंजी"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "पुष्टि के लिए APPLY UPDATE FILES टाइप करें"
+msgstr "पुष्टि करने के लिए APPLY UPDATE FILES टाइप करें"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "डेटाबेस माइग्रेशन की पुष्टि के लिए RUN DATABASE MIGRATIONS टाइप करें"
+msgstr "डेटाबेस माइग्रेशन की पुष्टि करने के लिए RUN DATABASE MIGRATIONS टाइप करें"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "पुष्टि के लिए RUN POST UPDATE ACTIONS टाइप करें"
+msgstr "पुष्टि करने के लिए RUN POST UPDATE ACTIONS टाइप करें"
 
 msgid "Unknown update notice source."
 msgstr "अज्ञात अपडेट नोटिस स्रोत।"
@@ -40571,4 +40571,607 @@ msgstr "कुछ लक्षित फ़ाइलें या निर्�
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "इसे ठीक करने के लिए, अस्थायी रूप से पूरे Chamilo निर्देशिका का स्वामी %s (वेब सर्वर उपयोगकर्ता) पर बदलें, अपडेट लागू करें, उसके बाद स्वामी को वापस %s पर बदलें, फिर var/ (और उसकी सामग्री) का स्वामी वापस %s पर सेट करें ताकि अनुप्रयोग उसमें लिखना जारी रख सके।"
+
+msgid "Update package verification failed."
+msgstr "अपडेट पैकेज सत्यापन विफल रहा।"
+
+msgid "Update preflight checks failed."
+msgstr "अपडेट प्रीफ़्लाइट जाँचें विफल रहीं।"
+
+msgid "Unable to stage update package."
+msgstr "अपडेट पैकेज स्टेज नहीं किया जा सका।"
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "इस सर्वर पर UI से पोस्ट-एप्लाई कमांड चलाना अक्षम है।"
+
+msgid "Missing required field: %s"
+msgstr "आवश्यक फ़ील्ड अनुपस्थित: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "कोई अपडेट मैनिफ़ेस्ट स्रोत नहीं दिया गया और कोई डिफ़ॉल्ट अपडेट मैनिफ़ेस्ट URL कॉन्फ़िगर नहीं है।"
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "अपडेट मैनिफ़ेस्ट URL को आधिकारिक अपडेट मूल %s का उपयोग करना चाहिए। केवल मैनिफ़ेस्ट पथ बदला जा सकता है।"
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "स्थानीय अपडेट मैनिफ़ेस्ट पथ अक्षम हैं। HTTPS मैनिफ़ेस्ट URL का उपयोग करें या स्थानीय परीक्षणों के लिए सर्वर वातावरण में CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 सेट करें।"
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "HTTP %s पथ न दें। अपडेट मैनिफ़ेस्ट से डाउनलोड करने के लिए इस फ़ील्ड को खाली छोड़ें।"
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "इस वातावरण में स्थानीय अपडेट %s पथ अक्षम हैं।"
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "इस वातावरण में सर्वर पर विश्वसनीय अपडेट सार्वजनिक कुंजियाँ कॉन्फ़िगर होनी चाहिए।"
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "इस वातावरण में अपडेट हस्ताक्षर सत्यापन छोड़ना अक्षम है।"
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "पोस्ट-एप्लाई अपडेट क्रियाएँ चलाने के लिए पुष्टि पाठ \"%s\" आवश्यक है।"
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "स्टेज किए गए अपडेट फ़ाइलें लागू करने के लिए पुष्टि पाठ \"%s\" आवश्यक है।"
+
+msgid "Unable to resolve project directory."
+msgstr "प्रोजेक्ट निर्देशिका निर्धारित नहीं की जा सकी।"
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "डेटाबेस बैकअप इस अपडेटर द्वारा प्रबंधित नहीं है। माइग्रेशन चलाने से पहले डेटाबेस बैकअप बनाएँ और सत्यापित करें।"
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine माइग्रेशन down() विधियाँ हटाए गए या रूपांतरित डेटा को पुनर्स्थापित करने की गारंटी नहीं देतीं।"
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "पोस्ट-एप्लाई मेटाडेटा डेटाबेस माइग्रेशन समीक्षा की अनुशंसा करता है।"
+
+msgid "No migration files were found in the staged package."
+msgstr "स्टेज किए गए पैकेज में कोई माइग्रेशन फ़ाइलें नहीं मिलीं।"
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "स्टेज की गई Doctrine माइग्रेशन फ़ाइलें पाई गईं।"
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine माइग्रेशन लक्ष्य स्टेज किए गए पैकेज से निर्धारित किया गया।"
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine माइग्रेशन बेसलाइन में स्टेज किए गए माइग्रेशन के लिए अवरोधक समस्याएँ हैं।"
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine ऐतिहासिक माइग्रेशन बेसलाइन चेतावनियाँ रिपोर्ट करता है, लेकिन केवल स्टेज किए गए %s माइग्रेशन की स्पष्ट रूप से समीक्षा और निष्पादन किया जाएगा।"
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine ऐतिहासिक माइग्रेशन बेसलाइन चेतावनियाँ रिपोर्ट करता है। अपडेटर स्पष्ट पुष्टि के बाद केवल स्टेज की गई %s माइग्रेशन कक्षाएँ निष्पादित करेगा।"
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine बेसलाइन में स्टेज किए गए %s माइग्रेशन के लिए कोई अवरोधक समस्या नहीं है।"
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "कम से कम एक स्टेज किए गए माइग्रेशन के लिए Doctrine ड्राई-रन विफल रहा। इसे ठीक होने तक डेटाबेस माइग्रेशन न चलाएँ।"
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "प्रत्येक स्टेज की गई माइग्रेशन कक्षा के लिए Doctrine ड्राई-रन सफलतापूर्वक पूर्ण हुआ।"
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "माइग्रेशन चलाने से पहले इस अपडेटर के बाहर डेटाबेस बैकअप बनाना आवश्यक है।"
+
+msgid "Staging path is required to review database migrations."
+msgstr "डेटाबेस माइग्रेशन की समीक्षा के लिए स्टेजिंग पथ आवश्यक है।"
+
+msgid "Unable to read update %s: %s"
+msgstr "अपडेट %s पढ़ा नहीं जा सका: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "अपडेट %s JSON अमान्य है: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "अपडेट %s JSON एक ऑब्जेक्ट होना चाहिए।"
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "पोस्ट-एप्लाई जाँच मेटाडेटा में मान्य क्रियाओं की सूची नहीं है।"
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "इस स्टेज किए गए अपडेट के लिए डेटाबेस माइग्रेशन अनुशंसित नहीं थे।"
+
+msgid "Update metadata is missing the staged application path."
+msgstr "अपडेट मेटाडेटा में स्टेज किया गया एप्लिकेशन पथ अनुपस्थित है।"
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "नियोजित स्टेज की गई माइग्रेशन फ़ाइल नहीं मिली: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "स्टेज की गई माइग्रेशन फ़ाइल पढ़ी नहीं जा सकी: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "getDescription() से कोई विवरण निकाला नहीं जा सका।"
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "अपडेट रनर केवल %s स्टेज किए गए माइग्रेशन का समर्थन करता है: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "माइग्रेशन सुरक्षा मेटाडेटा लिखा नहीं जा सका: %s"
+
+msgid "Migration safety check failed."
+msgstr "माइग्रेशन सुरक्षा जाँच विफल रही।"
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "असुरक्षित स्टेज किया गया सापेक्ष माइग्रेशन पथ पाया गया: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "स्थापित Chamilo संस्करण स्वचालित रूप से पहचाना नहीं जा सका। केवल यह पुष्टि करने के बाद जारी रखें कि यह अपडेट संगत है।"
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "स्थापित या लक्ष्य संस्करण तुलनीय सिमेंटिक संस्करण प्रारूप में नहीं है। केवल मैन्युअल सत्यापन के बाद जारी रखें।"
+
+msgid "An update is available."
+msgstr "एक अपडेट उपलब्ध है।"
+
+msgid "The installed version already matches the manifest version."
+msgstr "स्थापित संस्करण पहले से मैनिफ़ेस्ट संस्करण से मेल खाता है।"
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "मैनिफेस्ट संस्करण स्थापित संस्करण से पुराना है। डाउनग्रेड डिफ़ॉल्ट रूप से अवरुद्ध हैं।"
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "स्टेज की गई फ़ाइलें सफलतापूर्वक लागू नहीं हुईं। पोस्ट-एप्लाई जाँच जारी नहीं रह सकती।"
+
+msgid "Apply result metadata was read successfully."
+msgstr "एप्लाई परिणाम मेटाडेटा सफलतापूर्वक पढ़ा गया।"
+
+msgid "Post-apply action recommendations were generated."
+msgstr "पोस्ट-एप्लाई क्रिया अनुशंसाएँ उत्पन्न की गईं।"
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "स्टेज किए गए पैकेज में डेटाबेस माइग्रेशन पाए गए। उन्हें केवल यह पुष्टि करने के बाद चलाएँ कि फ़ाइल अपडेट सही है और डेटाबेस बैकअप मौजूद है।"
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "पोस्ट-एप्लाई जाँच चलाने के लिए स्टेजिंग पथ आवश्यक है।"
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "अपडेट %s मान्य JSON नहीं है: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "अपडेट %s एक JSON ऑब्जेक्ट होना चाहिए।"
+
+msgid "Composer dependencies"
+msgstr "Composer निर्भरताएँ"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "स्टेज किए गए पैकेज में Composer मेटाडेटा शामिल था। अपडेट को पूर्ण मानने से पहले एप्लिकेशन रूट से Composer install चलाएँ।"
+
+msgid "Frontend assets"
+msgstr "फ्रंटएंड एसेट्स"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "स्टेज किए गए पैकेज में फ्रंटएंड-संबंधित फ़ाइलें शामिल थीं। निर्भरताएँ स्थापित करने के बाद प्रोडक्शन एसेट्स पुनर्निर्मित करें।"
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "स्टेज किए गए पैकेज में Doctrine माइग्रेशन फ़ाइलें पाई गईं। माइग्रेशन चलाने से पहले पुष्टि करें कि डेटाबेस बैकअप मौजूद है।"
+
+msgid "Symfony cache"
+msgstr "Symfony कैश"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "अपडेट फ़ाइलें लागू करने और कोई आवश्यक कमांड चलाने के बाद Symfony कैश साफ़ करें।"
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "पोस्ट-एप्लाई जाँच मेटाडेटा लिखा नहीं जा सका।"
+
+msgid "Post-apply check failed."
+msgstr "पोस्ट-एप्लाई जाँच विफल हुई।"
+
+msgid "Update package is not readable: %s"
+msgstr "अपडेट पैकेज पढ़ने योग्य नहीं है: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "अपडेट पैकेज मान्य ZIP आर्काइव नहीं है।"
+
+msgid "Update package ZIP archive is empty."
+msgstr "अपडेट पैकेज ZIP आर्काइव खाली है।"
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "अपडेट पैकेज में एक अपठनीय ZIP प्रविष्टि है।"
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "अपडेट पैकेज में असुरक्षित निरपेक्ष पथ है: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "अपडेट पैकेज में पथ ट्रैवर्सल प्रविष्टि है: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "अपडेट पैकेज में सिंबॉलिक लिंक है: %s"
+
+msgid "Starting post-apply actions."
+msgstr "पोस्ट-एप्लाई क्रियाएँ शुरू हो रही हैं।"
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "पोस्ट-एप्लाई कमांड निष्पादन के लिए स्पष्ट पुष्टि आवश्यक है।"
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "पोस्ट-एप्लाई अनुशंसा मेटाडेटा सफलतापूर्वक पढ़ा गया।"
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "पोस्ट-एप्लाई क्रियाओं को अनुशंसा रिपोर्ट के विरुद्ध सत्यापित किया गया।"
+
+msgid "Post-apply actions were selected."
+msgstr "पोस्ट-एप्लाई क्रियाएँ चुनी गईं।"
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "उन्नत पोस्ट-एप्लाई क्रियाओं के लिए स्पष्ट उन्नत पुष्टि आवश्यक है।"
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "उन्नत पोस्ट-एप्लाई क्रियाओं की स्पष्ट पुष्टि की गई।"
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "चयनित पोस्ट-एप्लाई कमांड सफलतापूर्वक पूर्ण हुए।"
+
+msgid "Post-apply command run metadata was written."
+msgstr "पोस्ट-एप्लाई कमांड रन मेटाडेटा लिखा गया।"
+
+msgid "Post-apply actions completed successfully."
+msgstr "पोस्ट-एप्लाई क्रियाएँ सफलतापूर्वक पूर्ण हुईं।"
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "अमान्य अपडेट पोस्ट-एप्लाई कमांड परिभाषा: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "पोस्ट-एप्लाई क्रिया चल रही है: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "%s के लिए कमांड %d में से %d चल रहा है।"
+
+msgid "Post-apply action failed: %s"
+msgstr "पोस्ट-एप्लाई क्रिया विफल: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "पोस्ट-एप्लाई क्रिया \"%s\" एग्ज़िट कोड %d के साथ विफल हुई।"
+
+msgid "Post-apply action completed: %s"
+msgstr "पोस्ट-एप्लाई क्रिया पूर्ण: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "पोस्ट-एप्लाई क्रियाएँ चलाने के लिए स्टेजिंग पथ आवश्यक है।"
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "चलाने के लिए कोई अनुशंसित पोस्ट-एप्लाई क्रियाएँ नहीं हैं।"
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "चलाने के लिए कोई अनुमत पोस्ट-एप्लाई क्रियाएँ नहीं हैं।"
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "इस अपडेट के लिए पोस्ट-एप्लाई क्रिया अनुमत नहीं है: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "डेटाबेस माइग्रेशन निष्पादन से पहले माइग्रेशन सुरक्षा समीक्षा आवश्यक है।"
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "डेटाबेस माइग्रेशन नहीं चल सकते क्योंकि माइग्रेशन सुरक्षा समीक्षा पास नहीं हुई।"
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "डेटाबेस माइग्रेशन नहीं चल सकते क्योंकि माइग्रेशन सुरक्षा समीक्षा में स्टेज किए गए माइग्रेशन सूचीबद्ध नहीं थे।"
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "डेटाबेस माइग्रेशन नहीं चल सकते क्योंकि माइग्रेशन सुरक्षा समीक्षा में अमान्य माइग्रेशन प्रविष्टि है।"
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "अपडेट रनर केवल स्टेज किए गए %s माइग्रेशन निष्पादित कर सकता है।"
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "डेटाबेस माइग्रेशन नहीं चल सकते क्योंकि स्टेज की गई माइग्रेशन सुरक्षा समीक्षा में अवरोधक त्रुटियाँ बताई गईं।"
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine माइग्रेशन बेसलाइन चेतावनियाँ रिपोर्ट करता है। केवल स्टेज किए गए %s माइग्रेशन क्लास स्पष्ट रूप से निष्पादित किए जाएंगे।"
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "डेटाबेस माइग्रेशन के लिए पुष्टि आवश्यक है कि डेटाबेस बैकअप मौजूद है।"
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "डेटाबेस माइग्रेशन के लिए पुष्टि पाठ \"RUN DATABASE MIGRATIONS\" आवश्यक है।"
+
+msgid "Database migration safety review was completed before execution."
+msgstr "निष्पादन से पहले डेटाबेस माइग्रेशन सुरक्षा समीक्षा पूर्ण हो गई थी।"
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "डेटाबेस बैकअप के अस्तित्व की स्पष्ट रूप से पुष्टि की गई थी।"
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "डेटाबेस माइग्रेशन सुरक्षा समीक्षा और बैकअप पुष्टि प्रदान की गई थी।"
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "स्पष्ट डेटाबेस बैकअप पुष्टि के बाद डेटाबेस माइग्रेशन निष्पादित किए गए। अपडेटर ने डेटाबेस बैकअप नहीं बनाया।"
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "आवश्यक पोस्ट-एप्लाई एक्ज़ीक्यूटेबल अनुमतियाँ सामान्यीकृत की गईं।"
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "डेटाबेस माइग्रेशन नहीं चलाए जा सके क्योंकि bin/console नहीं मिला।"
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "चयनित पोस्ट-एप्लाई कमांड के पास आवश्यक लेखन योग्य पथ हैं।"
+
+msgid "Post-apply command writable paths were validated."
+msgstr "पोस्ट-एप्लाई कमांड के लेखन योग्य पथ सत्यापित किए गए।"
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "उन्नत पोस्ट-एप्लाई क्रियाएँ निर्भरताएँ, जनरेटेड एसेट या डेटाबेस बदल सकती हैं। जारी रखने से पहले बैकअप की समीक्षा करें।"
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "वेब अपडेटर से Composer सुरक्षित रूप से नहीं चल सकता क्योंकि Composer द्वारा जनरेट की गई फ़ाइल \"%s\" का स्वामी UID %d है जबकि PHP रनटाइम UID %d का उपयोग करता है। Composer को डिप्लॉयमेंट स्वामी के रूप में मैन्युअल रूप से चलाएँ, फिर शेष पोस्ट-एप्लाई क्रियाएँ जारी रखें।"
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "पोस्ट-एप्लाई क्रिया \"%s\" के लिए आवश्यक पथ लेखन योग्य नहीं है: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "पोस्ट-एप्लाई क्रिया \"%s\" के लिए आवश्यक पैरेंट डायरेक्टरी लेखन योग्य नहीं है: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "आवश्यक पोस्ट-एप्लाई एक्ज़ीक्यूटेबल की अनुमतियाँ नहीं पढ़ी जा सकीं: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "आवश्यक पोस्ट-एप्लाई एक्ज़ीक्यूटेबल को एक्ज़ीक्यूटेबल चिह्नित नहीं किया जा सका: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "chmod के बाद भी आवश्यक पोस्ट-एप्लाई एक्ज़ीक्यूटेबल एक्ज़ीक्यूटेबल नहीं है: %s"
+
+msgid "Executable permission was normalized."
+msgstr "एक्ज़ीक्यूटेबल अनुमति सामान्यीकृत की गई।"
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "पोस्ट-एप्लाई कमांड के लिए पृथक Git कॉन्फ़िगरेशन नहीं लिखा जा सका।"
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "कोई अन्य अपडेट ऑपरेशन चल रहा प्रतीत होता है। var/update/update.lock केवल तभी हटाएँ जब कोई अपडेट सक्रिय न हो।"
+
+msgid "Unable to create update lock: %s"
+msgstr "अपडेट लॉक नहीं बनाया जा सका: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "पोस्ट-एप्लाई कमांड रन मेटाडेटा नहीं लिखा जा सका: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "अपडेट मैनिफ़ेस्ट में पैकेज ब्लॉक अनुपस्थित है।"
+
+msgid "Update manifest signature block must be an object."
+msgstr "अपडेट मैनिफ़ेस्ट सिग्नेचर ब्लॉक एक ऑब्जेक्ट होना चाहिए।"
+
+msgid "Update manifest requirements block must be an object."
+msgstr "अपडेट मैनिफ़ेस्ट रिक्वायरमेंट्स ब्लॉक एक ऑब्जेक्ट होना चाहिए।"
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "अपडेट पैकेज sha256 64-अक्षर का हेक्साडेसिमल स्ट्रिंग होना चाहिए।"
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "अपडेट मैनिफ़ेस्ट में आवश्यक स्ट्रिंग फ़ील्ड \"%s\" अनुपस्थित है।"
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "अपडेट मैनिफ़ेस्ट फ़ील्ड \"%s\" एक स्ट्रिंग होना चाहिए।"
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "अपडेट मैनिफ़ेस्ट मान्य JSON नहीं है: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "अपडेट मैनिफ़ेस्ट JSON एक ऑब्जेक्ट होना चाहिए।"
+
+msgid "Manifest source cannot be empty."
+msgstr "मैनिफ़ेस्ट स्रोत खाली नहीं हो सकता।"
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "अपडेट मैनिफ़ेस्ट URL को आधिकारिक अपडेट ओरिजिन %s का उपयोग करना चाहिए।"
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "अपडेट मैनिफ़ेस्ट डाउनलोड नहीं किया जा सका। HTTP स्थिति: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "मैनिफ़ेस्ट फ़ाइल पठनीय नहीं है: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "मैनिफ़ेस्ट फ़ाइल नहीं पढ़ी जा सकी: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "अपडेट मैनिफ़ेस्ट URL को HTTPS का उपयोग करना चाहिए।"
+
+msgid "Update package metadata is not readable: %s"
+msgstr "अपडेट पैकेज मेटाडेटा पठनीय नहीं है: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "अपडेट पैकेज मेटाडेटा नहीं पढ़ा जा सका: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "अपडेट पैकेज मेटाडेटा मान्य JSON नहीं है: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "अपडेट पैकेज मेटाडेटा एक JSON ऑब्जेक्ट होना चाहिए।"
+
+msgid "Update package metadata format must be %d."
+msgstr "अपडेट पैकेज मेटाडेटा प्रारूप %d होना चाहिए।"
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "अपडेट पैकेज मेटाडेटा फ़ील्ड \"remove\" एक ऐरे होना चाहिए।"
+
+msgid "Update package removal paths must be strings."
+msgstr "अपडेट पैकेज हटाने के पथ स्ट्रिंग होने चाहिए।"
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "अपडेट पैकेज मेटाडेटा संरक्षित पथ नहीं हटा सकता: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "अपडेट पैकेज एक ही पथ को शामिल और हटा नहीं सकता: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "अपडेट पैकेज मेटाडेटा sha256 की गणना नहीं की जा सकी।"
+
+msgid "Update package removal path cannot be empty."
+msgstr "अपडेट पैकेज हटाने का पथ खाली नहीं हो सकता।"
+
+msgid "Update package removal path contains a null byte."
+msgstr "अपडेट पैकेज हटाने के पथ में नल बाइट है।"
+
+msgid "Update package removal path must be relative: %s"
+msgstr "अपडेट पैकेज हटाने का पथ सापेक्ष होना चाहिए: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "अपडेट पैकेज हटाने के पथ में असुरक्षित खंड है: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "अपडेट लागू करने की योजना बनाने के लिए स्टेजिंग पथ आवश्यक है।"
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "स्टेजिंग निर्देशिका में STAGING-INFO.json नहीं है।"
+
+msgid "Unable to read staging metadata: %s"
+msgstr "स्टेजिंग मेटाडेटा पढ़ने में असमर्थ: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "स्टेजिंग मेटाडेटा मान्य JSON नहीं है: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "स्टेजिंग मेटाडेटा एक JSON ऑब्जेक्ट होना चाहिए।"
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "स्टेजिंग मेटाडेटा में application_path फ़ील्ड नहीं है।"
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "अपडेट पैकेज में %s नहीं है। फ़ाइलें लागू करने से पहले हस्ताक्षरित क्लीनअप मेटाडेटा आवश्यक है।"
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "स्टेजिंग मेटाडेटा में निष्कर्षण के दौरान रिकॉर्ड किया गया हस्ताक्षरित पैकेज क्लीनअप मेटाडेटा नहीं है।"
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "स्टेजिंग के बाद अपडेट पैकेज क्लीनअप मेटाडेटा बदल गया है। जारी रखने से पहले सत्यापित पैकेज को पुनः स्टेज करें।"
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "स्टेजिंग मेटाडेटा में मान्य पैकेज हटाने की सूची नहीं है।"
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "स्टेजिंग के बाद अपडेट पैकेज क्लीनअप पथ बदल गए हैं। जारी रखने से पहले सत्यापित पैकेज को पुनः स्टेज करें।"
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "हस्ताक्षरित पैकेज क्लीनअप मेटाडेटा स्टेजिंग के बाद से अपरिवर्तित है।"
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "अपडेट लॉक फ़ाइल पहले से मौजूद है। कोई अन्य अपडेट चल रहा हो सकता है।"
+
+msgid "Update lock directory is not writable."
+msgstr "अपडेट लॉक निर्देशिका लेखन योग्य नहीं है।"
+
+msgid "No update lock is currently active."
+msgstr "वर्तमान में कोई अपडेट लॉक सक्रिय नहीं है।"
+
+msgid "Update backup directory is not writable."
+msgstr "अपडेट बैकअप निर्देशिका लेखन योग्य नहीं है।"
+
+msgid "Update backup directory is writable."
+msgstr "अपडेट बैकअप निर्देशिका लेखन योग्य है।"
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "वर्तमान प्रक्रिया द्वारा अपडेट बैकअप निर्देशिका बनाई नहीं जा सकती।"
+
+msgid "Update backup directory can be created."
+msgstr "अपडेट बैकअप निर्देशिका बनाई जा सकती है।"
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "कुछ अपडेट कार्य निर्देशिकाएँ लेखन योग्य नहीं हैं या वर्तमान प्रक्रिया द्वारा बनाई नहीं जा सकतीं।"
+
+msgid "Update working directories are writable or can be created."
+msgstr "अपडेट कार्य निर्देशिकाएँ लेखन योग्य हैं या बनाई जा सकती हैं।"
+
+msgid "Update apply file plan was generated."
+msgstr "अपडेट लागू करने की फ़ाइल योजना तैयार की गई।"
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "पैकेज क्लीनअप मेटाडेटा में ऐसे पथ हैं जिन्हें सुरक्षित रूप से हटाया नहीं जा सकता।"
+
+msgid "Package-declared removal targets are safe."
+msgstr "पैकेज द्वारा घोषित हटाने के लक्ष्य सुरक्षित हैं।"
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "पैकेज द्वारा घोषित कुछ अप्रचलित फ़ाइलें इस इंस्टॉलेशन में पहले से अनुपस्थित हैं।"
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "नियोजित अपडेट मौजूदा प्रतीकात्मक लिंक को अधिलेखित या हटा देगा।"
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "नियोजित अपडेट मौजूदा प्रतीकात्मक लिंक को अधिलेखित या हटाता नहीं है।"
+
+msgid "New update migration files must be placed under %s."
+msgstr "नई अपडेट माइग्रेशन फ़ाइलें %s के अंतर्गत रखी जानी चाहिए।"
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "नई %s Doctrine माइग्रेशन फ़ाइलें पाई गईं। फ़ाइलें लागू करने के बाद उन्हें डेटाबेस माइग्रेशन सुरक्षा समीक्षा की आवश्यकता होगी।"
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "JSON प्रतिक्रिया में कुछ अपडेट लागू योजना फ़ाइल सूचियाँ काट दी गईं।"
+
+msgid "Unable to write update apply plan metadata."
+msgstr "अपडेट लागू योजना मेटाडेटा लिखने में असमर्थ।"
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "अपडेट पैकेज डाउनलोड करने में असमर्थ। HTTP स्थिति: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "अपडेट पैकेज लक्ष्य फ़ाइल खोलने में असमर्थ: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "अपडेट डाउनलोड आधिकारिक अपडेट स्रोत %s का उपयोग करना चाहिए।"
+
+msgid "The update package URL must use HTTPS."
+msgstr "अपडेट पैकेज URL को HTTPS का उपयोग करना चाहिए।"
+
+msgid "Update package archive safety checks passed."
+msgstr "अपडेट पैकेज संग्रह सुरक्षा जाँचें सफल रहीं।"
+
+msgid "Update package was extracted to staging."
+msgstr "अपडेट पैकेज स्टेजिंग में निकाला गया।"
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "हस्ताक्षरित पैकेज क्लीनअप मेटाडेटा लोड किया गया।"
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "अपडेट पैकेज में %s नहीं है। हस्ताक्षरित क्लीनअप मेटाडेटा उपलब्ध होने तक फ़ाइल लागू करना अवरुद्ध रहेगा।"
+
+msgid "Staged package dry-run report was generated."
+msgstr "स्टेज किए गए पैकेज की ड्राई-रन रिपोर्ट तैयार की गई।"
+
+msgid "Staging metadata was written."
+msgstr "स्टेजिंग मेटाडेटा लिखा गया।"
+
+msgid "Unable to extract update package to staging directory."
+msgstr "अपडेट पैकेज को स्टेजिंग निर्देशिका में निकालने में असमर्थ।"
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "स्टेज किए गए पैकेज में Chamilo एप्लिकेशन रूट नहीं मिला।"
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "स्टेज किए गए पैकेज में आवश्यक Chamilo प्रविष्टि नहीं है: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "स्टेज किए गए पैकेज में अपेक्षित Chamilo संरचना है।"
+
+msgid "Staged package does not contain composer.lock."
+msgstr "स्टेज किए गए पैकेज में composer.lock नहीं है।"
+
+msgid "Staged package contains composer.lock."
+msgstr "स्टेज किए गए पैकेज में composer.lock है।"
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "स्टेज किए गए पैकेज में yarn.lock नहीं है।"
+
+msgid "Staged package contains yarn.lock."
+msgstr "स्टेज किए गए पैकेज में yarn.lock है।"
+
+msgid "Unable to encode staging metadata."
+msgstr "स्टेजिंग मेटाडेटा को एनकोड करने में असमर्थ।"
+
+msgid "Unable to write staging metadata."
+msgstr "स्टेजिंग मेटाडेटा लिखने में असमर्थ।"
+
+msgid "Update operation log created."
+msgstr "अपडेट ऑपरेशन लॉग बनाया गया।"
+
+msgid "Unable to write update operation log."
+msgstr "अपडेट ऑपरेशन लॉग लिखने में असमर्थ।"
+
+msgid "Invalid update operation id."
+msgstr "अमान्य अपडेट ऑपरेशन आईडी।"
 

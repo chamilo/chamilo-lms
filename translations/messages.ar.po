@@ -37023,15 +37023,6 @@ msgstr "المفتاح العام الموثوق"
 msgid "Trusted signing key"
 msgstr "مفتاح التوقيع الموثوق"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "اكتب APPLY UPDATE FILES للتأكيد"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "اكتب RUN DATABASE MIGRATIONS لتأكيد ترحيل قاعدة البيانات"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "اكتب RUN POST UPDATE ACTIONS للتأكيد"
-
 msgid "Unknown update notice source."
 msgstr "مصدر إشعار التحديث غير معروف."
 
@@ -40589,4 +40580,607 @@ msgstr "لا يمكن كتابة أو حذف بعض الملفات أو الأد
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "لإصلاح ذلك، غيّر مؤقتًا مالك دليل Chamilo بالكامل إلى %s (مستخدم خادم الويب)، طبّق التحديث، ثم أعد المالك إلى %s بعد ذلك، ثم عيّن مالك var/ (ومحتوياته) إلى %s حتى يتمكن التطبيق من مواصلة الكتابة فيه."
+
+msgid "Update package verification failed."
+msgstr "فشل التحقق من حزمة التحديث."
+
+msgid "Update preflight checks failed."
+msgstr "فشلت فحوصات ما قبل التحديث."
+
+msgid "Unable to stage update package."
+msgstr "تعذر تجهيز حزمة التحديث."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "تشغيل أوامر ما بعد التطبيق من واجهة المستخدم معطّل على هذا الخادم."
+
+msgid "Missing required field: %s"
+msgstr "حقل مطلوب مفقود: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "لم يُوفَّر مصدر لبيان التحديث ولم يُضبط عنوان URL افتراضي لبيان التحديث."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "يجب أن يستخدم عنوان URL لبيان التحديث المصدر الرسمي للتحديث %s. يمكن تغيير مسار البيان فقط."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "مسارات بيان التحديث المحلية معطّلة. استخدم عنوان HTTPS للبيان أو عيّن CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 في بيئة الخادم للاختبارات المحلية."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "لا تُدخل مسار HTTP لـ %s. اترك هذا الحقل فارغًا لتنزيله من بيان التحديث."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "مسارات التحديث المحلية لـ %s معطّلة في هذه البيئة."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "يجب ضبط مفاتيح التحديث العامة الموثوقة على الخادم في هذه البيئة."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "تخطي التحقق من توقيع التحديث معطّل في هذه البيئة."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "يتطلب تشغيل إجراءات ما بعد تطبيق التحديث نص التأكيد \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "يتطلب تطبيق ملفات التحديث المجهّزة نص التأكيد \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "تعذر تحديد دليل المشروع."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "نسخة احتياطية لقاعدة البيانات ليست مُدارة بواسطة أداة التحديث هذه. أنشئ نسخة احتياطية لقاعدة البيانات وتحقق منها قبل تشغيل الترحيلات."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "دوال down() لترحيل Doctrine غير مضمونة لاستعادة البيانات المحذوفة أو المحوّلة."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "توصي بيانات ما بعد التطبيق بمراجعة ترحيل قاعدة البيانات."
+
+msgid "No migration files were found in the staged package."
+msgstr "لم يُعثر على ملفات ترحيل في الحزمة المجهّزة."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "تم اكتشاف ملفات ترحيل Doctrine مجهّزة."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "تم تحديد هدف ترحيل Doctrine من الحزمة المجهّزة."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "خط أساس ترحيل Doctrine يحتوي على مشكلات حاجبة للترحيلات المجهّزة."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "يُبلغ Doctrine عن تحذيرات خط أساس تاريخية للترحيل، لكن ستُراجع وتُنفَّذ فقط ترحيلات %s المجهّزة بشكل صريح."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "يُبلغ Doctrine عن تحذيرات خط أساس تاريخية للترحيل. ستنفّذ أداة التحديث فقط فئات ترحيل %s المجهّزة بعد تأكيد صريح."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "لا توجد مشكلة حاجبة في خط أساس Doctrine لترحيلات %s المجهّزة."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "فشل التشغيل التجريبي لترحيل Doctrine لترحيل مجهّز واحد على الأقل. لا تشغّل ترحيلات قاعدة البيانات حتى يُصلح ذلك."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "اكتمل التشغيل التجريبي لـ Doctrine بنجاح لكل فئة ترحيل مجهّزة."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "يجب إنشاء نسخة احتياطية لقاعدة البيانات خارج أداة التحديث هذه قبل تشغيل الترحيلات."
+
+msgid "Staging path is required to review database migrations."
+msgstr "مسار التجهيز مطلوب لمراجعة ترحيلات قاعدة البيانات."
+
+msgid "Unable to read update %s: %s"
+msgstr "تعذر قراءة تحديث %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON لتحديث %s غير صالح: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "يجب أن يكون JSON لتحديث %s كائنًا."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "بيانات فحوصات ما بعد التطبيق لا تحتوي على قائمة إجراءات صالحة."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "لم يُوصَ بترحيلات قاعدة البيانات لهذا التحديث المجهّز."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "بيانات تعريف التحديث تفتقد مسار التطبيق المجهّز."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "لم يُعثر على ملف الترحيل المجهّز المخطط: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "تعذر قراءة ملف الترحيل المجهّز: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "تعذر استخراج وصف من getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "يدعم مشغّل التحديث فقط ترحيلات %s المجهّزة: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "تعذر كتابة بيانات أمان الترحيل: %s"
+
+msgid "Migration safety check failed."
+msgstr "فشل فحص أمان الترحيل."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "تم اكتشاف مسار ترحيل نسبي مجهّز غير آمن: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "تعذر اكتشاف إصدار Chamilo المثبّت تلقائيًا. تابع فقط بعد التأكد من توافق هذا التحديث."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "الإصدار المثبّت أو المستهدف ليس بتنسيق إصدار دلالي قابل للمقارنة. تابع فقط بعد التحقق اليدوي."
+
+msgid "An update is available."
+msgstr "يتوفر تحديث."
+
+msgid "The installed version already matches the manifest version."
+msgstr "الإصدار المثبّت يطابق بالفعل إصدار البيان."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "إصدار البيان أقدم من الإصدار المثبّت. التخفيض محظور افتراضيًا."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "لم تُطبَّق الملفات المجهّزة بنجاح. لا يمكن متابعة فحوصات ما بعد التطبيق."
+
+msgid "Apply result metadata was read successfully."
+msgstr "تمت قراءة بيانات نتيجة التطبيق بنجاح."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "تم إنشاء توصيات إجراءات ما بعد التطبيق."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "تم اكتشاف ترحيلات قاعدة البيانات في الحزمة المرحلية. شغّلها فقط بعد التأكد من صحة تحديث الملفات ووجود نسخة احتياطية لقاعدة البيانات."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "مسار الترحيل المرحلي مطلوب لتشغيل فحوصات ما بعد التطبيق."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "التحديث %s ليس JSON صالحًا: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "يجب أن يكون التحديث %s كائن JSON."
+
+msgid "Composer dependencies"
+msgstr "اعتماديات Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "تم تضمين بيانات Composer الوصفية في الحزمة المرحلية. شغّل Composer install من جذر التطبيق قبل اعتبار التحديث مكتملًا."
+
+msgid "Frontend assets"
+msgstr "أصول الواجهة الأمامية"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "تم تضمين ملفات متعلقة بالواجهة الأمامية في الحزمة المرحلية. أعد بناء أصول الإنتاج بعد تثبيت الاعتماديات."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "تم اكتشاف ملفات ترحيل Doctrine في الحزمة المرحلية. تأكد من وجود نسخة احتياطية لقاعدة البيانات قبل تشغيل الترحيلات."
+
+msgid "Symfony cache"
+msgstr "ذاكرة Symfony المؤقتة"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "امسح ذاكرة Symfony المؤقتة بعد تطبيق ملفات التحديث وتشغيل أي أوامر مطلوبة."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "تعذر كتابة بيانات فحوصات ما بعد التطبيق الوصفية."
+
+msgid "Post-apply check failed."
+msgstr "فشل فحص ما بعد التطبيق."
+
+msgid "Update package is not readable: %s"
+msgstr "حزمة التحديث غير قابلة للقراءة: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "حزمة التحديث ليست أرشيف ZIP صالحًا."
+
+msgid "Update package ZIP archive is empty."
+msgstr "أرشيف ZIP لحزمة التحديث فارغ."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "تحتوي حزمة التحديث على إدخال ZIP غير قابل للقراءة."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "تحتوي حزمة التحديث على مسار مطلق غير آمن: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "تحتوي حزمة التحديث على إدخال اجتياز مسار: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "تحتوي حزمة التحديث على رابط رمزي: %s"
+
+msgid "Starting post-apply actions."
+msgstr "بدء إجراءات ما بعد التطبيق."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "تنفيذ أوامر ما بعد التطبيق يتطلب تأكيدًا صريحًا."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "تمت قراءة بيانات توصيات ما بعد التطبيق الوصفية بنجاح."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "تم التحقق من إجراءات ما بعد التطبيق مقابل تقرير التوصيات."
+
+msgid "Post-apply actions were selected."
+msgstr "تم اختيار إجراءات ما بعد التطبيق."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "إجراءات ما بعد التطبيق المتقدمة تتطلب تأكيدًا متقدمًا صريحًا."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "تم تأكيد إجراءات ما بعد التطبيق المتقدمة صراحة."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "اكتملت أوامر ما بعد التطبيق المحددة بنجاح."
+
+msgid "Post-apply command run metadata was written."
+msgstr "تمت كتابة بيانات تشغيل أوامر ما بعد التطبيق الوصفية."
+
+msgid "Post-apply actions completed successfully."
+msgstr "اكتملت إجراءات ما بعد التطبيق بنجاح."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "تعريف أمر ما بعد التطبيق للتحديث غير صالح: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "تشغيل إجراء ما بعد التطبيق: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "تشغيل الأمر %d من %d لـ %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "فشل إجراء ما بعد التطبيق: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "فشل إجراء ما بعد التطبيق \"%s\" برمز خروج %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "اكتمل إجراء ما بعد التطبيق: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "مسار الترحيل المرحلي مطلوب لتشغيل إجراءات ما بعد التطبيق."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "لا توجد إجراءات ما بعد تطبيق موصى بها للتشغيل."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "لا توجد إجراءات ما بعد تطبيق مسموح بها للتشغيل."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "إجراء ما بعد التطبيق غير مسموح به لهذا التحديث: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "تتطلب ترحيلات قاعدة البيانات مراجعة سلامة الترحيل قبل التنفيذ."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "لا يمكن تشغيل ترحيلات قاعدة البيانات لأن مراجعة سلامة الترحيل لم تنجح."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "لا يمكن تشغيل ترحيلات قاعدة البيانات لأن مراجعة سلامة الترحيل لم تدرج الترحيلات المرحلية."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "لا يمكن تشغيل ترحيلات قاعدة البيانات لأن مراجعة سلامة الترحيل تحتوي على إدخال ترحيل غير صالح."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "يمكن لمشغّل التحديث تنفيذ ترحيلات %s المرحلية فقط."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "لا يمكن تشغيل ترحيلات قاعدة البيانات لأن مراجعة سلامة الترحيل المرحلي أبلغت عن أخطاء حاجبة."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "يُبلغ Doctrine عن تحذيرات خط الأساس للترحيل. سيتم تنفيذ فئات ترحيل %s المرحلية فقط بشكل صريح."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "تتطلب ترحيلات قاعدة البيانات تأكيد وجود نسخة احتياطية لقاعدة البيانات."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "تتطلب ترحيلات قاعدة البيانات نص التأكيد \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "اكتملت مراجعة سلامة ترحيل قاعدة البيانات قبل التنفيذ."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "تم تأكيد وجود نسخة احتياطية لقاعدة البيانات صراحة."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "تم تقديم مراجعة سلامة ترحيل قاعدة البيانات وتأكيد النسخة الاحتياطية."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "تم تنفيذ ترحيلات قاعدة البيانات بعد تأكيد صريح للنسخة الاحتياطية. لم يُنشئ المحدّث النسخة الاحتياطية لقاعدة البيانات."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "تم تطبيع أذونات التنفيذ المطلوبة بعد التطبيق."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "تعذر تشغيل ترحيلات قاعدة البيانات لأن bin/console غير موجود."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "أوامر ما بعد التطبيق المحددة لديها المسارات القابلة للكتابة المطلوبة."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "تم التحقق من مسارات الكتابة لأوامر ما بعد التطبيق."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "يمكن لإجراءات ما بعد التطبيق المتقدمة تعديل التبعيات أو الأصول المُولَّدة أو قاعدة البيانات. راجع النسخ الاحتياطية قبل المتابعة."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "لا يمكن تشغيل Composer بأمان من محدّث الويب لأن الملف المُولَّد بواسطة Composer \"%s\" مملوك لمعرّف المستخدم %d بينما يستخدم وقت تشغيل PHP معرّف المستخدم %d. شغّل Composer يدوياً كمالك النشر، ثم تابع إجراءات ما بعد التطبيق المتبقية."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "المسار المطلوب لإجراء ما بعد التطبيق \"%s\" غير قابل للكتابة: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "المجلد الأب المطلوب لإجراء ما بعد التطبيق \"%s\" غير قابل للكتابة: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "تعذر قراءة أذونات الملف التنفيذي المطلوب لما بعد التطبيق: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "تعذر تعليم الملف التنفيذي المطلوب لما بعد التطبيق كقابل للتنفيذ: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "الملف التنفيذي المطلوب لما بعد التطبيق ما زال غير قابل للتنفيذ بعد chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "تم تطبيع إذن التنفيذ."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "تعذر كتابة إعداد Git المعزول لأوامر ما بعد التطبيق."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "يبدو أن عملية تحديث أخرى قيد التشغيل. احذف var/update/update.lock فقط إذا لم يكن هناك تحديث نشط."
+
+msgid "Unable to create update lock: %s"
+msgstr "تعذر إنشاء قفل التحديث: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "تعذر كتابة بيانات تشغيل أوامر ما بعد التطبيق: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "بيان التحديث يفتقد كتلة الحزمة."
+
+msgid "Update manifest signature block must be an object."
+msgstr "يجب أن تكون كتلة توقيع بيان التحديث كائناً."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "يجب أن تكون كتلة متطلبات بيان التحديث كائناً."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "يجب أن يكون sha256 لحزمة التحديث سلسلة سداسية عشرية من 64 حرفاً."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "بيان التحديث يفتقد الحقل النصي المطلوب \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "يجب أن يكون حقل بيان التحديث \"%s\" نصاً."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "بيان التحديث ليس JSON صالحاً: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "يجب أن يكون JSON لبيان التحديث كائناً."
+
+msgid "Manifest source cannot be empty."
+msgstr "لا يمكن أن يكون مصدر البيان فارغاً."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "يجب أن يستخدم عنوان URL لبيان التحديث مصدر التحديث الرسمي %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "تعذر تنزيل بيان التحديث. حالة HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "ملف البيان غير قابل للقراءة: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "تعذر قراءة ملف البيان: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "يجب أن يستخدم عنوان URL لبيان التحديث بروتوكول HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "بيانات وصف حزمة التحديث غير قابلة للقراءة: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "تعذر قراءة بيانات وصف حزمة التحديث: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "بيانات وصف حزمة التحديث ليست JSON صالحاً: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "يجب أن تكون بيانات وصف حزمة التحديث كائن JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "يجب أن يكون تنسيق بيانات وصف حزمة التحديث %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "يجب أن يكون حقل بيانات وصف حزمة التحديث \"remove\" مصفوفة."
+
+msgid "Update package removal paths must be strings."
+msgstr "يجب أن تكون مسارات الإزالة في حزمة التحديث نصوصاً."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "لا يمكن لبيانات وصف حزمة التحديث إزالة مسار محمي: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "لا يمكن لحزمة التحديث تضمين وإزالة المسار نفسه: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "تعذر حساب sha256 لبيانات وصف حزمة التحديث."
+
+msgid "Update package removal path cannot be empty."
+msgstr "لا يمكن أن يكون مسار الإزالة في حزمة التحديث فارغاً."
+
+msgid "Update package removal path contains a null byte."
+msgstr "مسار الإزالة في حزمة التحديث يحتوي على بايت فارغ."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "يجب أن يكون مسار الإزالة في حزمة التحديث نسبياً: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "مسار الإزالة في حزمة التحديث يحتوي على جزء غير آمن: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "مسار التجهيز مطلوب لبناء خطة تطبيق التحديث."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "مجلد التجهيز يفتقد STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "تعذر قراءة بيانات التعريف المرحلية: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "بيانات التعريف المرحلية ليست JSON صالحًا: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "يجب أن تكون بيانات التعريف المرحلية كائن JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "بيانات التعريف المرحلية تفتقد الحقل application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "حزمة التحديث تفتقد %s. بيانات تعريف التنظيف الموقّعة مطلوبة قبل تطبيق الملفات."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "بيانات التعريف المرحلية لا تحتوي على بيانات تعريف تنظيف الحزمة الموقّعة المسجّلة أثناء الاستخراج."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "تغيّرت بيانات تعريف تنظيف حزمة التحديث بعد التجهيز المرحلي. أعد تجهيز الحزمة المُتحقَّق منها قبل المتابعة."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "بيانات التعريف المرحلية لا تحتوي على قائمة إزالة حزمة صالحة."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "تغيّرت مسارات تنظيف حزمة التحديث بعد التجهيز المرحلي. أعد تجهيز الحزمة المُتحقَّق منها قبل المتابعة."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "بيانات تعريف تنظيف الحزمة الموقّعة لم تتغيّر منذ التجهيز المرحلي."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "ملف قفل التحديث موجود بالفعل. قد يكون تحديث آخر قيد التنفيذ."
+
+msgid "Update lock directory is not writable."
+msgstr "دليل قفل التحديث غير قابل للكتابة."
+
+msgid "No update lock is currently active."
+msgstr "لا يوجد قفل تحديث نشط حاليًا."
+
+msgid "Update backup directory is not writable."
+msgstr "دليل نسخ احتياطي للتحديث غير قابل للكتابة."
+
+msgid "Update backup directory is writable."
+msgstr "دليل نسخ احتياطي للتحديث قابل للكتابة."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "لا يمكن للعملية الحالية إنشاء دليل النسخ الاحتياطي للتحديث."
+
+msgid "Update backup directory can be created."
+msgstr "يمكن إنشاء دليل النسخ الاحتياطي للتحديث."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "بعض أدلة عمل التحديث غير قابلة للكتابة أو لا يمكن للعملية الحالية إنشاؤها."
+
+msgid "Update working directories are writable or can be created."
+msgstr "أدلة عمل التحديث قابلة للكتابة أو يمكن إنشاؤها."
+
+msgid "Update apply file plan was generated."
+msgstr "تم إنشاء خطة ملفات تطبيق التحديث."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "بيانات تعريف تنظيف الحزمة تحتوي على مسارات لا يمكن إزالتها بأمان."
+
+msgid "Package-declared removal targets are safe."
+msgstr "أهداف الإزالة المعلنة في الحزمة آمنة."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "بعض الملفات المهجورة المعلنة في الحزمة غائبة أصلًا عن هذا التثبيت."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "التحديث المخطط سيستبدل أو يزيل روابط رمزية موجودة."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "التحديث المخطط لا يستبدل أو يزيل روابط رمزية موجودة."
+
+msgid "New update migration files must be placed under %s."
+msgstr "يجب وضع ملفات ترحيل التحديث الجديدة تحت %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "تم اكتشاف ملفات ترحيل Doctrine جديدة من نوع %s. ستتطلب مراجعة أمان لترحيل قاعدة البيانات بعد تطبيق الملفات."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "تم اقتطاع بعض قوائم ملفات خطة تطبيق التحديث في استجابة JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "تعذر كتابة بيانات تعريف خطة تطبيق التحديث."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "تعذر تنزيل حزمة التحديث. حالة HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "تعذر فتح ملف هدف حزمة التحديث: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "يجب أن تستخدم تنزيلات التحديث مصدر التحديث الرسمي %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "يجب أن يستخدم عنوان URL لحزمة التحديث HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "اجتازت فحوصات أمان أرشيف حزمة التحديث."
+
+msgid "Update package was extracted to staging."
+msgstr "تم استخراج حزمة التحديث إلى التجهيز المرحلي."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "تم تحميل بيانات تعريف تنظيف الحزمة الموقّعة."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "حزمة التحديث لا تحتوي على %s. سيتم حظر تطبيق الملفات حتى توفير بيانات تعريف التنظيف الموقّعة."
+
+msgid "Staged package dry-run report was generated."
+msgstr "تم إنشاء تقرير التشغيل التجريبي للحزمة المجهّزة مرحليًا."
+
+msgid "Staging metadata was written."
+msgstr "تم كتابة بيانات التعريف المرحلية."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "تعذر استخراج حزمة التحديث إلى دليل التجهيز المرحلي."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "تعذر تحديد جذر تطبيق Chamilo في الحزمة المجهّزة مرحليًا."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "الحزمة المجهّزة مرحليًا تفتقد إدخال Chamilo المطلوب: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "الحزمة المجهّزة مرحليًا تحتوي على بنية Chamilo المتوقعة."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "الحزمة المجهّزة مرحليًا لا تحتوي على composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "الحزمة المجهّزة مرحليًا تحتوي على composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "الحزمة المجهّزة مرحليًا لا تحتوي على yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "الحزمة المجهّزة مرحليًا تحتوي على yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "تعذر ترميز بيانات التعريف المرحلية."
+
+msgid "Unable to write staging metadata."
+msgstr "تعذر كتابة بيانات التعريف المرحلية."
+
+msgid "Update operation log created."
+msgstr "تم إنشاء سجل عملية التحديث."
+
+msgid "Unable to write update operation log."
+msgstr "تعذر كتابة سجل عملية التحديث."
+
+msgid "Invalid update operation id."
+msgstr "معرف عملية التحديث غير صالح."
 

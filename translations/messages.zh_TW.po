@@ -40236,3 +40236,948 @@ msgstr "實習城市"
 msgid "City"
 msgstr "城市"
 
+msgid "Update workflow restored after page refresh"
+msgstr "頁面重新整理後已還原更新流程"
+
+msgid "Last completed step"
+msgstr "最後完成的步驟"
+
+msgid "Stage package"
+msgstr "暫存套件"
+
+msgid "Package staging"
+msgstr "套件暫存"
+
+msgid "Apply plan"
+msgstr "套用計畫"
+
+msgid "Update workflow completed"
+msgstr "更新流程已完成"
+
+msgid "Update directory exists and is writable."
+msgstr "更新目錄存在且可寫入。"
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "更新目錄存在但無法寫入：%s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "更新目錄尚不存在，但其上層目錄可寫入。"
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "更新目錄尚不存在，但可在 var/ 下建立。"
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "更新目錄不存在，且以目前權限無法建立。"
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "無法判定更新預檢所需的可用磁碟空間。"
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "可用磁碟空間不足，無法安全執行更新暫存作業。"
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "可用磁碟空間足以進行此驗證階段的更新流程。"
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "更新清單未定義 PHP 版本需求。"
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "無法完整評估 PHP 需求：%s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "目前 PHP 版本不符合更新需求：%s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "目前 PHP 版本符合更新需求。"
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "未提供本機套件路徑。下載的套件僅能在下載後檢查。"
+
+msgid "Local update package is not readable: %s"
+msgstr "本機更新套件無法讀取：%s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "本機更新套件必須為 ZIP 封存檔。"
+
+msgid "Local update package is readable."
+msgstr "本機更新套件可讀取。"
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "無法自動偵測已安裝的 Chamilo 版本。無法檢查版本方向。"
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "已安裝或目標版本不是可比較的語意化版本格式。"
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "目標版本低於已安裝版本。預設不允許降級。"
+
+msgid "Target version matches the installed version."
+msgstr "目標版本與已安裝版本相同。"
+
+msgid "Target version is newer than the installed version."
+msgstr "目標版本新於已安裝版本。"
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "專案不是 Git 工作複本，或不存在 .git。"
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "此更新系統適用於不支援 Git 的安裝。我們偵測到本機系統使用 Git。繼續更新可能導致 Git 歷史損壞。對於支援 Git 的系統，建議使用網站根目錄 CONTRIBUTING.md 中詳述的 Git 程序。"
+
+msgid "Local Git changes were also detected."
+msgstr "亦偵測到本機 Git 變更。"
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "部分專案中繼資料檔案缺失。後續更新階段可能需要手動檢查相依套件。"
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer 與 Yarn 中繼資料檔案存在。"
+
+msgid "Starting staged file application."
+msgstr "開始套用暫存檔案。"
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "套用暫存檔案需要明確確認。"
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "套用暫存的更新檔案需要明確確認。"
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "暫存目錄位於 Chamilo 更新暫存目錄內。"
+
+msgid "Staging directory was validated."
+msgstr "暫存目錄已通過驗證。"
+
+msgid "Apply plan metadata was read successfully."
+msgstr "已成功讀取套用計畫中繼資料。"
+
+msgid "Staged application path is valid."
+msgstr "暫存套用路徑有效。"
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "已簽署套件的清理中繼資料與已審閱的套用計畫相符。"
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "已簽署套件的清理中繼資料已通過驗證。"
+
+msgid "Update lock was acquired."
+msgstr "已取得更新鎖定。"
+
+msgid "Update backup directory was created."
+msgstr "已建立更新備份目錄。"
+
+msgid "Update file operations were collected."
+msgstr "已收集更新檔案作業。"
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "計畫替換或移除的既有檔案已備份。"
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "暫存的更新檔案已複製到 Chamilo 安裝目錄。"
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "套件宣告的過時檔案已從 Chamilo 安裝中移除。"
+
+msgid "Package-declared obsolete files were removed."
+msgstr "套件宣告的過時檔案已移除。"
+
+msgid "Update apply audit metadata was written."
+msgstr "已寫入更新套用稽核中繼資料。"
+
+msgid "Staged files applied successfully."
+msgstr "暫存檔案已成功套用。"
+
+msgid "Unable to restore removed files: %s"
+msgstr "無法還原已移除的檔案：%s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "無法復原已複製的檔案：%s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "更新套用失敗後已執行檔案復原。"
+
+msgid "Rollback failed: %s"
+msgstr "復原失敗：%s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "無法寫入更新套用稽核中繼資料：%s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "失敗後無法釋放更新鎖定：%s"
+
+msgid "Staging path is required to apply update files."
+msgstr "套用更新檔案需要暫存路徑。"
+
+msgid "Staging directory does not exist: %s"
+msgstr "暫存目錄不存在：%s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo 更新暫存根目錄不存在。"
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "暫存目錄必須位於 var/update/staging 內。"
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "暫存目錄缺少 APPLY-PLAN.json。"
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "無法讀取更新套用計畫中繼資料：%s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "更新套用計畫中繼資料不是有效的 JSON：%s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "更新套用計畫中繼資料必須是 JSON 物件。"
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "更新套用計畫缺少 application_path 欄位。"
+
+msgid "Staged application path is not readable: %s"
+msgstr "暫存應用程式路徑無法讀取：%s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "暫存應用程式路徑必須位於暫存目錄內。"
+
+msgid "Staged application path is missing composer.json."
+msgstr "暫存應用程式路徑缺少 composer.json。"
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "更新套件缺少 %s。請重新暫存含已簽署清理中繼資料的已驗證套件。"
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "更新套用計畫缺少已審核的套件清理中繼資料。"
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "更新套件清理中繼資料在產生套用計畫後已變更。請先重建套用計畫再繼續。"
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "更新套用計畫包含無效的套件移除清單。"
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "更新套件清理路徑在產生套用計畫後已變更。請先重建套用計畫再繼續。"
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "更新套用計畫缺少已審核的移除路徑清單。"
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "更新套用計畫的移除路徑與已簽署的套件清理中繼資料不符。"
+
+msgid "Update lock path must be inside var/update."
+msgstr "更新鎖定路徑必須位於 var/update 內。"
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "更新套用計畫缺少 backup_path 欄位。"
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "更新備份路徑包含不安全的路徑區段。"
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "更新備份路徑必須位於 var/update/backups 內。"
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "無法取得更新鎖定。可能有其他更新正在進行。"
+
+msgid "Unable to release update lock: %s"
+msgstr "無法釋放更新鎖定：%s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "更新備份目錄已存在：%s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "無法建立目標目錄：%s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "計畫中的更新將覆寫現有符號連結：%s"
+
+msgid "Target file is not writable: %s"
+msgstr "目標檔案無法寫入：%s"
+
+msgid "Target file cannot be created: %s"
+msgstr "無法建立目標檔案：%s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "移除過時檔案前無法解析 Chamilo 專案目錄。"
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "更新清理無法移除受保護路徑：%s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "計畫中的更新將移除現有符號連結：%s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "更新清理僅支援檔案，不支援目錄：%s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "過時目標檔案無法讀取以進行備份：%s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "以目前目錄權限無法移除過時目標檔案：%s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "過時目標檔案解析後位於 Chamilo 專案目錄之外：%s"
+
+msgid "Unable to back up target file: %s"
+msgstr "無法備份目標檔案：%s"
+
+msgid "Unable to write update backup metadata."
+msgstr "無法寫入更新備份中繼資料。"
+
+msgid "Unable to copy staged update file: %s"
+msgstr "無法複製暫存更新檔案：%s"
+
+msgid "Copied %d of %d staged files."
+msgstr "已複製 %d / %d 個暫存檔案。"
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "無法移除套件宣告的過時檔案：%s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "已移除 %d / %d 個套件宣告的過時檔案。"
+
+msgid "Unable to restore backed up file: %s"
+msgstr "無法還原備份檔案：%s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "回復時無法移除新複製的檔案：%s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "無法還原已移除的檔案，因為缺少備份：%s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "無法從備份還原已移除的檔案：%s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "無法寫入更新套用稽核中繼資料。"
+
+msgid "Unable to write global update apply log."
+msgstr "無法寫入全域更新套用紀錄。"
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "偵測到不安全的暫存相對路徑：%s"
+
+msgid "Directory is not writable: %s"
+msgstr "目錄不可寫入：%s"
+
+msgid "Unable to create directory: %s"
+msgstr "無法建立目錄：%s"
+
+msgid "Staging metadata was read successfully."
+msgstr "已成功讀取暫存中繼資料。"
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "套用計畫中繼資料已寫入暫存目錄。"
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "目標檔案與目錄對計畫中的更新與清理似乎可寫入。"
+
+msgid "Update apply plan check failed."
+msgstr "更新套用計畫檢查失敗。"
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "部分目標檔案或目錄無法寫入或移除。"
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "若要修正此問題，請暫時將整個 Chamilo 目錄的擁有者改為 %s（網頁伺服器使用者），套用更新後再將擁有者改回 %s，然後將 var/（及其內容）的擁有者設回 %s，以便應用程式持續寫入。"
+
+msgid "Update package verification failed."
+msgstr "更新套件驗證失敗。"
+
+msgid "Update preflight checks failed."
+msgstr "更新前置檢查失敗。"
+
+msgid "Unable to stage update package."
+msgstr "無法暫存更新套件。"
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "此伺服器已停用從使用者介面執行套用後指令。"
+
+msgid "Missing required field: %s"
+msgstr "缺少必要欄位：%s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "未提供更新清單來源，且未設定預設更新清單 URL。"
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "更新清單 URL 必須使用官方更新來源 %s。僅可變更清單路徑。"
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "已停用本機更新清單路徑。請使用 HTTPS 清單 URL，或在伺服器環境中設定 CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 以進行本機測試。"
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "請勿提供 HTTP %s 路徑。請將此欄位留空，以便從更新清單下載。"
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "此環境已停用本機更新 %s 路徑。"
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "此環境必須在伺服器上設定受信任的更新公開金鑰。"
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "此環境已停用略過更新簽章驗證。"
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "執行套用後更新動作需要確認文字 \"%s\"。"
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "套用暫存更新檔案需要確認文字 \"%s\"。"
+
+msgid "Unable to resolve project directory."
+msgstr "無法解析專案目錄。"
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "此更新程式不管理資料庫備份。執行遷移前請先建立並驗證資料庫備份。"
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine 遷移的 down() 方法不保證能還原已刪除或已轉換的資料。"
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "套用後中繼資料建議檢視資料庫遷移。"
+
+msgid "No migration files were found in the staged package."
+msgstr "暫存套件中找不到遷移檔案。"
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "已偵測到暫存的 Doctrine 遷移檔案。"
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "已從暫存套件解析 Doctrine 遷移目標。"
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine 遷移基準對暫存遷移有阻礙問題。"
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine 回報歷史遷移基準警告，但僅會明確檢視並執行暫存的 %s 遷移。"
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine 回報歷史遷移基準警告。更新程式將在明確確認後僅執行暫存的 %s 遷移類別。"
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine 基準對暫存的 %s 遷移沒有阻礙問題。"
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "至少一個暫存遷移的 Doctrine 模擬執行失敗。修復前請勿執行資料庫遷移。"
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "每個暫存遷移類別的 Doctrine 模擬執行皆成功完成。"
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "執行遷移前必須在此更新程式之外建立資料庫備份。"
+
+msgid "Staging path is required to review database migrations."
+msgstr "檢視資料庫遷移需要暫存路徑。"
+
+msgid "Unable to read update %s: %s"
+msgstr "無法讀取更新 %s：%s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "更新 %s JSON 無效：%s"
+
+msgid "Update %s JSON must be an object."
+msgstr "更新 %s JSON 必須為物件。"
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "套用後檢查中繼資料未包含有效的動作清單。"
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "此次暫存更新不建議執行資料庫遷移。"
+
+msgid "Update metadata is missing the staged application path."
+msgstr "更新中繼資料缺少暫存套用路徑。"
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "找不到預定的暫存遷移檔案：%s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "無法讀取暫存遷移檔案：%s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "無法從 getDescription() 擷取說明。"
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "更新執行程式僅支援 %s 個暫存遷移：%s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "無法寫入遷移安全中繼資料：%s"
+
+msgid "Migration safety check failed."
+msgstr "遷移安全檢查失敗。"
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "偵測到不安全的暫存相對遷移路徑：%s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "無法自動偵測已安裝的 Chamilo 版本。請確認此更新相容後再繼續。"
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "已安裝或目標版本不是可比較的語意化版本格式。請手動驗證後再繼續。"
+
+msgid "An update is available."
+msgstr "有可用的更新。"
+
+msgid "The installed version already matches the manifest version."
+msgstr "已安裝版本已與清單版本相符。"
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "清單版本舊於已安裝版本。預設會封鎖降級。"
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "暫存檔案未成功套用。無法繼續套用後檢查。"
+
+msgid "Apply result metadata was read successfully."
+msgstr "已成功讀取套用結果中繼資料。"
+
+msgid "Post-apply action recommendations were generated."
+msgstr "已產生套用後動作建議。"
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "暫存套件中偵測到資料庫遷移。請確認檔案更新正確且已備份資料庫後再執行。"
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "執行套用後檢查需要暫存路徑。"
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "更新 %s 不是有效的 JSON：%s"
+
+msgid "Update %s must be a JSON object."
+msgstr "更新 %s 必須是 JSON 物件。"
+
+msgid "Composer dependencies"
+msgstr "Composer 相依套件"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "暫存套件包含 Composer 中繼資料。請先在應用程式根目錄執行 Composer install，再視為更新完成。"
+
+msgid "Frontend assets"
+msgstr "前端資產"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "暫存套件包含前端相關檔案。安裝相依套件後請重建正式環境資產。"
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "暫存套件中偵測到 Doctrine 遷移檔案。執行遷移前請確認已備份資料庫。"
+
+msgid "Symfony cache"
+msgstr "Symfony 快取"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "套用更新檔案並執行任何必要指令後，請清除 Symfony 快取。"
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "無法寫入套用後檢查中繼資料。"
+
+msgid "Post-apply check failed."
+msgstr "套用後檢查失敗。"
+
+msgid "Update package is not readable: %s"
+msgstr "無法讀取更新套件：%s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "更新套件不是有效的 ZIP 封存檔。"
+
+msgid "Update package ZIP archive is empty."
+msgstr "更新套件 ZIP 封存檔是空的。"
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "更新套件包含無法讀取的 ZIP 項目。"
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "更新套件包含不安全的絕對路徑：%s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "更新套件包含路徑遍歷項目：%s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "更新套件包含符號連結：%s"
+
+msgid "Starting post-apply actions."
+msgstr "開始套用後動作。"
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "執行套用後指令需要明確確認。"
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "已成功讀取套用後建議中繼資料。"
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "已依建議報告驗證套用後動作。"
+
+msgid "Post-apply actions were selected."
+msgstr "已選取套用後動作。"
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "進階套用後動作需要明確的進階確認。"
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "已明確確認進階套用後動作。"
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "所選套用後指令已成功完成。"
+
+msgid "Post-apply command run metadata was written."
+msgstr "已寫入套用後指令執行中繼資料。"
+
+msgid "Post-apply actions completed successfully."
+msgstr "套用後動作已成功完成。"
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "無效的更新套用後指令定義：%s"
+
+msgid "Running post-apply action: %s"
+msgstr "正在執行套用後動作：%s"
+
+msgid "Running command %d of %d for %s."
+msgstr "正在執行 %s 的第 %d 個指令，共 %d 個。"
+
+msgid "Post-apply action failed: %s"
+msgstr "套用後動作失敗：%s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "套用後動作「%s」失敗，結束代碼為 %d。"
+
+msgid "Post-apply action completed: %s"
+msgstr "套用後動作已完成：%s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "執行套用後動作需要暫存路徑。"
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "沒有建議執行的套用後動作。"
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "沒有允許執行的套用後動作。"
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "此更新不允許套用後動作：%s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "資料庫遷移在執行前需要通過遷移安全審查。"
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "無法執行資料庫遷移，因為遷移安全審查未通過。"
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "無法執行資料庫遷移，因為遷移安全審查未列出暫存的遷移。"
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "無法執行資料庫遷移，因為遷移安全審查包含無效的遷移項目。"
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "更新執行程式只能執行暫存的 %s 遷移。"
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "無法執行資料庫遷移，因為暫存遷移的安全審查回報了阻擋錯誤。"
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine 回報遷移基準警告。將僅明確執行暫存的 %s 遷移類別。"
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "資料庫遷移需要確認已存在資料庫備份。"
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "資料庫遷移需要確認文字「RUN DATABASE MIGRATIONS」。"
+
+msgid "Database migration safety review was completed before execution."
+msgstr "資料庫遷移安全審查已在執行前完成。"
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "已明確確認資料庫備份存在。"
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "已提供資料庫遷移安全審查與備份確認。"
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "資料庫遷移已在明確確認資料庫備份後執行。更新程式並未建立資料庫備份。"
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "已正規化套用後所需可執行檔的權限。"
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "找不到 bin/console，無法執行資料庫遷移。"
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "所選套用後指令具備所需的可寫入路徑。"
+
+msgid "Post-apply command writable paths were validated."
+msgstr "已驗證套用後指令的可寫入路徑。"
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "進階套用後動作可能會修改相依套件、產生的資產或資料庫。繼續前請檢查備份。"
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "無法從網頁更新程式安全執行 Composer，因為 Composer 產生的檔案「%s」擁有者 UID 為 %d，而 PHP 執行環境使用 UID %d。請以部署擁有者身分手動執行 Composer，然後繼續其餘套用後動作。"
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "套用後動作「%s」所需路徑無法寫入：%s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "套用後動作「%s」所需上層目錄無法寫入：%s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "無法讀取套用後所需可執行檔的權限：%s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "無法將套用後所需可執行檔標示為可執行：%s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "chmod 後，套用後所需可執行檔仍無法執行：%s"
+
+msgid "Executable permission was normalized."
+msgstr "已正規化可執行權限。"
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "無法為套用後指令寫入隔離的 Git 設定。"
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "似乎有另一個更新作業正在執行。僅在沒有進行中的更新時，才移除 var/update/update.lock。"
+
+msgid "Unable to create update lock: %s"
+msgstr "無法建立更新鎖定：%s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "無法寫入套用後指令執行中繼資料：%s"
+
+msgid "Update manifest is missing the package block."
+msgstr "更新清單缺少套件區塊。"
+
+msgid "Update manifest signature block must be an object."
+msgstr "更新清單的簽章區塊必須為物件。"
+
+msgid "Update manifest requirements block must be an object."
+msgstr "更新清單的需求區塊必須為物件。"
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "更新套件的 sha256 必須為 64 字元的十六進位字串。"
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "更新清單缺少必要字串欄位「%s」。"
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "更新清單欄位「%s」必須為字串。"
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "更新清單不是有效的 JSON：%s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "更新清單 JSON 必須為物件。"
+
+msgid "Manifest source cannot be empty."
+msgstr "清單來源不可為空。"
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "更新清單網址必須使用官方更新來源 %s。"
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "無法下載更新清單。HTTP 狀態：%d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "清單檔案無法讀取：%s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "無法讀取清單檔案：%s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "更新資訊清單網址必須使用 HTTPS。"
+
+msgid "Update package metadata is not readable: %s"
+msgstr "無法讀取更新套件中繼資料：%s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "無法讀取更新套件中繼資料：%s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "更新套件中繼資料不是有效的 JSON：%s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "更新套件中繼資料必須是 JSON 物件。"
+
+msgid "Update package metadata format must be %d."
+msgstr "更新套件中繼資料格式必須為 %d。"
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "更新套件中繼資料欄位 \"remove\" 必須是陣列。"
+
+msgid "Update package removal paths must be strings."
+msgstr "更新套件移除路徑必須是字串。"
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "更新套件中繼資料無法移除受保護路徑：%s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "更新套件不可同時包含並移除同一路徑：%s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "無法計算更新套件中繼資料的 sha256。"
+
+msgid "Update package removal path cannot be empty."
+msgstr "更新套件移除路徑不可為空。"
+
+msgid "Update package removal path contains a null byte."
+msgstr "更新套件移除路徑含有空位元組。"
+
+msgid "Update package removal path must be relative: %s"
+msgstr "更新套件移除路徑必須為相對路徑：%s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "更新套件移除路徑含有不安全區段：%s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "建立更新套用計畫需要暫存路徑。"
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "暫存目錄缺少 STAGING-INFO.json。"
+
+msgid "Unable to read staging metadata: %s"
+msgstr "無法讀取暫存中繼資料：%s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "暫存中繼資料不是有效的 JSON：%s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "暫存中繼資料必須是 JSON 物件。"
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "暫存中繼資料缺少 application_path 欄位。"
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "更新套件缺少 %s。套用檔案前必須具備已簽署的清理中繼資料。"
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "暫存中繼資料未包含解壓縮時記錄的已簽署套件清理中繼資料。"
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "更新套件清理中繼資料在暫存後已變更。請重新暫存已驗證的套件後再繼續。"
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "暫存中繼資料未包含有效的套件移除清單。"
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "更新套件清理路徑在暫存後已變更。請重新暫存已驗證的套件後再繼續。"
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "已簽署的套件清理中繼資料自暫存後未變更。"
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "更新鎖定檔已存在。可能有另一項更新正在進行。"
+
+msgid "Update lock directory is not writable."
+msgstr "更新鎖定目錄無法寫入。"
+
+msgid "No update lock is currently active."
+msgstr "目前沒有作用中的更新鎖定。"
+
+msgid "Update backup directory is not writable."
+msgstr "更新備份目錄無法寫入。"
+
+msgid "Update backup directory is writable."
+msgstr "更新備份目錄可寫入。"
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "目前程序無法建立更新備份目錄。"
+
+msgid "Update backup directory can be created."
+msgstr "可以建立更新備份目錄。"
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "部分更新工作目錄無法寫入，或目前程序無法建立。"
+
+msgid "Update working directories are writable or can be created."
+msgstr "更新工作目錄可寫入或可建立。"
+
+msgid "Update apply file plan was generated."
+msgstr "已產生更新套用檔案計畫。"
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "套件清理中繼資料含有無法安全移除的路徑。"
+
+msgid "Package-declared removal targets are safe."
+msgstr "套件宣告的移除目標是安全的。"
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "部分套件宣告的過時檔案在此安裝中已不存在。"
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "計畫中的更新將覆寫或移除現有符號連結。"
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "計畫中的更新不會覆寫或移除現有符號連結。"
+
+msgid "New update migration files must be placed under %s."
+msgstr "新的更新遷移檔案必須放在 %s 之下。"
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "偵測到新的 %s Doctrine 遷移檔案。套用檔案後需進行資料庫遷移安全審查。"
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "部分更新套用計畫檔案清單在 JSON 回應中被截斷。"
+
+msgid "Unable to write update apply plan metadata."
+msgstr "無法寫入更新套用計畫中繼資料。"
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "無法下載更新套件。HTTP 狀態：%d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "無法開啟更新套件目標檔案：%s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "更新下載必須使用官方更新來源 %s。"
+
+msgid "The update package URL must use HTTPS."
+msgstr "更新套件網址必須使用 HTTPS。"
+
+msgid "Update package archive safety checks passed."
+msgstr "更新套件封存安全檢查已通過。"
+
+msgid "Update package was extracted to staging."
+msgstr "更新套件已解壓縮至暫存區。"
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "已載入已簽署套件的清理中繼資料。"
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "更新套件未包含 %s。在提供已簽署的清理中繼資料之前，將封鎖檔案套用。"
+
+msgid "Staged package dry-run report was generated."
+msgstr "已產生暫存套件的模擬執行報告。"
+
+msgid "Staging metadata was written."
+msgstr "已寫入暫存中繼資料。"
+
+msgid "Unable to extract update package to staging directory."
+msgstr "無法將更新套件解壓縮至暫存目錄。"
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "無法在暫存套件中找到 Chamilo 應用程式根目錄。"
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "暫存套件缺少必要的 Chamilo 項目：%s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "暫存套件包含預期的 Chamilo 結構。"
+
+msgid "Staged package does not contain composer.lock."
+msgstr "暫存套件未包含 composer.lock。"
+
+msgid "Staged package contains composer.lock."
+msgstr "暫存套件包含 composer.lock。"
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "暫存套件未包含 yarn.lock。"
+
+msgid "Staged package contains yarn.lock."
+msgstr "暫存套件包含 yarn.lock。"
+
+msgid "Unable to encode staging metadata."
+msgstr "無法編碼暫存中繼資料。"
+
+msgid "Unable to write staging metadata."
+msgstr "無法寫入暫存中繼資料。"
+
+msgid "Update operation log created."
+msgstr "已建立更新作業記錄。"
+
+msgid "Unable to write update operation log."
+msgstr "無法寫入更新作業記錄。"
+
+msgid "Invalid update operation id."
+msgstr "更新作業識別碼無效。"
+

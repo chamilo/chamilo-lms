@@ -37011,13 +37011,13 @@ msgid "Trusted signing key"
 msgstr "Pouzdani ključ za potpisivanje"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Upišite PRIMIJENI DATOTEKE AŽURIRANJA za potvrdu"
+msgstr "Unesite APPLY UPDATE FILES za potvrdu"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Upišite POKRENI MIGRACIJE BAZE PODATAKA za potvrdu migracija baze podataka"
+msgstr "Unesite RUN DATABASE MIGRATIONS za potvrdu migracija baze podataka"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Upišite POKRENI RADNJE NAKON AŽURIRANJA za potvrdu"
+msgstr "Unesite RUN POST UPDATE ACTIONS za potvrdu"
 
 msgid "Unknown update notice source."
 msgstr "Nepoznati izvor obavijesti o ažuriranju."
@@ -40576,4 +40576,607 @@ msgstr "Neke ciljne datoteke ili direktoriji ne mogu se zapisati ili ukloniti."
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Da biste to popravili, privremeno promijenite vlasnika cijelog Chamilo direktorija na %s (korisnik web poslužitelja), primijenite ažuriranje, zatim vratite vlasnika na %s, a zatim postavite vlasnika var/ (i njegovog sadržaja) natrag na %s kako bi aplikacija mogla nastaviti zapisivati u njega."
+
+msgid "Update package verification failed."
+msgstr "Provjera paketa ažuriranja nije uspjela."
+
+msgid "Update preflight checks failed."
+msgstr "Predprovjere ažuriranja nisu uspjele."
+
+msgid "Unable to stage update package."
+msgstr "Nije moguće pripremiti paket ažuriranja."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Pokretanje naredbi nakon primjene iz korisničkog sučelja onemogućeno je na ovom poslužitelju."
+
+msgid "Missing required field: %s"
+msgstr "Nedostaje obavezno polje: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Nije naveden izvor manifesta ažuriranja i nije konfiguriran zadani URL manifesta ažuriranja."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL manifesta ažuriranja mora koristiti službeno izvorište ažuriranja %s. Može se promijeniti samo putanja manifesta."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Lokalne putanje manifesta ažuriranja onemogućene su. Koristite HTTPS URL manifesta ili postavite CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 u okruženju poslužitelja za lokalne testove."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Ne navodite HTTP putanju %s. Ostavite ovo polje praznim da se preuzme iz manifesta ažuriranja."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Lokalne putanje ažuriranja %s onemogućene su u ovom okruženju."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "U ovom okruženju na poslužitelju moraju biti konfigurirani pouzdani javni ključevi ažuriranja."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Preskakanje provjere potpisa ažuriranja onemogućeno je u ovom okruženju."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Pokretanje radnji ažuriranja nakon primjene zahtijeva tekst potvrde \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Primjena pripremljenih datoteka ažuriranja zahtijeva tekst potvrde \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Nije moguće odrediti direktorij projekta."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Sigurnosna kopija baze podataka nije upravljana ovim ažuriranjem. Izradite i provjerite sigurnosnu kopiju baze podataka prije pokretanja migracija."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Metode Doctrine migracije down() ne jamče vraćanje izbrisanih ili transformiranih podataka."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Metapodaci nakon primjene preporučuju pregled migracija baze podataka."
+
+msgid "No migration files were found in the staged package."
+msgstr "U pripremljenom paketu nisu pronađene datoteke migracija."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Otkrivene su pripremljene datoteke Doctrine migracija."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Cilj Doctrine migracije određen je iz pripremljenog paketa."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Osnovna linija Doctrine migracija ima blokirajuće probleme za pripremljene migracije."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine prijavljuje upozorenja povijesne osnovne linije migracija, ali samo pripremljene migracije %s bit će pregledane i izričito izvršene."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine prijavljuje upozorenja povijesne osnovne linije migracija. Ažuriranje će izvršiti samo pripremljene klase migracija %s nakon izričite potvrde."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Osnovna linija Doctrine nema blokirajući problem za pripremljene migracije %s."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Doctrine suho pokretanje nije uspjelo za barem jednu pripremljenu migraciju. Ne pokrećite migracije baze podataka dok se to ne popravi."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Doctrine suho pokretanje uspješno je dovršeno za svaku pripremljenu klasu migracije."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Sigurnosna kopija baze podataka mora se izraditi izvan ovog ažuriranja prije pokretanja migracija."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Putanja pripreme potrebna je za pregled migracija baze podataka."
+
+msgid "Unable to read update %s: %s"
+msgstr "Nije moguće pročitati ažuriranje %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON ažuriranja %s nije valjan: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON ažuriranja %s mora biti objekt."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Metapodaci provjera nakon primjene ne sadrže valjani popis radnji."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Migracije baze podataka nisu preporučene za ovo pripremljeno ažuriranje."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "U metapodacima ažuriranja nedostaje putanja pripremljene aplikacije."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Planirana pripremljena datoteka migracije nije pronađena: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Nije moguće pročitati pripremljenu datoteku migracije: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Iz getDescription() nije bilo moguće izdvojiti opis."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Pokretač ažuriranja podržava samo pripremljene migracije %s: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Nije moguće zapisati metapodatke sigurnosti migracije: %s"
+
+msgid "Migration safety check failed."
+msgstr "Provjera sigurnosti migracije nije uspjela."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Otkrivena je nesigurna relativna putanja pripremljene migracije: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Instalirana verzija Chamiloa nije se mogla automatski otkriti. Nastavite tek nakon što potvrdite da je ovo ažuriranje kompatibilno."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Instalirana ili ciljna verzija nije u usporedivom semantičkom formatu verzije. Nastavite tek nakon ručne provjere."
+
+msgid "An update is available."
+msgstr "Dostupno je ažuriranje."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Instalirana verzija već odgovara verziji manifesta."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Verzija manifesta starija je od instalirane verzije. Unaprijed su onemogućena smanjenja verzije."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Pripremljene datoteke nisu uspješno primijenjene. Provjere nakon primjene ne mogu se nastaviti."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Metapodaci rezultata primjene uspješno su pročitani."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Generirane su preporuke za radnje nakon primjene."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "U pripremljenom paketu otkrivene su migracije baze podataka. Pokrenite ih tek nakon što potvrdite da je ažuriranje datoteka ispravno i da postoji sigurnosna kopija baze podataka."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Za pokretanje provjera nakon primjene potreban je put pripreme."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Ažuriranje %s nije valjani JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Ažuriranje %s mora biti JSON objekt."
+
+msgid "Composer dependencies"
+msgstr "Composer ovisnosti"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Metapodaci Composera uključeni su u pripremljeni paket. Prije nego što ažuriranje smatrate dovršenim, pokrenite Composer install iz korijena aplikacije."
+
+msgid "Frontend assets"
+msgstr "Prednje datoteke"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Datoteke vezane uz prednji dio uključene su u pripremljeni paket. Nakon instalacije ovisnosti ponovno izgradite produkcijske resurse."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "U pripremljenom paketu otkrivene su datoteke Doctrine migracija. Prije pokretanja migracija potvrdite da postoji sigurnosna kopija baze podataka."
+
+msgid "Symfony cache"
+msgstr "Symfony predmemorija"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Očistite Symfony predmemoriju nakon primjene datoteka ažuriranja i pokretanja potrebnih naredbi."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Nije moguće zapisati metapodatke provjera nakon primjene."
+
+msgid "Post-apply check failed."
+msgstr "Provjera nakon primjene nije uspjela."
+
+msgid "Update package is not readable: %s"
+msgstr "Paket ažuriranja nije čitljiv: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Paket ažuriranja nije valjana ZIP arhiva."
+
+msgid "Update package ZIP archive is empty."
+msgstr "ZIP arhiva paketa ažuriranja prazna je."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Paket ažuriranja sadrži nečitljivi ZIP unos."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Paket ažuriranja sadrži nesiguran apsolutni put: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Paket ažuriranja sadrži unos s prolaskom kroz putanju: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Paket ažuriranja sadrži simboličku poveznicu: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Pokretanje radnji nakon primjene."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Izvršavanje naredbi nakon primjene zahtijeva izričitu potvrdu."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Metapodaci preporuka nakon primjene uspješno su pročitani."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Radnje nakon primjene provjerene su prema izvješću o preporukama."
+
+msgid "Post-apply actions were selected."
+msgstr "Odabrane su radnje nakon primjene."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Napredne radnje nakon primjene zahtijevaju izričitu naprednu potvrdu."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Napredne radnje nakon primjene izričito su potvrđene."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Odabrane naredbe nakon primjene uspješno su dovršene."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Metapodaci pokretanja naredbi nakon primjene zapisani su."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Radnje nakon primjene uspješno su dovršene."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Neispravna definicija naredbe ažuriranja nakon primjene: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Pokretanje radnje nakon primjene: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Pokretanje naredbe %d od %d za %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Radnja nakon primjene nije uspjela: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Radnja nakon primjene \"%s\" nije uspjela s izlaznim kodom %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Radnja nakon primjene dovršena: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Za pokretanje radnji nakon primjene potreban je put pripreme."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Nema preporučenih radnji nakon primjene za pokretanje."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Nema dopuštenih radnji nakon primjene za pokretanje."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Radnja nakon primjene nije dopuštena za ovo ažuriranje: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Migracije baze podataka zahtijevaju pregled sigurnosti migracije prije izvršavanja."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Migracije baze podataka ne mogu se pokrenuti jer pregled sigurnosti migracije nije prošao."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Migracije baze podataka ne mogu se pokrenuti jer pregled sigurnosti migracije nije naveo pripremljene migracije."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Migracije baze podataka ne mogu se pokrenuti jer pregled sigurnosti migracije sadrži neispravan unos migracije."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Pokretač ažuriranja može izvršiti samo pripremljene %s migracije."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Migracije baze podataka ne mogu se pokrenuti jer je pregled sigurnosti pripremljenih migracija prijavio blokirajuće pogreške."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine prijavljuje upozorenja o osnovnoj liniji migracija. Izričito će se izvršiti samo pripremljene klase migracija %s."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Migracije baze podataka zahtijevaju potvrdu da postoji sigurnosna kopija baze podataka."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Migracije baze podataka zahtijevaju potvrdni tekst \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Pregled sigurnosti migracije baze podataka dovršen je prije izvršenja."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Postojanje sigurnosne kopije baze podataka izričito je potvrđeno."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Dostavljeni su pregled sigurnosti migracije baze podataka i potvrda sigurnosne kopije."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Migracije baze podataka izvršene su nakon izričite potvrde sigurnosne kopije baze podataka. Ažuriranje nije stvorilo sigurnosnu kopiju baze podataka."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Potrebna izvršna dopuštenja nakon primjene normalizirana su."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Nije moguće pokrenuti migracije baze podataka jer bin/console nije pronađen."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Odabrane naredbe nakon primjene imaju potrebne putanje s pravom pisanja."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Putanje s pravom pisanja za naredbe nakon primjene provjerene su."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Napredne radnje nakon primjene mogu izmijeniti ovisnosti, generirane resurse ili bazu podataka. Pregledajte sigurnosne kopije prije nastavka."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer se ne može sigurno pokrenuti iz web-ažuriranja jer je datoteka koju je generirao Composer \"%s\" u vlasništvu UID-a %d, dok PHP okruženje koristi UID %d. Pokrenite Composer ručno kao vlasnik implementacije, zatim nastavite s preostalim radnjama nakon primjene."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Putanja potrebna za radnju nakon primjene \"%s\" nije dostupna za pisanje: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Nadređeni direktorij potreban za radnju nakon primjene \"%s\" nije dostupan za pisanje: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Nije moguće pročitati dopuštenja za potrebnu izvršnu datoteku nakon primjene: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Nije moguće označiti potrebnu izvršnu datoteku nakon primjene kao izvršnu: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Potrebna izvršna datoteka nakon primjene i dalje nije izvršna nakon chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Dopuštenje izvršavanja normalizirano je."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Nije moguće zapisati izoliranu Git konfiguraciju za naredbe nakon primjene."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Čini se da je u tijeku druga operacija ažuriranja. Uklonite var/update/update.lock samo ako ažuriranje nije aktivno."
+
+msgid "Unable to create update lock: %s"
+msgstr "Nije moguće stvoriti zaključavanje ažuriranja: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Nije moguće zapisati metapodatke pokretanja naredbe nakon primjene: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "U manifestu ažuriranja nedostaje blok paketa."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Blok potpisa manifesta ažuriranja mora biti objekt."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Blok zahtjeva manifesta ažuriranja mora biti objekt."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 paketa ažuriranja mora biti heksadecimalni niz od 64 znaka."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "U manifestu ažuriranja nedostaje obavezno polje niza \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Polje manifesta ažuriranja \"%s\" mora biti niz."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Manifest ažuriranja nije valjani JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON manifesta ažuriranja mora biti objekt."
+
+msgid "Manifest source cannot be empty."
+msgstr "Izvor manifesta ne može biti prazan."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL manifesta ažuriranja mora koristiti službeno izvorište ažuriranja %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Nije moguće preuzeti manifest ažuriranja. HTTP status: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Datoteka manifesta nije čitljiva: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Nije moguće pročitati datoteku manifesta: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL manifesta ažuriranja mora koristiti HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Metapodaci paketa ažuriranja nisu čitljivi: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Nije moguće pročitati metapodatke paketa ažuriranja: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Metapodaci paketa ažuriranja nisu valjani JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Metapodaci paketa ažuriranja moraju biti JSON objekt."
+
+msgid "Update package metadata format must be %d."
+msgstr "Format metapodataka paketa ažuriranja mora biti %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Polje metapodataka paketa ažuriranja \"remove\" mora biti polje."
+
+msgid "Update package removal paths must be strings."
+msgstr "Putanje uklanjanja paketa ažuriranja moraju biti nizovi."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Metapodaci paketa ažuriranja ne mogu ukloniti zaštićenu putanju: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Paket ažuriranja ne može uključivati i uklanjati istu putanju: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Nije moguće izračunati sha256 metapodataka paketa ažuriranja."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Putanja uklanjanja paketa ažuriranja ne može biti prazna."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Putanja uklanjanja paketa ažuriranja sadrži null bajt."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Putanja uklanjanja paketa ažuriranja mora biti relativna: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Put za uklanjanje paketa ažuriranja sadrži nesiguran segment: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Za izradu plana primjene ažuriranja potreban je put za pripremu (staging)."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "U pripremnom direktoriju nedostaje STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Nije moguće pročitati metapodatke pripreme: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Metapodaci pripreme nisu valjani JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Metapodaci pripreme moraju biti JSON objekt."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "U metapodacima pripreme nedostaje polje application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "U paketu ažuriranja nedostaje %s. Potpisani metapodaci čišćenja potrebni su prije primjene datoteka."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Metapodaci pripreme ne sadrže potpisane metapodatke čišćenja paketa zabilježene tijekom raspakiranja."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Metapodaci čišćenja paketa ažuriranja promijenili su se nakon pripreme. Ponovno pripremite provjereni paket prije nastavka."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Metapodaci pripreme ne sadrže valjani popis uklanjanja paketa."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Putevi čišćenja paketa ažuriranja promijenili su se nakon pripreme. Ponovno pripremite provjereni paket prije nastavka."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Potpisani metapodaci čišćenja paketa nisu se promijenili od pripreme."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Datoteka zaključavanja ažuriranja već postoji. Drugo ažuriranje možda je u tijeku."
+
+msgid "Update lock directory is not writable."
+msgstr "Direktorij zaključavanja ažuriranja nije zapisljiv."
+
+msgid "No update lock is currently active."
+msgstr "Trenutačno nije aktivno zaključavanje ažuriranja."
+
+msgid "Update backup directory is not writable."
+msgstr "Direktorij sigurnosne kopije ažuriranja nije zapisljiv."
+
+msgid "Update backup directory is writable."
+msgstr "Direktorij sigurnosne kopije ažuriranja je zapisljiv."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Trenutačni proces ne može stvoriti direktorij sigurnosne kopije ažuriranja."
+
+msgid "Update backup directory can be created."
+msgstr "Direktorij sigurnosne kopije ažuriranja može se stvoriti."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Neki radni direktoriji ažuriranja nisu zapisljivi ili ih trenutačni proces ne može stvoriti."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Radni direktoriji ažuriranja su zapisljivi ili se mogu stvoriti."
+
+msgid "Update apply file plan was generated."
+msgstr "Plan primjene datoteka ažuriranja je izrađen."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Metapodaci čišćenja paketa sadrže puteve koji se ne mogu sigurno ukloniti."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Ciljevi uklanjanja navedeni u paketu su sigurni."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Neke zastarjele datoteke navedene u paketu već nedostaju u ovoj instalaciji."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Planirano ažuriranje prepisalo bi ili uklonilo postojeće simboličke veze."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Planirano ažuriranje ne prepisuje niti uklanja postojeće simboličke veze."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Nove datoteke migracije ažuriranja moraju biti smještene pod %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Otkrivene su nove datoteke Doctrine migracije %s. Nakon primjene datoteka bit će potreban pregled sigurnosti migracije baze podataka."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Neki popisi datoteka plana primjene ažuriranja skraćeni su u JSON odgovoru."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Nije moguće zapisati metapodatke plana primjene ažuriranja."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Nije moguće preuzeti paket ažuriranja. HTTP status: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Nije moguće otvoriti odredišnu datoteku paketa ažuriranja: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Preuzimanja ažuriranja moraju koristiti službeno izvorište ažuriranja %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL paketa ažuriranja mora koristiti HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Provjere sigurnosti arhive paketa ažuriranja uspješno su prošle."
+
+msgid "Update package was extracted to staging."
+msgstr "Paket ažuriranja raspakiran je u pripremni direktorij."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Potpisani metapodaci čišćenja paketa učitani su."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Paket ažuriranja ne sadrži %s. Primjena datoteka bit će blokirana dok se ne dostave potpisani metapodaci čišćenja."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Izvješće o suhom pokretanju pripremljenog paketa je izrađeno."
+
+msgid "Staging metadata was written."
+msgstr "Metapodaci pripreme su zapisani."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Nije moguće raspakirati paket ažuriranja u pripremni direktorij."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Nije moguće pronaći korijen Chamilo aplikacije u pripremljenom paketu."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "U pripremljenom paketu nedostaje obavezni Chamilo unos: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Pripremljeni paket sadrži očekivanu Chamilo strukturu."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Pripremljeni paket ne sadrži composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Pripremljeni paket sadrži composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Pripremljeni paket ne sadrži yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Pripremljeni paket sadrži yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Nije moguće kodirati metapodatke pripreme."
+
+msgid "Unable to write staging metadata."
+msgstr "Nije moguće zapisati metapodatke pripreme."
+
+msgid "Update operation log created."
+msgstr "Stvoren je zapisnik operacije ažuriranja."
+
+msgid "Unable to write update operation log."
+msgstr "Nije moguće zapisati zapisnik operacije ažuriranja."
+
+msgid "Invalid update operation id."
+msgstr "Nevažeći ID operacije ažuriranja."
 

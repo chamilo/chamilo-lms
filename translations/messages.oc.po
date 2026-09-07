@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":òc:dret d'autor,, non:sens dret d'autor"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dorsièr,, application/msword:MsWord,, application/octet-stream:Flux d'octets,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dorsièr,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercici:exercici,,      simulacion:simulacion,,      questionari:questionari,,      diagrama:diagrama,,      figura:figura,,      grafic:grafic,,      indèx:indèx,,      diapositiva:diapositiva,,      taula:taula,,      tèxte narratiu:tèxte narratiu,,      examen:examen,,      experiment:experiment,,      enunciat de problèma:enunciat de problèma,,      autoevaluacion:autoevaluacion,,      leçon:leçon"
@@ -37009,7 +37009,7 @@ msgid "Type APPLY UPDATE FILES to confirm"
 msgstr "Picatz APPLY UPDATE FILES per confirmar"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Picatz RUN DATABASE MIGRATIONS per confirmar las migracions de la basa de donadas"
+msgstr "Picatz RUN DATABASE MIGRATIONS per confirmar las migracions de basa de donadas"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
 msgstr "Picatz RUN POST UPDATE ACTIONS per confirmar"
@@ -40229,4 +40229,949 @@ msgstr "Vila de l'estagi"
 
 msgid "City"
 msgstr "Vila"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Flux de trabalh de mesa a jorn restablit après l'actualizacion de la pagina"
+
+msgid "Last completed step"
+msgstr "Darrièra etapa acabada"
+
+msgid "Stage package"
+msgstr "Paquet de mesa en escena"
+
+msgid "Package staging"
+msgstr "Mesa en escena del paquet"
+
+msgid "Apply plan"
+msgstr "Aplicar lo plan"
+
+msgid "Update workflow completed"
+msgstr "Flux de trabalh de mesa a jorn acabat"
+
+msgid "Update directory exists and is writable."
+msgstr "Lo repertòri de mesa a jorn existís e es escribible."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Lo repertòri de mesa a jorn existís mas es pas escribible : %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Lo repertòri de mesa a jorn existís pas encara, mas son repertòri parent es escribible."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Lo repertòri de mesa a jorn existís pas encara, mas se pòt crear jos var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Lo repertòri de mesa a jorn existís pas e se pòt pas crear amb las permissions actualas."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Impossible de determinar l'espaci disc liure per la verificacion preliminària de mesa a jorn."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Espaci disc liure insufisent per una operacion segura de mesa en escena de mesa a jorn."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "L'espaci disc liure es sufisent per aqueste flux de mesa a jorn d'estadi de verificacion."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Lo manifèst de mesa a jorn definís pas una exigéncia de version PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Impossible d'avalorar completament l'exigéncia PHP : %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "La version PHP actuala satisfai pas l'exigéncia de mesa a jorn : %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "La version PHP actuala satisfai l'exigéncia de mesa a jorn."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Cap de camin de paquet local es pas estat provesit. Los paquets telecargats se pòdon verificar sonque après lo telecargament."
+
+msgid "Local update package is not readable: %s"
+msgstr "Lo paquet de mesa a jorn local es pas legible : %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Lo paquet de mesa a jorn local deu èsser una archiu ZIP."
+
+msgid "Local update package is readable."
+msgstr "Lo paquet de mesa a jorn local es legible."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "La version Chamilo installada a pas pogut èsser detectada automaticament. Lo sens de version se pòt pas verificar."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "La version installada o cibla es pas dins un format de version semantica comparable."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "La version cibla es inferiora a la version installada. Las retrogradacions son pas autorizadas per defaut."
+
+msgid "Target version matches the installed version."
+msgstr "La version cibla correspond a la version installada."
+
+msgid "Target version is newer than the installed version."
+msgstr "La version cibla es mai recenta que la version installada."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Lo projècte es pas un extrach Git o .git es pas present."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Aqueste sistèma de mesa a jorn es destinat a las installacions sens supòrt Git. Avèm detectat que lo sistèma local utiliza Git. Contunhar la mesa a jorn poiriá copar l'istoric Git. Per los sistèmas amb supòrt Git, recomandam d'utilizar la procedura Git detalhada dins CONTRIBUTING.md a la raiç web."
+
+msgid "Local Git changes were also detected."
+msgstr "De modificacions Git localas son tanben estadas detectadas."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Qualques fichièrs de metadonadas del projècte mancan. Las etapas ulterioras de mesa a jorn pòdon requerir de verificacions manualas de dependéncias."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Los fichièrs de metadonadas Composer e Yarn son presents."
+
+msgid "Starting staged file application."
+msgstr "Aviada de l'aplicacion dels fichièrs meses en escena."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Una confirmacion explicita es requesida per aplicar los fichièrs meses en escena."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "L'aplicacion dels fichièrs de mesa a jorn meses en escena requerís una confirmacion explicita."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Lo repertòri de mesa en escena es dins lo repertòri de mesa en escena de mesa a jorn de Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Lo repertòri de mesa en escena es estat validat."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Las metadonadas del plan d'aplicacion son estadas legidas amb succès."
+
+msgid "Staged application path is valid."
+msgstr "Lo camin d'aplicacion mesa en escena es valid."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Las metadonadas de netejatge del paquet signat correspondon al plan d'aplicacion revisat."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Las metadonadas de netejatge del paquet signat son estadas validadas."
+
+msgid "Update lock was acquired."
+msgstr "Lo verrolh de mesa a jorn es estat aquesit."
+
+msgid "Update backup directory was created."
+msgstr "Lo repertòri de salvagarda de mesa a jorn es estat creat."
+
+msgid "Update file operations were collected."
+msgstr "Las operacions de fichièrs de mesa a jorn son estadas reculhidas."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Los fichièrs existents prevists pel remplaçament o la supression son estats salvagardats."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Los fichièrs de mesa a jorn estadiats son estats copiats cap a l'installacion de Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Los fichièrs obsolèts declarats pel paquet son estats levats de l'installacion de Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Los fichièrs obsolèts declarats pel paquet son estats levats."
+
+msgid "Update apply audit metadata was written."
+msgstr "Las metadonadas d'audit de l'aplicacion de la mesa a jorn son estadas escritas."
+
+msgid "Staged files applied successfully."
+msgstr "Los fichièrs estadiats son estats aplicats amb succès."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Impossible de restablir los fichièrs levats : %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Impossible d'anullar los fichièrs copiats : %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Lo retorn en rèire dels fichièrs es estat executat aprèp l'fracàs de l'aplicacion de la mesa a jorn."
+
+msgid "Rollback failed: %s"
+msgstr "Lo retorn en rèire a fracassat : %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Impossible d'escriure las metadonadas d'audit de l'aplicacion de la mesa a jorn : %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Impossible de relargar lo verrolh de mesa a jorn aprèp l'fracàs : %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Lo camin d'estadiatge es requesit per aplicar los fichièrs de mesa a jorn."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Lo repertòri d'estadiatge existís pas : %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Lo repertòri de basa d'estadiatge de mesa a jorn de Chamilo existís pas."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Lo repertòri d'estadiatge deu èsser dins var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Lo repertòri d'estadiatge manca APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Impossible de legir las metadonadas del plan d'aplicacion de la mesa a jorn : %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Las metadonadas del plan d'aplicacion de la mesa a jorn son pas un JSON valid : %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Las metadonadas del plan d'aplicacion de la mesa a jorn devon èsser un objècte JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Lo plan d'aplicacion de la mesa a jorn manca lo camp application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Lo camin d'aplicacion estadiat es pas readable : %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Lo camin d'aplicacion estadiat deu èsser dins lo repertòri d'estadiatge."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Lo camin d'aplicacion estadiat manca composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Lo paquet de mesa a jorn manca %s. Tornatz estadiar un paquet verificat amb de metadonadas de netejatge signadas."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Lo plan d'aplicacion de la mesa a jorn manca las metadonadas de netejatge del paquet revisadas."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Las metadonadas de netejatge del paquet de mesa a jorn an cambiat aprèp la generacion del plan d'aplicacion. Reconstrusissètz lo plan d'aplicacion abans de contunhar."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Lo plan d'aplicacion de la mesa a jorn conten una lista de supression de paquet invalida."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Los camins de netejatge del paquet de mesa a jorn an cambiat aprèp la generacion del plan d'aplicacion. Reconstrusissètz lo plan d'aplicacion abans de contunhar."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Lo plan d'aplicacion de la mesa a jorn manca la lista de camins de supression revisada."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Los camins de supression del plan d'aplicacion de la mesa a jorn correspondon pas a las metadonadas de netejatge signadas del paquet."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Lo camin del verrolh de mesa a jorn deu èsser dins var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Lo plan d'aplicacion de la mesa a jorn manca lo camp backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Lo camin de salvagarda de la mesa a jorn conten de segments de camin pas segurs."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Lo camin de salvagarda de la mesa a jorn deu èsser dins var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Impossible d'obténer lo verrolh de mesa a jorn. Una autra mesa a jorn pòt èsser en cors."
+
+msgid "Unable to release update lock: %s"
+msgstr "Impossible de relargar lo verrolh de mesa a jorn : %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Lo repertòri de salvagarda de la mesa a jorn existís ja : %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Lo repertòri cibla se pòt pas crear : %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "La mesa a jorn prevista espotiriá un ligam simbolic existent : %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Lo fichièr cibla es pas escribible : %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Lo fichièr cibla se pòt pas crear : %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Impossible de resòlvre lo repertòri del projècte Chamilo abans de levar los fichièrs obsolèts."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Lo netejatge de la mesa a jorn pòt pas levar lo camin protegit : %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "La mesa a jorn prevista levariá un ligam simbolic existent : %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Lo netejatge de la mesa a jorn pren en carga sonque de fichièrs, pas de repertòris : %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Lo fichièr cibla obsolèt es pas readable per la salvagarda : %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Lo fichièr cibla obsolèt se pòt pas levar amb las permissions actualas del repertòri : %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Lo fichièr cibla obsolèt se resòlv fòra del repertòri del projècte Chamilo : %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Impossible de salvagardar lo fichièr cibla : %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Impossible d'escriure las metadonadas de salvagarda de la mesa a jorn."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Impossible de copiar lo fichièr de mesa a jorn preparat : %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d fichièrs preparats copiats sus %d."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Impossible de suprimir lo fichièr obsolèt declarat pel paquet : %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "%d fichièrs obsolèts declarats pel paquet suprimits sus %d."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Impossible de restablir lo fichièr salvagardat : %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Impossible de suprimir lo fichièr novèlament copiat pendent lo retorn en rèire : %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Impossible de restablir lo fichièr suprimit perque sa salvagarda manca : %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Impossible de restablir lo fichièr suprimit dempuèi la salvagarda : %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Impossible d’escriure las metadonadas d’audit d’aplicacion de la mesa a jorn."
+
+msgid "Unable to write global update apply log."
+msgstr "Impossible d’escriure lo jornal global d’aplicacion de la mesa a jorn."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Camin relatiu preparat pas segur detectat : %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Lo repertòri es pas escribible : %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Impossible de crear lo repertòri : %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Las metadonadas de preparacion son estadas legidas amb succès."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Las metadonadas del plan d’aplicacion son estadas escritas dins lo repertòri de preparacion."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Los fichièrs e repertòris ciblas semblan escribibles per la mesa a jorn e lo netejatge planificats."
+
+msgid "Update apply plan check failed."
+msgstr "La verificacion del plan d’aplicacion de la mesa a jorn a fracassat."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Qualques fichièrs o repertòris ciblas se pòdon pas escriure ni suprimir."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Per corregir aquò, cambiatz temporàriament lo proprietari de tot lo repertòri Chamilo cap a %s (l’utilizaire del servidor web), aplicatz la mesa a jorn, tornatz lo proprietari a %s après, puèi definissètz lo proprietari de var/ (e de son contengut) tornamai a %s per que l’aplicacion pòsca contunhar d’i escriure."
+
+msgid "Update package verification failed."
+msgstr "La verificacion del paquet de mesa a jorn a fracassat."
+
+msgid "Update preflight checks failed."
+msgstr "Las verificacions preliminàrias de mesa a jorn an fracassat."
+
+msgid "Unable to stage update package."
+msgstr "Impossible de preparar lo paquet de mesa a jorn."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "L’execucion de las comandas post-aplicacion dempuèi l’interfàcia es desactivada sus aqueste servidor."
+
+msgid "Missing required field: %s"
+msgstr "Camp requerit mancant : %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Cap de font de manifèst de mesa a jorn es pas estada provesida e cap d’URL de manifèst de mesa a jorn per defaut es pas configurada."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "L’URL del manifèst de mesa a jorn deu utilizar l’origina oficiala de mesa a jorn %s. Se pòt cambiar sonque lo camin del manifèst."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Los camins locals de manifèst de mesa a jorn son desactivats. Utilizatz una URL de manifèst HTTPS o definissètz CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 dins l’environament del servidor pels tèsts locals."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Provesissètz pas un camin HTTP %s. Daissatz aqueste camp void per lo telecargar dempuèi lo manifèst de mesa a jorn."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Los camins locals de mesa a jorn %s son desactivats dins aqueste environament."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Las claus publicas de mesa a jorn de fisança devon èsser configuradas sul servidor dins aqueste environament."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Sautar la verificacion de signatura de mesa a jorn es desactivat dins aqueste environament."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "L’execucion de las accions de mesa a jorn post-aplicacion requerís lo tèxte de confirmacion \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "L’aplicacion dels fichièrs de mesa a jorn preparats requerís lo tèxte de confirmacion \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Impossible de resòlvre lo repertòri del projècte."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "La salvagarda de la basa de donadas es pas gerida per aqueste actualizador. Creatz e verificatz una salvagarda de la basa de donadas abans d’executar las migracions."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Las metòdes down() de migracion Doctrine garantisson pas de restablir las donadas suprimidas o transformadas."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Las metadonadas post-aplicacion recomandan una revision de las migracions de basa de donadas."
+
+msgid "No migration files were found in the staged package."
+msgstr "Cap de fichièr de migracion es pas estat trobat dins lo paquet preparat."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "De fichièrs de migracion Doctrine preparats son estats detectats."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "La cibla de migracion Doctrine es estada resolguda dempuèi lo paquet preparat."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "La linha de basa de migracion Doctrine a de problèmas blocants per las migracions preparadas."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine senhala d’avertiments istorics de linha de basa de migracion, mas sonque las migracions %s preparadas seràn revisadas e executadas explicitament."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine senhala d’avertiments istorics de linha de basa de migracion. L’actualizador executarà sonque las classas de migracion %s preparadas après confirmacion explicita."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "La linha de basa Doctrine a pas de problèma blocant per las migracions %s preparadas."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Lo tèst a sec de migracion Doctrine a fracassat per al mens una migracion preparada. Executetz pas las migracions de basa de donadas fins que siá corregit."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Lo tèst a sec Doctrine s’es acabat amb succès per cada classa de migracion preparada."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Una salvagarda de la basa de donadas deu èsser creada fòra d’aqueste actualizador abans d’executar las migracions."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Lo camin de preparacion es requerit per revisar las migracions de basa de donadas."
+
+msgid "Unable to read update %s: %s"
+msgstr "Impossible de legir la mesa a jorn %s : %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Lo JSON de mesa a jorn %s es invalid : %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "La mesa a jorn %s JSON deu èsser un objècte."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Las metadonadas de las verificacions post-aplicacion contenon pas una lista d’accions valida."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Las migracions de basa de donadas èran pas recomandadas per aquesta mesa a jorn escalonada."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Las metadonadas de mesa a jorn manca lo camin d’aplicacion escalonada."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Lo fichièr de migracion escalonada planificat es pas estat trobat : %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Impossible de legir lo fichièr de migracion escalonada : %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Cap de descripcion s’es pas poguda extraire de getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Solament %s migracions escalonadas son presas en carga pel motor de mesa a jorn : %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Impossible d’escriure las metadonadas de seguretat de migracion : %s"
+
+msgid "Migration safety check failed."
+msgstr "La verificacion de seguretat de migracion a fracassat."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Camin relatiu de migracion escalonada pas segur detectat : %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "La version installada de Chamilo s’es pas poguda detectar automaticament. Contunhatz solament après aver confirmat que aquesta mesa a jorn es compatibla."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "La version installada o cibla es pas dins un format de version semantica comparable. Contunhatz solament après verificacion manuala."
+
+msgid "An update is available."
+msgstr "Una mesa a jorn es disponibla."
+
+msgid "The installed version already matches the manifest version."
+msgstr "La version installada correspond ja a la version del manifèst."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "La version del manifèst es mai anciana que la version installada. Las rebaissas son blocadas per defaut."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Los fichièrs escalonats son pas estats aplicats amb succès. Las verificacions post-aplicacion pòdon pas contunhar."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Las metadonadas del resultat d’aplicacion son estadas legidas amb succès."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Las recomandacions d’accions post-aplicacion son estadas generadas."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "De migracions de basa de donadas son estadas detectadas dins lo paquet escalonat. Las executatz solament après aver confirmat que la mesa a jorn dels fichièrs es corrècta e qu’existís una salvagarda de la basa de donadas."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Lo camin d’escalonament es requesit per executar las verificacions post-aplicacion."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "La mesa a jorn %s es pas un JSON valid : %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "La mesa a jorn %s deu èsser un objècte JSON."
+
+msgid "Composer dependencies"
+msgstr "Dependéncias Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Las metadonadas Composer èran inclusas dins lo paquet escalonat. Executatz Composer install dempuèi la raiç de l’aplicacion abans de considerar la mesa a jorn coma acabada."
+
+msgid "Frontend assets"
+msgstr "Ressorsas front-end"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "De fichièrs ligats al front-end èran incluses dins lo paquet escalonat. Reconstrusètz las ressorsas de produccion après l’installacion de las dependéncias."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "De fichièrs de migracion Doctrine son estats detectats dins lo paquet escalonat. Confirmatz qu’existís una salvagarda de la basa de donadas abans d’executar las migracions."
+
+msgid "Symfony cache"
+msgstr "Cache Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Voidatz lo cache Symfony après aver aplicat los fichièrs de mesa a jorn e executat las comandas necessàrias."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Impossible d’escriure las metadonadas de las verificacions post-aplicacion."
+
+msgid "Post-apply check failed."
+msgstr "La verificacion post-aplicacion a fracassat."
+
+msgid "Update package is not readable: %s"
+msgstr "Lo paquet de mesa a jorn es pas legible : %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Lo paquet de mesa a jorn es pas una archiu ZIP valida."
+
+msgid "Update package ZIP archive is empty."
+msgstr "L’archiu ZIP del paquet de mesa a jorn es voida."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Lo paquet de mesa a jorn conten una entrada ZIP pas legibla."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Lo paquet de mesa a jorn conten un camin absolut pas segur : %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Lo paquet de mesa a jorn conten una entrada de traversada de camin : %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Lo paquet de mesa a jorn conten un ligam simbolic : %s"
+
+msgid "Starting post-apply actions."
+msgstr "Aviada de las accions post-aplicacion."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "L’execucion de las comandas post-aplicacion requerís una confirmacion explicita."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Las metadonadas de recomandacion post-aplicacion son estadas legidas amb succès."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Las accions post-aplicacion son estadas validadas contra lo rapòrt de recomandacion."
+
+msgid "Post-apply actions were selected."
+msgstr "Las accions post-aplicacion son estadas seleccionadas."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Las accions post-aplicacion avançadas requerisson una confirmacion avançada explicita."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Las accions post-aplicacion avançadas son estadas confirmadas explicitament."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Las comandas post-aplicacion seleccionadas se son acabadas amb succès."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Las metadonadas d’execucion de las comandas post-aplicacion son estadas escritas."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Las accions post-aplicacion se son acabadas amb succès."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Definicion de comanda post-aplicacion de mesa a jorn invalida : %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Execucion de l’accion post-aplicacion : %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Execucion de la comanda %d de %d per %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "L’accion post-aplicacion a fracassat : %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "L’accion post-aplicacion \"%s\" a fracassat amb lo còdi de sortida %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Accion post-aplicacion acabada : %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Lo camin d’estadiatge es requesit per executar las accions post-aplicacion."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "I a pas d’accions post-aplicacion recomandadas d’executar."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "I a pas d’accions post-aplicacion autorizadas d’executar."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "L’accion post-aplicacion es pas autorizada per aquesta mesa a jorn : %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Las migracions de basa de donadas demandan una revision de seguretat abans l’execucion."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Las migracions de basa de donadas pòdon pas s’executar perque la revision de seguretat de las migracions a pas passat."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Las migracions de basa de donadas pòdon pas s’executar perque la revision de seguretat de las migracions a pas listat de migracions estadiadas."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Las migracions de basa de donadas pòdon pas s’executar perque la revision de seguretat de las migracions conten una entrada de migracion invalida."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Solament las migracions %s estadiadas pòdon èsser executadas pel motor de mesa a jorn."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Las migracions de basa de donadas pòdon pas s’executar perque la revision de seguretat de las migracions estadiadas a senhalat d’errors blocantas."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine senhala d’avertiments de linha de basa de migracion. Solament las classas de migracion %s estadiadas seràn executadas explicitament."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Las migracions de basa de donadas demandan la confirmacion qu’existís una salvagarda de la basa de donadas."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Las migracions de basa de donadas demandan lo tèxte de confirmacion \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "La revision de seguretat de las migracions de basa de donadas es estada acabada abans l’execucion."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "L’existéncia de la salvagarda de la basa de donadas es estada confirmada explicitament."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "La revision de seguretat de las migracions e la confirmacion de salvagarda son estadas provesidas."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Las migracions de basa de donadas son estadas executadas après una confirmacion explicita de salvagarda. Lo mesaire a jorn a pas creat la salvagarda de la basa de donadas."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Las permissions executablas requesidas post-aplicacion son estadas normalizadas."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Impossible d’executar las migracions de basa de donadas perque bin/console es pas estat trobat."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Las comandas post-aplicacion seleccionadas an los camins escribibles requesits."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Los camins escribibles de las comandas post-aplicacion son estats validats."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Las accions post-aplicacion avançadas pòdon modificar las dependéncias, los actius generats o la basa de donadas. Verificatz las salvagardas abans de contunhar."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer pòt pas s’executar en seguretat dempuèi lo mesaire a jorn web perque lo fichièr generat per Composer \"%s\" aparten a l’UID %d mentre que lo motor PHP utiliza l’UID %d. Executatz Composer manualament coma proprietari del desplegament, puèi contunhatz amb las autras accions post-aplicacion."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Lo camin requesit per l’accion post-aplicacion \"%s\" es pas escribible : %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Lo repertòri parent requesit per l’accion post-aplicacion \"%s\" es pas escribible : %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Impossible de legir las permissions de l’executable post-aplicacion requesit : %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Impossible de marcar l’executable post-aplicacion requesit coma executable : %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "L’executable post-aplicacion requesit es encara pas executable après chmod : %s"
+
+msgid "Executable permission was normalized."
+msgstr "La permission d’execucion es estada normalizada."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Impossible d’escriure la configuracion Git isolada per las comandas post-aplicacion."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Una autra operacion de mesa a jorn sembla en cors. Suprimissètz var/update/update.lock solament se cap de mesa a jorn es pas activa."
+
+msgid "Unable to create update lock: %s"
+msgstr "Impossible de crear lo verrolh de mesa a jorn : %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Impossible d’escriure las metadonadas d’execucion de las comandas post-aplicacion : %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Lo manifest de mesa a jorn manca lo blòc de paquet."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Lo blòc de signatura del manifest de mesa a jorn deu èsser un objècte."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Lo blòc d’exigéncias del manifest de mesa a jorn deu èsser un objècte."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Lo sha256 del paquet de mesa a jorn deu èsser una cadena exadecimala de 64 caractèrs."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Lo manifest de mesa a jorn manca lo camp de cadena requesit \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Lo camp del manifest de mesa a jorn \"%s\" deu èsser una cadena."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Lo manifest de mesa a jorn es pas un JSON valid : %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Lo JSON del manifest de mesa a jorn deu èsser un objècte."
+
+msgid "Manifest source cannot be empty."
+msgstr "La font del manifest pòt pas èsser voida."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "L’URL del manifest de mesa a jorn deu utilizar l’origina oficiala de mesa a jorn %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Impossible de telecargar lo manifest de mesa a jorn. Estatut HTTP : %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Lo fichièr de manifest es pas legible : %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Impossible de legir lo fichièr manifest : %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "L’URL del manifest de mesa a jorn deu utilizar HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Las metadonadas del paquet de mesa a jorn son pas legiblas : %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Impossible de legir las metadonadas del paquet de mesa a jorn : %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Las metadonadas del paquet de mesa a jorn son pas un JSON valid : %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Las metadonadas del paquet de mesa a jorn devon èsser un objècte JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Lo format de las metadonadas del paquet de mesa a jorn deu èsser %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Lo camp de metadonadas del paquet de mesa a jorn \"remove\" deu èsser un tablèu."
+
+msgid "Update package removal paths must be strings."
+msgstr "Los camins de supression del paquet de mesa a jorn devon èsser de cadenas."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Las metadonadas del paquet de mesa a jorn pòdon pas suprimir un camin protegit : %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Lo paquet de mesa a jorn pòt pas inclure e suprimir lo meteis camin : %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Impossible de calcular lo sha256 de las metadonadas del paquet de mesa a jorn."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Lo camin de supression del paquet de mesa a jorn pòt pas èsser void."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Lo camin de supression del paquet de mesa a jorn conten un octet nul."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Lo camin de supression del paquet de mesa a jorn deu èsser relatiu : %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Lo camin de supression del paquet de mesa a jorn conten un segment pas segur : %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Un camin d’estadiatge es requesit per bastir un plan d’aplicacion de mesa a jorn."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Lo repertòri d’estadiatge manca STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Impossible de legir las metadonadas d’estadiatge : %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Las metadonadas d’estadiatge son pas un JSON valid : %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Las metadonadas d’estadiatge devon èsser un objècte JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Las metadonadas d’estadiatge manca lo camp application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Lo paquet de mesa a jorn manca %s. De metadonadas de netejatge signadas son requesidas abans de poder aplicar los fichièrs."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Las metadonadas d’estadiatge contenon pas las metadonadas de netejatge signadas del paquet enregistradas pendent l’extraccion."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Las metadonadas de netejatge del paquet de mesa a jorn an cambiat après l’estadiatge. Tornatz estadiar lo paquet verificat abans de contunhar."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Las metadonadas d’estadiatge contenon pas una lista de supression de paquet valida."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Los camins de netejatge del paquet de mesa a jorn an cambiat après l’estadiatge. Tornatz estadiar lo paquet verificat abans de contunhar."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Las metadonadas de netejatge signadas del paquet son pas cambiadas dempuèi l’estadiatge."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Un fichièr de verrolh de mesa a jorn existís ja. Una autra mesa a jorn pòt èsser en cors."
+
+msgid "Update lock directory is not writable."
+msgstr "Lo repertòri de verrolh de mesa a jorn es pas escribible."
+
+msgid "No update lock is currently active."
+msgstr "Cap de verrolh de mesa a jorn es pas actiu actualament."
+
+msgid "Update backup directory is not writable."
+msgstr "Lo repertòri de salvagarda de mesa a jorn es pas escribible."
+
+msgid "Update backup directory is writable."
+msgstr "Lo repertòri de salvagarda de mesa a jorn es escribible."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Lo repertòri de salvagarda de mesa a jorn pòt pas èsser creat pel processús actual."
+
+msgid "Update backup directory can be created."
+msgstr "Lo repertòri de salvagarda de mesa a jorn pòt èsser creat."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Qualques repertòris de trabalh de mesa a jorn son pas escribibles o pòdon pas èsser creats pel processús actual."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Los repertòris de trabalh de mesa a jorn son escribibles o pòdon èsser creats."
+
+msgid "Update apply file plan was generated."
+msgstr "Lo plan de fichièrs d’aplicacion de mesa a jorn es estat generat."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Las metadonadas de netejatge del paquet contenon de camins que se pòdon pas suprimir d’un biais segur."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Las cibles de supression declaradas pel paquet son seguras."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Qualques fichièrs obsolèts declarats pel paquet son ja absents d’aquesta installacion."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "La mesa a jorn prevista espotiriá o suprimiriá de ligams simbolics existents."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "La mesa a jorn prevista espotís pas ni suprím pas de ligams simbolics existents."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Los fichièrs de migracion de mesa a jorn novèls devon èsser plaçats jos %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "%s fichièrs de migracion Doctrine novèls son estats detectats. Requeriràn una revision de seguretat de migracion de basa de donadas après l’aplicacion dels fichièrs."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Qualques listas de fichièrs del plan d’aplicacion de mesa a jorn son estadas tronçadas dins la responsa JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Impossible d’escriure las metadonadas del plan d’aplicacion de mesa a jorn."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Impossible de telecargar lo paquet de mesa a jorn. Estatut HTTP : %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Impossible de dobrir lo fichièr cibla del paquet de mesa a jorn : %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Los telecargaments de mesa a jorn devon utilizar l’origina oficiala de mesa a jorn %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "L'URL del paquet de mesa a jorn deu utilizar HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Las verificacions de seguretat de l'archiu del paquet de mesa a jorn son passadas."
+
+msgid "Update package was extracted to staging."
+msgstr "Lo paquet de mesa a jorn es estat extrach cap a l'espaci de preparacion."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Las metadonadas de netejatge del paquet signat son estadas cargadas."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Lo paquet de mesa a jorn conten pas %s. L'aplicacion dels fichièrs serà blocada fins que las metadonadas de netejatge signadas sián provesidas."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Lo rapòrt de simulacion del paquet en preparacion es estat generat."
+
+msgid "Staging metadata was written."
+msgstr "Las metadonadas de preparacion son estadas escritas."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Impossible d'extraire lo paquet de mesa a jorn cap al repertòri de preparacion."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Impossible de localizar la raiç de l'aplicacion Chamilo dins lo paquet en preparacion."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Lo paquet en preparacion manca l'entrada Chamilo requesida : %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Lo paquet en preparacion conten l'estructura Chamilo esperada."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Lo paquet en preparacion conten pas composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Lo paquet en preparacion conten composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Lo paquet en preparacion conten pas yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Lo paquet en preparacion conten yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Impossible d'encodar las metadonadas de preparacion."
+
+msgid "Unable to write staging metadata."
+msgstr "Impossible d'escriure las metadonadas de preparacion."
+
+msgid "Update operation log created."
+msgstr "Jornal d'operacion de mesa a jorn creat."
+
+msgid "Unable to write update operation log."
+msgstr "Impossible d'escriure lo jornal d'operacion de mesa a jorn."
+
+msgid "Invalid update operation id."
+msgstr "Identificant d'operacion de mesa a jorn invalid."
 

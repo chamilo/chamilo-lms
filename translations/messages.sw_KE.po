@@ -40230,3 +40230,948 @@ msgstr "Jiji la mafunzo ya kazi"
 msgid "City"
 msgstr "Jiji"
 
+msgid "Update workflow restored after page refresh"
+msgstr "Mtiririko wa sasisho umerejeshwa baada ya kuonyesha upya ukurasa"
+
+msgid "Last completed step"
+msgstr "Hatua ya mwisho iliyokamilika"
+
+msgid "Stage package"
+msgstr "Kifurushi cha hatua"
+
+msgid "Package staging"
+msgstr "Kuandaa kifurushi"
+
+msgid "Apply plan"
+msgstr "Tumia mpango"
+
+msgid "Update workflow completed"
+msgstr "Mtiririko wa sasisho umekamilika"
+
+msgid "Update directory exists and is writable."
+msgstr "Saraka ya sasisho ipo na inaweza kuandikiwa."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Saraka ya sasisho ipo lakini haiwezi kuandikiwa: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Saraka ya sasisho bado haipo, lakini saraka yake mzazi inaweza kuandikiwa."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Saraka ya sasisho bado haipo, lakini inaweza kuundwa chini ya var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Saraka ya sasisho haipo na haiwezi kuundwa kwa ruhusa za sasa."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Imeshindikana kubaini nafasi huru ya diski kwa ukaguzi wa awali wa sasisho."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Nafasi huru ya diski haitoshi kwa operesheni salama ya kuandaa sasisho."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Nafasi huru ya diski inatosha kwa mtiririko huu wa sasisho wa hatua ya uthibitishaji."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Orodha ya sasisho haifafanui mahitaji ya toleo la PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Imeshindikana kutathmini kikamilifu mahitaji ya PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Toleo la sasa la PHP halikidhi mahitaji ya sasisho: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Toleo la sasa la PHP linakidhi mahitaji ya sasisho."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Njia ya kifurushi cha ndani haikutolewa. Vifurushi vilivyopakuliwa vinaweza kukaguliwa tu baada ya kupakua."
+
+msgid "Local update package is not readable: %s"
+msgstr "Kifurushi cha sasisho cha ndani hakiwezi kusomwa: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Kifurushi cha sasisho cha ndani lazima kiwe kumbukumbu ya ZIP."
+
+msgid "Local update package is readable."
+msgstr "Kifurushi cha sasisho cha ndani kinaweza kusomwa."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Toleo la Chamilo lililosakinishwa halikuweza kugunduliwa kiotomatiki. Mwelekeo wa toleo hauwezi kukaguliwa."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Toleo lililosakinishwa au lengwa si katika umbizo linganishi la toleo la kisemantiki."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Toleo lengwa ni la chini kuliko toleo lililosakinishwa. Kushusha toleo hakuruhusiwi kwa chaguo-msingi."
+
+msgid "Target version matches the installed version."
+msgstr "Toleo lengwa linalingana na toleo lililosakinishwa."
+
+msgid "Target version is newer than the installed version."
+msgstr "Toleo lengwa ni jipya kuliko toleo lililosakinishwa."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Mradi si Git checkout au .git haipo."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Mfumo huu wa sasisho umekusudiwa usakinishaji bila msaada wa Git. Tumegundua kuwa mfumo wa ndani unatumia Git. Kuendelea na sasisho kunaweza kuharibu historia ya Git. Kwa mifumo yenye msaada wa Git, tunapendekeza kutumia taratibu za Git zilizoelezwa katika CONTRIBUTING.md katika mzizi wa wavuti."
+
+msgid "Local Git changes were also detected."
+msgstr "Mabadiliko ya Git ya ndani pia yaligunduliwa."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Baadhi ya faili za metadata za mradi zinakosekana. Hatua za baadaye za sasisho zinaweza kuhitaji ukaguzi wa tegemezi kwa mkono."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Faili za metadata za Composer na Yarn zipo."
+
+msgid "Starting staged file application."
+msgstr "Inaanza utumiaji wa faili zilizoandaliwa."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Uthibitisho dhahiri unahitajika ili kutumia faili zilizoandaliwa."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Kutumia faili za sasisho zilizoandaliwa kunahitaji uthibitisho dhahiri."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Saraka ya kuandaa iko ndani ya saraka ya kuandaa sasisho ya Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Saraka ya kuandaa ilithibitishwa."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Metadata ya mpango wa kutumia ilisomwa kwa mafanikio."
+
+msgid "Staged application path is valid."
+msgstr "Njia ya utumiaji iliyoandaliwa ni halali."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Metadata ya usafishaji wa kifurushi kilichotiwa saini inalingana na mpango wa kutumia uliokaguliwa."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Metadata ya usafishaji wa kifurushi kilichotiwa saini ilithibitishwa."
+
+msgid "Update lock was acquired."
+msgstr "Kufuli ya sasisho ilipatikana."
+
+msgid "Update backup directory was created."
+msgstr "Saraka ya nakala rudufu ya sasisho iliundwa."
+
+msgid "Update file operations were collected."
+msgstr "Operesheni za faili za sasisho zilikusanywa."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Faili zilizopo zilizopangwa kubadilishwa au kuondolewa zilinakiliwa rudufu."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Faili za sasisho zilizotayarishwa zilinakiliwa kwenye usakinishaji wa Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Faili zilizopitwa na wakati zilizotangazwa na kifurushi ziliondolewa kutoka usakinishaji wa Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Faili zilizopitwa na wakati zilizotangazwa na kifurushi ziliondolewa."
+
+msgid "Update apply audit metadata was written."
+msgstr "Metadata ya ukaguzi wa utekelezaji wa sasisho iliandikwa."
+
+msgid "Staged files applied successfully."
+msgstr "Faili zilizotayarishwa zilitekelezwa kwa mafanikio."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Imeshindikana kurejesha faili zilizoondolewa: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Imeshindikana kurudisha nyuma faili zilizonakiliwa: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Kurudisha nyuma faili kulitekelezwa baada ya kushindikana kutekeleza sasisho."
+
+msgid "Rollback failed: %s"
+msgstr "Kurudisha nyuma kumeshindikana: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Imeshindikana kuandika metadata ya ukaguzi wa utekelezaji wa sasisho: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Imeshindikana kuachilia kufuli ya sasisho baada ya kushindikana: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Njia ya utayarishaji inahitajika ili kutekeleza faili za sasisho."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Saraka ya utayarishaji haipo: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Saraka msingi ya utayarishaji wa sasisho la Chamilo haipo."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Saraka ya utayarishaji lazima iwe ndani ya var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Saraka ya utayarishaji inakosa APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Imeshindikana kusoma metadata ya mpango wa utekelezaji wa sasisho: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metadata ya mpango wa utekelezaji wa sasisho si JSON halali: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metadata ya mpango wa utekelezaji wa sasisho lazima iwe kitu cha JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Mpango wa utekelezaji wa sasisho unakosa uga wa application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Njia ya programu iliyotayarishwa haiwezi kusomwa: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Njia ya programu iliyotayarishwa lazima iwe ndani ya saraka ya utayarishaji."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Njia ya programu iliyotayarishwa inakosa composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Kifurushi cha sasisho kinakosa %s. Tayarisha tena kifurushi kilichothibitishwa chenye metadata ya usafishaji iliyotiwa saini."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Mpango wa utekelezaji wa sasisho unakosa metadata ya usafishaji wa kifurushi iliyokaguliwa."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Metadata ya usafishaji wa kifurushi cha sasisho ilibadilika baada ya mpango wa utekelezaji kutengenezwa. Tengeneza upya mpango wa utekelezaji kabla ya kuendelea."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Mpango wa utekelezaji wa sasisho una orodha batili ya kuondoa kifurushi."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Njia za usafishaji wa kifurushi cha sasisho zilibadilika baada ya mpango wa utekelezaji kutengenezwa. Tengeneza upya mpango wa utekelezaji kabla ya kuendelea."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Mpango wa utekelezaji wa sasisho unakosa orodha ya njia za kuondoa iliyokaguliwa."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Njia za kuondoa za mpango wa utekelezaji wa sasisho hazilingani na metadata ya usafishaji ya kifurushi iliyotiwa saini."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Njia ya kufuli ya sasisho lazima iwe ndani ya var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Mpango wa utekelezaji wa sasisho unakosa uga wa backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Njia ya nakala rudufu ya sasisho ina sehemu za njia zisizo salama."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Njia ya nakala rudufu ya sasisho lazima iwe ndani ya var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Imeshindikana kupata kufuli ya sasisho. Sasisho lingine linaweza kuwa linaendelea."
+
+msgid "Unable to release update lock: %s"
+msgstr "Imeshindikana kuachilia kufuli ya sasisho: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Saraka ya nakala rudufu ya sasisho tayari ipo: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Saraka lengwa haiwezi kuundwa: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Sasisho lililopangwa lingefuta kiungo cha ishara kilichopo: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Faili lengwa haiwezi kuandikiwa: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Faili lengwa haiwezi kuundwa: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Imeshindikana kutatua saraka ya mradi wa Chamilo kabla ya kuondoa faili zilizopitwa na wakati."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Usafishaji wa sasisho hauwezi kuondoa njia iliyolindwa: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Sasisho lililopangwa lingetoa kiungo cha ishara kilichopo: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Usafishaji wa sasisho unasaidia faili pekee, si saraka: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Faili lengwa iliyopitwa na wakati haiwezi kusomwa kwa nakala rudufu: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Faili lengwa iliyopitwa na wakati haiwezi kuondolewa kwa ruhusa za sasa za saraka: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Faili lengwa iliyopitwa na wakati inatatuliwa nje ya saraka ya mradi wa Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Imeshindikana kuhifadhi nakala rudufu ya faili lengwa: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Imeshindikana kuandika metadata ya nakala rudufu ya sasisho."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Imeshindwa kunakili faili ya sasisho iliyotayarishwa: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Imenakiliwa faili %d kati ya %d zilizotayarishwa."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Imeshindwa kuondoa faili iliyotangazwa kuwa ya kizamani na kifurushi: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Imeondolewa faili %d kati ya %d zilizotangazwa kuwa za kizamani na kifurushi."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Imeshindwa kurejesha faili iliyohifadhiwa nakala: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Imeshindwa kuondoa faili iliyonakiliwa hivi karibuni wakati wa kurudisha nyuma: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Imeshindwa kurejesha faili iliyoondolewa kwa sababu nakala yake ya hifadhi haipo: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Imeshindwa kurejesha faili iliyoondolewa kutoka kwenye hifadhi nakala: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Imeshindwa kuandika metadata ya ukaguzi wa kutekeleza sasisho."
+
+msgid "Unable to write global update apply log."
+msgstr "Imeshindwa kuandika kumbukumbu ya kimataifa ya kutekeleza sasisho."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Njia isiyo salama ya jamaa iliyotayarishwa imegunduliwa: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Saraka haiwezi kuandikiwa: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Imeshindwa kuunda saraka: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Metadata ya utayarishaji ilisomwa kwa mafanikio."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metadata ya mpango wa utekelezaji iliandikwa kwenye saraka ya utayarishaji."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Faili na saraka lengwa zinaonekana kuweza kuandikiwa kwa sasisho na usafishaji uliopangwa."
+
+msgid "Update apply plan check failed."
+msgstr "Ukaguzi wa mpango wa kutekeleza sasisho umeshindwa."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Baadhi ya faili au saraka lengwa haziwezi kuandikiwa au kuondolewa."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Ili kurekebisha hili, badilisha kwa muda mmiliki wa saraka nzima ya Chamilo kuwa %s (mtumiaji wa seva ya wavuti), tekeleza sasisho, rudisha mmiliki kuwa %s baadaye, kisha weka mmiliki wa var/ (na yaliyomo) tena kuwa %s ili programu iendelee kuandika humo."
+
+msgid "Update package verification failed."
+msgstr "Uthibitishaji wa kifurushi cha sasisho umeshindwa."
+
+msgid "Update preflight checks failed."
+msgstr "Ukaguzi wa awali wa sasisho umeshindwa."
+
+msgid "Unable to stage update package."
+msgstr "Imeshindwa kutayarisha kifurushi cha sasisho."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Kutekeleza amri baada ya utekelezaji kutoka kwenye kiolesura kumezimwa kwenye seva hii."
+
+msgid "Missing required field: %s"
+msgstr "Sehemu inayohitajika haipo: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Hakuna chanzo cha manifesto ya sasisho kilichotolewa na hakuna URL chaguomsingi ya manifesto ya sasisho iliyosanidiwa."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL ya manifesto ya sasisho lazima itumie asili rasmi ya sasisho %s. Njia ya manifesto pekee ndiyo inayoweza kubadilishwa."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Njia za ndani za manifesto ya sasisho zimezimwa. Tumia URL ya manifesto ya HTTPS au weka CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 katika mazingira ya seva kwa majaribio ya ndani."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Usitoe njia ya HTTP %s. Acha sehemu hii tupu ili kuipakua kutoka kwenye manifesto ya sasisho."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Njia za ndani za sasisho %s zimezimwa katika mazingira haya."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Funguo za umma zinazoaminika za sasisho lazima zisanidiwe kwenye seva katika mazingira haya."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Kuruka uthibitishaji wa saini ya sasisho kumezimwa katika mazingira haya."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Kutekeleza vitendo vya sasisho baada ya utekelezaji kunahitaji maandishi ya uthibitisho \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Kutekeleza faili za sasisho zilizotayarishwa kunahitaji maandishi ya uthibitisho \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Imeshindwa kutatua saraka ya mradi."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Hifadhi nakala ya hifadhidata haidhibitiwi na kisasisho hiki. Unda na thibitisha hifadhi nakala ya hifadhidata kabla ya kuendesha uhamishaji."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Mbinu za Doctrine migration down() hazihakikishiwi kurejesha data iliyofutwa au iliyobadilishwa."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Metadata baada ya utekelezaji inapendekeza ukaguzi wa uhamishaji wa hifadhidata."
+
+msgid "No migration files were found in the staged package."
+msgstr "Hakuna faili za uhamishaji zilizopatikana katika kifurushi kilichotayarishwa."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Faili za uhamishaji za Doctrine zilizotayarishwa ziligunduliwa."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Lengo la uhamishaji wa Doctrine lilitatuliwa kutoka kwenye kifurushi kilichotayarishwa."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Msingi wa uhamishaji wa Doctrine una masuala yanayozuia kwa uhamishaji uliotayarishwa."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine inaripoti maonyo ya msingi wa uhamishaji wa kihistoria, lakini uhamishaji wa %s uliotayarishwa pekee ndio utakaoangaliwa na kutekelezwa kwa uwazi."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine inaripoti maonyo ya msingi wa uhamishaji wa kihistoria. Kisasisho kitatekeleza madarasa ya uhamishaji ya %s yaliyotayarishwa pekee baada ya uthibitisho wa wazi."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Msingi wa Doctrine hauna suala linalozuia kwa uhamishaji wa %s uliotayarishwa."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Majaribio kavu ya uhamishaji wa Doctrine yameshindwa kwa angalau uhamishaji mmoja uliotayarishwa. Usiendeshe uhamishaji wa hifadhidata hadi hili lirekebishwe."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Majaribio kavu ya Doctrine yamekamilika kwa mafanikio kwa kila darasa la uhamishaji lililotayarishwa."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Hifadhi nakala ya hifadhidata lazima iundwe nje ya kisasisho hiki kabla ya kuendesha uhamishaji."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Njia ya utayarishaji inahitajika ili kukagua uhamishaji wa hifadhidata."
+
+msgid "Unable to read update %s: %s"
+msgstr "Imeshindwa kusoma sasisho %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON ya sasisho %s si sahihi: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON ya sasisho %s lazima iwe kitu."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Metadata ya ukaguzi baada ya kutumia haina orodha halali ya vitendo."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Uhamishaji wa hifadhidata haukupendekezwa kwa sasisho hili lililowekwa hatua."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Metadata ya sasisho inakosa njia ya programu iliyowekwa hatua."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Faili ya uhamishaji iliyopangwa hatua haikupatikana: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Imeshindwa kusoma faili ya uhamishaji iliyowekwa hatua: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Hakuna maelezo yaliyoweza kutolewa kutoka getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Ni uhamishaji %s tu uliowekwa hatua unaoungwa mkono na kimbiaji cha sasisho: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Imeshindwa kuandika metadata ya usalama wa uhamishaji: %s"
+
+msgid "Migration safety check failed."
+msgstr "Ukaguzi wa usalama wa uhamishaji umeshindwa."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Njia isiyo salama ya uhamishaji wa jamaa iliyowekwa hatua imegunduliwa: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Toleo la Chamilo lililosakinishwa halikuweza kugunduliwa kiotomatiki. Endelea tu baada ya kuthibitisha kuwa sasisho hili linaendana."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Toleo lililosakinishwa au lengwa si katika muundo wa toleo la kisemantiki unaoweza kulinganishwa. Endelea tu baada ya uthibitishaji wa mkono."
+
+msgid "An update is available."
+msgstr "Sasisho linapatikana."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Toleo lililosakinishwa tayari linalingana na toleo la manifesto."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Toleo la manifesto ni la zamani kuliko toleo lililosakinishwa. Kushusha toleo kumezuiliwa kwa chaguo-msingi."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Faili zilizowekwa hatua hazikutumika kwa mafanikio. Ukaguzi baada ya kutumia hauwezi kuendelea."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Metadata ya matokeo ya kutumia ilisomwa kwa mafanikio."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Mapendekezo ya vitendo baada ya kutumia yalitolewa."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Uhamishaji wa hifadhidata uligunduliwa katika kifurushi kilichowekwa hatua. Viendeshe tu baada ya kuthibitisha kuwa sasisho la faili ni sahihi na nakala rudufu ya hifadhidata ipo."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Njia ya kuweka hatua inahitajika ili kuendesha ukaguzi baada ya kutumia."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Sasisho %s si JSON halali: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Sasisho %s lazima liwe kitu cha JSON."
+
+msgid "Composer dependencies"
+msgstr "Tegemezi za Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Metadata ya Composer ilijumuishwa katika kifurushi kilichowekwa hatua. Endesha Composer install kutoka mzizi wa programu kabla ya kuzingatia sasisho kuwa limekamilika."
+
+msgid "Frontend assets"
+msgstr "Rasilimali za mbele"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Faili zinazohusiana na mbele zilijumuishwa katika kifurushi kilichowekwa hatua. Jenga upya rasilimali za uzalishaji baada ya kusakinisha tegemezi."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Faili za uhamishaji wa Doctrine ziligunduliwa katika kifurushi kilichowekwa hatua. Thibitisha kuwa nakala rudufu ya hifadhidata ipo kabla ya kuendesha uhamishaji."
+
+msgid "Symfony cache"
+msgstr "Hifadhi ya Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Futa hifadhi ya Symfony baada ya kutumia faili za sasisho na kuendesha amri zozote zinazohitajika."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Imeshindwa kuandika metadata ya ukaguzi baada ya kutumia."
+
+msgid "Post-apply check failed."
+msgstr "Ukaguzi baada ya kutumia umeshindwa."
+
+msgid "Update package is not readable: %s"
+msgstr "Kifurushi cha sasisho hakiwezi kusomwa: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Kifurushi cha sasisho si kumbukumbu halali ya ZIP."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Kumbukumbu ya ZIP ya kifurushi cha sasisho ni tupu."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Kifurushi cha sasisho kina ingizo la ZIP lisiloweza kusomwa."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Kifurushi cha sasisho kina njia kamili isiyo salama: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Kifurushi cha sasisho kina ingizo la kuvuka njia: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Kifurushi cha sasisho kina kiungo cha ishara: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Inaanza vitendo baada ya kutumia."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Utekelezaji wa amri baada ya kutumia unahitaji uthibitisho wa wazi."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Metadata ya mapendekezo baada ya kutumia ilisomwa kwa mafanikio."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Vitendo baada ya kutumia vilithibitishwa dhidi ya ripoti ya mapendekezo."
+
+msgid "Post-apply actions were selected."
+msgstr "Vitendo baada ya kutumia vilichaguliwa."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Vitendo vya hali ya juu baada ya kutumia vinahitaji uthibitisho wa wazi wa hali ya juu."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Vitendo vya hali ya juu baada ya kutumia vilithibitishwa wazi."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Amri zilizochaguliwa baada ya kutumia zilikamilika kwa mafanikio."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Metadata ya kuendesha amri baada ya kutumia iliandikwa."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Vitendo baada ya kutumia vilikamilika kwa mafanikio."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Ufafanuzi batili wa amri ya sasisho baada ya kutumia: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Inatekeleza hatua baada ya kutumia: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Inatekeleza amri %d kati ya %d kwa %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Hatua baada ya kutumia imeshindwa: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Hatua baada ya kutumia \"%s\" imeshindwa na msimbo wa kutoka %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Hatua baada ya kutumia imekamilika: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Njia ya kuandaa inahitajika ili kuendesha hatua baada ya kutumia."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Hakuna hatua zinazopendekezwa baada ya kutumia za kuendesha."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Hakuna hatua zinazoruhusiwa baada ya kutumia za kuendesha."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Hatua baada ya kutumia hairuhusiwi kwa sasisho hili: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Uhamishaji wa hifadhidata unahitaji ukaguzi wa usalama wa uhamishaji kabla ya utekelezaji."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Uhamishaji wa hifadhidata hauwezi kuendeshwa kwa sababu ukaguzi wa usalama wa uhamishaji haukupita."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Uhamishaji wa hifadhidata hauwezi kuendeshwa kwa sababu ukaguzi wa usalama wa uhamishaji haukuorodhesha uhamishaji ulioandaliwa."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Uhamishaji wa hifadhidata hauwezi kuendeshwa kwa sababu ukaguzi wa usalama wa uhamishaji una ingizo batili la uhamishaji."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Ni uhamishaji wa %s ulioandaliwa tu unaoweza kutekelezwa na kiendeshi cha sasisho."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Uhamishaji wa hifadhidata hauwezi kuendeshwa kwa sababu ukaguzi wa usalama wa uhamishaji ulioandaliwa uliripoti makosa yanayozuia."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine inaripoti maonyo ya msingi wa uhamishaji. Madarasa ya uhamishaji wa %s yaliyoandaliwa tu yataendeshwa kwa uwazi."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Uhamishaji wa hifadhidata unahitaji uthibitisho kwamba nakala rudufu ya hifadhidata ipo."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Uhamishaji wa hifadhidata unahitaji maandishi ya uthibitisho \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Ukaguzi wa usalama wa uhamishaji wa hifadhidata ulikamilishwa kabla ya utekelezaji."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Kuwepo kwa nakala rudufu ya hifadhidata kulithibitishwa kwa uwazi."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Ukaguzi wa usalama wa uhamishaji wa hifadhidata na uthibitisho wa nakala rudufu vilitolewa."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Uhamishaji wa hifadhidata ulitekelezwa baada ya uthibitisho wa wazi wa nakala rudufu ya hifadhidata. Kisasa hakikuunda nakala rudufu ya hifadhidata."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Ruhusa zinazohitajika za faili zinazotekelezeka baada ya kutumia zilirekebishwa."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Imeshindwa kuendesha uhamishaji wa hifadhidata kwa sababu bin/console haikupatikana."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Amri zilizochaguliwa baada ya kutumia zina njia zinazohitajika za kuandika."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Njia za kuandika za amri baada ya kutumia zilithibitishwa."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Hatua za kina baada ya kutumia zinaweza kubadilisha tegemezi, rasilimali zilizotengenezwa au hifadhidata. Kagua nakala rudufu kabla ya kuendelea."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer haiwezi kuendeshwa kwa usalama kutoka kwa kisasa cha wavuti kwa sababu faili iliyotengenezwa na Composer \"%s\" inamilikiwa na UID %d huku mazingira ya PHP yakitumia UID %d. Endesha Composer kwa mkono kama mmiliki wa usambazaji, kisha uendelee na hatua zilizobaki baada ya kutumia."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Njia inayohitajika na hatua baada ya kutumia \"%s\" haiwezi kuandikwa: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Saraka kuu inayohitajika na hatua baada ya kutumia \"%s\" haiwezi kuandikwa: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Imeshindwa kusoma ruhusa za faili inayotekelezeka inayohitajika baada ya kutumia: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Imeshindwa kuweka faili inayotekelezeka inayohitajika baada ya kutumia kama inayotekelezeka: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Faili inayotekelezeka inayohitajika baada ya kutumia bado haitolekezi baada ya chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Ruhusa ya kutekeleza ilirekebishwa."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Imeshindwa kuandika usanidi wa Git uliotengwa kwa amri baada ya kutumia."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Operesheni nyingine ya sasisho inaonekana inaendelea. Ondoa var/update/update.lock tu ikiwa hakuna sasisho linaloendelea."
+
+msgid "Unable to create update lock: %s"
+msgstr "Imeshindwa kuunda kufuli ya sasisho: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Imeshindwa kuandika metadata ya uendeshaji wa amri baada ya kutumia: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Manifesti ya sasisho inakosa kizuizi cha kifurushi."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Kizuizi cha saini cha manifesti ya sasisho lazima kiwe kitu."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Kizuizi cha mahitaji cha manifesti ya sasisho lazima kiwe kitu."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 ya kifurushi cha sasisho lazima iwe mfuatano wa heksadesimali wa herufi 64."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Manifesti ya sasisho inakosa uga unaohitajika wa mfuatano \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Uga wa manifesti ya sasisho \"%s\" lazima uwe mfuatano."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Manifesti ya sasisho si JSON halali: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON ya manifesti ya sasisho lazima iwe kitu."
+
+msgid "Manifest source cannot be empty."
+msgstr "Chanzo cha manifesti hakiwezi kuwa tupu."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL ya manifesti ya sasisho lazima itumie asili rasmi ya sasisho %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Imeshindwa kupakua manifesti ya sasisho. Hali ya HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Faili ya manifesti haiwezi kusomwa: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Imeshindikana kusoma faili ya manifest: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL ya manifest ya sasisho lazima itumie HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Metadata ya kifurushi cha sasisho haiwezi kusomwa: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Imeshindikana kusoma metadata ya kifurushi cha sasisho: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Metadata ya kifurushi cha sasisho si JSON halali: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Metadata ya kifurushi cha sasisho lazima iwe kitu cha JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Umbizo la metadata ya kifurushi cha sasisho lazima liwe %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Sehemu ya metadata ya kifurushi cha sasisho \"remove\" lazima iwe safu."
+
+msgid "Update package removal paths must be strings."
+msgstr "Njia za kuondoa za kifurushi cha sasisho lazima ziwe maandishi."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Metadata ya kifurushi cha sasisho haiwezi kuondoa njia iliyolindwa: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Kifurushi cha sasisho hakiwezi kujumuisha na kuondoa njia ile ile: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Imeshindikana kukokotoa sha256 ya metadata ya kifurushi cha sasisho."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Njia ya kuondoa ya kifurushi cha sasisho haiwezi kuwa tupu."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Njia ya kuondoa ya kifurushi cha sasisho ina baiti tupu."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Njia ya kuondoa ya kifurushi cha sasisho lazima iwe ya jamaa: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Njia ya kuondoa ya kifurushi cha sasisho ina sehemu isiyo salama: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Njia ya hatua ya maandalizi inahitajika ili kujenga mpango wa kutekeleza sasisho."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Saraka ya hatua ya maandalizi inakosa STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Imeshindikana kusoma metadata ya hatua ya maandalizi: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Metadata ya hatua ya maandalizi si JSON halali: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Metadata ya hatua ya maandalizi lazima iwe kitu cha JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Metadata ya hatua ya maandalizi inakosa sehemu ya application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Kifurushi cha sasisho kinakosa %s. Metadata iliyosainiwa ya usafishaji inahitajika kabla ya faili kutekelezwa."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Metadata ya hatua ya maandalizi haina metadata iliyosainiwa ya usafishaji wa kifurushi iliyorekodiwa wakati wa kutoa."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Metadata ya usafishaji wa kifurushi cha sasisho imebadilika baada ya hatua ya maandalizi. Weka tena kifurushi kilichothibitishwa kabla ya kuendelea."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Metadata ya hatua ya maandalizi haina orodha halali ya kuondoa kifurushi."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Njia za usafishaji wa kifurushi cha sasisho zimebadilika baada ya hatua ya maandalizi. Weka tena kifurushi kilichothibitishwa kabla ya kuendelea."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Metadata iliyosainiwa ya usafishaji wa kifurushi haijabadilika tangu hatua ya maandalizi."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Faili ya kufunga sasisho tayari ipo. Sasisho lingine linaweza kuwa linaendelea."
+
+msgid "Update lock directory is not writable."
+msgstr "Saraka ya kufunga sasisho haiwezi kuandikiwa."
+
+msgid "No update lock is currently active."
+msgstr "Hakuna kufunga kwa sasisho linalotumika kwa sasa."
+
+msgid "Update backup directory is not writable."
+msgstr "Saraka ya chelezo ya sasisho haiwezi kuandikiwa."
+
+msgid "Update backup directory is writable."
+msgstr "Saraka ya chelezo ya sasisho inaweza kuandikiwa."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Saraka ya chelezo ya sasisho haiwezi kuundwa na mchakato wa sasa."
+
+msgid "Update backup directory can be created."
+msgstr "Saraka ya chelezo ya sasisho inaweza kuundwa."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Baadhi ya saraka za kazi za sasisho haziwezi kuandikiwa au kuundwa na mchakato wa sasa."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Saraka za kazi za sasisho zinaweza kuandikiwa au kuundwa."
+
+msgid "Update apply file plan was generated."
+msgstr "Mpango wa faili za kutekeleza sasisho umetengenezwa."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Metadata ya usafishaji wa kifurushi ina njia ambazo haziwezi kuondolewa kwa usalama."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Malengo ya kuondoa yaliyotangazwa na kifurushi ni salama."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Baadhi ya faili zilizopitwa na wakati zilizotangazwa na kifurushi tayari hazipo katika usakinishaji huu."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Sasisho lililopangwa lingefuta au kuondoa viungo vya ishara vilivyopo."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Sasisho lililopangwa halifuti wala kuondoa viungo vya ishara vilivyopo."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Faili mpya za uhamishaji wa sasisho lazima ziwekwe chini ya %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Faili mpya %s za uhamishaji wa Doctrine ziligunduliwa. Zitahitaji ukaguzi wa usalama wa uhamishaji wa hifadhidata baada ya kutekeleza faili."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Baadhi ya orodha za faili za mpango wa kutekeleza sasisho zilifupishwa katika jibu la JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Imeshindikana kuandika metadata ya mpango wa kutekeleza sasisho."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Imeshindikana kupakua kifurushi cha sasisho. Hali ya HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Imeshindikana kufungua faili lengwa ya kifurushi cha sasisho: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Vipakuzi vya sasisho lazima vitumie chanzo rasmi cha sasisho %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL ya kifurushi cha sasisho lazima itumie HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Ukaguzi wa usalama wa kumbukumbu ya kifurushi cha sasisho umefaulu."
+
+msgid "Update package was extracted to staging."
+msgstr "Kifurushi cha sasisho kimetolewa hadi eneo la maandalizi."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Metadata ya usafishaji wa kifurushi kilichotiwa saini imepakiwa."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Kifurushi cha sasisho hakina %s. Utumiaji wa faili utazuiliwa hadi metadata ya usafishaji iliyotiwa saini itolewe."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Ripoti ya majaribio ya kifurushi kilichoandaliwa imetolewa."
+
+msgid "Staging metadata was written."
+msgstr "Metadata ya maandalizi imeandikwa."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Imeshindwa kutoa kifurushi cha sasisho kwenye saraka ya maandalizi."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Imeshindwa kupata mzizi wa programu ya Chamilo katika kifurushi kilichoandaliwa."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Kifurushi kilichoandaliwa kinakosa ingizo la Chamilo linalohitajika: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Kifurushi kilichoandaliwa kina muundo wa Chamilo unaotarajiwa."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Kifurushi kilichoandaliwa hakina composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Kifurushi kilichoandaliwa kina composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Kifurushi kilichoandaliwa hakina yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Kifurushi kilichoandaliwa kina yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Imeshindwa kusimba metadata ya maandalizi."
+
+msgid "Unable to write staging metadata."
+msgstr "Imeshindwa kuandika metadata ya maandalizi."
+
+msgid "Update operation log created."
+msgstr "Kumbukumbu ya operesheni ya sasisho imeundwa."
+
+msgid "Unable to write update operation log."
+msgstr "Imeshindwa kuandika kumbukumbu ya operesheni ya sasisho."
+
+msgid "Invalid update operation id."
+msgstr "Kitambulisho cha operesheni ya sasisho si sahihi."
+

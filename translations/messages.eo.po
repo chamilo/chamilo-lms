@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulo-ekzemplo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ekzemplo de formulo: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -37012,13 +37012,13 @@ msgid "Trusted signing key"
 msgstr "Fidinda subskriba ŝlosilo"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Tajpu APLIKI ĜISDATIGAJN DOSIEROJN por konfirmi"
+msgstr "Tajpu APPLY UPDATE FILES por konfirmi"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Tajpu RULI DATUMBAZAJN MIGRADOJN por konfirmi datumbazajn migradojn"
+msgstr "Tajpu RUN DATABASE MIGRATIONS por konfirmi datumbazajn migradojn"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Tajpu RULI POST-ĜISDATIGAJN AGOJN por konfirmi"
+msgstr "Tajpu RUN POST UPDATE ACTIONS por konfirmi"
 
 msgid "Unknown update notice source."
 msgstr "Nekonata fonto de ĝisdatiga avizo."
@@ -40577,4 +40577,607 @@ msgstr "Kelkaj celaj dosieroj aŭ dosierujoj ne povas esti skribitaj aŭ forigit
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Por ripari tion, provizore ŝanĝu la posedanton de la tuta Chamilo-dosierujo al %s (la uzanto de la retservilo), apliku la ĝisdatigon, poste ŝanĝu la posedanton reen al %s, kaj poste agordu la posedanton de var/ (kaj ĝia enhavo) reen al %s por ke la aplikaĵo daŭre povu skribi al ĝi."
+
+msgid "Update package verification failed."
+msgstr "Kontrolo de ĝisdatiga pakaĵo malsukcesis."
+
+msgid "Update preflight checks failed."
+msgstr "Antaŭflugaj kontroloj de ĝisdatigo malsukcesis."
+
+msgid "Unable to stage update package."
+msgstr "Ne eblas prepari ĝisdatigan pakaĵon."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Rulado de post-aplikaj komandoj el la UI estas malŝaltita sur ĉi tiu servilo."
+
+msgid "Missing required field: %s"
+msgstr "Mankas deviga kampo: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Neniu fonto de ĝisdatiga manifesto estis donita kaj nenia defaŭlta URL de ĝisdatiga manifesto estas agordita."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL de ĝisdatiga manifesto devas uzi la oficialan ĝisdatigan originon %s. Nur la vojo de la manifesto povas esti ŝanĝita."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Lokaj vojoj de ĝisdatiga manifesto estas malŝaltitaj. Uzu HTTPS-URL de manifesto aŭ agordu CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 en la servila medio por lokaj testoj."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Ne donu HTTP-vojon %s. Lasu ĉi tiun kampon malplena por elŝuti ĝin el la ĝisdatiga manifesto."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Lokaj ĝisdatigaj vojoj %s estas malŝaltitaj en ĉi tiu medio."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Fidelaj publikaj ŝlosiloj de ĝisdatigo devas esti agorditaj sur la servilo en ĉi tiu medio."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Preterpaso de kontrolo de ĝisdatiga subskribo estas malŝaltita en ĉi tiu medio."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Rulado de post-aplikaj ĝisdatigaj agoj postulas la konfirman tekston \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Apliko de pretigitaj ĝisdatigaj dosieroj postulas la konfirman tekston \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Ne eblas determini la projektan dosierujon."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Datumbaza sekurkopio ne estas administrata de ĉi tiu ĝisdatigilo. Kreu kaj kontrolu datumbazan sekurkopion antaŭ ol ruli migradojn."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Metodoj down() de Doctrine-migradoj ne estas garantitaj por restarigi forigitajn aŭ transformitajn datumojn."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Post-aplikaj metadatumoj rekomendas revizion de datumbazaj migradoj."
+
+msgid "No migration files were found in the staged package."
+msgstr "Neniuj migradaj dosieroj estis trovitaj en la pretigita pakaĵo."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Pretigitaj Doctrine-migradaj dosieroj estis detektitaj."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Celo de Doctrine-migrado estis determinita el la pretigita pakaĵo."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "La baza linio de Doctrine-migrado havas blokajn problemojn por pretigitaj migradoj."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine raportas historiajn avertojn pri migrada baza linio, sed nur pretigitaj migradoj %s estos reviziitaj kaj ruliĝos eksplicite."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine raportas historiajn avertojn pri migrada baza linio. La ĝisdatigilo rulos nur pretigitajn migradajn klasojn %s post eksplicita konfirmo."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "La baza linio de Doctrine havas neniun blokan problemon por la pretigitaj migradoj %s."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Prova rulado de Doctrine-migrado malsukcesis por almenaŭ unu pretigita migrado. Ne rulu datumbazajn migradojn ĝis tio estas riparita."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Prova rulado de Doctrine sukcese finiĝis por ĉiu pretigita migrada klaso."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Datumbaza sekurkopio devas esti kreita ekster ĉi tiu ĝisdatigilo antaŭ ol ruli migradojn."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Pretiga vojo estas bezonata por revizii datumbazajn migradojn."
+
+msgid "Unable to read update %s: %s"
+msgstr "Ne eblas legi ĝisdatigon %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON de ĝisdatigo %s estas nevalida: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON de ĝisdatigo %s devas esti objekto."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Metadatumoj de post-aplikaj kontroloj ne enhavas validan liston de agoj."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Datumbazaj migradoj ne estis rekomenditaj por ĉi tiu pretigita ĝisdatigo."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Ĝisdatigaj metadatumoj mankas la pretigitan aplikaĵan vojon."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Planita pretigita migrada dosiero ne estis trovita: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Ne eblas legi pretigitan migradan dosieron: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Neniu priskribo povis esti eltirita el getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Nur pretigitaj migradoj %s estas subtenataj de la ĝisdatiga rulilo: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Ne eblas skribi metadatumojn pri migrada sekureco: %s"
+
+msgid "Migration safety check failed."
+msgstr "Kontrolo de migrada sekureco malsukcesis."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Nesekura pretigita relativa migrada vojo detektita: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Instalita versio de Chamilo ne povis esti aŭtomate detektita. Daŭrigu nur post konfirmo ke ĉi tiu ĝisdatigo estas kongrua."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Instalita aŭ cela versio ne estas en komparebla semantika versia formato. Daŭrigu nur post mana kontrolo."
+
+msgid "An update is available."
+msgstr "Ĝisdatigo estas havebla."
+
+msgid "The installed version already matches the manifest version."
+msgstr "La instalita versio jam kongruas kun la versio de la manifesto."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "La versio de la manifesto estas pli malnova ol la instalita versio. Malaltigoj estas blokitaj defaŭlte."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Stagitaj dosieroj ne estis sukcese aplikitaj. Kontroloj post-aplikaj ne povas daŭri."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Metadatumoj de la aplika rezulto estis sukcese legitaj."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Rekomendoj pri post-aplikaj agoj estis generitaj."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Datumbazaj migradoj estis detektitaj en la stagita pakaĵo. Rulu ilin nur post konfirmo, ke la dosiera ĝisdatigo estas ĝusta kaj datumbaza sekurkopio ekzistas."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Staga vojo estas bezonata por ruli kontrolojn post-aplikajn."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Ĝisdatigo %s ne estas valida JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Ĝisdatigo %s devas esti JSON-objekto."
+
+msgid "Composer dependencies"
+msgstr "Composer-dependaĵoj"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Composer-metadatumoj estis inkluzivitaj en la stagita pakaĵo. Rulu Composer install el la aplikaĵa radiko antaŭ ol konsideri la ĝisdatigon kompleta."
+
+msgid "Frontend assets"
+msgstr "Frontend-aktivaĵoj"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Frontend-rilataj dosieroj estis inkluzivitaj en la stagita pakaĵo. Rekonstruu produktadajn aktivaĵojn post instalado de dependaĵoj."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Doctrine-migradaj dosieroj estis detektitaj en la stagita pakaĵo. Konfirmu, ke datumbaza sekurkopio ekzistas antaŭ ol ruli migradojn."
+
+msgid "Symfony cache"
+msgstr "Symfony-kaŝmemoro"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Malplenigu Symfony-kaŝmemoron post aplikado de ĝisdatigaj dosieroj kaj rulado de iuj bezonataj komandoj."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Ne eblas skribi metadatumojn de kontroloj post-aplikaj."
+
+msgid "Post-apply check failed."
+msgstr "Kontrolo post-aplika malsukcesis."
+
+msgid "Update package is not readable: %s"
+msgstr "Ĝisdatiga pakaĵo ne estas legebla: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Ĝisdatiga pakaĵo ne estas valida ZIP-arkivo."
+
+msgid "Update package ZIP archive is empty."
+msgstr "ZIP-arkivo de ĝisdatiga pakaĵo estas malplena."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Ĝisdatiga pakaĵo enhavas nelegeblan ZIP-eron."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Ĝisdatiga pakaĵo enhavas nesekuran absolutan vojon: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Ĝisdatiga pakaĵo enhavas vojan transiran eron: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Ĝisdatiga pakaĵo enhavas simbolan ligilon: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Komencante post-aplikajn agojn."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Rulado de post-aplikaj komandoj postulas eksplicitan konfirmon."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Metadatumoj de post-aplikaj rekomendoj estis sukcese legitaj."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Post-aplikaj agoj estis validigitaj kontraŭ la rekomenda raporto."
+
+msgid "Post-apply actions were selected."
+msgstr "Post-aplikaj agoj estis elektitaj."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Altnivelaj post-aplikaj agoj postulas eksplicitan altnivelan konfirmon."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Altnivelaj post-aplikaj agoj estis eksplicite konfirmitaj."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Elektitaj post-aplikaj komandoj kompletigis sukcese."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Metadatumoj de rulado de post-aplikaj komandoj estis skribitaj."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Post-aplikaj agoj kompletigis sukcese."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Nevalida difino de post-aplika ĝisdatiga komando: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Rulante post-aplikan agon: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Rulante komandon %d el %d por %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Post-aplika ago malsukcesis: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Post-aplika ago \"%s\" malsukcesis kun elira kodo %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Post-aplika ago kompletigis: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Staga vojo estas bezonata por ruli post-aplikajn agojn."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Ne estas rekomenditaj post-aplikaj agoj por ruli."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Ne estas permesitaj post-aplikaj agoj por ruli."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Post-aplika ago ne estas permesita por ĉi tiu ĝisdatigo: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Datumbazaj migradoj postulas revizion pri migrada sekureco antaŭ rulado."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Datumbazaj migradoj ne povas ruli ĉar la revizio pri migrada sekureco ne pasis."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Datumbazaj migradoj ne povas ruli ĉar la revizio pri migrada sekureco ne listigis stagitajn migradojn."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Datumbazaj migradoj ne povas ruli ĉar la revizio pri migrada sekureco enhavas nevalidan migradan eron."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Nur stagitaj %s-migradoj povas esti rulitaj de la ĝisdatiga rulilo."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Datumbazaj migradoj ne povas ruli ĉar la stagita revizio pri migrada sekureco raportis blokajn erarojn."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine raportas avertojn pri migrada bazo. Nur preparitaj migradaj klasoj %s estos plenumitaj eksplicite."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Datumbazaj migradoj postulas konfirmon, ke ekzistas sekurkopio de la datumbazo."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Datumbazaj migradoj postulas la konfirman tekston \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Sekureca revizio de datumbaza migrado estis kompletigita antaŭ plenumo."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Ekzisto de datumbaza sekurkopio estis eksplicite konfirmita."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Sekureca revizio de datumbaza migrado kaj konfirmo de sekurkopio estis provizitaj."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Datumbazaj migradoj estis plenumitaj post eksplicita konfirmo de datumbaza sekurkopio. La ĝisdatigilo ne kreis la datumbazan sekurkopion."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Postulataj plenumeblaj permesoj post aplikado estis normaligitaj."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Ne eblas ruli datumbazajn migradojn ĉar bin/console ne estis trovita."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Elektitaj post-aplikaj komandoj havas la postulatajn skribeblajn vojojn."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Skribeblaj vojoj de post-aplikaj komandoj estis validigitaj."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Altnivelaj post-aplikaj agoj povas ŝanĝi dependaĵojn, generitajn rimedojn aŭ la datumbazon. Reviziu sekurkopiojn antaŭ daŭrigi."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer ne povas ruliĝi sekure el la reta ĝisdatigilo ĉar la de Composer generita dosiero \"%s\" estas posedata de UID %d dum la PHP-rultempo uzas UID %d. Rulu Composer permane kiel la deplojposedanto, poste daŭrigu kun la restantaj post-aplikaj agoj."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Vojo postulata de post-aplika ago \"%s\" ne estas skribebla: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Gepatra dosierujo postulata de post-aplika ago \"%s\" ne estas skribebla: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Ne eblas legi permesojn por postulata post-aplika plenumebla: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Ne eblas marki postulatan post-aplikan plenumeblon kiel plenumebla: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Postulata post-aplika plenumebla ankoraŭ ne estas plenumebla post chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Plenumebla permeso estis normaligita."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Ne eblas skribi izolitan Git-agordon por post-aplikaj komandoj."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Alia ĝisdatiga operacio ŝajnas ruliĝi. Forigu var/update/update.lock nur se neniu ĝisdatigo estas aktiva."
+
+msgid "Unable to create update lock: %s"
+msgstr "Ne eblas krei ĝisdatigan ŝlosilon: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Ne eblas skribi metadatenojn de rulo de post-aplika komando: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Ĝisdatiga manifesto mankas la pakaĵan blokon."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Subskriba bloko de ĝisdatiga manifesto devas esti objekto."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Postuloj-bloko de ĝisdatiga manifesto devas esti objekto."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 de ĝisdatiga pakaĵo devas esti 64-litera deksesuma ĉeno."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Ĝisdatiga manifesto mankas postulatan ĉenan kampon \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Kampo \"%s\" de ĝisdatiga manifesto devas esti ĉeno."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Ĝisdatiga manifesto ne estas valida JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON de ĝisdatiga manifesto devas esti objekto."
+
+msgid "Manifest source cannot be empty."
+msgstr "Fonto de manifesto ne povas esti malplena."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL de ĝisdatiga manifesto devas uzi la oficialan ĝisdatigan originon %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Ne eblas elŝuti ĝisdatigan manifeston. HTTP-stato: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Manifestodosiero ne estas legebla: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Ne eblas legi manifestodosieron: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "La URL de ĝisdatiga manifesto devas uzi HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Metadatenoj de ĝisdatiga pakaĵo ne estas legeblaj: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Ne eblas legi metadatenojn de ĝisdatiga pakaĵo: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Metadatenoj de ĝisdatiga pakaĵo ne estas valida JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Metadatenoj de ĝisdatiga pakaĵo devas esti JSON-objekto."
+
+msgid "Update package metadata format must be %d."
+msgstr "Formato de metadatenoj de ĝisdatiga pakaĵo devas esti %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Kampo \"remove\" de metadatenoj de ĝisdatiga pakaĵo devas esti tabelo."
+
+msgid "Update package removal paths must be strings."
+msgstr "Forigaj vojoj de ĝisdatiga pakaĵo devas esti ĉenoj."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Metadatenoj de ĝisdatiga pakaĵo ne povas forigi protektitan vojon: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Ĝisdatiga pakaĵo ne povas inkluzivi kaj forigi la saman vojon: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Ne eblas kalkuli sha256 de metadatenoj de ĝisdatiga pakaĵo."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Foriga vojo de ĝisdatiga pakaĵo ne povas esti malplena."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Foriga vojo de ĝisdatiga pakaĵo enhavas nulan bajton."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Foriga vojo de ĝisdatiga pakaĵo devas esti relativa: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "La vojo por forigo de la ĝisdatiga pako enhavas nesekuran segmenton: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Staging-vojo estas bezonata por krei planon de apliko de ĝisdatigo."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "La staging-dosierujo mankas STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Ne eblas legi staging-metadatumojn: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Staging-metadatumoj ne estas valida JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Staging-metadatumoj devas esti JSON-objekto."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Staging-metadatumoj mankas la kampon application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "La ĝisdatiga pako mankas %s. Subskribitaj purigaj metadatumoj estas bezonataj antaŭ ol dosieroj povas esti aplikitaj."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Staging-metadatumoj ne enhavas la subskribitajn purigajn metadatumojn de la pako registritajn dum eltiro."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Purigaj metadatumoj de la ĝisdatiga pako ŝanĝiĝis post staging. Re-stageu la kontrolitan pakon antaŭ ol daŭrigi."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Staging-metadatumoj ne enhavas validan liston de forigoj de la pako."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Purigaj vojoj de la ĝisdatiga pako ŝanĝiĝis post staging. Re-stageu la kontrolitan pakon antaŭ ol daŭrigi."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Subskribitaj purigaj metadatumoj de la pako estas senŝanĝaj depost staging."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Ĝisdatiga ŝlosdosiero jam ekzistas. Alia ĝisdatigo eble estas en progreso."
+
+msgid "Update lock directory is not writable."
+msgstr "La ĝisdatiga ŝlosdosierujo ne estas skribebla."
+
+msgid "No update lock is currently active."
+msgstr "Neniu ĝisdatiga ŝloso estas nuntempe aktiva."
+
+msgid "Update backup directory is not writable."
+msgstr "La ĝisdatiga savkopia dosierujo ne estas skribebla."
+
+msgid "Update backup directory is writable."
+msgstr "La ĝisdatiga savkopia dosierujo estas skribebla."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "La ĝisdatiga savkopia dosierujo ne povas esti kreita de la nuna procezo."
+
+msgid "Update backup directory can be created."
+msgstr "La ĝisdatiga savkopia dosierujo povas esti kreita."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Kelkaj laboraj dosierujoj de ĝisdatigo ne estas skribeblaj aŭ ne povas esti kreitaj de la nuna procezo."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Laboraj dosierujoj de ĝisdatigo estas skribeblaj aŭ povas esti kreitaj."
+
+msgid "Update apply file plan was generated."
+msgstr "Plano de apliko de ĝisdatigaj dosieroj estis generita."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Purigaj metadatumoj de la pako enhavas vojojn kiuj ne povas esti forigitaj sekure."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Forigaj celoj deklaritaj de la pako estas sekuraj."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Kelkaj malnoviĝintaj dosieroj deklaritaj de la pako jam forestas de ĉi tiu instalo."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "La planita ĝisdatigo anstataŭigus aŭ forigus ekzistantajn simbolajn ligilojn."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "La planita ĝisdatigo ne anstataŭigas nek forigas ekzistantajn simbolajn ligilojn."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Novaj ĝisdatigaj migradaj dosieroj devas esti metitaj sub %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Novaj Doctrine-migradaj dosieroj %s estis detektitaj. Ili postulos revizion de datumbaza migrada sekureco post apliko de dosieroj."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Kelkaj dosierlistoj de la plano de apliko de ĝisdatigo estis trunkitaj en la JSON-respondo."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Ne eblas skribi metadatumojn de la plano de apliko de ĝisdatigo."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Ne eblas elŝuti ĝisdatigan pakon. HTTP-statuso: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Ne eblas malfermi celan dosieron de ĝisdatiga pako: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Ĝisdatigaj elŝutoj devas uzi la oficialan ĝisdatigan originon %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "La URL de la ĝisdatiga pako devas uzi HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Sekurecaj kontroloj de la arkivo de ĝisdatiga pako sukcesis."
+
+msgid "Update package was extracted to staging."
+msgstr "Ĝisdatiga pako estis eltirita al staging."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Subskribitaj purigaj metadatumoj de la pako estis ŝargitaj."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "La ĝisdatiga pako ne enhavas %s. Apliko de dosieroj estos blokita ĝis subskribitaj purigaj metadatumoj estos provizitaj."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Raporto de seka rulado de la staged pako estis generita."
+
+msgid "Staging metadata was written."
+msgstr "Staging-metadatumoj estis skribitaj."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Ne eblas eltiri ĝisdatigan pakon al staging-dosierujo."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Ne eblas trovi la radikon de la Chamilo-aplikaĵo en la staged pako."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "La staged pako mankas bezonatan Chamilo-eniron: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "La staged pako enhavas la atendatan strukturon de Chamilo."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "La staged pako ne enhavas composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "La staged pako enhavas composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "La staged pako ne enhavas yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "La staged pako enhavas yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Ne eblas kodi stadiajn metadatumojn."
+
+msgid "Unable to write staging metadata."
+msgstr "Ne eblas skribi stadiajn metadatumojn."
+
+msgid "Update operation log created."
+msgstr "Protokolo de ĝisdatiga operacio kreita."
+
+msgid "Unable to write update operation log."
+msgstr "Ne eblas skribi protokolon de ĝisdatiga operacio."
+
+msgid "Invalid update operation id."
+msgstr "Nevalida identigilo de ĝisdatiga operacio."
 

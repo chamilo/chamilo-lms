@@ -40234,3 +40234,948 @@ msgstr "Bandar latihan industri"
 msgid "City"
 msgstr "Bandar"
 
+msgid "Update workflow restored after page refresh"
+msgstr "Aliran kerja kemas kini dipulihkan selepas muat semula halaman"
+
+msgid "Last completed step"
+msgstr "Langkah terakhir yang selesai"
+
+msgid "Stage package"
+msgstr "Pakej pentas"
+
+msgid "Package staging"
+msgstr "Pementasan pakej"
+
+msgid "Apply plan"
+msgstr "Rancangan aplikasi"
+
+msgid "Update workflow completed"
+msgstr "Aliran kerja kemas kini selesai"
+
+msgid "Update directory exists and is writable."
+msgstr "Direktori kemas kini wujud dan boleh ditulis."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Direktori kemas kini wujud tetapi tidak boleh ditulis: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Direktori kemas kini belum wujud, tetapi direktori induknya boleh ditulis."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Direktori kemas kini belum wujud, tetapi ia boleh dicipta di bawah var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Direktori kemas kini tidak wujud dan tidak dapat dicipta dengan kebenaran semasa."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Tidak dapat menentukan ruang cakera bebas untuk pra-pemeriksaan kemas kini."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Ruang cakera bebas tidak mencukupi untuk operasi pementasan kemas kini yang selamat."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Ruang cakera bebas mencukupi untuk aliran kemas kini peringkat pengesahan ini."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Manifes kemas kini tidak mentakrifkan keperluan versi PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Tidak dapat menilai sepenuhnya keperluan PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Versi PHP semasa tidak memenuhi keperluan kemas kini: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Versi PHP semasa memenuhi keperluan kemas kini."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Tiada laluan pakej setempat diberikan. Pakej yang dimuat turun hanya boleh diperiksa selepas muat turun."
+
+msgid "Local update package is not readable: %s"
+msgstr "Pakej kemas kini setempat tidak boleh dibaca: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Pakej kemas kini setempat mestilah arkib ZIP."
+
+msgid "Local update package is readable."
+msgstr "Pakej kemas kini setempat boleh dibaca."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Versi Chamilo yang dipasang tidak dapat dikesan secara automatik. Arah versi tidak dapat diperiksa."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Versi yang dipasang atau sasaran bukan dalam format versi semantik yang boleh dibandingkan."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Versi sasaran lebih rendah daripada versi yang dipasang. Penurunan versi tidak dibenarkan secara lalai."
+
+msgid "Target version matches the installed version."
+msgstr "Versi sasaran sepadan dengan versi yang dipasang."
+
+msgid "Target version is newer than the installed version."
+msgstr "Versi sasaran lebih baharu daripada versi yang dipasang."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Projek bukan semakan Git atau .git tidak wujud."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Sistem kemas kini ini dimaksudkan untuk pemasangan tanpa sokongan Git. Kami telah mengesan bahawa sistem setempat menggunakan Git. Meneruskan kemas kini mungkin menyebabkan sejarah Git rosak. Untuk sistem dengan sokongan Git, kami mengesyorkan menggunakan prosedur Git yang terperinci dalam CONTRIBUTING.md di akar web."
+
+msgid "Local Git changes were also detected."
+msgstr "Perubahan Git setempat juga dikesan."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Sesetengah fail metadata projek tiada. Peringkat kemas kini kemudian mungkin memerlukan pemeriksaan kebergantungan secara manual."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Fail metadata Composer dan Yarn wujud."
+
+msgid "Starting staged file application."
+msgstr "Memulakan aplikasi fail berperingkat."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Pengesahan eksplisit diperlukan untuk menerapkan fail berperingkat."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Menerapkan fail kemas kini berperingkat memerlukan pengesahan eksplisit."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Direktori pementasan berada di dalam direktori pementasan kemas kini Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Direktori pementasan telah disahkan."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Metadata rancangan aplikasi berjaya dibaca."
+
+msgid "Staged application path is valid."
+msgstr "Laluan aplikasi berperingkat adalah sah."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Metadata pembersihan pakej yang ditandatangani sepadan dengan rancangan aplikasi yang disemak."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Metadata pembersihan pakej yang ditandatangani telah disahkan."
+
+msgid "Update lock was acquired."
+msgstr "Kunci kemas kini telah diperoleh."
+
+msgid "Update backup directory was created."
+msgstr "Direktori sandaran kemas kini telah dicipta."
+
+msgid "Update file operations were collected."
+msgstr "Operasi fail kemas kini telah dikumpulkan."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Fail sedia ada yang dirancang untuk diganti atau dibuang telah disandarkan."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Fail kemas kini berperingkat telah disalin ke pemasangan Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Fail lapuk yang diisytiharkan pakej telah dibuang daripada pemasangan Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Fail lapuk yang diisytiharkan pakej telah dibuang."
+
+msgid "Update apply audit metadata was written."
+msgstr "Metadata audit penerapan kemas kini telah ditulis."
+
+msgid "Staged files applied successfully."
+msgstr "Fail berperingkat berjaya diterapkan."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Tidak dapat memulihkan fail yang dibuang: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Tidak dapat mengundur fail yang disalin: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Pengunduran fail dilaksanakan selepas kegagalan penerapan kemas kini."
+
+msgid "Rollback failed: %s"
+msgstr "Pengunduran gagal: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Tidak dapat menulis metadata audit penerapan kemas kini: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Tidak dapat melepaskan kunci kemas kini selepas kegagalan: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Laluan pementasan diperlukan untuk menerapkan fail kemas kini."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Direktori pementasan tidak wujud: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Direktori asas pementasan kemas kini Chamilo tidak wujud."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Direktori pementasan mestilah di dalam var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Direktori pementasan tiada APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Tidak dapat membaca metadata pelan penerapan kemas kini: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metadata pelan penerapan kemas kini bukan JSON yang sah: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metadata pelan penerapan kemas kini mestilah objek JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Pelan penerapan kemas kini tiada medan application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Laluan aplikasi berperingkat tidak boleh dibaca: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Laluan aplikasi berperingkat mestilah di dalam direktori pementasan."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Laluan aplikasi berperingkat tiada composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Pakej kemas kini tiada %s. Pementasan semula pakej yang disahkan dengan metadata pembersihan yang ditandatangani."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Pelan penerapan kemas kini tiada metadata pembersihan pakej yang disemak."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Metadata pembersihan pakej kemas kini berubah selepas pelan penerapan dijana. Bina semula pelan penerapan sebelum meneruskan."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Pelan penerapan kemas kini mengandungi senarai pembuangan pakej yang tidak sah."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Laluan pembersihan pakej kemas kini berubah selepas pelan penerapan dijana. Bina semula pelan penerapan sebelum meneruskan."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Pelan penerapan kemas kini tiada senarai laluan pembuangan yang disemak."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Laluan pembuangan pelan penerapan kemas kini tidak sepadan dengan metadata pembersihan pakej yang ditandatangani."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Laluan kunci kemas kini mestilah di dalam var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Pelan penerapan kemas kini tiada medan backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Laluan sandaran kemas kini mengandungi segmen laluan yang tidak selamat."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Laluan sandaran kemas kini mestilah di dalam var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Tidak dapat memperoleh kunci kemas kini. Kemas kini lain mungkin sedang berjalan."
+
+msgid "Unable to release update lock: %s"
+msgstr "Tidak dapat melepaskan kunci kemas kini: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Direktori sandaran kemas kini sudah wujud: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Direktori sasaran tidak dapat dicipta: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Kemas kini yang dirancang akan menimpa pautan simbolik sedia ada: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Fail sasaran tidak boleh ditulis: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Fail sasaran tidak dapat dicipta: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Tidak dapat menyelesaikan direktori projek Chamilo sebelum membuang fail lapuk."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Pembersihan kemas kini tidak dapat membuang laluan dilindungi: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Kemas kini yang dirancang akan membuang pautan simbolik sedia ada: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Pembersihan kemas kini menyokong fail sahaja, bukan direktori: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Fail sasaran lapuk tidak boleh dibaca untuk sandaran: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Fail sasaran lapuk tidak dapat dibuang dengan kebenaran direktori semasa: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Fail sasaran lapuk terselesaikan di luar direktori projek Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Tidak dapat menyandarkan fail sasaran: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Tidak dapat menulis metadata sandaran kemas kini."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Tidak dapat menyalin fail kemas kini berperingkat: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Disalin %d daripada %d fail berperingkat."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Tidak dapat membuang fail usang yang diisytiharkan pakej: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Dibuang %d daripada %d fail usang yang diisytiharkan pakej."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Tidak dapat memulihkan fail sandaran: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Tidak dapat membuang fail yang baru disalin semasa undur: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Tidak dapat memulihkan fail yang dibuang kerana sandarannya tiada: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Tidak dapat memulihkan fail yang dibuang daripada sandaran: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Tidak dapat menulis metadata audit penerapan kemas kini."
+
+msgid "Unable to write global update apply log."
+msgstr "Tidak dapat menulis log penerapan kemas kini global."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Laluan relatif berperingkat yang tidak selamat dikesan: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Direktori tidak boleh ditulis: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Tidak dapat mencipta direktori: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Metadata berperingkat berjaya dibaca."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metadata rancangan penerapan ditulis ke direktori berperingkat."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Fail dan direktori sasaran kelihatan boleh ditulis untuk kemas kini dan pembersihan yang dirancang."
+
+msgid "Update apply plan check failed."
+msgstr "Semakan rancangan penerapan kemas kini gagal."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Sesetengah fail atau direktori sasaran tidak dapat ditulis atau dibuang."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Untuk membetulkan ini, tukar sementara pemilik seluruh direktori Chamilo kepada %s (pengguna pelayan web), terapkan kemas kini, tukar pemilik kembali kepada %s selepas itu, kemudian tetapkan pemilik var/ (dan kandungannya) kembali kepada %s supaya aplikasi dapat terus menulis kepadanya."
+
+msgid "Update package verification failed."
+msgstr "Pengesahan pakej kemas kini gagal."
+
+msgid "Update preflight checks failed."
+msgstr "Semakan pra-penerbangan kemas kini gagal."
+
+msgid "Unable to stage update package."
+msgstr "Tidak dapat memperingkat pakej kemas kini."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Menjalankan arahan pasca-penerapan daripada UI dilumpuhkan pada pelayan ini."
+
+msgid "Missing required field: %s"
+msgstr "Medan wajib tiada: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Tiada sumber manifes kemas kini diberikan dan tiada URL manifes kemas kini lalai dikonfigurasikan."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL manifes kemas kini mesti menggunakan asal kemas kini rasmi %s. Hanya laluan manifes boleh diubah."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Laluan manifes kemas kini setempat dilumpuhkan. Gunakan URL manifes HTTPS atau tetapkan CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 dalam persekitaran pelayan untuk ujian setempat."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Jangan berikan laluan HTTP %s. Biarkan medan ini kosong untuk memuat turunnya daripada manifes kemas kini."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Laluan kemas kini setempat %s dilumpuhkan dalam persekitaran ini."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Kunci awam kemas kini yang dipercayai mesti dikonfigurasikan pada pelayan dalam persekitaran ini."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Melangkau pengesahan tandatangan kemas kini dilumpuhkan dalam persekitaran ini."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Menjalankan tindakan kemas kini pasca-penerapan memerlukan teks pengesahan \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Menerapkan fail kemas kini berperingkat memerlukan teks pengesahan \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Tidak dapat menyelesaikan direktori projek."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Sandaran pangkalan data tidak diuruskan oleh pengemas kini ini. Cipta dan sahkan sandaran pangkalan data sebelum menjalankan migrasi."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Kaedah Doctrine migration down() tidak dijamin memulihkan data yang dipadam atau diubah."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Metadata pasca-penerapan mengesyorkan semakan migrasi pangkalan data."
+
+msgid "No migration files were found in the staged package."
+msgstr "Tiada fail migrasi dijumpai dalam pakej berperingkat."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Fail migrasi Doctrine berperingkat dikesan."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Sasaran migrasi Doctrine diselesaikan daripada pakej berperingkat."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Garis dasar migrasi Doctrine mempunyai isu yang menghalang untuk migrasi berperingkat."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine melaporkan amaran garis dasar migrasi sejarah, tetapi hanya migrasi %s berperingkat akan disemak dan dilaksanakan secara eksplisit."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine melaporkan amaran garis dasar migrasi sejarah. Pengemas kini akan melaksanakan hanya kelas migrasi %s berperingkat selepas pengesahan eksplisit."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Garis dasar Doctrine tiada isu yang menghalang untuk migrasi %s berperingkat."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Ujian kering migrasi Doctrine gagal untuk sekurang-kurangnya satu migrasi berperingkat. Jangan jalankan migrasi pangkalan data sehingga ini dibetulkan."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Ujian kering Doctrine selesai dengan jayanya untuk setiap kelas migrasi berperingkat."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Sandaran pangkalan data mesti dicipta di luar pengemas kini ini sebelum menjalankan migrasi."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Laluan berperingkat diperlukan untuk menyemak migrasi pangkalan data."
+
+msgid "Unable to read update %s: %s"
+msgstr "Tidak dapat membaca kemas kini %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON kemas kini %s tidak sah: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON kemas kini %s mestilah objek."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Metadata semakan pasca-guna tidak mengandungi senarai tindakan yang sah."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Penghijrahan pangkalan data tidak disyorkan untuk kemas kini berperingkat ini."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Metadata kemas kini tiada laluan aplikasi berperingkat."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Fail penghijrahan berperingkat yang dirancang tidak dijumpai: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Tidak dapat membaca fail penghijrahan berperingkat: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Tiada perihalan dapat diekstrak daripada getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Hanya %s penghijrahan berperingkat disokong oleh pelari kemas kini: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Tidak dapat menulis metadata keselamatan penghijrahan: %s"
+
+msgid "Migration safety check failed."
+msgstr "Semakan keselamatan penghijrahan gagal."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Laluan penghijrahan relatif berperingkat yang tidak selamat dikesan: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Versi Chamilo yang dipasang tidak dapat dikesan secara automatik. Teruskan hanya selepas mengesahkan kemas kini ini serasi."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Versi terpasang atau sasaran bukan dalam format versi semantik yang boleh dibandingkan. Teruskan hanya selepas pengesahan manual."
+
+msgid "An update is available."
+msgstr "Kemas kini tersedia."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Versi terpasang sudah sepadan dengan versi manifes."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Versi manifes lebih lama daripada versi terpasang. Penurunan versi disekat secara lalai."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Fail berperingkat tidak berjaya digunakan. Semakan pasca-guna tidak dapat diteruskan."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Metadata hasil penggunaan berjaya dibaca."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Cadangan tindakan pasca-guna telah dijana."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Penghijrahan pangkalan data dikesan dalam pakej berperingkat. Jalankan hanya selepas mengesahkan kemas kini fail adalah betul dan sandaran pangkalan data wujud."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Laluan pementasan diperlukan untuk menjalankan semakan pasca-guna."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Kemas kini %s bukan JSON yang sah: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Kemas kini %s mestilah objek JSON."
+
+msgid "Composer dependencies"
+msgstr "Kebergantungan Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Metadata Composer disertakan dalam pakej berperingkat. Jalankan Composer install dari akar aplikasi sebelum menganggap kemas kini selesai."
+
+msgid "Frontend assets"
+msgstr "Aset bahagian hadapan"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Fail berkaitan bahagian hadapan disertakan dalam pakej berperingkat. Bina semula aset pengeluaran selepas memasang kebergantungan."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Fail penghijrahan Doctrine dikesan dalam pakej berperingkat. Sahkan sandaran pangkalan data wujud sebelum menjalankan penghijrahan."
+
+msgid "Symfony cache"
+msgstr "Cache Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Kosongkan cache Symfony selepas menggunakan fail kemas kini dan menjalankan sebarang arahan yang diperlukan."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Tidak dapat menulis metadata semakan pasca-guna."
+
+msgid "Post-apply check failed."
+msgstr "Semakan pasca-guna gagal."
+
+msgid "Update package is not readable: %s"
+msgstr "Pakej kemas kini tidak boleh dibaca: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Pakej kemas kini bukan arkib ZIP yang sah."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Arkib ZIP pakej kemas kini kosong."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Pakej kemas kini mengandungi entri ZIP yang tidak boleh dibaca."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Pakej kemas kini mengandungi laluan mutlak yang tidak selamat: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Pakej kemas kini mengandungi entri lintasan laluan: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Pakej kemas kini mengandungi pautan simbolik: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Memulakan tindakan pasca-guna."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Pelaksanaan arahan pasca-guna memerlukan pengesahan yang jelas."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Metadata cadangan pasca-guna berjaya dibaca."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Tindakan pasca-guna telah disahkan terhadap laporan cadangan."
+
+msgid "Post-apply actions were selected."
+msgstr "Tindakan pasca-guna telah dipilih."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Tindakan pasca-guna lanjutan memerlukan pengesahan lanjutan yang jelas."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Tindakan pasca-guna lanjutan telah disahkan secara jelas."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Arahan pasca-guna yang dipilih selesai dengan jayanya."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Metadata pelaksanaan arahan pasca-guna telah ditulis."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Tindakan pasca-guna selesai dengan jayanya."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Definisi arahan pasca-guna kemas kini tidak sah: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Menjalankan tindakan pasca-guna: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Menjalankan arahan %d daripada %d untuk %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Tindakan pasca-aplikasi gagal: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Tindakan pasca-aplikasi \"%s\" gagal dengan kod keluar %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Tindakan pasca-aplikasi selesai: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Laluan pementasan diperlukan untuk menjalankan tindakan pasca-aplikasi."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Tiada tindakan pasca-aplikasi yang disyorkan untuk dijalankan."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Tiada tindakan pasca-aplikasi yang dibenarkan untuk dijalankan."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Tindakan pasca-aplikasi tidak dibenarkan untuk kemas kini ini: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Migrasi pangkalan data memerlukan semakan keselamatan migrasi sebelum pelaksanaan."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Migrasi pangkalan data tidak dapat dijalankan kerana semakan keselamatan migrasi tidak lulus."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Migrasi pangkalan data tidak dapat dijalankan kerana semakan keselamatan migrasi tidak menyenaraikan migrasi yang dipentaskan."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Migrasi pangkalan data tidak dapat dijalankan kerana semakan keselamatan migrasi mengandungi entri migrasi yang tidak sah."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Hanya migrasi %s yang dipentaskan boleh dilaksanakan oleh pelari kemas kini."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Migrasi pangkalan data tidak dapat dijalankan kerana semakan keselamatan migrasi yang dipentaskan melaporkan ralat yang menyekat."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine melaporkan amaran garis dasar migrasi. Hanya kelas migrasi %s yang dipentaskan akan dilaksanakan secara eksplisit."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Migrasi pangkalan data memerlukan pengesahan bahawa sandaran pangkalan data wujud."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Migrasi pangkalan data memerlukan teks pengesahan \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Semakan keselamatan migrasi pangkalan data telah selesai sebelum pelaksanaan."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Kewujudan sandaran pangkalan data telah disahkan secara eksplisit."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Semakan keselamatan migrasi pangkalan data dan pengesahan sandaran telah disediakan."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Migrasi pangkalan data telah dilaksanakan selepas pengesahan sandaran pangkalan data secara eksplisit. Pengemas kini tidak mencipta sandaran pangkalan data."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Kebenaran boleh laksana pasca-aplikasi yang diperlukan telah dinormalkan."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Tidak dapat menjalankan migrasi pangkalan data kerana bin/console tidak dijumpai."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Arahan pasca-aplikasi yang dipilih mempunyai laluan boleh tulis yang diperlukan."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Laluan boleh tulis arahan pasca-aplikasi telah disahkan."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Tindakan pasca-aplikasi lanjutan boleh mengubah kebergantungan, aset yang dijana atau pangkalan data. Semak sandaran sebelum meneruskan."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer tidak dapat dijalankan dengan selamat daripada pengemas kini web kerana fail yang dijana Composer \"%s\" dimiliki oleh UID %d manakala masa jalan PHP menggunakan UID %d. Jalankan Composer secara manual sebagai pemilik penempatan, kemudian teruskan dengan tindakan pasca-aplikasi yang tinggal."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Laluan yang diperlukan oleh tindakan pasca-aplikasi \"%s\" tidak boleh ditulis: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Direktori induk yang diperlukan oleh tindakan pasca-aplikasi \"%s\" tidak boleh ditulis: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Tidak dapat membaca kebenaran untuk fail boleh laksana pasca-aplikasi yang diperlukan: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Tidak dapat menanda fail boleh laksana pasca-aplikasi yang diperlukan sebagai boleh laksana: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Fail boleh laksana pasca-aplikasi yang diperlukan masih tidak boleh laksana selepas chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Kebenaran boleh laksana telah dinormalkan."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Tidak dapat menulis konfigurasi Git terasing untuk arahan pasca-aplikasi."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Operasi kemas kini lain nampaknya sedang berjalan. Buang var/update/update.lock hanya jika tiada kemas kini yang aktif."
+
+msgid "Unable to create update lock: %s"
+msgstr "Tidak dapat mencipta kunci kemas kini: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Tidak dapat menulis metadata larian arahan pasca-aplikasi: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Manifes kemas kini tiada blok pakej."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Blok tandatangan manifes kemas kini mestilah objek."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Blok keperluan manifes kemas kini mestilah objek."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 pakej kemas kini mestilah rentetan heksadesimal 64 aksara."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Manifes kemas kini tiada medan rentetan yang diperlukan \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Medan manifes kemas kini \"%s\" mestilah rentetan."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Manifes kemas kini bukan JSON yang sah: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON manifes kemas kini mestilah objek."
+
+msgid "Manifest source cannot be empty."
+msgstr "Sumber manifes tidak boleh kosong."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL manifes kemas kini mesti menggunakan asal kemas kini rasmi %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Tidak dapat memuat turun manifes kemas kini. Status HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Fail manifes tidak boleh dibaca: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Tidak dapat membaca fail manifes: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL manifes kemas kini mesti menggunakan HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Metadata pakej kemas kini tidak boleh dibaca: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Tidak dapat membaca metadata pakej kemas kini: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Metadata pakej kemas kini bukan JSON yang sah: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Metadata pakej kemas kini mesti objek JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Format metadata pakej kemas kini mesti %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Medan metadata pakej kemas kini \"remove\" mesti tatasusunan."
+
+msgid "Update package removal paths must be strings."
+msgstr "Laluan penyingkiran pakej kemas kini mesti rentetan."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Metadata pakej kemas kini tidak boleh menyingkirkan laluan dilindungi: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Pakej kemas kini tidak boleh menyertakan dan menyingkirkan laluan yang sama: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Tidak dapat mengira sha256 metadata pakej kemas kini."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Laluan penyingkiran pakej kemas kini tidak boleh kosong."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Laluan penyingkiran pakej kemas kini mengandungi bait null."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Laluan penyingkiran pakej kemas kini mesti relatif: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Laluan penyingkiran pakej kemas kini mengandungi segmen tidak selamat: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Laluan pentas diperlukan untuk membina pelan penerapan kemas kini."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Direktori pentas tiada STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Tidak dapat membaca metadata pentas: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Metadata pentas bukan JSON yang sah: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Metadata pentas mesti objek JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Metadata pentas tiada medan application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Pakej kemas kini tiada %s. Metadata pembersihan yang ditandatangani diperlukan sebelum fail boleh diterapkan."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Metadata pentas tidak mengandungi metadata pembersihan pakej yang ditandatangani yang direkodkan semasa pengekstrakan."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Metadata pembersihan pakej kemas kini berubah selepas pentas. Pentaskan semula pakej yang disahkan sebelum meneruskan."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Metadata pentas tidak mengandungi senarai penyingkiran pakej yang sah."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Laluan pembersihan pakej kemas kini berubah selepas pentas. Pentaskan semula pakej yang disahkan sebelum meneruskan."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Metadata pembersihan pakej yang ditandatangani tidak berubah sejak pentas."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Fail kunci kemas kini sudah wujud. Kemas kini lain mungkin sedang berlangsung."
+
+msgid "Update lock directory is not writable."
+msgstr "Direktori kunci kemas kini tidak boleh ditulis."
+
+msgid "No update lock is currently active."
+msgstr "Tiada kunci kemas kini yang aktif pada masa ini."
+
+msgid "Update backup directory is not writable."
+msgstr "Direktori sandaran kemas kini tidak boleh ditulis."
+
+msgid "Update backup directory is writable."
+msgstr "Direktori sandaran kemas kini boleh ditulis."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Direktori sandaran kemas kini tidak dapat dicipta oleh proses semasa."
+
+msgid "Update backup directory can be created."
+msgstr "Direktori sandaran kemas kini boleh dicipta."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Sesetengah direktori kerja kemas kini tidak boleh ditulis atau tidak dapat dicipta oleh proses semasa."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Direktori kerja kemas kini boleh ditulis atau boleh dicipta."
+
+msgid "Update apply file plan was generated."
+msgstr "Pelan fail penerapan kemas kini telah dijana."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Metadata pembersihan pakej mengandungi laluan yang tidak dapat disingkirkan dengan selamat."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Sasaran penyingkiran yang diisytiharkan pakej adalah selamat."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Sesetengah fail lapuk yang diisytiharkan pakej sudah tiada dalam pemasangan ini."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Kemas kini yang dirancang akan menimpa atau menyingkirkan pautan simbolik sedia ada."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Kemas kini yang dirancang tidak menimpa atau menyingkirkan pautan simbolik sedia ada."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Fail migrasi kemas kini baharu mesti diletakkan di bawah %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Fail migrasi Doctrine %s baharu dikesan. Ia memerlukan semakan keselamatan migrasi pangkalan data selepas menerapkan fail."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Sesetengah senarai fail pelan penerapan kemas kini dipotong dalam respons JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Tidak dapat menulis metadata pelan penerapan kemas kini."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Tidak dapat memuat turun pakej kemas kini. Status HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Tidak dapat membuka fail sasaran pakej kemas kini: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Muat turun kemas kini mesti menggunakan sumber kemas kini rasmi %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL pakej kemas kini mesti menggunakan HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Pemeriksaan keselamatan arkib pakej kemas kini lulus."
+
+msgid "Update package was extracted to staging."
+msgstr "Pakej kemas kini telah diekstrak ke pementasan."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Metadata pembersihan pakej yang ditandatangani telah dimuatkan."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Pakej kemas kini tidak mengandungi %s. Penggunaan fail akan disekat sehingga metadata pembersihan yang ditandatangani disediakan."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Laporan dry-run pakej pementasan telah dijana."
+
+msgid "Staging metadata was written."
+msgstr "Metadata pementasan telah ditulis."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Tidak dapat mengekstrak pakej kemas kini ke direktori pementasan."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Tidak dapat mencari akar aplikasi Chamilo dalam pakej pementasan."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Pakej pementasan tiada entri Chamilo yang diperlukan: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Pakej pementasan mengandungi struktur Chamilo yang dijangka."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Pakej pementasan tidak mengandungi composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Pakej pementasan mengandungi composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Pakej pementasan tidak mengandungi yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Pakej pementasan mengandungi yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Tidak dapat mengekod metadata pementasan."
+
+msgid "Unable to write staging metadata."
+msgstr "Tidak dapat menulis metadata pementasan."
+
+msgid "Update operation log created."
+msgstr "Log operasi kemas kini dicipta."
+
+msgid "Unable to write update operation log."
+msgstr "Tidak dapat menulis log operasi kemas kini."
+
+msgid "Invalid update operation id."
+msgstr "ID operasi kemas kini tidak sah."
+

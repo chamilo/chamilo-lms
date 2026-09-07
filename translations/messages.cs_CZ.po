@@ -40572,3 +40572,606 @@ msgstr "Do některých cílových souborů nebo adresářů nelze zapisovat nebo
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Pro nápravu dočasně změňte vlastníka celého adresáře Chamilo na %s (uživatel webového serveru), aplikujte aktualizaci, poté změňte vlastníka zpět na %s a nakonec nastavte vlastníka var/ (a jeho obsahu) zpět na %s, aby do něj aplikace mohla i nadále zapisovat."
 
+msgid "Update package verification failed."
+msgstr "Ověření aktualizačního balíčku selhalo."
+
+msgid "Update preflight checks failed."
+msgstr "Předběžné kontroly aktualizace selhaly."
+
+msgid "Unable to stage update package."
+msgstr "Nelze připravit aktualizační balíček."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Spuštění příkazů po aplikaci z uživatelského rozhraní je na tomto serveru zakázáno."
+
+msgid "Missing required field: %s"
+msgstr "Chybí povinné pole: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Nebyl zadán žádný zdroj manifestu aktualizace a není nakonfigurována výchozí adresa URL manifestu aktualizace."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Adresa URL manifestu aktualizace musí používat oficiální zdroj aktualizací %s. Měnit lze pouze cestu k manifestu."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Místní cesty k manifestu aktualizace jsou zakázány. Použijte adresu URL manifestu přes HTTPS nebo pro místní testy nastavte v prostředí serveru CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Nezadávejte cestu HTTP %s. Ponechejte toto pole prázdné, aby se stáhla z manifestu aktualizace."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Místní cesty aktualizace %s jsou v tomto prostředí zakázány."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "V tomto prostředí musí být na serveru nakonfigurovány důvěryhodné veřejné klíče aktualizací."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Přeskočení ověření podpisu aktualizace je v tomto prostředí zakázáno."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Spuštění akcí po aplikaci aktualizace vyžaduje potvrzovací text \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Aplikace připravených souborů aktualizace vyžaduje potvrzovací text \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Nelze určit adresář projektu."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Zálohu databáze tento aktualizátor nespravuje. Před spuštěním migrací vytvořte a ověřte zálohu databáze."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Metody down() migrací Doctrine nezaručují obnovení smazaných nebo transformovaných dat."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Metadata po aplikaci doporučují kontrolu migrace databáze."
+
+msgid "No migration files were found in the staged package."
+msgstr "V připraveném balíčku nebyly nalezeny žádné soubory migrace."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Byly zjištěny připravené soubory migrace Doctrine."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Cíl migrace Doctrine byl určen z připraveného balíčku."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Výchozí stav migrací Doctrine má blokující problémy pro připravené migrace."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine hlásí historická varování výchozího stavu migrací, ale explicitně budou zkontrolovány a spuštěny pouze připravené migrace %s."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine hlásí historická varování výchozího stavu migrací. Aktualizátor po výslovném potvrzení spustí pouze připravené třídy migrace %s."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Výchozí stav Doctrine nemá žádný blokující problém pro připravené migrace %s."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Zkušební spuštění migrace Doctrine selhalo alespoň u jedné připravené migrace. Dokud to nebude opraveno, nespouštějte migrace databáze."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Zkušební spuštění Doctrine bylo úspěšně dokončeno pro každou připravenou třídu migrace."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Před spuštěním migrací musí být záloha databáze vytvořena mimo tento aktualizátor."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Pro kontrolu migrací databáze je vyžadována cesta k přípravě."
+
+msgid "Unable to read update %s: %s"
+msgstr "Nelze načíst aktualizaci %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON aktualizace %s je neplatný: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON aktualizace %s musí být objekt."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Metadata kontrol po aplikaci neobsahují platný seznam akcí."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Pro tuto připravenou aktualizaci nebyly doporučeny migrace databáze."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "V metadatech aktualizace chybí cesta k připravené aplikaci."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Plánovaný soubor připravené migrace nebyl nalezen: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Nelze načíst soubor připravené migrace: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Z getDescription() se nepodařilo získat žádný popis."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Aktualizační spouštěč podporuje pouze připravené migrace %s: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Nelze zapsat metadata bezpečnosti migrace: %s"
+
+msgid "Migration safety check failed."
+msgstr "Kontrola bezpečnosti migrace selhala."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Byla zjištěna nebezpečná relativní cesta připravené migrace: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Nainstalovanou verzi Chamilo se nepodařilo automaticky zjistit. Pokračujte pouze po potvrzení, že je tato aktualizace kompatibilní."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Nainstalovaná nebo cílová verze není ve srovnatelném formátu sémantické verze. Pokračujte pouze po ručním ověření."
+
+msgid "An update is available."
+msgstr "Je k dispozici aktualizace."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Nainstalovaná verze již odpovídá verzi v manifestu."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Verze v manifestu je starší než nainstalovaná verze. Downgrady jsou ve výchozím nastavení blokovány."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Připravené soubory nebyly úspěšně aplikovány. Kontroly po aplikaci nemohou pokračovat."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Metadata výsledku aplikace byla úspěšně načtena."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Doporučení akcí po aplikaci byla vygenerována."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "V připraveném balíčku byly zjištěny migrace databáze. Spusťte je až po ověření, že aktualizace souborů je správná a že existuje záloha databáze."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Pro spuštění kontrol po aplikaci je vyžadována cesta ke stagingu."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Aktualizace %s není platný JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Aktualizace %s musí být JSON objekt."
+
+msgid "Composer dependencies"
+msgstr "Závislosti Composeru"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Metadata Composeru byla zahrnuta v připraveném balíčku. Před považováním aktualizace za dokončenou spusťte Composer install z kořenového adresáře aplikace."
+
+msgid "Frontend assets"
+msgstr "Frontendové prostředky"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Soubory související s frontendem byly zahrnuty v připraveném balíčku. Po instalaci závislostí znovu sestavte produkční prostředky."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "V připraveném balíčku byly zjištěny soubory migrací Doctrine. Před spuštěním migrací ověřte, že existuje záloha databáze."
+
+msgid "Symfony cache"
+msgstr "Mezipaměť Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Po aplikaci souborů aktualizace a spuštění požadovaných příkazů vymažte mezipaměť Symfony."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Nelze zapsat metadata kontrol po aplikaci."
+
+msgid "Post-apply check failed."
+msgstr "Kontrola po aplikaci selhala."
+
+msgid "Update package is not readable: %s"
+msgstr "Balíček aktualizace nelze číst: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Balíček aktualizace není platný archiv ZIP."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Archiv ZIP balíčku aktualizace je prázdný."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Balíček aktualizace obsahuje nečitelnou položku ZIP."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Balíček aktualizace obsahuje nebezpečnou absolutní cestu: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Balíček aktualizace obsahuje položku s průchodem adresářů: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Balíček aktualizace obsahuje symbolický odkaz: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Spouštění akcí po aplikaci."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Spuštění příkazů po aplikaci vyžaduje výslovné potvrzení."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Metadata doporučení po aplikaci byla úspěšně načtena."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Akce po aplikaci byly ověřeny podle zprávy s doporučeními."
+
+msgid "Post-apply actions were selected."
+msgstr "Akce po aplikaci byly vybrány."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Pokročilé akce po aplikaci vyžadují výslovné pokročilé potvrzení."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Pokročilé akce po aplikaci byly výslovně potvrzeny."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Vybrané příkazy po aplikaci byly úspěšně dokončeny."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Metadata spuštění příkazů po aplikaci byla zapsána."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Akce po aplikaci byly úspěšně dokončeny."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Neplatná definice příkazu po aplikaci aktualizace: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Spouštění akce po aplikaci: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Spouštění příkazu %d z %d pro %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Akce po aplikaci selhala: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Akce po aplikaci \"%s\" selhala s návratovým kódem %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Akce po aplikaci dokončena: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Pro spuštění akcí po aplikaci je vyžadována cesta ke stagingu."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Nejsou žádné doporučené akce po aplikaci ke spuštění."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Nejsou žádné povolené akce po aplikaci ke spuštění."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Akce po aplikaci není pro tuto aktualizaci povolena: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Migrace databáze vyžadují před spuštěním kontrolu bezpečnosti migrace."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Migrace databáze nelze spustit, protože kontrola bezpečnosti migrace neprošla."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Migrace databáze nelze spustit, protože kontrola bezpečnosti migrace neuvádí připravené migrace."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Migrace databáze nelze spustit, protože kontrola bezpečnosti migrace obsahuje neplatnou položku migrace."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Spouštěč aktualizací může spustit pouze připravené migrace %s."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Migrace databáze nelze spustit, protože kontrola bezpečnosti připravených migrací nahlásila blokující chyby."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine hlásí varování základní linie migrací. Explicitně budou spuštěny pouze třídy připravených migrací %s."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Migrace databáze vyžadují potvrzení, že existuje záloha databáze."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Migrace databáze vyžadují potvrzovací text \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Kontrola bezpečnosti migrace databáze byla dokončena před spuštěním."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Existence zálohy databáze byla výslovně potvrzena."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Byla poskytnuta kontrola bezpečnosti migrace databáze a potvrzení zálohy."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Migrace databáze byly spuštěny po výslovném potvrzení zálohy databáze. Aktualizátor zálohu databáze nevytvořil."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Požadovaná spustitelná oprávnění po aplikaci byla sjednocena."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Nelze spustit migrace databáze, protože bin/console nebyl nalezen."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Vybrané příkazy po aplikaci mají požadované zapisovatelné cesty."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Zapisovatelné cesty příkazů po aplikaci byly ověřeny."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Pokročilé akce po aplikaci mohou změnit závislosti, vygenerované prostředky nebo databázi. Před pokračováním zkontrolujte zálohy."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer nelze z webového aktualizátoru spustit bezpečně, protože soubor vygenerovaný Composerem \"%s\" vlastní UID %d, zatímco běhové prostředí PHP používá UID %d. Spusťte Composer ručně jako vlastník nasazení a poté pokračujte zbývajícími akcemi po aplikaci."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Cesta požadovaná akcí po aplikaci \"%s\" není zapisovatelná: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Nadřazený adresář požadovaný akcí po aplikaci \"%s\" není zapisovatelný: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Nelze načíst oprávnění požadovaného spustitelného souboru po aplikaci: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Nelze označit požadovaný spustitelný soubor po aplikaci jako spustitelný: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Požadovaný spustitelný soubor po aplikaci stále není spustitelný po chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Oprávnění ke spuštění bylo sjednoceno."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Nelze zapsat izolovanou konfiguraci Git pro příkazy po aplikaci."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Zdá se, že již probíhá jiná aktualizace. Soubor var/update/update.lock odstraňte pouze tehdy, pokud žádná aktualizace neprobíhá."
+
+msgid "Unable to create update lock: %s"
+msgstr "Nelze vytvořit zámek aktualizace: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Nelze zapsat metadata běhu příkazu po aplikaci: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "V manifestu aktualizace chybí blok balíčku."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Blok podpisu v manifestu aktualizace musí být objekt."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Blok požadavků v manifestu aktualizace musí být objekt."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Hodnota sha256 balíčku aktualizace musí být 64znakový hexadecimální řetězec."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "V manifestu aktualizace chybí povinné řetězcové pole \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Pole manifestu aktualizace \"%s\" musí být řetězec."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Manifest aktualizace není platné JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON manifestu aktualizace musí být objekt."
+
+msgid "Manifest source cannot be empty."
+msgstr "Zdroj manifestu nesmí být prázdný."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Adresa URL manifestu aktualizace musí používat oficiální zdroj aktualizací %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Nelze stáhnout manifest aktualizace. Stav HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Soubor manifestu není čitelný: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Nelze načíst soubor manifestu: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Adresa URL manifestu aktualizace musí používat HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Metadata balíčku aktualizace nejsou čitelná: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Nelze načíst metadata balíčku aktualizace: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Metadata balíčku aktualizace nejsou platné JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Metadata balíčku aktualizace musí být objekt JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Formát metadat balíčku aktualizace musí být %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Pole metadat balíčku aktualizace \"remove\" musí být pole."
+
+msgid "Update package removal paths must be strings."
+msgstr "Cesty k odstranění v balíčku aktualizace musí být řetězce."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Metadata balíčku aktualizace nemohou odstranit chráněnou cestu: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Balíček aktualizace nemůže stejnou cestu zároveň zahrnout i odstranit: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Nelze vypočítat sha256 metadat balíčku aktualizace."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Cesta k odstranění v balíčku aktualizace nesmí být prázdná."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Cesta k odstranění v balíčku aktualizace obsahuje nulový bajt."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Cesta k odstranění v balíčku aktualizace musí být relativní: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Cesta k odstranění v balíčku aktualizace obsahuje nebezpečný segment: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Pro sestavení plánu aplikace aktualizace je vyžadována cesta ke stagingu."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Ve stagingovém adresáři chybí STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Nelze načíst metadata přípravné oblasti: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Metadata přípravné oblasti nejsou platný JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Metadata přípravné oblasti musí být objekt JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "V metadatech přípravné oblasti chybí pole application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "V aktualizačním balíčku chybí %s. Před použitím souborů jsou vyžadována podepsaná metadata úklidu."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Metadata přípravné oblasti neobsahují podepsaná metadata úklidu balíčku zaznamenaná během rozbalení."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Metadata úklidu aktualizačního balíčku se po přípravě změnila. Před pokračováním znovu připravte ověřený balíček."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Metadata přípravné oblasti neobsahují platný seznam souborů k odstranění z balíčku."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Cesty úklidu aktualizačního balíčku se po přípravě změnily. Před pokračováním znovu připravte ověřený balíček."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Podepsaná metadata úklidu balíčku se od přípravy nezměnila."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Soubor zámku aktualizace již existuje. Možná probíhá jiná aktualizace."
+
+msgid "Update lock directory is not writable."
+msgstr "Adresář zámku aktualizace není zapisovatelný."
+
+msgid "No update lock is currently active."
+msgstr "Momentálně není aktivní žádný zámek aktualizace."
+
+msgid "Update backup directory is not writable."
+msgstr "Záložní adresář aktualizace není zapisovatelný."
+
+msgid "Update backup directory is writable."
+msgstr "Záložní adresář aktualizace je zapisovatelný."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Záložní adresář aktualizace nelze vytvořit aktuálním procesem."
+
+msgid "Update backup directory can be created."
+msgstr "Záložní adresář aktualizace lze vytvořit."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Některé pracovní adresáře aktualizace nejsou zapisovatelné nebo je aktuální proces nemůže vytvořit."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Pracovní adresáře aktualizace jsou zapisovatelné nebo je lze vytvořit."
+
+msgid "Update apply file plan was generated."
+msgstr "Byl vygenerován plán použití souborů aktualizace."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Metadata úklidu balíčku obsahují cesty, které nelze bezpečně odstranit."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Cíle odstranění deklarované balíčkem jsou bezpečné."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Některé zastaralé soubory deklarované balíčkem v této instalaci již chybí."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Plánovaná aktualizace by přepsala nebo odstranila existující symbolické odkazy."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Plánovaná aktualizace nepřepisuje ani neodstraňuje existující symbolické odkazy."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Nové migrační soubory aktualizace musí být umístěny v %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Byly zjištěny nové migrační soubory Doctrine %s. Po použití souborů budou vyžadovat bezpečnostní kontrolu migrace databáze."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Některé seznamy souborů plánu použití aktualizace byly v odpovědi JSON zkráceny."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Nelze zapsat metadata plánu použití aktualizace."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Nelze stáhnout aktualizační balíček. Stav HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Nelze otevřít cílový soubor aktualizačního balíčku: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Stahování aktualizací musí používat oficiální zdroj aktualizací %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "Adresa URL aktualizačního balíčku musí používat HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Kontroly bezpečnosti archivu aktualizačního balíčku byly úspěšné."
+
+msgid "Update package was extracted to staging."
+msgstr "Aktualizační balíček byl rozbalen do přípravné oblasti."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Podepsaná metadata úklidu balíčku byla načtena."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Aktualizační balíček neobsahuje %s. Použití souborů bude zablokováno, dokud nebudou poskytnuta podepsaná metadata úklidu."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Byla vygenerována zpráva o zkušebním běhu připraveného balíčku."
+
+msgid "Staging metadata was written."
+msgstr "Metadata přípravné oblasti byla zapsána."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Nelze rozbalit aktualizační balíček do adresáře přípravné oblasti."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Nelze najít kořen aplikace Chamilo v připraveném balíčku."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "V připraveném balíčku chybí požadovaná položka Chamilo: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Připravený balíček obsahuje očekávanou strukturu Chamilo."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Připravený balíček neobsahuje composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Připravený balíček obsahuje composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Připravený balíček neobsahuje yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Připravený balíček obsahuje yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Nelze zakódovat metadata přípravné oblasti."
+
+msgid "Unable to write staging metadata."
+msgstr "Nelze zapsat metadata přípravné oblasti."
+
+msgid "Update operation log created."
+msgstr "Byl vytvořen protokol operace aktualizace."
+
+msgid "Unable to write update operation log."
+msgstr "Nelze zapsat protokol operace aktualizace."
+
+msgid "Invalid update operation id."
+msgstr "Neplatné ID operace aktualizace."
+

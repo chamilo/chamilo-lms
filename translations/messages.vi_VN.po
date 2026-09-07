@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ví dụ công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -40235,4 +40235,949 @@ msgstr "Thành phố thực tập"
 
 msgid "City"
 msgstr "Thành phố"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Quy trình cập nhật đã được khôi phục sau khi làm mới trang"
+
+msgid "Last completed step"
+msgstr "Bước hoàn thành gần nhất"
+
+msgid "Stage package"
+msgstr "Gói dàn dựng"
+
+msgid "Package staging"
+msgstr "Dàn dựng gói"
+
+msgid "Apply plan"
+msgstr "Kế hoạch áp dụng"
+
+msgid "Update workflow completed"
+msgstr "Quy trình cập nhật đã hoàn tất"
+
+msgid "Update directory exists and is writable."
+msgstr "Thư mục cập nhật tồn tại và có thể ghi."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Thư mục cập nhật tồn tại nhưng không thể ghi: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Thư mục cập nhật chưa tồn tại, nhưng thư mục cha có thể ghi."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Thư mục cập nhật chưa tồn tại, nhưng có thể được tạo trong var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Thư mục cập nhật không tồn tại và không thể tạo với quyền hiện tại."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Không thể xác định dung lượng đĩa trống cho kiểm tra trước khi cập nhật."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Không đủ dung lượng đĩa trống cho thao tác dàn dựng cập nhật an toàn."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Dung lượng đĩa trống đủ cho luồng cập nhật giai đoạn xác minh này."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Tệp manifest cập nhật không định nghĩa yêu cầu phiên bản PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Không thể đánh giá đầy đủ yêu cầu PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Phiên bản PHP hiện tại không đáp ứng yêu cầu cập nhật: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Phiên bản PHP hiện tại đáp ứng yêu cầu cập nhật."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Chưa cung cấp đường dẫn gói cục bộ. Các gói đã tải xuống chỉ có thể được kiểm tra sau khi tải xuống."
+
+msgid "Local update package is not readable: %s"
+msgstr "Gói cập nhật cục bộ không thể đọc: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Gói cập nhật cục bộ phải là tệp ZIP."
+
+msgid "Local update package is readable."
+msgstr "Gói cập nhật cục bộ có thể đọc được."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Không thể tự động phát hiện phiên bản Chamilo đã cài đặt. Không thể kiểm tra hướng phiên bản."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Phiên bản đã cài đặt hoặc phiên bản đích không ở định dạng phiên bản ngữ nghĩa có thể so sánh."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Phiên bản đích thấp hơn phiên bản đã cài đặt. Hạ cấp không được phép theo mặc định."
+
+msgid "Target version matches the installed version."
+msgstr "Phiên bản đích trùng với phiên bản đã cài đặt."
+
+msgid "Target version is newer than the installed version."
+msgstr "Phiên bản đích mới hơn phiên bản đã cài đặt."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Dự án không phải bản checkout Git hoặc không có .git."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Hệ thống cập nhật này dành cho các cài đặt không hỗ trợ Git. Chúng tôi phát hiện hệ thống cục bộ đang dùng Git. Tiếp tục cập nhật có thể làm hỏng lịch sử Git. Với hệ thống có Git, chúng tôi khuyến nghị dùng quy trình Git được mô tả trong CONTRIBUTING.md ở thư mục gốc web."
+
+msgid "Local Git changes were also detected."
+msgstr "Cũng phát hiện các thay đổi Git cục bộ."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Một số tệp siêu dữ liệu dự án bị thiếu. Các giai đoạn cập nhật sau có thể cần kiểm tra phụ thuộc thủ công."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Các tệp siêu dữ liệu Composer và Yarn đều có mặt."
+
+msgid "Starting staged file application."
+msgstr "Bắt đầu áp dụng tệp đã dàn dựng."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Cần xác nhận rõ ràng để áp dụng các tệp đã dàn dựng."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Áp dụng các tệp cập nhật đã dàn dựng yêu cầu xác nhận rõ ràng."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Thư mục dàn dựng nằm trong thư mục dàn dựng cập nhật của Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Thư mục dàn dựng đã được xác thực."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Siêu dữ liệu kế hoạch áp dụng đã được đọc thành công."
+
+msgid "Staged application path is valid."
+msgstr "Đường dẫn ứng dụng đã dàn dựng hợp lệ."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Siêu dữ liệu dọn dẹp gói đã ký khớp với kế hoạch áp dụng đã xem xét."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Siêu dữ liệu dọn dẹp gói đã ký đã được xác thực."
+
+msgid "Update lock was acquired."
+msgstr "Khóa cập nhật đã được lấy."
+
+msgid "Update backup directory was created."
+msgstr "Thư mục sao lưu cập nhật đã được tạo."
+
+msgid "Update file operations were collected."
+msgstr "Các thao tác tệp cập nhật đã được thu thập."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Các tệp hiện có dự kiến thay thế hoặc xóa đã được sao lưu."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Các tệp cập nhật đã dàn dựng đã được sao chép vào cài đặt Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Các tệp lỗi thời được khai báo trong gói đã được gỡ khỏi cài đặt Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Các tệp lỗi thời được khai báo trong gói đã được gỡ."
+
+msgid "Update apply audit metadata was written."
+msgstr "Siêu dữ liệu kiểm toán áp dụng cập nhật đã được ghi."
+
+msgid "Staged files applied successfully."
+msgstr "Các tệp đã chuẩn bị được áp dụng thành công."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Không thể khôi phục các tệp đã gỡ: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Không thể hoàn tác các tệp đã sao chép: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Đã thực hiện hoàn tác tệp sau khi áp dụng cập nhật thất bại."
+
+msgid "Rollback failed: %s"
+msgstr "Hoàn tác thất bại: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Không thể ghi siêu dữ liệu kiểm toán áp dụng cập nhật: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Không thể giải phóng khóa cập nhật sau khi thất bại: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Cần đường dẫn chuẩn bị để áp dụng tệp cập nhật."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Thư mục chuẩn bị không tồn tại: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Thư mục gốc chuẩn bị cập nhật Chamilo không tồn tại."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Thư mục chuẩn bị phải nằm trong var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Thư mục chuẩn bị thiếu APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Không thể đọc siêu dữ liệu kế hoạch áp dụng cập nhật: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Siêu dữ liệu kế hoạch áp dụng cập nhật không phải JSON hợp lệ: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Siêu dữ liệu kế hoạch áp dụng cập nhật phải là một đối tượng JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Kế hoạch áp dụng cập nhật thiếu trường application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Đường dẫn ứng dụng đã chuẩn bị không đọc được: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Đường dẫn ứng dụng đã chuẩn bị phải nằm trong thư mục chuẩn bị."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Đường dẫn ứng dụng đã chuẩn bị thiếu composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Gói cập nhật thiếu %s. Hãy chuẩn bị lại một gói đã xác minh với siêu dữ liệu dọn dẹp đã ký."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Kế hoạch áp dụng cập nhật thiếu siêu dữ liệu dọn dẹp gói đã được xem xét."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Siêu dữ liệu dọn dẹp gói cập nhật đã thay đổi sau khi tạo kế hoạch áp dụng. Hãy tạo lại kế hoạch áp dụng trước khi tiếp tục."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Kế hoạch áp dụng cập nhật chứa danh sách gỡ gói không hợp lệ."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Các đường dẫn dọn dẹp gói cập nhật đã thay đổi sau khi tạo kế hoạch áp dụng. Hãy tạo lại kế hoạch áp dụng trước khi tiếp tục."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Kế hoạch áp dụng cập nhật thiếu danh sách đường dẫn gỡ đã được xem xét."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Các đường dẫn gỡ trong kế hoạch áp dụng cập nhật không khớp với siêu dữ liệu dọn dẹp gói đã ký."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Đường dẫn khóa cập nhật phải nằm trong var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Kế hoạch áp dụng cập nhật thiếu trường backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Đường dẫn sao lưu cập nhật chứa các phân đoạn đường dẫn không an toàn."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Đường dẫn sao lưu cập nhật phải nằm trong var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Không thể lấy khóa cập nhật. Có thể đang có một bản cập nhật khác đang chạy."
+
+msgid "Unable to release update lock: %s"
+msgstr "Không thể giải phóng khóa cập nhật: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Thư mục sao lưu cập nhật đã tồn tại: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Không thể tạo thư mục đích: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Bản cập nhật dự kiến sẽ ghi đè một liên kết tượng trưng hiện có: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Tệp đích không ghi được: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Không thể tạo tệp đích: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Không thể xác định thư mục dự án Chamilo trước khi gỡ các tệp lỗi thời."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Dọn dẹp cập nhật không thể gỡ đường dẫn được bảo vệ: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Bản cập nhật dự kiến sẽ gỡ một liên kết tượng trưng hiện có: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Dọn dẹp cập nhật chỉ hỗ trợ tệp, không hỗ trợ thư mục: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Tệp đích lỗi thời không đọc được để sao lưu: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Không thể gỡ tệp đích lỗi thời với quyền thư mục hiện tại: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Tệp đích lỗi thời được phân giải ra ngoài thư mục dự án Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Không thể sao lưu tệp đích: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Không thể ghi siêu dữ liệu sao lưu cập nhật."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Không thể sao chép tệp cập nhật đã chuẩn bị: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Đã sao chép %d trong %d tệp đã chuẩn bị."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Không thể xóa tệp lỗi thời do gói khai báo: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Đã xóa %d trong %d tệp lỗi thời do gói khai báo."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Không thể khôi phục tệp đã sao lưu: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Không thể xóa tệp mới sao chép trong quá trình hoàn tác: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Không thể khôi phục tệp đã xóa vì thiếu bản sao lưu: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Không thể khôi phục tệp đã xóa từ bản sao lưu: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Không thể ghi siêu dữ liệu kiểm toán áp dụng cập nhật."
+
+msgid "Unable to write global update apply log."
+msgstr "Không thể ghi nhật ký áp dụng cập nhật toàn cục."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Phát hiện đường dẫn tương đối không an toàn trong khu vực chuẩn bị: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Thư mục không thể ghi: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Không thể tạo thư mục: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Đã đọc thành công siêu dữ liệu khu vực chuẩn bị."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Siêu dữ liệu kế hoạch áp dụng đã được ghi vào thư mục chuẩn bị."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Các tệp và thư mục đích có vẻ có thể ghi cho việc cập nhật và dọn dẹp đã lên kế hoạch."
+
+msgid "Update apply plan check failed."
+msgstr "Kiểm tra kế hoạch áp dụng cập nhật thất bại."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Một số tệp hoặc thư mục đích không thể ghi hoặc xóa."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Để khắc phục, tạm thời đổi chủ sở hữu toàn bộ thư mục Chamilo thành %s (người dùng máy chủ web), áp dụng cập nhật, đổi chủ sở hữu trở lại %s sau đó, rồi đặt chủ sở hữu của var/ (và nội dung bên trong) trở lại %s để ứng dụng tiếp tục ghi được."
+
+msgid "Update package verification failed."
+msgstr "Xác minh gói cập nhật thất bại."
+
+msgid "Update preflight checks failed."
+msgstr "Kiểm tra trước khi cập nhật thất bại."
+
+msgid "Unable to stage update package."
+msgstr "Không thể chuẩn bị gói cập nhật."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Chạy lệnh sau khi áp dụng từ giao diện người dùng bị tắt trên máy chủ này."
+
+msgid "Missing required field: %s"
+msgstr "Thiếu trường bắt buộc: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Không có nguồn manifest cập nhật nào được cung cấp và chưa cấu hình URL manifest cập nhật mặc định."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL manifest cập nhật phải dùng nguồn cập nhật chính thức %s. Chỉ có thể thay đổi đường dẫn manifest."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Đường dẫn manifest cập nhật cục bộ bị tắt. Dùng URL manifest HTTPS hoặc đặt CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 trong môi trường máy chủ để kiểm thử cục bộ."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Không cung cấp đường dẫn HTTP %s. Để trống trường này để tải xuống từ manifest cập nhật."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Đường dẫn cập nhật cục bộ %s bị tắt trong môi trường này."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Phải cấu hình khóa công khai cập nhật đáng tin cậy trên máy chủ trong môi trường này."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Bỏ qua xác minh chữ ký cập nhật bị tắt trong môi trường này."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Chạy các hành động cập nhật sau khi áp dụng yêu cầu văn bản xác nhận \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Áp dụng các tệp cập nhật đã chuẩn bị yêu cầu văn bản xác nhận \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Không thể xác định thư mục dự án."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Sao lưu cơ sở dữ liệu không do trình cập nhật này quản lý. Tạo và xác minh bản sao lưu cơ sở dữ liệu trước khi chạy di chuyển."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Các phương thức down() của Doctrine migration không đảm bảo khôi phục dữ liệu đã xóa hoặc đã biến đổi."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Siêu dữ liệu sau khi áp dụng khuyến nghị xem xét di chuyển cơ sở dữ liệu."
+
+msgid "No migration files were found in the staged package."
+msgstr "Không tìm thấy tệp di chuyển nào trong gói đã chuẩn bị."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Đã phát hiện tệp Doctrine migration đã chuẩn bị."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Đích Doctrine migration đã được xác định từ gói đã chuẩn bị."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Đường cơ sở Doctrine migration có vấn đề chặn đối với các di chuyển đã chuẩn bị."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine báo cảnh báo đường cơ sở di chuyển lịch sử, nhưng chỉ các di chuyển %s đã chuẩn bị sẽ được xem xét và thực thi một cách tường minh."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine báo cảnh báo đường cơ sở di chuyển lịch sử. Trình cập nhật sẽ chỉ thực thi các lớp di chuyển %s đã chuẩn bị sau khi xác nhận tường minh."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Đường cơ sở Doctrine không có vấn đề chặn đối với các di chuyển %s đã chuẩn bị."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Chạy thử Doctrine migration thất bại với ít nhất một di chuyển đã chuẩn bị. Không chạy di chuyển cơ sở dữ liệu cho đến khi được khắc phục."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Chạy thử Doctrine hoàn tất thành công cho từng lớp di chuyển đã chuẩn bị."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Phải tạo bản sao lưu cơ sở dữ liệu bên ngoài trình cập nhật này trước khi chạy di chuyển."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Cần đường dẫn chuẩn bị để xem xét di chuyển cơ sở dữ liệu."
+
+msgid "Unable to read update %s: %s"
+msgstr "Không thể đọc cập nhật %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON cập nhật %s không hợp lệ: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON cập nhật %s phải là một đối tượng."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Siêu dữ liệu kiểm tra sau khi áp dụng không chứa danh sách hành động hợp lệ."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Không khuyến nghị chạy di chuyển cơ sở dữ liệu cho bản cập nhật theo giai đoạn này."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Siêu dữ liệu cập nhật thiếu đường dẫn ứng dụng theo giai đoạn."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Không tìm thấy tệp di chuyển theo giai đoạn đã lập kế hoạch: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Không thể đọc tệp di chuyển theo giai đoạn: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Không thể trích xuất mô tả từ getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Trình chạy cập nhật chỉ hỗ trợ %s di chuyển theo giai đoạn: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Không thể ghi siêu dữ liệu an toàn di chuyển: %s"
+
+msgid "Migration safety check failed."
+msgstr "Kiểm tra an toàn di chuyển thất bại."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Phát hiện đường dẫn di chuyển tương đối theo giai đoạn không an toàn: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Không thể tự động phát hiện phiên bản Chamilo đã cài đặt. Chỉ tiếp tục sau khi xác nhận bản cập nhật này tương thích."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Phiên bản đã cài đặt hoặc phiên bản đích không ở định dạng phiên bản ngữ nghĩa có thể so sánh. Chỉ tiếp tục sau khi xác minh thủ công."
+
+msgid "An update is available."
+msgstr "Có bản cập nhật."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Phiên bản đã cài đặt đã khớp với phiên bản trong manifest."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Phiên bản trong manifest cũ hơn phiên bản đã cài đặt. Hạ cấp bị chặn theo mặc định."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Các tệp theo giai đoạn chưa được áp dụng thành công. Không thể tiếp tục kiểm tra sau khi áp dụng."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Đã đọc thành công siêu dữ liệu kết quả áp dụng."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Đã tạo khuyến nghị hành động sau khi áp dụng."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Đã phát hiện di chuyển cơ sở dữ liệu trong gói theo giai đoạn. Chỉ chạy chúng sau khi xác nhận cập nhật tệp là đúng và đã có bản sao lưu cơ sở dữ liệu."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Cần đường dẫn giai đoạn để chạy kiểm tra sau khi áp dụng."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Cập nhật %s không phải JSON hợp lệ: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Cập nhật %s phải là một đối tượng JSON."
+
+msgid "Composer dependencies"
+msgstr "Phụ thuộc Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Siêu dữ liệu Composer đã được đưa vào gói theo giai đoạn. Chạy Composer install từ thư mục gốc ứng dụng trước khi coi bản cập nhật là hoàn tất."
+
+msgid "Frontend assets"
+msgstr "Tài nguyên giao diện"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Các tệp liên quan đến giao diện đã được đưa vào gói theo giai đoạn. Xây dựng lại tài nguyên production sau khi cài đặt phụ thuộc."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Đã phát hiện tệp di chuyển Doctrine trong gói theo giai đoạn. Xác nhận đã có bản sao lưu cơ sở dữ liệu trước khi chạy di chuyển."
+
+msgid "Symfony cache"
+msgstr "Bộ nhớ đệm Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Xóa bộ nhớ đệm Symfony sau khi áp dụng tệp cập nhật và chạy các lệnh cần thiết."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Không thể ghi siêu dữ liệu kiểm tra sau khi áp dụng."
+
+msgid "Post-apply check failed."
+msgstr "Kiểm tra sau khi áp dụng thất bại."
+
+msgid "Update package is not readable: %s"
+msgstr "Gói cập nhật không thể đọc: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Gói cập nhật không phải kho lưu trữ ZIP hợp lệ."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Kho lưu trữ ZIP của gói cập nhật trống."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Gói cập nhật chứa mục ZIP không thể đọc."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Gói cập nhật chứa đường dẫn tuyệt đối không an toàn: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Gói cập nhật chứa mục duyệt đường dẫn: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Gói cập nhật chứa liên kết tượng trưng: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Bắt đầu hành động sau khi áp dụng."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Thực thi lệnh sau khi áp dụng yêu cầu xác nhận rõ ràng."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Đã đọc thành công siêu dữ liệu khuyến nghị sau khi áp dụng."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Các hành động sau khi áp dụng đã được xác thực theo báo cáo khuyến nghị."
+
+msgid "Post-apply actions were selected."
+msgstr "Đã chọn các hành động sau khi áp dụng."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Các hành động sau khi áp dụng nâng cao yêu cầu xác nhận nâng cao rõ ràng."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Các hành động sau khi áp dụng nâng cao đã được xác nhận rõ ràng."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Các lệnh sau khi áp dụng đã chọn hoàn tất thành công."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Đã ghi siêu dữ liệu chạy lệnh sau khi áp dụng."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Các hành động sau khi áp dụng hoàn tất thành công."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Định nghĩa lệnh sau khi áp dụng cập nhật không hợp lệ: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Đang chạy hành động sau khi áp dụng: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Đang chạy lệnh %d trên %d cho %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Hành động sau khi áp dụng thất bại: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Hành động sau khi áp dụng \"%s\" thất bại với mã thoát %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Hành động sau khi áp dụng đã hoàn tất: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Cần đường dẫn staging để chạy các hành động sau khi áp dụng."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Không có hành động sau khi áp dụng được khuyến nghị để chạy."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Không có hành động sau khi áp dụng được phép để chạy."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Hành động sau khi áp dụng không được phép cho bản cập nhật này: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Di chuyển cơ sở dữ liệu yêu cầu đánh giá an toàn di chuyển trước khi thực thi."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Không thể chạy di chuyển cơ sở dữ liệu vì đánh giá an toàn di chuyển không đạt."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Không thể chạy di chuyển cơ sở dữ liệu vì đánh giá an toàn di chuyển không liệt kê các di chuyển đã staging."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Không thể chạy di chuyển cơ sở dữ liệu vì đánh giá an toàn di chuyển chứa mục di chuyển không hợp lệ."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Chỉ các di chuyển %s đã staging mới có thể được thực thi bởi trình chạy cập nhật."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Không thể chạy di chuyển cơ sở dữ liệu vì đánh giá an toàn di chuyển đã staging báo lỗi chặn."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine báo cảnh báo đường cơ sở di chuyển. Chỉ các lớp di chuyển %s đã staging sẽ được thực thi tường minh."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Di chuyển cơ sở dữ liệu yêu cầu xác nhận rằng bản sao lưu cơ sở dữ liệu tồn tại."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Di chuyển cơ sở dữ liệu yêu cầu văn bản xác nhận \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Đánh giá an toàn di chuyển cơ sở dữ liệu đã hoàn tất trước khi thực thi."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Sự tồn tại của bản sao lưu cơ sở dữ liệu đã được xác nhận tường minh."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Đánh giá an toàn di chuyển cơ sở dữ liệu và xác nhận sao lưu đã được cung cấp."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Di chuyển cơ sở dữ liệu đã được thực thi sau khi xác nhận tường minh bản sao lưu cơ sở dữ liệu. Trình cập nhật không tạo bản sao lưu cơ sở dữ liệu."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Quyền thực thi bắt buộc cho sau khi áp dụng đã được chuẩn hóa."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Không thể chạy di chuyển cơ sở dữ liệu vì không tìm thấy bin/console."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Các lệnh sau khi áp dụng đã chọn có các đường dẫn ghi được yêu cầu."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Đường dẫn ghi của lệnh sau khi áp dụng đã được xác thực."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Các hành động sau khi áp dụng nâng cao có thể thay đổi phụ thuộc, tài nguyên được tạo hoặc cơ sở dữ liệu. Kiểm tra bản sao lưu trước khi tiếp tục."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer không thể chạy an toàn từ trình cập nhật web vì tệp do Composer tạo \"%s\" thuộc sở hữu UID %d trong khi PHP runtime dùng UID %d. Chạy Composer thủ công với tư cách chủ triển khai, sau đó tiếp tục các hành động sau khi áp dụng còn lại."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Đường dẫn yêu cầu bởi hành động sau khi áp dụng \"%s\" không ghi được: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Thư mục cha yêu cầu bởi hành động sau khi áp dụng \"%s\" không ghi được: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Không thể đọc quyền cho tệp thực thi sau khi áp dụng bắt buộc: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Không thể đánh dấu tệp thực thi sau khi áp dụng bắt buộc là thực thi được: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Tệp thực thi sau khi áp dụng bắt buộc vẫn chưa thực thi được sau chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Quyền thực thi đã được chuẩn hóa."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Không thể ghi cấu hình Git tách biệt cho các lệnh sau khi áp dụng."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Có vẻ một thao tác cập nhật khác đang chạy. Chỉ xóa var/update/update.lock nếu không có cập nhật nào đang hoạt động."
+
+msgid "Unable to create update lock: %s"
+msgstr "Không thể tạo khóa cập nhật: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Không thể ghi siêu dữ liệu chạy lệnh sau khi áp dụng: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Manifest cập nhật thiếu khối gói."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Khối chữ ký manifest cập nhật phải là một đối tượng."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Khối yêu cầu manifest cập nhật phải là một đối tượng."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 của gói cập nhật phải là chuỗi thập lục phân 64 ký tự."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Manifest cập nhật thiếu trường chuỗi bắt buộc \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Trường manifest cập nhật \"%s\" phải là chuỗi."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Manifest cập nhật không phải JSON hợp lệ: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON manifest cập nhật phải là một đối tượng."
+
+msgid "Manifest source cannot be empty."
+msgstr "Nguồn manifest không được để trống."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL manifest cập nhật phải dùng nguồn cập nhật chính thức %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Không thể tải manifest cập nhật. Trạng thái HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Tệp manifest không đọc được: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Không thể đọc tệp manifest: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL tệp kê khai cập nhật phải sử dụng HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Không thể đọc siêu dữ liệu gói cập nhật: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Không thể đọc siêu dữ liệu gói cập nhật: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Siêu dữ liệu gói cập nhật không phải JSON hợp lệ: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Siêu dữ liệu gói cập nhật phải là một đối tượng JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Định dạng siêu dữ liệu gói cập nhật phải là %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Trường siêu dữ liệu gói cập nhật \"remove\" phải là một mảng."
+
+msgid "Update package removal paths must be strings."
+msgstr "Đường dẫn xóa của gói cập nhật phải là chuỗi."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Siêu dữ liệu gói cập nhật không thể xóa đường dẫn được bảo vệ: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Gói cập nhật không thể vừa bao gồm vừa xóa cùng một đường dẫn: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Không thể tính sha256 của siêu dữ liệu gói cập nhật."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Đường dẫn xóa của gói cập nhật không được để trống."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Đường dẫn xóa của gói cập nhật chứa byte null."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Đường dẫn xóa của gói cập nhật phải là đường dẫn tương đối: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Đường dẫn xóa của gói cập nhật chứa phân đoạn không an toàn: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Cần có đường dẫn staging để xây dựng kế hoạch áp dụng cập nhật."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Thư mục staging thiếu STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Không thể đọc siêu dữ liệu staging: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Siêu dữ liệu staging không phải JSON hợp lệ: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Siêu dữ liệu staging phải là một đối tượng JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Siêu dữ liệu staging thiếu trường application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Gói cập nhật thiếu %s. Cần siêu dữ liệu dọn dẹp đã ký trước khi có thể áp dụng tệp."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Siêu dữ liệu staging không chứa siêu dữ liệu dọn dẹp gói đã ký được ghi lại trong quá trình giải nén."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Siêu dữ liệu dọn dẹp gói cập nhật đã thay đổi sau khi staging. Hãy staging lại gói đã xác minh trước khi tiếp tục."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Siêu dữ liệu staging không chứa danh sách xóa gói hợp lệ."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Đường dẫn dọn dẹp gói cập nhật đã thay đổi sau khi staging. Hãy staging lại gói đã xác minh trước khi tiếp tục."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Siêu dữ liệu dọn dẹp gói đã ký không thay đổi kể từ khi staging."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Tệp khóa cập nhật đã tồn tại. Có thể đang có một quá trình cập nhật khác."
+
+msgid "Update lock directory is not writable."
+msgstr "Thư mục khóa cập nhật không thể ghi."
+
+msgid "No update lock is currently active."
+msgstr "Hiện không có khóa cập nhật nào đang hoạt động."
+
+msgid "Update backup directory is not writable."
+msgstr "Thư mục sao lưu cập nhật không thể ghi."
+
+msgid "Update backup directory is writable."
+msgstr "Thư mục sao lưu cập nhật có thể ghi."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Tiến trình hiện tại không thể tạo thư mục sao lưu cập nhật."
+
+msgid "Update backup directory can be created."
+msgstr "Có thể tạo thư mục sao lưu cập nhật."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Một số thư mục làm việc cập nhật không thể ghi hoặc tiến trình hiện tại không thể tạo."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Các thư mục làm việc cập nhật có thể ghi hoặc có thể được tạo."
+
+msgid "Update apply file plan was generated."
+msgstr "Đã tạo kế hoạch áp dụng tệp cập nhật."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Siêu dữ liệu dọn dẹp gói chứa các đường dẫn không thể xóa an toàn."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Các đích xóa do gói khai báo là an toàn."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Một số tệp lỗi thời do gói khai báo đã không còn trong cài đặt này."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Cập nhật theo kế hoạch sẽ ghi đè hoặc xóa các liên kết tượng trưng hiện có."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Cập nhật theo kế hoạch không ghi đè hoặc xóa các liên kết tượng trưng hiện có."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Các tệp di chuyển cập nhật mới phải được đặt dưới %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Đã phát hiện tệp di chuyển Doctrine %s mới. Chúng sẽ cần rà soát an toàn di chuyển cơ sở dữ liệu sau khi áp dụng tệp."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Một số danh sách tệp trong kế hoạch áp dụng cập nhật đã bị cắt ngắn trong phản hồi JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Không thể ghi siêu dữ liệu kế hoạch áp dụng cập nhật."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Không thể tải gói cập nhật. Mã trạng thái HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Không thể mở tệp đích gói cập nhật: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Tải xuống cập nhật phải sử dụng nguồn cập nhật chính thức %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL gói cập nhật phải sử dụng HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Kiểm tra an toàn kho lưu trữ gói cập nhật đã thành công."
+
+msgid "Update package was extracted to staging."
+msgstr "Gói cập nhật đã được giải nén vào khu vực tạm."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Siêu dữ liệu dọn dẹp gói đã ký đã được tải."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Gói cập nhật không chứa %s. Việc áp dụng tệp sẽ bị chặn cho đến khi siêu dữ liệu dọn dẹp đã ký được cung cấp."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Báo cáo chạy thử gói tạm đã được tạo."
+
+msgid "Staging metadata was written."
+msgstr "Siêu dữ liệu khu vực tạm đã được ghi."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Không thể giải nén gói cập nhật vào thư mục tạm."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Không thể tìm thấy thư mục gốc ứng dụng Chamilo trong gói tạm."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Gói tạm thiếu mục Chamilo bắt buộc: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Gói tạm chứa cấu trúc Chamilo mong đợi."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Gói tạm không chứa composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Gói tạm chứa composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Gói tạm không chứa yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Gói tạm chứa yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Không thể mã hóa siêu dữ liệu khu vực tạm."
+
+msgid "Unable to write staging metadata."
+msgstr "Không thể ghi siêu dữ liệu khu vực tạm."
+
+msgid "Update operation log created."
+msgstr "Nhật ký thao tác cập nhật đã được tạo."
+
+msgid "Unable to write update operation log."
+msgstr "Không thể ghi nhật ký thao tác cập nhật."
+
+msgid "Invalid update operation id."
+msgstr "ID thao tác cập nhật không hợp lệ."
 

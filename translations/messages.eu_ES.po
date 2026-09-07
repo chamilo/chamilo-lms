@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula lagina: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulen adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -40582,4 +40582,607 @@ msgstr "Helburuko fitxategi edo direktorio batzuk ezin dira idatzi edo kendu."
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Hau konpontzeko, aldatu aldi baterako Chamilo direktorio osoaren jabea %s-ra (web-zerbitzariaren erabiltzailea), aplikatu eguneraketa, aldatu jabea berriro %s-ra ondoren, eta ezarri var\/-ren (eta bere edukien) jabea berriro %s-ra, aplikazioak bertan idazten jarraitu ahal izan dezan."
+
+msgid "Update package verification failed."
+msgstr "Eguneratze-paketearen egiaztapenak huts egin du."
+
+msgid "Update preflight checks failed."
+msgstr "Eguneratzearen aurreko egiaztapenek huts egin dute."
+
+msgid "Unable to stage update package."
+msgstr "Ezin da eguneratze-paketea prestatu."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Aplikatu ondoko komandoak interfazetik exekutatzea desgaituta dago zerbitzari honetan."
+
+msgid "Missing required field: %s"
+msgstr "Beharrezko eremua falta da: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Ez da eguneratze-manifestuaren iturbururik eman eta ez dago lehenetsitako eguneratze-manifestuaren URLrik konfiguratuta."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Eguneratze-manifestuaren URLak jatorri ofiziala erabili behar du: %s. Manifestuaren bidea soilik alda daiteke."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Eguneratze-manifestu lokalen bideak desgaituta daude. Erabili HTTPS manifestu-URL bat edo ezarri CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 zerbitzariaren ingurunean tokiko probaetarako."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Ez eman HTTP %s biderik. Utzi eremu hau hutsik eguneratze-manifestutik deskargatzeko."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Eguneratze lokaleko %s bideak desgaituta daude ingurune honetan."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Eguneratze fidagarrien gako publikoak zerbitzarian konfiguratu behar dira ingurune honetan."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Eguneratzearen sinadura-egiaztapena saltatzea desgaituta dago ingurune honetan."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Aplikatu ondoko eguneratze-ekintzak exekutatzeko \"%s\" berrespen-testua behar da."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Prestatutako eguneratze-fitxategiak aplikatzeko \"%s\" berrespen-testua behar da."
+
+msgid "Unable to resolve project directory."
+msgstr "Ezin da proiektuaren direktorioa ebatzi."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Datu-basearen babeskopia ez du eguneratzaile honek kudeatzen. Sortu eta egiaztatu datu-basearen babeskopia migrazioak exekutatu aurretik."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine-ren down() migrazio-metodoek ez dute bermatzen ezabatutako edo eraldatutako datuak leheneratzea."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Aplikatu ondoko metadatuak datu-basearen migrazioak berrikustea gomendatzen dute."
+
+msgid "No migration files were found in the staged package."
+msgstr "Ez da migrazio-fitxategirik aurkitu prestatutako paketean."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Prestatutako Doctrine migrazio-fitxategiak detektatu dira."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine migrazioaren helburua prestatutako paketetik ebatzi da."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine migrazioaren oinarriak arazo blokeatzaileak ditu prestatutako migrazioetarako."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine-k migrazio-oinarri historikoaren abisuak ematen ditu, baina prestatutako %s migrazioak soilik berrikusiko eta exekutatuko dira esplizituki."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine-k migrazio-oinarri historikoaren abisuak ematen ditu. Eguneratzaileak prestatutako %s migrazio-klaseak soilik exekutatuko ditu berrespen esplizituaren ondoren."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine oinarriak ez du arazo blokeatzailerik prestatutako %s migrazioetarako."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Doctrine-ren saiakera lehorrak huts egin du gutxienez prestatutako migrazio batean. Ez exekutatu datu-basearen migrazioak hau konpondu arte."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Doctrine-ren saiakera lehorra ongi osatu da prestatutako migrazio-klase bakoitzerako."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Datu-basearen babeskopia eguneratzaile honetatik kanpo sortu behar da migrazioak exekutatu aurretik."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Prestatze-bidea beharrezkoa da datu-basearen migrazioak berrikusteko."
+
+msgid "Unable to read update %s: %s"
+msgstr "Ezin da eguneratzea irakurri %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Eguneratze %s JSON-a baliogabea da: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Eguneratze %s JSON-ak objektu bat izan behar du."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Aplikatu ondoko egiaztapenen metadatuak ez dute ekintza-zerrenda baliodunik."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Datu-basearen migrazioak ez ziren gomendatu prestatutako eguneratze honetarako."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Eguneratze-metadatuei prestatutako aplikazioaren bidea falta zaie."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Planifikatutako prestatutako migrazio-fitxategia ez da aurkitu: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Ezin da prestatutako migrazio-fitxategia irakurri: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Ez da deskribapenik atera getDescription()-etik."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Eguneratze-exekutatzaileak prestatutako %s migrazio soilik onartzen ditu: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Ezin dira migrazioaren segurtasun-metadatuak idatzi: %s"
+
+msgid "Migration safety check failed."
+msgstr "Migrazioaren segurtasun-egiaztapenak huts egin du."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Prestatutako migrazio-bide erlatibo ez-segurua detektatu da: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Instalatutako Chamilo bertsioa ezin izan da automatikoki detektatu. Jarraitu soilik eguneratze hau bateragarria dela berretsi ondoren."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Instalatutako edo helburuko bertsioa ez dago bertsio semantiko konparagarriaren formatuan. Jarraitu soilik eskuzko egiaztapenaren ondoren."
+
+msgid "An update is available."
+msgstr "Eguneratze bat eskuragarri dago."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Instalatutako bertsioak jada bat dator manifestuaren bertsioarekin."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Manifestuaren bertsioa instalatutakoa baino zaharragoa da. Bertsio-jaitsierak blokeatuta daude lehenespenez."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Prestaketa-faseko fitxategiak ez dira behar bezala aplikatu. Aplikatu ondorengo egiaztapenak ezin dira jarraitu."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Aplikazio-emaitzaren metadatuak ongi irakurri dira."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Aplikatu ondorengo ekintzen gomendioak sortu dira."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Datu-basearen migrazioak detektatu dira prestaketa-faseko paketean. Exekutatu itzazu soilik fitxategien eguneratzea zuzena dela eta datu-basearen babeskopia dagoela baieztatu ondoren."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Prestaketa-bidea beharrezkoa da aplikatu ondorengo egiaztapenak exekutatzeko."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "%s eguneratzea ez da JSON balioduna: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "%s eguneratzeak JSON objektua izan behar du."
+
+msgid "Composer dependencies"
+msgstr "Composer-en mendekotasunak"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Composer-en metadatuak prestaketa-faseko paketean sartu dira. Exekutatu Composer install aplikazioaren erroan eguneratzea osotzat jo aurretik."
+
+msgid "Frontend assets"
+msgstr "Frontend-eko baliabideak"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Frontend-arekin lotutako fitxategiak prestaketa-faseko paketean sartu dira. Berreraiki produkzio-baliabideak mendekotasunak instalatu ondoren."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Doctrine migrazio-fitxategiak detektatu dira prestaketa-faseko paketean. Baieztatu datu-basearen babeskopia dagoela migrazioak exekutatu aurretik."
+
+msgid "Symfony cache"
+msgstr "Symfony cache-a"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Garbitu Symfony cache-a eguneratze-fitxategiak aplikatu eta beharrezko komandoak exekutatu ondoren."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Ezin dira idatzi aplikatu ondorengo egiaztapenen metadatuak."
+
+msgid "Post-apply check failed."
+msgstr "Aplikatu ondorengo egiaztapenak huts egin du."
+
+msgid "Update package is not readable: %s"
+msgstr "Eguneratze-paketea ezin da irakurri: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Eguneratze-paketea ez da ZIP artxibo balioduna."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Eguneratze-paketearen ZIP artxiboa hutsik dago."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Eguneratze-paketeak irakurtezina den ZIP sarrera bat du."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Eguneratze-paketeak bide absolutu ez-segurua du: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Eguneratze-paketeak bide-zeharkatze sarrera bat du: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Eguneratze-paketeak esteka sinboliko bat du: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Aplikatu ondorengo ekintzak hasten."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Aplikatu ondorengo komandoen exekuzioak berrespen esplizitua behar du."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Aplikatu ondorengo gomendioen metadatuak ongi irakurri dira."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Aplikatu ondorengo ekintzak gomendio-txostenaren arabera balioztatu dira."
+
+msgid "Post-apply actions were selected."
+msgstr "Aplikatu ondorengo ekintzak hautatu dira."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Aplikatu ondorengo ekintza aurreratuek berrespen aurreratu esplizitua behar dute."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Aplikatu ondorengo ekintza aurreratuak esplizituki berretsi dira."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Hautatutako aplikatu ondorengo komandoak ongi osatu dira."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Aplikatu ondorengo komandoen exekuzioaren metadatuak idatzi dira."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Aplikatu ondorengo ekintzak ongi osatu dira."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Eguneratzearen aplikatu ondorengo komandoaren definizio baliogabea: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Aplikatu ondorengo ekintza exekutatzen: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "%s-rako %d/%d komandoa exekutatzen."
+
+msgid "Post-apply action failed: %s"
+msgstr "Aplikatu ondorengo ekintzak huts egin du: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "\"%s\" aplikatu ondorengo ekintzak huts egin du %d irteera-kodearekin."
+
+msgid "Post-apply action completed: %s"
+msgstr "Aplikatu ondorengo ekintza osatu da: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Prestaketa-bidea beharrezkoa da aplikatu ondorengo ekintzak exekutatzeko."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Ez dago gomendatutako aplikatu ondorengo ekintzarik exekutatzeko."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Ez dago baimendutako aplikatu ondorengo ekintzarik exekutatzeko."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Aplikatu ondorengo ekintza ez dago baimenduta eguneratze honetarako: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Datu-basearen migrazioek migrazio-segurtasunaren berrikuspena behar dute exekutatu aurretik."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Datu-basearen migrazioak ezin dira exekutatu, migrazio-segurtasunaren berrikuspenak ez baitu gainditu."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Datu-basearen migrazioak ezin dira exekutatu, migrazio-segurtasunaren berrikuspenak ez dituelako zerrendatu prestaketa-faseko migrazioak."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Datu-basearen migrazioak ezin dira exekutatu, migrazio-segurtasunaren berrikuspenak migrazio-sarrera baliogabea duelako."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Eguneratze-exekutatzaileak prestaketa-faseko %s migrazioak soilik exekuta ditzake."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Datu-basearen migrazioak ezin dira exekutatu, prestaketa-faseko migrazio-segurtasunaren berrikuspenak blokeatze-erroreak jakinarazi dituelako."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine-k migrazio-oinarriaren abisuak jakinarazten ditu. Fasean dauden %s migrazio-klaseak bakarrik exekutatuko dira esplizituki."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Datu-basearen migrazioek datu-basearen babeskopia existitzen dela berretsi behar dute."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Datu-basearen migrazioek \"RUN DATABASE MIGRATIONS\" berrespen-testua behar dute."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Datu-basearen migrazioaren segurtasun-berrikuspena exekutatu aurretik osatu zen."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Datu-basearen babeskopiaren existentzia esplizituki berretsi zen."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Datu-basearen migrazioaren segurtasun-berrikuspena eta babeskopiaren berrespena eman ziren."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Datu-basearen migrazioak datu-basearen babeskopiaren berrespen esplizituaren ondoren exekutatu ziren. Eguneratzaileak ez zuen datu-basearen babeskopia sortu."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Aplikatu osteko exekutagarriaren beharrezko baimenak normalizatu ziren."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Ezin dira datu-basearen migrazioak exekutatu bin/console ez delako aurkitu."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Hautatutako aplikatu osteko komandoek beharrezko idazketa-bideak dituzte."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Aplikatu osteko komandoen idazketa-bideak balioztatu ziren."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Aplikatu osteko ekintza aurreratuek mendekotasunak, sortutako baliabideak edo datu-basea alda ditzakete. Berrikusi babeskopiak jarraitu aurretik."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer ezin da segurtasunez web-eguneratzailetik exekutatu, Composer-ek sortutako \"%s\" fitxategia %d UID-aren jabea delako eta PHP exekuzio-inguruneak %d UID erabiltzen duelako. Exekutatu Composer eskuz inplementazioaren jabe gisa, eta jarraitu gainerako aplikatu osteko ekintzekin."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Aplikatu osteko \"%s\" ekintzak behar duen bidea ez da idazgarria: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Aplikatu osteko \"%s\" ekintzak behar duen guraso-direktorioa ez da idazgarria: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Ezin dira irakurri beharrezko aplikatu osteko exekutagarriaren baimenak: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Ezin da beharrezko aplikatu osteko exekutagarria exekutagarri gisa markatu: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Beharrezko aplikatu osteko exekutagarria oraindik ez da exekutagarria chmod ondoren: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Exekuzio-baimena normalizatu zen."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Ezin da idatzi Git konfigurazio isolatua aplikatu osteko komandoetarako."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Beste eguneratze-eragiketa bat martxan dagoela dirudi. Kendu var/update/update.lock soilik eguneratzerik aktibo ez badago."
+
+msgid "Unable to create update lock: %s"
+msgstr "Ezin da eguneratze-blokeoa sortu: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Ezin da idatzi aplikatu osteko komandoaren exekuzio-metadatuak: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Eguneratze-manifestuari pakete-blokea falta zaio."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Eguneratze-manifestuaren sinadura-blokeak objektu bat izan behar du."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Eguneratze-manifestuaren eskakizun-blokeak objektu bat izan behar du."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Eguneratze-paketearen sha256-ak 64 karaktereko kate hamaseitarra izan behar du."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Eguneratze-manifestuari beharrezko \"%s\" kate-eremua falta zaio."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Eguneratze-manifestuaren \"%s\" eremuak kate bat izan behar du."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Eguneratze-manifestua ez da JSON baliozkoa: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Eguneratze-manifestuaren JSON-ak objektu bat izan behar du."
+
+msgid "Manifest source cannot be empty."
+msgstr "Manifestuaren iturburua ezin da hutsik egon."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Eguneratze-manifestuaren URLak eguneratze-jatorri ofiziala erabili behar du: %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Ezin da eguneratze-manifestua deskargatu. HTTP egoera: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Manifestu-fitxategia ez da irakurgarria: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Ezin da manifestu-fitxategia irakurri: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Eguneratze-manifestuaren URLak HTTPS erabili behar du."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Eguneratze-paketearen metadatuak ez dira irakurgarriak: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Ezin dira eguneratze-paketearen metadatuak irakurri: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Eguneratze-paketearen metadatuak ez dira JSON baliozkoak: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Eguneratze-paketearen metadatuak JSON objektu bat izan behar dute."
+
+msgid "Update package metadata format must be %d."
+msgstr "Eguneratze-paketearen metadatuen formatuak %d izan behar du."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Eguneratze-paketearen metadatuen \"remove\" eremuak array bat izan behar du."
+
+msgid "Update package removal paths must be strings."
+msgstr "Eguneratze-paketearen kentze-bideek kateak izan behar dute."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Eguneratze-paketearen metadatuak ezin du babestutako bidea kendu: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Eguneratze-paketeak ezin du bide bera sartu eta kendu: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Ezin da kalkulatu eguneratze-paketearen metadatuen sha256."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Eguneratze-paketearen kentze-bidea ezin da hutsik egon."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Eguneratze-paketearen kentze-bideak byte nulua du."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Eguneratze-paketearen kentze-bidea erlatiboa izan behar da: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Eguneratze-paketearen kentze-bideak segmentu ez-segurua du: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Eguneratzea aplikatzeko plana eraikitzeko, prestaketa-bidea behar da."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Prestaketa-direktorioak ez du STAGING-INFO.json fitxategirik."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Ezin da prestaketa-metadatuak irakurri: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Prestaketa-metadatuak ez dira JSON baliodunak: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Prestaketa-metadatuek JSON objektu bat izan behar dute."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Prestaketa-metadatuek application_path eremua falta dute."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Eguneratze-paketeak %s falta du. Sinatutako garbiketa-metadatuak behar dira fitxategiak aplikatu aurretik."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Prestaketa-metadatuek ez dute erauzketan erregistratutako pakete-garbiketaren sinatutako metadaturik."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Eguneratze-paketearen garbiketa-metadatuak aldatu dira prestaketaren ondoren. Berriro prestatu egiaztatutako paketea jarraitu aurretik."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Prestaketa-metadatuek ez dute paketea kentzeko zerrenda baliodunik."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Eguneratze-paketearen garbiketa-bideak aldatu dira prestaketaren ondoren. Berriro prestatu egiaztatutako paketea jarraitu aurretik."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Pakete-garbiketaren sinatutako metadatuak ez dira aldatu prestaketatik."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Eguneratze-blokeo fitxategi bat existitzen da jada. Beste eguneratze bat abian egon daiteke."
+
+msgid "Update lock directory is not writable."
+msgstr "Eguneratze-blokeoaren direktorioa ez da idazgarria."
+
+msgid "No update lock is currently active."
+msgstr "Ez dago eguneratze-blokeorik aktibo une honetan."
+
+msgid "Update backup directory is not writable."
+msgstr "Eguneratze-babeskopiaren direktorioa ez da idazgarria."
+
+msgid "Update backup directory is writable."
+msgstr "Eguneratze-babeskopiaren direktorioa idazgarria da."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Uneko prozesuak ezin du eguneratze-babeskopiaren direktorioa sortu."
+
+msgid "Update backup directory can be created."
+msgstr "Eguneratze-babeskopiaren direktorioa sor daiteke."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Eguneratzearen lan-direktorio batzuk ez dira idazgarriak edo uneko prozesuak ezin ditu sortu."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Eguneratzearen lan-direktorioak idazgarriak dira edo sor daitezke."
+
+msgid "Update apply file plan was generated."
+msgstr "Eguneratzea aplikatzeko fitxategi-plana sortu da."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Pakete-garbiketaren metadatuek segurtasunez kendu ezin diren bideak dituzte."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Paketeak adierazitako kentze-helburuak seguruak dira."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Paketeak adierazitako fitxategi zaharkitu batzuk jada ez daude instalazio honetan."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Planifikatutako eguneratzeak dauden esteka sinbolikoak gainidatzi edo kenduko lituzke."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Planifikatutako eguneratzeak ez ditu dauden esteka sinbolikoak gainidazten edo kentzen."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Eguneratze-migrazio fitxategi berriak %s azpian jarri behar dira."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "%s Doctrine migrazio-fitxategi berri detektatu dira. Fitxategiak aplikatu ondoren datu-basearen migrazioaren segurtasun-berrikuspena beharko dute."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Eguneratzea aplikatzeko planaren fitxategi-zerrenda batzuk moztu dira JSON erantzunean."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Ezin dira eguneratzea aplikatzeko planaren metadatuak idatzi."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Ezin da eguneratze-paketea deskargatu. HTTP egoera: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Ezin da eguneratze-paketearen helburu-fitxategia ireki: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Eguneratze-deskargek jatorri ofiziala erabili behar dute: %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "Eguneratze-paketearen URLak HTTPS erabili behar du."
+
+msgid "Update package archive safety checks passed."
+msgstr "Eguneratze-paketearen artxiboaren segurtasun-egiaztapenak gainditu dira."
+
+msgid "Update package was extracted to staging."
+msgstr "Eguneratze-paketea prestaketa-direktoriora erauzi da."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Pakete-garbiketaren sinatutako metadatuak kargatu dira."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Eguneratze-paketeak ez du %s. Fitxategien aplikazioa blokeatuta egongo da sinatutako garbiketa-metadatuak eman arte."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Prestatutako paketearen proba-txostena sortu da."
+
+msgid "Staging metadata was written."
+msgstr "Prestaketa-metadatuak idatzi dira."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Ezin da eguneratze-paketea prestaketa-direktoriora erauzi."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Ezin da Chamilo aplikazioaren erroa aurkitu prestatutako paketean."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Prestatutako paketeak Chamiloren beharrezko sarrera falta du: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Prestatutako paketeak espero den Chamilo egitura du."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Prestatutako paketeak ez du composer.lock fitxategirik."
+
+msgid "Staged package contains composer.lock."
+msgstr "Prestatutako paketeak composer.lock du."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Prestatutako paketeak ez du yarn.lock fitxategirik."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Prestatutako paketeak yarn.lock du."
+
+msgid "Unable to encode staging metadata."
+msgstr "Ezin da prestaketa-metadatuak kodetu."
+
+msgid "Unable to write staging metadata."
+msgstr "Ezin da prestaketa-metadatuak idatzi."
+
+msgid "Update operation log created."
+msgstr "Eguneratze-eragiketaren erregistroa sortu da."
+
+msgid "Unable to write update operation log."
+msgstr "Ezin da eguneratze-eragiketaren erregistroa idatzi."
+
+msgid "Invalid update operation id."
+msgstr "Eguneratze-eragiketaren ID baliogabea."
 

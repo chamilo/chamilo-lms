@@ -37011,15 +37011,6 @@ msgstr "Доверен публичен ключ"
 msgid "Trusted signing key"
 msgstr "Доверен ключ за подписване"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Въведете APPLY UPDATE FILES, за да потвърдите"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Въведете RUN DATABASE MIGRATIONS, за да потвърдите миграциите на базата данни"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Въведете RUN POST UPDATE ACTIONS, за да потвърдите"
-
 msgid "Unknown update notice source."
 msgstr "Неизвестен източник на известие за актуализация."
 
@@ -40577,4 +40568,607 @@ msgstr "Някои целеви файлове или директории не 
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "За да коригирате това, временно променете собственика на цялата директория на Chamilo на %s (потребителят на уеб сървъра), приложете актуализацията, след това върнете собственика на %s и задайте собственика на var/ (и съдържанието ѝ) отново на %s, за да може приложението да продължи да записва в нея."
+
+msgid "Update package verification failed."
+msgstr "Проверката на пакета за актуализация не успя."
+
+msgid "Update preflight checks failed."
+msgstr "Предварителните проверки за актуализация не успяха."
+
+msgid "Unable to stage update package."
+msgstr "Неуспешно подготвяне на пакета за актуализация."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Изпълнението на команди след прилагане от потребителския интерфейс е забранено на този сървър."
+
+msgid "Missing required field: %s"
+msgstr "Липсва задължително поле: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Не е предоставен източник на манифест за актуализация и не е конфигуриран URL адрес на манифест по подразбиране."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL адресът на манифеста за актуализация трябва да използва официалния произход %s. Може да се променя само пътят към манифеста."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Локалните пътища към манифеста за актуализация са забранени. Използвайте HTTPS URL към манифеста или задайте CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 в средата на сървъра за локални тестове."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Не предоставяйте HTTP път %s. Оставете това поле празно, за да се изтегли от манифеста за актуализация."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Локалните пътища за актуализация %s са забранени в тази среда."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "В тази среда на сървъра трябва да бъдат конфигурирани доверени публични ключове за актуализация."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Пропускането на проверката на подписа на актуализацията е забранено в тази среда."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Изпълнението на действия след прилагане на актуализацията изисква потвърждаващ текст \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Прилагането на подготвените файлове за актуализация изисква потвърждаващ текст \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Неуспешно определяне на директорията на проекта."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Архивирането на базата данни не се управлява от този инструмент за актуализация. Създайте и проверете архив на базата данни преди изпълнение на миграции."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Методите down() на Doctrine миграциите не гарантират възстановяване на изтрити или преобразувани данни."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Метаданните след прилагане препоръчват преглед на миграциите на базата данни."
+
+msgid "No migration files were found in the staged package."
+msgstr "В подготвения пакет не бяха намерени файлове за миграция."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Открити са подготвени файлове за Doctrine миграции."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Целта на Doctrine миграцията беше определена от подготвения пакет."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Базовата линия на Doctrine миграциите има блокиращи проблеми за подготвените миграции."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine докладва предупреждения за историческата базова линия на миграциите, но ще бъдат прегледани и изпълнени изрично само подготвените миграции %s."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine докладва предупреждения за историческата базова линия на миграциите. Инструментът за актуализация ще изпълни само подготвените класове за миграция %s след изрично потвърждение."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Базовата линия на Doctrine няма блокиращ проблем за подготвените миграции %s."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Пробното изпълнение (dry-run) на Doctrine не успя поне за една подготвена миграция. Не изпълнявайте миграции на базата данни, докато това не бъде отстранено."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Пробното изпълнение (dry-run) на Doctrine завърши успешно за всеки подготвен клас за миграция."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Преди изпълнение на миграции трябва да се създаде архив на базата данни извън този инструмент за актуализация."
+
+msgid "Staging path is required to review database migrations."
+msgstr "За преглед на миграциите на базата данни е необходим път за подготовка."
+
+msgid "Unable to read update %s: %s"
+msgstr "Неуспешно четене на актуализация %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON на актуализация %s е невалиден: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON на актуализация %s трябва да бъде обект."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Метаданните за проверки след прилагане не съдържат валиден списък с действия."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "За тази подготвена актуализация не бяха препоръчани миграции на базата данни."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "В метаданните за актуализация липсва пътят към подготвеното приложение."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Планираният подготвен файл за миграция не беше намерен: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Неуспешно четене на подготвения файл за миграция: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Не можа да се извлече описание от getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Инструментът за актуализация поддържа само %s подготвени миграции: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Неуспешен запис на метаданни за безопасност на миграцията: %s"
+
+msgid "Migration safety check failed."
+msgstr "Проверката за безопасност на миграцията не успя."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Открит е небезопасен относителен път към подготвена миграция: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Инсталираната версия на Chamilo не можа да бъде открита автоматично. Продължете само след като потвърдите съвместимостта на тази актуализация."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Инсталираната или целевата версия не е в сравним семантичен формат. Продължете само след ръчна проверка."
+
+msgid "An update is available."
+msgstr "Налична е актуализация."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Инсталираната версия вече съвпада с версията в манифеста."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Версията в манифеста е по-стара от инсталираната. Понижаването на версията е блокирано по подразбиране."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Подготвените файлове не бяха приложени успешно. Проверките след прилагане не могат да продължат."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Метаданните за резултата от прилагането бяха прочетени успешно."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Генерирани са препоръки за действия след прилагане."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "В подготвения пакет са открити миграции на базата данни. Изпълнете ги само след като потвърдите, че актуализацията на файловете е коректна и съществува резервно копие на базата данни."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Необходим е път за подготвяне, за да се изпълнят проверките след прилагане."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Актуализацията %s не е валиден JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Актуализацията %s трябва да бъде JSON обект."
+
+msgid "Composer dependencies"
+msgstr "Зависимости на Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Метаданните на Composer са включени в подготвения пакет. Изпълнете Composer install от корена на приложението, преди да считате актуализацията за завършена."
+
+msgid "Frontend assets"
+msgstr "Frontend ресурси"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Файлове, свързани с frontend, са включени в подготвения пакет. Преизградете продукционните ресурси след инсталиране на зависимостите."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Открити са файлове за Doctrine миграции в подготвения пакет. Потвърдете, че съществува резервно копие на базата данни, преди да изпълните миграциите."
+
+msgid "Symfony cache"
+msgstr "Symfony кеш"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Изчистете Symfony кеша след прилагане на файловете за актуализация и изпълнение на всички необходими команди."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Не може да се запишат метаданните за проверките след прилагане."
+
+msgid "Post-apply check failed."
+msgstr "Проверката след прилагане е неуспешна."
+
+msgid "Update package is not readable: %s"
+msgstr "Пакетът за актуализация не може да се прочете: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Пакетът за актуализация не е валиден ZIP архив."
+
+msgid "Update package ZIP archive is empty."
+msgstr "ZIP архивът на пакета за актуализация е празен."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Пакетът за актуализация съдържа нечетим ZIP запис."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Пакетът за актуализация съдържа небезопасен абсолютен път: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Пакетът за актуализация съдържа запис с обхождане на пътя: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Пакетът за актуализация съдържа символна връзка: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Стартиране на действия след прилагане."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Изпълнението на команди след прилагане изисква изрично потвърждение."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Метаданните с препоръки след прилагане са прочетени успешно."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Действията след прилагане са валидирани спрямо отчета с препоръки."
+
+msgid "Post-apply actions were selected."
+msgstr "Избрани са действия след прилагане."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Разширените действия след прилагане изискват изрично разширено потвърждение."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Разширените действия след прилагане са изрично потвърдени."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Избраните команди след прилагане са завършени успешно."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Метаданните за изпълнението на командите след прилагане са записани."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Действията след прилагане са завършени успешно."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Невалидна дефиниция на команда след прилагане на актуализация: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Изпълнение на действие след прилагане: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Изпълнение на команда %d от %d за %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Действието след прилагане е неуспешно: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Действието след прилагане \"%s\" е неуспешно с код на изход %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Действието след прилагане е завършено: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Необходим е път за подготвяне, за да се изпълнят действията след прилагане."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Няма препоръчани действия след прилагане за изпълнение."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Няма разрешени действия след прилагане за изпълнение."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Действието след прилагане не е разрешено за тази актуализация: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Миграциите на базата данни изискват преглед за безопасност преди изпълнение."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Миграциите на базата данни не могат да се изпълнят, защото прегледът за безопасност на миграциите не е преминал."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Миграциите на базата данни не могат да се изпълнят, защото прегледът за безопасност на миграциите не изброява подготвените миграции."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Миграциите на базата данни не могат да се изпълнят, защото прегледът за безопасност на миграциите съдържа невалиден запис за миграция."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Само подготвените %s миграции могат да бъдат изпълнени от изпълнителя на актуализацията."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Миграциите на базата данни не могат да се изпълнят, защото прегледът за безопасност на подготвените миграции е докладвал блокиращи грешки."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine докладва предупреждения за базовата линия на миграциите. Само подготвените класове за миграции %s ще бъдат изпълнени изрично."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Миграциите на базата данни изискват потвърждение, че съществува резервно копие на базата данни."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Миграциите на базата данни изискват потвърдителния текст \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Прегледът за безопасност на миграцията на базата данни беше завършен преди изпълнението."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Съществуването на резервно копие на базата данни беше изрично потвърдено."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Предоставени бяха преглед за безопасност на миграцията на базата данни и потвърждение на резервното копие."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Миграциите на базата данни бяха изпълнени след изрично потвърждение на резервно копие. Програмата за актуализация не създаде резервното копие на базата данни."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Необходимите изпълними права след прилагане бяха нормализирани."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Неуспешно изпълнение на миграциите на базата данни, защото bin/console не беше намерен."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Избраните команди след прилагане имат необходимите пътища с права за запис."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Пътищата с права за запис за командите след прилагане бяха проверени."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Разширените действия след прилагане могат да променят зависимости, генерирани ресурси или базата данни. Прегледайте резервните копия преди да продължите."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer не може да се изпълнява безопасно от уеб актуализатора, защото генерираният от Composer файл \"%s\" принадлежи на UID %d, докато PHP средата използва UID %d. Изпълнете Composer ръчно като собственик на внедряването, след което продължете с останалите действия след прилагане."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Пътят, изискван от действието след прилагане \"%s\", няма права за запис: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Родителската директория, изисквана от действието след прилагане \"%s\", няма права за запис: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Неуспешно четене на правата за необходимия изпълним файл след прилагане: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Неуспешно маркиране на необходимия изпълним файл след прилагане като изпълним: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Необходимият изпълним файл след прилагане все още не е изпълним след chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Правото за изпълнение беше нормализирано."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Неуспешен запис на изолирана Git конфигурация за командите след прилагане."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Изглежда, че се изпълнява друга операция за актуализация. Премахнете var/update/update.lock само ако няма активна актуализация."
+
+msgid "Unable to create update lock: %s"
+msgstr "Неуспешно създаване на заключване за актуализация: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Неуспешен запис на метаданни за изпълнение на команда след прилагане: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "В манифеста за актуализация липсва блокът на пакета."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Блокът за подпис в манифеста за актуализация трябва да бъде обект."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Блокът за изисквания в манифеста за актуализация трябва да бъде обект."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 на пакета за актуализация трябва да бъде 64-символен шестнадесетичен низ."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "В манифеста за актуализация липсва задължителното текстово поле \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Полето \"%s\" в манифеста за актуализация трябва да бъде низ."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Манифестът за актуализация не е валиден JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON на манифеста за актуализация трябва да бъде обект."
+
+msgid "Manifest source cannot be empty."
+msgstr "Източникът на манифеста не може да бъде празен."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL адресът на манифеста за актуализация трябва да използва официалния произход на актуализациите %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Неуспешно изтегляне на манифеста за актуализация. HTTP статус: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Файлът на манифеста не е четим: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Неуспешно четене на файла на манифеста: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL адресът на манифеста за актуализация трябва да използва HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Метаданните на пакета за актуализация не са четими: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Неуспешно четене на метаданните на пакета за актуализация: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Метаданните на пакета за актуализация не са валиден JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Метаданните на пакета за актуализация трябва да бъдат JSON обект."
+
+msgid "Update package metadata format must be %d."
+msgstr "Форматът на метаданните на пакета за актуализация трябва да бъде %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Полето \"remove\" в метаданните на пакета за актуализация трябва да бъде масив."
+
+msgid "Update package removal paths must be strings."
+msgstr "Пътищата за премахване в пакета за актуализация трябва да бъдат низове."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Метаданните на пакета за актуализация не могат да премахват защитен път: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Пакетът за актуализация не може едновременно да включва и премахва същия път: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Неуспешно изчисляване на sha256 на метаданните на пакета за актуализация."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Пътят за премахване в пакета за актуализация не може да бъде празен."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Пътят за премахване в пакета за актуализация съдържа нулев байт."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Пътят за премахване в пакета за актуализация трябва да бъде относителен: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Пътят за премахване в пакета за актуализация съдържа небезопасен сегмент: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Необходим е път за подготвителна директория, за да се изгради план за прилагане на актуализацията."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "В подготвителната директория липсва STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Не може да се прочете междинните метаданни: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Междинните метаданни не са валиден JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Междинните метаданни трябва да бъдат JSON обект."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "В междинните метаданни липсва полето application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "В пакета за актуализация липсва %s. Необходими са подписани метаданни за почистване, преди да могат да се приложат файлове."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Междинните метаданни не съдържат подписаните метаданни за почистване на пакета, записани при извличането."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Метаданните за почистване на пакета за актуализация са се променили след междинното съхранение. Поставете отново проверените пакет преди продължаване."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Междинните метаданни не съдържат валиден списък за премахване на пакета."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Пътищата за почистване на пакета за актуализация са се променили след междинното съхранение. Поставете отново проверените пакет преди продължаване."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Подписаните метаданни за почистване на пакета не са се променили след междинното съхранение."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Вече съществува файл за заключване на актуализация. Възможно е друга актуализация да е в ход."
+
+msgid "Update lock directory is not writable."
+msgstr "Директорията за заключване на актуализацията не е достъпна за запис."
+
+msgid "No update lock is currently active."
+msgstr "В момента няма активно заключване на актуализация."
+
+msgid "Update backup directory is not writable."
+msgstr "Директорията за резервно копие на актуализацията не е достъпна за запис."
+
+msgid "Update backup directory is writable."
+msgstr "Директорията за резервно копие на актуализацията е достъпна за запис."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Директорията за резервно копие на актуализацията не може да бъде създадена от текущия процес."
+
+msgid "Update backup directory can be created."
+msgstr "Директорията за резервно копие на актуализацията може да бъде създадена."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Някои работни директории за актуализация не са достъпни за запис или не могат да бъдат създадени от текущия процес."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Работните директории за актуализация са достъпни за запис или могат да бъдат създадени."
+
+msgid "Update apply file plan was generated."
+msgstr "Генериран е план за прилагане на файловете за актуализация."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Метаданните за почистване на пакета съдържат пътища, които не могат да бъдат премахнати безопасно."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Целите за премахване, обявени в пакета, са безопасни."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Някои остарели файлове, обявени в пакета, вече липсват в тази инсталация."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Планираната актуализация би презаписала или премахнала съществуващи символни връзки."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Планираната актуализация не презаписва и не премахва съществуващи символни връзки."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Новите файлове за миграция на актуализацията трябва да бъдат поставени под %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Открити са нови файлове за Doctrine миграция %s. След прилагане на файловете ще е необходим преглед за безопасност на миграцията на базата данни."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Някои списъци с файлове в плана за прилагане на актуализацията са съкратени в JSON отговора."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Не може да се запишат метаданните на плана за прилагане на актуализацията."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Не може да се изтегли пакетът за актуализация. HTTP статус: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Не може да се отвори целевият файл на пакета за актуализация: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Изтеглянията на актуализации трябва да използват официалния източник за актуализации %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL адресът на пакета за актуализация трябва да използва HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Проверките за безопасност на архива на пакета за актуализация са преминати."
+
+msgid "Update package was extracted to staging."
+msgstr "Пакетът за актуализация е извлечен в междинното хранилище."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Подписаните метаданни за почистване на пакета са заредени."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Пакетът за актуализация не съдържа %s. Прилагането на файлове ще бъде блокирано, докато не бъдат предоставени подписани метаданни за почистване."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Генериран е отчет за пробното изпълнение на междинно съхранения пакет."
+
+msgid "Staging metadata was written."
+msgstr "Междинните метаданни са записани."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Не може да се извлече пакетът за актуализация в междинната директория."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Не може да се намери коренът на приложението Chamilo в междинно съхранения пакет."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "В междинно съхранения пакет липсва задължителен елемент на Chamilo: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Междинно съхраненият пакет съдържа очакваната структура на Chamilo."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Междинно съхраненият пакет не съдържа composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Междинно съхраненият пакет съдържа composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Междинно съхраненият пакет не съдържа yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Междинно съхраненият пакет съдържа yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Не може да се кодират междинните метаданни."
+
+msgid "Unable to write staging metadata."
+msgstr "Не може да се запишат междинните метаданни."
+
+msgid "Update operation log created."
+msgstr "Създаден е журнал на операцията по актуализация."
+
+msgid "Unable to write update operation log."
+msgstr "Неуспешен запис в журнала на операцията за актуализация."
+
+msgid "Invalid update operation id."
+msgstr "Невалиден идентификатор на операция за актуализация."
 

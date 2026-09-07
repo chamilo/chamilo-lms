@@ -40572,3 +40572,606 @@ msgstr "Cualchi file o cartele di destinazion no pues jessi scrit o gjavât."
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Par comedi chest, cambie temporaneamentri il proprietari di dute la cartele di Chamilo a %s (l'utent dal servidôr web), apliche l'inzornament, torne a meti il proprietari a %s dopo, po met il proprietari di var/ (e dai siei contignûts) di gnûf a %s cussì che l'aplicazion e puedi continuâ a scrivi dentri."
 
+msgid "Update package verification failed."
+msgstr "La verifiche dal pachet di inzornament e je falide."
+
+msgid "Update preflight checks failed."
+msgstr "I controlis preliminârs dal inzornament a son falîts."
+
+msgid "Unable to stage update package."
+msgstr "Impussibil preparâ il pachet di inzornament."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "L'esecuzion dai comants post-aplicazion de interface e je disativade su chest servidôr."
+
+msgid "Missing required field: %s"
+msgstr "Cjamp obligatoriu mancjant: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Nissune sorzint di manifest di inzornament e je stade furnide e nissun URL predefinît di manifest di inzornament nol è configurât."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "L'URL dal manifest di inzornament al à di doprâ la origjin uficiâl di inzornament %s. Si pues cambiâ dome il percors dal manifest."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "I percors locâi dal manifest di inzornament a son disativâts. Dopre un URL HTTPS dal manifest o imposte CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 tal ambient dal servidôr par lis prove locâls."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "No sta furnî un percors HTTP %s. Lasse vueit chest cjamp par discjariâlu dal manifest di inzornament."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "I percors locâi di inzornament %s a son disativâts in chest ambient."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Lis clâfs publichis di fidence pal inzornament a àn di jessi configuradis sul servidôr in chest ambient."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Il salt de verifiche de firme di inzornament al è disativât in chest ambient."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "L'esecuzion des azions post-aplicazion di inzornament e domande il test di conferme \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "L'aplicazion dai files di inzornament preparâts e domande il test di conferme \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Impussibil risolvi la cartele dal progjet."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "La copie di sigurece de base di dâts no je gjestide di chest inzornadôr. Cree e verifiche une copie di sigurece de base di dâts prime di eseguî lis migrazions."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "I metodis down() des migrazions Doctrine no garantissin di ripristinâ i dâts scancelâts o trasformâts."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "I metadâts post-aplicazion a racomandin une revision des migrazions de base di dâts."
+
+msgid "No migration files were found in the staged package."
+msgstr "Nissun file di migrazion cjatât tal pachet preparât."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "A son stâts rilevâts files di migrazion Doctrine preparâts."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "La destinazion de migrazion Doctrine e je stade risolte dal pachet preparât."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "La baseline des migrazions Doctrine e à problems blocants pes migrazions preparadis."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine al segnale avîs storics su la baseline des migrazions, ma dome lis migrazions preparadis %s a saran riviodudis e eseguîdis in mût esplicit."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine al segnale avîs storics su la baseline des migrazions. L'inzornadôr al eseguissarà dome lis classis di migrazion preparadis %s dopo conferme esplicite."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "La baseline Doctrine no à nissun problem blocant pes migrazions preparadis %s."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "La prove a sec (dry-run) des migrazions Doctrine e je falide par almancul une migrazion preparade. No sta eseguî lis migrazions de base di dâts fintremai che chest nol è justât."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "La prove a sec Doctrine e je lade ben par ogni classe di migrazion preparade."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Si à di creâ une copie di sigurece de base di dâts fûr di chest inzornadôr prime di eseguî lis migrazions."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Il percors di preparazion al è necessari par riviodi lis migrazions de base di dâts."
+
+msgid "Unable to read update %s: %s"
+msgstr "Impussibil lei l'inzornament %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Il JSON di inzornament %s nol è valit: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Il JSON di inzornament %s al à di jessi un ogjet."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "I metadâts dai controlis post-aplicazion no contegnin une liste di azions valide."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Lis migrazions de base di dâts no jerin racomandadís par chest inzornament preparât."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "I metadâts di inzornament a mancjin dal percors de aplicazion preparade."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Il file di migrazion preparât planificât nol è stât cjatât: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Impussibil lei il file di migrazion preparât: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Nissune descrizion e je stade cjapade fûr di getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "L'esecutôr di inzornament al supuarte dome lis migrazions preparadis %s: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Impussibil scrivi i metadâts di sigurece des migrazions: %s"
+
+msgid "Migration safety check failed."
+msgstr "Il control di sigurece des migrazions al è falît."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Rilevât un percors relatîf di migrazion preparât no sigûr: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "No si è rivâts a rilevâ in automatic la version di Chamilo instalade. Continue dome dopo vê confermât che chest inzornament al è compatibil."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "La version instalade o di destinazion no je intun formât di version semantiche confrontabil. Continue dome dopo verifiche manuâl."
+
+msgid "An update is available."
+msgstr "Al è disponibil un inzornament."
+
+msgid "The installed version already matches the manifest version."
+msgstr "La version instalade e corispuint za a chê dal manifest."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "La version dal manifest e je plui vecje di chê instalade. I downgrade a son blocâts pal predefinît."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "I files in staging no son stâts aplicâts cun sucès. I controlis post-aplicazion no puedin continuâ."
+
+msgid "Apply result metadata was read successfully."
+msgstr "I metadâts dal risultât de aplicazion a son stâts leiûts cun sucès."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Lis racomandazions des azions post-aplicazion a son stadis gjeneradis."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "A son stadis rilevadis migrazions de base di dâts tal pachet in staging. Eseguîlis dome dopo vê confermât che l'inzornament dai files al è just e che al esist un backup de base di dâts."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Il percors di staging al è necessari par eseguî i controlis post-aplicazion."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "L'inzornament %s nol è un JSON valit: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "L'inzornament %s al à di jessi un ogjet JSON."
+
+msgid "Composer dependencies"
+msgstr "Dipendencis Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "I metadâts di Composer a son stâts includûts tal pachet in staging. Eseguî Composer install de lidrîs de aplicazion prime di considerâ complet l'inzornament."
+
+msgid "Frontend assets"
+msgstr "Risorsis frontend"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "I files relatîfs al frontend a son stâts includûts tal pachet in staging. Tornâ a costruî lis risorsis di produzion dopo vê instalât lis dipendencis."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "A son stâts rilevâts files di migrazion Doctrine tal pachet in staging. Confermâ che al esist un backup de base di dâts prime di eseguî lis migrazions."
+
+msgid "Symfony cache"
+msgstr "Cache Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Netâ la cache Symfony dopo vê aplicât i files di inzornament e vê eseguît i comants necessaris."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Impussibil scrivi i metadâts dai controlis post-aplicazion."
+
+msgid "Post-apply check failed."
+msgstr "Control post-aplicazion falît."
+
+msgid "Update package is not readable: %s"
+msgstr "Il pachet di inzornament nol è leiibil: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Il pachet di inzornament nol è un archivi ZIP valit."
+
+msgid "Update package ZIP archive is empty."
+msgstr "L'archivi ZIP dal pachet di inzornament al è vueit."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Il pachet di inzornament al conten une vôs ZIP no leiibile."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Il pachet di inzornament al conten un percors assolût no sigûr: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Il pachet di inzornament al conten une vôs cun path traversal: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Il pachet di inzornament al conten un colegament simbolic: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Inizi des azions post-aplicazion."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "L'esecuzion dai comants post-aplicazion e domande une conferme esplicite."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "I metadâts des racomandazions post-aplicazion a son stâts leiûts cun sucès."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Lis azions post-aplicazion a son stadis convalidadis rispiet al rapuart des racomandazions."
+
+msgid "Post-apply actions were selected."
+msgstr "Lis azions post-aplicazion a son stadis selezionadis."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Lis azions post-aplicazion avanzadis a domande une conferme avanzade esplicite."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Lis azions post-aplicazion avanzadis a son stadis confermadis in mût esplicit."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "I comants post-aplicazion selezionâts a son stâts completâts cun sucès."
+
+msgid "Post-apply command run metadata was written."
+msgstr "I metadâts de esecuzion dai comants post-aplicazion a son stâts scrits."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Lis azions post-aplicazion a son stadis completadis cun sucès."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Definizion di comant post-aplicazion di inzornament no valide: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Esecuzion de azion post-aplicazion: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Esecuzion dal comant %d di %d par %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Azion post-aplicazion falide: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Azion post-aplicazion \"%s\" falide cul codiç di jessude %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Azion post-aplicazion completade: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Il percors di staging al è necessari par eseguî lis azions post-aplicazion."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "No je nissune azion post-aplicazion racomandade di eseguî."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "No je nissune azion post-aplicazion permetude di eseguî."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "La azion post-aplicazion no je permetude par chest inzornament: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Lis migrazions de base di dâts a domande une revision di sigurece des migrazions prime de esecuzion."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Lis migrazions de base di dâts no puedin jessi eseguîdis parcè che la revision di sigurece des migrazions no je passade."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Lis migrazions de base di dâts no puedin jessi eseguîdis parcè che la revision di sigurece des migrazions no à listât lis migrazions in staging."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Lis migrazions de base di dâts no puedin jessi eseguîdis parcè che la revision di sigurece des migrazions e conten une vôs di migrazion no valide."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Dome lis migrazions %s in staging a puedin jessi eseguîdis dal esecutôr di inzornament."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Lis migrazions de base di dâts no puedin jessi eseguîdis parcè che la revision di sigurece des migrazions preparadis à segnalât erôrs blocants."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine segnalà avîs sul baseline des migrazions. Dome lis classis di migrazion preparadis %s a saran eseguîdis in mût esplicit."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Lis migrazions de base di dâts a domandin la conferme che e esist une copie di sigurece de base di dâts."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Lis migrazions de base di dâts a domandin il test di conferme \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "La revision di sigurece des migrazions de base di dâts e je stade completade prime de esecuzion."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "La esistence de copie di sigurece de base di dâts e je stade confermade in mût esplicit."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "A son stadis furnidis la revision di sigurece des migrazions de base di dâts e la conferme de copie di sigurece."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Lis migrazions de base di dâts a son stadis eseguîdis dopo une conferme esplicite de copie di sigurece. L’agjornadôr nol à creât la copie di sigurece de base di dâts."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "I permès eseguibii necessaris dopo l’aplicazion a son stâts normalizâts."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Impussibil eseguî lis migrazions de base di dâts parcè che bin/console nol è stât cjatât."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "I comants dopo l’aplicazion selezionâts a àn i percors scrivibii necessaris."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "I percors scrivibii dai comants dopo l’aplicazion a son stâts convalidâts."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Lis azions avanzadis dopo l’aplicazion a puedin modificâ dipendencis, risorsis gjeneradis o la base di dâts. Controlâ lis copiis di sigurece prime di continuâ."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer nol pues jessi eseguît in sigurece dal agjornadôr web parcè che il file gjenerât di Composer \"%s\" al è di proprietât dal UID %d intant che il runtime PHP al dopre l’UID %d. Eseguî Composer a man come proprietari de instalazion, po continuâ cu lis restantis azions dopo l’aplicazion."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Il percors domandât de azion dopo l’aplicazion \"%s\" nol è scrivibil: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "La cartele gjernitôr domandade de azion dopo l’aplicazion \"%s\" no je scrivibile: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Impussibil lei i permès pal eseguibil necessari dopo l’aplicazion: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Impussibil segnâ come eseguibil l’eseguibil necessari dopo l’aplicazion: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "L’eseguibil necessari dopo l’aplicazion nol è ancjemò eseguibil dopo chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Il permès di esecuzion al è stât normalizât."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Impussibil scrivi la configurazion Git isolade pai comants dopo l’aplicazion."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Al somee che un’altre operazion di agjornament e sedi in cors. Gjavâ var/update/update.lock dome se nissun agjornament nol è atîf."
+
+msgid "Unable to create update lock: %s"
+msgstr "Impussibil creâ il lock di agjornament: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Impussibil scrivi i metadâts di esecuzion dai comants dopo l’aplicazion: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Al manifest di agjornament i mancje il bloc dal pachet."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Il bloc de firme dal manifest di agjornament al à di jessi un ogjet."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Il bloc dai recuisîts dal manifest di agjornament al à di jessi un ogjet."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Il sha256 dal pachet di agjornament al à di jessi une stringhe esadecimâl di 64 caratars."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Al manifest di agjornament i mancje il cjamp stringhe obligatoriu \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Il cjamp dal manifest di agjornament \"%s\" al à di jessi une stringhe."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Il manifest di agjornament nol è un JSON valit: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Il JSON dal manifest di agjornament al à di jessi un ogjet."
+
+msgid "Manifest source cannot be empty."
+msgstr "La sorzint dal manifest no pues jessi vueide."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "L’URL dal manifest di agjornament al à di doprâ l’origjin uficiâl di agjornament %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Impussibil discjariâ il manifest di agjornament. Stât HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Il file dal manifest nol è leiibil: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Impussibil lei il file dal manifest: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "L’URL dal manifest di agjornament al à di doprâ HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "I metadâts dal pachet di agjornament no son leiibii: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Impussibil lei i metadâts dal pachet di agjornament: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "I metadâts dal pachet di agjornament no son un JSON valit: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "I metadâts dal pachet di agjornament a àn di jessi un ogjet JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Il formât dai metadâts dal pachet di agjornament al à di jessi %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Il cjamp \"remove\" dai metadâts dal pachet di agjornament al à di jessi un array."
+
+msgid "Update package removal paths must be strings."
+msgstr "I percors di rimozion dal pachet di agjornament a àn di jessi stringhis."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "I metadâts dal pachet di agjornament no puedin gjavâ un percors protet: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Il pachet di agjornament nol pues includi e gjavâ il stes percors: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Impussibil calcolâ il sha256 dai metadâts dal pachet di agjornament."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Il percors di rimozion dal pachet di agjornament nol pues jessi vueit."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Il percors di rimozion dal pachet di agjornament al conten un byte nul."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Il percors di rimozion dal pachet di inzornament al à di jessi relatîf: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Il percors di rimozion dal pachet di inzornament al conten un segment no sigûr: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Al è necessari un percors di staging par costruî un plan di aplicazion dal inzornament."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "La directory di staging e je cence STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Impussibil lei i metadâts di staging: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "I metadâts di staging no son un JSON valit: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "I metadâts di staging a àn di jessi un ogjet JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "I metadâts di staging a son cence il cjamp application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Il pachet di inzornament al è cence %s. I metadâts di netezement firmâts a son necessaris prime di podê aplicâ i files."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "I metadâts di staging no contegnin i metadâts di netezement dal pachet firmâts regjistrâts dilunc la estrazion."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "I metadâts di netezement dal pachet di inzornament a son cambiâts dopo dal staging. Torne a fâ il staging dal pachet verificât prime di continuâ."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "I metadâts di staging no contegnin une liste di rimozion dal pachet valide."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "I percors di netezement dal pachet di inzornament a son cambiâts dopo dal staging. Torne a fâ il staging dal pachet verificât prime di continuâ."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "I metadâts di netezement dal pachet firmâts no son cambiâts dal staging in ca."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Un file di bloc dal inzornament al esist za. Un altri inzornament al podarès jessi in cors."
+
+msgid "Update lock directory is not writable."
+msgstr "La directory dal bloc dal inzornament no je scrivibile."
+
+msgid "No update lock is currently active."
+msgstr "Nissun bloc di inzornament al è atîf in chest moment."
+
+msgid "Update backup directory is not writable."
+msgstr "La directory di backup dal inzornament no je scrivibile."
+
+msgid "Update backup directory is writable."
+msgstr "La directory di backup dal inzornament e je scrivibile."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "La directory di backup dal inzornament no pues jessi creade dal procès atuâl."
+
+msgid "Update backup directory can be created."
+msgstr "La directory di backup dal inzornament e pues jessi creade."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Cualchi directory di lavôr dal inzornament no je scrivibile o no pues jessi creade dal procès atuâl."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Lis directorys di lavôr dal inzornament a son scrivibilis o a puedin jessi creadis."
+
+msgid "Update apply file plan was generated."
+msgstr "Il plan dai files di aplicazion dal inzornament al è stât gjenerât."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "I metadâts di netezement dal pachet a contegnin percors che no si puedin gjavâ in sigurece."
+
+msgid "Package-declared removal targets are safe."
+msgstr "I obietîfs di rimozion declarâts dal pachet a son sigûrs."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Cualchi file obsolet declarât dal pachet al è za assint di cheste instalazion."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "L'inzornament planificât al sovrascrivarès o al gjavarès colegaments simbolics esistents."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "L'inzornament planificât nol sovrascrîf ni nol gjave colegaments simbolics esistents."
+
+msgid "New update migration files must be placed under %s."
+msgstr "I gnûfs files di migrazion dal inzornament a àn di jessi metûts sot di %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "A son stâts rilevâts gnûfs files di migrazion Doctrine %s. A varan dibisugne di une revision di sigurece de migrazion de base di dâts dopo vê aplicât i files."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Cualchi liste di files dal plan di aplicazion dal inzornament e je stade cjonçade te rispueste JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Impussibil scrivi i metadâts dal plan di aplicazion dal inzornament."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Impussibil discjariâ il pachet di inzornament. Stât HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Impussibil vierzi il file di destinazion dal pachet di inzornament: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "I discjariaments di inzornament a àn di doprâ la origjin uficiâl di inzornament %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "L'URL dal pachet di inzornament al à di doprâ HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "I controlis di sigurece dal archivi dal pachet di inzornament a son passâts."
+
+msgid "Update package was extracted to staging."
+msgstr "Il pachet di inzornament al è stât estrat te staging."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "I metadâts di netezement dal pachet firmâts a son stâts cjariâts."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Il pachet di inzornament nol conten %s. L'aplicazion dai files e sarà blocade fint che no si furnissin i metadâts di netezement firmâts."
+
+msgid "Staged package dry-run report was generated."
+msgstr "La relazion di prove a sec dal pachet in staging e je stade gjenerade."
+
+msgid "Staging metadata was written."
+msgstr "I metadâts di staging a son stâts scrits."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Impussibil estrai il pachet di inzornament te directory di staging."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Impussibil cjatâ la lidrîs de aplicazion Chamilo tal pachet in staging."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Il pachet in staging al è cence la vôs Chamilo necessarie: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Il pachet in staging al conten la struture Chamilo spietade."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Il pachet in staging nol conten composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Il pachet in staging al conten composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Il pachet in staging nol conten yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Il pachet preparât al conten yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Impussibil codificâ i metadâts di preparazion."
+
+msgid "Unable to write staging metadata."
+msgstr "Impussibil scrivi i metadâts di preparazion."
+
+msgid "Update operation log created."
+msgstr "Regjistri de operazion di inzornament creât."
+
+msgid "Unable to write update operation log."
+msgstr "Impussibil scrivi il regjistri de operazion di inzornament."
+
+msgid "Invalid update operation id."
+msgstr "ID de operazion di inzornament no valit."
+

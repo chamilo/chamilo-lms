@@ -40572,3 +40572,606 @@ msgstr "ზოგიერთი სამიზნე ფაილი ან �
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "ამის გამოსასწორებლად დროებით შეცვალეთ მთელი Chamilo დირექტორიის მფლობელი %s-ზე (ვებ-სერვერის მომხმარებელი), გამოიყენეთ განახლება, შემდეგ დააბრუნეთ მფლობელი %s-ზე, შემდეგ კი დააყენეთ var/-ის (და მისი შიგთავსის) მფლობელი ისევ %s-ზე, რათა აპლიკაციამ შეძლოს მასში ჩაწერის გაგრძელება."
 
+msgid "Update package verification failed."
+msgstr "განახლების პაკეტის შემოწმება ვერ მოხერხდა."
+
+msgid "Update preflight checks failed."
+msgstr "განახლების წინასწარი შემოწმებები ვერ გაიარა."
+
+msgid "Unable to stage update package."
+msgstr "განახლების პაკეტის მომზადება ვერ მოხერხდა."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "ამ სერვერზე UI-დან განახლების შემდგომი ბრძანებების გაშვება გამორთულია."
+
+msgid "Missing required field: %s"
+msgstr "აკლია სავალდებულო ველი: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "განახლების მანიფესტის წყარო არ არის მითითებული და ნაგულისხმევი მანიფესტის URL არ არის კონფიგურირებული."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "განახლების მანიფესტის URL უნდა იყენებდეს ოფიციალურ განახლების წყაროს %s. შეიძლება შეიცვალოს მხოლოდ მანიფესტის გზა."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "ლოკალური განახლების მანიფესტის გზები გამორთულია. გამოიყენეთ HTTPS მანიფესტის URL ან ლოკალური ტესტებისთვის სერვერის გარემოში დააყენეთ CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "არ მიუთითოთ HTTP %s გზა. დატოვეთ ეს ველი ცარიელი, რომ ჩამოიტვირთოს განახლების მანიფესტიდან."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "ამ გარემოში ლოკალური განახლების %s გზები გამორთულია."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "ამ გარემოში სერვერზე უნდა იყოს კონფიგურირებული სანდო განახლების საჯარო გასაღებები."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "ამ გარემოში განახლების ხელმოწერის შემოწმების გამოტოვება გამორთულია."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "განახლების შემდგომი მოქმედებების გასაშვებად საჭიროა დადასტურების ტექსტი \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "მომზადებული განახლების ფაილების გამოსაყენებლად საჭიროა დადასტურების ტექსტი \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "პროექტის დირექტორიის განსაზღვრა ვერ მოხერხდა."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "მონაცემთა ბაზის სარეზერვო ასლს ეს განახლების პროგრამა არ მართავს. მიგრაციების გაშვებამდე შექმენით და გადაამოწმეთ მონაცემთა ბაზის სარეზერვო ასლი."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine-ის მიგრაციის down() მეთოდები არ იძლევა გარანტიას წაშლილი ან გარდაქმნილი მონაცემების აღდგენაზე."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "განახლების შემდგომი მეტამონაცემები რეკომენდაციას იძლევა მონაცემთა ბაზის მიგრაციის გადახედვაზე."
+
+msgid "No migration files were found in the staged package."
+msgstr "მომზადებულ პაკეტში მიგრაციის ფაილები ვერ მოიძებნა."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "აღმოჩენილია მომზადებული Doctrine მიგრაციის ფაილები."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine მიგრაციის სამიზნე განისაზღვრა მომზადებული პაკეტიდან."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine მიგრაციის საწყის ხაზს აქვს დამაბლოკავი პრობლემები მომზადებული მიგრაციებისთვის."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine აცხადებს ისტორიული მიგრაციის საწყისი ხაზის გაფრთხილებებს, მაგრამ განხილული და აშკარად შესრულდება მხოლოდ მომზადებული %s მიგრაციები."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine აცხადებს ისტორიული მიგრაციის საწყისი ხაზის გაფრთხილებებს. განახლების პროგრამა აშკარა დადასტურების შემდეგ შეასრულებს მხოლოდ მომზადებულ %s მიგრაციის კლასებს."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine-ის საწყის ხაზს არ აქვს დამაბლოკავი პრობლემა მომზადებული %s მიგრაციებისთვის."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Doctrine-ის საცდელი გაშვება ჩავარდა სულ მცირე ერთი მომზადებული მიგრაციისთვის. მონაცემთა ბაზის მიგრაციები არ გაუშვათ, სანამ ეს არ გამოსწორდება."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Doctrine-ის საცდელი გაშვება წარმატებით დასრულდა თითოეული მომზადებული მიგრაციის კლასისთვის."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "მიგრაციების გაშვებამდე მონაცემთა ბაზის სარეზერვო ასლი უნდა შეიქმნას ამ განახლების პროგრამის გარეთ."
+
+msgid "Staging path is required to review database migrations."
+msgstr "მონაცემთა ბაზის მიგრაციების გადასახედად საჭიროა მომზადების გზა."
+
+msgid "Unable to read update %s: %s"
+msgstr "განახლების %s წაკითხვა ვერ მოხერხდა: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "განახლების %s JSON არასწორია: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "განახლების %s JSON უნდა იყოს ობიექტი."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "განახლების შემდგომი შემოწმებების მეტამონაცემები არ შეიცავს მოქმედებების სწორ სიას."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "ამ მომზადებული განახლებისთვის მონაცემთა ბაზის მიგრაციები არ იყო რეკომენდებული."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "განახლების მეტამონაცემებში აკლია მომზადებული აპლიკაციის გზა."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "დაგეგმილი მომზადებული მიგრაციის ფაილი ვერ მოიძებნა: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "მომზადებული მიგრაციის ფაილის წაკითხვა ვერ მოხერხდა: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "getDescription()-დან აღწერის ამოღება ვერ მოხერხდა."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "განახლების გამშვები მხარს უჭერს მხოლოდ %s მომზადებულ მიგრაციებს: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "მიგრაციის უსაფრთხოების მეტამონაცემების ჩაწერა ვერ მოხერხდა: %s"
+
+msgid "Migration safety check failed."
+msgstr "მიგრაციის უსაფრთხოების შემოწმება ჩავარდა."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "აღმოჩენილია მომზადებული მიგრაციის არაუსაფრთხო ფარდობითი გზა: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "დაყენებული Chamilo-ის ვერსია ავტომატურად ვერ განისაზღვრა. გააგრძელეთ მხოლოდ მას შემდეგ, რაც დაადასტურებთ, რომ ეს განახლება თავსებადია."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "დაყენებული ან სამიზნე ვერსია არ არის შედარებადი სემანტიკური ვერსიის ფორმატში. გააგრძელეთ მხოლოდ ხელით შემოწმების შემდეგ."
+
+msgid "An update is available."
+msgstr "ხელმისაწვდომია განახლება."
+
+msgid "The installed version already matches the manifest version."
+msgstr "დაყენებული ვერსია უკვე ემთხვევა მანიფესტის ვერსიას."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "მანიფესტის ვერსია უფრო ძველია, ვიდრე დაინსტალირებული ვერსია. დაქვეითება ნაგულისხმევად დაბლოკილია."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "დროებით განთავსებული ფაილები წარმატებით არ იქნა გამოყენებული. გამოყენების შემდგომი შემოწმებები ვერ გაგრძელდება."
+
+msgid "Apply result metadata was read successfully."
+msgstr "გამოყენების შედეგის მეტამონაცემები წარმატებით წაიკითხა."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "გამოყენების შემდგომი მოქმედებების რეკომენდაციები შეიქმნა."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "დროებით განთავსებულ პაკეტში აღმოჩენილია მონაცემთა ბაზის მიგრაციები. გაუშვით ისინი მხოლოდ მას შემდეგ, რაც დაადასტურებთ, რომ ფაილების განახლება სწორია და მონაცემთა ბაზის სარეზერვო ასლი არსებობს."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "გამოყენების შემდგომი შემოწმებების გასაშვებად საჭიროა დროებითი განთავსების გზა."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "განახლება %s არ არის ვალიდური JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "განახლება %s უნდა იყოს JSON ობიექტი."
+
+msgid "Composer dependencies"
+msgstr "Composer-ის დამოკიდებულებები"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "დროებით განთავსებულ პაკეტში შედიოდა Composer-ის მეტამონაცემები. განახლების დასრულებულად მიჩნევამდე გაუშვით Composer install აპლიკაციის ძირითადი დირექტორიიდან."
+
+msgid "Frontend assets"
+msgstr "ფრონტენდის რესურსები"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "დროებით განთავსებულ პაკეტში შედიოდა ფრონტენდთან დაკავშირებული ფაილები. დამოკიდებულებების დაყენების შემდეგ ხელახლა ააწყვეთ საწარმოო რესურსები."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "დროებით განთავსებულ პაკეტში აღმოჩენილია Doctrine-ის მიგრაციის ფაილები. მიგრაციების გაშვებამდე დაადასტურეთ, რომ მონაცემთა ბაზის სარეზერვო ასლი არსებობს."
+
+msgid "Symfony cache"
+msgstr "Symfony-ის ქეში"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "განახლების ფაილების გამოყენებისა და საჭირო ბრძანებების გაშვების შემდეგ გაასუფთავეთ Symfony-ის ქეში."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "გამოყენების შემდგომი შემოწმებების მეტამონაცემების ჩაწერა შეუძლებელია."
+
+msgid "Post-apply check failed."
+msgstr "გამოყენების შემდგომი შემოწმება ვერ შესრულდა."
+
+msgid "Update package is not readable: %s"
+msgstr "განახლების პაკეტი წაუკითხავია: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "განახლების პაკეტი არ არის ვალიდური ZIP არქივი."
+
+msgid "Update package ZIP archive is empty."
+msgstr "განახლების პაკეტის ZIP არქივი ცარიელია."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "განახლების პაკეტი შეიცავს წაუკითხავ ZIP ჩანაწერს."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "განახლების პაკეტი შეიცავს არაუსაფრთხო აბსოლუტურ გზას: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "განახლების პაკეტი შეიცავს გზის გავლით გასვლის ჩანაწერს: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "განახლების პაკეტი შეიცავს სიმბოლურ ბმულს: %s"
+
+msgid "Starting post-apply actions."
+msgstr "გამოყენების შემდგომი მოქმედებების დაწყება."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "გამოყენების შემდგომი ბრძანების შესრულება მოითხოვს ცალსახა დადასტურებას."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "გამოყენების შემდგომი რეკომენდაციის მეტამონაცემები წარმატებით წაიკითხა."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "გამოყენების შემდგომი მოქმედებები შემოწმდა რეკომენდაციების ანგარიშის მიხედვით."
+
+msgid "Post-apply actions were selected."
+msgstr "გამოყენების შემდგომი მოქმედებები შეირჩა."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "გაფართოებული გამოყენების შემდგომი მოქმედებები მოითხოვს ცალსახა გაფართოებულ დადასტურებას."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "გაფართოებული გამოყენების შემდგომი მოქმედებები ცალსახად დადასტურდა."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "შერჩეული გამოყენების შემდგომი ბრძანებები წარმატებით დასრულდა."
+
+msgid "Post-apply command run metadata was written."
+msgstr "გამოყენების შემდგომი ბრძანების გაშვების მეტამონაცემები ჩაიწერა."
+
+msgid "Post-apply actions completed successfully."
+msgstr "გამოყენების შემდგომი მოქმედებები წარმატებით დასრულდა."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "განახლების გამოყენების შემდგომი ბრძანების არასწორი განსაზღვრება: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "გამოყენების შემდგომი მოქმედების გაშვება: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "მიმდინარეობს ბრძანება %d / %d — %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "გამოყენების შემდგომი მოქმედება ვერ შესრულდა: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "გამოყენების შემდგომი მოქმედება \"%s\" ვერ შესრულდა გამოსვლის კოდით %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "გამოყენების შემდგომი მოქმედება დასრულდა: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "გამოყენების შემდგომი მოქმედებების გასაშვებად საჭიროა დროებითი განთავსების გზა."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "გასაშვები რეკომენდებული გამოყენების შემდგომი მოქმედებები არ არის."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "გასაშვები დაშვებული გამოყენების შემდგომი მოქმედებები არ არის."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "გამოყენების შემდგომი მოქმედება ამ განახლებისთვის დაუშვებელია: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "მონაცემთა ბაზის მიგრაციები შესრულებამდე მოითხოვს მიგრაციის უსაფრთხოების განხილვას."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "მონაცემთა ბაზის მიგრაციები ვერ გაეშვება, რადგან მიგრაციის უსაფრთხოების განხილვა არ გაიარა."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "მონაცემთა ბაზის მიგრაციები ვერ გაეშვება, რადგან მიგრაციის უსაფრთხოების განხილვაში არ არის ჩამოთვლილი დროებით განთავსებული მიგრაციები."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "მონაცემთა ბაზის მიგრაციები ვერ გაეშვება, რადგან მიგრაციის უსაფრთხოების განხილვა შეიცავს არასწორ მიგრაციის ჩანაწერს."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "განახლების გამშვებს შეუძლია შეასრულოს მხოლოდ დროებით განთავსებული %s მიგრაციები."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "მონაცემთა ბაზის მიგრაციები ვერ გაეშვება, რადგან დროებით განთავსებული მიგრაციის უსაფრთხოების განხილვამ დააფიქსირა დამბლოკავი შეცდომები."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine აფიქსირებს მიგრაციის საწყისი ხაზის გაფრთხილებებს. აშკარად შესრულდება მხოლოდ დადგმული %s მიგრაციის კლასები."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "მონაცემთა ბაზის მიგრაციებისთვის საჭიროა დადასტურება, რომ არსებობს მონაცემთა ბაზის სარეზერვო ასლი."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "მონაცემთა ბაზის მიგრაციებისთვის საჭიროა დადასტურების ტექსტი \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "მონაცემთა ბაზის მიგრაციის უსაფრთხოების განხილვა შესრულებამდე დასრულდა."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "მონაცემთა ბაზის სარეზერვო ასლის არსებობა აშკარად დადასტურდა."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "მონაცემთა ბაზის მიგრაციის უსაფრთხოების განხილვა და სარეზერვო ასლის დადასტურება მოწოდებულია."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "მონაცემთა ბაზის მიგრაციები შესრულდა მონაცემთა ბაზის სარეზერვო ასლის აშკარა დადასტურების შემდეგ. განახლებამ სარეზერვო ასლი არ შექმნა."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "გამოყენების შემდგომი საჭირო შესრულებადი ფაილების უფლებები ნორმალიზდა."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "მონაცემთა ბაზის მიგრაციების გაშვება შეუძლებელია, რადგან bin/console ვერ მოიძებნა."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "არჩეულ გამოყენების შემდგომ ბრძანებებს აქვთ საჭირო ჩაწერადი გზები."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "გამოყენების შემდგომი ბრძანების ჩაწერადი გზები დადასტურდა."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "გამოყენების შემდგომი გაფართოებული მოქმედებები შეიძლება შეცვალოს დამოკიდებულებები, გენერირებული რესურსები ან მონაცემთა ბაზა. გაგრძელებამდე გადახედეთ სარეზერვო ასლებს."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer ვებგანახლებიდან უსაფრთხოდ ვერ გაეშვება, რადგან Composer-ის მიერ გენერირებული ფაილი \"%s\" ეკუთვნის UID %d-ს, ხოლო PHP გარემო იყენებს UID %d-ს. გაუშვით Composer ხელით განლაგების მფლობელის სახელით, შემდეგ გააგრძელეთ დარჩენილი გამოყენების შემდგომი მოქმედებები."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "გამოყენების შემდგომი მოქმედების \"%s\" საჭირო გზა არ არის ჩაწერადი: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "გამოყენების შემდგომი მოქმედების \"%s\" საჭირო მშობელი დირექტორია არ არის ჩაწერადი: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "გამოყენების შემდგომი საჭირო შესრულებადი ფაილის უფლებების წაკითხვა შეუძლებელია: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "გამოყენების შემდგომი საჭირო შესრულებადი ფაილის შესრულებადად მონიშვნა შეუძლებელია: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "გამოყენების შემდგომი საჭირო შესრულებადი ფაილი chmod-ის შემდეგაც არ არის შესრულებადი: %s"
+
+msgid "Executable permission was normalized."
+msgstr "შესრულების უფლება ნორმალიზდა."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "გამოყენების შემდგომი ბრძანებებისთვის იზოლირებული Git კონფიგურაციის ჩაწერა შეუძლებელია."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "როგორც ჩანს, სხვა განახლების ოპერაცია მიმდინარეობს. წაშალეთ var/update/update.lock მხოლოდ იმ შემთხვევაში, თუ განახლება აქტიური არ არის."
+
+msgid "Unable to create update lock: %s"
+msgstr "განახლების ბლოკირების შექმნა შეუძლებელია: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "გამოყენების შემდგომი ბრძანების გაშვების მეტამონაცემების ჩაწერა შეუძლებელია: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "განახლების მანიფესტს აკლია პაკეტის ბლოკი."
+
+msgid "Update manifest signature block must be an object."
+msgstr "განახლების მანიფესტის ხელმოწერის ბლოკი უნდა იყოს ობიექტი."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "განახლების მანიფესტის მოთხოვნების ბლოკი უნდა იყოს ობიექტი."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "განახლების პაკეტის sha256 უნდა იყოს 64 სიმბოლოს ჰექსადეციმალური სტრიქონი."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "განახლების მანიფესტს აკლია საჭირო სტრიქონული ველი \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "განახლების მანიფესტის ველი \"%s\" უნდა იყოს სტრიქონი."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "განახლების მანიფესტი არ არის ვალიდური JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "განახლების მანიფესტის JSON უნდა იყოს ობიექტი."
+
+msgid "Manifest source cannot be empty."
+msgstr "მანიფესტის წყარო არ შეიძლება იყოს ცარიელი."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "განახლების მანიფესტის URL უნდა იყენებდეს ოფიციალურ განახლების წარმოშობას %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "განახლების მანიფესტის ჩამოტვირთვა შეუძლებელია. HTTP სტატუსი: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "მანიფესტის ფაილი არ არის წაკითხვადი: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "მანიფესტის ფაილის წაკითხვა შეუძლებელია: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "განახლების მანიფესტის URL უნდა იყენებდეს HTTPS-ს."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "განახლების პაკეტის მეტამონაცემები არ არის წაკითხვადი: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "განახლების პაკეტის მეტამონაცემების წაკითხვა შეუძლებელია: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "განახლების პაკეტის მეტამონაცემები არ არის ვალიდური JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "განახლების პაკეტის მეტამონაცემები უნდა იყოს JSON ობიექტი."
+
+msgid "Update package metadata format must be %d."
+msgstr "განახლების პაკეტის მეტამონაცემების ფორმატი უნდა იყოს %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "განახლების პაკეტის მეტამონაცემების ველი \"remove\" უნდა იყოს მასივი."
+
+msgid "Update package removal paths must be strings."
+msgstr "განახლების პაკეტის წაშლის გზები უნდა იყოს სტრიქონები."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "განახლების პაკეტის მეტამონაცემები ვერ წაშლის დაცულ გზას: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "განახლების პაკეტი ვერ შეიცავს და წაშლის ერთსა და იმავე გზას: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "განახლების პაკეტის მეტამონაცემების sha256-ის გამოთვლა შეუძლებელია."
+
+msgid "Update package removal path cannot be empty."
+msgstr "განახლების პაკეტის წაშლის გზა არ შეიძლება იყოს ცარიელი."
+
+msgid "Update package removal path contains a null byte."
+msgstr "განახლების პაკეტის წაშლის გზა შეიცავს ნულოვან ბაიტს."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "განახლების პაკეტის წაშლის გზა უნდა იყოს ფარდობითი: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "განახლების პაკეტის წაშლის გზა შეიცავს არაუსაფრთხო სეგმენტს: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "განახლების გამოყენების გეგმის ასაგებად საჭიროა დროებითი (staging) გზა."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "დროებით დირექტორიაში აკლია STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "დროებითი მეტამონაცემების წაკითხვა ვერ მოხერხდა: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "დროებითი მეტამონაცემები არ არის სწორი JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "დროებითი მეტამონაცემები უნდა იყოს JSON ობიექტი."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "დროებით მეტამონაცემებში აკლია ველი application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "განახლების პაკეტში აკლია %s. ხელმოწერილი გასუფთავების მეტამონაცემები აუცილებელია ფაილების გამოყენებამდე."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "დროებით მეტამონაცემებში არ არის ხელმოწერილი პაკეტის გასუფთავების მეტამონაცემები, რომლებიც ჩაიწერა ამოღებისას."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "განახლების პაკეტის გასუფთავების მეტამონაცემები შეიცვალა დროებით განთავსების შემდეგ. გაგრძელებამდე ხელახლა განათავსეთ შემოწმებული პაკეტი."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "დროებით მეტამონაცემებში არ არის პაკეტის წაშლის სწორი სია."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "განახლების პაკეტის გასუფთავების გზები შეიცვალა დროებით განთავსების შემდეგ. გაგრძელებამდე ხელახლა განათავსეთ შემოწმებული პაკეტი."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "ხელმოწერილი პაკეტის გასუფთავების მეტამონაცემები უცვლელია დროებითი განთავსების შემდეგ."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "განახლების ბლოკირების ფაილი უკვე არსებობს. შესაძლოა სხვა განახლება მიმდინარეობდეს."
+
+msgid "Update lock directory is not writable."
+msgstr "განახლების ბლოკირების დირექტორია არ არის ჩაწერადი."
+
+msgid "No update lock is currently active."
+msgstr "ამჟამად განახლების ბლოკირება აქტიური არ არის."
+
+msgid "Update backup directory is not writable."
+msgstr "განახლების სარეზერვო დირექტორია არ არის ჩაწერადი."
+
+msgid "Update backup directory is writable."
+msgstr "განახლების სარეზერვო დირექტორია ჩაწერადია."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "განახლების სარეზერვო დირექტორიის შექმნა მიმდინარე პროცესით შეუძლებელია."
+
+msgid "Update backup directory can be created."
+msgstr "განახლების სარეზერვო დირექტორიის შექმნა შესაძლებელია."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "განახლების ზოგიერთი სამუშაო დირექტორია არ არის ჩაწერადი ან მიმდინარე პროცესით ვერ იქმნება."
+
+msgid "Update working directories are writable or can be created."
+msgstr "განახლების სამუშაო დირექტორიები ჩაწერადია ან შეიძლება შეიქმნას."
+
+msgid "Update apply file plan was generated."
+msgstr "განახლების ფაილების გამოყენების გეგმა შეიქმნა."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "პაკეტის გასუფთავების მეტამონაცემები შეიცავს გზებს, რომელთა უსაფრთხოდ წაშლა შეუძლებელია."
+
+msgid "Package-declared removal targets are safe."
+msgstr "პაკეტში მითითებული წაშლის სამიზნეები უსაფრთხოა."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "პაკეტში მითითებული ზოგიერთი მოძველებული ფაილი ამ ინსტალაციაში უკვე არ არსებობს."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "დაგეგმილი განახლება გადაწერს ან წაშლის არსებულ სიმბოლურ ბმულებს."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "დაგეგმილი განახლება არ გადაწერს და არ წაშლის არსებულ სიმბოლურ ბმულებს."
+
+msgid "New update migration files must be placed under %s."
+msgstr "განახლების ახალი მიგრაციის ფაილები უნდა განთავსდეს %s-ში."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "აღმოჩენილია ახალი %s Doctrine მიგრაციის ფაილები. ფაილების გამოყენების შემდეგ საჭირო იქნება მონაცემთა ბაზის მიგრაციის უსაფრთხოების შემოწმება."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "განახლების გამოყენების გეგმის ზოგიერთი ფაილების სია JSON პასუხში შემოკლებულია."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "განახლების გამოყენების გეგმის მეტამონაცემების ჩაწერა ვერ მოხერხდა."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "განახლების პაკეტის ჩამოტვირთვა ვერ მოხერხდა. HTTP სტატუსი: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "განახლების პაკეტის სამიზნე ფაილის გახსნა ვერ მოხერხდა: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "განახლების ჩამოტვირთვები უნდა იყენებდეს ოფიციალურ განახლების წყაროს %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "განახლების პაკეტის URL უნდა იყენებდეს HTTPS-ს."
+
+msgid "Update package archive safety checks passed."
+msgstr "განახლების პაკეტის არქივის უსაფრთხოების შემოწმებები წარმატებით გაიარა."
+
+msgid "Update package was extracted to staging."
+msgstr "განახლების პაკეტი ამოიღეს დროებით დირექტორიაში."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "ხელმოწერილი პაკეტის გასუფთავების მეტამონაცემები ჩაიტვირთა."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "განახლების პაკეტი არ შეიცავს %s. ფაილების გამოყენება დაიბლოკება, სანამ ხელმოწერილი გასუფთავების მეტამონაცემები არ იქნება მოწოდებული."
+
+msgid "Staged package dry-run report was generated."
+msgstr "დროებით განთავსებული პაკეტის საცდელი გაშვების ანგარიში შეიქმნა."
+
+msgid "Staging metadata was written."
+msgstr "დროებითი მეტამონაცემები ჩაიწერა."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "განახლების პაკეტის ამოღება დროებით დირექტორიაში ვერ მოხერხდა."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "დროებით პაკეტში Chamilo აპლიკაციის ფესვი ვერ მოიძებნა."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "დროებით პაკეტში აკლია Chamilo-ს საჭირო ჩანაწერი: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "დროებით პაკეტი შეიცავს მოსალოდნელ Chamilo სტრუქტურას."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "დროებით პაკეტში არ არის composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "დროებით პაკეტი შეიცავს composer.lock-ს."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "დროებით პაკეტში არ არის yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "დროებით პაკეტი შეიცავს yarn.lock-ს."
+
+msgid "Unable to encode staging metadata."
+msgstr "სტეიჯინგის მეტამონაცემების კოდირება ვერ მოხერხდა."
+
+msgid "Unable to write staging metadata."
+msgstr "სტეიჯინგის მეტამონაცემების ჩაწერა ვერ მოხერხდა."
+
+msgid "Update operation log created."
+msgstr "განახლების ოპერაციის ჟურნალი შეიქმნა."
+
+msgid "Unable to write update operation log."
+msgstr "განახლების ოპერაციის ჟურნალის ჩაწერა ვერ მოხერხდა."
+
+msgid "Invalid update operation id."
+msgstr "განახლების ოპერაციის არასწორი იდენტიფიკატორი."
+

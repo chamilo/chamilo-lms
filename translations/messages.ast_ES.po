@@ -37011,15 +37011,6 @@ msgstr "Clave pública de confianza"
 msgid "Trusted signing key"
 msgstr "Clave de robla de confianza"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Escribi APLICAR FICHEROS D'ANOVAMIENTU pa confirmar"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Escribi EXECUTAR MIGRACIONES DE BASE DE DATOS pa confirmar les migraciones de la base de datos"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Escribi EXECUTAR AIONES POST-ANOVAMIENTU pa confirmar"
-
 msgid "Unknown update notice source."
 msgstr "Fonte d'avisu d'anovamientu desconocida."
 
@@ -40577,4 +40568,607 @@ msgstr "Dalgunos ficheros o direutorios de destín nun se pueden escribir o desa
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Pa iguar esto, camuda temporalmente'l propietariu de too el direutoriu de Chamilo a %s (l'usuariu del sirvidor web), aplica l'actualización, vuelve a camudar el propietariu a %s dempués, y depués afita'l propietariu de var/ (y el so conteníu) otra vegada a %s pa que l'aplicación pueda siguir escribiendo nél."
+
+msgid "Update package verification failed."
+msgstr "Falló la verificación del paquete d'actualización."
+
+msgid "Update preflight checks failed."
+msgstr "Fallaron les comprobaciones previes a l'actualización."
+
+msgid "Unable to stage update package."
+msgstr "Nun se pudo preparar el paquete d'actualización."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Nesti sirvidor ta desactiváu executar dende la interfaz los comandos posteriores a l'aplicación."
+
+msgid "Missing required field: %s"
+msgstr "Falta'l campu obligatoriu: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Nun se proporcionó nenguna fonte de manifiestu d'actualización y nun hai configurada nenguna URL predeterminada de manifiestu d'actualización."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "La URL del manifiestu d'actualización tien d'usar l'orixe oficial d'actualización %s. Namái se pue cambiar el camín del manifiestu."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Los caminos locales de manifiestu d'actualización tán desactivaos. Use una URL HTTPS de manifiestu o defina CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 nel entornu del sirvidor pa pruebes locales."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Nun proporcione un camín HTTP %s. Deixe esti campu baleru pa descargalu dende'l manifiestu d'actualización."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Los caminos locales d'actualización %s tán desactivaos nesti entornu."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Nesti entornu tienen de tar configuraes nel sirvidor les claves públiques d'actualización de confianza."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Nesti entornu ta desactiváu saltase la verificación de la firma d'actualización."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Pa executar les aiciones posteriores a l'aplicación de l'actualización fai falta'l testu de confirmación \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Pa aplicar los ficheros d'actualización preparaos fai falta'l testu de confirmación \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Nun se pudo resolver el direutoriu del proyeutu."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Esta ferramienta d'actualización nun xestiona la copia de seguridá de la base de datos. Cree y compruebe una copia de seguridá de la base de datos enantes d'executar les migraciones."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Los métodos down() de les migraciones de Doctrine nun garantizen restaurar datos esborraos o tresformaos."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Los metadatos posteriores a l'aplicación aconseyen revisar les migraciones de la base de datos."
+
+msgid "No migration files were found in the staged package."
+msgstr "Nun s'atoparon ficheros de migración nel paquete preparáu."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Detectáronse ficheros de migración de Doctrine nel paquete preparáu."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "El destín de la migración de Doctrine resolvióse dende'l paquete preparáu."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "La llinia base de migraciones de Doctrine tien problemes que bloquien les migraciones preparaes."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine informa d'avisos históricos na llinia base de migraciones, pero namái se van revisar y executar de forma esplícita les migraciones %s preparaes."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine informa d'avisos históricos na llinia base de migraciones. L'actualizador namái va executar les clases de migración %s preparaes tres una confirmación esplícita."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "La llinia base de Doctrine nun tien nengún problema que bloquie les migraciones %s preparaes."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Falló la simulación (dry-run) de Doctrine pa polo menos una migración preparada. Nun execute les migraciones de la base de datos hasta que se iguare esto."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "La simulación (dry-run) de Doctrine completóse con ésitu pa cada clase de migración preparada."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Hai que crear una copia de seguridá de la base de datos fuera d'esta ferramienta d'actualización enantes d'executar les migraciones."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Fai falta'l camín de preparación pa revisar les migraciones de la base de datos."
+
+msgid "Unable to read update %s: %s"
+msgstr "Nun se pudo lleer l'actualización %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "El JSON d'actualización %s nun ye válidu: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "El JSON d'actualización %s tien de ser un oxetu."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Los metadatos de comprobaciones posteriores a l'aplicación nun contienen una llista d'aiciones válida."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Nun s'aconseyaron migraciones de base de datos pa esta actualización preparada."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Nos metadatos d'actualización falta'l camín de l'aplicación preparada."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Nun s'atopó'l ficheru de migración preparada planiáu: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Nun se pudo lleer el ficheru de migración preparada: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Nun se pudo extraer nenguna descripción de getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "L'executor d'actualizaciones namái admite %s migraciones preparaes: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Nun se pudieron escribir los metadatos de seguridá de la migración: %s"
+
+msgid "Migration safety check failed."
+msgstr "Falló la comprobación de seguridá de la migración."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Detectóse un camín relativu de migración preparada inseguru: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Nun se pudo detectar automáticamente la versión instalada de Chamilo. Siga namái dempués de confirmar que esta actualización ye compatible."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "La versión instalada o de destín nun ta nun formatu de versión semántica comparable. Siga namái dempués d'una verificación manual."
+
+msgid "An update is available."
+msgstr "Hai una actualización disponible."
+
+msgid "The installed version already matches the manifest version."
+msgstr "La versión instalada yá coincide cola versión del manifiestu."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "La versión del manifiestu ye anterior a la versión instalada. Les baxaes de versión tán bloquiaes de forma predeterminada."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Los ficheros preparaos nun s'aplicaron correutamente. Les comprobaciones posteriores a l'aplicación nun puen siguir."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Los metadatos del resultáu de l'aplicación lleéronse correutamente."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Xeneráronse les recomendaciones d'aiciones post-aplicación."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Detectáronse migraciones de base de datos nel paquete preparáu. Execútales namái dempués de confirmar que l'actualización de ficheros ye correuta y qu'esiste una copia de seguridá de la base de datos."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Ríquese la ruta de preparación pa executar les comprobaciones post-aplicación."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "L'actualización %s nun ye JSON válidu: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "L'actualización %s tien de ser un oxetu JSON."
+
+msgid "Composer dependencies"
+msgstr "Dependencies de Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Incluyóse metadatos de Composer nel paquete preparáu. Executa Composer install dende la raíz de l'aplicación enantes de considerar completa l'actualización."
+
+msgid "Frontend assets"
+msgstr "Recursos del frontend"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Incluyéronse ficheros rellacionaos col frontend nel paquete preparáu. Reconstruyi los recursos de producción dempués d'instalar les dependencies."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Detectáronse ficheros de migración de Doctrine nel paquete preparáu. Confirma qu'esiste una copia de seguridá de la base de datos enantes d'executar les migraciones."
+
+msgid "Symfony cache"
+msgstr "Caché de Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Llimpia la caché de Symfony dempués d'aplicar los ficheros d'actualización y executar cualesquier comandu riquíu."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Nun se pudo escribir los metadatos de les comprobaciones post-aplicación."
+
+msgid "Post-apply check failed."
+msgstr "Falló la comprobación post-aplicación."
+
+msgid "Update package is not readable: %s"
+msgstr "El paquete d'actualización nun ye lleíble: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "El paquete d'actualización nun ye un archivu ZIP válidu."
+
+msgid "Update package ZIP archive is empty."
+msgstr "L'archivu ZIP del paquete d'actualización ta vacíu."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "El paquete d'actualización contiene una entrada ZIP que nun se pue lleer."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "El paquete d'actualización contiene un camín absolutu inseguru: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "El paquete d'actualización contiene una entrada de recorríu de camín: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "El paquete d'actualización contiene un enllaz simbólicu: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Entamando les aiciones post-aplicación."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "L'execución de comandos post-aplicación riquier confirmación esplícita."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Lléyense correutamente los metadatos de recomendación post-aplicación."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Les aiciones post-aplicación validáronse contra l'informe de recomendaciones."
+
+msgid "Post-apply actions were selected."
+msgstr "Seleccionáronse les aiciones post-aplicación."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Les aiciones post-aplicación avanzaes riquen confirmación avanzada esplícita."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Les aiciones post-aplicación avanzaes confirmáronse de forma esplícita."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Los comandos post-aplicación escoyíos completáronse correutamente."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Escribiéronse los metadatos d'execución de comandos post-aplicación."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Les aiciones post-aplicación completáronse correutamente."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Definición inválida de comandu post-aplicación d'actualización: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Executando aición post-aplicación: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Executando'l comandu %d de %d pa %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Falló l'aición post-aplicación: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "L'aición post-aplicación \"%s\" falló col códigu de salida %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Completóse l'aición post-aplicación: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Ríquese la ruta de preparación pa executar les aiciones post-aplicación."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Nun hai aiciones post-aplicación recomendaes pa executar."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Nun hai aiciones post-aplicación permitíes pa executar."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "L'aición post-aplicación nun ta permitida pa esta actualización: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Les migraciones de base de datos riquen una revisión de seguridá de migración enantes de la execución."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Les migraciones de base de datos nun se puen executar porque la revisión de seguridá de migración nun pasó."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Les migraciones de base de datos nun se puen executar porque la revisión de seguridá de migración nun llistó les migraciones preparaes."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Les migraciones de base de datos nun se puen executar porque la revisión de seguridá de migración contiene una entrada de migración inválida."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Namái les migraciones %s preparaes puen executase pol executor d'actualizaciones."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Les migraciones de base de datos nun se puen executar porque la revisión de seguridá de migraciones preparaes informó d'errores de bloquéu."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine informa d'avisos de llinia base de migración. Namái s'executarán de forma esplícita les clases de migración %s preparaes."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Les migraciones de base de datos riquen confirmación de qu'esiste una copia de seguridá de la base de datos."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Les migraciones de base de datos riquen el testu de confirmación \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "La revisión de seguridá de la migración de la base de datos completóse enantes de la execución."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Confirmóse esplicitamente la esistencia d'una copia de seguridá de la base de datos."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Apurriéronse la revisión de seguridá de la migración de la base de datos y la confirmación de la copia de seguridá."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Les migraciones de la base de datos executáronse tres una confirmación esplicita de la copia de seguridá. L'actualizador nun creó la copia de seguridá de la base de datos."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Normalizáronse los permisos d'execución riquíos tres l'aplicación."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Nun se puen executar les migraciones de la base de datos porque nun s'atopó bin/console."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Los comandos posteriores a l'aplicación esbillaos tienen les rutes escribibles riquíes."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Validáronse les rutes escribibles de los comandos posteriores a l'aplicación."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Les aiciones avanzaes posteriores a l'aplicación puen modificar dependencies, recursos xeneraos o la base de datos. Revise les copies de seguridá enantes de siguir."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer nun se pue executar de forma segura dende l'actualizador web porque'l ficheru xeneráu por Composer \"%s\" pertenez al UID %d mentanto que'l runtime de PHP usa l'UID %d. Execute Composer de forma manual como propietariu del despliegu y depués siga coles demás aiciones posteriores a l'aplicación."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "La ruta riquida pola aición posterior a l'aplicación \"%s\" nun ye escribible: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "El direutoriu padre riquíu pola aición posterior a l'aplicación \"%s\" nun ye escribible: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Nun se puen lleer los permisos del executable riquíu posterior a l'aplicación: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Nun se pue marcar como executable l'executable riquíu posterior a l'aplicación: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "L'executable riquíu posterior a l'aplicación entá nun ye executable tres chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Normalizóse'l permisu d'execución."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Nun se pue escribir la configuración aislada de Git pa los comandos posteriores a l'aplicación."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Paez qu'hai otra operación d'actualización n'execución. Desanicie var/update/update.lock namái si nun hai nenguna actualización activa."
+
+msgid "Unable to create update lock: %s"
+msgstr "Nun se pue crear el bloquéu d'actualización: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Nun se puen escribir los metadatos d'execución del comandu posterior a l'aplicación: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Al manifiestu d'actualización fálta-y el bloque del paquete."
+
+msgid "Update manifest signature block must be an object."
+msgstr "El bloque de firma del manifiestu d'actualización tien de ser un oxetu."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "El bloque de requisitos del manifiestu d'actualización tien de ser un oxetu."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "El sha256 del paquete d'actualización tien de ser una cadena hexadecimal de 64 caráuteres."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Al manifiestu d'actualización fálta-y el campu de cadena riquíu \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "El campu del manifiestu d'actualización \"%s\" tien de ser una cadena."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "El manifiestu d'actualización nun ye JSON válidu: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "El JSON del manifiestu d'actualización tien de ser un oxetu."
+
+msgid "Manifest source cannot be empty."
+msgstr "La fonte del manifiestu nun pue tar vacía."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "La URL del manifiestu d'actualización tien d'usar l'orixe oficial d'actualización %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Nun se pue descargar el manifiestu d'actualización. Estáu HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "El ficheru del manifiestu nun ye lleíble: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Nun se pue lleer el ficheru del manifiestu: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "La URL del manifiestu d'actualización tien d'usar HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Los metadatos del paquete d'actualización nun son lleíbles: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Nun se puen lleer los metadatos del paquete d'actualización: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Los metadatos del paquete d'actualización nun son JSON válidu: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Los metadatos del paquete d'actualización tienen de ser un oxetu JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "El formatu de los metadatos del paquete d'actualización tien de ser %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "El campu \"remove\" de los metadatos del paquete d'actualización tien de ser una matriz."
+
+msgid "Update package removal paths must be strings."
+msgstr "Les rutes de desaniciu del paquete d'actualización tienen de ser cadenes."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Los metadatos del paquete d'actualización nun puen desaniciar la ruta protexida: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "El paquete d'actualización nun pue incluir y desaniciar la mesma ruta: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Nun se pue calcular el sha256 de los metadatos del paquete d'actualización."
+
+msgid "Update package removal path cannot be empty."
+msgstr "La ruta de desaniciu del paquete d'actualización nun pue tar vacía."
+
+msgid "Update package removal path contains a null byte."
+msgstr "La ruta de desaniciu del paquete d'actualización contién un byte nulu."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "La ruta de desaniciu del paquete d'actualización tien de ser relativa: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "La ruta de desaniciu del paquete d'actualización contién un segmentu inseguru: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Fai falta una ruta d'ensayu pa construyir un plan d'aplicación de l'actualización."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Al direutoriu d'ensayu fálta-y STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Nun se puen lleer los metadatos de staging: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Los metadatos de staging nun son JSON válidu: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Los metadatos de staging tienen de ser un oxetu JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "A los metadatos de staging fálta-yos el campu application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Al paquete d'actualización fálta-y %s. Precísense metadatos de llimpieza firmaos enantes de poder aplicar los ficheros."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Los metadatos de staging nun contienen los metadatos de llimpieza del paquete firmaos rexistraos durante la estraición."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Los metadatos de llimpieza del paquete d'actualización camudaron dempués del staging. Vuelva a poner n'escena'l paquete verificáu enantes de siguir."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Los metadatos de staging nun contienen una llista válida de desaniciu del paquete."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Los caminos de llimpieza del paquete d'actualización camudaron dempués del staging. Vuelva a poner n'escena'l paquete verificáu enantes de siguir."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Los metadatos de llimpieza del paquete firmaos nun camudaron dende'l staging."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Yá esiste un ficheru de bloquéu d'actualización. Pue haber otra actualización en cursu."
+
+msgid "Update lock directory is not writable."
+msgstr "El direutoriu de bloquéu d'actualización nun ye escribible."
+
+msgid "No update lock is currently active."
+msgstr "Nun hai nengún bloquéu d'actualización activu anguaño."
+
+msgid "Update backup directory is not writable."
+msgstr "El direutoriu de copia de seguridá d'actualización nun ye escribible."
+
+msgid "Update backup directory is writable."
+msgstr "El direutoriu de copia de seguridá d'actualización ye escribible."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "El procesu actual nun pue crear el direutoriu de copia de seguridá d'actualización."
+
+msgid "Update backup directory can be created."
+msgstr "Pue crease'l direutoriu de copia de seguridá d'actualización."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Dalgunos direutorios de trabayu d'actualización nun son escribibles o'l procesu actual nun pue crealos."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Los direutorios de trabayu d'actualización son escribibles o puen crease."
+
+msgid "Update apply file plan was generated."
+msgstr "Xeneróse'l plan d'aplicación de ficheros d'actualización."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Los metadatos de llimpieza del paquete contienen caminos que nun puen desaniciase de forma segura."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Los destinos de desaniciu declaraos pol paquete son seguros."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Dalgunos ficheros obsoletos declaraos pol paquete yá nun tán nesta instalación."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "L'actualización planiada sobrescribiría o desaniciaría enllaces simbólicos esistentes."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "L'actualización planiada nun sobrescribe nin desanicia enllaces simbólicos esistentes."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Los ficheros nuevos de migración d'actualización tienen de allugase so %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Detectáronse ficheros nuevos de migración Doctrine %s. Precisarán una revisión de seguridá de migración de base de datos dempués d'aplicar los ficheros."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Dalgunes llistes de ficheros del plan d'aplicación d'actualización truncáronse na respuesta JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Nun se puen escribir los metadatos del plan d'aplicación d'actualización."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Nun se pue descargar el paquete d'actualización. Estáu HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Nun se pue abrir el ficheru destín del paquete d'actualización: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Les descargues d'actualización tienen d'usar l'orixe oficial d'actualización %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "La URL del paquete d'actualización tien d'usar HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Les comprobaciones de seguridá del archivu del paquete d'actualización pasaron."
+
+msgid "Update package was extracted to staging."
+msgstr "El paquete d'actualización estrayóse a staging."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Cargáronse los metadatos de llimpieza del paquete firmaos."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "El paquete d'actualización nun contiene %s. Bloquiaráse l'aplicación de ficheros fasta que se proporcionen metadatos de llimpieza firmaos."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Xeneróse l'informe de simulación (dry-run) del paquete n'escena."
+
+msgid "Staging metadata was written."
+msgstr "Escribiéronse los metadatos de staging."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Nun se pue estrayer el paquete d'actualización al direutoriu de staging."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Nun se pue llocalizar la raíz de l'aplicación Chamilo nel paquete n'escena."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Al paquete n'escena fálta-y la entrada riquida de Chamilo: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "El paquete n'escena contiene la estructura esperada de Chamilo."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "El paquete n'escena nun contiene composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "El paquete n'escena contiene composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "El paquete n'escena nun contiene yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "El paquete n'escena contiene yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Nun se puen codificar los metadatos de staging."
+
+msgid "Unable to write staging metadata."
+msgstr "Nun se puen escribir los metadatos de staging."
+
+msgid "Update operation log created."
+msgstr "Creóse'l rexistru d'operación d'actualización."
+
+msgid "Unable to write update operation log."
+msgstr "Nun se pudo escribir el rexistru de la operación d'actualización."
+
+msgid "Invalid update operation id."
+msgstr "ID d'operación d'actualización inválidu."
 

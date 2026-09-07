@@ -37015,7 +37015,7 @@ msgid "Type APPLY UPDATE FILES to confirm"
 msgstr "พิมพ์ APPLY UPDATE FILES เพื่อยืนยัน"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "พิมพ์ RUN DATABASE MIGRATIONS เพื่อยืนยันการย้ายข้อมูลฐานข้อมูล"
+msgstr "พิมพ์ RUN DATABASE MIGRATIONS เพื่อยืนยันการย้ายฐานข้อมูล"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
 msgstr "พิมพ์ RUN POST UPDATE ACTIONS เพื่อยืนยัน"
@@ -40235,4 +40235,949 @@ msgstr "เมืองที่ฝึกงาน"
 
 msgid "City"
 msgstr "เมือง"
+
+msgid "Update workflow restored after page refresh"
+msgstr "กู้คืนขั้นตอนการอัปเดตแล้วหลังรีเฟรชหน้า"
+
+msgid "Last completed step"
+msgstr "ขั้นตอนที่เสร็จล่าสุด"
+
+msgid "Stage package"
+msgstr "จัดเตรียมแพ็กเกจ"
+
+msgid "Package staging"
+msgstr "การจัดเตรียมแพ็กเกจ"
+
+msgid "Apply plan"
+msgstr "แผนการนำไปใช้"
+
+msgid "Update workflow completed"
+msgstr "ขั้นตอนการอัปเดตเสร็จสมบูรณ์"
+
+msgid "Update directory exists and is writable."
+msgstr "ไดเรกทอรีอัปเดตมีอยู่และสามารถเขียนได้"
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "ไดเรกทอรีอัปเดตมีอยู่แต่ไม่สามารถเขียนได้: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "ไดเรกทอรีอัปเดตยังไม่มี แต่ไดเรกทอรีแม่สามารถเขียนได้"
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "ไดเรกทอรีอัปเดตยังไม่มี แต่สามารถสร้างภายใต้ var/ ได้"
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "ไดเรกทอรีอัปเดตไม่มีอยู่และไม่สามารถสร้างได้ด้วยสิทธิ์ปัจจุบัน"
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "ไม่สามารถระบุพื้นที่ดิสก์ว่างสำหรับการตรวจสอบก่อนอัปเดตได้"
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "พื้นที่ดิสก์ว่างไม่เพียงพอสำหรับการจัดเตรียมอัปเดตอย่างปลอดภัย"
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "พื้นที่ดิสก์ว่างเพียงพอสำหรับขั้นตอนการอัปเดตในขั้นตรวจสอบนี้"
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "ไฟล์ manifest ของการอัปเดตไม่ได้กำหนดข้อกำหนดเวอร์ชัน PHP"
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "ไม่สามารถประเมินข้อกำหนด PHP ได้ครบถ้วน: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "เวอร์ชัน PHP ปัจจุบันไม่ตรงตามข้อกำหนดการอัปเดต: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "เวอร์ชัน PHP ปัจจุบันตรงตามข้อกำหนดการอัปเดต"
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "ไม่ได้ระบุเส้นทางแพ็กเกจในเครื่อง แพ็กเกจที่ดาวน์โหลดสามารถตรวจสอบได้หลังดาวน์โหลดเท่านั้น"
+
+msgid "Local update package is not readable: %s"
+msgstr "แพ็กเกจอัปเดตในเครื่องอ่านไม่ได้: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "แพ็กเกจอัปเดตในเครื่องต้องเป็นไฟล์ ZIP"
+
+msgid "Local update package is readable."
+msgstr "แพ็กเกจอัปเดตในเครื่องอ่านได้"
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "ตรวจไม่พบเวอร์ชัน Chamilo ที่ติดตั้งโดยอัตโนมัติ จึงไม่สามารถตรวจสอบทิศทางของเวอร์ชันได้"
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "เวอร์ชันที่ติดตั้งหรือเวอร์ชันเป้าหมายไม่อยู่ในรูปแบบ semantic version ที่เปรียบเทียบได้"
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "เวอร์ชันเป้าหมายต่ำกว่าเวอร์ชันที่ติดตั้ง โดยค่าเริ่มต้นไม่อนุญาตให้ดาวน์เกรด"
+
+msgid "Target version matches the installed version."
+msgstr "เวอร์ชันเป้าหมายตรงกับเวอร์ชันที่ติดตั้ง"
+
+msgid "Target version is newer than the installed version."
+msgstr "เวอร์ชันเป้าหมายใหม่กว่าเวอร์ชันที่ติดตั้ง"
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "โปรเจกต์ไม่ใช่ Git checkout หรือไม่มี .git"
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "ระบบอัปเดตนี้มีไว้สำหรับการติดตั้งที่ไม่มี Git ตรวจพบว่าระบบในเครื่องใช้ Git การดำเนินการอัปเดตอาจทำให้ประวัติ Git เสียหาย สำหรับระบบที่มี Git แนะนำให้ใช้ขั้นตอน Git ตามที่ระบุใน CONTRIBUTING.md ที่รากเว็บ"
+
+msgid "Local Git changes were also detected."
+msgstr "ตรวจพบการเปลี่ยนแปลง Git ในเครื่องด้วย"
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "ไฟล์เมตาดาต้าของโปรเจกต์บางไฟล์หายไป ขั้นตอนอัปเดตถัดไปอาจต้องตรวจสอบการพึ่งพาด้วยตนเอง"
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "มีไฟล์เมตาดาต้าของ Composer และ Yarn"
+
+msgid "Starting staged file application."
+msgstr "เริ่มนำไฟล์ที่จัดเตรียมไปใช้"
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "ต้องมีการยืนยันอย่างชัดเจนเพื่อนำไฟล์ที่จัดเตรียมไปใช้"
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "การนำไฟล์อัปเดตที่จัดเตรียมไปใช้ต้องมีการยืนยันอย่างชัดเจน"
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "ไดเรกทอรีจัดเตรียมอยู่ภายในไดเรกทอรีจัดเตรียมอัปเดตของ Chamilo"
+
+msgid "Staging directory was validated."
+msgstr "ตรวจสอบไดเรกทอรีจัดเตรียมแล้ว"
+
+msgid "Apply plan metadata was read successfully."
+msgstr "อ่านเมตาดาต้าของแผนการนำไปใช้สำเร็จ"
+
+msgid "Staged application path is valid."
+msgstr "เส้นทางการนำไปใช้ที่จัดเตรียมถูกต้อง"
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "เมตาดาต้าการล้างแพ็กเกจที่ลงนามตรงกับแผนการนำไปใช้ที่ตรวจสอบแล้ว"
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "ตรวจสอบเมตาดาต้าการล้างแพ็กเกจที่ลงนามแล้ว"
+
+msgid "Update lock was acquired."
+msgstr "ได้ล็อกการอัปเดตแล้ว"
+
+msgid "Update backup directory was created."
+msgstr "สร้างไดเรกทอรีสำรองการอัปเดตแล้ว"
+
+msgid "Update file operations were collected."
+msgstr "รวบรวมการดำเนินการไฟล์อัปเดตแล้ว"
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "สำรองไฟล์ที่มีอยู่ที่วางแผนจะแทนที่หรือลบแล้ว"
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "คัดลอกไฟล์อัปเดตที่จัดเตรียมไปยังการติดตั้ง Chamilo แล้ว"
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "ไฟล์ที่ล้าสมัยตามที่ระบุในแพ็กเกจถูกลบออกจากการติดตั้ง Chamilo แล้ว"
+
+msgid "Package-declared obsolete files were removed."
+msgstr "ไฟล์ที่ล้าสมัยตามที่ระบุในแพ็กเกจถูกลบแล้ว"
+
+msgid "Update apply audit metadata was written."
+msgstr "เขียนข้อมูลเมตาการตรวจสอบการนำการอัปเดตไปใช้แล้ว"
+
+msgid "Staged files applied successfully."
+msgstr "นำไฟล์ที่จัดเตรียมไปใช้สำเร็จแล้ว"
+
+msgid "Unable to restore removed files: %s"
+msgstr "ไม่สามารถกู้คืนไฟล์ที่ถูกลบได้: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "ไม่สามารถย้อนกลับไฟล์ที่คัดลอกได้: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "ดำเนินการย้อนกลับไฟล์หลังจากการนำการอัปเดตไปใช้ล้มเหลว"
+
+msgid "Rollback failed: %s"
+msgstr "การย้อนกลับล้มเหลว: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "ไม่สามารถเขียนข้อมูลเมตาการตรวจสอบการนำการอัปเดตไปใช้ได้: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "ไม่สามารถปลดล็อกการอัปเดตหลังเกิดความล้มเหลวได้: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "ต้องระบุเส้นทางจัดเตรียมเพื่อนำไฟล์อัปเดตไปใช้"
+
+msgid "Staging directory does not exist: %s"
+msgstr "ไม่มีไดเรกทอรีจัดเตรียม: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "ไม่มีไดเรกทอรีฐานการจัดเตรียมการอัปเดตของ Chamilo"
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "ไดเรกทอรีจัดเตรียมต้องอยู่ภายใน var/update/staging"
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "ไดเรกทอรีจัดเตรียมไม่มี APPLY-PLAN.json"
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "ไม่สามารถอ่านข้อมูลเมตาแผนการนำการอัปเดตไปใช้ได้: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "ข้อมูลเมตาแผนการนำการอัปเดตไปใช้ไม่ใช่ JSON ที่ถูกต้อง: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "ข้อมูลเมตาแผนการนำการอัปเดตไปใช้ต้องเป็นอ็อบเจ็กต์ JSON"
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "แผนการนำการอัปเดตไปใช้ไม่มีฟิลด์ application_path"
+
+msgid "Staged application path is not readable: %s"
+msgstr "เส้นทางแอปพลิเคชันที่จัดเตรียมอ่านไม่ได้: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "เส้นทางแอปพลิเคชันที่จัดเตรียมต้องอยู่ภายในไดเรกทอรีจัดเตรียม"
+
+msgid "Staged application path is missing composer.json."
+msgstr "เส้นทางแอปพลิเคชันที่จัดเตรียมไม่มี composer.json"
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "แพ็กเกจอัปเดตไม่มี %s กรุณาจัดเตรียมแพ็กเกจที่ตรวจสอบแล้วพร้อมข้อมูลเมตาการล้างข้อมูลที่ลงนามอีกครั้ง"
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "แผนการนำการอัปเดตไปใช้ไม่มีข้อมูลเมตาการล้างแพ็กเกจที่ตรวจสอบแล้ว"
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "ข้อมูลเมตาการล้างแพ็กเกจอัปเดตเปลี่ยนแปลงหลังจากสร้างแผนการนำไปใช้แล้ว กรุณาสร้างแผนการนำไปใช้อีกครั้งก่อนดำเนินการต่อ"
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "แผนการนำการอัปเดตไปใช้มีรายการลบแพ็กเกจที่ไม่ถูกต้อง"
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "เส้นทางการล้างแพ็กเกจอัปเดตเปลี่ยนแปลงหลังจากสร้างแผนการนำไปใช้แล้ว กรุณาสร้างแผนการนำไปใช้อีกครั้งก่อนดำเนินการต่อ"
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "แผนการนำการอัปเดตไปใช้ไม่มีรายการเส้นทางการลบที่ตรวจสอบแล้ว"
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "เส้นทางการลบในแผนการนำการอัปเดตไปใช้ไม่ตรงกับข้อมูลเมตาการล้างแพ็กเกจที่ลงนาม"
+
+msgid "Update lock path must be inside var/update."
+msgstr "เส้นทางล็อกการอัปเดตต้องอยู่ภายใน var/update"
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "แผนการนำการอัปเดตไปใช้ไม่มีฟิลด์ backup_path"
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "เส้นทางสำรองการอัปเดตมีส่วนของเส้นทางที่ไม่ปลอดภัย"
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "เส้นทางสำรองการอัปเดตต้องอยู่ภายใน var/update/backups"
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "ไม่สามารถรับล็อกการอัปเดตได้ อาจมีการอัปเดตอื่นกำลังดำเนินการอยู่"
+
+msgid "Unable to release update lock: %s"
+msgstr "ไม่สามารถปลดล็อกการอัปเดตได้: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "ไดเรกทอรีสำรองการอัปเดตมีอยู่แล้ว: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "ไม่สามารถสร้างไดเรกทอรีปลายทางได้: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "การอัปเดตตามแผนจะเขียนทับลิงก์สัญลักษณ์ที่มีอยู่: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "ไฟล์ปลายทางเขียนไม่ได้: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "ไม่สามารถสร้างไฟล์ปลายทางได้: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "ไม่สามารถระบุไดเรกทอรีโปรเจกต์ Chamilo ก่อนลบไฟล์ที่ล้าสมัยได้"
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "การล้างการอัปเดตไม่สามารถลบเส้นทางที่ได้รับการป้องกันได้: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "การอัปเดตตามแผนจะลบลิงก์สัญลักษณ์ที่มีอยู่: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "การล้างการอัปเดตรองรับเฉพาะไฟล์ ไม่ใช่ไดเรกทอรี: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "ไฟล์ปลายทางที่ล้าสมัยอ่านไม่ได้สำหรับการสำรอง: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "ไม่สามารถลบไฟล์ปลายทางที่ล้าสมัยได้ด้วยสิทธิ์ไดเรกทอรีปัจจุบัน: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "ไฟล์ปลายทางที่ล้าสมัยชี้ไปนอกไดเรกทอรีโปรเจกต์ Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "ไม่สามารถสำรองไฟล์ปลายทางได้: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "ไม่สามารถเขียนข้อมูลเมตาการสำรองการอัปเดตได้"
+
+msgid "Unable to copy staged update file: %s"
+msgstr "ไม่สามารถคัดลอกไฟล์อัปเดตที่จัดเตรียมได้: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "คัดลอกไฟล์ที่จัดเตรียมแล้ว %d จาก %d ไฟล์"
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "ไม่สามารถลบไฟล์ที่ล้าสมัยตามที่แพ็กเกจระบุ: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "ลบไฟล์ที่ล้าสมัยตามที่แพ็กเกจระบุแล้ว %d จาก %d ไฟล์"
+
+msgid "Unable to restore backed up file: %s"
+msgstr "ไม่สามารถกู้คืนไฟล์ที่สำรองไว้: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "ไม่สามารถลบไฟล์ที่คัดลอกใหม่ระหว่างการย้อนกลับ: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "ไม่สามารถกู้คืนไฟล์ที่ถูกลบได้เนื่องจากไม่มีไฟล์สำรอง: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "ไม่สามารถกู้คืนไฟล์ที่ถูกลบจากไฟล์สำรอง: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "ไม่สามารถเขียนข้อมูลเมตาการตรวจสอบการนำการอัปเดตไปใช้"
+
+msgid "Unable to write global update apply log."
+msgstr "ไม่สามารถเขียนบันทึกการนำการอัปเดตไปใช้ระดับระบบ"
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "ตรวจพบเส้นทางสัมพัทธ์ที่ไม่ปลอดภัยในพื้นที่จัดเตรียม: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "ไดเรกทอรีไม่สามารถเขียนได้: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "ไม่สามารถสร้างไดเรกทอรี: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "อ่านข้อมูลเมตาการจัดเตรียมสำเร็จแล้ว"
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "เขียนข้อมูลเมตาแผนการนำไปใช้ไปยังไดเรกทอรีจัดเตรียมแล้ว"
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "ไฟล์และไดเรกทอรีปลายทางดูเหมือนสามารถเขียนได้สำหรับการอัปเดตและการล้างข้อมูลตามแผน"
+
+msgid "Update apply plan check failed."
+msgstr "การตรวจสอบแผนการนำการอัปเดตไปใช้ล้มเหลว"
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "ไฟล์หรือไดเรกทอรีปลายทางบางรายการไม่สามารถเขียนหรือลบได้"
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "เพื่อแก้ไขปัญหานี้ ให้เปลี่ยนเจ้าของไดเรกทอรี Chamilo ทั้งชุดชั่วคราวเป็น %s (ผู้ใช้เว็บเซิร์ฟเวอร์) นำการอัปเดตไปใช้ จากนั้นเปลี่ยนเจ้าของกลับเป็น %s แล้วตั้งเจ้าของของ var/ (และเนื้อหาภายใน) กลับเป็น %s เพื่อให้แอปพลิเคชันเขียนต่อไปได้"
+
+msgid "Update package verification failed."
+msgstr "การตรวจสอบแพ็กเกจอัปเดตล้มเหลว"
+
+msgid "Update preflight checks failed."
+msgstr "การตรวจสอบก่อนอัปเดตล้มเหลว"
+
+msgid "Unable to stage update package."
+msgstr "ไม่สามารถจัดเตรียมแพ็กเกจอัปเดตได้"
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "การรันคำสั่งหลังนำไปใช้จาก UI ถูกปิดใช้งานบนเซิร์ฟเวอร์นี้"
+
+msgid "Missing required field: %s"
+msgstr "ไม่มีฟิลด์ที่จำเป็น: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "ไม่ได้ระบุแหล่งแมนิเฟสต์การอัปเดต และไม่ได้กำหนด URL แมนิเฟสต์การอัปเดตเริ่มต้น"
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL แมนิเฟสต์การอัปเดตต้องใช้แหล่งอัปเดตอย่างเป็นทางการ %s เปลี่ยนได้เฉพาะเส้นทางแมนิเฟสต์เท่านั้น"
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "เส้นทางแมนิเฟสต์การอัปเดตในเครื่องถูกปิดใช้งาน ใช้ URL แมนิเฟสต์แบบ HTTPS หรือตั้งค่า CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 ในสภาพแวดล้อมเซิร์ฟเวอร์สำหรับการทดสอบในเครื่อง"
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "อย่าใส่เส้นทาง HTTP %s ปล่อยฟิลด์นี้ว่างเพื่อดาวน์โหลดจากแมนิเฟสต์การอัปเดต"
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "เส้นทางอัปเดตในเครื่อง %s ถูกปิดใช้งานในสภาพแวดล้อมนี้"
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "ต้องกำหนดคีย์สาธารณะที่เชื่อถือได้สำหรับการอัปเดตบนเซิร์ฟเวอร์ในสภาพแวดล้อมนี้"
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "การข้ามการตรวจสอบลายเซ็นการอัปเดตถูกปิดใช้งานในสภาพแวดล้อมนี้"
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "การรันการดำเนินการหลังนำไปใช้ของการอัปเดตต้องใช้ข้อความยืนยัน \"%s\""
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "การนำไฟล์อัปเดตที่จัดเตรียมไปใช้ต้องใช้ข้อความยืนยัน \"%s\""
+
+msgid "Unable to resolve project directory."
+msgstr "ไม่สามารถระบุไดเรกทอรีโปรเจกต์ได้"
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "ตัวอัปเดตนี้ไม่จัดการการสำรองฐานข้อมูล สร้างและตรวจสอบการสำรองฐานข้อมูลก่อนรันการย้ายข้อมูล"
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "เมธอด down() ของ Doctrine migration ไม่รับประกันว่าจะกู้คืนข้อมูลที่ถูกลบหรือถูกแปลงแล้ว"
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "ข้อมูลเมตาหลังนำไปใช้แนะนำให้ตรวจสอบการย้ายฐานข้อมูล"
+
+msgid "No migration files were found in the staged package."
+msgstr "ไม่พบไฟล์การย้ายข้อมูลในแพ็กเกจที่จัดเตรียม"
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "ตรวจพบไฟล์ Doctrine migration ที่จัดเตรียมแล้ว"
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "ระบุเป้าหมาย Doctrine migration จากแพ็กเกจที่จัดเตรียมแล้ว"
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "เส้นฐาน Doctrine migration มีปัญหาที่ขัดขวางสำหรับการย้ายข้อมูลที่จัดเตรียม"
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine รายงานคำเตือนเส้นฐานการย้ายข้อมูลในอดีต แต่จะตรวจสอบและดำเนินการเฉพาะการย้ายข้อมูล %s ที่จัดเตรียมอย่างชัดเจนเท่านั้น"
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine รายงานคำเตือนเส้นฐานการย้ายข้อมูลในอดีต ตัวอัปเดตจะดำเนินการเฉพาะคลาสการย้ายข้อมูล %s ที่จัดเตรียมหลังจากยืนยันอย่างชัดเจน"
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "เส้นฐาน Doctrine ไม่มีปัญหาที่ขัดขวางสำหรับการย้ายข้อมูล %s ที่จัดเตรียม"
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "การทดลองรัน Doctrine migration ล้มเหลวอย่างน้อยหนึ่งรายการที่จัดเตรียม อย่ารันการย้ายฐานข้อมูลจนกว่าจะแก้ไขแล้ว"
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "การทดลองรัน Doctrine สำเร็จสำหรับแต่ละคลาสการย้ายข้อมูลที่จัดเตรียม"
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "ต้องสร้างการสำรองฐานข้อมูลนอกตัวอัปเดตนี้ก่อนรันการย้ายข้อมูล"
+
+msgid "Staging path is required to review database migrations."
+msgstr "ต้องมีเส้นทางจัดเตรียมเพื่อตรวจสอบการย้ายฐานข้อมูล"
+
+msgid "Unable to read update %s: %s"
+msgstr "ไม่สามารถอ่านการอัปเดต %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON ของการอัปเดต %s ไม่ถูกต้อง: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON ของการอัปเดต %s ต้องเป็นอ็อบเจ็กต์"
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "ข้อมูลเมตาของการตรวจสอบหลังนำไปใช้ไม่มีรายการการดำเนินการที่ถูกต้อง"
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "ไม่แนะนำให้รันการย้ายฐานข้อมูลสำหรับการอัปเดตแบบจัดเตรียมนี้"
+
+msgid "Update metadata is missing the staged application path."
+msgstr "ข้อมูลเมตาของการอัปเดตไม่มีเส้นทางแอปพลิเคชันที่จัดเตรียมไว้"
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "ไม่พบไฟล์การย้ายแบบจัดเตรียมตามแผน: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "ไม่สามารถอ่านไฟล์การย้ายแบบจัดเตรียม: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "ไม่สามารถดึงคำอธิบายจาก getDescription() ได้"
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "ตัวรันการอัปเดตรองรับการย้ายแบบจัดเตรียมเพียง %s รายการ: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "ไม่สามารถเขียนข้อมูลเมตาความปลอดภัยของการย้าย: %s"
+
+msgid "Migration safety check failed."
+msgstr "การตรวจสอบความปลอดภัยของการย้ายล้มเหลว"
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "ตรวจพบเส้นทางการย้ายแบบสัมพัทธ์ที่ไม่ปลอดภัย: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "ไม่สามารถตรวจจับเวอร์ชัน Chamilo ที่ติดตั้งโดยอัตโนมัติได้ ดำเนินการต่อเฉพาะเมื่อยืนยันแล้วว่าการอัปเดตนี้เข้ากันได้"
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "เวอร์ชันที่ติดตั้งหรือเวอร์ชันเป้าหมายไม่อยู่ในรูปแบบเวอร์ชันเชิงความหมายที่เปรียบเทียบได้ ดำเนินการต่อเฉพาะหลังการตรวจสอบด้วยตนเอง"
+
+msgid "An update is available."
+msgstr "มีการอัปเดตพร้อมใช้งาน"
+
+msgid "The installed version already matches the manifest version."
+msgstr "เวอร์ชันที่ติดตั้งตรงกับเวอร์ชันในแมนิเฟสต์แล้ว"
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "เวอร์ชันในแมนิเฟสต์เก่ากว่าเวอร์ชันที่ติดตั้ง การดาวน์เกรดถูกบล็อกตามค่าเริ่มต้น"
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "ไฟล์ที่จัดเตรียมไม่ได้นำไปใช้สำเร็จ ไม่สามารถดำเนินการตรวจสอบหลังนำไปใช้ต่อได้"
+
+msgid "Apply result metadata was read successfully."
+msgstr "อ่านข้อมูลเมตาผลลัพธ์การนำไปใช้สำเร็จแล้ว"
+
+msgid "Post-apply action recommendations were generated."
+msgstr "สร้างคำแนะนำการดำเนินการหลังนำไปใช้แล้ว"
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "ตรวจพบการย้ายฐานข้อมูลในแพ็กเกจที่จัดเตรียม รันเฉพาะหลังจากยืนยันว่าการอัปเดตไฟล์ถูกต้องและมีข้อมูลสำรองฐานข้อมูลแล้ว"
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "ต้องมีเส้นทางการจัดเตรียมเพื่อรันการตรวจสอบหลังนำไปใช้"
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "การอัปเดต %s ไม่ใช่ JSON ที่ถูกต้อง: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "การอัปเดต %s ต้องเป็นออบเจ็กต์ JSON"
+
+msgid "Composer dependencies"
+msgstr "การพึ่งพา Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "แพ็กเกจที่จัดเตรียมมีข้อมูลเมตาของ Composer รัน Composer install จากรากของแอปพลิเคชันก่อนถือว่าการอัปเดตเสร็จสมบูรณ์"
+
+msgid "Frontend assets"
+msgstr "สินทรัพย์ส่วนหน้า"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "แพ็กเกจที่จัดเตรียมมีไฟล์ที่เกี่ยวข้องกับส่วนหน้า สร้างสินทรัพย์สำหรับโปรดักชันใหม่หลังติดตั้งการพึ่งพา"
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "ตรวจพบไฟล์การย้าย Doctrine ในแพ็กเกจที่จัดเตรียม ยืนยันว่ามีข้อมูลสำรองฐานข้อมูลก่อนรันการย้าย"
+
+msgid "Symfony cache"
+msgstr "แคช Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "ล้างแคช Symfony หลังจากนำไปใช้ไฟล์อัปเดตและรันคำสั่งที่จำเป็น"
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "ไม่สามารถเขียนข้อมูลเมตาของการตรวจสอบหลังนำไปใช้"
+
+msgid "Post-apply check failed."
+msgstr "การตรวจสอบหลังนำไปใช้ล้มเหลว"
+
+msgid "Update package is not readable: %s"
+msgstr "แพ็กเกจอัปเดตอ่านไม่ได้: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "แพ็กเกจอัปเดตไม่ใช่ไฟล์ ZIP ที่ถูกต้อง"
+
+msgid "Update package ZIP archive is empty."
+msgstr "ไฟล์ ZIP ของแพ็กเกจอัปเดตว่างเปล่า"
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "แพ็กเกจอัปเดตมีรายการ ZIP ที่อ่านไม่ได้"
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "แพ็กเกจอัปเดตมีเส้นทางสัมบูรณ์ที่ไม่ปลอดภัย: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "แพ็กเกจอัปเดตมีรายการที่ข้ามไดเรกทอรี: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "แพ็กเกจอัปเดตมีลิงก์สัญลักษณ์: %s"
+
+msgid "Starting post-apply actions."
+msgstr "กำลังเริ่มการดำเนินการหลังนำไปใช้"
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "การรันคำสั่งหลังนำไปใช้ต้องมีการยืนยันอย่างชัดเจน"
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "อ่านข้อมูลเมตาคำแนะนำหลังนำไปใช้สำเร็จแล้ว"
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "การดำเนินการหลังนำไปใช้ได้รับการตรวจสอบกับรายงานคำแนะนำแล้ว"
+
+msgid "Post-apply actions were selected."
+msgstr "เลือกการดำเนินการหลังนำไปใช้แล้ว"
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "การดำเนินการหลังนำไปใช้ขั้นสูงต้องมีการยืนยันขั้นสูงอย่างชัดเจน"
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "การดำเนินการหลังนำไปใช้ขั้นสูงได้รับการยืนยันอย่างชัดเจนแล้ว"
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "คำสั่งหลังนำไปใช้ที่เลือกเสร็จสมบูรณ์แล้ว"
+
+msgid "Post-apply command run metadata was written."
+msgstr "เขียนข้อมูลเมตาการรันคำสั่งหลังนำไปใช้แล้ว"
+
+msgid "Post-apply actions completed successfully."
+msgstr "การดำเนินการหลังนำไปใช้เสร็จสมบูรณ์แล้ว"
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "คำจำกัดความคำสั่งหลังนำไปใช้ของการอัปเดตไม่ถูกต้อง: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "กำลังรันการดำเนินการหลังนำไปใช้: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "กำลังรันคำสั่ง %d จาก %d สำหรับ %s"
+
+msgid "Post-apply action failed: %s"
+msgstr "การดำเนินการหลังนำไปใช้ล้มเหลว: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "การดำเนินการหลังนำไปใช้ \"%s\" ล้มเหลวด้วยรหัสออก %d"
+
+msgid "Post-apply action completed: %s"
+msgstr "การดำเนินการหลังนำไปใช้เสร็จสมบูรณ์: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "ต้องมีเส้นทางสเตจเพื่อรันการดำเนินการหลังนำไปใช้"
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "ไม่มีการดำเนินการหลังนำไปใช้ที่แนะนำให้รัน"
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "ไม่มีการดำเนินการหลังนำไปใช้ที่อนุญาตให้รัน"
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "ไม่อนุญาตการดำเนินการหลังนำไปใช้สำหรับการอัปเดตนี้: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "การย้ายฐานข้อมูลต้องมีการตรวจสอบความปลอดภัยของการย้ายก่อนดำเนินการ"
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "ไม่สามารถรันการย้ายฐานข้อมูลได้เนื่องจากการตรวจสอบความปลอดภัยของการย้ายไม่ผ่าน"
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "ไม่สามารถรันการย้ายฐานข้อมูลได้เนื่องจากการตรวจสอบความปลอดภัยของการย้ายไม่ได้ระบุรายการย้ายที่สเตจไว้"
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "ไม่สามารถรันการย้ายฐานข้อมูลได้เนื่องจากการตรวจสอบความปลอดภัยของการย้ายมีรายการย้ายที่ไม่ถูกต้อง"
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "ตัวรันการอัปเดตสามารถดำเนินการได้เฉพาะการย้าย %s ที่สเตจไว้เท่านั้น"
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "ไม่สามารถรันการย้ายฐานข้อมูลได้เนื่องจากการตรวจสอบความปลอดภัยของการย้ายที่สเตจไว้รายงานข้อผิดพลาดที่บล็อก"
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine รายงานคำเตือนเส้นฐานของการย้าย จะดำเนินการคลาสการย้าย %s ที่สเตจไว้อย่างชัดเจนเท่านั้น"
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "การย้ายฐานข้อมูลต้องยืนยันว่ามีการสำรองฐานข้อมูลอยู่แล้ว"
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "การย้ายฐานข้อมูลต้องใช้ข้อความยืนยัน \"RUN DATABASE MIGRATIONS\""
+
+msgid "Database migration safety review was completed before execution."
+msgstr "การตรวจสอบความปลอดภัยของการย้ายฐานข้อมูลเสร็จสมบูรณ์ก่อนดำเนินการ"
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "ยืนยันการมีอยู่ของการสำรองฐานข้อมูลอย่างชัดเจนแล้ว"
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "มีการให้การตรวจสอบความปลอดภัยของการย้ายฐานข้อมูลและการยืนยันการสำรองแล้ว"
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "ดำเนินการย้ายฐานข้อมูลแล้วหลังยืนยันการสำรองฐานข้อมูลอย่างชัดเจน ตัวอัปเดตไม่ได้สร้างการสำรองฐานข้อมูล"
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "ปรับสิทธิ์ไฟล์ปฏิบัติการหลังนำไปใช้ที่จำเป็นให้เป็นมาตรฐานแล้ว"
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "ไม่สามารถรันการย้ายฐานข้อมูลได้เนื่องจากไม่พบ bin/console"
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "คำสั่งหลังนำไปใช้ที่เลือกมีเส้นทางที่เขียนได้ตามที่ต้องการ"
+
+msgid "Post-apply command writable paths were validated."
+msgstr "ตรวจสอบเส้นทางที่เขียนได้ของคำสั่งหลังนำไปใช้แล้ว"
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "การดำเนินการหลังนำไปใช้ขั้นสูงสามารถแก้ไขการพึ่งพา แอสเซ็ตที่สร้างขึ้น หรือฐานข้อมูลได้ ตรวจสอบการสำรองก่อนดำเนินการต่อ"
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "ไม่สามารถรัน Composer อย่างปลอดภัยจากตัวอัปเดตบนเว็บได้เนื่องจากไฟล์ที่ Composer สร้าง \"%s\" เป็นของ UID %d ในขณะที่รันไทม์ PHP ใช้ UID %d โปรดรัน Composer ด้วยตนเองในฐานะเจ้าของการปรับใช้ จากนั้นดำเนินการหลังนำไปใช้ที่เหลือต่อ"
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "เส้นทางที่การดำเนินการหลังนำไปใช้ \"%s\" ต้องการไม่สามารถเขียนได้: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "ไดเรกทอรีแม่ที่การดำเนินการหลังนำไปใช้ \"%s\" ต้องการไม่สามารถเขียนได้: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "ไม่สามารถอ่านสิทธิ์ของไฟล์ปฏิบัติการหลังนำไปใช้ที่จำเป็น: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "ไม่สามารถทำเครื่องหมายไฟล์ปฏิบัติการหลังนำไปใช้ที่จำเป็นให้ปฏิบัติการได้: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "ไฟล์ปฏิบัติการหลังนำไปใช้ที่จำเป็นยังปฏิบัติการไม่ได้หลัง chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "ปรับสิทธิ์การปฏิบัติการให้เป็นมาตรฐานแล้ว"
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "ไม่สามารถเขียนการกำหนดค่า Git แยกสำหรับคำสั่งหลังนำไปใช้"
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "ดูเหมือนมีการดำเนินการอัปเดตอื่นกำลังทำงานอยู่ ลบ var/update/update.lock เฉพาะเมื่อไม่มีการอัปเดตที่ใช้งานอยู่"
+
+msgid "Unable to create update lock: %s"
+msgstr "ไม่สามารถสร้างล็อกการอัปเดต: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "ไม่สามารถเขียนเมทาดาทาการรันคำสั่งหลังนำไปใช้: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "แมนิเฟสต์การอัปเดตขาดบล็อกแพ็กเกจ"
+
+msgid "Update manifest signature block must be an object."
+msgstr "บล็อกลายเซ็นของแมนิเฟสต์การอัปเดตต้องเป็นอ็อบเจกต์"
+
+msgid "Update manifest requirements block must be an object."
+msgstr "บล็อกข้อกำหนดของแมนิเฟสต์การอัปเดตต้องเป็นอ็อบเจกต์"
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 ของแพ็กเกจอัปเดตต้องเป็นสตริงเลขฐานสิบหก 64 ตัวอักษร"
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "แมนิเฟสต์การอัปเดตขาดฟิลด์สตริงที่จำเป็น \"%s\""
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "ฟิลด์แมนิเฟสต์การอัปเดต \"%s\" ต้องเป็นสตริง"
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "แมนิเฟสต์การอัปเดตไม่ใช่ JSON ที่ถูกต้อง: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON ของแมนิเฟสต์การอัปเดตต้องเป็นอ็อบเจกต์"
+
+msgid "Manifest source cannot be empty."
+msgstr "แหล่งแมนิเฟสต์ต้องไม่ว่างเปล่า"
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL แมนิเฟสต์การอัปเดตต้องใช้ต้นทางอัปเดตอย่างเป็นทางการ %s"
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "ไม่สามารถดาวน์โหลดแมนิเฟสต์การอัปเดต สถานะ HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "ไฟล์แมนิเฟสต์อ่านไม่ได้: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "ไม่สามารถอ่านไฟล์แมนิเฟสต์: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL ของไฟล์ manifest การอัปเดตต้องใช้ HTTPS"
+
+msgid "Update package metadata is not readable: %s"
+msgstr "ไม่สามารถอ่านข้อมูลเมตาของแพ็กเกจอัปเดตได้: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "ไม่สามารถอ่านข้อมูลเมตาของแพ็กเกจอัปเดตได้: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "ข้อมูลเมตาของแพ็กเกจอัปเดตไม่ใช่ JSON ที่ถูกต้อง: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "ข้อมูลเมตาของแพ็กเกจอัปเดตต้องเป็นออบเจ็กต์ JSON"
+
+msgid "Update package metadata format must be %d."
+msgstr "รูปแบบข้อมูลเมตาของแพ็กเกจอัปเดตต้องเป็น %d"
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "ฟิลด์ \"remove\" ในข้อมูลเมตาของแพ็กเกจอัปเดตต้องเป็นอาร์เรย์"
+
+msgid "Update package removal paths must be strings."
+msgstr "เส้นทางการลบของแพ็กเกจอัปเดตต้องเป็นสตริง"
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "ข้อมูลเมตาของแพ็กเกจอัปเดตไม่สามารถลบเส้นทางที่ได้รับการป้องกันได้: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "แพ็กเกจอัปเดตไม่สามารถรวมและลบเส้นทางเดียวกันได้: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "ไม่สามารถคำนวณ sha256 ของข้อมูลเมตาแพ็กเกจอัปเดตได้"
+
+msgid "Update package removal path cannot be empty."
+msgstr "เส้นทางการลบของแพ็กเกจอัปเดตต้องไม่ว่างเปล่า"
+
+msgid "Update package removal path contains a null byte."
+msgstr "เส้นทางการลบของแพ็กเกจอัปเดตมีไบต์ว่าง (null byte)"
+
+msgid "Update package removal path must be relative: %s"
+msgstr "เส้นทางการลบของแพ็กเกจอัปเดตต้องเป็นเส้นทางสัมพัทธ์: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "เส้นทางการลบของแพ็กเกจอัปเดตมีส่วนที่ไม่ปลอดภัย: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "ต้องมีเส้นทางสเตจจิ้งเพื่อสร้างแผนการนำการอัปเดตไปใช้"
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "ไดเรกทอรีสเตจจิ้งไม่มีไฟล์ STAGING-INFO.json"
+
+msgid "Unable to read staging metadata: %s"
+msgstr "ไม่สามารถอ่านข้อมูลเมตาสเตจจิ้งได้: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "ข้อมูลเมตาสเตจจิ้งไม่ใช่ JSON ที่ถูกต้อง: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "ข้อมูลเมตาสเตจจิ้งต้องเป็นออบเจ็กต์ JSON"
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "ข้อมูลเมตาสเตจจิ้งไม่มีฟิลด์ application_path"
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "แพ็กเกจอัปเดตไม่มี %s ต้องมีข้อมูลเมตาการล้างข้อมูลที่ลงนามแล้วก่อนจึงจะนำไฟล์ไปใช้ได้"
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "ข้อมูลเมตาสเตจจิ้งไม่มีข้อมูลเมตาการล้างแพ็กเกจที่ลงนามซึ่งบันทึกไว้ระหว่างการแตกไฟล์"
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "ข้อมูลเมตาการล้างแพ็กเกจอัปเดตเปลี่ยนแปลงหลังสเตจจิ้ง โปรดสเตจแพ็กเกจที่ตรวจสอบแล้วอีกครั้งก่อนดำเนินการต่อ"
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "ข้อมูลเมตาสเตจจิ้งไม่มีรายการลบแพ็กเกจที่ถูกต้อง"
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "เส้นทางการล้างแพ็กเกจอัปเดตเปลี่ยนแปลงหลังสเตจจิ้ง โปรดสเตจแพ็กเกจที่ตรวจสอบแล้วอีกครั้งก่อนดำเนินการต่อ"
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "ข้อมูลเมตาการล้างแพ็กเกจที่ลงนามไม่เปลี่ยนแปลงนับตั้งแต่สเตจจิ้ง"
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "มีไฟล์ล็อกการอัปเดตอยู่แล้ว อาจมีการอัปเดตอื่นกำลังดำเนินการอยู่"
+
+msgid "Update lock directory is not writable."
+msgstr "ไดเรกทอรีล็อกการอัปเดตไม่สามารถเขียนได้"
+
+msgid "No update lock is currently active."
+msgstr "ขณะนี้ไม่มีล็อกการอัปเดตที่ใช้งานอยู่"
+
+msgid "Update backup directory is not writable."
+msgstr "ไดเรกทอรีสำรองการอัปเดตไม่สามารถเขียนได้"
+
+msgid "Update backup directory is writable."
+msgstr "ไดเรกทอรีสำรองการอัปเดตสามารถเขียนได้"
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "กระบวนการปัจจุบันไม่สามารถสร้างไดเรกทอรีสำรองการอัปเดตได้"
+
+msgid "Update backup directory can be created."
+msgstr "สามารถสร้างไดเรกทอรีสำรองการอัปเดตได้"
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "ไดเรกทอรีทำงานของการอัปเดตบางรายการไม่สามารถเขียนได้หรือกระบวนการปัจจุบันสร้างไม่ได้"
+
+msgid "Update working directories are writable or can be created."
+msgstr "ไดเรกทอรีทำงานของการอัปเดตสามารถเขียนได้หรือสามารถสร้างได้"
+
+msgid "Update apply file plan was generated."
+msgstr "สร้างแผนไฟล์สำหรับการนำการอัปเดตไปใช้แล้ว"
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "ข้อมูลเมตาการล้างแพ็กเกจมีเส้นทางที่ไม่สามารถลบได้อย่างปลอดภัย"
+
+msgid "Package-declared removal targets are safe."
+msgstr "เป้าหมายการลบที่ประกาศในแพ็กเกจปลอดภัย"
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "ไฟล์ที่ล้าสมัยซึ่งประกาศในแพ็กเกจบางรายการไม่มีอยู่แล้วในการติดตั้งนี้"
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "การอัปเดตตามแผนจะเขียนทับหรือลบลิงก์สัญลักษณ์ที่มีอยู่"
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "การอัปเดตตามแผนจะไม่เขียนทับหรือลบลิงก์สัญลักษณ์ที่มีอยู่"
+
+msgid "New update migration files must be placed under %s."
+msgstr "ไฟล์ไมเกรชันการอัปเดตใหม่ต้องอยู่ใน %s"
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "ตรวจพบไฟล์ไมเกรชัน Doctrine ใหม่ %s จะต้องมีการตรวจสอบความปลอดภัยของการไมเกรชันฐานข้อมูลหลังจากนำไฟล์ไปใช้"
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "รายการไฟล์ในแผนการนำการอัปเดตไปใช้บางรายการถูกตัดทอนในคำตอบ JSON"
+
+msgid "Unable to write update apply plan metadata."
+msgstr "ไม่สามารถเขียนข้อมูลเมตาของแผนการนำการอัปเดตไปใช้ได้"
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "ไม่สามารถดาวน์โหลดแพ็กเกจอัปเดตได้ สถานะ HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "ไม่สามารถเปิดไฟล์ปลายทางของแพ็กเกจอัปเดตได้: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "การดาวน์โหลดการอัปเดตต้องใช้แหล่งอัปเดตอย่างเป็นทางการ %s"
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL ของแพ็กเกจอัปเดตต้องใช้ HTTPS"
+
+msgid "Update package archive safety checks passed."
+msgstr "การตรวจสอบความปลอดภัยของไฟล์แพ็กเกจอัปเดตผ่านแล้ว"
+
+msgid "Update package was extracted to staging."
+msgstr "แพ็กเกจอัปเดตถูกแตกไฟล์ไปยังพื้นที่เตรียมการแล้ว"
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "โหลดข้อมูลเมตาการล้างแพ็กเกจที่ลงนามแล้ว"
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "แพ็กเกจอัปเดตไม่มี %s การนำไฟล์ไปใช้จะถูกบล็อกจนกว่าจะมีข้อมูลเมตาการล้างที่ลงนามแล้ว"
+
+msgid "Staged package dry-run report was generated."
+msgstr "สร้างรายงานทดลองรันของแพ็กเกจที่เตรียมไว้แล้ว"
+
+msgid "Staging metadata was written."
+msgstr "เขียนข้อมูลเมตาการเตรียมการแล้ว"
+
+msgid "Unable to extract update package to staging directory."
+msgstr "ไม่สามารถแตกไฟล์แพ็กเกจอัปเดตไปยังไดเรกทอรีเตรียมการได้"
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "ไม่พบรากของแอปพลิเคชัน Chamilo ในแพ็กเกจที่เตรียมไว้"
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "แพ็กเกจที่เตรียมไว้ขาดรายการ Chamilo ที่จำเป็น: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "แพ็กเกจที่เตรียมไว้มีโครงสร้าง Chamilo ตามที่คาดไว้"
+
+msgid "Staged package does not contain composer.lock."
+msgstr "แพ็กเกจที่เตรียมไว้ไม่มี composer.lock"
+
+msgid "Staged package contains composer.lock."
+msgstr "แพ็กเกจที่เตรียมไว้มี composer.lock"
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "แพ็กเกจที่เตรียมไว้ไม่มี yarn.lock"
+
+msgid "Staged package contains yarn.lock."
+msgstr "แพ็กเกจที่เตรียมไว้มี yarn.lock"
+
+msgid "Unable to encode staging metadata."
+msgstr "ไม่สามารถเข้ารหัสข้อมูลเมตาการเตรียมการได้"
+
+msgid "Unable to write staging metadata."
+msgstr "ไม่สามารถเขียนข้อมูลเมตาการเตรียมการได้"
+
+msgid "Update operation log created."
+msgstr "สร้างบันทึกการดำเนินการอัปเดตแล้ว"
+
+msgid "Unable to write update operation log."
+msgstr "ไม่สามารถเขียนบันทึกการดำเนินการอัปเดตได้"
+
+msgid "Invalid update operation id."
+msgstr "รหัสการดำเนินการอัปเดตไม่ถูกต้อง"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Fórmula qhawarina: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Fórmula qhawarina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -37012,13 +37012,13 @@ msgid "Trusted signing key"
 msgstr "Allin qhaway signing key"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "APPLY UPDATE FILES nisqata qillqay yuyaychanapaq"
+msgstr "Taqyachinaykipaq APPLY UPDATE FILES qillqay"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "RUN DATABASE MIGRATIONS nisqata qillqay willañawi migrations yuyaychanapaq"
+msgstr "Willañiqisuyu migraciones ruwanaykipaq RUN DATABASE MIGRATIONS qillqay"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "RUN POST UPDATE ACTIONS nisqata qillqay yuyaychanapaq"
+msgstr "Taqyachinaykipaq RUN POST UPDATE ACTIONS qillqay"
 
 msgid "Unknown update notice source."
 msgstr "Mana riqsisqa musuqchay willay qallariy."
@@ -40235,4 +40235,949 @@ msgstr "Practicas llaqta"
 
 msgid "City"
 msgstr "Llaqta"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Musuqyachiy llamk'ay ñanqa p'anqa musuqyachisqamanta kutichisqa"
+
+msgid "Last completed step"
+msgstr "Qhipa tukusqa rikch'ay"
+
+msgid "Stage package"
+msgstr "Paqete qispichiy"
+
+msgid "Package staging"
+msgstr "Paqete qispichiy"
+
+msgid "Apply plan"
+msgstr "Plan ruway"
+
+msgid "Update workflow completed"
+msgstr "Musuqyachiy llamk'ay ñanqa tukuyninpi"
+
+msgid "Update directory exists and is writable."
+msgstr "Musuqyachiy directorioqa kachkan, qillqayta atinmi."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Musuqyachiy directorioqa kachkan ichaqa mana qillqayta atinchu: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Musuqyachiy directorioqa manaraq kanchu, ichaqa tayta directorionqa qillqayta atinmi."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Musuqyachiy directorioqa manaraq kanchu, ichaqa var/ ukhupi ruwayta atikunmi."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Musuqyachiy directorioqa manam kanchu, kunan saqillaykunawanqa mana ruwayta atikunchu."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Musuqyachiy ñawpaq qhawaypaq qillqa disco pisi kayta mana yachayta atikunchu."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Allin musuqyachiy qispichiy ruwanapaq mana aypaq qillqa disco kanchu."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Kay chiqaqchay-rikch'ay musuqyachiy ñanpaq qillqa discoqa aypanmi."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Musuqyachiy manifiestoqa PHP laya mañakuyta mana ninchu."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "PHP mañakuyta hunt'asqa chiqaqchayta mana atikunchu: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Kunan PHP layaqa musuqyachiy mañakuyta mana hunt'anchu: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Kunan PHP layaqa musuqyachiy mañakuyta hunt'anmi."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Mana local paqete ñan qusqachu. Uraykachisqa paqetekunaqa uraykachisqamantaraq qhawayta atikun."
+
+msgid "Local update package is not readable: %s"
+msgstr "Local musuqyachiy paqeteqa mana ñawiriytachu atikun: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Local musuqyachiy paqeteqa ZIP archivo kananmi."
+
+msgid "Local update package is readable."
+msgstr "Local musuqyachiy paqeteqa ñawiriyta atikunmi."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Chamilo churasqa layaqa kikinmanta mana tarikunchu. Laya ñanqa mana qhawayta atikunchu."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Churasqa utaq taripana layaqa mana tupachinapaq semántico laya formatopi kanchu."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Taripana layaqa churasqa layamanta aswan pisi. Uraykuykunaqa kikinmanta mana saqisqachu."
+
+msgid "Target version matches the installed version."
+msgstr "Taripana layaqa churasqa layawan tupachinmi."
+
+msgid "Target version is newer than the installed version."
+msgstr "Taripana layaqa churasqa layamanta aswan musuq."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Proyectoqa mana Git checkoutchu utaq .git mana kanchu."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Kay musuqyachiy sistemaqa Git yanapayninnaq churaykunapaqmi. Local sistema Git llamk'achisqanta tarirqayku. Musuqyachiywan qatiyqa Git willakuyta waqllichiyta atinman. Git yanapayuq sistemakunapaqqa, web saphipi CONTRIBUTING.md nisqapi Git ruranata yuyaychayku."
+
+msgid "Local Git changes were also detected."
+msgstr "Local Git tikraykunapas tarikurqanmi."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Wakin proyecto metadata archivokuna pisiyan. Qhipa musuqyachiy rikch'aykunaqa makiwan dependencia qhawayta mañayta atinman."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer hinaspa Yarn metadata archivokunaqa kachkanmi."
+
+msgid "Starting staged file application."
+msgstr "Qispichisqa archivo ruwayta qallarispa."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Qispichisqa archivokunata ruwanapaq sut'i taqyachiy mañakun."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Qispichisqa musuqyachiy archivokunata ruwayqa sut'i taqyachiyta mañakun."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Qispichiy directorioqa Chamilo musuqyachiy qispichiy directorio ukhupi kachkan."
+
+msgid "Staging directory was validated."
+msgstr "Qispichiy directorioqa chiqaqchasqam."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Plan ruway metadataqa allinta ñawirisqa."
+
+msgid "Staged application path is valid."
+msgstr "Qispichisqa ruway ñanqa allinmi."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Firmasqa paqete pichay metadataqa qhawasqa plan ruwaywan tupachinmi."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Firmasqa paqete pichay metadataqa chiqaqchasqam."
+
+msgid "Update lock was acquired."
+msgstr "Musuqyachiy candadoqa hap'isqam."
+
+msgid "Update backup directory was created."
+msgstr "Musuqyachiy backup directorioqa ruwasqam."
+
+msgid "Update file operations were collected."
+msgstr "Musuqyachiy archivo ruwaykunaqa huñusqam."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Rakinapaq utaq qichunapaq kachkaq archivokunaqa backup ruwasqam."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Qispichisqa musuqyachiy archivokunaqa Chamilo churayman copiasqam."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Paqete nisqan mawk’a willañiqikuna Chamilo churaymanta horqosqa karqan."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Paqete nisqan mawk’a willañiqikuna horqosqa karqan."
+
+msgid "Update apply audit metadata was written."
+msgstr "Musuqyachiy churay qhaway metadata qillqasqa karqan."
+
+msgid "Staged files applied successfully."
+msgstr "Wakichisqa willañiqikuna allinta churasqa karqan."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Horqosqa willañiqikunata mana kutichiyta atikunchu: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Kipusqa willañiqikunata mana kutichiyta atikunchu: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Musuqyachiy churay pantay qhipanpi willañiqi kutichiy ruwasqa karqan."
+
+msgid "Rollback failed: %s"
+msgstr "Kutichiy manam atikunchu: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Musuqyachiy churay qhaway metadatata mana qillqayta atikunchu: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Pantay qhipanpi musuqyachiy wichq’ayta mana kachariyta atikunchu: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Musuqyachiy willañiqikunata churanapaq wakichiy ñanqa necesitakun."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Wakichiy qillqana mana kanchu: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo musuqyachiy wakichiy hatun qillqana mana kanchu."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Wakichiy qillqanaqa var/update/staging ukhupi kanan tiyan."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Wakichiy qillqanapi APPLY-PLAN.json mana kanchu."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Musuqyachiy churay plan metadatata mana ñawiriyta atikunchu: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Musuqyachiy churay plan metadata mana allin JSONchu: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Musuqyachiy churay plan metadataqa JSON objeto kanan tiyan."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Musuqyachiy churay planpi application_path kampu mana kanchu."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Wakichisqa ruwana ñan mana ñawiriy atikunchu: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Wakichisqa ruwana ñanqa wakichiy qillqana ukhupi kanan tiyan."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Wakichisqa ruwana ñanpi composer.json mana kanchu."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Musuqyachiy paqetepi %s mana kanchu. Firmasqa pichay metadatayuq chiqapchasqa paqeteta musuqmanta wakichiy."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Musuqyachiy churay planpi qhawasqa paqete pichay metadata mana kanchu."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Musuqyachiy paqete pichay metadataqa churay plan ruwasqan qhipanpi tikrasqa. Ñawpaqta churay planta musuqmanta ruway."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Musuqyachiy churay planpi mana allin paqete horqoy lista kachkan."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Musuqyachiy paqete pichay ñankunaqa churay plan ruwasqan qhipanpi tikrasqa. Ñawpaqta churay planta musuqmanta ruway."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Musuqyachiy churay planpi qhawasqa horqoy ñan lista mana kanchu."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Musuqyachiy churay plan horqoy ñankunaqa firmasqa paqete pichay metadataman mana tupanchu."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Musuqyachiy wichq’ay ñanqa var/update ukhupi kanan tiyan."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Musuqyachiy churay planpi backup_path kampu mana kanchu."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Musuqyachiy waqaychasqa ñanpi mana allin ñan rak’ikuna kachkan."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Musuqyachiy waqaychasqa ñanqa var/update/backups ukhupi kanan tiyan."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Musuqyachiy wichq’ayta mana hap’iyta atikunchu. Huk musuqyachiy ruwakuchkanman."
+
+msgid "Unable to release update lock: %s"
+msgstr "Musuqyachiy wichq’ayta mana kachariyta atikunchu: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Musuqyachiy waqaychasqa qillqana ña kachkanña: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Taripana qillqanata mana ruwayta atikunchu: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Planasqa musuqyachiyqa kachkaq t’inkisqa t’inkita qillqanman: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Taripana willañiqi mana qillqay atikunchu: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Taripana willañiqita mana ruwayta atikunchu: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Mawk’a willañiqikunata horqonapaq Chamilo proyecto qillqanata mana tarikunchu."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Musuqyachiy pichayqa amachasqa ñanta mana horqoyta atinchu: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Planasqa musuqyachiyqa kachkaq t’inkisqa t’inkita horqonman: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Musuqyachiy pichayqa willañiqikunallata yanapan, mana qillqanakunatachu: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Mawk’a taripana willañiqi waqaychanapaq mana ñawiriy atikunchu: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Mawk’a taripana willañiqita kunan qillqana saqillaykunawan mana horqoyta atikunchu: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Mawk’a taripana willañiqi Chamilo proyecto qillqanamanta hawapi tarikun: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Taripana willañiqita mana waqaychayta atikunchu: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Musuqyachiy waqaychasqa metadatata mana qillqayta atikunchu."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Wakichisqa musuqyachiy willañiqita mana kipuyta atikunchu: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d de %d wakichisqa willañiqikuna khipusqa."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Paqitipi willasqa mawk’a willañiqita qichuyta mana atikunchu: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "%d de %d paqitipi willasqa mawk’a willañiqikuna qichusqa."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Waqaychasqa willañiqita kutichiyta mana atikunchu: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Kutichiy pachapi musuq khipusqa willañiqita qichuyta mana atikunchu: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Qichusqa willañiqita kutichiyta mana atikunchu, waqaychasqan kanchu: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Qichusqa willañiqita waqaychasqamanta kutichiyta mana atikunchu: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Musuqyachiy ruwaypa qhaway metadatan qillqayta mana atikunchu."
+
+msgid "Unable to write global update apply log."
+msgstr "Llapan musuqyachiy ruway qillqata qillqayta mana atikunchu."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Mana allin wakichisqa tinkisqa ñan tarisqa: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Qillqana mana atikun qillqana p’anqapi: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Qillqana p’anqata ruwayta mana atikunchu: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Wakichiy metadata allinta ñawirisqa."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Ruway plan metadata wakichiy qillqanaman qillqasqa."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Tukuy willañiqikuna chaymanta qillqanakuna qillqayta atikun, planchasqa musuqyachiy chaymanta pichaypaq."
+
+msgid "Update apply plan check failed."
+msgstr "Musuqyachiy ruway plan qhaway mana allinchu."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Wakin willañiqikuna utaq qillqanakuna mana qillqayta utaq qichuyta atikunchu."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Kayta allichanapaq, tukuy Chamilo qillqanap dueñonta mit’alla %s (web sirwiq ruraq) man churay, musuqyachiyta ruway, chaymanta dueñonta %s man kutichiy, qhipaman var/ (chaymanta ukhun) dueñonta %s man kutichiy, aplicacion qillqayta atinanpaq."
+
+msgid "Update package verification failed."
+msgstr "Musuqyachiy paqiti chiqaqchay mana allinchu."
+
+msgid "Update preflight checks failed."
+msgstr "Musuqyachiy ñawpaq qhawaykuna mana allinchu."
+
+msgid "Unable to stage update package."
+msgstr "Musuqyachiy paqitita wakichiyta mana atikunchu."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Kay sirwiqpi UI nisqamanta qhipa-ruway kamachikuykuna mana kanchu."
+
+msgid "Missing required field: %s"
+msgstr "Munasqa k’iti kanchu: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Mana ima musuqyachiy manifest pukyuta qukurqanchu, nitaq kikin manifest URL kachu."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Musuqyachiy manifest URL kamachisqa musuqyachiy pukyuta %s llamk’anan. Manifest ñanlla tikrayta atikun."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Local musuqyachiy manifest ñankuna mana kanchu. HTTPS manifest URL llamk’ay utaq CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 sirwiqpi churay local pruebakunapaq."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Ama HTTP %s ñanta quwaychu. Kay k’itita ch’usaq saqiy, musuqyachiy manifestmanta uraykachinanpaq."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Kay kawsaypi local musuqyachiy %s ñankuna mana kanchu."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Kay kawsaypi iñisqa musuqyachiy llaqta llaves sirwiqpi churanan."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Kay kawsaypi musuqyachiy silq’uy chiqaqchayta saqey mana kanchu."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Qhipa-ruway musuqyachiy ruwaykunaqa \"%s\" chiqaqchay qillqata munan."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Wakichisqa musuqyachiy willañiqikuna ruwayqa \"%s\" chiqaqchay qillqata munan."
+
+msgid "Unable to resolve project directory."
+msgstr "Proyecto qillqanata tarita mana atikunchu."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Yachay wasi waqaychayta kay musuqyachiq mana kamachinchu. Migracionkunata ruwanaykipaq ñawpaqta yachay wasi waqaychayta ruway chaymanta chiqaqchay."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine migration down() metodokunaqa chinkasqa utaq tikrasqa willakuyta kutichinanta mana iñichikunchu."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Qhipa-ruway metadata yachay wasi migracion qhawayta yuyaykun."
+
+msgid "No migration files were found in the staged package."
+msgstr "Wakichisqa paqitipi mana ima migracion willañiqi tarikurqanchu."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Wakichisqa Doctrine migracion willañiqikuna tarisqa."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine migracion taripana wakichisqa paqitimanta tarisqa."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine migracion qallariyqa wakichisqa migracionkunapaq hark’ay sasachakuykunayuq."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine ñaupa migracion qallariy yuyaykunata willan, ichaqa wakichisqa %s migracionkuna qhawasqa chaymanta chiqaqta ruwasqa kanqa."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine ñaupa migracion qallariy yuyaykunata willan. Musuqyachiqqa wakichisqa %s migracion klasikunallata chiqaqchay qhipaman ruwanqa."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine qallariyqa wakichisqa %s migracionkunapaq mana hark’ay sasachakuyniyuqchu."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Doctrine migracion dry-run huk wakichisqa migracionpaq mana allinchu. Ama yachay wasi migracionkunata ruwaychu kay allichakusqankama."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Doctrine dry-run sapa wakichisqa migracion klasipaq allinta tukurqan."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Migracionkunata ruwanaykipaq kay musuqyachiqmanta hawapi yachay wasi waqaychay ruwanan."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Yachay wasi migracionkunata qhawanapaq wakichiy ñan munasqa."
+
+msgid "Unable to read update %s: %s"
+msgstr "Musuqyachiy %s ñawiriyta mana atikunchu: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Musuqyachiy %s JSON mana allinchu: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Musuqyachiy %s JSON huk objeto kanan."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Qhipa-churay qhawaykuna metadata mana allin ruwaykuna listata kachanchu."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Kay qallariy musuqyachiykunaqpaq willañiqita migraciones mana yuyaychasqachu karqan."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Musuqyachiy metadata pisiyan qallariy churay ñan."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Planasqa qallariy migración willañiqi mana tarikurqanchu: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Mana atikunchu qallariy migración willañiqita ñawinayta: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Mana ima willakuyta hurquyta atikurqanchu getDescription() nisqamanta."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Musuqyachiy purichiqqa %s qallariy migracionesllatam yanapan: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Mana atikunchu migración qhali kay metadata qillqayta: %s"
+
+msgid "Migration safety check failed."
+msgstr "Migración qhali kay qhawayqa manam allinchu karqan."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Mana qhali qallariy relativa migración ñan tarikurqan: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Churasqa Chamilo layaqa mana kikinmanta tarikuyta atikurqanchu. Kay musuqyachiy allin kasqanta takyachispa qhipaman riy."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Churasqa utaq taripana layaqa mana tupachiy atikuq semántica laya formatopi kanchu. Makillawan qhawayta ruwaspa qhipaman riy."
+
+msgid "An update is available."
+msgstr "Huk musuqyachiy kachkan."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Churasqa layaqa manifest laya hinaña kachkan."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Manifest layaqa churasqa layamanta aswan mawk'am. Uraykachiykunaqa kikinmanta harkasqam."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Qallariy willañiqikuna mana allinta churasqachu. Qhipa-churay qhawaykuna mana qatiyta atikunchu."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Churay ruway metadata allinta ñawinasqa karqan."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Qhipa-churay ruway yuyaychaykuna ruwasqa karqan."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Willañiqi migraciones qallariy paqetepi tarikurqan. Willañiqi musuqyachiy allin kasqanta takyachispa, willañiqi waqaychasqa kachkaptinlla purichiy."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Qallariy ñanqa qhipa-churay qhawaykunata purichinapaq munasqa."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Musuqyachiy %s mana allin JSON kanchu: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Musuqyachiy %s JSON objeto kanan tiyan."
+
+msgid "Composer dependencies"
+msgstr "Composer dependencias"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Composer metadata qallariy paqetepi kachkan. Musuqyachiy tukusqa nishaspa ñawpaqta aplicación saphimanta Composer install purichiy."
+
+msgid "Frontend assets"
+msgstr "Ñawpaq uya bienes"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Ñawpaq uya willañiqikuna qallariy paqetepi kachkan. Dependencias churasqakama producción bienes musuqmanta ruway."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Doctrine migración willañiqikuna qallariy paqetepi tarikurqan. Migraciones purichinaykipaq ñawpaqta willañiqi waqaychasqa kasqanta takyachiy."
+
+msgid "Symfony cache"
+msgstr "Symfony cache"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Musuqyachiy willañiqikuna churasqakama, munasqa kamachikunata purichisqakama Symfony cacheta pichay."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Mana atikunchu qhipa-churay qhawaykuna metadata qillqayta."
+
+msgid "Post-apply check failed."
+msgstr "Qhipa-churay qhawayqa manam allinchu karqan."
+
+msgid "Update package is not readable: %s"
+msgstr "Musuqyachiy paqete mana ñawinay atikunchu: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Musuqyachiy paqete mana allin ZIP archivo kanchu."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Musuqyachiy paqete ZIP archivo ch'usaqmi."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Musuqyachiy paqete mana ñawinay atikuq ZIP yaykuyta kachkan."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Musuqyachiy paqete mana qhali hunt'a ñanta kachkan: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Musuqyachiy paqete ñan puriy yaykuyta kachkan: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Musuqyachiy paqete simbólico t'inki kachkan: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Qhipa-churay ruwaykuna qallarisqa."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Qhipa-churay kamachi purichiyqa sut'i takyachiyta munan."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Qhipa-churay yuyaychay metadata allinta ñawinasqa karqan."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Qhipa-churay ruwaykuna yuyaychay willakuyman tupachisqa karqan."
+
+msgid "Post-apply actions were selected."
+msgstr "Qhipa-churay ruwaykuna akllasqa karqan."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Ñawpaq qhipa-churay ruwaykunaqa sut'i ñawpaq takyachiyta munan."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Ñawpaq qhipa-churay ruwaykuna sut'ita takyachisqa karqan."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Akllasqa qhipa-churay kamachikuna allinta tukuq karqan."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Qhipa-churay kamachi purichiy metadata qillqasqa karqan."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Qhipa-churay ruwaykuna allinta tukuq karqan."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Mana allin musuqyachiy qhipa-churay kamachi nishay: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Qhipa-churay ruway purichisqa: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "%d kamachiyta %d-manta %s-paq ruwachkan."
+
+msgid "Post-apply action failed: %s"
+msgstr "Qhipa-churay ruway mana allinchu: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Qhipa-churay ruway \"%s\" mana allinchu, lluqsiy código %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Qhipa-churay ruway tukusqa: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Qhipa-churay ruwaykunata ruwanapaq staging ñanqa necesitakun."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Manan kanchu yuyaychasqa qhipa-churay ruwaykuna ruwanapaq."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Manan kanchu saqillasqa qhipa-churay ruwaykuna ruwanapaq."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Kay musuqyachiytaq qhipa-churay ruwayqa mana saqillasqachu: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Willay wasi migracionesqa ruwayninman ñawpaqta migración seguridad qhawayta necesitanku."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Willay wasi migracionesqa mana ruway atikunchu, migración seguridad qhaway mana pasasqarayku."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Willay wasi migracionesqa mana ruway atikunchu, migración seguridad qhaway staged migracioneskunata mana listachisqarayku."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Willay wasi migracionesqa mana ruway atikunchu, migración seguridad qhaway invalid migración yuyayniyuq kasqanrayku."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Update runnerqa staged %s migracioneskunallata ruwayta atin."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Willay wasi migracionesqa mana ruway atikunchu, staged migración seguridad qhaway harkaq pantaykunata willasqanrayku."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine migración baseline yuyaychaykunata willan. Staged %s migración clasesllata sapaqta ruwakunqa."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Willay wasi migracionesqa willay wasi backup kachkasqanmanta confirmaciónta necesitanku."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Willay wasi migracionesqa \"RUN DATABASE MIGRATIONS\" confirmación qillqata necesitanku."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Willay wasi migración seguridad qhawayqa ruwayninman ñawpaqta tukusqa karqan."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Willay wasi backup kachkasqanqa sapaqta confirmasqa karqan."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Willay wasi migración seguridad qhawaywan backup confirmaciónpas qusqa karqan."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Willay wasi migracionesqa sapaq willay wasi backup confirmación qhipanpi ruwasqa karqan. Musuqyachiqqa willay wasi backupta mana ruwarqanchu."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Necesitasqa qhipa-churay ejecutable permisokuna normalizasqa karqan."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Willay wasi migracioneskunata mana ruway atikunchu, bin/console mana tarisqarayku."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Akllasqa qhipa-churay kamachiykunaqa necesitakusqa qillqay atikuq ñankunayuq kanku."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Qhipa-churay kamachiy qillqay atikuq ñankuna validasqa karqan."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Ñawpaq qhipa-churay ruwaykunaqa dependencias, rurasqa assetskuna utaq willay wasita tikrayta atinku. Qatiykachkanki ñawpaqta backupkunata qhaway."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composerqa web musuqyachiqmanta mana allinpaq ruway atikunchu, Composer-pa rurasqan archivo \"%s\" UID %d-pa kapuynin kachkan, PHP runtimeñataq UID %d-ta llamk’achkan. Composerta despliegue dueñohina makillawan ruway, chaymanta puchusqa qhipa-churay ruwaykunawan qatiy."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Qhipa-churay ruway \"%s\"-pa necesitakusqa ñanqa mana qillqay atikuqchu: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Qhipa-churay ruway \"%s\"-pa necesitakusqa tayta directorioqa mana qillqay atikuqchu: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Necesitasqa qhipa-churay ejecutablepaq permisokunata mana ñawiriy atikunchu: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Necesitasqa qhipa-churay ejecutableta ejecutable hina mana señalay atikunchu: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Necesitasqa qhipa-churay ejecutableqa chmod qhipanpipas manaraq ejecutablechu: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Ejecutable permisoqa normalizasqa karqan."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Qhipa-churay kamachiykunapaq sapaq Git configuraciónta mana qillqay atikunchu."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Huk musuqyachiy ruwayña kachkanman. var/update/update.lock-ta qichuy, musuqyachiy mana kachkaptinlla."
+
+msgid "Unable to create update lock: %s"
+msgstr "Musuqyachiy lockta mana ruway atikunchu: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Qhipa-churay kamachiy ruway metadata-ta mana qillqay atikunchu: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Musuqyachiy manifestqa paquete bloque-ta mana kanchu."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Musuqyachiy manifest firma bloqueqa objeto kanan tiyan."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Musuqyachiy manifest requisitos bloqueqa objeto kanan tiyan."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Musuqyachiy paquete sha256qa 64-carácter hexadecimal qillqa kanan tiyan."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Musuqyachiy manifestqa necesitakusqa qillqa campo \"%s\"-ta mana kanchu."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Musuqyachiy manifest campo \"%s\"qa qillqa kanan tiyan."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Musuqyachiy manifestqa mana allin JSON-chu: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Musuqyachiy manifest JSONqa objeto kanan tiyan."
+
+msgid "Manifest source cannot be empty."
+msgstr "Manifest pukyuyqa mana ch’usaqchu kanan tiyan."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Musuqyachiy manifest URL-qa oficial musuqyachiy origen %s-ta llamk’achinan tiyan."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Musuqyachiy manifestta mana uraykachiy atikunchu. HTTP estado: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Manifest archivoqa mana ñawiriy atikuqchu: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Manifest archivota mana ñawiriy atikunchu: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Musuqyachiy manifest URL HTTPS nisqawanmi kanan."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Musuqyachiy paqiti metadata mana ñawinchanallachu: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Musuqyachiy paqiti metadatata mana ñawinchayta atikunchu: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Musuqyachiy paqiti metadata mana allin JSONchu: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Musuqyachiy paqiti metadata JSON objeto kananmi."
+
+msgid "Update package metadata format must be %d."
+msgstr "Musuqyachiy paqiti metadata formato %d kananmi."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Musuqyachiy paqiti metadata \"remove\" campo array kananmi."
+
+msgid "Update package removal paths must be strings."
+msgstr "Musuqyachiy paqiti qichuy ñankuna qillqakuna kananmi."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Musuqyachiy paqiti metadata mana amachasqa ñanta qichuyta atinchu: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Musuqyachiy paqiti mana kaqlla ñanta yapayta qichuytawan atinchu: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Musuqyachiy paqiti metadata sha256 yupayta mana atikunchu."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Musuqyachiy paqiti qichuy ñan mana ch'usaqchu kanan."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Musuqyachiy paqiti qichuy ñanpi null byte kachkan."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Musuqyachiy paqiti qichuy ñan relativa kananmi: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Musuqyachiy paqiti qichuy ñanpi mana allin segmento kachkan: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Staging ñanmi necesitakun musuqyachiy aplicay plan ruwanapaq."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Staging directorio STAGING-INFO.json mana kanchu."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Staging metadatata mana ñawinchayta atikunchu: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Staging metadata mana allin JSONchu: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Staging metadata JSON objeto kananmi."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Staging metadatapi application_path campo mana kanchu."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Musuqyachiy paqitipi %s mana kanchu. Firmasqa pichay metadata necesitakun willañiqikuna aplicakunanpaq."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Staging metadatapi mana kanchu extraqchkaspa hallch'asqa firmasqa paqiti pichay metadata."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Musuqyachiy paqiti pichay metadata staging qhipaman tikrakurqan. Verificadasqa paqitita musuqmanta stagey qatiykachanaykipaq."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Staging metadatapi mana allin paqiti qichuy lista kanchu."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Musuqyachiy paqiti pichay ñankuna staging qhipaman tikrakurqan. Verificadasqa paqitita musuqmanta stagey qatiykachanaykipaq."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Firmasqa paqiti pichay metadata mana tikrakunchu stagingmanta."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Musuqyachiy candado willañiqi ña kachkan. Huk musuqyachiy ruwakuchkanman."
+
+msgid "Update lock directory is not writable."
+msgstr "Musuqyachiy candado directorio mana qillqanallachu."
+
+msgid "No update lock is currently active."
+msgstr "Kunanqa mana musuqyachiy candado kanchu."
+
+msgid "Update backup directory is not writable."
+msgstr "Musuqyachiy backup directorio mana qillqanallachu."
+
+msgid "Update backup directory is writable."
+msgstr "Musuqyachiy backup directorio qillqanalla."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Musuqyachiy backup directorio mana kay proceso ruwayta atinchu."
+
+msgid "Update backup directory can be created."
+msgstr "Musuqyachiy backup directorio ruwayta atikun."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Wakin musuqyachiy llamk'ana directorioquna mana qillqanallachu utaq kay proceso mana ruwayta atinchu."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Musuqyachiy llamk'ana directorioquna qillqanalla utaq ruwayta atikun."
+
+msgid "Update apply file plan was generated."
+msgstr "Musuqyachiy aplicay willañiqi plan ruwakurqan."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Paqiti pichay metadatapi ñankuna kachkan mana allinta qichuyta atikunanchu."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Paqiti nisqa qichuy taripaqkuna allinmi."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Wakin paqiti nisqa mawk'a willañiqikuna kay instalacionpi ña mana kanchu."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Planasqa musuqyachiy kachkaq simbólico t'inkikunata qillqaywan utaq qichuywan ruwanman."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Planasqa musuqyachiy mana kachkaq simbólico t'inkikunata qillqanchu nitaq qichunchu."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Musuq musuqyachiy migración willañiqikuna %s ukhupi churanalla."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Musuq %s Doctrine migración willañiqikuna tarikurqan. Willañiqikuna aplicasqa qhipaman base de datos migración allin qhawariyta necesitanku."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Wakin musuqyachiy aplicay plan willañiqi listakuna JSON kutichiypi truncasqa karqan."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Musuqyachiy aplicay plan metadatata mana qillqayta atikunchu."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Musuqyachiy paqitita mana uraykachiyta atikunchu. HTTP estado: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Musuqyachiy paqiti taripaq willañiqita mana kichayta atikunchu: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Musuqyachiy uraykachiykuna oficial musuqyachiy origen %s nisqawanmi kanan."
+
+msgid "The update package URL must use HTTPS."
+msgstr "Musuqyachiy paqiti URL HTTPS nisqawanmi kanan."
+
+msgid "Update package archive safety checks passed."
+msgstr "Musuqchay paqete archivoq qhapaq kay qhawaykuna allinmi pasasqa."
+
+msgid "Update package was extracted to staging."
+msgstr "Musuqchay paqete stagingman hurqusqa karqan."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Firmasqa paqete pichay metadata cargasqa karqan."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Musuqchay paqete manan %s-ta kanchu. Archivo aplicacionqa hark'asqa kanqa firmasqa pichay metadata qusqa kama."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Staging paqetepa dry-run willakuy ruwasqa karqan."
+
+msgid "Staging metadata was written."
+msgstr "Staging metadata qillqasqa karqan."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Manan atikunchu musuqchay paqeteta staging directorioyman hurquyta."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Manan tarikunchu Chamilo aplicacion saphinta staged paqetepi."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Staged paqetepi faltan Chamilo yaykuna: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Staged paqete Chamilo estructura suyachisqata kachkan."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Staged paqete manan composer.lock-ta kanchu."
+
+msgid "Staged package contains composer.lock."
+msgstr "Staged paqete composer.lock-ta kachkan."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Staged paqete manan yarn.lock-ta kanchu."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Staged paqete yarn.lock-ta kachkan."
+
+msgid "Unable to encode staging metadata."
+msgstr "Manan atikunchu staging metadata encodeyta."
+
+msgid "Unable to write staging metadata."
+msgstr "Manan atikunchu staging metadata qillqayta."
+
+msgid "Update operation log created."
+msgstr "Musuqchay ruway log ruwasqa."
+
+msgid "Unable to write update operation log."
+msgstr "Manan atikunchu musuqchay ruway logta qillqayta."
+
+msgid "Invalid update operation id."
+msgstr "Mana allin musuqchay ruway id."
 

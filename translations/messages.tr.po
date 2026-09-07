@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Saygılarımızla"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formül örneği: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formül örneği: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Değişken aralıkları"
@@ -40235,4 +40235,949 @@ msgstr "Staj şehri"
 
 msgid "City"
 msgstr "Şehir"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Sayfa yenilendikten sonra güncelleme iş akışı geri yüklendi"
+
+msgid "Last completed step"
+msgstr "Son tamamlanan adım"
+
+msgid "Stage package"
+msgstr "Paket hazırlığı"
+
+msgid "Package staging"
+msgstr "Paket hazırlama"
+
+msgid "Apply plan"
+msgstr "Uygulama planı"
+
+msgid "Update workflow completed"
+msgstr "Güncelleme iş akışı tamamlandı"
+
+msgid "Update directory exists and is writable."
+msgstr "Güncelleme dizini mevcut ve yazılabilir."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Güncelleme dizini mevcut ancak yazılabilir değil: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Güncelleme dizini henüz yok, ancak üst dizini yazılabilir."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Güncelleme dizini henüz yok, ancak var/ altında oluşturulabilir."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Güncelleme dizini yok ve mevcut izinlerle oluşturulamaz."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Güncelleme ön kontrolü için boş disk alanı belirlenemedi."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Güvenli bir güncelleme hazırlama işlemi için yeterli boş disk alanı yok."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Bu doğrulama aşamasındaki güncelleme akışı için boş disk alanı yeterli."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Güncelleme manifesti bir PHP sürüm gereksinimi tanımlamıyor."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "PHP gereksinimi tam olarak değerlendirilemedi: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Mevcut PHP sürümü güncelleme gereksinimini karşılamıyor: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Mevcut PHP sürümü güncelleme gereksinimini karşılıyor."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Yerel paket yolu sağlanmadı. İndirilen paketler yalnızca indirmeden sonra kontrol edilebilir."
+
+msgid "Local update package is not readable: %s"
+msgstr "Yerel güncelleme paketi okunamıyor: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Yerel güncelleme paketi bir ZIP arşivi olmalıdır."
+
+msgid "Local update package is readable."
+msgstr "Yerel güncelleme paketi okunabilir."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Yüklü Chamilo sürümü otomatik olarak algılanamadı. Sürüm yönü kontrol edilemiyor."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Yüklü veya hedef sürüm karşılaştırılabilir semantik sürüm biçiminde değil."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Hedef sürüm yüklü sürümden daha düşük. Sürüm düşürmeye varsayılan olarak izin verilmez."
+
+msgid "Target version matches the installed version."
+msgstr "Hedef sürüm yüklü sürümle eşleşiyor."
+
+msgid "Target version is newer than the installed version."
+msgstr "Hedef sürüm yüklü sürümden daha yeni."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Proje bir Git kopyası değil veya .git mevcut değil."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Bu güncelleme sistemi Git desteği olmayan kurulumlar içindir. Yerel sistemin Git kullandığı tespit edildi. Güncellemeye devam etmek Git geçmişinin bozulmasına yol açabilir. Git destekli sistemler için web kökündeki CONTRIBUTING.md dosyasında ayrıntılı Git prosedürünü kullanmanızı öneririz."
+
+msgid "Local Git changes were also detected."
+msgstr "Yerel Git değişiklikleri de tespit edildi."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Bazı proje meta veri dosyaları eksik. Sonraki güncelleme aşamaları elle bağımlılık kontrolleri gerektirebilir."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer ve Yarn meta veri dosyaları mevcut."
+
+msgid "Starting staged file application."
+msgstr "Aşamalı dosya uygulaması başlatılıyor."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Hazırlanan dosyaları uygulamak için açık onay gerekir."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Hazırlanan güncelleme dosyalarını uygulamak açık onay gerektirir."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Hazırlama dizini Chamilo güncelleme hazırlama dizininin içinde."
+
+msgid "Staging directory was validated."
+msgstr "Hazırlama dizini doğrulandı."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Uygulama planı meta verileri başarıyla okundu."
+
+msgid "Staged application path is valid."
+msgstr "Hazırlanan uygulama yolu geçerli."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "İmzalı paket temizleme meta verileri incelenen uygulama planıyla eşleşiyor."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "İmzalı paket temizleme meta verileri doğrulandı."
+
+msgid "Update lock was acquired."
+msgstr "Güncelleme kilidi alındı."
+
+msgid "Update backup directory was created."
+msgstr "Güncelleme yedekleme dizini oluşturuldu."
+
+msgid "Update file operations were collected."
+msgstr "Güncelleme dosya işlemleri toplandı."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Değiştirilmesi veya kaldırılması planlanan mevcut dosyalar yedeklendi."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Hazırlanan güncelleme dosyaları Chamilo kurulumuna kopyalandı."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Pakette belirtilen güncelliğini yitirmiş dosyalar Chamilo kurulumundan kaldırıldı."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Pakette belirtilen güncelliğini yitirmiş dosyalar kaldırıldı."
+
+msgid "Update apply audit metadata was written."
+msgstr "Güncelleme uygulama denetim üst verileri yazıldı."
+
+msgid "Staged files applied successfully."
+msgstr "Hazırlanan dosyalar başarıyla uygulandı."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Kaldırılan dosyalar geri yüklenemedi: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Kopyalanan dosyalar geri alınamadı: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Güncelleme uygulaması başarısız olduktan sonra dosya geri alma işlemi yürütüldü."
+
+msgid "Rollback failed: %s"
+msgstr "Geri alma başarısız oldu: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Güncelleme uygulama denetim üst verileri yazılamadı: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Hata sonrası güncelleme kilidi serbest bırakılamadı: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Güncelleme dosyalarını uygulamak için hazırlama yolu gereklidir."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Hazırlama dizini mevcut değil: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo güncelleme hazırlama temel dizini mevcut değil."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Hazırlama dizini var/update/staging içinde olmalıdır."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Hazırlama dizininde APPLY-PLAN.json eksik."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Güncelleme uygulama planı üst verileri okunamadı: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Güncelleme uygulama planı üst verileri geçerli JSON değil: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Güncelleme uygulama planı üst verileri bir JSON nesnesi olmalıdır."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Güncelleme uygulama planında application_path alanı eksik."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Hazırlanan uygulama yolu okunabilir değil: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Hazırlanan uygulama yolu hazırlama dizininin içinde olmalıdır."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Hazırlanan uygulama yolunda composer.json eksik."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Güncelleme paketinde %s eksik. İmzalı temizlik üst verileri içeren doğrulanmış bir paketi yeniden hazırlayın."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Güncelleme uygulama planında incelenen paket temizlik üst verileri eksik."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Güncelleme paketi temizlik üst verileri, uygulama planı oluşturulduktan sonra değişti. Devam etmeden önce uygulama planını yeniden oluşturun."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Güncelleme uygulama planı geçersiz bir paket kaldırma listesi içeriyor."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Güncelleme paketi temizlik yolları, uygulama planı oluşturulduktan sonra değişti. Devam etmeden önce uygulama planını yeniden oluşturun."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Güncelleme uygulama planında incelenen kaldırma yolu listesi eksik."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Güncelleme uygulama planı kaldırma yolları, imzalı paket temizlik üst verileriyle eşleşmiyor."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Güncelleme kilit yolu var/update içinde olmalıdır."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Güncelleme uygulama planında backup_path alanı eksik."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Güncelleme yedekleme yolu güvenli olmayan yol parçaları içeriyor."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Güncelleme yedekleme yolu var/update/backups içinde olmalıdır."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Güncelleme kilidi alınamadı. Başka bir güncelleme devam ediyor olabilir."
+
+msgid "Unable to release update lock: %s"
+msgstr "Güncelleme kilidi serbest bırakılamadı: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Güncelleme yedekleme dizini zaten mevcut: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Hedef dizin oluşturulamadı: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Planlanan güncelleme mevcut bir sembolik bağlantının üzerine yazardı: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Hedef dosya yazılabilir değil: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Hedef dosya oluşturulamadı: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Güncelliğini yitirmiş dosyalar kaldırılmadan önce Chamilo proje dizini çözümlenemedi."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Güncelleme temizliği korumalı yolu kaldıramaz: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Planlanan güncelleme mevcut bir sembolik bağlantıyı kaldırırdı: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Güncelleme temizliği yalnızca dosyaları destekler, dizinleri değil: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Güncelliğini yitirmiş hedef dosya yedekleme için okunabilir değil: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Güncelliğini yitirmiş hedef dosya mevcut dizin izinleriyle kaldırılamaz: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Güncelliğini yitirmiş hedef dosya Chamilo proje dizininin dışında çözümleniyor: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Hedef dosya yedeklenemedi: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Güncelleme yedekleme üst verileri yazılamadı."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Hazırlanan güncelleme dosyası kopyalanamadı: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d / %d hazırlanan dosya kopyalandı."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Pakette belirtilen eski dosya kaldırılamadı: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "%d / %d pakette belirtilen eski dosya kaldırıldı."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Yedeklenen dosya geri yüklenemedi: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Geri alma sırasında yeni kopyalanan dosya kaldırılamadı: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Kaldırılan dosya geri yüklenemedi çünkü yedeği eksik: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Kaldırılan dosya yedekten geri yüklenemedi: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Güncelleme uygulama denetim meta verileri yazılamadı."
+
+msgid "Unable to write global update apply log."
+msgstr "Genel güncelleme uygulama günlüğü yazılamadı."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Güvenli olmayan hazırlanmış göreli yol algılandı: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Dizin yazılabilir değil: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Dizin oluşturulamadı: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Hazırlama meta verileri başarıyla okundu."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Uygulama planı meta verileri hazırlama dizinine yazıldı."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Hedef dosya ve dizinler planlanan güncelleme ve temizlik için yazılabilir görünüyor."
+
+msgid "Update apply plan check failed."
+msgstr "Güncelleme uygulama planı denetimi başarısız oldu."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Bazı hedef dosya veya dizinler yazılamıyor veya kaldırılamıyor."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Bunu düzeltmek için geçici olarak tüm Chamilo dizininin sahibini %s (web sunucusu kullanıcısı) olarak değiştirin, güncellemeyi uygulayın, ardından sahibi tekrar %s yapın ve uygulamanın yazmaya devam edebilmesi için var/ (ve içeriğinin) sahibini %s olarak ayarlayın."
+
+msgid "Update package verification failed."
+msgstr "Güncelleme paketi doğrulaması başarısız oldu."
+
+msgid "Update preflight checks failed."
+msgstr "Güncelleme ön kontrolleri başarısız oldu."
+
+msgid "Unable to stage update package."
+msgstr "Güncelleme paketi hazırlanamadı."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Bu sunucuda arayüzden uygulama sonrası komutların çalıştırılması devre dışı."
+
+msgid "Missing required field: %s"
+msgstr "Gerekli alan eksik: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Güncelleme manifest kaynağı sağlanmadı ve varsayılan güncelleme manifest URL’si yapılandırılmamış."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Güncelleme manifest URL’si resmi güncelleme kaynağını %s kullanmalıdır. Yalnızca manifest yolu değiştirilebilir."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Yerel güncelleme manifest yolları devre dışı. HTTPS manifest URL’si kullanın veya yerel testler için sunucu ortamında CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 ayarlayın."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "HTTP %s yolu sağlamayın. Güncelleme manifestinden indirmek için bu alanı boş bırakın."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Bu ortamda yerel güncelleme %s yolları devre dışı."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Bu ortamda sunucuda güvenilir güncelleme genel anahtarları yapılandırılmalıdır."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Bu ortamda güncelleme imza doğrulamasını atlamak devre dışı."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Uygulama sonrası güncelleme eylemlerini çalıştırmak için onay metni \"%s\" gerekir."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Hazırlanan güncelleme dosyalarını uygulamak için onay metni \"%s\" gerekir."
+
+msgid "Unable to resolve project directory."
+msgstr "Proje dizini çözümlenemedi."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Veritabanı yedeği bu güncelleyici tarafından yönetilmez. Geçişleri çalıştırmadan önce bir veritabanı yedeği oluşturun ve doğrulayın."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine migration down() yöntemlerinin silinen veya dönüştürülen verileri geri yüklemesi garanti edilmez."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Uygulama sonrası meta veriler veritabanı geçiş incelemesini öneriyor."
+
+msgid "No migration files were found in the staged package."
+msgstr "Hazırlanan pakette geçiş dosyası bulunamadı."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Hazırlanan Doctrine geçiş dosyaları algılandı."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine geçiş hedefi hazırlanan paketten çözümlendi."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine geçiş taban çizgisinin hazırlanan geçişler için engelleyici sorunları var."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine geçmiş geçiş taban çizgisi uyarıları bildiriyor, ancak yalnızca hazırlanan %s geçişleri incelenecek ve açıkça çalıştırılacak."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine geçmiş geçiş taban çizgisi uyarıları bildiriyor. Güncelleyici, açık onaydan sonra yalnızca hazırlanan %s geçiş sınıflarını çalıştıracak."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine taban çizgisinin hazırlanan %s geçişleri için engelleyici sorunu yok."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "En az bir hazırlanan geçiş için Doctrine deneme çalıştırması başarısız oldu. Bu düzeltilene kadar veritabanı geçişlerini çalıştırmayın."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Her hazırlanan geçiş sınıfı için Doctrine deneme çalıştırması başarıyla tamamlandı."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Geçişleri çalıştırmadan önce bu güncelleyicinin dışında bir veritabanı yedeği oluşturulmalıdır."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Veritabanı geçişlerini incelemek için hazırlama yolu gereklidir."
+
+msgid "Unable to read update %s: %s"
+msgstr "Güncelleme %s okunamadı: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Güncelleme %s JSON geçersiz: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Güncelleme %s JSON bir nesne olmalıdır."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Uygulama sonrası denetim üst verileri geçerli bir eylem listesi içermiyor."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Bu aşamalı güncelleme için veritabanı geçişleri önerilmedi."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Güncelleme üst verilerinde aşamalı uygulama yolu eksik."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Planlanan aşamalı geçiş dosyası bulunamadı: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Aşamalı geçiş dosyası okunamadı: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "getDescription() içinden bir açıklama çıkarılamadı."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Güncelleme çalıştırıcısı yalnızca %s aşamalı geçişi destekler: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Geçiş güvenlik üst verileri yazılamadı: %s"
+
+msgid "Migration safety check failed."
+msgstr "Geçiş güvenlik denetimi başarısız oldu."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Güvenli olmayan aşamalı göreli geçiş yolu algılandı: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Yüklü Chamilo sürümü otomatik olarak algılanamadı. Yalnızca bu güncellemenin uyumlu olduğunu doğruladıktan sonra devam edin."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Yüklü veya hedef sürüm karşılaştırılabilir anlamsal sürüm biçiminde değil. Yalnızca manuel doğrulamadan sonra devam edin."
+
+msgid "An update is available."
+msgstr "Bir güncelleme mevcut."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Yüklü sürüm zaten manifesto sürümüyle eşleşiyor."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Manifesto sürümü yüklü sürümden daha eski. Sürüm düşürmeler varsayılan olarak engellenir."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Aşamalı dosyalar başarıyla uygulanmadı. Uygulama sonrası denetimler devam edemez."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Uygulama sonucu üst verileri başarıyla okundu."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Uygulama sonrası eylem önerileri oluşturuldu."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Aşamalı pakette veritabanı geçişleri algılandı. Bunları yalnızca dosya güncellemesinin doğru olduğunu ve bir veritabanı yedeğinin bulunduğunu doğruladıktan sonra çalıştırın."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Uygulama sonrası denetimleri çalıştırmak için aşama yolu gereklidir."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Güncelleme %s geçerli JSON değil: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Güncelleme %s bir JSON nesnesi olmalıdır."
+
+msgid "Composer dependencies"
+msgstr "Composer bağımlılıkları"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Aşamalı pakete Composer üst verileri dahil edildi. Güncellemeyi tamamlanmış saymadan önce uygulama kökünden Composer install çalıştırın."
+
+msgid "Frontend assets"
+msgstr "Ön yüz varlıkları"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Aşamalı pakete ön yüzle ilgili dosyalar dahil edildi. Bağımlılıkları yükledikten sonra üretim varlıklarını yeniden oluşturun."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Aşamalı pakette Doctrine geçiş dosyaları algılandı. Geçişleri çalıştırmadan önce bir veritabanı yedeğinin bulunduğunu doğrulayın."
+
+msgid "Symfony cache"
+msgstr "Symfony önbelleği"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Güncelleme dosyalarını uyguladıktan ve gerekli komutları çalıştırdıktan sonra Symfony önbelleğini temizleyin."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Uygulama sonrası denetim üst verileri yazılamadı."
+
+msgid "Post-apply check failed."
+msgstr "Uygulama sonrası denetim başarısız oldu."
+
+msgid "Update package is not readable: %s"
+msgstr "Güncelleme paketi okunamıyor: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Güncelleme paketi geçerli bir ZIP arşivi değil."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Güncelleme paketi ZIP arşivi boş."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Güncelleme paketi okunamayan bir ZIP girişi içeriyor."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Güncelleme paketi güvenli olmayan mutlak bir yol içeriyor: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Güncelleme paketi bir yol geçişi girişi içeriyor: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Güncelleme paketi bir sembolik bağlantı içeriyor: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Uygulama sonrası eylemler başlatılıyor."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Uygulama sonrası komut çalıştırma açık onay gerektirir."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Uygulama sonrası öneri üst verileri başarıyla okundu."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Uygulama sonrası eylemler öneri raporuna göre doğrulandı."
+
+msgid "Post-apply actions were selected."
+msgstr "Uygulama sonrası eylemler seçildi."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Gelişmiş uygulama sonrası eylemler açık gelişmiş onay gerektirir."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Gelişmiş uygulama sonrası eylemler açıkça onaylandı."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Seçilen uygulama sonrası komutlar başarıyla tamamlandı."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Uygulama sonrası komut çalıştırma üst verileri yazıldı."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Uygulama sonrası eylemler başarıyla tamamlandı."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Geçersiz güncelleme uygulama sonrası komut tanımı: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Uygulama sonrası eylem çalıştırılıyor: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "%s için %d / %d komutu çalıştırılıyor."
+
+msgid "Post-apply action failed: %s"
+msgstr "Uygulama sonrası eylem başarısız oldu: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Uygulama sonrası eylem \"%s\" %d çıkış koduyla başarısız oldu."
+
+msgid "Post-apply action completed: %s"
+msgstr "Uygulama sonrası eylem tamamlandı: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Uygulama sonrası eylemleri çalıştırmak için hazırlık yolu gereklidir."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Çalıştırılacak önerilen uygulama sonrası eylem yok."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Çalıştırılacak izin verilen uygulama sonrası eylem yok."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Bu güncelleme için uygulama sonrası eyleme izin verilmiyor: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Veritabanı geçişleri, çalıştırılmadan önce bir geçiş güvenlik incelemesi gerektirir."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Geçiş güvenlik incelemesi başarısız olduğu için veritabanı geçişleri çalıştırılamaz."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Geçiş güvenlik incelemesi hazırlanan geçişleri listelemediği için veritabanı geçişleri çalıştırılamaz."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Geçiş güvenlik incelemesi geçersiz bir geçiş kaydı içerdiği için veritabanı geçişleri çalıştırılamaz."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Güncelleme çalıştırıcısı yalnızca hazırlanan %s geçişlerini yürütebilir."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Hazırlanan geçiş güvenlik incelemesi engelleyici hatalar bildirdiği için veritabanı geçişleri çalıştırılamaz."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine geçiş taban çizgisi uyarıları bildiriyor. Yalnızca hazırlanan %s geçiş sınıfları açıkça yürütülecek."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Veritabanı geçişleri, bir veritabanı yedeğinin mevcut olduğunun onaylanmasını gerektirir."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Veritabanı geçişleri, \"RUN DATABASE MIGRATIONS\" onay metnini gerektirir."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Veritabanı geçiş güvenlik incelemesi yürütmeden önce tamamlandı."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Veritabanı yedeğinin mevcut olduğu açıkça onaylandı."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Veritabanı geçiş güvenlik incelemesi ve yedek onayı sağlandı."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Veritabanı geçişleri, açık bir veritabanı yedek onayı sonrasında yürütüldü. Güncelleyici veritabanı yedeğini oluşturmadı."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Gerekli uygulama sonrası çalıştırılabilir izinleri normalleştirildi."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "bin/console bulunamadığı için veritabanı geçişleri çalıştırılamıyor."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Seçilen uygulama sonrası komutların gerekli yazılabilir yolları var."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Uygulama sonrası komut yazılabilir yolları doğrulandı."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Gelişmiş uygulama sonrası eylemler bağımlılıkları, üretilen varlıkları veya veritabanını değiştirebilir. Devam etmeden önce yedekleri gözden geçirin."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer web güncelleyicisinden güvenle çalıştırılamaz çünkü Composer tarafından üretilen \"%s\" dosyasının sahibi UID %d iken PHP çalışma zamanı UID %d kullanıyor. Composer'ı dağıtım sahibi olarak elle çalıştırın, ardından kalan uygulama sonrası eylemlere devam edin."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Uygulama sonrası eylem \"%s\" için gereken yol yazılabilir değil: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Uygulama sonrası eylem \"%s\" için gereken üst dizin yazılabilir değil: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Gerekli uygulama sonrası çalıştırılabilir için izinler okunamıyor: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Gerekli uygulama sonrası çalıştırılabilir, çalıştırılabilir olarak işaretlenemiyor: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Gerekli uygulama sonrası çalıştırılabilir, chmod sonrasında hâlâ çalıştırılabilir değil: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Çalıştırılabilir izni normalleştirildi."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Uygulama sonrası komutlar için yalıtılmış Git yapılandırması yazılamıyor."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Başka bir güncelleme işlemi çalışıyor gibi görünüyor. Yalnızca etkin bir güncelleme yoksa var/update/update.lock dosyasını kaldırın."
+
+msgid "Unable to create update lock: %s"
+msgstr "Güncelleme kilidi oluşturulamıyor: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Uygulama sonrası komut çalıştırma üst verileri yazılamıyor: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Güncelleme manifestinde paket bloğu eksik."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Güncelleme manifesti imza bloğu bir nesne olmalıdır."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Güncelleme manifesti gereksinimler bloğu bir nesne olmalıdır."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Güncelleme paketi sha256 değeri 64 karakterlik onaltılık bir dize olmalıdır."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Güncelleme manifestinde gerekli dize alanı \"%s\" eksik."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Güncelleme manifesti alanı \"%s\" bir dize olmalıdır."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Güncelleme manifesti geçerli JSON değil: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Güncelleme manifesti JSON bir nesne olmalıdır."
+
+msgid "Manifest source cannot be empty."
+msgstr "Manifest kaynağı boş olamaz."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Güncelleme manifesti URL'si resmi güncelleme kaynağını kullanmalıdır: %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Güncelleme manifesti indirilemiyor. HTTP durumu: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Manifest dosyası okunabilir değil: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Manifest dosyası okunamıyor: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Güncelleme bildirim URL’si HTTPS kullanmalıdır."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Güncelleme paketi üst verileri okunamıyor: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Güncelleme paketi üst verileri okunamadı: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Güncelleme paketi üst verileri geçerli JSON değil: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Güncelleme paketi üst verileri bir JSON nesnesi olmalıdır."
+
+msgid "Update package metadata format must be %d."
+msgstr "Güncelleme paketi üst veri biçimi %d olmalıdır."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Güncelleme paketi üst verilerindeki \"remove\" alanı bir dizi olmalıdır."
+
+msgid "Update package removal paths must be strings."
+msgstr "Güncelleme paketi kaldırma yolları dizge olmalıdır."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Güncelleme paketi üst verileri korumalı yolu kaldıramaz: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Güncelleme paketi aynı yolu hem ekleyip hem kaldıramaz: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Güncelleme paketi üst verilerinin sha256 değeri hesaplanamadı."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Güncelleme paketi kaldırma yolu boş olamaz."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Güncelleme paketi kaldırma yolu boş (null) bayt içeriyor."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Güncelleme paketi kaldırma yolu göreli olmalıdır: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Güncelleme paketi kaldırma yolu güvenli olmayan bir bölüm içeriyor: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Güncelleme uygulama planı oluşturmak için hazırlık (staging) yolu gereklidir."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Hazırlık dizininde STAGING-INFO.json eksik."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Hazırlık üst verileri okunamadı: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Hazırlık üst verileri geçerli JSON değil: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Hazırlık üst verileri bir JSON nesnesi olmalıdır."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Hazırlık üst verilerinde application_path alanı eksik."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Güncelleme paketinde %s eksik. Dosyalar uygulanmadan önce imzalı temizleme üst verileri gereklidir."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Hazırlık üst verileri, çıkarım sırasında kaydedilen imzalı paket temizleme üst verilerini içermiyor."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Güncelleme paketi temizleme üst verileri hazırlıktan sonra değişti. Devam etmeden önce doğrulanmış paketi yeniden hazırlayın."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Hazırlık üst verileri geçerli bir paket kaldırma listesi içermiyor."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Güncelleme paketi temizleme yolları hazırlıktan sonra değişti. Devam etmeden önce doğrulanmış paketi yeniden hazırlayın."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "İmzalı paket temizleme üst verileri hazırlıktan bu yana değişmedi."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Bir güncelleme kilit dosyası zaten var. Başka bir güncelleme devam ediyor olabilir."
+
+msgid "Update lock directory is not writable."
+msgstr "Güncelleme kilit dizini yazılabilir değil."
+
+msgid "No update lock is currently active."
+msgstr "Şu anda etkin bir güncelleme kilidi yok."
+
+msgid "Update backup directory is not writable."
+msgstr "Güncelleme yedekleme dizini yazılabilir değil."
+
+msgid "Update backup directory is writable."
+msgstr "Güncelleme yedekleme dizini yazılabilir."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Güncelleme yedekleme dizini geçerli süreç tarafından oluşturulamıyor."
+
+msgid "Update backup directory can be created."
+msgstr "Güncelleme yedekleme dizini oluşturulabilir."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Bazı güncelleme çalışma dizinleri yazılabilir değil veya geçerli süreç tarafından oluşturulamıyor."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Güncelleme çalışma dizinleri yazılabilir veya oluşturulabilir."
+
+msgid "Update apply file plan was generated."
+msgstr "Güncelleme uygulama dosya planı oluşturuldu."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Paket temizleme üst verileri güvenle kaldırılamayan yollar içeriyor."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Pakette bildirilen kaldırma hedefleri güvenlidir."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Pakette bildirilen bazı eski dosyalar bu kurulumda zaten yok."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Planlanan güncelleme mevcut sembolik bağlantıların üzerine yazacak veya bunları kaldıracak."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Planlanan güncelleme mevcut sembolik bağlantıların üzerine yazmaz veya bunları kaldırmaz."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Yeni güncelleme geçiş dosyaları %s altına yerleştirilmelidir."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Yeni %s Doctrine geçiş dosyaları algılandı. Dosyalar uygulandıktan sonra bir veritabanı geçişi güvenlik incelemesi gerekecektir."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Bazı güncelleme uygulama planı dosya listeleri JSON yanıtında kısaltıldı."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Güncelleme uygulama planı üst verileri yazılamadı."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Güncelleme paketi indirilemedi. HTTP durumu: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Güncelleme paketi hedef dosyası açılamadı: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Güncelleme indirmeleri resmi güncelleme kaynağını kullanmalıdır: %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "Güncelleme paketi URL’si HTTPS kullanmalıdır."
+
+msgid "Update package archive safety checks passed."
+msgstr "Güncelleme paketi arşiv güvenlik kontrolleri geçti."
+
+msgid "Update package was extracted to staging."
+msgstr "Güncelleme paketi hazırlık alanına çıkarıldı."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "İmzalı paket temizleme üst verileri yüklendi."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Güncelleme paketi %s içermiyor. İmzalı temizleme üst verileri sağlanana kadar dosya uygulaması engellenecektir."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Hazırlanan paket deneme çalıştırma raporu oluşturuldu."
+
+msgid "Staging metadata was written."
+msgstr "Hazırlık üst verileri yazıldı."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Güncelleme paketi hazırlık dizinine çıkarılamadı."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Hazırlanan pakette Chamilo uygulama kökü bulunamadı."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Hazırlanan pakette gerekli Chamilo girişi eksik: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Hazırlanan paket beklenen Chamilo yapısını içeriyor."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Hazırlanan paket composer.lock içermiyor."
+
+msgid "Staged package contains composer.lock."
+msgstr "Hazırlanan paket composer.lock içeriyor."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Hazırlanan paket yarn.lock içermiyor."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Hazırlanan paket yarn.lock içeriyor."
+
+msgid "Unable to encode staging metadata."
+msgstr "Hazırlık üst verileri kodlanamadı."
+
+msgid "Unable to write staging metadata."
+msgstr "Hazırlık üst verileri yazılamadı."
+
+msgid "Update operation log created."
+msgstr "Güncelleme işlem günlüğü oluşturuldu."
+
+msgid "Unable to write update operation log."
+msgstr "Güncelleme işlem günlüğü yazılamadı."
+
+msgid "Invalid update operation id."
+msgstr "Geçersiz güncelleme işlem kimliği."
 

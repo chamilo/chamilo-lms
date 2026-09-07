@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول نمونه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول بېلګه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -40229,4 +40229,949 @@ msgstr "د انټرنشپ ښار"
 
 msgid "City"
 msgstr "ښار"
+
+msgid "Update workflow restored after page refresh"
+msgstr "د پاڼې له تازه کېدو وروسته د تازه کولو کاري بهیر بېرته ورغول شو"
+
+msgid "Last completed step"
+msgstr "وروستی بشپړ شوی ګام"
+
+msgid "Stage package"
+msgstr "د بستې چمتووالی"
+
+msgid "Package staging"
+msgstr "د بستې چمتو کول"
+
+msgid "Apply plan"
+msgstr "پلان پلي کول"
+
+msgid "Update workflow completed"
+msgstr "د تازه کولو کاري بهیر بشپړ شو"
+
+msgid "Update directory exists and is writable."
+msgstr "د تازه کولو لارښود شته او د لیکلو وړ دی."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "د تازه کولو لارښود شته خو د لیکلو وړ نه دی: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "د تازه کولو لارښود لا نه شته، خو د هغه اصلي لارښود د لیکلو وړ دی."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "د تازه کولو لارښود لا نه شته، خو د var/ لاندې جوړېدای شي."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "د تازه کولو لارښود نه شته او د اوسنیو اجازو سره جوړېدای نشي."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "د تازه کولو د مخکې ازموینې لپاره ازاد ډیسک ځای نه شي ټاکل کېدای."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "د خوندي تازه کولو د چمتووالي عملیاتو لپاره کافي ازاد ډیسک ځای نشته."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "د دې د تایید پړاو تازه کولو بهیر لپاره ازاد ډیسک ځای کافي دی."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "د تازه کولو منشور د PHP نسخې اړتیا نه ټاکي."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "د PHP اړتیا په بشپړ ډول نه شي ارزول کېدای: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "اوسنۍ PHP نسخه د تازه کولو اړتیا نه پوره کوي: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "اوسنۍ PHP نسخه د تازه کولو اړتیا پوره کوي."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "د سیمه‌ییزې بستې لار نه ده ورکړل شوې. ډاونلوډ شوې بستې یوازې د ډاونلوډ وروسته چک کېدای شي."
+
+msgid "Local update package is not readable: %s"
+msgstr "سیمه‌ییزه تازه کولو بسته د لوستلو وړ نه ده: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "سیمه‌ییزه تازه کولو بسته باید ZIP آرشیف وي."
+
+msgid "Local update package is readable."
+msgstr "سیمه‌ییزه تازه کولو بسته د لوستلو وړ ده."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "د نصب شوې چامیلو نسخه په اتومات ډول نه شوه موندل کېدای. د نسخې لوری نه شي چک کېدای."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "نصب شوې یا هدفي نسخه د پرتله کېدونکې معنايي نسخې بڼه نه لري."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "هدفي نسخه د نصب شوې نسخې څخه ټیټه ده. ښکته کول په ډیفالټ نه دي اجازه ورکړل شوي."
+
+msgid "Target version matches the installed version."
+msgstr "هدفي نسخه د نصب شوې نسخې سره سمون لري."
+
+msgid "Target version is newer than the installed version."
+msgstr "هدفي نسخه د نصب شوې نسخې څخه نوې ده."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "پروژه د Git چک‌آوټ نه ده یا .git شتون نلري."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "دا تازه کولو سیسټم د هغو نصبونو لپاره دی چې د Git ملاتړ نلري. موږ موندلي چې سیمه‌ییز سیسټم Git کاروي. د تازه کولو دوام ممکن د Git تاریخچه خراب کړي. د Git ملاتړ لرونکو سیسټمونو لپاره، موږ د ویب ریښې په CONTRIBUTING.md کې د Git پروسیجر کارول سپارښتنه کوو."
+
+msgid "Local Git changes were also detected."
+msgstr "سیمه‌ییز Git بدلونونه هم وموندل شول."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "د پروژې ځینې میټاډاټا فایلونه ورک دي. وروستي تازه کولو پړاوونه ممکن لاسي د تړاوونو چک ته اړتیا ولري."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "د Composer او Yarn میټاډاټا فایلونه شته دي."
+
+msgid "Starting staged file application."
+msgstr "د چمتو شویو فایلونو پلي کول پیلېږي."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "د چمتو شویو فایلونو پلي کولو لپاره څرګند تایید اړین دی."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "د چمتو شویو تازه کولو فایلونو پلي کول څرګند تایید ته اړتیا لري."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "د چمتووالي لارښود د چامیلو د تازه کولو د چمتووالي لارښود دننه دی."
+
+msgid "Staging directory was validated."
+msgstr "د چمتووالي لارښود تایید شو."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "د پلي کولو پلان میټاډاټا په بریالیتوب سره ولوستل شو."
+
+msgid "Staged application path is valid."
+msgstr "د چمتو شوي پلي کولو لار باوري ده."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "د لاسلیک شوې بستې د پاکولو میټاډاټا د بیاکتنه شوي پلي کولو پلان سره سمون لري."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "د لاسلیک شوې بستې د پاکولو میټاډاټا تایید شو."
+
+msgid "Update lock was acquired."
+msgstr "د تازه کولو قفل ترلاسه شو."
+
+msgid "Update backup directory was created."
+msgstr "د تازه کولو د بیک‌اپ لارښود جوړ شو."
+
+msgid "Update file operations were collected."
+msgstr "د تازه کولو د فایل عملیات راټول شول."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "هغه موجود فایلونه چې د بدلولو یا لرې کولو پلان لري بیک‌اپ شول."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "چمتو شوي تازه کولو فایلونه د چامیلو نصب ته کاپي شول."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "د کڅوړې له خوا اعلان شوي زوړ فایلونه د چامیلو نصب څخه لرې شول."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "د کڅوړې له خوا اعلان شوي زوړ فایلونه لرې شول."
+
+msgid "Update apply audit metadata was written."
+msgstr "د تازه کولو پلي کولو د پلټنې میټاډاټا ولیکل شوه."
+
+msgid "Staged files applied successfully."
+msgstr "مرحله شوي فایلونه په بریالیتوب سره پلي شول."
+
+msgid "Unable to restore removed files: %s"
+msgstr "د لرې شویو فایلونو بیا رغول ناشوني دي: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "د کاپي شویو فایلونو بیرته راګرځول ناشوني دي: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "د تازه کولو پلي کولو ناکامۍ وروسته د فایل بیرته راګرځول ترسره شو."
+
+msgid "Rollback failed: %s"
+msgstr "بیرته راګرځول ناکام شو: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "د تازه کولو پلي کولو د پلټنې میټاډاټا لیکل ناشوني دي: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "د ناکامۍ وروسته د تازه کولو قفل خوشې کول ناشوني دي: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "د تازه کولو فایلونو پلي کولو لپاره د مرحلې لاره اړینه ده."
+
+msgid "Staging directory does not exist: %s"
+msgstr "د مرحلې لارښود شتون نلري: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "د چامیلو تازه کولو د مرحلې بنسټیز لارښود شتون نلري."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "د مرحلې لارښود باید د var/update/staging دننه وي."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "د مرحلې لارښود APPLY-PLAN.json نلري."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "د تازه کولو پلي کولو پلان میټاډاټا لوستل ناشوني دي: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "د تازه کولو پلي کولو پلان میټاډاټا باوري JSON نه دی: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "د تازه کولو پلي کولو پلان میټاډاټا باید د JSON څیز وي."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "د تازه کولو پلي کولو پلان د application_path ساحه نلري."
+
+msgid "Staged application path is not readable: %s"
+msgstr "مرحله شوې د غوښتنلیک لاره د لوستلو وړ نه ده: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "مرحله شوې د غوښتنلیک لاره باید د مرحلې لارښود دننه وي."
+
+msgid "Staged application path is missing composer.json."
+msgstr "مرحله شوې د غوښتنلیک لاره composer.json نلري."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "د تازه کولو کڅوړه %s نلري. یوه تایید شوې کڅوړه د لاسلیک شوې پاکولو میټاډاټا سره بیا مرحله کړئ."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "د تازه کولو پلي کولو پلان د بیاکتنه شوې کڅوړې پاکولو میټاډاټا نلري."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "د تازه کولو کڅوړې پاکولو میټاډاټا د پلي کولو پلان جوړولو وروسته بدل شو. د دوام دمخه پلي کولو پلان بیا جوړ کړئ."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "د تازه کولو پلي کولو پلان ناباوره د کڅوړې لرې کولو لیست لري."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "د تازه کولو کڅوړې پاکولو لارې د پلي کولو پلان جوړولو وروسته بدلې شوې. د دوام دمخه پلي کولو پلان بیا جوړ کړئ."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "د تازه کولو پلي کولو پلان د بیاکتنه شوې لرې کولو لارو لیست نلري."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "د تازه کولو پلي کولو پلان د لرې کولو لارې د لاسلیک شوې کڅوړې پاکولو میټاډاټا سره سمون نه خوري."
+
+msgid "Update lock path must be inside var/update."
+msgstr "د تازه کولو قفل لاره باید د var/update دننه وي."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "د تازه کولو پلي کولو پلان د backup_path ساحه نلري."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "د تازه کولو بیک اپ لاره ناامنه لارې برخې لري."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "د تازه کولو بیک اپ لاره باید د var/update/backups دننه وي."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "د تازه کولو قفل ترلاسه کول ناشوني دي. بل تازه کول ممکن روان وي."
+
+msgid "Unable to release update lock: %s"
+msgstr "د تازه کولو قفل خوشې کول ناشوني دي: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "د تازه کولو بیک اپ لارښود له مخکې شتون لري: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "هدف لارښود نشي جوړېدلی: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "پلان شوی تازه کول به موجود سمبولیک لینک له سره ولیکي: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "هدف فایل د لیکلو وړ نه دی: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "هدف فایل نشي جوړېدلی: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "د زوړ فایلونو لرې کولو دمخه د چامیلو پروژې لارښود حل کول ناشوني دي."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "د تازه کولو پاکول خوندي لاره نشي لرې کولی: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "پلان شوی تازه کول به موجود سمبولیک لینک لرې کړي: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "د تازه کولو پاکول یوازې فایلونه ملاتړ کوي، نه لارښودونه: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "زوړ هدف فایل د بیک اپ لپاره د لوستلو وړ نه دی: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "زوړ هدف فایل د اوسنیو لارښود اجازو سره نشي لرې کېدلی: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "زوړ هدف فایل د چامیلو پروژې لارښود څخه بهر حل کېږي: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "د هدف فایل بیک اپ ناشونی دی: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "د تازه کولو بیک اپ میټاډاټا لیکل ناشوني دي."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "مرحله شوی تازه کولو فایل کاپي کول ناشوني دي: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "د %d له %d مرحله شویو فایلونو څخه کاپي شول."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "د بسته له خوا اعلان شوی زوړ فایل نشي لرې کېدای: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "د بسته له خوا اعلان شوي %d له %d زړو فایلونو څخه لرې شول."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "د بیک‌اپ شوی فایل بیا رغول نشي کېدای: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "د رول‌بیک پر مهال نوی کاپي شوی فایل نشي لرې کېدای: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "لرې شوی فایل نشي بیا رغول کېدای ځکه یې بیک‌اپ نشته: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "لرې شوی فایل له بیک‌اپ څخه نشي بیا رغول کېدای: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "د تازه معلوماتو پلي کولو د پلټنې میټاډاټا نشي لیکل کېدای."
+
+msgid "Unable to write global update apply log."
+msgstr "د نړیوال تازه معلوماتو پلي کولو لاګ نشي لیکل کېدای."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "ناخوندي مرحله شوی نسبي لار وموندل شو: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "ډایرکټري د لیکلو وړ نه ده: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "ډایرکټري نشي جوړېدای: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "د مرحلې میټاډاټا په بریالیتوب سره ولوستل شوه."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "د پلي کولو پلان میټاډاټا د مرحلې ډایرکټرۍ ته ولیکل شوه."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "هدف فایلونه او ډایرکټرۍ د پلان شوي تازه معلوماتو او پاکولو لپاره د لیکلو وړ ښکاري."
+
+msgid "Update apply plan check failed."
+msgstr "د تازه معلوماتو د پلي کولو پلان چک ناکام شو."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "ځینې هدف فایلونه یا ډایرکټرۍ نشي لیکل یا لرې کېدای."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "د دې د حل لپاره، د ټولې چامیلو ډایرکټرۍ مالک په موقتي ډول %s (د ویب سرور کارن) ته بدل کړئ، تازه معلومات پلي کړئ، وروسته مالک بیا %s ته بدل کړئ، بیا د var/ (او د هغې محتویاتو) مالک %s ته وټاکئ ترڅو غوښتنلیک ورته لیکل ته دوام ورکړي."
+
+msgid "Update package verification failed."
+msgstr "د تازه معلوماتو د بستې تایید ناکام شو."
+
+msgid "Update preflight checks failed."
+msgstr "د تازه معلوماتو مخکیني چکونه ناکام شول."
+
+msgid "Unable to stage update package."
+msgstr "د تازه معلوماتو بسته نشي مرحله کېدای."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "په دې سرور کې له UI څخه د پلي کولو وروسته قوماندې چلول غیر فعال دي."
+
+msgid "Missing required field: %s"
+msgstr "اړین ډګر نشته: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "د تازه معلوماتو د مانیفیسټ هیڅ سرچینه نه ده ورکړل شوې او هیڅ ډیفالټ د تازه معلوماتو مانیفیسټ URL نه دی تنظیم شوی."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "د تازه معلوماتو د مانیفیسټ URL باید رسمي د تازه معلوماتو اصل %s وکاروي. یوازې د مانیفیسټ لار بدلېدای شي."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "ځایي د تازه معلوماتو د مانیفیسټ لارې غیر فعالې دي. د HTTPS مانیفیسټ URL وکاروئ یا د ځایي ازموینو لپاره په سرور چاپېریال کې CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 وټاکئ."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "د HTTP %s لار مه ورکوئ. دا ډګر تش پرېږدئ ترڅو له د تازه معلوماتو مانیفیسټ څخه ډاونلوډ شي."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "په دې چاپېریال کې ځایي د تازه معلوماتو %s لارې غیر فعالې دي."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "په دې چاپېریال کې باید په سرور کې د باور وړ د تازه معلوماتو عامه کیلي تنظیم شي."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "په دې چاپېریال کې د تازه معلوماتو د لاسلیک تایید تېرول غیر فعال دي."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "د پلي کولو وروسته د تازه معلوماتو کړنې چلول د تایید متن \"%s\" ته اړتیا لري."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "د مرحله شویو تازه معلوماتو فایلونو پلي کول د تایید متن \"%s\" ته اړتیا لري."
+
+msgid "Unable to resolve project directory."
+msgstr "د پروژې ډایرکټري نشي حل کېدای."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "د ډیټابیس بیک‌اپ د دې تازه کوونکي له خوا نه اداره کېږي. د مهاجرتونو له چلولو مخکې د ډیټابیس بیک‌اپ جوړ او تایید کړئ."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "د Doctrine د مهاجرت down() میتودونه د ړنګ شوي یا بدل شوي معلوماتو بیا رغونه تضمین نه کوي."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "د پلي کولو وروسته میټاډاټا د ډیټابیس مهاجرت بیاکتنه وړاندیز کوي."
+
+msgid "No migration files were found in the staged package."
+msgstr "په مرحله شوې بسته کې د مهاجرت هیڅ فایل ونه موندل شو."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "مرحله شوي Doctrine د مهاجرت فایلونه وموندل شول."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "د Doctrine د مهاجرت هدف له مرحله شوې بستې څخه حل شو."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "د Doctrine د مهاجرت بنسټ د مرحله شویو مهاجرتونو لپاره خنډونکي ستونزې لري."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine د تاریخي مهاجرت بنسټ خبرداری ورکوي، خو یوازې مرحله شوي %s مهاجرتونه به په څرګند ډول بیاکتنه او اجرا شي."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine د تاریخي مهاجرت بنسټ خبرداری ورکوي. تازه کوونکی به یوازې مرحله شوي %s د مهاجرت ټولګي د څرګند تایید وروسته اجرا کړي."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "د Doctrine بنسټ د مرحله شویو %s مهاجرتونو لپاره هیڅ خنډونکې ستونزه نلري."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "د Doctrine مهاجرت وچ چلول لږ تر لږه د یوه مرحله شوي مهاجرت لپاره ناکام شو. تر هغه چې دا حل نشي، د ډیټابیس مهاجرتونه مه چلوئ."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "د Doctrine وچ چلول د هر مرحله شوي د مهاجرت ټولګي لپاره په بریالیتوب سره بشپړ شو."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "د مهاجرتونو له چلولو مخکې باید د ډیټابیس بیک‌اپ د دې تازه کوونکي څخه بهر جوړ شي."
+
+msgid "Staging path is required to review database migrations."
+msgstr "د ډیټابیس مهاجرتونو بیاکتنې لپاره د مرحلې لار اړینه ده."
+
+msgid "Unable to read update %s: %s"
+msgstr "د تازه معلوماتو %s نشي لوستل کېدای: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "د تازه معلوماتو %s JSON ناباوره دی: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "د تازه معلوماتو %s JSON باید یو آبجکټ وي."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "د پلي کولو وروسته د چکونو میټاډاټا د اعتبار وړ کړنو لست نه لري."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "د دې مرحلې شوي تازه کولو لپاره د ډیټابیس مهاجرتونه سپارښتنه نه شول."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "د تازه کولو میټاډاټا کې د مرحلې شوي پلي کولو لاره نشته."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "پلان شوی مرحلې شوی مهاجرت فایل ونه موندل شو: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "د مرحلې شوي مهاجرت فایل لوستل ناشوني دي: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "له getDescription() څخه هیڅ تشریح نه شو استخراج کېدای."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "د تازه کولو چلونکی یوازې %s مرحلې شوي مهاجرتونه ملاتړ کوي: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "د مهاجرت د خوندیتوب میټاډاټا لیکل ناشوني دي: %s"
+
+msgid "Migration safety check failed."
+msgstr "د مهاجرت د خوندیتوب چک ناکام شو."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "ناخوندی مرحلې شوی نسبي مهاجرت لاره وموندل شوه: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "د نصب شوي چامیلو نسخه په اتومات ډول ونه موندل شوه. یوازې وروسته له دې چې تایید کړئ دا تازه کول مطابقت لري، دوام ورکړئ."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "نصب شوې یا هدف نسخه د پرتله کېدونکي سیمانټیک نسخې بڼه کې نه ده. یوازې وروسته له لاسي تایید څخه دوام ورکړئ."
+
+msgid "An update is available."
+msgstr "یو تازه کول شتون لري."
+
+msgid "The installed version already matches the manifest version."
+msgstr "نصب شوې نسخه دمخه د مانیفیسټ نسخې سره سمون لري."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "د مانیفیسټ نسخه د نصب شوې نسخې څخه زړه ده. ښکته کول په ډیفالټ بند دي."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "مرحلې شوي فایلونه په بریالیتوب سره پلي نه شول. د پلي کولو وروسته چکونه نشي دوام کولای."
+
+msgid "Apply result metadata was read successfully."
+msgstr "د پلي کولو پایلې میټاډاټا په بریالیتوب سره ولوستل شوه."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "د پلي کولو وروسته د کړنو سپارښتنې جوړې شوې."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "په مرحلې شوي بسته کې د ډیټابیس مهاجرتونه وموندل شول. یوازې وروسته له دې چې تایید کړئ د فایل تازه کول سم دي او د ډیټابیس بیک اپ شتون لري، یې چل کړئ."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "د پلي کولو وروسته چکونو چلولو لپاره د مرحلې لاره اړینه ده."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "تازه کول %s د اعتبار وړ JSON نه دی: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "تازه کول %s باید د JSON آبجیکټ وي."
+
+msgid "Composer dependencies"
+msgstr "د کمپوزر تړاوونه"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "د کمپوزر میټاډاټا په مرحلې شوي بسته کې شامله وه. د تازه کولو بشپړ ګڼلو دمخه له د اپلیکیشن ریښې څخه Composer install چل کړئ."
+
+msgid "Frontend assets"
+msgstr "د مخکینۍ برخې شتمنۍ"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "د مخکینۍ برخې اړوند فایلونه په مرحلې شوي بسته کې شامل وو. د تړاوونو نصبولو وروسته د تولید شتمنۍ بیا جوړې کړئ."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "په مرحلې شوي بسته کې د ډاکټرین مهاجرت فایلونه وموندل شول. د مهاجرتونو چلولو دمخه تایید کړئ چې د ډیټابیس بیک اپ شتون لري."
+
+msgid "Symfony cache"
+msgstr "د سیمفوني کیش"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "د تازه کولو فایلونو پلي کولو او اړینو قوماندو چلولو وروسته د سیمفوني کیش پاک کړئ."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "د پلي کولو وروسته د چکونو میټاډاټا لیکل ناشوني دي."
+
+msgid "Post-apply check failed."
+msgstr "د پلي کولو وروسته چک ناکام شو."
+
+msgid "Update package is not readable: %s"
+msgstr "د تازه کولو بسته لوستل کېدونکې نه ده: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "د تازه کولو بسته د اعتبار وړ ZIP آرشیف نه دی."
+
+msgid "Update package ZIP archive is empty."
+msgstr "د تازه کولو بستې ZIP آرشیف تش دی."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "د تازه کولو بسته یو نه لوستل کېدونکی ZIP ننوت لري."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "د تازه کولو بسته یوه ناخوندی مطلقه لاره لري: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "د تازه کولو بسته د لارې تېرېدو ننوت لري: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "د تازه کولو بسته یو سمبولیک لینک لري: %s"
+
+msgid "Starting post-apply actions."
+msgstr "د پلي کولو وروسته کړنې پیلېږي."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "د پلي کولو وروسته د قوماندې اجرا صریح تایید ته اړتیا لري."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "د پلي کولو وروسته د سپارښتنې میټاډاټا په بریالیتوب سره ولوستل شوه."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "د پلي کولو وروسته کړنې د سپارښتنې راپور په وړاندې تایید شوې."
+
+msgid "Post-apply actions were selected."
+msgstr "د پلي کولو وروسته کړنې وټاکل شوې."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "پرمختللې د پلي کولو وروسته کړنې صریح پرمختللي تایید ته اړتیا لري."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "پرمختللې د پلي کولو وروسته کړنې په صریح ډول تایید شوې."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "ټاکل شوې د پلي کولو وروسته قوماندې په بریالیتوب سره بشپړې شوې."
+
+msgid "Post-apply command run metadata was written."
+msgstr "د پلي کولو وروسته د قوماندې چلولو میټاډاټا ولیکل شوه."
+
+msgid "Post-apply actions completed successfully."
+msgstr "د پلي کولو وروسته کړنې په بریالیتوب سره بشپړې شوې."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "د تازه کولو د پلي کولو وروسته د قوماندې ناسم تعریف: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "د پلي کولو وروسته کړنه چلیږي: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "د %s لپاره امر %d د %d څخه پرمخ روان دی."
+
+msgid "Post-apply action failed: %s"
+msgstr "د پلي کولو وروسته عمل ناکام شو: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "د پلي کولو وروسته عمل \"%s\" د وتلو کوډ %d سره ناکام شو."
+
+msgid "Post-apply action completed: %s"
+msgstr "د پلي کولو وروسته عمل بشپړ شو: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "د پلي کولو وروسته عملونو د چلولو لپاره د سټېجينګ لاره اړینه ده."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "د چلولو لپاره هیڅ وړاندیز شوي پلي کولو وروسته عملونه نشته."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "د چلولو لپاره هیڅ اجازه ورکړل شوي پلي کولو وروسته عملونه نشته."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "د دې تازه کولو لپاره د پلي کولو وروسته عمل اجازه نه لري: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "د ډیټابیس مهاجرتونه د اجرا کولو دمخه د مهاجرت خوندیتوب بیاکتنې ته اړتیا لري."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "د ډیټابیس مهاجرتونه نشي چلېدلی ځکه چې د مهاجرت خوندیتوب بیاکتنه نه ده تېره شوې."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "د ډیټابیس مهاجرتونه نشي چلېدلی ځکه چې د مهاجرت خوندیتوب بیاکتنې سټېج شوي مهاجرتونه نه دي لیست کړي."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "د ډیټابیس مهاجرتونه نشي چلېدلی ځکه چې د مهاجرت خوندیتوب بیاکتنه یو ناسم مهاجرت داخلول لري."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "یوازې سټېج شوي %s مهاجرتونه د تازه کولو چلونکي لخوا اجرا کېدای شي."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "د ډیټابیس مهاجرتونه نشي چلېدلی ځکه چې د سټېج شوي مهاجرت خوندیتوب بیاکتنې بندونکي تېروتنې راپور کړې."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine د مهاجرت بنسټ خبرداری راپوروي. یوازې سټېج شوي %s مهاجرت ټولګي به په څرګند ډول اجرا شي."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "د ډیټابیس مهاجرتونه د تایید ته اړتیا لري چې د ډیټابیس بیک اپ شتون لري."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "د ډیټابیس مهاجرتونه د تایید متن \"RUN DATABASE MIGRATIONS\" ته اړتیا لري."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "د ډیټابیس مهاجرت خوندیتوب بیاکتنه د اجرا کولو دمخه بشپړه شوې وه."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "د ډیټابیس بیک اپ شتون په څرګند ډول تایید شو."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "د ډیټابیس مهاجرت خوندیتوب بیاکتنه او د بیک اپ تایید وړاندې شول."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "د ډیټابیس مهاجرتونه د ډیټابیس بیک اپ څرګند تایید وروسته اجرا شول. تازه کوونکي د ډیټابیس بیک اپ نه دی جوړ کړی."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "د پلي کولو وروسته اړین د اجرا وړ اجازې نورمالې شوې."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "د ډیټابیس مهاجرتونه نشي چلولی ځکه چې bin/console ونه موندل شو."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "ټاکل شوي د پلي کولو وروسته امرونه اړین د لیکلو وړ لارې لري."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "د پلي کولو وروسته امر د لیکلو وړ لارې تایید شوې."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "پرمختللي د پلي کولو وروسته عملونه کولی شي انحصارونه، جوړ شوي شتمنۍ یا ډیټابیس بدل کړي. د دوام دمخه بیک اپونه بیا وګورئ."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "کمپوزر له ویب تازه کوونکي څخه په خوندي ډول نشي چلېدلی ځکه چې د کمپوزر لخوا جوړ شوی فایل \"%s\" د UID %d ملکیت دی پداسې حال کې چې PHP رنټایم UID %d کاروي. کمپوزر په لاسي ډول د ځای پرځای کولو مالک په توګه چل کړئ، بیا پاتې د پلي کولو وروسته عملونو سره دوام ورکړئ."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "د پلي کولو وروسته عمل \"%s\" لخوا اړینه لاره د لیکلو وړ نه ده: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "د پلي کولو وروسته عمل \"%s\" لخوا اړین اصلي فولډر د لیکلو وړ نه دی: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "د اړین د پلي کولو وروسته اجرا وړ لپاره اجازې نشي لوستلی: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "اړین د پلي کولو وروسته اجرا وړ د اجرا وړ په توګه نشي نښه کولی: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "اړین د پلي کولو وروسته اجرا وړ د chmod وروسته لا هم اجرا وړ نه دی: %s"
+
+msgid "Executable permission was normalized."
+msgstr "د اجرا وړ اجازه نورمال شوې."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "د پلي کولو وروسته امرونو لپاره جلا Git تنظیمات نشي لیکلی."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "بل تازه کولو عملیات روان ښکاري. var/update/update.lock یوازې هغه وخت لرې کړئ چې هیڅ تازه کول فعال نه وي."
+
+msgid "Unable to create update lock: %s"
+msgstr "د تازه کولو لاک نشي جوړولی: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "د پلي کولو وروسته امر د چلولو میټاډاټا نشي لیکلی: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "د تازه کولو منشور د کڅوړې بلاک نلري."
+
+msgid "Update manifest signature block must be an object."
+msgstr "د تازه کولو منشور د لاسلیک بلاک باید یو څیز وي."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "د تازه کولو منشور د اړتیاوو بلاک باید یو څیز وي."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "د تازه کولو کڅوړه sha256 باید ۶۴ توري لرونکی هیکساډیسیمل تار وي."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "د تازه کولو منشور اړین تار ساحه \"%s\" نلري."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "د تازه کولو منشور ساحه \"%s\" باید تار وي."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "د تازه کولو منشور باوري JSON نه دی: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "د تازه کولو منشور JSON باید یو څیز وي."
+
+msgid "Manifest source cannot be empty."
+msgstr "د منشور سرچینه نشي خالي کېدای."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "د تازه کولو منشور URL باید رسمي تازه کولو اصل %s وکاروي."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "د تازه کولو منشور نشي ډاونلوډ کولی. HTTP حالت: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "د منشور فایل د لوستلو وړ نه دی: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "د منشور فایل نشي لوستلی: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "د تازه کولو منشور URL باید HTTPS وکاروي."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "د تازه کولو کڅوړې میټاډاټا د لوستلو وړ نه ده: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "د تازه کولو کڅوړې میټاډاټا لوستل نشو کولی: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "د تازه کولو کڅوړې میټاډاټا باوري JSON نه ده: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "د تازه کولو کڅوړې میټاډاټا باید د JSON څیز وي."
+
+msgid "Update package metadata format must be %d."
+msgstr "د تازه کولو کڅوړې میټاډاټا بڼه باید %d وي."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "د تازه کولو کڅوړې میټاډاټا ساحه \"remove\" باید یو آرایه وي."
+
+msgid "Update package removal paths must be strings."
+msgstr "د تازه کولو کڅوړې د لرې کولو لارې باید تارونه وي."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "د تازه کولو کڅوړې میټاډاټا خوندي لاره نشو لرې کولی: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "د تازه کولو کڅوړه نشي کولی ورته لاره شامل او لرې کړي: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "د تازه کولو کڅوړې میټاډاټا sha256 محاسبه نشو کولی."
+
+msgid "Update package removal path cannot be empty."
+msgstr "د تازه کولو کڅوړې د لرې کولو لاره نشي خالي کېدای."
+
+msgid "Update package removal path contains a null byte."
+msgstr "د تازه کولو کڅوړې د لرې کولو لاره یو null بایټ لري."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "د تازه کولو کڅوړې د لرې کولو لاره باید نسبي وي: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "د تازه کولو کڅوړې د لرې کولو لاره یو ناامنه برخه لري: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "د تازه کولو پلي کولو پلان جوړولو لپاره د سټېجینګ لاره اړینه ده."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "د سټېجینګ فولډر STAGING-INFO.json نلري."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "د سټېجینګ میټاډاټا لوستل نشو کولی: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "د سټېجینګ میټاډاټا باوري JSON نه ده: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "د سټېجینګ میټاډاټا باید د JSON څیز وي."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "د سټېجینګ میټاډاټا کې د application_path ساحه نشته."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "د تازه کولو کڅوړه %s نلري. د فایلونو پلي کولو دمخه لاسلیک شوې پاکولو میټاډاټا اړینه ده."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "د سټېجینګ میټاډاټا د استخراج پر مهال ثبت شوې لاسلیک شوې کڅوړې پاکولو میټاډاټا نلري."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "د تازه کولو کڅوړې پاکولو میټاډاټا د سټېجینګ وروسته بدله شوې. د دوام دمخه تایید شوې کڅوړه بیا سټېج کړئ."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "د سټېجینګ میټاډاټا باوري د کڅوړې لرې کولو لیست نلري."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "د تازه کولو کڅوړې پاکولو لارې د سټېجینګ وروسته بدلې شوې. د دوام دمخه تایید شوې کڅوړه بیا سټېج کړئ."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "لاسلیک شوې کڅوړې پاکولو میټاډاټا د سټېجینګ راهیسې نه ده بدله شوې."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "د تازه کولو لاک فایل دمخه شته. بل تازه کول ممکن روان وي."
+
+msgid "Update lock directory is not writable."
+msgstr "د تازه کولو لاک فولډر د لیکلو وړ نه دی."
+
+msgid "No update lock is currently active."
+msgstr "اوس مهال هیڅ د تازه کولو لاک فعال نه دی."
+
+msgid "Update backup directory is not writable."
+msgstr "د تازه کولو بیک اپ فولډر د لیکلو وړ نه دی."
+
+msgid "Update backup directory is writable."
+msgstr "د تازه کولو بیک اپ فولډر د لیکلو وړ دی."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "د تازه کولو بیک اپ فولډر د اوسني پروسې لخوا نشي جوړېدای."
+
+msgid "Update backup directory can be created."
+msgstr "د تازه کولو بیک اپ فولډر جوړېدای شي."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "ځینې د تازه کولو کاري فولډرونه د لیکلو وړ نه دي یا د اوسني پروسې لخوا نشي جوړېدای."
+
+msgid "Update working directories are writable or can be created."
+msgstr "د تازه کولو کاري فولډرونه د لیکلو وړ دي یا جوړېدای شي."
+
+msgid "Update apply file plan was generated."
+msgstr "د تازه کولو پلي کولو فایل پلان جوړ شو."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "د کڅوړې پاکولو میټاډاټا هغه لارې لري چې په خوندي ډول نشي لرې کېدای."
+
+msgid "Package-declared removal targets are safe."
+msgstr "د کڅوړې اعلان شوي لرې کولو هدفونه خوندي دي."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "ځینې د کڅوړې اعلان شوي زوړ فایلونه د دې نصب څخه دمخه نشته."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "پلان شوی تازه کول به موجود سمبولیک لینکونه له سره ولیکي یا لرې کړي."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "پلان شوی تازه کول موجود سمبولیک لینکونه له سره نه لیکي او نه لرې کوي."
+
+msgid "New update migration files must be placed under %s."
+msgstr "د تازه کولو نوي مهاجرت فایلونه باید د %s لاندې کېښودل شي."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "نوي %s Doctrine مهاجرت فایلونه وموندل شول. د فایلونو پلي کولو وروسته به د ډیټابیس مهاجرت خوندیتوب بیاکتنې ته اړتیا ولري."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "د تازه کولو پلي کولو پلان ځینې فایل لیستونه په JSON ځواب کې لنډ شوي وو."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "د تازه کولو پلي کولو پلان میټاډاټا لیکل نشو کولی."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "د تازه کولو کڅوړه ډاونلوډ نشو کولی. HTTP حالت: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "د تازه کولو کڅوړې هدف فایل پرانیستل نشو کولی: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "د تازه کولو ډاونلوډونه باید رسمي تازه کولو سرچینه %s وکاروي."
+
+msgid "The update package URL must use HTTPS."
+msgstr "د تازه کولو کڅوړې URL باید HTTPS وکاروي."
+
+msgid "Update package archive safety checks passed."
+msgstr "د تازه کولو د بستې د آرشیف د خوندیتوب چکونه بریالي شول."
+
+msgid "Update package was extracted to staging."
+msgstr "د تازه کولو بسته سټېجینګ ته استخراج شوه."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "د لاسلیک شوې بستې د پاکولو میټاډاټا بار شوه."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "د تازه کولو بسته %s نه لري. د فایل پلي کول به بند پاتې شي تر څو لاسلیک شوې د پاکولو میټاډاټا وړاندې شي."
+
+msgid "Staged package dry-run report was generated."
+msgstr "د سټېج شوې بستې د ازمایښتي چلولو راپور جوړ شو."
+
+msgid "Staging metadata was written."
+msgstr "د سټېجینګ میټاډاټا ولیکل شوه."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "د تازه کولو بسته سټېجینګ فولډر ته استخراج نشوه."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "په سټېج شوې بسته کې د چامیلو د غوښتنلیک ریښه ونه موندل شوه."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "سټېج شوې بسته د چامیلو اړین ننوت نه لري: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "سټېج شوې بسته د چامیلو تمه شوې جوړښت لري."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "سټېج شوې بسته composer.lock نه لري."
+
+msgid "Staged package contains composer.lock."
+msgstr "سټېج شوې بسته composer.lock لري."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "سټېج شوې بسته yarn.lock نه لري."
+
+msgid "Staged package contains yarn.lock."
+msgstr "سټېج شوې بسته yarn.lock لري."
+
+msgid "Unable to encode staging metadata."
+msgstr "د سټېجینګ میټاډاټا کوډ کول ناشوني دي."
+
+msgid "Unable to write staging metadata."
+msgstr "د سټېجینګ میټاډاټا لیکل ناشوني دي."
+
+msgid "Update operation log created."
+msgstr "د تازه کولو د عملیاتو لاګ جوړ شو."
+
+msgid "Unable to write update operation log."
+msgstr "د تازه کولو د عملیاتو لاګ لیکل ناشوني دي."
+
+msgid "Invalid update operation id."
+msgstr "د تازه کولو د عملیاتو ناسم پېژند."
 

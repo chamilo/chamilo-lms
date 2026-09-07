@@ -37011,13 +37011,13 @@ msgid "Trusted signing key"
 msgstr "Usaldatud allkirjastamisvõti"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Sisesta APPLY UPDATE FILES kinnitamiseks"
+msgstr "Kinnitamiseks sisestage APPLY UPDATE FILES"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Sisesta RUN DATABASE MIGRATIONS andmebaasi migratsioonide kinnitamiseks"
+msgstr "Andmebaasi migratsioonide kinnitamiseks sisestage RUN DATABASE MIGRATIONS"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Sisesta RUN POST UPDATE ACTIONS kinnitamiseks"
+msgstr "Kinnitamiseks sisestage RUN POST UPDATE ACTIONS"
 
 msgid "Unknown update notice source."
 msgstr "Tundmatu värskendusteate allikas."
@@ -40576,4 +40576,607 @@ msgstr "Mõnda sihtfaili või -kataloogi ei saa kirjutada ega eemaldada."
 
 msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
 msgstr "Selle parandamiseks muutke ajutiselt kogu Chamilo kataloogi omanikuks %s (veebiserveri kasutaja), rakendage uuendus, muutke omanik pärast seda tagasi %s-ks ning määrake seejärel var/ (ja selle sisu) omanikuks taas %s, et rakendus saaks sinna edasi kirjutada."
+
+msgid "Update package verification failed."
+msgstr "Uuenduspaketi kontrollimine ebaõnnestus."
+
+msgid "Update preflight checks failed."
+msgstr "Uuenduse eelkontrollid ebaõnnestusid."
+
+msgid "Unable to stage update package."
+msgstr "Uuenduspaketti ei õnnestunud ette valmistada."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Järelrakendamise käskude käivitamine kasutajaliidesest on selles serveris keelatud."
+
+msgid "Missing required field: %s"
+msgstr "Puudub kohustuslik väli: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Uuenduse manifesti allikat ei antud ja vaikimisi uuenduse manifesti URL-i pole seadistatud."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "Uuenduse manifesti URL peab kasutama ametlikku uuenduse päritolu %s. Muuta saab ainult manifesti teed."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Kohalikud uuenduse manifesti teed on keelatud. Kasutage HTTPS-manifesti URL-i või seadistage kohalike testide jaoks serverikeskkonnas CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Ärge esitage HTTP %s teed. Jätke see väli tühjaks, et see uuenduse manifestist alla laadida."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Kohalikud uuenduse %s teed on selles keskkonnas keelatud."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Selles keskkonnas peavad serveris olema seadistatud usaldusväärsed uuenduse avalikud võtmed."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Uuenduse allkirja kontrollimise vahelejätmine on selles keskkonnas keelatud."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Järelrakendamise uuendustoimingute käivitamiseks on vaja kinnitusteksti \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Ettevalmistatud uuendusfailide rakendamiseks on vaja kinnitusteksti \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Projekti kataloogi ei õnnestunud määrata."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Andmebaasi varukoopiat see uuendaja ei halda. Enne migratsioonide käivitamist looge ja kontrollige andmebaasi varukoopia."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine’i migratsiooni down() meetodid ei taga kustutatud või muudetud andmete taastamist."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Järelrakendamise metaandmed soovitavad andmebaasi migratsioonide ülevaatamist."
+
+msgid "No migration files were found in the staged package."
+msgstr "Ettevalmistatud paketist ei leitud migratsioonifaile."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Tuvastati ettevalmistatud Doctrine’i migratsioonifailid."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine’i migratsiooni sihtkoht määrati ettevalmistatud paketist."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine’i migratsiooni lähtejoonel on ettevalmistatud migratsioonide jaoks blokeerivaid probleeme."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine teatab ajaloolistest migratsiooni lähtejoone hoiatustest, kuid ülevaadatakse ja käivitatakse selgesõnaliselt ainult ettevalmistatud %s migratsioonid."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine teatab ajaloolistest migratsiooni lähtejoone hoiatustest. Uuendaja käivitab pärast selgesõnalist kinnitust ainult ettevalmistatud %s migratsiooniklassid."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine’i lähtejoonel ei ole ettevalmistatud %s migratsioonide jaoks blokeerivat probleemi."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Doctrine’i migratsiooni proovikäivitus ebaõnnestus vähemalt ühe ettevalmistatud migratsiooni puhul. Ärge käivitage andmebaasi migratsioone enne, kui see on parandatud."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Doctrine’i proovikäivitus õnnestus iga ettevalmistatud migratsiooniklassi puhul."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Enne migratsioonide käivitamist tuleb andmebaasi varukoopia luua väljaspool seda uuendajat."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Andmebaasi migratsioonide ülevaatamiseks on vaja ettevalmistamise teed."
+
+msgid "Unable to read update %s: %s"
+msgstr "Uuendust %s ei õnnestunud lugeda: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "Uuenduse %s JSON on vigane: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "Uuenduse %s JSON peab olema objekt."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Järelrakendamise kontrollide metaandmed ei sisalda kehtivat toimingute loendit."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Selle ettevalmistatud uuenduse jaoks ei soovitatud andmebaasi migratsioone."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Uuenduse metaandmetest puudub ettevalmistatud rakenduse tee."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Planeeritud ettevalmistatud migratsioonifaili ei leitud: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Ettevalmistatud migratsioonifaili ei õnnestunud lugeda: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "getDescription() meetodist ei õnnestunud kirjeldust eraldada."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Uuenduse käivitaja toetab ainult %s ettevalmistatud migratsioone: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Migratsiooni ohutusmetaandmeid ei õnnestunud kirjutada: %s"
+
+msgid "Migration safety check failed."
+msgstr "Migratsiooni ohutuskontroll ebaõnnestus."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Tuvastati ohtlik ettevalmistatud suhteline migratsioonitee: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Paigaldatud Chamilo versiooni ei õnnestunud automaatselt tuvastada. Jätkake ainult pärast kinnitamist, et see uuendus on ühilduv."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Paigaldatud või sihtversioon ei ole võrreldavas semantilise versiooni vormingus. Jätkake ainult pärast käsitsi kontrollimist."
+
+msgid "An update is available."
+msgstr "Uuendus on saadaval."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Paigaldatud versioon ühtib juba manifesti versiooniga."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Manifesti versioon on vanem kui paigaldatud versioon. Alandused on vaikimisi blokeeritud."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Ettevalmistatud faile ei rakendatud edukalt. Järelkontrollid ei saa jätkuda."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Rakendamise tulemuse metaandmed loeti edukalt."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Järelrakendamise toimingute soovitused genereeriti."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Ettevalmistatud paketis tuvastati andmebaasi migratsioonid. Käivitage need alles pärast failivärskenduse õigsuse kinnitamist ja andmebaasi varukoopia olemasolu."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Järelkontrollide käivitamiseks on vaja ettevalmistusraja."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Värskendus %s ei ole kehtiv JSON: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Värskendus %s peab olema JSON-objekt."
+
+msgid "Composer dependencies"
+msgstr "Composer’i sõltuvused"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Ettevalmistatud paketti lisati Composer’i metaandmed. Enne värskenduse lõpetatuks pidamist käivitage rakenduse juurkaustast Composer install."
+
+msgid "Frontend assets"
+msgstr "Esiosa varad"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Ettevalmistatud paketti lisati esiosaga seotud failid. Pärast sõltuvuste paigaldamist koostage tootmisvarad uuesti."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Ettevalmistatud paketis tuvastati Doctrine’i migratsioonifailid. Enne migratsioonide käivitamist kinnitage, et andmebaasi varukoopia on olemas."
+
+msgid "Symfony cache"
+msgstr "Symfony vahemälu"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Pärast värskendusfailide rakendamist ja vajalike käskude käivitamist tühjendage Symfony vahemälu."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Järelkontrollide metaandmeid ei saa kirjutada."
+
+msgid "Post-apply check failed."
+msgstr "Järelkontroll ebaõnnestus."
+
+msgid "Update package is not readable: %s"
+msgstr "Värskenduspakett ei ole loetav: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Värskenduspakett ei ole kehtiv ZIP-arhiiv."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Värskenduspaketi ZIP-arhiiv on tühi."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Värskenduspakett sisaldab loetamatut ZIP-kirjet."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Värskenduspakett sisaldab ohtlikku absoluutset rada: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Värskenduspakett sisaldab tee läbimise kirjet: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Värskenduspakett sisaldab sümboolset linki: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Järelrakendamise toimingute alustamine."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Järelrakendamise käsu täitmine nõuab selget kinnitust."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Järelrakendamise soovituste metaandmed loeti edukalt."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Järelrakendamise toimingud valideeriti soovitusaruande alusel."
+
+msgid "Post-apply actions were selected."
+msgstr "Järelrakendamise toimingud valiti."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Täpsemad järelrakendamise toimingud nõuavad selget täpsemat kinnitust."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Täpsemad järelrakendamise toimingud kinnitati selgelt."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Valitud järelrakendamise käsud lõpetati edukalt."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Järelrakendamise käsu käivitamise metaandmed kirjutati."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Järelrakendamise toimingud lõpetati edukalt."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Kehtetu värskenduse järelrakendamise käsu määratlus: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Järelrakendamise toimingu käivitamine: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Käsu %d/%d käivitamine toimingu %s jaoks."
+
+msgid "Post-apply action failed: %s"
+msgstr "Järelrakendamise toiming ebaõnnestus: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Järelrakendamise toiming \"%s\" ebaõnnestus väljumiskoodiga %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Järelrakendamise toiming lõpetatud: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Järelrakendamise toimingute käivitamiseks on vaja ettevalmistusraja."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Käivitamiseks ei ole soovitatud järelrakendamise toiminguid."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Käivitamiseks ei ole lubatud järelrakendamise toiminguid."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Järelrakendamise toiming ei ole selle värskenduse jaoks lubatud: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Andmebaasi migratsioonid nõuavad enne täitmist migratsiooni ohutusülevaatust."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Andmebaasi migratsioone ei saa käivitada, sest migratsiooni ohutusülevaatus ei läbinud."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Andmebaasi migratsioone ei saa käivitada, sest migratsiooni ohutusülevaatus ei loetlenud ettevalmistatud migratsioone."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Andmebaasi migratsioone ei saa käivitada, sest migratsiooni ohutusülevaatus sisaldab kehtetut migratsioonikirjet."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Värskenduse käivitaja saab täita ainult ettevalmistatud %s migratsioone."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Andmebaasi migratsioone ei saa käivitada, sest ettevalmistatud migratsiooni ohutusülevaatus teatas blokeerivatest vigadest."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine teatab migratsiooni lähtejoone hoiatustest. Käivitatakse ainult ettevalmistatud %s migratsiooniklassid."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Andmebaasi migratsioonid nõuavad kinnitust, et andmebaasi varukoopia on olemas."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Andmebaasi migratsioonid nõuavad kinnitusteksti \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Andmebaasi migratsiooni ohutusülevaatus tehti enne käivitamist."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Andmebaasi varukoopia olemasolu kinnitati selgesõnaliselt."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Andmebaasi migratsiooni ohutusülevaatus ja varukoopia kinnitus esitati."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Andmebaasi migratsioonid käivitati pärast selgesõnalist andmebaasi varukoopia kinnitust. Uuendaja ei loonud andmebaasi varukoopiat."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Nõutavad rakendamisjärgsete käivitatavate failide õigused normaliseeriti."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Andmebaasi migratsioone ei saa käivitada, sest bin/console ei leitud."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Valitud rakendamisjärgsetel käskudel on nõutavad kirjutatavad teed."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Rakendamisjärgsete käskude kirjutatavad teed valideeriti."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Täpsemad rakendamisjärgsed toimingud võivad muuta sõltuvusi, genereeritud varasid või andmebaasi. Enne jätkamist vaadake varukoopiad üle."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composerit ei saa veebiuuendajast ohutult käivitada, sest Composeriga loodud fail \"%s\" kuulub UID-le %d, samas kui PHP käituskeskkond kasutab UID-d %d. Käivitage Composer käsitsi juurutamise omanikuna ja jätkake seejärel ülejäänud rakendamisjärgsete toimingutega."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Rakendamisjärgse toimingu \"%s\" nõutav tee ei ole kirjutatav: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Rakendamisjärgse toimingu \"%s\" nõutav ülemkataloog ei ole kirjutatav: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Nõutava rakendamisjärgse käivitatava faili õigusi ei saa lugeda: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Nõutavat rakendamisjärgset käivitatavat faili ei saa märkida käivitatavaks: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Nõutav rakendamisjärgne käivitatav fail ei ole pärast chmod’i endiselt käivitatav: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Käivitusõigus normaliseeriti."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Rakendamisjärgsete käskude jaoks ei saa kirjutada eraldatud Git-konfiguratsiooni."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Tundub, et teine uuendustoiming on pooleli. Eemaldage var/update/update.lock ainult siis, kui ükski uuendus ei ole aktiivne."
+
+msgid "Unable to create update lock: %s"
+msgstr "Uuenduse lukku ei saa luua: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Rakendamisjärgse käsu käivitamise metaandmeid ei saa kirjutada: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Uuenduse manifestist puudub paketiplokk."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Uuenduse manifesti allkirjaplokk peab olema objekt."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Uuenduse manifesti nõuete plokk peab olema objekt."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "Uuenduspaketi sha256 peab olema 64-märgiline kuueteistkümnendsõne."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Uuenduse manifestist puudub nõutav sõneväli \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Uuenduse manifesti väli \"%s\" peab olema sõne."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Uuenduse manifest ei ole kehtiv JSON: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "Uuenduse manifesti JSON peab olema objekt."
+
+msgid "Manifest source cannot be empty."
+msgstr "Manifesti allikas ei tohi olla tühi."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "Uuenduse manifesti URL peab kasutama ametlikku uuenduse päritolu %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Uuenduse manifesti ei saa alla laadida. HTTP olek: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Manifestifail ei ole loetav: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Manifestifaili ei saa lugeda: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "Uuenduse manifesti URL peab kasutama HTTPS-i."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Uuenduspaketi metaandmed ei ole loetavad: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Uuenduspaketi metaandmeid ei saa lugeda: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Uuenduspaketi metaandmed ei ole kehtiv JSON: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Uuenduspaketi metaandmed peavad olema JSON-objekt."
+
+msgid "Update package metadata format must be %d."
+msgstr "Uuenduspaketi metaandmete vorming peab olema %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Uuenduspaketi metaandmete väli \"remove\" peab olema massiiv."
+
+msgid "Update package removal paths must be strings."
+msgstr "Uuenduspaketi eemaldamisteed peavad olema sõned."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Uuenduspaketi metaandmed ei saa eemaldada kaitstud teed: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Uuenduspakett ei saa sama teed nii lisada kui eemaldada: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Uuenduspaketi metaandmete sha256-d ei saa arvutada."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Uuenduspaketi eemaldamistee ei tohi olla tühi."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Uuenduspaketi eemaldamistee sisaldab nullbaiti."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Uuenduspaketi eemaldamistee peab olema suhteline: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Uuenduspaketi eemaldamise tee sisaldab ohtlikku segmenti: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Uuenduse rakendamise plaani koostamiseks on vajalik ettevalmistuskaust."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Ettevalmistuskataloogis puudub STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Ettevalmistuse metaandmeid ei saa lugeda: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Ettevalmistuse metaandmed ei ole kehtiv JSON: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Ettevalmistuse metaandmed peavad olema JSON-objekt."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Ettevalmistuse metaandmetest puudub väli application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Uuenduspaketist puudub %s. Enne failide rakendamist on vajalikud allkirjastatud puhastuse metaandmed."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Ettevalmistuse metaandmed ei sisalda lahtipakkimise ajal salvestatud allkirjastatud paketi puhastuse metaandmeid."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Uuenduspaketi puhastuse metaandmed muutusid pärast ettevalmistust. Enne jätkamist valmistage kontrollitud pakett uuesti ette."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Ettevalmistuse metaandmed ei sisalda kehtivat paketi eemaldamise loendit."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Uuenduspaketi puhastuse teed muutusid pärast ettevalmistust. Enne jätkamist valmistage kontrollitud pakett uuesti ette."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Allkirjastatud paketi puhastuse metaandmed ei ole pärast ettevalmistust muutunud."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Uuenduse lukufail on juba olemas. Võib-olla on teine uuendus pooleli."
+
+msgid "Update lock directory is not writable."
+msgstr "Uuenduse lukukataloog ei ole kirjutatav."
+
+msgid "No update lock is currently active."
+msgstr "Praegu ei ole aktiivset uuenduse lukku."
+
+msgid "Update backup directory is not writable."
+msgstr "Uuenduse varukoopia kataloog ei ole kirjutatav."
+
+msgid "Update backup directory is writable."
+msgstr "Uuenduse varukoopia kataloog on kirjutatav."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Praegune protsess ei saa uuenduse varukoopia kataloogi luua."
+
+msgid "Update backup directory can be created."
+msgstr "Uuenduse varukoopia kataloogi saab luua."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Mõned uuenduse töökaustad ei ole kirjutatavad või praegune protsess ei saa neid luua."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Uuenduse töökaustad on kirjutatavad või neid saab luua."
+
+msgid "Update apply file plan was generated."
+msgstr "Uuenduse failide rakendamise plaan on loodud."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Paketi puhastuse metaandmed sisaldavad teid, mida ei saa ohutult eemaldada."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Paketi deklareeritud eemaldamise sihtmärgid on ohutud."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Mõned paketi deklareeritud vananenud failid puuduvad selles paigalduses juba."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Planeeritud uuendus kirjutaks üle või eemaldaks olemasolevad sümboolsed lingid."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Planeeritud uuendus ei kirjuta üle ega eemalda olemasolevaid sümboolseid linke."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Uued uuenduse migratsioonifailid tuleb paigutada kausta %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Tuvastati uued %s Doctrine’i migratsioonifailid. Pärast failide rakendamist vajavad need andmebaasi migratsiooni ohutuskontrolli."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Mõned uuenduse rakendamise plaani faililoendid kärbiti JSON-vastuses."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Uuenduse rakendamise plaani metaandmeid ei saa kirjutada."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Uuenduspaketti ei saa alla laadida. HTTP olek: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Uuenduspaketi sihtfaili ei saa avada: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Uuenduste allalaadimised peavad kasutama ametlikku uuenduse allikat %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "Uuenduspaketi URL peab kasutama HTTPS-i."
+
+msgid "Update package archive safety checks passed."
+msgstr "Uuenduspaketi arhiivi ohutuskontrollid läbiti."
+
+msgid "Update package was extracted to staging."
+msgstr "Uuenduspakett ekstraktiti ettevalmistusse."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Allkirjastatud paketi puhastuse metaandmed laaditi."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Uuenduspakett ei sisalda %s. Failide rakendamine blokeeritakse, kuni allkirjastatud puhastuse metaandmed on esitatud."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Ettevalmistatud paketi kuivkäivituse aruanne on loodud."
+
+msgid "Staging metadata was written."
+msgstr "Ettevalmistuse metaandmed kirjutati."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Uuenduspaketti ei saa ettevalmistuskataloogi ekstraktida."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Ettevalmistatud paketist ei leitud Chamilo rakenduse juurkausta."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Ettevalmistatud paketist puudub nõutav Chamilo kirje: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Ettevalmistatud pakett sisaldab oodatud Chamilo struktuuri."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Ettevalmistatud pakett ei sisalda faili composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Ettevalmistatud pakett sisaldab faili composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Ettevalmistatud pakett ei sisalda faili yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Ettevalmistatud pakett sisaldab faili yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Staging-metateabe kodeerimine ebaõnnestus."
+
+msgid "Unable to write staging metadata."
+msgstr "Staging-metateabe kirjutamine ebaõnnestus."
+
+msgid "Update operation log created."
+msgstr "Uuendustoimingu logi loodud."
+
+msgid "Unable to write update operation log."
+msgstr "Uuendustoimingu logi kirjutamine ebaõnnestus."
+
+msgid "Invalid update operation id."
+msgstr "Vigane uuendustoimingu ID."
 

@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Cordial"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de formulă: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu de formulă: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Domenii de variabile"
@@ -37026,13 +37026,13 @@ msgid "Trusted signing key"
 msgstr "Cheie de semnare de încredere"
 
 msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Tastați APLICARE FIȘIERE ACTUALIZARE pentru a confirma"
+msgstr "Tastați APPLY UPDATE FILES pentru a confirma"
 
 msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Tastați RULARE MIGRĂRI BAZĂ DE DATE pentru a confirma migrările bazei de date"
+msgstr "Tastați RUN DATABASE MIGRATIONS pentru a confirma migrările bazei de date"
 
 msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Tastați RULARE ACȚIUNI POST-ACTUALIZARE pentru a confirma"
+msgstr "Tastați RUN POST UPDATE ACTIONS pentru a confirma"
 
 msgid "Unknown update notice source."
 msgstr "Sursă necunoscută a notificării de actualizare."
@@ -40249,4 +40249,949 @@ msgstr "Orașul stagiului"
 
 msgid "City"
 msgstr "Oraș"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Fluxul de actualizare a fost restaurat după reîmprospătarea paginii"
+
+msgid "Last completed step"
+msgstr "Ultimul pas finalizat"
+
+msgid "Stage package"
+msgstr "Pachet de pregătire"
+
+msgid "Package staging"
+msgstr "Pregătirea pachetului"
+
+msgid "Apply plan"
+msgstr "Plan de aplicare"
+
+msgid "Update workflow completed"
+msgstr "Fluxul de actualizare a fost finalizat"
+
+msgid "Update directory exists and is writable."
+msgstr "Directorul de actualizare există și este inscriptibil."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Directorul de actualizare există, dar nu este inscriptibil: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Directorul de actualizare nu există încă, dar directorul părinte este inscriptibil."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Directorul de actualizare nu există încă, dar poate fi creat în var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Directorul de actualizare nu există și nu poate fi creat cu permisiunile actuale."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Nu s-a putut determina spațiul liber pe disc pentru verificarea preliminară a actualizării."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Spațiu liber pe disc insuficient pentru o operațiune sigură de pregătire a actualizării."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Spațiul liber pe disc este suficient pentru acest flux de actualizare din etapa de verificare."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Manifestul de actualizare nu definește o cerință de versiune PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Nu s-a putut evalua complet cerința PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Versiunea PHP actuală nu îndeplinește cerința de actualizare: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Versiunea PHP actuală îndeplinește cerința de actualizare."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Nu a fost furnizată nicio cale locală de pachet. Pachetele descărcate pot fi verificate doar după descărcare."
+
+msgid "Local update package is not readable: %s"
+msgstr "Pachetul local de actualizare nu poate fi citit: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Pachetul local de actualizare trebuie să fie o arhivă ZIP."
+
+msgid "Local update package is readable."
+msgstr "Pachetul local de actualizare poate fi citit."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Versiunea Chamilo instalată nu a putut fi detectată automat. Direcția versiunii nu poate fi verificată."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Versiunea instalată sau cea țintă nu este într-un format de versiune semantică comparabil."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Versiunea țintă este mai mică decât versiunea instalată. Downgrade-urile nu sunt permise în mod implicit."
+
+msgid "Target version matches the installed version."
+msgstr "Versiunea țintă coincide cu versiunea instalată."
+
+msgid "Target version is newer than the installed version."
+msgstr "Versiunea țintă este mai nouă decât versiunea instalată."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Proiectul nu este un checkout Git sau .git nu este prezent."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Acest sistem de actualizare este destinat instalațiilor fără suport Git. Am detectat că sistemul local folosește Git. Continuarea actualizării ar putea duce la un istoric Git deteriorat. Pentru sistemele cu suport Git, recomandăm procedura Git detaliată în CONTRIBUTING.md din rădăcina web."
+
+msgid "Local Git changes were also detected."
+msgstr "Au fost detectate și modificări Git locale."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Lipsesc unele fișiere de metadate ale proiectului. Etapele ulterioare de actualizare pot necesita verificări manuale ale dependențelor."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Fișierele de metadate Composer și Yarn sunt prezente."
+
+msgid "Starting staged file application."
+msgstr "Se începe aplicarea fișierelor pregătite."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Este necesară o confirmare explicită pentru a aplica fișierele pregătite."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Aplicarea fișierelor de actualizare pregătite necesită o confirmare explicită."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Directorul de pregătire se află în directorul de pregătire a actualizării Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Directorul de pregătire a fost validat."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Metadatele planului de aplicare au fost citite cu succes."
+
+msgid "Staged application path is valid."
+msgstr "Calea de aplicare pregătită este validă."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Metadatele de curățare ale pachetului semnat coincid cu planul de aplicare revizuit."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Metadatele de curățare ale pachetului semnat au fost validate."
+
+msgid "Update lock was acquired."
+msgstr "Blocarea de actualizare a fost obținută."
+
+msgid "Update backup directory was created."
+msgstr "Directorul de backup al actualizării a fost creat."
+
+msgid "Update file operations were collected."
+msgstr "Operațiile asupra fișierelor de actualizare au fost colectate."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Fișierele existente planificate pentru înlocuire sau eliminare au fost salvate în backup."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Fișierele de actualizare pregătite au fost copiate în instalația Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Fișierele obsolete declarate de pachet au fost eliminate din instalarea Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Fișierele obsolete declarate de pachet au fost eliminate."
+
+msgid "Update apply audit metadata was written."
+msgstr "Metadatele de audit ale aplicării actualizării au fost scrise."
+
+msgid "Staged files applied successfully."
+msgstr "Fișierele din staging au fost aplicate cu succes."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Nu s-au putut restaura fișierele eliminate: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Nu s-au putut anula fișierele copiate: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Rollback-ul fișierelor a fost executat după eșecul aplicării actualizării."
+
+msgid "Rollback failed: %s"
+msgstr "Rollback-ul a eșuat: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Nu s-au putut scrie metadatele de audit ale aplicării actualizării: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Nu s-a putut elibera blocarea actualizării după eșec: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Calea de staging este necesară pentru aplicarea fișierelor de actualizare."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Directorul de staging nu există: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Directorul de bază de staging pentru actualizarea Chamilo nu există."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Directorul de staging trebuie să fie în var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Directorului de staging îi lipsește APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Nu s-au putut citi metadatele planului de aplicare a actualizării: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Metadatele planului de aplicare a actualizării nu sunt JSON valid: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Metadatele planului de aplicare a actualizării trebuie să fie un obiect JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Planului de aplicare a actualizării îi lipsește câmpul application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Calea aplicației din staging nu este citibilă: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Calea aplicației din staging trebuie să fie în directorul de staging."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Căii aplicației din staging îi lipsește composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Pachetului de actualizare îi lipsește %s. Reîncărcați în staging un pachet verificat cu metadate de curățare semnate."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Planului de aplicare a actualizării îi lipsesc metadatele de curățare ale pachetului revizuite."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Metadatele de curățare ale pachetului de actualizare s-au modificat după generarea planului de aplicare. Regenerați planul de aplicare înainte de a continua."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Planul de aplicare a actualizării conține o listă invalidă de eliminări din pachet."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Căile de curățare ale pachetului de actualizare s-au modificat după generarea planului de aplicare. Regenerați planul de aplicare înainte de a continua."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Planului de aplicare a actualizării îi lipsește lista revizuită de căi de eliminare."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Căile de eliminare din planul de aplicare a actualizării nu corespund metadatelor semnate de curățare ale pachetului."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Calea blocării actualizării trebuie să fie în var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Planului de aplicare a actualizării îi lipsește câmpul backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Calea de backup a actualizării conține segmente de cale nesigure."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Calea de backup a actualizării trebuie să fie în var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Nu s-a putut obține blocarea actualizării. Este posibil ca o altă actualizare să fie în curs."
+
+msgid "Unable to release update lock: %s"
+msgstr "Nu s-a putut elibera blocarea actualizării: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Directorul de backup al actualizării există deja: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Directorul țintă nu poate fi creat: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Actualizarea planificată ar suprascrie o legătură simbolică existentă: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Fișierul țintă nu este inscriptibil: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Fișierul țintă nu poate fi creat: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Nu s-a putut rezolva directorul proiectului Chamilo înainte de eliminarea fișierelor obsolete."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Curățarea actualizării nu poate elimina calea protejată: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Actualizarea planificată ar elimina o legătură simbolică existentă: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Curățarea actualizării suportă doar fișiere, nu directoare: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Fișierul țintă obsolete nu este citibil pentru backup: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Fișierul țintă obsolete nu poate fi eliminat cu permisiunile actuale ale directorului: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Fișierul țintă obsolete se rezolvă în afara directorului proiectului Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Nu s-a putut face backup pentru fișierul țintă: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Nu s-au putut scrie metadatele de backup ale actualizării."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Nu s-a putut copia fișierul de actualizare din staging: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "S-au copiat %d din %d fișiere pregătite."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Nu s-a putut elimina fișierul declarat ca învechit de pachet: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "S-au eliminat %d din %d fișiere declarate ca învechite de pachet."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Nu s-a putut restaura fișierul salvat: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Nu s-a putut elimina fișierul copiat recent în timpul revenirii: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Nu s-a putut restaura fișierul eliminat deoarece copia de rezervă lipsește: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Nu s-a putut restaura fișierul eliminat din copia de rezervă: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Nu s-au putut scrie metadatele de audit ale aplicării actualizării."
+
+msgid "Unable to write global update apply log."
+msgstr "Nu s-a putut scrie jurnalul global de aplicare a actualizării."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "S-a detectat o cale relativă nesigură în zona de pregătire: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Directorul nu este inscriptibil: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Nu s-a putut crea directorul: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Metadatele de pregătire au fost citite cu succes."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Metadatele planului de aplicare au fost scrise în directorul de pregătire."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Fișierele și directoarele țintă par inscriptibile pentru actualizarea și curățarea planificate."
+
+msgid "Update apply plan check failed."
+msgstr "Verificarea planului de aplicare a actualizării a eșuat."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Unele fișiere sau directoare țintă nu pot fi scrise sau eliminate."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Pentru a remedia acest lucru, schimbați temporar proprietarul întregului director Chamilo la %s (utilizatorul serverului web), aplicați actualizarea, readuceți proprietarul la %s, apoi setați proprietarul lui var/ (și al conținutului său) înapoi la %s, astfel încât aplicația să poată continua să scrie acolo."
+
+msgid "Update package verification failed."
+msgstr "Verificarea pachetului de actualizare a eșuat."
+
+msgid "Update preflight checks failed."
+msgstr "Verificările preliminare ale actualizării au eșuat."
+
+msgid "Unable to stage update package."
+msgstr "Nu s-a putut pregăti pachetul de actualizare."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Executarea comenzilor post-aplicare din interfață este dezactivată pe acest server."
+
+msgid "Missing required field: %s"
+msgstr "Câmp obligatoriu lipsă: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Nu a fost furnizată nicio sursă de manifest de actualizare și nu este configurat niciun URL implicit de manifest de actualizare."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL-ul manifestului de actualizare trebuie să folosească originea oficială de actualizare %s. Doar calea manifestului poate fi modificată."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Căile locale ale manifestului de actualizare sunt dezactivate. Folosiți un URL HTTPS pentru manifest sau setați CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 în mediul serverului pentru teste locale."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Nu furnizați o cale HTTP %s. Lăsați acest câmp gol pentru a-l descărca din manifestul de actualizare."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Căile locale de actualizare %s sunt dezactivate în acest mediu."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Cheile publice de încredere pentru actualizări trebuie configurate pe server în acest mediu."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Omiterea verificării semnăturii actualizării este dezactivată în acest mediu."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Executarea acțiunilor de actualizare post-aplicare necesită textul de confirmare \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Aplicarea fișierelor de actualizare pregătite necesită textul de confirmare \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Nu s-a putut rezolva directorul proiectului."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Copia de rezervă a bazei de date nu este gestionată de acest actualizator. Creați și verificați o copie de rezervă a bazei de date înainte de a rula migrările."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Metodele down() ale migrărilor Doctrine nu garantează restaurarea datelor șterse sau transformate."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Metadatele post-aplicare recomandă revizuirea migrărilor bazei de date."
+
+msgid "No migration files were found in the staged package."
+msgstr "Nu s-au găsit fișiere de migrare în pachetul pregătit."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "S-au detectat fișiere de migrare Doctrine pregătite."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Ținta migrării Doctrine a fost rezolvată din pachetul pregătit."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Linia de bază a migrărilor Doctrine are probleme blocante pentru migrările pregătite."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine raportează avertismente istorice privind linia de bază a migrărilor, dar vor fi revizuite și executate explicit doar migrările pregătite %s."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine raportează avertismente istorice privind linia de bază a migrărilor. Actualizatorul va executa doar clasele de migrare pregătite %s după confirmare explicită."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Linia de bază Doctrine nu are nicio problemă blocantă pentru migrările pregătite %s."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Simularea migrării Doctrine a eșuat pentru cel puțin o migrare pregătită. Nu rulați migrările bazei de date până când acest lucru nu este remediat."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Simularea Doctrine s-a finalizat cu succes pentru fiecare clasă de migrare pregătită."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "O copie de rezervă a bazei de date trebuie creată în afara acestui actualizator înainte de a rula migrările."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Calea de pregătire este necesară pentru a revizui migrările bazei de date."
+
+msgid "Unable to read update %s: %s"
+msgstr "Nu s-a putut citi actualizarea %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON-ul actualizării %s este nevalid: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON-ul actualizării %s trebuie să fie un obiect."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Metadatele verificărilor post-aplicare nu conțin o listă validă de acțiuni."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Migrările bazei de date nu au fost recomandate pentru această actualizare pregătită."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Metadatele actualizării nu conțin calea aplicației pregătite."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Fișierul de migrare pregătit planificat nu a fost găsit: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Nu se poate citi fișierul de migrare pregătit: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Nu s-a putut extrage nicio descriere din getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Executorul de actualizare acceptă doar %s migrări pregătite: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Nu se pot scrie metadatele de siguranță ale migrării: %s"
+
+msgid "Migration safety check failed."
+msgstr "Verificarea de siguranță a migrării a eșuat."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "A fost detectată o cale relativă nesigură de migrare pregătită: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Versiunea Chamilo instalată nu a putut fi detectată automat. Continuați doar după ce confirmați că această actualizare este compatibilă."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Versiunea instalată sau țintă nu este într-un format de versiune semantică comparabilă. Continuați doar după verificare manuală."
+
+msgid "An update is available."
+msgstr "Este disponibilă o actualizare."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Versiunea instalată corespunde deja versiunii din manifest."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Versiunea din manifest este mai veche decât versiunea instalată. Retrogradările sunt blocate implicit."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Fișierele pregătite nu au fost aplicate cu succes. Verificările post-aplicare nu pot continua."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Metadatele rezultatului aplicării au fost citite cu succes."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Au fost generate recomandări de acțiuni post-aplicare."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Au fost detectate migrări ale bazei de date în pachetul pregătit. Rulați-le doar după ce confirmați că actualizarea fișierelor este corectă și că există o copie de rezervă a bazei de date."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Calea de pregătire este necesară pentru a rula verificările post-aplicare."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Actualizarea %s nu este JSON valid: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Actualizarea %s trebuie să fie un obiect JSON."
+
+msgid "Composer dependencies"
+msgstr "Dependențe Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Metadatele Composer au fost incluse în pachetul pregătit. Rulați Composer install din rădăcina aplicației înainte de a considera actualizarea finalizată."
+
+msgid "Frontend assets"
+msgstr "Resurse frontend"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Fișierele legate de frontend au fost incluse în pachetul pregătit. Regenerați resursele de producție după instalarea dependențelor."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Au fost detectate fișiere de migrare Doctrine în pachetul pregătit. Confirmați că există o copie de rezervă a bazei de date înainte de a rula migrările."
+
+msgid "Symfony cache"
+msgstr "Cache Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Goliți cache-ul Symfony după aplicarea fișierelor de actualizare și rularea comenzilor necesare."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Nu se pot scrie metadatele verificărilor post-aplicare."
+
+msgid "Post-apply check failed."
+msgstr "Verificarea post-aplicare a eșuat."
+
+msgid "Update package is not readable: %s"
+msgstr "Pachetul de actualizare nu poate fi citit: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Pachetul de actualizare nu este o arhivă ZIP validă."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Arhiva ZIP a pachetului de actualizare este goală."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Pachetul de actualizare conține o intrare ZIP care nu poate fi citită."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Pachetul de actualizare conține o cale absolută nesigură: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Pachetul de actualizare conține o intrare cu traversare de cale: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Pachetul de actualizare conține o legătură simbolică: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Se pornesc acțiunile post-aplicare."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Executarea comenzilor post-aplicare necesită confirmare explicită."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Metadatele recomandărilor post-aplicare au fost citite cu succes."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Acțiunile post-aplicare au fost validate în raport cu raportul de recomandări."
+
+msgid "Post-apply actions were selected."
+msgstr "Au fost selectate acțiunile post-aplicare."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Acțiunile post-aplicare avansate necesită confirmare avansată explicită."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Acțiunile post-aplicare avansate au fost confirmate explicit."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Comenzile post-aplicare selectate s-au finalizat cu succes."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Metadatele rulării comenzilor post-aplicare au fost scrise."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Acțiunile post-aplicare s-au finalizat cu succes."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Definiție invalidă a comenzii post-aplicare de actualizare: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Se rulează acțiunea post-aplicare: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Se execută comanda %d din %d pentru %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Acțiunea post-aplicare a eșuat: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Acțiunea post-aplicare \"%s\" a eșuat cu codul de ieșire %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Acțiunea post-aplicare s-a finalizat: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Calea de pregătire (staging) este necesară pentru a rula acțiunile post-aplicare."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Nu există acțiuni post-aplicare recomandate de rulat."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Nu există acțiuni post-aplicare permise de rulat."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Acțiunea post-aplicare nu este permisă pentru această actualizare: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Migrările bazei de date necesită o revizuire de siguranță a migrării înainte de execuție."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Migrările bazei de date nu pot rula deoarece revizuirea de siguranță a migrării nu a trecut."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Migrările bazei de date nu pot rula deoarece revizuirea de siguranță a migrării nu a listat migrările pregătite."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Migrările bazei de date nu pot rula deoarece revizuirea de siguranță a migrării conține o înregistrare de migrare nevalidă."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Doar migrările %s pregătite pot fi executate de către runner-ul de actualizare."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Migrările bazei de date nu pot rula deoarece revizuirea de siguranță a migrărilor pregătite a raportat erori de blocare."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine raportează avertismente privind linia de bază a migrărilor. Vor fi executate explicit doar clasele de migrare %s pregătite."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Migrările bazei de date necesită confirmarea că există o copie de rezervă a bazei de date."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Migrările bazei de date necesită textul de confirmare \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Revizuirea de siguranță a migrării bazei de date a fost finalizată înainte de execuție."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Existența copiei de rezervă a bazei de date a fost confirmată explicit."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Au fost furnizate revizuirea de siguranță a migrării bazei de date și confirmarea copiei de rezervă."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Migrările bazei de date au fost executate după o confirmare explicită a copiei de rezervă. Actualizatorul nu a creat copia de rezervă a bazei de date."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Permisiunile executabilelor post-aplicare necesare au fost normalizate."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Nu se pot rula migrările bazei de date deoarece bin/console nu a fost găsit."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Comenzile post-aplicare selectate au căile inscriptibile necesare."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Căile inscriptibile ale comenzilor post-aplicare au fost validate."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Acțiunile post-aplicare avansate pot modifica dependențe, resurse generate sau baza de date. Verificați copiile de rezervă înainte de a continua."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer nu poate rula în siguranță din actualizatorul web deoarece fișierul generat de Composer \"%s\" aparține UID-ului %d, în timp ce runtime-ul PHP folosește UID-ul %d. Rulați Composer manual ca proprietar al implementării, apoi continuați cu restul acțiunilor post-aplicare."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Calea necesară acțiunii post-aplicare \"%s\" nu este inscriptibilă: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Directorul părinte necesar acțiunii post-aplicare \"%s\" nu este inscriptibil: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Nu se pot citi permisiunile pentru executabilul post-aplicare necesar: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Nu se poate marca executabilul post-aplicare necesar ca executabil: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Executabilul post-aplicare necesar tot nu este executabil după chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Permisiunea de executare a fost normalizată."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Nu se poate scrie configurația Git izolată pentru comenzile post-aplicare."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Se pare că rulează o altă operațiune de actualizare. Eliminați var/update/update.lock doar dacă nicio actualizare nu este activă."
+
+msgid "Unable to create update lock: %s"
+msgstr "Nu se poate crea blocarea actualizării: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Nu se pot scrie metadatele de rulare ale comenzii post-aplicare: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Manifestul de actualizare nu conține blocul pachetului."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Blocul de semnătură al manifestului de actualizare trebuie să fie un obiect."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Blocul de cerințe al manifestului de actualizare trebuie să fie un obiect."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 al pachetului de actualizare trebuie să fie un șir hexadecimal de 64 de caractere."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Manifestului de actualizare îi lipsește câmpul șir obligatoriu \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Câmpul \"%s\" al manifestului de actualizare trebuie să fie un șir."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Manifestul de actualizare nu este JSON valid: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON-ul manifestului de actualizare trebuie să fie un obiect."
+
+msgid "Manifest source cannot be empty."
+msgstr "Sursa manifestului nu poate fi goală."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL-ul manifestului de actualizare trebuie să folosească originea oficială de actualizare %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Nu se poate descărca manifestul de actualizare. Stare HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Fișierul manifest nu este citibil: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Nu se poate citi fișierul manifest: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL-ul manifestului de actualizare trebuie să folosească HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Metadatele pachetului de actualizare nu pot fi citite: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Nu s-au putut citi metadatele pachetului de actualizare: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Metadatele pachetului de actualizare nu sunt JSON valid: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Metadatele pachetului de actualizare trebuie să fie un obiect JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Formatul metadatelor pachetului de actualizare trebuie să fie %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Câmpul de metadate al pachetului de actualizare \"remove\" trebuie să fie un tablou."
+
+msgid "Update package removal paths must be strings."
+msgstr "Căile de eliminare din pachetul de actualizare trebuie să fie șiruri."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Metadatele pachetului de actualizare nu pot elimina calea protejată: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Pachetul de actualizare nu poate include și elimina aceeași cale: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Nu s-a putut calcula sha256 pentru metadatele pachetului de actualizare."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Calea de eliminare din pachetul de actualizare nu poate fi goală."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Calea de eliminare din pachetul de actualizare conține un octet null."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Calea de eliminare din pachetul de actualizare trebuie să fie relativă: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Calea de eliminare din pachetul de actualizare conține un segment nesigur: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Calea de staging este necesară pentru a construi un plan de aplicare a actualizării."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Directorului de staging îi lipsește STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Nu s-au putut citi metadatele de staging: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Metadatele de staging nu sunt JSON valid: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Metadatele de staging trebuie să fie un obiect JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Metadatelor de staging le lipsește câmpul application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Pachetului de actualizare îi lipsește %s. Metadatele de curățare semnate sunt necesare înainte ca fișierele să poată fi aplicate."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Metadatele de staging nu conțin metadatele de curățare semnate ale pachetului înregistrate în timpul extragerii."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Metadatele de curățare ale pachetului de actualizare s-au schimbat după staging. Re-stageați pachetul verificat înainte de a continua."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Metadatele de staging nu conțin o listă validă de eliminare a pachetului."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Căile de curățare ale pachetului de actualizare s-au schimbat după staging. Re-stageați pachetul verificat înainte de a continua."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Metadatele de curățare semnate ale pachetului sunt neschimbate de la staging."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Există deja un fișier de blocare a actualizării. Este posibil ca o altă actualizare să fie în curs."
+
+msgid "Update lock directory is not writable."
+msgstr "Directorul de blocare a actualizării nu este inscriptibil."
+
+msgid "No update lock is currently active."
+msgstr "Nu există nicio blocare de actualizare activă momentan."
+
+msgid "Update backup directory is not writable."
+msgstr "Directorul de backup al actualizării nu este inscriptibil."
+
+msgid "Update backup directory is writable."
+msgstr "Directorul de backup al actualizării este inscriptibil."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Directorul de backup al actualizării nu poate fi creat de procesul curent."
+
+msgid "Update backup directory can be created."
+msgstr "Directorul de backup al actualizării poate fi creat."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Unele directoare de lucru ale actualizării nu sunt inscriptibile sau nu pot fi create de procesul curent."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Directoarele de lucru ale actualizării sunt inscriptibile sau pot fi create."
+
+msgid "Update apply file plan was generated."
+msgstr "Planul de aplicare a fișierelor de actualizare a fost generat."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Metadatele de curățare ale pachetului conțin căi care nu pot fi eliminate în siguranță."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Țintele de eliminare declarate de pachet sunt sigure."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Unele fișiere obsolete declarate de pachet lipsesc deja din această instalare."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Actualizarea planificată ar suprascrie sau elimina legături simbolice existente."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Actualizarea planificată nu suprascrie și nu elimină legături simbolice existente."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Fișierele noi de migrare pentru actualizare trebuie plasate sub %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Au fost detectate fișiere noi de migrare Doctrine %s. Vor necesita o revizuire de siguranță a migrării bazei de date după aplicarea fișierelor."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Unele liste de fișiere din planul de aplicare a actualizării au fost trunchiate în răspunsul JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Nu s-au putut scrie metadatele planului de aplicare a actualizării."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Nu s-a putut descărca pachetul de actualizare. Stare HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Nu s-a putut deschide fișierul țintă al pachetului de actualizare: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Descărcările de actualizare trebuie să folosească originea oficială de actualizare %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL-ul pachetului de actualizare trebuie să folosească HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Verificările de siguranță ale arhivei pachetului de actualizare au fost trecute."
+
+msgid "Update package was extracted to staging."
+msgstr "Pachetul de actualizare a fost extras în zona de pregătire."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Metadatele de curățare ale pachetului semnat au fost încărcate."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Pachetul de actualizare nu conține %s. Aplicarea fișierelor va fi blocată până când sunt furnizate metadatele de curățare semnate."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Raportul de simulare al pachetului pregătit a fost generat."
+
+msgid "Staging metadata was written."
+msgstr "Metadatele de pregătire au fost scrise."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Nu s-a putut extrage pachetul de actualizare în directorul de pregătire."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Nu s-a putut localiza rădăcina aplicației Chamilo în pachetul pregătit."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Pachetului pregătit îi lipsește intrarea Chamilo obligatorie: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Pachetul pregătit conține structura Chamilo așteptată."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Pachetul pregătit nu conține composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Pachetul pregătit conține composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Pachetul pregătit nu conține yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Pachetul pregătit conține yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Nu s-au putut codifica metadatele de pregătire."
+
+msgid "Unable to write staging metadata."
+msgstr "Nu s-au putut scrie metadatele de pregătire."
+
+msgid "Update operation log created."
+msgstr "Jurnalul operațiunii de actualizare a fost creat."
+
+msgid "Unable to write update operation log."
+msgstr "Nu s-a putut scrie jurnalul operațiunii de actualizare."
+
+msgid "Invalid update operation id."
+msgstr "Identificator invalid al operațiunii de actualizare."
 

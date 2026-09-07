@@ -36927,15 +36927,6 @@ msgstr ""
 msgid "Trusted signing key"
 msgstr ""
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr ""
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr ""
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr ""
-
 msgid "Unknown update notice source."
 msgstr ""
 

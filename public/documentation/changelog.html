@@ -40,7 +40,7 @@
     </div>
 
     <a id="3.0-stable"></a>
-    <h1>Chamilo 3.0 stable, 2026-09-06</h1>
+    <h1>Chamilo 3.0 stable, 2026-09-07</h1>
     <h3>Release notes - summary</h3>
     <p>
         The first release of the Chamilo 3.x branch, building on the stable 2.0 foundation.<br>
@@ -80,6 +80,8 @@
           <li>Added Model Context Protocol (MCP) server for AI client integrations managing course creation/listing, document, tests, learning paths and survey creations, student progress info recovery, tickets management, and more</li>
           <li>Added support for Anthropic's Claude model (and compatible) as AI provider</li>
           <li>Enhanced course analyzer with course description context</li>
+	  <li>Added experimental web update feature for future versions</li>
+          <li>Added AI study helper in learning paths (select text and click icon)</li>
         </ul>
       </li>
       <li>URLs, Branches and Rooms:
@@ -169,9 +171,8 @@
 
     <h3>Added</h3>
     <ul aria-live="off">
+        <li>[2026-09-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/7b43f6eab8f37cc47a41f1c4a7dfeeca25a59f40">7b43f6ea</a>) Learnpath: Add AI study helper in Vue runtime</li>
         <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/4beeff13a4ce">4beeff13</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8977">GH#8977</a>) WYSIWYG: Add MathJax formula support to the editor toolbar</li>
-        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/f841d0bc74a6">f841d0bc</a>) Internal: Add a skill for the Vue breadcrumb declarations</li>
-        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/d31f3488bc4f">d31f3488</a>) Documentation: Add example Nginx vhost block</li>
         <li>[2026-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/1d4b0d1d6159">1d4b0d1d</a>) MCP: add Student Success feedback tool</li>
         <li>[2026-09-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/79ad30257a4e">79ad3025</a>) AI tutor: add platform support mode</li>
         <li>[2026-09-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/6de2c82cf9de">6de2c82c</a>) Internal: Add command to upload bundled themes to the configured remote storage</li>
@@ -203,6 +204,12 @@
 
     <h3>Changed</h3>
     <ul aria-live="off">
+        <li>[2026-09-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/31b235932fe6a016e43d114d29f1c3a12958cd75">31b23593</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9028">GH#9028</a>) Admin: Fix action icons path and style in mail templates list</li>
+        <li>[2026-09-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/dcb0f4b1483b60f0524e9565e13680261494e28f">dcb0f4b1</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9026">GH#9026</a>) Registration: Fix locale setting preventing registration page edition form to appear</li>
+        <li>[2026-09-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/ef7e0b0744456b1871be6469db521ed7787b95ae">ef7e0b07</a>) QA: Improve Playwright tests</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/d2b280880074">d2b28088</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5004">GH#5004</a>) Guard updater Composer runtime ownership</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/48ae94af0bcc">48ae94af</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5004">GH#5004</a>) Guard updater Composer runtime ownership</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/cc83d83e05c9">cc83d83e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5004">GH#5004</a>) Internal: Harden automated update workflow</li>
         <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/4557c5eab23d">4557c5ea</a>) Internal: Bump version number</li>
         <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/27006cbd2379">27006cbd</a>) API: Fix the IRI returned when a course tool introduction is created</li>
         <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/3b5e6be43e0b">3b5e6be4</a>) CI: Repair the dependency caching of the workflows</li>
@@ -452,6 +459,17 @@
 
     <h3>Fixed</h3>
     <ul aria-live="off">
+        <li>[2026-09-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/fef9803447f63316ff5179d474e9aefa72321a40">fef98034</a>) Language: Update language terms</li>
+        <li>[2026-09-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ad5e824eda3">5ad5e824</a>) Language: Update language terms</li>
+        <li>[2026-09-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/c78d4fc36c3b">c78d4fc3</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5004">GH#5004</a>) Fix updater prod container compatibility</li>
+        <li>[2026-09-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/dc3c2d09a5b7">dc3c2d09</a>) Language: Add new terms for system update + a few translations</li>
+        <li>[2026-09-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/2e0406777976">2e040677</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5004">GH#5004</a>) Fix updater preflight continuity</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/31d881adde12">31d881ad</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5004">GH#5004</a>) Fix updater trusted key fallback</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/63ebc6004af7">63ebc600</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5004">GH#5004</a>) Fix updater post-apply resume after refresh</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/dc5c94abc039">dc5c94ab</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5004">GH#5004</a>) Fix updater post-apply executable handling</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/d93a46b5f741">d93a46b5</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5004">GH#5004</a>) Fix updater post-apply action order</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/8cab749b901c">8cab749b</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5004">GH#5004</a>) Fix updater Yarn build command display</li>
+        <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed2bed3bab65">ed2bed3b</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5004">GH#5004</a>) Fix updater apply plan error display</li>
         <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/f781decc80b2">f781decc</a>) Install: Fix a fatal error when a form field arrives as a nested array</li>
         <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/1671d44f0e6d">1671d44f</a>) Install: Stop a PHP deprecation notice on every installer page load</li>
         <li>[2026-09-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/df52c44a4b25">df52c44a</a>) Language: remove extra language files committed by error</li>

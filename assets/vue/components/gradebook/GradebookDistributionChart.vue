@@ -22,6 +22,7 @@ import {
   PointElement,
   Tooltip,
 } from "chart.js"
+import { useTheme } from "../../composables/theme"
 
 Chart.register(
   BarController,
@@ -51,8 +52,22 @@ const props = defineProps({
 })
 
 const { t } = useI18n()
+const { getColorTheme } = useTheme()
 const canvas = ref(null)
 let chart = null
+
+/**
+ * Reads one platform theme color as a string chart.js understands. The bars
+ * follow the theme instead of a fixed palette; the average point takes the
+ * tertiary color, which contrasts with the bars in every theme and carries no
+ * meaning of its own, unlike the danger red.
+ *
+ * @param {string} variableName A theme CSS variable, e.g. "--color-primary-base".
+ * @returns {string} The color as a hexadecimal string.
+ */
+function themeColor(variableName) {
+  return getColorTheme(variableName).value.to("srgb").toString({ format: "hex" })
+}
 
 /**
  * Builds the datasets: one bar per score range, plus a single point on the
@@ -67,7 +82,7 @@ function buildData() {
       type: "bar",
       label: t("Learners"),
       data: props.distribution.map((bucket) => bucket.count),
-      backgroundColor: "#2563eb",
+      backgroundColor: themeColor("--color-primary-base"),
       borderRadius: 4,
     },
   ]
@@ -77,12 +92,14 @@ function buildData() {
     : -1
 
   if (averageIndex >= 0) {
+    const averageColor = themeColor("--color-tertiary-base")
+
     datasets.push({
       type: "line",
       label: `${t("Average score")} (${props.average.percentage}%)`,
       data: props.distribution.map((bucket, index) => (index === averageIndex ? bucket.count : null)),
-      borderColor: "#dc2626",
-      backgroundColor: "#dc2626",
+      borderColor: averageColor,
+      backgroundColor: averageColor,
       pointRadius: 6,
       pointHoverRadius: 8,
       showLine: false,

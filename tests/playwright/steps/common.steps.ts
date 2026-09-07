@@ -1203,6 +1203,34 @@ Then("I uncheck {string}", async ({ page }, field: string) => {
   await (await resolveField(page, field)).uncheck()
 })
 
+// Not ported — new, for toolUsers.feature's table selection checkboxes. Those
+// are BaseCheckbox (PrimeVue) instances: the real <input> is transparent and
+// sits on top of the styled box, so it still resolves and clicks like any
+// checkbox, but its state has to be asserted explicitly — a "should see" on
+// the surrounding text cannot tell a select-all header apart from one row.
+Then(/^the checkbox "([^"]*)" should( not)? be checked$/, async ({ page }, field: string, negated?: string) => {
+  const locator = (await resolveField(page, field)).first()
+
+  if (negated) {
+    await expect(locator).not.toBeChecked()
+    return
+  }
+
+  await expect(locator).toBeChecked()
+})
+
+// Same components, for the "some rows selected" state of a select-all header.
+// It lives ONLY in the input's `indeterminate` DOM property — no attribute, no
+// class, nothing a selector can reach — and PrimeVue writes it from its own
+// updated() hook, one tick after the model changes, hence the polling.
+Then(/^the checkbox "([^"]*)" should( not)? be indeterminate$/, async ({ page }, field: string, negated?: string) => {
+  const locator = (await resolveField(page, field)).first()
+
+  // !negated, not `undefined === negated`: playwright-bdd hands an unmatched
+  // optional group over as null, so the strict check inverted the assertion.
+  await expect.poll(() => locator.evaluate((el: HTMLInputElement) => el.indeterminate)).toBe(!negated)
+})
+
 // Not ported — new, for toolAssessments.feature's "Create an evaluation"
 // scenario. gradebook_add_result.php's per-learner score field is
 // genuinely id/name "score[<numeric user id>]" (confirmed live) — the
@@ -2210,6 +2238,33 @@ Then("I should not see the {string} element", async ({ page }, selector: string)
 // expect() timeout (15s, see playwright.config.ts) applies.
 When(/^(?:|I )wait for the element "([^"]*)" to appear$/, async ({ page }, selector: string) => {
   await expect(page.locator(selector).first()).toBeVisible()
+})
+
+// Not ported — new, for the SPA route-change trap documented in CLAUDE.md: a
+// router.push() fires no navigation event, so "I wait for the page to be
+// loaded" resolves against the OLD route and the next step reads the previous
+// view's state. Two views that differ only by a query parameter (the Users
+// tool's Learners/Teachers tabs) look identical while the switch is pending,
+// so the query string is the only signal that cannot lie. Real failure: a
+// scenario pressed "Teachers", clicked "Add" before the push landed, and
+// registered its user as a LEARNER — silently, with every assertion passing.
+When(/^(?:|I )wait for the URL to contain "([^"]*)"$/, async ({ page }, fragment: string) => {
+  await page.waitForURL((url) => String(url).includes(fragment))
+})
+
+// Not ported — new, for the selection column of a BaseTable. Naming the row by
+// its own text ("I click the ... icon in the row for ...") stays the safer
+// default, but a selection checkbox is exercised on lists whose contents are
+// not fixed — a page of available users, say — where the point is only that
+// SOME row toggles, and hardcoding a username there ties the test to one box's
+// seed data. The position is 1-based, like a Gherkin table's own rows.
+When("I click the checkbox in table row {int}", async ({ page }, position: number) => {
+  await page
+    .locator(".p-datatable tbody tr")
+    .nth(position - 1)
+    .locator('input[type="checkbox"]')
+    .first()
+    .click()
 })
 
 // Ported from FeatureContext::iWaitUpToSecondsForTheElementToAppear() — same

@@ -41188,3 +41188,51 @@ msgstr "No s'ha pogut escriure el registre de l'operació d'actualització."
 msgid "Invalid update operation id."
 msgstr "Identificador d'operació d'actualització no vàlid."
 
+msgid "AI study helper"
+msgstr "Assistent d'estudi amb IA"
+
+msgid "Selected text"
+msgstr "Text seleccionat"
+
+msgid "Learning technique"
+msgstr "Tècnica d'aprenentatge"
+
+msgid "AI response"
+msgstr "Resposta de la IA"
+
+msgid "AI request failed."
+msgstr "La sol·licitud d'IA ha fallat."
+
+msgid "Mind mapping"
+msgstr "Mapes mentals"
+
+msgid "Feynman Technique"
+msgstr "Tècnica de Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Interrogació elaborativa"
+
+msgid "Spaced repetition"
+msgstr "Repetició espaiada"
+
+msgid "SQ3R Method"
+msgstr "Mètode SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogies i metàfores"
+
+msgid "Dual coding"
+msgstr "Codificació dual"
+
+msgid "Storytelling"
+msgstr "Narració d'històries"
+
+msgid "Thematic connections"
+msgstr "Connexions temàtiques"
+
+msgid "Interleaved learning"
+msgstr "Aprenentatge intercalat"
+
+msgid "Memory palaces"
+msgstr "Palaus de la memòria"
+

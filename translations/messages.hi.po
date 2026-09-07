@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "सादर"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र उदाहरण: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चर सीमाएं"
@@ -41168,4 +41168,52 @@ msgstr "अपडेट ऑपरेशन लॉग लिखने में �
 
 msgid "Invalid update operation id."
 msgstr "अमान्य अपडेट ऑपरेशन आईडी।"
+
+msgid "AI study helper"
+msgstr "एआई अध्ययन सहायक"
+
+msgid "Selected text"
+msgstr "चयनित पाठ"
+
+msgid "Learning technique"
+msgstr "अधिगम तकनीक"
+
+msgid "AI response"
+msgstr "एआई प्रतिक्रिया"
+
+msgid "AI request failed."
+msgstr "एआई अनुरोध विफल रहा।"
+
+msgid "Mind mapping"
+msgstr "माइंड मैपिंग"
+
+msgid "Feynman Technique"
+msgstr "फेनमैन तकनीक"
+
+msgid "Elaborative interrogation"
+msgstr "विस्तृत पूछताछ"
+
+msgid "Spaced repetition"
+msgstr "अंतराल पुनरावृत्ति"
+
+msgid "SQ3R Method"
+msgstr "SQ3R विधि"
+
+msgid "Analogies and metaphors"
+msgstr "उपमाएँ और रूपक"
+
+msgid "Dual coding"
+msgstr "द्वैध कूटलेखन"
+
+msgid "Storytelling"
+msgstr "कथावाचन"
+
+msgid "Thematic connections"
+msgstr "विषयगत संबंध"
+
+msgid "Interleaved learning"
+msgstr "अंतर्ग्रथित अधिगम"
+
+msgid "Memory palaces"
+msgstr "स्मृति महल"
 

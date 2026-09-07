@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Z poważaniem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Przykład formuły: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Przykład wzoru: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Zakresy zmiennych"
@@ -41178,4 +41178,52 @@ msgstr "Nie można zapisać dziennika operacji aktualizacji."
 
 msgid "Invalid update operation id."
 msgstr "Nieprawidłowy identyfikator operacji aktualizacji."
+
+msgid "AI study helper"
+msgstr "Asystent nauki AI"
+
+msgid "Selected text"
+msgstr "Zaznaczony tekst"
+
+msgid "Learning technique"
+msgstr "Technika uczenia się"
+
+msgid "AI response"
+msgstr "Odpowiedź AI"
+
+msgid "AI request failed."
+msgstr "Żądanie AI nie powiodło się."
+
+msgid "Mind mapping"
+msgstr "Mapy myśli"
+
+msgid "Feynman Technique"
+msgstr "Technika Feynmana"
+
+msgid "Elaborative interrogation"
+msgstr "Pytania pogłębiające"
+
+msgid "Spaced repetition"
+msgstr "Powtórki rozłożone w czasie"
+
+msgid "SQ3R Method"
+msgstr "Metoda SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogie i metafory"
+
+msgid "Dual coding"
+msgstr "Podwójne kodowanie"
+
+msgid "Storytelling"
+msgstr "Opowiadanie historii"
+
+msgid "Thematic connections"
+msgstr "Powiązania tematyczne"
+
+msgid "Interleaved learning"
+msgstr "Nauka przeplatana"
+
+msgid "Memory palaces"
+msgstr "Pałace pamięci"
 

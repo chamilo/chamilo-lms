@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":si:con copyright,, non:sen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartafol,, application/msword:MsWord,, application/octet-stream:Fluxo de octetos,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Cartafol,, application\/msword:MsWord,, application\/octet-stream:Fluxo de octetos,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercicio,, simulation:simulación,, questionnaire:cuestionario,, diagram:diagrama,, figure:figura,, graph:gráfico,, index:índice,, slide:diapositiva,, table:táboa,, narrative text:texto narrativo,, exam:examen,, experiment:experimento,, problem statement:problema,, self assessment:autoevaluación,, lecture:presentación"
@@ -41187,4 +41187,52 @@ msgstr "Non se puido escribir o rexistro da operación de actualización."
 
 msgid "Invalid update operation id."
 msgstr "Id. de operación de actualización non válido."
+
+msgid "AI study helper"
+msgstr "Asistente de estudo con IA"
+
+msgid "Selected text"
+msgstr "Texto seleccionado"
+
+msgid "Learning technique"
+msgstr "Técnica de aprendizaxe"
+
+msgid "AI response"
+msgstr "Resposta da IA"
+
+msgid "AI request failed."
+msgstr "Fallou a solicitude de IA."
+
+msgid "Mind mapping"
+msgstr "Mapas mentais"
+
+msgid "Feynman Technique"
+msgstr "Técnica de Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Interrogación elaborativa"
+
+msgid "Spaced repetition"
+msgstr "Repetición espazada"
+
+msgid "SQ3R Method"
+msgstr "Método SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogías e metáforas"
+
+msgid "Dual coding"
+msgstr "Codificación dual"
+
+msgid "Storytelling"
+msgstr "Narración de historias"
+
+msgid "Thematic connections"
+msgstr "Conexións temáticas"
+
+msgid "Interleaved learning"
+msgstr "Aprendizaxe intercalada"
+
+msgid "Memory palaces"
+msgstr "Palacios da memoria"
 

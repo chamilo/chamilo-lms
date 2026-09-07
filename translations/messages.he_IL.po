@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "בכנות"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "דוגמת נוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "דוגמת נוסחה: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "טווחים משתנים"
@@ -41185,4 +41185,52 @@ msgstr "לא ניתן לכתוב את יומן פעולת העדכון."
 
 msgid "Invalid update operation id."
 msgstr "מזהה פעולת עדכון לא חוקי."
+
+msgid "AI study helper"
+msgstr "עוזר לימוד מבוסס בינה מלאכותית"
+
+msgid "Selected text"
+msgstr "טקסט נבחר"
+
+msgid "Learning technique"
+msgstr "טכניקת למידה"
+
+msgid "AI response"
+msgstr "תגובת בינה מלאכותית"
+
+msgid "AI request failed."
+msgstr "בקשת הבינה המלאכותית נכשלה."
+
+msgid "Mind mapping"
+msgstr "מיפוי מחשבות"
+
+msgid "Feynman Technique"
+msgstr "שיטת פיינמן"
+
+msgid "Elaborative interrogation"
+msgstr "חקירה מעמיקה"
+
+msgid "Spaced repetition"
+msgstr "חזרה במרווחים"
+
+msgid "SQ3R Method"
+msgstr "שיטת SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "אנלוגיות ומטאפורות"
+
+msgid "Dual coding"
+msgstr "קידוד כפול"
+
+msgid "Storytelling"
+msgstr "סיפור סיפורים"
+
+msgid "Thematic connections"
+msgstr "קשרים נושאיים"
+
+msgid "Interleaved learning"
+msgstr "למידה משולבת"
+
+msgid "Memory palaces"
+msgstr "ארמונות זיכרון"
 

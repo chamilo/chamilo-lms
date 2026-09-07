@@ -41218,3 +41218,51 @@ msgstr "ບໍ່ສາມາດຂຽນບັນທຶກການດຳເນ
 msgid "Invalid update operation id."
 msgstr "ລະຫັດການດຳເນີນການອັບເດດບໍ່ຖືກຕ້ອງ."
 
+msgid "AI study helper"
+msgstr "ຜູ້ຊ່ວຍການຮຽນດ້ວຍ AI"
+
+msgid "Selected text"
+msgstr "ຂໍ້ຄວາມທີ່ເລືອກ"
+
+msgid "Learning technique"
+msgstr "ເຕັກນິກການຮຽນ"
+
+msgid "AI response"
+msgstr "ການຕອບຂອງ AI"
+
+msgid "AI request failed."
+msgstr "ການຮ້ອງຂໍ AI ລົ້ມເຫລວ."
+
+msgid "Mind mapping"
+msgstr "ແຜນທີ່ຄວາມຄິດ"
+
+msgid "Feynman Technique"
+msgstr "ເຕັກນິກ Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "ການສອບຖາມແບບຂະຫຍາຍ"
+
+msgid "Spaced repetition"
+msgstr "ການທົບທວນຊ້ຳແບບຫ່າງໄລຍະ"
+
+msgid "SQ3R Method"
+msgstr "ວິທີ SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "ການປຽບທຽບ ແລະ ຄຳອຸປະມາ"
+
+msgid "Dual coding"
+msgstr "ການເຂົ້າລະຫັດຄູ່"
+
+msgid "Storytelling"
+msgstr "ການເລົ່າເລື່ອງ"
+
+msgid "Thematic connections"
+msgstr "ການເຊື່ອມໂຍງຕາມຫົວຂໍ້"
+
+msgid "Interleaved learning"
+msgstr "ການຮຽນແບບສະຫຼັບ"
+
+msgid "Memory palaces"
+msgstr "ວັງຄວາມຈຳ"
+

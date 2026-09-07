@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ fọ́múlà: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -41168,4 +41168,52 @@ msgstr "Kò ṣeé ṣe láti kọ àkọsílẹ̀ iṣẹ́ ìdàgbàsókè."
 
 msgid "Invalid update operation id."
 msgstr "Id iṣẹ́ ìdàgbàsókè kò tọ́."
+
+msgid "AI study helper"
+msgstr "Olùrànlọ́wọ́ ìkẹ́kọ̀ọ́ AI"
+
+msgid "Selected text"
+msgstr "Ọ̀rọ̀ tí a yàn"
+
+msgid "Learning technique"
+msgstr "Ìlànà ìkẹ́kọ̀ọ́"
+
+msgid "AI response"
+msgstr "Ìdáhùn AI"
+
+msgid "AI request failed."
+msgstr "Ìbéèrè AI kùnà."
+
+msgid "Mind mapping"
+msgstr "Ìṣàwòrán ọkàn"
+
+msgid "Feynman Technique"
+msgstr "Ìlànà Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Ìbéèrè àlàyé jíjinlẹ̀"
+
+msgid "Spaced repetition"
+msgstr "Àtúnkọ ní ààyè"
+
+msgid "SQ3R Method"
+msgstr "Ìlànà SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Àfiwé àti àkàwé"
+
+msgid "Dual coding"
+msgstr "Kóòdù méjì"
+
+msgid "Storytelling"
+msgstr "Ìtàn sísọ"
+
+msgid "Thematic connections"
+msgstr "Àsopọ̀ àkóónú"
+
+msgid "Interleaved learning"
+msgstr "Ìkẹ́kọ̀ọ́ tí a pọ̀ mọ́ra"
+
+msgid "Memory palaces"
+msgstr "Ààfin ìrántí"
 

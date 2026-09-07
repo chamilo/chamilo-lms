@@ -41175,3 +41175,51 @@ msgstr "Неуспешен запис в журнала на операцият�
 msgid "Invalid update operation id."
 msgstr "Невалиден идентификатор на операция за актуализация."
 
+msgid "AI study helper"
+msgstr "Помощник за учене с ИИ"
+
+msgid "Selected text"
+msgstr "Избран текст"
+
+msgid "Learning technique"
+msgstr "Техника за учене"
+
+msgid "AI response"
+msgstr "Отговор на ИИ"
+
+msgid "AI request failed."
+msgstr "Заявката към ИИ не бе успешна."
+
+msgid "Mind mapping"
+msgstr "Мисловни карти"
+
+msgid "Feynman Technique"
+msgstr "Техника на Файнман"
+
+msgid "Elaborative interrogation"
+msgstr "Елаборативно разпитване"
+
+msgid "Spaced repetition"
+msgstr "Разпределено повторение"
+
+msgid "SQ3R Method"
+msgstr "Метод SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Аналогии и метафори"
+
+msgid "Dual coding"
+msgstr "Двойно кодиране"
+
+msgid "Storytelling"
+msgstr "Разказване на истории"
+
+msgid "Thematic connections"
+msgstr "Тематични връзки"
+
+msgid "Interleaved learning"
+msgstr "Редуващо се учене"
+
+msgid "Memory palaces"
+msgstr "Дворци на паметта"
+

@@ -506,6 +506,8 @@ import LpReporting from "./LpReporting.vue"
 import { useNotification } from "../../composables/notification"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
+import { useCidReqStore } from "../../store/cidReq"
+import { useCourseSettings } from "../../store/courseSettingStore"
 import lpService from "../../services/lpService"
 import permissionService from "../../services/permissionService"
 import platformConfigService from "../../services/platformConfigService"
@@ -516,6 +518,8 @@ const route = useRoute()
 const router = useRouter()
 const platformConfig = usePlatformConfig()
 const securityStore = useSecurityStore()
+const cidReqStore = useCidReqStore()
+const courseSettingsStore = useCourseSettings()
 const { showErrorNotification } = useNotification()
 
 const runtime = ref(null)
@@ -1432,9 +1436,21 @@ function openAiLearningHelper() {
 }
 
 function getAiLearningHelperLanguage() {
-  const courseLanguage = String(window.course_language || "").trim()
-  if (courseLanguage) {
-    return courseLanguage
+  // Mirrors the course_lang resolution in useLocale() / LocaleSubscriber::
+  // getCurrentLanguage(): the course language is authoritative, except when
+  // the course opts into "show_course_in_user_language", in which case the
+  // user's own locale takes over.
+  const course = cidReqStore.course
+  if (course) {
+    const userLocale = String(securityStore.user?.locale || "").trim()
+    if ("1" === courseSettingsStore.getSetting("show_course_in_user_language") && userLocale) {
+      return userLocale
+    }
+
+    const courseLanguage = String(course.courseLanguage || "").trim()
+    if (courseLanguage) {
+      return courseLanguage
+    }
   }
 
   const platformLanguage = String(platformConfig.getSetting("language.platform_language") || "").trim()

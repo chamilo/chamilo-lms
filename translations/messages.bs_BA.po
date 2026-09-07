@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primjer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primjer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raspon varijabli"
@@ -26704,7 +26704,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfiguracija LDAP konekcije"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] <\/pre>"
+msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Postavi datum isteka pri prvoj prijavi"
@@ -41168,4 +41168,52 @@ msgstr "Nije moguće zapisati dnevnik operacije ažuriranja."
 
 msgid "Invalid update operation id."
 msgstr "Nevažeći ID operacije ažuriranja."
+
+msgid "AI study helper"
+msgstr "AI pomoćnik za učenje"
+
+msgid "Selected text"
+msgstr "Odabrani tekst"
+
+msgid "Learning technique"
+msgstr "Tehnika učenja"
+
+msgid "AI response"
+msgstr "AI odgovor"
+
+msgid "AI request failed."
+msgstr "AI zahtjev nije uspio."
+
+msgid "Mind mapping"
+msgstr "Mentalno mapiranje"
+
+msgid "Feynman Technique"
+msgstr "Feynmanova tehnika"
+
+msgid "Elaborative interrogation"
+msgstr "Elaborativno ispitivanje"
+
+msgid "Spaced repetition"
+msgstr "Razmaknuto ponavljanje"
+
+msgid "SQ3R Method"
+msgstr "SQ3R metoda"
+
+msgid "Analogies and metaphors"
+msgstr "Analogije i metafore"
+
+msgid "Dual coding"
+msgstr "Dvostruko kodiranje"
+
+msgid "Storytelling"
+msgstr "Pričanje priča"
+
+msgid "Thematic connections"
+msgstr "Tematske veze"
+
+msgid "Interleaved learning"
+msgstr "Isprepleteno učenje"
+
+msgid "Memory palaces"
+msgstr "Memorijske palate"
 

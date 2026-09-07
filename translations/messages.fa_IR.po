@@ -41173,3 +41173,51 @@ msgstr "امکان نوشتن گزارش عملیات به‌روزرسانی و
 msgid "Invalid update operation id."
 msgstr "شناسه عملیات به‌روزرسانی نامعتبر است."
 
+msgid "AI study helper"
+msgstr "دستیار مطالعه هوش مصنوعی"
+
+msgid "Selected text"
+msgstr "متن انتخاب‌شده"
+
+msgid "Learning technique"
+msgstr "تکنیک یادگیری"
+
+msgid "AI response"
+msgstr "پاسخ هوش مصنوعی"
+
+msgid "AI request failed."
+msgstr "درخواست هوش مصنوعی ناموفق بود."
+
+msgid "Mind mapping"
+msgstr "نقشه‌ ذهنی"
+
+msgid "Feynman Technique"
+msgstr "تکنیک فاینمن"
+
+msgid "Elaborative interrogation"
+msgstr "پرسش‌گری تشریحی"
+
+msgid "Spaced repetition"
+msgstr "تکرار با فاصله"
+
+msgid "SQ3R Method"
+msgstr "روش SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "قیاس‌ها و استعاره‌ها"
+
+msgid "Dual coding"
+msgstr "کدگذاری دوگانه"
+
+msgid "Storytelling"
+msgstr "داستان‌گویی"
+
+msgid "Thematic connections"
+msgstr "ارتباطات موضوعی"
+
+msgid "Interleaved learning"
+msgstr "یادگیری درهم‌آمیخته"
+
+msgid "Memory palaces"
+msgstr "کاخ‌های حافظه"
+

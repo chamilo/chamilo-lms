@@ -41175,3 +41175,51 @@ msgstr "Manan atikunchu musuqchay ruway logta qillqayta."
 msgid "Invalid update operation id."
 msgstr "Mana allin musuqchay ruway id."
 
+msgid "AI study helper"
+msgstr "IA yachakuy yanapaq"
+
+msgid "Selected text"
+msgstr "Akllasqa qillqa"
+
+msgid "Learning technique"
+msgstr "Yachakuy técnica"
+
+msgid "AI response"
+msgstr "IA kutichiy"
+
+msgid "AI request failed."
+msgstr "IA mañakuy mana allinchu."
+
+msgid "Mind mapping"
+msgstr "Yuyay mapa"
+
+msgid "Feynman Technique"
+msgstr "Feynman técnica"
+
+msgid "Elaborative interrogation"
+msgstr "Mast’arisqa tapukuy"
+
+msgid "Spaced repetition"
+msgstr "Ch’usaq pacha kutichiy"
+
+msgid "SQ3R Method"
+msgstr "SQ3R método"
+
+msgid "Analogies and metaphors"
+msgstr "Kikinchaykuna chaymanta rikch’aykuna"
+
+msgid "Dual coding"
+msgstr "Iskay kuti qillqay"
+
+msgid "Storytelling"
+msgstr "Willakuy"
+
+msgid "Thematic connections"
+msgstr "Tema t’inkikuna"
+
+msgid "Interleaved learning"
+msgstr "Chaqrusqa yachakuy"
+
+msgid "Memory palaces"
+msgstr "Yuyay wasikuna"
+

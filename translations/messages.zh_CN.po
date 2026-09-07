@@ -41175,3 +41175,51 @@ msgstr "无法写入更新操作日志。"
 msgid "Invalid update operation id."
 msgstr "无效的更新操作 ID。"
 
+msgid "AI study helper"
+msgstr "AI 学习助手"
+
+msgid "Selected text"
+msgstr "所选文本"
+
+msgid "Learning technique"
+msgstr "学习方法"
+
+msgid "AI response"
+msgstr "AI 回复"
+
+msgid "AI request failed."
+msgstr "AI 请求失败。"
+
+msgid "Mind mapping"
+msgstr "思维导图"
+
+msgid "Feynman Technique"
+msgstr "费曼学习法"
+
+msgid "Elaborative interrogation"
+msgstr "精细化追问"
+
+msgid "Spaced repetition"
+msgstr "间隔重复"
+
+msgid "SQ3R Method"
+msgstr "SQ3R 学习法"
+
+msgid "Analogies and metaphors"
+msgstr "类比与隐喻"
+
+msgid "Dual coding"
+msgstr "双重编码"
+
+msgid "Storytelling"
+msgstr "故事讲述"
+
+msgid "Thematic connections"
+msgstr "主题关联"
+
+msgid "Interleaved learning"
+msgstr "交错学习"
+
+msgid "Memory palaces"
+msgstr "记忆宫殿"
+

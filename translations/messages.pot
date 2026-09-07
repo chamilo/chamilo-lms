@@ -41095,3 +41095,51 @@ msgstr ""
 
 msgid "Invalid update operation id."
 msgstr ""
+
+msgid "AI study helper"
+msgstr ""
+
+msgid "Selected text"
+msgstr ""
+
+msgid "Learning technique"
+msgstr ""
+
+msgid "AI response"
+msgstr ""
+
+msgid "AI request failed."
+msgstr ""
+
+msgid "Mind mapping"
+msgstr ""
+
+msgid "Feynman Technique"
+msgstr ""
+
+msgid "Elaborative interrogation"
+msgstr ""
+
+msgid "Spaced repetition"
+msgstr ""
+
+msgid "SQ3R Method"
+msgstr ""
+
+msgid "Analogies and metaphors"
+msgstr ""
+
+msgid "Dual coding"
+msgstr ""
+
+msgid "Storytelling"
+msgstr ""
+
+msgid "Thematic connections"
+msgstr ""
+
+msgid "Interleaved learning"
+msgstr ""
+
+msgid "Memory palaces"
+msgstr ""

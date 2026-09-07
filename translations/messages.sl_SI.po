@@ -41189,3 +41189,51 @@ msgstr "Dnevnika posodobitvene operacije ni mogoče zapisati."
 msgid "Invalid update operation id."
 msgstr "Neveljaven ID posodobitvene operacije."
 
+msgid "AI study helper"
+msgstr "AI učni pomočnik"
+
+msgid "Selected text"
+msgstr "Izbrano besedilo"
+
+msgid "Learning technique"
+msgstr "Učna tehnika"
+
+msgid "AI response"
+msgstr "Odgovor UI"
+
+msgid "AI request failed."
+msgstr "Zahteva AI ni uspela."
+
+msgid "Mind mapping"
+msgstr "Miselni vzorci"
+
+msgid "Feynman Technique"
+msgstr "Feynmanova tehnika"
+
+msgid "Elaborative interrogation"
+msgstr "Elaborativno spraševanje"
+
+msgid "Spaced repetition"
+msgstr "Razporejeno ponavljanje"
+
+msgid "SQ3R Method"
+msgstr "Metoda SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogije in metafore"
+
+msgid "Dual coding"
+msgstr "Dvojno kodiranje"
+
+msgid "Storytelling"
+msgstr "Pripovedovanje zgodb"
+
+msgid "Thematic connections"
+msgstr "Tematske povezave"
+
+msgid "Interleaved learning"
+msgstr "Prepleteno učenje"
+
+msgid "Memory palaces"
+msgstr "Palače spomina"
+

@@ -4211,5 +4211,21 @@
     "Stage package": "\u30b9\u30c6\u30fc\u30b8\u30d1\u30c3\u30b1\u30fc\u30b8",
     "Package staging": "\u30d1\u30c3\u30b1\u30fc\u30b8\u306e\u30b9\u30c6\u30fc\u30b8\u30f3\u30b0",
     "Apply plan": "\u8a08\u753b\u3092\u9069\u7528",
-    "Update workflow completed": "\u66f4\u65b0\u30ef\u30fc\u30af\u30d5\u30ed\u30fc\u304c\u5b8c\u4e86\u3057\u307e\u3057\u305f"
+    "Update workflow completed": "\u66f4\u65b0\u30ef\u30fc\u30af\u30d5\u30ed\u30fc\u304c\u5b8c\u4e86\u3057\u307e\u3057\u305f",
+    "AI study helper": "AI\u5b66\u7fd2\u30a2\u30b7\u30b9\u30bf\u30f3\u30c8",
+    "Selected text": "\u9078\u629e\u3057\u305f\u30c6\u30ad\u30b9\u30c8",
+    "Learning technique": "\u5b66\u7fd2\u6280\u6cd5",
+    "AI response": "AI \u306e\u5fdc\u7b54",
+    "AI request failed.": "AI\u30ea\u30af\u30a8\u30b9\u30c8\u306b\u5931\u6557\u3057\u307e\u3057\u305f\u3002",
+    "Mind mapping": "\u30de\u30a4\u30f3\u30c9\u30de\u30c3\u30d4\u30f3\u30b0",
+    "Feynman Technique": "\u30d5\u30a1\u30a4\u30f3\u30de\u30f3\u6280\u6cd5",
+    "Elaborative interrogation": "\u7cbe\u7dfb\u5316\u8cea\u554f\u6cd5",
+    "Spaced repetition": "\u9593\u9694\u53cd\u5fa9",
+    "SQ3R Method": "SQ3R\u6cd5",
+    "Analogies and metaphors": "\u985e\u63a8\u3068\u6bd4\u55a9",
+    "Dual coding": "\u4e8c\u91cd\u7b26\u53f7\u5316",
+    "Storytelling": "\u30b9\u30c8\u30fc\u30ea\u30fc\u30c6\u30ea\u30f3\u30b0",
+    "Thematic connections": "\u30c6\u30fc\u30de\u7684\u306a\u3064\u306a\u304c\u308a",
+    "Interleaved learning": "\u4ea4\u4e92\u5b66\u7fd2",
+    "Memory palaces": "\u8a18\u61b6\u306e\u5bae\u6bbf"
 }

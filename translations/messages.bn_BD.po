@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্রের নমুনা: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -41168,4 +41168,52 @@ msgstr "আপডেট অপারেশন লগ লিখতে অক্�
 
 msgid "Invalid update operation id."
 msgstr "অবৈধ আপডেট অপারেশন আইডি।"
+
+msgid "AI study helper"
+msgstr "এআই অধ্যয়ন সহায়ক"
+
+msgid "Selected text"
+msgstr "নির্বাচিত পাঠ্য"
+
+msgid "Learning technique"
+msgstr "শেখার কৌশল"
+
+msgid "AI response"
+msgstr "এআই প্রতিক্রিয়া"
+
+msgid "AI request failed."
+msgstr "এআই অনুরোধ ব্যর্থ হয়েছে।"
+
+msgid "Mind mapping"
+msgstr "মাইন্ড ম্যাপিং"
+
+msgid "Feynman Technique"
+msgstr "ফেইনম্যান কৌশল"
+
+msgid "Elaborative interrogation"
+msgstr "ব্যাখ্যামূলক প্রশ্নোত্তর"
+
+msgid "Spaced repetition"
+msgstr "ব্যবধানযুক্ত পুনরাবৃত্তি"
+
+msgid "SQ3R Method"
+msgstr "এসকিউ৩আর পদ্ধতি"
+
+msgid "Analogies and metaphors"
+msgstr "উপমা ও রূপক"
+
+msgid "Dual coding"
+msgstr "দ্বৈত কোডিং"
+
+msgid "Storytelling"
+msgstr "গল্পকথন"
+
+msgid "Thematic connections"
+msgstr "বিষয়ভিত্তিক সংযোগ"
+
+msgid "Interleaved learning"
+msgstr "আন্তঃমিশ্রিত শিক্ষা"
+
+msgid "Memory palaces"
+msgstr "স্মৃতি প্রাসাদ"
 

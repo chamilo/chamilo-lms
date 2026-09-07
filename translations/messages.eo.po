@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ekzemplo de formulo: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ekzemplo de formulo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -41174,4 +41174,52 @@ msgstr "Ne eblas skribi protokolon de ĝisdatiga operacio."
 
 msgid "Invalid update operation id."
 msgstr "Nevalida identigilo de ĝisdatiga operacio."
+
+msgid "AI study helper"
+msgstr "AI-studa helpilo"
+
+msgid "Selected text"
+msgstr "Elektita teksto"
+
+msgid "Learning technique"
+msgstr "Lernotekniko"
+
+msgid "AI response"
+msgstr "AI-respondo"
+
+msgid "AI request failed."
+msgstr "AI-peto malsukcesis."
+
+msgid "Mind mapping"
+msgstr "Mensomapado"
+
+msgid "Feynman Technique"
+msgstr "Tekniko de Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Elabora demandado"
+
+msgid "Spaced repetition"
+msgstr "Disigita ripetado"
+
+msgid "SQ3R Method"
+msgstr "Metodo SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogioj kaj metaforoj"
+
+msgid "Dual coding"
+msgstr "Duobla kodado"
+
+msgid "Storytelling"
+msgstr "Rakontado"
+
+msgid "Thematic connections"
+msgstr "Temaj ligoj"
+
+msgid "Interleaved learning"
+msgstr "Interplektita lernado"
+
+msgid "Memory palaces"
+msgstr "Memorpalacoj"
 

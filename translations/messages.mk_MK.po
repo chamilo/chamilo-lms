@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Со почит"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример на формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Опсези на променливи"
@@ -41172,4 +41172,52 @@ msgstr "Не може да се запише дневникот на опера�
 
 msgid "Invalid update operation id."
 msgstr "Неважечки идентификатор на операција за ажурирање."
+
+msgid "AI study helper"
+msgstr "Помошник за учење со ВИ"
+
+msgid "Selected text"
+msgstr "Избран текст"
+
+msgid "Learning technique"
+msgstr "Техника на учење"
+
+msgid "AI response"
+msgstr "Одговор од вештачка интелигенција"
+
+msgid "AI request failed."
+msgstr "Барањето до ВИ не успеа."
+
+msgid "Mind mapping"
+msgstr "Ментално мапирање"
+
+msgid "Feynman Technique"
+msgstr "Техника на Фајнман"
+
+msgid "Elaborative interrogation"
+msgstr "Елаборативно испрашување"
+
+msgid "Spaced repetition"
+msgstr "Повторување со интервали"
+
+msgid "SQ3R Method"
+msgstr "Метод SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Аналогии и метафори"
+
+msgid "Dual coding"
+msgstr "Двојно кодирање"
+
+msgid "Storytelling"
+msgstr "Раскажување приказни"
+
+msgid "Thematic connections"
+msgstr "Тематски врски"
+
+msgid "Interleaved learning"
+msgstr "Исплетено учење"
+
+msgid "Memory palaces"
+msgstr "Палати на меморијата"
 

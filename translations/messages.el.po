@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Ειλικρινά"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Δείγμα τύπου: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Δείγμα τύπου: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Μεταβλητά όρια"
@@ -41187,4 +41187,52 @@ msgstr "Αδυναμία εγγραφής αρχείου καταγραφής λ
 
 msgid "Invalid update operation id."
 msgstr "Μη έγκυρο αναγνωριστικό λειτουργίας ενημέρωσης."
+
+msgid "AI study helper"
+msgstr "Βοηθός μελέτης ΤΝ"
+
+msgid "Selected text"
+msgstr "Επιλεγμένο κείμενο"
+
+msgid "Learning technique"
+msgstr "Τεχνική μάθησης"
+
+msgid "AI response"
+msgstr "Απάντηση ΤΝ"
+
+msgid "AI request failed."
+msgstr "Το αίτημα ΤΝ απέτυχε."
+
+msgid "Mind mapping"
+msgstr "Νοητική χαρτογράφηση"
+
+msgid "Feynman Technique"
+msgstr "Τεχνική Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Επεξεργαστική ανάκριση"
+
+msgid "Spaced repetition"
+msgstr "Διακεκομμένη επανάληψη"
+
+msgid "SQ3R Method"
+msgstr "Μέθοδος SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Αναλογίες και μεταφορές"
+
+msgid "Dual coding"
+msgstr "Διπλή κωδικοποίηση"
+
+msgid "Storytelling"
+msgstr "Αφήγηση"
+
+msgid "Thematic connections"
+msgstr "Θεματικές συνδέσεις"
+
+msgid "Interleaved learning"
+msgstr "Διαπλεκόμενη μάθηση"
+
+msgid "Memory palaces"
+msgstr "Παλάτια μνήμης"
 

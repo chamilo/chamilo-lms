@@ -4211,5 +4211,21 @@
     "Stage package": "Stagingpakket",
     "Package staging": "Pakketstaging",
     "Apply plan": "Plan toepassen",
-    "Update workflow completed": "Updateworkflow voltooid"
+    "Update workflow completed": "Updateworkflow voltooid",
+    "AI study helper": "AI-studieassistent",
+    "Selected text": "Geselecteerde tekst",
+    "Learning technique": "Leermethode",
+    "AI response": "AI-antwoord",
+    "AI request failed.": "AI-verzoek mislukt.",
+    "Mind mapping": "Mindmapping",
+    "Feynman Technique": "Feynman-techniek",
+    "Elaborative interrogation": "Elaboratieve ondervraging",
+    "Spaced repetition": "Gespreide herhaling",
+    "SQ3R Method": "SQ3R-methode",
+    "Analogies and metaphors": "Analogie\u00ebn en metaforen",
+    "Dual coding": "Dubbele codering",
+    "Storytelling": "Verhalen vertellen",
+    "Thematic connections": "Thematische verbanden",
+    "Interleaved learning": "Afgewisseld leren",
+    "Memory palaces": "Geheugenpaleizen"
 }

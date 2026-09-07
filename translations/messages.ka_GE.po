@@ -41169,3 +41169,51 @@ msgstr "განახლების ოპერაციის ჟურნ�
 msgid "Invalid update operation id."
 msgstr "განახლების ოპერაციის არასწორი იდენტიფიკატორი."
 
+msgid "AI study helper"
+msgstr "AI სასწავლო დამხმარე"
+
+msgid "Selected text"
+msgstr "მონიშნული ტექსტი"
+
+msgid "Learning technique"
+msgstr "სწავლის ტექნიკა"
+
+msgid "AI response"
+msgstr "AI პასუხი"
+
+msgid "AI request failed."
+msgstr "AI მოთხოვნა ვერ შესრულდა."
+
+msgid "Mind mapping"
+msgstr "აზროვნების რუკა"
+
+msgid "Feynman Technique"
+msgstr "ფეინმანის ტექნიკა"
+
+msgid "Elaborative interrogation"
+msgstr "გაფართოებული გამოკითხვა"
+
+msgid "Spaced repetition"
+msgstr "დაშორებული გამეორება"
+
+msgid "SQ3R Method"
+msgstr "SQ3R მეთოდი"
+
+msgid "Analogies and metaphors"
+msgstr "ანალოგიები და მეტაფორები"
+
+msgid "Dual coding"
+msgstr "ორმაგი კოდირება"
+
+msgid "Storytelling"
+msgstr "ისტორიების თხრობა"
+
+msgid "Thematic connections"
+msgstr "თემატური კავშირები"
+
+msgid "Interleaved learning"
+msgstr "შერეული სწავლა"
+
+msgid "Memory palaces"
+msgstr "მეხსიერების სასახლეები"
+

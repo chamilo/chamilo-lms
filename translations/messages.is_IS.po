@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Með kveðju"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formúludæmi: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Dæmi um formúlu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Breytusvið"
@@ -41173,4 +41173,52 @@ msgstr "Ekki tókst að skrifa aðgerðarannál uppfærslu."
 
 msgid "Invalid update operation id."
 msgstr "Ógilt auðkenni uppfærsluaðgerðar."
+
+msgid "AI study helper"
+msgstr "Námsaðstoð með gervigreind"
+
+msgid "Selected text"
+msgstr "Valinn texti"
+
+msgid "Learning technique"
+msgstr "Námsaðferð"
+
+msgid "AI response"
+msgstr "Svar gervigreindar"
+
+msgid "AI request failed."
+msgstr "Beiðni til gervigreindar mistókst."
+
+msgid "Mind mapping"
+msgstr "Hugarkort"
+
+msgid "Feynman Technique"
+msgstr "Feynman-aðferðin"
+
+msgid "Elaborative interrogation"
+msgstr "Útfærðar spurningar"
+
+msgid "Spaced repetition"
+msgstr "Dreifð endurtekning"
+
+msgid "SQ3R Method"
+msgstr "SQ3R-aðferðin"
+
+msgid "Analogies and metaphors"
+msgstr "Samanburðir og myndlíkingar"
+
+msgid "Dual coding"
+msgstr "Tvöföld kóðun"
+
+msgid "Storytelling"
+msgstr "Sögusögn"
+
+msgid "Thematic connections"
+msgstr "Þemaleg tengsl"
+
+msgid "Interleaved learning"
+msgstr "Fléttað nám"
+
+msgid "Memory palaces"
+msgstr "Minnishöll"
 

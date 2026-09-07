@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Cordial"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu de formulă: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu de formulă: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Domenii de variabile"
@@ -41188,4 +41188,52 @@ msgstr "Nu s-a putut scrie jurnalul operațiunii de actualizare."
 
 msgid "Invalid update operation id."
 msgstr "Identificator invalid al operațiunii de actualizare."
+
+msgid "AI study helper"
+msgstr "Asistent de studiu AI"
+
+msgid "Selected text"
+msgstr "Text selectat"
+
+msgid "Learning technique"
+msgstr "Tehnică de învățare"
+
+msgid "AI response"
+msgstr "Răspuns AI"
+
+msgid "AI request failed."
+msgstr "Cererea AI a eșuat."
+
+msgid "Mind mapping"
+msgstr "Hărți mentale"
+
+msgid "Feynman Technique"
+msgstr "Tehnica Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Interogare elaborativă"
+
+msgid "Spaced repetition"
+msgstr "Repetiție spațiată"
+
+msgid "SQ3R Method"
+msgstr "Metoda SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogii și metafore"
+
+msgid "Dual coding"
+msgstr "Codare duală"
+
+msgid "Storytelling"
+msgstr "Povestire"
+
+msgid "Thematic connections"
+msgstr "Conexiuni tematice"
+
+msgid "Interleaved learning"
+msgstr "Învățare intercalată"
+
+msgid "Memory palaces"
+msgstr "Palate ale memoriei"
 

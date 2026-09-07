@@ -4211,5 +4211,21 @@
     "Stage package": "Pacchetto di staging",
     "Package staging": "Staging del pacchetto",
     "Apply plan": "Applica piano",
-    "Update workflow completed": "Flusso di aggiornamento completato"
+    "Update workflow completed": "Flusso di aggiornamento completato",
+    "AI study helper": "Assistente di studio IA",
+    "Selected text": "Testo selezionato",
+    "Learning technique": "Tecnica di apprendimento",
+    "AI response": "Risposta IA",
+    "AI request failed.": "Richiesta IA non riuscita.",
+    "Mind mapping": "Mappe mentali",
+    "Feynman Technique": "Tecnica di Feynman",
+    "Elaborative interrogation": "Interrogazione elaborativa",
+    "Spaced repetition": "Ripetizione spaziata",
+    "SQ3R Method": "Metodo SQ3R",
+    "Analogies and metaphors": "Analogie e metafore",
+    "Dual coding": "Codifica duale",
+    "Storytelling": "Narrazione",
+    "Thematic connections": "Collegamenti tematici",
+    "Interleaved learning": "Apprendimento intercalato",
+    "Memory palaces": "Palazzi della memoria"
 }

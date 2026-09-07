@@ -41239,3 +41239,51 @@ msgstr "更新操作ログを書き込めません。"
 msgid "Invalid update operation id."
 msgstr "無効な更新操作IDです。"
 
+msgid "AI study helper"
+msgstr "AI学習アシスタント"
+
+msgid "Selected text"
+msgstr "選択したテキスト"
+
+msgid "Learning technique"
+msgstr "学習技法"
+
+msgid "AI response"
+msgstr "AI の応答"
+
+msgid "AI request failed."
+msgstr "AIリクエストに失敗しました。"
+
+msgid "Mind mapping"
+msgstr "マインドマッピング"
+
+msgid "Feynman Technique"
+msgstr "ファインマン技法"
+
+msgid "Elaborative interrogation"
+msgstr "精緻化質問法"
+
+msgid "Spaced repetition"
+msgstr "間隔反復"
+
+msgid "SQ3R Method"
+msgstr "SQ3R法"
+
+msgid "Analogies and metaphors"
+msgstr "類推と比喩"
+
+msgid "Dual coding"
+msgstr "二重符号化"
+
+msgid "Storytelling"
+msgstr "ストーリーテリング"
+
+msgid "Thematic connections"
+msgstr "テーマ的なつながり"
+
+msgid "Interleaved learning"
+msgstr "交互学習"
+
+msgid "Memory palaces"
+msgstr "記憶の宮殿"
+

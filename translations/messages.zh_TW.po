@@ -41175,3 +41175,51 @@ msgstr "無法寫入更新作業記錄。"
 msgid "Invalid update operation id."
 msgstr "更新作業識別碼無效。"
 
+msgid "AI study helper"
+msgstr "AI 學習助手"
+
+msgid "Selected text"
+msgstr "選取的文字"
+
+msgid "Learning technique"
+msgstr "學習技巧"
+
+msgid "AI response"
+msgstr "AI 回應"
+
+msgid "AI request failed."
+msgstr "AI 請求失敗。"
+
+msgid "Mind mapping"
+msgstr "心智圖"
+
+msgid "Feynman Technique"
+msgstr "費曼學習法"
+
+msgid "Elaborative interrogation"
+msgstr "精緻化提問"
+
+msgid "Spaced repetition"
+msgstr "間隔重複"
+
+msgid "SQ3R Method"
+msgstr "SQ3R 方法"
+
+msgid "Analogies and metaphors"
+msgstr "類比與隱喻"
+
+msgid "Dual coding"
+msgstr "雙重編碼"
+
+msgid "Storytelling"
+msgstr "故事敘述"
+
+msgid "Thematic connections"
+msgstr "主題連結"
+
+msgid "Interleaved learning"
+msgstr "交錯學習"
+
+msgid "Memory palaces"
+msgstr "記憶宮殿"
+

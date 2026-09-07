@@ -4211,5 +4211,21 @@
     "Stage package": "I-stage ang package",
     "Package staging": "Pag-stage ng package",
     "Apply plan": "Ilapat ang plano",
-    "Update workflow completed": "Natapos ang workflow ng update"
+    "Update workflow completed": "Natapos ang workflow ng update",
+    "AI study helper": "Katulong sa pag-aaral ng AI",
+    "Selected text": "Piniling teksto",
+    "Learning technique": "Teknik sa pagkatuto",
+    "AI response": "Tugon ng AI",
+    "AI request failed.": "Nabigo ang kahilingan sa AI.",
+    "Mind mapping": "Mind mapping",
+    "Feynman Technique": "Teknik ni Feynman",
+    "Elaborative interrogation": "Elaborative interrogation",
+    "Spaced repetition": "Spaced repetition",
+    "SQ3R Method": "Paraan ng SQ3R",
+    "Analogies and metaphors": "Mga analogiya at metapora",
+    "Dual coding": "Dual coding",
+    "Storytelling": "Pagkukuwento",
+    "Thematic connections": "Mga tematikong ugnayan",
+    "Interleaved learning": "Interleaved learning",
+    "Memory palaces": "Mga palasyo ng memorya"
 }

@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "مثال على الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نموذج الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -41186,4 +41186,52 @@ msgstr "تعذر كتابة سجل عملية التحديث."
 
 msgid "Invalid update operation id."
 msgstr "معرف عملية التحديث غير صالح."
+
+msgid "AI study helper"
+msgstr "مساعد الدراسة بالذكاء الاصطناعي"
+
+msgid "Selected text"
+msgstr "النص المحدد"
+
+msgid "Learning technique"
+msgstr "تقنية التعلم"
+
+msgid "AI response"
+msgstr "استجابة الذكاء الاصطناعي"
+
+msgid "AI request failed."
+msgstr "فشل طلب الذكاء الاصطناعي."
+
+msgid "Mind mapping"
+msgstr "الخرائط الذهنية"
+
+msgid "Feynman Technique"
+msgstr "تقنية فاينمان"
+
+msgid "Elaborative interrogation"
+msgstr "الاستجواب التوسعي"
+
+msgid "Spaced repetition"
+msgstr "التكرار المتباعد"
+
+msgid "SQ3R Method"
+msgstr "طريقة SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "التشبيهات والاستعارات"
+
+msgid "Dual coding"
+msgstr "الترميز المزدوج"
+
+msgid "Storytelling"
+msgstr "السرد القصصي"
+
+msgid "Thematic connections"
+msgstr "الروابط الموضوعية"
+
+msgid "Interleaved learning"
+msgstr "التعلم المتداخل"
+
+msgid "Memory palaces"
+msgstr "قصور الذاكرة"
 

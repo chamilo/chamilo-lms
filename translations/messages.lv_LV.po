@@ -41174,3 +41174,51 @@ msgstr "Neizdevās ierakstīt atjaunināšanas operācijas žurnālu."
 msgid "Invalid update operation id."
 msgstr "Nederīgs atjaunināšanas operācijas ID."
 
+msgid "AI study helper"
+msgstr "MI mācību palīgs"
+
+msgid "Selected text"
+msgstr "Atlasītais teksts"
+
+msgid "Learning technique"
+msgstr "Mācīšanās tehnika"
+
+msgid "AI response"
+msgstr "MI atbilde"
+
+msgid "AI request failed."
+msgstr "MI pieprasījums neizdevās."
+
+msgid "Mind mapping"
+msgstr "Prāta kartēšana"
+
+msgid "Feynman Technique"
+msgstr "Feinmana tehnika"
+
+msgid "Elaborative interrogation"
+msgstr "Izvērsta izjautāšana"
+
+msgid "Spaced repetition"
+msgstr "Atkārtošana ar intervāliem"
+
+msgid "SQ3R Method"
+msgstr "SQ3R metode"
+
+msgid "Analogies and metaphors"
+msgstr "Analoģijas un metaforas"
+
+msgid "Dual coding"
+msgstr "Dubultā kodēšana"
+
+msgid "Storytelling"
+msgstr "Stāstījums"
+
+msgid "Thematic connections"
+msgstr "Tematiskās saiknes"
+
+msgid "Interleaved learning"
+msgstr "Pārmaiņus mācīšanās"
+
+msgid "Memory palaces"
+msgstr "Atmiņas pils"
+

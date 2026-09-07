@@ -41174,3 +41174,51 @@ msgstr "Nije moguće zapisati zapisnik operacije ažuriranja."
 msgid "Invalid update operation id."
 msgstr "Nevažeći ID operacije ažuriranja."
 
+msgid "AI study helper"
+msgstr "AI pomoćnik za učenje"
+
+msgid "Selected text"
+msgstr "Odabrani tekst"
+
+msgid "Learning technique"
+msgstr "Tehnika učenja"
+
+msgid "AI response"
+msgstr "Odgovor umjetne inteligencije"
+
+msgid "AI request failed."
+msgstr "AI zahtjev nije uspio."
+
+msgid "Mind mapping"
+msgstr "Mentalne mape"
+
+msgid "Feynman Technique"
+msgstr "Feynmanova tehnika"
+
+msgid "Elaborative interrogation"
+msgstr "Elaborativno ispitivanje"
+
+msgid "Spaced repetition"
+msgstr "Razmaknuto ponavljanje"
+
+msgid "SQ3R Method"
+msgstr "Metoda SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogije i metafore"
+
+msgid "Dual coding"
+msgstr "Dvojno kodiranje"
+
+msgid "Storytelling"
+msgstr "Pripovijedanje"
+
+msgid "Thematic connections"
+msgstr "Tematske poveznice"
+
+msgid "Interleaved learning"
+msgstr "Isprepleteno učenje"
+
+msgid "Memory palaces"
+msgstr "Palače pamćenja"
+

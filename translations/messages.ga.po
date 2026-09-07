@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Le meas"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Sampla foirmle: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Sampla foirmle: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raonta athróg"
@@ -41172,4 +41172,52 @@ msgstr "Ní féidir log oibríochta nuashonraithe a scríobh."
 
 msgid "Invalid update operation id."
 msgstr "ID oibríochta nuashonraithe neamhbhailí."
+
+msgid "AI study helper"
+msgstr "Cúntóir staidéir AI"
+
+msgid "Selected text"
+msgstr "Téacs roghnaithe"
+
+msgid "Learning technique"
+msgstr "Teicníc foghlama"
+
+msgid "AI response"
+msgstr "Freagra AI"
+
+msgid "AI request failed."
+msgstr "Theip ar iarratas AI."
+
+msgid "Mind mapping"
+msgstr "Mapáil intinne"
+
+msgid "Feynman Technique"
+msgstr "Teicníc Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Ceistiúchán mionsonraithe"
+
+msgid "Spaced repetition"
+msgstr "Athrá spásáilte"
+
+msgid "SQ3R Method"
+msgstr "Modh SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analóga agus meafair"
+
+msgid "Dual coding"
+msgstr "Códú déach"
+
+msgid "Storytelling"
+msgstr "Insint scéalta"
+
+msgid "Thematic connections"
+msgstr "Naisc théamacha"
+
+msgid "Interleaved learning"
+msgstr "Foghlaim idirfhite"
+
+msgid "Memory palaces"
+msgstr "Páláis chuimhne"
 

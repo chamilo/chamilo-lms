@@ -43055,3 +43055,51 @@ msgstr "Impossible d'écrire le journal de l'opération de mise à jour."
 msgid "Invalid update operation id."
 msgstr "Identifiant d'opération de mise à jour invalide."
 
+msgid "AI study helper"
+msgstr "Assistant d'étude IA"
+
+msgid "Selected text"
+msgstr "Texte sélectionné"
+
+msgid "Learning technique"
+msgstr "Technique d'apprentissage"
+
+msgid "AI response"
+msgstr "Réponse de l’IA"
+
+msgid "AI request failed."
+msgstr "La requête IA a échoué."
+
+msgid "Mind mapping"
+msgstr "Carte mentale"
+
+msgid "Feynman Technique"
+msgstr "Technique de Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Interrogation élaborative"
+
+msgid "Spaced repetition"
+msgstr "Répétition espacée"
+
+msgid "SQ3R Method"
+msgstr "Méthode SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogies et métaphores"
+
+msgid "Dual coding"
+msgstr "Double codage"
+
+msgid "Storytelling"
+msgstr "Storytelling"
+
+msgid "Thematic connections"
+msgstr "Connexions thématiques"
+
+msgid "Interleaved learning"
+msgstr "Apprentissage entrelacé"
+
+msgid "Memory palaces"
+msgstr "Palais de mémoire"
+

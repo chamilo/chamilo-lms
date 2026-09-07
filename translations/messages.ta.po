@@ -41173,3 +41173,51 @@ msgstr "புதுப்பிப்பு செயல்பாட்டு �
 msgid "Invalid update operation id."
 msgstr "தவறான புதுப்பிப்பு செயல்பாட்டு அடையாளம்."
 
+msgid "AI study helper"
+msgstr "AI படிப்பு உதவியாளர்"
+
+msgid "Selected text"
+msgstr "தேர்ந்தெடுத்த உரை"
+
+msgid "Learning technique"
+msgstr "கற்றல் நுட்பம்"
+
+msgid "AI response"
+msgstr "AI பதில்"
+
+msgid "AI request failed."
+msgstr "AI கோரிக்கை தோல்வியுற்றது."
+
+msgid "Mind mapping"
+msgstr "மனவரைபடம்"
+
+msgid "Feynman Technique"
+msgstr "ஃபெய்ன்மேன் நுட்பம்"
+
+msgid "Elaborative interrogation"
+msgstr "விரிவாக்க விசாரணை"
+
+msgid "Spaced repetition"
+msgstr "இடைவெளி மீள்பயிற்சி"
+
+msgid "SQ3R Method"
+msgstr "SQ3R முறை"
+
+msgid "Analogies and metaphors"
+msgstr "ஒப்புமைகளும் உருவகங்களும்"
+
+msgid "Dual coding"
+msgstr "இரட்டைக் குறியீடு"
+
+msgid "Storytelling"
+msgstr "கதைசொல்லல்"
+
+msgid "Thematic connections"
+msgstr "கருப்பொருள் இணைப்புகள்"
+
+msgid "Interleaved learning"
+msgstr "இடைமாற்றக் கற்றல்"
+
+msgid "Memory palaces"
+msgstr "நினைவு அரண்மனைகள்"
+

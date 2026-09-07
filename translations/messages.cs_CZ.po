@@ -41169,3 +41169,51 @@ msgstr "Nelze zapsat protokol operace aktualizace."
 msgid "Invalid update operation id."
 msgstr "Neplatné ID operace aktualizace."
 
+msgid "AI study helper"
+msgstr "AI studijní pomocník"
+
+msgid "Selected text"
+msgstr "Vybraný text"
+
+msgid "Learning technique"
+msgstr "Technika učení"
+
+msgid "AI response"
+msgstr "Odpověď AI"
+
+msgid "AI request failed."
+msgstr "Požadavek na AI selhal."
+
+msgid "Mind mapping"
+msgstr "Myšlenkové mapy"
+
+msgid "Feynman Technique"
+msgstr "Feynmanova technika"
+
+msgid "Elaborative interrogation"
+msgstr "Elaborativní dotazování"
+
+msgid "Spaced repetition"
+msgstr "Rozložené opakování"
+
+msgid "SQ3R Method"
+msgstr "Metoda SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogie a metafory"
+
+msgid "Dual coding"
+msgstr "Dvojité kódování"
+
+msgid "Storytelling"
+msgstr "Vyprávění příběhů"
+
+msgid "Thematic connections"
+msgstr "Tematické souvislosti"
+
+msgid "Interleaved learning"
+msgstr "Prokládané učení"
+
+msgid "Memory palaces"
+msgstr "Paměťové paláce"
+

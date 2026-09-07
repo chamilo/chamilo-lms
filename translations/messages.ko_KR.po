@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "감사합니다"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "수식 예시: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "공식 예제: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "변수 범위"
@@ -41172,4 +41172,52 @@ msgstr "업데이트 작업 로그를 쓸 수 없습니다."
 
 msgid "Invalid update operation id."
 msgstr "잘못된 업데이트 작업 ID입니다."
+
+msgid "AI study helper"
+msgstr "AI 학습 도우미"
+
+msgid "Selected text"
+msgstr "선택한 텍스트"
+
+msgid "Learning technique"
+msgstr "학습 기법"
+
+msgid "AI response"
+msgstr "AI 응답"
+
+msgid "AI request failed."
+msgstr "AI 요청에 실패했습니다."
+
+msgid "Mind mapping"
+msgstr "마인드맵"
+
+msgid "Feynman Technique"
+msgstr "파인만 기법"
+
+msgid "Elaborative interrogation"
+msgstr "정교화 질문법"
+
+msgid "Spaced repetition"
+msgstr "간격 반복"
+
+msgid "SQ3R Method"
+msgstr "SQ3R 방법"
+
+msgid "Analogies and metaphors"
+msgstr "비유와 은유"
+
+msgid "Dual coding"
+msgstr "이중 부호화"
+
+msgid "Storytelling"
+msgstr "스토리텔링"
+
+msgid "Thematic connections"
+msgstr "주제별 연결"
+
+msgid "Interleaved learning"
+msgstr "교차 학습"
+
+msgid "Memory palaces"
+msgstr "기억의 궁전"
 

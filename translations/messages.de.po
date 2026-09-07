@@ -42739,3 +42739,51 @@ msgstr "Protokoll der Aktualisierungsoperation konnte nicht geschrieben werden."
 msgid "Invalid update operation id."
 msgstr "Ungültige ID der Aktualisierungsoperation."
 
+msgid "AI study helper"
+msgstr "KI-Lernassistent"
+
+msgid "Selected text"
+msgstr "Ausgewählter Text"
+
+msgid "Learning technique"
+msgstr "Lerntechnik"
+
+msgid "AI response"
+msgstr "KI-Antwort"
+
+msgid "AI request failed."
+msgstr "KI-Anfrage fehlgeschlagen."
+
+msgid "Mind mapping"
+msgstr "Mindmapping"
+
+msgid "Feynman Technique"
+msgstr "Feynman-Technik"
+
+msgid "Elaborative interrogation"
+msgstr "Elaboratives Fragen"
+
+msgid "Spaced repetition"
+msgstr "Verteilte Wiederholung"
+
+msgid "SQ3R Method"
+msgstr "SQ3R-Methode"
+
+msgid "Analogies and metaphors"
+msgstr "Analogien und Metaphern"
+
+msgid "Dual coding"
+msgstr "Doppelkodierung"
+
+msgid "Storytelling"
+msgstr "Storytelling"
+
+msgid "Thematic connections"
+msgstr "Thematische Verbindungen"
+
+msgid "Interleaved learning"
+msgstr "Verschachteltes Lernen"
+
+msgid "Memory palaces"
+msgstr "Gedächtnispaläste"
+

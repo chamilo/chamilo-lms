@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "ရိုးသားစွာ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ဖော်မြူလာ နမူနာ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ပုံသေနည်း နမူနာ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ပြောင်းလဲနိုင်သော အကွာအဝေးများ"
@@ -41172,4 +41172,52 @@ msgstr "အပ်ဒိတ်လုပ်ဆောင်မှု မှတ်�
 
 msgid "Invalid update operation id."
 msgstr "မမှန်ကန်သော အပ်ဒိတ်လုပ်ဆောင်မှု id။"
+
+msgid "AI study helper"
+msgstr "AI လေ့လာမှု အကူအညီ"
+
+msgid "Selected text"
+msgstr "ရွေးချယ်ထားသော စာသား"
+
+msgid "Learning technique"
+msgstr "သင်ယူမှု နည်းစနစ်"
+
+msgid "AI response"
+msgstr "AI တုံ့ပြန်ချက်"
+
+msgid "AI request failed."
+msgstr "AI တောင်းဆိုမှု မအောင်မြင်ပါ။"
+
+msgid "Mind mapping"
+msgstr "စိတ်မြေပုံရေးဆွဲခြင်း"
+
+msgid "Feynman Technique"
+msgstr "ဖိုင်မန် နည်းစနစ်"
+
+msgid "Elaborative interrogation"
+msgstr "အသေးစိတ် မေးမြန်းခြင်း"
+
+msgid "Spaced repetition"
+msgstr "အချိန်ခြား ပြန်လည်လေ့ကျင့်ခြင်း"
+
+msgid "SQ3R Method"
+msgstr "SQ3R နည်းလမ်း"
+
+msgid "Analogies and metaphors"
+msgstr "နှိုင်းယှဉ်ချက်များနှင့် ဥပမာများ"
+
+msgid "Dual coding"
+msgstr "နှစ်မျိုးကုဒ်ရေးခြင်း"
+
+msgid "Storytelling"
+msgstr "ပုံပြင်ပြောခြင်း"
+
+msgid "Thematic connections"
+msgstr "အကြောင်းအရာဆိုင်ရာ ဆက်စပ်မှုများ"
+
+msgid "Interleaved learning"
+msgstr "ရောနှော သင်ယူခြင်း"
+
+msgid "Memory palaces"
+msgstr "မှတ်ဉာဏ် နန်းတော်များ"
 

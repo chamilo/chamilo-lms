@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Helsingar"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formeleksempel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -41172,4 +41172,52 @@ msgstr "Klarte ikkje å skrive logg for oppdateringsoperasjon."
 
 msgid "Invalid update operation id."
 msgstr "Ugyldig ID for oppdateringsoperasjon."
+
+msgid "AI study helper"
+msgstr "KI-studiehjelpar"
+
+msgid "Selected text"
+msgstr "Vald tekst"
+
+msgid "Learning technique"
+msgstr "Læringsteknikk"
+
+msgid "AI response"
+msgstr "KI-svar"
+
+msgid "AI request failed."
+msgstr "KI-førespurnaden mislukka."
+
+msgid "Mind mapping"
+msgstr "Tankekart"
+
+msgid "Feynman Technique"
+msgstr "Feynman-teknikken"
+
+msgid "Elaborative interrogation"
+msgstr "Utdjupande utspørjing"
+
+msgid "Spaced repetition"
+msgstr "Spreidd repetisjon"
+
+msgid "SQ3R Method"
+msgstr "SQ3R-metoden"
+
+msgid "Analogies and metaphors"
+msgstr "Analogiar og metaforar"
+
+msgid "Dual coding"
+msgstr "Dobbeltkoding"
+
+msgid "Storytelling"
+msgstr "Forteljing"
+
+msgid "Thematic connections"
+msgstr "Tematiske samanhengar"
+
+msgid "Interleaved learning"
+msgstr "Vekslande læring"
+
+msgid "Memory palaces"
+msgstr "Minnepalass"
 

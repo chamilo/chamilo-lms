@@ -41175,3 +41175,51 @@ msgstr "Güncelleme işlem günlüğü yazılamadı."
 msgid "Invalid update operation id."
 msgstr "Geçersiz güncelleme işlem kimliği."
 
+msgid "AI study helper"
+msgstr "YZ çalışma yardımcısı"
+
+msgid "Selected text"
+msgstr "Seçilen metin"
+
+msgid "Learning technique"
+msgstr "Öğrenme tekniği"
+
+msgid "AI response"
+msgstr "Yapay zeka yanıtı"
+
+msgid "AI request failed."
+msgstr "YZ isteği başarısız oldu."
+
+msgid "Mind mapping"
+msgstr "Zihin haritalama"
+
+msgid "Feynman Technique"
+msgstr "Feynman Tekniği"
+
+msgid "Elaborative interrogation"
+msgstr "Ayrıntılı sorgulama"
+
+msgid "Spaced repetition"
+msgstr "Aralıklı tekrar"
+
+msgid "SQ3R Method"
+msgstr "SQ3R Yöntemi"
+
+msgid "Analogies and metaphors"
+msgstr "Analojiler ve metaforlar"
+
+msgid "Dual coding"
+msgstr "Çift kodlama"
+
+msgid "Storytelling"
+msgstr "Hikâye anlatımı"
+
+msgid "Thematic connections"
+msgstr "Tematik bağlantılar"
+
+msgid "Interleaved learning"
+msgstr "Karışık öğrenme"
+
+msgid "Memory palaces"
+msgstr "Hafıza sarayları"
+

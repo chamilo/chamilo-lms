@@ -41169,3 +41169,51 @@ msgstr "Impussibil scrivi il regjistri de operazion di inzornament."
 msgid "Invalid update operation id."
 msgstr "ID de operazion di inzornament no valit."
 
+msgid "AI study helper"
+msgstr "Jutori di studi IA"
+
+msgid "Selected text"
+msgstr "Test selezionât"
+
+msgid "Learning technique"
+msgstr "Tecniche di apprendiment"
+
+msgid "AI response"
+msgstr "Rispueste IA"
+
+msgid "AI request failed."
+msgstr "La richieste IA e je falide."
+
+msgid "Mind mapping"
+msgstr "Mapis mentâls"
+
+msgid "Feynman Technique"
+msgstr "Tecniche di Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Interogazion elaborative"
+
+msgid "Spaced repetition"
+msgstr "Ripetizion spaziade"
+
+msgid "SQ3R Method"
+msgstr "Metodi SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogiis e metaforis"
+
+msgid "Dual coding"
+msgstr "Codificazion dople"
+
+msgid "Storytelling"
+msgstr "Narazion"
+
+msgid "Thematic connections"
+msgstr "Leams tematics"
+
+msgid "Interleaved learning"
+msgstr "Apprendiment intercalât"
+
+msgid "Memory palaces"
+msgstr "Palaçs de memorie"
+

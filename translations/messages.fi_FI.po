@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavaesimerkki: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavaesimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -41174,4 +41174,52 @@ msgstr "Päivitystoiminnon lokin kirjoitus epäonnistui."
 
 msgid "Invalid update operation id."
 msgstr "Virheellinen päivitystoiminnon tunniste."
+
+msgid "AI study helper"
+msgstr "Tekoälyopiskeluavustaja"
+
+msgid "Selected text"
+msgstr "Valittu teksti"
+
+msgid "Learning technique"
+msgstr "Oppimistekniikka"
+
+msgid "AI response"
+msgstr "Tekoälyn vastaus"
+
+msgid "AI request failed."
+msgstr "Tekoälypyyntö epäonnistui."
+
+msgid "Mind mapping"
+msgstr "Miellekartta"
+
+msgid "Feynman Technique"
+msgstr "Feynmanin tekniikka"
+
+msgid "Elaborative interrogation"
+msgstr "Elaboratiivinen interrogointi"
+
+msgid "Spaced repetition"
+msgstr "Hajautettu toisto"
+
+msgid "SQ3R Method"
+msgstr "SQ3R-menetelmä"
+
+msgid "Analogies and metaphors"
+msgstr "Analogiat ja metaforat"
+
+msgid "Dual coding"
+msgstr "Kaksoiskoodaus"
+
+msgid "Storytelling"
+msgstr "Tarinankerronta"
+
+msgid "Thematic connections"
+msgstr "Temaattiset yhteydet"
+
+msgid "Interleaved learning"
+msgstr "Vuorotteleva oppiminen"
+
+msgid "Memory palaces"
+msgstr "Muistipalatsit"
 

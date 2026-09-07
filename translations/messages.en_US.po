@@ -41178,3 +41178,51 @@ msgstr "Unable to write update operation log."
 
 msgid "Invalid update operation id."
 msgstr "Invalid update operation id."
+
+msgid "AI study helper"
+msgstr "AI study helper"
+
+msgid "Selected text"
+msgstr "Selected text"
+
+msgid "Learning technique"
+msgstr "Learning technique"
+
+msgid "AI response"
+msgstr "AI response"
+
+msgid "AI request failed."
+msgstr "AI request failed."
+
+msgid "Mind mapping"
+msgstr "Mind mapping"
+
+msgid "Feynman Technique"
+msgstr "Feynman Technique"
+
+msgid "Elaborative interrogation"
+msgstr "Elaborative interrogation"
+
+msgid "Spaced repetition"
+msgstr "Spaced repetition"
+
+msgid "SQ3R Method"
+msgstr "SQ3R Method"
+
+msgid "Analogies and metaphors"
+msgstr "Analogies and metaphors"
+
+msgid "Dual coding"
+msgstr "Dual coding"
+
+msgid "Storytelling"
+msgstr "Storytelling"
+
+msgid "Thematic connections"
+msgstr "Thematic connections"
+
+msgid "Interleaved learning"
+msgstr "Interleaved learning"
+
+msgid "Memory palaces"
+msgstr "Memory palaces"

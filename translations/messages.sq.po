@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Me respekt"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Shembull formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Shembull formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Vargjet e variablave"
@@ -41172,4 +41172,52 @@ msgstr "Nuk mund të shkruhet regjistri i operacionit të përditësimit."
 
 msgid "Invalid update operation id."
 msgstr "ID e pavlefshme e operacionit të përditësimit."
+
+msgid "AI study helper"
+msgstr "Ndihmës studimi me IA"
+
+msgid "Selected text"
+msgstr "Teksti i zgjedhur"
+
+msgid "Learning technique"
+msgstr "Teknikë të nxëni"
+
+msgid "AI response"
+msgstr "Përgjigje e IA"
+
+msgid "AI request failed."
+msgstr "Kërkesa e IA dështoi."
+
+msgid "Mind mapping"
+msgstr "Hartë mendore"
+
+msgid "Feynman Technique"
+msgstr "Teknika Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Pyetje elaborative"
+
+msgid "Spaced repetition"
+msgstr "Përsëritje me intervale"
+
+msgid "SQ3R Method"
+msgstr "Metoda SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogji dhe metafora"
+
+msgid "Dual coding"
+msgstr "Kodim i dyfishtë"
+
+msgid "Storytelling"
+msgstr "Tregim"
+
+msgid "Thematic connections"
+msgstr "Lidhje tematike"
+
+msgid "Interleaved learning"
+msgstr "Nxënie e ndërthurur"
+
+msgid "Memory palaces"
+msgstr "Pallate të kujtesës"
 

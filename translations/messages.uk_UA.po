@@ -41169,3 +41169,51 @@ msgstr "Не вдалося записати журнал операції он�
 msgid "Invalid update operation id."
 msgstr "Недійсний ідентифікатор операції оновлення."
 
+msgid "AI study helper"
+msgstr "Помічник ШІ для навчання"
+
+msgid "Selected text"
+msgstr "Вибраний текст"
+
+msgid "Learning technique"
+msgstr "Техніка навчання"
+
+msgid "AI response"
+msgstr "Відповідь ШІ"
+
+msgid "AI request failed."
+msgstr "Запит до ШІ не вдався."
+
+msgid "Mind mapping"
+msgstr "Інтелект-карти"
+
+msgid "Feynman Technique"
+msgstr "Метод Фейнмана"
+
+msgid "Elaborative interrogation"
+msgstr "Елаборативне опитування"
+
+msgid "Spaced repetition"
+msgstr "Інтервальне повторення"
+
+msgid "SQ3R Method"
+msgstr "Метод SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Аналогії та метафори"
+
+msgid "Dual coding"
+msgstr "Подвійне кодування"
+
+msgid "Storytelling"
+msgstr "Сторітелінг"
+
+msgid "Thematic connections"
+msgstr "Тематичні зв’язки"
+
+msgid "Interleaved learning"
+msgstr "Переміжне навчання"
+
+msgid "Memory palaces"
+msgstr "Палаци пам’яті"
+

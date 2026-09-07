@@ -41175,3 +41175,51 @@ msgstr "ไม่สามารถเขียนบันทึกการด
 msgid "Invalid update operation id."
 msgstr "รหัสการดำเนินการอัปเดตไม่ถูกต้อง"
 
+msgid "AI study helper"
+msgstr "ผู้ช่วยการเรียนด้วย AI"
+
+msgid "Selected text"
+msgstr "ข้อความที่เลือก"
+
+msgid "Learning technique"
+msgstr "เทคนิคการเรียนรู้"
+
+msgid "AI response"
+msgstr "การตอบกลับของ AI"
+
+msgid "AI request failed."
+msgstr "คำขอ AI ล้มเหลว"
+
+msgid "Mind mapping"
+msgstr "แผนที่ความคิด"
+
+msgid "Feynman Technique"
+msgstr "เทคนิคไฟน์แมน"
+
+msgid "Elaborative interrogation"
+msgstr "การซักถามเชิงขยายความ"
+
+msgid "Spaced repetition"
+msgstr "การทบทวนแบบเว้นระยะ"
+
+msgid "SQ3R Method"
+msgstr "วิธี SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "อุปมาอุปไมยและคำเปรียบเทียบ"
+
+msgid "Dual coding"
+msgstr "การเข้ารหัสคู่"
+
+msgid "Storytelling"
+msgstr "การเล่าเรื่อง"
+
+msgid "Thematic connections"
+msgstr "การเชื่อมโยงตามหัวข้อ"
+
+msgid "Interleaved learning"
+msgstr "การเรียนรู้แบบสลับกัน"
+
+msgid "Memory palaces"
+msgstr "พระราชวังแห่งความจำ"
+

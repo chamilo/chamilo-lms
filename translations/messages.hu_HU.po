@@ -41173,3 +41173,51 @@ msgstr "Nem sikerült a frissítési művelet naplójának írása."
 msgid "Invalid update operation id."
 msgstr "Érvénytelen frissítési műveletazonosító."
 
+msgid "AI study helper"
+msgstr "MI tanulási segítő"
+
+msgid "Selected text"
+msgstr "Kijelölt szöveg"
+
+msgid "Learning technique"
+msgstr "Tanulási technika"
+
+msgid "AI response"
+msgstr "MI-válasz"
+
+msgid "AI request failed."
+msgstr "Az MI-kérés sikertelen."
+
+msgid "Mind mapping"
+msgstr "Gondolattérkép"
+
+msgid "Feynman Technique"
+msgstr "Feynman-technika"
+
+msgid "Elaborative interrogation"
+msgstr "Kidolgozó kérdezés"
+
+msgid "Spaced repetition"
+msgstr "Időközönkénti ismétlés"
+
+msgid "SQ3R Method"
+msgstr "SQ3R-módszer"
+
+msgid "Analogies and metaphors"
+msgstr "Analógiák és metaforák"
+
+msgid "Dual coding"
+msgstr "Kettős kódolás"
+
+msgid "Storytelling"
+msgstr "Történetmesélés"
+
+msgid "Thematic connections"
+msgstr "Tematikus kapcsolatok"
+
+msgid "Interleaved learning"
+msgstr "Kevert tanulás"
+
+msgid "Memory palaces"
+msgstr "Memóriapaloták"
+

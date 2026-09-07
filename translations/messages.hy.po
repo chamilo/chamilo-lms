@@ -41173,3 +41173,51 @@ msgstr "Հնարավոր չէ գրել թարմացման գործողությա
 msgid "Invalid update operation id."
 msgstr "Թարմացման գործողության անվավեր նույնացուցիչ։"
 
+msgid "AI study helper"
+msgstr "ԱԲ ուսումնական օգնական"
+
+msgid "Selected text"
+msgstr "Ընտրված տեքստ"
+
+msgid "Learning technique"
+msgstr "Ուսումնական տեխնիկա"
+
+msgid "AI response"
+msgstr "ԱԲ պատասխան"
+
+msgid "AI request failed."
+msgstr "ԱԲ հարցումը ձախողվեց։"
+
+msgid "Mind mapping"
+msgstr "Մտքի քարտեզագրում"
+
+msgid "Feynman Technique"
+msgstr "Ֆեյնմանի տեխնիկա"
+
+msgid "Elaborative interrogation"
+msgstr "Մանրամասն հարցադրում"
+
+msgid "Spaced repetition"
+msgstr "Բաշխված կրկնություն"
+
+msgid "SQ3R Method"
+msgstr "SQ3R մեթոդ"
+
+msgid "Analogies and metaphors"
+msgstr "Անալոգիաներ և փոխաբերություններ"
+
+msgid "Dual coding"
+msgstr "Կրկնակի կոդավորում"
+
+msgid "Storytelling"
+msgstr "Պատմողականություն"
+
+msgid "Thematic connections"
+msgstr "Թեմատիկ կապեր"
+
+msgid "Interleaved learning"
+msgstr "Խաչաձև ուսուցում"
+
+msgid "Memory palaces"
+msgstr "Հիշողության պալատներ"
+

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Við kærleika"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formuludømi: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formuldømi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablumørk"
@@ -41168,4 +41168,52 @@ msgstr "Kann ikki skriva logg fyri dagførsluoperatión."
 
 msgid "Invalid update operation id."
 msgstr "Ógildugt id fyri dagførsluoperatión."
+
+msgid "AI study helper"
+msgstr "AI-námsaðstoð"
+
+msgid "Selected text"
+msgstr "Valdur tekstur"
+
+msgid "Learning technique"
+msgstr "Námstøkni"
+
+msgid "AI response"
+msgstr "KI-svar"
+
+msgid "AI request failed."
+msgstr "AI-fyrispurningur miseydnaðist."
+
+msgid "Mind mapping"
+msgstr "Hugsanakort"
+
+msgid "Feynman Technique"
+msgstr "Feynman-tøknin"
+
+msgid "Elaborative interrogation"
+msgstr "Útgreinandi spurningar"
+
+msgid "Spaced repetition"
+msgstr "Spreidd endurtøka"
+
+msgid "SQ3R Method"
+msgstr "SQ3R-hátturin"
+
+msgid "Analogies and metaphors"
+msgstr "Líkingar og myndamáli"
+
+msgid "Dual coding"
+msgstr "Tvíkoding"
+
+msgid "Storytelling"
+msgstr "Søguforteljing"
+
+msgid "Thematic connections"
+msgstr "Tematiskar sambindingar"
+
+msgid "Interleaved learning"
+msgstr "Samanflættað læring"
+
+msgid "Memory palaces"
+msgstr "Minnishøllir"
 

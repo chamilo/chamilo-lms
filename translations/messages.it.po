@@ -41189,3 +41189,51 @@ msgstr "Impossibile scrivere il log dell'operazione di aggiornamento."
 msgid "Invalid update operation id."
 msgstr "ID operazione di aggiornamento non valido."
 
+msgid "AI study helper"
+msgstr "Assistente di studio IA"
+
+msgid "Selected text"
+msgstr "Testo selezionato"
+
+msgid "Learning technique"
+msgstr "Tecnica di apprendimento"
+
+msgid "AI response"
+msgstr "Risposta IA"
+
+msgid "AI request failed."
+msgstr "Richiesta IA non riuscita."
+
+msgid "Mind mapping"
+msgstr "Mappe mentali"
+
+msgid "Feynman Technique"
+msgstr "Tecnica di Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Interrogazione elaborativa"
+
+msgid "Spaced repetition"
+msgstr "Ripetizione spaziata"
+
+msgid "SQ3R Method"
+msgstr "Metodo SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogie e metafore"
+
+msgid "Dual coding"
+msgstr "Codifica duale"
+
+msgid "Storytelling"
+msgstr "Narrazione"
+
+msgid "Thematic connections"
+msgstr "Collegamenti tematici"
+
+msgid "Interleaved learning"
+msgstr "Apprendimento intercalato"
+
+msgid "Memory palaces"
+msgstr "Palazzi della memoria"
+

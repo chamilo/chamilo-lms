@@ -4211,5 +4211,21 @@
     "Stage package": "Paket staging",
     "Package staging": "Staging paket",
     "Apply plan": "Terapkan rencana",
-    "Update workflow completed": "Alur kerja pembaruan selesai"
+    "Update workflow completed": "Alur kerja pembaruan selesai",
+    "AI study helper": "Asisten belajar AI",
+    "Selected text": "Teks terpilih",
+    "Learning technique": "Teknik belajar",
+    "AI response": "Respons AI",
+    "AI request failed.": "Permintaan AI gagal.",
+    "Mind mapping": "Peta pikiran",
+    "Feynman Technique": "Teknik Feynman",
+    "Elaborative interrogation": "Interogasi elaboratif",
+    "Spaced repetition": "Pengulangan berjarak",
+    "SQ3R Method": "Metode SQ3R",
+    "Analogies and metaphors": "Analogi dan metafora",
+    "Dual coding": "Pengodean ganda",
+    "Storytelling": "Bercerita",
+    "Thematic connections": "Koneksi tematik",
+    "Interleaved learning": "Pembelajaran berselang",
+    "Memory palaces": "Istana memori"
 }

@@ -41175,3 +41175,51 @@ msgstr "Không thể ghi nhật ký thao tác cập nhật."
 msgid "Invalid update operation id."
 msgstr "ID thao tác cập nhật không hợp lệ."
 
+msgid "AI study helper"
+msgstr "Trợ lý học tập AI"
+
+msgid "Selected text"
+msgstr "Văn bản đã chọn"
+
+msgid "Learning technique"
+msgstr "Kỹ thuật học tập"
+
+msgid "AI response"
+msgstr "Phản hồi AI"
+
+msgid "AI request failed."
+msgstr "Yêu cầu AI thất bại."
+
+msgid "Mind mapping"
+msgstr "Sơ đồ tư duy"
+
+msgid "Feynman Technique"
+msgstr "Kỹ thuật Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Hỏi đáp khai triển"
+
+msgid "Spaced repetition"
+msgstr "Lặp lại ngắt quãng"
+
+msgid "SQ3R Method"
+msgstr "Phương pháp SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Phép so sánh và ẩn dụ"
+
+msgid "Dual coding"
+msgstr "Mã hóa kép"
+
+msgid "Storytelling"
+msgstr "Kể chuyện"
+
+msgid "Thematic connections"
+msgstr "Liên kết chủ đề"
+
+msgid "Interleaved learning"
+msgstr "Học đan xen"
+
+msgid "Memory palaces"
+msgstr "Cung điện trí nhớ"
+

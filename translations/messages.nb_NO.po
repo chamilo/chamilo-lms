@@ -41174,3 +41174,51 @@ msgstr "Kan ikke skrive logg for oppdateringsoperasjon."
 msgid "Invalid update operation id."
 msgstr "Ugyldig ID for oppdateringsoperasjon."
 
+msgid "AI study helper"
+msgstr "AI-studiehjelper"
+
+msgid "Selected text"
+msgstr "Valgt tekst"
+
+msgid "Learning technique"
+msgstr "Læringsteknikk"
+
+msgid "AI response"
+msgstr "KI-svar"
+
+msgid "AI request failed."
+msgstr "AI-forespørsel mislyktes."
+
+msgid "Mind mapping"
+msgstr "Tankekart"
+
+msgid "Feynman Technique"
+msgstr "Feynman-teknikken"
+
+msgid "Elaborative interrogation"
+msgstr "Elaborativ utspørring"
+
+msgid "Spaced repetition"
+msgstr "Spredt repetisjon"
+
+msgid "SQ3R Method"
+msgstr "SQ3R-metoden"
+
+msgid "Analogies and metaphors"
+msgstr "Analogier og metaforer"
+
+msgid "Dual coding"
+msgstr "Dobbeltkoding"
+
+msgid "Storytelling"
+msgstr "Historiefortelling"
+
+msgid "Thematic connections"
+msgstr "Tematiske sammenhenger"
+
+msgid "Interleaved learning"
+msgstr "Vekslende læring"
+
+msgid "Memory palaces"
+msgstr "Minnespalass"
+

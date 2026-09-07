@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Tusaale foomula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaalaha foormuulada: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -41168,4 +41168,52 @@ msgstr "Lama qori karo diiwaanka hawlgalka cusboonaysiinta."
 
 msgid "Invalid update operation id."
 msgstr "Aqoonsiga hawlgalka cusboonaysiinta waa khaldan."
+
+msgid "AI study helper"
+msgstr "Kaaliyaha waxbarashada AI"
+
+msgid "Selected text"
+msgstr "Qoraalka la doortay"
+
+msgid "Learning technique"
+msgstr "Farsamada waxbarashada"
+
+msgid "AI response"
+msgstr "Jawaabta AI"
+
+msgid "AI request failed."
+msgstr "Codsiga AI wuu fashilmay."
+
+msgid "Mind mapping"
+msgstr "Khariidaynta maskaxda"
+
+msgid "Feynman Technique"
+msgstr "Farsamada Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Su'aalaha faahfaahinta"
+
+msgid "Spaced repetition"
+msgstr "Ku celcelinta kala fog"
+
+msgid "SQ3R Method"
+msgstr "Habka SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Isku ekaanshaha iyo sarbeebaha"
+
+msgid "Dual coding"
+msgstr "Koodhinta labanlaabka"
+
+msgid "Storytelling"
+msgstr "Sheeko sheegid"
+
+msgid "Thematic connections"
+msgstr "Xiriirada mawduuca"
+
+msgid "Interleaved learning"
+msgstr "Waxbarashada isku dhafan"
+
+msgid "Memory palaces"
+msgstr "Qasriyada xusuusta"
 

@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Hormat kami"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh rumus: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh rumus: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rentang variabel"
@@ -41172,4 +41172,52 @@ msgstr "Tidak dapat menulis log operasi pembaruan."
 
 msgid "Invalid update operation id."
 msgstr "ID operasi pembaruan tidak valid."
+
+msgid "AI study helper"
+msgstr "Asisten belajar AI"
+
+msgid "Selected text"
+msgstr "Teks terpilih"
+
+msgid "Learning technique"
+msgstr "Teknik belajar"
+
+msgid "AI response"
+msgstr "Respons AI"
+
+msgid "AI request failed."
+msgstr "Permintaan AI gagal."
+
+msgid "Mind mapping"
+msgstr "Peta pikiran"
+
+msgid "Feynman Technique"
+msgstr "Teknik Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Interogasi elaboratif"
+
+msgid "Spaced repetition"
+msgstr "Pengulangan berjarak"
+
+msgid "SQ3R Method"
+msgstr "Metode SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogi dan metafora"
+
+msgid "Dual coding"
+msgstr "Pengodean ganda"
+
+msgid "Storytelling"
+msgstr "Bercerita"
+
+msgid "Thematic connections"
+msgstr "Koneksi tematik"
+
+msgid "Interleaved learning"
+msgstr "Pembelajaran berselang"
+
+msgid "Memory palaces"
+msgstr "Istana memori"
 

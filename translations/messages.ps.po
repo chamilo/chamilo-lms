@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول بېلګه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول بېلګه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -41168,4 +41168,52 @@ msgstr "د تازه کولو د عملیاتو لاګ لیکل ناشوني دي
 
 msgid "Invalid update operation id."
 msgstr "د تازه کولو د عملیاتو ناسم پېژند."
+
+msgid "AI study helper"
+msgstr "د مصنوعي هوښیارۍ د زده‌کړې مرستندوی"
+
+msgid "Selected text"
+msgstr "ټاکل شوی متن"
+
+msgid "Learning technique"
+msgstr "د زده‌کړې تخنیک"
+
+msgid "AI response"
+msgstr "د AI ځواب"
+
+msgid "AI request failed."
+msgstr "د مصنوعي هوښیارۍ غوښتنه ناکامه شوه."
+
+msgid "Mind mapping"
+msgstr "ذهني نقشه جوړول"
+
+msgid "Feynman Technique"
+msgstr "د فاینمن تخنیک"
+
+msgid "Elaborative interrogation"
+msgstr "تشریحي پوښتنې"
+
+msgid "Spaced repetition"
+msgstr "فاصله‌دار تکرار"
+
+msgid "SQ3R Method"
+msgstr "د SQ3R میتود"
+
+msgid "Analogies and metaphors"
+msgstr "ورته‌والی او استعارې"
+
+msgid "Dual coding"
+msgstr "دوه ګونی کوډینګ"
+
+msgid "Storytelling"
+msgstr "کیسې ویل"
+
+msgid "Thematic connections"
+msgstr "موضوعي اړیکې"
+
+msgid "Interleaved learning"
+msgstr "ګډه زده‌کړه"
+
+msgid "Memory palaces"
+msgstr "د حافظې ماڼۍ"
 

@@ -41174,3 +41174,51 @@ msgstr "Nepavyko įrašyti atnaujinimo operacijos žurnalo."
 msgid "Invalid update operation id."
 msgstr "Neteisingas atnaujinimo operacijos id."
 
+msgid "AI study helper"
+msgstr "DI mokymosi pagalbininkas"
+
+msgid "Selected text"
+msgstr "Pasirinktas tekstas"
+
+msgid "Learning technique"
+msgstr "Mokymosi technika"
+
+msgid "AI response"
+msgstr "DI atsakymas"
+
+msgid "AI request failed."
+msgstr "DI užklausa nepavyko."
+
+msgid "Mind mapping"
+msgstr "Minčių žemėlapiai"
+
+msgid "Feynman Technique"
+msgstr "Feinmano technika"
+
+msgid "Elaborative interrogation"
+msgstr "Išplėstinis klausinėjimas"
+
+msgid "Spaced repetition"
+msgstr "Intervalinis kartojimas"
+
+msgid "SQ3R Method"
+msgstr "SQ3R metodas"
+
+msgid "Analogies and metaphors"
+msgstr "Analogijos ir metaforos"
+
+msgid "Dual coding"
+msgstr "Dvejopas kodavimas"
+
+msgid "Storytelling"
+msgstr "Pasakojimas"
+
+msgid "Thematic connections"
+msgstr "Teminiai ryšiai"
+
+msgid "Interleaved learning"
+msgstr "Persipynęs mokymasis"
+
+msgid "Memory palaces"
+msgstr "Atminties rūmai"
+

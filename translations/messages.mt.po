@@ -41174,3 +41174,51 @@ msgstr "Ma jistax jinkiteb ir-reġistru tal-operazzjoni tal-aġġornament."
 msgid "Invalid update operation id."
 msgstr "ID tal-operazzjoni tal-aġġornament invalidu."
 
+msgid "AI study helper"
+msgstr "Għajnuna għall-istudju bl-IA"
+
+msgid "Selected text"
+msgstr "Test magħżul"
+
+msgid "Learning technique"
+msgstr "Teknika tat-tagħlim"
+
+msgid "AI response"
+msgstr "Risposta tal-AI"
+
+msgid "AI request failed."
+msgstr "It-talba tal-IA falliet."
+
+msgid "Mind mapping"
+msgstr "Mappar mentali"
+
+msgid "Feynman Technique"
+msgstr "Teknika ta' Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Interrogazzjoni elaborattiva"
+
+msgid "Spaced repetition"
+msgstr "Ripetizzjoni spazjata"
+
+msgid "SQ3R Method"
+msgstr "Metodu SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analoġiji u metafori"
+
+msgid "Dual coding"
+msgstr "Kodifikazzjoni doppja"
+
+msgid "Storytelling"
+msgstr "Rakkontar ta' stejjer"
+
+msgid "Thematic connections"
+msgstr "Konnessjonijiet tematiċi"
+
+msgid "Interleaved learning"
+msgstr "Tagħlim interkalat"
+
+msgid "Memory palaces"
+msgstr "Palazzi tal-memorja"
+

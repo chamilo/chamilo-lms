@@ -416,6 +416,77 @@
             </div>
           </div>
         </div>
+
+        <BaseButton
+          v-if="isAiLearningHelperAvailable && aiHelperMenuVisible"
+          id="lp-ai-learning-helper-open"
+          :label="t('AI study helper')"
+          :style="aiHelperMenuStyle"
+          class="lp-ai-learning-helper-trigger"
+          icon="robot"
+          only-icon
+          type="primary"
+          @click="openAiLearningHelper"
+        />
+
+        <BaseDialog
+          v-model:is-visible="aiHelperDialogVisible"
+          :close-label="t('Close')"
+          :title="t('AI study helper')"
+          class="w-[min(48rem,calc(100vw-2rem))]"
+          header-icon="robot"
+        >
+          <div class="flex flex-col gap-4">
+            <div class="rounded-lg border border-gray-25 bg-gray-15 p-3">
+              <div class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-50">
+                {{ t("Selected text") }}
+              </div>
+              <div class="max-h-32 overflow-y-auto whitespace-pre-wrap text-sm leading-6 text-gray-90">
+                {{ aiHelperSelectedText }}
+              </div>
+            </div>
+
+            <BaseSelect
+              id="lp-ai-learning-helper-method"
+              v-model="aiHelperMethod"
+              :label="t('Learning technique')"
+              name="lp_ai_learning_helper_method"
+              :options="aiHelperMethods"
+            />
+
+            <div
+              v-if="aiHelperStatus"
+              class="text-sm text-gray-50"
+            >
+              {{ aiHelperStatus }}
+            </div>
+
+            <div
+              v-if="aiHelperAnswer"
+              class="rounded-lg border border-gray-25 bg-white p-4"
+            >
+              <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-50">
+                {{ t("AI response") }}
+              </div>
+              <div
+                class="max-h-[min(46vh,520px)] overflow-y-auto whitespace-pre-wrap pr-1 text-sm leading-6 text-gray-90"
+              >
+                {{ aiHelperAnswer }}
+              </div>
+            </div>
+          </div>
+
+          <template #footer>
+            <BaseButton
+              id="lp-ai-learning-helper-generate"
+              :is-loading="aiHelperGenerating"
+              :label="t('Generate')"
+              icon="magic-staff"
+              type="success"
+              @click="generateAiLearningHelper"
+            />
+          </template>
+        </BaseDialog>
       </main>
     </template>
   </div>
@@ -426,7 +497,9 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import LpFinalItem from "../../components/lp/LpFinalItem.vue"
 import LpImpressRuntime from "../../components/lp/LpImpressRuntime.vue"
 import LpReporting from "./LpReporting.vue"
@@ -453,6 +526,14 @@ const isSyncingRuntime = ref(false)
 const isReturningToCStudio = ref(false)
 const iframeLoading = ref(false)
 const iframeReloadKey = ref(0)
+const aiHelperMenuVisible = ref(false)
+const aiHelperMenuPosition = ref({ left: 24, top: 24 })
+const aiHelperDialogVisible = ref(false)
+const aiHelperSelectedText = ref("")
+const aiHelperMethod = ref("feynman")
+const aiHelperAnswer = ref("")
+const aiHelperStatus = ref("")
+const aiHelperGenerating = ref(false)
 const runtimeVideo = ref(null)
 const videoNextOverlayVisible = ref(false)
 const previewImageFailed = ref(false)
@@ -472,6 +553,7 @@ let scormRuntimeContext = null
 let scormRuntimeKey = ""
 let restoreTeacherViewPromise = null
 let youtubeApiPromise = null
+let aiHelperFrameCleanup = null
 let embeddedVideoCleanup = []
 let embeddedVideoWatchGeneration = 0
 
@@ -576,7 +658,44 @@ const currentItem = computed(
 const isFinalItem = computed(
   () => currentItem.value?.itemType === "final_item" && Boolean(runtime.value?.finalItem?.enabled),
 )
-const isVideoItem = computed(() => "video" === String(currentItem.value?.itemType || "").trim().toLowerCase())
+const isVideoItem = computed(
+  () =>
+    "video" ===
+    String(currentItem.value?.itemType || "")
+      .trim()
+      .toLowerCase(),
+)
+const isAiLearningHelperAvailable = computed(
+  () =>
+    !isReportingMode.value &&
+    !isImpressMode.value &&
+    Boolean(runtime.value?.contentUrl) &&
+    "document" ===
+      String(currentItem.value?.itemType || "")
+        .trim()
+        .toLowerCase() &&
+    "true" ===
+      String(platformConfig.getSetting("ai_helpers.enable_ai_helpers") || "")
+        .trim()
+        .toLowerCase(),
+)
+const aiHelperMethods = computed(() => [
+  { value: "mind_map", label: t("Mind mapping") },
+  { value: "feynman", label: t("Feynman Technique") },
+  { value: "elaborative_interrogation", label: t("Elaborative interrogation") },
+  { value: "spaced_repetition", label: t("Spaced repetition") },
+  { value: "sq3r", label: t("SQ3R Method") },
+  { value: "analogies_metaphors", label: t("Analogies and metaphors") },
+  { value: "dual_coding", label: t("Dual coding") },
+  { value: "storytelling", label: t("Storytelling") },
+  { value: "thematic_connections", label: t("Thematic connections") },
+  { value: "interleaved_learning", label: t("Interleaved learning") },
+  { value: "memory_palace", label: t("Memory palaces") },
+])
+const aiHelperMenuStyle = computed(() => ({
+  left: `${aiHelperMenuPosition.value.left}px`,
+  top: `${aiHelperMenuPosition.value.top}px`,
+}))
 const contentStageKey = computed(() =>
   [
     Number(runtime.value?.currentItemId || 0),
@@ -1113,7 +1232,12 @@ function loadYoutubeIframeApi() {
 async function setupEmbeddedVideoWatchers(frame) {
   clearEmbeddedVideoWatchers()
   hideVideoNextOverlay()
-  if ("link" !== String(currentItem.value?.itemType || "").trim().toLowerCase()) {
+  if (
+    "link" !==
+    String(currentItem.value?.itemType || "")
+      .trim()
+      .toLowerCase()
+  ) {
     return
   }
   const generation = embeddedVideoWatchGeneration
@@ -1121,7 +1245,7 @@ async function setupEmbeddedVideoWatchers(frame) {
   let frameDocument
   try {
     frameDocument = frame?.contentDocument || frame?.contentWindow?.document
-  } catch (error) {
+  } catch {
     return
   }
   if (!frameDocument) {
@@ -1173,6 +1297,202 @@ async function setupEmbeddedVideoWatchers(frame) {
   }
 }
 
+function clearAiLearningHelperFrameBinding() {
+  if (typeof aiHelperFrameCleanup === "function") {
+    aiHelperFrameCleanup()
+  }
+
+  aiHelperFrameCleanup = null
+  aiHelperMenuVisible.value = false
+}
+
+function resetAiLearningHelper() {
+  clearAiLearningHelperFrameBinding()
+  aiHelperDialogVisible.value = false
+  aiHelperSelectedText.value = ""
+  aiHelperAnswer.value = ""
+  aiHelperStatus.value = ""
+  aiHelperGenerating.value = false
+}
+
+function getAiLearningHelperFrameDocument() {
+  const frame = contentFrame.value
+  if (!frame) {
+    return null
+  }
+
+  try {
+    return frame.contentDocument || frame.contentWindow?.document || null
+  } catch (error) {
+    console.warn("[LearningPathRuntime] Unable to access the document iframe for the AI study helper.", error)
+    return null
+  }
+}
+
+function readAiLearningHelperSelection(frameDocument = getAiLearningHelperFrameDocument()) {
+  if (!frameDocument) {
+    return ""
+  }
+
+  try {
+    return String(frameDocument.getSelection?.()?.toString() || "").trim()
+  } catch {
+    return ""
+  }
+}
+
+function updateAiLearningHelperMenu(event, frameDocument) {
+  if (!isAiLearningHelperAvailable.value) {
+    aiHelperMenuVisible.value = false
+    return
+  }
+
+  const selectedText = readAiLearningHelperSelection(frameDocument)
+  if (!selectedText) {
+    aiHelperMenuVisible.value = false
+    return
+  }
+
+  aiHelperSelectedText.value = selectedText.substring(0, 5000)
+
+  let left = Number(event?.clientX || 24) + 12
+  let top = Number(event?.clientY || 24) + 12
+
+  try {
+    const frame = contentFrame.value
+    if (frame && frameDocument === getAiLearningHelperFrameDocument()) {
+      const rect = frame.getBoundingClientRect()
+      left += rect.left
+      top += rect.top
+    }
+  } catch (error) {
+    console.warn("[LearningPathRuntime] Unable to position the AI study helper beside the selection.", error)
+  }
+
+  aiHelperMenuPosition.value = {
+    left: Math.max(12, Math.min(left, window.innerWidth - 64)),
+    top: Math.max(12, Math.min(top, window.innerHeight - 64)),
+  }
+  aiHelperMenuVisible.value = true
+}
+
+function bindAiLearningHelperFrame() {
+  clearAiLearningHelperFrameBinding()
+
+  if (!isAiLearningHelperAvailable.value) {
+    return
+  }
+
+  const frameDocument = getAiLearningHelperFrameDocument()
+  if (!frameDocument) {
+    return
+  }
+
+  const handleMouseUp = (event) => {
+    window.setTimeout(() => updateAiLearningHelperMenu(event, frameDocument), 10)
+  }
+  const handleKeyUp = () => {
+    window.setTimeout(() => {
+      if (readAiLearningHelperSelection(frameDocument)) {
+        updateAiLearningHelperMenu({ clientX: 24, clientY: 24 }, frameDocument)
+      } else {
+        aiHelperMenuVisible.value = false
+      }
+    }, 10)
+  }
+  const handleContextMenu = (event) => {
+    if (!readAiLearningHelperSelection(frameDocument)) {
+      return
+    }
+
+    event.preventDefault()
+    updateAiLearningHelperMenu(event, frameDocument)
+  }
+
+  frameDocument.addEventListener("mouseup", handleMouseUp)
+  frameDocument.addEventListener("keyup", handleKeyUp)
+  frameDocument.addEventListener("contextmenu", handleContextMenu)
+
+  aiHelperFrameCleanup = () => {
+    frameDocument.removeEventListener("mouseup", handleMouseUp)
+    frameDocument.removeEventListener("keyup", handleKeyUp)
+    frameDocument.removeEventListener("contextmenu", handleContextMenu)
+  }
+}
+
+function openAiLearningHelper() {
+  if (!isAiLearningHelperAvailable.value || !aiHelperSelectedText.value) {
+    return
+  }
+
+  aiHelperMenuVisible.value = false
+  aiHelperAnswer.value = ""
+  aiHelperStatus.value = ""
+  aiHelperDialogVisible.value = true
+}
+
+function getAiLearningHelperLanguage() {
+  const courseLanguage = String(window.course_language || "").trim()
+  if (courseLanguage) {
+    return courseLanguage
+  }
+
+  const platformLanguage = String(platformConfig.getSetting("language.platform_language") || "").trim()
+
+  return platformLanguage || "en"
+}
+
+async function generateAiLearningHelper() {
+  const currentItemId = Number(runtime.value?.currentItemId || 0)
+  if (
+    !isAiLearningHelperAvailable.value ||
+    currentItemId <= 0 ||
+    !aiHelperSelectedText.value ||
+    aiHelperGenerating.value
+  ) {
+    return
+  }
+
+  aiHelperGenerating.value = true
+  aiHelperAnswer.value = ""
+  aiHelperStatus.value = t("Generating...")
+
+  try {
+    const result = await lpService.generateAiLearningHelper(
+      {
+        ...contextParams.value,
+        origin: "learnpath",
+        lp_id: lpId.value,
+        lp_item_id: currentItemId,
+      },
+      {
+        cid: contextParams.value.cid,
+        sid: contextParams.value.sid,
+        lp_id: lpId.value,
+        lp_item_id: currentItemId,
+        selected_text: aiHelperSelectedText.value,
+        method: aiHelperMethod.value,
+        language: getAiLearningHelperLanguage(),
+      },
+    )
+
+    if (!result?.success) {
+      throw new Error(result?.text || t("AI request failed."))
+    }
+
+    aiHelperAnswer.value = String(result.text || "")
+    aiHelperStatus.value = ""
+  } catch (error) {
+    aiHelperStatus.value =
+      error?.response?.data?.text ||
+      error?.response?.data?.["hydra:description"] ||
+      error?.message ||
+      t("AI request failed.")
+  } finally {
+    aiHelperGenerating.value = false
+  }
+}
+
 function applyRuntime(data, { contentChanged = false } = {}) {
   if (!data.runtimeSupported && data.legacyFallbackUrl) {
     window.location.replace(data.legacyFallbackUrl)
@@ -1183,6 +1503,7 @@ function applyRuntime(data, { contentChanged = false } = {}) {
     stopCurrentVideoPlayback()
     hideVideoNextOverlay()
     clearEmbeddedVideoWatchers()
+    resetAiLearningHelper()
     contentFrame.value = null
   }
 
@@ -1308,6 +1629,7 @@ async function openItem(itemId) {
   stopCurrentVideoPlayback()
   hideVideoNextOverlay()
   clearEmbeddedVideoWatchers()
+  resetAiLearningHelper()
   contentFrame.value = null
   isChangingItem.value = true
   iframeLoading.value = true
@@ -1342,6 +1664,7 @@ function handleIframeLoad(event) {
   contentFrame.value = event?.target || contentFrame.value
   iframeLoading.value = false
   void setupEmbeddedVideoWatchers(contentFrame.value)
+  bindAiLearningHelperFrame()
   scormRuntimeContext?.logLms("Content iframe load event starts", 2)
   scormRuntimeContext?.logLms("Content type is SCO; skipping auto LMSInitialize()", 2)
   scheduleRuntimeRefresh()
@@ -1349,6 +1672,7 @@ function handleIframeLoad(event) {
 
 function handleMediaLoad() {
   clearEmbeddedVideoWatchers()
+  resetAiLearningHelper()
   contentFrame.value = null
   iframeLoading.value = false
   scheduleRuntimeRefresh()
@@ -1365,6 +1689,7 @@ function handleImpressActiveChange(item) {
   if (isSection) {
     hideVideoNextOverlay()
     clearEmbeddedVideoWatchers()
+    resetAiLearningHelper()
     contentFrame.value = null
     iframeLoading.value = false
   }
@@ -1436,6 +1761,7 @@ onBeforeUnmount(() => {
   scormRuntimeContext?.flushBeacon("unmount")
   stopCurrentVideoPlayback()
   clearEmbeddedVideoWatchers()
+  resetAiLearningHelper()
   clearScormRuntime()
 })
 </script>
@@ -2131,5 +2457,14 @@ button.lp-runtime-menu-link {
   .lp-view-collapsed .lp-runtime-content {
     padding: 12px;
   }
+}
+
+.lp-ai-learning-helper-trigger {
+  position: fixed !important;
+  z-index: 2147482000;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px !important;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 20%);
 }
 </style>

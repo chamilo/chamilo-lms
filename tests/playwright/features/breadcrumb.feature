@@ -67,6 +67,15 @@ Feature: Breadcrumb visibility
 
   # Covers the "ancestors" trail: with a folder open, the tool crumb stops being the
   # last one and becomes a link. The scenario creates the folder and deletes it again.
+  #
+  # The final delete used a plain "button:has(.mdi-delete)" click, unscoped to any
+  # row — a real CI run proved that ambiguous: the page ALSO has a "Delete selected"
+  # bulk-action button carrying the same icon, disabled while nothing is checked
+  # (which is always, in this scenario). Playwright's own retry re-resolved the
+  # locator onto that disabled button instead of the row's own delete icon, and the
+  # click then hung for the rest of the test timeout waiting for it to become
+  # enabled — which it never does, since no checkbox is ever ticked. Scoped to the
+  # row instead, same convention as every other row-action click in this suite.
   Scenario: A document folder adds its own crumb to the trail
     Given I am a platform administrator
     And I am on course "TEMP" homepage
@@ -81,7 +90,7 @@ Feature: Breadcrumb visibility
     Then I should see the ".app-breadcrumb a[href*='/resources/document/']" element
     And I click the ".app-breadcrumb a[href*='/resources/document/']" element
     And I wait up to 45 seconds for the element "button:has(.mdi-delete)" to appear
-    And I click the "button:has(.mdi-delete)" element
+    And I click the "[title='Delete']" icon in the row for "BcTmpFolder"
     And I click the ".p-dialog button:has(.mdi-check)" element
     And I wait until I no longer see "BcTmpFolder"
 

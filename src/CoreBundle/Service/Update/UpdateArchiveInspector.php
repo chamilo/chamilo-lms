@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service\Update;
 
 use RuntimeException;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ZipArchive;
 
@@ -14,9 +15,12 @@ final class UpdateArchiveInspector
 {
     private const int ZIP_OPSYS_UNIX = 3;
 
-    public function __construct(
-        private readonly TranslatorInterface $translator,
-    ) {}
+    private readonly TranslatorInterface $translator;
+
+    public function __construct(?TranslatorInterface $translator = null)
+    {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     /**
      * @return array{file_count: int, top_level_entries: string[]}

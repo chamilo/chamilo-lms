@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Service\Update\Dto;
 
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Exclude;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Exclude]
@@ -28,8 +29,10 @@ final readonly class UpdateManifest
     /**
      * @param array<string, mixed> $data
      */
-    public static function fromArray(array $data, TranslatorInterface $translator): self
+    public static function fromArray(array $data, ?TranslatorInterface $translator = null): self
     {
+        $translator ??= new IdentityTranslator();
+
         $package = $data['package'] ?? null;
 
         if (!\is_array($package)) {

@@ -13,6 +13,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const JSON_PRETTY_PRINT;
@@ -38,13 +39,17 @@ final readonly class UpdateApplyPlanner
         'public/upload',
     ];
 
+    private TranslatorInterface $translator;
+
     public function __construct(
         private UpdateMigrationPolicy $migrationPolicy,
         private UpdatePackageRemovalManifest $packageRemovalManifest,
-        private TranslatorInterface $translator,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
-    ) {}
+        ?TranslatorInterface $translator = null,
+    ) {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     public function buildPlan(string $stagingPath): UpdateApplyPlanResult
     {

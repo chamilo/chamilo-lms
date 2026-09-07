@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Service\Update\Dto\UpdateManifest;
 use Chamilo\CoreBundle\Service\Update\Dto\UpdatePreflightResult;
 use Composer\InstalledVersions;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
@@ -22,11 +23,15 @@ final readonly class UpdatePreflightChecker
     private const int MINIMUM_FREE_SPACE_BYTES = 209715200;
     private const int PACKAGE_SPACE_MULTIPLIER = 3;
 
+    private TranslatorInterface $translator;
+
     public function __construct(
         private KernelInterface $kernel,
         private InstalledChamiloVersionProvider $installedVersionProvider,
-        private TranslatorInterface $translator,
-    ) {}
+        ?TranslatorInterface $translator = null,
+    ) {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     public function check(UpdateManifest $manifest, ?string $packagePath = null): UpdatePreflightResult
     {

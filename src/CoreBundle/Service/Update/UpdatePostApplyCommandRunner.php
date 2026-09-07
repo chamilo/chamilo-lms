@@ -11,6 +11,7 @@ use JsonException;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
@@ -30,14 +31,18 @@ final readonly class UpdatePostApplyCommandRunner
         'doctrine_migrations',
     ];
 
+    private TranslatorInterface $translator;
+
     public function __construct(
         private UpdateOperationLogger $operationLogger,
         private UpdateConfiguration $updateConfiguration,
         private UpdateMigrationPolicy $migrationPolicy,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
-        private TranslatorInterface $translator,
-    ) {}
+        ?TranslatorInterface $translator = null,
+    ) {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     /**
      * @param string[] $requestedActions

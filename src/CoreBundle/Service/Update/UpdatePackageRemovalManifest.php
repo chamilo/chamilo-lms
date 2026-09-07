@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Service\Update;
 
 use JsonException;
 use RuntimeException;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const JSON_THROW_ON_ERROR;
@@ -32,9 +33,12 @@ final readonly class UpdatePackageRemovalManifest
         'public/upload',
     ];
 
-    public function __construct(
-        private TranslatorInterface $translator,
-    ) {}
+    private TranslatorInterface $translator;
+
+    public function __construct(?TranslatorInterface $translator = null)
+    {
+        $this->translator = $translator ?? new IdentityTranslator();
+    }
 
     /**
      * @return array{

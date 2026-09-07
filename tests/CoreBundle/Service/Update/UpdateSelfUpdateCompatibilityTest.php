@@ -49,7 +49,14 @@ final class UpdateSelfUpdateCompatibilityTest extends TestCase
             array_map(static fn (ReflectionParameter $parameter): string => $parameter->getName(), $parameters)
         );
 
-        $translatorParameter = $parameters[\count($parameters) - 1];
+        $parametersByName = [];
+        foreach ($parameters as $parameter) {
+            $parametersByName[$parameter->getName()] = $parameter;
+        }
+
+        self::assertArrayHasKey('translator', $parametersByName);
+
+        $translatorParameter = $parametersByName['translator'];
         $translatorType = $translatorParameter->getType();
 
         if (!$translatorType instanceof ReflectionNamedType) {

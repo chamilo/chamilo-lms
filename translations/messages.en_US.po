@@ -40813,6 +40813,9 @@ msgstr "Post-apply command run metadata was written."
 msgid "Post-apply actions completed successfully."
 msgstr "Post-apply actions completed successfully."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Invalid update post-apply command definition: %s"
 

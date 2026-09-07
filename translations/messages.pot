@@ -40730,6 +40730,9 @@ msgstr ""
 msgid "Post-apply actions completed successfully."
 msgstr ""
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr ""
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr ""
 

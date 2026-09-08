@@ -16,14 +16,13 @@ use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\GradebookResultAttempt;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookContextResolver;
 use Chamilo\CoreBundle\State\Gradebook\GradebookEvaluationImportProcessor;
 use Chamilo\CoreBundle\State\Gradebook\GradebookEvaluationResultActionProcessor;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
-use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +41,7 @@ use const DATE_ATOM;
 final readonly class GradebookEvaluationResultsHelper
 {
     public function __construct(
-        private CidReqHelper $cidReqHelper,
+        private GradebookContextResolver $contextResolver,
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
@@ -53,20 +52,19 @@ final readonly class GradebookEvaluationResultsHelper
 
     public function buildReport(Request $request): GradebookEvaluationResults
     {
-        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if ($session instanceof Session && !$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-        $this->validateCourseResourceNode($request, $course);
-        $groupId = $this->validateGroupContext($course);
-        $user = $this->getCurrentUser();
+        $resolved = $this->contextResolver->resolve($request);
+        $course = $resolved['course'];
+        $session = $resolved['session'];
+        $groupId = $resolved['groupId'];
+        $user = $resolved['user'];
 
+        // Not the resolver's own canManage: this endpoint owns its view and
+        // manage rules, in the two methods further down.
         if (!$this->canViewEvaluationResults()) {
             throw new AccessDeniedHttpException('You are not allowed to view manual evaluation results in this context.');
         }
 
-        $rootCategory = $this->findRootCategory($course, $session);
+        $rootCategory = $resolved['rootCategory'];
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
@@ -181,53 +179,6 @@ final readonly class GradebookEvaluationResultsHelper
         }
 
         return $response;
-    }
-
-    private function getCurrentUser(): User
-    {
-        $user = $this->security->getUser();
-        if (!$user instanceof User) {
-            throw new AccessDeniedHttpException('A valid user is required.');
-        }
-
-        return $user;
-    }
-
-    private function validateCourseResourceNode(Request $request, Course $course): void
-    {
-        $nodeId = $request->query->getInt('node');
-        $resourceNode = $course->getResourceNode();
-        if ($nodeId <= 0 || null === $resourceNode || (int) $resourceNode->getId() !== $nodeId) {
-            throw new AccessDeniedHttpException('The requested resource node does not belong to the current course.');
-        }
-    }
-
-    private function validateGroupContext(Course $course): int
-    {
-        $group = $this->cidReqHelper->getDoctrineGroupEntity();
-        if (!$group instanceof CGroup) {
-            return 0;
-        }
-
-        $groupId = (int) $group->getIid();
-
-        $groupNode = $group->getResourceNode();
-        $courseNode = $course->getResourceNode();
-        if (null === $groupNode || null === $courseNode
-            || (int) ($groupNode->getParent()?->getId() ?? 0) !== (int) $courseNode->getId()
-        ) {
-            throw new AccessDeniedHttpException('The requested group does not belong to the current course.');
-        }
-
-        return $groupId;
-    }
-
-    private function findRootCategory(Course $course, ?Session $session): ?GradebookCategory
-    {
-        return $this->entityManager->getRepository(GradebookCategory::class)->findOneBy(
-            ['course' => $course, 'session' => $session, 'parent' => null],
-            ['id' => 'ASC'],
-        );
     }
 
     private function getEvaluationInGradebook(

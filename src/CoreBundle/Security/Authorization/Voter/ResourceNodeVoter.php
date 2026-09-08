@@ -472,7 +472,10 @@ class ResourceNodeVoter extends Voter
             }
         }
 
-        if (empty($rights) && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
+        if (empty($rights)
+            && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
+            && $this->mayUseDefaultReadFallback($link, $resourceNode, $user)
+        ) {
             // Give just read access.
             $resourceRight = (new ResourceRight())
                 ->setMask($readerMask)
@@ -714,6 +717,40 @@ class ResourceNodeVoter extends Voter
         }
 
         return false;
+    }
+
+    /**
+     * VISIBILITY_PUBLISHED means published inside its own course, never portal-wide: the course's
+     * own visibility answers that. The course id reaching this point falls back to the resource's
+     * first link, so the link-matching loop also matches a request carrying no context, and the
+     * context roles describe the course of the request rather than the one the link belongs to.
+     * A course link therefore needs an open course or a real subscription to it.
+     */
+    private function mayUseDefaultReadFallback(
+        ResourceLink $link,
+        ResourceNode $resourceNode,
+        ?UserInterface $user
+    ): bool {
+        $linkCourse = $link->getCourse();
+        if (!$linkCourse instanceof Course) {
+            return true;
+        }
+
+        if ($linkCourse->isPublic()) {
+            return true;
+        }
+
+        // An OPEN_PLATFORM course opens its contents to every registered user, unless the
+        // administrator requires a subscription first. CourseVoter reads the same pair.
+        if (Course::OPEN_PLATFORM === $linkCourse->getVisibility()
+            && !$this->isTruthySettingValue(
+                $this->settingsManager->getSetting('course.block_registered_users_access_to_open_course_contents', true)
+            )
+        ) {
+            return true;
+        }
+
+        return $user instanceof User && $this->belongsToResourceCourse($resourceNode, $user);
     }
 
     /**

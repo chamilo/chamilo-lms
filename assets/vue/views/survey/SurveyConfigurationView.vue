@@ -249,14 +249,13 @@
 
       <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
         <div class="grid gap-6 md:grid-cols-2">
-          <BaseSelect
+          <ResourceLanguageSelector
             v-if="resourceLanguageEnabled && languageOptions.length > 2"
             id="resource_language"
             v-model="form.resourceLanguage"
-            :allow-clear="true"
-            :label="t('Language')"
             :options="languageOptions"
             name="language"
+            :hide-when-single-language="false"
           />
 
           <BaseSelect
@@ -405,6 +404,7 @@ import BaseInputNumber from "../../components/basecomponents/BaseInputNumber.vue
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import surveyService from "../../services/surveyService"
 

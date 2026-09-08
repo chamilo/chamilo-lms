@@ -159,15 +159,13 @@
 
           <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
             <div class="space-y-5">
-              <BaseSelect
+              <ResourceLanguageSelector
                 v-if="resourceLanguageEnabled && form.languages.length > 2"
                 id="resource_language"
                 v-model="form.language"
-                :label="t('Language')"
                 name="language"
-                option-label="label"
-                option-value="value"
                 :options="form.languages"
+                :hide-when-single-language="false"
               />
 
               <div class="space-y-3 rounded-lg border border-gray-20 bg-white p-4">
@@ -439,6 +437,7 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import CalendarRemindersEditor from "../../components/ccalendarevent/CalendarRemindersEditor.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"

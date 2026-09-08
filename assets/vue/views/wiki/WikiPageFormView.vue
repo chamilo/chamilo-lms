@@ -208,15 +208,13 @@
             v-model="showAdvancedSettings"
           >
             <div class="space-y-6">
-              <BaseSelect
+              <ResourceLanguageSelector
                 v-if="resourceLanguageEnabled && form.languages.length > 1"
                 id="wiki_page_language"
                 v-model="form.language"
-                :label="t('Language')"
                 name="language"
-                option-label="label"
-                option-value="value"
                 :options="form.languages"
+                :hide-when-single-language="false"
               />
 
               <template v-if="form.canConfigureAssignment">
@@ -411,6 +409,7 @@ import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue";
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue";
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue";
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue";
 import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility";
 import wikiService from "../../services/wikiService";
 

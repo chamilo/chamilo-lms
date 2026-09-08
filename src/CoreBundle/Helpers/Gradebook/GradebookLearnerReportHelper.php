@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Helpers\Gradebook;
 
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookLearnerReport;
+use Chamilo\CoreBundle\Dto\Gradebook\GradebookContext;
+use Chamilo\CoreBundle\Dto\Gradebook\GradebookLearnerReportCriteria;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookComment;
@@ -21,7 +23,6 @@ use Chamilo\CoreBundle\State\Gradebook\GradebookContextResolver;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\State\Gradebook\GradebookScoreCalculator;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -43,44 +44,44 @@ final readonly class GradebookLearnerReportHelper
         private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
-    public function buildReport(Request $request, ?int $forcedUserId = null): GradebookLearnerReport
+    public function buildReport(GradebookContext $resolved, GradebookLearnerReportCriteria $criteria): GradebookLearnerReport
     {
-        $resolved = $this->contextResolver->resolve($request);
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
-        $category = $this->contextResolver->getSelectedCategory(
-            $request,
-            $resolved['course'],
-            $resolved['session'],
-            $rootCategory,
-        );
-        $requestedUserId = null !== $forcedUserId ? $forcedUserId : $request->query->getInt('userId');
-        $learnerId = $requestedUserId > 0 ? $requestedUserId : (int) $resolved['user']->getId();
+        $category = $criteria->categoryId > 0 && $criteria->categoryId !== (int) $rootCategory->getId()
+            ? $this->contextResolver->getCategoryInGradebook(
+                $criteria->categoryId,
+                $rootCategory,
+                $resolved->course,
+                $resolved->session,
+            )
+            : $rootCategory;
+        $learnerId = $criteria->userId > 0 ? $criteria->userId : (int) $resolved->user->getId();
         $learner = $this->contextResolver->getStudentInContext(
             $learnerId,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
         );
 
-        if (!$resolved['canManage'] && (int) $resolved['user']->getId() !== (int) $learner->getId()) {
+        if (!$resolved->canManage && (int) $resolved->user->getId() !== (int) $learner->getId()) {
             throw new AccessDeniedHttpException('Learners can only view their own Gradebook report.');
         }
 
-        $includeHidden = $resolved['canManage'];
-        $students = $this->contextResolver->getStudents($resolved['course'], $resolved['session']);
+        $includeHidden = $resolved->canManage;
+        $students = $this->contextResolver->getStudents($resolved->course, $resolved->session);
         $customScoring = $this->contextResolver->isSettingEnabled('gradebook.gradebook_score_display_custom');
         $ranges = $customScoring ? $this->getScoreDisplayRanges($category) : [];
         $upperLimitIncluded = $this->contextResolver->isSettingEnabled('gradebook.gradebook_score_display_upperlimit');
 
         $resource = new GradebookLearnerReport();
-        $resource->context = $this->buildContext($request, $resolved['course'], $resolved['session'], $resolved['groupId']);
+        $resource->context = $this->buildContext($criteria, $resolved->course, $resolved->session, $resolved->groupId);
         $resource->category = $this->normalizeCategory($category);
         $showEmailAddresses = $this->contextResolver->isSettingEnabled('show_email_addresses');
         $resource->learner = $this->normalizeLearner($learner, $showEmailAddresses);
-        $resource->canManage = $resolved['canManage'];
+        $resource->canManage = $resolved->canManage;
         $resource->settings = [
             'numberDecimals' => $this->getNumberDecimals(),
             'customScoreDisplay' => $customScoring,
@@ -91,9 +92,9 @@ final readonly class GradebookLearnerReportHelper
             'showEmailAddresses' => $showEmailAddresses,
         ];
 
-        foreach ($this->getItemsRecursive($category, $resolved['course'], $resolved['session'], $includeHidden) as $item) {
-            $result = $this->calculateItem($item, $learner, $resolved['course'], $resolved['session']);
-            $average = $this->calculateAverage($item, $students, $resolved['course'], $resolved['session']);
+        foreach ($this->getItemsRecursive($category, $resolved->course, $resolved->session, $includeHidden) as $item) {
+            $result = $this->calculateItem($item, $learner, $resolved->course, $resolved->session);
+            $average = $this->calculateAverage($item, $students, $resolved->course, $resolved->session);
             $itemCategory = $item->getCategory();
             $title = '';
             $url = null;
@@ -105,16 +106,16 @@ final readonly class GradebookLearnerReportHelper
                 $kind = 'link';
                 $normalizedLink = $this->linkResourceResolver->normalizeLink(
                     $item,
-                    $resolved['course'],
-                    $resolved['session'],
-                    $resolved['groupId'],
-                    $resolved['canManage'],
+                    $resolved->course,
+                    $resolved->session,
+                    $resolved->groupId,
+                    $resolved->canManage,
                 );
                 $title = (string) ($normalizedLink['title'] ?? '');
                 $url = \is_string($normalizedLink['url'] ?? null) ? $normalizedLink['url'] : null;
             }
 
-            if (!$resolved['canManage'] && $resource->settings['hideLinkToItemForStudent']) {
+            if (!$resolved->canManage && $resource->settings['hideLinkToItemForStudent']) {
                 $url = null;
             }
 
@@ -122,7 +123,7 @@ final readonly class GradebookLearnerReportHelper
                 'id' => (int) $item->getId(),
                 'kind' => $kind,
                 'title' => $title,
-                'courseTitle' => $resolved['course']->getTitle(),
+                'courseTitle' => $resolved->course->getTitle(),
                 'categoryId' => (int) $itemCategory->getId(),
                 'categoryTitle' => $itemCategory->getTitle(),
                 'score' => $result['score'],
@@ -146,12 +147,12 @@ final readonly class GradebookLearnerReportHelper
         $resource->total = $this->scoreCalculator->calculateCategory(
             $category,
             $learner,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
             $includeHidden,
         );
 
-        if ($resolved['canManage'] && $resource->settings['allowComments']) {
+        if ($resolved->canManage && $resource->settings['allowComments']) {
             $comment = $this->entityManager->getRepository(GradebookComment::class)->findOneBy([
                 'gradeBook' => $category,
                 'user' => $learner,
@@ -315,13 +316,17 @@ final readonly class GradebookLearnerReportHelper
     /**
      * @return array<string, int>
      */
-    private function buildContext(Request $request, Course $course, ?Session $session, int $groupId): array
-    {
+    private function buildContext(
+        GradebookLearnerReportCriteria $criteria,
+        Course $course,
+        ?Session $session,
+        int $groupId,
+    ): array {
         return [
             'cid' => (int) $course->getId(),
             'sid' => (int) ($session?->getId() ?? 0),
             'gid' => $groupId,
-            'node' => $request->query->getInt('node'),
+            'node' => $criteria->node,
         ];
     }
 

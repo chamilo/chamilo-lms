@@ -63,22 +63,22 @@ final readonly class GradebookLearnerSkillsProvider implements ProviderInterface
         }
 
         $resolved = $this->contextResolver->resolve($request, true);
-        if (!$resolved['rootCategory'] instanceof GradebookCategory) {
+        if (!$resolved->rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
         $userId = $request->query->getInt('userId');
-        $learner = $this->contextResolver->getStudentInContext($userId, $resolved['course'], $resolved['session']);
-        $courseId = (int) $resolved['course']->getId();
-        $sessionId = (int) ($resolved['session']?->getId() ?? 0);
+        $learner = $this->contextResolver->getStudentInContext($userId, $resolved->course, $resolved->session);
+        $courseId = (int) $resolved->course->getId();
+        $sessionId = (int) ($resolved->session?->getId() ?? 0);
         $relations = $this->entityManager->getRepository(SkillRelItem::class)->findBy(
             ['courseId' => $courseId, 'sessionId' => $sessionId],
             ['id' => 'ASC'],
         );
         $issued = $this->entityManager->getRepository(SkillRelUser::class)->findBy([
             'user' => $learner,
-            'course' => $resolved['course'],
-            'session' => $resolved['session'],
+            'course' => $resolved->course,
+            'session' => $resolved->session,
         ]);
         $issuedSkillIds = [];
         foreach ($issued as $issue) {
@@ -116,7 +116,7 @@ final readonly class GradebookLearnerSkillsProvider implements ProviderInterface
                 $resultId,
                 $courseId,
                 $sessionId,
-                $resolved['groupId'],
+                $resolved->groupId,
                 $request->query->getInt('node'),
             );
         }
@@ -125,7 +125,7 @@ final readonly class GradebookLearnerSkillsProvider implements ProviderInterface
         $resource->context = [
             'cid' => $courseId,
             'sid' => $sessionId,
-            'gid' => $resolved['groupId'],
+            'gid' => $resolved->groupId,
             'node' => $request->query->getInt('node'),
         ];
         $resource->learner = [

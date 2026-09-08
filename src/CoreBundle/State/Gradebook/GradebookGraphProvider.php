@@ -26,6 +26,7 @@ final readonly class GradebookGraphProvider implements ProviderInterface
         private RequestStack $requestStack,
         private GradebookReportHelper $reportHelper,
         private GradebookContextResolver $contextResolver,
+        private GradebookCriteriaFactory $criteriaFactory,
         private EntityManagerInterface $entityManager,
     ) {}
 
@@ -40,7 +41,10 @@ final readonly class GradebookGraphProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $report = $this->reportHelper->buildReport($request, true, true);
+        $report = $this->reportHelper->buildReport(
+            $this->contextResolver->resolve($request),
+            $this->criteriaFactory->reportFrom($request, exportAll: true, includeScores: true),
+        );
         $resource = new GradebookGraph();
         $resource->context = $report->context;
         $resource->category = $report->category;

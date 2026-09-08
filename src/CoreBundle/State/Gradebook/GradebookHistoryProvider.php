@@ -45,7 +45,7 @@ final readonly class GradebookHistoryProvider implements ProviderInterface
         }
 
         $resolved = $this->contextResolver->resolve($request, true);
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
@@ -65,7 +65,7 @@ final readonly class GradebookHistoryProvider implements ProviderInterface
             if (!$item instanceof GradebookEvaluation) {
                 throw new NotFoundHttpException('The requested evaluation was not found.');
             }
-            if ((int) $item->getCourse()->getId() !== (int) $resolved['course']->getId()) {
+            if ((int) $item->getCourse()->getId() !== (int) $resolved->course->getId()) {
                 throw new NotFoundHttpException('The requested evaluation was not found.');
             }
             $category = $item->getCategory();
@@ -75,15 +75,15 @@ final readonly class GradebookHistoryProvider implements ProviderInterface
             if (!$item instanceof GradebookLink) {
                 throw new NotFoundHttpException('The requested Gradebook link was not found.');
             }
-            if ((int) $item->getCourse()->getId() !== (int) $resolved['course']->getId()) {
+            if ((int) $item->getCourse()->getId() !== (int) $resolved->course->getId()) {
                 throw new NotFoundHttpException('The requested Gradebook link was not found.');
             }
             $category = $item->getCategory();
             $normalized = $this->linkResourceResolver->normalizeLink(
                 $item,
-                $resolved['course'],
-                $resolved['session'],
-                $resolved['groupId'],
+                $resolved->course,
+                $resolved->session,
+                $resolved->groupId,
                 true,
             );
             $title = (string) ($normalized['title'] ?? ('Gradebook link #'.(int) $item->getId()));
@@ -92,8 +92,8 @@ final readonly class GradebookHistoryProvider implements ProviderInterface
         $this->contextResolver->getCategoryInGradebook(
             (int) $category->getId(),
             $rootCategory,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
         );
 
         $logs = $this->entityManager->getRepository(GradebookLinkevalLog::class)
@@ -110,9 +110,9 @@ final readonly class GradebookHistoryProvider implements ProviderInterface
 
         $resource = new GradebookHistory();
         $resource->context = [
-            'cid' => (int) $resolved['course']->getId(),
-            'sid' => (int) ($resolved['session']?->getId() ?? 0),
-            'gid' => $resolved['groupId'],
+            'cid' => (int) $resolved->course->getId(),
+            'sid' => (int) ($resolved->session?->getId() ?? 0),
+            'gid' => $resolved->groupId,
             'node' => $request->query->getInt('node'),
         ];
         $resource->kind = $kind;

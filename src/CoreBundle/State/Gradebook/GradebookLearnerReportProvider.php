@@ -21,6 +21,8 @@ final readonly class GradebookLearnerReportProvider implements ProviderInterface
 {
     public function __construct(
         private RequestStack $requestStack,
+        private GradebookContextResolver $contextResolver,
+        private GradebookCriteriaFactory $criteriaFactory,
         private GradebookLearnerReportHelper $learnerReportHelper,
     ) {}
 
@@ -35,6 +37,9 @@ final readonly class GradebookLearnerReportProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        return $this->learnerReportHelper->buildReport($request);
+        return $this->learnerReportHelper->buildReport(
+            $this->contextResolver->resolve($request),
+            $this->criteriaFactory->learnerReportFrom($request),
+        );
     }
 }

@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Helpers\Gradebook;
 
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookEvaluationResults;
+use Chamilo\CoreBundle\Dto\Gradebook\GradebookContext;
+use Chamilo\CoreBundle\Dto\Gradebook\GradebookEvaluationResultsCriteria;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
@@ -19,13 +21,11 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\State\Gradebook\GradebookContextResolver;
 use Chamilo\CoreBundle\State\Gradebook\GradebookEvaluationImportProcessor;
 use Chamilo\CoreBundle\State\Gradebook\GradebookEvaluationResultActionProcessor;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -41,7 +41,6 @@ use const DATE_ATOM;
 final readonly class GradebookEvaluationResultsHelper
 {
     public function __construct(
-        private GradebookContextResolver $contextResolver,
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
@@ -50,13 +49,12 @@ final readonly class GradebookEvaluationResultsHelper
         private UserRepository $userRepository,
     ) {}
 
-    public function buildReport(Request $request): GradebookEvaluationResults
+    public function buildReport(GradebookContext $resolved, GradebookEvaluationResultsCriteria $criteria): GradebookEvaluationResults
     {
-        $resolved = $this->contextResolver->resolve($request);
-        $course = $resolved['course'];
-        $session = $resolved['session'];
-        $groupId = $resolved['groupId'];
-        $user = $resolved['user'];
+        $course = $resolved->course;
+        $session = $resolved->session;
+        $groupId = $resolved->groupId;
+        $user = $resolved->user;
 
         // Not the resolver's own canManage: this endpoint owns its view and
         // manage rules, in the two methods further down.
@@ -64,13 +62,12 @@ final readonly class GradebookEvaluationResultsHelper
             throw new AccessDeniedHttpException('You are not allowed to view manual evaluation results in this context.');
         }
 
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
-        $evaluationId = $request->query->getInt('evaluationId');
-        $evaluation = $this->getEvaluationInGradebook($evaluationId, $rootCategory, $course, $session);
+        $evaluation = $this->getEvaluationInGradebook($criteria->evaluationId, $rootCategory, $course, $session);
         $canManage = $this->canManageEvaluationResults($course, $session, $user, $evaluation);
         $allowMultipleAttempts = $this->isSettingEnabled('gradebook.gradebook_multiple_evaluation_attempts');
 
@@ -164,7 +161,7 @@ final readonly class GradebookEvaluationResultsHelper
             'cid' => (int) $course->getId(),
             'sid' => $session instanceof Session ? (int) $session->getId() : 0,
             'gid' => $groupId,
-            'node' => $request->query->getInt('node'),
+            'node' => $criteria->node,
         ];
         $response->canManage = $canManage;
         if ($canManage) {

@@ -15,6 +15,10 @@ abstract class CcAssesmentMaterialBase extends CcQuestionMetadataBase
      * @var mixed
      */
     protected $mattag;
+
+    /**
+     * @var string
+     */
     protected $tagname;
 
     public function setMattext(CcAssesmentMattext $object): void

@@ -1,15 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Traits\Repository\ORM;
 
-use Gedmo\Exception\RuntimeException;
-use Gedmo\Tool\Wrapper\EntityWrapper;
+use Doctrine\ORM\Proxy\Proxy;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use Exception;
+use Gedmo\Exception\InvalidArgumentException;
+use Gedmo\Exception\RuntimeException;
+use Gedmo\Exception\UnexpectedValueException;
+use Gedmo\Tool\Wrapper\EntityWrapper;
 use Gedmo\Tree\Strategy;
 use Gedmo\Tree\Strategy\ORM\Nested;
-use Gedmo\Exception\InvalidArgumentException;
-use Gedmo\Exception\UnexpectedValueException;
-use Doctrine\ORM\Proxy\Proxy;
 
 /**
  * The NestedTreeRepository trait has some useful functions
@@ -23,9 +27,6 @@ trait NestedTreeRepositoryTrait
 {
     use TreeRepositoryTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRootNodesQueryBuilder($sortByField = null, $direction = 'asc')
     {
         $meta = $this->getClassMetadata();
@@ -37,8 +38,8 @@ trait NestedTreeRepositoryTrait
             ->where($qb->expr()->isNull('node.'.$config['parent']))
         ;
 
-        if ($sortByField !== null) {
-            $qb->orderBy('node.'.$sortByField, strtolower($direction) === 'asc' ? 'asc' : 'desc');
+        if (null !== $sortByField) {
+            $qb->orderBy('node.'.$sortByField, 'asc' === strtolower($direction) ? 'asc' : 'desc');
         } else {
             $qb->orderBy('node.'.$config['left'], 'ASC');
         }
@@ -46,24 +47,22 @@ trait NestedTreeRepositoryTrait
         return $qb;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRootNodesQuery($sortByField = null, $direction = 'asc')
     {
         return $this->getRootNodesQueryBuilder($sortByField, $direction)->getQuery();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRootNodes($sortByField = null, $direction = 'asc')
     {
         return $this->getRootNodesQuery($sortByField, $direction)->getResult();
     }
 
     /**
-     * Persists node in given position strategy
+     * Persists node in given position strategy.
+     *
+     * @param mixed      $node
+     * @param null|mixed $child
+     * @param mixed      $position
      */
     protected function persistAs($node, $child = null, $position = Nested::FIRST_CHILD)
     {
@@ -73,17 +72,18 @@ trait NestedTreeRepositoryTrait
         $config = $this->listener->getConfiguration($em, $meta->name);
 
         $siblingInPosition = null;
-        if ($child !== null) {
+        if (null !== $child) {
             switch ($position) {
                 case Nested::PREV_SIBLING:
                 case Nested::NEXT_SIBLING:
                     $sibling = new EntityWrapper($child, $em);
                     $newParent = $sibling->getPropertyValue($config['parent']);
                     if (null === $newParent && isset($config['root'])) {
-                        throw new UnexpectedValueException("Cannot persist sibling for a root node, tree operation is not possible");
+                        throw new UnexpectedValueException('Cannot persist sibling for a root node, tree operation is not possible');
                     }
                     $siblingInPosition = $child;
                     $child = $newParent;
+
                     break;
             }
             $wrapped->setPropertyValue($config['parent'], $child);
@@ -98,9 +98,10 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Persists given $node as first child of tree
+     * Persists given $node as first child of tree.
      *
-     * @param $node
+     * @param mixed $node
+     *
      * @return self
      */
     public function persistAsFirstChild($node)
@@ -109,10 +110,11 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Persists given $node as first child of $parent node
+     * Persists given $node as first child of $parent node.
      *
-     * @param $node
-     * @param $parent
+     * @param mixed $node
+     * @param mixed $parent
+     *
      * @return self
      */
     public function persistAsFirstChildOf($node, $parent)
@@ -121,9 +123,10 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Persists given $node as last child of tree
+     * Persists given $node as last child of tree.
      *
-     * @param $node
+     * @param mixed $node
+     *
      * @return self
      */
     public function persistAsLastChild($node)
@@ -132,10 +135,11 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Persists given $node as last child of $parent node
+     * Persists given $node as last child of $parent node.
      *
-     * @param $node
-     * @param $parent
+     * @param mixed $node
+     * @param mixed $parent
+     *
      * @return self
      */
     public function persistAsLastChildOf($node, $parent)
@@ -144,10 +148,11 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Persists given $node next to $sibling node
+     * Persists given $node next to $sibling node.
      *
-     * @param $node
-     * @param $sibling
+     * @param mixed $node
+     * @param mixed $sibling
+     *
      * @return self
      */
     public function persistAsNextSiblingOf($node, $sibling)
@@ -156,10 +161,11 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Persists given $node previous to $sibling node
+     * Persists given $node previous to $sibling node.
      *
-     * @param $node
-     * @param $sibling
+     * @param mixed $node
+     * @param mixed $sibling
+     *
      * @return self
      */
     public function persistAsPrevSiblingOf($node, $sibling)
@@ -168,9 +174,10 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Persists given $node same as first child of it's parent
+     * Persists given $node same as first child of it's parent.
      *
-     * @param $node
+     * @param mixed $node
+     *
      * @return self
      */
     public function persistAsNextSibling($node)
@@ -179,9 +186,10 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Persists given $node same as last child of it's parent
+     * Persists given $node same as last child of it's parent.
      *
-     * @param $node
+     * @param mixed $node
+     *
      * @return self
      */
     public function persistAsPrevSibling($node)
@@ -190,29 +198,29 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Get the Tree path query builder by given $node
+     * Get the Tree path query builder by given $node.
      *
      * @param object $node
      *
-     * @throws InvalidArgumentException - if input is not valid
+     * @return QueryBuilder
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @throws InvalidArgumentException - if input is not valid
      */
     public function getPathQueryBuilder($node)
     {
         $meta = $this->getClassMetadata();
         if (!$node instanceof $meta->name) {
-            throw new InvalidArgumentException("Node is not related to this repository");
+            throw new InvalidArgumentException('Node is not related to this repository');
         }
         $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
         $wrapped = new EntityWrapper($node, $this->getEntityManager());
         if (!$wrapped->hasValidIdentifier()) {
-            throw new InvalidArgumentException("Node is not managed by UnitOfWork");
+            throw new InvalidArgumentException('Node is not managed by UnitOfWork');
         }
         $left = $wrapped->getPropertyValue($config['left']);
         $right = $wrapped->getPropertyValue($config['right']);
         if (null === $left || null === $right) {
-            throw new InvalidArgumentException("Node has uninitialized tree left/right values");
+            throw new InvalidArgumentException('Node has uninitialized tree left/right values');
         }
         $qb = $this->getQueryBuilder();
         $qb->select('node')
@@ -233,11 +241,11 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Get the Tree path query by given $node
+     * Get the Tree path query by given $node.
      *
      * @param object $node
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getPathQuery($node)
     {
@@ -245,7 +253,7 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Get the Tree path of Nodes by given $node
+     * Get the Tree path of Nodes by given $node.
      *
      * @param object $node
      *
@@ -258,6 +266,12 @@ trait NestedTreeRepositoryTrait
 
     /**
      * @see getChildrenQueryBuilder
+     *
+     * @param null|mixed $node
+     * @param mixed      $direct
+     * @param null|mixed $sortByField
+     * @param mixed      $direction
+     * @param mixed      $includeNode
      */
     public function childrenQueryBuilder($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
@@ -268,11 +282,11 @@ trait NestedTreeRepositoryTrait
         $qb->select('node')
             ->from($config['useObjectClass'], 'node')
         ;
-        if ($node !== null) {
+        if (null !== $node) {
             if ($node instanceof $meta->name) {
                 $wrapped = new EntityWrapper($node, $this->getEntityManager());
                 if (!$wrapped->hasValidIdentifier()) {
-                    throw new InvalidArgumentException("Node is not managed by UnitOfWork");
+                    throw new InvalidArgumentException('Node is not managed by UnitOfWork');
                 }
                 if ($direct) {
                     $qb->where($qb->expr()->eq('node.'.$config['parent'], ':pid'));
@@ -295,7 +309,7 @@ trait NestedTreeRepositoryTrait
                     $qb->setParameter('rootNode', $node);
                 }
             } else {
-                throw new \InvalidArgumentException("Node is not related to this repository");
+                throw new \InvalidArgumentException('Node is not related to this repository');
             }
         } else {
             if ($direct) {
@@ -304,7 +318,7 @@ trait NestedTreeRepositoryTrait
         }
         if (!$sortByField) {
             $qb->orderBy('node.'.$config['left'], 'ASC');
-        } elseif (is_array($sortByField)) {
+        } elseif (\is_array($sortByField)) {
             $fields = '';
             foreach ($sortByField as $field) {
                 $fields .= 'node.'.$field.',';
@@ -312,7 +326,7 @@ trait NestedTreeRepositoryTrait
             $fields = rtrim($fields, ',');
             $qb->orderBy($fields, $direction);
         } else {
-            if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
+            if ($meta->hasField($sortByField) && \in_array(strtolower($direction), ['asc', 'desc'])) {
                 $qb->orderBy('node.'.$sortByField, $direction);
             } else {
                 throw new InvalidArgumentException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
@@ -324,6 +338,12 @@ trait NestedTreeRepositoryTrait
 
     /**
      * @see getChildrenQuery
+     *
+     * @param null|mixed $node
+     * @param mixed      $direct
+     * @param null|mixed $sortByField
+     * @param mixed      $direction
+     * @param mixed      $includeNode
      */
     public function childrenQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
@@ -332,6 +352,12 @@ trait NestedTreeRepositoryTrait
 
     /**
      * @see getChildren
+     *
+     * @param null|mixed $node
+     * @param mixed      $direct
+     * @param null|mixed $sortByField
+     * @param mixed      $direction
+     * @param mixed      $includeNode
      */
     public function children($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
@@ -340,40 +366,31 @@ trait NestedTreeRepositoryTrait
         return $q->getResult();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getChildrenQueryBuilder($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
         return $this->childrenQueryBuilder($node, $direct, $sortByField, $direction, $includeNode);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getChildrenQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
         return $this->childrenQuery($node, $direct, $sortByField, $direction, $includeNode);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getChildren($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
         return $this->children($node, $direct, $sortByField, $direction, $includeNode);
     }
 
     /**
-     * Get tree leafs query builder
+     * Get tree leafs query builder.
      *
      * @param object $root        - root node in case of root tree is required
      * @param string $sortByField - field name to sort by
      * @param string $direction   - sort direction : "ASC" or "DESC"
      *
-     * @throws InvalidArgumentException - if input is not valid
+     * @return QueryBuilder
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @throws InvalidArgumentException - if input is not valid
      */
     public function getLeafsQueryBuilder($root = null, $sortByField = null, $direction = 'ASC')
     {
@@ -381,7 +398,7 @@ trait NestedTreeRepositoryTrait
         $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
 
         if (isset($config['root']) && null === $root) {
-            throw new InvalidArgumentException("If tree has root, getLeafs method requires any node of this tree");
+            throw new InvalidArgumentException('If tree has root, getLeafs method requires any node of this tree');
         }
 
         $qb = $this->getQueryBuilder();
@@ -394,12 +411,12 @@ trait NestedTreeRepositoryTrait
                 $wrapped = new EntityWrapper($root, $this->getEntityManager());
                 $rootId = $wrapped->getPropertyValue($config['root']);
                 if (!$rootId) {
-                    throw new InvalidArgumentException("Root node must be managed");
+                    throw new InvalidArgumentException('Root node must be managed');
                 }
                 $qb->andWhere($qb->expr()->eq('node.'.$config['root'], ':rid'));
                 $qb->setParameter('rid', $rootId);
             } else {
-                throw new InvalidArgumentException("Node is not related to this repository");
+                throw new InvalidArgumentException('Node is not related to this repository');
             }
         }
         if (!$sortByField) {
@@ -408,7 +425,7 @@ trait NestedTreeRepositoryTrait
             }
             $qb->addOrderBy('node.'.$config['left'], 'ASC');
         } else {
-            if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
+            if ($meta->hasField($sortByField) && \in_array(strtolower($direction), ['asc', 'desc'])) {
                 $qb->orderBy('node.'.$sortByField, $direction);
             } else {
                 throw new InvalidArgumentException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
@@ -419,13 +436,13 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Get tree leafs query
+     * Get tree leafs query.
      *
      * @param object $root        - root node in case of root tree is required
      * @param string $sortByField - field name to sort by
      * @param string $direction   - sort direction : "ASC" or "DESC"
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getLeafsQuery($root = null, $sortByField = null, $direction = 'ASC')
     {
@@ -433,7 +450,7 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Get list of leaf nodes of the tree
+     * Get list of leaf nodes of the tree.
      *
      * @param object $root        - root node in case of root tree is required
      * @param string $sortByField - field name to sort by
@@ -447,30 +464,30 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Get the query builder for next siblings of the given $node
+     * Get the query builder for next siblings of the given $node.
      *
      * @param object $node
      * @param bool   $includeSelf - include the node itself
      *
-     * @throws \Gedmo\Exception\InvalidArgumentException - if input is invalid
+     * @return QueryBuilder
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @throws InvalidArgumentException - if input is invalid
      */
     public function getNextSiblingsQueryBuilder($node, $includeSelf = false)
     {
         $meta = $this->getClassMetadata();
         if (!$node instanceof $meta->name) {
-            throw new InvalidArgumentException("Node is not related to this repository");
+            throw new InvalidArgumentException('Node is not related to this repository');
         }
         $wrapped = new EntityWrapper($node, $this->getEntityManager());
         if (!$wrapped->hasValidIdentifier()) {
-            throw new InvalidArgumentException("Node is not managed by UnitOfWork");
+            throw new InvalidArgumentException('Node is not managed by UnitOfWork');
         }
 
         $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
         $parent = $wrapped->getPropertyValue($config['parent']);
         if (isset($config['root']) && !$parent) {
-            throw new InvalidArgumentException("Cannot get siblings from tree root node");
+            throw new InvalidArgumentException('Cannot get siblings from tree root node');
         }
 
         $left = $wrapped->getPropertyValue($config['left']);
@@ -497,12 +514,12 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Get the query for next siblings of the given $node
+     * Get the query for next siblings of the given $node.
      *
      * @param object $node
      * @param bool   $includeSelf - include the node itself
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getNextSiblingsQuery($node, $includeSelf = false)
     {
@@ -510,7 +527,7 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Find the next siblings of the given $node
+     * Find the next siblings of the given $node.
      *
      * @param object $node
      * @param bool   $includeSelf - include the node itself
@@ -523,30 +540,30 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Get query builder for previous siblings of the given $node
+     * Get query builder for previous siblings of the given $node.
      *
      * @param object $node
      * @param bool   $includeSelf - include the node itself
      *
-     * @throws \Gedmo\Exception\InvalidArgumentException - if input is invalid
+     * @return QueryBuilder
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @throws InvalidArgumentException - if input is invalid
      */
     public function getPrevSiblingsQueryBuilder($node, $includeSelf = false)
     {
         $meta = $this->getClassMetadata();
         if (!$node instanceof $meta->name) {
-            throw new InvalidArgumentException("Node is not related to this repository");
+            throw new InvalidArgumentException('Node is not related to this repository');
         }
         $wrapped = new EntityWrapper($node, $this->getEntityManager());
         if (!$wrapped->hasValidIdentifier()) {
-            throw new InvalidArgumentException("Node is not managed by UnitOfWork");
+            throw new InvalidArgumentException('Node is not managed by UnitOfWork');
         }
 
         $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
         $parent = $wrapped->getPropertyValue($config['parent']);
         if (isset($config['root']) && !$parent) {
-            throw new InvalidArgumentException("Cannot get siblings from tree root node");
+            throw new InvalidArgumentException('Cannot get siblings from tree root node');
         }
 
         $left = $wrapped->getPropertyValue($config['left']);
@@ -573,14 +590,14 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Get query for previous siblings of the given $node
+     * Get query for previous siblings of the given $node.
      *
      * @param object $node
      * @param bool   $includeSelf - include the node itself
      *
-     * @throws \Gedmo\Exception\InvalidArgumentException - if input is invalid
+     * @return Query
      *
-     * @return \Doctrine\ORM\Query
+     * @throws InvalidArgumentException - if input is invalid
      */
     public function getPrevSiblingsQuery($node, $includeSelf = false)
     {
@@ -588,7 +605,7 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Find the previous siblings of the given $node
+     * Find the previous siblings of the given $node.
      *
      * @param object $node
      * @param bool   $includeSelf - include the node itself
@@ -601,15 +618,15 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Move the node down in the same level
+     * Move the node down in the same level.
      *
      * @param object   $node
      * @param int|bool $number integer - number of positions to shift
      *                         boolean - if "true" - shift till last position
      *
-     * @throws \RuntimeException - if something fails in transaction
+     * @return bool - true if shifted
      *
-     * @return boolean - true if shifted
+     * @throws \RuntimeException - if something fails in transaction
      */
     public function moveDown($node, $number = 1)
     {
@@ -617,34 +634,35 @@ trait NestedTreeRepositoryTrait
         $meta = $this->getClassMetadata();
         if ($node instanceof $meta->name) {
             $nextSiblings = $this->getNextSiblings($node);
-            if ($numSiblings = count($nextSiblings)) {
+            if ($numSiblings = \count($nextSiblings)) {
                 $result = true;
-                if ($number === true) {
+                if (true === $number) {
                     $number = $numSiblings;
                 } elseif ($number > $numSiblings) {
                     $number = $numSiblings;
                 }
                 $this->listener
                     ->getStrategy($this->getEntityManager(), $meta->name)
-                    ->updateNode($this->getEntityManager(), $node, $nextSiblings[$number - 1], Nested::NEXT_SIBLING);
+                    ->updateNode($this->getEntityManager(), $node, $nextSiblings[$number - 1], Nested::NEXT_SIBLING)
+                ;
             }
         } else {
-            throw new InvalidArgumentException("Node is not related to this repository");
+            throw new InvalidArgumentException('Node is not related to this repository');
         }
 
         return $result;
     }
 
     /**
-     * Move the node up in the same level
+     * Move the node up in the same level.
      *
      * @param object   $node
      * @param int|bool $number integer - number of positions to shift
      *                         boolean - true shift till first position
      *
-     * @throws \RuntimeException - if something fails in transaction
+     * @return bool - true if shifted
      *
-     * @return boolean - true if shifted
+     * @throws \RuntimeException - if something fails in transaction
      */
     public function moveUp($node, $number = 1)
     {
@@ -652,26 +670,27 @@ trait NestedTreeRepositoryTrait
         $meta = $this->getClassMetadata();
         if ($node instanceof $meta->name) {
             $prevSiblings = array_reverse($this->getPrevSiblings($node));
-            if ($numSiblings = count($prevSiblings)) {
+            if ($numSiblings = \count($prevSiblings)) {
                 $result = true;
-                if ($number === true) {
+                if (true === $number) {
                     $number = $numSiblings;
                 } elseif ($number > $numSiblings) {
                     $number = $numSiblings;
                 }
                 $this->listener
                     ->getStrategy($this->getEntityManager(), $meta->name)
-                    ->updateNode($this->getEntityManager(), $node, $prevSiblings[$number - 1], Nested::PREV_SIBLING);
+                    ->updateNode($this->getEntityManager(), $node, $prevSiblings[$number - 1], Nested::PREV_SIBLING)
+                ;
             }
         } else {
-            throw new InvalidArgumentException("Node is not related to this repository");
+            throw new InvalidArgumentException('Node is not related to this repository');
         }
 
         return $result;
     }
 
     /**
-     * UNSAFE: be sure to backup before running this method when necessary
+     * UNSAFE: be sure to backup before running this method when necessary.
      *
      * Removes given $node from the tree and reparents its descendants
      */
@@ -689,6 +708,7 @@ trait NestedTreeRepositoryTrait
 
             if (!is_numeric($left) || !is_numeric($right)) {
                 $this->removeSingle($wrapped);
+
                 return;
             }
 
@@ -696,12 +716,14 @@ trait NestedTreeRepositoryTrait
                 $this->removeSingle($wrapped);
                 $this->listener
                     ->getStrategy($em, $meta->name)
-                    ->shiftRL($em, $config['useObjectClass'], $right, -2, $rootId);
+                    ->shiftRL($em, $config['useObjectClass'], $right, -2, $rootId)
+                ;
 
                 return; // node was a leaf
             }
             // process updates in transaction
             $em->getConnection()->beginTransaction();
+
             try {
                 $parent = $wrapped->getPropertyValue($config['parent']);
                 $parentId = null;
@@ -717,7 +739,8 @@ trait NestedTreeRepositoryTrait
                 if (isset($config['root']) && !$parent) {
                     $qb = $this->getQueryBuilder();
                     $qb->select('node.'.$pk, 'node.'.$config['left'], 'node.'.$config['right'])
-                        ->from($config['useObjectClass'], 'node');
+                        ->from($config['useObjectClass'], 'node')
+                    ;
 
                     $qb->andWhere($qb->expr()->eq('node.'.$config['parent'], ':pid'));
                     $qb->setParameter('pid', $nodeId);
@@ -751,10 +774,12 @@ trait NestedTreeRepositoryTrait
 
                         $this->listener
                             ->getStrategy($em, $meta->name)
-                            ->shiftRangeRL($em, $config['useObjectClass'], $left, $right, $shift, $rootId, $rootId, - 1);
+                            ->shiftRangeRL($em, $config['useObjectClass'], $left, $right, $shift, $rootId, $rootId, -1)
+                        ;
                         $this->listener
                             ->getStrategy($em, $meta->name)
-                            ->shiftRL($em, $config['useObjectClass'], $right, -2, $rootId);
+                            ->shiftRL($em, $config['useObjectClass'], $right, -2, $rootId)
+                        ;
                     }
                 } else {
                     $qb = $this->getQueryBuilder();
@@ -771,41 +796,44 @@ trait NestedTreeRepositoryTrait
 
                     $this->listener
                         ->getStrategy($em, $meta->name)
-                        ->shiftRangeRL($em, $config['useObjectClass'], $left, $right, $shift, $rootId, $rootId, - 1);
+                        ->shiftRangeRL($em, $config['useObjectClass'], $left, $right, $shift, $rootId, $rootId, -1)
+                    ;
 
                     $this->listener
                         ->getStrategy($em, $meta->name)
-                        ->shiftRL($em, $config['useObjectClass'], $right, -2, $rootId);
+                        ->shiftRL($em, $config['useObjectClass'], $right, -2, $rootId)
+                    ;
                 }
                 $this->removeSingle($wrapped);
                 $em->getConnection()->commit();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $em->close();
                 $em->getConnection()->rollback();
+
                 throw new RuntimeException('Transaction failed', null, $e);
             }
         } else {
-            throw new InvalidArgumentException("Node is not related to this repository");
+            throw new InvalidArgumentException('Node is not related to this repository');
         }
     }
 
     /**
      * Reorders $node's sibling nodes and child nodes,
-     * according to the $sortByField and $direction specified
+     * according to the $sortByField and $direction specified.
      *
      * @param object|null $node        - node from which to start reordering the tree; null will reorder everything
      * @param string      $sortByField - field name to sort by
      * @param string      $direction   - sort direction : "ASC" or "DESC"
-     * @param boolean     $verify      - true to verify tree first
+     * @param bool        $verify      - true to verify tree first
      *
      * @return bool|null
      */
     public function reorder($node, $sortByField = null, $direction = 'ASC', $verify = true)
     {
         $meta = $this->getClassMetadata();
-        if ($node instanceof $meta->name || $node === null) {
+        if ($node instanceof $meta->name || null === $node) {
             $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
-            if ($verify && is_array($this->verify())) {
+            if ($verify && \is_array($this->verify())) {
                 return false;
             }
 
@@ -820,18 +848,18 @@ trait NestedTreeRepositoryTrait
                 }
             }
         } else {
-            throw new InvalidArgumentException("Node is not related to this repository");
+            throw new InvalidArgumentException('Node is not related to this repository');
         }
     }
 
     /**
      * Reorders all nodes in the tree according to the $sortByField and $direction specified.
      *
-     * @param string  $sortByField - field name to sort by
-     * @param string  $direction   - sort direction : "ASC" or "DESC"
-     * @param boolean $verify      - true to verify tree first
+     * @param string $sortByField - field name to sort by
+     * @param string $direction   - sort direction : "ASC" or "DESC"
+     * @param bool   $verify      - true to verify tree first
      */
-    public function reorderAll($sortByField = null, $direction = 'ASC', $verify = true)
+    public function reorderAll($sortByField = null, $direction = 'ASC', $verify = true): void
     {
         $this->reorder(null, $sortByField, $direction, $verify);
     }
@@ -839,7 +867,7 @@ trait NestedTreeRepositoryTrait
     /**
      * Verifies that current tree is valid.
      * If any error is detected it will return an array
-     * with a list of errors found on tree
+     * with a list of errors found on tree.
      *
      * @return array|bool - true on success,error list on failure
      */
@@ -849,7 +877,7 @@ trait NestedTreeRepositoryTrait
             return true; // tree is empty
         }
 
-        $errors = array();
+        $errors = [];
         $meta = $this->getClassMetadata();
         $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
         if (isset($config['root'])) {
@@ -865,15 +893,13 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * NOTE: flush your entity manager after
+     * NOTE: flush your entity manager after.
      *
      * Tries to recover the tree
-     *
-     * @return void
      */
-    public function recover()
+    public function recover(): void
     {
-        if ($this->verify() === true) {
+        if (true === $this->verify()) {
             return;
         }
 
@@ -882,7 +908,7 @@ trait NestedTreeRepositoryTrait
         $config = $this->listener->getConfiguration($em, $meta->name);
         $self = $this;
 
-        $doRecover = function ($root, &$count, $level = 0) use ($meta, $config, $self, $em, &$doRecover) {
+        $doRecover = function ($root, &$count, $level = 0) use ($meta, $config, $self, $em, &$doRecover): void {
             $lft = $count++;
             foreach ($self->getChildren($root, true) as $child) {
                 $doRecover($child, $count, $level + 1);
@@ -911,13 +937,16 @@ trait NestedTreeRepositoryTrait
 
     /**
      * Added in Chamilo.
+     *
+     * @param mixed      $node
+     * @param null|mixed $sortByField
      */
-    public function recoverNode($node, $sortByField = null)
+    public function recoverNode($node, $sortByField = null): void
     {
         $meta = $this->getClassMetadata();
         $em = $this->getEntityManager();
         $config = $this->listener->getConfiguration($em, $meta->name);
-        $doRecover = function ($root, &$count, $level = 0) use ($meta, $config, $node, $em, $sortByField, &$doRecover) {
+        $doRecover = function ($root, &$count, $level = 0) use ($meta, $config, $em, $sortByField, &$doRecover): void {
             $lft = $count++;
             foreach ($this->getChildren($root, true, $sortByField) as $child) {
                 $doRecover($child, $count, $level + 1);
@@ -941,16 +970,13 @@ trait NestedTreeRepositoryTrait
             return true; // tree is empty
         }
 
-        $errors = array();
+        $errors = [];
         $this->verifyTree($errors, $node);
 
         return $errors ?: true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getNodesHierarchyQueryBuilder($node = null, $direct = false, array $options = array(), $includeNode = false)
+    public function getNodesHierarchyQueryBuilder($node = null, $direct = false, array $options = [], $includeNode = false)
     {
         $meta = $this->getClassMetadata();
         $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
@@ -958,44 +984,35 @@ trait NestedTreeRepositoryTrait
         return $this->childrenQueryBuilder(
             $node,
             $direct,
-            isset($config['root']) ? array($config['root'], $config['left']) : $config['left'],
+            isset($config['root']) ? [$config['root'], $config['left']] : $config['left'],
             'ASC',
             $includeNode
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getNodesHierarchyQuery($node = null, $direct = false, array $options = array(), $includeNode = false)
+    public function getNodesHierarchyQuery($node = null, $direct = false, array $options = [], $includeNode = false)
     {
         return $this->getNodesHierarchyQueryBuilder($node, $direct, $options, $includeNode)->getQuery();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getNodesHierarchy($node = null, $direct = false, array $options = array(), $includeNode = false)
+    public function getNodesHierarchy($node = null, $direct = false, array $options = [], $includeNode = false)
     {
         return $this->getNodesHierarchyQuery($node, $direct, $options, $includeNode)->getArrayResult();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function validate()
     {
-        return $this->listener->getStrategy($this->getEntityManager(), $this->getClassMetadata()->name)->getName() === Strategy::NESTED;
+        return Strategy::NESTED === $this->listener->getStrategy($this->getEntityManager(), $this->getClassMetadata()->name)->getName();
     }
 
     /**
      * Collect errors on given tree if
-     * where are any
+     * where are any.
      *
      * @param array  $errors
      * @param object $root
      */
-    private function verifyTree(&$errors, $root = null)
+    private function verifyTree(&$errors, $root = null): void
     {
         $meta = $this->getClassMetadata();
         $em = $this->getEntityManager();
@@ -1011,7 +1028,7 @@ trait NestedTreeRepositoryTrait
             $qb->where($qb->expr()->eq('node.'.$config['root'], ':rid'));
             $qb->setParameter('rid', $rootId);
         }
-        $min = intval($qb->getQuery()->getSingleScalarResult());
+        $min = (int) $qb->getQuery()->getSingleScalarResult();
         $edge = $this->listener->getStrategy($em, $meta->name)->max($em, $config['useObjectClass'], $rootId);
         // check duplicate right and left values
         for ($i = $min; $i <= $edge; $i++) {
@@ -1027,9 +1044,9 @@ trait NestedTreeRepositoryTrait
                 $qb->andWhere($qb->expr()->eq('node.'.$config['root'], ':rid'));
                 $qb->setParameter('rid', $rootId);
             }
-            $count = intval($qb->getQuery()->getSingleScalarResult());
-            if ($count !== 1) {
-                if ($count === 0) {
+            $count = (int) $qb->getQuery()->getSingleScalarResult();
+            if (1 !== $count) {
+                if (0 === $count) {
                     $errors[] = "index [{$i}], missing".($root ? ' on tree root: '.$rootId : '');
                 } else {
                     $errors[] = "index [{$i}], duplicate".($root ? ' on tree root: '.$rootId : '');
@@ -1049,7 +1066,7 @@ trait NestedTreeRepositoryTrait
             $qb->setParameter('rid', $rootId);
         }
         $nodes = $qb->getQuery()->getArrayResult();
-        if (count($nodes)) {
+        if (\count($nodes)) {
             foreach ($nodes as $node) {
                 $errors[] = "node [{$node[$identifier]}] has missing parent".($root ? ' on tree root: '.$rootId : '');
             }
@@ -1068,8 +1085,9 @@ trait NestedTreeRepositoryTrait
         }
         $result = $qb->getQuery()
             ->setMaxResults(1)
-            ->getResult(Query::HYDRATE_ARRAY);
-        $node = count($result) ? array_shift($result) : null;
+            ->getResult(Query::HYDRATE_ARRAY)
+        ;
+        $node = \count($result) ? array_shift($result) : null;
 
         if ($node) {
             $id = $node[$identifier];
@@ -1118,7 +1136,7 @@ trait NestedTreeRepositoryTrait
                     $qb->andWhere($qb->expr()->eq('node.'.$config['root'], ':rid'));
                     $qb->setParameter('rid', $rootId);
                 }
-                if ($count = intval($qb->getQuery()->getSingleScalarResult())) {
+                if ($count = (int) $qb->getQuery()->getSingleScalarResult()) {
                     $errors[] = "node [{$id}] parent field is blank, but it has a parent";
                 }
             }
@@ -1126,13 +1144,11 @@ trait NestedTreeRepositoryTrait
     }
 
     /**
-     * Removes single node without touching children
+     * Removes single node without touching children.
      *
      * @internal
-     *
-     * @param EntityWrapper $wrapped
      */
-    private function removeSingle(EntityWrapper $wrapped)
+    private function removeSingle(EntityWrapper $wrapped): void
     {
         $meta = $this->getClassMetadata();
         $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
@@ -1143,7 +1159,8 @@ trait NestedTreeRepositoryTrait
         $qb = $this->getQueryBuilder();
         $qb->update($config['useObjectClass'], 'node')
             ->set('node.'.$config['left'], 0)
-            ->set('node.'.$config['right'], 0);
+            ->set('node.'.$config['right'], 0)
+        ;
 
         $qb->andWhere($qb->expr()->eq('node.'.$pk, ':id'));
         $qb->setParameter('id', $nodeId);

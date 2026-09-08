@@ -1,19 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Traits\Repository\ORM;
 
-use Doctrine\ORM\QueryBuilder;
-use Gedmo\Exception\InvalidArgumentException;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use Exception;
+use Gedmo\Exception\InvalidArgumentException;
+use Gedmo\Tool\Wrapper\EntityWrapper;
 use Gedmo\Tree\Entity\MappedSuperclass\AbstractClosure;
 use Gedmo\Tree\Entity\Repository\ClosureTreeRepository;
 use Gedmo\Tree\Strategy;
-use Gedmo\Tool\Wrapper\EntityWrapper;
+use RuntimeException;
 
 /**
  * The ClosureTreeRepository has some useful functions
  * to interact with Closure tree. Repository uses
- * the strategy used by listener
+ * the strategy used by listener.
  *
  * @author Gustavo Adrian <comfortablynumb84@gmail.com>
  * @author Gediminas Morkevicius <gediminas.morkevicius@gmail.com>
@@ -23,9 +27,6 @@ trait ClosureTreeRepositoryTrait
 {
     use TreeRepositoryTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRootNodesQueryBuilder($sortByField = null, $direction = 'asc')
     {
         $meta = $this->getClassMetadata();
@@ -34,39 +35,34 @@ trait ClosureTreeRepositoryTrait
         $qb = $this->getQueryBuilder();
         $qb->select('node')
             ->from($config['useObjectClass'], 'node')
-            ->where('node.'.$config['parent']." IS NULL");
+            ->where('node.'.$config['parent'].' IS NULL')
+        ;
 
         if ($sortByField) {
-            $qb->orderBy('node.'.$sortByField, strtolower($direction) === 'asc' ? 'asc' : 'desc');
+            $qb->orderBy('node.'.$sortByField, 'asc' === strtolower($direction) ? 'asc' : 'desc');
         }
 
         return $qb;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRootNodesQuery($sortByField = null, $direction = 'asc')
     {
         return $this->getRootNodesQueryBuilder($sortByField, $direction)->getQuery();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRootNodes($sortByField = null, $direction = 'asc')
     {
         return $this->getRootNodesQuery($sortByField, $direction)->getResult();
     }
 
     /**
-     * Get the Tree path query by given $node
+     * Get the Tree path query by given $node.
      *
      * @param object $node
      *
-     * @throws InvalidArgumentException - if input is not valid
-     *
      * @return Query
+     *
+     * @throws InvalidArgumentException - if input is not valid
      */
     public function getPathQuery($node)
     {
@@ -74,20 +70,20 @@ trait ClosureTreeRepositoryTrait
         $em = $this->getEntityManager();
 
         if (!$node instanceof $meta->name) {
-            throw new InvalidArgumentException("Node is not related to this repository");
+            throw new InvalidArgumentException('Node is not related to this repository');
         }
 
         if (!$em->getUnitOfWork()->isInIdentityMap($node)) {
-            throw new InvalidArgumentException("Node is not managed by UnitOfWork");
+            throw new InvalidArgumentException('Node is not managed by UnitOfWork');
         }
 
         $config = $this->listener->getConfiguration($em, $meta->name);
         $closureMeta = $em->getClassMetadata($config['closure']);
 
         $dql = "SELECT c, node FROM {$closureMeta->name} c";
-        $dql .= " INNER JOIN c.ancestor node";
-        $dql .= " WHERE c.descendant = :node";
-        $dql .= " ORDER BY c.depth DESC";
+        $dql .= ' INNER JOIN c.ancestor node';
+        $dql .= ' WHERE c.descendant = :node';
+        $dql .= ' ORDER BY c.depth DESC';
         $q = $em->createQuery($dql);
         $q->setParameters(compact('node'));
 
@@ -95,7 +91,7 @@ trait ClosureTreeRepositoryTrait
     }
 
     /**
-     * Get the Tree path of Nodes by given $node
+     * Get the Tree path of Nodes by given $node.
      *
      * @param object $node
      *
@@ -109,27 +105,32 @@ trait ClosureTreeRepositoryTrait
     }
 
     /**
-     * Get list of nodes related to a given $node
-     * @param string  $way         - search direction: "down" (for children) or "up" (for ancestors)
-     * @param object  $node        - if null, all tree nodes will be taken
-     * @param boolean $direct      - true to take only direct children or parents
-     * @param string  $sortByField - field name to sort by
-     * @param string  $direction   - sort direction : "ASC" or "DESC"
-     * @param bool    $includeNode - Include the root node in results?
+     * Get list of nodes related to a given $node.
+     *
+     * @param string $way         - search direction: "down" (for children) or "up" (for ancestors)
+     * @param object $node        - if null, all tree nodes will be taken
+     * @param bool   $direct      - true to take only direct children or parents
+     * @param string $sortByField - field name to sort by
+     * @param string $direction   - sort direction : "ASC" or "DESC"
+     * @param bool   $includeNode - Include the root node in results?
      *
      * @return array - list of given $node parents, null on failure
      */
     public function closureLocateQueryBuilder($way = 'down', $node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
-        switch($way) {
+        switch ($way) {
             case 'down':
                 $first = 'ancestor';
                 $second = 'descendant';
+
                 break;
+
             case 'up':
                 $first = 'descendant';
                 $second = 'ancestor';
+
                 break;
+
             default:
                 throw new InvalidArgumentException("Direction must be 'up' or 'down' but '$way' found");
         }
@@ -138,7 +139,7 @@ trait ClosureTreeRepositoryTrait
         $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
         $qb = $this->getQueryBuilder();
 
-        if ($node !== null) {
+        if (null !== $node) {
             if ($node instanceof $meta->name) {
                 if (!$this->getEntityManager()->getUnitOfWork()->isInIdentityMap($node)) {
                     throw new InvalidArgumentException('Node is not managed by UnitOfWork');
@@ -146,7 +147,8 @@ trait ClosureTreeRepositoryTrait
                 $where = "c.$first = :node AND ";
                 $qb->select('c, node')
                     ->from($config['closure'], 'c')
-                    ->innerJoin("c.$second", 'node');
+                    ->innerJoin("c.$second", 'node')
+                ;
                 if ($direct) {
                     $where .= 'c.depth = 1';
                 } else {
@@ -157,18 +159,19 @@ trait ClosureTreeRepositoryTrait
                     $qb->orWhere("c.$first = :node AND c.$second = :node");
                 }
             } else {
-                throw new \InvalidArgumentException("Node is not related to this repository");
+                throw new \InvalidArgumentException('Node is not related to this repository');
             }
         } else {
             $qb->select('node')
-                ->from($config['useObjectClass'], 'node');
+                ->from($config['useObjectClass'], 'node')
+            ;
             if ($direct) {
                 $qb->where('node.'.$config['parent'].' IS NULL');
             }
         }
 
         if ($sortByField) {
-            if ($meta->hasField($sortByField) && in_array(strtolower($direction), array('asc', 'desc'))) {
+            if ($meta->hasField($sortByField) && \in_array(strtolower($direction), ['asc', 'desc'])) {
                 $qb->orderBy('node.'.$sortByField, $direction);
             } else {
                 throw new InvalidArgumentException("Invalid sort options specified: field - {$sortByField}, direction - {$direction}");
@@ -184,6 +187,12 @@ trait ClosureTreeRepositoryTrait
 
     /**
      * @see getChildrenQueryBuilder
+     *
+     * @param null|mixed $node
+     * @param mixed      $direct
+     * @param null|mixed $sortByField
+     * @param mixed      $direction
+     * @param mixed      $includeNode
      */
     public function childrenQueryBuilder($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
@@ -192,6 +201,12 @@ trait ClosureTreeRepositoryTrait
 
     /**
      * @see getChildrenQuery
+     *
+     * @param null|mixed $node
+     * @param mixed      $direct
+     * @param null|mixed $sortByField
+     * @param mixed      $direction
+     * @param mixed      $includeNode
      */
     public function childrenQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
@@ -200,6 +215,12 @@ trait ClosureTreeRepositoryTrait
 
     /**
      * @see getChildren
+     *
+     * @param null|mixed $node
+     * @param mixed      $direct
+     * @param null|mixed $sortByField
+     * @param mixed      $direction
+     * @param mixed      $includeNode
      */
     public function children($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
@@ -214,25 +235,16 @@ trait ClosureTreeRepositoryTrait
         return $result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getChildrenQueryBuilder($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
         return $this->childrenQueryBuilder($node, $direct, $sortByField, $direction, $includeNode);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getChildrenQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
         return $this->childrenQuery($node, $direct, $sortByField, $direction, $includeNode);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getChildren($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
         return $this->children($node, $direct, $sortByField, $direction, $includeNode);
@@ -240,6 +252,12 @@ trait ClosureTreeRepositoryTrait
 
     /**
      * @see getAncestorsQueryBuilder
+     *
+     * @param null|mixed $node
+     * @param mixed      $direct
+     * @param null|mixed $sortByField
+     * @param mixed      $direction
+     * @param mixed      $includeNode
      */
     public function ancestorsQueryBuilder($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
@@ -248,6 +266,12 @@ trait ClosureTreeRepositoryTrait
 
     /**
      * @see getAncestorsQuery
+     *
+     * @param null|mixed $node
+     * @param mixed      $direct
+     * @param null|mixed $sortByField
+     * @param mixed      $direction
+     * @param mixed      $includeNode
      */
     public function ancestorsQuery($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
@@ -256,6 +280,12 @@ trait ClosureTreeRepositoryTrait
 
     /**
      * @see getAncestors
+     *
+     * @param null|mixed $node
+     * @param mixed      $direct
+     * @param null|mixed $sortByField
+     * @param mixed      $direction
+     * @param mixed      $includeNode
      */
     public function ancestors($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
@@ -271,13 +301,13 @@ trait ClosureTreeRepositoryTrait
     }
 
     /**
-     * Get the list of ancestors that lead to the given $node. This returns a QueryBuilder object
+     * Get the list of ancestors that lead to the given $node. This returns a QueryBuilder object.
      *
-     * @param object  $node        - if null, all tree nodes will be taken
-     * @param boolean $direct      - true to take only direct children
-     * @param string  $sortByField - field name to sort by
-     * @param string  $direction   - sort direction : "ASC" or "DESC"
-     * @param bool    $includeNode - Include the root node in results?
+     * @param object $node        - if null, all tree nodes will be taken
+     * @param bool   $direct      - true to take only direct children
+     * @param string $sortByField - field name to sort by
+     * @param string $direction   - sort direction : "ASC" or "DESC"
+     * @param bool   $includeNode - Include the root node in results?
      *
      * @return QueryBuilder - QueryBuilder object
      */
@@ -287,13 +317,13 @@ trait ClosureTreeRepositoryTrait
     }
 
     /**
-     * Get the list of ancestors that lead to the given $node. This returns a Query object
+     * Get the list of ancestors that lead to the given $node. This returns a Query object.
      *
-     * @param object  $node        - if null, all tree nodes will be taken
-     * @param boolean $direct      - true to take only direct children
-     * @param string  $sortByField - field name to sort by
-     * @param string  $direction   - sort direction : "ASC" or "DESC"
-     * @param bool    $includeNode - Include the root node in results?
+     * @param object $node        - if null, all tree nodes will be taken
+     * @param bool   $direct      - true to take only direct children
+     * @param string $sortByField - field name to sort by
+     * @param string $direction   - sort direction : "ASC" or "DESC"
+     * @param bool   $includeNode - Include the root node in results?
      *
      * @return Query - Query object
      */
@@ -303,13 +333,13 @@ trait ClosureTreeRepositoryTrait
     }
 
     /**
-     * Get the list of ancestors that lead to the given $node
+     * Get the list of ancestors that lead to the given $node.
      *
-     * @param object  $node        - if null, all tree nodes will be taken
-     * @param boolean $direct      - true to take only direct children
-     * @param string  $sortByField - field name to sort by
-     * @param string  $direction   - sort direction : "ASC" or "DESC"
-     * @param bool    $includeNode - Include the root node in results?
+     * @param object $node        - if null, all tree nodes will be taken
+     * @param bool   $direct      - true to take only direct children
+     * @param string $sortByField - field name to sort by
+     * @param string $direction   - sort direction : "ASC" or "DESC"
+     * @param bool   $includeNode - Include the root node in results?
      *
      * @return array - list of given $node parents, null on failure
      */
@@ -320,18 +350,21 @@ trait ClosureTreeRepositoryTrait
 
     /**
      * @see childrenCount
+     *
+     * @param null|mixed $node
+     * @param mixed      $direct
      */
     public function ancestorsCount($node = null, $direct = false)
     {
         $meta = $this->getClassMetadata();
 
-        if (is_object($node)) {
-            if (!($node instanceof $meta->name)) {
-                throw new InvalidArgumentException("Node is not related to this repository");
+        if (\is_object($node)) {
+            if (!$node instanceof $meta->name) {
+                throw new InvalidArgumentException('Node is not related to this repository');
             }
             $wrapped = new EntityWrapper($node, $this->getEntityManager());
             if (!$wrapped->hasValidIdentifier()) {
-                throw new InvalidArgumentException("Node is not managed by UnitOfWork");
+                throw new InvalidArgumentException('Node is not managed by UnitOfWork');
             }
         }
 
@@ -353,27 +386,27 @@ trait ClosureTreeRepositoryTrait
     }
 
     /**
-     * Removes given $node from the tree and reparents its descendants
+     * Removes given $node from the tree and reparents its descendants.
      *
      * @todo may be improved, to issue single query on reparenting
      *
      * @param object $node
      *
-     * @throws \Gedmo\Exception\InvalidArgumentException
-     * @throws \Gedmo\Exception\RuntimeException         - if something fails in transaction
+     * @throws InvalidArgumentException
+     * @throws \Gedmo\Exception\RuntimeException - if something fails in transaction
      */
-    public function removeFromTree($node)
+    public function removeFromTree($node): void
     {
         $meta = $this->getClassMetadata();
         $em = $this->getEntityManager();
 
         if (!$node instanceof $meta->name) {
-            throw new InvalidArgumentException("Node is not related to this repository");
+            throw new InvalidArgumentException('Node is not related to this repository');
         }
 
         $wrapped = new EntityWrapper($node, $em);
         if (!$wrapped->hasValidIdentifier()) {
-            throw new InvalidArgumentException("Node is not managed by UnitOfWork");
+            throw new InvalidArgumentException('Node is not managed by UnitOfWork');
         }
 
         $config = $this->listener->getConfiguration($em, $meta->name);
@@ -389,6 +422,7 @@ trait ClosureTreeRepositoryTrait
 
         // process updates in transaction
         $em->getConnection()->beginTransaction();
+
         try {
             foreach ($nodesToReparent as $nodeToReparent) {
                 $id = $meta->getPropertyAccessor($pk)->getValue($nodeToReparent);
@@ -403,7 +437,8 @@ trait ClosureTreeRepositoryTrait
 
                 $this->listener
                     ->getStrategy($em, $meta->name)
-                    ->updateNode($em, $nodeToReparent, $node);
+                    ->updateNode($em, $nodeToReparent, $node)
+                ;
                 $oid = spl_object_hash($nodeToReparent);
                 $em->getUnitOfWork()->setOriginalEntityProperty($oid, $config['parent'], $parent);
             }
@@ -414,7 +449,7 @@ trait ClosureTreeRepositoryTrait
             $q->setParameters(compact('nodeId'));
             $q->getSingleScalarResult();
             $em->getConnection()->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $em->close();
             $em->getConnection()->rollback();
 
@@ -425,11 +460,12 @@ trait ClosureTreeRepositoryTrait
         $em->getUnitOfWork()->removeFromIdentityMap($node);
         $node = null;
     }
+
     /**
      * Process nodes and produce an array with the
-     * structure of the tree
+     * structure of the tree.
      *
-     * @param array - Array of nodes
+     * @param array $nodes - Array of nodes
      *
      * @return array - Array with tree structure
      */
@@ -437,19 +473,19 @@ trait ClosureTreeRepositoryTrait
     {
         $meta = $this->getClassMetadata();
         $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
-        $nestedTree = array();
+        $nestedTree = [];
         $idField = $meta->getSingleIdentifierFieldName();
         $hasLevelProp = !empty($config['level']);
         $levelProp = $hasLevelProp ? $config['level'] : ClosureTreeRepository::SUBQUERY_LEVEL;
         $childrenIndex = $this->repoUtils->getChildrenIndex();
 
-        if (count($nodes) > 0) {
+        if (\count($nodes) > 0) {
             $firstLevel = $hasLevelProp ? $nodes[0][0]['descendant'][$levelProp] : $nodes[0][$levelProp];
             $l = 1;     // 1 is only an initial value. We could have a tree which has a root node with any level (subtrees)
-            $refs = array();
+            $refs = [];
             foreach ($nodes as $n) {
                 $node = $n[0]['descendant'];
-                $node[$childrenIndex] = array();
+                $node[$childrenIndex] = [];
                 $level = $hasLevelProp ? $node[$levelProp] : $n[$levelProp];
                 if ($l < $level) {
                     $l = $level;
@@ -459,7 +495,7 @@ trait ClosureTreeRepositoryTrait
                 } else {
                     $tmp = &$refs[$n['parent_id']][$childrenIndex];
                 }
-                $key = count($tmp);
+                $key = \count($tmp);
                 $tmp[$key] = $node;
                 $refs[$node[$idField]] = &$tmp[$key];
             }
@@ -469,26 +505,17 @@ trait ClosureTreeRepositoryTrait
         return $nestedTree;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getNodesHierarchy($node = null, $direct = false, array $options = array(), $includeNode = false)
+    public function getNodesHierarchy($node = null, $direct = false, array $options = [], $includeNode = false)
     {
         return $this->getNodesHierarchyQuery($node, $direct, $options, $includeNode)->getArrayResult();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getNodesHierarchyQuery($node = null, $direct = false, array $options = array(), $includeNode = false)
+    public function getNodesHierarchyQuery($node = null, $direct = false, array $options = [], $includeNode = false)
     {
         return $this->getNodesHierarchyQueryBuilder($node, $direct, $options, $includeNode)->getQuery();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getNodesHierarchyQueryBuilder($node = null, $direct = false, array $options = array(), $includeNode = false)
+    public function getNodesHierarchyQueryBuilder($node = null, $direct = false, array $options = [], $includeNode = false)
     {
         $meta = $this->getClassMetadata();
         $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
@@ -506,9 +533,10 @@ trait ClosureTreeRepositoryTrait
             ->from($config['closure'], 'c')
             ->innerJoin('c.descendant', 'node')
             ->leftJoin('node.'.$config['parent'], 'p')
-            ->addOrderBy(($hasLevelProp ? 'node.'.$config['level'] : ClosureTreeRepository::SUBQUERY_LEVEL), 'asc');
+            ->addOrderBy($hasLevelProp ? 'node.'.$config['level'] : ClosureTreeRepository::SUBQUERY_LEVEL, 'asc')
+        ;
 
-        if ($node !== null) {
+        if (null !== $node) {
             $q->where('c.ancestor = :node');
             $q->setParameter('node', $node);
         } else {
@@ -519,13 +547,13 @@ trait ClosureTreeRepositoryTrait
             $q->andWhere('c.ancestor != c.descendant');
         }
 
-        $defaultOptions = array();
+        $defaultOptions = [];
         $options = array_merge($defaultOptions, $options);
-        if (isset($options['childSort']) && is_array($options['childSort']) &&
-            isset($options['childSort']['field']) && isset($options['childSort']['dir'])) {
+        if (isset($options['childSort']) && \is_array($options['childSort'])
+            && isset($options['childSort']['field'], $options['childSort']['dir'])) {
             $q->addOrderBy(
                 'node.'.$options['childSort']['field'],
-                strtolower($options['childSort']['dir']) == 'asc' ? 'asc' : 'desc'
+                'asc' == strtolower($options['childSort']['dir']) ? 'asc' : 'desc'
             );
         }
 
@@ -547,7 +575,7 @@ trait ClosureTreeRepositoryTrait
           WHERE c.id IS NULL
         ");
 
-        if ($missingSelfRefsCount = intval($q->getSingleScalarResult())) {
+        if ($missingSelfRefsCount = (int) $q->getSingleScalarResult()) {
             $errors[] = "Missing $missingSelfRefsCount self referencing closures";
         }
 
@@ -559,16 +587,16 @@ trait ClosureTreeRepositoryTrait
           WHERE c2.id IS NULL AND node.$nodeIdField <> c1.ancestor
         ");
 
-        if ($missingClosuresCount = intval($q->getSingleScalarResult())) {
+        if ($missingClosuresCount = (int) $q->getSingleScalarResult()) {
             $errors[] = "Missing $missingClosuresCount closures";
         }
 
         return $errors ?: true;
     }
 
-    public function recover()
+    public function recover(): void
     {
-        if ($this->verify() === true) {
+        if (true === $this->verify()) {
             return;
         }
 
@@ -582,7 +610,7 @@ trait ClosureTreeRepositoryTrait
         $config = $this->listener->getConfiguration($this->getEntityManager(), $nodeMeta->name);
         $closureMeta = $this->getEntityManager()->getClassMetadata($config['closure']);
 
-        $insertClosures = function ($entries) use ($closureMeta) {
+        $insertClosures = function ($entries) use ($closureMeta): void {
             $closureTable = $closureMeta->getTableName();
             $ancestorColumnName = $this->getJoinColumnFieldName($closureMeta->getAssociationMapping('ancestor'));
             $descendantColumnName = $this->getJoinColumnFieldName($closureMeta->getAssociationMapping('descendant'));
@@ -606,8 +634,9 @@ trait ClosureTreeRepositoryTrait
             do {
                 $entries = $q->getScalarResult();
                 $insertClosures($entries);
-                $newClosuresCount += count($entries);
-            } while (count($entries) > 0);
+                $newClosuresCount += \count($entries);
+            } while (\count($entries) > 0);
+
             return $newClosuresCount;
         };
 
@@ -654,11 +683,11 @@ trait ClosureTreeRepositoryTrait
             $ids = array_map(function ($el) {
                 return $el['id'];
             }, $ids);
-            $query = "DELETE FROM {$closureTableName} WHERE id IN (".implode(', ', $ids).")";
+            $query = "DELETE FROM {$closureTableName} WHERE id IN (".implode(', ', $ids).')';
             if (!$conn->executeQuery($query)) {
-                throw new \RuntimeException('Failed to remove incorrect closures');
+                throw new RuntimeException('Failed to remove incorrect closures');
             }
-            $deletedClosuresCount += count($ids);
+            $deletedClosuresCount += \count($ids);
         }
 
         return $deletedClosuresCount;
@@ -666,18 +695,15 @@ trait ClosureTreeRepositoryTrait
 
     protected function getJoinColumnFieldName($association)
     {
-        if (count($association['joinColumnFieldNames']) > 1) {
-            throw new \RuntimeException('More association on field ' . $association['fieldName']);
+        if (\count($association['joinColumnFieldNames']) > 1) {
+            throw new RuntimeException('More association on field '.$association['fieldName']);
         }
 
         return array_shift($association['joinColumnFieldNames']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function validate()
     {
-        return $this->listener->getStrategy($this->getEntityManager(), $this->getClassMetadata()->name)->getName() === Strategy::CLOSURE;
+        return Strategy::CLOSURE === $this->listener->getStrategy($this->getEntityManager(), $this->getClassMetadata()->name)->getName();
     }
 }

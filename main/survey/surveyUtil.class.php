@@ -866,7 +866,7 @@ class SurveyUtil
                             question_id = $questionId $sessionCondition $lpItemCondition";
                 $result = Database::query($sql);
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    echo $row['option_id'].'<hr noshade="noshade" size="1" />';
+                    echo Security::remove_XSS($row['option_id']).'<hr noshade="noshade" size="1" />';
                 }
                 echo '</div>';
             } else {
@@ -1588,7 +1588,7 @@ class SurveyUtil
             if (!empty($user_fields_values)) {
                 foreach ($user_fields_values as $fieldName => $value) {
                     $fieldValue = is_array($value) ? $value[$fieldName] : $value;
-                    $content .= '<td align="center">'.$fieldValue.'</td>';
+                    $content .= '<td align="center">'.Security::remove_XSS($fieldValue).'</td>';
                 }
             }
         }
@@ -1598,7 +1598,7 @@ class SurveyUtil
                 if ($questions[$question_id]['type'] === 'open' || $questions[$question_id]['type'] === 'comment') {
                     $content .= '<td align="center">';
                     if (isset($answers_of_user[$question_id]) && isset($answers_of_user[$question_id]['0'])) {
-                        $content .= $answers_of_user[$question_id]['0']['option_id'];
+                        $content .= Security::remove_XSS($answers_of_user[$question_id]['0']['option_id']);
                     }
                     $content .= '</td>';
                 } else {

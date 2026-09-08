@@ -11,8 +11,8 @@ $userId = api_get_user_id();
 $courseInfo = api_get_course_info();
 
 $surveyId = isset($_REQUEST['survey_id']) ? (int) $_REQUEST['survey_id'] : 0;
-$invitationcode = isset($_REQUEST['invitationcode']) ? Database::escape_string($_REQUEST['invitationcode']) : 0;
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$invitationcode = $_REQUEST['invitationcode'] ?? 0;
+$action = $_REQUEST['action'] ?? '';
 
 if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
     $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
@@ -28,6 +28,18 @@ if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
     }
 
     $survey_invitation = Database::fetch_array($result, 'ASSOC');
+    $invitedUser = (string) $survey_invitation['user'];
+    // The "auto" invitation codes are derived from public data (the user id and the survey
+    // code), so, unlike the random codes sent by mail, they cannot act as a shared secret.
+    // When such a code belongs to a platform user, only that very user is allowed to use it.
+    if (0 === strpos((string) $survey_invitation['invitation_code'], 'auto-') &&
+        ctype_digit($invitedUser) &&
+        (int) $invitedUser > 0 &&
+        (int) $invitedUser !== $userId
+    ) {
+        api_not_allowed(true, get_lang('WrongInvitationCode'));
+    }
+
     $sql = "SELECT * FROM $table_survey
             WHERE
                 c_id = $courseId AND
@@ -61,7 +73,7 @@ $interbreadcrumb[] = [
 
 $questions = SurveyManager::get_questions($surveyData['iid']);
 
-$url = api_get_self().'?survey_id='.$surveyId.'&invitationcode='.$invitationcode.'&'.api_get_cidreq();
+$url = api_get_self().'?survey_id='.$surveyId.'&invitationcode='.urlencode($invitationcode).'&'.api_get_cidreq();
 $urlEdit = $url.'&action=edit';
 
 if (isset($_POST) && !empty($_POST)) {
@@ -105,8 +117,8 @@ if (isset($_POST) && !empty($_POST)) {
 
     SurveyManager::update_survey_answered(
         $surveyData,
-        $survey_invitation['user'],
-        $survey_invitation['survey_code']
+        $userId,
+        $surveyData['code']
     );
 
     Display::addFlash(Display::return_message(get_lang('Saved')));

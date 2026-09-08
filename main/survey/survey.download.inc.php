@@ -31,6 +31,18 @@ function check_download_survey($course, $invitation, $doc_url)
         exit;
     }
     $survey_invitation = Database::fetch_assoc($result);
+    $invitedUser = (string) $survey_invitation['user'];
+    // The "auto" invitation codes are derived from public data (the user id and the survey
+    // code), so, unlike the random codes sent by mail, they cannot act as a shared secret.
+    // When such a code belongs to a platform user, only that very user is allowed to use it.
+    if (0 === strpos((string) $survey_invitation['invitation_code'], 'auto-') &&
+        ctype_digit($invitedUser) &&
+        (int) $invitedUser > 0 &&
+        (int) $invitedUser !== api_get_user_id()
+    ) {
+        echo Display::return_message(get_lang('WrongInvitationCode'), 'error', false);
+        exit;
+    }
 
     // Now we check if the user already filled the survey
     /*if ($survey_invitation['answered'] == 1) {
@@ -48,14 +60,14 @@ function check_download_survey($course, $invitation, $doc_url)
                 code='".Database::escape_string($survey_invitation['survey_code'])."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 1) {
-        if ($_POST['language']) {
-            $survey_invitation['survey_id'] = $_POST['language'];
+        if (!empty($_POST['language'])) {
+            $survey_invitation['survey_id'] = (int) $_POST['language'];
         } else {
             echo '<form
                 id="language"
                 name="language"
                 method="POST"
-                action="'.api_get_self().'?course='.Security::remove_XSS($_GET['course']).'&invitationcode='.Security::remove_XSS($_GET['invitationcode']).'">';
+                action="'.api_get_self().'?course='.urlencode($course).'&invitationcode='.urlencode($invitation).'">';
             echo '  <select name="language">';
             while ($row = Database::fetch_assoc($result)) {
                 echo '<option value="'.$row['survey_id'].'">'.$row['lang'].'</option>';

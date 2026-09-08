@@ -116,7 +116,7 @@
         <li><a href="https://www.php.net/manual/en/session.configuration.php#ini.session.cookie-httponly">session.cookie_httponly</a> on</li>
         <li><a href="https://php.net/manual/ini.core.php#ini.upload-max-filesize">upload_max_filesize</a> &gt;100M</li>
         <li><a href="https://php.net/manual/ini.core.php#ini.post-max-size">post_max_size</a> &gt;100M</li>
-        <li><a href="https://www.php.net/manual/en/ini.core.php#ini.memory-limit">memory_limit</a> &gt;128M</li>
+        <li><a href="https://www.php.net/manual/en/ini.core.php#ini.memory-limit">memory_limit</a> &gt;256M</li>
       </ul>
     <h3>2.5. Installation wizard</h3>
     <a id="web-install-wizard" class="anchor"></a>
@@ -211,7 +211,7 @@ vim [my.chamilo.local].conf
     php_value session.cookie_httponly On
     php_value upload_max_filesize 100M
     php_value post_max_size 100M
-    php_value memory_limit 128M
+    php_value memory_limit 256M
     #php_value session.save_handler "redis"
     #php_value session.save_path "tcp://127.0.0.1:6379"
 &lt;/VirtualHost&gt;</pre>
@@ -423,10 +423,10 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
         Open http://localhost/ in your browser. If the WampServer welcome screen with server configuration info appears, it means WampServer is working.<br>
         Click on the WampServer icon in your status bar and go to PHP -&gt; Extensions. Make sure all the following extensions are enabled: php_curl, php_gd, php_intl, php_ldap, php_mbstring, php_mysqli, php_soap, php_xml, php_zip<br>
         Edit C:\wamp64\bin\php\php8.3\php.ini, locate ";extension=sodium" and remove the ";" from the beginning of the line.<br>
-        Also, update the "memory_limit" setting from "128M" to "2048M" and a few other settings as shown below.<br>
+        Also, update the "memory_limit" setting from "256M" to "2048M" and a few other settings as shown below.<br>
 <pre>
     display_errors = Off
-    memory_limit = 128M
+    memory_limit = 256M
     session.cookie_httponly = 1
     upload_max_filesize = 100M
     post_max_size = 100M

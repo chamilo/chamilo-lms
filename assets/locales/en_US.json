@@ -1252,6 +1252,7 @@
     "Assign authentication sources to users": "Assign authentication sources to users",
     "Back to user assignment page": "Back to user assignment page",
     "Authentication sources assigned successfully": "Authentication sources assigned successfully",
+    "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?": "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?",
     "Tip: choose “— Just upload —” to store without sending to anyone.": "Tip: choose “— Just upload —” to store without sending to anyone.",
     "Please select at least one recipient (“— Just upload —” or any user)": "Please select at least one recipient (“— Just upload —” or any user)",
     "Sharing": "Sharing",

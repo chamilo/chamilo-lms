@@ -285,6 +285,10 @@ class AccessUrlController extends AbstractController
     }
 
     /**
+     * Sets each user's authentication methods for the given access URL to exactly the
+     * provided list — adding newly selected methods and removing any existing one that is
+     * no longer selected (an empty list removes every method for that user on this URL).
+     *
      * @throws Exception
      */
     #[Route('/auth-sources/assign', methods: ['POST'])]
@@ -297,7 +301,7 @@ class AccessUrlController extends AbstractController
     ): Response {
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data['users']) || empty($data['access_url']) || empty($data['auth_source'])) {
+        if (empty($data['users']) || empty($data['access_url']) || !isset($data['auth_sources']) || !\is_array($data['auth_sources'])) {
             throw new Exception('Missing required parameters');
         }
 
@@ -308,10 +312,12 @@ class AccessUrlController extends AbstractController
             throw $this->createNotFoundException('Access URL not found');
         }
 
-        $authSources = $authConfigHelper->getAuthSourceAuthentications($accessUrl);
+        $allowedAuthSources = $authConfigHelper->getAuthSourceAuthentications($accessUrl);
 
-        if (!\in_array($data['auth_source'], $authSources)) {
-            throw new Exception('User authentication method not allowed');
+        foreach ($data['auth_sources'] as $authentication) {
+            if (!\in_array($authentication, $allowedAuthSources, true)) {
+                throw new Exception('User authentication method not allowed');
+            }
         }
 
         foreach ($data['users'] as $userIri) {
@@ -322,7 +328,15 @@ class AccessUrlController extends AbstractController
                 continue;
             }
 
-            $user->addAuthSourceByAuthentication($data['auth_source'], $accessUrl);
+            foreach ($user->getAuthSourcesByUrl($accessUrl) as $existingAuthSource) {
+                if (!\in_array($existingAuthSource->getAuthentication(), $data['auth_sources'], true)) {
+                    $user->removeAuthSource($existingAuthSource);
+                }
+            }
+
+            foreach ($data['auth_sources'] as $authentication) {
+                $user->addAuthSourceByAuthentication($authentication, $accessUrl);
+            }
         }
 
         $entityManager->flush();

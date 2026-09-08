@@ -31371,6 +31371,9 @@ msgstr ""
 msgid "Authentication sources assigned successfully"
 msgstr ""
 
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr ""
+
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr ""
 

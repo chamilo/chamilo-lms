@@ -31433,6 +31433,9 @@ msgstr "Back to user assignment page"
 msgid "Authentication sources assigned successfully"
 msgstr "Authentication sources assigned successfully"
 
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Tip: choose “— Just upload —” to store without sending to anyone."
 

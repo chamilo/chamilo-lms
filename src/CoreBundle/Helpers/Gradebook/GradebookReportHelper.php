@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Helpers\Gradebook;
 
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookReport;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookComment;
@@ -16,22 +15,19 @@ use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\GradebookScoreDisplay;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookCommentActionProcessor;
+use Chamilo\CoreBundle\State\Gradebook\GradebookContextResolver;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\State\Gradebook\GradebookScoreCalculator;
-use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
@@ -43,7 +39,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class GradebookReportHelper
 {
     public function __construct(
-        private CidReqHelper $cidReqHelper,
+        private GradebookContextResolver $contextResolver,
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
@@ -64,21 +60,20 @@ final readonly class GradebookReportHelper
         ?bool $includeScoresOverride = null,
     ): GradebookReport {
         $exportAll ??= $this->getBooleanQuery($request, 'all', false);
-        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if ($session instanceof Session && !$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-        $this->validateCourseResourceNode($request, $course);
-        $groupId = $this->validateGroupContext($course);
+        $resolved = $this->contextResolver->resolve($request);
+        $course = $resolved['course'];
+        $session = $resolved['session'];
+        $groupId = $resolved['groupId'];
+        // Not the resolver's own canManage: that one answers "may edit", which is
+        // false in the student view, and this report stays readable there.
         $this->assertCanViewReport();
 
-        $rootCategory = $this->findRootCategory($course, $session);
+        $rootCategory = $resolved['rootCategory'];
         if (!$rootCategory instanceof GradebookCategory) {
             return $this->emptyReport($request, $course, $session, $groupId);
         }
 
-        $category = $this->getSelectedCategory($request, $course, $session, $rootCategory);
+        $category = $this->contextResolver->getSelectedCategory($request, $course, $session, $rootCategory);
         $report = new GradebookReport();
         $includeScores = $includeScoresOverride ?? $this->getBooleanQuery($request, 'includeScores', true);
         $report->context = $this->buildContext($request, $course, $session, $groupId);
@@ -87,7 +82,7 @@ final readonly class GradebookReportHelper
         $report->extraFieldColumns = $includeScores ? $this->getExtraFieldDefinitions() : [];
         $report->settings = $this->buildSettings($category);
         $scoreDisplayRanges = $this->getScoreDisplayRanges($category);
-        $upperLimitIncluded = $this->isSettingEnabled('gradebook.gradebook_score_display_upperlimit');
+        $upperLimitIncluded = $this->contextResolver->isSettingEnabled('gradebook.gradebook_score_display_upperlimit');
         if ($report->settings['allowComments']) {
             $report->commentCsrfToken = (string) $this->csrfTokenManager->getToken(
                 GradebookCommentActionProcessor::CSRF_TOKEN_ID,
@@ -100,7 +95,7 @@ final readonly class GradebookReportHelper
         $sortBy = $this->normalizeSortBy((string) $request->query->get('sortBy', 'fullName'));
         $sortDirection = 'desc' === strtolower((string) $request->query->get('sortDirection', 'asc')) ? 'desc' : 'asc';
 
-        $students = $this->getStudents($course, $session);
+        $students = $this->contextResolver->getStudents($course, $session);
         if ('' !== $search) {
             $students = array_values(array_filter(
                 $students,
@@ -206,35 +201,6 @@ final readonly class GradebookReportHelper
         return $report;
     }
 
-    private function validateCourseResourceNode(Request $request, Course $course): void
-    {
-        $nodeId = $request->query->getInt('node');
-        $courseNode = $course->getResourceNode();
-        if ($nodeId <= 0 || null === $courseNode || (int) $courseNode->getId() !== $nodeId) {
-            throw new AccessDeniedHttpException('The requested resource node does not belong to the current course.');
-        }
-    }
-
-    private function validateGroupContext(Course $course): int
-    {
-        $group = $this->cidReqHelper->getDoctrineGroupEntity();
-        if (!$group instanceof CGroup) {
-            return 0;
-        }
-
-        $groupId = (int) $group->getIid();
-
-        $groupNode = $group->getResourceNode();
-        $courseNode = $course->getResourceNode();
-        if (null === $groupNode || null === $courseNode
-            || (int) ($groupNode->getParent()?->getId() ?? 0) !== (int) $courseNode->getId()
-        ) {
-            throw new AccessDeniedHttpException('The requested group does not belong to the current course.');
-        }
-
-        return $groupId;
-    }
-
     private function assertCanViewReport(): void
     {
         if ($this->security->isGranted('ROLE_ADMIN')
@@ -245,104 +211,12 @@ final readonly class GradebookReportHelper
         }
 
         if ($this->security->isGranted('ROLE_SESSION_MANAGER')
-            && $this->isSettingEnabled('session.session_admins_edit_courses_content')
+            && $this->contextResolver->isSettingEnabled('session.session_admins_edit_courses_content')
         ) {
             return;
         }
 
         throw new AccessDeniedHttpException('You are not allowed to view the Gradebook learner report.');
-    }
-
-    private function findRootCategory(Course $course, ?Session $session): ?GradebookCategory
-    {
-        return $this->entityManager->getRepository(GradebookCategory::class)->findOneBy(
-            [
-                'course' => $course,
-                'session' => $session,
-                'parent' => null,
-            ],
-            ['id' => 'ASC'],
-        );
-    }
-
-    private function getSelectedCategory(
-        Request $request,
-        Course $course,
-        ?Session $session,
-        GradebookCategory $rootCategory,
-    ): GradebookCategory {
-        $categoryId = $request->query->getInt('categoryId');
-        if ($categoryId <= 0 || $categoryId === (int) $rootCategory->getId()) {
-            return $rootCategory;
-        }
-
-        $category = $this->entityManager->getRepository(GradebookCategory::class)->find($categoryId);
-        if (!$category instanceof GradebookCategory) {
-            throw new NotFoundHttpException('The requested Gradebook category was not found.');
-        }
-        if (!$this->sameCategoryContext($category, $course, $session) || !$this->isCategoryDescendantOf($category, $rootCategory)) {
-            throw new AccessDeniedHttpException('The requested Gradebook category is outside the current Gradebook.');
-        }
-
-        return $category;
-    }
-
-    private function isCategoryDescendantOf(GradebookCategory $category, GradebookCategory $rootCategory): bool
-    {
-        $visited = [];
-        $current = $category;
-        while (null !== $current) {
-            $currentId = (int) $current->getId();
-            if ($currentId === (int) $rootCategory->getId()) {
-                return true;
-            }
-            if (isset($visited[$currentId])) {
-                return false;
-            }
-
-            $visited[$currentId] = true;
-            $current = $current->getParent();
-        }
-
-        return false;
-    }
-
-    /**
-     * @return list<User>
-     */
-    private function getStudents(Course $course, ?Session $session): array
-    {
-        $students = [];
-        if ($session instanceof Session) {
-            $subscriptions = $this->entityManager->getRepository(SessionRelCourseRelUser::class)->findBy([
-                'course' => $course,
-                'session' => $session,
-                'status' => Session::STUDENT,
-            ]);
-            foreach ($subscriptions as $subscription) {
-                if ($subscription instanceof SessionRelCourseRelUser) {
-                    $student = $subscription->getUser();
-                    if (User::SOFT_DELETED !== $student->getStatus()) {
-                        $students[(int) $student->getId()] = $student;
-                    }
-                }
-            }
-        } else {
-            $subscriptions = $this->entityManager->getRepository(CourseRelUser::class)->findBy([
-                'course' => $course,
-                'status' => CourseRelUser::STUDENT,
-            ]);
-            foreach ($subscriptions as $subscription) {
-                if ($subscription instanceof CourseRelUser) {
-                    $student = $subscription->getUser();
-                    if (User::SOFT_DELETED !== $student->getStatus()) {
-                        $students[(int) $student->getId()] = $student;
-                    }
-                }
-            }
-        }
-
-        return array_values($students);
     }
 
     /**
@@ -604,19 +478,19 @@ final readonly class GradebookReportHelper
                 (int) ($this->settingsManager->getSetting('gradebook.gradebook_number_decimals', true) ?: 0),
             ),
             'calculationMode' => $category->getCalculationMode()->value,
-            'allowComments' => $this->isSettingEnabled('gradebook.allow_gradebook_comments'),
-            'allowSkillRelItems' => $this->isSettingEnabled('skill.allow_skill_rel_items'),
-            'hideGraph' => $this->isSettingEnabled('gradebook.gradebook_hide_graph'),
-            'hideTable' => $this->isSettingEnabled('gradebook.gradebook_hide_table'),
-            'detailedAdminView' => $this->isSettingEnabled('gradebook.gradebook_detailed_admin_view'),
-            'hidePdfReportButton' => $this->isSettingEnabled('gradebook.gradebook_hide_pdf_report_button'),
+            'allowComments' => $this->contextResolver->isSettingEnabled('gradebook.allow_gradebook_comments'),
+            'allowSkillRelItems' => $this->contextResolver->isSettingEnabled('skill.allow_skill_rel_items'),
+            'hideGraph' => $this->contextResolver->isSettingEnabled('gradebook.gradebook_hide_graph'),
+            'hideTable' => $this->contextResolver->isSettingEnabled('gradebook.gradebook_hide_table'),
+            'detailedAdminView' => $this->contextResolver->isSettingEnabled('gradebook.gradebook_detailed_admin_view'),
+            'hidePdfReportButton' => $this->contextResolver->isSettingEnabled('gradebook.gradebook_hide_pdf_report_button'),
             'reportScoreStyle' => $this->getReportScoreStyle(),
-            'customScoreStandalone' => $this->isSettingEnabled('gradebook.gradebook_score_display_custom_standalone')
-                && $this->isSettingEnabled('gradebook.gradebook_score_display_custom'),
-            'useExerciseScoreSettingsInCategories' => $this->isSettingEnabled(
+            'customScoreStandalone' => $this->contextResolver->isSettingEnabled('gradebook.gradebook_score_display_custom_standalone')
+                && $this->contextResolver->isSettingEnabled('gradebook.gradebook_score_display_custom'),
+            'useExerciseScoreSettingsInCategories' => $this->contextResolver->isSettingEnabled(
                 'gradebook.gradebook_use_exercise_score_settings_in_categories',
             ),
-            'useExerciseScoreSettingsInTotal' => $this->isSettingEnabled(
+            'useExerciseScoreSettingsInTotal' => $this->contextResolver->isSettingEnabled(
                 'gradebook.gradebook_use_exercise_score_settings_in_total',
             ),
             'exerciseMinScore' => $this->getNumericSetting('exercise.exercise_min_score'),
@@ -897,7 +771,7 @@ final readonly class GradebookReportHelper
      */
     private function getScoreDisplayRanges(GradebookCategory $category): array
     {
-        if (!$this->isSettingEnabled('gradebook.gradebook_score_display_custom')) {
+        if (!$this->contextResolver->isSettingEnabled('gradebook.gradebook_score_display_custom')) {
             return [];
         }
 
@@ -1042,28 +916,21 @@ final readonly class GradebookReportHelper
         return $mainWeight;
     }
 
-    private function isSettingEnabled(string $name): bool
-    {
-        $value = $this->settingsManager->getSetting($name, true);
-
-        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
-    }
-
     private function emptyReport(Request $request, Course $course, ?Session $session, int $groupId): GradebookReport
     {
         $report = new GradebookReport();
         $report->context = $this->buildContext($request, $course, $session, $groupId);
         $report->settings = [
-            'allowComments' => $this->isSettingEnabled('gradebook.allow_gradebook_comments'),
-            'allowSkillRelItems' => $this->isSettingEnabled('skill.allow_skill_rel_items'),
-            'hideGraph' => $this->isSettingEnabled('gradebook.gradebook_hide_graph'),
-            'hideTable' => $this->isSettingEnabled('gradebook.gradebook_hide_table'),
+            'allowComments' => $this->contextResolver->isSettingEnabled('gradebook.allow_gradebook_comments'),
+            'allowSkillRelItems' => $this->contextResolver->isSettingEnabled('skill.allow_skill_rel_items'),
+            'hideGraph' => $this->contextResolver->isSettingEnabled('gradebook.gradebook_hide_graph'),
+            'hideTable' => $this->contextResolver->isSettingEnabled('gradebook.gradebook_hide_table'),
             'reportScoreStyle' => $this->getReportScoreStyle(),
             'customScoreStandalone' => false,
-            'useExerciseScoreSettingsInCategories' => $this->isSettingEnabled(
+            'useExerciseScoreSettingsInCategories' => $this->contextResolver->isSettingEnabled(
                 'gradebook.gradebook_use_exercise_score_settings_in_categories',
             ),
-            'useExerciseScoreSettingsInTotal' => $this->isSettingEnabled(
+            'useExerciseScoreSettingsInTotal' => $this->contextResolver->isSettingEnabled(
                 'gradebook.gradebook_use_exercise_score_settings_in_total',
             ),
             'exerciseMinScore' => $this->getNumericSetting('exercise.exercise_min_score'),

@@ -19,7 +19,7 @@
     </div>
 </nav>
 <div>
-  <h1>Optimization guide for Chamilo 2</h1>
+  <h1>Optimization guide for Chamilo 3</h1>
   <p>
 Although we strive to make Chamilo as lightweight and fast as possible
   out of the box, some optimizations can have a averse effect on some
@@ -37,15 +37,14 @@ Although we strive to make Chamilo as lightweight and fast as possible
   <h2>HTTP Caching</h2>
   Thanks to Chamilo 3's integration with the Symfony controller, you can now use HTTP caching relatively easily to improve performance.<br>
   This is still experimental, so please report any issues you encounter.<br>
-  To enable, edit the config/packages/framework.yaml file and add the following lines at the end of the file:<br>
+  To enable, edit the config/packages/prod/framework.yaml file and add the following lines at the end of the file:<br>
       <pre>
-          when@prod:
-            framework:
-              http_cache: true
+framework:
+    http_cache: true
       </pre>
 
   <h2>Enabling OpCache</h2>
-  OpCache is a PHP extension that can speed up the execution of PHP scripts by pre-interpreting parts of scripts that are relatively static.<br>
+  OpCache (bundled into PHP as of v8.5) is a PHP extension that can speed up the execution of PHP scripts by pre-interpreting parts of scripts that are relatively static.<br>
   This is great for performance, but it is kind of tricky to set up correctly.<br>
   When installing the php-opcache extension (which can also be packaged into your PHP installation from the start),
   you will find a .ini file in the php configuration folder (on Ubuntu <em>/etc/php/8.3/apache2/conf.d/10-opcache.ini</em>) that looks like this:<br>
@@ -57,6 +56,7 @@ Although we strive to make Chamilo as lightweight and fast as possible
   This is not the case. You still have to add at least the "enable" option set to "1" for OpCache to be working.<br>
   This is our recommendation for moderately-sized Chamilo systems:<br>
   <pre>
+      ; This first line is not necessary in PHP8.5+
       zend_extension=opcache.so
       opcache.jit=off
       opcache.enable=1

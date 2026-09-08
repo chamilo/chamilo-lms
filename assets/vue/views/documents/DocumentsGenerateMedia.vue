@@ -172,6 +172,13 @@
         <p class="text-xs text-gray-600">{{ t("Tip: click a preset to quickly set the size.") }}</p>
       </div>
 
+      <BaseAdvancedSettingsButton
+        v-if="showResourceLanguageAdvancedSettings"
+        v-model="showAdvancedSettings"
+      >
+        <ResourceLanguageSelector v-model="selectedLanguage" />
+      </BaseAdvancedSettingsButton>
+
       <!-- Actions -->
       <div class="flex flex-wrap items-center gap-2">
         <BaseButton
@@ -373,6 +380,10 @@ function isResourceLanguageActive(language) {
 }
 
 const showResourceLanguageAdvancedSettings = computed(() => {
+  if ("true" !== platformConfig.getSetting("language.language_by_resource")) {
+    return false
+  }
+
   const languages = Array.isArray(window.languages) ? window.languages : []
 
   return languages.filter(isResourceLanguageActive).length > 1
@@ -381,6 +392,77 @@ const showResourceLanguageAdvancedSettings = computed(() => {
 const folders = ref([])
 const selectedFolderId = ref(null)
 const selectedLanguage = ref("")
+
+function normalizeLanguageIso(value) {
+  const raw = String(value || "").trim()
+  if (!raw) {
+    return ""
+  }
+
+  const normalizedRaw = raw.replace("-", "_").toLowerCase()
+  const languages = Array.isArray(window.languages) ? window.languages : []
+  const exact = languages.find((language) => {
+    const candidates = [
+      language?.isocode,
+      language?.isoCode,
+      language?.englishName,
+      language?.english_name,
+      language?.originalName,
+      language?.original_name,
+    ]
+
+    return candidates.some(
+      (candidate) => String(candidate || "").replace("-", "_").toLowerCase() === normalizedRaw,
+    )
+  })
+
+  if (exact) {
+    return String(exact.isocode || exact.isoCode || "")
+  }
+
+  const shortCode = normalizedRaw.split("_")[0]
+  const byShortCode = languages.find((language) => {
+    const code = String(language?.isocode || language?.isoCode || "")
+      .replace("-", "_")
+      .toLowerCase()
+
+    return code === shortCode || code.startsWith(`${shortCode}_`)
+  })
+
+  return String(byShortCode?.isocode || byShortCode?.isoCode || "")
+}
+
+async function applyDefaultLanguageFromContext() {
+  if (selectedLanguage.value) {
+    return
+  }
+
+  let defaultLanguage = normalizeLanguageIso(route.query.course_language)
+
+  if (!defaultLanguage && cid) {
+    try {
+      const response = await fetch(`/api/courses/${cid}`, {
+        credentials: "same-origin",
+        headers: { Accept: "application/json" },
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        defaultLanguage = normalizeLanguageIso(data?.courseLanguage || data?.course_language || data?.language)
+      }
+    } catch (error) {
+      console.warn("[DocumentsGenerateMedia] Failed to load course language.", error)
+    }
+  }
+
+  if (!defaultLanguage) {
+    defaultLanguage = normalizeLanguageIso(securityStore.user?.locale)
+  }
+
+  if (defaultLanguage && !selectedLanguage.value) {
+    selectedLanguage.value = defaultLanguage
+  }
+}
 
 const fileName = ref("")
 const prompt = ref("")
@@ -1147,6 +1229,7 @@ onMounted(async () => {
 
     folders.value = await fetchFolders()
     selectedFolderId.value = normalizeResourceNodeId(route.params.node) || folders.value[0]?.value || null
+    await applyDefaultLanguageFromContext()
 
     if (typeOptions.value.length === 1) {
       selectedType.value = typeOptions.value[0].value

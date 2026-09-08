@@ -75,13 +75,13 @@
             v-if="showAdvancedSettings"
             v-model="showAdvancedSettingsPanel"
           >
-            <BaseSelect
+            <ResourceLanguageSelector
               v-if="resourceLanguageEnabled"
               id="resource_language"
               v-model="form.language"
-              :label="t('Language')"
               name="language"
               :options="translatedLanguages"
+              :hide-when-single-language="false"
             />
           </BaseAdvancedSettingsButton>
         </div>
@@ -116,8 +116,8 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
-import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import courseProgressService from "../../services/courseProgressService"
 

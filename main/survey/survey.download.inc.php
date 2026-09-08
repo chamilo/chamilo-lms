@@ -83,38 +83,56 @@ function check_download_survey($course, $invitation, $doc_url)
         $survey_invitation['survey_id'] = $row['survey_id'];
     }
 
-    $doc_url = Database::escape_string($doc_url);
-    $survey_invitation['survey_id'] = Database::escape_string($survey_invitation['survey_id']);
+    $surveyId = (int) $survey_invitation['survey_id'];
 
-    $sql = "SELECT count(*)
-            FROM $table_survey
-            WHERE
-                c_id = $course_id AND
-                survey_id = ".$survey_invitation['survey_id']." AND (
-                    title LIKE '%$doc_url%'
-                    or subtitle LIKE '%$doc_url%'
-                    or intro LIKE '%$doc_url%'
-                    or surveythanks LIKE '%$doc_url%'
-                )
-            UNION
-                SELECT count(*)
-                FROM $table_survey_question
+    // The document is only served when the survey itself references it. Spaces reach this
+    // point as "+" (mod_rewrite) while the survey text may spell them out or encode them,
+    // so every spelling has to be accepted.
+    $docUrlVariants = array_unique(
+        [
+            $doc_url,
+            str_replace('+', ' ', $doc_url),
+            str_replace('+', '%20', $doc_url),
+        ]
+    );
+
+    $searchedFields = [
+        $table_survey => ['title', 'subtitle', 'intro', 'surveythanks'],
+        $table_survey_question => ['survey_question', 'survey_question_comment'],
+        $table_survey_question_option => ['option_text'],
+    ];
+
+    $documentIsInSurvey = false;
+    foreach ($searchedFields as $table => $fields) {
+        $conditions = [];
+        foreach ($fields as $field) {
+            foreach ($docUrlVariants as $docUrlVariant) {
+                // "%" and "_" are LIKE wildcards: neutralise them after the string escaping
+                // so a crafted file name cannot widen the match.
+                $escapedUrl = str_replace(
+                    ['%', '_'],
+                    ['\\%', '\\_'],
+                    Database::escape_string($docUrlVariant)
+                );
+                $conditions[] = "$field LIKE '%$escapedUrl%'";
+            }
+        }
+
+        $sql = "SELECT count(*) AS total
+                FROM $table
                 WHERE
                     c_id = $course_id AND
-                    survey_id = ".$survey_invitation['survey_id']." AND (
-                        survey_question LIKE '%$doc_url%' OR
-                        survey_question_comment LIKE '%$doc_url%'
-                    )
-            UNION
-                SELECT count(*)
-                FROM $table_survey_question_option
-                WHERE
-                    c_id = $course_id AND
-                    survey_id = ".$survey_invitation['survey_id']." AND (
-                        option_text LIKE '%$doc_url%'
-                    )";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) == 0) {
+                    survey_id = $surveyId AND
+                    (".implode(' OR ', $conditions).")";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+        if (!empty($row['total'])) {
+            $documentIsInSurvey = true;
+            break;
+        }
+    }
+
+    if (!$documentIsInSurvey) {
         echo Display::return_message(get_lang('WrongInvitationCode'), 'error', false);
         exit;
     }

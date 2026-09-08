@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookGraph;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookScoreDisplay;
+use Chamilo\CoreBundle\Helpers\Gradebook\GradebookReportHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -23,7 +24,7 @@ final readonly class GradebookGraphProvider implements ProviderInterface
 {
     public function __construct(
         private RequestStack $requestStack,
-        private GradebookReportProvider $reportProvider,
+        private GradebookReportHelper $reportHelper,
         private GradebookContextResolver $contextResolver,
         private EntityManagerInterface $entityManager,
     ) {}
@@ -39,7 +40,7 @@ final readonly class GradebookGraphProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $report = $this->reportProvider->buildReport($request, true, true);
+        $report = $this->reportHelper->buildReport($request, true, true);
         $resource = new GradebookGraph();
         $resource->context = $report->context;
         $resource->category = $report->category;

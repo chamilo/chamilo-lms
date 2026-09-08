@@ -26,7 +26,7 @@ const isLoadingAssign = ref(false)
 
 const userFinder = ref({ selectedUsers: [] })
 
-/** Map of userIri → current auth_source string (or null) for the selected URL */
+/** Map of userIri → current auth_source strings (possibly several) for the selected URL */
 const currentAuthSourceMap = ref({})
 
 async function fetchCurrentAuthSources(accessUrlIri) {
@@ -55,7 +55,7 @@ const selectedUsersWithAuthSource = computed(() =>
     const current = currentAuthSourceMap.value[iri]
     return {
       ...user,
-      roleLabel: current ? `${t("Current")}: ${current}` : t("No auth source"),
+      roleLabel: current?.length ? `${t("Current")}: ${current.join(", ")}` : t("No auth source"),
     }
   }),
 )

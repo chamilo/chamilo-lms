@@ -240,13 +240,14 @@ class AccessUrlController extends AbstractController
     }
 
     /**
-     * Returns the current auth_source (if any) for a list of users on a given access URL.
+     * Returns the current auth_source(s) (if any) for a list of users on a given access URL.
+     * A user may have more than one authentication method configured for the same URL.
      *
      * Query parameters:
      *   access_url  – IRI of the AccessUrl entity
      *   users[]     – one or more IRIs of User entities
      *
-     * Response: { "/api/users/42": "platform", "/api/users/99": null, ... }
+     * Response: { "/api/users/42": ["platform", "extldap"], "/api/users/99": [], ... }
      */
     #[Route('/auth-sources/users-current', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
@@ -277,10 +278,7 @@ class AccessUrlController extends AbstractController
                 continue;
             }
 
-            $sources = $user->getAuthSourcesByUrl($accessUrl);
-            $result[$userIri] = $sources->count() > 0
-                ? $sources->first()->getAuthentication()
-                : null;
+            $result[$userIri] = $user->getAuthSourcesAuthentications($accessUrl);
         }
 
         return new JsonResponse($result);

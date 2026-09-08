@@ -288,6 +288,49 @@ if (!empty($_POST['updatePath'])) {
 
 $checkMigrationStatus = [];
 $isUpdateAvailable = isUpdateAvailable();
+
+if ($isUpdateAvailable) {
+    try {
+        $databaseVersion = getChamiloDatabaseVersion(Database::getManager()->getConnection());
+        if ('' !== $databaseVersion) {
+            // For Chamilo 2.x and newer, the database is the reliable source version.
+            // The current 3.x code tree already contains its own version.php, so using
+            // the target code path here would incorrectly report the target version.
+            $my_old_version = $databaseVersion;
+        }
+    } catch (\Throwable $e) {
+        error_log('Installer: Could not determine source database version: '.$e->getMessage());
+    }
+}
+
+$isModernUpdate = $isUpdateAvailable
+    && '' !== $my_old_version
+    && version_compare($my_old_version, '2.0.0', '>=')
+    && version_compare($my_old_version, $new_version, '<');
+
+if ($isModernUpdate && empty($proposedUpdatePath)) {
+    // Chamilo 2.x already stores DB configuration in .env and its 2.x schema no
+    // longer needs the 1.11 source-tree path. Keep the active update tree as the
+    // path so the wizard can continue without asking for a legacy directory.
+    $proposedUpdatePath = api_add_trailing_slash(api_get_path(SYMFONY_SYS_PATH));
+    $emptyUpdatePath = false;
+}
+
+if ($isModernUpdate) {
+    $existingEncryptMethod = get_config_param('password_encryption', $proposedUpdatePath);
+    if (is_string($existingEncryptMethod) && '' !== trim($existingEncryptMethod)) {
+        $encryptPassForm = trim($existingEncryptMethod);
+    }
+}
+
+// Step2.vue intentionally navigates to this GET URL for the upgrade action.
+// Normalize it into the same internal state as the historical POST flow.
+if ('step2_update_8' === ($_GET['step'] ?? '')) {
+    $_POST['step2_update_8'] = '1';
+    $_POST['updatePath'] = $proposedUpdatePath;
+    $_POST['old_version'] = $my_old_version;
+}
+
 if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) {
     if (isset($_POST['step2_install'])) {
         $installType = 'new';
@@ -299,7 +342,8 @@ if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($
             $proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYMFONY_SYS_PATH) : $_POST['updatePath']);
 
             if (file_exists($proposedUpdatePath)) {
-                if (1 === preg_match('/^1\.11\.\d+$/', (string) $my_old_version)) {
+                $isLegacy111Update = 1 === preg_match('/^1\.11\.\d+$/', (string) $my_old_version);
+                if ($isLegacy111Update || $isModernUpdate) {
                     $_POST['step2'] = 1;
                 } else {
                     $badUpdatePath = true;

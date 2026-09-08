@@ -179,24 +179,25 @@
     >
       <Column class="w-12">
         <template #header>
-          <input
+          <BaseCheckbox
+            id="available-user-select-all"
+            v-model="allSelected"
             :aria-label="t('Select all')"
-            class="h-4 w-4 cursor-pointer rounded border-gray-30"
-            type="checkbox"
-            :checked="allSelected"
             :disabled="users.length === 0 || !canSubscribe"
-            :indeterminate.prop="selectionIndeterminate"
-            @change="toggleAll($event.target.checked)"
+            :indeterminate="selectionIndeterminate"
+            label=""
+            name="select_all"
           />
         </template>
         <template #body="{ data }">
-          <input
+          <BaseCheckbox
+            :id="`available-user-select-${data.id}`"
+            v-model="selectedUserIds"
             :aria-label="t('Select user')"
-            class="h-4 w-4 cursor-pointer rounded border-gray-30"
-            type="checkbox"
-            :checked="selectedUserIds.includes(data.id)"
             :disabled="!canSubscribe"
-            @change="toggleSelection(data.id, $event.target.checked)"
+            label=""
+            name="selected_users"
+            :value="data.id"
           />
         </template>
       </Column>
@@ -264,6 +265,7 @@ import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
@@ -317,9 +319,17 @@ const profilingFieldOptions = computed(() => [
 const selectedProfilingField = computed(() =>
   profilingFields.value.find((field) => String(field.id) === String(extraFieldIdDraft.value)),
 )
-const allSelected = computed(
-  () => users.value.length > 0 && users.value.every((user) => selectedUserIds.value.includes(user.id)),
-)
+const allSelected = computed({
+  get: () => users.value.length > 0 && users.value.every((user) => selectedUserIds.value.includes(user.id)),
+  /**
+   * Selects every listed user, or clears the selection.
+   *
+   * @param {boolean} checked
+   */
+  set: (checked) => {
+    selectedUserIds.value = checked ? users.value.map((user) => user.id) : []
+  },
+})
 const selectionIndeterminate = computed(() => selectedUserIds.value.length > 0 && !allSelected.value)
 
 function requestParams() {
@@ -423,19 +433,6 @@ function onSort(event) {
   sortField.value = event.sortField || "lastname"
   sortOrder.value = Number(event.sortOrder) < 0 ? "desc" : "asc"
   loadUsers()
-}
-
-function toggleSelection(userId, checked) {
-  if (checked) {
-    selectedUserIds.value = [...new Set([...selectedUserIds.value, userId])]
-    return
-  }
-
-  selectedUserIds.value = selectedUserIds.value.filter((id) => id !== userId)
-}
-
-function toggleAll(checked) {
-  selectedUserIds.value = checked ? users.value.map((user) => user.id) : []
 }
 
 function subscribeSelected() {

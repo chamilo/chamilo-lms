@@ -43,23 +43,17 @@
       {{ t("To view graph score rule must be enabled") }}
     </div>
 
-    <div v-else class="grid gap-4 lg:grid-cols-2">
-      <article
+    <div
+      v-else
+      class="grid gap-4 lg:grid-cols-2"
+    >
+      <GradebookDistributionChart
         v-for="resource in graph?.resources || []"
         :key="resource.key"
-        class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
-      >
-        <h2 class="mb-4 font-semibold text-gray-90">{{ resource.title }}</h2>
-        <div class="space-y-3">
-          <div v-for="bucket in resource.distribution" :key="bucket.label" class="grid grid-cols-[minmax(6rem,auto)_1fr_auto] items-center gap-3">
-            <span class="truncate text-sm text-gray-700">{{ bucket.label }}</span>
-            <div class="h-4 overflow-hidden rounded bg-gray-100">
-              <div class="h-full rounded bg-primary" :style="{ width: `${bucket.widthPercent}%` }" />
-            </div>
-            <span class="min-w-8 text-right text-sm font-semibold text-gray-90">{{ bucket.count }}</span>
-          </div>
-        </div>
-      </article>
+        :average="resource.average"
+        :distribution="resource.distribution"
+        :title="resource.title"
+      />
     </div>
   </section>
 </template>
@@ -69,6 +63,7 @@ import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import GradebookDistributionChart from "../../components/gradebook/GradebookDistributionChart.vue"
 import gradebookService from "../../services/gradebookService"
 
 const { t } = useI18n()
@@ -86,7 +81,11 @@ const categorySubtitle = computed(() => {
   return String(graph.value?.category?.title || "").trim()
 })
 
-const flatRoute = computed(() => ({ name: "GradebookFlatView", params: { node: route.params.node }, query: { ...route.query } }))
+const flatRoute = computed(() => ({
+  name: "GradebookFlatView",
+  params: { node: route.params.node },
+  query: { ...route.query },
+}))
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -104,7 +103,8 @@ async function loadGraph() {
       categoryId: getQueryValue(route.query.categoryId),
     })
   } catch (error) {
-    errorMessage.value = error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("No data available")
+    errorMessage.value =
+      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("No data available")
   } finally {
     isLoading.value = false
   }

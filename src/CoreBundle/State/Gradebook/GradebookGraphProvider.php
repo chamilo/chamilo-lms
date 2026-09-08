@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookGraph;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookScoreDisplay;
+use Chamilo\CoreBundle\Helpers\Gradebook\GradebookReportHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -23,7 +24,7 @@ final readonly class GradebookGraphProvider implements ProviderInterface
 {
     public function __construct(
         private RequestStack $requestStack,
-        private GradebookReportProvider $reportProvider,
+        private GradebookReportHelper $reportHelper,
         private GradebookContextResolver $contextResolver,
         private EntityManagerInterface $entityManager,
     ) {}
@@ -39,7 +40,7 @@ final readonly class GradebookGraphProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $report = $this->reportProvider->buildReport($request, true, true);
+        $report = $this->reportHelper->buildReport($request, true, true);
         $resource = new GradebookGraph();
         $resource->context = $report->context;
         $resource->category = $report->category;
@@ -92,6 +93,7 @@ final readonly class GradebookGraphProvider implements ProviderInterface
             $upperLimitIncluded,
             $report->rows,
             $report->settings,
+            true,
         );
         $resource->enabled = true;
 
@@ -112,12 +114,14 @@ final readonly class GradebookGraphProvider implements ProviderInterface
         bool $upperLimitIncluded,
         array $rows,
         array $settings,
+        bool $withAverage = false,
     ): array {
         $counts = [];
         foreach ($ranges as $range) {
             $counts[$range['display']] = 0;
         }
 
+        $percentages = [];
         foreach ($rows as $row) {
             $result = 'total' === $key ? ($row['total'] ?? null) : ($row['scores'][$key] ?? null);
             $percentage = 0.0;
@@ -130,25 +134,51 @@ final readonly class GradebookGraphProvider implements ProviderInterface
                 }
                 $percentage = is_numeric($result['percentage'] ?? null) ? (float) $result['percentage'] : 0.0;
             }
+            $percentages[] = $percentage;
             $label = $this->resolveDisplay($percentage, $ranges, $upperLimitIncluded);
             if (null !== $label) {
                 $counts[$label] = ($counts[$label] ?? 0) + 1;
             }
         }
 
-        $maximum = max([1, ...array_values($counts)]);
+        // Ascending, so the lowest range is the leftmost bar of the chart.
         $distribution = [];
-        foreach (array_reverse($ranges) as $range) {
-            $label = $range['display'];
-            $count = $counts[$label] ?? 0;
+        foreach ($ranges as $range) {
             $distribution[] = [
-                'label' => $label,
-                'count' => $count,
-                'widthPercent' => round(($count / $maximum) * 100, 2),
+                'label' => $range['display'],
+                'count' => $counts[$range['display']] ?? 0,
             ];
         }
 
-        return ['key' => $key, 'title' => $title, 'distribution' => $distribution];
+        return [
+            'key' => $key,
+            'title' => $title,
+            'distribution' => $distribution,
+            'average' => $withAverage ? $this->buildAverage($percentages, $ranges, $upperLimitIncluded) : null,
+        ];
+    }
+
+    /**
+     * Averages the same values the bars count, so the point never contradicts them:
+     * a row without a result weighs as 0, exactly as it does in the lowest bucket.
+     *
+     * @param list<float>                                $percentages
+     * @param list<array{score: float, display: string}> $ranges
+     *
+     * @return array<string, mixed>|null
+     */
+    private function buildAverage(array $percentages, array $ranges, bool $upperLimitIncluded): ?array
+    {
+        if ([] === $percentages) {
+            return null;
+        }
+
+        $average = array_sum($percentages) / \count($percentages);
+
+        return [
+            'percentage' => round($average, 2),
+            'label' => $this->resolveDisplay($average, $ranges, $upperLimitIncluded),
+        ];
     }
 
     /**

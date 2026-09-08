@@ -1,3 +1,16 @@
+parameters:
+    # Fallback used only until the real DB server version is known (a fresh
+    # checkout with no .env yet, or a packaging build with no reachable
+    # database). Without server_version below, Doctrine must open a live
+    # connection to auto-detect the platform the moment any entity metadata
+    # is touched -- which happens during ordinary kernel boot (e.g.
+    # `assets:install`), long before a database is configured. The web
+    # installer detects and writes the real value on install; for a
+    # manually-configured .env/.env.local, run
+    # `bin/console chamilo:database:detect-server-version` once a DB is
+    # reachable. Either one always overrides this default.
+    env(DATABASE_SERVER_VERSION): '8.0.32'
+
 doctrine:
     dbal:
         dbname: '%env(DATABASE_NAME)%'
@@ -6,6 +19,7 @@ doctrine:
         host: '%env(DATABASE_HOST)%'
         port: '%env(DATABASE_PORT)%'
         driver: 'pdo_mysql'
+        server_version: '%env(DATABASE_SERVER_VERSION)%'
         charset: utf8mb4
         options:
             1002: "SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))"

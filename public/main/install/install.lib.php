@@ -1447,6 +1447,31 @@ function updateEnvFile($distFile, $envFile, $params)
     error_log("File env saved here: $envFile");
 }
 
+/**
+ * Pin the detected DB server version into an already-written .env, so Doctrine
+ * never needs a live connection just to resolve its platform (see
+ * config/packages/doctrine.yaml). Call this after updateEnvFile() and after a
+ * real connection to the target database has been established.
+ */
+function setEnvDatabaseServerVersion(string $envFile, string $version): void
+{
+    $line = "DATABASE_SERVER_VERSION='".escapeInstallerEnvValue($version)."'";
+
+    $contents = file_get_contents($envFile);
+    if (false === $contents) {
+        throw new \Exception("Could not read $envFile to pin DATABASE_SERVER_VERSION");
+    }
+
+    if (preg_match('/^DATABASE_SERVER_VERSION=.*$/m', $contents)) {
+        $contents = preg_replace('/^DATABASE_SERVER_VERSION=.*$/m', $line, $contents);
+    } else {
+        $contents = preg_replace('/^(DATABASE_PASSWORD=.*)$/m', "$1\n".$line, $contents, 1);
+    }
+
+    file_put_contents($envFile, $contents);
+    error_log("Pinned DATABASE_SERVER_VERSION=$version in $envFile");
+}
+
 function installTools($container, $manager, $upgrade = false)
 {
     error_log('installTools');

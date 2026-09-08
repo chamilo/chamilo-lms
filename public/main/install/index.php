@@ -463,6 +463,15 @@ if (isset($_POST['step2'])) {
         );
         $manager = Database::getManager();
 
+        try {
+            $detectedDbServerVersion = $manager->getConnection()->fetchOne('SELECT VERSION()');
+            if (is_string($detectedDbServerVersion) && '' !== trim($detectedDbServerVersion)) {
+                setEnvDatabaseServerVersion($envFile, trim($detectedDbServerVersion));
+            }
+        } catch (\Throwable $e) {
+            error_log('Could not detect DB server version: ' . $e->getMessage());
+        }
+
         $tmp = get_config_param_from_db('platformLanguage');
         if (!empty($tmp)) {
             $languageForm = $tmp;
@@ -674,6 +683,13 @@ if (isset($_POST['step2'])) {
             $dbSchemaManager = $conn->createSchemaManager();
             $platform = $conn->getDatabasePlatform();
 
+            $detectedDbServerVersion = null;
+            try {
+                $detectedDbServerVersion = $conn->fetchOne('SELECT VERSION()');
+            } catch (\Throwable $e) {
+                error_log('Could not detect DB server version: ' . $e->getMessage());
+            }
+
             // If there are tables, drop them (no DROP DATABASE required)
             try {
                 $tables = $dbSchemaManager->listTableNames();
@@ -752,6 +768,11 @@ if (isset($_POST['step2'])) {
             ];
 
             updateEnvFile($distFile, $envFile, $params);
+
+            if (is_string($detectedDbServerVersion) && '' !== trim($detectedDbServerVersion)) {
+                setEnvDatabaseServerVersion($envFile, trim($detectedDbServerVersion));
+            }
+
             (new Dotenv())->load($envFile);
 
             error_log('Load kernel');

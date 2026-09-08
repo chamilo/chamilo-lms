@@ -83,13 +83,13 @@
             v-model="showAdvancedSettingsPanel"
           >
             <div class="space-y-4">
-              <BaseSelect
+              <ResourceLanguageSelector
                 v-if="resourceLanguageEnabled && form.languages.length > 2"
                 id="resource_language"
                 v-model="form.language"
-                :label="t('Language')"
                 name="language"
                 :options="translatedLanguages"
+                :hide-when-single-language="false"
               />
 
               <BaseCheckbox
@@ -134,8 +134,8 @@ import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
-import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import courseDescriptionService from "../../services/courseDescriptionService"
 

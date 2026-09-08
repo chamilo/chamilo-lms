@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State\CourseDescription;
 
 use ApiPlatform\Metadata\Operation;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseDescription\CourseDescriptionItem;
 use Chamilo\CoreBundle\Entity\Course;
@@ -75,7 +75,7 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
         }
 
         $description = null;
-        if ($operation instanceof Put) {
+        if ($operation instanceof Patch) {
             $descriptionId = isset($uriVariables['iid']) ? (int) $uriVariables['iid'] : 0;
             $description = $this->getDescriptionFromOwnContext($descriptionId, $course, $session);
         } elseif (CCourseDescription::TYPE_CUSTOM !== $descriptionType) {

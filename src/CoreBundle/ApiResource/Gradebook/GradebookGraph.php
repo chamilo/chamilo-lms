@@ -19,12 +19,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
     shortName: 'GradebookGraph',
     operations: [
         new Get(
-            uriTemplate: '/gradebook/graph',
+            uriTemplate: '/gradebook/graph.{_format}',
             openapi: new Operation(
                 summary: 'Gradebook score-distribution graph data for the current course context',
                 parameters: [
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'categoryId', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'search', in: 'query', required: false, schema: ['type' => 'string']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN')

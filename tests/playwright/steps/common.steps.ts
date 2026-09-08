@@ -1885,6 +1885,32 @@ async function dismissBlockingUi(page: Page): Promise<void> {
   if (await cookieAccept.isVisible().catch(() => false)) {
     await cookieAccept.click({ timeout: 2_000 }).catch(() => {})
   }
+  // The Symfony Web Debug Toolbar is dev-env chrome, not part of the app, but it
+  // is position:fixed at the bottom of the viewport and intercepts the pointer
+  // event for anything underneath it — which includes the submit button of any
+  // dialog tall enough to reach down there.
+  //
+  // Real failure this fixes, reproduced locally against a dev box: toolForum.
+  // feature's "Create a forum" dialog (title + rich-text description + six
+  // checkboxes + two dates + an image picker) puts its "Create forum" button
+  // right under the toolbar. pressButton()'s dialog-scoped tier clicks with no
+  // force fallback, so the click retried for the FULL 90s test timeout, the call
+  // log repeating `<div class="sf-toolbar-icon"> ... intercepts pointer events`.
+  // Every scenario after it then failed in cascade for want of that forum.
+  //
+  // Hidden rather than removed: the toolbar carries the profiler token some
+  // debugging reads, and display:none is enough to stop it capturing clicks.
+  // Cheap on a prod-env box, where the element simply is not there.
+  const debugToolbar = page.locator(".sf-toolbar")
+  if ((await debugToolbar.count()) > 0) {
+    await debugToolbar
+      .evaluateAll((elements) => {
+        elements.forEach((element) => {
+          ;(element as HTMLElement).style.display = "none"
+        })
+      })
+      .catch(() => {})
+  }
 }
 
 async function clickFirstOrForce(locator: ReturnType<Page["locator"]>, page: Page): Promise<void> {

@@ -62,15 +62,15 @@ final readonly class GradebookCertificateExpirationsProvider implements Provider
 
         // requireManage: true — this list is teacher/admin only.
         $resolved = $this->contextResolver->resolve($request, true);
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
         $category = $this->contextResolver->getSelectedCategory(
             $request,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
             $rootCategory,
         );
 
@@ -83,7 +83,7 @@ final readonly class GradebookCertificateExpirationsProvider implements Provider
         $horizon = (clone $today)->modify("+{$daysAhead} days");
 
         $certificatesByUserId = [];
-        foreach ($this->contextResolver->getStudents($resolved['course'], $resolved['session']) as $student) {
+        foreach ($this->contextResolver->getStudents($resolved->course, $resolved->session) as $student) {
             $certificate = $this->certificateRepository->getCertificateByUserId(
                 (int) $category->getId(),
                 (int) $student->getId(),
@@ -148,9 +148,9 @@ final readonly class GradebookCertificateExpirationsProvider implements Provider
 
         $resource = new GradebookCertificateExpirations();
         $resource->context = [
-            'cid' => (int) $resolved['course']->getId(),
-            'sid' => (int) ($resolved['session']?->getId() ?? 0),
-            'gid' => $resolved['groupId'],
+            'cid' => (int) $resolved->course->getId(),
+            'sid' => (int) ($resolved->session?->getId() ?? 0),
+            'gid' => $resolved->groupId,
             'node' => $request->query->getInt('node'),
         ];
         $resource->category = [

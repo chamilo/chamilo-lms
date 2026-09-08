@@ -43,20 +43,20 @@ final readonly class GradebookBadgesProvider implements ProviderInterface
         }
 
         $resolved = $this->contextResolver->resolve($request);
-        if (!$resolved['rootCategory'] instanceof GradebookCategory) {
+        if (!$resolved->rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
         $requestedUserId = $request->query->getInt('userId');
-        $learnerId = $requestedUserId > 0 ? $requestedUserId : (int) $resolved['user']->getId();
-        $learner = $this->contextResolver->getStudentInContext($learnerId, $resolved['course'], $resolved['session']);
-        if (!$resolved['canManage'] && (int) $resolved['user']->getId() !== (int) $learner->getId()) {
+        $learnerId = $requestedUserId > 0 ? $requestedUserId : (int) $resolved->user->getId();
+        $learner = $this->contextResolver->getStudentInContext($learnerId, $resolved->course, $resolved->session);
+        if (!$resolved->canManage && (int) $resolved->user->getId() !== (int) $learner->getId()) {
             throw new AccessDeniedHttpException('Learners can only export their own badges.');
         }
 
         $issues = $this->entityManager->getRepository(SkillRelUser::class)->findBy([
             'user' => $learner,
-            'course' => $resolved['course'],
-            'session' => $resolved['session'],
+            'course' => $resolved->course,
+            'session' => $resolved->session,
         ]);
         $assertions = [];
         foreach ($issues as $issue) {
@@ -66,16 +66,16 @@ final readonly class GradebookBadgesProvider implements ProviderInterface
             $assertions[] = '/main/skills/assertion.php?'.http_build_query([
                 'user' => (int) $learner->getId(),
                 'skill' => (int) $issue->getSkill()->getId(),
-                'course' => (int) $resolved['course']->getId(),
-                'session' => (int) ($resolved['session']?->getId() ?? 0),
+                'course' => (int) $resolved->course->getId(),
+                'session' => (int) ($resolved->session?->getId() ?? 0),
             ]);
         }
 
         $resource = new GradebookBadges();
         $resource->context = [
-            'cid' => (int) $resolved['course']->getId(),
-            'sid' => (int) ($resolved['session']?->getId() ?? 0),
-            'gid' => $resolved['groupId'],
+            'cid' => (int) $resolved->course->getId(),
+            'sid' => (int) ($resolved->session?->getId() ?? 0),
+            'gid' => $resolved->groupId,
             'node' => $request->query->getInt('node'),
         ];
         $resource->learner = [

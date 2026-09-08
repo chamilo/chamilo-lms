@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Helpers\Gradebook\GradebookEvaluationResultsHelper;
 use Chamilo\CoreBundle\Helpers\Gradebook\GradebookLearnerReportHelper;
 use Chamilo\CoreBundle\Helpers\Gradebook\GradebookReportHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookExportService;
+use Chamilo\CoreBundle\State\Gradebook\GradebookContextResolver;
+use Chamilo\CoreBundle\State\Gradebook\GradebookCriteriaFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +39,8 @@ final readonly class GradebookExportController
         private GradebookReportHelper $reportHelper,
         private GradebookLearnerReportHelper $learnerReportHelper,
         private GradebookEvaluationResultsHelper $evaluationResultsHelper,
+        private GradebookContextResolver $contextResolver,
+        private GradebookCriteriaFactory $criteriaFactory,
         private GradebookExportService $exportService,
         private EntityManagerInterface $entityManager,
     ) {}
@@ -64,7 +68,10 @@ final readonly class GradebookExportController
             throw new BadRequestHttpException('The requested format is not supported for the Gradebook list view.');
         }
 
-        $report = $this->reportHelper->buildReport($request, true, true);
+        $report = $this->reportHelper->buildReport(
+            $this->contextResolver->resolve($request),
+            $this->criteriaFactory->reportFrom($request, exportAll: true, includeScores: true),
+        );
         if ('pdf' === $format && true === ($report->settings['hidePdfReportButton'] ?? false)) {
             throw new AccessDeniedHttpException('Gradebook PDF reports are disabled by platform settings.');
         }
@@ -79,7 +86,10 @@ final readonly class GradebookExportController
         }
 
         return $this->exportService->createEvaluationResponse(
-            $this->evaluationResultsHelper->buildReport($request),
+            $this->evaluationResultsHelper->buildReport(
+                $this->contextResolver->resolve($request),
+                $this->criteriaFactory->evaluationResultsFrom($request),
+            ),
             $format,
             $course->getTitle(),
         );
@@ -91,7 +101,10 @@ final readonly class GradebookExportController
             throw new BadRequestHttpException('Detailed learner reports can only be exported as PDF.');
         }
 
-        $report = $this->learnerReportHelper->buildReport($request);
+        $report = $this->learnerReportHelper->buildReport(
+            $this->contextResolver->resolve($request),
+            $this->criteriaFactory->learnerReportFrom($request),
+        );
         if (!$report->canManage && true === ($report->settings['hidePdfReportButton'] ?? false)) {
             throw new AccessDeniedHttpException('Gradebook PDF reports are disabled by platform settings.');
         }
@@ -105,7 +118,11 @@ final readonly class GradebookExportController
             throw new BadRequestHttpException('The learner summary can only be exported as PDF.');
         }
 
-        $report = $this->reportHelper->buildReport($request, true, false);
+        $resolved = $this->contextResolver->resolve($request);
+        $report = $this->reportHelper->buildReport(
+            $resolved,
+            $this->criteriaFactory->reportFrom($request, exportAll: true, includeScores: false),
+        );
         $reports = [];
         foreach ($report->rows as $row) {
             $user = \is_array($row['user'] ?? null) ? $row['user'] : [];
@@ -113,7 +130,10 @@ final readonly class GradebookExportController
             if ($userId <= 0) {
                 continue;
             }
-            $reports[] = $this->learnerReportHelper->buildReport($request, $userId);
+            $reports[] = $this->learnerReportHelper->buildReport(
+                $resolved,
+                $this->criteriaFactory->learnerReportFrom($request, $userId),
+            );
         }
 
         return $this->exportService->createStudentsPdfResponse(

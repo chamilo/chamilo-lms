@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Helpers\Gradebook;
 
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookReport;
+use Chamilo\CoreBundle\Dto\Gradebook\GradebookContext;
+use Chamilo\CoreBundle\Dto\Gradebook\GradebookReportCriteria;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
@@ -26,7 +28,6 @@ use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -50,33 +51,24 @@ final readonly class GradebookReportHelper
         private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
-    /**
-     * @param bool|null $exportAll null reads the "all" query parameter; callers that
-     *                             always need every row pass true
-     */
-    public function buildReport(
-        Request $request,
-        ?bool $exportAll = null,
-        ?bool $includeScoresOverride = null,
-    ): GradebookReport {
-        $exportAll ??= $this->getBooleanQuery($request, 'all', false);
-        $resolved = $this->contextResolver->resolve($request);
-        $course = $resolved['course'];
-        $session = $resolved['session'];
-        $groupId = $resolved['groupId'];
+    public function buildReport(GradebookContext $resolved, GradebookReportCriteria $criteria): GradebookReport
+    {
+        $course = $resolved->course;
+        $session = $resolved->session;
+        $groupId = $resolved->groupId;
         // Not the resolver's own canManage: that one answers "may edit", which is
         // false in the student view, and this report stays readable there.
         $this->assertCanViewReport();
 
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
-            return $this->emptyReport($request, $course, $session, $groupId);
+            return $this->emptyReport($criteria, $course, $session, $groupId);
         }
 
-        $category = $this->contextResolver->getSelectedCategory($request, $course, $session, $rootCategory);
+        $category = $this->selectCategory($criteria, $course, $session, $rootCategory);
         $report = new GradebookReport();
-        $includeScores = $includeScoresOverride ?? $this->getBooleanQuery($request, 'includeScores', true);
-        $report->context = $this->buildContext($request, $course, $session, $groupId);
+        $includeScores = $criteria->includeScores;
+        $report->context = $this->buildContext($criteria, $course, $session, $groupId);
         $report->category = $this->normalizeCategory($category);
         $report->columns = $includeScores ? $this->buildColumns($category, $course, $session, $groupId) : [];
         $report->extraFieldColumns = $includeScores ? $this->getExtraFieldDefinitions() : [];
@@ -89,11 +81,12 @@ final readonly class GradebookReportHelper
             );
         }
 
-        $page = max(1, $request->query->getInt('page', 1));
-        $itemsPerPage = min(100, max(1, $request->query->getInt('itemsPerPage', 20)));
-        $search = mb_strtolower(trim((string) $request->query->get('search', '')));
-        $sortBy = $this->normalizeSortBy((string) $request->query->get('sortBy', 'fullName'));
-        $sortDirection = 'desc' === strtolower((string) $request->query->get('sortDirection', 'asc')) ? 'desc' : 'asc';
+        $page = $criteria->page;
+        $itemsPerPage = $criteria->itemsPerPage;
+        $search = $criteria->search;
+        $sortBy = $criteria->sortBy;
+        $sortDirection = $criteria->sortDirection;
+        $exportAll = $criteria->exportAll;
 
         $students = $this->contextResolver->getStudents($course, $session);
         if ('' !== $search) {
@@ -618,21 +611,37 @@ final readonly class GradebookReportHelper
         );
     }
 
-    private function normalizeSortBy(string $sortBy): string
-    {
-        return \in_array($sortBy, ['fullName', 'firstName', 'lastName', 'username'], true) ? $sortBy : 'fullName';
+    /**
+     * The root category is the whole Gradebook, so asking for it explicitly is
+     * the same as asking for nothing.
+     */
+    private function selectCategory(
+        GradebookReportCriteria $criteria,
+        Course $course,
+        ?Session $session,
+        GradebookCategory $rootCategory,
+    ): GradebookCategory {
+        if ($criteria->categoryId <= 0 || $criteria->categoryId === (int) $rootCategory->getId()) {
+            return $rootCategory;
+        }
+
+        return $this->contextResolver->getCategoryInGradebook($criteria->categoryId, $rootCategory, $course, $session);
     }
 
     /**
      * @return array<string, int>
      */
-    private function buildContext(Request $request, Course $course, ?Session $session, int $groupId): array
-    {
+    private function buildContext(
+        GradebookReportCriteria $criteria,
+        Course $course,
+        ?Session $session,
+        int $groupId,
+    ): array {
         return [
             'cid' => (int) $course->getId(),
             'sid' => null !== $session ? (int) $session->getId() : 0,
             'gid' => $groupId,
-            'node' => $request->query->getInt('node'),
+            'node' => $criteria->node,
         ];
     }
 
@@ -663,16 +672,6 @@ final readonly class GradebookReportHelper
         }
 
         return $comments;
-    }
-
-    private function getBooleanQuery(Request $request, string $name, bool $default): bool
-    {
-        $value = $request->query->get($name);
-        if (null === $value || '' === $value) {
-            return $default;
-        }
-
-        return \in_array(strtolower((string) $value), ['1', 'true', 'yes', 'on'], true);
     }
 
     private function sameCategoryContext(GradebookCategory $category, Course $course, ?Session $session): bool
@@ -916,10 +915,14 @@ final readonly class GradebookReportHelper
         return $mainWeight;
     }
 
-    private function emptyReport(Request $request, Course $course, ?Session $session, int $groupId): GradebookReport
-    {
+    private function emptyReport(
+        GradebookReportCriteria $criteria,
+        Course $course,
+        ?Session $session,
+        int $groupId,
+    ): GradebookReport {
         $report = new GradebookReport();
-        $report->context = $this->buildContext($request, $course, $session, $groupId);
+        $report->context = $this->buildContext($criteria, $course, $session, $groupId);
         $report->settings = [
             'allowComments' => $this->contextResolver->isSettingEnabled('gradebook.allow_gradebook_comments'),
             'allowSkillRelItems' => $this->contextResolver->isSettingEnabled('skill.allow_skill_rel_items'),

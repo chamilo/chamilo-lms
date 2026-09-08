@@ -44,15 +44,15 @@ final readonly class GradebookScoringSettingsProvider implements ProviderInterfa
         }
 
         $resolved = $this->contextResolver->resolve($request);
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
         $category = $this->contextResolver->getSelectedCategory(
             $request,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
             $rootCategory,
         );
 
@@ -84,16 +84,16 @@ final readonly class GradebookScoringSettingsProvider implements ProviderInterfa
 
         $resource = new GradebookScoringSettings();
         $resource->context = [
-            'cid' => (int) $resolved['course']->getId(),
-            'sid' => (int) ($resolved['session']?->getId() ?? 0),
-            'gid' => $resolved['groupId'],
+            'cid' => (int) $resolved->course->getId(),
+            'sid' => (int) ($resolved->session?->getId() ?? 0),
+            'gid' => $resolved->groupId,
             'node' => $request->query->getInt('node'),
         ];
         $resource->category = [
             'id' => (int) $category->getId(),
             'title' => $category->getTitle(),
         ];
-        $resource->canManage = $resolved['canManage'] && $teachersCanChange;
+        $resource->canManage = $resolved->canManage && $teachersCanChange;
         $resource->customEnabled = $customEnabled;
         $resource->coloringEnabled = $coloringEnabled;
         $resource->upperLimitIncluded = $upperLimitIncluded;

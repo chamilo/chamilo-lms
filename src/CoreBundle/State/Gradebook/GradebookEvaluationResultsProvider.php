@@ -21,6 +21,8 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
 {
     public function __construct(
         private RequestStack $requestStack,
+        private GradebookContextResolver $contextResolver,
+        private GradebookCriteriaFactory $criteriaFactory,
         private GradebookEvaluationResultsHelper $evaluationResultsHelper,
     ) {}
 
@@ -35,6 +37,9 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        return $this->evaluationResultsHelper->buildReport($request);
+        return $this->evaluationResultsHelper->buildReport(
+            $this->contextResolver->resolve($request),
+            $this->criteriaFactory->evaluationResultsFrom($request),
+        );
     }
 }

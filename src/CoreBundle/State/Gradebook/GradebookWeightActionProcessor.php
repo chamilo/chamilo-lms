@@ -64,14 +64,14 @@ final readonly class GradebookWeightActionProcessor implements ProcessorInterfac
 
         $this->validateCsrfToken($data->submittedCsrfToken);
         $resolved = $this->contextResolver->resolve($request, true);
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
         $categoryId = (int) ($data->categoryId ?? 0);
         $category = $categoryId > 0
-            ? $this->contextResolver->getCategoryInGradebook($categoryId, $rootCategory, $resolved['course'], $resolved['session'])
+            ? $this->contextResolver->getCategoryInGradebook($categoryId, $rootCategory, $resolved->course, $resolved->session)
             : $rootCategory;
 
         if (null !== $category->getGradeModel()) {
@@ -83,9 +83,9 @@ final readonly class GradebookWeightActionProcessor implements ProcessorInterfac
 
         $action = strtolower(trim($data->action));
         if (self::ACTION_AUTO_DISTRIBUTE === $action) {
-            $this->autoDistribute($category, $resolved['course'], $resolved['session'], $resolved['user']);
+            $this->autoDistribute($category, $resolved->course, $resolved->session, $resolved->user);
         } elseif (self::ACTION_SAVE === $action) {
-            $this->saveWeights($category, $data->weights, $resolved['course'], $resolved['session'], $resolved['user']);
+            $this->saveWeights($category, $data->weights, $resolved->course, $resolved->session, $resolved->user);
         } else {
             throw new BadRequestHttpException('Unsupported Gradebook weight action.');
         }

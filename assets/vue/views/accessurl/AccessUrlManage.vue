@@ -188,6 +188,12 @@ onMounted(() => {
         type="secondary"
         :route="{ name: 'AccessUrlCourseCategories' }"
       />
+      <BaseButton
+        :label="t('Assign authentication sources')"
+        icon="account-key"
+        type="secondary"
+        :route="{ name: 'AccessUrlAuthSourcesAssign' }"
+      />
     </SectionHeader>
 
     <div

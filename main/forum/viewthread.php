@@ -111,7 +111,10 @@ switch ($action) {
         exit;
         break;
     case 'move':
-        if (isset($_GET['post'])) {
+        if (isset($_GET['post']) &&
+            api_is_allowed_to_edit(false, true) &&
+            !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
+        ) {
             $message = move_post_form();
             Display::addFlash(Display::return_message(get_lang($message), 'normal', false));
         }

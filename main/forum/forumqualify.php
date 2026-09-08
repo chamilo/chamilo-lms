@@ -177,7 +177,7 @@ if (($action == 'invisible' || $action == 'visible') &&
 ) {
     $message = approve_post($_GET['id'], $action);
 }
-if ($action == 'move' && isset($_GET['post'])) {
+if ($action == 'move' && isset($_GET['post']) && api_is_allowed_to_edit(false, true)) {
     $message = move_post_form();
 }
 

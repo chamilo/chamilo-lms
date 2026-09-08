@@ -2416,32 +2416,38 @@ Then(
   },
 )
 
-// Not ported — new, for toolForum.feature's teardown. public/main/template/
-// default/forum/list.html.twig (viewed directly) renders each forum as
-// `<div class="card-forum">` (not `.card`, so the generic card step above
-// can't find it) and each category as `<div class="category-forum">`.
-// Scoping matters here for a genuine, reproduced-live reason, not just
-// hygiene: "Forum Test"/"Forum Category Test" have no unique-name
-// constraint, so a rerun of this file against a database that already has
-// one (confirmed by simply running the file twice locally without
-// reseeding) leaves TWO of each on this same page — and a category's own
-// delete-category icon and a forum's own delete-forum icon both render via
-// the exact same Display::getMdiIcon(ActionIcon::DELETE, ...) call, i.e. the
-// identical `i.mdi-delete` class, as every OTHER category/forum's own delete
-// icon. An unscoped "I click the 'i.mdi-delete' element" resolves to
-// whichever renders FIRST in DOM order, which is not guaranteed to be the
-// one this run itself just created — silently tearing down (or acting on)
-// the wrong, stale duplicate instead.
+// Rescoped for the Vue forum tool, keeping both step phrases (toolForum.feature
+// is their only caller). The legacy Twig list these used to target is gone:
+// public/main/forum/'s own pages now deny access, and the course tool link
+// resolves to /resources/forum/{nodeId}/ (src/CoreBundle/Tool/Forum.php).
+//
+// The Vue list has no `.card`-style hook at all — every class on it is a
+// Tailwind utility, so there is nothing stable to filter on. What IS stable is
+// the semantics, confirmed by a live DOM dump: ForumCardList renders each
+// category as a `<section>` whose own title is its `<h2>`, and each forum as an
+// `<article>` whose own title is its `<a>`. Hence `getByRole` rather than
+// `getByText` for a forum — the exact same title string also appears in the
+// category's "forums in this category" summary, and getByText would match both,
+// putting two `<article>`s in the filter.
+//
+// Scoping stays load-bearing for the same reason as before: the action icons are
+// icon-only `<button title="Delete">` elements, and every category and forum on
+// the page renders its own identically-titled one. Pass the selector as
+// `button[title="..."]` (the title is the only identifier these carry).
+//
+// clickFirstOrForce, not a bare click(): in a dev-env run the Symfony debug
+// toolbar overlays the bottom of the viewport and intercepts the pointer event
+// on any row that scrolls under it — observed as
+// `<div class="sf-toolbar-icon"> ... intercepts pointer events` while driving
+// this exact list. The force retry inside that helper absorbs it.
 Then(
   "I click the {string} icon for the forum {string}",
   async ({ page }, selector: string, forumTitle: string) => {
     page.once("dialog", (dialog) => dialog.accept())
-    await page
-      .locator(".card-forum")
-      .filter({ has: page.getByText(forumTitle, { exact: true }) })
-      .locator(selector)
-      .first()
-      .click()
+    const scope = page
+      .locator("article")
+      .filter({ has: page.getByRole("link", { name: forumTitle, exact: true }) })
+    await clickFirstOrForce(scope.locator(selector), page)
   },
 )
 
@@ -2449,12 +2455,10 @@ Then(
   "I click the {string} icon for the forum category {string}",
   async ({ page }, selector: string, categoryTitle: string) => {
     page.once("dialog", (dialog) => dialog.accept())
-    await page
-      .locator(".category-forum")
-      .filter({ has: page.getByText(categoryTitle, { exact: true }) })
-      .locator(selector)
-      .first()
-      .click()
+    const scope = page
+      .locator("section")
+      .filter({ has: page.getByRole("heading", { name: categoryTitle, exact: true }) })
+    await clickFirstOrForce(scope.locator(selector), page)
   },
 )
 

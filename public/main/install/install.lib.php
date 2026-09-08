@@ -15,6 +15,9 @@ use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Query\Query;
+use Doctrine\Migrations\Version\Direction;
+use Doctrine\Migrations\Version\ExecutionResult;
+use Doctrine\Migrations\Version\Version;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
@@ -269,6 +272,7 @@ function set_file_folder_permissions()
 function get_config_param($param, $updatePath = '')
 {
     global $updateFromConfigFile;
+
     if (empty($updatePath) && !empty($_POST['updatePath'])) {
         $updatePath = $_POST['updatePath'];
     }
@@ -276,14 +280,83 @@ function get_config_param($param, $updatePath = '')
     if (empty($updatePath)) {
         $updatePath = api_get_path(SYMFONY_SYS_PATH);
     }
-    $updatePath = api_add_trailing_slash(str_replace('\\', '/', realpath($updatePath)));
+
+    $resolvedUpdatePath = realpath($updatePath);
+    if (false === $resolvedUpdatePath) {
+        return null;
+    }
+
+    $updatePath = api_add_trailing_slash(str_replace('\\', '/', $resolvedUpdatePath));
 
     if (empty($updateFromConfigFile)) {
-        // If update from previous install was requested,
+        // Chamilo 1.11.x keeps its connection/configuration values here.
         if (file_exists($updatePath.'app/config/configuration.php')) {
             $updateFromConfigFile = 'app/config/configuration.php';
+        } elseif (file_exists($updatePath.'.env')) {
+            // Chamilo 2.x no longer has app/config/configuration.php. During a
+            // 2.x -> 3.x web update, recover the equivalent values from .env.
+            try {
+                $contents = file_get_contents($updatePath.'.env');
+                if (false === $contents) {
+                    return null;
+                }
+
+                $env = (new Dotenv())->parse($contents, $updatePath.'.env');
+                $envMap = [
+                    'db_host' => 'DATABASE_HOST',
+                    'db_port' => 'DATABASE_PORT',
+                    'db_user' => 'DATABASE_USER',
+                    'db_password' => 'DATABASE_PASSWORD',
+                    'main_database' => 'DATABASE_NAME',
+                    'password_encryption' => 'APP_ENCRYPT_METHOD',
+                ];
+
+                if (isset($envMap[$param])) {
+                    return $env[$envMap[$param]] ?? null;
+                }
+
+                if ('root_sys' === $param) {
+                    return $updatePath;
+                }
+
+                if ('root_web' === $param) {
+                    return api_get_path(WEB_PATH);
+                }
+
+                if ('system_version' === $param) {
+                    try {
+                        $databaseVersion = get_config_param_from_db('chamilo_database_version');
+                        if (!empty($databaseVersion)) {
+                            return $databaseVersion;
+                        }
+                    } catch (\Throwable) {
+                        // Fall back to the package metadata below.
+                    }
+
+                    $versionFiles = [
+                        $updatePath.'version.php',
+                        $updatePath.'public/main/install/version.php',
+                    ];
+
+                    foreach ($versionFiles as $versionFile) {
+                        if (!is_file($versionFile)) {
+                            continue;
+                        }
+
+                        $versionInfo = require $versionFile;
+                        if (is_array($versionInfo) && !empty($versionInfo['new_version'])) {
+                            return (string) $versionInfo['new_version'];
+                        }
+                    }
+                }
+
+                return null;
+            } catch (\Throwable $e) {
+                error_log('Could not read modern Chamilo configuration from .env: '.$e->getMessage());
+
+                return null;
+            }
         } else {
-            // Give up recovering.
             return null;
         }
     }
@@ -1941,49 +2014,184 @@ function isUpdateAvailable(): bool
 }
 
 /**
+ * Return the migration PHP files configured for the web installer.
+ *
+ * @return string[]
+ */
+function getInstallerMigrationFiles(): array
+{
+    $configuration = require __DIR__.'/migrations.php';
+    $files = [];
+
+    foreach (($configuration['migrations_paths'] ?? []) as $migrationPath) {
+        $absolutePath = realpath(__DIR__.'/'.$migrationPath);
+        if (false === $absolutePath) {
+            continue;
+        }
+
+        foreach (glob($absolutePath.'/Version*.php') ?: [] as $file) {
+            $files[] = $file;
+        }
+    }
+
+    sort($files);
+
+    return array_values(array_unique($files));
+}
+
+/**
+ * Read the Chamilo database version from the settings table used by the source database.
+ */
+function getChamiloDatabaseVersion(Connection $connection): string
+{
+    $schema = $connection->createSchemaManager();
+
+    foreach (['settings_current', 'settings'] as $table) {
+        if (!$schema->tablesExist([$table])) {
+            continue;
+        }
+
+        try {
+            $version = $connection->fetchOne(
+                "SELECT selected_value FROM {$table} WHERE variable = :variable LIMIT 1",
+                ['variable' => 'chamilo_database_version']
+            );
+        } catch (\Throwable) {
+            continue;
+        }
+
+        if (is_string($version) && '' !== trim($version)) {
+            return trim($version);
+        }
+    }
+
+    return '';
+}
+
+/**
+ * A fresh Chamilo 2.x install is created from the final 2.x schema and therefore has
+ * no Doctrine migration metadata table. Before upgrading it to 3.x, mark the V200
+ * migration namespace as the existing schema baseline so Doctrine only executes the
+ * migrations introduced after the 2.x baseline.
+ */
+function baselineV200MigrationsForModernUpgrade(
+    DependencyFactory $dependency,
+    Connection $connection
+): int {
+    $databaseVersion = getChamiloDatabaseVersion($connection);
+    if (
+        '' === $databaseVersion
+        || version_compare($databaseVersion, '2.0.0', '<')
+        || version_compare($databaseVersion, '3.0.0', '>=')
+    ) {
+        return 0;
+    }
+
+    $metadataStorage = $dependency->getMetadataStorage();
+    $metadataStorage->ensureInitialized();
+    $executedMigrations = $metadataStorage->getExecutedMigrations();
+    $baselineCount = 0;
+    $migrationPath = realpath(__DIR__.'/../../../src/CoreBundle/Migrations/Schema/V200');
+
+    if (false === $migrationPath) {
+        throw new \RuntimeException('Could not resolve the V200 migration directory for the 2.x upgrade baseline.');
+    }
+
+    foreach (glob($migrationPath.'/Version*.php') ?: [] as $migrationFile) {
+        $className = pathinfo($migrationFile, PATHINFO_FILENAME);
+        $version = new Version('Chamilo\\CoreBundle\\Migrations\\Schema\\V200\\'.$className);
+
+        if ($executedMigrations->hasMigration($version)) {
+            continue;
+        }
+
+        $result = new ExecutionResult($version, Direction::UP, new \DateTimeImmutable());
+        $result->setTime(0.0);
+        $metadataStorage->complete($result);
+        ++$baselineCount;
+    }
+
+    if ($baselineCount > 0) {
+        error_log("Installer: registered {$baselineCount} V200 migration(s) as the Chamilo 2.x schema baseline.");
+    }
+
+    return $baselineCount;
+}
+
+/**
+ * Persist the target Chamilo database version after a successful web upgrade.
+ */
+function setChamiloDatabaseVersion(Connection $connection, string $version): void
+{
+    $schema = $connection->createSchemaManager();
+    $updated = false;
+
+    foreach (['settings_current', 'settings'] as $table) {
+        if (!$schema->tablesExist([$table])) {
+            continue;
+        }
+
+        $hasVersionSetting = $connection->fetchOne(
+            "SELECT 1 FROM {$table} WHERE variable = :variable LIMIT 1",
+            ['variable' => 'chamilo_database_version']
+        );
+        if (false === $hasVersionSetting || null === $hasVersionSetting) {
+            continue;
+        }
+
+        $connection->executeStatement(
+            "UPDATE {$table} SET selected_value = :version WHERE variable = :variable",
+            [
+                'version' => $version,
+                'variable' => 'chamilo_database_version',
+            ]
+        );
+        $updated = true;
+    }
+
+    if (!$updated) {
+        throw new \RuntimeException('Could not persist the upgraded Chamilo database version.');
+    }
+}
+
+/**
  * Check the current migration status.
  *
- * This function calculates the progress of the database migration by comparing the number of executed migrations
- * with the total number of migration files available in the system. It also retrieves the latest executed migration version.
- *
- * @return array {
- *     An array containing the following keys:
- *
- *     @type int    $progress_percentage The percentage of migrations that have been executed.
- *     @type string $current_migration   The version of the last executed migration, or null if no migrations have been executed.
- * }
+ * @return array{progress_percentage:int, current_migration:string}
  */
 function checkMigrationStatus(): array
 {
     Database::setManager(initializeEntityManager());
-    $manager = Database::getManager();
-    $connection = $manager->getConnection();
+    $connection = Database::getManager()->getConnection();
+    $totalMigrations = count(getInstallerMigrationFiles());
+    $schema = $connection->createSchemaManager();
 
-    $migrationFiles = glob(__DIR__ . '/../../../src/CoreBundle/Migrations/Schema/V200/Version*.php');
-    $totalMigrations = count($migrationFiles);
-
-    $executedMigrations = $connection->createQueryBuilder()
-        ->select('COUNT(*) as count')
-        ->from('version')
-        ->execute()
-        ->fetchOne();
-
-    $progress_percentage = 0;
-    if ($totalMigrations > 0) {
-        $progress_percentage = ($executedMigrations / $totalMigrations) * 100;
+    if (!$schema->tablesExist(['version'])) {
+        return [
+            'progress_percentage' => 0,
+            'current_migration' => '',
+        ];
     }
 
-    $current_migration = $connection->createQueryBuilder()
+    $executedMigrations = (int) $connection->fetchOne('SELECT COUNT(*) FROM version');
+    $progressPercentage = 0;
+    if ($totalMigrations > 0) {
+        $progressPercentage = (int) ceil(($executedMigrations / $totalMigrations) * 100);
+        $progressPercentage = min(100, max(0, $progressPercentage));
+    }
+
+    $currentMigration = $connection->createQueryBuilder()
         ->select('version')
         ->from('version')
         ->orderBy('executed_at', 'DESC')
+        ->addOrderBy('version', 'DESC')
         ->setMaxResults(1)
-        ->execute()
+        ->executeQuery()
         ->fetchOne();
 
     return [
-        'progress_percentage' => ceil($progress_percentage),
-        'current_migration' => $current_migration,
+        'progress_percentage' => $progressPercentage,
+        'current_migration' => is_string($currentMigration) ? $currentMigration : '',
     ];
 }
 
@@ -2125,6 +2333,7 @@ function executeMigration(): array
         moveLegacyVersionTable($connection);
 
         $dependency->getMetadataStorage()->ensureInitialized();
+        baselineV200MigrationsForModernUpgrade($dependency, $connection);
 
         $env = $_SERVER['APP_ENV'] ?? 'dev';
         $kernel = new Chamilo\Kernel($env, false);
@@ -2139,13 +2348,12 @@ function executeMigration(): array
         ]);
 
         $output = new BufferedOutput();
-        $application->run($input, $output);
-
-        $result = $output->fetch();
+        $migrationExitCode = $application->run($input, $output);
+        $migrationOutput = trim($output->fetch());
 
         createExtraConfigFile();
 
-        if (strpos($result, '[OK] Successfully migrated to version') !== false) {
+        if (0 === $migrationExitCode) {
             $demoCoursesInput = new ArrayInput([
                 'command' => 'chamilo:install-demo-courses-on-update',
             ]);
@@ -2176,18 +2384,29 @@ function executeMigration(): array
                 error_log('Could not upload the themes: '.trim($themesOutput->fetch()));
             }
 
+            $versionInfo = require __DIR__.'/version.php';
+            $targetVersion = (string) ($versionInfo['new_version'] ?? '');
+            if ('' === $targetVersion) {
+                throw new RuntimeException('Could not determine the target Chamilo version after migration.');
+            }
+
+            setChamiloDatabaseVersion($connection, $targetVersion);
+
             $resultStatus['status'] = true;
             $resultStatus['message'] = 'Migration and bundled demo course installation completed successfully.';
             $resultStatus['progress_percentage'] = 100;
         } else {
             $resultStatus['message'] = 'Migration completed with errors.';
+            if ('' !== $migrationOutput) {
+                $resultStatus['message'] .= ' '.$migrationOutput;
+            }
             $resultStatus['progress_percentage'] = 0;
         }
 
         $resultStatus['current_migration'] = getLastExecutedMigration($connection);
-    } catch (Exception $e) {
+    } catch (\Throwable $e) {
         $resultStatus['current_migration'] = getLastExecutedMigration($connection);
-        $resultStatus['message'] = 'Migration failed: ' . $e->getMessage();
+        $resultStatus['message'] = 'Migration failed: '.$e->getMessage();
     }
 
     return $resultStatus;

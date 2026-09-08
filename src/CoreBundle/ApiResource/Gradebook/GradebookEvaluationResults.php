@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Gradebook\GradebookEvaluationResultsProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -22,14 +21,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/gradebook/evaluation-results',
             openapi: new Operation(
                 summary: 'Manual Gradebook evaluation results for the current course context',
-                parameters: [
-                    new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'evaluationId', in: 'query', required: true, schema: ['type' => 'integer']),
-                ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_SESSION_MANAGER') or is_granted('ROLE_ADMIN')",
             name: 'get_gradebook_evaluation_results',
             provider: GradebookEvaluationResultsProvider::class,
+            // Declared here rather than in the openapi operation: a QueryParameter
+            // documents AND validates, while an openapi Parameter only documents,
+            // and a twin declaration there would hide this one.
             parameters: [
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
@@ -39,6 +37,20 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier. The group must belong to the course',
+                ),
+                'node' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Resource node of the course, which the provider checks against the course itself',
+                    required: true,
+                ),
+                'evaluationId' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Manual evaluation to read, which must belong to this course Gradebook',
+                    required: true,
                 ),
             ],
         ),

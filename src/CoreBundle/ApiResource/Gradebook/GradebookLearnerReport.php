@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLearnerReportProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -22,11 +21,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/gradebook/learner-report',
             openapi: new Operation(
                 summary: 'Detailed Gradebook report for one learner in the current course context',
-                parameters: [
-                    new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'categoryId', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'userId', in: 'query', required: false, schema: ['type' => 'integer']),
-                ],
             ),
             security: "is_granted('ROLE_ADMIN')
                 or is_granted('ROLE_CURRENT_COURSE_TEACHER')
@@ -36,6 +30,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 or is_granted('ROLE_SESSION_MANAGER')",
             name: 'get_gradebook_learner_report',
             provider: GradebookLearnerReportProvider::class,
+            // Declared here rather than in the openapi operation: a QueryParameter
+            // documents AND validates, while an openapi Parameter only documents,
+            // and a twin declaration there would hide this one.
             parameters: [
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
@@ -45,6 +42,23 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier. The group must belong to the course',
+                ),
+                'node' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Resource node of the course, which the provider checks against the course itself',
+                    required: true,
+                ),
+                'categoryId' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Gradebook category to report on. Defaults to the root category of the course',
+                ),
+                'userId' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Learner to report on. Defaults to the current user, who must be a learner of the course',
                 ),
             ],
         ),

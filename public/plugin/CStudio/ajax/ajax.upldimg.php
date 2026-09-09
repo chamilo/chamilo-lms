@@ -27,6 +27,12 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
 
         $idPage = get_int_from('id');
 
+        if (api_is_anonymous()) {
+            echo 'KO';
+
+            exit;
+        }
+
         if (!oel_ctr_rights($idPage)) {
             echo 'KO';
 
@@ -72,29 +78,33 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
         }
 
         if (!$fileSystem->fileExists($coursePageCache.'/'.$nameFile)) {
-            $stream = fopen(api_get_path(SYS_PUBLIC_PATH).$urSys, 'r');
-            $fileSystem->writeStream($coursePageCache.'/'.$nameFile, $stream);
-            fclose($stream);
+            $safeSourcePath = oel_resolve_safe_local_path(
+                api_get_path(SYS_PUBLIC_PATH).$urSys,
+                api_get_path(SYS_PUBLIC_PATH)
+            );
+            if (null !== $safeSourcePath) {
+                $stream = fopen($safeSourcePath, 'r');
+                $fileSystem->writeStream($coursePageCache.'/'.$nameFile, $stream);
+                fclose($stream);
+            }
         }
         if (!$fileSystem->fileExists($coursePageCache.'/'.$nameFile)) {
             $urSysDir = str_replace($VDB->w_get_path(WEB_PATH), $VDB->w_get_path(SYS_PATH), $urSys);
-            $stream = fopen($urSysDir, 'r');
-            $fileSystem->writeStream($coursePageCache.'/'.$nameFile, $stream);
-            fclose($stream);
-        }
-        if (!$fileSystem->fileExists($coursePageCache.'/'.$nameFile)) {
-            $stream = fopen($ur, 'r');
-            $fileSystem->writeStream($coursePageCache.'/'.$nameFile, $stream);
-            fclose($stream);
+            $safeSourcePath = oel_resolve_safe_local_path($urSysDir, $VDB->w_get_path(SYS_PATH));
+            if (null !== $safeSourcePath) {
+                $stream = fopen($safeSourcePath, 'r');
+                $fileSystem->writeStream($coursePageCache.'/'.$nameFile, $stream);
+                fclose($stream);
+            }
         }
 
         if ($fileSystem->fileExists($coursePageCache.'/'.$nameFile)) {
             $imgCacheProxy = $VDB->w_get_path(WEB_PLUGIN_PATH).'CStudio/img-cache.php?path=';
 
             if (1 == $isShort) {
-                echo $imgCacheProxy.'img_cache/'.$nameFile;
+                echo $imgCacheProxy.$nameFile;
             } else {
-                echo $imgCacheProxy.'img_cache/'.strtolower($localFolder).'/'.$nameFile;
+                echo $imgCacheProxy.strtolower($localFolder).'/'.$nameFile;
             }
         }
     }

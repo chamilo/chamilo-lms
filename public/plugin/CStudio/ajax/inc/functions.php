@@ -93,6 +93,37 @@ function recurseCopyFolderScoNoVideos($src, $dst): void
 }
 
 /**
+ * Resolve $candidatePath to a real, existing, regular file strictly contained
+ * within $allowedRoot. Defeats path traversal (../, absolute paths, symlink
+ * escapes) by canonicalising both paths with realpath() and checking
+ * containment on the canonical result, rather than blacklisting patterns in
+ * the untrusted input.
+ *
+ * Returns null when the path does not exist, is not a regular file, or
+ * resolves outside of $allowedRoot.
+ */
+function oel_resolve_safe_local_path(string $candidatePath, string $allowedRoot): ?string
+{
+    $realRoot = realpath($allowedRoot);
+    if (false === $realRoot) {
+        return null;
+    }
+
+    $realPath = realpath($candidatePath);
+    if (false === $realPath || !is_file($realPath)) {
+        return null;
+    }
+
+    $realRoot = rtrim($realRoot, \DIRECTORY_SEPARATOR).\DIRECTORY_SEPARATOR;
+
+    if (0 !== strncmp($realPath, $realRoot, \strlen($realRoot))) {
+        return null;
+    }
+
+    return $realPath;
+}
+
+/**
  * This method control rights user for editing a OeL page.
  *
  * @param mixed $idPage

@@ -36,8 +36,8 @@
 			<a href="{{ _p.web_plugin }}CStudio/editor/index.php?action=edit&{{ {'id': term.id}|url_encode() }}"
 			class="btn btn-success">
             <span class="fa fa-edit fa-fw" aria-hidden="true"></span></a>    
-			<a onclick="return confirm('Etes-vous sure ?')" 
-			href="{{ _p.web_plugin }}CStudio/oel_tools_teachdoc_list.php?action=delete&{{ {'id': term.id}|url_encode() }}"
+			<a onclick="return confirm('Are you sure?')"
+			href="{{ _p.web_plugin }}CStudio/oel_tools_teachdoc_list.php?action=delete&{{ {'id': term.id, 'cotk': cotk}|url_encode() }}"
 			class="btn btn-danger">
             <span class="fa fa-times fa-fw" aria-hidden="true"></span></a>
 			

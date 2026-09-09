@@ -86,6 +86,21 @@
                     $redirectUrl = str_replace('t@@d', '?', $redirectUrl);
                     $redirectUrl = str_replace('t@@@d', '&', $redirectUrl);
 
+                    // Only ever redirect within this same origin: strip any
+                    // attacker-supplied scheme/host down to a relative
+                    // path+query before either branch below builds on it, so
+                    // this can't become an open redirect to another domain.
+                    $requestUrlParts = parse_url($redirectUrl);
+                    if (!empty($requestUrlParts['host'])) {
+                        $currentHost = (string) ($_SERVER['HTTP_HOST'] ?? '');
+                        if ('' === $currentHost || 0 !== strcasecmp($requestUrlParts['host'], $currentHost)) {
+                            $redirectUrl = (string) ($requestUrlParts['path'] ?? '/');
+                            if (isset($requestUrlParts['query'])) {
+                                $redirectUrl .= '?'.$requestUrlParts['query'];
+                            }
+                        }
+                    }
+
                     if (1 === $quitExcept) {
                         $urlParts = parse_url($redirectUrl);
                         $path = (string) ($urlParts['path'] ?? '');

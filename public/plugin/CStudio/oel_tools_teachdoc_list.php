@@ -11,6 +11,8 @@ require_once __DIR__.'/teachdoc_hub.php';
 require_once __DIR__.'0_dal/dal.vdatabase.php';
 $VDB = new VirtualDatabase();
 
+require_once __DIR__.'/inc/csrf_token.php';
+
 $language = 'en';
 $platformLanguage = api_get_interface_language();
 $iso = api_get_language_isocode($platformLanguage);
@@ -36,6 +38,8 @@ if (!api_is_anonymous()) {
 
 $userId = (int) $user['id'];
 
+$cotk = generateCSRFToken($userId);
+
 $vers = 6;
 
 $plugin = teachdoc_hub::create();
@@ -60,6 +64,15 @@ $result = $VDB->query_to_array($sql);
 $countData = count($result);
 
 $action = isset($_GET['action']) ? $VDB->remove_XSS($_GET['action']) : 'add';
+
+// 'delete' is a state-changing action reachable via a plain GET link, so it
+// needs its own token check -- the POST-only cases below are covered by the
+// hidden 'cotk' field added to $form instead.
+if ('delete' === $action) {
+    if (!isset($_GET['cotk']) || false == validateCSRFToken($_GET['cotk'], $userId)) {
+        api_not_allowed(true);
+    }
+}
 
 $term = null;
 
@@ -101,6 +114,7 @@ $htmlHeadXtra[] = "<style>
 $form = new FormValidator('dictionary', 'post', api_get_self().'?action='.$action.'&id='.$id);
 
 $form->addText('title', 'Title', true);
+$form->addHidden('cotk', $cotk);
 
 $form->addButtonSave('&nbsp;&nbsp;'.get_lang('Save').'&nbsp;&nbsp;');
 
@@ -108,6 +122,10 @@ switch ($action) {
     case 'add':
         if ($form->validate()) {
             $values = $form->getSubmitValues();
+
+            if (false == validateCSRFToken($values['cotk'] ?? '', $userId)) {
+                api_not_allowed(true);
+            }
 
             $date = new DateTime();
             $year = $date->format('Y');
@@ -142,6 +160,11 @@ switch ($action) {
         $form->setDefaults($term);
         if ($form->validate()) {
             $values = $form->getSubmitValues();
+
+            if (false == validateCSRFToken($values['cotk'] ?? '', $userId)) {
+                api_not_allowed(true);
+            }
+
             $params = [
                 'title' => $values['title'],
             ];
@@ -169,6 +192,7 @@ switch ($action) {
 
 $tpl = new Template('TeachDoc HUB');
 $tpl->assign('terms', $terms);
+$tpl->assign('cotk', $cotk);
 $tpl->assign('form', $form->returnForm());
 
 $content = $tpl->fetch('/CStudio/view/page_list-v12.tpl');

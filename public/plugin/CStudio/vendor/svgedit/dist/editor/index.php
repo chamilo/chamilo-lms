@@ -12,31 +12,51 @@
       require_once __DIR__.'/../../../../0_dal/dal.global_lib.php';
       require_once __DIR__.'/../../../../0_dal/dal.vdatabase.php';
       $VDB = new VirtualDatabase();
-      
+
+      require_once __DIR__.'/../../../../ajax/inc/functions.php';
+      require_once __DIR__.'/../../../../inc/csrf_token.php';
+
+      $idPage = '';
+      $idPageHtmlTop = '';
+      $urlfile = '';
+      $namefile = '';
+
+      if (isset($_GET['idpg'])) {
+        $idPage = $_GET['idpg'];
+      }
+      if (isset($_GET['id'])) {
+        $idPageHtmlTop = $_GET['id'];
+      }
+      if (isset($_GET['ur'])) {
+        $urlfile = $_GET['ur'];
+        $namefile = basename($urlfile);
+      }
+
+      $oel_token = isset($_GET['cotk']) ? $_GET['cotk'] : '';
+
+      if (
+          $VDB->w_api_is_anonymous()
+          || false == validateCSRFToken($oel_token, $VDB->w_api_get_user_id())
+          || !oel_ctr_rights((int) $idPageHtmlTop)
+      ) {
+          exit('Context token is not valid or has expired. User rejected.');
+      }
+
+      $jsonFlags = \JSON_HEX_TAG | \JSON_HEX_AMP | \JSON_HEX_APOS | \JSON_HEX_QUOT;
+
       echo "<script>
           var _p = {
             web_plugin : '".$VDB->w_get_path(WEB_PLUGIN_PATH)."',
             web_editor : '".$VDB->w_get_path(WEB_PLUGIN_PATH)."adv_oel_tools_teachdoc/editor'
           };
       </script>";
-      
-      echo "<script>";
-      if (isset($_GET['idpg'])) {
-        $idPage = $_GET['idpg'];
-      }
-      echo "var idPage = '".$idPage."';";
-      if (isset($_GET['id'])) {
-        $idPageHtmlTop = $_GET['id'];
-      }
-      echo "var idPageHtmlTop = '".$idPageHtmlTop."';";
-      if (isset($_GET['ur'])) {
-        $urlfile = $_GET['ur'];
-        $namefile = basename($urlfile);
-      }
-      echo "var urlfile = '".$urlfile."';";
-      echo "var returnfilename = '".$namefile."';";
 
-      echo "</script>";
+      echo '<script>';
+      echo 'var idPage = '.json_encode($idPage, $jsonFlags).';';
+      echo 'var idPageHtmlTop = '.json_encode($idPageHtmlTop, $jsonFlags).';';
+      echo 'var urlfile = '.json_encode($urlfile, $jsonFlags).';';
+      echo 'var returnfilename = '.json_encode($namefile, $jsonFlags).';';
+      echo '</script>';
   ?>
 
   <!-- No-op until loaded dynamically (could make configurable) -->
@@ -780,8 +800,7 @@
 </body>
 
 <script>
-  <?php $oel_token = isset($_GET['cotk']) ? $_GET['cotk'] : '';?>
-  var global_csrf_oel_token = "<?php echo $oel_token; ?>";
+  var global_csrf_oel_token = <?php echo json_encode($oel_token, \JSON_HEX_TAG | \JSON_HEX_AMP | \JSON_HEX_APOS | \JSON_HEX_QUOT); ?>;
 </script>
 
 </html>

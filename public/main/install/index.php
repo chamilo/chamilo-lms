@@ -183,10 +183,18 @@ if ($langParam !== null && $langParam !== '') {
 $translator = new Translator($installationLanguage);
 $translator->addLoader('po', new PoFileLoader());
 
-$langResourceFile = api_get_path(SYMFONY_SYS_PATH).'translations/messages.'.(explode('_', $installationLanguage, 2)[0]).'.po';
+$translationsPath = api_get_path(SYMFONY_SYS_PATH).'translations/';
+$baseInstallationLanguage = explode('_', $installationLanguage, 2)[0];
+$langResourceCandidates = array_unique([
+    $translationsPath.'messages.'.$installationLanguage.'.po',
+    $translationsPath.'messages.'.$baseInstallationLanguage.'.po',
+]);
 
-if (file_exists($langResourceFile)) {
-    $translator->addResource('po', $langResourceFile, $installationLanguage);
+foreach ($langResourceCandidates as $langResourceFile) {
+    if (file_exists($langResourceFile)) {
+        $translator->addResource('po', $langResourceFile, $installationLanguage);
+        break;
+    }
 }
 
 Container::$translator = $translator;

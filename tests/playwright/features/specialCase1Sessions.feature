@@ -300,6 +300,17 @@ Feature: Special case 1 — course/session creation
     Then I should see "Testing course fr"
 
     # Two HTML documents: introduction, final
+    #
+    # Real CI failure, root-caused (not guessed): the Save click navigates back
+    # to the document LIST via a client-side Vue Router route change, which
+    # never fires a real browser navigation event — the generic "wait for the
+    # page to be loaded" (domcontentloaded) resolves immediately regardless,
+    # the exact same SPA-navigation trap this suite has already hit and fixed
+    # elsewhere (createUser.feature's "press Add" race, breadcrumb.feature's
+    # folder delete). "I should see ..." then ran before the list's own
+    # re-fetch had come back, and failed to find the just-created title.
+    # "wait for the page content to settle" (networkidle-bounded, already used
+    # throughout this file for the same reason) waits for that XHR instead.
     Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Documents"
@@ -309,7 +320,7 @@ Feature: Special case 1 — course/session creation
     And I fill in "title" with "introduction"
     And I fill in tinymce field "item_content" with "<p class='ck ck-texte'><span dir='ltr' lang='en'>English content</span><span dir='ltr' lang='fr'>Contenu en français</span></p>"
     And I click the "button:has(.mdi-content-save)" element
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     Then I should not see an error
     And I should see "introduction"
 
@@ -318,7 +329,7 @@ Feature: Special case 1 — course/session creation
     And I fill in "title" with "final"
     And I fill in tinymce field "item_content" with "<p class='ck ck-texte'><span dir='ltr' lang='en'>English content</span><span dir='ltr' lang='fr'>Contenu en français</span></p>"
     And I click the "button:has(.mdi-content-save)" element
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     Then I should not see an error
     And I should see "final"
 

@@ -20,16 +20,16 @@ require_once __DIR__.'/../../ajax/inc/functions.php';
 
 require_once __DIR__.'/../../0_dal/dal.save.php';
 
-if ($VDB->w_api_is_anonymous()) {
-    echo '{"history":[];';
-
-    exit;
-}
-
 if (isset($_POST['idteach']) || isset($_GET['idteach'])) {
-    echo '{"history" :[';
-
     $idPage = get_int_from('idteach');
+
+    if ($VDB->w_api_is_anonymous() || !oel_ctr_rights($idPage)) {
+        echo '{"history":[];';
+
+        exit;
+    }
+
+    echo '{"history" :[';
 
     $localFolder = get_local_folder($idPage).'-'.$idPage;
     $historyCache = 'CStudio/editor/history_cache/'.$localFolder;

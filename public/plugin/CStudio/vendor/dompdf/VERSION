@@ -1,1 +1,1 @@
-<75f13c70>
+Deprecated: unused bundled dompdf removed for security (dangerous eval() sink in PhpEvaluator.php, unmaintained pre-1.0 snapshot never instantiated anywhere in this plugin). Content blanked rather than deleted so an installation upgrading by directory overwrite cannot retain the original file. Should be removed entirely before the next major version.

@@ -41,7 +41,10 @@ if (!isset($_GET['id'])) {
 }
 
 $step = isset($_GET['step']) ? $VDB->remove_XSS($_GET['step']) : '0';
-$idPageTop = isset($_GET['id']) ? $VDB->remove_XSS($_GET['id']) : '0';
+// Cast (not remove_XSS(), which does not strip '/' or '.'): $idPageTop is
+// concatenated straight into filesystem paths below, so a value like
+// "5/../6" must not be able to redirect those paths onto another page.
+$idPageTop = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $process = isset($_GET['p']) ? $VDB->remove_XSS($_GET['p']) : '0';
 /*
 0 = scorm

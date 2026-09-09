@@ -8,6 +8,10 @@ declare(strict_types=1);
 require_once __DIR__.'/../0_dal/dal.global_lib.php';
 api_protect_admin_script();
 
+require_once __DIR__.'/../inc/csrf_token.php';
+
+$cotk = generateCSRFToken((int) api_get_user_id());
+
 $fileNameOpts = __DIR__.'/options.xml';
 
 $VactiveLogsCreator = '';
@@ -149,7 +153,8 @@ if (1 == $Vtab) {
         $formOptions .= '<p>';
         $formOptions .= '<label for="listDefaultTemplates" style="margin-left:24px;font-style:italic;" ';
         $formOptions .= ' class="maskpartform noselect trd" >List of templates id : </label>';
-        $formOptions .= '<input type="text" class="maskpartform" id="listDefaultTemplates" value="'.$VlistDefaultTemplates.'" name="listDefaultTemplates" />';
+        $formOptions .= '<input type="text" class="maskpartform" id="listDefaultTemplates" value="'.htmlspecialchars((string) $VlistDefaultTemplates, ENT_QUOTES, 'UTF-8').'" name="listDefaultTemplates" />';
+        $formOptions .= '<input type="hidden" name="cotk" value="'.htmlspecialchars($cotk, ENT_QUOTES, 'UTF-8').'" />';
         $formOptions .= '</p>';
 
         $formOptions .= '<p class="maskpartform" style="text-align:center;" >';
@@ -166,6 +171,10 @@ if (1 == $Vtab) {
 
     // Save the XML
     if (isset($_GET['send'])) {
+        if (false == validateCSRFToken($_POST['cotk'] ?? '', (int) api_get_user_id())) {
+            exit('CSRF token is not valid or has expired.');
+        }
+
         $values = ['activeLogsCreator', 'activeLogsLearning', 'displayTemplateArea', 'onlyUserTemplates', 'customDefaultTemplates', 'listDefaultTemplates'];
 
         $values['activeLogsCreator'] = 0;

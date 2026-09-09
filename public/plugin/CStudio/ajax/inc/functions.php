@@ -126,6 +126,14 @@ function oel_resolve_safe_local_path(string $candidatePath, string $allowedRoot)
 /**
  * This method control rights user for editing a OeL page.
  *
+ * Fails closed: a page id must have been explicitly whitelisted into the
+ * current session (via oel_add_ctr_rights(), called once by editor/index.php
+ * after it verifies a real edit permission + CSRF token) before any request
+ * for that id is allowed. Previously this returned true whenever the session
+ * whitelist was empty/unset -- the plugin's normal state for any request that
+ * never went through editor/index.php first -- which let anonymous or
+ * unrelated requests reach state-changing actions gated only by this check.
+ *
  * @param mixed $idPage
  */
 function oel_ctr_rights($idPage): bool
@@ -137,16 +145,10 @@ function oel_ctr_rights($idPage): bool
     }
 
     if ('' == $lst_ids) {
-        return true;
-    }
-
-    $pos = strrpos($lst_ids, ";$idPage;");
-
-    if (false === $pos) {
         return false;
     }
 
-    return true;
+    return false !== strrpos($lst_ids, ";$idPage;");
 }
 
 /**

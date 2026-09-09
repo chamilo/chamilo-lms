@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+if ('cli' !== \PHP_SAPI) {
+    http_response_code(403);
+
+    exit('This script must be run from the command line.');
+}
+
 require_once __DIR__.'/../../0_dal/dal.global_lib.php';
 
 require_once __DIR__.'/../../0_dal/dal.chamilo_object.php';

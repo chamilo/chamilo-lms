@@ -29,9 +29,15 @@ if (api_is_anonymous()) {
 }
 
 if (isset($_POST['idteach']) || isset($_GET['idteach'])) {
-    echo '{"files" :[';
-
     $idPage = get_int_from('idteach');
+
+    if (!oel_ctr_rights($idPage)) {
+        echo '{"files":[];';
+
+        exit;
+    }
+
+    echo '{"files" :[';
 
     $localFolder = get_local_folder($idPage);
 

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State\Gradebook;
 
+use Chamilo\CoreBundle\Dto\Gradebook\GradebookContext;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
@@ -33,14 +34,11 @@ final readonly class GradebookContextResolver
         private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
-    /**
-     * @return array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool}
-     */
     public function resolve(
         Request $request,
         bool $requireManage = false,
         bool $validateCourseResourceNode = true,
-    ): array {
+    ): GradebookContext {
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         if ($session instanceof Session && !$session->hasCourse($course)) {
@@ -66,14 +64,14 @@ final readonly class GradebookContextResolver
             ['id' => 'ASC'],
         );
 
-        return [
-            'course' => $course,
-            'session' => $session,
-            'groupId' => $groupId,
-            'rootCategory' => $rootCategory instanceof GradebookCategory ? $rootCategory : null,
-            'user' => $user,
-            'canManage' => $canManage,
-        ];
+        return new GradebookContext(
+            course: $course,
+            session: $session,
+            groupId: $groupId,
+            rootCategory: $rootCategory instanceof GradebookCategory ? $rootCategory : null,
+            user: $user,
+            canManage: $canManage,
+        );
     }
 
     public function getSelectedCategory(

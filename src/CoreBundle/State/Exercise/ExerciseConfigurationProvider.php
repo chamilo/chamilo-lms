@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -110,7 +111,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->questionSelectionType = 1;
         $configuration->randomByCategory = 0;
         $configuration->categoryMatrix = [];
-        $configuration->language = '';
+        $configuration->language = $this->getDefaultResourceLanguage($course);
         $configuration->updateTitleInLearningPaths = false;
         $configuration->skillIds = [];
         $configuration->extraFieldValues = $this->getDefaultExtraFieldValues();
@@ -498,6 +499,23 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         }
 
         return $language->getIsocode();
+    }
+
+    private function getDefaultResourceLanguage(Course $course): string
+    {
+        $courseLanguage = trim((string) $course->getCourseLanguage());
+        if ('' === $courseLanguage) {
+            return '';
+        }
+
+        $repository = $this->entityManager->getRepository(Language::class);
+        if (!$repository instanceof LanguageRepository) {
+            return '';
+        }
+
+        $language = $repository->findOneAvailableByTitleOrCode($courseLanguage);
+
+        return $language instanceof Language ? $language->getIsocode() : '';
     }
 
     /**

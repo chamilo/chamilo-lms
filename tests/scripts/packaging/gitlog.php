@@ -76,6 +76,17 @@ foreach ($logs as $log) {
         }
     }
 
+    // check end commit to stop processing; done before any skip filter below
+    // so a boundary commit that would otherwise be skipped (e.g. a "Language:
+    // Update language terms" commit) still reliably stops the loop
+    if ($endCommit) {
+        $length = strlen($endCommit);
+        if (substr($log['sha1'], 0, $length) == $endCommit) {
+            echo "Found the end commit ".$endCommit.", exiting...".PHP_EOL;
+            break;
+        }
+    }
+
     // Replace "Something - Something" by "Something: Something"
     $matches = array();
     if (preg_match('/^(\w*)\s-\s(.*)/', $log['message'], $matches)) {
@@ -92,9 +103,14 @@ foreach ($logs as $log) {
         $log['message'] = $matches[1].': '.$matches[2];
     }
 
+    // Skip messages that just report a routine language terms sync, regardless
+    // of what precedes it (e.g. "Language: Update language terms")
+    if (false !== strpos($log['message'], 'Update language terms')) {
+        continue;
+    }
+
     //Skip language update messages (not important)
     $langMsg = array(
-        'Update language terms',
         'Update language vars',
         'Update lang vars',
         'Merge',
@@ -166,14 +182,6 @@ foreach ($logs as $log) {
     } else {
         $commitLink = substr($log['sha1'], 0, 8);
         echo '('.$commitLink.$issueLink.') '.$log['message'].''.PHP_EOL;
-    }
-    // check end commit to stop processing
-    if ($endCommit) {
-        $length = strlen($endCommit);
-        if (substr($log['sha1'], 0, $length) == $endCommit) {
-            echo "Found the end commit ".$endCommit.", exiting...".PHP_EOL;
-            break;
-        }
     }
     $i++;
 }

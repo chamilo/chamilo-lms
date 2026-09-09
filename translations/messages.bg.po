@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "С уважение"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Пример за формула: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Пример за формула: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Диапазони на променливите"
@@ -40809,6 +40809,9 @@ msgstr "Метаданните за изпълнението на команди
 msgid "Post-apply actions completed successfully."
 msgstr "Действията след прилагане са завършени успешно."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Не забравяйте да възстановите разрешенията на файловете и директориите в състоянието им преди тази актуализация. Ако оставите уеб сървъра с права за запис в кода на Chamilo, всяка бъдеща уязвимост се превръща в начин за промяна на файловете на вашата платформа."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Невалидна дефиниция на команда след прилагане на актуализация: %s"
 
@@ -41171,4 +41174,52 @@ msgstr "Неуспешен запис в журнала на операцият�
 
 msgid "Invalid update operation id."
 msgstr "Невалиден идентификатор на операция за актуализация."
+
+msgid "AI study helper"
+msgstr "Помощник за учене с ИИ"
+
+msgid "Selected text"
+msgstr "Избран текст"
+
+msgid "Learning technique"
+msgstr "Техника за учене"
+
+msgid "AI response"
+msgstr "Отговор на ИИ"
+
+msgid "AI request failed."
+msgstr "Заявката към ИИ не бе успешна."
+
+msgid "Mind mapping"
+msgstr "Мисловни карти"
+
+msgid "Feynman Technique"
+msgstr "Техника на Файнман"
+
+msgid "Elaborative interrogation"
+msgstr "Елаборативно разпитване"
+
+msgid "Spaced repetition"
+msgstr "Разпределено повторение"
+
+msgid "SQ3R Method"
+msgstr "Метод SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Аналогии и метафори"
+
+msgid "Dual coding"
+msgstr "Двойно кодиране"
+
+msgid "Storytelling"
+msgstr "Разказване на истории"
+
+msgid "Thematic connections"
+msgstr "Тематични връзки"
+
+msgid "Interleaved learning"
+msgstr "Редуващо се учене"
+
+msgid "Memory palaces"
+msgstr "Дворци на паметта"
 

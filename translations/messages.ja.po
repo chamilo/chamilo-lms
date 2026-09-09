@@ -371,7 +371,7 @@ msgid "Sincerely"
 msgstr "敬具"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "数式の例: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "数式の例: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "変数範囲"
@@ -37075,15 +37075,6 @@ msgstr "信頼された公開鍵"
 msgid "Trusted signing key"
 msgstr "信頼された署名鍵"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "確認するには APPLY UPDATE FILES と入力してください"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "データベースマイグレーションを実行するには RUN DATABASE MIGRATIONS と入力してください"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "確認するには RUN POST UPDATE ACTIONS と入力してください"
-
 msgid "Unknown update notice source."
 msgstr "不明な更新通知ソースです。"
 
@@ -40882,6 +40873,9 @@ msgstr "適用後コマンド実行のメタデータを書き込みました。
 msgid "Post-apply actions completed successfully."
 msgstr "適用後アクションが正常に完了しました。"
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "この更新前の状態に、ファイルとディレクトリの権限を戻すことを忘れないでください。WebサーバーにChamiloのコードへの書き込み権限を残しておくと、将来の脆弱性がプラットフォームのファイルを改変する手段となります。"
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "無効な更新の適用後コマンド定義です: %s"
 
@@ -41244,4 +41238,52 @@ msgstr "更新操作ログを書き込めません。"
 
 msgid "Invalid update operation id."
 msgstr "無効な更新操作IDです。"
+
+msgid "AI study helper"
+msgstr "AI学習アシスタント"
+
+msgid "Selected text"
+msgstr "選択したテキスト"
+
+msgid "Learning technique"
+msgstr "学習技法"
+
+msgid "AI response"
+msgstr "AI の応答"
+
+msgid "AI request failed."
+msgstr "AIリクエストに失敗しました。"
+
+msgid "Mind mapping"
+msgstr "マインドマッピング"
+
+msgid "Feynman Technique"
+msgstr "ファインマン技法"
+
+msgid "Elaborative interrogation"
+msgstr "精緻化質問法"
+
+msgid "Spaced repetition"
+msgstr "間隔反復"
+
+msgid "SQ3R Method"
+msgstr "SQ3R法"
+
+msgid "Analogies and metaphors"
+msgstr "類推と比喩"
+
+msgid "Dual coding"
+msgstr "二重符号化"
+
+msgid "Storytelling"
+msgstr "ストーリーテリング"
+
+msgid "Thematic connections"
+msgstr "テーマ的なつながり"
+
+msgid "Interleaved learning"
+msgstr "交互学習"
+
+msgid "Memory palaces"
+msgstr "記憶の宮殿"
 

@@ -426,6 +426,17 @@ class AiController extends AbstractController
             ], 404);
         }
 
+        // Object-level check: the client-supplied cid must be a course the current
+        // user actually manages, not merely any course with the feature enabled.
+        try {
+            $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+        } catch (AccessDeniedException) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Access denied.',
+            ], 403);
+        }
+
         if (!$this->isAiFeatureEnabledForCourse('glossary_terms_generator', $cid)) {
             return $this->buildAiFeatureDisabledResponse();
         }
@@ -1378,6 +1389,17 @@ class AiController extends AbstractController
                 'success' => false,
                 'text' => 'Course not found.',
             ], 404);
+        }
+
+        // Object-level check: the client-supplied cid must be a course the current
+        // user actually manages, not merely any course with the feature enabled.
+        try {
+            $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+        } catch (AccessDeniedException) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Access denied.',
+            ], 403);
         }
 
         /** @var ResourceFile|null $resourceFile */
@@ -2824,6 +2846,14 @@ class AiController extends AbstractController
         $course = $this->em->getRepository(Course::class)->find($cid);
         if (null === $course) {
             return new JsonResponse(['success' => false, 'text' => 'Course not found.'], 404);
+        }
+
+        // Object-level check: the client-supplied cid must be a course the current
+        // user actually manages, not merely any course with the feature enabled.
+        try {
+            $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+        } catch (AccessDeniedException) {
+            return new JsonResponse(['success' => false, 'text' => 'Access denied.'], 403);
         }
 
         /** @var ResourceFile|null $resourceFile */

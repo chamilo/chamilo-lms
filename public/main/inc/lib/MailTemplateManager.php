@@ -81,7 +81,7 @@ class MailTemplateManager extends Model
      */
     public function display()
     {
-        $backUrl = api_get_path(WEB_CODE_PATH).'admin';
+        $backUrl = api_get_path(WEB_PATH).'admin';
         $addUrl = api_get_self().'?action=add';
         $token = Security::get_existing_token();
         $confirm = addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES));
@@ -89,11 +89,11 @@ class MailTemplateManager extends Model
 
         $html = '<section class="w-full px-4 py-6">';
         $html .= '<div class="mb-4 flex items-center gap-2">';
-        $html .= '<a class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-25 bg-white text-primary shadow-sm transition hover:bg-gray-15" href="'.$backUrl.'" title="'.api_htmlentities(get_lang('Back')).'">'.
+        $html .= '<a href="'.$backUrl.'">'.
             Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).
             '</a>';
-        $html .= '<a class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-sm transition hover:bg-primary/90" href="'.$addUrl.'" title="'.api_htmlentities(get_lang('Add')).'">'.
-            '<span class="mdi mdi-plus-box text-xl" aria-hidden="true"></span>'.
+        $html .= '<a href="'.$addUrl.'">'.
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon-success', null, ICON_SIZE_MEDIUM, get_lang('Add')).
             '</a>';
         $html .= '</div>';
         $html .= '<div class="mb-5">';

@@ -174,6 +174,8 @@ final readonly class UpdatePostApplyCommandRunner
                 $metadataPath = $this->writeRunMetadata($stagingPath, true, $checks, $actions, $warnings, $details);
                 $this->logOperation($operationId, 'success', 'done', $this->translator->trans('Post-apply actions completed successfully.'));
 
+                $warnings[] = $this->translator->trans("Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files.");
+
                 return UpdatePostApplyRunResult::success($stagingPath, $metadataPath, $operationId, $checks, $actions, $warnings, $details);
             } finally {
                 $this->releaseLock($lockPath);

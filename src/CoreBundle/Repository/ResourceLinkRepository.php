@@ -36,7 +36,7 @@ class ResourceLinkRepository extends SortableRepository
         'attendance' => '/main/attendance/index.php',
         'course_progress' => '/resources/course-progress/%resource_node_id%/',
         'agenda' => '/resources/ccalendarevent',
-        'forum' => '/main/forum/index.php',
+        'forum' => '/resources/forum/%resource_node_id%/',
         'student_publication' => '/resources/assignment/%resource_node_id%',
         'survey' => '/resources/survey/%resource_node_id%/',
         'notebook' => '/resources/notebook/%resource_node_id%/',

@@ -32,14 +32,11 @@
   $idPage = 0;
   $action = '';
 
-  if (!$VDB->w_api_is_anonymous()) {
-      $user = $VDB->w_api_get_user_info();
-      if (!$VDB->w_api_is_allowed_to_edit()) {
-          echo "<div style='color:red;' >Status !".$user['status'].'</div>';
-          echo "<script>setTimeout(function(){ location.href = '../../index.php'; }, 3000);</script>";
+  if ($VDB->w_api_is_anonymous() || !$VDB->w_api_is_allowed_to_edit()) {
+      echo "<div style='color:red;' >Status not allowed</div>";
+      echo "<script>setTimeout(function(){ location.href = '../../index.php'; }, 3000);</script>";
 
-          exit;
-      }
+      exit;
   }
 
   ?>

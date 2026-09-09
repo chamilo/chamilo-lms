@@ -1555,7 +1555,15 @@ class SessionManager
             ]).'"> %s </a>';
             $linkForum = '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
             $linkWork = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
-            $linkSurvey = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
+            // The survey tool lives at /resources/survey/{courseResourceNodeId}/; the legacy
+            // list it used to point at links on to survey/reporting.php, which now denies
+            // access. Without a resource node there is nothing to link to, so plain text.
+            $surveyNodeId = (int) (api_get_course_entity((int) $course['real_id'])?->getResourceNode()?->getId() ?? 0);
+            $linkSurvey = $surveyNodeId > 0
+                ? '<a href="'.api_get_path(WEB_PATH).'resources/survey/'.$surveyNodeId.'/?'.http_build_query(
+                    ['cid' => (int) $course['real_id'], 'sid' => (int) $sessionId, 'gid' => 0]
+                ).'"> %s </a>'
+                : ' %s ';
 
             $table[] = [
                 'lastname' => $user[1],

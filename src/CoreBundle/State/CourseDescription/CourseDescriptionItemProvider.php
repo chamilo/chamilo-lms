@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseDescriptionHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
@@ -144,6 +145,7 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         $item->languages = $this->getLanguages();
         $item->settings = $this->getSettings();
         $item->enableSearch = $item->settings['searchEnabled'];
+        $item->language = $this->getDefaultResourceLanguage($course);
 
         if ($description instanceof CCourseDescription) {
             $item->iid = $description->getIid();
@@ -290,5 +292,22 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         $language = $description->getResourceNode()?->getLanguage();
 
         return null !== $language ? (string) $language->getIsocode() : '';
+    }
+
+    private function getDefaultResourceLanguage(Course $course): string
+    {
+        $courseLanguage = trim((string) $course->getCourseLanguage());
+        if ('' === $courseLanguage) {
+            return '';
+        }
+
+        $repository = $this->entityManager->getRepository(Language::class);
+        if (!$repository instanceof LanguageRepository) {
+            return '';
+        }
+
+        $language = $repository->findOneAvailableByTitleOrCode($courseLanguage);
+
+        return $language instanceof Language ? $language->getIsocode() : '';
     }
 }

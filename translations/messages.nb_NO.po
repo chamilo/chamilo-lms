@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vennlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-eksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel-eksempel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelområder"
@@ -37010,15 +37010,6 @@ msgstr "Pålitelig offentlig nøkkel"
 msgid "Trusted signing key"
 msgstr "Pålitelig signeringsnøkkel"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Skriv APPLY UPDATE FILES for å bekrefte"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Skriv RUN DATABASE MIGRATIONS for å bekrefte databasemigreringer"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Skriv RUN POST UPDATE ACTIONS for å bekrefte"
-
 msgid "Unknown update notice source."
 msgstr "Ukjent kilde for oppdateringsvarsel."
 
@@ -40817,6 +40808,9 @@ msgstr "Metadata for kjøring av etter-anvendelseskommandoer ble skrevet."
 msgid "Post-apply actions completed successfully."
 msgstr "Etter-anvendelseshandlinger ble fullført."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Husk å gjenopprette fil- og mappetillatelsene til slik de var før denne oppdateringen. Hvis webserveren har skrivetilgang til Chamilo-koden, kan enhver fremtidig sårbarhet brukes til å endre filene på plattformen din."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Ugyldig definisjon av etter-anvendelseskommando for oppdatering: %s"
 
@@ -41179,4 +41173,52 @@ msgstr "Kan ikke skrive logg for oppdateringsoperasjon."
 
 msgid "Invalid update operation id."
 msgstr "Ugyldig ID for oppdateringsoperasjon."
+
+msgid "AI study helper"
+msgstr "AI-studiehjelper"
+
+msgid "Selected text"
+msgstr "Valgt tekst"
+
+msgid "Learning technique"
+msgstr "Læringsteknikk"
+
+msgid "AI response"
+msgstr "KI-svar"
+
+msgid "AI request failed."
+msgstr "AI-forespørsel mislyktes."
+
+msgid "Mind mapping"
+msgstr "Tankekart"
+
+msgid "Feynman Technique"
+msgstr "Feynman-teknikken"
+
+msgid "Elaborative interrogation"
+msgstr "Elaborativ utspørring"
+
+msgid "Spaced repetition"
+msgstr "Spredt repetisjon"
+
+msgid "SQ3R Method"
+msgstr "SQ3R-metoden"
+
+msgid "Analogies and metaphors"
+msgstr "Analogier og metaforer"
+
+msgid "Dual coding"
+msgstr "Dobbeltkoding"
+
+msgid "Storytelling"
+msgstr "Historiefortelling"
+
+msgid "Thematic connections"
+msgstr "Tematiske sammenhenger"
+
+msgid "Interleaved learning"
+msgstr "Vekslende læring"
+
+msgid "Memory palaces"
+msgstr "Minnespalass"
 

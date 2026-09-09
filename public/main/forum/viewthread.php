@@ -79,7 +79,6 @@ $forumUrl        = api_get_path(WEB_CODE_PATH).'forum/';
 $origin = api_get_origin();
 $_user = api_get_user_info();
 $my_search = null;
-$moveForm = '';
 
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
@@ -188,24 +187,6 @@ switch ($my_action) {
         }
         header('Location: '.$currentUrl);
         exit;
-
-    case 'move':
-        if (isset($_GET['post'])) {
-            $form = move_post_form();
-            if ($form->validate()) {
-                $values = $form->exportValues();
-                store_move_post($values);
-
-                $currentUrl = api_get_path(WEB_CODE_PATH).
-                    'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
-
-                header('Location: '.$currentUrl);
-                exit;
-            }
-            $moveForm = $form->returnForm();
-        }
-
-        break;
 
     case 'report':
         $result = reportPost($postEntity, $forumEntity, $threadEntity);
@@ -473,7 +454,7 @@ foreach ($posts as $post) {
         }
     }
 
-    // Visibility / Move icons
+    // Visibility icon
     if (api_is_allowed_to_edit(false, true) && !api_is_session_general_coach()) {
         $iconEdit .= returnVisibleInvisibleIcon(
             'post',
@@ -484,11 +465,6 @@ foreach ($posts as $post) {
                 'thread' => $threadId,
             ]
         );
-
-        if ($count > 0) {
-            $iconEdit .= '<a class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-25 hover:bg-gray-15" href="viewthread.php?'.api_get_cidreq()."&forum=$forumId&thread=$threadId&action=move&post={$post['post_id']}".'">'
-                .Display::getMdiIcon(ActionIcon::MOVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move post')).'</a>';
-        }
     }
 
     $userCanQualify = 1 == $threadEntity->isThreadPeerQualify() && $posterId != $userId;
@@ -787,7 +763,6 @@ if ($showForm) {
 }
 
 $template->assign('form', $formToString);
-$template->assign('move_form', $moveForm);
 
 $layout = $template->get_template('forum/posts.tpl');
 

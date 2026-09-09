@@ -201,7 +201,7 @@ Standard Symfony patterns within each bundle: `Entity/`, `Repository/`, `Control
 
 API Platform resources are defined via PHP attributes on entities. Custom API resources live in `src/CoreBundle/ApiResource/`. GraphQL queries/mutations are in `src/CoreBundle/GraphQL/`.
 
-Database migrations are in `src/CoreBundle/Migrations/Schema/V200/`.
+Database migrations are in `src/CoreBundle/Migrations/Schema/`.
 
 ### Legacy Code
 

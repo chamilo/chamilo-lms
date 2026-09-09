@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Gradebook\GradebookReportProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -22,17 +21,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/gradebook/report',
             openapi: new Operation(
                 summary: 'Read-only Gradebook learner score report for the current course context',
-                parameters: [
-                    new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'categoryId', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'page', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'itemsPerPage', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'search', in: 'query', required: false, schema: ['type' => 'string']),
-                    new Parameter(name: 'includeScores', in: 'query', required: false, schema: ['type' => 'boolean']),
-                    new Parameter(name: 'all', in: 'query', required: false, schema: ['type' => 'boolean']),
-                    new Parameter(name: 'sortBy', in: 'query', required: false, schema: ['type' => 'string']),
-                    new Parameter(name: 'sortDirection', in: 'query', required: false, schema: ['type' => 'string']),
-                ],
             ),
             security: "is_granted('ROLE_ADMIN')
                 or is_granted('ROLE_CURRENT_COURSE_TEACHER')
@@ -40,6 +28,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 or is_granted('ROLE_SESSION_MANAGER')",
             name: 'get_gradebook_report',
             provider: GradebookReportProvider::class,
+            // Declared here rather than in the openapi operation: a QueryParameter
+            // documents AND validates, while an openapi Parameter only documents,
+            // and a twin declaration there would hide this one.
             parameters: [
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
@@ -49,6 +40,47 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier. The group must belong to the course',
+                ),
+                'node' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Resource node of the course, which the provider checks against the course itself',
+                    required: true,
+                ),
+                'categoryId' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Gradebook category to report on. Defaults to the root category of the course',
+                ),
+                'page' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Page to return, from 1. Ignored when "all" is true',
+                ),
+                'itemsPerPage' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Learners per page, from 1 to 100, 20 by default. Ignored when "all" is true',
+                ),
+                'search' => new QueryParameter(
+                    schema: ['type' => 'string'],
+                    description: 'Filters the learners by name, login or code',
+                ),
+                'sortBy' => new QueryParameter(
+                    schema: ['type' => 'string'],
+                    description: 'One of fullName, firstName, lastName or username. Anything else sorts by fullName',
+                ),
+                'sortDirection' => new QueryParameter(
+                    schema: ['type' => 'string'],
+                    description: 'Either asc or desc. Anything else sorts ascending',
+                ),
+                'all' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Returns every learner in one page, for an export',
+                ),
+                'includeScores' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'False returns the learners without the score columns, which is much cheaper',
                 ),
             ],
         ),

@@ -1203,6 +1203,34 @@ Then("I uncheck {string}", async ({ page }, field: string) => {
   await (await resolveField(page, field)).uncheck()
 })
 
+// Not ported — new, for toolUsers.feature's table selection checkboxes. Those
+// are BaseCheckbox (PrimeVue) instances: the real <input> is transparent and
+// sits on top of the styled box, so it still resolves and clicks like any
+// checkbox, but its state has to be asserted explicitly — a "should see" on
+// the surrounding text cannot tell a select-all header apart from one row.
+Then(/^the checkbox "([^"]*)" should( not)? be checked$/, async ({ page }, field: string, negated?: string) => {
+  const locator = (await resolveField(page, field)).first()
+
+  if (negated) {
+    await expect(locator).not.toBeChecked()
+    return
+  }
+
+  await expect(locator).toBeChecked()
+})
+
+// Same components, for the "some rows selected" state of a select-all header.
+// It lives ONLY in the input's `indeterminate` DOM property — no attribute, no
+// class, nothing a selector can reach — and PrimeVue writes it from its own
+// updated() hook, one tick after the model changes, hence the polling.
+Then(/^the checkbox "([^"]*)" should( not)? be indeterminate$/, async ({ page }, field: string, negated?: string) => {
+  const locator = (await resolveField(page, field)).first()
+
+  // !negated, not `undefined === negated`: playwright-bdd hands an unmatched
+  // optional group over as null, so the strict check inverted the assertion.
+  await expect.poll(() => locator.evaluate((el: HTMLInputElement) => el.indeterminate)).toBe(!negated)
+})
+
 // Not ported — new, for toolAssessments.feature's "Create an evaluation"
 // scenario. gradebook_add_result.php's per-learner score field is
 // genuinely id/name "score[<numeric user id>]" (confirmed live) — the
@@ -1857,6 +1885,32 @@ async function dismissBlockingUi(page: Page): Promise<void> {
   if (await cookieAccept.isVisible().catch(() => false)) {
     await cookieAccept.click({ timeout: 2_000 }).catch(() => {})
   }
+  // The Symfony Web Debug Toolbar is dev-env chrome, not part of the app, but it
+  // is position:fixed at the bottom of the viewport and intercepts the pointer
+  // event for anything underneath it — which includes the submit button of any
+  // dialog tall enough to reach down there.
+  //
+  // Real failure this fixes, reproduced locally against a dev box: toolForum.
+  // feature's "Create a forum" dialog (title + rich-text description + six
+  // checkboxes + two dates + an image picker) puts its "Create forum" button
+  // right under the toolbar. pressButton()'s dialog-scoped tier clicks with no
+  // force fallback, so the click retried for the FULL 90s test timeout, the call
+  // log repeating `<div class="sf-toolbar-icon"> ... intercepts pointer events`.
+  // Every scenario after it then failed in cascade for want of that forum.
+  //
+  // Hidden rather than removed: the toolbar carries the profiler token some
+  // debugging reads, and display:none is enough to stop it capturing clicks.
+  // Cheap on a prod-env box, where the element simply is not there.
+  const debugToolbar = page.locator(".sf-toolbar")
+  if ((await debugToolbar.count()) > 0) {
+    await debugToolbar
+      .evaluateAll((elements) => {
+        elements.forEach((element) => {
+          ;(element as HTMLElement).style.display = "none"
+        })
+      })
+      .catch(() => {})
+  }
 }
 
 async function clickFirstOrForce(locator: ReturnType<Page["locator"]>, page: Page): Promise<void> {
@@ -2212,6 +2266,33 @@ When(/^(?:|I )wait for the element "([^"]*)" to appear$/, async ({ page }, selec
   await expect(page.locator(selector).first()).toBeVisible()
 })
 
+// Not ported — new, for the SPA route-change trap documented in CLAUDE.md: a
+// router.push() fires no navigation event, so "I wait for the page to be
+// loaded" resolves against the OLD route and the next step reads the previous
+// view's state. Two views that differ only by a query parameter (the Users
+// tool's Learners/Teachers tabs) look identical while the switch is pending,
+// so the query string is the only signal that cannot lie. Real failure: a
+// scenario pressed "Teachers", clicked "Add" before the push landed, and
+// registered its user as a LEARNER — silently, with every assertion passing.
+When(/^(?:|I )wait for the URL to contain "([^"]*)"$/, async ({ page }, fragment: string) => {
+  await page.waitForURL((url) => String(url).includes(fragment))
+})
+
+// Not ported — new, for the selection column of a BaseTable. Naming the row by
+// its own text ("I click the ... icon in the row for ...") stays the safer
+// default, but a selection checkbox is exercised on lists whose contents are
+// not fixed — a page of available users, say — where the point is only that
+// SOME row toggles, and hardcoding a username there ties the test to one box's
+// seed data. The position is 1-based, like a Gherkin table's own rows.
+When("I click the checkbox in table row {int}", async ({ page }, position: number) => {
+  await page
+    .locator(".p-datatable tbody tr")
+    .nth(position - 1)
+    .locator('input[type="checkbox"]')
+    .first()
+    .click()
+})
+
 // Ported from FeatureContext::iWaitUpToSecondsForTheElementToAppear() — same
 // as above with an explicit, longer timeout for slower-to-render elements
 // (e.g. TinyMCE's own ".tox-tinymce" toolbar, which only mounts after its
@@ -2335,32 +2416,38 @@ Then(
   },
 )
 
-// Not ported — new, for toolForum.feature's teardown. public/main/template/
-// default/forum/list.html.twig (viewed directly) renders each forum as
-// `<div class="card-forum">` (not `.card`, so the generic card step above
-// can't find it) and each category as `<div class="category-forum">`.
-// Scoping matters here for a genuine, reproduced-live reason, not just
-// hygiene: "Forum Test"/"Forum Category Test" have no unique-name
-// constraint, so a rerun of this file against a database that already has
-// one (confirmed by simply running the file twice locally without
-// reseeding) leaves TWO of each on this same page — and a category's own
-// delete-category icon and a forum's own delete-forum icon both render via
-// the exact same Display::getMdiIcon(ActionIcon::DELETE, ...) call, i.e. the
-// identical `i.mdi-delete` class, as every OTHER category/forum's own delete
-// icon. An unscoped "I click the 'i.mdi-delete' element" resolves to
-// whichever renders FIRST in DOM order, which is not guaranteed to be the
-// one this run itself just created — silently tearing down (or acting on)
-// the wrong, stale duplicate instead.
+// Rescoped for the Vue forum tool, keeping both step phrases (toolForum.feature
+// is their only caller). The legacy Twig list these used to target is gone:
+// public/main/forum/'s own pages now deny access, and the course tool link
+// resolves to /resources/forum/{nodeId}/ (src/CoreBundle/Tool/Forum.php).
+//
+// The Vue list has no `.card`-style hook at all — every class on it is a
+// Tailwind utility, so there is nothing stable to filter on. What IS stable is
+// the semantics, confirmed by a live DOM dump: ForumCardList renders each
+// category as a `<section>` whose own title is its `<h2>`, and each forum as an
+// `<article>` whose own title is its `<a>`. Hence `getByRole` rather than
+// `getByText` for a forum — the exact same title string also appears in the
+// category's "forums in this category" summary, and getByText would match both,
+// putting two `<article>`s in the filter.
+//
+// Scoping stays load-bearing for the same reason as before: the action icons are
+// icon-only `<button title="Delete">` elements, and every category and forum on
+// the page renders its own identically-titled one. Pass the selector as
+// `button[title="..."]` (the title is the only identifier these carry).
+//
+// clickFirstOrForce, not a bare click(): in a dev-env run the Symfony debug
+// toolbar overlays the bottom of the viewport and intercepts the pointer event
+// on any row that scrolls under it — observed as
+// `<div class="sf-toolbar-icon"> ... intercepts pointer events` while driving
+// this exact list. The force retry inside that helper absorbs it.
 Then(
   "I click the {string} icon for the forum {string}",
   async ({ page }, selector: string, forumTitle: string) => {
     page.once("dialog", (dialog) => dialog.accept())
-    await page
-      .locator(".card-forum")
-      .filter({ has: page.getByText(forumTitle, { exact: true }) })
-      .locator(selector)
-      .first()
-      .click()
+    const scope = page
+      .locator("article")
+      .filter({ has: page.getByRole("link", { name: forumTitle, exact: true }) })
+    await clickFirstOrForce(scope.locator(selector), page)
   },
 )
 
@@ -2368,12 +2455,10 @@ Then(
   "I click the {string} icon for the forum category {string}",
   async ({ page }, selector: string, categoryTitle: string) => {
     page.once("dialog", (dialog) => dialog.accept())
-    await page
-      .locator(".category-forum")
-      .filter({ has: page.getByText(categoryTitle, { exact: true }) })
-      .locator(selector)
-      .first()
-      .click()
+    const scope = page
+      .locator("section")
+      .filter({ has: page.getByRole("heading", { name: categoryTitle, exact: true }) })
+    await clickFirstOrForce(scope.locator(selector), page)
   },
 )
 

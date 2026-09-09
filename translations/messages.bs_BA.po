@@ -40803,6 +40803,9 @@ msgstr "Metapodaci pokretanja naredbi nakon primjene su zapisani."
 msgid "Post-apply actions completed successfully."
 msgstr "Radnje nakon primjene uspješno su završene."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Ne zaboravite vratiti dozvole datoteka i direktorija na stanje prije ovog ažuriranja. Ako web server ostane s pravom pisanja na Chamilo kod, svaka buduća ranjivost postaje način za izmjenu datoteka vaše platforme."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Nevažeća definicija naredbe ažuriranja nakon primjene: %s"
 
@@ -41165,4 +41168,52 @@ msgstr "Nije moguće zapisati dnevnik operacije ažuriranja."
 
 msgid "Invalid update operation id."
 msgstr "Nevažeći ID operacije ažuriranja."
+
+msgid "AI study helper"
+msgstr "AI pomoćnik za učenje"
+
+msgid "Selected text"
+msgstr "Odabrani tekst"
+
+msgid "Learning technique"
+msgstr "Tehnika učenja"
+
+msgid "AI response"
+msgstr "AI odgovor"
+
+msgid "AI request failed."
+msgstr "AI zahtjev nije uspio."
+
+msgid "Mind mapping"
+msgstr "Mentalno mapiranje"
+
+msgid "Feynman Technique"
+msgstr "Feynmanova tehnika"
+
+msgid "Elaborative interrogation"
+msgstr "Elaborativno ispitivanje"
+
+msgid "Spaced repetition"
+msgstr "Razmaknuto ponavljanje"
+
+msgid "SQ3R Method"
+msgstr "SQ3R metoda"
+
+msgid "Analogies and metaphors"
+msgstr "Analogije i metafore"
+
+msgid "Dual coding"
+msgstr "Dvostruko kodiranje"
+
+msgid "Storytelling"
+msgstr "Pričanje priča"
+
+msgid "Thematic connections"
+msgstr "Tematske veze"
+
+msgid "Interleaved learning"
+msgstr "Isprepleteno učenje"
+
+msgid "Memory palaces"
+msgstr "Memorijske palate"
 

@@ -71,54 +71,58 @@ Feature: Course tools basic testing
   Scenario: Make sure the learning path tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/lp/lp_controller.php?action=list&cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Learning paths"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/lp/"
+    And I should not see an error
 
 
   Scenario: Make sure the links tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/link/link.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Links"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/links/"
+    And I should not see an error
 
 
   Scenario: Make sure the tests tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/exercise/exercise.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Tests"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/exercise/"
+    And I should not see an error
 
 
   Scenario: Make sure the announcements tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/announcements/announcements.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Announcements"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/announcement/"
+    And I should not see an error
 
 
   Scenario: Make sure the assessments tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/gradebook/index.php?cid=3"
-    # Original Behat text was "wait the page to be loaded when ready" (missing
-    # "for") — no such step was ever defined in FeatureContext.php, so this
-    # scenario always errored out at this exact line in the original suite
-    # and never actually reached "Then I should not see an error". Fixed the
-    # typo here to restore the check it was clearly meant to perform.
-    And wait for the page to be loaded when ready
-    Then I should not see an error
+    # This scenario never ran in the original Behat suite: its text was "wait the
+    # page to be loaded when ready" (missing "for"), a step FeatureContext.php
+    # never defined, so it errored out before reaching its own assertion.
+    When I follow the course tool "Assessments"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/gradebook/"
+    And I should not see an error
 
 
   Scenario: Make sure the glossary tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/glossary/index.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Glossary"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/glossary/"
+    And I should not see an error
 
 
   Scenario: Make sure the attendances tool is available
@@ -138,41 +142,51 @@ Feature: Course tools basic testing
   Scenario: Make sure the agenda tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/calendar/agenda_js.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Agenda"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/ccalendarevent"
+    And I should not see an error
 
 
+  # Follows the course tool instead of visiting a URL. The forum tool's own link
+  # is /resources/forum/{nodeId}/ (src/CoreBundle/Tool/Forum.php), so hitting
+  # /main/forum/index.php tested a page the tool no longer points at — and did it
+  # with a hardcoded cid=3, a course id nothing guarantees TEMP will have.
+  # Asserting the destination URL is what actually pins the tool to its Vue route.
   Scenario: Make sure the forums tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/forum/index.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Forum"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/forum/"
+    And I should not see an error
 
 
   Scenario: Make sure the dropbox tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/dropbox/index.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Dropbox"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/dropbox/"
+    And I should not see an error
 
 
   Scenario: Make sure the users tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/user/user.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Users"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/course-users/"
+    And I should not see an error
 
 
   Scenario: Make sure the groups tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/group/group.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Groups"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/groups"
+    And I should not see an error
 
 
 
@@ -196,25 +210,28 @@ Feature: Course tools basic testing
   Scenario: Make sure the surveys tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/survey/index.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Surveys"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/survey/"
+    And I should not see an error
 
 
   Scenario: Make sure the wiki tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/wiki/index.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Wiki"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/wiki/"
+    And I should not see an error
 
 
   Scenario: Make sure the notebook tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/notebook/index.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Notebook"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/notebook/"
+    And I should not see an error
 
 
   Scenario: Make sure the projects tool is available
@@ -230,9 +247,10 @@ Feature: Course tools basic testing
   Scenario: Make sure the reporting tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/tracking/courseLog.php?cid=3"
-    And I wait for the page to be loaded
-    Then I should not see an error
+    When I follow the course tool "Reporting"
+    And I wait until I no longer see "Loading"
+    Then the URL should contain "/resources/course-reporting/"
+    And I should not see an error
 
 
   Scenario: Make sure the settings tool is available

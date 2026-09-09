@@ -54,7 +54,7 @@ if (isset($_GET['id'])) {
         $changQuizzColor = $_GET['changquizz'];
     }
     if (isset($_GET['loadh'])) {
-        $loadh = $_GET['loadh'];
+        $loadh = basename((string) $_GET['loadh']);
     }
     $fromsvg = '';
     if (isset($_GET['fromsvg'])) {
@@ -254,18 +254,19 @@ if (isset($_GET['id'])) {
 
         if ('' == $base_html) {
             if (isset($_GET['pty'])) {
-                $pathFile = 'templates/pages/'.$_GET['pty'].'.html';
+                $pty = basename((string) $_GET['pty']);
+                $pathFile = 'templates/pages/'.$pty.'.html';
                 if (file_exists($pathFile)) {
                     $base_html = file_get_contents($pathFile);
                 } else {
-                    $pathFile = 'CStudio/custom_code/page-templates/'.$_GET['pty'].'/data.html';
+                    $pathFile = 'CStudio/custom_code/page-templates/'.$pty.'/data.html';
                     if ($pluginFileSystem->fileExists($pathFile)) {
                         $base_html = $pluginFileSystem->read($pathFile);
                         $localfold = get_local_folder($idPage);
                         $base_html = str_replace('{folderlocal}', $localfold, $base_html);
                         $foldDest = 'img_cache/'.$localfold.'/';
                         recurseCopyTeachdocOufs(
-                            'CStudio/custom_code/page-templates/'.$_GET['pty'].'/data/',
+                            'CStudio/custom_code/page-templates/'.$pty.'/data/',
                             "CStudio/editor/$foldDest"
                         );
                     } else {

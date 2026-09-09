@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "З повагою"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Приклад формули: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Приклад формули: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Діапазони змінних"
@@ -37005,15 +37005,6 @@ msgstr "Довірений відкритий ключ"
 msgid "Trusted signing key"
 msgstr "Довірений ключ підпису"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Введіть APPLY UPDATE FILES для підтвердження"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Введіть RUN DATABASE MIGRATIONS для підтвердження міграцій бази даних"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Введіть RUN POST UPDATE ACTIONS для підтвердження"
-
 msgid "Unknown update notice source."
 msgstr "Невідоме джерело повідомлення про оновлення."
 
@@ -40812,6 +40803,9 @@ msgstr "Метадані запуску команд після застосув
 msgid "Post-apply actions completed successfully."
 msgstr "Дії після застосування виконано успішно."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Не забудьте відновити права доступу до файлів і каталогів до стану, який був до цього оновлення. Якщо залишити веб-серверу право запису до коду Chamilo, будь-яка майбутня вразливість стане способом змінювати файли вашої платформи."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Недійсне визначення команди після застосування оновлення: %s"
 
@@ -41174,4 +41168,52 @@ msgstr "Не вдалося записати журнал операції он�
 
 msgid "Invalid update operation id."
 msgstr "Недійсний ідентифікатор операції оновлення."
+
+msgid "AI study helper"
+msgstr "Помічник ШІ для навчання"
+
+msgid "Selected text"
+msgstr "Вибраний текст"
+
+msgid "Learning technique"
+msgstr "Техніка навчання"
+
+msgid "AI response"
+msgstr "Відповідь ШІ"
+
+msgid "AI request failed."
+msgstr "Запит до ШІ не вдався."
+
+msgid "Mind mapping"
+msgstr "Інтелект-карти"
+
+msgid "Feynman Technique"
+msgstr "Метод Фейнмана"
+
+msgid "Elaborative interrogation"
+msgstr "Елаборативне опитування"
+
+msgid "Spaced repetition"
+msgstr "Інтервальне повторення"
+
+msgid "SQ3R Method"
+msgstr "Метод SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Аналогії та метафори"
+
+msgid "Dual coding"
+msgstr "Подвійне кодування"
+
+msgid "Storytelling"
+msgstr "Сторітелінг"
+
+msgid "Thematic connections"
+msgstr "Тематичні зв’язки"
+
+msgid "Interleaved learning"
+msgstr "Переміжне навчання"
+
+msgid "Memory palaces"
+msgstr "Палаци пам’яті"
 

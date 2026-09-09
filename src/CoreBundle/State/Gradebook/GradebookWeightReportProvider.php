@@ -42,23 +42,23 @@ final readonly class GradebookWeightReportProvider implements ProviderInterface
         }
 
         $resolved = $this->contextResolver->resolve($request);
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
         $category = $this->contextResolver->getSelectedCategory(
             $request,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
             $rootCategory,
         );
 
         $report = new GradebookWeightReport();
         $report->context = [
-            'cid' => (int) $resolved['course']->getId(),
-            'sid' => (int) ($resolved['session']?->getId() ?? 0),
-            'gid' => $resolved['groupId'],
+            'cid' => (int) $resolved->course->getId(),
+            'sid' => (int) ($resolved->session?->getId() ?? 0),
+            'gid' => $resolved->groupId,
             'node' => $request->query->getInt('node'),
         ];
         $report->category = [
@@ -68,7 +68,7 @@ final readonly class GradebookWeightReportProvider implements ProviderInterface
             'hasGradeModel' => null !== $category->getGradeModel(),
         ];
         $report->expectedTotal = (float) $category->getWeight();
-        $report->canManage = $resolved['canManage'] && null === $category->getGradeModel();
+        $report->canManage = $resolved->canManage && null === $category->getGradeModel();
         $report->locked = 1 === (int) $category->getLocked();
         $report->csrfToken = (string) $this->csrfTokenManager->getToken(GradebookWeightActionProcessor::CSRF_TOKEN_ID);
 
@@ -79,10 +79,10 @@ final readonly class GradebookWeightReportProvider implements ProviderInterface
 
             $summary = $this->linkResourceResolver->normalizeLink(
                 $link,
-                $resolved['course'],
-                $resolved['session'],
-                $resolved['groupId'],
-                $resolved['canManage'],
+                $resolved->course,
+                $resolved->session,
+                $resolved->groupId,
+                $resolved->canManage,
             );
             $weight = (float) $link->getWeight();
             $report->currentTotal += $weight;

@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képlet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -37009,15 +37009,6 @@ msgstr "Megbízható nyilvános kulcs"
 msgid "Trusted signing key"
 msgstr "Megbízható aláíró kulcs"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "A megerősítéshez írja be: APPLY UPDATE FILES"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Az adatbázis-migrációk megerősítéséhez írja be: RUN DATABASE MIGRATIONS"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "A megerősítéshez írja be: RUN POST UPDATE ACTIONS"
-
 msgid "Unknown update notice source."
 msgstr "Ismeretlen frissítési értesítés forrása."
 
@@ -40816,6 +40807,9 @@ msgstr "Az alkalmazás utáni parancsfuttatás metaadatai kiírva."
 msgid "Post-apply actions completed successfully."
 msgstr "Az alkalmazás utáni műveletek sikeresen befejeződtek."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Ne feledje, hogy a fájlok és könyvtárak jogosultságait vissza kell állítania a frissítés előtti állapotukra. Ha a webszerver írási hozzáféréssel rendelkezik a Chamilo kódjához, bármely jövőbeli sebezhetőség a platform fájljainak módosítására adhat lehetőséget."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Érvénytelen frissítési alkalmazás utáni parancsdefiníció: %s"
 
@@ -41178,4 +41172,52 @@ msgstr "Nem sikerült a frissítési művelet naplójának írása."
 
 msgid "Invalid update operation id."
 msgstr "Érvénytelen frissítési műveletazonosító."
+
+msgid "AI study helper"
+msgstr "MI tanulási segítő"
+
+msgid "Selected text"
+msgstr "Kijelölt szöveg"
+
+msgid "Learning technique"
+msgstr "Tanulási technika"
+
+msgid "AI response"
+msgstr "MI-válasz"
+
+msgid "AI request failed."
+msgstr "Az MI-kérés sikertelen."
+
+msgid "Mind mapping"
+msgstr "Gondolattérkép"
+
+msgid "Feynman Technique"
+msgstr "Feynman-technika"
+
+msgid "Elaborative interrogation"
+msgstr "Kidolgozó kérdezés"
+
+msgid "Spaced repetition"
+msgstr "Időközönkénti ismétlés"
+
+msgid "SQ3R Method"
+msgstr "SQ3R-módszer"
+
+msgid "Analogies and metaphors"
+msgstr "Analógiák és metaforák"
+
+msgid "Dual coding"
+msgstr "Kettős kódolás"
+
+msgid "Storytelling"
+msgstr "Történetmesélés"
+
+msgid "Thematic connections"
+msgstr "Tematikus kapcsolatok"
+
+msgid "Interleaved learning"
+msgstr "Kevert tanulás"
+
+msgid "Memory palaces"
+msgstr "Memóriapaloták"
 

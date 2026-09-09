@@ -21,6 +21,13 @@ require_once '../inc/functions.php';
 use Chamilo\CoreBundle\Framework\Container;
 
 $idPage = get_int_from('id');
+
+if (false == oel_ctr_rights($idPage)) {
+    echo 'error';
+
+    exit;
+}
+
 $namefile = get_string_from('urlfile');
 $localFolder = get_local_folder($idPage);
 $svgSource = get_string_direct_from('src');

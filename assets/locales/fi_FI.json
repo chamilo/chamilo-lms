@@ -4211,5 +4211,21 @@
     "Stage package": "Vaiheistettu paketti",
     "Package staging": "Paketin vaiheistus",
     "Apply plan": "K\u00e4yt\u00e4 suunnitelmaa",
-    "Update workflow completed": "P\u00e4ivitysty\u00f6nkulku valmis"
+    "Update workflow completed": "P\u00e4ivitysty\u00f6nkulku valmis",
+    "AI study helper": "Teko\u00e4lyopiskeluavustaja",
+    "Selected text": "Valittu teksti",
+    "Learning technique": "Oppimistekniikka",
+    "AI response": "Teko\u00e4lyn vastaus",
+    "AI request failed.": "Teko\u00e4lypyynt\u00f6 ep\u00e4onnistui.",
+    "Mind mapping": "Miellekartta",
+    "Feynman Technique": "Feynmanin tekniikka",
+    "Elaborative interrogation": "Elaboratiivinen interrogointi",
+    "Spaced repetition": "Hajautettu toisto",
+    "SQ3R Method": "SQ3R-menetelm\u00e4",
+    "Analogies and metaphors": "Analogiat ja metaforat",
+    "Dual coding": "Kaksoiskoodaus",
+    "Storytelling": "Tarinankerronta",
+    "Thematic connections": "Temaattiset yhteydet",
+    "Interleaved learning": "Vuorotteleva oppiminen",
+    "Memory palaces": "Muistipalatsit"
 }

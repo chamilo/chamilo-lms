@@ -58,14 +58,14 @@ final readonly class GradebookScoringActionProcessor implements ProcessorInterfa
             throw new AccessDeniedHttpException('Custom Gradebook score display is disabled on this platform.');
         }
 
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
         $categoryId = (int) ($data->categoryId ?? 0);
         $category = $categoryId > 0
-            ? $this->contextResolver->getCategoryInGradebook($categoryId, $rootCategory, $resolved['course'], $resolved['session'])
+            ? $this->contextResolver->getCategoryInGradebook($categoryId, $rootCategory, $resolved->course, $resolved->session)
             : $rootCategory;
 
         $ranges = $this->normalizeRanges($data->ranges);

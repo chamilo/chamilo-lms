@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vänliga hälsningar,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formelprov: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formel-exempel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -37011,15 +37011,6 @@ msgstr "Betrodd publik nyckel"
 msgid "Trusted signing key"
 msgstr "Betrodd signeringsnyckel"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Skriv APPLY UPDATE FILES för att bekräfta"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Skriv RUN DATABASE MIGRATIONS för att bekräfta databasmigreringar"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Skriv RUN POST UPDATE ACTIONS för att bekräfta"
-
 msgid "Unknown update notice source."
 msgstr "Okänd källa för uppdateringsmeddelande."
 
@@ -40818,6 +40809,9 @@ msgstr "Metadata för körning av efterkommando skrevs."
 msgid "Post-apply actions completed successfully."
 msgstr "Efteråtgärder slutfördes utan problem."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Kom ihåg att återställa fil- och katalogbehörigheterna till det tillstånd de hade före denna uppdatering. Om webbservern har skrivåtkomst till Chamilo-koden kan varje framtida sårbarhet användas för att ändra plattformens filer."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Ogiltig definition av efterkommando för uppdatering: %s"
 
@@ -41180,4 +41174,52 @@ msgstr "Kunde inte skriva logg för uppdateringsåtgärd."
 
 msgid "Invalid update operation id."
 msgstr "Ogiltigt id för uppdateringsåtgärd."
+
+msgid "AI study helper"
+msgstr "AI-studiehjälp"
+
+msgid "Selected text"
+msgstr "Markerad text"
+
+msgid "Learning technique"
+msgstr "Inlärningsteknik"
+
+msgid "AI response"
+msgstr "AI-svar"
+
+msgid "AI request failed."
+msgstr "AI-förfrågan misslyckades."
+
+msgid "Mind mapping"
+msgstr "Tankekarta"
+
+msgid "Feynman Technique"
+msgstr "Feynman-tekniken"
+
+msgid "Elaborative interrogation"
+msgstr "Elaborativ utfrågning"
+
+msgid "Spaced repetition"
+msgstr "Intervallrepetition"
+
+msgid "SQ3R Method"
+msgstr "SQ3R-metoden"
+
+msgid "Analogies and metaphors"
+msgstr "Analogier och metaforer"
+
+msgid "Dual coding"
+msgstr "Dubbelkodning"
+
+msgid "Storytelling"
+msgstr "Berättande"
+
+msgid "Thematic connections"
+msgstr "Tematiska kopplingar"
+
+msgid "Interleaved learning"
+msgstr "Växlad inlärning"
+
+msgid "Memory palaces"
+msgstr "Minnespalats"
 

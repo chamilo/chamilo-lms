@@ -235,29 +235,13 @@
         v-else-if="graph?.resources?.length"
         class="grid gap-4 lg:grid-cols-2"
       >
-        <article
+        <GradebookDistributionChart
           v-for="resource in graph.resources"
           :key="resource.key"
-          class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
-        >
-          <h2 class="mb-4 text-center font-semibold text-gray-90">{{ resource.title }}</h2>
-          <div class="space-y-3">
-            <div
-              v-for="bucket in resource.distribution"
-              :key="bucket.label"
-              class="grid grid-cols-[minmax(6rem,auto)_1fr_auto] items-center gap-3"
-            >
-              <span class="truncate text-sm text-gray-700">{{ bucket.label }}</span>
-              <div class="h-4 overflow-hidden rounded bg-gray-100">
-                <div
-                  class="h-full rounded bg-primary"
-                  :style="{ width: `${bucket.widthPercent}%` }"
-                />
-              </div>
-              <span class="min-w-8 text-right text-sm font-semibold text-gray-90">{{ bucket.count }}</span>
-            </div>
-          </div>
-        </article>
+          :average="resource.average"
+          :distribution="resource.distribution"
+          :title="resource.title"
+        />
       </div>
     </div>
   </section>
@@ -270,6 +254,7 @@ import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import GradebookDistributionChart from "../../components/gradebook/GradebookDistributionChart.vue"
 import gradebookService from "../../services/gradebookService"
 
 const { t } = useI18n()

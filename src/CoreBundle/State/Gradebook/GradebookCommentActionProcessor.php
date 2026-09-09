@@ -55,7 +55,7 @@ final readonly class GradebookCommentActionProcessor implements ProcessorInterfa
         }
 
         $resolved = $this->contextResolver->resolve($request, true);
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
@@ -63,13 +63,13 @@ final readonly class GradebookCommentActionProcessor implements ProcessorInterfa
         $category = $this->contextResolver->getCategoryInGradebook(
             $data->categoryId,
             $rootCategory,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
         );
         $learner = $this->contextResolver->getStudentInContext(
             $data->userId,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
         );
         $commentText = $data->comment;
         if (mb_strlen($commentText) > 10000) {

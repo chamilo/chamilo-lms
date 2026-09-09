@@ -32,20 +32,19 @@ final class QuizXapianIndexer
      */
     public function indexQuiz(CQuiz $quiz): ?int
     {
+        // Keep the disabled feature completely silent. Entity listeners also run
+        // during installation/fixtures, where search is disabled by default.
+        $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
+        if ('true' !== $enabled) {
+            return null;
+        }
+
         $resourceNode = $quiz->getResourceNode();
 
         error_log(
             '[Xapian] indexQuiz: start for quiz id='.(string) $quiz->getIid()
             .', resource_node_id='.($resourceNode ? $resourceNode->getId() : 'null')
         );
-
-        // Check global setting
-        $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
-        if ('true' !== $enabled) {
-            error_log('[Xapian] indexQuiz: search is disabled, skipping');
-
-            return null;
-        }
 
         if (!$resourceNode instanceof ResourceNode) {
             error_log('[Xapian] indexQuiz: missing ResourceNode, skipping');

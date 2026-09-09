@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "პატივისცემით"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ფორმულის ნიმუში: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ფორმულის ნიმუში: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ცვლადის დიაპაზონები"
@@ -37005,15 +37005,6 @@ msgstr "სანდო საჯარო გასაღები"
 msgid "Trusted signing key"
 msgstr "სანდო ხელმოწერის გასაღები"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "დასადასტურებლად აკრიფეთ APPLY UPDATE FILES"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "მონაცემთა ბაზის მიგრაციების დასადასტურებლად აკრიფეთ RUN DATABASE MIGRATIONS"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "დასადასტურებლად აკრიფეთ RUN POST UPDATE ACTIONS"
-
 msgid "Unknown update notice source."
 msgstr "განახლების შეტყობინების წყარო უცნობია."
 
@@ -40812,6 +40803,9 @@ msgstr "გამოყენების შემდგომი ბრძა�
 msgid "Post-apply actions completed successfully."
 msgstr "გამოყენების შემდგომი მოქმედებები წარმატებით დასრულდა."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "გახსოვდეთ, რომ ფაილებისა და დირექტორიების უფლებები უნდა აღადგინოთ იმ მდგომარეობაში, რაც განახლებამდე იყო. თუ ვებ-სერვერს დარჩება ჩაწერის წვდომა Chamilo-ს კოდზე, ნებისმიერი მომავალი დაუცველობა პლატფორმის ფაილების შეცვლის საშუალებად იქცევა."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "განახლების გამოყენების შემდგომი ბრძანების არასწორი განსაზღვრება: %s"
 
@@ -41174,4 +41168,52 @@ msgstr "განახლების ოპერაციის ჟურნ�
 
 msgid "Invalid update operation id."
 msgstr "განახლების ოპერაციის არასწორი იდენტიფიკატორი."
+
+msgid "AI study helper"
+msgstr "AI სასწავლო დამხმარე"
+
+msgid "Selected text"
+msgstr "მონიშნული ტექსტი"
+
+msgid "Learning technique"
+msgstr "სწავლის ტექნიკა"
+
+msgid "AI response"
+msgstr "AI პასუხი"
+
+msgid "AI request failed."
+msgstr "AI მოთხოვნა ვერ შესრულდა."
+
+msgid "Mind mapping"
+msgstr "აზროვნების რუკა"
+
+msgid "Feynman Technique"
+msgstr "ფეინმანის ტექნიკა"
+
+msgid "Elaborative interrogation"
+msgstr "გაფართოებული გამოკითხვა"
+
+msgid "Spaced repetition"
+msgstr "დაშორებული გამეორება"
+
+msgid "SQ3R Method"
+msgstr "SQ3R მეთოდი"
+
+msgid "Analogies and metaphors"
+msgstr "ანალოგიები და მეტაფორები"
+
+msgid "Dual coding"
+msgstr "ორმაგი კოდირება"
+
+msgid "Storytelling"
+msgstr "ისტორიების თხრობა"
+
+msgid "Thematic connections"
+msgstr "თემატური კავშირები"
+
+msgid "Interleaved learning"
+msgstr "შერეული სწავლა"
+
+msgid "Memory palaces"
+msgstr "მეხსიერების სასახლეები"
 

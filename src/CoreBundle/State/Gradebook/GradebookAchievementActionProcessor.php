@@ -60,23 +60,23 @@ final readonly class GradebookAchievementActionProcessor implements ProcessorInt
 
         $this->validateCsrfToken($data->submittedCsrfToken);
         $resolved = $this->contextResolver->resolve($request);
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
         $learner = $this->contextResolver->getStudentInContext(
-            (int) $resolved['user']->getId(),
-            $resolved['course'],
-            $resolved['session'],
+            (int) $resolved->user->getId(),
+            $resolved->course,
+            $resolved->session,
         );
         $categoryId = (int) ($data->categoryId ?? 0);
         $category = $categoryId > 0
             ? $this->contextResolver->getCategoryInGradebook(
                 $categoryId,
                 $rootCategory,
-                $resolved['course'],
-                $resolved['session'],
+                $resolved->course,
+                $resolved->session,
             )
             : $rootCategory;
 
@@ -87,8 +87,8 @@ final readonly class GradebookAchievementActionProcessor implements ProcessorInt
         $eligibility = $this->certificateGenerator->getAcademicEligibility(
             $category,
             $learner,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
         );
 
         $scoreLog = (new GradebookScoreLog())
@@ -128,8 +128,8 @@ final readonly class GradebookAchievementActionProcessor implements ProcessorInt
             return $response;
         }
 
-        if ($this->certificateGenerator->usesCustomCertificate($resolved['course'])) {
-            $this->skillAwarder->award($category, $learner, $resolved['course'], $resolved['session']);
+        if ($this->certificateGenerator->usesCustomCertificate($resolved->course)) {
+            $this->skillAwarder->award($category, $learner, $resolved->course, $resolved->session);
             $response->customCertificateFallback = true;
             $response->message = 'CustomCertificate generation remains handled by the plugin workflow.';
 
@@ -139,8 +139,8 @@ final readonly class GradebookAchievementActionProcessor implements ProcessorInt
         $certificate = $this->certificateGenerator->generate(
             $category,
             $learner,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
         );
         $response->certificateGenerated = true;
         $response->certificate = $this->certificateGenerator->normalizeCertificate($certificate, false);

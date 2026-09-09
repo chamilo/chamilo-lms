@@ -64,7 +64,7 @@ final readonly class GradebookEvaluationImportProcessor implements ProcessorInte
 
         $this->validateCsrfToken((string) $request->request->get('submittedCsrfToken', ''));
         $resolved = $this->contextResolver->resolve($request, true);
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
@@ -72,8 +72,8 @@ final readonly class GradebookEvaluationImportProcessor implements ProcessorInte
         $evaluation = $this->getEvaluationInGradebook(
             $request->request->getInt('evaluationId'),
             $rootCategory,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
         );
         if (1 === (int) $evaluation->getLocked() && !$this->security->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedHttpException('This evaluation is locked.');
@@ -94,7 +94,7 @@ final readonly class GradebookEvaluationImportProcessor implements ProcessorInte
         $overwrite = $request->request->getBoolean('overwrite');
         $ignoreErrors = $request->request->getBoolean('ignoreErrors');
         $rows = $this->readCsv($file, $ignoreErrors);
-        $students = $this->contextResolver->getStudents($resolved['course'], $resolved['session']);
+        $students = $this->contextResolver->getStudents($resolved->course, $resolved->session);
         $studentsByUsername = [];
         foreach ($students as $student) {
             $studentsByUsername[mb_strtolower($student->getUsername())] = $student;

@@ -323,7 +323,7 @@ class Diagnoser
         $array = [];
         $writable_folders = [
             api_get_path(SYS_ARCHIVE_PATH),
-            api_get_path(SYMFONY_SYS_PATH).'/var/upload/users/',
+            api_get_path(SYMFONY_SYS_PATH).'var/upload/users/',
         ];
         foreach ($writable_folders as $folder) {
             $writable = is_writable($folder);

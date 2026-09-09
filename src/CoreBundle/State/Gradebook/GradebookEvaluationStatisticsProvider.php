@@ -43,11 +43,11 @@ final readonly class GradebookEvaluationStatisticsProvider implements ProviderIn
         }
 
         $resolved = $this->contextResolver->resolve($request);
-        if (!$resolved['canManage']) {
+        if (!$resolved->canManage) {
             throw new AccessDeniedHttpException('You are not allowed to view Gradebook evaluation statistics.');
         }
 
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
@@ -61,7 +61,7 @@ final readonly class GradebookEvaluationStatisticsProvider implements ProviderIn
         if (!$evaluation instanceof GradebookEvaluation) {
             throw new NotFoundHttpException('The requested evaluation was not found.');
         }
-        if ((int) $evaluation->getCourse()->getId() !== (int) $resolved['course']->getId()) {
+        if ((int) $evaluation->getCourse()->getId() !== (int) $resolved->course->getId()) {
             throw new AccessDeniedHttpException('The requested evaluation belongs to another course.');
         }
 
@@ -69,15 +69,15 @@ final readonly class GradebookEvaluationStatisticsProvider implements ProviderIn
         $this->contextResolver->getCategoryInGradebook(
             (int) $category->getId(),
             $rootCategory,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
         );
 
         $resource = new GradebookEvaluationStatistics();
         $resource->context = [
-            'cid' => (int) $resolved['course']->getId(),
-            'sid' => (int) ($resolved['session']?->getId() ?? 0),
-            'gid' => $resolved['groupId'],
+            'cid' => (int) $resolved->course->getId(),
+            'sid' => (int) ($resolved->session?->getId() ?? 0),
+            'gid' => $resolved->groupId,
             'node' => $request->query->getInt('node'),
         ];
         $resource->evaluation = [

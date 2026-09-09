@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ekzemplo de formulo: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ekzemplo de formulo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -37011,15 +37011,6 @@ msgstr "Fidinda publika ŝlosilo"
 msgid "Trusted signing key"
 msgstr "Fidinda subskriba ŝlosilo"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Tajpu APPLY UPDATE FILES por konfirmi"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Tajpu RUN DATABASE MIGRATIONS por konfirmi datumbazajn migradojn"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Tajpu RUN POST UPDATE ACTIONS por konfirmi"
-
 msgid "Unknown update notice source."
 msgstr "Nekonata fonto de ĝisdatiga avizo."
 
@@ -40818,6 +40809,9 @@ msgstr "Metadatumoj de rulado de post-aplikaj komandoj estis skribitaj."
 msgid "Post-apply actions completed successfully."
 msgstr "Post-aplikaj agoj kompletigis sukcese."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Memoru restarigi la permesojn de viaj dosieroj kaj dosierujoj al ilia stato antaŭ ĉi tiu ĝisdatigo. Lasante la retservilon kun skrib-alira rajto al la kodo de Chamilo, iu ajn estonta vundebleco fariĝas maniero modifi la dosierojn de via platformo."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Nevalida difino de post-aplika ĝisdatiga komando: %s"
 
@@ -41180,4 +41174,52 @@ msgstr "Ne eblas skribi protokolon de ĝisdatiga operacio."
 
 msgid "Invalid update operation id."
 msgstr "Nevalida identigilo de ĝisdatiga operacio."
+
+msgid "AI study helper"
+msgstr "AI-studa helpilo"
+
+msgid "Selected text"
+msgstr "Elektita teksto"
+
+msgid "Learning technique"
+msgstr "Lernotekniko"
+
+msgid "AI response"
+msgstr "AI-respondo"
+
+msgid "AI request failed."
+msgstr "AI-peto malsukcesis."
+
+msgid "Mind mapping"
+msgstr "Mensomapado"
+
+msgid "Feynman Technique"
+msgstr "Tekniko de Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Elabora demandado"
+
+msgid "Spaced repetition"
+msgstr "Disigita ripetado"
+
+msgid "SQ3R Method"
+msgstr "Metodo SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogioj kaj metaforoj"
+
+msgid "Dual coding"
+msgstr "Duobla kodado"
+
+msgid "Storytelling"
+msgstr "Rakontado"
+
+msgid "Thematic connections"
+msgstr "Temaj ligoj"
+
+msgid "Interleaved learning"
+msgstr "Interplektita lernado"
+
+msgid "Memory palaces"
+msgstr "Memorpalacoj"
 

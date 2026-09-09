@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ndiyo:nakala,, hapana:hakuna nakala"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Mtiririko wa okteti,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folda,, application/msword:MsWord,, application/octet-stream:Mtiririko wa Octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":mazoezi:mazoezi,,      uigaji:uigaji,,      dodoso:dodoso,,      mchoro:mchoro,,      picha:picha,,      grafu:grafu,,      faharasa:faharasa,,      slaidi:slaidi,,      jedwali:jedwali,,      maandishi ya hadithi:maandishi ya hadithi,,      mtihani:mtihani,,      majaribio:majaribio,,      taarifa ya tatizo:taarifa ya tatizo,,      tathmini ya kibinafsi:tathmini ya kibinafsi,,      mhadhara:mhadhara"
@@ -37005,15 +37005,6 @@ msgstr "Ufunguo wa umma unaoaminika"
 msgid "Trusted signing key"
 msgstr "Ufunguo wa kusaini unaoaminika"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Andika APPLY UPDATE FILES ili kuthibitisha"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Andika RUN DATABASE MIGRATIONS ili kuthibitisha uhamishaji wa hifadhidata"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Andika RUN POST UPDATE ACTIONS ili kuthibitisha"
-
 msgid "Unknown update notice source."
 msgstr "Chanzo cha taarifa ya sasisho hakijulikani."
 
@@ -40812,6 +40803,9 @@ msgstr "Metadata ya kuendesha amri baada ya kutumia iliandikwa."
 msgid "Post-apply actions completed successfully."
 msgstr "Vitendo baada ya kutumia vilikamilika kwa mafanikio."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Kumbuka kurejesha ruhusa za faili na saraka zako katika hali yake kabla ya sasisho hili. Kuacha seva ya wavuti ikiwa na ufikiaji wa kuandika kwenye msimbo wa Chamilo hugeuza udhaifu wowote wa baadaye kuwa njia ya kubadilisha faili za jukwaa lako."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Ufafanuzi batili wa amri ya sasisho baada ya kutumia: %s"
 
@@ -41174,4 +41168,52 @@ msgstr "Imeshindwa kuandika kumbukumbu ya operesheni ya sasisho."
 
 msgid "Invalid update operation id."
 msgstr "Kitambulisho cha operesheni ya sasisho si sahihi."
+
+msgid "AI study helper"
+msgstr "Msaidizi wa masomo wa AI"
+
+msgid "Selected text"
+msgstr "Maandishi yaliyochaguliwa"
+
+msgid "Learning technique"
+msgstr "Mbinu ya kujifunza"
+
+msgid "AI response"
+msgstr "Jibu la AI"
+
+msgid "AI request failed."
+msgstr "Ombi la AI limeshindwa."
+
+msgid "Mind mapping"
+msgstr "Ramani ya akili"
+
+msgid "Feynman Technique"
+msgstr "Mbinu ya Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Uchunguzi wa kina"
+
+msgid "Spaced repetition"
+msgstr "Kurudia kwa nafasi"
+
+msgid "SQ3R Method"
+msgstr "Mbinu ya SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analogia na sitiari"
+
+msgid "Dual coding"
+msgstr "Usimbaji maradufu"
+
+msgid "Storytelling"
+msgstr "Kusimulia hadithi"
+
+msgid "Thematic connections"
+msgstr "Miunganisho ya mada"
+
+msgid "Interleaved learning"
+msgstr "Kujifunza kwa mchanganyiko"
+
+msgid "Memory palaces"
+msgstr "Majumba ya kumbukumbu"
 

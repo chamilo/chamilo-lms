@@ -183,10 +183,18 @@ if ($langParam !== null && $langParam !== '') {
 $translator = new Translator($installationLanguage);
 $translator->addLoader('po', new PoFileLoader());
 
-$langResourceFile = api_get_path(SYMFONY_SYS_PATH).'translations/messages.'.(explode('_', $installationLanguage, 2)[0]).'.po';
+$translationsPath = api_get_path(SYMFONY_SYS_PATH).'translations/';
+$baseInstallationLanguage = explode('_', $installationLanguage, 2)[0];
+$langResourceCandidates = array_unique([
+    $translationsPath.'messages.'.$installationLanguage.'.po',
+    $translationsPath.'messages.'.$baseInstallationLanguage.'.po',
+]);
 
-if (file_exists($langResourceFile)) {
-    $translator->addResource('po', $langResourceFile, $installationLanguage);
+foreach ($langResourceCandidates as $langResourceFile) {
+    if (file_exists($langResourceFile)) {
+        $translator->addResource('po', $langResourceFile, $installationLanguage);
+        break;
+    }
 }
 
 Container::$translator = $translator;
@@ -288,6 +296,49 @@ if (!empty($_POST['updatePath'])) {
 
 $checkMigrationStatus = [];
 $isUpdateAvailable = isUpdateAvailable();
+
+if ($isUpdateAvailable) {
+    try {
+        $databaseVersion = getChamiloDatabaseVersion(Database::getManager()->getConnection());
+        if ('' !== $databaseVersion) {
+            // For Chamilo 2.x and newer, the database is the reliable source version.
+            // The current 3.x code tree already contains its own version.php, so using
+            // the target code path here would incorrectly report the target version.
+            $my_old_version = $databaseVersion;
+        }
+    } catch (\Throwable $e) {
+        error_log('Installer: Could not determine source database version: '.$e->getMessage());
+    }
+}
+
+$isModernUpdate = $isUpdateAvailable
+    && '' !== $my_old_version
+    && version_compare($my_old_version, '2.0.0', '>=')
+    && version_compare($my_old_version, $new_version, '<');
+
+if ($isModernUpdate && empty($proposedUpdatePath)) {
+    // Chamilo 2.x already stores DB configuration in .env and its 2.x schema no
+    // longer needs the 1.11 source-tree path. Keep the active update tree as the
+    // path so the wizard can continue without asking for a legacy directory.
+    $proposedUpdatePath = api_add_trailing_slash(api_get_path(SYMFONY_SYS_PATH));
+    $emptyUpdatePath = false;
+}
+
+if ($isModernUpdate) {
+    $existingEncryptMethod = get_config_param('password_encryption', $proposedUpdatePath);
+    if (is_string($existingEncryptMethod) && '' !== trim($existingEncryptMethod)) {
+        $encryptPassForm = trim($existingEncryptMethod);
+    }
+}
+
+// Step2.vue intentionally navigates to this GET URL for the upgrade action.
+// Normalize it into the same internal state as the historical POST flow.
+if ('step2_update_8' === ($_GET['step'] ?? '')) {
+    $_POST['step2_update_8'] = '1';
+    $_POST['updatePath'] = $proposedUpdatePath;
+    $_POST['old_version'] = $my_old_version;
+}
+
 if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) {
     if (isset($_POST['step2_install'])) {
         $installType = 'new';
@@ -299,7 +350,8 @@ if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($
             $proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYMFONY_SYS_PATH) : $_POST['updatePath']);
 
             if (file_exists($proposedUpdatePath)) {
-                if (1 === preg_match('/^1\.11\.\d+$/', (string) $my_old_version)) {
+                $isLegacy111Update = 1 === preg_match('/^1\.11\.\d+$/', (string) $my_old_version);
+                if ($isLegacy111Update || $isModernUpdate) {
                     $_POST['step2'] = 1;
                 } else {
                     $badUpdatePath = true;
@@ -462,6 +514,15 @@ if (isset($_POST['step2'])) {
             $dbPortForm
         );
         $manager = Database::getManager();
+
+        try {
+            $detectedDbServerVersion = $manager->getConnection()->fetchOne('SELECT VERSION()');
+            if (is_string($detectedDbServerVersion) && '' !== trim($detectedDbServerVersion)) {
+                setEnvDatabaseServerVersion($envFile, trim($detectedDbServerVersion));
+            }
+        } catch (\Throwable $e) {
+            error_log('Could not detect DB server version: ' . $e->getMessage());
+        }
 
         $tmp = get_config_param_from_db('platformLanguage');
         if (!empty($tmp)) {
@@ -674,6 +735,13 @@ if (isset($_POST['step2'])) {
             $dbSchemaManager = $conn->createSchemaManager();
             $platform = $conn->getDatabasePlatform();
 
+            $detectedDbServerVersion = null;
+            try {
+                $detectedDbServerVersion = $conn->fetchOne('SELECT VERSION()');
+            } catch (\Throwable $e) {
+                error_log('Could not detect DB server version: ' . $e->getMessage());
+            }
+
             // If there are tables, drop them (no DROP DATABASE required)
             try {
                 $tables = $dbSchemaManager->listTableNames();
@@ -752,6 +820,11 @@ if (isset($_POST['step2'])) {
             ];
 
             updateEnvFile($distFile, $envFile, $params);
+
+            if (is_string($detectedDbServerVersion) && '' !== trim($detectedDbServerVersion)) {
+                setEnvDatabaseServerVersion($envFile, trim($detectedDbServerVersion));
+            }
+
             (new Dotenv())->load($envFile);
 
             error_log('Load kernel');

@@ -37,7 +37,7 @@ Chamilo offers a wide range of features, including:
 - Quizzes (20+ question types, random selection with categories, adaptative tests, time limits, co-creation with AI, proctoring tools integration, ...)
 - Roles and permissions management (beta)
 - Rooms and branches for in-person courses
-- SCORM 1.2, QTI, LTI, xAPI CMI 5, Aiken, and other standards compliant formats
+- SCORM 1.2, QTI, LTI, xAPI CMI 5, Aiken, and other standards compliant formats (partial SCORM 2004 support)
 - Security features (password policy and rotation, 2FA/MFA authentication, HSTS, regular updates, IDS, ...)
 - Sessions management (re-use courses multiple times, add structure to long-term courses management chaos)
 - Skills management (create, edit, delete, assign to users, scale/levels of acquisition, ...)
@@ -49,7 +49,7 @@ Chamilo offers a wide range of features, including:
 - ...
 
 Note: AI features (with support for OpenAI, Grok, Gemini, Claude and DeepSeek
-models) and other integrations do require active subscriptions to, or
+models) and other integrations may require active subscriptions to, or
 availability of, external services/applications.
 
 ## Try it out
@@ -57,11 +57,6 @@ availability of, external services/applications.
 You can try out Chamilo at https://campus.chamilo.net/ (use the "Teach courses" option to give yourself creation rights).
 
 ## Quick install
-
-**IMPORTANT** Chamilo 3.0 is in its validation phase right now.
-The installation procedure below is for reference only.
-For a stable Chamilo, please install Chamilo 2.x.
-See the 2.0 branch's README.md for details.
 
 ### Minimum hardware requirements
 
@@ -75,7 +70,6 @@ You will need:
 Chamilo 3.0 has been tested on a 2 vCPUs, 2GB RAM virtual machine under Ubuntu 24.04 and has been shown to work, but to
 build the development environment, you will need at least 4GB RAM.
 At this stage, we haven't made any load testing to evaluate the number of users that could use the system simultaneously.
-Remember this is an alpha version. As such, it will run in "dev" mode (see the `.env` file), considerably more slowly the "prod" mode.
 
 #### Client
 
@@ -95,7 +89,7 @@ You can install Chamilo using 3rd party installers like Softaculous,
 Installatron, DigitalOcean marketplace, etc. and skip the following steps.
 
 These are instructions for a fictitious `my.chamilo.net` domain, with a
-`chamilo` database and DB user, on your own self-managed server.
+`chamilo` database, DB user and password, on your own self-managed server.
 Please adapt the commands below accordingly.
 
 These instructions are meant for a standalone public server, with no
@@ -161,7 +155,7 @@ environment). This will improve maintainability through different Chamilo upgrad
 
 ## Documentation
 
-For more information on Chamilo, visit https://3.chamilo.org/documentation/index.html
+For more information on Chamilo, visit https://campus.chamilo.net/documentation/index.html
 For Chamilo usage documentation, most of the documentation at
 https://docs.chamilo.org/ is up to date.
 

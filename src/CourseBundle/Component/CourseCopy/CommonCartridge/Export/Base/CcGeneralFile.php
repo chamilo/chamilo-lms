@@ -16,9 +16,25 @@ class CcGeneralFile extends XMLGenericDocument
      * @var DOMElement
      */
     protected $root;
+
+    /**
+     * @var string
+     */
     protected $rootns;
+
+    /**
+     * @var string
+     */
     protected $rootname;
+
+    /**
+     * @var array
+     */
     protected $ccnamespaces = [];
+
+    /**
+     * @var array
+     */
     protected $ccnsnames = [];
 
     public function __construct()

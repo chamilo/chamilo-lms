@@ -11,6 +11,9 @@ use DOMNode;
 
 class CcAssesmentMaterial extends CcAssesmentMaterialBase
 {
+    /**
+     * @var CcAssesmentAltmaterial|null
+     */
     protected $altmaterial;
 
     public function __construct($value = null)

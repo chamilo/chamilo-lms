@@ -44,46 +44,46 @@ final readonly class GradebookCertificatesProvider implements ProviderInterface
         }
 
         $resolved = $this->contextResolver->resolve($request);
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
         $category = $this->contextResolver->getSelectedCategory(
             $request,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
             $rootCategory,
         );
         if (
-            !$resolved['canManage']
+            !$resolved->canManage
             && (int) $category->getId() !== (int) $rootCategory->getId()
             && !$category->getVisible()
         ) {
             throw new NotFoundHttpException('The requested Gradebook category was not found.');
         }
-        $allStudents = $this->contextResolver->getStudents($resolved['course'], $resolved['session']);
-        $officialCodeOptions = $resolved['canManage'] ? $this->buildOfficialCodeOptions($allStudents) : [];
+        $allStudents = $this->contextResolver->getStudents($resolved->course, $resolved->session);
+        $officialCodeOptions = $resolved->canManage ? $this->buildOfficialCodeOptions($allStudents) : [];
         $officialCode = trim((string) $request->query->get('officialCode', ''));
 
-        if ($resolved['canManage']) {
+        if ($resolved->canManage) {
             $students = $this->filterStudentsByOfficialCode($allStudents, $officialCode);
         } else {
             $students = [
                 $this->contextResolver->getStudentInContext(
-                    (int) $resolved['user']->getId(),
-                    $resolved['course'],
-                    $resolved['session'],
+                    (int) $resolved->user->getId(),
+                    $resolved->course,
+                    $resolved->session,
                 ),
             ];
         }
 
-        $useCustomCertificateFallback = $this->certificateGenerator->usesCustomCertificate($resolved['course']);
+        $useCustomCertificateFallback = $this->certificateGenerator->usesCustomCertificate($resolved->course);
         $hideExport = $this->contextResolver->isSettingEnabled('certificate.hide_certificate_export_link');
         $hideStudentExport = $this->contextResolver->isSettingEnabled(
             'certificate.hide_certificate_export_link_students',
         );
-        $hideDownload = $hideExport || (!$resolved['canManage'] && $hideStudentExport);
+        $hideDownload = $hideExport || (!$resolved->canManage && $hideStudentExport);
         $rows = [];
 
         foreach ($students as $student) {
@@ -118,9 +118,9 @@ final readonly class GradebookCertificatesProvider implements ProviderInterface
 
         $resource = new GradebookCertificates();
         $resource->context = [
-            'cid' => (int) $resolved['course']->getId(),
-            'sid' => (int) ($resolved['session']?->getId() ?? 0),
-            'gid' => $resolved['groupId'],
+            'cid' => (int) $resolved->course->getId(),
+            'sid' => (int) ($resolved->session?->getId() ?? 0),
+            'gid' => $resolved->groupId,
             'node' => $request->query->getInt('node'),
         ];
         $resourceWeight = $this->getResourceWeight($category);
@@ -133,7 +133,7 @@ final readonly class GradebookCertificatesProvider implements ProviderInterface
             'weightWarning' => abs($resourceWeight - $categoryWeight) > 0.00001,
             'certificateTemplate' => $this->certificateGenerator->getTemplateSummary($category),
         ];
-        $resource->canManage = $resolved['canManage'];
+        $resource->canManage = $resolved->canManage;
         $resource->settings = [
             'filterByOfficialCode' => $this->contextResolver->isSettingEnabled(
                 'certificate.certificate_filter_by_official_code',
@@ -143,7 +143,7 @@ final readonly class GradebookCertificatesProvider implements ProviderInterface
         ];
         $resource->officialCodeOptions = $officialCodeOptions;
         $resource->learners = $rows;
-        if ($resolved['canManage']) {
+        if ($resolved->canManage) {
             $resource->csrfToken = $this->csrfTokenManager
                 ->getToken(GradebookCertificateActionProcessor::CSRF_TOKEN_ID)
                 ->getValue()
@@ -151,16 +151,16 @@ final readonly class GradebookCertificatesProvider implements ProviderInterface
         }
         if ($useCustomCertificateFallback) {
             $resource->customCertificateFallbackUrl = '/main/gradebook/gradebook_display_certificate.php?'.http_build_query([
-                'cid' => (int) $resolved['course']->getId(),
-                'sid' => (int) ($resolved['session']?->getId() ?? 0),
-                'gid' => $resolved['groupId'],
+                'cid' => (int) $resolved->course->getId(),
+                'sid' => (int) ($resolved->session?->getId() ?? 0),
+                'gid' => $resolved->groupId,
                 'cat_id' => (int) $category->getId(),
                 'filter' => '' !== $officialCode ? $officialCode : 'all',
             ]);
             $resource->customCertificateTemplateUrl = '/plugin/CustomCertificate/src/index.php?'.http_build_query([
-                'cid' => (int) $resolved['course']->getId(),
-                'sid' => (int) ($resolved['session']?->getId() ?? 0),
-                'gid' => $resolved['groupId'],
+                'cid' => (int) $resolved->course->getId(),
+                'sid' => (int) ($resolved->session?->getId() ?? 0),
+                'gid' => $resolved->groupId,
                 'origin' => 'gradebook',
                 'selectcat' => (int) $category->getId(),
             ]);

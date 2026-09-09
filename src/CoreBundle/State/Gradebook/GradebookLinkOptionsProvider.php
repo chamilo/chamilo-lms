@@ -46,10 +46,10 @@ final readonly class GradebookLinkOptionsProvider implements ProviderInterface
         }
 
         $resolved = $this->contextResolver->resolve($request, true, false);
-        $course = $resolved['course'];
-        $session = $resolved['session'];
+        $course = $resolved->course;
+        $session = $resolved->session;
         $this->validateRequestedNode($request, $course, $session);
-        $rootCategory = $resolved['rootCategory'] ?? $this->linkManager->getRootCategory($course, $session, true);
+        $rootCategory = $resolved->rootCategory ?? $this->linkManager->getRootCategory($course, $session, true);
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
@@ -69,7 +69,7 @@ final readonly class GradebookLinkOptionsProvider implements ProviderInterface
         $result->context = [
             'cid' => (int) $course->getId(),
             'sid' => null !== $session ? (int) $session->getId() : 0,
-            'gid' => (int) $resolved['groupId'],
+            'gid' => (int) $resolved->groupId,
             'node' => $request->query->getInt('node'),
         ];
         $result->csrfToken = $this->csrfTokenManager
@@ -83,7 +83,7 @@ final readonly class GradebookLinkOptionsProvider implements ProviderInterface
                 $link,
                 $course,
                 $session,
-                (int) $resolved['groupId'],
+                (int) $resolved->groupId,
                 true,
             );
             $result->link = [

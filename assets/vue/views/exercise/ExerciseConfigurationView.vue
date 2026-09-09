@@ -610,14 +610,12 @@
                 v-if="resourceLanguageEnabled && languageOptions.length > 0"
                 class="space-y-2"
               >
-                <BaseSelect
+                <ResourceLanguageSelector
                   id="exercise-language"
                   v-model="form.language"
-                  :label="t('Language')"
                   name="language"
                   :options="languageOptions"
-                  option-label="label"
-                  option-value="value"
+                  :hide-when-single-language="false"
                 />
                 <p class="text-xs text-gray-600">
                   {{ t("Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself.") }}
@@ -801,6 +799,7 @@ import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import exerciseService from "../../services/exerciseService"
 

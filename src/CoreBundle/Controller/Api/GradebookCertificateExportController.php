@@ -56,23 +56,23 @@ final class GradebookCertificateExportController extends AbstractController
         }
 
         $resolved = $this->contextResolver->resolve($request, true);
-        if ($this->certificateGenerator->usesCustomCertificate($resolved['course'])) {
+        if ($this->certificateGenerator->usesCustomCertificate($resolved->course)) {
             throw new AccessDeniedHttpException('CustomCertificate export must use the existing plugin workflow.');
         }
 
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
         $category = $this->contextResolver->getSelectedCategory(
             $request,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
             $rootCategory,
         );
         $officialCode = trim((string) $request->query->get('officialCode', ''));
-        $students = $this->contextResolver->getStudents($resolved['course'], $resolved['session']);
+        $students = $this->contextResolver->getStudents($resolved->course, $resolved->session);
         if ('' !== $officialCode) {
             $students = array_values(array_filter(
                 $students,

@@ -36,6 +36,18 @@ $oel_token = isset($_GET['cotk']) ? $_GET['cotk'] : '';
 $cotk = $oel_token;
 $iduser = $VDB->w_api_get_user_id();
 
+if (false == validateCSRFToken($oel_token, $iduser)) {
+    echo json_encode(['status' => 'error', 'message' => 'CSRF token is not valid or has expired.']);
+
+    exit;
+}
+
+if ($VDB->w_api_is_anonymous() || !$VDB->w_api_is_allowed_to_edit()) {
+    echo json_encode(['status' => 'error', 'message' => 'User rejected.']);
+
+    exit;
+}
+
 if ('copyimages' == $action || 'copydocuments' == $action || 'copyvideos' == $action) {
     $tmpImgCache = isset($_GET['tmpImgCache']) ? $_GET['tmpImgCache'] : '';
     $oldFolder = isset($_GET['oldFolder']) ? $_GET['oldFolder'] : '';

@@ -61,10 +61,10 @@ final readonly class GradebookLearnerSkillActionProcessor implements ProcessorIn
         }
 
         $resolved = $this->contextResolver->resolve($request, true);
-        if (!$resolved['rootCategory'] instanceof GradebookCategory) {
+        if (!$resolved->rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
-        $learner = $this->contextResolver->getStudentInContext($data->userId, $resolved['course'], $resolved['session']);
+        $learner = $this->contextResolver->getStudentInContext($data->userId, $resolved->course, $resolved->session);
         $skill = $this->entityManager->getRepository(Skill::class)->find($data->skillId);
         if (!$skill instanceof Skill) {
             throw new NotFoundHttpException('The requested skill was not found.');
@@ -72,8 +72,8 @@ final readonly class GradebookLearnerSkillActionProcessor implements ProcessorIn
 
         $skillRelItem = $this->entityManager->getRepository(SkillRelItem::class)->findOneBy([
             'skill' => $skill,
-            'courseId' => (int) $resolved['course']->getId(),
-            'sessionId' => (int) ($resolved['session']?->getId() ?? 0),
+            'courseId' => (int) $resolved->course->getId(),
+            'sessionId' => (int) ($resolved->session?->getId() ?? 0),
         ]);
         if (!$skillRelItem instanceof SkillRelItem) {
             throw new AccessDeniedHttpException('The requested skill is not linked to the current course context.');
@@ -82,8 +82,8 @@ final readonly class GradebookLearnerSkillActionProcessor implements ProcessorIn
         $criteria = [
             'user' => $learner,
             'skill' => $skill,
-            'course' => $resolved['course'],
-            'session' => $resolved['session'],
+            'course' => $resolved->course,
+            'session' => $resolved->session,
         ];
         $existing = $this->entityManager->getRepository(SkillRelUser::class)->findOneBy($criteria);
         $acquired = false;
@@ -93,14 +93,14 @@ final readonly class GradebookLearnerSkillActionProcessor implements ProcessorIn
             $issue = (new SkillRelUser())
                 ->setUser($learner)
                 ->setSkill($skill)
-                ->setCourse($resolved['course'])
+                ->setCourse($resolved->course)
                 ->setAcquiredSkillAt(new DateTime('now', new DateTimeZone('UTC')))
                 ->setValidationStatus(1)
                 ->setArgumentation('')
-                ->setArgumentationAuthorId((int) $resolved['user']->getId())
+                ->setArgumentationAuthorId((int) $resolved->user->getId())
             ;
-            if (null !== $resolved['session']) {
-                $issue->setSession($resolved['session']);
+            if (null !== $resolved->session) {
+                $issue->setSession($resolved->session);
             }
             $this->entityManager->persist($issue);
             $acquired = true;

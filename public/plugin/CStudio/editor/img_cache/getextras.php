@@ -16,12 +16,27 @@ header('Content-type: text/javascript');
 
 error_reporting(0);
 
+require_once __DIR__.'/../../0_dal/dal.vdatabase.php';
+$VDB = new VirtualDatabase();
+
+require_once __DIR__.'/../../ajax/inc/functions.php';
+
+require_once __DIR__.'/../../0_dal/dal.save.php';
+
 $idPage = -1;
 if (isset($_POST['id'])) {
     $idPage = (int) $_POST['id'];
 }
 if (isset($_GET['id'])) {
     $idPage = (int) $_GET['id'];
+}
+
+// Checked before the cache read below: a fresh cache hit used to be served
+// unconditionally, bypassing even the anonymous check that follows it.
+if ($VDB->w_api_is_anonymous() || !oel_ctr_rights($idPage)) {
+    echo 'var baseMyCollImgs = [];';
+
+    exit;
 }
 
 $pluginFileSystem = Container::getPluginsFileSystem();
@@ -40,19 +55,6 @@ try {
     }
 } catch (\Throwable $exception) {
     error_log('CStudio getextras cache read failed: '.$exception->getMessage());
-}
-
-require_once __DIR__.'/../../0_dal/dal.vdatabase.php';
-$VDB = new VirtualDatabase();
-
-require_once __DIR__.'/../../ajax/inc/functions.php';
-
-require_once __DIR__.'/../../0_dal/dal.save.php';
-
-if ($VDB->w_api_is_anonymous()) {
-    echo 'var baseMyCollImgs = [];';
-
-    exit;
 }
 
 if (isset($_POST['id']) || isset($_GET['id'])) {

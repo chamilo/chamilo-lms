@@ -164,7 +164,7 @@ if (isset($_GET['id'])) {
         $finalPathW = '';
 
         if (isset($_GET['namesrc'])) {
-            $namFileZip = $_GET['namesrc'];
+            $namFileZip = basename((string) $_GET['namesrc']);
             $pluginFileSystem = Container::getPluginsFileSystem();
 
             if ($pluginFileSystem->fileExists(api_get_folder_imporfiles().$namFileZip)) {

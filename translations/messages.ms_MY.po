@@ -37009,15 +37009,6 @@ msgstr "Kunci awam yang dipercayai"
 msgid "Trusted signing key"
 msgstr "Kunci tandatangan yang dipercayai"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Taip APPLY UPDATE FILES untuk mengesahkan"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Taip RUN DATABASE MIGRATIONS untuk mengesahkan penghijrahan pangkalan data"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Taip RUN POST UPDATE ACTIONS untuk mengesahkan"
-
 msgid "Unknown update notice source."
 msgstr "Sumber notis kemas kini tidak diketahui."
 
@@ -40816,6 +40807,9 @@ msgstr "Metadata pelaksanaan arahan pasca-guna telah ditulis."
 msgid "Post-apply actions completed successfully."
 msgstr "Tindakan pasca-guna selesai dengan jayanya."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Ingat untuk memulihkan kebenaran fail dan direktori anda kepada keadaan sebelum kemas kini ini. Membiarkan pelayan web dengan akses tulis kepada kod Chamilo menjadikan sebarang kelemahan masa depan sebagai cara untuk mengubah suai fail platform anda."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Definisi arahan pasca-guna kemas kini tidak sah: %s"
 
@@ -41178,4 +41172,52 @@ msgstr "Tidak dapat menulis log operasi kemas kini."
 
 msgid "Invalid update operation id."
 msgstr "ID operasi kemas kini tidak sah."
+
+msgid "AI study helper"
+msgstr "Pembantu belajar AI"
+
+msgid "Selected text"
+msgstr "Teks terpilih"
+
+msgid "Learning technique"
+msgstr "Teknik pembelajaran"
+
+msgid "AI response"
+msgstr "Respons AI"
+
+msgid "AI request failed."
+msgstr "Permintaan AI gagal."
+
+msgid "Mind mapping"
+msgstr "Pemetaan minda"
+
+msgid "Feynman Technique"
+msgstr "Teknik Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Interogasi elaboratif"
+
+msgid "Spaced repetition"
+msgstr "Pengulangan berjarak"
+
+msgid "SQ3R Method"
+msgstr "Kaedah SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Analog dan metafora"
+
+msgid "Dual coding"
+msgstr "Pengekodan dual"
+
+msgid "Storytelling"
+msgstr "Penceritaan"
+
+msgid "Thematic connections"
+msgstr "Hubungan tematik"
+
+msgid "Interleaved learning"
+msgstr "Pembelajaran berselang"
+
+msgid "Memory palaces"
+msgstr "Istana memori"
 

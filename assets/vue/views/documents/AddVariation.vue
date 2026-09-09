@@ -202,6 +202,77 @@ const showResourceLanguageAdvancedSettings = computed(() => {
   return resourceLanguageEnabled.value && languages.filter(isResourceLanguageActive).length > 1
 })
 const selectedLanguage = ref("")
+
+function normalizeLanguageIso(value) {
+  const raw = String(value || "").trim()
+  if (!raw) {
+    return ""
+  }
+
+  const normalizedRaw = raw.replace("-", "_").toLowerCase()
+  const languages = Array.isArray(window.languages) ? window.languages : []
+  const exact = languages.find((language) => {
+    const candidates = [
+      language?.isocode,
+      language?.isoCode,
+      language?.englishName,
+      language?.english_name,
+      language?.originalName,
+      language?.original_name,
+    ]
+
+    return candidates.some(
+      (candidate) => String(candidate || "").replace("-", "_").toLowerCase() === normalizedRaw,
+    )
+  })
+
+  if (exact) {
+    return String(exact.isocode || exact.isoCode || "")
+  }
+
+  const shortCode = normalizedRaw.split("_")[0]
+  const byShortCode = languages.find((language) => {
+    const code = String(language?.isocode || language?.isoCode || "")
+      .replace("-", "_")
+      .toLowerCase()
+
+    return code === shortCode || code.startsWith(`${shortCode}_`)
+  })
+
+  return String(byShortCode?.isocode || byShortCode?.isoCode || "")
+}
+
+async function applyDefaultLanguageFromContext() {
+  if (selectedLanguage.value) {
+    return
+  }
+
+  let defaultLanguage = ""
+
+  if (cid) {
+    try {
+      const response = await fetch(`/api/courses/${cid}`, {
+        credentials: "same-origin",
+        headers: { Accept: "application/json" },
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        defaultLanguage = normalizeLanguageIso(data?.courseLanguage || data?.course_language || data?.language)
+      }
+    } catch (error) {
+      console.warn("[DocumentsAddVariation] Failed to load course language.", error)
+    }
+  }
+
+  if (!defaultLanguage) {
+    defaultLanguage = normalizeLanguageIso(securityStore.user?.locale)
+  }
+
+  if (defaultLanguage && !selectedLanguage.value) {
+    selectedLanguage.value = defaultLanguage
+  }
+}
 const accessUrls = ref([])
 const isAdmin = computed(() => securityStore.isAdmin)
 
@@ -214,6 +285,7 @@ onMounted(async () => {
   await fetchOriginalFile()
   await fetchVariations()
   await fetchAccessUrls()
+  await applyDefaultLanguageFromContext()
 })
 
 async function fetchVariations() {

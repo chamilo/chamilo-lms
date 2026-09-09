@@ -31433,6 +31433,9 @@ msgstr "Back to user assignment page"
 msgid "Authentication sources assigned successfully"
 msgstr "Authentication sources assigned successfully"
 
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Tip: choose “— Just upload —” to store without sending to anyone."
 
@@ -40813,6 +40816,9 @@ msgstr "Post-apply command run metadata was written."
 msgid "Post-apply actions completed successfully."
 msgstr "Post-apply actions completed successfully."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Invalid update post-apply command definition: %s"
 
@@ -41175,3 +41181,51 @@ msgstr "Unable to write update operation log."
 
 msgid "Invalid update operation id."
 msgstr "Invalid update operation id."
+
+msgid "AI study helper"
+msgstr "AI study helper"
+
+msgid "Selected text"
+msgstr "Selected text"
+
+msgid "Learning technique"
+msgstr "Learning technique"
+
+msgid "AI response"
+msgstr "AI response"
+
+msgid "AI request failed."
+msgstr "AI request failed."
+
+msgid "Mind mapping"
+msgstr "Mind mapping"
+
+msgid "Feynman Technique"
+msgstr "Feynman Technique"
+
+msgid "Elaborative interrogation"
+msgstr "Elaborative interrogation"
+
+msgid "Spaced repetition"
+msgstr "Spaced repetition"
+
+msgid "SQ3R Method"
+msgstr "SQ3R Method"
+
+msgid "Analogies and metaphors"
+msgstr "Analogies and metaphors"
+
+msgid "Dual coding"
+msgstr "Dual coding"
+
+msgid "Storytelling"
+msgstr "Storytelling"
+
+msgid "Thematic connections"
+msgstr "Thematic connections"
+
+msgid "Interleaved learning"
+msgstr "Interleaved learning"
+
+msgid "Memory palaces"
+msgstr "Memory palaces"

@@ -89,15 +89,14 @@
             allow-clear
           />
 
-          <BaseSelect
+          <ResourceLanguageSelector
             v-if="resourceLanguageEnabled && form.showLanguage"
             id="lp-language"
             v-model="form.language"
             name="language"
-            :label="t('Language')"
             :options="form.languageOptions"
-            option-label="label"
-            option-value="value"
+            empty-value="__none__"
+            :hide-when-single-language="false"
           />
 
           <BaseCheckbox
@@ -411,6 +410,7 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import LpExtraFields from "../../components/lp/LpExtraFields.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"

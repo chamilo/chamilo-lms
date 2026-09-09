@@ -61,6 +61,8 @@ function update_lp_infos($lp_id, $title, $local_folder): void
     if ('chamil' == $VDB->engine) {
         $tblCLp = $VDB->get_course_table(TABLE_LP_MAIN);
         $title = oel_escape_string($title);
+        $local_folder = oel_escape_string($local_folder);
+        $lp_id = (int) $lp_id;
         $sqlU = "UPDATE $tblCLp SET $tblCLp.path = '$local_folder/.' , $tblCLp.default_view_mod = 'embedframe' , $tblCLp.title = '$title' ";
         $sqlU .= " WHERE $tblCLp.iid = $lp_id;";
         $VDB->query($sqlU);

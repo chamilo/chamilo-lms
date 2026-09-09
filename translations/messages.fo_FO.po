@@ -37005,15 +37005,6 @@ msgstr "Treyst almennur lykil"
 msgid "Trusted signing key"
 msgstr "Treyst undirskrivanar lykil"
 
-msgid "Type APPLY UPDATE FILES to confirm"
-msgstr "Skriva APPLY UPDATE FILES fyri at vátta"
-
-msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
-msgstr "Skriva RUN DATABASE MIGRATIONS fyri at vátta dátugrunnsflytingar"
-
-msgid "Type RUN POST UPDATE ACTIONS to confirm"
-msgstr "Skriva RUN POST UPDATE ACTIONS fyri at vátta"
-
 msgid "Unknown update notice source."
 msgstr "Ókend uppdatering kunngerð kelda."
 
@@ -40812,6 +40803,9 @@ msgstr "Metadáta fyri koyring av eftir-nýtslu skipan vórðu skrivað."
 msgid "Post-apply actions completed successfully."
 msgstr "Eftir-nýtslu átøk vórðu fullfíggjað við góðum úrsliti."
 
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Minst til at seta fílu- og mappuloyvini aftur til tað støðið, tey høvdu áðrenn hesa dagføringina. Um vevtænastan framvegis hevur skrivirættindi til Chamilo-kotuna, gerst ein framtíðar veikleiki ein máti at broyta fílurnar á pallinum."
+
 msgid "Invalid update post-apply command definition: %s"
 msgstr "Ógildug skipanardefinering fyri eftir-nýtslu uppdatering: %s"
 
@@ -41174,4 +41168,52 @@ msgstr "Kann ikki skriva logg fyri dagførsluoperatión."
 
 msgid "Invalid update operation id."
 msgstr "Ógildugt id fyri dagførsluoperatión."
+
+msgid "AI study helper"
+msgstr "AI-námsaðstoð"
+
+msgid "Selected text"
+msgstr "Valdur tekstur"
+
+msgid "Learning technique"
+msgstr "Námstøkni"
+
+msgid "AI response"
+msgstr "KI-svar"
+
+msgid "AI request failed."
+msgstr "AI-fyrispurningur miseydnaðist."
+
+msgid "Mind mapping"
+msgstr "Hugsanakort"
+
+msgid "Feynman Technique"
+msgstr "Feynman-tøknin"
+
+msgid "Elaborative interrogation"
+msgstr "Útgreinandi spurningar"
+
+msgid "Spaced repetition"
+msgstr "Spreidd endurtøka"
+
+msgid "SQ3R Method"
+msgstr "SQ3R-hátturin"
+
+msgid "Analogies and metaphors"
+msgstr "Líkingar og myndamáli"
+
+msgid "Dual coding"
+msgstr "Tvíkoding"
+
+msgid "Storytelling"
+msgstr "Søguforteljing"
+
+msgid "Thematic connections"
+msgstr "Tematiskar sambindingar"
+
+msgid "Interleaved learning"
+msgstr "Samanflættað læring"
+
+msgid "Memory palaces"
+msgstr "Minnishøllir"
 

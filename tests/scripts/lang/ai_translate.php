@@ -14,6 +14,8 @@ if (PHP_SAPI != 'cli') {
     die('This script can only be executed from the command line');
 }
 
+$scriptStartTime = microtime(true);
+
 $translationSourceLanguageCode = 'en_US';
 $translationAPIEndpoint = 'https://api.x.ai/v1/chat/completions';
 
@@ -96,6 +98,18 @@ function eprintln(string $msg, bool $timestam = false): void {
         $msg = '[' . date('H:i:s') . '] ' . $msg;
     }
     fwrite(STDERR, $msg . PHP_EOL);
+}
+
+/**
+ * Format a duration in seconds as hh:mm:ss (hours are not capped at 24).
+ */
+function formatDuration(float $seconds): string {
+    $totalSeconds = (int) round(max(0, $seconds));
+    $hours = intdiv($totalSeconds, 3600);
+    $minutes = intdiv($totalSeconds % 3600, 60);
+    $secs = $totalSeconds % 60;
+
+    return sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
 }
 
 /**
@@ -1111,16 +1125,24 @@ eprintln(
     true
 );
 
+$totalLangCount = count(array_filter($langCodes, static fn ($l) => trim((string) $l) !== ''));
+$langIndex = 0;
+
 foreach ($langCodes as $lang) {
     $lang = trim($lang);
     if ($lang === '') {
         continue;
     }
+    $langIndex++;
 
     $targetLangName = getLanguageName($lang);
     $targetFile = $translationsDir."messages.{$lang}.po";
     eprintln("------------------------------------------------------------");
-    eprintln("Processing language: {$lang} ({$targetLangName})", true);
+    eprintln(
+        "Processing language: {$lang} ({$targetLangName}) ({$langIndex}/{$totalLangCount})"
+        ." [Running for ".formatDuration(microtime(true) - $scriptStartTime)." so far]",
+        true
+    );
     eprintln("Target file: {$targetFile}");
 
     if (is_file($targetFile)) {

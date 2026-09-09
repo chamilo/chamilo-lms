@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Gradebook;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookCertificateAction;
+use Chamilo\CoreBundle\Dto\Gradebook\GradebookContext;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
@@ -86,7 +87,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
 
         $this->validateCsrfToken($data->submittedCsrfToken);
         $resolved = $this->contextResolver->resolve($request, true);
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
@@ -96,8 +97,8 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             ? $this->contextResolver->getCategoryInGradebook(
                 $categoryId,
                 $rootCategory,
-                $resolved['course'],
-                $resolved['session'],
+                $resolved->course,
+                $resolved->session,
             )
             : $rootCategory;
 
@@ -139,22 +140,19 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         return $response;
     }
 
-    /**
-     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
-     */
-    private function generateAll(GradebookCategory $category, array $resolved): int
+    private function generateAll(GradebookCategory $category, GradebookContext $resolved): int
     {
-        if ($this->certificateGenerator->usesCustomCertificate($resolved['course'])) {
+        if ($this->certificateGenerator->usesCustomCertificate($resolved->course)) {
             throw new BadRequestHttpException('CustomCertificate generation must use the existing plugin workflow.');
         }
 
         $affected = 0;
-        foreach ($this->contextResolver->getStudents($resolved['course'], $resolved['session']) as $learner) {
+        foreach ($this->contextResolver->getStudents($resolved->course, $resolved->session) as $learner) {
             $eligibility = $this->certificateGenerator->getEligibility(
                 $category,
                 $learner,
-                $resolved['course'],
-                $resolved['session'],
+                $resolved->course,
+                $resolved->session,
             );
             if (!$eligibility['eligible']) {
                 continue;
@@ -164,8 +162,8 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
                 $this->certificateGenerator->generate(
                     $category,
                     $learner,
-                    $resolved['course'],
-                    $resolved['session'],
+                    $resolved->course,
+                    $resolved->session,
                 );
                 $affected++;
             } catch (Throwable $exception) {
@@ -180,10 +178,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         return $affected;
     }
 
-    /**
-     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
-     */
-    private function deleteOne(GradebookCertificateAction $data, GradebookCategory $category, array $resolved): int
+    private function deleteOne(GradebookCertificateAction $data, GradebookCategory $category, GradebookContext $resolved): int
     {
         $learner = $this->requireLearner($data, $resolved);
 
@@ -193,10 +188,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         ) ? 1 : 0;
     }
 
-    /**
-     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
-     */
-    private function deleteAll(GradebookCertificateAction $data, GradebookCategory $category, array $resolved): int
+    private function deleteAll(GradebookCertificateAction $data, GradebookCategory $category, GradebookContext $resolved): int
     {
         $affected = 0;
         foreach ($this->getFilteredStudents($data, $resolved) as $learner) {
@@ -219,10 +211,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         return $affected;
     }
 
-    /**
-     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
-     */
-    private function notifyAll(GradebookCertificateAction $data, GradebookCategory $category, array $resolved): int
+    private function notifyAll(GradebookCertificateAction $data, GradebookCategory $category, GradebookContext $resolved): int
     {
         $message = trim($data->notificationMessage);
         if ('' === $message) {
@@ -244,10 +233,10 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
                 if ($this->legacyCertificateBridge->notify(
                     $certificate,
                     $learner,
-                    (string) $resolved['course']->getTitle(),
+                    (string) $resolved->course->getTitle(),
                     $subject,
                     $message,
-                    (int) $resolved['user']->getId(),
+                    (int) $resolved->user->getId(),
                 )) {
                     $affected++;
                 }
@@ -263,12 +252,9 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         return $affected;
     }
 
-    /**
-     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
-     */
-    private function setTemplate(GradebookCertificateAction $data, array $resolved): int
+    private function setTemplate(GradebookCertificateAction $data, GradebookContext $resolved): int
     {
-        if ($this->certificateGenerator->usesCustomCertificate($resolved['course'])) {
+        if ($this->certificateGenerator->usesCustomCertificate($resolved->course)) {
             throw new BadRequestHttpException('CustomCertificate templates must use the existing plugin workflow.');
         }
 
@@ -287,8 +273,8 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             throw new AccessDeniedHttpException('The certificate template has no resource context.');
         }
 
-        $currentCourseId = (int) $resolved['course']->getId();
-        $currentSessionId = (int) ($resolved['session']?->getId() ?? 0);
+        $currentCourseId = (int) $resolved->course->getId();
+        $currentSessionId = (int) ($resolved->session?->getId() ?? 0);
         $belongsToContext = false;
 
         foreach ($resourceNode->getResourceLinks() as $resourceLink) {
@@ -316,7 +302,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             throw new AccessDeniedHttpException('The requested certificate template is outside the current course context.');
         }
 
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
@@ -327,16 +313,13 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         return $affected;
     }
 
-    /**
-     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
-     */
-    private function useSystemTemplate(array $resolved): int
+    private function useSystemTemplate(GradebookContext $resolved): int
     {
-        if ($this->certificateGenerator->usesCustomCertificate($resolved['course'])) {
+        if ($this->certificateGenerator->usesCustomCertificate($resolved->course)) {
             throw new BadRequestHttpException('CustomCertificate templates must use the existing plugin workflow.');
         }
 
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
@@ -361,10 +344,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         return $affected;
     }
 
-    /**
-     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
-     */
-    private function setExpiryDate(GradebookCertificateAction $data, GradebookCategory $category, array $resolved): int
+    private function setExpiryDate(GradebookCertificateAction $data, GradebookCategory $category, GradebookContext $resolved): int
     {
         $learner = $this->requireLearner($data, $resolved);
 
@@ -395,15 +375,12 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         $certificate->setExpiryDate($newExpiryDate);
         $this->entityManager->flush();
 
-        $this->recordExpiryDateAudit($certificate, $resolved['user'], $oldExpiryDate, $newExpiryDate);
+        $this->recordExpiryDateAudit($certificate, $resolved->user, $oldExpiryDate, $newExpiryDate);
 
         return 1;
     }
 
-    /**
-     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
-     */
-    private function notifyExpiry(GradebookCertificateAction $data, GradebookCategory $category, array $resolved): int
+    private function notifyExpiry(GradebookCertificateAction $data, GradebookCategory $category, GradebookContext $resolved): int
     {
         $userIds = array_values(array_unique(array_filter(
             array_map('intval', $data->userIds),
@@ -423,7 +400,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             // Throws AccessDeniedHttpException for a user outside the current course/session
             // context — a manipulated payload must fail loudly, not silently skip (see CLAUDE.md
             // OWASP checklist: mass parameter manipulation).
-            $learner = $this->contextResolver->getStudentInContext($userId, $resolved['course'], $resolved['session']);
+            $learner = $this->contextResolver->getStudentInContext($userId, $resolved->course, $resolved->session);
 
             $certificate = $this->certificateRepository->getCertificateByUserId(
                 (int) $category->getId(),
@@ -440,7 +417,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             // A teacher explicitly selected these certificates from the expirations page, where
             // "last reminder sent" is already visible — honor that choice rather than silently
             // refusing a resend (unlike the cron, which defaults to not resending).
-            $result = $this->expiryNotifier->notify($certificate, $certificateUrl, true, $resolved['user']);
+            $result = $this->expiryNotifier->notify($certificate, $certificateUrl, true, $resolved->user);
             if ($result['sent']) {
                 $affected++;
             }
@@ -473,10 +450,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         );
     }
 
-    /**
-     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
-     */
-    private function requireLearner(GradebookCertificateAction $data, array $resolved): User
+    private function requireLearner(GradebookCertificateAction $data, GradebookContext $resolved): User
     {
         $userId = (int) ($data->userId ?? 0);
         if ($userId <= 0) {
@@ -485,20 +459,18 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
 
         return $this->contextResolver->getStudentInContext(
             $userId,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
         );
     }
 
     /**
-     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
-     *
      * @return list<User>
      */
-    private function getFilteredStudents(GradebookCertificateAction $data, array $resolved): array
+    private function getFilteredStudents(GradebookCertificateAction $data, GradebookContext $resolved): array
     {
         $officialCode = trim($data->officialCode);
-        $students = $this->contextResolver->getStudents($resolved['course'], $resolved['session']);
+        $students = $this->contextResolver->getStudents($resolved->course, $resolved->session);
         if ('' === $officialCode) {
             return $students;
         }

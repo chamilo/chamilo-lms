@@ -1184,10 +1184,41 @@ body {
     margin-top: 0 !important;
 }
 
-/* Legacy-image blocks keep their known icon but reserve readable label space. */
+/*
+ * Legacy CStudio bitmap blocks still carry FontAwesome's `fa` class even though
+ * their real icon comes from background-image. In the row palette this makes
+ * FontAwesome's ::before glyph render on top of the bitmap and leaves the label
+ * with no reserved icon space. Keep those existing bitmap assets, but treat
+ * these known legacy block classes as bitmap rows rather than FA icon rows.
+ */
+.gjs-block.fa.icon-action::before,
+.gjs-block.fa.icon-audio::before,
+.gjs-block.fa.icon-cmq::before,
+.gjs-block.fa.icon-h1::before,
+.gjs-block.fa.icon-h2::before,
+.gjs-block.fa.icon-txtteach::before,
+.gjs-block.fa.icon-btnTeach::before,
+.gjs-block.fa.icon-plugTeach::before {
+    display: none !important;
+    content: none !important;
+}
+
+.gjs-block.fa.icon-action .gjs-block-label,
+.gjs-block.fa.icon-audio .gjs-block-label,
+.gjs-block.fa.icon-cmq .gjs-block-label,
+.gjs-block.fa.icon-h1 .gjs-block-label,
+.gjs-block.fa.icon-h2 .gjs-block-label,
+.gjs-block.fa.icon-txtteach .gjs-block-label,
+.gjs-block.fa.icon-btnTeach .gjs-block-label,
+.gjs-block.fa.icon-plugTeach .gjs-block-label,
 .cstudio-mdi-ready .gjs-block:not(.cstudio-block-mdi):not(.gjs-fonts):not(.fa) .gjs-block-label,
 .gjs-block:not(.cstudio-block-mdi):not(.gjs-fonts):not(.fa) .gjs-block-label {
     padding-left: 38px !important;
+}
+
+/* The old quiz helper badge is useful on square tiles but overlaps row icons. */
+.gjs-block .qlabicon {
+    display: none !important;
 }
 
 /* Category headers align with the title row used by the modern LP TOC. */

@@ -214,3 +214,81 @@ Feature: Users tool
     And I press "Yes"
     And I wait for the page to be loaded
     Then I should not see "ywarnier"
+
+  # Not ported — new, for the selection column both views carry. Its two
+  # checkboxes used to be native <input type="checkbox">; they are BaseCheckbox
+  # (PrimeVue) now, which renders the real input transparently on top of a
+  # styled box, so what the user sees is worth pinning explicitly: a header
+  # that reports none, some (indeterminate) or all, and rows that feed it.
+  #
+  # Both scenarios below subscribe nobody and unsubscribe nobody, so neither
+  # needs a teardown. That is deliberate: a first version registered a fixed
+  # user to obtain a second row, and it failed on a box where that account was
+  # not in the available list at all — the seed data this suite runs against is
+  # not the same everywhere. Only two things are assumed, and both hold by
+  # construction: the Teachers tab of a course has at least one teacher, and
+  # the Subscribe view lists more users than it subscribes.
+  Scenario: Admin selects course users with the row and select-all checkboxes
+    Given I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    And I follow the course tool "Users"
+    And I wait for the page to be loaded
+    And I press "Teachers"
+    # NOT "I wait for the page to be loaded": the tab switch is a router.push,
+    # which fires no navigation event at all, and both tabs render the same
+    # toolbar, so domcontentloaded resolves against the tab we just left. The
+    # query string is the only signal that the switch actually landed.
+    And I wait for the URL to contain "type=1"
+    And I wait for the element "#course-user-select-all" to appear
+    # Nothing selected yet: the header is neither "all" nor "some".
+    Then the checkbox "course-user-select-all" should not be checked
+    And the checkbox "course-user-select-all" should not be indeterminate
+    And I should not see "users selected"
+    # A row feeds the header, and the bulk bar appears with it.
+    And I click the checkbox in table row 1
+    Then I should see "users selected"
+    And I should see "Unsubscribe"
+    # The header takes every selectable row.
+    And I check "course-user-select-all"
+    Then the checkbox "course-user-select-all" should be checked
+    And the checkbox "course-user-select-all" should not be indeterminate
+    And I should see "users selected"
+    # And drops them all again.
+    And I uncheck "course-user-select-all"
+    Then the checkbox "course-user-select-all" should not be checked
+    And I should not see "users selected"
+
+  # Not ported — new, the same selection column on the Subscribe view, where it
+  # gates the bulk "Register" button instead of "Unsubscribe". This is also
+  # where the indeterminate state is pinned: that state needs at least two
+  # selectable rows, and the available-users list is the one table in this tool
+  # guaranteed to have them (every user the course has NOT subscribed yet).
+  Scenario: Admin selects available users with the select-all checkbox
+    Given I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    And I follow the course tool "Users"
+    And I wait for the page to be loaded
+    And I click the "[title='Add']" element
+    And I wait for the URL to contain "subscribe"
+    # Same Subscribe-view settle rules as Scenario 1's teardown — see the long
+    # note there for why domcontentloaded guarantees nothing on this route.
+    And I wait for the page content to settle
+    And I wait for the element "[title='Register']" to appear
+    And I wait for the element "#available-user-select-all" to appear
+    Then the checkbox "available-user-select-all" should not be checked
+    And I should not see "users selected"
+    # The header takes the whole page of rows.
+    And I check "available-user-select-all"
+    Then the checkbox "available-user-select-all" should be checked
+    And the checkbox "available-user-select-all" should not be indeterminate
+    And I should see "users selected"
+    # Dropping a single row leaves the header on "some", never on "all".
+    And I click the checkbox in table row 1
+    Then the checkbox "available-user-select-all" should be indeterminate
+    And the checkbox "available-user-select-all" should not be checked
+    And I should see "users selected"
+    # The bulk bar clears the selection, and the header follows it.
+    And I press "Clear selection"
+    Then the checkbox "available-user-select-all" should not be checked
+    And the checkbox "available-user-select-all" should not be indeterminate
+    And I should not see "users selected"

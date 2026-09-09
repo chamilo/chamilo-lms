@@ -1,11 +1,60 @@
-# Ported from tests/behat/features/toolForum.feature, verbatim — confirmed
-# against the current codebase that every field name/id (forum_category_title,
-# forum_category_comment, forum_title, forum_comment, post_title, post_text),
-# button name (SubmitForumCategory, SubmitForum, SubmitPost), icon class
-# (i.mdi-format-quote-open, i.mdi-comment-arrow-right-outline, i.mdi-delete,
-# i.mdi-comment-quote), the native confirm() delete dialog, and the
-# "Quoting" string are all unchanged (public/main/forum/forumfunction.inc.php,
-# viewforum.php, viewthread.php).
+# Rewritten against the Vue forum tool. This file used to drive the legacy
+# pages under public/main/forum/ (index.php?action=add_category, newthread.php,
+# reply.php, viewthread.php); those are gone — newthread.php, reply.php,
+# editthread.php, editpost.php, forumqualify.php, forumsearch.php,
+# viewforumcategory.php and iframe_thread.php now only deny access, and the
+# course tool link resolves to /resources/forum/{courseResourceNodeId}/
+# (src/CoreBundle/Tool/Forum.php). So this is a rewrite, not a port: the old
+# field names (forum_category_comment aside) and the old flow no longer exist.
+#
+# Every selector below was confirmed against the running app with a DOM dump,
+# not read off the Vue source. What that turned up, and why the steps look the
+# way they do:
+#
+# - The list has no table and no `.card`: ForumCardList renders each category as
+#   a `<section>` (title in its own `<h2>`) and each forum as an `<article>`
+#   (title in its own `<a>`). Both row-scoped steps here were rescoped to that
+#   in common.steps.ts.
+# - Every row action is an icon-only `<button title="...">` — Delete, Edit, Hide,
+#   Lock, Move up, Move down, Add forum — and the title is its only identifier,
+#   so the steps pass `button[title='...']` as the selector.
+# - The toolbar actions on the thread list and post list are `<a title="...">`
+#   (BaseButton with a `:route`, i.e. router-links), NOT buttons. "New thread",
+#   "Reply", "Back to forums" and "Search" all resolve only by that title.
+# - The two Description fields differ, and getting this wrong fails as "Could
+#   not find an id for field": the CATEGORY dialog's description
+#   (forum_category_comment) is a plain textarea, filled with the generic fill
+#   step; the FORUM dialog's (id `forum-comment`, no `name` at all) is
+#   TinyMCE-backed, as are the thread message (`forum-thread-message`) and the
+#   reply message (`forum-reply-message`).
+# - Deletion is a PrimeVue ConfirmDialog titled "Confirmation" whose confirm
+#   button reads "Yes" — NOT a native confirm() and NOT SweetAlert2, so
+#   "I confirm the popup" (which only handles .swal2-container) does nothing
+#   here. Every delete below presses "Yes" instead, and waits for
+#   ".p-confirmdialog" first. That wait is load-bearing: without it the press
+#   raced the dialog's own mount, reported success, and left the dialog sitting
+#   open with the thread still there — a delete that silently never happened,
+#   which then failed one step later as "Thread One is still on the page".
+# - "I wait until I no longer see 'Loading'" before each assertion is not
+#   padding. This tool's list mounts, then fetches /api/forum_categories,
+#   /api/forums and /api/forum/action-token; measured against a dev-env box it
+#   took 10-15s to settle, which outlives the 15s expect() budget an assertion
+#   alone would get. That step polls for 30s.
+# - Every scenario here spends most of the 90s test timeout, and the reason is
+#   the environment rather than these steps: each one pays a login, a course
+#   home load and then one SPA route load per view it visits, and the config's
+#   own note records that regular scenarios run in ~23s in PRODUCTION mode. On a
+#   dev-env box (Symfony profiler on, no warm prod cache) they land at 60-72s,
+#   so a scenario that visits one view too many tips over. That is what shaped
+#   the "Delete a forum thread" scenario below, and it is why nothing here fills
+#   a single-entry form with the "I fill in the following:" TABLE form: that step
+#   runs resolveField twice per row (a fill pass, then a verify pass), and
+#   resolveField is the expensive part.
+#
+# Scenario order is deliberate and shared-state: the category and forum created
+# by the first two scenarios are the ones every later scenario acts on, and the
+# last scenario tears both down so a rerun starts from the state this file found
+# (the shared TEMP course is the only fixture it touches).
 Feature: Forum tool
   In order to use the Forum tool
   The teachers should be able to create forum categories, forums, forum threads
@@ -13,134 +62,130 @@ Feature: Forum tool
   Background:
     Given I am a platform administrator
     And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
 
   Scenario: Create a forum category
-    Given I am on "/main/forum/index.php?action=add_category&cid=3"
-    And I wait for the page to be loaded
-    When I fill in the following:
-      | forum_category_title   | Forum Category Test |
-    And I fill in editor field "forum_category_comment" with "This is the first forum category for test"
-    And I press "SubmitForumCategory"
-    And wait for the page to be loaded
-    And I should see "Forum Category Test"
-    Then I should not see an error
+    Given I follow the course tool "Forum"
+    And I wait until I no longer see "Loading"
+    When I click the "button[title='Add a category']" element
+    And I wait for the element "#forum-category-title" to appear
+    And I fill in "forum_category_title" with "Forum Category Test"
+    And I fill in "forum_category_comment" with "This is the first forum category for test"
+    And I press "Create category"
+    And I wait until I no longer see "Loading"
+    Then I should see "Forum Category Test"
+    And I should not see an error
 
   Scenario: Create a forum
-    Given I am on "/main/forum/index.php?action=add_forum&cid=3"
-    And I wait for the page to be loaded
-    When I fill in the following:
-      | forum_title   | Forum Test |
-    And I fill in editor field "forum_comment" with "This is the first forum for test"
-    And I press "SubmitForum"
-    And wait very long for the page to be loaded
+    Given I follow the course tool "Forum"
+    And I wait until I no longer see "Loading"
+    When I click the "button[title='Add forum']" element
+    And I wait for the element "#forum-title" to appear
+    And I fill in "forum_title" with "Forum Test"
+    And I fill in tinymce field "forum-comment" with "This is the first forum for test"
+    And I press "Create forum"
+    And I wait until I no longer see "Loading"
     Then I should see "Forum Test"
     And I should not see an error
 
+  # The UPDATE half of the CRUD coverage, on the category rather than on the
+  # forum: renaming the forum would move the anchor every later scenario uses to
+  # reach it. The teardown below deletes the renamed category, not the original.
+  Scenario: Edit a forum category
+    Given I follow the course tool "Forum"
+    And I wait until I no longer see "Loading"
+    When I click the "button[title='Edit']" icon for the forum category "Forum Category Test"
+    And I wait for the element "#forum-category-title" to appear
+    And the field "forum_category_title" should have value "Forum Category Test"
+    And I fill in "forum_category_title" with "Forum Category Renamed"
+    And I press "Save"
+    And I wait until I no longer see "Loading"
+    Then I should see "Forum Category Renamed"
+    And I should not see "Forum Category Test"
+    And I should not see an error
+
   Scenario: Create a forum thread
-    Given I am on "/main/forum/index.php?cid=3"
-    And I wait for the page to be loaded
+    Given I follow the course tool "Forum"
+    And I wait until I no longer see "Loading"
     And I follow "Forum Test"
-    And I wait for the page to be loaded
-    And I click the "i.mdi-format-quote-open" element
-    And wait for the page to be loaded
-    When I fill in the following:
-      | post_title | Thread One |
-    And I fill in editor field "post_text" with "This is a the first thread in a forum for test"
-    And I press "SubmitPost"
-    And wait for the page to be loaded
+    And I wait until I no longer see "Loading"
+    When I click the "a[title='New thread']" element
+    And I wait for the element "#forum-thread-title" to appear
+    And I fill in "thread_title" with "Thread One"
+    And I fill in tinymce field "forum-thread-message" with "This is a the first thread in a forum for test"
+    And I press "Create thread"
+    And I wait until I no longer see "Loading"
     Then I should see "Thread One"
     And I should not see an error
 
   Scenario: Reply to forum message
-    Given I am on "/main/forum/index.php?cid=3"
-    And I wait for the page to be loaded
+    Given I follow the course tool "Forum"
+    And I wait until I no longer see "Loading"
     And I follow "Forum Test"
-    And I wait for the page to be loaded
-    When I follow "Thread One"
-    And I wait for the page to be loaded
-    When I click the "i.mdi-comment-arrow-right-outline" element
-    And I wait for the page to be loaded
-    And I fill in the following:
-      | post_title | Reply |
-    And I fill in editor field "post_text" with "This is a reply to the first message for test"
-    And I press "SubmitPost"
-    And wait for the page to be loaded
+    And I wait until I no longer see "Loading"
+    And I follow "Thread One"
+    And I wait until I no longer see "Loading"
+    When I click the "a[title='Reply to this message']" element
+    And I wait for the element "#forum-reply-title" to appear
+    And I fill in "reply_title" with "Reply"
+    And I fill in tinymce field "forum-reply-message" with "This is a reply to the first message for test"
+    And I press "Post reply"
+    And I wait until I no longer see "Loading"
     Then I should see "Reply"
-    Then I should not see an error
+    And I should not see an error
 
-  # Runs BEFORE "Delete a forum thread" below, unlike the original Behat
-  # order — real, confirmed CI failure: deletePost() (forumfunction.inc.php)
-  # doesn't cascade-delete a thread's replies when its original post is
-  # deleted, it re-parents them and leaves them in place (a thread is only
-  # actually removed once its last surviving post is gone). viewthread.php
-  # recomputes "which post is the thread's OP" on every load as MIN(iid)
-  # among surviving posts, and OP posts don't render a quote icon at all
-  # (viewthread.php's `$isOp` gate). So running "Delete a forum thread"
-  # (which deletes "Thread One", the OP) first left "Reply" promoted to OP
-  # by the time this scenario ran, permanently hiding the quote icon it
-  # depends on — deterministic given this file's fixed scenario order, not a
-  # flake. Reordering (quote, then delete) sidesteps this without touching
-  # the app's own deliberate re-parenting behavior.
+  # Runs BEFORE "Delete a forum thread", exactly as it did in the legacy version
+  # of this file and for a reason that survives the rewrite: deleting a thread's
+  # original post re-parents its replies rather than cascading, so tearing the
+  # thread down first would leave this scenario with no post to quote.
   Scenario: Quote a forum message
-    Given I am on "/main/forum/index.php?cid=3"
-    And I wait for the page to be loaded
+    Given I follow the course tool "Forum"
+    And I wait until I no longer see "Loading"
     And I follow "Forum Test"
-    And I wait for the page to be loaded
-    When I follow "Thread One"
-    And I wait for the page to be loaded
-    When I click the "i.mdi-comment-quote" element
-    And I wait for the page to be loaded
-    And I press "SubmitPost"
-    And wait for the page to be loaded
-    Then I should see "Quoting"
-
-  Scenario: Delete a forum thread
-    Given I am on "/main/forum/index.php?cid=3"
-    And I wait for the page to be loaded
-    And I follow "Forum Test"
-    And I wait for the page to be loaded
-    Then I follow "Thread One"
-    And I wait for the page to be loaded
-    Then I click the "i.mdi-delete" element
-    And I confirm the popup
-    And wait for the page to be loaded
+    And I wait until I no longer see "Loading"
+    And I follow "Thread One"
+    And I wait until I no longer see "Loading"
+    When I click the "a[title='Quote this message']" element
+    And I wait for the element "#forum-reply-title" to appear
+    And I press "Post reply"
+    And I wait until I no longer see "Loading"
     Then I should not see an error
 
-  # Not in the original Behat source (which never cleaned up "Forum Test"/
-  # "Forum Category Test" either) — added after a real, reproduced-live
-  # issue: this file's own "Forum Test" forum/"Forum Category Test" category
-  # have no unique-name constraint, so a repeated run of this file against a
-  # database that already has one (a rerun on a reused/self-hosted box, or
-  # two runs overlapping) leaves TWO of each on "/main/forum/index.php".
-  # "I follow {string}" (common.steps.ts) resolves ambiguous exact-text
-  # matches with a plain `.first().click()` — no error, just a silent click
-  # on whichever one DOM order happens to put first. Directly reproduced
-  # locally by running this file twice without reseeding the database: the
-  # second pass's own "Create a forum thread" scenario silently added
-  # "Thread One" to the FIRST run's stale, already fully-torn-down "Forum
-  # Test" instead of the one it had just created — every scenario still
-  # reported green, but which forum/thread each step actually acted on
-  # became non-deterministic, which is exactly the kind of drift that can
-  # surface as the cascading failures this file previously hit in CI.
-  # Tearing down the forum and its category here — the only "Forum Test"/
-  # "Forum Category Test" this file itself created — keeps every future run
-  # starting from the same database state this one found it in, regardless
-  # of environment reuse.
-  # Uses the dedicated forum-scoped/category-scoped steps (common.steps.ts)
-  # rather than a plain "I click the ... element": a category's own
-  # delete-category icon and a forum's own delete-forum icon render via the
-  # identical `i.mdi-delete` class as every OTHER category/forum's own
-  # delete icon on the same page — an unscoped click is only safe as long as
-  # exactly one category and one forum ever exist, which is precisely the
-  # invariant this teardown exists to guarantee. Scoping to the exact title
-  # removes that assumption instead of relying on it.
+  # Deletes "Thread One", which by now carries a reply AND a quote of that reply.
+  # That is the point of running it last: those three posts form a postParent
+  # chain, and deleting a thread in that shape used to answer 500 with Doctrine's
+  # "A new entity was found through the relationship
+  # 'Chamilo\CourseBundle\Entity\CForumPost#postParent' that was not configured
+  # to cascade persist operations" — the UI showed "Could not delete thread" and
+  # the thread stayed. CForumThreadRepository::delete() now clears postParent on
+  # the thread's posts before removing them, so this scenario is the regression
+  # test for that fix. A thread with 0 or 1 replies always deleted fine, so a
+  # freshly created thread would NOT cover it.
+  #
+  # Deletes from the thread list, not from inside the thread: the list carries the
+  # same per-thread "Delete thread" action, and opening the thread would add a
+  # fourth SPA route load, which on a dev-env box tips this past the 90s timeout.
+  # Unscoped because the forum this file creates holds exactly one thread.
+  Scenario: Delete a forum thread
+    Given I follow the course tool "Forum"
+    And I wait until I no longer see "Loading"
+    And I follow "Forum Test"
+    And I wait until I no longer see "Loading"
+    When I click the "button[title='Delete thread']" element
+    And I wait for the element ".p-confirmdialog" to appear
+    And I press "Yes"
+    And I wait until I no longer see "Thread One"
+    Then I should not see an error
+
   Scenario: Delete the forum and forum category
-    Given I am on "/main/forum/index.php?cid=3"
-    And I wait for the page to be loaded
-    Then I click the "i.mdi-delete" icon for the forum "Forum Test"
-    And I confirm the popup
-    And wait for the page to be loaded
-    Then I click the "i.mdi-delete" icon for the forum category "Forum Category Test"
-    And I confirm the popup
-    And wait for the page to be loaded
+    Given I follow the course tool "Forum"
+    And I wait until I no longer see "Loading"
+    When I click the "button[title='Delete']" icon for the forum "Forum Test"
+    And I wait for the element ".p-confirmdialog" to appear
+    And I press "Yes"
+    And I wait until I no longer see "Forum Test"
+    And I click the "button[title='Delete']" icon for the forum category "Forum Category Renamed"
+    And I wait for the element ".p-confirmdialog" to appear
+    And I press "Yes"
+    And I wait until I no longer see "Forum Category Renamed"
     Then I should not see an error

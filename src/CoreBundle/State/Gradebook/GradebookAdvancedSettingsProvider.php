@@ -54,19 +54,19 @@ final readonly class GradebookAdvancedSettingsProvider implements ProviderInterf
         }
 
         $resolved = $this->contextResolver->resolve($request);
-        if (!$resolved['canManage']) {
+        if (!$resolved->canManage) {
             throw new AccessDeniedHttpException('You are not allowed to manage advanced Gradebook settings in this context.');
         }
 
-        $rootCategory = $resolved['rootCategory'];
+        $rootCategory = $resolved->rootCategory;
         if (!$rootCategory instanceof GradebookCategory) {
             throw new NotFoundHttpException('The Gradebook was not found.');
         }
 
         $category = $this->contextResolver->getSelectedCategory(
             $request,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
             $rootCategory,
         );
         $isRoot = (int) $category->getId() === (int) $rootCategory->getId();
@@ -78,13 +78,13 @@ final readonly class GradebookAdvancedSettingsProvider implements ProviderInterf
         $gradeModelFrozen = $isRoot && ($rootCategory->getSubCategories()->count() > 0 || $rootCategory->getLinks()->count() > 0);
         $canChangeGradeModel = $isRoot
             && $gradeModelEnabled
-            && $resolved['canManage']
+            && $resolved->canManage
             && ($this->security->isGranted('ROLE_ADMIN') || $teachersCanChangeGradeModel)
             && !$gradeModelFrozen;
 
         $skillToolEnabled = $this->contextResolver->isSettingEnabled('skill.allow_skills_tool');
         $teachersCanAssignSkills = $this->contextResolver->isSettingEnabled('skill.skills_teachers_can_assign_skills');
-        $canManageSkills = $resolved['canManage']
+        $canManageSkills = $resolved->canManage
             && $skillToolEnabled
             && (
                 $this->security->isGranted('ROLE_ADMIN')
@@ -97,9 +97,9 @@ final readonly class GradebookAdvancedSettingsProvider implements ProviderInterf
 
         $resource = new GradebookAdvancedSettings();
         $resource->context = [
-            'cid' => (int) $resolved['course']->getId(),
-            'sid' => (int) ($resolved['session']?->getId() ?? 0),
-            'gid' => $resolved['groupId'],
+            'cid' => (int) $resolved->course->getId(),
+            'sid' => (int) ($resolved->session?->getId() ?? 0),
+            'gid' => $resolved->groupId,
             'node' => $request->query->getInt('node'),
         ];
         $resource->category = [
@@ -108,7 +108,7 @@ final readonly class GradebookAdvancedSettingsProvider implements ProviderInterf
             'isRoot' => $isRoot,
             'title' => $category->getTitle(),
         ];
-        $resource->canManage = $resolved['canManage'];
+        $resource->canManage = $resolved->canManage;
         $resource->canManageSkills = $canManageSkills;
         $resource->gradeModelEnabled = $gradeModelEnabled;
         $resource->canChangeGradeModel = $canChangeGradeModel;
@@ -126,8 +126,8 @@ final readonly class GradebookAdvancedSettingsProvider implements ProviderInterf
             $request,
             $category,
             $rootCategory,
-            $resolved['course'],
-            $resolved['session'],
+            $resolved->course,
+            $resolved->session,
         );
 
         return $resource;

@@ -238,24 +238,25 @@
         class="w-12"
       >
         <template #header>
-          <input
+          <BaseCheckbox
+            id="course-user-select-all"
+            v-model="allSelectableSelected"
             :aria-label="t('Select all')"
-            class="h-4 w-4 cursor-pointer rounded border-gray-30"
-            type="checkbox"
-            :checked="allSelectableSelected"
             :disabled="selectableUsers.length === 0"
-            :indeterminate.prop="selectionIndeterminate"
-            @change="toggleAll($event.target.checked)"
+            :indeterminate="selectionIndeterminate"
+            label=""
+            name="select_all"
           />
         </template>
         <template #body="{ data }">
-          <input
+          <BaseCheckbox
             v-if="data.canUnsubscribe"
+            :id="`course-user-select-${data.id}`"
+            v-model="selectedUserIds"
             :aria-label="t('Select user')"
-            class="h-4 w-4 cursor-pointer rounded border-gray-30"
-            type="checkbox"
-            :checked="selectedUserIds.includes(data.id)"
-            @change="toggleSelection(data.id, $event.target.checked)"
+            label=""
+            name="selected_users"
+            :value="data.id"
           />
         </template>
       </Column>
@@ -406,6 +407,7 @@ import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
@@ -469,10 +471,18 @@ const activeOptions = computed(() => [
   { label: t("Inactive"), value: "0" },
 ])
 const selectableUsers = computed(() => users.value.filter((user) => user.canUnsubscribe))
-const allSelectableSelected = computed(
-  () =>
+const allSelectableSelected = computed({
+  get: () =>
     selectableUsers.value.length > 0 && selectableUsers.value.every((user) => selectedUserIds.value.includes(user.id)),
-)
+  /**
+   * Selects every selectable user, or clears the selection.
+   *
+   * @param {boolean} checked
+   */
+  set: (checked) => {
+    selectedUserIds.value = checked ? selectableUsers.value.map((user) => user.id) : []
+  },
+})
 const selectionIndeterminate = computed(() => selectedUserIds.value.length > 0 && !allSelectableSelected.value)
 
 function requestParams() {
@@ -598,19 +608,6 @@ function onSort(event) {
   sortField.value = event.sortField || "lastname"
   sortOrder.value = Number(event.sortOrder) < 0 ? "desc" : "asc"
   loadUsers()
-}
-
-function toggleSelection(userId, checked) {
-  if (checked) {
-    selectedUserIds.value = [...new Set([...selectedUserIds.value, userId])]
-    return
-  }
-
-  selectedUserIds.value = selectedUserIds.value.filter((id) => id !== userId)
-}
-
-function toggleAll(checked) {
-  selectedUserIds.value = checked ? selectableUsers.value.map((user) => user.id) : []
 }
 
 function confirmUnsubscribe(user) {

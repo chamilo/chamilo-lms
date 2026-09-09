@@ -142,6 +142,11 @@
 
     <h3>Security fixes</h3>
     <ul aria-live="off">
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/e0a3ac68e996">e0a3ac68</a>) Security: Fix 18 vulnerabilities in CStudio, blank deprecated dompdf lib files</li>
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/e16f2ffc7c88">e16f2ffc</a>) Security: Fix arbitrary file read in CStudio - refs GHSA-qrg6-98r3-jqqr</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/be45f2f2a293">be45f2f2</a>) Security: Deny access to the legacy survey answer and reporting pages</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/a7afdafea0ea">a7afdafe</a>) Security: Remove the SQL-injectable forum move-post feature</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/80ef31ee81c0">80ef31ee</a>) Security: Check the group tool state on the migrated Vue routes</li>
         <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/e4fafd1bb473">e4fafd1b</a>) Security: Check course edit rights on AI document endpoints</li>
         <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/0e36e8d9fb17">0e36e8d9</a>) Security: Bind the resource read fallback to real course access</li>
         <li>[2026-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/4e336fa8852b">4e336fa8</a>) Security: Stop the resource node's creator from being reassigned over the API</li>
@@ -173,6 +178,8 @@
 
     <h3>Added</h3>
     <ul aria-live="off">
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/3bfc9121141d">3bfc9121</a>) Auth: add force_redirect for OAuth2 providers</li>
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/4e0fbbebd3fa">4e0fbbeb</a>) Documentation: Add pcre.jit=0 to installation configuration recommendations</li>
         <li>[2026-09-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/7b43f6eab8f37cc47a41f1c4a7dfeeca25a59f40">7b43f6ea</a>) Learnpath: Add AI study helper in Vue runtime</li>
         <li>[2026-09-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/4beeff13a4ce">4beeff13</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8977">GH#8977</a>) WYSIWYG: Add MathJax formula support to the editor toolbar</li>
         <li>[2026-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/1d4b0d1d6159">1d4b0d1d</a>) MCP: add Student Success feedback tool</li>
@@ -206,6 +213,17 @@
 
     <h3>Changed</h3>
     <ul aria-live="off">
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/2a8bdfaa3e3c">2a8bdfaa</a> - <a href="https://task.beeznest.com/issues/23500">BT#23500</a>) Catalogue: restore the use of course.hide_course_rating in the catalogue course card presentation</li>
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/5206b1d5db70">5206b1d5</a> - <a href="https://task.beeznest.com/issues/23500">BT#23500</a>) User: Fix csv user import to use platform default language instead of english by default if nothing is set</li>
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/feea72a96ae4">feea72a9</a>) Survey: Select the survey report type from the URL</li>
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/d03d554e8f1d">d03d554e</a>) Survey: Point every reporting link at the Vue survey tool</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/fabe3f305118">fabe3f30</a>) Survey: Point the session progress link at the Vue survey tool</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/0927e940b473">0927e940</a>) Survey: Point the invitation link at the Vue survey tool</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/c299a495c6ce">c299a495</a>) Forum: Point the remaining Symfony links at the Vue forum route</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/9fca22fb6736">9fca22fb</a>) Installer: load exact locale translations in requirements</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/9ea2db7fda4e">9ea2db7f</a>) QA: Check each course tool against the route it actually opens</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/c34f1507caed">c34f1507</a>) Internal: Remove the course auto-launch method the router guard replaced</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/67dc91ebaebf">67dc91eb</a>) Forum: Fix the deletion of a thread whose posts form a parent chain</li>
         <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/0b31960b4d3b">0b31960b</a>) Installer: support web upgrades from Chamilo 2.x</li>
         <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/9f66cf75fb7a">9f66cf75</a>) QA: Rewrite the forum tool coverage against its Vue interface</li>
         <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/055ae30f4223">055ae30f</a>) QA: Stop the Symfony debug toolbar from intercepting dialog submit clicks</li>
@@ -472,6 +490,8 @@
 
     <h3>Fixed</h3>
     <ul aria-live="off">
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/2ef12503067d">2ef12503</a>) CStudio: fix legacy block icons in right palette</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/740b8037a101">740b8037</a>) Search: silence quiz indexing when Xapian is disabled</li>
         <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/318e165d410e">318e165d</a>) Install: Update minimum memory_limit, post_max_size, upload_max_filesize requirements</li>
         <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/5bc8358dde4a">5bc8358d</a>) Install: Update REQUIRED_PHP_VERSION to 8.3</li>
         <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/c3acc4d75c34">c3acc4d7</a>) Install: Set database version by default to avoid building issues</li>

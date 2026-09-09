@@ -120,12 +120,23 @@ class GroupVoter extends Voter
                     $requestUri = $request->getRequestUri();
                 }
 
+                // Every tool needs BOTH of its paths listed: the legacy page and the Vue
+                // route it was migrated to. $toolStatus below defaults to TOOL_PUBLIC, so a
+                // path that matches nothing grants access — a tool listed only under /main/
+                // stops being checked at all once its callers move to /resources/. The wiki
+                // was the only one carrying both; the other five were added here for the
+                // same reason.
                 $tools = [
                     '/main/forum/' => $group->getForumState(),
+                    '/resources/forum/' => $group->getForumState(),
                     '/documents/' => $group->getDocState(),
+                    '/resources/document/' => $group->getDocState(),
                     '/main/calendar/' => $group->getCalendarState(),
+                    '/resources/ccalendarevent' => $group->getCalendarState(),
                     '/main/announcements/' => $group->getAnnouncementsState(),
+                    '/resources/announcement/' => $group->getAnnouncementsState(),
                     '/main/work/' => $group->getWorkState(),
+                    '/resources/assignment/' => $group->getWorkState(),
                     '/resources/wiki/' => $group->getWikiState(),
                     '/main/wiki/' => $group->getWikiState(),
                     /*'/main/group/group_space' => GroupManager::TOOL_PUBLIC,

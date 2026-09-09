@@ -4142,15 +4142,30 @@ class SurveyUtil
         $invitationCode = Security::remove_XSS($invitationCode);
         $sessionId = (int) $sessionId;
 
-        $params = [
-            'iid' => $survey->getIid(),
-            'invitationcode' => $invitationCode,
-            'cid' => $course->getId(),
-            'course' => $course->getCode(),
-            'sid' => $sessionId,
-            'language' => $course->getCourseLanguage(),
-        ];
+        // Mirrors SurveyInvitationProcessor::buildModernAnswerLink(). Answering a survey
+        // lives in the Vue tool; survey/fillsurvey.php only denies access now, so a link
+        // built the old way would be dead on arrival.
+        $nodeId = null !== $survey->getResourceNode()
+            ? (int) $survey->getResourceNode()->getId()
+            : (int) $course->getId();
+        $route = 3 === $survey->getSurveyType() ? 'meeting' : 'answer';
 
-        return api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?'.http_build_query($params);
+        $params = ['invitationCode' => $invitationCode];
+        if (1 == $survey->getAnonymous()) {
+            $params['publicCid'] = (int) $course->getId();
+            $params['publicSid'] = $sessionId;
+            $params['publicGid'] = 0;
+        } else {
+            $params['cid'] = (int) $course->getId();
+            $params['sid'] = $sessionId;
+        }
+
+        return rtrim(api_get_path(WEB_PATH), '/').\sprintf(
+            '/resources/survey/%d/%d/%s?%s',
+            $nodeId,
+            (int) $survey->getIid(),
+            $route,
+            http_build_query($params)
+        );
     }
 }

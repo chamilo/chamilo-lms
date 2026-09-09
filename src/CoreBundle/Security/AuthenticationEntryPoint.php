@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security;
 
+use Chamilo\CoreBundle\Helpers\ForcedLoginRedirectHelper;
 use Chamilo\CoreBundle\Helpers\RequestExpectsJsonHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,6 +21,7 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 {
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly ForcedLoginRedirectHelper $forcedLoginRedirectHelper,
     ) {}
 
     public function start(Request $request, ?AuthenticationException $authException = null): Response
@@ -34,6 +36,14 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
         // context, on the next HTML navigation.
         if (RequestExpectsJsonHelper::expectsJson($request)) {
             return new JsonResponse(['error' => $message], Response::HTTP_UNAUTHORIZED);
+        }
+
+        // A provider with force_redirect owns the sign-in, so the visitor goes straight
+        // there. No flash either: the next page belongs to the provider.
+        $forcedRedirectUrl = $this->forcedLoginRedirectHelper->resolveRedirectUrl($request);
+
+        if (null !== $forcedRedirectUrl) {
+            return new RedirectResponse($forcedRedirectUrl);
         }
 
         $session = $request->getSession();

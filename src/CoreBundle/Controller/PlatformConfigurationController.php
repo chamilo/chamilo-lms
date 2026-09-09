@@ -10,6 +10,7 @@ use Bbb;
 use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\ForcedLoginRedirectHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
@@ -52,11 +53,18 @@ class PlatformConfigurationController extends AbstractController
         McpAccessPolicy $mcpAccessPolicy,
         UrlGeneratorInterface $urlGenerator,
         PluginHelper $pluginHelper,
+        ForcedLoginRedirectHelper $forcedLoginRedirectHelper,
+        Request $request,
     ): Response {
-        $requestSession = $this->getRequest()->getSession();
+        $requestSession = $request->getSession();
 
         $enabledOAuthProviders = $authenticationConfigHelper->getEnabledOAuthProviders();
-        $forcedLoginMethod = $authenticationConfigHelper->getForcedLoginMethod();
+
+        // The escape hatch also drops force_as_login_method: otherwise the page would
+        // still offer the provider button alone.
+        $forcedLoginMethod = $forcedLoginRedirectHelper->isEscapeActive($request)
+            ? null
+            : $authenticationConfigHelper->getForcedLoginMethod();
 
         if ($forcedLoginMethod) {
             if (\array_key_exists($forcedLoginMethod, $enabledOAuthProviders)) {

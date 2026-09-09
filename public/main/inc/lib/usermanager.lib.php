@@ -242,7 +242,10 @@ class UserManager
         // Checking the user language
         $languages = api_get_languages();
         if (!in_array($language, array_keys($languages), true)) {
-            $language = 'en_US'; // default
+            $language = api_get_platform_default_isocode();
+            if (empty($language) || !in_array($language, array_keys($languages), true)) {
+                $language = 'en_US'; // last resort default
+            }
         }
 
         $now = new DateTime();

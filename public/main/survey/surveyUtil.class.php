@@ -331,7 +331,7 @@ class SurveyUtil
 
         if (false !== $result) {
             $message = get_lang('The user\'s answers to the survey have been successfully removed.').'<br />
-					<a href="'.self::generateSurveyReportingLink($survey_id).'">'.get_lang('Go back').'</a>';
+					<a href="'.self::generateSurveyReportingLink($survey_id, null, 'userreport').'">'.get_lang('Go back').'</a>';
             echo Display::return_message($message, 'confirmation', false);
         }
     }
@@ -351,7 +351,7 @@ class SurveyUtil
 		</script>";
         echo get_lang('Select user who filled the survey').'<br />';
         echo '<select name="user" onchange="jumpMenu(\'parent\',this,0)">';
-        echo '<option value="'.self::generateSurveyReportingLink($surveyId).'">'
+        echo '<option value="'.self::generateSurveyReportingLink($surveyId, null, 'userreport').'">'
             .get_lang('User').'</option>';
 
         foreach ($people_filled as $key => &$person) {
@@ -637,19 +637,19 @@ class SurveyUtil
                 // Pagination (question numbers)
                 echo '<div id="question_report_questionnumbers" class="pagination">';
                 if (0 != $currentQuestion) {
-                    echo '<li><a href="'.self::generateSurveyReportingLink($surveyId).'">'
+                    echo '<li><a href="'.self::generateSurveyReportingLink($surveyId, null, 'questionreport').'">'
                         .get_lang('Previous question').'</a></li>';
                 }
 
                 for ($i = 1; $i <= $numberOfQuestions; $i++) {
                     if ($offset != $i - 1) {
-                        echo '<li><a href="'.self::generateSurveyReportingLink($surveyId).'">'.$i.'</a></li>';
+                        echo '<li><a href="'.self::generateSurveyReportingLink($surveyId, null, 'questionreport').'">'.$i.'</a></li>';
                     } else {
                         echo '<li class="disabled"><a href="#">'.$i.'</a></li>';
                     }
                 }
                 if ($currentQuestion < ($numberOfQuestions - 1)) {
-                    echo '<li><a href="'.self::generateSurveyReportingLink($surveyId).'">'
+                    echo '<li><a href="'.self::generateSurveyReportingLink($surveyId, null, 'questionreport').'">'
                         .get_lang('Next question').'</a></li>';
                 }
                 echo '</div>';
@@ -792,7 +792,7 @@ class SurveyUtil
                         echo '<td>'.$value['option_text'].'</td>';
                         echo '<td>';
                         if (0 != $absolute_number) {
-                            echo '<a href="'.self::generateSurveyReportingLink($surveyId).'">'.$absolute_number.'</a>';
+                            echo '<a href="'.self::generateSurveyReportingLink($surveyId, null, 'questionreport').'">'.$absolute_number.'</a>';
                         } else {
                             echo '0';
                         }
@@ -939,7 +939,7 @@ class SurveyUtil
                 echo '<tr>';
                 echo '<td>'.$value->getOptionText().'</td>';
                 echo '<td>'.$i.'</td>';
-                echo '<td><a href="'.self::generateSurveyReportingLink($surveyId).'">'.$absolute_number.'</a></td>';
+                echo '<td><a href="'.self::generateSurveyReportingLink($surveyId, null, 'questionreport').'">'.$absolute_number.'</a></td>';
                 echo '<td>'.$percentage.' %</td>';
                 echo '<td>';
                 echo '<div style="background:#eef2ff;border:1px solid #c7d2fe;height:10px;position:relative;">'
@@ -3652,7 +3652,7 @@ class SurveyUtil
                 $statusClass = 'bg-green-100 text-green-700';
 
                 if ($showLink) {
-                    $url = self::generateSurveyReportingLink($surveyId);
+                    $url = self::generateSurveyReportingLink($surveyId, null, 'questionreport');
                 } else {
                     $isLink = false;
                 }
@@ -4126,16 +4126,19 @@ class SurveyUtil
      */
     /**
      * Builds the Vue survey reporting URL. survey/reporting.php only denies access now,
-     * so every link that used to point at it comes through here instead. The Vue view
-     * owns its own report-type tabs, so the legacy action/question/viewoption parameters
-     * have no equivalent and are dropped; only the selected user survives.
+     * so every link that used to point at it comes through here instead.
      *
-     * @param int      $surveyId
-     * @param int|null $userId
+     * $reportType selects the tab SurveyReportingView opens on, and takes the same legacy
+     * action names the old page used. There is no comparative report in the Vue view, so
+     * that one lands on the overview.
+     *
+     * @param int         $surveyId
+     * @param int|null    $userId
+     * @param string|null $reportType legacy action name, or a Vue report key
      *
      * @return string empty when the course has no resource node to build the route from
      */
-    public static function generateSurveyReportingLink($surveyId, $userId = null)
+    public static function generateSurveyReportingLink($surveyId, $userId = null, $reportType = null)
     {
         $course = api_get_course_entity(api_get_course_int_id());
         $nodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
@@ -4144,14 +4147,28 @@ class SurveyUtil
             return '';
         }
 
+        $reportKeys = [
+            'userreport' => 'user',
+            'completereport' => 'complete',
+            'questionreport' => 'question',
+            'user' => 'user',
+            'complete' => 'complete',
+            'question' => 'question',
+        ];
+
         $params = [
             'cid' => (int) api_get_course_int_id(),
             'sid' => (int) api_get_session_id(),
             'gid' => (int) api_get_group_id(),
         ];
 
+        if (!empty($reportType) && isset($reportKeys[$reportType])) {
+            $params['report'] = $reportKeys[$reportType];
+        }
+
         if (!empty($userId)) {
             $params['user'] = $userId;
+            $params['report'] = 'user';
         }
 
         return rtrim(api_get_path(WEB_PATH), '/').\sprintf(

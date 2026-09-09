@@ -56,8 +56,10 @@ localCourse.value.ratingCount = Number(
   localCourse.value.ratingCount ?? props.course?.count ?? props.course?.ratingCount ?? 0,
 )
 
+const isRatingHidden = computed(() => platformConfigStore.getSetting("course.hide_course_rating") === "true")
+
 const fetchRating = async () => {
-  if (!localCourse.value?.id) return
+  if (!localCourse.value?.id || isRatingHidden.value) return
   try {
     const params = localCourse.value?.sessionId ? { session: localCourse.value.sessionId } : {}
     const data = await baseService.get(`/catalogue/api/courses/${localCourse.value.id}/rating`, params)
@@ -496,7 +498,10 @@ onMounted(() => {
     <template #content>
       <BaseAvatarList :users="localCourse.teachers.map((cru) => cru.user)" />
 
-      <div class="flex gap-2">
+      <div
+        v-if="!isRatingHidden"
+        class="flex gap-2"
+      >
         <div
           v-if="displayRatingAvg !== null"
           class="text-caption"
@@ -512,7 +517,7 @@ onMounted(() => {
       </div>
 
       <div
-        v-if="localCourse.popularity || localVote"
+        v-if="!isRatingHidden && (localCourse.popularity || localVote)"
         class="text-caption"
       >
         {{ localCourse.popularity || 0 }} Vote<span v-if="localCourse.popularity !== 1">s</span>

@@ -44,7 +44,7 @@
                 <div class="item">
                     {{ 'tool_forum.png' | icon(64, 'Add forum'|trans ) }}
                     <div class="caption">
-                        <a href="/main/forum/index.php?{{ { 'cid': course.id}|url_encode }}" class="btn btn-outline-primary">
+                        <a href="/resources/forum/{{ course.resourceNode.id }}/?{{ { 'cid': course.id, 'sid': 0, 'gid': 0}|url_encode }}" class="btn btn-outline-primary">
                             <em class="fa fa-users"></em> {{ 'Add forum'|trans }}
                         </a>
                     </div>

@@ -143,8 +143,7 @@ foreach ($sentInvitations as $row) {
             if (!$surveyAnonymousShowAnswered && !$hideSurveyReportingButton) {
                 echo '<td>';
                 echo '<a href="'.
-                    api_get_path(WEB_CODE_PATH).
-                    'survey/reporting.php?action=userreport&survey_id='.$surveyId.'&user='.$user.'&'.api_get_cidreq().'">'.
+                    SurveyUtil::generateSurveyReportingLink($surveyId, $user).'">'.
                     get_lang('View answers').'</a>';
                 echo '</td>';
             } else {

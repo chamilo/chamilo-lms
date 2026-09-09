@@ -331,7 +331,7 @@ class SurveyUtil
 
         if (false !== $result) {
             $message = get_lang('The user\'s answers to the survey have been successfully removed.').'<br />
-					<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id=' .$survey_id.'&'.api_get_cidreq().'">'.get_lang('Go back').'</a>';
+					<a href="'.self::generateSurveyReportingLink($survey_id).'">'.get_lang('Go back').'</a>';
             echo Display::return_message($message, 'confirmation', false);
         }
     }
@@ -351,8 +351,7 @@ class SurveyUtil
 		</script>";
         echo get_lang('Select user who filled the survey').'<br />';
         echo '<select name="user" onchange="jumpMenu(\'parent\',this,0)">';
-        echo '<option value="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='
-            .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'">'
+        echo '<option value="'.self::generateSurveyReportingLink($surveyId).'">'
             .get_lang('User').'</option>';
 
         foreach ($people_filled as $key => &$person) {
@@ -367,9 +366,7 @@ class SurveyUtil
                 $name = get_lang('Anonymous').' '.($key + 1);
                 $id = $person;
             }
-            echo '<option value="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='
-                .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&user='
-                .Security::remove_XSS($id).'&'.api_get_cidreq().'" ';
+            echo '<option value="'.self::generateSurveyReportingLink($surveyId, $id).'" ';
             if (isset($_GET['user']) && $_GET['user'] == $id) {
                 echo 'selected="selected"';
             }
@@ -505,7 +502,7 @@ class SurveyUtil
     public static function displayUserReport(CSurvey $survey, $people_filled, $addActionBar = true)
     {
         $surveyId = $survey->getIid();
-        $reportingUrl = api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq();
+        $reportingUrl = self::generateSurveyReportingLink($surveyId);
 
         // Actions bar
         if ($addActionBar) {
@@ -590,7 +587,7 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         // Toolbar
-        $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
+        $actions = '<a href="'.self::generateSurveyReportingLink($surveyId).'">'.
             Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview')).
             '</a>';
         $actions .= Display::url(
@@ -640,22 +637,19 @@ class SurveyUtil
                 // Pagination (question numbers)
                 echo '<div id="question_report_questionnumbers" class="pagination">';
                 if (0 != $currentQuestion) {
-                    echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
-                        .api_get_cidreq().'&survey_id='.$surveyId.'&question='.($offset - 1).'">'
+                    echo '<li><a href="'.self::generateSurveyReportingLink($surveyId).'">'
                         .get_lang('Previous question').'</a></li>';
                 }
 
                 for ($i = 1; $i <= $numberOfQuestions; $i++) {
                     if ($offset != $i - 1) {
-                        echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
-                            .api_get_cidreq().'&survey_id='.$surveyId.'&question='.($i - 1).'">'.$i.'</a></li>';
+                        echo '<li><a href="'.self::generateSurveyReportingLink($surveyId).'">'.$i.'</a></li>';
                     } else {
                         echo '<li class="disabled"><a href="#">'.$i.'</a></li>';
                     }
                 }
                 if ($currentQuestion < ($numberOfQuestions - 1)) {
-                    echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
-                        .api_get_cidreq().'&survey_id='.$surveyId.'&question='.($offset + 1).'">'
+                    echo '<li><a href="'.self::generateSurveyReportingLink($surveyId).'">'
                         .get_lang('Next question').'</a></li>';
                 }
                 echo '</div>';
@@ -798,8 +792,7 @@ class SurveyUtil
                         echo '<td>'.$value['option_text'].'</td>';
                         echo '<td>';
                         if (0 != $absolute_number) {
-                            echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action='.$action
-                                .'&survey_id='.$surveyId.'&question='.$offset.'&viewoption='.$value['iid'].'">'.$absolute_number.'</a>';
+                            echo '<a href="'.self::generateSurveyReportingLink($surveyId).'">'.$absolute_number.'</a>';
                         } else {
                             echo '0';
                         }
@@ -858,8 +851,8 @@ class SurveyUtil
             echo '<ul>';
             while ($row = Database::fetch_assoc($result)) {
                 $user_info = api_get_user_info($row['user']);
-                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action=userreport&survey_id='
-                    .$surveyId.'&user='.$row['user'].'">'.$user_info['complete_name_with_username'].'</a></li>';
+                echo '<li><a href="'.self::generateSurveyReportingLink($surveyId, $row['user']).'">'
+                    .$user_info['complete_name_with_username'].'</a></li>';
             }
             echo '</ul>';
             echo '</div></div></div></div>';
@@ -946,9 +939,7 @@ class SurveyUtil
                 echo '<tr>';
                 echo '<td>'.$value->getOptionText().'</td>';
                 echo '<td>'.$i.'</td>';
-                echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action='.$action
-                    .'&survey_id='.$surveyId.'&question='.Security::remove_XSS($offset)
-                    .'&viewoption='.$optionId.'&value='.$i.'">'.$absolute_number.'</a></td>';
+                echo '<td><a href="'.self::generateSurveyReportingLink($surveyId).'">'.$absolute_number.'</a></td>';
                 echo '<td>'.$percentage.' %</td>';
                 echo '<td>';
                 echo '<div style="background:#eef2ff;border:1px solid #c7d2fe;height:10px;position:relative;">'
@@ -1027,7 +1018,7 @@ class SurveyUtil
 
         // Toolbar
         if ($addActionBar) {
-            $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
+            $actions = '<a href="'.self::generateSurveyReportingLink($surveyId).'">'
                 .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview'), [], ICON_SIZE_MEDIUM)
                 .'</a>';
             $actions .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();">'
@@ -1236,7 +1227,7 @@ class SurveyUtil
         }
 
         $content = '<tr>';
-        $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq();
+        $url = self::generateSurveyReportingLink($surveyId);
         if (0 == $survey->getAnonymous()) {
             if (0 !== (int) $user) {
                 $userInfo = api_get_user_info($user);
@@ -1970,7 +1961,7 @@ class SurveyUtil
         $questions = SurveyManager::get_questions($surveyId);
 
         // Toolbar
-        $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
+        $actions = '<a href="'.self::generateSurveyReportingLink($surveyId).'">'
             .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview'))
             .'</a>';
         echo Display::toolbarAction('survey', [$actions]);
@@ -1980,8 +1971,7 @@ class SurveyUtil
         $xAxis = isset($_GET['xaxis']) ? Security::remove_XSS($_GET['xaxis']) : '';
         $yAxis = isset($_GET['yaxis']) ? Security::remove_XSS($_GET['yaxis']) : '';
 
-        $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action='.Security::remove_XSS($_GET['action'])
-            .'&survey_id='.$surveyId.'&xaxis='.$xAxis.'&y='.$yAxis;
+        $url = self::generateSurveyReportingLink($surveyId);
 
         $form = new FormValidator('compare', 'get', $url);
         $form->addHidden('action', Security::remove_XSS($_GET['action']));
@@ -2910,7 +2900,7 @@ class SurveyUtil
 
         $reportingLink = Display::url(
             Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Reporting')),
-            $codePath.'survey/reporting.php?'.http_build_query($params + ['survey_id' => $survey_id])
+            self::generateSurveyReportingLink($survey_id)
         );
 
         if (!$row['can_edit']) {
@@ -3662,10 +3652,7 @@ class SurveyUtil
                 $statusClass = 'bg-green-100 text-green-700';
 
                 if ($showLink) {
-                    $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&'.http_build_query([
-                        'action' => 'questionreport',
-                        'survey_id' => $surveyId,
-                    ]);
+                    $url = self::generateSurveyReportingLink($surveyId);
                 } else {
                     $isLink = false;
                 }
@@ -4137,6 +4124,44 @@ class SurveyUtil
      *
      * @return string
      */
+    /**
+     * Builds the Vue survey reporting URL. survey/reporting.php only denies access now,
+     * so every link that used to point at it comes through here instead. The Vue view
+     * owns its own report-type tabs, so the legacy action/question/viewoption parameters
+     * have no equivalent and are dropped; only the selected user survives.
+     *
+     * @param int      $surveyId
+     * @param int|null $userId
+     *
+     * @return string empty when the course has no resource node to build the route from
+     */
+    public static function generateSurveyReportingLink($surveyId, $userId = null)
+    {
+        $course = api_get_course_entity(api_get_course_int_id());
+        $nodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
+
+        if ($nodeId <= 0) {
+            return '';
+        }
+
+        $params = [
+            'cid' => (int) api_get_course_int_id(),
+            'sid' => (int) api_get_session_id(),
+            'gid' => (int) api_get_group_id(),
+        ];
+
+        if (!empty($userId)) {
+            $params['user'] = $userId;
+        }
+
+        return rtrim(api_get_path(WEB_PATH), '/').\sprintf(
+            '/resources/survey/%d/%d/reporting?%s',
+            $nodeId,
+            (int) $surveyId,
+            http_build_query($params)
+        );
+    }
+
     public static function generateFillSurveyLink(CSurvey $survey, $invitationCode, Course $course, $sessionId = 0)
     {
         $invitationCode = Security::remove_XSS($invitationCode);

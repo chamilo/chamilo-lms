@@ -441,7 +441,10 @@ switch ($action) {
 
         $questionId = isset($_REQUEST['question_id']) ? (int) $_REQUEST['question_id'] : null;
         $image = isset($_REQUEST['image']) ? $_REQUEST['image'] : '';
-
+        if (!filter_var($image, FILTER_VALIDATE_URL) || !preg_match('/\.(jpg|jpeg|png|gif|svg)$/i', $image)) {
+            echo '0';
+            exit;
+        }
         $questionList = $objExercise->getQuestionList();
 
         if (!in_array($questionId, $questionList)) {

@@ -15,948 +15,522 @@
       />
     </SectionHeader>
 
-    <nav class="w-full">
-      <div class="overflow-x-auto pb-0.5">
-        <div class="stats-menu-grid">
-          <section
-            v-for="group in reportGroups"
-            :key="group.label"
-            class="h-fit min-w-0 self-start rounded-2xl border bg-white p-4 shadow-sm"
-            :class="sectionHasActive(group) ? 'border-primary/30 ring-1 ring-primary/20' : 'border-gray-25'"
-          >
-            <h2 class="flex items-center gap-2 text-sm font-semibold text-gray-90">
-              <span
-                class="h-2 w-2 rounded-full"
-                :class="sectionHasActive(group) ? 'bg-primary' : 'bg-gray-50'"
-              />
-              {{ t(group.label) }}
-            </h2>
-
-            <ul class="mt-3 space-y-1">
-              <li
-                v-for="item in group.items"
-                :key="`${item.report}-${item.type || ''}`"
-              >
-                <router-link
-                  v-if="isModernReport(item.report)"
-                  :to="modernReportRoute(item)"
-                  :aria-current="isActiveItem(item) ? 'page' : undefined"
-                  class="group flex items-start justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-primary/30"
-                  :class="
-                    isActiveItem(item)
-                      ? 'bg-primary/10 text-primary ring-1 ring-primary/25'
-                      : 'text-gray-90 hover:bg-gray-15 hover:text-gray-90'
-                  "
-                >
-                  <span class="flex min-w-0 items-start gap-2">
-                    <span
-                      class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
-                      :class="isActiveItem(item) ? 'bg-primary' : 'bg-gray-50 group-hover:bg-primary/60'"
-                    />
-                    <span class="break-words leading-5">{{ reportLabel(item) }}</span>
-                  </span>
-                  <span
-                    v-if="isActiveItem(item)"
-                    class="inline-flex items-center rounded-full bg-primary/15 px-2 py-0.5 text-xs font-semibold text-primary"
-                  >
-                    {{ t("Active") }}
-                  </span>
-                </router-link>
-                <a
-                  v-else
-                  :href="legacyReportUrl(item)"
-                  class="group flex items-start justify-between gap-3 rounded-xl px-3 py-2 text-sm font-medium text-gray-90 transition hover:bg-gray-15 hover:text-gray-90 focus:outline-none focus:ring-2 focus:ring-primary/30"
-                >
-                  <span class="flex min-w-0 items-start gap-2">
-                    <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-50 group-hover:bg-primary/60" />
-                    <span class="break-words leading-5">{{ reportLabel(item) }}</span>
-                  </span>
-                </a>
-              </li>
-            </ul>
-          </section>
-        </div>
-      </div>
-
-      <div
-        v-if="activeMenuInfo"
-        class="mt-4 flex flex-wrap items-center gap-2 text-sm text-gray-90"
-      >
-        <span class="font-semibold">{{ t("You are here") }}:</span>
-        <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-          {{ t(activeMenuInfo.section) }} · {{ reportLabel(activeMenuInfo.item) }}
-        </span>
-      </div>
-    </nav>
-
-    <div class="my-6 h-px w-full bg-gray-25" />
-
-    <section
-      v-if="showFilters"
-      class="space-y-4"
-    >
-      <div
-        v-if="activeReport === 'tool_usage'"
-        class="space-y-4"
-      >
-        <Message
-          v-if="report.meta.noToolsAvailable"
-          :closable="false"
-          severity="info"
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
+      <nav class="w-full shrink-0 lg:w-72">
+        <Menu
+          :model="reportMenuItems"
+          class="w-full"
         >
-          {{ t("No tool available for this report") }}
-        </Message>
-        <template v-else>
-          <h3 class="text-lg font-semibold text-gray-90">{{ t("Tool-based resource count") }}</h3>
-          <div class="flex flex-col gap-4 lg:flex-row lg:items-end">
-            <div class="w-full lg:max-w-2xl">
-              <BaseMultiSelect
-                v-model="filters.toolIds"
-                :filter="true"
-                input-id="admin-statistics-tool-ids"
-                :label="t('Select tools')"
-                :options="toolOptions"
+          <template #item="{ item, props }">
+            <router-link
+              v-if="item.route"
+              v-slot="{ href, navigate }"
+              :to="item.route"
+              custom
+            >
+              <a
+                :href="href"
+                v-bind="props.action"
+                :aria-current="item.active ? 'page' : undefined"
+                :class="item.active ? 'bg-primary/10 font-semibold text-primary' : undefined"
+                @click="navigate"
+              >
+                <span class="break-words leading-5">{{ item.label }}</span>
+              </a>
+            </router-link>
+            <a
+              v-else
+              :href="item.url"
+              v-bind="props.action"
+            >
+              <span class="break-words leading-5">{{ item.label }}</span>
+            </a>
+          </template>
+        </Menu>
+      </nav>
+
+      <div class="min-w-0 flex-1 space-y-5">
+        <section
+          v-if="showFilters"
+          class="space-y-4"
+        >
+          <div
+            v-if="activeReport === 'tool_usage'"
+            class="space-y-4"
+          >
+            <Message
+              v-if="report.meta.noToolsAvailable"
+              :closable="false"
+              severity="info"
+            >
+              {{ t("No tool available for this report") }}
+            </Message>
+            <template v-else>
+              <h3 class="text-lg font-semibold text-gray-90">{{ t("Tool-based resource count") }}</h3>
+              <div class="flex flex-col gap-4 lg:flex-row lg:items-end">
+                <div class="w-full lg:max-w-2xl">
+                  <BaseMultiSelect
+                    v-model="filters.toolIds"
+                    :filter="true"
+                    input-id="admin-statistics-tool-ids"
+                    :label="t('Select tools')"
+                    :options="toolOptions"
+                  />
+                </div>
+                <BaseButton
+                  :disabled="filters.toolIds.length === 0"
+                  icon="search"
+                  :label="t('Generate report')"
+                  type="primary"
+                  @click="applyToolUsageFilter"
+                />
+              </div>
+            </template>
+          </div>
+
+          <div
+            v-else-if="activeReport === 'courselastvisit'"
+            class="flex flex-col gap-4 sm:flex-row sm:items-end"
+          >
+            <div class="w-full sm:max-w-48">
+              <BaseInputNumber
+                id="admin-statistics-date-diff"
+                v-model="filters.dateDiff"
+                :label="t('Days')"
+                :min="1"
+                :max="36500"
               />
             </div>
             <BaseButton
-              :disabled="filters.toolIds.length === 0"
               icon="search"
-              :label="t('Generate report')"
+              :label="t('Search')"
               type="primary"
-              @click="applyToolUsageFilter"
+              @click="applyLastVisitFilter"
             />
           </div>
-        </template>
-      </div>
 
-      <div
-        v-else-if="activeReport === 'courselastvisit'"
-        class="flex flex-col gap-4 sm:flex-row sm:items-end"
-      >
-        <div class="w-full sm:max-w-48">
-          <BaseInputNumber
-            id="admin-statistics-date-diff"
-            v-model="filters.dateDiff"
-            :label="t('Days')"
-            :min="1"
-            :max="36500"
-          />
-        </div>
-        <BaseButton
-          icon="search"
-          :label="t('Search')"
-          type="primary"
-          @click="applyLastVisitFilter"
-        />
-      </div>
-
-      <div
-        v-else-if="activeReport === 'recentlogins'"
-        class="flex flex-col gap-4 sm:flex-row sm:items-end"
-      >
-        <div class="w-full sm:max-w-72">
-          <BaseSelect
-            id="admin-statistics-session-duration"
-            v-model="filters.sessionDuration"
-            :label="`${t('Session min duration')} (${t('Minutes')})`"
-            name="session_duration"
-            :options="sessionDurationOptions"
-          />
-        </div>
-        <BaseButton
-          :label="t('Filter')"
-          type="primary"
-          @click="applyRecentLoginsFilter"
-        />
-      </div>
-
-      <div
-        v-else-if="activeReport === 'zombies'"
-        class="flex flex-col gap-4 lg:flex-row lg:items-end"
-      >
-        <div class="w-full lg:max-w-xs">
-          <BaseCalendar
-            id="admin-statistics-zombie-ceiling"
-            v-model="filters.zombieCeiling"
-            :label="t('Latest access')"
-          />
-        </div>
-        <BaseCheckbox
-          id="admin-statistics-zombie-active-only"
-          v-model="filters.zombieActiveOnly"
-          :label="t('Active only')"
-          name="active_only"
-        />
-        <BaseButton
-          icon="search"
-          :label="t('Search')"
-          type="primary"
-          @click="applyZombieFilter"
-        />
-      </div>
-
-      <div
-        v-else-if="activeReport === 'duplicated_users'"
-        class="space-y-4"
-      >
-        <div class="flex flex-wrap gap-2">
-          <BaseButton
-            :label="t('By name')"
-            :type="filters.duplicateMode === 'name' ? 'primary' : 'tertiary'"
-            @click="setDuplicateMode('name')"
-          />
-          <BaseButton
-            :label="t('By email')"
-            :type="filters.duplicateMode === 'email' ? 'primary' : 'tertiary'"
-            @click="setDuplicateMode('email')"
-          />
-          <BaseButton
-            :label="t('By extra field')"
-            :type="filters.duplicateMode === 'extra' ? 'primary' : 'tertiary'"
-            @click="setDuplicateMode('extra')"
-          />
-        </div>
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-end">
           <div
-            v-if="filters.duplicateMode === 'extra'"
-            class="w-full lg:max-w-md"
+            v-else-if="activeReport === 'recentlogins'"
+            class="flex flex-col gap-4 sm:flex-row sm:items-end"
           >
-            <BaseSelect
-              id="admin-statistics-duplicate-extra-field"
-              v-model="filters.duplicateExtraFieldId"
-              :label="t('Profile field')"
-              name="extra_field_id"
-              :options="duplicateExtraFieldOptions"
+            <div class="w-full sm:max-w-72">
+              <BaseSelect
+                id="admin-statistics-session-duration"
+                v-model="filters.sessionDuration"
+                :label="`${t('Session min duration')} (${t('Minutes')})`"
+                name="session_duration"
+                :options="sessionDurationOptions"
+              />
+            </div>
+            <BaseButton
+              :label="t('Filter')"
+              type="primary"
+              @click="applyRecentLoginsFilter"
             />
           </div>
-          <BaseButton
-            v-if="filters.duplicateMode === 'extra'"
-            :disabled="Number(filters.duplicateExtraFieldId) <= 0"
-            icon="search"
-            :label="t('Search')"
-            type="primary"
-            @click="applyDuplicateFilter"
-          />
-          <BaseButton
-            icon="file-delimited-outline"
-            :is-loading="exporting"
-            :label="t('Export to CSV')"
-            type="primary-alternative"
-            @click="downloadCurrentReport('csv')"
-          />
-          <BaseButton
-            icon="file-excel"
-            :is-loading="exporting"
-            :label="t('Export as XLS')"
-            type="primary-alternative"
-            @click="downloadCurrentReport('xls')"
-          />
-        </div>
-      </div>
 
-      <div
-        v-else-if="activeReport === 'session_by_date'"
-        class="flex flex-col gap-4 xl:flex-row xl:items-end"
-      >
-        <div class="w-full xl:max-w-md">
-          <BaseCalendar
-            id="admin-statistics-session-range"
-            v-model="filters.sessionRange"
-            :label="t('Date range')"
-            type="range"
-          />
-        </div>
-        <div class="w-full xl:max-w-64">
-          <BaseSelect
-            id="admin-statistics-session-status"
-            v-model="filters.statusId"
-            :label="t('Session status')"
-            name="status_id"
-            :options="statusOptions"
-          />
-        </div>
-        <BaseButton
-          icon="search"
-          :label="t('Search')"
-          type="primary"
-          @click="applySessionFilter"
-        />
-      </div>
+          <div
+            v-else-if="activeReport === 'zombies'"
+            class="flex flex-col gap-4 lg:flex-row lg:items-end"
+          >
+            <div class="w-full lg:max-w-xs">
+              <BaseCalendar
+                id="admin-statistics-zombie-ceiling"
+                v-model="filters.zombieCeiling"
+                :label="t('Latest access')"
+              />
+            </div>
+            <BaseCheckbox
+              id="admin-statistics-zombie-active-only"
+              v-model="filters.zombieActiveOnly"
+              :label="t('Active only')"
+              name="active_only"
+            />
+            <BaseButton
+              icon="search"
+              :label="t('Search')"
+              type="primary"
+              @click="applyZombieFilter"
+            />
+          </div>
 
-      <div
-        v-else-if="usesDateRange"
-        class="flex flex-col gap-4 xl:flex-row xl:items-end"
-      >
-        <div class="w-full xl:max-w-md">
-          <BaseCalendar
-            id="admin-statistics-date-range"
-            v-model="filters.dateRange"
-            :label="t('Date range')"
-            type="range"
-          />
-        </div>
-        <BaseButton
-          v-if="activeReport === 'user_session'"
-          :label="t('Last week')"
-          type="plain"
-          @click="setUserSessionLastWeek"
-        />
-        <BaseButton
-          icon="search"
-          :label="t('Search')"
-          type="primary"
-          @click="applyDateRangeFilter"
-        />
-        <BaseButton
-          v-if="report.meta.canExportCsv"
-          icon="file-delimited-outline"
-          :is-loading="exporting"
-          :label="t('Export to CSV')"
-          type="primary-alternative"
-          @click="downloadCurrentReport('csv')"
-        />
-        <BaseButton
-          v-if="report.meta.canExportXls && activeReport !== 'user_session'"
-          icon="file-excel"
-          :is-loading="exporting"
-          :label="t('Export to XLS')"
-          type="primary-alternative"
-          @click="downloadCurrentReport('xls')"
-        />
-      </div>
-    </section>
-
-    <section
-      v-if="loading"
-      class="flex min-h-48 items-center justify-center rounded-xl border border-gray-25 bg-white p-6 shadow-sm"
-    >
-      <ProgressSpinner />
-    </section>
-
-    <template v-else>
-      <h2
-        v-if="report.meta.contentTitle"
-        class="mb-[18px] text-xl font-semibold text-gray-90"
-      >
-        {{ report.meta.contentTitle }}
-      </h2>
-
-      <h2
-        v-if="activeReport === 'no_login_users' && Number(report.meta.totalUsers) >= 0"
-        class="mb-4 text-lg font-semibold text-gray-90"
-      >
-        {{ `${t("Number of users")}: ${legacyInteger(report.meta.totalUsers)}` }}
-      </h2>
-
-      <section
-        v-if="report.title && !legacyTitlelessReports.has(activeReport)"
-        class="space-y-1"
-      >
-        <h2 class="text-xl font-semibold text-gray-90">{{ report.title }}</h2>
-        <p
-          v-if="report.description"
-          class="text-sm text-gray-60"
-        >
-          {{ report.description }}
-        </p>
-      </section>
-
-      <section
-        v-if="report.stats.length && activeReport !== 'session_by_date'"
-        class="overflow-x-auto"
-      >
-        <table class="w-full border-collapse border border-gray-25 text-sm">
-          <thead>
-            <tr class="bg-gray-10 text-left text-gray-90">
-              <th
-                class="border border-gray-25 px-3 py-2 font-semibold"
-                :colspan="report.meta.showStatsPercentage ? 4 : 3"
+          <div
+            v-else-if="activeReport === 'duplicated_users'"
+            class="space-y-4"
+          >
+            <div class="flex flex-wrap gap-2">
+              <BaseButton
+                :label="t('By name')"
+                :type="filters.duplicateMode === 'name' ? 'primary' : 'tertiary'"
+                @click="setDuplicateMode('name')"
+              />
+              <BaseButton
+                :label="t('By email')"
+                :type="filters.duplicateMode === 'email' ? 'primary' : 'tertiary'"
+                @click="setDuplicateMode('email')"
+              />
+              <BaseButton
+                :label="t('By extra field')"
+                :type="filters.duplicateMode === 'extra' ? 'primary' : 'tertiary'"
+                @click="setDuplicateMode('extra')"
+              />
+            </div>
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-end">
+              <div
+                v-if="filters.duplicateMode === 'extra'"
+                class="w-full lg:max-w-md"
               >
-                {{ report.meta.statsTitle || report.title }}
-              </th>
-            </tr>
-            <tr class="border-b border-gray-25 text-left text-gray-90">
-              <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Name") }}</th>
-              <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Distribution") }}</th>
-              <th class="border border-gray-25 px-3 py-2 text-right font-semibold">{{ t("Count") }}</th>
-              <th
-                v-if="report.meta.showStatsPercentage"
-                class="border border-gray-25 px-3 py-2 text-right font-semibold"
-              >
-                {{ t("Percentage") }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="stat in report.stats"
-              :key="`${stat.label}-${stat.value}`"
-              class="border-b border-gray-15 odd:bg-white even:bg-gray-5"
-            >
-              <td class="whitespace-pre-line border border-gray-25 px-3 py-2 align-top">{{ stat.label }}</td>
-              <td class="border border-gray-25 px-3 py-2 align-middle">
-                <div
-                  class="flex items-center gap-2.5"
-                  :title="`${legacyPercentage(stat.value)}%`"
-                >
-                  <div class="h-2.5 min-w-36 flex-1 overflow-hidden rounded-full bg-gray-20">
-                    <div
-                      class="h-full rounded-full bg-primary"
-                      :style="{ width: `${legacyBarPercent(stat.value)}%` }"
-                    />
-                  </div>
-                  <div class="min-w-14 whitespace-nowrap text-right text-xs text-gray-60">
-                    {{ legacyPercentage(stat.value) }}%
-                  </div>
-                </div>
-              </td>
-              <td class="border border-gray-25 px-3 py-2 text-right align-top">{{ legacyInteger(stat.value) }}</td>
-              <td
-                v-if="report.meta.showStatsPercentage"
-                class="border border-gray-25 px-3 py-2 text-right align-top"
-              >
-                {{ legacyPercentage(stat.value) }}%
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section
-        v-if="report.statsGroups.length && !report.meta.legacyStatsGroups"
-        class="grid gap-4 lg:grid-cols-2"
-      >
-        <article
-          v-for="group in report.statsGroups"
-          :key="group.title"
-          class="rounded-xl border border-gray-25 bg-white p-4 shadow-sm"
-        >
-          <h3 class="mb-3 text-lg font-semibold text-gray-90">{{ group.title }}</h3>
-          <div class="divide-y divide-gray-20">
-            <div
-              v-for="item in group.items || []"
-              :key="`${item.label}-${item.value}`"
-              class="flex items-center justify-between gap-3 py-2 text-sm"
-            >
-              <span class="text-gray-70">{{ stripHtml(item.label) }}</span>
-              <span class="font-semibold text-gray-90">{{ formatNumber(item.value) }}</span>
+                <BaseSelect
+                  id="admin-statistics-duplicate-extra-field"
+                  v-model="filters.duplicateExtraFieldId"
+                  :label="t('Profile field')"
+                  name="extra_field_id"
+                  :options="duplicateExtraFieldOptions"
+                />
+              </div>
+              <BaseButton
+                v-if="filters.duplicateMode === 'extra'"
+                :disabled="Number(filters.duplicateExtraFieldId) <= 0"
+                icon="search"
+                :label="t('Search')"
+                type="primary"
+                @click="applyDuplicateFilter"
+              />
+              <BaseButton
+                icon="file-delimited-outline"
+                :is-loading="exporting"
+                :label="t('Export to CSV')"
+                type="primary-alternative"
+                @click="downloadCurrentReport('csv')"
+              />
+              <BaseButton
+                icon="file-excel"
+                :is-loading="exporting"
+                :label="t('Export as XLS')"
+                type="primary-alternative"
+                @click="downloadCurrentReport('xls')"
+              />
             </div>
           </div>
-        </article>
-      </section>
 
-      <section
-        v-if="activeReport === 'users_online' && onlineCards.length"
-        class="mx-auto w-full max-w-6xl"
-      >
-        <div class="mb-4 flex items-center justify-between gap-4">
-          <h2 class="text-lg font-semibold text-gray-90">{{ t("Users online") }}</h2>
-          <div class="text-sm text-gray-50">{{ report.meta.generatedAt }}</div>
-        </div>
-
-        <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <article
-            v-for="card in onlineCards"
-            :key="`online-${card.minutes}`"
-            :class="onlineCardClasses(card.minutes)"
-          >
-            <div class="flex items-center gap-3">
-              <div :class="onlineIconClasses(card.minutes)">
-                <BaseIcon
-                  :icon="onlineCardIcon(card.minutes)"
-                  size="normal"
-                />
-              </div>
-              <div class="min-w-0">
-                <div class="text-sm text-gray-50">{{ card.label }}</div>
-                <div class="text-2xl font-semibold text-gray-90">{{ legacyInteger(card.value) }}</div>
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <h3 class="mb-4 text-lg font-semibold text-gray-90">{{ t("Users active in a test") }}</h3>
-
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <article
-            v-for="card in testCards"
-            :key="`test-${card.minutes}`"
-            :class="onlineCardClasses(card.minutes)"
-          >
-            <div class="flex items-center gap-3">
-              <div :class="onlineIconClasses(card.minutes)">
-                <BaseIcon
-                  :icon="onlineCardIcon(card.minutes)"
-                  size="normal"
-                />
-              </div>
-              <div class="min-w-0">
-                <div class="text-sm text-gray-50">{{ card.label }}</div>
-                <div class="text-2xl font-semibold text-gray-90">{{ legacyInteger(card.value) }}</div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section
-        v-if="activeReport === 'session_by_date' && report.meta.legacySessionByDate && hasSessionDateRange"
-        class="space-y-4"
-      >
-        <h3 class="text-lg font-semibold text-gray-90">{{ report.meta.statsTitle || t("Global statistics") }}</h3>
-
-        <div class="overflow-x-auto">
-          <table class="w-full border-collapse text-sm">
-            <tbody>
-              <tr
-                v-for="stat in report.stats"
-                :key="`session-stat-${stat.label}`"
-                class="border-b border-gray-15 odd:bg-white even:bg-gray-5"
-              >
-                <td class="px-3 py-2">{{ stat.label }}</td>
-                <td class="px-3 py-2">{{ stat.value }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div
-          v-if="Number(report.table.totalItems || 0) > 0 && report.charts.length"
-          class="grid grid-cols-1 gap-4 lg:grid-cols-3"
-        >
           <div
-            v-for="chart in report.charts"
-            :key="`session-table-${chart.title}`"
+            v-else-if="activeReport === 'session_by_date'"
+            class="flex flex-col gap-4 xl:flex-row xl:items-end"
+          >
+            <div class="w-full xl:max-w-md">
+              <BaseCalendar
+                id="admin-statistics-session-range"
+                v-model="filters.sessionRange"
+                :label="t('Date range')"
+                type="range"
+              />
+            </div>
+            <div class="w-full xl:max-w-64">
+              <BaseSelect
+                id="admin-statistics-session-status"
+                v-model="filters.statusId"
+                :label="t('Session status')"
+                name="status_id"
+                :options="statusOptions"
+              />
+            </div>
+            <BaseButton
+              icon="search"
+              :label="t('Search')"
+              type="primary"
+              @click="applySessionFilter"
+            />
+          </div>
+
+          <div
+            v-else-if="usesDateRange"
+            class="flex flex-col gap-4 xl:flex-row xl:items-end"
+          >
+            <div class="w-full xl:max-w-md">
+              <BaseCalendar
+                id="admin-statistics-date-range"
+                v-model="filters.dateRange"
+                :label="t('Date range')"
+                type="range"
+              />
+            </div>
+            <BaseButton
+              v-if="activeReport === 'user_session'"
+              :label="t('Last week')"
+              type="plain"
+              @click="setUserSessionLastWeek"
+            />
+            <BaseButton
+              icon="search"
+              :label="t('Search')"
+              type="primary"
+              @click="applyDateRangeFilter"
+            />
+            <BaseButton
+              v-if="report.meta.canExportCsv"
+              icon="file-delimited-outline"
+              :is-loading="exporting"
+              :label="t('Export to CSV')"
+              type="primary-alternative"
+              @click="downloadCurrentReport('csv')"
+            />
+            <BaseButton
+              v-if="report.meta.canExportXls && activeReport !== 'user_session'"
+              icon="file-excel"
+              :is-loading="exporting"
+              :label="t('Export to XLS')"
+              type="primary-alternative"
+              @click="downloadCurrentReport('xls')"
+            />
+          </div>
+        </section>
+
+        <section
+          v-if="loading"
+          class="flex min-h-48 items-center justify-center rounded-xl border border-gray-25 bg-white p-6 shadow-sm"
+        >
+          <ProgressSpinner />
+        </section>
+
+        <template v-else>
+          <h2
+            v-if="report.meta.contentTitle"
+            class="mb-[18px] text-xl font-semibold text-gray-90"
+          >
+            {{ report.meta.contentTitle }}
+          </h2>
+
+          <h2
+            v-if="activeReport === 'no_login_users' && Number(report.meta.totalUsers) >= 0"
+            class="mb-4 text-lg font-semibold text-gray-90"
+          >
+            {{ `${t("Number of users")}: ${legacyInteger(report.meta.totalUsers)}` }}
+          </h2>
+
+          <section
+            v-if="report.title && !legacyTitlelessReports.has(activeReport)"
+            class="space-y-1"
+          >
+            <h2 class="text-xl font-semibold text-gray-90">{{ report.title }}</h2>
+            <p
+              v-if="report.description"
+              class="text-sm text-gray-60"
+            >
+              {{ report.description }}
+            </p>
+          </section>
+
+          <section
+            v-if="report.stats.length && activeReport !== 'session_by_date'"
             class="overflow-x-auto"
           >
-            <h4 class="mb-2 text-base font-semibold text-gray-90">{{ chart.title }}</h4>
-            <ChartDataTable :chart="chart" />
-          </div>
-        </div>
-
-        <BaseTable
-          :total-items="courseSessionRows.length"
-          :values="courseSessionRows"
-        >
-          <Column
-            field="course"
-            :header="t('Course')"
-          />
-          <Column
-            field="sessionsCount"
-            :header="t('Sessions count')"
-          />
-        </BaseTable>
-
-        <div
-          v-if="Number(report.table.totalItems || 0) > 0 && report.charts.length"
-          class="grid grid-cols-1 gap-4 lg:grid-cols-3"
-        >
-          <div
-            v-for="chart in report.charts"
-            :key="`session-chart-${chart.title}`"
-            class="h-[360px]"
-          >
-            <Chart
-              :data="chart.data"
-              :options="chartOptions(chart.title)"
-              :type="chart.type || 'pie'"
-              class="h-full"
-            />
-          </div>
-        </div>
-
-        <BaseTable
-          :total-items="Number(report.table.totalItems || 0)"
-          :values="report.table.items || []"
-        >
-          <Column
-            v-for="column in report.table.columns || []"
-            :key="column.key"
-            :field="column.key"
-            :header="column.label"
-          >
-            <template #body="{ data }">
-              <span>{{ data[column.key] }}</span>
-            </template>
-          </Column>
-        </BaseTable>
-
-        <BaseButton
-          v-if="report.meta.canExportXls"
-          icon="file-excel"
-          :is-loading="exporting"
-          :label="t('Export to XLS')"
-          type="plain"
-          @click="downloadCurrentReport('xls')"
-        />
-      </section>
-
-      <section
-        v-if="hasChart"
-        :class="legacyFlatChart ? '' : 'rounded-xl border border-gray-25 bg-white p-4 shadow-sm'"
-      >
-        <div :class="chartWrapperClass">
-          <Chart
-            :data="report.chart.data"
-            :options="chartOptions(report.chart.title)"
-            :type="report.chart.type || 'pie'"
-            class="h-full"
-          />
-        </div>
-        <ChartDataTable
-          v-if="showChartDataTables"
-          :chart="report.chart"
-        />
-        <div
-          v-if="activeReport === 'new_user_registrations' && route.query.month"
-          class="mt-2"
-        >
-          <BaseButton
-            :label="t('Back to months')"
-            type="primary"
-            @click="clearRegistrationDrilldown"
-          />
-        </div>
-      </section>
-
-      <section
-        v-if="report.meta.legacyUsersActive && report.charts.length"
-        class="space-y-[18px]"
-      >
-        <h2 class="text-lg font-semibold text-gray-90">
-          {{ `${t("Total number of students")}: ${legacyInteger(report.meta.studentCount)}` }}
-        </h2>
-
-        <div class="space-y-[18px]">
-          <div
-            v-for="chart in report.charts"
-            :key="`users-active-table-${chart.title}`"
-          >
-            <h3 class="mb-2 text-lg font-semibold text-gray-90">{{ chart.title }}</h3>
-            <ChartDataTable :chart="chart" />
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <div
-            v-for="chart in report.charts.slice(0, 3)"
-            :key="`users-active-chart-a-${chart.title}`"
-            class="mb-5 mt-5 h-[360px]"
-          >
-            <Chart
-              :data="chart.data"
-              :options="chartOptions(chart.title)"
-              :type="chart.type || 'pie'"
-              class="h-full"
-            />
-          </div>
-        </div>
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <div
-            v-for="chart in report.charts.slice(3, 5)"
-            :key="`users-active-chart-b-${chart.title}`"
-            class="mb-5 mt-5 h-[360px]"
-          >
-            <Chart
-              :data="chart.data"
-              :options="chartOptions(chart.title)"
-              :type="chart.type || 'pie'"
-              class="h-full"
-            />
-          </div>
-        </div>
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <div
-            v-for="chart in report.charts.slice(5, 7)"
-            :key="`users-active-chart-c-${chart.title}`"
-            class="mb-5 mt-5 h-[360px]"
-          >
-            <Chart
-              :data="chart.data"
-              :options="chartOptions(chart.title)"
-              :type="chart.type || 'pie'"
-              class="h-full"
-            />
-          </div>
-        </div>
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <div
-            v-for="chart in report.charts.slice(7, 8)"
-            :key="`users-active-chart-d-${chart.title}`"
-            class="mb-5 mt-5 h-[360px]"
-          >
-            <Chart
-              :data="chart.data"
-              :options="chartOptions(chart.title)"
-              :type="chart.type || 'pie'"
-              class="h-full"
-            />
-          </div>
-        </div>
-      </section>
-
-      <Message
-        v-if="activeReport === 'new_user_registrations' && report.meta.noData"
-        :closable="false"
-        severity="info"
-      >
-        {{ t("No data available for the selected date range") }}
-      </Message>
-
-      <section
-        v-if="report.meta.legacyRegistrationCharts && report.charts.length && !route.query.month"
-        class="space-y-5"
-      >
-        <div class="h-[360px] w-full">
-          <Chart
-            :data="report.charts[0].data"
-            :options="chartOptions(report.charts[0].title)"
-            :type="report.charts[0].type || 'bar'"
-            class="h-full"
-            @select="handleRegistrationChartSelect"
-          />
-        </div>
-        <template v-if="report.charts[1]">
-          <hr />
-          <div class="mx-auto h-[520px] w-full max-w-[700px]">
-            <Chart
-              :data="report.charts[1].data"
-              :options="chartOptions(report.charts[1].title)"
-              :type="report.charts[1].type || 'pie'"
-              class="h-full"
-            />
-          </div>
-        </template>
-      </section>
-
-      <section
-        v-if="
-          report.charts.length &&
-          !report.meta.legacyUsersActive &&
-          !report.meta.legacyRegistrationCharts &&
-          activeReport !== 'session_by_date'
-        "
-        :class="report.meta.legacyFlatCharts ? legacyChartsGridClass : 'grid gap-4 lg:grid-cols-2'"
-      >
-        <article
-          v-for="chart in report.charts"
-          :key="chart.title"
-          :class="report.meta.legacyFlatCharts ? '' : 'rounded-xl border border-gray-25 bg-white p-4 shadow-sm'"
-        >
-          <div :class="report.meta.legacyFlatCharts ? 'mb-5 h-[360px]' : 'h-[360px]'">
-            <Chart
-              :data="chart.data"
-              :options="chartOptions(chart.title)"
-              :type="chart.type || 'pie'"
-              class="h-full"
-            />
-          </div>
-          <ChartDataTable
-            v-if="showChartDataTables"
-            :chart="chart"
-          />
-        </article>
-      </section>
-
-      <section
-        v-if="report.statsGroups.length && report.meta.legacyStatsGroups"
-        class="space-y-4"
-      >
-        <div
-          v-for="group in report.statsGroups"
-          :key="group.title"
-          class="overflow-x-auto"
-        >
-          <table class="w-full border-collapse border border-gray-25 text-sm">
-            <thead>
-              <tr class="bg-gray-10 text-left text-gray-90">
-                <th
-                  class="border border-gray-25 px-3 py-2 font-semibold"
-                  colspan="3"
-                >
-                  {{ group.title }}
-                </th>
-              </tr>
-              <tr class="border-b border-gray-25 text-left text-gray-90">
-                <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Name") }}</th>
-                <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Distribution") }}</th>
-                <th class="border border-gray-25 px-3 py-2 text-right font-semibold">{{ t("Count") }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="item in group.items || []"
-                :key="`${item.label}-${item.value}`"
-                class="border-b border-gray-15 odd:bg-white even:bg-gray-5"
-              >
-                <td class="border border-gray-25 px-3 py-2 align-top">
-                  <div class="flex items-center justify-between gap-3">
-                    <span>{{ item.label }}</span>
-                    <span
-                      v-if="item.detail"
-                      class="mr-[5px] text-sm text-gray-50"
-                    >
-                      {{ item.detail }}
-                    </span>
-                  </div>
-                </td>
-                <td class="border border-gray-25 px-3 py-2 align-middle">
-                  <div
-                    class="flex items-center gap-2.5"
-                    :title="`${legacyGroupPercentage(group.items, item.value)}%`"
+            <table class="w-full border-collapse border border-gray-25 text-sm">
+              <thead>
+                <tr class="bg-gray-10 text-left text-gray-90">
+                  <th
+                    class="border border-gray-25 px-3 py-2 font-semibold"
+                    :colspan="report.meta.showStatsPercentage ? 4 : 3"
                   >
-                    <div class="h-2.5 min-w-36 flex-1 overflow-hidden rounded-full bg-gray-20">
-                      <div
-                        class="h-full rounded-full bg-primary"
-                        :style="{ width: `${legacyGroupBarPercent(group.items, item.value)}%` }"
-                      />
+                    {{ report.meta.statsTitle || report.title }}
+                  </th>
+                </tr>
+                <tr class="border-b border-gray-25 text-left text-gray-90">
+                  <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Name") }}</th>
+                  <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Distribution") }}</th>
+                  <th class="border border-gray-25 px-3 py-2 text-right font-semibold">{{ t("Count") }}</th>
+                  <th
+                    v-if="report.meta.showStatsPercentage"
+                    class="border border-gray-25 px-3 py-2 text-right font-semibold"
+                  >
+                    {{ t("Percentage") }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="stat in report.stats"
+                  :key="`${stat.label}-${stat.value}`"
+                  class="border-b border-gray-15 odd:bg-white even:bg-gray-5"
+                >
+                  <td class="whitespace-pre-line border border-gray-25 px-3 py-2 align-top">{{ stat.label }}</td>
+                  <td class="border border-gray-25 px-3 py-2 align-middle">
+                    <div
+                      class="flex items-center gap-2.5"
+                      :title="`${legacyPercentage(stat.value)}%`"
+                    >
+                      <div class="h-2.5 min-w-36 flex-1 overflow-hidden rounded-full bg-gray-20">
+                        <div
+                          class="h-full rounded-full bg-primary"
+                          :style="{ width: `${legacyBarPercent(stat.value)}%` }"
+                        />
+                      </div>
+                      <div class="min-w-14 whitespace-nowrap text-right text-xs text-gray-60">
+                        {{ legacyPercentage(stat.value) }}%
+                      </div>
                     </div>
-                    <div class="min-w-14 whitespace-nowrap text-right text-xs text-gray-60">
-                      {{ legacyGroupPercentage(group.items, item.value) }}%
-                    </div>
-                  </div>
-                </td>
-                <td class="border border-gray-25 px-3 py-2 text-right align-top">{{ legacyInteger(item.value) }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+                  </td>
+                  <td class="border border-gray-25 px-3 py-2 text-right align-top">{{ legacyInteger(stat.value) }}</td>
+                  <td
+                    v-if="report.meta.showStatsPercentage"
+                    class="border border-gray-25 px-3 py-2 text-right align-top"
+                  >
+                    {{ legacyPercentage(stat.value) }}%
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
 
-      <section
-        v-if="activeReport === 'zombies' && hasTable"
-        class="ch-zombies-wrap space-y-4"
-      >
-        <div class="flex flex-wrap gap-2">
-          <BaseButton
-            :disabled="!selectedZombieUsers.length"
-            icon="toggle-switch"
-            :is-loading="maintenanceLoading"
-            :label="t('Activate')"
-            type="success"
-            @click="confirmZombieAction('activate')"
-          />
-          <BaseButton
-            :disabled="!selectedZombieUsers.length"
-            icon="toggle-switch-off"
-            :is-loading="maintenanceLoading"
-            :label="t('Deactivate')"
-            type="secondary"
-            @click="confirmZombieAction('deactivate')"
-          />
-          <BaseButton
-            :disabled="!selectedZombieUsers.length"
-            icon="delete"
-            :is-loading="maintenanceLoading"
-            :label="t('Delete')"
-            type="danger"
-            @click="confirmZombieAction('delete')"
-          />
-        </div>
-        <BaseTable
-          v-model:rows="tableRows"
-          v-model:selected-items="selectedZombieUsers"
-          v-model:sort-field="zombieSortField"
-          v-model:sort-order="zombieSortOrder"
-          data-key="id"
-          :is-loading="loading"
-          :lazy="true"
-          :text-for-empty="t('No results found')"
-          :total-items="Number(report.table.totalItems || 0)"
-          :values="report.table.items || []"
-          @page="handlePage"
-          @sort="handleZombieSort"
-        >
-          <Column selection-mode="multiple" />
-          <Column
-            v-for="column in report.table.columns || []"
-            :key="column.key"
-            :field="column.key"
-            :header="column.label"
-            :sort-field="zombieSortFieldForColumn(column.key)"
-            :sortable="zombieSortableColumns.includes(column.key)"
+          <section
+            v-if="report.statsGroups.length && !report.meta.legacyStatsGroups"
+            class="grid gap-4 lg:grid-cols-2"
           >
-            <template #body="{ data }">
-              <a
-                v-if="column.key === 'email' && data.email"
-                :href="`mailto:${encodeURIComponent(data.email)}`"
-                class="text-primary underline hover:text-primary/80"
-              >
-                {{ data.email }}
-              </a>
-              <span v-else-if="['registeredDate', 'lastAccess'].includes(column.key)">
-                {{ formatLegacyShortDate(data[column.key]) }}
-              </span>
-              <BaseIcon
-                v-else-if="column.key === 'activeLabel'"
-                class="ch-tool-icon"
-                :icon="Number(data.active) === 1 ? 'check-circle' : 'close-circle'"
-                size="small"
-                :title="Number(data.active) === 1 ? t('Yes') : t('No')"
-              />
-              <span v-else>{{ data[column.key] }}</span>
-            </template>
-          </Column>
-        </BaseTable>
-      </section>
+            <article
+              v-for="group in report.statsGroups"
+              :key="group.title"
+              class="rounded-xl border border-gray-25 bg-white p-4 shadow-sm"
+            >
+              <h3 class="mb-3 text-lg font-semibold text-gray-90">{{ group.title }}</h3>
+              <div class="divide-y divide-gray-20">
+                <div
+                  v-for="item in group.items || []"
+                  :key="`${item.label}-${item.value}`"
+                  class="flex items-center justify-between gap-3 py-2 text-sm"
+                >
+                  <span class="text-gray-70">{{ stripHtml(item.label) }}</span>
+                  <span class="font-semibold text-gray-90">{{ formatNumber(item.value) }}</span>
+                </div>
+              </div>
+            </article>
+          </section>
 
-      <section
-        v-if="activeReport === 'duplicated_users'"
-        class="space-y-4"
-      >
-        <Message
-          :closable="false"
-          severity="info"
-        >
-          {{ duplicateModeDescription }}
-        </Message>
-        <article class="rounded-xl border border-gray-25 bg-white p-4 shadow-sm">
-          <h3 class="font-semibold text-gray-90">{{ t("How to use this report") }}</h3>
-          <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-70">
-            <li>
-              <strong>{{ t("Disable / Enable") }}</strong
-              >:
-              {{ t("Only blocks or restores login. It does not delete the user and does not remove subscriptions.") }}
-            </li>
-            <li>
-              <strong>{{ t("Unify") }}</strong
-              >:
-              {{
-                t(
-                  "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone.",
-                )
-              }}
-            </li>
-            <li>
-              <strong>{{ t("Permanent deletion") }}</strong
-              >:
-              {{
-                t(
-                  "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually.",
-                )
-              }}
-            </li>
-          </ul>
-        </article>
-        <article
-          v-for="group in duplicateGroups"
-          :key="group.key"
-          class="overflow-hidden rounded border border-info/30 bg-info/5"
-        >
-          <header class="flex flex-wrap items-center gap-3 border-b border-info/30 bg-info/10 px-3 py-2">
-            <h3 class="font-semibold text-gray-90">{{ group.label }}</h3>
-            <span class="rounded-full bg-info px-2 py-1 text-xs font-semibold text-white">
-              {{ group.items?.length || 0 }} {{ t("Users") }}
-            </span>
-          </header>
-          <div class="p-3">
+          <section
+            v-if="activeReport === 'users_online' && onlineCards.length"
+            class="mx-auto w-full max-w-6xl"
+          >
+            <div class="mb-4 flex items-center justify-between gap-4">
+              <h2 class="text-lg font-semibold text-gray-90">{{ t("Users online") }}</h2>
+              <div class="text-sm text-gray-50">{{ report.meta.generatedAt }}</div>
+            </div>
+
+            <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <article
+                v-for="card in onlineCards"
+                :key="`online-${card.minutes}`"
+                :class="onlineCardClasses(card.minutes)"
+              >
+                <div class="flex items-center gap-3">
+                  <div :class="onlineIconClasses(card.minutes)">
+                    <BaseIcon
+                      :icon="onlineCardIcon(card.minutes)"
+                      size="normal"
+                    />
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-sm text-gray-50">{{ card.label }}</div>
+                    <div class="text-2xl font-semibold text-gray-90">{{ legacyInteger(card.value) }}</div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <h3 class="mb-4 text-lg font-semibold text-gray-90">{{ t("Users active in a test") }}</h3>
+
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <article
+                v-for="card in testCards"
+                :key="`test-${card.minutes}`"
+                :class="onlineCardClasses(card.minutes)"
+              >
+                <div class="flex items-center gap-3">
+                  <div :class="onlineIconClasses(card.minutes)">
+                    <BaseIcon
+                      :icon="onlineCardIcon(card.minutes)"
+                      size="normal"
+                    />
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-sm text-gray-50">{{ card.label }}</div>
+                    <div class="text-2xl font-semibold text-gray-90">{{ legacyInteger(card.value) }}</div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section
+            v-if="activeReport === 'session_by_date' && report.meta.legacySessionByDate && hasSessionDateRange"
+            class="space-y-4"
+          >
+            <h3 class="text-lg font-semibold text-gray-90">{{ report.meta.statsTitle || t("Global statistics") }}</h3>
+
+            <div class="overflow-x-auto">
+              <table class="w-full border-collapse text-sm">
+                <tbody>
+                  <tr
+                    v-for="stat in report.stats"
+                    :key="`session-stat-${stat.label}`"
+                    class="border-b border-gray-15 odd:bg-white even:bg-gray-5"
+                  >
+                    <td class="px-3 py-2">{{ stat.label }}</td>
+                    <td class="px-3 py-2">{{ stat.value }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div
+              v-if="Number(report.table.totalItems || 0) > 0 && report.charts.length"
+              class="grid grid-cols-1 gap-4 lg:grid-cols-3"
+            >
+              <div
+                v-for="chart in report.charts"
+                :key="`session-table-${chart.title}`"
+                class="overflow-x-auto"
+              >
+                <h4 class="mb-2 text-base font-semibold text-gray-90">{{ chart.title }}</h4>
+                <ChartDataTable :chart="chart" />
+              </div>
+            </div>
+
             <BaseTable
-              :total-items="group.items?.length || 0"
-              :values="group.items || []"
+              :total-items="courseSessionRows.length"
+              :values="courseSessionRows"
             >
               <Column
-                v-for="column in duplicateColumns"
+                field="course"
+                :header="t('Course')"
+              />
+              <Column
+                field="sessionsCount"
+                :header="t('Sessions count')"
+              />
+            </BaseTable>
+
+            <div
+              v-if="Number(report.table.totalItems || 0) > 0 && report.charts.length"
+              class="grid grid-cols-1 gap-4 lg:grid-cols-3"
+            >
+              <div
+                v-for="chart in report.charts"
+                :key="`session-chart-${chart.title}`"
+                class="h-[360px]"
+              >
+                <Chart
+                  :data="chart.data"
+                  :options="chartOptions(chart.title)"
+                  :type="chart.type || 'pie'"
+                  class="h-full"
+                />
+              </div>
+            </div>
+
+            <BaseTable
+              :total-items="Number(report.table.totalItems || 0)"
+              :values="report.table.items || []"
+            >
+              <Column
+                v-for="column in report.table.columns || []"
                 :key="column.key"
                 :field="column.key"
                 :header="column.label"
@@ -965,269 +539,661 @@
                   <span>{{ data[column.key] }}</span>
                 </template>
               </Column>
-              <Column :header="t('Actions')">
+            </BaseTable>
+
+            <BaseButton
+              v-if="report.meta.canExportXls"
+              icon="file-excel"
+              :is-loading="exporting"
+              :label="t('Export to XLS')"
+              type="plain"
+              @click="downloadCurrentReport('xls')"
+            />
+          </section>
+
+          <section
+            v-if="hasChart"
+            :class="legacyFlatChart ? '' : 'rounded-xl border border-gray-25 bg-white p-4 shadow-sm'"
+          >
+            <div :class="chartWrapperClass">
+              <Chart
+                :data="report.chart.data"
+                :options="chartOptions(report.chart.title)"
+                :type="report.chart.type || 'pie'"
+                class="h-full"
+              />
+            </div>
+            <ChartDataTable
+              v-if="showChartDataTables"
+              :chart="report.chart"
+            />
+            <div
+              v-if="activeReport === 'new_user_registrations' && route.query.month"
+              class="mt-2"
+            >
+              <BaseButton
+                :label="t('Back to months')"
+                type="primary"
+                @click="clearRegistrationDrilldown"
+              />
+            </div>
+          </section>
+
+          <section
+            v-if="report.meta.legacyUsersActive && report.charts.length"
+            class="space-y-[18px]"
+          >
+            <h2 class="text-lg font-semibold text-gray-90">
+              {{ `${t("Total number of students")}: ${legacyInteger(report.meta.studentCount)}` }}
+            </h2>
+
+            <div class="space-y-[18px]">
+              <div
+                v-for="chart in report.charts"
+                :key="`users-active-table-${chart.title}`"
+              >
+                <h3 class="mb-2 text-lg font-semibold text-gray-90">{{ chart.title }}</h3>
+                <ChartDataTable :chart="chart" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+              <div
+                v-for="chart in report.charts.slice(0, 3)"
+                :key="`users-active-chart-a-${chart.title}`"
+                class="mb-5 mt-5 h-[360px]"
+              >
+                <Chart
+                  :data="chart.data"
+                  :options="chartOptions(chart.title)"
+                  :type="chart.type || 'pie'"
+                  class="h-full"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <div
+                v-for="chart in report.charts.slice(3, 5)"
+                :key="`users-active-chart-b-${chart.title}`"
+                class="mb-5 mt-5 h-[360px]"
+              >
+                <Chart
+                  :data="chart.data"
+                  :options="chartOptions(chart.title)"
+                  :type="chart.type || 'pie'"
+                  class="h-full"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <div
+                v-for="chart in report.charts.slice(5, 7)"
+                :key="`users-active-chart-c-${chart.title}`"
+                class="mb-5 mt-5 h-[360px]"
+              >
+                <Chart
+                  :data="chart.data"
+                  :options="chartOptions(chart.title)"
+                  :type="chart.type || 'pie'"
+                  class="h-full"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <div
+                v-for="chart in report.charts.slice(7, 8)"
+                :key="`users-active-chart-d-${chart.title}`"
+                class="mb-5 mt-5 h-[360px]"
+              >
+                <Chart
+                  :data="chart.data"
+                  :options="chartOptions(chart.title)"
+                  :type="chart.type || 'pie'"
+                  class="h-full"
+                />
+              </div>
+            </div>
+          </section>
+
+          <Message
+            v-if="activeReport === 'new_user_registrations' && report.meta.noData"
+            :closable="false"
+            severity="info"
+          >
+            {{ t("No data available for the selected date range") }}
+          </Message>
+
+          <section
+            v-if="report.meta.legacyRegistrationCharts && report.charts.length && !route.query.month"
+            class="space-y-5"
+          >
+            <div class="h-[360px] w-full">
+              <Chart
+                :data="report.charts[0].data"
+                :options="chartOptions(report.charts[0].title)"
+                :type="report.charts[0].type || 'bar'"
+                class="h-full"
+                @select="handleRegistrationChartSelect"
+              />
+            </div>
+            <template v-if="report.charts[1]">
+              <hr />
+              <div class="mx-auto h-[520px] w-full max-w-[700px]">
+                <Chart
+                  :data="report.charts[1].data"
+                  :options="chartOptions(report.charts[1].title)"
+                  :type="report.charts[1].type || 'pie'"
+                  class="h-full"
+                />
+              </div>
+            </template>
+          </section>
+
+          <section
+            v-if="
+              report.charts.length &&
+              !report.meta.legacyUsersActive &&
+              !report.meta.legacyRegistrationCharts &&
+              activeReport !== 'session_by_date'
+            "
+            :class="report.meta.legacyFlatCharts ? legacyChartsGridClass : 'grid gap-4 lg:grid-cols-2'"
+          >
+            <article
+              v-for="chart in report.charts"
+              :key="chart.title"
+              :class="report.meta.legacyFlatCharts ? '' : 'rounded-xl border border-gray-25 bg-white p-4 shadow-sm'"
+            >
+              <div :class="report.meta.legacyFlatCharts ? 'mb-5 h-[360px]' : 'h-[360px]'">
+                <Chart
+                  :data="chart.data"
+                  :options="chartOptions(chart.title)"
+                  :type="chart.type || 'pie'"
+                  class="h-full"
+                />
+              </div>
+              <ChartDataTable
+                v-if="showChartDataTables"
+                :chart="chart"
+              />
+            </article>
+          </section>
+
+          <section
+            v-if="report.statsGroups.length && report.meta.legacyStatsGroups"
+            class="space-y-4"
+          >
+            <div
+              v-for="group in report.statsGroups"
+              :key="group.title"
+              class="overflow-x-auto"
+            >
+              <table class="w-full border-collapse border border-gray-25 text-sm">
+                <thead>
+                  <tr class="bg-gray-10 text-left text-gray-90">
+                    <th
+                      class="border border-gray-25 px-3 py-2 font-semibold"
+                      colspan="3"
+                    >
+                      {{ group.title }}
+                    </th>
+                  </tr>
+                  <tr class="border-b border-gray-25 text-left text-gray-90">
+                    <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Name") }}</th>
+                    <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Distribution") }}</th>
+                    <th class="border border-gray-25 px-3 py-2 text-right font-semibold">{{ t("Count") }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="item in group.items || []"
+                    :key="`${item.label}-${item.value}`"
+                    class="border-b border-gray-15 odd:bg-white even:bg-gray-5"
+                  >
+                    <td class="border border-gray-25 px-3 py-2 align-top">
+                      <div class="flex items-center justify-between gap-3">
+                        <span>{{ item.label }}</span>
+                        <span
+                          v-if="item.detail"
+                          class="mr-[5px] text-sm text-gray-50"
+                        >
+                          {{ item.detail }}
+                        </span>
+                      </div>
+                    </td>
+                    <td class="border border-gray-25 px-3 py-2 align-middle">
+                      <div
+                        class="flex items-center gap-2.5"
+                        :title="`${legacyGroupPercentage(group.items, item.value)}%`"
+                      >
+                        <div class="h-2.5 min-w-36 flex-1 overflow-hidden rounded-full bg-gray-20">
+                          <div
+                            class="h-full rounded-full bg-primary"
+                            :style="{ width: `${legacyGroupBarPercent(group.items, item.value)}%` }"
+                          />
+                        </div>
+                        <div class="min-w-14 whitespace-nowrap text-right text-xs text-gray-60">
+                          {{ legacyGroupPercentage(group.items, item.value) }}%
+                        </div>
+                      </div>
+                    </td>
+                    <td class="border border-gray-25 px-3 py-2 text-right align-top">
+                      {{ legacyInteger(item.value) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section
+            v-if="activeReport === 'zombies' && hasTable"
+            class="ch-zombies-wrap space-y-4"
+          >
+            <div class="flex flex-wrap gap-2">
+              <BaseButton
+                :disabled="!selectedZombieUsers.length"
+                icon="toggle-switch"
+                :is-loading="maintenanceLoading"
+                :label="t('Activate')"
+                type="success"
+                @click="confirmZombieAction('activate')"
+              />
+              <BaseButton
+                :disabled="!selectedZombieUsers.length"
+                icon="toggle-switch-off"
+                :is-loading="maintenanceLoading"
+                :label="t('Deactivate')"
+                type="secondary"
+                @click="confirmZombieAction('deactivate')"
+              />
+              <BaseButton
+                :disabled="!selectedZombieUsers.length"
+                icon="delete"
+                :is-loading="maintenanceLoading"
+                :label="t('Delete')"
+                type="danger"
+                @click="confirmZombieAction('delete')"
+              />
+            </div>
+            <BaseTable
+              v-model:rows="tableRows"
+              v-model:selected-items="selectedZombieUsers"
+              v-model:sort-field="zombieSortField"
+              v-model:sort-order="zombieSortOrder"
+              data-key="id"
+              :is-loading="loading"
+              :lazy="true"
+              :text-for-empty="t('No results found')"
+              :total-items="Number(report.table.totalItems || 0)"
+              :values="report.table.items || []"
+              @page="handlePage"
+              @sort="handleZombieSort"
+            >
+              <Column selection-mode="multiple" />
+              <Column
+                v-for="column in report.table.columns || []"
+                :key="column.key"
+                :field="column.key"
+                :header="column.label"
+                :sort-field="zombieSortFieldForColumn(column.key)"
+                :sortable="zombieSortableColumns.includes(column.key)"
+              >
                 <template #body="{ data }">
-                  <div class="flex flex-wrap gap-2">
-                    <BaseButton
-                      :label="t('Details')"
-                      size="small"
-                      :to-url="data.detailsUrl"
-                      type="plain"
-                    />
-                    <BaseButton
-                      :is-loading="maintenanceLoading"
-                      :label="Number(data.active) === 1 ? t('Deactivate') : t('Enable')"
-                      size="small"
-                      :type="Number(data.active) === 1 ? 'danger' : 'success'"
-                      @click="confirmDuplicateStatus(data)"
-                    />
-                    <BaseButton
-                      :is-loading="maintenanceLoading"
-                      :label="t('Unify')"
-                      size="small"
-                      type="plain"
-                      @click="confirmDuplicateUnify(data)"
-                    />
-                  </div>
+                  <a
+                    v-if="column.key === 'email' && data.email"
+                    :href="`mailto:${encodeURIComponent(data.email)}`"
+                    class="text-primary underline hover:text-primary/80"
+                  >
+                    {{ data.email }}
+                  </a>
+                  <span v-else-if="['registeredDate', 'lastAccess'].includes(column.key)">
+                    {{ formatLegacyShortDate(data[column.key]) }}
+                  </span>
+                  <BaseIcon
+                    v-else-if="column.key === 'activeLabel'"
+                    class="ch-tool-icon"
+                    :icon="Number(data.active) === 1 ? 'check-circle' : 'close-circle'"
+                    size="small"
+                    :title="Number(data.active) === 1 ? t('Yes') : t('No')"
+                  />
+                  <span v-else>{{ data[column.key] }}</span>
                 </template>
               </Column>
             </BaseTable>
-          </div>
-        </article>
-      </section>
+          </section>
 
-      <section
-        v-if="activeReport === 'quarterly_report' && quarterlyCards.length"
-        class="space-y-4"
-      >
-        <div class="flex justify-end">
-          <BaseButton
-            icon="eye"
-            :is-loading="loadingAllQuarterly"
-            :label="`${t('Show')}: ${t('All')}`"
-            type="primary"
-            @click="loadAllQuarterlySections"
-          />
-        </div>
-
-        <div class="grid gap-4 lg:grid-cols-2">
-          <article
-            v-for="card in quarterlyCards"
-            :key="card.id"
-            class="rounded-xl border border-gray-25 bg-white shadow-sm"
+          <section
+            v-if="activeReport === 'duplicated_users'"
+            class="space-y-4"
           >
-            <header class="flex items-start justify-between gap-3 border-b border-gray-20 p-4">
-              <h3 class="text-base font-semibold text-gray-90">{{ card.title }}</h3>
-              <div class="flex gap-2">
-                <BaseButton
-                  icon="eye"
-                  :is-loading="Boolean(quarterlyLoading[card.id])"
-                  :label="t('Show')"
-                  type="primary-alternative"
-                  @click="toggleQuarterlySection(card.id)"
-                />
-                <BaseButton
-                  icon="refresh"
-                  :is-loading="Boolean(quarterlyLoading[card.id])"
-                  :label="t('Refresh')"
-                  type="secondary"
-                  @click="loadQuarterlySection(card.id, true)"
-                />
-              </div>
-            </header>
-
-            <div
-              v-if="quarterlyVisible[card.id]"
-              class="space-y-4 p-4"
+            <Message
+              :closable="false"
+              severity="info"
             >
-              <ProgressSpinner v-if="quarterlyLoading[card.id]" />
-              <template v-else-if="quarterlySections[card.id]">
-                <p
-                  v-if="quarterlySections[card.id].message"
-                  class="text-sm text-gray-70"
-                >
-                  {{ quarterlySections[card.id].message }}
-                </p>
-
+              {{ duplicateModeDescription }}
+            </Message>
+            <article class="rounded-xl border border-gray-25 bg-white p-4 shadow-sm">
+              <h3 class="font-semibold text-gray-90">{{ t("How to use this report") }}</h3>
+              <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-70">
+                <li>
+                  <strong>{{ t("Disable / Enable") }}</strong
+                  >:
+                  {{
+                    t("Only blocks or restores login. It does not delete the user and does not remove subscriptions.")
+                  }}
+                </li>
+                <li>
+                  <strong>{{ t("Unify") }}</strong
+                  >:
+                  {{
+                    t(
+                      "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone.",
+                    )
+                  }}
+                </li>
+                <li>
+                  <strong>{{ t("Permanent deletion") }}</strong
+                  >:
+                  {{
+                    t(
+                      "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually.",
+                    )
+                  }}
+                </li>
+              </ul>
+            </article>
+            <article
+              v-for="group in duplicateGroups"
+              :key="group.key"
+              class="overflow-hidden rounded border border-info/30 bg-info/5"
+            >
+              <header class="flex flex-wrap items-center gap-3 border-b border-info/30 bg-info/10 px-3 py-2">
+                <h3 class="font-semibold text-gray-90">{{ group.label }}</h3>
+                <span class="rounded-full bg-info px-2 py-1 text-xs font-semibold text-white">
+                  {{ group.items?.length || 0 }} {{ t("Users") }}
+                </span>
+              </header>
+              <div class="p-3">
                 <BaseTable
-                  v-if="quarterlySections[card.id].columns"
-                  :total-items="quarterlySections[card.id].items?.length || 0"
-                  :values="quarterlySections[card.id].items || []"
+                  :total-items="group.items?.length || 0"
+                  :values="group.items || []"
                 >
                   <Column
-                    v-for="column in quarterlySections[card.id].columns"
+                    v-for="column in duplicateColumns"
                     :key="column.key"
                     :field="column.key"
                     :header="column.label"
-                  />
+                  >
+                    <template #body="{ data }">
+                      <span>{{ data[column.key] }}</span>
+                    </template>
+                  </Column>
+                  <Column :header="t('Actions')">
+                    <template #body="{ data }">
+                      <div class="flex flex-wrap gap-2">
+                        <BaseButton
+                          :label="t('Details')"
+                          size="small"
+                          :to-url="data.detailsUrl"
+                          type="plain"
+                        />
+                        <BaseButton
+                          :is-loading="maintenanceLoading"
+                          :label="Number(data.active) === 1 ? t('Deactivate') : t('Enable')"
+                          size="small"
+                          :type="Number(data.active) === 1 ? 'danger' : 'success'"
+                          @click="confirmDuplicateStatus(data)"
+                        />
+                        <BaseButton
+                          :is-loading="maintenanceLoading"
+                          :label="t('Unify')"
+                          size="small"
+                          type="plain"
+                          @click="confirmDuplicateUnify(data)"
+                        />
+                      </div>
+                    </template>
+                  </Column>
                 </BaseTable>
+              </div>
+            </article>
+          </section>
+
+          <section
+            v-if="activeReport === 'quarterly_report' && quarterlyCards.length"
+            class="space-y-4"
+          >
+            <div class="flex justify-end">
+              <BaseButton
+                icon="eye"
+                :is-loading="loadingAllQuarterly"
+                :label="`${t('Show')}: ${t('All')}`"
+                type="primary"
+                @click="loadAllQuarterlySections"
+              />
+            </div>
+
+            <div class="grid gap-4 lg:grid-cols-2">
+              <article
+                v-for="card in quarterlyCards"
+                :key="card.id"
+                class="rounded-xl border border-gray-25 bg-white shadow-sm"
+              >
+                <header class="flex items-start justify-between gap-3 border-b border-gray-20 p-4">
+                  <h3 class="text-base font-semibold text-gray-90">{{ card.title }}</h3>
+                  <div class="flex gap-2">
+                    <BaseButton
+                      icon="eye"
+                      :is-loading="Boolean(quarterlyLoading[card.id])"
+                      :label="t('Show')"
+                      type="primary-alternative"
+                      @click="toggleQuarterlySection(card.id)"
+                    />
+                    <BaseButton
+                      icon="refresh"
+                      :is-loading="Boolean(quarterlyLoading[card.id])"
+                      :label="t('Refresh')"
+                      type="secondary"
+                      @click="loadQuarterlySection(card.id, true)"
+                    />
+                  </div>
+                </header>
 
                 <div
-                  v-for="(table, tableIndex) in quarterlySections[card.id].tables || []"
-                  :key="`${card.id}-table-${tableIndex}`"
-                  class="space-y-2"
+                  v-if="quarterlyVisible[card.id]"
+                  class="space-y-4 p-4"
                 >
-                  <h4
-                    v-if="table.title"
-                    class="font-semibold text-gray-90"
-                  >
-                    {{ table.title }}
-                  </h4>
-                  <BaseTable
-                    :total-items="table.items?.length || 0"
-                    :values="table.items || []"
-                  >
-                    <Column
-                      v-for="column in table.columns || []"
-                      :key="column.key"
-                      :field="column.key"
-                      :header="column.label"
+                  <ProgressSpinner v-if="quarterlyLoading[card.id]" />
+                  <template v-else-if="quarterlySections[card.id]">
+                    <p
+                      v-if="quarterlySections[card.id].message"
+                      class="text-sm text-gray-70"
                     >
-                      <template #body="{ data }">
-                        <a
-                          v-if="column.key === 'course' && data.courseUrl"
-                          :href="data.courseUrl"
-                          class="text-primary underline hover:text-primary/80"
+                      {{ quarterlySections[card.id].message }}
+                    </p>
+
+                    <BaseTable
+                      v-if="quarterlySections[card.id].columns"
+                      :total-items="quarterlySections[card.id].items?.length || 0"
+                      :values="quarterlySections[card.id].items || []"
+                    >
+                      <Column
+                        v-for="column in quarterlySections[card.id].columns"
+                        :key="column.key"
+                        :field="column.key"
+                        :header="column.label"
+                      />
+                    </BaseTable>
+
+                    <div
+                      v-for="(table, tableIndex) in quarterlySections[card.id].tables || []"
+                      :key="`${card.id}-table-${tableIndex}`"
+                      class="space-y-2"
+                    >
+                      <h4
+                        v-if="table.title"
+                        class="font-semibold text-gray-90"
+                      >
+                        {{ table.title }}
+                      </h4>
+                      <BaseTable
+                        :total-items="table.items?.length || 0"
+                        :values="table.items || []"
+                      >
+                        <Column
+                          v-for="column in table.columns || []"
+                          :key="column.key"
+                          :field="column.key"
+                          :header="column.label"
                         >
-                          {{ data[column.key] }}
-                        </a>
-                        <span v-else>{{ data[column.key] }}</span>
-                      </template>
-                    </Column>
-                  </BaseTable>
+                          <template #body="{ data }">
+                            <a
+                              v-if="column.key === 'course' && data.courseUrl"
+                              :href="data.courseUrl"
+                              class="text-primary underline hover:text-primary/80"
+                            >
+                              {{ data[column.key] }}
+                            </a>
+                            <span v-else>{{ data[column.key] }}</span>
+                          </template>
+                        </Column>
+                      </BaseTable>
+                    </div>
+
+                    <Message
+                      v-if="quarterlySections[card.id].warning"
+                      :closable="false"
+                      severity="warn"
+                    >
+                      {{ quarterlySections[card.id].warning }}
+                    </Message>
+                  </template>
                 </div>
-
-                <Message
-                  v-if="quarterlySections[card.id].warning"
-                  :closable="false"
-                  severity="warn"
-                >
-                  {{ quarterlySections[card.id].warning }}
-                </Message>
-              </template>
+              </article>
             </div>
-          </article>
-        </div>
-      </section>
+          </section>
 
-      <p
-        v-if="activeReport === 'courselastvisit' && report.meta.legacySummary"
-        class="text-sm text-gray-90"
-      >
-        {{ report.meta.legacySummary }}
-      </p>
-
-      <h4
-        v-if="activeReport === 'courses_usage' && report.meta.contentTitle"
-        class="text-lg font-semibold text-gray-90"
-      >
-        {{ report.meta.contentTitle }}
-      </h4>
-
-      <section
-        v-if="
-          hasTable &&
-          !['zombies', 'duplicated_users', 'session_by_date'].includes(activeReport) &&
-          !(activeReport === 'tool_usage' && !filters.toolIds.length)
-        "
-        :class="
-          legacyCourseReports.has(activeReport) || report.meta.legacyFlatTable
-            ? ''
-            : 'rounded-xl border border-gray-25 bg-white p-4 shadow-sm'
-        "
-      >
-        <BaseTable
-          v-model:rows="tableRows"
-          v-model:sort-field="reportSortField"
-          v-model:sort-order="reportSortOrder"
-          :is-loading="loading"
-          :lazy="Boolean(report.table.lazy)"
-          :text-for-empty="tableEmptyText"
-          :total-items="Number(report.table.totalItems || 0)"
-          :values="report.table.items"
-          @page="handlePage"
-          @sort="handleReportSort"
-        >
-          <Column
-            v-for="column in report.table.columns"
-            :key="column.key"
-            :field="column.key"
-            :header="column.label"
-            :sortable="Boolean(column.sortable)"
+          <p
+            v-if="activeReport === 'courselastvisit' && report.meta.legacySummary"
+            class="text-sm text-gray-90"
           >
-            <template #body="{ data }">
-              <a
-                v-if="activeReport === 'tool_usage' && column.key === 'toolName' && data.link && data.link !== '-'"
-                :href="data.link"
-                class="text-primary underline hover:text-primary/80"
-              >
-                {{ data[column.key] }}
-              </a>
-              <router-link
-                v-else-if="activeReport === 'courselastvisit' && column.key === 'courseTitle'"
-                :to="`/course/${Number(data.courseId)}/home`"
-                class="text-primary underline hover:text-primary/80"
-              >
-                {{ data[column.key] }}
-              </router-link>
-              <a
-                v-else-if="activeReport === 'user_session' && column.key === 'session' && data.sessionUrl"
-                :href="data.sessionUrl"
-                class="text-primary underline hover:text-primary/80"
-              >
-                {{ data[column.key] }}
-              </a>
-              <a
-                v-else-if="activeReport === 'users_online' && column.key === 'fullName' && data.detailsUrl"
-                :href="data.detailsUrl"
-                class="text-primary underline hover:text-primary/80"
-              >
-                {{ data[column.key] }}
-              </a>
-              <span v-else-if="activeReport === 'tool_usage' && column.key === 'lastUpdated'">
-                {{ data[column.key] }}
-              </span>
-              <span v-else-if="isDateColumn(column.key)">
-                {{ formatDateTime(data[column.key]) }}
-              </span>
-              <span v-else>{{ data[column.key] }}</span>
-            </template>
-          </Column>
-        </BaseTable>
+            {{ report.meta.legacySummary }}
+          </p>
 
-        <div
-          v-if="activeReport === 'user_session' && report.meta.canExportXls"
-          class="mt-4"
-        >
-          <BaseButton
-            icon="file-excel"
-            :is-loading="exporting"
-            :label="t('Export to XLS')"
-            type="plain"
-            @click="downloadCurrentReport('xls')"
-          />
-        </div>
-      </section>
+          <h4
+            v-if="activeReport === 'courses_usage' && report.meta.contentTitle"
+            class="text-lg font-semibold text-gray-90"
+          >
+            {{ report.meta.contentTitle }}
+          </h4>
 
-      <BaseTable
-        v-if="activeReport === 'session_by_date' && report.meta.legacySessionByDate && !hasSessionDateRange"
-        :total-items="Number(report.table.totalItems || 0)"
-        :values="report.table.items || []"
-      >
-        <Column
-          v-for="column in report.table.columns || []"
-          :key="`session-empty-${column.key}`"
-          :field="column.key"
-          :header="column.label"
-        />
-      </BaseTable>
-    </template>
+          <section
+            v-if="
+              hasTable &&
+              !['zombies', 'duplicated_users', 'session_by_date'].includes(activeReport) &&
+              !(activeReport === 'tool_usage' && !filters.toolIds.length)
+            "
+            :class="
+              legacyCourseReports.has(activeReport) || report.meta.legacyFlatTable
+                ? ''
+                : 'rounded-xl border border-gray-25 bg-white p-4 shadow-sm'
+            "
+          >
+            <BaseTable
+              v-model:rows="tableRows"
+              v-model:sort-field="reportSortField"
+              v-model:sort-order="reportSortOrder"
+              :is-loading="loading"
+              :lazy="Boolean(report.table.lazy)"
+              :text-for-empty="tableEmptyText"
+              :total-items="Number(report.table.totalItems || 0)"
+              :values="report.table.items"
+              @page="handlePage"
+              @sort="handleReportSort"
+            >
+              <Column
+                v-for="column in report.table.columns"
+                :key="column.key"
+                :field="column.key"
+                :header="column.label"
+                :sortable="Boolean(column.sortable)"
+              >
+                <template #body="{ data }">
+                  <a
+                    v-if="activeReport === 'tool_usage' && column.key === 'toolName' && data.link && data.link !== '-'"
+                    :href="data.link"
+                    class="text-primary underline hover:text-primary/80"
+                  >
+                    {{ data[column.key] }}
+                  </a>
+                  <router-link
+                    v-else-if="activeReport === 'courselastvisit' && column.key === 'courseTitle'"
+                    :to="`/course/${Number(data.courseId)}/home`"
+                    class="text-primary underline hover:text-primary/80"
+                  >
+                    {{ data[column.key] }}
+                  </router-link>
+                  <a
+                    v-else-if="activeReport === 'user_session' && column.key === 'session' && data.sessionUrl"
+                    :href="data.sessionUrl"
+                    class="text-primary underline hover:text-primary/80"
+                  >
+                    {{ data[column.key] }}
+                  </a>
+                  <a
+                    v-else-if="activeReport === 'users_online' && column.key === 'fullName' && data.detailsUrl"
+                    :href="data.detailsUrl"
+                    class="text-primary underline hover:text-primary/80"
+                  >
+                    {{ data[column.key] }}
+                  </a>
+                  <span v-else-if="activeReport === 'tool_usage' && column.key === 'lastUpdated'">
+                    {{ data[column.key] }}
+                  </span>
+                  <span v-else-if="isDateColumn(column.key)">
+                    {{ formatDateTime(data[column.key]) }}
+                  </span>
+                  <span v-else>{{ data[column.key] }}</span>
+                </template>
+              </Column>
+            </BaseTable>
+
+            <div
+              v-if="activeReport === 'user_session' && report.meta.canExportXls"
+              class="mt-4"
+            >
+              <BaseButton
+                icon="file-excel"
+                :is-loading="exporting"
+                :label="t('Export to XLS')"
+                type="plain"
+                @click="downloadCurrentReport('xls')"
+              />
+            </div>
+          </section>
+
+          <BaseTable
+            v-if="activeReport === 'session_by_date' && report.meta.legacySessionByDate && !hasSessionDateRange"
+            :total-items="Number(report.table.totalItems || 0)"
+            :values="report.table.items || []"
+          >
+            <Column
+              v-for="column in report.table.columns || []"
+              :key="`session-empty-${column.key}`"
+              :field="column.key"
+              :header="column.label"
+            />
+          </BaseTable>
+        </template>
+      </div>
+    </div>
   </main>
 </template>
 
 <script setup>
 import Chart from "primevue/chart"
 import Column from "primevue/column"
+import Menu from "primevue/menu"
 import Message from "primevue/message"
 import ProgressSpinner from "primevue/progressspinner"
 import { computed, defineComponent, h, onBeforeUnmount, reactive, ref, watch } from "vue"
@@ -1244,6 +1210,7 @@ import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import adminStatisticsService from "../../services/adminStatisticsService"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useNotification } from "../../composables/notification"
+import { isReportOfRoute, reportGroups } from "../../utils/statisticsReports"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const route = useRoute()
@@ -1318,58 +1285,6 @@ const legacyTitlelessReports = new Set([
   "duplicated_users",
 ])
 
-const reportGroups = [
-  {
-    label: "Courses",
-    items: [
-      { report: "courses", label: "Courses" },
-      { report: "tools", label: "Tools access" },
-      { report: "tool_usage", label: "Tool-based resource count" },
-      { report: "courselastvisit", label: "Latest access" },
-      { report: "coursebylanguage", label: "Number of courses by language" },
-      { report: "courses_usage", label: "Courses usage" },
-    ],
-  },
-  {
-    label: "Users",
-    items: [
-      { report: "users_online", label: "Users online" },
-      { report: "users", label: "Number of users" },
-      { report: "recentlogins", label: "Logins" },
-      { report: "logins", type: "month", label: "Logins" },
-      { report: "logins", type: "day", label: "Logins" },
-      { report: "logins", type: "hour", label: "Logins" },
-      { report: "pictures", label: "Number of users", suffix: "Picture" },
-      { report: "logins_by_date", label: "Logins by date" },
-      { report: "no_login_users", label: "Not logged in for some time" },
-      { report: "zombies", label: "Zombies" },
-      { report: "users_active", label: "Users statistics" },
-      { report: "new_user_registrations", label: "New users registrations" },
-      { report: "subscription_by_day", label: "Course/Session subscriptions by day" },
-      { report: "duplicated_users", label: "Duplicate users" },
-    ],
-  },
-  {
-    label: "System",
-    items: [
-      { report: "user_session", label: "Portal user session stats" },
-      { report: "quarterly_report", label: "Quarterly report" },
-    ],
-  },
-  {
-    label: "Social",
-    items: [
-      { report: "messagereceived", label: "Number of messages received" },
-      { report: "messagesent", label: "Number of messages sent" },
-      { report: "friends", label: "Contacts count" },
-    ],
-  },
-  {
-    label: "Session",
-    items: [{ report: "session_by_date", label: "Sessions by date" }],
-  },
-]
-
 const loading = ref(false)
 const exporting = ref(false)
 const selectedZombieUsers = ref([])
@@ -1434,15 +1349,19 @@ const reportSortOrder = computed({
     courseLastVisitSortOrder.value = Number(value || 1)
   },
 })
-const activeMenuInfo = computed(() => {
-  for (const group of reportGroups) {
-    const item = group.items.find((entry) => isActiveItem(entry))
-    if (item) {
-      return { section: group.label, item }
-    }
-  }
-  return null
-})
+/**
+ * Builds the Menu model from the report groups: one submenu per group, one item per report.
+ */
+const reportMenuItems = computed(() =>
+  reportGroups.map((group) => ({
+    label: t(group.label),
+    items: group.items.map((item) => ({
+      label: t(item.label),
+      active: isReportOfRoute(item, route),
+      ...(isModernReport(item.report) ? { route: modernReportRoute(item) } : { url: legacyReportUrl(item) }),
+    })),
+  })),
+)
 const toolOptions = computed(() => (Array.isArray(report.filters.tools) ? report.filters.tools : []))
 const statusOptions = computed(() => (Array.isArray(report.filters.statusOptions) ? report.filters.statusOptions : []))
 const hasChart = computed(() => Boolean(report.chart?.data && Array.isArray(report.chart.data.labels)))
@@ -1563,33 +1482,8 @@ const ChartDataTable = defineComponent({
   },
 })
 
-function sectionHasActive(group) {
-  return group.items.some((item) => isActiveItem(item))
-}
-
 function isModernReport(name) {
   return modernReports.has(name)
-}
-
-function reportLabel(item) {
-  if (item.report === "logins" && item.type) {
-    const typeLabel = item.type.charAt(0).toUpperCase() + item.type.slice(1)
-    return `${t("Logins")} (${t(typeLabel)})`
-  }
-  if (item.suffix) {
-    return `${t(item.label)} (${t(item.suffix)})`
-  }
-  return t(item.label)
-}
-
-function isActiveItem(item) {
-  if (activeReport.value !== item.report) {
-    return false
-  }
-  if (!item.type) {
-    return true
-  }
-  return String(route.query.type || "month") === item.type
 }
 
 function modernReportRoute(item) {
@@ -2449,31 +2343,3 @@ watch(
 
 onBeforeUnmount(stopUsersOnlineRefresh)
 </script>
-
-<style scoped>
-.stats-menu-grid {
-  --stats-cols: 5;
-  display: grid;
-  gap: 1rem;
-  align-items: start;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-
-@media (min-width: 640px) {
-  .stats-menu-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 768px) {
-  .stats-menu-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .stats-menu-grid {
-    grid-template-columns: repeat(var(--stats-cols), minmax(240px, 1fr));
-  }
-}
-</style>

@@ -943,19 +943,6 @@ class ReportRegistry
         return api_get_path(WEB_CODE_PATH).'admin/report.php?'.http_build_query(['id' => $report['id']]);
     }
 
-    public static function getCanonicalUrl(string $reportId, array $extraQuery = []): string
-    {
-        $report = self::findReport($reportId);
-
-        if (null === $report) {
-            return api_get_path(WEB_CODE_PATH).'admin/reports_catalog.php';
-        }
-
-        $query = array_merge(['id' => $reportId], $extraQuery);
-
-        return api_get_path(WEB_CODE_PATH).'admin/report.php?'.http_build_query($query);
-    }
-
     /**
      * Return the current user's selectable course/session contexts.
      *

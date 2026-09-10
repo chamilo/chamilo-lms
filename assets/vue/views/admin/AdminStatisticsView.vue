@@ -3,8 +3,8 @@
     <SectionHeader :title="t('Statistics')">
       <BaseButton
         :label="t('Back')"
-        icon="arrow-left"
         :route="{ name: 'AdminIndex' }"
+        icon="arrow-left"
         type="tertiary-alternative"
       />
       <BaseButton
@@ -21,30 +21,18 @@
           :model="reportMenuItems"
           class="w-full"
         >
+          <!-- Menu renders item.url as a plain anchor and knows nothing of item.route, so
+               router navigation only happens through this slot. -->
           <template #item="{ item, props }">
-            <router-link
-              v-if="item.route"
-              v-slot="{ href, navigate }"
+            <BaseAppLink
+              :aria-current="item.active ? 'page' : undefined"
+              :class="item.active ? 'bg-primary/10 font-semibold text-primary' : undefined"
               :to="item.route"
-              custom
-            >
-              <a
-                :href="href"
-                v-bind="props.action"
-                :aria-current="item.active ? 'page' : undefined"
-                :class="item.active ? 'bg-primary/10 font-semibold text-primary' : undefined"
-                @click="navigate"
-              >
-                <span class="break-words leading-5">{{ item.label }}</span>
-              </a>
-            </router-link>
-            <a
-              v-else
-              :href="item.url"
+              :url="item.url"
               v-bind="props.action"
             >
               <span class="break-words leading-5">{{ item.label }}</span>
-            </a>
+            </BaseAppLink>
           </template>
         </Menu>
       </nav>
@@ -72,15 +60,15 @@
                   <BaseMultiSelect
                     v-model="filters.toolIds"
                     :filter="true"
-                    input-id="admin-statistics-tool-ids"
                     :label="t('Select tools')"
                     :options="toolOptions"
+                    input-id="admin-statistics-tool-ids"
                   />
                 </div>
                 <BaseButton
                   :disabled="filters.toolIds.length === 0"
-                  icon="search"
                   :label="t('Generate report')"
+                  icon="search"
                   type="primary"
                   @click="applyToolUsageFilter"
                 />
@@ -97,13 +85,13 @@
                 id="admin-statistics-date-diff"
                 v-model="filters.dateDiff"
                 :label="t('Days')"
-                :min="1"
                 :max="36500"
+                :min="1"
               />
             </div>
             <BaseButton
-              icon="search"
               :label="t('Search')"
+              icon="search"
               type="primary"
               @click="applyLastVisitFilter"
             />
@@ -118,8 +106,8 @@
                 id="admin-statistics-session-duration"
                 v-model="filters.sessionDuration"
                 :label="`${t('Session min duration')} (${t('Minutes')})`"
-                name="session_duration"
                 :options="sessionDurationOptions"
+                name="session_duration"
               />
             </div>
             <BaseButton
@@ -147,8 +135,8 @@
               name="active_only"
             />
             <BaseButton
-              icon="search"
               :label="t('Search')"
+              icon="search"
               type="primary"
               @click="applyZombieFilter"
             />
@@ -184,29 +172,29 @@
                   id="admin-statistics-duplicate-extra-field"
                   v-model="filters.duplicateExtraFieldId"
                   :label="t('Profile field')"
-                  name="extra_field_id"
                   :options="duplicateExtraFieldOptions"
+                  name="extra_field_id"
                 />
               </div>
               <BaseButton
                 v-if="filters.duplicateMode === 'extra'"
                 :disabled="Number(filters.duplicateExtraFieldId) <= 0"
-                icon="search"
                 :label="t('Search')"
+                icon="search"
                 type="primary"
                 @click="applyDuplicateFilter"
               />
               <BaseButton
-                icon="file-delimited-outline"
                 :is-loading="exporting"
                 :label="t('Export to CSV')"
+                icon="file-delimited-outline"
                 type="primary-alternative"
                 @click="downloadCurrentReport('csv')"
               />
               <BaseButton
-                icon="file-excel"
                 :is-loading="exporting"
                 :label="t('Export as XLS')"
+                icon="file-excel"
                 type="primary-alternative"
                 @click="downloadCurrentReport('xls')"
               />
@@ -230,13 +218,13 @@
                 id="admin-statistics-session-status"
                 v-model="filters.statusId"
                 :label="t('Session status')"
-                name="status_id"
                 :options="statusOptions"
+                name="status_id"
               />
             </div>
             <BaseButton
-              icon="search"
               :label="t('Search')"
+              icon="search"
               type="primary"
               @click="applySessionFilter"
             />
@@ -261,24 +249,24 @@
               @click="setUserSessionLastWeek"
             />
             <BaseButton
-              icon="search"
               :label="t('Search')"
+              icon="search"
               type="primary"
               @click="applyDateRangeFilter"
             />
             <BaseButton
               v-if="report.meta.canExportCsv"
-              icon="file-delimited-outline"
               :is-loading="exporting"
               :label="t('Export to CSV')"
+              icon="file-delimited-outline"
               type="primary-alternative"
               @click="downloadCurrentReport('csv')"
             />
             <BaseButton
               v-if="report.meta.canExportXls && activeReport !== 'user_session'"
-              icon="file-excel"
               :is-loading="exporting"
               :label="t('Export to XLS')"
+              icon="file-excel"
               type="primary-alternative"
               @click="downloadCurrentReport('xls')"
             />
@@ -328,8 +316,8 @@
               <thead>
                 <tr class="bg-gray-10 text-left text-gray-90">
                   <th
-                    class="border border-gray-25 px-3 py-2 font-semibold"
                     :colspan="report.meta.showStatsPercentage ? 4 : 3"
+                    class="border border-gray-25 px-3 py-2 font-semibold"
                   >
                     {{ report.meta.statsTitle || report.title }}
                   </th>
@@ -355,13 +343,13 @@
                   <td class="whitespace-pre-line border border-gray-25 px-3 py-2 align-top">{{ stat.label }}</td>
                   <td class="border border-gray-25 px-3 py-2 align-middle">
                     <div
-                      class="flex items-center gap-2.5"
                       :title="`${legacyPercentage(stat.value)}%`"
+                      class="flex items-center gap-2.5"
                     >
                       <div class="h-2.5 min-w-36 flex-1 overflow-hidden rounded-full bg-gray-20">
                         <div
-                          class="h-full rounded-full bg-primary"
                           :style="{ width: `${legacyBarPercent(stat.value)}%` }"
+                          class="h-full rounded-full bg-primary"
                         />
                       </div>
                       <div class="min-w-14 whitespace-nowrap text-right text-xs text-gray-60">
@@ -498,12 +486,12 @@
               :values="courseSessionRows"
             >
               <Column
-                field="course"
                 :header="t('Course')"
+                field="course"
               />
               <Column
-                field="sessionsCount"
                 :header="t('Sessions count')"
+                field="sessionsCount"
               />
             </BaseTable>
 
@@ -543,9 +531,9 @@
 
             <BaseButton
               v-if="report.meta.canExportXls"
-              icon="file-excel"
               :is-loading="exporting"
               :label="t('Export to XLS')"
+              icon="file-excel"
               type="plain"
               @click="downloadCurrentReport('xls')"
             />
@@ -762,13 +750,13 @@
                     </td>
                     <td class="border border-gray-25 px-3 py-2 align-middle">
                       <div
-                        class="flex items-center gap-2.5"
                         :title="`${legacyGroupPercentage(group.items, item.value)}%`"
+                        class="flex items-center gap-2.5"
                       >
                         <div class="h-2.5 min-w-36 flex-1 overflow-hidden rounded-full bg-gray-20">
                           <div
-                            class="h-full rounded-full bg-primary"
                             :style="{ width: `${legacyGroupBarPercent(group.items, item.value)}%` }"
+                            class="h-full rounded-full bg-primary"
                           />
                         </div>
                         <div class="min-w-14 whitespace-nowrap text-right text-xs text-gray-60">
@@ -792,25 +780,25 @@
             <div class="flex flex-wrap gap-2">
               <BaseButton
                 :disabled="!selectedZombieUsers.length"
-                icon="toggle-switch"
                 :is-loading="maintenanceLoading"
                 :label="t('Activate')"
+                icon="toggle-switch"
                 type="success"
                 @click="confirmZombieAction('activate')"
               />
               <BaseButton
                 :disabled="!selectedZombieUsers.length"
-                icon="toggle-switch-off"
                 :is-loading="maintenanceLoading"
                 :label="t('Deactivate')"
+                icon="toggle-switch-off"
                 type="secondary"
                 @click="confirmZombieAction('deactivate')"
               />
               <BaseButton
                 :disabled="!selectedZombieUsers.length"
-                icon="delete"
                 :is-loading="maintenanceLoading"
                 :label="t('Delete')"
+                icon="delete"
                 type="danger"
                 @click="confirmZombieAction('delete')"
               />
@@ -820,12 +808,12 @@
               v-model:selected-items="selectedZombieUsers"
               v-model:sort-field="zombieSortField"
               v-model:sort-order="zombieSortOrder"
-              data-key="id"
               :is-loading="loading"
               :lazy="true"
               :text-for-empty="t('No results found')"
               :total-items="Number(report.table.totalItems || 0)"
               :values="report.table.items || []"
+              data-key="id"
               @page="handlePage"
               @sort="handleZombieSort"
             >
@@ -851,10 +839,10 @@
                   </span>
                   <BaseIcon
                     v-else-if="column.key === 'activeLabel'"
-                    class="ch-tool-icon"
                     :icon="Number(data.active) === 1 ? 'check-circle' : 'close-circle'"
-                    size="small"
                     :title="Number(data.active) === 1 ? t('Yes') : t('No')"
+                    class="ch-tool-icon"
+                    size="small"
                   />
                   <span v-else>{{ data[column.key] }}</span>
                 </template>
@@ -933,15 +921,15 @@
                       <div class="flex flex-wrap gap-2">
                         <BaseButton
                           :label="t('Details')"
-                          size="small"
                           :to-url="data.detailsUrl"
+                          size="small"
                           type="plain"
                         />
                         <BaseButton
                           :is-loading="maintenanceLoading"
                           :label="Number(data.active) === 1 ? t('Deactivate') : t('Enable')"
-                          size="small"
                           :type="Number(data.active) === 1 ? 'danger' : 'success'"
+                          size="small"
                           @click="confirmDuplicateStatus(data)"
                         />
                         <BaseButton
@@ -965,9 +953,9 @@
           >
             <div class="flex justify-end">
               <BaseButton
-                icon="eye"
                 :is-loading="loadingAllQuarterly"
                 :label="`${t('Show')}: ${t('All')}`"
+                icon="eye"
                 type="primary"
                 @click="loadAllQuarterlySections"
               />
@@ -983,16 +971,16 @@
                   <h3 class="text-base font-semibold text-gray-90">{{ card.title }}</h3>
                   <div class="flex gap-2">
                     <BaseButton
-                      icon="eye"
                       :is-loading="Boolean(quarterlyLoading[card.id])"
                       :label="t('Show')"
+                      icon="eye"
                       type="primary-alternative"
                       @click="toggleQuarterlySection(card.id)"
                     />
                     <BaseButton
-                      icon="refresh"
                       :is-loading="Boolean(quarterlyLoading[card.id])"
                       :label="t('Refresh')"
+                      icon="refresh"
                       type="secondary"
                       @click="loadQuarterlySection(card.id, true)"
                     />
@@ -1163,9 +1151,9 @@
               class="mt-4"
             >
               <BaseButton
-                icon="file-excel"
                 :is-loading="exporting"
                 :label="t('Export to XLS')"
+                icon="file-excel"
                 type="plain"
                 @click="downloadCurrentReport('xls')"
               />
@@ -1396,7 +1384,6 @@ const chartWrapperClass = computed(() => {
 })
 const hasTable = computed(() => Array.isArray(report.table?.columns) && report.table.columns.length > 0)
 const courseSessionRows = computed(() => (Array.isArray(report.meta.courseSessions) ? report.meta.courseSessions : []))
-const requiresDateRange = computed(() => Boolean(report.meta.requiresDateRange))
 const usesDateRange = computed(() => dateRangeReports.has(activeReport.value))
 const hasSessionDateRange = computed(() => isCompleteDateRange(filters.sessionRange))
 const hasDateRange = computed(() => isCompleteDateRange(filters.dateRange))
@@ -1515,20 +1502,6 @@ function legacyReportUrl(item, sourceQuery = {}) {
   }
 
   return `/main/admin/statistics/index.php?${params.toString()}`
-}
-
-function routeItemForCurrentReport() {
-  for (const group of reportGroups) {
-    const item = group.items.find(
-      (entry) =>
-        entry.report === activeReport.value && (!entry.type || entry.type === String(route.query.type || "month")),
-    )
-    if (item) {
-      return item
-    }
-  }
-
-  return { report: activeReport.value, label: activeReport.value }
 }
 
 function queryParameters(pageOverride = null, rowsOverride = null) {

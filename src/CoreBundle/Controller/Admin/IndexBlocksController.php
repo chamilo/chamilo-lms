@@ -607,7 +607,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-stats',
-            'url' => '/main/admin/report.php?id=platform_global_statistics',
+            'route' => ['name' => 'AdminStatistics'],
             'label' => $this->translator->trans('Global statistics'),
         ];
         $items[] = [

@@ -1,3 +1,5 @@
+import { activeReportLabelKey } from "../utils/statisticsReports"
+
 // Fixed breadcrumb ancestors, shared by the pages that hang from a list page.
 // Labels are translation keys; the breadcrumb component translates them.
 const adminCrumb = { label: "Administration", route: { name: "AdminIndex" } }
@@ -100,7 +102,14 @@ export default {
     {
       name: "AdminStatistics",
       path: "statistics",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Statistics" },
+      // The last crumb names the report the query asks for, and is omitted when there is
+      // none, so the trail reads "Administration / Statistics" on the bare page.
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: (route) => activeReportLabelKey(route),
+        breadcrumbParents: [adminCrumb, { label: "Statistics", route: { name: "AdminStatistics" } }],
+      },
       component: () => import("../views/admin/AdminStatisticsView.vue"),
     },
     {

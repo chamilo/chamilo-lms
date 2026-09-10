@@ -164,23 +164,32 @@ function isInCourseOrSessionContext() {
 }
 
 /**
+ * Resolve the raw translation key a route declares for its own crumb.
+ *
+ * `meta.breadcrumb` is either a key or a function of the route. An empty result means
+ * "omit this crumb", whichever of the two forms produced it.
+ *
+ * @param {object|undefined} meta - Route meta that can hold a `breadcrumb` label or resolver.
+ * @returns {string|undefined} The declared key, or `undefined` when nothing was declared.
+ */
+function resolveCrumbKey(meta) {
+  const label = meta?.breadcrumb
+
+  return "function" === typeof label ? label(route) : label
+}
+
+/**
  * Resolve a crumb label from a route meta object.
  *
- * A route name is a technical identifier, not a translation key. When `meta.breadcrumb` is
- * absent, the label falls back to the formatted route name and stays untranslated. The
- * development warning exposes the missing declaration instead of hiding it in the interface.
- *
- * `meta.breadcrumb` can also be a function that receives the current route and returns a
- * translation key. Declare one when the label depends on the request context, as the agenda
- * does with `cid` and `gid`.
+ * When no key is declared, the label falls back to the formatted route name and stays
+ * untranslated, so the warning exposes the missing declaration instead of hiding it.
  *
  * @param {object|undefined} meta - Route meta that can hold a `breadcrumb` label or resolver.
  * @param {string} name - Route or tool name used to build the fallback label.
  * @returns {string} Translated label, or the formatted route name.
  */
 function resolveCrumbLabel(meta, name) {
-  const label = meta?.breadcrumb
-  const key = "function" === typeof label ? label(route) : label
+  const key = resolveCrumbKey(meta)
 
   if (key) {
     return t(key)
@@ -198,7 +207,8 @@ function resolveCrumbLabel(meta, name) {
  *
  * `meta.breadcrumbParents` holds the crumbs that always precede the page, each one a
  * `{ label, route }` pair whose label is a translation key. The page's own crumb comes from
- * `meta.breadcrumb`, so the route owns its whole trail and this file names no page.
+ * `meta.breadcrumb`, so the route owns its whole trail and this file names no page. An empty
+ * key omits that last crumb, which is what a page whose own name depends on the query wants.
  *
  * @returns {Array|null} Array of crumb items if the route declared ancestors; `null` otherwise.
  */
@@ -211,7 +221,9 @@ function buildDeclaredParentCrumbs() {
 
   const items = parents.map((parent) => ({ label: t(parent.label), route: parent.route }))
 
-  items.push({ label: resolveCrumbLabel(route.meta, route.name) })
+  if ("" !== resolveCrumbKey(route.meta)) {
+    items.push({ label: resolveCrumbLabel(route.meta, route.name) })
+  }
 
   return items
 }

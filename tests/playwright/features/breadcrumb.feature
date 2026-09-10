@@ -118,3 +118,20 @@ Feature: Breadcrumb visibility
     When I am on "/admin/settings/search_settings?keyword=allow_registration"
     And I wait for the element ".app-breadcrumb" to appear
     Then I should see the ".app-breadcrumb a[href='/admin/settings']" element
+
+  # The statistics page names the report the query asks for. With no report the
+  # trail stops at "Statistics", so that crumb is the last one and is not a link;
+  # once a report is selected it gains a link back to the query-less page.
+  Scenario: The statistics page shows no report crumb until a report is selected
+    Given I am a platform administrator
+    When I am on "/admin/statistics"
+    And I wait for the element ".app-breadcrumb" to appear
+    Then I should see the ".app-breadcrumb a[href='/admin']" element
+    And I should not see the ".app-breadcrumb a[href='/admin/statistics']" element
+
+  Scenario: A selected statistics report adds a crumb that links back to the report list
+    Given I am a platform administrator
+    When I am on "/admin/statistics?report=users_online"
+    And I wait for the element ".app-breadcrumb" to appear
+    Then I should see the ".app-breadcrumb a[href='/admin']" element
+    And I should see the ".app-breadcrumb a[href='/admin/statistics']" element

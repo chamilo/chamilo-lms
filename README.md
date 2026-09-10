@@ -29,7 +29,7 @@ Chamilo offers a wide range of features, including:
 - Learning paths (create, manage, ...)
 - Live chat (at course level or global, including AI chatbot)
 - GDPR compliance (GDPR-ready, export of personal data, ...)
-- Gradebook (including generation of badges and certificates with QR codes)
+- Gradebook (including generation of badges and certificates with QR codes and expiry dates)
 - Learning analytics (progress, course completion, participation, average time spent, average score, auditing, ...)
 - Groups/Classes (at course or global level)
 - Multilingual support (60+ languages fully translated, including RTL support)
@@ -44,6 +44,7 @@ Chamilo offers a wide range of features, including:
 - Student profiles (edit personal data, change password, subscribe to push notifications, ...)
 - Style customization (easy color changes, custom CSS, custom logo, ...)
 - Surveys (create, take, analyse)
+- Hierarchical Multi-Tenant ("Multi-URLs")
 - Upgrades from previous versions and import of existing courses from other LMS
 - Videoconference through integrations / Realtime collaboration
 - ...

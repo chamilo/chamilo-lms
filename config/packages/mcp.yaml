@@ -89,6 +89,15 @@ mcp:
         upsert_course_survey_answer_description_language for iterative translation. Full replace
         tools (edit_course_survey_*_description) remain for non-translation edits. Survey write
         tools require the course teacher.
+
+        Tools created inside a course (documents, tests, learning paths, surveys...) are not
+        automatically visible to students on the course homepage. Use list_course_tools to see
+        which tools are currently shown and set_course_tool_visibility (by the returned name or
+        tool_id) to show or hide one. A tool's own draft/published state (e.g. a test's publish
+        flag) is separate from whether the tool itself appears on the course homepage — both may
+        need to be set for content to actually reach students. Inside a session, visibility can
+        only be changed when the platform enables session.allow_edit_tool_visibility_in_session;
+        otherwise sessionId always targets the base course.
     client_transports:
         stdio: true
         http: true

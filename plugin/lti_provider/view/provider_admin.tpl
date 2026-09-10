@@ -39,6 +39,9 @@
                         <a href="{{ _p.web_plugin }}lti_provider/edit.php?{{ url_params }}">
                             {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
                         </a>
+                        <a href="{{ _p.web_plugin }}lti_provider/duplicate.php?{{ url_params }}">
+                            {{ 'copy.png'|img(22, 'Duplicate'|get_plugin_lang('LtiProviderPlugin')) }}
+                        </a>
                         <a href="{{ _p.web_plugin }}lti_provider/delete.php?{{ url_params }}">
                             {{ 'delete.png'|img(22, 'Delete'|get_lang) }}
                         </a>

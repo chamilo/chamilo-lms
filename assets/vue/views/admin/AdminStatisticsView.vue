@@ -1,20 +1,5 @@
 <template>
   <main class="space-y-5 pb-8">
-    <Message
-      v-if="errorMessage"
-      :closable="false"
-      severity="error"
-    >
-      {{ errorMessage }}
-    </Message>
-    <Message
-      v-if="successMessage"
-      :closable="false"
-      severity="success"
-    >
-      {{ successMessage }}
-    </Message>
-
     <header class="border-b border-gray-25 pb-3">
       <h1 class="text-2xl font-semibold text-gray-90">{{ t("Statistics") }}</h1>
     </header>
@@ -1053,13 +1038,6 @@
               class="space-y-4 p-4"
             >
               <ProgressSpinner v-if="quarterlyLoading[card.id]" />
-              <Message
-                v-else-if="quarterlyErrors[card.id]"
-                :closable="false"
-                severity="error"
-              >
-                {{ quarterlyErrors[card.id] }}
-              </Message>
               <template v-else-if="quarterlySections[card.id]">
                 <p
                   v-if="quarterlySections[card.id].message"
@@ -1256,11 +1234,13 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import adminStatisticsService from "../../services/adminStatisticsService"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useNotification } from "../../composables/notification"
 
 const route = useRoute()
 const router = useRouter()
 const { locale, t } = useI18n()
 const { requireConfirmation } = useConfirmation()
+const { showErrorNotification, showSuccessNotification } = useNotification()
 
 const modernReports = new Set([
   "courses",
@@ -1375,8 +1355,6 @@ const reportGroups = [
 
 const loading = ref(false)
 const exporting = ref(false)
-const errorMessage = ref("")
-const successMessage = ref("")
 const selectedZombieUsers = ref([])
 const zombieSortField = ref("firstname")
 const zombieSortOrder = ref(-1)
@@ -1392,7 +1370,6 @@ const userSessionSortOrder = ref(1)
 const loadingAllQuarterly = ref(false)
 const quarterlySections = reactive({})
 const quarterlyLoading = reactive({})
-const quarterlyErrors = reactive({})
 const quarterlyVisible = reactive({})
 const filters = reactive({
   toolIds: [],
@@ -1832,8 +1809,6 @@ function initializeFiltersFromRoute() {
 
 async function loadReport(pageOverride = null, rowsOverride = null) {
   if (!activeReport.value) {
-    errorMessage.value = ""
-    successMessage.value = ""
     resetReportData()
     return
   }
@@ -1861,15 +1836,13 @@ async function loadReport(pageOverride = null, rowsOverride = null) {
   }
 
   loading.value = true
-  errorMessage.value = ""
-  successMessage.value = ""
   resetReportData()
 
   try {
     const data = await adminStatisticsService.getReport(queryParameters(pageOverride, rowsOverride))
     applyResponse(data)
   } catch (error) {
-    errorMessage.value = error?.response?.data?.detail || error?.message || t("Unable to load the report")
+    showErrorNotification(error?.response?.data?.detail || error?.message || t("Unable to load the report"))
   } finally {
     loading.value = false
   }
@@ -2009,18 +1982,19 @@ async function applyDuplicateFilter() {
 
 async function runMaintenanceAction(payload) {
   maintenanceLoading.value = true
-  errorMessage.value = ""
-  successMessage.value = ""
   try {
     const result = await adminStatisticsService.runAction({
       ...payload,
       csrfToken: String(report.meta.csrfToken || ""),
     })
-    successMessage.value = String(result?.message || "")
+    const message = String(result?.message || "")
+    if (message) {
+      showSuccessNotification(message)
+    }
     selectedZombieUsers.value = []
     await loadReport()
   } catch (error) {
-    errorMessage.value = error?.response?.data?.detail || error?.message || t("An error occurred")
+    showErrorNotification(error?.response?.data?.detail || error?.message || t("An error occurred"))
   } finally {
     maintenanceLoading.value = false
   }
@@ -2147,7 +2121,6 @@ async function handlePage(event) {
 
 async function downloadCurrentReport(format) {
   exporting.value = true
-  errorMessage.value = ""
   try {
     const params = queryParameters()
     delete params.page
@@ -2166,7 +2139,7 @@ async function downloadCurrentReport(format) {
     link.remove()
     URL.revokeObjectURL(url)
   } catch (error) {
-    errorMessage.value = error?.response?.data?.detail || error?.message || t("Unable to export the report")
+    showErrorNotification(error?.response?.data?.detail || error?.message || t("Unable to export the report"))
   } finally {
     exporting.value = false
   }
@@ -2186,13 +2159,12 @@ async function loadQuarterlySection(section, force = false) {
     return
   }
   quarterlyLoading[section] = true
-  quarterlyErrors[section] = ""
   quarterlyVisible[section] = true
   try {
     const data = await adminStatisticsService.getReport({ report: "quarterly_report", section })
     quarterlySections[section] = data?.meta?.quarterlySectionData || {}
   } catch (error) {
-    quarterlyErrors[section] = error?.response?.data?.detail || error?.message || t("Unable to load the report")
+    showErrorNotification(error?.response?.data?.detail || error?.message || t("Unable to load the report"))
   } finally {
     quarterlyLoading[section] = false
   }

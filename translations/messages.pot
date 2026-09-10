@@ -41146,3 +41146,15 @@ msgstr ""
 
 msgid "Memory palaces"
 msgstr ""
+
+msgid "Logins (Month)"
+msgstr ""
+
+msgid "Logins (Day)"
+msgstr ""
+
+msgid "Logins (Hour)"
+msgstr ""
+
+msgid "Number of users (Picture)"
+msgstr ""

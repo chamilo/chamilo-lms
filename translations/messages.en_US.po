@@ -41229,3 +41229,15 @@ msgstr "Interleaved learning"
 
 msgid "Memory palaces"
 msgstr "Memory palaces"
+
+msgid "Logins (Month)"
+msgstr "Logins (Month)"
+
+msgid "Logins (Day)"
+msgstr "Logins (Day)"
+
+msgid "Logins (Hour)"
+msgstr "Logins (Hour)"
+
+msgid "Number of users (Picture)"
+msgstr "Number of users (Picture)"

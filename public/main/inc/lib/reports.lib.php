@@ -104,15 +104,6 @@ class ReportRegistry
 
         return [
             [
-                'id' => 'platform_global_statistics',
-                'title' => get_lang('Global statistics'),
-                'description' => get_lang('Main platform statistics dashboard.'),
-                'category' => self::CATEGORY_PLATFORM,
-                'url' => '/admin/statistics',
-                'roles' => $admin,
-                'permission' => 'reports.platform',
-            ],
-            [
                 'id' => 'platform_courses',
                 'title' => get_lang('Courses'),
                 'description' => get_lang('Number of courses and course distribution report.'),

@@ -1,23 +1,19 @@
 <template>
   <main class="space-y-5 pb-8">
-    <header class="border-b border-gray-25 pb-3">
-      <h1 class="text-2xl font-semibold text-gray-90">{{ t("Statistics") }}</h1>
-    </header>
-
-    <div class="flex flex-wrap gap-2">
+    <SectionHeader :title="t('Statistics')">
       <BaseButton
-        icon="format-list-bulleted"
+        :label="t('Back')"
+        icon="arrow-left"
+        :route="{ name: 'AdminIndex' }"
+        type="tertiary-alternative"
+      />
+      <BaseButton
         :label="t('Reports catalog')"
+        icon="format-list-bulleted"
         to-url="/main/admin/reports_catalog.php"
         type="tertiary-alternative"
       />
-      <BaseButton
-        icon="arrow-left"
-        :label="t('Back')"
-        to-url="/main/admin/index.php"
-        type="tertiary-alternative"
-      />
-    </div>
+    </SectionHeader>
 
     <nav class="w-full">
       <div class="overflow-x-auto pb-0.5">
@@ -426,7 +422,6 @@
         </table>
       </section>
 
-
       <section
         v-if="report.statsGroups.length && !report.meta.legacyStatsGroups"
         class="grid gap-4 lg:grid-cols-2"
@@ -736,7 +731,12 @@
       </section>
 
       <section
-        v-if="report.charts.length && !report.meta.legacyUsersActive && !report.meta.legacyRegistrationCharts && activeReport !== 'session_by_date'"
+        v-if="
+          report.charts.length &&
+          !report.meta.legacyUsersActive &&
+          !report.meta.legacyRegistrationCharts &&
+          activeReport !== 'session_by_date'
+        "
         :class="report.meta.legacyFlatCharts ? legacyChartsGridClass : 'grid gap-4 lg:grid-cols-2'"
       >
         <article
@@ -915,11 +915,13 @@
           <h3 class="font-semibold text-gray-90">{{ t("How to use this report") }}</h3>
           <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-70">
             <li>
-              <strong>{{ t("Disable / Enable") }}</strong>:
+              <strong>{{ t("Disable / Enable") }}</strong
+              >:
               {{ t("Only blocks or restores login. It does not delete the user and does not remove subscriptions.") }}
             </li>
             <li>
-              <strong>{{ t("Unify") }}</strong>:
+              <strong>{{ t("Unify") }}</strong
+              >:
               {{
                 t(
                   "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone.",
@@ -927,7 +929,8 @@
               }}
             </li>
             <li>
-              <strong>{{ t("Permanent deletion") }}</strong>:
+              <strong>{{ t("Permanent deletion") }}</strong
+              >:
               {{
                 t(
                   "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually.",
@@ -1122,8 +1125,16 @@
       </h4>
 
       <section
-        v-if="hasTable && !['zombies', 'duplicated_users', 'session_by_date'].includes(activeReport) && !(activeReport === 'tool_usage' && !filters.toolIds.length)"
-        :class="legacyCourseReports.has(activeReport) || report.meta.legacyFlatTable ? '' : 'rounded-xl border border-gray-25 bg-white p-4 shadow-sm'"
+        v-if="
+          hasTable &&
+          !['zombies', 'duplicated_users', 'session_by_date'].includes(activeReport) &&
+          !(activeReport === 'tool_usage' && !filters.toolIds.length)
+        "
+        :class="
+          legacyCourseReports.has(activeReport) || report.meta.legacyFlatTable
+            ? ''
+            : 'rounded-xl border border-gray-25 bg-white p-4 shadow-sm'
+        "
       >
         <BaseTable
           v-model:rows="tableRows"
@@ -1210,8 +1221,6 @@
           :header="column.label"
         />
       </BaseTable>
-
-
     </template>
   </main>
 </template>
@@ -1235,6 +1244,7 @@ import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import adminStatisticsService from "../../services/adminStatisticsService"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useNotification } from "../../composables/notification"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -1277,7 +1287,14 @@ const dateRangeReports = new Set([
   "user_session",
 ])
 
-const legacyCourseReports = new Set(["courses", "tools", "tool_usage", "courselastvisit", "coursebylanguage", "courses_usage"])
+const legacyCourseReports = new Set([
+  "courses",
+  "tools",
+  "tool_usage",
+  "courselastvisit",
+  "coursebylanguage",
+  "courses_usage",
+])
 const legacyCoreUserReports = new Set([
   "users",
   "recentlogins",
@@ -1634,8 +1651,7 @@ function queryParameters(pageOverride = null, rowsOverride = null) {
     parameters.direction = [3, 4].includes(Number(route.query.direction)) ? Number(route.query.direction) : 4
   }
   if (activeReport.value === "courses_usage") {
-    parameters.page =
-      pageOverride || Number(route.query.page_nr || route.query.table_courses_usage_page_nr || 1)
+    parameters.page = pageOverride || Number(route.query.page_nr || route.query.table_courses_usage_page_nr || 1)
     parameters.itemsPerPage =
       rowsOverride || Number(route.query.per_page || route.query.table_courses_usage_per_page || 20)
   }
@@ -1939,7 +1955,6 @@ async function handleRegistrationChartSelect(event) {
   await replaceQuery({ ...route.query, report: "new_user_registrations", month })
 }
 
-
 async function clearRegistrationDrilldown() {
   const query = { ...route.query }
   delete query.month
@@ -2057,7 +2072,15 @@ function confirmDuplicateUnify(item) {
   })
 }
 
-const zombieSortableColumns = ["officialCode", "firstname", "lastname", "username", "email", "profile", "registeredDate"]
+const zombieSortableColumns = [
+  "officialCode",
+  "firstname",
+  "lastname",
+  "username",
+  "email",
+  "profile",
+  "registeredDate",
+]
 
 function zombieSortFieldForColumn(columnKey) {
   return columnKey === "profile" ? "status" : columnKey

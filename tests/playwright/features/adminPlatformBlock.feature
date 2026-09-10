@@ -15,6 +15,13 @@
 #   is reemplemented to work with Chamilo 2") — this is a genuinely dead
 #   feature in the current app, not a renamed/hidden one, confirmed live (no
 #   matching link at all).
+# - report.php is legacy and mostly redirects, so scenarios target the real
+#   destination instead. Two keep it on purpose: report.php only redirects when
+#   the report does NOT require a course context. course_learners_tracking and
+#   course_activity_statistics do require one, so with no cid report.php renders
+#   its own course selector, which is what those two scenarios assert. Their Vue
+#   destinations (/resources/course-reporting/ and .../activity) redirect to
+#   /home without a cid — confirmed live — so moving them would test nothing.
 # - "Open External tools (LTI)" dropped entirely: that label only exists in
 #   COURSE settings (public/main/course_info/infocours.php,
 #   CourseSettingsManager::getSections()), never on /admin. The ImsLti plugin's
@@ -166,7 +173,7 @@ Feature: Admin Platform management block
     And I should not see an error
 
   Scenario: Exercises global report keeps its own modern course selector
-    Given I am on "/main/admin/report.php?id=course_exercise_global_report"
+    Given I am on "/courses/exercise/global-report"
     And I wait for the page to be loaded
     Then I should see "Exercises global report"
     And I should not see an error

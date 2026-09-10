@@ -196,7 +196,7 @@ class IndexBlocksController extends BaseController
         return [
             [
                 'class' => 'item-security-activities-audit',
-                'url' => '/main/admin/report.php?id=security_activities_audit',
+                'url' => '/main/admin/activities_audit.php',
                 'label' => $this->translator->trans('Activities audit'),
             ],
             [
@@ -617,27 +617,27 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-my-space',
-            'url' => '/main/admin/report.php?id=learning_analytics_dashboard',
+            'route' => ['name' => 'GlobalReportingOverview'],
             'label' => $this->translator->trans('Learning analytics'),
         ];
         $items[] = [
             'class' => 'item-quarterly-report',
-            'url' => '/main/admin/report.php?id=platform_quarterly_report',
+            'route' => ['name' => 'AdminStatistics', 'query' => ['report' => 'quarterly_report']],
             'label' => $this->translator->trans('Quarterly report'),
         ];
         $items[] = [
             'class' => 'item-teacher-time-report',
-            'url' => '/main/admin/report.php?id=learning_teacher_time_report',
+            'url' => '/main/admin/teacher_time_report.php',
             'label' => $this->translator->trans('Teachers time report'),
         ];
         $items[] = [
             'class' => 'item-stats-report',
-            'url' => '/main/admin/report.php?id=learning_corporate_report',
+            'route' => ['name' => 'GlobalReportingCompany'],
             'label' => $this->translator->trans('Corporate report'),
         ];
         $items[] = [
             'class' => 'item-special-export',
-            'url' => '/main/admin/report.php?id=export_special_exports',
+            'url' => '/main/admin/special_exports.php',
             'label' => $this->translator->trans('Special exports'),
         ];
         $items[] = [

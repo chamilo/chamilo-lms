@@ -1018,6 +1018,7 @@
     "An error occurred while sending the notification message": "Hitilafu imetokea wakati wa kutuma ujumbe wa arifa",
     "You will therefore be automatically redirected to this URL": "Kwa hivyo utaelekezwa kiotomatiki kwenye URL hii",
     "You have access to multiple URLs": "Una ufikiaji wa URL nyingi",
+    "You have access to multiple URLs. Here is the list of your accesses.": "Una ufikiaji wa URL nyingi. Hii ni orodha ya ufikiaji wako.",
     "Please click on the link below corresponding to the URL you wish to access": "Tafadhali bofya kiungo hapa chini kinacholingana na URL unayotaka kufikia",
     "You do not currently have access to any URL": "Huna ufikiaji wa URL yoyote kwa sasa",
     "Maximum number of subscriptions allowed": "Idadi ya juu zaidi ya usajili inaruhusiwa",

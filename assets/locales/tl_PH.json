@@ -1018,6 +1018,7 @@
     "An error occurred while sending the notification message": "Nagkaroon ng error habang nagpapadala ng notification message",
     "You will therefore be automatically redirected to this URL": "Kung gayon, awtomatikong i-redirect ka sa URL na ito",
     "You have access to multiple URLs": "May access ka sa maraming URL",
+    "You have access to multiple URLs. Here is the list of your accesses.": "May access ka sa maraming URL. Narito ang listahan ng iyong mga access.",
     "Please click on the link below corresponding to the URL you wish to access": "Pindutin ang link sa ibaba na tumutugma sa URL na nais mong ma-access",
     "You do not currently have access to any URL": "Wala kang access sa anumang URL sa kasalukuyan",
     "Maximum number of subscriptions allowed": "Pinakamataas na bilang ng mga subscription na pinapayagan",

@@ -1018,6 +1018,7 @@
     "An error occurred while sending the notification message": "\uc54c\ub9bc \uba54\uc2dc\uc9c0 \uc804\uc1a1 \uc911 \uc624\ub958\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4",
     "You will therefore be automatically redirected to this URL": "\ub530\ub77c\uc11c \uc790\ub3d9\uc73c\ub85c \uc774 URL\ub85c \ub9ac\ub514\ub809\uc158\ub429\ub2c8\ub2e4.",
     "You have access to multiple URLs": "\uc5ec\ub7ec URL\uc5d0 \uc811\uadfc\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
+    "You have access to multiple URLs. Here is the list of your accesses.": "여러 URL에 접근할 수 있습니다. 다음은 귀하의 접근 목록입니다.",
     "Please click on the link below corresponding to the URL you wish to access": "\uc811\uadfc\ud558\ub824\ub294 URL\uc5d0 \ud574\ub2f9\ud558\ub294 \uc544\ub798 \ub9c1\ud06c\ub97c \ud074\ub9ad\ud558\uc2ed\uc2dc\uc624.",
     "You do not currently have access to any URL": "\ud604\uc7ac \uc811\uadfc\ud560 \uc218 \uc788\ub294 URL\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.",
     "Maximum number of subscriptions allowed": "\ud5c8\uc6a9\ub41c \ucd5c\ub300 \uad6c\ub3c5 \uc218\uc785\ub2c8\ub2e4.",

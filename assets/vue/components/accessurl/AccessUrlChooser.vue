@@ -37,7 +37,7 @@ const visible = ref(loadComponent.value)
       </div>
       <div v-else-if="accessUrls.length > 1">
         <p v-text="t('You have access to multiple URLs. Here is the list of your accesses.')" />
-        <p v-text="t('Please click on the link below corresponding to the URL you wish to access.')" />
+        <p v-text="t('Please click on the link below corresponding to the URL you wish to access')" />
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div
             v-for="accessUrl in accessUrls"

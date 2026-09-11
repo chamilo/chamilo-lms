@@ -50,6 +50,7 @@ final readonly class ScormRuntimeManager
         private EntityManagerInterface $entityManager,
         private AssetRepository $assetRepository,
         private ScormManifestParser $manifestParser,
+        private ArticulateRiseSuspendDataDecoder $articulateRiseSuspendDataDecoder,
         private SettingsManager $settingsManager,
         private UrlGeneratorInterface $urlGenerator,
         private ExtraFieldRepository $extraFieldRepository,
@@ -635,9 +636,7 @@ final readonly class ScormRuntimeManager
             }
         } else {
             $completeIncompleteOnLeave = 'incomplete' === $status
-                && $this->isTruthy(
-                    $this->settingsManager->getSetting('lp.scorm_complete_on_leave_when_incomplete', true),
-                );
+                && $this->shouldCompleteIncompleteScorm12OnLeave($lp, $values);
 
             if ($this->shouldFinalizeWithoutStatus($terminated, $reason)
                 && !$statusWasSet
@@ -1092,6 +1091,34 @@ final readonly class ScormRuntimeManager
         }
 
         return array_keys($normalized);
+    }
+
+    /**
+     * @param array<string, string> $values
+     */
+    private function shouldCompleteIncompleteScorm12OnLeave(CLp $lp, array $values): bool
+    {
+        if (!$this->isTruthy(
+            $this->settingsManager->getSetting('lp.scorm_complete_on_leave_when_incomplete', true),
+        )) {
+            return false;
+        }
+
+        $suspendData = trim((string) ($values['cmi.suspend_data'] ?? ''));
+        if ('' === $suspendData) {
+            return true;
+        }
+
+        $contentMaker = trim($lp->getContentMaker());
+        $isRise = 0 === strcasecmp(ArticulateRiseSuspendDataDecoder::CONTENT_MAKER, $contentMaker)
+            || $this->articulateRiseSuspendDataDecoder->isRiseSuspendData($suspendData);
+        if (!$isRise) {
+            return true;
+        }
+
+        $progress = $this->articulateRiseSuspendDataDecoder->extractProgress($suspendData);
+
+        return null === $progress || $progress >= 100;
     }
 
     private function shouldFinalizeWithoutStatus(bool $terminated, string $reason): bool

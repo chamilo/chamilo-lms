@@ -48,6 +48,10 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'allow_my_files' => 'true',
                     'registered' => 'false',
                     'server_type' => 'prod',
+                    // Deprecated: the value is not maintained (migrations never
+                    // raise it) and must not be compared against the code version.
+                    // The row is kept only as a fresh-install presence marker for
+                    // InstallDbGuardSubscriber. Hidden from the UI (getHiddenSettings).
                     'chamilo_database_version' => '2.0.0',
                     'unoconv_binaries' => '/usr/bin/unoconv',
                     'pdf_img_dpi' => '96',

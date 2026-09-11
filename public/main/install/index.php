@@ -171,7 +171,15 @@ $langParam = $httpRequest->attributes->get('language_list')
     ?? $httpRequest->request->get('language_list');
 if ($langParam !== null && $langParam !== '') {
     $search = ['../', '\\0'];
-    $installationLanguage = str_replace($search, '', urldecode($langParam));
+    $candidate = str_replace($search, '', urldecode($langParam));
+    // Accept only a locale-shaped value. This value reaches the Symfony
+    // Translator, which throws Invalid "<value>" locale verbatim into the PHP
+    // error log for anything else; reflecting attacker text (e.g. inline PHP)
+    // there is the write half of a log-poisoning chain. Fall back to the
+    // default rather than pass an unvalidated locale through.
+    $installationLanguage = 1 === preg_match('/^[A-Za-z0-9_-]{1,32}$/', $candidate)
+        ? $candidate
+        : 'en_US';
     ChamiloSession::write('install_language', $installationLanguage);
 } elseif (ChamiloSession::has('install_language')) {
     $installationLanguage = ChamiloSession::read('install_language');

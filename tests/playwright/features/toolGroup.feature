@@ -882,12 +882,21 @@ Feature: Group tool
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
     And I wait for the page content to settle
     Then I should see "Access to this resource has been denied"
+    # Group 0003 is TOOL_PRIVATE (announcements_state=2), not TOOL_PUBLIC like
+    # Group 0001 above: GroupVoter::VIEW denies acostea (not a member) at the
+    # CidReqListener stage, before the SPA (and its per-announcement Vue check)
+    # ever loads — the site-root redirect this file's own header comment
+    # already documents as a distinct denial mode, not the Vue "Access to this
+    # resource has been denied" message that only fires for a PUBLIC group's
+    # per-announcement recipient check (Group 0001 above). Root-caused via a
+    # live trace showing the generic app shell (no course/group content, no
+    # denial message at all) rather than a Vue error screen.
     Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
     And I wait for the page content to settle
-    Then I should see "Access to this resource has been denied"
+    Then the URL should be the site root
     Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
     And I wait for the page content to settle
-    Then I should see "Access to this resource has been denied"
+    Then the URL should be the site root
     Then I visit URL saved with name "announcement_only_for_fapple_private"
     And I wait for the page content to settle
     And I should see "Announcement description only for fapple Group 0005"

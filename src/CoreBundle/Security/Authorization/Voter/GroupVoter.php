@@ -169,8 +169,14 @@ class GroupVoter extends Voter
                         break;
 
                     case GroupManager::TOOL_PRIVATE_BETWEEN_USERS:
-                        // Only works for announcements for now
-                        if ($userIsInGroup && '/main/announcements/' === $path) {
+                        // Only works for announcements for now. Both the legacy path and
+                        // its Vue-migrated equivalent must be accepted here, same as the
+                        // $tools map above: real requests go through /resources/announcement/
+                        // (the Vue route) now, and comparing against /main/announcements/
+                        // alone made this branch impossible to satisfy, unconditionally
+                        // denying every group member regardless of membership.
+                        $isAnnouncementsPath = '/main/announcements/' === $path || '/resources/announcement/' === $path;
+                        if ($userIsInGroup && $isAnnouncementsPath) {
                             return true;
                         }
 

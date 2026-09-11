@@ -361,16 +361,27 @@ function get_config_param($param, $updatePath = '')
         }
     }
 
-    if (file_exists($updatePath.$updateFromConfigFile) &&
-        !is_dir($updatePath.$updateFromConfigFile)
-    ) {
-        require $updatePath.$updateFromConfigFile;
+    // $updateFromConfigFile can arrive from the request (GET). Canonicalise the
+    // full path with realpath() so any ../ is collapsed, then require it only
+    // when it stays inside $updatePath and is the expected legacy config file.
+    // This blocks path traversal that would otherwise require an arbitrary file
+    // (e.g. the PHP error log for code execution, or .env for disclosure).
+    $configFilePath = realpath($updatePath.$updateFromConfigFile);
+    if (false !== $configFilePath) {
+        $configFilePath = str_replace('\\', '/', $configFilePath);
 
-        if (isset($_configuration) && array_key_exists($param, $_configuration)) {
-            return $_configuration[$param];
+        if (!is_dir($configFilePath)
+            && 'configuration.php' === basename($configFilePath)
+            && str_starts_with($configFilePath, $updatePath)
+        ) {
+            require $configFilePath;
+
+            if (isset($_configuration) && array_key_exists($param, $_configuration)) {
+                return $_configuration[$param];
+            }
+
+            return null;
         }
-
-        return null;
     }
 
     error_log('Config array could not be found in get_config_param()', 0);

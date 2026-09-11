@@ -144,9 +144,15 @@ if (file_exists($envFile)) {
             $dbVersion = null;
         }
 
-        // Block ONLY if DB is initialized AND version is up-to-date.
+        // Block whenever the database is already initialized. The previous
+        // version_compare() gate failed open on a stock install: a fresh 3.0.0
+        // seeds chamilo_database_version to 2.0.0 and never raises it, so
+        // version_compare('2.0.0', '3.0.0', '>=') is false and an anonymous
+        // caller could still drive the wizard's writing steps (rewrite .env,
+        // build a schema, create an administrator). Recovering a half-installed
+        // instance is unaffected: that path has $dbLooksInitialized === false.
         $dbVersion = is_string($dbVersion) ? trim($dbVersion) : '';
-        if ($dbLooksInitialized && $dbVersion !== '' && version_compare($dbVersion, $installerVersion, '>=')) {
+        if ($dbLooksInitialized) {
             header('HTTP/1.1 409 Conflict');
             echo '<!doctype html><meta charset="utf-8"><title>Chamilo already installed</title>';
             echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';

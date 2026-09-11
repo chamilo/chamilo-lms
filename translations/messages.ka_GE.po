@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "პატივისცემით"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ფორმულის ნიმუში: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ფორმულის ნიმუში: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ცვლადის დიაპაზონები"
@@ -24063,6 +24063,18 @@ msgstr "შედეგის ჩვენება მსწავლელს:
 msgid "Signed in as"
 msgstr "შეყვანილი როგორც"
 
+msgid "Authorize application"
+msgstr "აპლიკაციის ავტორიზაცია"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "სურს დაკავშირება თქვენს Chamilo ანგარიშთან."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "ეს აპლიკაცია შეძლებს იმოქმედოს Chamilo-ში ზუსტად ისე, როგორც თქვენ — თქვენი არსებული ანგარიშის უფლებებით და არაფრით მეტით. მას არასოდეს ექნება წვდომა იმაზე, რაც თქვენ უკვე არ გაქვთ."
+
+msgid "Allow"
+msgstr "დაშვება"
+
 msgid "Remember me"
 msgstr "დამიხსენიებინე"
 
@@ -31427,6 +31439,9 @@ msgstr "უკან მომხმარებლის მინიჭებ�
 
 msgid "Authentication sources assigned successfully"
 msgstr "აუთენტიფიკაციის წყაროები წარმატებით მინიჭებულია"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "ავთენტიფიკაციის მეთოდი არ არის არჩეული. ეს შლის ყველა ავთენტიფიკაციის მეთოდს არჩეული მომხმარებლის(ების)თვის ამ URL-ზე, რამაც შეიძლება ხელი შეუშალოს შესვლას. გავაგრძელოთ?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "საბჭოთა: აირჩიეთ „— უბრალოდ ატვირთვა —“ შესანახად გაგზავნის გარეშე."
@@ -41216,4 +41231,316 @@ msgstr "შერეული სწავლა"
 
 msgid "Memory palaces"
 msgstr "მეხსიერების სასახლეები"
+
+msgid "Logins (Month)"
+msgstr "შესვლები (თვე)"
+
+msgid "Logins (Day)"
+msgstr "შესვლები (დღე)"
+
+msgid "Logins (Hour)"
+msgstr "შესვლები (საათი)"
+
+msgid "Number of users (Picture)"
+msgstr "მომხმარებელთა რაოდენობა (სურათი)"
+
+msgid "Allow tutors to register users"
+msgstr "ტუტორებს მომხმარებლების რეგისტრაციის უფლება"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "ტუტორებს კურსის სესიებში რედაქტირების უფლება"
+
+msgid "Extend rights for tutors"
+msgstr "ტუტორების უფლებების გაფართოება"
+
+msgid "Show session tutor"
+msgstr "სესიის ტუტორის ჩვენება"
+
+msgid "Default tutor access days after session"
+msgstr "ტუტორის წვდომის ნაგულისხმევი დღეები სესიის შემდეგ"
+
+msgid "Default tutor access days before session"
+msgstr "ტუტორის წვდომის ნაგულისხმევი დღეები სესიამდე"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: კურსის ტუტორის დამალვა"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "ზოგადი ტუტორის დამალვა Dropbox-ში"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "ტუტორების უფლებების გაფართოება გამოკითხვებზე"
+
+msgid "Maximum courses per user"
+msgstr "მაქსიმალური კურსები მომხმარებელზე"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "ტუტორებს სავარჯიშოების განხილვისას კომენტარის უფლება"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "ოფიციალური კოდის ჩართვა ექსპორტირებული ტესტის შედეგის PDF ფაილის სახელში"
+
+msgid "Certificate expiry reminder cron"
+msgstr "სერტიფიკატის ვადის შეხსენების cron"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "სერტიფიკატის ვადის შეხსენების ფანჯარა (დღეები)"
+
+msgid "Allow certificates search"
+msgstr "სერტიფიკატების ძიების დაშვება"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "ტუტორებს ყოველთვის განცხადებების რედაქტირების უფლება"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "სტუდენტების ოფიციალური კოდის ჩვენება დასწრების ფურცლებში"
+
+msgid "Restrict course chat to tutors"
+msgstr "კურსის ჩატის შეზღუდვა ტუტორებზე"
+
+msgid "Language by resource"
+msgstr "ენა რესურსის მიხედვით"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "SCO-ს დასრულება გასვლისას, როცა სტატუსი არასრული რჩება"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "პროგრესული ადაპტური ტესტების ჩართვა კატეგორიის დანიშნულების მიხედვით"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "ტესტის შეტყობინებების ზოგადი ტუტორისთვის გაგზავნის დაბლოკვა"
+
+msgid "Enable session expiration warning"
+msgstr "სესიის ვადის გაფრთხილების ჩართვა"
+
+msgid "Session expiration warning time"
+msgstr "სესიის ვადის გაფრთხილების დრო"
+
+msgid "Check password requirements"
+msgstr "პაროლის მოთხოვნების შემოწმება"
+
+msgid "File integrity check notification recipients"
+msgstr "ფაილის მთლიანობის შემოწმების შეტყობინების მიმღებები"
+
+msgid "Enable the OAuth authorization server"
+msgstr "OAuth ავტორიზაციის სერვერის ჩართვა"
+
+msgid "Enable MCP server"
+msgstr "MCP სერვერის ჩართვა"
+
+msgid "Allow MCP by roles"
+msgstr "MCP-ის დაშვება როლების მიხედვით"
+
+msgid "Enable external API keys"
+msgstr "გარე API გასაღებების ჩართვა"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "ხანგრძლივობის მიხედვით სესიები ყოველთვის ხელმისაწვდომია ტუტორებისთვის"
+
+msgid "Allow registration via course invitation links"
+msgstr "რეგისტრაციის დაშვება კურსის მოწვევის ბმულებით"
+
+msgid "Add student fullname in file download name"
+msgstr "სტუდენტის სრული სახელის დამატება ფაილის ჩამოტვირთვის სახელში"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "AI თარგმანის დაშვება ყველა აქტიურ ენაზე WYSIWYG რედაქტორებში"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "კურსის ტუტორების რედაქტირების შესაძლებლობის გამორთვა"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "სესიების გამოყენებისას ნაგულისხმევი ქცევაა საბაზისო კურსში განსაზღვრული ხელსაწყოს ხილვადობის გამოყენება. ეს პარამეტრი ამას ცვლის, რათა სესიის კურსებში ტუტორებმა ხელსაწყოების ხილვადობა საკუთარ საჭიროებებზე მოარგონ."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "ტუტორებს შეუძლიათ მომხმარებლების შექმნა პლატფორმაზე და მომხმარებლების სესიაზე ჩაწერა."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "ჩართეთ ეს პარამეტრი, რათა ტუტორებს ავტორინგის ხელსაწყოებზე იგივე უფლებები ჰქონდეთ, რაც ტრენერებს"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "ზოგადი სესიის ტუტორის სახელის ჩვენება სესიის სათაურის ყუთში კურსების სიაში"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "ჩართვისას სესიებში კურსის ტუტორებს შეუძლიათ ახალი მომხმარებლების ჩაწერა თავიანთ სესიაზე. წინააღმდეგ შემთხვევაში ეს პარამეტრი ხელმისაწვდომია მხოლოდ ადმინისტრატორებისა და სესიის ადმინისტრატორებისთვის."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "დღეების ნაგულისხმევი რაოდენობა, რამდენ ხანს შეუძლია ტუტორს სესიაზე წვდომა ოფიციალური დასრულების თარიღის შემდეგ"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "დღეების ნაგულისხმევი რაოდენობა, რამდენ ხანს შეუძლია ტუტორს სესიაზე წვდომა ოფიციალური დაწყების თარიღამდე"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "MathJax ბიბლიოთეკის ჩართვა მათემატიკური ფორმულების ვიზუალიზაციისთვის. რედაქტორის ხელსაწყოთა ზოლს ემატება ფორმულის ღილაკი, სადაც ფორმულები იწერება LaTeX-ით."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "კურსის კოდები, გამოყოფილი \"|\"-ით. როდესაც ადამიანური რესურსების დირექტორი შედის სისტემაში, მომხმარებელი ავტომატურად ჩაირიცხება ამ კურსებში. მაგალითი: COURSE001|COURSE002. ეს არ ცვლის მომხმარებლის როლს."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "კურსის კოდები, გამოყოფილი \"|\"-ით. როდესაც სესიის ადმინისტრატორი შედის სისტემაში, მომხმარებელი ავტომატურად ჩაირიცხება ამ კურსებში. მაგალითი: COURSE001|COURSE002. ეს არ ცვლის მომხმარებლის როლს."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "კურსის კოდები, გამოყოფილი \"|\"-ით. როდესაც მსმენელი შედის სისტემაში, მომხმარებელი ავტომატურად ჩაირიცხება ამ კურსებში. მაგალითი: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "კურსის კოდები, გამოყოფილი \"|\"-ით. როდესაც მასწავლებელი შედის სისტემაში, მომხმარებელი ავტომატურად ჩაირიცხება ამ კურსებში. მაგალითი: COURSE001|COURSE002. ეს არ ანიჭებს კურსის მასწავლებლის უფლებებს."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "სესიის კურსის ტუტორის დამალვა Dropbox-ში, როცა ტუტორი სტუდენტებს უგზავნის დოკუმენტს"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "ზოგადი ტუტორის სახელის დამალვა Dropbox-ის ხელსაწყოში, როცა ფაილი ატვირთა ზოგადმა ტუტორმა"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "ამ პარამეტრის ჩართვა, რათა ტუტორებს შეეძლოთ გამოკითხვების შექმნა და რედაქტირება"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "გამოკითხვის მოწვევები ტუტორის ელფოსტის მისამართს უნდა იყენებდეს თუ ძირითადი კონფიგურაციის განყოფილებაში განსაზღვრულ no-reply მისამართს?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "კურსების მაქსიმალური რაოდენობა, რომელთა შექმნაც შეუძლია მასწავლებელს/ტრენერს. 0 ზღუდავს ლიმიტს. შეიძლება გადაიფაროს მომხმარებლისთვის BuyCourses სერვისის შეძენით."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "ტუტორებს სავარჯიშოების შემოწმებისას უკუკავშირის რედაქტირების უფლება"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "ქვიზის შედეგის PDF-ში ექსპორტისას ფაილის სახელში სტუდენტის ოფიციალური კოდის ჩართვა"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "პირად ფაილებზე შეუზღუდავი წვდომის დაშვება"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "cron-ის app:send-certificate-expiry-reminders ჩართვა, რომელიც შეახსენებს მსმენელებს, რომელთა სერტიფიკატები ვადაგასულია ან მალე იწურება."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "დღეების ნაგულისხმევი რაოდენობა წინასწარ, რომლითაც სკანირდება მალე ვადაგასული სერტიფიკატები, თუ cron არ გაეშვა --days-ahead-ით."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "მომხმარებლებსა და სტუმრებს ზედა მენიუდან გენერირებული სერტიფიკატების ძიების უფლება."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "ტუტორებს ყოველთვის შეეძლოთ განცხადებების რედაქტირება აქტიურ ან წარსულ სესიებში."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "დასწრების ფურცლებში და სიებში სტუდენტების ოფიციალური კოდის ჩვენება სახელთან ერთად."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "ცალკეულ რესურსებზე კონკრეტული ენის მინიჭების დაშვება."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "ზოგიერთი SCORM პაკეტი მხოლოდ ერთხელ იძახებს LMSSetValue(cmi.core.lesson_status, 'incomplete')-ს და არასოდეს აგზავნის ნამდვილ საბოლოო სტატუსს ან მნიშვნელოვან LMSFinish()-ს. ჩართეთ ეს, რათა Chamilo-მ ეს დარჩენილი 'incomplete' ჩათვალოს სტატუსის არარსებობად და დასრულება განისაზღვროს, როცა მსმენელი ტოვებს SCO-ს."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "თუ სასწავლო ბილიკი უხილავია, მაგრამ მასწავლებელმა ან ტუტორმა ის კურსის მთავარ გვერდზე ხელმისაწვდომი გახადა, ეს პარამეტრი ხელს უშლის Chamilo-ს, დამალოს ბმული კურსის მთავარ გვერდზე."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "პროგრესული ადაპტური ტესტების ჩართვა, სადაც თითოეული კითხვის კატეგორია მსმენელს ქულის მიხედვით სხვა კატეგორიაზე გადაამისამართებს."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "როცა მსმენელები ტესტს ასრულებენ, შეტყობინებები ჩვეულებრივ იგზავნება ტუტორებთან, მათ შორის ზოგად სესიის ტუტორთან. ჩართეთ ეს პარამეტრი, რათა ზოგადი ტუტორი ამ შეტყობინებებიდან გამოირიცხოს."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "მოლოდინში მყოფი ტესტების ანგარიშში ყველა სესიიდან ტესტის მცდელობების ჩვენება, სადაც ზოგად ტუტორს აქვს წვდომა."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "ავტორიზებულ მომხმარებლებს გაფრთხილების ჩვენება სერვერული სესიის ვადის ამოწურვამდე."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "წამების რაოდენობა სესიის ვადის ამოწურვამდე, როცა გაფრთხილება გამოჩნდება. ნაგულისხმევი არის 180 წამი."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "განსაზღვრავს მომხმარებლის პაროლების საჭირო სტრუქტურას. მაგალითი: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. სპეციალური სიმბოლოების მოთხოვნისთვის გამოიყენეთ \"specials\" (მრავლობითი)."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "ზემოთ განსაზღვრული პაროლის მოთხოვნების ვალიდაციის ჩართვა პაროლის შექმნის ან განახლებისას."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "ელფოსტის მისამართების მძიმით გამოყოფილი სია შეტყობინებისთვის, როცა ფაილის მთლიანობის სკანირება ცვლილებას აღმოაჩენს. ცარიელი დატოვებისას ეცნობება ყველა გლობალურ ადმინისტრატორს."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "გარე აპლიკაციებს (მაგ. Claude.ai MCP კონექტორი) საშუალებას აძლევს დარეგისტრირდნენ OAuth 2.1 Dynamic Client Registration-ით და დაუკავშირდნენ თითოეული მომხმარებლის საკუთარი Chamilo ანგარიშითა და უფლებებით. ნაგულისხმევად გამორთულია: აღმოჩენის, რეგისტრაციის, ავტორიზაციისა და ტოკენის ბოლო წერტილები აბრუნებს 404-ს, სანამ ეს არ ჩაირთვება."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Chamilo MCP ბოლო წერტილისა და პირადი MCP API გასაღების ინტერფეისის ჩართვა. გამორთვისას არსებული API გასაღებები, OAuth წვდომის ტოკენები და JWT სერთიფიკატები არ გამოიყენება /mcp-ზე."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "JSON რუკა Chamilo მომხმარებლის როლებისა, რომლებსაც MCP-ის გამოყენება შეუძლიათ. მომხმარებელი უნდა ემთხვეოდეს მინიმუმ ერთ ჩართულ როლს. ეს შეზღუდვა ვრცელდება ადრე გენერირებულ API გასაღებებზეც და არსებულ OAuth კავშირებზეც."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "სანდო სერვერ-სერვერ ინტეგრაციებს (მაგ. WordPress storefront პლაგინი) საშუალებას აძლევს ავტორიზაცია გაიარონ ზოგად /api ბოლო წერტილზე მომხმარებლის გარე API გასაღებით, რომელიც გენერირდება კონსოლის ბრძანებით \"chamilo:security:generate-external-api-key\". ნაგულისხმევად გამორთულია: არსებული გასაღებები ვერ გამოიყენება, სანამ ეს არ ჩაირთვება."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "სესიების სიაში სესიის ქვესათაურში ტუტორისა და თარიღების დამატება."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "წინააღმდეგ შემთხვევაში, სესიის ტუტორებს ხანგრძლივობის მიხედვით სესიებზე წვდომა მხოლოდ აქტიური ხანგრძლივობის განმავლობაში აქვთ."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "ჩართვისას მასწავლებელს/ადმინს შეუძლია კურსის მომხმარებლების ხელსაწყოდან გაუგზავნოს ერთჯერადი მოწვევის ბმული, რომლითაც დაურეგისტრირებელი პირი მივა რეგისტრაციის ფორმამდე და დარეგისტრირდება მაშინაც კი, როცა ზოგადი თვითრეგისტრაცია (allow_registration) გამორთულია."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "დავალების ფაილების სახელებში სტუდენტის სრული სახელის დამატება ინდივიდუალური ჩაბარებების ან დავალების პაკეტების ჩამოტვირთვისას."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "მასწავლებლებს საშუალებას აძლევს ერთ WYSIWYG მოქმედებაში გენერირონ თარგმანები პლატფორმის ყველა აქტიური ენისთვის. ამან შეიძლება დიდი რაოდენობის AI ტოკენი მოიხმაროს."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "გამორთვისას ადმინისტრატორებს კურსის რედაქტირების გვერდზე არ აქვთ ბმული სესიის კურსებზე ტუტორების სწრაფი მინიჭებისთვის."
+
+msgid "Show courses & sessions"
+msgstr "კურსებისა და სესიების ჩვენება"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "არასავალდებულო JSON. მაგალითი: {\"speed\": true}"
+
+msgid "Table"
+msgstr "ცხრილი"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "თემა"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "კურსის ტუტორის ელფოსტის გამგზავნი"
+
+msgid "Card (visual blocks)"
+msgstr "ბარათი (ვიზუალური ბლოკები)"
+
+msgid "List (classic)"
+msgstr "სია (კლასიკური)"
+
+msgid "Limit identical emails"
+msgstr "იდენტური ელფოსტების შეზღუდვა"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "კურსების მაქსიმალური რაოდენობა, რომელთა შექმნაც შეუძლია მასწავლებელს ან ტრენერს. დააყენეთ 0 ლიმიტის გამოსართავად."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "ერთი და იმავე ელფოსტით დაშვებული ანგარიშების მაქსიმალური რაოდენობა. დააყენეთ 0 ლიმიტის გამოსართავად."
+
+msgid "Validation"
+msgstr "ვალიდაცია"
+
+msgid "Test/Development"
+msgstr "ტესტი/განვითარება"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "მომხმარებლის დამატებითი ველის გასაღები სესიების ძიებისა და დასახელებისთვის /admin-dashboard/register-დან."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "JSON კონფიგურაცია ძიების წინასწარი ფილტრის ველებისთვის."
 

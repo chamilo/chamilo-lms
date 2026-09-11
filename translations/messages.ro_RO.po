@@ -24082,6 +24082,18 @@ msgstr "Arată rezultatul elevului: Arată scorul, alegerea elevului și feedbac
 msgid "Signed in as"
 msgstr "Autentificat ca"
 
+msgid "Authorize application"
+msgstr "Autorizare aplicație"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "dorește să se conecteze la contul dvs. Chamilo."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Această aplicație va putea acționa în Chamilo exact ca dvs. — folosind permisiunile existente ale contului și nimic mai mult. Nu va obține niciodată acces pe care nu îl aveți deja."
+
+msgid "Allow"
+msgstr "Permite"
+
 msgid "Remember me"
 msgstr "Amintește-ți de mine"
 
@@ -31447,6 +31459,9 @@ msgstr "Înapoi la pagina de atribuire utilizatori"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Surse de autentificare atribuite cu succes"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Nu este selectată nicio metodă de autentificare. Acest lucru elimină toate metodele de autentificare pentru utilizatorul (utilizatorii) selectat(i) pe acest URL, ceea ce îi poate împiedica să se autentifice. Continuați?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Sfat: alegeți „— Doar încărcare —” pentru a stoca fără a trimite cuiva."
@@ -41236,4 +41251,316 @@ msgstr "Învățare intercalată"
 
 msgid "Memory palaces"
 msgstr "Palate ale memoriei"
+
+msgid "Logins (Month)"
+msgstr "Autentificări (lună)"
+
+msgid "Logins (Day)"
+msgstr "Autentificări (zi)"
+
+msgid "Logins (Hour)"
+msgstr "Autentificări (oră)"
+
+msgid "Number of users (Picture)"
+msgstr "Număr de utilizatori (imagine)"
+
+msgid "Allow tutors to register users"
+msgstr "Permite tutorilor să înregistreze utilizatori"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Permite tutorilor să editeze în sesiunile de curs"
+
+msgid "Extend rights for tutors"
+msgstr "Extinde drepturile tutorilor"
+
+msgid "Show session tutor"
+msgstr "Afișează tutorele sesiunii"
+
+msgid "Default tutor access days after session"
+msgstr "Zile implicite de acces ale tutorelui după sesiune"
+
+msgid "Default tutor access days before session"
+msgstr "Zile implicite de acces ale tutorelui înainte de sesiune"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: ascunde tutorele cursului"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Ascunde tutorele general în Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Extinde drepturile tutorilor asupra chestionarelor"
+
+msgid "Maximum courses per user"
+msgstr "Număr maxim de cursuri per utilizator"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Permite tutorilor să comenteze la evaluarea exercițiilor"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Include codul oficial în numele fișierului PDF exportat cu rezultatele testului"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron pentru memento de expirare a certificatului"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Fereastră de memento pentru expirarea certificatului (zile)"
+
+msgid "Allow certificates search"
+msgstr "Permite căutarea certificatelor"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Permite tutorilor să editeze întotdeauna anunțurile"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Afișează codul oficial al studenților în foile de prezență"
+
+msgid "Restrict course chat to tutors"
+msgstr "Restricționează chatul cursului la tutori"
+
+msgid "Language by resource"
+msgstr "Limbă după resursă"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Finalizează SCO la părăsire când starea rămâne incompletă"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Activează testele adaptive progresive după destinația categoriei"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Blochează trimiterea notificărilor de test către tutorele general"
+
+msgid "Enable session expiration warning"
+msgstr "Activează avertismentul de expirare a sesiunii"
+
+msgid "Session expiration warning time"
+msgstr "Timpul avertismentului de expirare a sesiunii"
+
+msgid "Check password requirements"
+msgstr "Verifică cerințele parolei"
+
+msgid "File integrity check notification recipients"
+msgstr "Destinatarii notificărilor de verificare a integrității fișierelor"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Activează serverul de autorizare OAuth"
+
+msgid "Enable MCP server"
+msgstr "Activează serverul MCP"
+
+msgid "Allow MCP by roles"
+msgstr "Permite MCP după roluri"
+
+msgid "Enable external API keys"
+msgstr "Activează cheile API externe"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Sesiunile după durată sunt întotdeauna disponibile tutorilor"
+
+msgid "Allow registration via course invitation links"
+msgstr "Permite înregistrarea prin linkuri de invitație la curs"
+
+msgid "Add student fullname in file download name"
+msgstr "Adaugă numele complet al studentului în numele fișierului descărcat"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Permite traducerea AI în toate limbile active din editorii WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Dezactivează posibilitatea de a edita tutorii cursului"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Când se folosesc sesiuni, comportamentul implicit este să se folosească vizibilitatea instrumentelor definită în cursul de bază. Această setare modifică acest lucru pentru a permite tutorilor din cursurile de sesiune să adapteze vizibilitatea instrumentelor la nevoile lor."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Tutorii pot crea utilizatori pe platformă și pot înscrie utilizatori la o sesiune."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Activați această opțiune pentru a acorda tutorilor aceleași permisiuni ca formatorii asupra instrumentelor de creare"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Afișează numele tutorelui general al sesiunii în caseta titlului sesiunii din lista de cursuri"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Când este activată, tutorii de curs din sesiuni pot înscrie utilizatori noi la sesiunea lor. Altfel, această opțiune este disponibilă doar administratorilor și administratorilor de sesiune."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Număr implicit de zile în care un tutore poate accesa o sesiune după data oficială de încheiere a sesiunii"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Număr implicit de zile în care un tutore poate accesa o sesiune înainte de data oficială de început a sesiunii"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Activează biblioteca MathJax pentru vizualizarea formulelor matematice. Adaugă un buton de formulă în bara de instrumente a editorului, unde formulele se scriu în LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Coduri de curs separate prin \"|\". Când un director de resurse umane se autentifică, utilizatorul este înscris automat la aceste cursuri. Exemplu: COURSE001|COURSE002. Acest lucru nu modifică rolul utilizatorului."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Coduri de curs separate prin \"|\". Când un administrator de sesiune se autentifică, utilizatorul este înscris automat la aceste cursuri. Exemplu: COURSE001|COURSE002. Acest lucru nu modifică rolul utilizatorului."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Coduri de curs separate prin \"|\". Când un cursant se autentifică, utilizatorul este înscris automat la aceste cursuri. Exemplu: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Coduri de curs separate prin \"|\". Când un profesor se autentifică, utilizatorul este înscris automat la aceste cursuri. Exemplu: COURSE001|COURSE002. Acest lucru nu acordă permisiuni de profesor al cursului."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Ascunde tutorele cursului din sesiune în Dropbox când un document este trimis de tutore către studenți"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Ascunde numele tutorelui general în instrumentul Dropbox când tutorele general a încărcat fișierul"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Activează această opțiune pentru a permite tutorilor să creeze și să editeze sondaje"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Invitațiile la sondaje ar trebui să folosească adresa de e-mail a tutorelui sau adresa no-reply definită în secțiunea principală de configurare?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Numărul maxim de cursuri pe care un profesor/formator le poate crea. Setați 0 pentru a dezactiva limita. Poate fi suprascris per utilizator prin achiziția unui serviciu BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Permite tutorilor să editeze feedback-ul la evaluarea exercițiilor"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Dacă se include codul oficial al studentului în numele fișierului la exportul unui rezultat de test în PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Permite accesul la toate fișierele personale fără restricții"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Activează cron-ul app:send-certificate-expiry-reminders, care reamintește cursanților ale căror certificate au expirat sau sunt pe cale să expire."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Număr implicit de zile înainte pentru a căuta certificate pe cale să expire, folosit dacă cron-ul nu este rulat cu --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Permite utilizatorilor și vizitatorilor să caute certificate generate din meniul barei de sus."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Permite tutorilor să editeze întotdeauna anunțurile din sesiunile active sau anterioare."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Dacă se afișează codul oficial al studenților alături de numele lor în foile de prezență și liste."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Permite atribuirea unei limbi specifice resurselor individuale."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Unele pachete SCORM apelează LMSSetValue(cmi.core.lesson_status, 'incomplete') o singură dată și nu trimit niciodată un statut terminal real, nici un LMSFinish() semnificativ. Activați această opțiune pentru ca Chamilo să trateze acel 'incomplete' persistent la fel ca lipsa oricărui statut, rezolvând finalizarea când cursantul părăsește SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Dacă un parcurs de învățare este setat ca invizibil, dar profesorul sau tutorele a decis să îl facă disponibil de pe pagina principală a cursului, această opțiune împiedică Chamilo să ascundă linkul de pe pagina principală a cursului."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Activează testele adaptive progresive în care fiecare categorie de întrebări poate redirecționa cursanții către o altă categorie în funcție de scorul lor."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Când cursanții finalizează un test, notificările sunt de obicei trimise tutorilor, inclusiv tutorelui general al sesiunii. Activați această opțiune pentru a exclude tutorele general din aceste notificări."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Afișează încercările de test ale utilizatorilor din toate sesiunile la care tutorele general are acces, în raportul testelor în așteptare."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Afișează un avertisment utilizatorilor autentificați înainte de expirarea sesiunii pe server."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Numărul de secunde înainte de expirarea sesiunii când se afișează avertismentul. Implicit este 180 de secunde."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Definește structura necesară pentru parolele utilizatorilor. Exemplu: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Folosiți \"specials\" (plural) pentru a impune caractere speciale."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Activează validarea cerințelor de parolă definite mai sus la crearea sau actualizarea parolei."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Listă de adrese de e-mail separate prin virgulă de notificat când o scanare de integritate a fișierelor detectează o modificare. Lăsați gol pentru a notifica în schimb fiecare administrator global."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Permite aplicațiilor externe (de ex. conectorul MCP Claude.ai) să se înregistreze prin OAuth 2.1 Dynamic Client Registration și să se conecteze folosind contul și permisiunile Chamilo ale fiecărui utilizator. Dezactivat implicit: endpoint-urile de descoperire, înregistrare, autorizare și token returnează toate 404 până la activare."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Activează endpoint-ul MCP Chamilo și interfața cheilor API personale MCP. Când este dezactivat, cheile API existente, token-urile de acces OAuth și acreditările JWT nu pot fi folosite pe /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "Hartă JSON a rolurilor de utilizator Chamilo permise să folosească MCP. Un utilizator trebuie să corespundă cel puțin unui rol activat. Această restricție se aplică și cheilor API generate anterior și conexiunilor OAuth existente."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Permite integrărilor de încredere server-la-server (de ex. pluginul vitrină WordPress) să se autentifice la endpoint-ul general /api folosind o cheie API externă per utilizator, generată prin comanda de consolă \"chamilo:security:generate-external-api-key\". Dezactivat implicit: cheile existente nu pot fi folosite până la activare."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Adaugă tutorele și datele la subtitrul sesiunii în lista de sesiuni."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "În caz contrar, tutorii de sesiune au acces la sesiunile pe durată doar pe durata activă."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Când este activat, un profesor/administrator poate trimite un link de invitație unic din instrumentul Utilizatori al unui curs, care permite unei persoane neînregistrate să ajungă la formularul de înregistrare și să se înregistreze chiar dacă autoînregistrarea generală (allow_registration) este dezactivată."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Adaugă numele complet al studentului la numele fișierelor temelor la descărcarea lucrărilor individuale sau a pachetelor de teme."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Permite profesorilor să genereze traduceri pentru toate limbile active ale platformei într-o singură acțiune WYSIWYG. Acest lucru poate consuma un număr mare de tokeni AI."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Când este dezactivat, administratorii nu au un link pentru a atribui rapid tutori cursurilor din sesiune pe pagina de editare a cursului."
+
+msgid "Show courses & sessions"
+msgstr "Afișează cursuri și sesiuni"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON opțional. Exemplu: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Tabel"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Temă"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Expeditor e-mail tutore curs"
+
+msgid "Card (visual blocks)"
+msgstr "Card (blocuri vizuale)"
+
+msgid "List (classic)"
+msgstr "Listă (clasică)"
+
+msgid "Limit identical emails"
+msgstr "Limită e-mailuri identice"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Numărul maxim de cursuri pe care un profesor sau formator le poate crea. Setați 0 pentru a dezactiva limita."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Numărul maxim de conturi permise cu același e-mail. Setați 0 pentru a dezactiva limita."
+
+msgid "Validation"
+msgstr "Validare"
+
+msgid "Test/Development"
+msgstr "Test/Dezvoltare"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Cheia câmpului extra al utilizatorului de utilizat la căutarea și denumirea sesiunilor din /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Configurație JSON pentru câmpurile de prefiltru de căutare."
 

@@ -24068,6 +24068,18 @@ msgstr "แสดงผลให้ผู้เรียน: แสดงคะ�
 msgid "Signed in as"
 msgstr "ลงชื่อเข้าใช้ในฐานะ"
 
+msgid "Authorize application"
+msgstr "อนุญาตแอปพลิเคชัน"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "ต้องการเชื่อมต่อกับบัญชี Chamilo ของคุณ"
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "แอปพลิเคชันนี้จะสามารถดำเนินการบน Chamilo ได้เหมือนกับที่คุณทำได้ — โดยใช้สิทธิ์บัญชีที่มีอยู่ของคุณเท่านั้น ไม่มากกว่านั้น จะไม่ได้รับสิทธิ์เข้าถึงใด ๆ ที่คุณยังไม่มี"
+
+msgid "Allow"
+msgstr "อนุญาต"
+
 msgid "Remember me"
 msgstr "จดจำฉัน"
 
@@ -31433,6 +31445,9 @@ msgstr "กลับไปยังหน้าจึงกำหนดผู้
 
 msgid "Authentication sources assigned successfully"
 msgstr "กำหนดแหล่งยืนยันตัวตนเรียบร้อยแล้ว"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "ไม่ได้เลือกวิธีการยืนยันตัวตน การดำเนินการนี้จะลบวิธีการยืนยันตัวตนทั้งหมดของผู้ใช้ที่เลือกบน URL นี้ ซึ่งอาจทำให้เข้าสู่ระบบไม่ได้ ต้องการดำเนินการต่อหรือไม่?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "เคล็ดลับ: เลือก “— แค่อัปโหลด —” เพื่อเก็บโดยไม่ส่งให้ใคร"
@@ -41222,4 +41237,316 @@ msgstr "การเรียนรู้แบบสลับกัน"
 
 msgid "Memory palaces"
 msgstr "พระราชวังแห่งความจำ"
+
+msgid "Logins (Month)"
+msgstr "การเข้าสู่ระบบ (เดือน)"
+
+msgid "Logins (Day)"
+msgstr "การเข้าสู่ระบบ (วัน)"
+
+msgid "Logins (Hour)"
+msgstr "การเข้าสู่ระบบ (ชั่วโมง)"
+
+msgid "Number of users (Picture)"
+msgstr "จำนวนผู้ใช้ (รูปภาพ)"
+
+msgid "Allow tutors to register users"
+msgstr "อนุญาตให้ติวเตอร์ลงทะเบียนผู้ใช้"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "อนุญาตให้ติวเตอร์แก้ไขภายในเซสชันของรายวิชา"
+
+msgid "Extend rights for tutors"
+msgstr "ขยายสิทธิ์สำหรับติวเตอร์"
+
+msgid "Show session tutor"
+msgstr "แสดงติวเตอร์ของเซสชัน"
+
+msgid "Default tutor access days after session"
+msgstr "จำนวนวันเข้าถึงเริ่มต้นของติวเตอร์หลังเซสชัน"
+
+msgid "Default tutor access days before session"
+msgstr "จำนวนวันเข้าถึงเริ่มต้นของติวเตอร์ก่อนเซสชัน"
+
+msgid "Dropbox: hide course tutor"
+msgstr "กล่องฝากไฟล์: ซ่อนติวเตอร์รายวิชา"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "ซ่อนติวเตอร์ทั่วไปในกล่องฝากไฟล์"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "ขยายสิทธิ์สำหรับติวเตอร์ในการสำรวจ"
+
+msgid "Maximum courses per user"
+msgstr "จำนวนรายวิชาสูงสุดต่อผู้ใช้"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "อนุญาตให้ติวเตอร์แสดงความเห็นเมื่อตรวจแบบฝึกหัด"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "รวมรหัสทางการในชื่อไฟล์ PDF ผลการทดสอบที่ส่งออก"
+
+msgid "Certificate expiry reminder cron"
+msgstr "cron เตือนใบรับรองหมดอายุ"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "ช่วงเตือนใบรับรองหมดอายุ (วัน)"
+
+msgid "Allow certificates search"
+msgstr "อนุญาตการค้นหาใบรับรอง"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "อนุญาตให้ติวเตอร์แก้ไขประกาศได้เสมอ"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "แสดงรหัสทางการของนักเรียนในใบเช็คชื่อ"
+
+msgid "Restrict course chat to tutors"
+msgstr "จำกัดแชทรายวิชาเฉพาะติวเตอร์"
+
+msgid "Language by resource"
+msgstr "ภาษาตามทรัพยากร"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "ทำให้ SCO เสร็จสมบูรณ์เมื่อออกหากสถานะยังไม่สมบูรณ์"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "เปิดใช้แบบทดสอบปรับตามความก้าวหน้าตามปลายทางหมวดหมู่"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "บล็อกการส่งการแจ้งเตือนแบบทดสอบไปยังติวเตอร์ทั่วไป"
+
+msgid "Enable session expiration warning"
+msgstr "เปิดใช้คำเตือนเซสชันหมดอายุ"
+
+msgid "Session expiration warning time"
+msgstr "เวลาเตือนเซสชันหมดอายุ"
+
+msgid "Check password requirements"
+msgstr "ตรวจสอบข้อกำหนดรหัสผ่าน"
+
+msgid "File integrity check notification recipients"
+msgstr "ผู้รับการแจ้งเตือนการตรวจสอบความสมบูรณ์ของไฟล์"
+
+msgid "Enable the OAuth authorization server"
+msgstr "เปิดใช้เซิร์ฟเวอร์อนุญาต OAuth"
+
+msgid "Enable MCP server"
+msgstr "เปิดใช้เซิร์ฟเวอร์ MCP"
+
+msgid "Allow MCP by roles"
+msgstr "อนุญาต MCP ตามบทบาท"
+
+msgid "Enable external API keys"
+msgstr "เปิดใช้คีย์ API ภายนอก"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "เซสชันตามระยะเวลาพร้อมใช้งานสำหรับติวเตอร์เสมอ"
+
+msgid "Allow registration via course invitation links"
+msgstr "อนุญาตการลงทะเบียนผ่านลิงก์เชิญรายวิชา"
+
+msgid "Add student fullname in file download name"
+msgstr "เพิ่มชื่อเต็มของนักเรียนในชื่อไฟล์ดาวน์โหลด"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "อนุญาตการแปลด้วย AI เป็นภาษาที่ใช้งานทั้งหมดในตัวแก้ไข WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "ปิดความสามารถในการแก้ไขติวเตอร์รายวิชา"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "เมื่อใช้เซสชัน พฤติกรรมเริ่มต้นคือใช้การมองเห็นเครื่องมือที่กำหนดในรายวิชาฐาน การตั้งค่านี้เปลี่ยนให้ติวเตอร์ในรายวิชาของเซสชันปรับการมองเห็นเครื่องมือตามความต้องการได้"
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "ติวเตอร์สามารถสร้างผู้ใช้บนแพลตฟอร์มและลงทะเบียนผู้ใช้เข้าเซสชันได้"
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "เปิดตัวเลือกนี้เพื่อให้ติวเตอร์มีสิทธิ์เท่ากับผู้สอนในเครื่องมือสร้างเนื้อหา"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "แสดงชื่อติวเตอร์ทั่วไปของเซสชันในกล่องชื่อเซสชันในรายการรายวิชา"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "เมื่อเปิดใช้ ติวเตอร์รายวิชาในเซสชันสามารถลงทะเบียนผู้ใช้ใหม่เข้าเซสชันได้ มิฉะนั้นตัวเลือกนี้มีเฉพาะผู้ดูแลระบบและผู้ดูแลเซสชัน"
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "จำนวนวันเริ่มต้นที่ติวเตอร์สามารถเข้าถึงเซสชันได้หลังจากวันที่สิ้นสุดเซสชันอย่างเป็นทางการ"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "จำนวนวันเริ่มต้นที่ติวเตอร์สามารถเข้าถึงเซสชันได้ก่อนวันที่เริ่มเซสชันอย่างเป็นทางการ"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "เปิดใช้ไลบรารี MathJax เพื่อแสดงสูตรคณิตศาสตร์ จะเพิ่มปุ่มสูตรในแถบเครื่องมือของตัวแก้ไข โดยเขียนสูตรด้วย LaTeX"
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "รหัสรายวิชาคั่นด้วย \"|\" เมื่อผู้อำนวยการทรัพยากรบุคคลเข้าสู่ระบบ ผู้ใช้จะถูกสมัครเข้ารายวิชาเหล่านี้โดยอัตโนมัติ ตัวอย่าง: COURSE001|COURSE002 ไม่เปลี่ยนบทบาทผู้ใช้"
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "รหัสรายวิชาคั่นด้วย \"|\" เมื่อผู้ดูแลเซสชันเข้าสู่ระบบ ผู้ใช้จะถูกสมัครเข้ารายวิชาเหล่านี้โดยอัตโนมัติ ตัวอย่าง: COURSE001|COURSE002 ไม่เปลี่ยนบทบาทผู้ใช้"
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "รหัสรายวิชาคั่นด้วย \"|\" เมื่อผู้เรียนเข้าสู่ระบบ ผู้ใช้จะถูกสมัครเข้ารายวิชาเหล่านี้โดยอัตโนมัติ ตัวอย่าง: COURSE001|COURSE002"
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "รหัสรายวิชาคั่นด้วย \"|\" เมื่อครูเข้าสู่ระบบ ผู้ใช้จะถูกสมัครเข้ารายวิชาเหล่านี้โดยอัตโนมัติ ตัวอย่าง: COURSE001|COURSE002 ไม่ให้สิทธิ์ครูประจำรายวิชา"
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "ซ่อนติวเตอร์รายวิชาของเซสชันใน Dropbox เมื่อติวเตอร์ส่งเอกสารให้นักเรียน"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "ซ่อนชื่อติวเตอร์ทั่วไปในเครื่องมือ Dropbox เมื่อติวเตอร์ทั่วไปเป็นผู้อัปโหลดไฟล์"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "เปิดตัวเลือกนี้เพื่อให้ติวเตอร์สร้างและแก้ไขแบบสำรวจได้"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "คำเชิญแบบสำรวจควรใช้ที่อยู่อีเมลของติวเตอร์ หรือที่อยู่ no-reply ที่กำหนดในส่วนการตั้งค่าหลัก?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "จำนวนรายวิชาสูงสุดที่ครู/วิทยากรสามารถสร้างได้ ตั้งเป็น 0 เพื่อปิดจำกัด สามารถแทนที่ได้ต่อผู้ใช้ผ่านการซื้อบริการ BuyCourses"
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "อนุญาตให้ติวเตอร์แก้ไขข้อเสนอแนะเมื่อตรวจแบบฝึกหัด"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "รวมรหัสทางการของนักเรียนในชื่อไฟล์เมื่อส่งออกผลแบบทดสอบเป็น PDF หรือไม่"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "อนุญาตให้เข้าถึงไฟล์ส่วนตัวทั้งหมดโดยไม่มีข้อจำกัด"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "เปิดใช้ cron app:send-certificate-expiry-reminders ซึ่งเตือนผู้เรียนที่ใบรับรองหมดอายุแล้วหรือใกล้หมดอายุ"
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "จำนวนวันล่วงหน้าเริ่มต้นสำหรับสแกนใบรับรองที่ใกล้หมดอายุ ใช้เว้นแต่ cron จะรันด้วย --days-ahead"
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "อนุญาตให้ผู้ใช้และผู้เยี่ยมชมค้นหาใบรับรองที่สร้างแล้วจากเมนูแถบบน"
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "อนุญาตให้ติวเตอร์แก้ไขประกาศในเซสชันที่กำลังดำเนินอยู่หรือที่ผ่านมาได้เสมอ"
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "แสดงรหัสทางการของนักเรียนคู่กับชื่อในใบเช็คชื่อและรายชื่อหรือไม่"
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "อนุญาตกำหนดภาษาเฉพาะให้กับทรัพยากรแต่ละรายการ"
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "แพ็กเกจ SCORM บางชุดเรียก LMSSetValue(cmi.core.lesson_status, 'incomplete') เพียงครั้งเดียว และไม่ส่งสถานะสิ้นสุดจริงหรือ LMSFinish() ที่มีความหมาย เปิดใช้เพื่อให้ Chamilo ถือว่า 'incomplete' ที่ค้างอยู่นั้นเหมือนไม่มีสถานะ และสรุปความสำเร็จเมื่อผู้เรียนออกจาก SCO"
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "หากเส้นทางการเรียนรู้ถูกตั้งเป็นไม่แสดง แต่ครูหรือติวเตอร์ทำให้พร้อมใช้งานจากหน้าแรกของรายวิชา ตัวเลือกนี้จะป้องกันไม่ให้ Chamilo ซ่อนลิงก์บนหน้าแรกของรายวิชา"
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "เปิดใช้แบบทดสอบปรับตัวแบบก้าวหน้า โดยแต่ละหมวดคำถามสามารถส่งผู้เรียนไปหมวดอื่นตามคะแนนได้"
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "เมื่อผู้เรียนทำแบบทดสอบเสร็จ มักมีการแจ้งเตือนไปยังติวเตอร์ รวมถึงติวเตอร์ทั่วไปของเซสชัน เปิดตัวเลือกนี้เพื่อไม่รวมติวเตอร์ทั่วไปในการแจ้งเตือนเหล่านี้"
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "แสดงความพยายามทำแบบทดสอบของผู้ใช้ในทุกเซสชันที่ติวเตอร์ทั่วไปเข้าถึงได้ ในรายงานแบบทดสอบที่รอดำเนินการ"
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "แสดงคำเตือนแก่ผู้ใช้ที่เข้าสู่ระบบแล้วก่อนที่เซสชันฝั่งเซิร์ฟเวอร์จะหมดอายุ"
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "จำนวนวินาทีก่อนเซสชันหมดอายุที่จะแสดงคำเตือน ค่าเริ่มต้นคือ 180 วินาที"
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "กำหนดโครงสร้างที่จำเป็นสำหรับรหัสผ่านผู้ใช้ ตัวอย่าง: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}} ใช้ \"specials\" (พหูพจน์) เพื่อกำหนดให้ต้องมีอักขระพิเศษ"
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "เปิดการตรวจสอบข้อกำหนดรหัสผ่านที่กำหนดด้านบนเมื่อสร้างหรืออัปเดตรหัสผ่าน"
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "รายการที่อยู่อีเมลคั่นด้วยจุลภาคเพื่อแจ้งเมื่อการสแกนความสมบูรณ์ของไฟล์พบการเปลี่ยนแปลง เว้นว่างเพื่อแจ้งผู้ดูแลระบบส่วนกลางทุกคนแทน"
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "อนุญาตให้แอปพลิเคชันภายนอก (เช่น ตัวเชื่อมต่อ Claude.ai MCP) ลงทะเบียนผ่าน OAuth 2.1 Dynamic Client Registration และเชื่อมต่อด้วยบัญชีและสิทธิ์ Chamilo ของผู้ใช้แต่ละคน ปิดตามค่าเริ่มต้น: จุดปลาย discovery, registration, authorization และ token จะคืนค่า 404 จนกว่าจะเปิดใช้"
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "เปิดใช้จุดปลาย MCP ของ Chamilo และอินเทอร์เฟซคีย์ API ส่วนตัวของ MCP เมื่อปิด คีย์ API ที่มีอยู่ โทเค็นเข้าถึง OAuth และข้อมูลรับรอง JWT จะใช้บน /mcp ไม่ได้"
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "แผนที่ JSON ของบทบาทผู้ใช้ Chamilo ที่อนุญาตให้ใช้ MCP ผู้ใช้ต้องตรงกับอย่างน้อยหนึ่งบทบาทที่เปิดใช้ ข้อจำกัดนี้ใช้กับคีย์ API ที่สร้างไว้ก่อนและการเชื่อมต่อ OAuth ที่มีอยู่ด้วย"
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "อนุญาตให้การเชื่อมต่อเซิร์ฟเวอร์ต่อเซิร์ฟเวอร์ที่เชื่อถือได้ (เช่น ปลั๊กอินหน้าร้าน WordPress) ยืนยันตัวตนกับจุดปลาย /api ทั่วไปโดยใช้คีย์ API ภายนอกต่อผู้ใช้ สร้างผ่านคำสั่งคอนโซล \"chamilo:security:generate-external-api-key\" ปิดตามค่าเริ่มต้น: คีย์ที่มีอยู่ใช้ไม่ได้จนกว่าจะเปิดใช้"
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "เพิ่มติวเตอร์และวันที่ในคำบรรยายย่อยของเซสชันในรายการเซสชัน"
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "มิฉะนั้น ติวเตอร์เซสชันจะเข้าถึงเซสชันตามระยะเวลาได้เฉพาะในช่วงระยะเวลาที่ใช้งานอยู่เท่านั้น"
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "เมื่อเปิดใช้ ครู/ผู้ดูแลสามารถส่งลิงก์เชิญครั้งเดียวจากเครื่องมือผู้ใช้ของรายวิชา ให้บุคคลที่ยังไม่ได้ลงทะเบียนเข้าถึงแบบฟอร์มลงทะเบียนและลงทะเบียนได้ แม้การลงทะเบียนด้วยตนเองทั่วไป (allow_registration) จะถูกปิด"
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "เพิ่มชื่อเต็มของนักเรียนในชื่อไฟล์งานเมื่อดาวน์โหลดงานส่งรายชิ้นหรือแพ็กเกจงาน"
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "อนุญาตให้ครูสร้างคำแปลสำหรับภาษาแพลตฟอร์มที่ใช้งานทั้งหมดในการกระทำ WYSIWYG ครั้งเดียว อาจใช้โทเค็น AI จำนวนมาก"
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "เมื่อปิด ผู้ดูแลระบบจะไม่มีลิงก์สำหรับกำหนดติวเตอร์ให้รายวิชาในเซสชันอย่างรวดบนหน้าแก้ไขรายวิชา"
+
+msgid "Show courses & sessions"
+msgstr "แสดงรายวิชาและเซสชัน"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON ไม่บังคับ ตัวอย่าง: {\"speed\": true}"
+
+msgid "Table"
+msgstr "ตาราง"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "ธีม"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "ผู้ส่งอีเมลติวเตอร์รายวิชา"
+
+msgid "Card (visual blocks)"
+msgstr "การ์ด (บล็อกภาพ)"
+
+msgid "List (classic)"
+msgstr "รายการ (แบบคลาสสิก)"
+
+msgid "Limit identical emails"
+msgstr "จำกัดอีเมลที่ซ้ำกัน"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "จำนวนรายวิชาสูงสุดที่ครูหรือผู้ฝึกอบรมสามารถสร้างได้ ตั้งเป็น 0 เพื่อปิดการจำกัด"
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "จำนวนบัญชีสูงสุดที่อนุญาตให้ใช้อีเมลเดียวกัน ตั้งเป็น 0 เพื่อปิดการจำกัด"
+
+msgid "Validation"
+msgstr "การตรวจสอบความถูกต้อง"
+
+msgid "Test/Development"
+msgstr "ทดสอบ/พัฒนา"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "คีย์ฟิลด์เพิ่มเติมของผู้ใช้สำหรับค้นหาและตั้งชื่อเซสชันจาก /admin-dashboard/register"
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "การกำหนดค่า JSON สำหรับฟิลด์กรองล่วงหน้าในการค้นหา"
 

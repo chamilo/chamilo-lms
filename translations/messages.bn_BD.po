@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্রের নমুনা: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -24063,6 +24063,18 @@ msgstr "শিক্ষার্থীকে ফলাফল দেখান: �
 msgid "Signed in as"
 msgstr "লগইন হয়েছেন হিসেবে"
 
+msgid "Authorize application"
+msgstr "অ্যাপ্লিকেশন অনুমোদন করুন"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "আপনার চামিলো অ্যাকাউন্টে সংযোগ করতে চায়।"
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "এই অ্যাপ্লিকেশনটি চামিলোতে ঠিক আপনার মতোই কাজ করতে পারবে — আপনার বিদ্যমান অ্যাকাউন্ট অনুমতি ব্যবহার করে এবং তার বেশি কিছু নয়। আপনার কাছে যা নেই সেই অ্যাক্সেস এটি কখনোই পাবে না।"
+
+msgid "Allow"
+msgstr "অনুমতি দিন"
+
 msgid "Remember me"
 msgstr "আমাকে মনে রাখুন"
 
@@ -31427,6 +31439,9 @@ msgstr "ব্যবহারকারী নিয়োগ পৃষ্ঠা�
 
 msgid "Authentication sources assigned successfully"
 msgstr "প্রমাণীকরণ উৎসগুলি সফলভাবে নিয়োগ করা হয়েছে"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "কোনো প্রমাণীকরণ পদ্ধতি নির্বাচিত নয়। এটি এই URL-এ নির্বাচিত ব্যবহারকারী(দের) জন্য প্রতিটি প্রমাণীকরণ পদ্ধতি সরিয়ে দেয়, যা তাদের লগইন করতে বাধা দিতে পারে। চালিয়ে যাবেন?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "পরামর্শ: “— শুধু আপলোড করুন —” নির্বাচন করুন কাউকে না পাঠিয়ে সংরক্ষণ করতে।"
@@ -41216,4 +41231,316 @@ msgstr "আন্তঃমিশ্রিত শিক্ষা"
 
 msgid "Memory palaces"
 msgstr "স্মৃতি প্রাসাদ"
+
+msgid "Logins (Month)"
+msgstr "লগইন (মাস)"
+
+msgid "Logins (Day)"
+msgstr "লগইন (দিন)"
+
+msgid "Logins (Hour)"
+msgstr "লগইন (ঘণ্টা)"
+
+msgid "Number of users (Picture)"
+msgstr "ব্যবহারকারীর সংখ্যা (ছবি)"
+
+msgid "Allow tutors to register users"
+msgstr "টিউটরদের ব্যবহারকারী নিবন্ধন করার অনুমতি দিন"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "কোর্স সেশনের ভিতরে সম্পাদনার জন্য টিউটরদের অনুমতি দিন"
+
+msgid "Extend rights for tutors"
+msgstr "টিউটরদের অধিকার সম্প্রসারণ করুন"
+
+msgid "Show session tutor"
+msgstr "সেশন টিউটর দেখান"
+
+msgid "Default tutor access days after session"
+msgstr "সেশনের পর টিউটরের ডিফল্ট অ্যাক্সেস দিন"
+
+msgid "Default tutor access days before session"
+msgstr "সেশনের আগে টিউটরের ডিফল্ট অ্যাক্সেস দিন"
+
+msgid "Dropbox: hide course tutor"
+msgstr "ড্রপবক্স: কোর্স টিউটর লুকান"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "ড্রপবক্সে সাধারণ টিউটর লুকান"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "জরিপে টিউটরদের অধিকার সম্প্রসারণ করুন"
+
+msgid "Maximum courses per user"
+msgstr "প্রতি ব্যবহারকারীর সর্বোচ্চ কোর্স"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "অনুশীলন পর্যালোচনার সময় টিউটরদের মন্তব্য করার অনুমতি দিন"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "রপ্তানি করা কুইজ ফলাফল PDF ফাইলের নামে অফিসিয়াল কোড অন্তর্ভুক্ত করুন"
+
+msgid "Certificate expiry reminder cron"
+msgstr "সনদপত্র মেয়াদোত্তীর্ণ অনুস্মারক ক্রন"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "সনদপত্র মেয়াদোত্তীর্ণ অনুস্মারক উইন্ডো (দিন)"
+
+msgid "Allow certificates search"
+msgstr "সনদপত্র অনুসন্ধানের অনুমতি দিন"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "টিউটরদের সর্বদা ঘোষণা সম্পাদনা করার অনুমতি দিন"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "উপস্থিতি শীটে শিক্ষার্থীদের অফিসিয়াল কোড দেখান"
+
+msgid "Restrict course chat to tutors"
+msgstr "কোর্স চ্যাট শুধুমাত্র টিউটরদের জন্য সীমাবদ্ধ করুন"
+
+msgid "Language by resource"
+msgstr "রিসোর্স অনুযায়ী ভাষা"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "অবস্থা অসম্পূর্ণ থাকলে ছাড়ার সময় SCO সম্পূর্ণ করুন"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "বিভাগ গন্তব্য অনুযায়ী প্রগতিশীল অভিযোজিত পরীক্ষা সক্রিয় করুন"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "সাধারণ টিউটরকে পরীক্ষার বিজ্ঞপ্তি পাঠানো ব্লক করুন"
+
+msgid "Enable session expiration warning"
+msgstr "সেশন মেয়াদোত্তীর্ণ সতর্কতা সক্রিয় করুন"
+
+msgid "Session expiration warning time"
+msgstr "সেশন মেয়াদোত্তীর্ণ সতর্কতার সময়"
+
+msgid "Check password requirements"
+msgstr "পাসওয়ার্ডের প্রয়োজনীয়তা পরীক্ষা করুন"
+
+msgid "File integrity check notification recipients"
+msgstr "ফাইল অখণ্ডতা পরীক্ষার বিজ্ঞপ্তি প্রাপক"
+
+msgid "Enable the OAuth authorization server"
+msgstr "OAuth অনুমোদন সার্ভার সক্রিয় করুন"
+
+msgid "Enable MCP server"
+msgstr "MCP সার্ভার সক্রিয় করুন"
+
+msgid "Allow MCP by roles"
+msgstr "ভূমিকা অনুযায়ী MCP অনুমতি দিন"
+
+msgid "Enable external API keys"
+msgstr "বাহ্যিক API কী সক্রিয় করুন"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "সময়কাল অনুযায়ী সেশন টিউটরদের জন্য সর্বদা উপলব্ধ"
+
+msgid "Allow registration via course invitation links"
+msgstr "কোর্স আমন্ত্রণ লিঙ্কের মাধ্যমে নিবন্ধনের অনুমতি দিন"
+
+msgid "Add student fullname in file download name"
+msgstr "ফাইল ডাউনলোড নামে শিক্ষার্থীর পূর্ণ নাম যোগ করুন"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "WYSIWYG সম্পাদকে সব সক্রিয় ভাষায় AI অনুবাদের অনুমতি দিন"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "কোর্স টিউটর সম্পাদনা করার ক্ষমতা নিষ্ক্রিয় করুন"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "সেশন ব্যবহার করার সময়, ডিফল্ট আচরণ হল মূল কোর্সে নির্ধারিত টুল দৃশ্যমানতা ব্যবহার করা। এই সেটিং তা পরিবর্তন করে যাতে সেশন কোর্সের টিউটররা তাদের প্রয়োজন অনুযায়ী টুল দৃশ্যমানতা মানিয়ে নিতে পারেন।"
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "টিউটররা প্ল্যাটফর্মে ব্যবহারকারী তৈরি করতে এবং সেশনে ব্যবহারকারী নিবন্ধন করতে পারেন।"
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "লেখার সরঞ্জামে প্রশিক্ষকদের সমান অনুমতি টিউটরদের দিতে এই বিকল্পটি সক্রিয় করুন"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "কোর্স তালিকায় সেশনের শিরোনাম বাক্সে সাধারণ সেশন টিউটরের নাম দেখান"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "সক্রিয় থাকলে, সেশনের কোর্স টিউটররা তাদের সেশনে নতুন ব্যবহারকারী নিবন্ধন করতে পারেন। অন্যথায় এই বিকল্পটি শুধুমাত্র প্রশাসক এবং সেশন প্রশাসকদের জন্য উপলব্ধ।"
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "অফিসিয়াল সেশন শেষ তারিখের পর একজন টিউটর কত দিন সেশনে প্রবেশ করতে পারবেন তার ডিফল্ট সংখ্যা"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "অফিসিয়াল সেশন শুরুর তারিখের আগে একজন টিউটর কত দিন সেশনে প্রবেশ করতে পারবেন তার ডিফল্ট সংখ্যা"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "গাণিতিক সূত্র দেখানোর জন্য MathJax লাইব্রেরি সক্রিয় করুন। এতে সম্পাদকের টুলবারে একটি সূত্র বোতাম যোগ হয়, যেখানে সূত্র LaTeX-এ লেখা হয়।"
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "\"|\" দিয়ে পৃথক করা কোর্স কোড। মানবসম্পদ পরিচালক লগ ইন করলে ব্যবহারকারী স্বয়ংক্রিয়ভাবে এই কোর্সগুলিতে নিবন্ধিত হন। উদাহরণ: COURSE001|COURSE002। এটি ব্যবহারকারীর ভূমিকা পরিবর্তন করে না।"
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "\"|\" দিয়ে পৃথক করা কোর্স কোড। সেশন প্রশাসক লগ ইন করলে ব্যবহারকারী স্বয়ংক্রিয়ভাবে এই কোর্সগুলিতে নিবন্ধিত হন। উদাহরণ: COURSE001|COURSE002। এটি ব্যবহারকারীর ভূমিকা পরিবর্তন করে না।"
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "\"|\" দিয়ে পৃথক করা কোর্স কোড। শিক্ষার্থী লগ ইন করলে ব্যবহারকারী স্বয়ংক্রিয়ভাবে এই কোর্সগুলিতে নিবন্ধিত হন। উদাহরণ: COURSE001|COURSE002।"
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "\"|\" দিয়ে পৃথক করা কোর্স কোড। শিক্ষক লগ ইন করলে ব্যবহারকারী স্বয়ংক্রিয়ভাবে এই কোর্সগুলিতে নিবন্ধিত হন। উদাহরণ: COURSE001|COURSE002। এটি কোর্স শিক্ষকের অনুমতি দেয় না।"
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "টিউটর শিক্ষার্থীদের কাছে নথি পাঠালে Dropbox-এ সেশন কোর্স টিউটর লুকান"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "সাধারণ টিউটর ফাইল আপলোড করলে Dropbox টুলে সাধারণ টিউটরের নাম লুকান"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "টিউটরদের জরিপ তৈরি ও সম্পাদনা করার অনুমতি দিতে এই বিকল্প সক্রিয় করুন"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "জরিপ আমন্ত্রণে টিউটরের ই-মেইল ঠিকানা ব্যবহার করা হবে, নাকি মূল কনফিগারেশন বিভাগে নির্ধারিত no-reply ঠিকানা?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "একজন শিক্ষক/প্রশিক্ষক সর্বোচ্চ কতটি কোর্স তৈরি করতে পারবেন। সীমা বন্ধ করতে 0 সেট করুন। BuyCourses সেবা কেনার মাধ্যমে ব্যবহারকারীপ্রতি এটি অগ্রাহ্য করা যায়।"
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "অনুশীলন পর্যালোচনার সময় টিউটরদের প্রতিক্রিয়া সম্পাদনা করার অনুমতি দিন"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "কুইজ ফলাফল PDF-এ রপ্তানি করার সময় ফাইলের নামে শিক্ষার্থীর অফিসিয়াল কোড অন্তর্ভুক্ত করা হবে কি না"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "সীমাবদ্ধতা ছাড়াই সব ব্যক্তিগত ফাইলে প্রবেশাধিকার দেয়"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "app:send-certificate-expiry-reminders ক্রন সক্রিয় করুন, যা মেয়াদোত্তীর্ণ বা শিগগির মেয়াদোত্তীর্ণ সনদধারী শিক্ষার্থীদের স্মরণ করিয়ে দেয়।"
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "মেয়াদোত্তীর্ণ হতে যাওয়া সনদ খোঁজার জন্য আগাম দিনের ডিফল্ট সংখ্যা; ক্রন --days-ahead দিয়ে চালানো না হলে এটি ব্যবহৃত হয়।"
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "উপরের বার মেনু থেকে তৈরি সনদ অনুসন্ধান করতে ব্যবহারকারী ও দর্শকদের অনুমতি দিন।"
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "সক্রিয় বা অতীত সেশনের ভিতরে ঘোষণা সবসময় সম্পাদনা করতে টিউটরদের অনুমতি দিন।"
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "উপস্থিতি শিট ও তালিকায় নামের পাশে শিক্ষার্থীদের অফিসিয়াল কোড দেখানো হবে কি না।"
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "পৃথক সম্পদে নির্দিষ্ট ভাষা নির্ধারণ করার অনুমতি দিন।"
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "কিছু SCORM প্যাকেজ শুধু একবার LMSSetValue(cmi.core.lesson_status, 'incomplete') কল করে এবং কখনো প্রকৃত টার্মিনাল স্ট্যাটাস বা অর্থপূর্ণ LMSFinish() পাঠায় না। এই অবশিষ্ট 'incomplete'-কে কোনো স্ট্যাটাস নেই বলে গণ্য করতে এটি সক্রিয় করুন, যাতে শিক্ষার্থী SCO ছেড়ে গেলে সম্পূর্ণতা নির্ধারণ হয়।"
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "শেখার পথ অদৃশ্য সেট করা থাকলেও শিক্ষক বা টিউটর কোর্স হোমপেজ থেকে তা উপলব্ধ করলে, এই বিকল্প কোর্স হোমপেজে লিঙ্ক লুকাতে Chamilo-কে বাধা দেয়।"
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "প্রগতিশীল অভিযোজিত পরীক্ষা সক্রিয় করুন, যেখানে প্রতিটি প্রশ্ন বিভাগ স্কোর অনুযায়ী শিক্ষার্থীকে অন্য বিভাগে পাঠাতে পারে।"
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "শিক্ষার্থীরা পরীক্ষা শেষ করলে সাধারণত টিউটরদের, সাধারণ সেশন টিউটরসহ, বিজ্ঞপ্তি পাঠানো হয়। এই বিজ্ঞপ্তি থেকে সাধারণ টিউটর বাদ দিতে এই বিকল্প সক্রিয় করুন।"
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "মুলতুবি পরীক্ষা প্রতিবেদনে সাধারণ টিউটরের প্রবেশাধিকার আছে এমন সব সেশনের ব্যবহারকারীদের পরীক্ষার চেষ্টা দেখান।"
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "সার্ভার-সাইড সেশনের মেয়াদ শেষ হওয়ার আগে প্রমাণীকৃত ব্যবহারকারীদের সতর্কতা দেখান।"
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "সতর্কতা দেখানোর সময় সেশনের মেয়াদ শেষ হওয়ার কত সেকেন্ড আগে। ডিফল্ট ১৮০ সেকেন্ড।"
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "ব্যবহারকারীর পাসওয়ার্ডের প্রয়োজনীয় কাঠামো নির্ধারণ করে। উদাহরণ: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}। বিশেষ অক্ষর প্রয়োজন হলে \"specials\" (বহুবচন) ব্যবহার করুন।"
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "পাসওয়ার্ড তৈরি বা আপডেটের সময় উপরে নির্ধারিত পাসওয়ার্ড প্রয়োজনীয়তার যাচাই সক্রিয় করুন।"
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "ফাইল অখণ্ডতা স্ক্যানে পরিবর্তন ধরা পড়লে বিজ্ঞপ্তি পাঠানোর কমা-পৃথক ই-মেইল ঠিকানার তালিকা। খালি রাখলে প্রতিটি বৈশ্বিক প্রশাসককে বিজ্ঞপ্তি দেওয়া হবে।"
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "বাহ্যিক অ্যাপ্লিকেশনকে (যেমন Claude.ai MCP কানেক্টর) OAuth 2.1 Dynamic Client Registration দিয়ে নিবন্ধন এবং প্রতিটি ব্যবহারকারীর নিজস্ব Chamilo অ্যাকাউন্ট ও অনুমতি দিয়ে সংযোগ করার অনুমতি দেয়। ডিফল্টে নিষ্ক্রিয়: এটি চালু না হওয়া পর্যন্ত আবিষ্কার, নিবন্ধন, অনুমোদন ও টোকেন এন্ডপয়েন্ট সব ৪০৪ ফেরায়।"
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Chamilo MCP এন্ডপয়েন্ট এবং ব্যক্তিগত MCP API কী ইন্টারফেস সক্রিয় করে। নিষ্ক্রিয় থাকলে বিদ্যমান API কী, OAuth অ্যাক্সেস টোকেন ও JWT পরিচয়পত্র /mcp-এ ব্যবহার করা যায় না।"
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "MCP ব্যবহারের অনুমতিপ্রাপ্ত Chamilo ব্যবহারকারী ভূমিকার JSON মানচিত্র। ব্যবহারকারীকে অন্তত একটি সক্রিয় ভূমিকার সাথে মিলতে হবে। এই সীমাবদ্ধতা পূর্বে তৈরি API কী ও বিদ্যমান OAuth সংযোগেও প্রযোজ্য।"
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "বিশ্বস্ত সার্ভার-টু-সার্ভার ইন্টিগ্রেশনকে (যেমন WordPress স্টোরফ্রন্ট প্লাগইন) \"chamilo:security:generate-external-api-key\" কনসোল কমান্ড দিয়ে তৈরি প্রতি-ব্যবহারকারী বাহ্যিক API কী দিয়ে সাধারণ /api এন্ডপয়েন্টে প্রমাণীকরণ করতে দেয়। ডিফল্টে নিষ্ক্রিয়: এটি চালু না হওয়া পর্যন্ত বিদ্যমান কী ব্যবহার করা যায় না।"
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "সেশন তালিকায় সেশনের উপশিরোনামে টিউটর ও তারিখ যোগ করুন।"
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "অন্যথায়, সেশন টিউটররা শুধু সক্রিয় সময়কালে সময়কালভিত্তিক সেশনে প্রবেশ করতে পারেন।"
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "সক্রিয় থাকলে, শিক্ষক/প্রশাসক কোর্সের ব্যবহারকারী টুল থেকে একবারের আমন্ত্রণ লিঙ্ক পাঠাতে পারেন, যাতে অনিবন্ধিত ব্যক্তি নিবন্ধন ফর্মে পৌঁছে সাধারণ স্ব-নিবন্ধন (allow_registration) নিষ্ক্রিয় থাকলেও নিবন্ধন করতে পারেন।"
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "পৃথক জমা বা অ্যাসাইনমেন্ট প্যাকেজ ডাউনলোড করার সময় অ্যাসাইনমেন্ট ফাইলের নামে শিক্ষার্থীর পূর্ণ নাম যোগ করুন।"
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "শিক্ষকদের এক WYSIWYG ক্রিয়ায় সব সক্রিয় প্ল্যাটফর্ম ভাষার অনুবাদ তৈরি করতে দেয়। এতে প্রচুর AI টোকেন খরচ হতে পারে।"
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "নিষ্ক্রিয় থাকলে, কোর্স সম্পাদনা পৃষ্ঠায় সেশন কোর্সে দ্রুত টিউটর নিয়োগের লিঙ্ক প্রশাসকদের থাকে না।"
+
+msgid "Show courses & sessions"
+msgstr "কোর্স ও সেশন দেখান"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "ঐচ্ছিক JSON। উদাহরণ: {\"speed\": true}"
+
+msgid "Table"
+msgstr "সারণি"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "থিম"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "কোর্স টিউটর ইমেইল প্রেরক"
+
+msgid "Card (visual blocks)"
+msgstr "কার্ড (ভিজ্যুয়াল ব্লক)"
+
+msgid "List (classic)"
+msgstr "তালিকা (ক্লাসিক)"
+
+msgid "Limit identical emails"
+msgstr "অভিন্ন ইমেইল সীমিত করুন"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "একজন শিক্ষক বা প্রশিক্ষক যে সর্বোচ্চ সংখ্যক কোর্স তৈরি করতে পারেন। সীমা নিষ্ক্রিয় করতে ০ সেট করুন।"
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "একই ইমেইলে অনুমোদিত সর্বোচ্চ অ্যাকাউন্ট সংখ্যা। সীমা নিষ্ক্রিয় করতে ০ সেট করুন।"
+
+msgid "Validation"
+msgstr "যাচাইকরণ"
+
+msgid "Test/Development"
+msgstr "পরীক্ষা/উন্নয়ন"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "/admin-dashboard/register থেকে সেশন অনুসন্ধান ও নামকরণের সময় ব্যবহারের জন্য ব্যবহারকারীর অতিরিক্ত ফিল্ড কী।"
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "অনুসন্ধান প্রিফিল্টার ফিল্ডের জন্য JSON কনফিগারেশন।"
 

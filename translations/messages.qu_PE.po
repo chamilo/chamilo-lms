@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Fórmula qhawarina: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulamanta qhawarina: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -24068,6 +24068,18 @@ msgstr "Yachakunaman yachay qhawarina: Puyñu yachayniy, yachak suyakuywan kutic
 msgid "Signed in as"
 msgstr "Qillqasqan"
 
+msgid "Authorize application"
+msgstr "Rurana kaqta kamachiy"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "Chamilo yupayniykiman tinkuyta munan."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Kay ruranaqa Chamilopi qam hina llamk’ayta atinqa — kachkaq yupayniyki kamachiykunawan, manataq aswanwan. Manam hayk’aqpas mana kapusqayki yaykuyta hap’inqachu."
+
+msgid "Allow"
+msgstr "Saqiy"
+
 msgid "Remember me"
 msgstr "Yuyarina"
 
@@ -31433,6 +31445,9 @@ msgstr "Yachakuypaq qillqakuy paganaman kutiy"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Autentikatsiyun willakuykuna qillqasqakuna"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Mana ima chiqaqchay ñanpas akllasqachu. Kayqa akllasqa ruraqkunapaq kay URLpi llapan chiqaqchay ñankunata qichun, chaymi yaykuyta hark’ayta atinman. ¿Qatiykichu?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Consejo: “— Ñawpaq willakuy —” rurayniyuqta akllay, mana kamachirqanman."
@@ -41222,4 +41237,316 @@ msgstr "Chaqrusqa yachakuy"
 
 msgid "Memory palaces"
 msgstr "Yuyay wasikuna"
+
+msgid "Logins (Month)"
+msgstr "Yaykuykuna (killa)"
+
+msgid "Logins (Day)"
+msgstr "Yaykuykuna (p’unchaw)"
+
+msgid "Logins (Hour)"
+msgstr "Yaykuykuna (ura)"
+
+msgid "Number of users (Picture)"
+msgstr "Ruraqkuna yupaynin (rikch’a)"
+
+msgid "Allow tutors to register users"
+msgstr "Yachachiqkunata ruraqkunata qillqachiyta saqiy"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Yachachiqkunata kursu sessionkunapi allinchayta saqiy"
+
+msgid "Extend rights for tutors"
+msgstr "Yachachiqkunapaq hayñikunata mast’ariy"
+
+msgid "Show session tutor"
+msgstr "Session yachachiqta rikuchiy"
+
+msgid "Default tutor access days after session"
+msgstr "Session qhipaman yachachiqpa yaykunan p’unchawkuna (ñawpaqmanta)"
+
+msgid "Default tutor access days before session"
+msgstr "Session ñawpaqman yachachiqpa yaykunan p’unchawkuna (ñawpaqmanta)"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: kursu yachachiqta pakay"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Dropboxpi hatun yachachiqta pakay"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Tapukuykunapi yachachiqkunapaq hayñikunata mast’ariy"
+
+msgid "Maximum courses per user"
+msgstr "Ruraq sapaqpa aswan achka kursunkuna"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Yachachiqkunata ruwaykunata qhawaspa rimariyta saqiy"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Apachisqa quiz ruwasqa PDF sutiman kamachikuq kodigota yapay"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Certificadopa puchukay yuyarichiq cron"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Certificadopa puchukay yuyarichiq ventana (p’unchawkuna)"
+
+msgid "Allow certificates search"
+msgstr "Certificadokuna maskayta saqiy"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Yachachiqkunata willakuykunata sapa kuti allinchayta saqiy"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Yachakuqkunapa kamachikuq kodigonta asistencia rapikunapi rikuchiy"
+
+msgid "Restrict course chat to tutors"
+msgstr "Kursu rimanakuyta yachachiqkunallaman hark’ay"
+
+msgid "Language by resource"
+msgstr "Simi sapaq recursorayku"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Lluqsispa SCO hunt’achiy status mana hunt’asqa kachkaptin"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Categoria destino ruranawan progresivo adaptive pruebakunata kichay"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Hatun yachachiqman prueba willakuykuna kachayta hark’ay"
+
+msgid "Enable session expiration warning"
+msgstr "Session puchukay yuyarichiqta kichay"
+
+msgid "Session expiration warning time"
+msgstr "Session puchukay yuyarichiq pacha"
+
+msgid "Check password requirements"
+msgstr "Yaykuna rimaypa kamachiykunata qhaway"
+
+msgid "File integrity check notification recipients"
+msgstr "Archivo integridad qhaway willakuy chaskiqkuna"
+
+msgid "Enable the OAuth authorization server"
+msgstr "OAuth kamachiy servidor kichay"
+
+msgid "Enable MCP server"
+msgstr "MCP servidor kichay"
+
+msgid "Allow MCP by roles"
+msgstr "MCP-ta ruwaykunawan saqiy"
+
+msgid "Enable external API keys"
+msgstr "Hawa API llavikunata kichay"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Unayninrayku sessionkuna yachachiqkunaman sapa kuti kachkan"
+
+msgid "Allow registration via course invitation links"
+msgstr "Kursu invitacion tinkikunawan qillqachikuyta saqiy"
+
+msgid "Add student fullname in file download name"
+msgstr "Archivo uraykachiy sutiman yachakuqpa hunt’asqa sutinta yapay"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "WYSIWYG editornkunapi llapan kachkaq simikunaman IA t’ikrayta saqiy"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Kursu yachachiqkunata allinchay atiyta hark’ay"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Sessionkunata llamk’achispa, ñawpaqmantaqa hatun kursupi definisqa herramienta rikuchiyta llamk’achin. Kay churayqa chayta tikran, session kursukunapi yachachiqkunata herramienta rikuchiykunata necesitayninkuman hina allinchayta saqinapaq."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Yachachiqkuna plataforma patapi ruraqkunata paqarichiyta atinku, sessionman ruraqkunata qillqachiyta atinku."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Kay akllayta kichay yachachiqkunaman yachachiqkunahina hayñikunata qunapaq ruway herramientaspi"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Kursu listapi session suti cajapi hatun session yachachiqpa sutinta rikuchiy"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Kichasqa kaptin, sessionkunapi kursu yachachiqkuna musuq ruraqkunata sessionninkuman qillqachiyta atinku. Kay akllayqa mana chayqa kamachiqkunallapaq, session kamachiqkunallapaqmi."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Sessionpa kamachisqa tukukuyninmanta qhipaman yachachiqpa sessionman yaykunan p'unchawkunaq ñawpaqmanta yupaynin"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Sessionpa kamachisqa qallariyninmanta ñawpaqman yachachiqpa sessionman yaykunan p'unchawkunaq ñawpaqmanta yupaynin"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "MathJax libreríata kachariy yupana qillqakunata rikuchinanpaq. Kayqa editorpa toolbarman fórmula butunta yapaykun, chaypi LaTeX nisqawan qillqakun."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Curso códigokuna \"|\" nisqawan t'aqasqa. Runakunaq kamachiqnin yaykuqtin, ruraqqa kay cursokunaman kikinmanta qillqachikun. Qhawariy: COURSE001|COURSE002. Kayqa ruraqpa rolinta mana tikranchu."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Curso códigokuna \"|\" nisqawan t'aqasqa. Session kamachiq yaykuqtin, ruraqqa kay cursokunaman kikinmanta qillqachikun. Qhawariy: COURSE001|COURSE002. Kayqa ruraqpa rolinta mana tikranchu."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Curso códigokuna \"|\" nisqawan t'aqasqa. Yachakuq yaykuqtin, ruraqqa kay cursokunaman kikinmanta qillqachikun. Qhawariy: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Curso códigokuna \"|\" nisqawan t'aqasqa. Yachachiq yaykuqtin, ruraqqa kay cursokunaman kikinmanta qillqachikun. Qhawariy: COURSE001|COURSE002. Kayqa curso yachachiqpa atiykunata mana qunchu."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Dropboxpi session curso yachachiqta pakay, yachachiq qillqata yachakuqkunaman kachaqtin"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Dropbox llamk'anapi hatun yachachiqpa sutinta pakay, hatun yachachiq archivochayta churaqtin"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Kay akllayta kachariy yachachiqkuna tapukuykunata ruwananpaq hinaspa allichananpaq"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Tapukuy waqyaykuna yachachiqpa correo ninkunachu icha hatun allichaypi churasqa mana kutichina (no-reply) direcciontachu llamk'achinman?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Yachachiq/yachachiqpa ruway atisqan cursokunaq aswan hatun yupaynin. 0 churay sayayta hark'ananpaq. Ruraq sapaqpi BuyCourses llamk'ay rantinwan tikrakunman."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Yachachiqkuna ejercicioq qhawariyninpi kutichiyta allichayta saqiy"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Quizpa ruwayninta PDF nisqaman apachispa, yachakuqpa kamachisqa codigonta archivo sutinpi churanachu"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Llapan sapaq archivokunaman hark'aylla mana yaykuyta saqin"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "app:send-certificate-expiry-reminders cron nisqata kachariy, certificado tukusqan icha tukukunan kachkaq yachakuqkunata yuyarichinanpaq."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Tukukunan kachkaq certificadokunata maskhanapaq ñawpaq p'unchawkunaq ñawpaqmanta yupaynin, cron --days-ahead nisqawan mana purichisqa kaptin."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Ruraqkuna hinaspa watukuqkuna hanaq barra menumanta ruwasqa certificadokunata maskhanankuta saqiy."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Yachachiqkuna kachkaq icha ñawpaq sessionkunapi willaykunata sapa kuti allichayta saqiy."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Asistencia listakunapi hinaspa qillqakunapi yachakuqkunapa kamachisqa codigonta sutinwan kuska rikuchinachu."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Sapaq recursokunaman huk simita churayta saqiy."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Wakin SCORM paquetekunaqa LMSSetValue(cmi.core.lesson_status, 'incomplete') huk kuti llamk'achinku, mana chiqap tukukuq estado nitaqa mana allin LMSFinish() nitaqa kachankuchu. Kayta kachariy Chamilo chay qhipasqa 'incomplete' nisqata mana estado hina qhawanapaq, yachakuq SCO nisqamanta lluqsiqtin hunt'ayta allichananpaq."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Yachay ñan mana rikukuq kachkaptin icha yachachiq icha tutor cursoq qallariy p'anqanmanta rikuchiyta akllarqan chayqa, kay akllayqa Chamilota cursoq qallariy p'anqanpi t'inkita pakaymanta hark'an."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Pisi pisi adaptive pruebakunata kachariy, sapa tapukuy categoriaq puntunman hina yachakuqta huk categorieman pusananpaq."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Yachakuqkuna pruebata tukuchispa, willaykuna sapa kuti yachachiqkunaman kachakun, hatun session yachachiqpas. Kay akllayta kachariy hatun yachachiqta kay willaykunamanta qichunanpaq."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Suyasqa pruebakunaq willayninpi hatun yachachiqpa yaykunan llapan sessionkunapi ruraqkunaq prueba ruwayninkunata rikuchiy."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Yaykusqa ruraqkunaman servidorpa sessionnin tukukunankama ñawpaq willakuyta rikuchiy."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Willakuy rikuchisqa kaptin session tukukuyninmanta ñawpaq segundos yupaynin. Ñawpaqmantaqa 180 segundos."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Ruraqpa yaykuna siminpaq mañakusqa sayayta ninan. Qhawariy: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. \"specials\" (achka) llamk'achiy sapaq sanakunata mañananpaq."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Yaykuna simi ruwaypi icha musuqyachiy pi, hawanpi ninasqa yaykuna simi mañakuykunata chiqaqchayta kachariy."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Archivoq hunt'asqa kaynin qhaway huk tikrayta tarispa willanapaq correo direccionkuna, comawan t'aqasqa. Ch'usaq saqiy llapan hatun kamachiqkunaman willananpaq."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Hawa aplicacionkuna (qhawariy: Claude.ai MCP t'inki) OAuth 2.1 Dynamic Client Registration nisqawan qillqakuyta hinaspa sapa ruraqpa kikin Chamilo yupayninwan hinaspa atiykunawan t'inkikuyta saqin. Ñawpaqmanta hark'asqa: taripay, qillqakuy, saqiy hinaspa token puntokunaqa 404 kutichinku kay kacharisqa kachkankama."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Chamilo MCP puntota hinaspa sapaq MCP API llave uyata kacharichin. Hark'asqa kaptin, kachkaq API llavekuna, OAuth yaykuy tokenkuna hinaspa JWT credencialkunaqa /mcp nisqapi mana llamk'achikunmanchu."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "MCP llamk'achinanpaq saqisqa Chamilo ruraq rolkunaq JSON mapan. Ruraqqa huk kacharisqa rolwan tupanan. Kay hark'ayqa ñawpaq ruwasqa API llavekunaman hinaspa kachkaq OAuth t'inkikunamanpas chayan."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Iñisqa servidor-servidor t'inkikuna (qhawariy: WordPress tienda plugin) hatun /api puntoman sapa ruraqpa hawa API llavenwan yaykuyta saqin, \"chamilo:security:generate-external-api-key\" consola kamachiywan ruwasqa. Ñawpaqmanta hark'asqa: kachkaq llavekunaqa kay kacharisqa kachkankama mana llamk'achikunmanchu."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Session listapi sessionpa uray qillqanman yachachiqta hinaspa p'unchawkunata yapay."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Mana chayqa, session yachachiqkunaqa unaywan sessionkunaman kachkaq unayllapi yaykunku."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Kacharisqa kaptin, yachachiq/kamachiq cursoq Ruraqkuna llamk'aninmanta huk kuti waqyay t'inkita kachayta atin, mana qillqasqa runa qillqakuy formularioman chayananpaq hinaspa qillqakunanpaq, hatun kikin qillqakuy (allow_registration) hark'asqa kaptinpas."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Sapaq apachiykunata icha tarea paquetekunata uraykachispa, tarea archivo sutikunaman yachakuqpa hunt'asqa sutinta yapay."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Yachachiqkuna huk WYSIWYG ruwayllawan llapan kachkaq plataforma simikunapaq tikraykunata ruwayta saqin. Kayqa achka AI tokenkunata tukuchinman."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Hark'asqa kaptin, kamachiqkunaqa curso allichay p'anqapi session cursokunaman yachachiqkunata utqaylla churanapaq t'inkita mana kanchu."
+
+msgid "Show courses & sessions"
+msgstr "Cursokunata sessionkunatapas rikuchiy"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "Munasqa JSON. Qhawariy: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Tabla"
+
+msgid "LoginIsEmailTitle"
+msgstr "YaykuyqaCorreoSutin"
+
+msgid "Theme"
+msgstr "Rikch'ay"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Curso yachachiqpa correo kachaqnin"
+
+msgid "Card (visual blocks)"
+msgstr "Tarjeta (rikuna bloques)"
+
+msgid "List (classic)"
+msgstr "Lista (clásico)"
+
+msgid "Limit identical emails"
+msgstr "Kikillan correokunata sayachiy"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Yachachiq icha entrenadorpa ruwayta atisqan cursokunaq aswan hatun yupaynin. 0 churay sayachiyta hark'anapaq."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Kikillan correowan saqisqa cuentakunaq aswan hatun yupaynin. 0 churay sayachiyta hark'anapaq."
+
+msgid "Validation"
+msgstr "Chiqaqchay"
+
+msgid "Test/Development"
+msgstr "Prueba/Desarrollo"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Usuarioq extra campo llaven maskaypi hinaspa sessionkunata sutichanapaq /admin-dashboard/register-manta."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "JSON configuración maskay prefiltro campokunapaq."
 

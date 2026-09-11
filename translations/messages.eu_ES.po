@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula-adibidea: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulen adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -24073,6 +24073,18 @@ msgstr "Erakutsi emaitza ikasleari: Erakutsi puntuazioa, ikaslearen aukera eta f
 msgid "Signed in as"
 msgstr "Saioa hasita honekin"
 
+msgid "Authorize application"
+msgstr "Baimendu aplikazioa"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "zure Chamilo kontura konektatu nahi du."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Aplikazio honek zuk bezala jardun ahal izango du Chamilo-n — zure kontuaren baimen berberak erabiliz, eta ez gehiago. Ez du inoiz zuk ez duzun sarbiderik lortuko."
+
+msgid "Allow"
+msgstr "Baimendu"
+
 msgid "Remember me"
 msgstr "Gogoratu ninduten"
 
@@ -31438,6 +31450,9 @@ msgstr "Itzuli erabiltzaile esleipen orrialdera"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Autentifikazio iturriak ongi esleitu dira"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Ez da autentifikazio-metodurik hautatu. Honek URL honetan hautatutako erabiltzaile(ar)en autentifikazio-metodo guztiak kentzen ditu, eta saioa hastea eragotz diezaieke. Jarraitu?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Aholku: hautatu «— soilik igo —» inorentzat bidali gabe gordetzeko."
@@ -41227,4 +41242,316 @@ msgstr "Ikasketa tartekatua"
 
 msgid "Memory palaces"
 msgstr "Memoria-jauregiak"
+
+msgid "Logins (Month)"
+msgstr "Saio-hasierak (hilabetea)"
+
+msgid "Logins (Day)"
+msgstr "Saio-hasierak (eguna)"
+
+msgid "Logins (Hour)"
+msgstr "Saio-hasierak (ordua)"
+
+msgid "Number of users (Picture)"
+msgstr "Erabiltzaile kopurua (argazkia)"
+
+msgid "Allow tutors to register users"
+msgstr "Baimendu tutoreei erabiltzaileak erregistratzea"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Baimendu tutoreei ikastaro-saioetan editatzeko"
+
+msgid "Extend rights for tutors"
+msgstr "Zabaldu tutoreen eskubideak"
+
+msgid "Show session tutor"
+msgstr "Erakutsi saioaren tutorea"
+
+msgid "Default tutor access days after session"
+msgstr "Tutorearen sarbide-egun lehenetsiak saioaren ondoren"
+
+msgid "Default tutor access days before session"
+msgstr "Tutorearen sarbide-egun lehenetsiak saioaren aurretik"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: ezkutatu ikastaroaren tutorea"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Ezkutatu tutore orokorra Dropbox-en"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Zabaldu tutoreen eskubideak inkestetan"
+
+msgid "Maximum courses per user"
+msgstr "Erabiltzaile bakoitzeko ikastaro kopuru maximoa"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Baimendu tutoreei iruzkinak egitea ariketak zuzentzean"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Sartu kode ofiziala esportatutako galdetegiaren emaitzen PDF fitxategi-izenean"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Ziurtagiriaren iraungitze-abisuaren cron-a"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Ziurtagiriaren iraungitze-abisuaren leihoa (egunak)"
+
+msgid "Allow certificates search"
+msgstr "Baimendu ziurtagirien bilaketa"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Baimendu tutoreei iragarkiak beti editatzeko"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Erakutsi ikasleen kode ofiziala asistentzia-orrietan"
+
+msgid "Restrict course chat to tutors"
+msgstr "Mugatu ikastaroko txata tutoreei"
+
+msgid "Language by resource"
+msgstr "Hizkuntza baliabidearen arabera"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Osatu SCO irtetean egoera osatu gabe geratzen denean"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Gaitu kategoria-helmugaren araberako proba moldakor progresiboak"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Blokeatu proba-jakinarazpenak tutore orokorrari bidaltzea"
+
+msgid "Enable session expiration warning"
+msgstr "Gaitu saioaren iraungitze-abisua"
+
+msgid "Session expiration warning time"
+msgstr "Saioaren iraungitze-abisuaren denbora"
+
+msgid "Check password requirements"
+msgstr "Egiaztatu pasahitzaren eskakizunak"
+
+msgid "File integrity check notification recipients"
+msgstr "Fitxategiaren osotasun-egiaztapenaren jakinarazpenen hartzaileak"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Gaitu OAuth baimen-zerbitzaria"
+
+msgid "Enable MCP server"
+msgstr "Gaitu MCP zerbitzaria"
+
+msgid "Allow MCP by roles"
+msgstr "Baimendu MCP rolen arabera"
+
+msgid "Enable external API keys"
+msgstr "Gaitu kanpoko API gakoak"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Iraupenaren araberako saioak beti eskuragarri tutoreentzat"
+
+msgid "Allow registration via course invitation links"
+msgstr "Baimendu erregistroa ikastaroaren gonbidapen-esteken bidez"
+
+msgid "Add student fullname in file download name"
+msgstr "Gehitu ikaslearen izen osoa deskargatutako fitxategiaren izenean"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Baimendu IA itzulpena hizkuntza aktibo guztietara WYSIWYG editoreetan"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Desgaitu ikastaro-tutoreak editatzeko aukera"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Saioak erabiltzean, portaera lehenetsia oinarrizko ikastaroan definitutako tresnen ikusgarritasuna erabiltzea da. Ezarpen honek hori aldatzen du, saioetako ikastaroetako tutoreei tresnen ikusgarritasuna beren beharretara egokitzeko aukera emateko."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Tutoreek plataforman erabiltzaileak sor ditzakete eta erabiltzaileak saio batean izena eman dezakete."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Gaitu aukera hau tutoreei prestatzaileen baimen berberak emateko egile-tresnetan"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Erakutsi saioaren tutore orokorraren izena ikastaro-zerrendako saioaren izenburu-koadroan"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Gaituta dagoenean, saioetako ikastaro-tutoreek erabiltzaile berriak izena eman ditzakete beren saioan. Bestela, aukera hau administratzaileentzat eta saio-administratzaileentzat bakarrik dago eskuragarri."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Tutore batek saio ofizialaren amaiera-dataren ondoren saiora sartzeko egun kopuru lehenetsia"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Tutore batek saio ofizialaren hasiera-dataren aurretik saiora sartzeko egun kopuru lehenetsia"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Gaitu MathJax liburutegia formula matematikoak bistaratzeko. Honek formula-botoi bat gehitzen du editorearen tresna-barran; formulak LaTeX-en idazten dira."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Ikastaro-kodeak \"|\" bidez bereizita. Giza baliabideen zuzendari bat saioa hasten duenean, erabiltzailea automatikoki harpidetzen da ikastaro hauetara. Adibidea: COURSE001|COURSE002. Honek ez du erabiltzailearen rola aldatzen."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Ikastaro-kodeak \"|\" bidez bereizita. Saio-administratzaile bat saioa hasten duenean, erabiltzailea automatikoki harpidetzen da ikastaro hauetara. Adibidea: COURSE001|COURSE002. Honek ez du erabiltzailearen rola aldatzen."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Ikastaro-kodeak \"|\" bidez bereizita. Ikasle bat saioa hasten duenean, erabiltzailea automatikoki harpidetzen da ikastaro hauetara. Adibidea: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Ikastaro-kodeak \"|\" bidez bereizita. Irakasle bat saioa hasten duenean, erabiltzailea automatikoki harpidetzen da ikastaro hauetara. Adibidea: COURSE001|COURSE002. Honek ez du ikastaroko irakasle-baimenik ematen."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Ezkutatu saioaren ikastaro-tutorea Dropbox-en tutoreak dokumentu bat ikasleei bidaltzen dienean"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Ezkutatu tutore orokorraren izena Dropbox tresnan tutore orokorrak fitxategia igo duenean"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Gaitu aukera hau tutoreek inkestak sortu eta editatu ahal izateko"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Inkesta-gonbidapenek tutorearen helbide elektronikoa erabili behar dute ala konfigurazio nagusian definitutako no-reply helbidea?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Irakasle/prestakuntza-emaile batek sor ditzakeen ikastaroen gehienezko kopurua. Ezarri 0 muga desgaitzeko. Erabiltzaileka gainidatzi daiteke BuyCourses zerbitzu-erosketa baten bidez."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Utzi tutoreei feedbacka editatzeko ariketak zuzentzean"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Ikaslearen kode ofiziala fitxategi-izenean sartu behar den galdetegiaren emaitza PDFra esportatzean"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Fitxategi pertsonal guztietarako sarbidea murrizketarik gabe baimentzen du"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Gaitu app:send-certificate-expiry-reminders cron-a, ziurtagiriak iraungi zaizkien edo iraungitzear dauden ikasleei gogorarazteko."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Iraungitzear dauden ziurtagiriak bilatzeko egun kopuru lehenetsia, cron-a --days-ahead-ekin exekutatzen ez bada erabiltzen dena."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Utzi erabiltzaileei eta bisitariei sortutako ziurtagiriak goiko barrako menutik bilatzen."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Utzi tutoreei iragarkiak beti editatzeko saio aktiboetan edo iraganeko saioetan."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Ikasleen kode ofiziala izenaren ondoan erakutsi behar den asistentzia-orrietan eta zerrendetan."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Utzi hizkuntza zehatz bat esleitzea baliabide indibidualei."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "SCORM pakete batzuek LMSSetValue(cmi.core.lesson_status, 'incomplete') behin bakarrik deitzen dute eta inoiz ez dute egoera terminal benetakorik bidaltzen ezta LMSFinish() esanguratsurik ere. Gaitu hau Chamilok 'incomplete' geratzen den hori egoerarik ez balitz bezala tratatzeko, ikasleak SCO-tik irtetean osatzea ebatziz."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Ikaskuntza-ibilbidea ikusezin gisa ezarrita badago baina irakasleak edo tutoreak ikastaroaren hasiera-orritik eskuragarri jartzea erabaki badu, aukera honek Chamilok ikastaroaren hasiera-orriko esteka ezkutatzea saihesten du."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Gaitu proba moldakor progresiboak, non galdera-kategoria bakoitzak ikasleak beste kategoria batera bideratu ditzakeen puntuazioaren arabera."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Ikasleek proba bat osatzen dutenean, jakinarazpenak normalean tutoreei bidaltzen zaizkie, saioaren tutore orokorra barne. Gaitu aukera hau tutore orokorra jakinarazpen hauetatik kanpo uzteko."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Erakutsi tutore orokorrak sarbidea duen saio guztietako erabiltzaileen proba-saiakerak zain dauden proben txostenean."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Erakutsi abisu bat autentifikatutako erabiltzaileei zerbitzariko saioa iraungi aurretik."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Saioa iraungi aurreko segundo kopurua abisua erakusten denean. Lehenetsia 180 segundo da."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Erabiltzaile-pasahitzen beharrezko egitura definitzen du. Adibidea: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Erabili \"specials\" (plurala) karaktere bereziak eskatzeko."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Gaitu goian definitutako pasahitz-eskakizunen balidazioa pasahitza sortzean edo eguneratzean."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Fitxategi-osotasunaren eskaneatze batek aldaketa bat detektatzen duenean jakinarazteko helbide elektronikoen zerrenda, komaz bereizita. Utzi hutsik administratzaile global guztiei jakinarazteko."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Kanpoko aplikazioei (adib. Claude.ai MCP konektorea) OAuth 2.1 Dynamic Client Registration bidez erregistratzeko eta erabiltzaile bakoitzaren Chamilo kontu eta baimenekin konektatzeko aukera ematen die. Lehenespenez desgaituta: discovery, erregistro, baimen eta token amaierako puntuek 404 itzultzen dute hau piztu arte."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Chamilo MCP amaierako puntua eta MCP API gako pertsonalaren interfazea gaitzen ditu. Desgaituta dagoenean, dauden API gakoak, OAuth sarbide-tokenak eta JWT kredentzialak ezin dira /mcp-n erabili."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "MCP erabiltzeko baimendutako Chamilo erabiltzaile-rolen JSON mapa. Erabiltzaileak gutxienez rol gaituren batekin bat etorri behar du. Murrizketa hau aurretik sortutako API gakoei eta dauden OAuth konexioei ere aplikatzen zaie."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Konfiantzazko zerbitzari-zerbitzari integrazioei (adib. WordPress dendako plugina) /api amaierako puntu orokorrean autentifikatzeko aukera ematen die erabiltzaileko kanpoko API gako batekin, \"chamilo:security:generate-external-api-key\" kontsola-komandoaren bidez sortua. Lehenespenez desgaituta: dauden gakoak ezin dira erabili hau piztu arte."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Gehitu tutorea eta datak saioaren azpitituluan saio-zerrendan."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Bestela, saio-tutoreek iraupenaren araberako saioetarako sarbidea dute soilik iraupen aktiboan."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Gaituta dagoenean, irakasle/administratzaile batek ikastaroaren Erabiltzaileak tresnatik behin-behineko gonbidapen-esteka bat bidal dezake, erregistratu gabeko pertsona batek erregistro-formulariora iritsi eta erregistratu ahal izateko, autoerregistro orokorra (allow_registration) desgaituta dagoenean ere."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Gehitu ikaslearen izen osoa zeregin-fitxategien izenei bidalketa indibidualak edo zeregin-paketeak deskargatzean."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Irakasleei plataforma-hizkuntza aktibo guztietarako itzulpenak WYSIWYG ekintza bakarrean sortzeko aukera ematen die. Honek AI token kopuru handia kontsumitu dezake."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Desgaituta dagoenean, administratzaileek ez dute estekarik tutoreak saio-ikastaroetara azkar esleitzeko ikastaroa editatzeko orrian."
+
+msgid "Show courses & sessions"
+msgstr "Erakutsi ikastaroak eta saioak"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON aukerakoa. Adibidea: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Taula"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Gaia"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Ikastaroaren tutorearen email-bidaltzailea"
+
+msgid "Card (visual blocks)"
+msgstr "Txartela (bloke bisualak)"
+
+msgid "List (classic)"
+msgstr "Zerrenda (klasikoa)"
+
+msgid "Limit identical emails"
+msgstr "Email berdinak mugatu"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Irakasle edo prestatzaile batek sor ditzakeen ikastaroen gehienezko kopurua. Ezarri 0 muga desgaitzeko."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Email berarekin onartutako kontuen gehienezko kopurua. Ezarri 0 muga desgaitzeko."
+
+msgid "Validation"
+msgstr "Balidazioa"
+
+msgid "Test/Development"
+msgstr "Proba/Garapena"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Erabiltzailearen eremu gehigarriaren gakoa, saioak /admin-dashboard/register-etik bilatu eta izendatzeko."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Bilaketaren aurre-iragazkien eremuen JSON konfigurazioa."
 

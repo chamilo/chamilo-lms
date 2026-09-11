@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "S spoštovanjem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Obseg spremenljivk območja"
@@ -24082,6 +24082,18 @@ msgstr "Prikaži rezultat učečemu: Pokaži rezultat, izbiro učečega in njego
 msgid "Signed in as"
 msgstr "Prijavljen kot"
 
+msgid "Authorize application"
+msgstr "Pooblasti aplikacijo"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "želi vzpostaviti povezavo z vašim računom Chamilo."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Ta aplikacija bo lahko delovala v Chamilu enako kot vi — z obstoječimi dovoljenji vašega računa in nič več. Nikoli ne bo pridobila dostopa, ki ga že nimate."
+
+msgid "Allow"
+msgstr "Dovoli"
+
 msgid "Remember me"
 msgstr "Zapomni si me"
 
@@ -31447,6 +31459,9 @@ msgstr "Nazaj na stran dodelitve uporabnika"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Viri preverjanja pristnosti uspešno dodeljeni"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Ni izbrana nobena metoda overjanja. To odstrani vse metode overjanja za izbrane uporabnike na tem URL-ju, kar jim lahko prepreči prijavo. Nadaljujem?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Nasvet: izberite „— Samo naloži —“, da shranite brez pošiljanja komurkoli."
@@ -41236,4 +41251,316 @@ msgstr "Prepleteno učenje"
 
 msgid "Memory palaces"
 msgstr "Palače spomina"
+
+msgid "Logins (Month)"
+msgstr "Prijave (mesec)"
+
+msgid "Logins (Day)"
+msgstr "Prijave (dan)"
+
+msgid "Logins (Hour)"
+msgstr "Prijave (ura)"
+
+msgid "Number of users (Picture)"
+msgstr "Število uporabnikov (slika)"
+
+msgid "Allow tutors to register users"
+msgstr "Dovoli tutorjem registracijo uporabnikov"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Dovoli tutorjem urejanje znotraj sej tečaja"
+
+msgid "Extend rights for tutors"
+msgstr "Razširi pravice tutorjev"
+
+msgid "Show session tutor"
+msgstr "Prikaži tutorja seje"
+
+msgid "Default tutor access days after session"
+msgstr "Privzeti dnevi dostopa tutorja po seji"
+
+msgid "Default tutor access days before session"
+msgstr "Privzeti dnevi dostopa tutorja pred sejo"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: skrij tutorja tečaja"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Skrij splošnega tutorja v Dropboxu"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Razširi pravice tutorjev pri anketah"
+
+msgid "Maximum courses per user"
+msgstr "Največje število tečajev na uporabnika"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Dovoli tutorjem komentiranje pri pregledu vaj"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Vključi uradno kodo v ime izvožene PDF datoteke z rezultati kviza"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron za opomnik o poteku certifikata"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Okno opomnika o poteku certifikata (dnevi)"
+
+msgid "Allow certificates search"
+msgstr "Dovoli iskanje certifikatov"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Dovoli tutorjem vedno urejati obvestila"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Prikaži uradno kodo študentov na listah prisotnosti"
+
+msgid "Restrict course chat to tutors"
+msgstr "Omeji klepet tečaja na tutorje"
+
+msgid "Language by resource"
+msgstr "Jezik po viru"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Dokončaj SCO ob odhodu, če status ostane nedokončan"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Omogoči progresivne prilagodljive teste po ciljni kategoriji"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Blokiraj pošiljanje obvestil o testih splošnemu tutorju"
+
+msgid "Enable session expiration warning"
+msgstr "Omogoči opozorilo o poteku seje"
+
+msgid "Session expiration warning time"
+msgstr "Čas opozorila o poteku seje"
+
+msgid "Check password requirements"
+msgstr "Preveri zahteve za geslo"
+
+msgid "File integrity check notification recipients"
+msgstr "Prejemniki obvestil o preverjanju celovitosti datotek"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Omogoči OAuth pooblastitveni strežnik"
+
+msgid "Enable MCP server"
+msgstr "Omogoči MCP strežnik"
+
+msgid "Allow MCP by roles"
+msgstr "Dovoli MCP po vlogah"
+
+msgid "Enable external API keys"
+msgstr "Omogoči zunanje API ključe"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Seje po trajanju so tutorjem vedno na voljo"
+
+msgid "Allow registration via course invitation links"
+msgstr "Dovoli registracijo prek povezav za povabilo na tečaj"
+
+msgid "Add student fullname in file download name"
+msgstr "Dodaj polno ime študenta v ime prenesene datoteke"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Dovoli AI prevod v vse aktivne jezike v urejevalnikih WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Onemogoči možnost urejanja tutorjev tečaja"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Pri uporabi sej je privzeto vedenje uporaba vidnosti orodij, določene v osnovnem tečaju. Ta nastavitev to spremeni, da tutorjem v tečajih seje omogoči prilagoditev vidnosti orodij njihovim potrebam."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Tutorji lahko ustvarjajo uporabnike na platformi in vpisujejo uporabnike v sejo."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Omogočite to možnost, da tutorjem daste enaka dovoljenja kot trenerjem pri avtorskih orodjih"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Prikaži ime splošnega tutorja seje v polju naslova seje na seznamu tečajev"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Če je omogočeno, lahko tutorji tečaja v sejah vpišejo nove uporabnike v svojo sejo. Ta možnost je sicer na voljo samo skrbnikom in skrbnikom sej."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Privzeto število dni, ko lahko tutor dostopa do seje po uradnem datumu konca seje"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Privzeto število dni, ko lahko tutor dostopa do seje pred uradnim datumom začetka seje"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Omogoči knjižnico MathJax za prikaz matematičnih formul. V orodno vrstico urejevalnika doda gumb za formule, ki se pišejo v LaTeX-u."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kode tečajev, ločene z \"|\". Ko se direktor kadrov prijavi, je uporabnik samodejno vpisan v te tečaje. Primer: COURSE001|COURSE002. To ne spremeni vloge uporabnika."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kode tečajev, ločene z \"|\". Ko se skrbnik sej prijavi, je uporabnik samodejno vpisan v te tečaje. Primer: COURSE001|COURSE002. To ne spremeni vloge uporabnika."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Kode tečajev, ločene z \"|\". Ko se učenec prijavi, je uporabnik samodejno vpisan v te tečaje. Primer: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Kode tečajev, ločene z \"|\". Ko se učitelj prijavi, je uporabnik samodejno vpisan v te tečaje. Primer: COURSE001|COURSE002. To ne podeli dovoljenj učitelja tečaja."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Skrij tutorja tečaja seje v Dropboxu, ko tutor pošlje dokument študentom"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Skrij ime splošnega tutorja v orodju Dropbox, ko je datoteko naložil splošni tutor"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Omogočite to možnost, da tutorjem dovolite ustvarjanje in urejanje anket"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Ali naj vabila za ankete uporabljajo e-poštni naslov tutorja ali naslov no-reply, določen v glavnem razdelku nastavitev?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Največje število tečajev, ki jih lahko ustvari učitelj/trener. Nastavite na 0, da onemogočite omejitev. Lahko se preglasi za posameznega uporabnika z nakupom storitve BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Dovoli tutorjem urejanje povratnih informacij pri pregledu vaj"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Ali naj se ob izvozu rezultata kviza v PDF v ime datoteke vključi uradna koda študenta"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Omogoča neomejen dostop do vseh osebnih datotek"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Omogoči cron app:send-certificate-expiry-reminders, ki opomni učence, katerih potrdila so potekla ali bodo kmalu potekla."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Privzeto število dni vnaprej za iskanje potrdil, ki bodo kmalu potekla, razen če se cron zažene z --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Dovoli uporabnikom in obiskovalcem iskanje ustvarjenih potrdil v meniju zgornje vrstice."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Dovoli tutorjem, da vedno urejajo obvestila v aktivnih ali preteklih sejah."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Ali naj se uradna koda študentov prikaže poleg njihovega imena na listah prisotnosti in seznamih."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Dovoli dodelitev določenega jezika posameznim virom."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Nekateri paketi SCORM pokličejo LMSSetValue(cmi.core.lesson_status, 'incomplete') samo enkrat in nikoli ne pošljejo pravega končnega statusa niti smiselnega LMSFinish(). Omogočite to, da Chamilo to obstojno 'incomplete' obravnava enako kot brez statusa in zaključek razreši, ko učenec zapusti SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Če je učna pot nastavljena kot nevidna, vendar se je učitelj ali tutor odločil, da jo da na voljo z začetne strani tečaja, ta možnost prepreči, da bi Chamilo skril povezavo na začetni strani tečaja."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Omogoči progresivne prilagodljive teste, kjer lahko vsaka kategorija vprašanj glede na rezultat preusmeri učence v drugo kategorijo."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Ko učenci zaključijo test, se obvestila običajno pošljejo tutorjem, vključno s splošnim tutorjem seje. Omogočite to možnost, da splošnega tutorja iz teh obvestil izpustite."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "V poročilu o čakajočih testih prikaži poskuse testov uporabnikov v vseh sejah, do katerih ima splošni tutor dostop."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Prikaži opozorilo prijavljenim uporabnikom, preden poteče njihova seja na strežniku."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Število sekund pred potekom seje, ko se prikaže opozorilo. Privzeto je 180 sekund."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Določa zahtevano strukturo gesel uporabnikov. Primer: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Uporabite \"specials\" (množina) za zahtevo posebnih znakov."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Omogoči preverjanje zgoraj določenih zahtev za geslo med ustvarjanjem ali posodobitvijo gesla."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Seznam e-poštnih naslovov, ločenih z vejico, ki jih obvestimo, ko pregled celovitosti datotek zazna spremembo. Pustite prazno, da namesto tega obvestite vse globalne skrbnike."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Zunanjim aplikacijam (npr. konektorju Claude.ai MCP) omogoča registracijo prek OAuth 2.1 Dynamic Client Registration in povezavo z lastnim računom Chamilo ter dovoljenji vsakega uporabnika. Privzeto onemogočeno: končne točke odkrivanja, registracije, avtorizacije in žetonov do vklopa vračajo 404."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Omogoči končno točko Chamilo MCP in vmesnik osebnega API-ključa MCP. Ko je onemogočeno, obstoječih API-ključev, OAuth dostopnih žetonov in poverilnic JWT ni mogoče uporabljati na /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "JSON-zemljevid vlog uporabnikov Chamilo, ki smejo uporabljati MCP. Uporabnik mora ustrezati vsaj eni omogočeni vlogi. Ta omejitev velja tudi za predhodno ustvarjene API-ključe in obstoječe OAuth povezave."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Zaupanja vrednim integracijam strežnik-strežnik (npr. vtičniku trgovine WordPress) omogoča preverjanje pristnosti na splošni končni točki /api z zunanjim API-ključem na uporabnika, ustvarjenim z ukazom konzole \"chamilo:security:generate-external-api-key\". Privzeto onemogočeno: obstoječih ključev ni mogoče uporabljati, dokler to ni vklopljeno."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Dodaj tutorja in datume v podnaslov seje na seznamu sej."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Sicer imajo tutorji sej dostop do sej po trajanju le med aktivnim trajanjem."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Ko je omogočeno, lahko učitelj/skrbnik iz orodja Uporabniki v tečaju pošlje enkratno povezavo za povabilo, ki neregistrirani osebi omogoči dostop do obrazca za registracijo in registracijo, tudi če je splošna samoregistracija (allow_registration) onemogočena."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Dodaj polno ime študenta v imena datotek nalog pri prenosu posameznih oddaj ali paketov nalog."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Učiteljem omogoča ustvarjanje prevodov za vse aktivne jezike platforme v enem dejanju WYSIWYG. To lahko porabi veliko število žetonov UI."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Ko je onemogočeno, skrbniki na strani za urejanje tečaja nimajo povezave za hitro dodelitev tutorjev tečajem seje."
+
+msgid "Show courses & sessions"
+msgstr "Prikaži tečaje in seje"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "Neobvezni JSON. Primer: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Tabela"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Pošiljatelj e-pošte tutorja tečaja"
+
+msgid "Card (visual blocks)"
+msgstr "Kartice (vizualni bloki)"
+
+msgid "List (classic)"
+msgstr "Seznam (klasičen)"
+
+msgid "Limit identical emails"
+msgstr "Omejitev enakih e-poštnih naslovov"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Največje število tečajev, ki jih lahko ustvari učitelj ali trener. Nastavite na 0, da onemogočite omejitev."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Največje število računov z istim e-poštnim naslovom. Nastavite na 0, da onemogočite omejitev."
+
+msgid "Validation"
+msgstr "Validacija"
+
+msgid "Test/Development"
+msgstr "Test/Razvoj"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Ključ dodatnega polja uporabnika za iskanje in poimenovanje sej iz /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "JSON konfiguracija za polja predfiltra iskanja."
 

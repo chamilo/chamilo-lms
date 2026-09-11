@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "ရိုးသားစွာ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ပုံသေနည်း နမူနာ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ဖော်မြူလာ နမူနာ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ပြောင်းလဲနိုင်သော အကွာအဝေးများ"
@@ -24067,6 +24067,18 @@ msgstr "သင်ယူသူအား ရလဒ်ကိုပြပါ- ရမ
 msgid "Signed in as"
 msgstr "အနေဖြင့် ဝင်ရောက်ထားသည်"
 
+msgid "Authorize application"
+msgstr "အက်ပလီကေးရှင်းကို ခွင့်ပြုရန်"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "သင့် Chamilo အကောင့်သို့ ချိတ်ဆက်လိုပါသည်။"
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "ဤအက်ပလီကေးရှင်းသည် သင့်ရှိပြီးသား အကောင့်ခွင့်ပြုချက်များအတိုင်းသာ Chamilo တွင် သင်လုပ်နိုင်သည့်အတိုင်း လုပ်ဆောင်နိုင်မည်ဖြစ်ပြီး ထို့ထက်ပိုမရပါ။ သင့်တွင် မရှိသေးသော ဝင်ရောက်ခွင့်ကို မည်သည့်အခါမျှ ရရှိမည်မဟုတ်ပါ။"
+
+msgid "Allow"
+msgstr "ခွင့်ပြုမည်"
+
 msgid "Remember me"
 msgstr "ကျွန်ုပ်ကို မှတ်ထားပါ"
 
@@ -31431,6 +31443,9 @@ msgstr "အသုံးပြုသူ တိုင်းတာမှ စာမ�
 
 msgid "Authentication sources assigned successfully"
 msgstr "အထောက်အထားရင်းမြစ်များကို အောင်မြင်စွာ ခန့်အပ်ပေးပြီး"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "အထောက်အထားစိစစ်နည်း မရွေးထားပါ။ ဤ URL တွင် ရွေးထားသော အသုံးပြုသူ(များ)အတွက် အထောက်အထားစိစစ်နည်းအားလုံးကို ဖယ်ရှားမည်ဖြစ်ပြီး ဝင်ရောက်ခြင်း မလုပ်နိုင်တော့နိုင်ပါ။ ဆက်လုပ်မလား?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "အကြံပြုချက်။ “— မည်သူ့ကိုမျှ မပို့ဘဲ သိမ်းဆည်းရန် —” ကို ရွေးချယ်ပါ။"
@@ -41220,4 +41235,316 @@ msgstr "ရောနှော သင်ယူခြင်း"
 
 msgid "Memory palaces"
 msgstr "မှတ်ဉာဏ် နန်းတော်များ"
+
+msgid "Logins (Month)"
+msgstr "ဝင်ရောက်မှုများ (လ)"
+
+msgid "Logins (Day)"
+msgstr "ဝင်ရောက်မှုများ (နေ့)"
+
+msgid "Logins (Hour)"
+msgstr "ဝင်ရောက်မှုများ (နာရီ)"
+
+msgid "Number of users (Picture)"
+msgstr "အသုံးပြုသူအရေအတွက် (ပုံ)"
+
+msgid "Allow tutors to register users"
+msgstr "နည်းပြများအား အသုံးပြုသူများ စာရင်းသွင်းခွင့်ပြုရန်"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "နည်းပြများအား သင်တန်းဆက်ရှင်များအတွင်း တည်းဖြတ်ခွင့်ပြုရန်"
+
+msgid "Extend rights for tutors"
+msgstr "နည်းပြများအတွက် အခွင့်အရေး တိုးချဲ့ရန်"
+
+msgid "Show session tutor"
+msgstr "ဆက်ရှင် နည်းပြကို ပြရန်"
+
+msgid "Default tutor access days after session"
+msgstr "ဆက်ရှင်ပြီးနောက် နည်းပြ ဝင်ရောက်ခွင့် ရက်အရေအတွက် (ပုံသေ)"
+
+msgid "Default tutor access days before session"
+msgstr "ဆက်ရှင်မတိုင်မီ နည်းပြ ဝင်ရောက်ခွင့် ရက်အရေအတွက် (ပုံသေ)"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: သင်တန်းနည်းပြကို ဖျောက်ရန်"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Dropbox တွင် အထွေထွေ နည်းပြကို ဖျောက်ရန်"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "စစ်တမ်းများတွင် နည်းပြများအတွက် အခွင့်အရေး တိုးချဲ့ရန်"
+
+msgid "Maximum courses per user"
+msgstr "အသုံးပြုသူတစ်ဦးလျှင် အများဆုံး သင်တန်းအရေအတွက်"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "လေ့ကျင့်ခန်းများ စစ်ဆေးရာတွင် နည်းပြများအား မှတ်ချက်ပေးခွင့်ပြုရန်"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "တင်ပို့သော စာမေးပွဲရလဒ် PDF ဖိုင်အမည်တွင် တရားဝင်ကုဒ် ထည့်ရန်"
+
+msgid "Certificate expiry reminder cron"
+msgstr "လက်မှတ် သက်တမ်းကုန် သတိပေး cron"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "လက်မှတ် သက်တမ်းကုန် သတိပေး ကာလ (ရက်)"
+
+msgid "Allow certificates search"
+msgstr "လက်မှတ်များ ရှာဖွေခွင့်ပြုရန်"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "နည်းပြများအား ကြေညာချက်များကို အမြဲ တည်းဖြတ်ခွင့်ပြုရန်"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "တက်ရောက်မှုစာရင်းများတွင် ကျောင်းသားများ၏ တရားဝင်ကုဒ်ကို ပြရန်"
+
+msgid "Restrict course chat to tutors"
+msgstr "သင်တန်းချတ်ကို နည်းပြများသာ ကန့်သတ်ရန်"
+
+msgid "Language by resource"
+msgstr "အရင်းအမြစ်အလိုက် ဘာသာစကား"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "အခြေအနေ မပြီးဆုံးသေးသည့်အခါ ထွက်သည့်အခါ SCO ကို ပြီးဆုံးအဖြစ် သတ်မှတ်ရန်"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "အမျိုးအစား ဦးတည်ရာအလိုက် တိုးတက်လိုက်လျောညီထွေ စာမေးပွဲများ ဖွင့်ရန်"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "အထွေထွေ နည်းပြထံ စာမေးပွဲ အကြောင်းကြားချက်များ ပို့ခြင်းကို ပိတ်ရန်"
+
+msgid "Enable session expiration warning"
+msgstr "ဆက်ရှင် သက်တမ်းကုန် သတိပေးချက် ဖွင့်ရန်"
+
+msgid "Session expiration warning time"
+msgstr "ဆက်ရှင် သက်တမ်းကုန် သတိပေးချိန်"
+
+msgid "Check password requirements"
+msgstr "စကားဝှက် လိုအပ်ချက်များ စစ်ဆေးရန်"
+
+msgid "File integrity check notification recipients"
+msgstr "ဖိုင် ပြည့်စုံမှု စစ်ဆေး အကြောင်းကြားချက် လက်ခံသူများ"
+
+msgid "Enable the OAuth authorization server"
+msgstr "OAuth ခွင့်ပြုချက် ဆာဗာကို ဖွင့်ရန်"
+
+msgid "Enable MCP server"
+msgstr "MCP ဆာဗာကို ဖွင့်ရန်"
+
+msgid "Allow MCP by roles"
+msgstr "အခန်းကဏ္ဍအလိုက် MCP ခွင့်ပြုရန်"
+
+msgid "Enable external API keys"
+msgstr "ပြင်ပ API သော့များ ဖွင့်ရန်"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "ကြာချိန်အလိုက် ဆက်ရှင်များကို နည်းပြများအတွက် အမြဲ ရရှိနိုင်စေရန်"
+
+msgid "Allow registration via course invitation links"
+msgstr "သင်တန်း ဖိတ်ကြားလင့်ခ်များမှတစ်ဆင့် စာရင်းသွင်းခွင့်ပြုရန်"
+
+msgid "Add student fullname in file download name"
+msgstr "ဖိုင်ဒေါင်းလုဒ် အမည်တွင် ကျောင်းသား အမည်အပြည့်အစုံ ထည့်ရန်"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "WYSIWYG တည်းဖြတ်ကိရိယာများတွင် အသက်ဝင်သော ဘာသာစကားအားလုံးသို့ AI ဘာသာပြန်ခွင့်ပြုရန်"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "သင်တန်းနည်းပြများ တည်းဖြတ်နိုင်စွမ်းကို ပိတ်ရန်"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "ဆက်ရှင်များ အသုံးပြုသည့်အခါ ပုံသေအပြုအမူမှာ အခြေခံသင်တန်းတွင် သတ်မှတ်ထားသော ကိရိယာ မြင်နိုင်မှုကို အသုံးပြုခြင်းဖြစ်သည်။ ဤဆက်တင်သည် ဆက်ရှင်သင်တန်းများရှိ နည်းပြများအား ကိရိယာ မြင်နိုင်မှုများကို လိုအပ်ချက်အလိုက် ပြင်ဆင်ခွင့်ပြုရန် ပြောင်းလဲပေးသည်။"
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "နည်းပြများသည် ပလက်ဖောင်းပေါ်တွင် အသုံးပြုသူများ ဖန်တီးနိုင်ပြီး ဆက်ရှင်သို့ အသုံးပြုသူများ စာရင်းသွင်းနိုင်သည်။"
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "ရေးသားကိရိယာများတွင် နည်းပြများအား သင်တန်းဆရာများနှင့် တူညီသော ခွင့်ပြုချက်များ ပေးရန် ဤရွေးချယ်မှုကို ဖွင့်ပါ"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "သင်တန်းစာရင်းရှိ ဆက်ရှင်ခေါင်းစဉ်အကွက်တွင် အထွေထွေ ဆက်ရှင်နည်းပြအမည်ကို ပြရန်"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "ဖွင့်ထားပါက ဆက်ရှင်များရှိ သင်တန်းနည်းပြများသည် ၎င်းတို့၏ ဆက်ရှင်သို့ အသုံးပြုသူအသစ်များ စာရင်းသွင်းနိုင်သည်။ မဟုတ်ပါက ဤရွေးချယ်မှုကို စီမံခန့်ခွဲသူများနှင့် ဆက်ရှင် စီမံခန့်ခွဲသူများသာ ရရှိနိုင်သည်။"
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "တရားဝင်သင်တန်းကာလပြီးဆုံးရက်ပြီးနောက် သင်ကြားရေးဆရာတစ်ဦး သင်တန်းကာလသို့ ဝင်ရောက်နိုင်သည့် ပုံသေရက်အရေအတွက်"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "တရားဝင်သင်တန်းကာလစတင်ရက်မတိုင်မီ သင်ကြားရေးဆရာတစ်ဦး သင်တန်းကာလသို့ ဝင်ရောက်နိုင်သည့် ပုံသေရက်အရေအတွက်"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "သင်္ချာဖော်မြူလာများကို ကြည့်ရှုနိုင်ရန် MathJax စာကြည့်တိုက်ကို ဖွင့်ပါ။ ဤအရာသည် တည်းဖြတ်ကိရိယာဘားတွင် ဖော်မြူလာခလုတ်တစ်ခု ထည့်ပေးပြီး ဖော်မြူလာများကို LaTeX ဖြင့် ရေးသားသည်။"
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "\"|\" ဖြင့် ခွဲထားသော သင်တန်းကုဒ်များ။ လူ့စွမ်းအားအရင်းအမြစ် ဒါရိုက်တာ ဝင်ရောက်သောအခါ အသုံးပြုသူကို ဤသင်တန်းများသို့ အလိုအလျောက် စာရင်းသွင်းသည်။ ဥပမာ- COURSE001|COURSE002။ ဤအရာသည် အသုံးပြုသူအခန်းကဏ္ဍကို မပြောင်းလဲပါ။"
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "\"|\" ဖြင့် ခွဲထားသော သင်တန်းကုဒ်များ။ သင်တန်းကာလ စီမံခန့်ခွဲသူ ဝင်ရောက်သောအခါ အသုံးပြုသူကို ဤသင်တန်းများသို့ အလိုအလျောက် စာရင်းသွင်းသည်။ ဥပမာ- COURSE001|COURSE002။ ဤအရာသည် အသုံးပြုသူအခန်းကဏ္ဍကို မပြောင်းလဲပါ။"
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "\"|\" ဖြင့် ခွဲထားသော သင်တန်းကုဒ်များ။ သင်ယူသူ ဝင်ရောက်သောအခါ အသုံးပြုသူကို ဤသင်တန်းများသို့ အလိုအလျောက် စာရင်းသွင်းသည်။ ဥပမာ- COURSE001|COURSE002။"
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "\"|\" ဖြင့် ခွဲထားသော သင်တန်းကုဒ်များ။ ဆရာ ဝင်ရောက်သောအခါ အသုံးပြုသူကို ဤသင်တန်းများသို့ အလိုအလျောက် စာရင်းသွင်းသည်။ ဥပမာ- COURSE001|COURSE002။ ဤအရာသည် သင်တန်းဆရာ ခွင့်ပြုချက်များကို မပေးပါ။"
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "သင်ကြားရေးဆရာက ကျောင်းသားများထံ စာရွက်စာတမ်းပို့သောအခါ Dropbox တွင် သင်တန်းကာလ သင်ကြားရေးဆရာကို ဖုံးကွယ်ပါ"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "အထွေထွေ သင်ကြားရေးဆရာက ဖိုင်တင်သောအခါ Dropbox ကိရိယာတွင် အထွေထွေ သင်ကြားရေးဆရာအမည်ကို ဖုံးကွယ်ပါ"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "သင်ကြားရေးဆရာများ စစ်တမ်းများ ဖန်တီး၊ တည်းဖြတ်ခွင့်ပေးရန် ဤရွေးချယ်မှုကို ဖွင့်ပါ"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "စစ်တမ်းဖိတ်ကြားချက်များတွင် သင်ကြားရေးဆရာ၏ အီးမေးလ်လိပ်စာ သို့မဟုတ် အဓိက ပြင်ဆင်မှုအပိုင်းတွင် သတ်မှတ်ထားသော no-reply လိပ်စာကို အသုံးပြုသင့်ပါသလား။"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "ဆရာ/သင်တန်းပေးသူတစ်ဦး ဖန်တီးနိုင်သော သင်တန်းအများဆုံးအရေအတွက်။ ကန့်သတ်ချက်ပိတ်ရန် 0 သတ်မှတ်ပါ။ BuyCourses ဝန်ဆောင်မှုဝယ်ယူမှုဖြင့် အသုံးပြုသူအလိုက် ကျော်လွှားနိုင်သည်။"
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "လေ့ကျင့်ခန်းများ စစ်ဆေးသည့်အခါ သင်ကြားရေးဆရာများ တုံ့ပြန်ချက် တည်းဖြတ်ခွင့်ပေးပါ"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "ပဟေဠိရလဒ်ကို PDF သို့ ထုတ်ယူသည့်အခါ ဖိုင်အမည်တွင် ကျောင်းသား၏ တရားဝင်ကုဒ် ထည့်သင့်သည် မထည့်သင့်"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "ကိုယ်ပိုင်ဖိုင်အားလုံးကို ကန့်သတ်ချက်မရှိ ဝင်ရောက်ခွင့်ပေးသည်"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "သက်တမ်းကုန်ပြီးသော သို့မဟုတ် ကုန်ခါနီး လက်မှတ်ရှိသော သင်ယူသူများကို သတိပေးသည့် app:send-certificate-expiry-reminders cron ကို ဖွင့်ပါ။"
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "cron ကို --days-ahead ဖြင့် မလုပ်ဆောင်ပါက အသုံးပြုမည့် သက်တမ်းကုန်ခါနီး လက်မှတ်များကို စစ်ဆေးရန် ကြိုတင်ရက် ပုံသေအရေအတွက်။"
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "အသုံးပြုသူများနှင့် ဧည့်သည်များ အပေါ်ဘားမီနူးမှ ထုတ်လုပ်ထားသော လက်မှတ်များကို ရှာဖွေခွင့်ပေးပါ။"
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "သင်ကြားရေးဆရာများ လက်ရှိ သို့မဟုတ် ပြီးခဲ့သော သင်တန်းကာလများအတွင်း ကြေညာချက်များကို အမြဲ တည်းဖြတ်ခွင့်ပေးပါ။"
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "တက်ရောက်မှုစာရင်းများနှင့် စာရင်းများတွင် ကျောင်းသားအမည်ဘေးတွင် တရားဝင်ကုဒ် ပြသမည် မပြသမည်။"
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "အရင်းအမြစ်တစ်ခုချင်းစီအတွက် သီးခြားဘာသာစကား သတ်မှတ်ခွင့်ပေးပါ။"
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "SCORM ပက်ကေ့ချ်အချို့သည် LMSSetValue(cmi.core.lesson_status, 'incomplete') ကို တစ်ကြိမ်သာ ခေါ်ပြီး တကယ့် အဆုံးသတ်အခြေအနေ သို့မဟုတ် အဓိပ္ပာယ်ရှိသော LMSFinish() ကို မပို့ပါ။ ကျန်ရှိသော 'incomplete' ကို အခြေအနေမရှိသကဲ့သို့ Chamilo က သဘောထားပြီး သင်ယူသူ SCO မှ ထွက်သည့်အခါ ပြီးမြောက်မှုကို ဖြေရှင်းရန် ဤအရာကို ဖွင့်ပါ။"
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "သင်ယူလမ်းကြောင်းကို မမြင်ရအောင် သတ်မှတ်ထားသော်လည်း ဆရာ သို့မဟုတ် သင်ကြားရေးဆရာက သင်တန်းပင်မစာမျက်နှာမှ ရရှိနိုင်အောင် ဆုံးဖြတ်ပါက ဤရွေးချယ်မှုသည် သင်တန်းပင်မစာမျက်နှာရှိ လင့်ခ်ကို Chamilo က ဖုံးကွယ်ခြင်းမှ တားဆီးသည်။"
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "မေးခွန်းအမျိုးအစားတစ်ခုစီက ရမှတ်အပေါ်မူတည်၍ သင်ယူသူများကို အခြားအမျိုးအစားသို့ လမ်းညွှန်နိုင်သော တိုးတက်မှုရှိသော လိုက်လျောညီထွေ စမ်းသပ်မှုများကို ဖွင့်ပါ။"
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "သင်ယူသူများ စမ်းသပ်မှု ပြီးသောအခါ အကြောင်းကြားချက်များကို သင်ကြားရေးဆရာများထံ ပို့လေ့ရှိပြီး အထွေထွေ သင်တန်းကာလ သင်ကြားရေးဆရာလည်း ပါဝင်သည်။ ဤအကြောင်းကြားချက်များမှ အထွေထွေ သင်ကြားရေးဆရာကို ချန်လှပ်ရန် ဤရွေးချယ်မှုကို ဖွင့်ပါ။"
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "ဆိုင်းငံ့စမ်းသပ်မှု အစီရင်ခံစာတွင် အထွေထွေ သင်ကြားရေးဆရာ ဝင်ရောက်ခွင့်ရှိသော သင်တန်းကာလအားလုံးမှ အသုံးပြုသူများ၏ စမ်းသပ်မှုကြိုးပမ်းချက်များကို ပြပါ။"
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "ဆာဗာဘက် သင်တန်းကာလ သက်တမ်းမကုန်မီ အထောက်အထားပြပြီးသော အသုံးပြုသူများအား သတိပေးချက် ပြပါ။"
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "သတိပေးချက်ပြသသည့် သင်တန်းကာလ သက်တမ်းကုန်မီ စက္ကန့်အရေအတွက်။ ပုံသေမှာ ၁၈၀ စက္ကန့်ဖြစ်သည်။"
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "အသုံးပြုသူ စကားဝှက်များအတွက် လိုအပ်သော ဖွဲ့စည်းပုံကို သတ်မှတ်သည်။ ဥပမာ- {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}။ အထူးအက္ခရာများ လိုအပ်ရန် \"specials\" (ဗဟုဝုစ်) ကို အသုံးပြုပါ။"
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "စကားဝှက် ဖန်တီးခြင်း သို့မဟုတ် အပ်ဒိတ်လုပ်စဉ် အထက်တွင် သတ်မှတ်ထားသော စကားဝှက်လိုအပ်ချက်များကို စစ်ဆေးမှု ဖွင့်ပါ။"
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "ဖိုင်သမာဓိ စစ်ဆေးမှုက ပြောင်းလဲမှု တွေ့ရှိသောအခါ အကြောင်းကြားရန် ကော်မာဖြင့် ခွဲထားသော အီးမေးလ်လိပ်စာစာရင်း။ ကမ္ဘာလုံးဆိုင်ရာ စီမံခန့်ခွဲသူတိုင်းကို အကြောင်းကြားရန် ဗလာထားပါ။"
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "ပြင်ပအက်ပလီကေးရှင်းများ (ဥပမာ Claude.ai MCP ချိတ်ဆက်ကိရိယာ) ကို OAuth 2.1 Dynamic Client Registration ဖြင့် မှတ်ပုံတင်ပြီး အသုံးပြုသူတစ်ဦးချင်း၏ Chamilo အကောင့်နှင့် ခွင့်ပြုချက်များဖြင့် ချိတ်ဆက်ခွင့်ပေးသည်။ ပုံသေ ပိတ်ထားသည်- ဤအရာ မဖွင့်မချင်း ရှာဖွေ၊ မှတ်ပုံတင်၊ ခွင့်ပြုချက်နှင့် တိုကင် အဆုံးမှတ်များအားလုံး 404 ပြန်ပေးသည်။"
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Chamilo MCP အဆုံးမှတ်နှင့် ကိုယ်ပိုင် MCP API သော့ မျက်နှာပြင်ကို ဖွင့်သည်။ ပိတ်ထားသောအခါ ရှိပြီးသား API သော့များ၊ OAuth ဝင်ရောက်ခွင့် တိုကင်များနှင့် JWT အထောက်အထားများကို /mcp တွင် အသုံးမပြုနိုင်ပါ။"
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "MCP အသုံးပြုခွင့်ရှိသော Chamilo အသုံးပြုသူအခန်းကဏ္ဍများ၏ JSON မြေပုံ။ အသုံးပြုသူသည် ဖွင့်ထားသော အခန်းကဏ္ဍ အနည်းဆုံးတစ်ခုနှင့် ကိုက်ညီရမည်။ ဤကန့်သတ်ချက်သည် ယခင်ထုတ်ထားသော API သော့များနှင့် ရှိပြီးသား OAuth ချိတ်ဆက်မှုများနှင့်လည်း သက်ဆိုင်သည်။"
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "ယုံကြည်ရသော ဆာဗာမှဆာဗာ ပေါင်းစည်းမှုများ (ဥပမာ WordPress စတိုးရှေ့ပလပ်အင်) ကို \"chamilo:security:generate-external-api-key\" ကွန်ဆိုးလ်အမိန့်ဖြင့် ထုတ်သော အသုံးပြုသူအလိုက် ပြင်ပ API သော့ဖြင့် အထွေထွေ /api အဆုံးမှတ်တွင် အထောက်အထားပြခွင့်ပေးသည်။ ပုံသေ ပိတ်ထားသည်- ဤအရာ မဖွင့်မချင်း ရှိပြီးသားသော့များကို အသုံးမပြုနိုင်ပါ။"
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "သင်တန်းကာလစာရင်းတွင် သင်တန်းကာလ ခေါင်းစဉ်ခွဲသို့ သင်ကြားရေးဆရာနှင့် ရက်စွဲများ ထည့်ပါ။"
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "မဟုတ်ပါက သင်တန်းကာလ သင်ကြားရေးဆရာများသည် တက်ကြွသော ကြာချိန်အတွင်းသာ ကြာချိန်အလိုက် သင်တန်းကာလများသို့ ဝင်ရောက်ခွင့်ရှိသည်။"
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "ဖွင့်ထားသောအခါ ဆရာ/စီမံခန့်ခွဲသူသည် သင်တန်း၏ အသုံးပြုသူများ ကိရိယာမှ တစ်ကြိမ်သုံး ဖိတ်ကြားလင့်ခ် ပို့နိုင်ပြီး မှတ်ပုံမတင်ရသေးသူကို မှတ်ပုံတင်ပုံစံသို့ ရောက်စေကာ အထွေထွေ ကိုယ်တိုင်မှတ်ပုံတင်ခြင်း (allow_registration) ပိတ်ထားစဉ်ပင် မှတ်ပုံတင်ခွင့်ပေးသည်။"
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "တစ်ဦးချင်း တင်သွင်းမှုများ သို့မဟုတ် တာဝန်ပေးချက် ပက်ကေ့ချ်များ ဒေါင်းလုဒ်လုပ်သည့်အခါ တာဝန်ပေးချက် ဖိုင်အမည်များတွင် ကျောင်းသားအမည်အပြည့်အစုံ ထည့်ပါ။"
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "ဆရာများအား တက်ကြွသော ပလက်ဖောင်းဘာသာစကားအားလုံးအတွက် WYSIWYG လုပ်ဆောင်ချက်တစ်ခုတည်းဖြင့် ဘာသာပြန်များ ထုတ်ပေးခွင့်ပေးသည်။ ဤအရာသည် AI တိုကင် အများအပြား သုံးစွဲနိုင်သည်။"
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "ပိတ်ထားသောအခါ စီမံခန့်ခွဲသူများသည် သင်တန်းတည်းဖြတ်စာမျက်နှာတွင် သင်တန်းကာလ သင်တန်းများသို့ သင်ကြားရေးဆရာများ အမြန်သတ်မှတ်ရန် လင့်ခ် မရှိပါ။"
+
+msgid "Show courses & sessions"
+msgstr "သင်တန်းများနှင့် သင်တန်းကာလများ ပြပါ"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "ရွေးချယ်နိုင်သော JSON။ ဥပမာ- {\"speed\": true}"
+
+msgid "Table"
+msgstr "ဇယား"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "အပြင်အဆင်"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "သင်တန်းနည်းပြ အီးမေးလ် ပေးပို့သူ"
+
+msgid "Card (visual blocks)"
+msgstr "ကတ် (မြင်ကွင်းပိတ်များ)"
+
+msgid "List (classic)"
+msgstr "စာရင်း (ဂန္ထဝင်)"
+
+msgid "Limit identical emails"
+msgstr "တူညီသော အီးမေးလ်များကို ကန့်သတ်ရန်"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "ဆရာ သို့မဟုတ် လေ့ကျင့်ပေးသူတစ်ဦး ဖန်တီးနိုင်သော သင်တန်းအရေအတွက် အများဆုံး။ ကန့်သတ်ချက်ကို ပိတ်ရန် 0 သတ်မှတ်ပါ။"
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "တူညီသော အီးမေးလ်ဖြင့် ခွင့်ပြုထားသော အကောင့်အရေအတွက် အများဆုံး။ ကန့်သတ်ချက်ကို ပိတ်ရန် 0 သတ်မှတ်ပါ။"
+
+msgid "Validation"
+msgstr "အတည်ပြုခြင်း"
+
+msgid "Test/Development"
+msgstr "စမ်းသပ်မှု/ဖွံ့ဖြိုးတိုးတက်မှု"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "/admin-dashboard/register မှ ဆက်ရှင်များကို ရှာဖွေပြီး အမည်ပေးရာတွင် အသုံးပြုရန် အသုံးပြုသူ အပိုအကွက်သော့။"
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "ရှာဖွေမှု ကြိုတင်စစ်ထုတ်အကွက်များအတွက် JSON ဖွဲ့စည်းမှု။"
 

@@ -371,7 +371,7 @@ msgid "Sincerely"
 msgstr "敬具"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "数式の例: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "数式の例: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "変数範囲"
@@ -24132,6 +24132,18 @@ msgstr "学習者に結果を表示：各試行のスコア、学習者の選択
 msgid "Signed in as"
 msgstr "ログイン中："
 
+msgid "Authorize application"
+msgstr "アプリケーションを許可"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "があなたの Chamilo アカウントへの接続を求めています。"
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "このアプリケーションは、既存のアカウント権限の範囲内でのみ、あなたと同じように Chamilo 上で操作できます。あなたが持っていない権限が付与されることはありません。"
+
+msgid "Allow"
+msgstr "許可"
+
 msgid "Remember me"
 msgstr "パスを記憶"
 
@@ -31497,6 +31509,9 @@ msgstr "ユーザー割り当てページに戻る"
 
 msgid "Authentication sources assigned successfully"
 msgstr "認証ソースの割り当てが成功しました"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "認証方法が選択されていません。この URL 上の選択したユーザーのすべての認証方法が削除され、ログインできなくなる可能性があります。続行しますか？"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "ヒント：「— ただアップロード —」を選択すると、誰にも送信せずに保存されます。"
@@ -41286,4 +41301,316 @@ msgstr "交互学習"
 
 msgid "Memory palaces"
 msgstr "記憶の宮殿"
+
+msgid "Logins (Month)"
+msgstr "ログイン数（月）"
+
+msgid "Logins (Day)"
+msgstr "ログイン数（日）"
+
+msgid "Logins (Hour)"
+msgstr "ログイン数（時）"
+
+msgid "Number of users (Picture)"
+msgstr "ユーザー数（写真）"
+
+msgid "Allow tutors to register users"
+msgstr "チューターによるユーザー登録を許可"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "チューターによるコースセッション内の編集を許可"
+
+msgid "Extend rights for tutors"
+msgstr "チューターの権限を拡張"
+
+msgid "Show session tutor"
+msgstr "セッションチューターを表示"
+
+msgid "Default tutor access days after session"
+msgstr "セッション終了後のチューター既定アクセス日数"
+
+msgid "Default tutor access days before session"
+msgstr "セッション開始前のチューター既定アクセス日数"
+
+msgid "Dropbox: hide course tutor"
+msgstr "ドロップボックス: コースチューターを非表示"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "ドロップボックスで一般チューターを非表示"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "アンケートにおけるチューターの権限を拡張"
+
+msgid "Maximum courses per user"
+msgstr "ユーザーあたりの最大コース数"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "演習の採点時にチューターのコメントを許可"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "エクスポートした小テスト結果 PDF のファイル名に公式コードを含める"
+
+msgid "Certificate expiry reminder cron"
+msgstr "証明書有効期限リマインダーの cron"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "証明書有効期限リマインダー期間（日）"
+
+msgid "Allow certificates search"
+msgstr "証明書の検索を許可"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "チューターによるお知らせの常時編集を許可"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "出席表に受講者の公式コードを表示"
+
+msgid "Restrict course chat to tutors"
+msgstr "コースチャットをチューターに制限"
+
+msgid "Language by resource"
+msgstr "リソースごとの言語"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "ステータスが未完了のまま離脱した場合に SCO を完了にする"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "カテゴリの行き先による段階的適応テストを有効化"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "一般チューターへのテスト通知送信をブロック"
+
+msgid "Enable session expiration warning"
+msgstr "セッション期限切れ警告を有効化"
+
+msgid "Session expiration warning time"
+msgstr "セッション期限切れ警告の時刻"
+
+msgid "Check password requirements"
+msgstr "パスワード要件を確認"
+
+msgid "File integrity check notification recipients"
+msgstr "ファイル整合性チェック通知の受信者"
+
+msgid "Enable the OAuth authorization server"
+msgstr "OAuth 認可サーバーを有効化"
+
+msgid "Enable MCP server"
+msgstr "MCP サーバーを有効化"
+
+msgid "Allow MCP by roles"
+msgstr "ロールによる MCP を許可"
+
+msgid "Enable external API keys"
+msgstr "外部 API キーを有効化"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "期間指定セッションをチューターに常時利用可能にする"
+
+msgid "Allow registration via course invitation links"
+msgstr "コース招待リンクによる登録を許可"
+
+msgid "Add student fullname in file download name"
+msgstr "ファイルダウンロード名に受講者の氏名を追加"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "WYSIWYG エディターですべての有効言語への AI 翻訳を許可"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "コースチューターの編集機能を無効化"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "セッション利用時の既定動作は、ベースコースで定義されたツールの表示設定を使うことです。この設定を変更すると、セッションコースのチューターが必要に応じてツールの表示を調整できます。"
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "チューターはプラットフォーム上でユーザーを作成し、セッションにユーザーを登録できます。"
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "このオプションを有効にすると、作成ツールにおいてチューターにトレーナーと同じ権限が与えられます"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "コース一覧のセッションタイトル枠に一般セッションチューター名を表示"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "有効にすると、セッション内のコースチューターは自分のセッションに新規ユーザーを登録できます。通常、この操作は管理者およびセッション管理者のみが行えます。"
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "公式のセッション終了日後、チューターがセッションにアクセスできる既定の日数"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "公式のセッション開始日前、チューターがセッションにアクセスできる既定の日数"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "数式を表示するために MathJax ライブラリを有効にします。エディターのツールバーに数式ボタンが追加され、数式は LaTeX で記述します。"
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "\"|\" で区切ったコースコード。人事担当者がログインすると、これらのコースに自動登録されます。例: COURSE001|COURSE002。ユーザーの役割は変わりません。"
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "\"|\" で区切ったコースコード。セッション管理者がログインすると、これらのコースに自動登録されます。例: COURSE001|COURSE002。ユーザーの役割は変わりません。"
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "\"|\" で区切ったコースコード。学習者がログインすると、これらのコースに自動登録されます。例: COURSE001|COURSE002。"
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "\"|\" で区切ったコースコード。教師がログインすると、これらのコースに自動登録されます。例: COURSE001|COURSE002。コース教師の権限は付与されません。"
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "チューターが学生に文書を送信したとき、ドロップボックスでセッションコースのチューターを非表示にする"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "総合チューターがファイルをアップロードしたとき、ドロップボックスツールで総合チューター名を非表示にする"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "チューターがアンケートを作成・編集できるようにする"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "アンケート招待にチューターのメールアドレスを使うか、メイン設定で定義した no-reply アドレスを使うか"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "教師／トレーナーが作成できるコースの最大数。0 にすると制限なし。BuyCourses サービスの購入によりユーザー単位で上書きできます。"
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "演習の採点時にチューターがフィードバックを編集できるようにする"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "クイズ結果を PDF に書き出すとき、ファイル名に学生の公式コードを含めるかどうか"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "制限なくすべての個人ファイルにアクセスできるようにする"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "証明書の有効期限が切れた、またはまもなく切れる学習者に通知する cron（app:send-certificate-expiry-reminders）を有効にする。"
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "まもなく期限切れの証明書を検索する既定の日数（--days-ahead なしで cron を実行した場合に使用）。"
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "ユーザーと訪問者がトップバーメニューから発行済み証明書を検索できるようにする。"
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "進行中または過去のセッション内で、チューターが常にお知らせを編集できるようにする。"
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "出席シートや一覧で、氏名の横に学生の公式コードを表示するかどうか。"
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "個々のリソースに特定の言語を割り当てられるようにする。"
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "一部の SCORM パッケージは LMSSetValue(cmi.core.lesson_status, 'incomplete') を一度だけ呼び出し、実際の終了ステータスも意味のある LMSFinish() も送信しません。これを有効にすると、残った 'incomplete' をステータスなしと同様に扱い、学習者が SCO を離れたときに完了を判定します。"
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "学習パスが非表示でも、教師またはチューターがコースホームページから利用可能にした場合、このオプションはコースホームページ上のリンクを Chamilo が隠さないようにします。"
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "各問題カテゴリの得点に応じて別のカテゴリへ誘導できる、段階的な適応テストを有効にする。"
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "学習者がテストを完了すると、通常は総合セッションチューターを含むチューターに通知されます。このオプションを有効にすると、これらの通知から総合チューターを除外します。"
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "保留中のテストレポートで、総合チューターがアクセスできるすべてのセッションのユーザーのテスト受験を表示する。"
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "サーバー側セッションの期限切れ前に、認証済みユーザーへ警告を表示する。"
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "警告を表示する、セッション期限切れまでの秒数。既定は 180 秒です。"
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "ユーザーパスワードに必要な構成を定義します。例: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}。特殊文字を必須にするには \"specials\"（複数形）を使用します。"
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "パスワード作成または更新時に、上記で定義したパスワード要件の検証を有効にする。"
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "ファイル整合性スキャンで変更が検出されたときに通知するメールアドレスのカンマ区切りリスト。空の場合はすべてのグローバル管理者に通知します。"
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "外部アプリケーション（例: Claude.ai MCP コネクタ）が OAuth 2.1 Dynamic Client Registration で登録し、各ユーザー自身の Chamilo アカウントと権限で接続できるようにします。既定では無効で、有効にするまで discovery、registration、authorization、token の各エンドポイントはすべて 404 を返します。"
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Chamilo MCP エンドポイントと個人 MCP API キー画面を有効にします。無効の場合、既存の API キー、OAuth アクセストークン、JWT 資格情報は /mcp で使用できません。"
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "MCP の使用を許可する Chamilo ユーザー役割の JSON マップ。ユーザーは有効な役割のうち少なくとも 1 つに一致する必要があります。この制限は以前生成した API キーと既存の OAuth 接続にも適用されます。"
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "信頼できるサーバー間連携（例: WordPress ストアフロントプラグイン）が、コンソールコマンド \"chamilo:security:generate-external-api-key\" で生成したユーザー単位の外部 API キーで一般の /api エンドポイントに認証できるようにします。既定では無効で、有効にするまで既存のキーは使用できません。"
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "セッション一覧のセッションサブタイトルにチューターと日付を追加する。"
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "無効の場合、セッションチューターは期間指定セッションに、有効期間中のみアクセスできます。"
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "有効にすると、教師／管理者はコースのユーザーツールから一度限りの招待リンクを送信でき、未登録者は一般の自己登録（allow_registration）が無効でも登録フォームに到達して登録できます。"
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "個別提出物または課題パッケージのダウンロード時、課題ファイル名に学生の氏名を追加する。"
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "教師が 1 回の WYSIWYG 操作で、有効なすべてのプラットフォーム言語の翻訳を生成できるようにします。大量の AI トークンを消費する場合があります。"
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "無効の場合、管理者はコース編集ページでセッションコースにチューターをすばやく割り当てるリンクを持ちません。"
+
+msgid "Show courses & sessions"
+msgstr "コースとセッションを表示"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "任意の JSON。例: {\"speed\": true}"
+
+msgid "Table"
+msgstr "表"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "テーマ"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "コースチューターのメール送信者"
+
+msgid "Card (visual blocks)"
+msgstr "カード（ビジュアルブロック）"
+
+msgid "List (classic)"
+msgstr "リスト（クラシック）"
+
+msgid "Limit identical emails"
+msgstr "同一メールアドレスの制限"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "教師またはトレーナーが作成できるコースの最大数。制限を無効にするには0に設定します。"
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "同一メールアドレスで許可されるアカウントの最大数。制限を無効にするには0に設定します。"
+
+msgid "Validation"
+msgstr "検証"
+
+msgid "Test/Development"
+msgstr "テスト／開発"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "/admin-dashboard/register からセッションを検索および命名する際に使用するユーザー追加フィールドキー。"
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "検索プリフィルターフィールドのJSON設定。"
 

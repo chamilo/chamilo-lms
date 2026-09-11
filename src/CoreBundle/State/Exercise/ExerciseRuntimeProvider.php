@@ -1578,91 +1578,158 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             return null;
         }
 
-        $variations = [];
-        foreach ($this->getOrderedAnswers($question) as $answer) {
-            $parsedAnswer = $this->parseCalculatedAnswer((string) $answer->getAnswer());
-            $variations[] = [
-                'id' => (int) $answer->getIid(),
-                'text' => $parsedAnswer['text'],
-                'position' => (int) $answer->getPosition(),
+        $answer = $this->getFirstAnswer($question);
+        if (!$answer instanceof CQuizAnswer) {
+            return ['text' => '', 'formulas' => []];
+        }
+
+        $parsed = $this->parseCalculatedAnswer((string) $answer->getAnswer());
+        $exeId = $attempt instanceof TrackEExercise ? $attempt->getExeId() : 0;
+        $questionIid = (int) ($question->getIid() ?? 0);
+
+        $text = $parsed['text'];
+        foreach ($parsed['variables'] as $name => $variable) {
+            $value = $this->generateCalculatedVariableValue(
+                (string) $variable['intervals'],
+                (int) $variable['decimals'],
+                $exeId,
+                $questionIid,
+                $name
+            );
+            $text = str_replace('[#'.$name.']', $this->formatCalculatedValue($value, (int) $variable['decimals']), $text);
+        }
+
+        $formulas = [];
+        foreach ($parsed['formulas'] as $formula) {
+            $formulas[] = [
+                'name' => $formula['name'],
+                'tolerance' => $formula['tolerance'],
+                'toleranceType' => $formula['toleranceType'],
+                'decimals' => $formula['decimals'],
+                'score' => $formula['score'],
             ];
         }
 
-        $selectedVariation = $this->selectCalculatedRuntimeVariation($question, $variations, $attempt);
-
         return [
-            'answerId' => null !== $selectedVariation ? (int) $selectedVariation['id'] : null,
-            'text' => (string) ($selectedVariation['text'] ?? ''),
-            'variations' => $variations,
+            'text' => $text,
+            'formulas' => $formulas,
         ];
     }
 
     /**
-     * The previous runtime stores the random calculated-answer variation in session for the current attempt.
-     * The current runtime must keep the same variation stable for an attempt without relying on session state.
+     * Deterministically derives a calculated-answer variable's value from its interval spec, seeded by
+     * (exam attempt, question, variable name) so the same attempt always sees the same generated values
+     * without needing to persist them — the same idea as the crc32-based stable selection this replaces,
+     * extended from "pick a stored variation" to "generate a value".
      *
-     * @param array<int, array{id: int, text: string, position: int}> $variations
-     *
-     * @return array{id: int, text: string, position: int}|null
+     * Mirrors the interval mini-language read by the legacy CalculatedAnswer::generateFromIntervals():
+     * "42" (fixed), "1-10" (range), "220|330|440" (list), "1-10|2" (range with step),
+     * "1-10*20-30" (multiple ranges, one is picked).
      */
-    private function selectCalculatedRuntimeVariation(CQuizQuestion $question, array $variations, ?TrackEExercise $attempt): ?array
+    private function generateCalculatedVariableValue(string $intervals, int $decimals, int $exeId, int $questionIid, string $variableName): float
     {
-        if ([] === $variations) {
-            return null;
+        if (is_numeric($intervals)) {
+            return round((float) $intervals, $decimals);
         }
 
-        $savedAnswerId = $this->getSavedCalculatedRuntimeAnswerId($question, $attempt);
-        if ($savedAnswerId > 0) {
-            foreach ($variations as $variation) {
-                if ((int) ($variation['id'] ?? 0) === $savedAnswerId) {
-                    return $variation;
+        $intervalList = explode('*', $intervals);
+        $chosenInterval = $intervalList[$this->calculatedSeedIndex($exeId, $questionIid, $variableName, 0, \count($intervalList))];
+
+        if (is_numeric($chosenInterval)) {
+            return round((float) $chosenInterval, $decimals);
+        }
+
+        if (str_contains($chosenInterval, '|')) {
+            $parts = explode('|', $chosenInterval);
+            $allNumeric = true;
+            foreach ($parts as $part) {
+                if (!is_numeric(trim($part))) {
+                    $allNumeric = false;
+
+                    break;
                 }
             }
+
+            if ($allNumeric) {
+                $index = $this->calculatedSeedIndex($exeId, $questionIid, $variableName, 1, \count($parts));
+
+                return round((float) $parts[$index], $decimals);
+            }
+
+            [$chosenInterval, $step] = explode('|', $chosenInterval, 2);
+            $step = (float) $step;
+            [$minimum, $maximum] = $this->parseCalculatedInterval($chosenInterval);
+            if ($minimum > $maximum) {
+                [$minimum, $maximum] = [$maximum, $minimum];
+            }
+
+            if ($step <= 0) {
+                return $minimum;
+            }
+
+            $factor = 10 ** $decimals;
+            $minimumScaled = (int) round($minimum * $factor);
+            $maximumScaled = (int) round($maximum * $factor);
+            $stepScaled = max(1, (int) round($step * $factor));
+            $steps = (int) floor(($maximumScaled - $minimumScaled) / $stepScaled);
+            $chosenStep = $this->calculatedSeedIndex($exeId, $questionIid, $variableName, 2, $steps + 1);
+
+            return round(($minimumScaled + $chosenStep * $stepScaled) / $factor, $decimals);
         }
 
-        if (!$attempt instanceof TrackEExercise || null === $attempt->getExeId()) {
-            return $variations[0];
+        [$minimum, $maximum] = $this->parseCalculatedInterval($chosenInterval);
+        if ($minimum > $maximum) {
+            [$minimum, $maximum] = [$maximum, $minimum];
         }
 
-        $index = abs((int) crc32(\sprintf(
-            '%d:%d:%d',
-            (int) $attempt->getExeId(),
-            (int) ($question->getIid() ?? 0),
-            \count($variations)
-        ))) % \count($variations);
+        if (0 === $decimals) {
+            $offset = $this->calculatedSeedIndex($exeId, $questionIid, $variableName, 3, ((int) $maximum - (int) $minimum) + 1);
 
-        return $variations[$index] ?? $variations[0];
+            return (float) ((int) $minimum + $offset);
+        }
+
+        $fraction = $this->calculatedSeedFraction($exeId, $questionIid, $variableName, 4);
+
+        return round($minimum + ($fraction * ($maximum - $minimum)), $decimals);
     }
 
-    private function getSavedCalculatedRuntimeAnswerId(CQuizQuestion $question, ?TrackEExercise $attempt): int
+    /**
+     * @return array{0: float, 1: float}
+     */
+    private function parseCalculatedInterval(string $interval): array
     {
-        if (!$attempt instanceof TrackEExercise || null === $attempt->getExeId() || null === $question->getIid()) {
-            return 0;
-        }
-
-        $row = $this->entityManager->createQueryBuilder()
-            ->select('attemptRow.answer')
-            ->from(TrackEAttempt::class, 'attemptRow')
-            ->andWhere('IDENTITY(attemptRow.trackExercise) = :attemptId')
-            ->andWhere('attemptRow.questionId = :questionId')
-            ->setParameter('attemptId', (int) $attempt->getExeId(), Types::INTEGER)
-            ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        $answer = \is_array($row) ? (string) ($row['answer'] ?? '') : '';
-        if ('' === trim($answer)) {
-            return 0;
-        }
-
-        $parts = explode(':', $answer, 2);
+        $parts = preg_split('/(?<!^)-(?!$)/', trim($interval), 2);
         if (2 !== \count($parts)) {
+            return [0.0, 0.0];
+        }
+
+        return [(float) trim($parts[0]), (float) trim($parts[1])];
+    }
+
+    private function calculatedSeedFraction(int $exeId, int $questionIid, string $variableName, int $salt): float
+    {
+        // md5, not crc32: crc32 barely mixes a short trailing difference (the variable name) into its
+        // high-order bits, so short names sharing a common exeId:questionIid prefix (e.g. #a, #b, #c, #d)
+        // produced near-identical fractions and collided into the same drawn value almost every time.
+        return hexdec(substr(md5(\sprintf('%d:%d:%s:%d', $exeId, $questionIid, $variableName, $salt)), 0, 8)) / 4294967295;
+    }
+
+    private function calculatedSeedIndex(int $exeId, int $questionIid, string $variableName, int $salt, int $count): int
+    {
+        if ($count <= 1) {
             return 0;
         }
 
-        return max(0, (int) $parts[0]);
+        return (int) floor($this->calculatedSeedFraction($exeId, $questionIid, $variableName, $salt) * $count) % $count;
+    }
+
+    private function formatCalculatedValue(float $value, int $decimals): string
+    {
+        if (0 === $decimals) {
+            return (string) (int) round($value);
+        }
+
+        return rtrim(rtrim(number_format($value, $decimals, '.', ''), '0'), '.');
     }
 
     /**
@@ -2002,26 +2069,51 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     }
 
     /**
-     * @return array{text: string, expectedAnswer: string, formula: string}
+     * Parses the stored "wording@@@#name:intervals::decimals;=name:formula:tolerance:type:decimals:score;..."
+     * encoding shared with the legacy exercise tool (public/main/exercise/calculated_answer.class.php).
+     *
+     * @return array{
+     *     text: string,
+     *     variables: array<string, array{name: string, intervals: string, decimals: int}>,
+     *     formulas: array<string, array{name: string, formula: string, tolerance: float, toleranceType: string, decimals: int, score: float}>
+     * }
      */
     private function parseCalculatedAnswer(string $answer): array
     {
-        $parts = explode('@@', $answer, 2);
-        $textWithExpectedAnswer = (string) ($parts[0] ?? $answer);
-        $formula = (string) ($parts[1] ?? '');
-        $expectedAnswer = '';
-        $text = $textWithExpectedAnswer;
+        $parts = explode('@@@', $answer, 2);
+        $text = (string) ($parts[0] ?? '');
+        $encodedData = (string) ($parts[1] ?? '');
 
-        if (1 === preg_match('/\[([^\[\]]*)\]\s*$/', $textWithExpectedAnswer, $matches)) {
-            $expectedAnswer = trim((string) ($matches[1] ?? ''));
-            $text = (string) preg_replace('/\s*\[[^\[\]]*\]\s*$/', '', $textWithExpectedAnswer);
+        $variables = [];
+        $formulas = [];
+
+        foreach (explode(';', trim($encodedData, ';')) as $item) {
+            if ('' === $item) {
+                continue;
+            }
+
+            $bits = explode(':', $item);
+            if (str_starts_with($item, '#') && \count($bits) >= 4) {
+                $name = ltrim($bits[0], '#');
+                $variables[$name] = [
+                    'name' => $name,
+                    'intervals' => $bits[1],
+                    'decimals' => (int) $bits[3],
+                ];
+            } elseif (str_starts_with($item, '=') && \count($bits) >= 6) {
+                $name = ltrim($bits[0], '=');
+                $formulas[$name] = [
+                    'name' => $name,
+                    'formula' => $bits[1],
+                    'tolerance' => (float) $bits[2],
+                    'toleranceType' => $bits[3],
+                    'decimals' => (int) $bits[4],
+                    'score' => (float) $bits[5],
+                ];
+            }
         }
 
-        return [
-            'text' => $text,
-            'expectedAnswer' => $expectedAnswer,
-            'formula' => $formula,
-        ];
+        return ['text' => $text, 'variables' => $variables, 'formulas' => $formulas];
     }
 
     /**

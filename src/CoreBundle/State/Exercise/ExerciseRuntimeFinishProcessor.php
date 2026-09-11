@@ -40,6 +40,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Webit\Util\EvalMath\EvalMath;
 
 /**
  * Finishes Vue runtime attempts using native Symfony/Doctrine scoring rules mirrored from the verified legacy rules.

@@ -35,7 +35,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use Webit\Util\EvalMath\EvalMath;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
@@ -1195,8 +1194,12 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             return $score;
         }
 
-        if (\in_array($type, [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::ANNOTATION, self::UPLOAD_ANSWER, self::ANSWER_IN_OFFICE_DOC, self::CALCULATED_ANSWER], true)) {
+        if (\in_array($type, [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::ANNOTATION, self::UPLOAD_ANSWER, self::ANSWER_IN_OFFICE_DOC], true)) {
             return max(0.0, (float) $data->score);
+        }
+
+        if (self::CALCULATED_ANSWER === $type) {
+            return array_sum(array_column($this->getCleanCalculatedFormulas($data), 'score'));
         }
 
         if (self::FILL_IN_BLANKS === $type) {
@@ -1947,93 +1950,138 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('Please type the text.');
         }
 
-        if (0 === \count($this->extractCalculatedTokens((string) $data->calculatedText))) {
+        if ([] === $this->getCleanCalculatedVariables($data)) {
             throw new BadRequestHttpException('Please define at least one blank with the selected marker.');
         }
 
-        if ('' === trim((string) $data->calculatedFormula)) {
+        $formulas = $this->getCleanCalculatedFormulas($data);
+        if ([] === $formulas) {
             throw new BadRequestHttpException('Please, write the formula.');
         }
 
-        if ((float) $data->score <= 0) {
-            throw new BadRequestHttpException('Required field.');
-        }
-
-        if ((int) $data->calculatedVariations < 1) {
-            throw new BadRequestHttpException('Question variations.');
-        }
-    }
-
-    private function persistCalculatedAnswers(CQuizQuestion $question, ExerciseQuestionEditor $data): void
-    {
-        $variations = max(1, (int) $data->calculatedVariations);
-        $ranges = $this->normalizeCalculatedRanges($data);
-
-        for ($position = 1; $position <= $variations; ++$position) {
-            $answerText = (string) $data->calculatedText;
-            $formula = (string) $data->calculatedFormula;
-
-            foreach ($this->extractCalculatedTokens($answerText) as $token) {
-                $range = $ranges[$token] ?? ['low' => '1', 'high' => '20'];
-                $value = $this->generateCalculatedValue((string) $range['low'], (string) $range['high']);
-                $answerText = str_replace($token, (string) $value, $answerText);
-                $formula = str_replace($token, (string) $value, $formula);
+        foreach ($formulas as $formula) {
+            if ('' === trim((string) $formula['formula'])) {
+                throw new BadRequestHttpException('Please, write the formula.');
             }
 
-            $result = $this->evaluateCalculatedFormula($formula);
-            $encodedAnswer = $answerText.' ['.$result.']@@'.(string) $data->calculatedFormula;
-
-            $answer = new CQuizAnswer();
-            $answer
-                ->setQuestion($question)
-                ->setAnswer($encodedAnswer)
-                ->setCorrect(1)
-                ->setComment((string) $data->calculatedComment)
-                ->setPonderation((float) $data->score)
-                ->setPosition($position)
-            ;
-            $this->entityManager->persist($answer);
+            if ((float) $formula['score'] <= 0) {
+                throw new BadRequestHttpException('Required field.');
+            }
         }
     }
 
     /**
-     * @return array<string, array{low: string, high: string}>
+     * Persists the single answer row encoding "wording@@@#name:intervals::decimals;=name:formula:tolerance:type:decimals:score;...",
+     * the same format read/written by the legacy exercise tool (public/main/exercise/calculated_answer.class.php).
+     * Unlike the single-formula legacy format this replaces, no values are resolved here: the wording keeps its
+     * [#name]/[=name] tokens, and random values are generated deterministically per student attempt at runtime.
      */
-    private function normalizeCalculatedRanges(ExerciseQuestionEditor $data): array
+    private function persistCalculatedAnswers(CQuizQuestion $question, ExerciseQuestionEditor $data): void
     {
-        $submittedRanges = [];
-        foreach ($data->calculatedRanges as $range) {
-            if (!\is_array($range)) {
+        $variables = $this->getCleanCalculatedVariables($data);
+        $formulas = $this->getCleanCalculatedFormulas($data);
+
+        $encodedData = '';
+        foreach ($variables as $variable) {
+            $intervals = str_replace([',', ';'], ['.', '*'], (string) $variable['intervals']);
+            $encodedData .= '#'.$variable['name'].':'.$intervals.'::'.$variable['decimals'].';';
+        }
+        foreach ($formulas as $formula) {
+            $encodedData .= '='.$formula['name'].':'.$formula['formula'].':'.$formula['tolerance'].':'.$formula['toleranceType'].':'.$formula['decimals'].':'.$formula['score'].';';
+        }
+
+        $encodedAnswer = ((string) $data->calculatedText).'@@@'.$encodedData;
+
+        $answer = new CQuizAnswer();
+        $answer
+            ->setQuestion($question)
+            ->setAnswer($encodedAnswer)
+            ->setCorrect(1)
+            ->setComment((string) $data->calculatedComment)
+            ->setPonderation(array_sum(array_column($formulas, 'score')))
+            ->setPosition(1)
+        ;
+        $this->entityManager->persist($answer);
+    }
+
+    /**
+     * @return array<int, array{name: string, intervals: string, decimals: int}>
+     */
+    private function getCleanCalculatedVariables(ExerciseQuestionEditor $data): array
+    {
+        $submitted = [];
+        foreach ($data->calculatedVariables as $variable) {
+            if (!\is_array($variable)) {
                 continue;
             }
 
-            $token = (string) ($range['token'] ?? '');
-            if ('' === $token) {
+            $name = trim((string) ($variable['name'] ?? ''));
+            if ('' === $name) {
                 continue;
             }
 
-            $submittedRanges[$token] = [
-                'low' => (string) ($range['low'] ?? '1'),
-                'high' => (string) ($range['high'] ?? '20'),
+            $submitted[$name] = [
+                'intervals' => (string) ($variable['intervals'] ?? '1-20'),
+                'decimals' => max(0, (int) ($variable['decimals'] ?? 0)),
             ];
         }
 
-        $ranges = [];
-        foreach ($this->extractCalculatedTokens((string) $data->calculatedText) as $token) {
-            $ranges[$token] = $submittedRanges[$token] ?? ['low' => '1', 'high' => '20'];
+        $variables = [];
+        foreach ($this->extractCalculatedTokens((string) $data->calculatedText, '#') as $name) {
+            $variables[] = [
+                'name' => $name,
+                'intervals' => (string) ($submitted[$name]['intervals'] ?? '1-20'),
+                'decimals' => (int) ($submitted[$name]['decimals'] ?? 0),
+            ];
         }
 
-        return $ranges;
+        return $variables;
+    }
+
+    /**
+     * @return array<int, array{name: string, formula: string, tolerance: float, toleranceType: string, decimals: int, score: float}>
+     */
+    private function getCleanCalculatedFormulas(ExerciseQuestionEditor $data): array
+    {
+        $submitted = [];
+        foreach ($data->calculatedFormulas as $formula) {
+            if (!\is_array($formula)) {
+                continue;
+            }
+
+            $name = trim((string) ($formula['name'] ?? ''));
+            if ('' === $name) {
+                continue;
+            }
+
+            $submitted[$name] = $formula;
+        }
+
+        $formulas = [];
+        foreach ($this->extractCalculatedTokens((string) $data->calculatedText, '=') as $name) {
+            $formula = $submitted[$name] ?? [];
+            $toleranceType = (string) ($formula['toleranceType'] ?? 'digit');
+            $formulas[] = [
+                'name' => $name,
+                'formula' => trim((string) ($formula['formula'] ?? '')),
+                'tolerance' => max(0.0, (float) ($formula['tolerance'] ?? 0)),
+                'toleranceType' => \in_array($toleranceType, ['digit', 'percent'], true) ? $toleranceType : 'digit',
+                'decimals' => max(0, (int) ($formula['decimals'] ?? 2)),
+                'score' => max(0.0, (float) ($formula['score'] ?? 0)),
+            ];
+        }
+
+        return $formulas;
     }
 
     /**
      * @return array<int, string>
      */
-    private function extractCalculatedTokens(string $text): array
+    private function extractCalculatedTokens(string $text, string $marker): array
     {
-        preg_match_all('/\[[^\]]+\]/', $text, $matches);
+        preg_match_all('/\['.preg_quote($marker, '/').'([a-zA-Z0-9_]+)\]/', $text, $matches);
         $tokens = [];
-        foreach ($matches[0] ?? [] as $token) {
+        foreach ($matches[1] ?? [] as $token) {
             $token = trim((string) $token);
             if ('' !== $token && !\in_array($token, $tokens, true)) {
                 $tokens[] = $token;
@@ -2041,32 +2089,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         return $tokens;
-    }
-
-    private function generateCalculatedValue(string $low, string $high): string
-    {
-        $minimum = (float) $low;
-        $maximum = (float) $high;
-        if ($maximum < $minimum) {
-            [$minimum, $maximum] = [$maximum, $minimum];
-        }
-
-        $hasDecimal = str_contains($low, '.') || str_contains($high, '.');
-        if (!$hasDecimal) {
-            return (string) random_int((int) $minimum, (int) $maximum);
-        }
-
-        $value = random_int((int) round($minimum * 100), (int) round($maximum * 100)) / 100;
-
-        return rtrim(rtrim(number_format($value, 2, '.', ''), '0'), '.');
-    }
-
-    private function evaluateCalculatedFormula(string $formula): string
-    {
-        $math = new EvalMath();
-        $result = (float) $math->evaluate($formula);
-
-        return rtrim(rtrim(number_format($result, 2, '.', ''), '0'), '.');
     }
 
     private function addHotspotData(Operation $operation, ExerciseQuestionEditor $response, CQuiz $quiz, CQuizQuestion $question, Course $course, ?Session $session): void
@@ -2523,9 +2545,8 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $firstAnswer = $answers[0] ?? null;
         if (!$firstAnswer instanceof CQuizAnswer) {
             $response->calculatedText = $this->getDefaultCalculatedText();
-            $response->calculatedFormula = '';
-            $response->calculatedRanges = [];
-            $response->calculatedVariations = 1;
+            $response->calculatedVariables = [];
+            $response->calculatedFormulas = [];
             $response->calculatedComment = '';
             $response->answers = [];
 
@@ -2534,52 +2555,61 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
         $parsed = $this->parseCalculatedAnswer((string) $firstAnswer->getAnswer());
         $response->calculatedText = $parsed['text'];
-        $response->calculatedFormula = $parsed['formula'];
-        $response->calculatedRanges = $this->buildCalculatedRanges($parsed['text']);
-        $response->calculatedVariations = max(1, \count($answers));
+        $response->calculatedVariables = array_values($parsed['variables']);
+        $response->calculatedFormulas = array_values($parsed['formulas']);
         $response->calculatedComment = (string) $firstAnswer->getComment();
         $response->score = (float) $question->getPonderation();
         $response->answers = [];
     }
 
     /**
-     * @return array{text: string, formula: string}
+     * @return array{
+     *     text: string,
+     *     variables: array<string, array{name: string, intervals: string, decimals: int}>,
+     *     formulas: array<string, array{name: string, formula: string, tolerance: float, toleranceType: string, decimals: int, score: float}>
+     * }
      */
     private function parseCalculatedAnswer(string $encodedAnswer): array
     {
-        $parts = explode('@@', $encodedAnswer);
-        $formula = \count($parts) > 1 ? (string) array_pop($parts) : '';
-        $text = (string) array_shift($parts);
-        $text = preg_replace('/\[[^\]]*\]/', '[]', $text) ?? $text;
+        $parts = explode('@@@', $encodedAnswer, 2);
+        $text = (string) ($parts[0] ?? '');
+        $encodedData = (string) ($parts[1] ?? '');
 
-        return [
-            'text' => $text,
-            'formula' => $formula,
-        ];
-    }
+        $variables = [];
+        $formulas = [];
 
-    /**
-     * @return array<int, array{token: string, low: string, high: string, random: string, position: int}>
-     */
-    private function buildCalculatedRanges(string $text): array
-    {
-        $ranges = [];
-        foreach ($this->extractCalculatedTokens($text) as $index => $token) {
-            $ranges[] = [
-                'token' => $token,
-                'low' => '1',
-                'high' => '20',
-                'random' => $this->generateCalculatedValue('1', '20'),
-                'position' => $index + 1,
-            ];
+        foreach (explode(';', trim($encodedData, ';')) as $item) {
+            if ('' === $item) {
+                continue;
+            }
+
+            $bits = explode(':', $item);
+            if (str_starts_with($item, '#') && \count($bits) >= 4) {
+                $name = ltrim($bits[0], '#');
+                $variables[$name] = [
+                    'name' => $name,
+                    'intervals' => str_replace('*', '; ', $bits[1]),
+                    'decimals' => (int) $bits[3],
+                ];
+            } elseif (str_starts_with($item, '=') && \count($bits) >= 6) {
+                $name = ltrim($bits[0], '=');
+                $formulas[$name] = [
+                    'name' => $name,
+                    'formula' => $bits[1],
+                    'tolerance' => (float) $bits[2],
+                    'toleranceType' => $bits[3],
+                    'decimals' => (int) $bits[4],
+                    'score' => (float) $bits[5],
+                ];
+            }
         }
 
-        return $ranges;
+        return ['text' => $text, 'variables' => $variables, 'formulas' => $formulas];
     }
 
     private function getDefaultCalculatedText(): string
     {
-        return '<p>Calculate the Body Mass Index for a person with weight [95] Kg and height [1.81] m.</p><p>Body Mass Index: []</p>';
+        return '<p>[#a] + [#b] = [=result]</p>';
     }
 
     private function validateFillBlanksPayload(ExerciseQuestionEditor $data): void

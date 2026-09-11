@@ -1021,6 +1021,7 @@
     "You have access to multiple URLs. Here is the list of your accesses.": "Tá rochtain agat ar URLanna iolracha. Seo liosta do rochtana.",
     "Please click on the link below corresponding to the URL you wish to access": "Clice\u00e1il ar an nasc th\u00edos a fhreagra\u00edonn don URL ar mhaith leat rochtain a fh\u00e1il air",
     "You do not currently have access to any URL": "N\u00edl rochtain agat faoi l\u00e1thair ar aon URL",
+    "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong.": "N\u00edl rochtain agat ar aon URL faoi l\u00e1thair. Iarr ar an riarth\u00f3ir rochtain a thabhairt duit ar an URL lena mbaineann t\u00fa.",
     "Maximum number of subscriptions allowed": "Uasmh\u00e9id s\u00ednti\u00fasanna ceadaithe",
     "An error occurred": "Tharla earr\u00e1id",
     "You don't have any course content yet": "N\u00edl aon \u00e1bhar c\u00farsa agat go f\u00f3ill",

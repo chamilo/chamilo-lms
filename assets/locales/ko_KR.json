@@ -1021,6 +1021,7 @@
     "You have access to multiple URLs. Here is the list of your accesses.": "여러 URL에 접근할 수 있습니다. 다음은 귀하의 접근 목록입니다.",
     "Please click on the link below corresponding to the URL you wish to access": "\uc811\uadfc\ud558\ub824\ub294 URL\uc5d0 \ud574\ub2f9\ud558\ub294 \uc544\ub798 \ub9c1\ud06c\ub97c \ud074\ub9ad\ud558\uc2ed\uc2dc\uc624.",
     "You do not currently have access to any URL": "\ud604\uc7ac \uc811\uadfc\ud560 \uc218 \uc788\ub294 URL\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.",
+    "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong.": "\ud604\uc7ac \uc811\uadfc\ud560 \uc218 \uc788\ub294 URL\uc774 \uc5c6\uc2b5\ub2c8\ub2e4. \uc18c\uc18d URL\uc5d0 \ub300\ud55c \uc811\uadfc \uad8c\ud55c\uc744 \uad00\ub9ac\uc790\uc5d0\uac8c \uc694\uccad\ud558\uc138\uc694.",
     "Maximum number of subscriptions allowed": "\ud5c8\uc6a9\ub41c \ucd5c\ub300 \uad6c\ub3c5 \uc218\uc785\ub2c8\ub2e4.",
     "An error occurred": "\uc624\ub958\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4.",
     "You don't have any course content yet": "\uc544\uc9c1 \uac15\uc758 \ucf58\ud150\uce20\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.",

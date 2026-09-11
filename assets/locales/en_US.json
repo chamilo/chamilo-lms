@@ -1021,6 +1021,7 @@
     "You have access to multiple URLs. Here is the list of your accesses.": "You have access to multiple URLs. Here is the list of your accesses.",
     "Please click on the link below corresponding to the URL you wish to access": "Please click on the link below corresponding to the URL you wish to access",
     "You do not currently have access to any URL": "You do not currently have access to any URL",
+    "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong.": "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong.",
     "Maximum number of subscriptions allowed": "Maximum number of subscriptions allowed",
     "An error occurred": "An error occurred",
     "You don't have any course content yet": "You don't have any course content yet",

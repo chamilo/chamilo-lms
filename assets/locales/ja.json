@@ -1021,6 +1021,7 @@
     "You have access to multiple URLs. Here is the list of your accesses.": "複数のURLにアクセス可能です。以下にアクセスリストを示します。",
     "Please click on the link below corresponding to the URL you wish to access": "\u30a2\u30af\u30bb\u30b9\u3057\u305f\u3044 URL \u306b\u5bfe\u5fdc\u3059\u308b\u4e0b\u8a18\u306e\u30ea\u30f3\u30af\u3092\u30af\u30ea\u30c3\u30af\u3057\u3066\u304f\u3060\u3055\u3044",
     "You do not currently have access to any URL": "\u73fe\u5728\u3001\u3069\u306e URL \u306b\u3082\u30a2\u30af\u30bb\u30b9\u6a29\u304c\u3042\u308a\u307e\u305b\u3093",
+    "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong.": "\u73fe\u5728\u3001\u3069\u306eURL\u306b\u3082\u30a2\u30af\u30bb\u30b9\u3067\u304d\u307e\u305b\u3093\u3002\u6240\u5c5e\u3059\u308bURL\u3078\u306e\u30a2\u30af\u30bb\u30b9\u3092\u7ba1\u7406\u8005\u306b\u4f9d\u983c\u3057\u3066\u304f\u3060\u3055\u3044\u3002",
     "Maximum number of subscriptions allowed": "\u8a31\u53ef\u3055\u308c\u305f\u6700\u5927\u8cfc\u8aad\u6570\u3067\u3059",
     "An error occurred": "\u30a8\u30e9\u30fc\u304c\u767a\u751f\u3057\u307e\u3057\u305f",
     "You don't have any course content yet": "\u30b3\u30fc\u30b9\u30b3\u30f3\u30c6\u30f3\u30c4\u304c\u307e\u3060\u3042\u308a\u307e\u305b\u3093",

@@ -1021,6 +1021,7 @@
     "You have access to multiple URLs. Here is the list of your accesses.": "Killakuna URLkunaq rurayniykuna kaypi.",
     "Please click on the link below corresponding to the URL you wish to access": "Aypasqayki URLman tinkisqa linkninpi chinkichis",
     "You do not currently have access to any URL": "Manam \u00f1awpaq URLman accesomannchu kanki",
+    "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong.": "Kunanqa mana ima URLmanpas haykuyta atinkichu. Administradorman ma\u00f1akuy, kapusqayki URLman haykunaykipaq permiso qunanpaq.",
     "Maximum number of subscriptions allowed": "Suscripciones maximon kaypi",
     "An error occurred": "Pantalla saqisqa",
     "You don't have any course content yet": "Manam kawsaynin curso yachaywan manam kanchu",

@@ -1021,6 +1021,7 @@
     "You have access to multiple URLs. Here is the list of your accesses.": "您有多个 URL 访问权限。这是您的访问列表。",
     "Please click on the link below corresponding to the URL you wish to access": "\u8bf7\u70b9\u51fb\u4e0b\u65b9\u5bf9\u5e94\u60a8\u5e0c\u671b\u8bbf\u95ee\u7684 URL \u7684\u94fe\u63a5",
     "You do not currently have access to any URL": "\u60a8\u5f53\u524d\u65e0\u6743\u8bbf\u95ee\u4efb\u4f55 URL",
+    "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong.": "\u60a8\u76ee\u524d\u65e0\u6cd5\u8bbf\u95ee\u4efb\u4f55 URL\u3002\u8bf7\u8054\u7cfb\u7ba1\u7406\u5458\uff0c\u6388\u4e88\u60a8\u6240\u5c5e URL \u7684\u8bbf\u95ee\u6743\u9650\u3002",
     "Maximum number of subscriptions allowed": "\u5141\u8bb8\u7684\u6700\u5927\u8ba2\u9605\u6570",
     "An error occurred": "\u53d1\u751f\u9519\u8bef",
     "You don't have any course content yet": "\u60a8\u8fd8\u6ca1\u6709\u4efb\u4f55\u8bfe\u7a0b\u5185\u5bb9",

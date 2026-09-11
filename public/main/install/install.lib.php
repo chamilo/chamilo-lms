@@ -1474,11 +1474,14 @@ function escapeInstallerEnvValue(mixed $value): string
         throw new \InvalidArgumentException('Installer .env values cannot contain line breaks.');
     }
 
-    return str_replace(
-        ['\\', "'"],
-        ['\\\\', "\\'"],
-        $value
-    );
+    // .env.dist wraps every value in single quotes: KEY='{{VALUE}}'. Symfony
+    // Dotenv's single-quote grammar has no backslash escape, so turning ' into
+    // \' would end the quoted region and let a trailing $(...) run as a shell
+    // command substitution. Use the POSIX '\'' idiom (close quote, escaped
+    // quote, reopen quote) so a single quote stays inside a quoted segment,
+    // where $ is literal. A backslash needs no escaping: it is literal inside
+    // single quotes and round-trips unchanged through Dotenv.
+    return str_replace("'", "'\\''", $value);
 }
 
 function updateEnvFile($distFile, $envFile, $params)

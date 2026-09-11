@@ -24055,6 +24055,18 @@ msgstr ""
 msgid "Signed in as"
 msgstr ""
 
+msgid "Authorize application"
+msgstr ""
+
+msgid "wants to connect to your Chamilo account."
+msgstr ""
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr ""
+
+msgid "Allow"
+msgstr ""
+
 msgid "Remember me"
 msgstr ""
 

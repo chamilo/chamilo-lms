@@ -24066,6 +24066,18 @@ msgstr "Tunjuk keputusan kepada pelajar: Tunjuk skor, pilihan pelajar dan maklum
 msgid "Signed in as"
 msgstr "Log masuk sebagai"
 
+msgid "Authorize application"
+msgstr "Benarkan aplikasi"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "ingin menyambung ke akaun Chamilo anda."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Aplikasi ini akan dapat bertindak pada Chamilo sama seperti anda — menggunakan keizinan akaun sedia ada anda dan tiada lebih. Ia tidak akan mendapat sebarang akses yang anda tidak miliki."
+
+msgid "Allow"
+msgstr "Benarkan"
+
 msgid "Remember me"
 msgstr "Ingat saya"
 
@@ -31431,6 +31443,9 @@ msgstr "Kembali ke halaman penugasan pengguna"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Sumber autentikasi ditugaskan dengan jayanya"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Tiada kaedah pengesahan dipilih. Ini akan mengalih keluar setiap kaedah pengesahan bagi pengguna yang dipilih pada URL ini, yang mungkin menghalang mereka daripada log masuk. Teruskan?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Petua: pilih “— Hanya muat naik —” untuk menyimpan tanpa hantar kepada sesiapa."
@@ -41220,4 +41235,316 @@ msgstr "Pembelajaran berselang"
 
 msgid "Memory palaces"
 msgstr "Istana memori"
+
+msgid "Logins (Month)"
+msgstr "Log masuk (Bulan)"
+
+msgid "Logins (Day)"
+msgstr "Log masuk (Hari)"
+
+msgid "Logins (Hour)"
+msgstr "Log masuk (Jam)"
+
+msgid "Number of users (Picture)"
+msgstr "Bilangan pengguna (Gambar)"
+
+msgid "Allow tutors to register users"
+msgstr "Benarkan tutor mendaftar pengguna"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Benarkan tutor mengedit dalam sesi kursus"
+
+msgid "Extend rights for tutors"
+msgstr "Luaskan hak untuk tutor"
+
+msgid "Show session tutor"
+msgstr "Tunjukkan tutor sesi"
+
+msgid "Default tutor access days after session"
+msgstr "Hari akses tutor lalai selepas sesi"
+
+msgid "Default tutor access days before session"
+msgstr "Hari akses tutor lalai sebelum sesi"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: sembunyikan tutor kursus"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Sembunyikan tutor umum dalam Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Luaskan hak tutor pada tinjauan"
+
+msgid "Maximum courses per user"
+msgstr "Maksimum kursus setiap pengguna"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Benarkan tutor memberi komen semasa menyemak latihan"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Sertakan kod rasmi dalam nama fail PDF keputusan kuiz yang dieksport"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron peringatan tamat tempoh sijil"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Tetingkap peringatan tamat tempoh sijil (hari)"
+
+msgid "Allow certificates search"
+msgstr "Benarkan carian sijil"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Benarkan tutor sentiasa mengedit pengumuman"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Tunjukkan kod rasmi pelajar dalam helaian kehadiran"
+
+msgid "Restrict course chat to tutors"
+msgstr "Hadkan sembang kursus kepada tutor"
+
+msgid "Language by resource"
+msgstr "Bahasa mengikut sumber"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Lengkapkan SCO semasa keluar apabila status kekal tidak lengkap"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Dayakan ujian adaptif progresif mengikut destinasi kategori"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Halang penghantaran pemberitahuan ujian kepada tutor umum"
+
+msgid "Enable session expiration warning"
+msgstr "Dayakan amaran tamat tempoh sesi"
+
+msgid "Session expiration warning time"
+msgstr "Masa amaran tamat tempoh sesi"
+
+msgid "Check password requirements"
+msgstr "Semak keperluan kata laluan"
+
+msgid "File integrity check notification recipients"
+msgstr "Penerima pemberitahuan semakan integriti fail"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Dayakan pelayan kebenaran OAuth"
+
+msgid "Enable MCP server"
+msgstr "Dayakan pelayan MCP"
+
+msgid "Allow MCP by roles"
+msgstr "Benarkan MCP mengikut peranan"
+
+msgid "Enable external API keys"
+msgstr "Dayakan kunci API luaran"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Sesi mengikut tempoh sentiasa tersedia kepada tutor"
+
+msgid "Allow registration via course invitation links"
+msgstr "Benarkan pendaftaran melalui pautan jemputan kursus"
+
+msgid "Add student fullname in file download name"
+msgstr "Tambah nama penuh pelajar dalam nama muat turun fail"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Benarkan terjemahan AI ke semua bahasa aktif dalam editor WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Lumpuhkan keupayaan untuk mengedit tutor kursus"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Apabila menggunakan sesi, tingkah laku lalai ialah menggunakan keterlihatan alat yang ditakrifkan dalam kursus asas. Tetapan ini mengubahnya untuk membenarkan tutor dalam kursus sesi menyesuaikan keterlihatan alat mengikut keperluan mereka."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Tutor boleh mencipta pengguna di platform dan melanggan pengguna ke sesi."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Dayakan pilihan ini untuk memberi tutor keizinan yang sama seperti jurulatih pada alat pengarangan"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Tunjukkan nama tutor sesi umum dalam kotak tajuk sesi dalam senarai kursus"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Apabila didayakan, tutor kursus dalam sesi boleh melanggan pengguna baharu ke sesi mereka. Jika tidak, pilihan ini hanya tersedia kepada pentadbir dan pentadbir sesi."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Bilangan hari lalai tutor boleh mengakses sesi selepas tarikh tamat rasmi sesi"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Bilangan hari lalai tutor boleh mengakses sesi sebelum tarikh mula rasmi sesi"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Dayakan pustaka MathJax untuk memvisualkan rumus matematik. Ini menambah butang rumus pada bar alat editor, di mana rumus ditulis dalam LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kod kursus dipisahkan dengan \"|\". Apabila pengarah sumber manusia log masuk, pengguna dilanggan secara automatik ke kursus ini. Contoh: COURSE001|COURSE002. Ini tidak mengubah peranan pengguna."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kod kursus dipisahkan dengan \"|\". Apabila pentadbir sesi log masuk, pengguna dilanggan secara automatik ke kursus ini. Contoh: COURSE001|COURSE002. Ini tidak mengubah peranan pengguna."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Kod kursus dipisahkan dengan \"|\". Apabila pelajar log masuk, pengguna dilanggan secara automatik ke kursus ini. Contoh: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Kod kursus dipisahkan dengan \"|\". Apabila guru log masuk, pengguna dilanggan secara automatik ke kursus ini. Contoh: COURSE001|COURSE002. Ini tidak memberikan kebenaran guru kursus."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Sembunyikan tutor kursus sesi dalam Dropbox apabila dokumen dihantar oleh tutor kepada pelajar"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Sembunyikan nama tutor umum dalam alat Dropbox apabila tutor umum memuat naik fail"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Dayakan pilihan ini untuk membenarkan tutor mencipta dan menyunting tinjauan"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Patutkah jemputan tinjauan menggunakan alamat e-mel tutor atau alamat no-reply yang ditakrifkan dalam bahagian konfigurasi utama?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Bilangan maksimum kursus yang boleh dicipta oleh guru/jurulatih. Tetapkan kepada 0 untuk mematikan had. Boleh diganti setiap pengguna melalui pembelian perkhidmatan BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Benarkan tutor menyunting maklum balas semasa menyemak latihan"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Sama ada kod rasmi pelajar disertakan dalam nama fail semasa mengeksport keputusan kuiz ke PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Membenarkan akses kepada semua fail peribadi tanpa sekatan"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Dayakan cron app:send-certificate-expiry-reminders, yang mengingatkan pelajar yang sijilnya telah tamat tempoh atau hampir tamat tempoh."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Bilangan hari lalai ke hadapan untuk mengimbas sijil yang hampir tamat tempoh, digunakan kecuali cron dijalankan dengan --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Benarkan pengguna dan pelawat mencari sijil yang dijana daripada menu bar atas."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Benarkan tutor sentiasa menyunting pengumuman dalam sesi aktif atau lepas."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Sama ada kod rasmi pelajar dipaparkan bersama nama mereka dalam helaian kehadiran dan senarai."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Benarkan menetapkan bahasa tertentu kepada sumber individu."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Sesetengah pakej SCORM hanya memanggil LMSSetValue(cmi.core.lesson_status, 'incomplete') sekali dan tidak pernah menghantar status terminal sebenar mahupun LMSFinish() yang bermakna. Dayakan ini supaya Chamilo merawat 'incomplete' yang tertinggal itu sama seperti tiada status, menyelesaikan penyiapan apabila pelajar meninggalkan SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Jika laluan pembelajaran ditetapkan kepada tidak kelihatan tetapi guru atau tutor memutuskan untuk menjadikannya tersedia dari laman utama kursus, pilihan ini menghalang Chamilo daripada menyembunyikan pautan pada laman utama kursus."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Dayakan ujian adaptif progresif di mana setiap kategori soalan boleh mengalihkan pelajar ke kategori lain bergantung pada skor mereka."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Apabila pelajar menyelesaikan ujian, pemberitahuan biasanya dihantar kepada tutor, termasuk tutor sesi umum. Dayakan pilihan ini untuk tidak menyertakan tutor umum dalam pemberitahuan ini."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Tunjukkan percubaan ujian daripada pengguna dalam semua sesi yang tutor umum mempunyai akses dalam laporan ujian tertunda."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Tunjukkan amaran kepada pengguna yang disahkan sebelum sesi sisi pelayan mereka tamat tempoh."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Bilangan saat sebelum tamat tempoh sesi apabila amaran dipaparkan. Lalai ialah 180 saat."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Mentakrifkan struktur yang diperlukan untuk kata laluan pengguna. Contoh: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Gunakan \"specials\" (jamak) untuk memerlukan aksara khas."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Dayakan pengesahan keperluan kata laluan yang ditakrifkan di atas semasa penciptaan atau kemas kini kata laluan."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Senarai alamat e-mel dipisahkan koma untuk dimaklumkan apabila imbasan integriti fail mengesan perubahan. Biarkan kosong untuk memaklumkan setiap pentadbir global sebaliknya."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Membenarkan aplikasi luaran (cth. penyambung MCP Claude.ai) mendaftar melalui OAuth 2.1 Dynamic Client Registration dan menyambung menggunakan akaun serta kebenaran Chamilo setiap pengguna. Dinyahdayakan secara lalai: titik hujung discovery, pendaftaran, kebenaran dan token semua mengembalikan 404 sehingga ini dihidupkan."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Mendayakan titik hujung MCP Chamilo dan antara muka kunci API MCP peribadi. Apabila dinyahdayakan, kunci API sedia ada, token akses OAuth dan kelayakan JWT tidak boleh digunakan pada /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "Peta JSON peranan pengguna Chamilo yang dibenarkan menggunakan MCP. Pengguna mesti sepadan sekurang-kurangnya satu peranan yang didayakan. Sekatan ini juga terpakai kepada kunci API yang dijana sebelum ini dan sambungan OAuth sedia ada."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Membenarkan integrasi pelayan-ke-pelayan yang dipercayai (cth. pemalam kedai WordPress) mengesahkan terhadap titik hujung /api umum menggunakan kunci API luaran setiap pengguna, dijana melalui perintah konsol \"chamilo:security:generate-external-api-key\". Dinyahdayakan secara lalai: kunci sedia ada tidak boleh digunakan sehingga ini dihidupkan."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Tambah tutor dan tarikh ke sari kata sesi dalam senarai sesi."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Jika tidak, tutor sesi hanya mempunyai akses kepada sesi mengikut tempoh semasa tempoh aktif."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Apabila didayakan, guru/pentadbir boleh menghantar pautan jemputan sekali sahaja dari alat Pengguna kursus yang membolehkan orang yang tidak berdaftar mencapai borang pendaftaran dan mendaftar walaupun pendaftaran sendiri umum (allow_registration) dinyahdayakan."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Tambah nama penuh pelajar ke nama fail tugasan semasa memuat turun penyerahan individu atau pakej tugasan."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Membenarkan guru menjana terjemahan untuk semua bahasa platform aktif dalam satu tindakan WYSIWYG. Ini mungkin menggunakan sejumlah besar token AI."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Apabila dinyahdayakan, pentadbir tidak mempunyai pautan untuk menetapkan tutor dengan pantas kepada kursus sesi pada halaman penyuntingan kursus."
+
+msgid "Show courses & sessions"
+msgstr "Tunjukkan kursus & sesi"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON pilihan. Contoh: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Jadual"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Penghantar e-mel tutor kursus"
+
+msgid "Card (visual blocks)"
+msgstr "Kad (blok visual)"
+
+msgid "List (classic)"
+msgstr "Senarai (klasik)"
+
+msgid "Limit identical emails"
+msgstr "Had e-mel yang sama"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Bilangan maksimum kursus yang boleh dicipta oleh guru atau jurulatih. Tetapkan kepada 0 untuk menyahdayakan had."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Bilangan maksimum akaun yang dibenarkan dengan e-mel yang sama. Tetapkan kepada 0 untuk menyahdayakan had."
+
+msgid "Validation"
+msgstr "Pengesahan"
+
+msgid "Test/Development"
+msgstr "Ujian/Pembangunan"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Kunci medan tambahan pengguna untuk digunakan semasa mencari dan menamakan sesi daripada /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Konfigurasi JSON untuk medan prapenapis carian."
 

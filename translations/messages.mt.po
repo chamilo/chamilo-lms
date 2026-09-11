@@ -24068,6 +24068,18 @@ msgstr "Uri r-riżultat lill-istudent: Uri l-punteġġ, l-għażla tal-istudent 
 msgid "Signed in as"
 msgstr "Idħol bħala"
 
+msgid "Authorize application"
+msgstr "Awtorizza l-applikazzjoni"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "trid tikkonnettja mal-kont tiegħek ta' Chamilo."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Din l-applikazzjoni tkun tista' taġixxi fuq Chamilo eżatt bħalek — billi tuża l-permessi eżistenti tal-kont tiegħek u xejn aktar. Qatt ma tikseb aċċess li m'għandekx diġà."
+
+msgid "Allow"
+msgstr "Ippermetti"
+
 msgid "Remember me"
 msgstr "Ftakarni"
 
@@ -31432,6 +31444,9 @@ msgstr "Lura għall-paġna tal-assenjazzjoni tal-utenti"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Sorsi ta’ awtentikazzjoni ġew assenjati b’suċċess"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "M'hemm l-ebda metodu ta' awtentikazzjoni magħżul. Dan ineħħi kull metodu ta' awtentikazzjoni għall-utent(i) magħżul(a) fuq dan l-URL, li jista' jwaqqafhom milli jidħlu. Tkompli?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Parir: agħżel “— Just upload —” biex tħażen mingħajr ma tibgħat lil ħadd."
@@ -41221,4 +41236,316 @@ msgstr "Tagħlim interkalat"
 
 msgid "Memory palaces"
 msgstr "Palazzi tal-memorja"
+
+msgid "Logins (Month)"
+msgstr "Logins (Xahar)"
+
+msgid "Logins (Day)"
+msgstr "Logins (Jum)"
+
+msgid "Logins (Hour)"
+msgstr "Logins (Siegħa)"
+
+msgid "Number of users (Picture)"
+msgstr "Numru ta' utenti (Ritratt)"
+
+msgid "Allow tutors to register users"
+msgstr "Ippermetti lit-tuturi jirreġistraw utenti"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Ippermetti lit-tuturi jeditjaw ġewwa s-sessjonijiet tal-kors"
+
+msgid "Extend rights for tutors"
+msgstr "Estendi d-drittijiet għat-tuturi"
+
+msgid "Show session tutor"
+msgstr "Uri t-tutur tas-sessjoni"
+
+msgid "Default tutor access days after session"
+msgstr "Jiem ta' aċċess default tat-tutur wara s-sessjoni"
+
+msgid "Default tutor access days before session"
+msgstr "Jiem ta' aċċess default tat-tutur qabel is-sessjoni"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: aħbi t-tutur tal-kors"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Aħbi t-tutur ġenerali fid-Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Estendi d-drittijiet għat-tuturi fuq l-istħarriġ"
+
+msgid "Maximum courses per user"
+msgstr "Massimu ta' korsijiet għal kull utent"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Ippermetti lit-tuturi jikkummentaw meta jirrevedu l-eżerċizzji"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Inkludi l-kodiċi uffiċjali fl-isem tal-fajl PDF tar-riżultat tal-kwizz esportat"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron ta' tfakkira ta' skadenza taċ-ċertifikat"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Tieqa ta' tfakkira ta' skadenza taċ-ċertifikat (jiem)"
+
+msgid "Allow certificates search"
+msgstr "Ippermetti t-tiftix taċ-ċertifikati"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Ippermetti lit-tuturi jeditjaw dejjem l-avviżi"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Uri l-kodiċi uffiċjali tal-istudenti fil-folji tal-attendenza"
+
+msgid "Restrict course chat to tutors"
+msgstr "Irrestringi ċ-chat tal-kors għat-tuturi"
+
+msgid "Language by resource"
+msgstr "Lingwa skont ir-riżorsa"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Tlesti l-SCO meta titlaq jekk l-istatus jibqa' mhux komplut"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Attiva testijiet adattivi progressivi skont id-destinazzjoni tal-kategorija"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Imblokka t-trażmissjoni ta' notifiki tat-test lit-tutur ġenerali"
+
+msgid "Enable session expiration warning"
+msgstr "Attiva twissija ta' skadenza tas-sessjoni"
+
+msgid "Session expiration warning time"
+msgstr "Ħin tat-twissija ta' skadenza tas-sessjoni"
+
+msgid "Check password requirements"
+msgstr "Iċċekkja r-rekwiżiti tal-password"
+
+msgid "File integrity check notification recipients"
+msgstr "Riċevituri tan-notifika tal-verifika tal-integrità tal-fajl"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Attiva s-server ta' awtorizzazzjoni OAuth"
+
+msgid "Enable MCP server"
+msgstr "Attiva s-server MCP"
+
+msgid "Allow MCP by roles"
+msgstr "Ippermetti MCP skont ir-rwoli"
+
+msgid "Enable external API keys"
+msgstr "Attiva ċwievet API esterni"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Sessjonijiet skont it-tul dejjem disponibbli għat-tuturi"
+
+msgid "Allow registration via course invitation links"
+msgstr "Ippermetti r-reġistrazzjoni permezz ta' links ta' stedina tal-kors"
+
+msgid "Add student fullname in file download name"
+msgstr "Żid l-isem sħiħ tal-istudent fl-isem tad-download tal-fajl"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Ippermetti traduzzjoni bl-IA għall-lingwi attivi kollha fl-edituri WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Iddiżattiva l-abbiltà li jiġu editjati t-tuturi tal-kors"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Meta jintużaw sessjonijiet, l-imġiba default hija li tintuża l-viżibilità tal-għodda definita fil-kors bażi. Din is-setting tibdel dan biex tippermetti lit-tuturi fil-korsijiet tas-sessjoni jadattaw il-viżibilità tal-għodod skont il-ħtiġijiet tagħhom."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "It-tuturi jistgħu joħolqu utenti fuq il-pjattaforma u jissottoskrivu utenti għal sessjoni."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Attiva din l-għażla biex tagħti lit-tuturi l-istess permessi bħat-trainers fuq l-għodod tal-awtur"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Uri l-isem tat-tutur ġenerali tas-sessjoni fil-kaxxa tat-titlu tas-sessjoni fil-lista tal-korsijiet"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Meta tkun attivata, it-tuturi tal-kors fis-sessjonijiet jistgħu jissottoskrivu utenti ġodda għas-sessjoni tagħhom. Din l-għażla inkella tkun disponibbli biss għall-amministraturi u l-amministraturi tas-sessjoni."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Numru default ta' jiem li tuturi jista' jaċċessa sessjoni wara d-data uffiċjali tat-tmiem tas-sessjoni"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Numru standard ta’ jiem li tutur jista’ jaċċessa sessjoni qabel id-data uffiċjali tal-bidu tas-sessjoni"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Attiva l-librerija MathJax biex turi formuli matematiċi. Dan iżid buttuna tal-formuli fil-bar tal-għodod tal-editur, fejn il-formuli jinkitbu f’LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kodiċijiet tal-korsijiet separati b’\"|\". Meta direttur tar-riżorsi umani jidħol, l-utent jiġi abbonat awtomatikament f’dawn il-korsijiet. Eżempju: COURSE001|COURSE002. Dan ma jibdilx ir-rwol tal-utent."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kodiċijiet tal-korsijiet separati b’\"|\". Meta amministratur tas-sessjoni jidħol, l-utent jiġi abbonat awtomatikament f’dawn il-korsijiet. Eżempju: COURSE001|COURSE002. Dan ma jibdilx ir-rwol tal-utent."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Kodiċijiet tal-korsijiet separati b’\"|\". Meta student jidħol, l-utent jiġi abbonat awtomatikament f’dawn il-korsijiet. Eżempju: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Kodiċijiet tal-korsijiet separati b’\"|\". Meta għalliem jidħol, l-utent jiġi abbonat awtomatikament f’dawn il-korsijiet. Eżempju: COURSE001|COURSE002. Dan ma jagħtix permessi ta’ għalliem tal-kors."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Aħbi t-tutur tal-kors tas-sessjoni fid-Dropbox meta dokument jintbagħat mit-tutur lill-istudenti"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Aħbi l-isem tat-tutur ġenerali fl-għodda Dropbox meta t-tutur ġenerali jkun tela’ l-fajl"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Attiva din l-għażla biex tħalli lit-tuturi joħolqu u jeditjaw stħarriġ"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "L-istediniet tal-istħarriġ għandhom jużaw l-indirizz elettroniku tat-tutur jew l-indirizz no-reply definit fit-taqsima prinċipali tal-konfigurazzjoni?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Numru massimu ta’ korsijiet li għalliem/trainer jista’ joħloq. Issettja għal 0 biex tiddiżattiva l-limitu. Jista’ jiġi override għal kull utent permezz ta’ xiri ta’ servizz BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Ħalli lit-tuturi jeditjaw il-feedback waqt ir-reviżjoni tal-eżerċizzji"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Jekk għandux jiġi inkluż il-kodiċi uffiċjali tal-istudent fl-isem tal-fajl meta riżultat ta’ kwizz jiġi esportat għal PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Jippermetti aċċess għall-fajls personali kollha mingħajr restrizzjoni"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Attiva l-cron app:send-certificate-expiry-reminders, li jfakkru lill-istudenti li ċ-ċertifikati tagħhom skadew jew waslu biex jiskadu."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Numru standard ta’ jiem minn qabel biex jiġu skennjati ċertifikati li waslu biex jiskadu, użat sakemm il-cron ma jkunx imexxi b’--days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Ħalli lill-utenti u lill-viżitaturi jfittxu ċertifikati ġġenerati mill-menu tal-bar ta’ fuq."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Ħalli lit-tuturi jeditjaw dejjem l-avviżi ġewwa sessjonijiet attivi jew tal-passat."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Jekk għandux jintwera l-kodiċi uffiċjali tal-istudenti ħdejn isimhom fil-folji u l-listi tal-attendenza."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Ħalli li lingwa speċifika tiġi assenjata lil riżorsi individwali."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Xi pakketti SCORM isejħu LMSSetValue(cmi.core.lesson_status, 'incomplete') darba biss u qatt ma jibagħtu status terminali reali u lanqas LMSFinish() sinifikanti. Attiva dan biex Chamilo jittratta dak l-'incomplete' li jibqa’ bħala l-ebda status, u jsolvi t-tlestija meta l-istudent iħalli l-SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Jekk mogħdija ta’ tagħlim tkun issettjata bħala invisibbli iżda l-għalliem jew it-tutur iddeċieda li jagħmilha disponibbli mill-paġna ewlenija tal-kors, din l-għażla żżomm lil Chamilo milli jaħbi l-link fuq il-paġna ewlenija tal-kors."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Attiva testijiet adattivi progressivi fejn kull kategorija ta’ mistoqsija tista’ tidderieġi lill-istudenti lejn kategorija oħra skont il-punteġġ tagħhom."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Meta l-istudenti jlestu test, in-notifiki normalment jintbagħtu lit-tuturi, inkluż it-tutur ġenerali tas-sessjoni. Attiva din l-għażla biex tħalli barra t-tutur ġenerali minn dawn in-notifiki."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Uri tentattivi tat-test mill-utenti fis-sessjonijiet kollha fejn it-tutur ġenerali għandu aċċess fir-rapport tat-testijiet pendenti."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Uri twissija lill-utenti awtentikati qabel ma s-sessjoni tagħhom fuq is-server tiskadi."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Numru ta’ sekondi qabel l-iskadenza tas-sessjoni meta tintwera t-twissija. L-istandard huwa 180 sekonda."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Jiddefinixxi l-istruttura meħtieġa għall-passwords tal-utenti. Eżempju: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Uża \"specials\" (plural) biex teħtieġ karattri speċjali."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Attiva l-validazzjoni tar-rekwiżiti tal-password definiti hawn fuq waqt il-ħolqien jew l-aġġornament tal-password."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Lista ta’ indirizzi elettronici, separati b’virgola, biex jiġu nnotifikati meta skan tal-integrità tal-fajls jiskopri bidla. Ħalli vojt biex minflok jiġu nnotifikati l-amministraturi globali kollha."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Jippermetti lil applikazzjonijiet esterni (eż. il-konnettur MCP ta’ Claude.ai) jirreġistraw permezz ta’ OAuth 2.1 Dynamic Client Registration u jikkonnettjaw bl-użu tal-kont u l-permessi ta’ Chamilo ta’ kull utent. Diżattivat b’mod standard: l-endpoints tad-discovery, ir-reġistrazzjoni, l-awtorizzazzjoni u t-token kollha jirritornaw 404 sakemm dan ma jinxtegħelx."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Jattiva l-endpoint MCP ta’ Chamilo u l-interface tal-ċavetta API personali MCP. Meta jkun diżattivat, ċwievet API eżistenti, tokens ta’ aċċess OAuth u kredenzjali JWT ma jistgħux jintużaw fuq /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "Mappa JSON tar-rwoli tal-utenti ta’ Chamilo permessi jużaw MCP. Utent irid jaqbel ma’ mill-inqas rwol wieħed attiv. Din ir-restrizzjoni tapplika wkoll għal ċwievet API ġġenerati qabel u konnessjonijiet OAuth eżistenti."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Jippermetti lil integrazzjonijiet affidabbli server-to-server (eż. il-plugin tal-ħanut WordPress) jautentikaw kontra l-endpoint ġenerali /api bl-użu ta’ ċavetta API esterna għal kull utent, ġġenerata permezz tal-kmand tal-console \"chamilo:security:generate-external-api-key\". Diżattivat b’mod standard: ċwievet eżistenti ma jistgħux jintużaw sakemm dan ma jinxtegħelx."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Żid it-tutur u d-dati mas-sottotitolu tas-sessjoni fil-lista tas-sessjonijiet."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Inkella, it-tuturi tas-sessjoni jkollhom aċċess biss għal sessjonijiet skont it-tul matul it-tul attiv."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Meta attivata, għalliem/amministratur jista’ jibgħat link ta’ stedina ta’ darba mill-għodda Users ta’ kors li jħalli persuna mhux irreġistrata tasal għall-formola tar-reġistrazzjoni u tirreġistra anke waqt li r-reġistrazzjoni ġenerali (allow_registration) tkun diżattivata."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Żid l-isem sħiħ tal-istudent mal-ismijiet tal-fajls tal-assenjazzjoni meta jitniżżlu sottomissjonijiet individwali jew pakketti tal-assenjazzjoni."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Jippermetti lill-għalliema jiġġeneraw traduzzjonijiet għall-lingwi attivi kollha tal-pjattaforma f’azzjoni WYSIWYG waħda. Dan jista’ jikkonsma numru kbir ta’ tokens tal-IA."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Meta diżattivata, l-amministraturi ma jkollhomx link biex jaħtru malajr tuturi għall-korsijiet tas-sessjoni fuq il-paġna tal-editjar tal-kors."
+
+msgid "Show courses & sessions"
+msgstr "Uri korsijiet u sessjonijiet"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON fakultattiv. Eżempju: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Tabella"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Mittent tal-email tat-tutur tal-kors"
+
+msgid "Card (visual blocks)"
+msgstr "Karta (blokkijiet viżwali)"
+
+msgid "List (classic)"
+msgstr "Lista (klassika)"
+
+msgid "Limit identical emails"
+msgstr "Illimita emails identiċi"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Numru massimu ta' korsijiet li għalliem jew trejner jista' joħloq. Issettja għal 0 biex tiddiżattiva l-limitu."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Numru massimu ta' kontijiet permessi bl-istess email. Issettja għal 0 biex tiddiżattiva l-limitu."
+
+msgid "Validation"
+msgstr "Validazzjoni"
+
+msgid "Test/Development"
+msgstr "Test/Żvilupp"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Ċavetta tal-qasam extra tal-utent biex tintuża meta tfittex u ssemmi s-sessjonijiet minn /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Konfigurazzjoni JSON għall-oqsma tal-prefiltru tat-tiftix."
 

@@ -24063,6 +24063,18 @@ msgstr "Vís niðurstøðuna til lærnarin: Vís stigini, lærnarans val og hans
 msgid "Signed in as"
 msgstr "Innloggaður sum"
 
+msgid "Authorize application"
+msgstr "Heimila forrit"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "vil knýta seg at Chamilo-kontuni hjá tær."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Hetta forritið kann virka á Chamilo nógv sum tú sjálvur — við somu rættindum sum tú longu hevur, og ikki meira. Tað fær ongantíð atgongd, sum tú ikki longu hevur."
+
+msgid "Allow"
+msgstr "Loyva"
+
 msgid "Remember me"
 msgstr "Minst meg"
 
@@ -31427,6 +31439,9 @@ msgstr "Aftur til brúkaratiltakssíðuna"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Innloggingskeiðar nevndar við ognast"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Ongin samleikaváttanarháttur er valdur. Hetta tekur burtur allar samleikaváttanarháttir fyri valdu brúkaran(ar) á hesi URL, og kann forða teimum í at rita inn. Halda fram?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Ráð: vel “— Bara leggja upp —” til at goyma uttan at senda til nakran."
@@ -41216,4 +41231,316 @@ msgstr "Samanflættað læring"
 
 msgid "Memory palaces"
 msgstr "Minnishøllir"
+
+msgid "Logins (Month)"
+msgstr "Innritanir (mánaður)"
+
+msgid "Logins (Day)"
+msgstr "Innritanir (dagur)"
+
+msgid "Logins (Hour)"
+msgstr "Innritanir (tími)"
+
+msgid "Number of users (Picture)"
+msgstr "Tal av brúkarum (mynd)"
+
+msgid "Allow tutors to register users"
+msgstr "Loyva vegleiðarum at skráseta brúkarar"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Loyva vegleiðarum at rætta inni í skeiðssetrum"
+
+msgid "Extend rights for tutors"
+msgstr "Víðka rættindi hjá vegleiðarum"
+
+msgid "Show session tutor"
+msgstr "Vís setursvegleiðara"
+
+msgid "Default tutor access days after session"
+msgstr "Sjálvsett vegleiðaraatgongdardagar eftir setur"
+
+msgid "Default tutor access days before session"
+msgstr "Sjálvsett vegleiðaraatgongdardagar áðrenn setur"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: fjal skeiðsvegleiðara"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Fjal almennan vegleiðara í Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Víðka rættindi hjá vegleiðarum á kanningum"
+
+msgid "Maximum courses per user"
+msgstr "Hægst tal av skeiðum per brúkara"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Loyva vegleiðarum at viðmerkja, tá ið venjingar verða mettar"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Tak við almennan kota í útflytt PDF-fílunavni fyri royndarúrslit"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Áminning um galdandi prógv (cron)"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Vindeyga fyri áminning um galdandi prógv (dagar)"
+
+msgid "Allow certificates search"
+msgstr "Loyva leiting í prógvum"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Loyva vegleiðarum altíð at rætta kunningar"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Vís almennan kota hjá næmingum á møtiskjølum"
+
+msgid "Restrict course chat to tutors"
+msgstr "Avmarka skeiðskjatt til vegleiðarar"
+
+msgid "Language by resource"
+msgstr "Mál eftir tilfeingi"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Fullfør SCO við fráfari, tá ið støðan verður ófullførd"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Gera stigvísar tillagaðar royndir virknar eftir bólkaáseting"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Forða sending av royndarboðum til almenna vegleiðaran"
+
+msgid "Enable session expiration warning"
+msgstr "Gera ávaring um setursgildistíð virkna"
+
+msgid "Session expiration warning time"
+msgstr "Tíð fyri ávaring um setursgildistíð"
+
+msgid "Check password requirements"
+msgstr "Kann loyniorðskrav"
+
+msgid "File integrity check notification recipients"
+msgstr "Móttakarar av boðum um fíluheiliváttan"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Gera OAuth-heimildarambæta virknan"
+
+msgid "Enable MCP server"
+msgstr "Gera MCP-ambæta virknan"
+
+msgid "Allow MCP by roles"
+msgstr "Loyva MCP eftir leiklutum"
+
+msgid "Enable external API keys"
+msgstr "Gera uttanhýsis API-lyklar virknar"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Setur eftir longd altíð tøk hjá vegleiðarum"
+
+msgid "Allow registration via course invitation links"
+msgstr "Loyva skráseting umvegis innbjóðingarslóðir til skeið"
+
+msgid "Add student fullname in file download name"
+msgstr "Tak við fullum navni hjá næmingi í niðurtøkunavni"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Loyva KI-umseting til øll virkin mál í WYSIWYG-ritilunum"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Slá av møguleikan at rætta skeiðsvegleiðarar"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Tá ið setur verða brúkt, er sjálvsetta atferðin at nýta amboðssýningina, sum er ásett í grundskeiðinum. Henda stilling broytir tað, so vegleiðarar í setursskeiðum kunnu tillaga amboðssýning eftir tørvi."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Vegleiðarar kunnu stovna brúkarar á pallinum og skriva brúkarar á eitt setur."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Gera henda møguleika virknan fyri at geva vegleiðarum somu rættindi sum lærarar á rithøvundsamboðum"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Vís navn á almenna setursvegleiðaranum í seturstitilboksini á skeiðslistanum"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Tá ið hetta er virkið, kunnu skeiðsvegleiðarar í setrum skriva nýggjar brúkarar á setrið. Annars er henda møguleiki bert tøkur hjá umsitarum og setursumsitarum."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Sjálvsett tal av døgum ein vegleiðari kann fáa atgongd til eina lotu eftir almenna lotuloksdagfesting"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Sjálvsett tal av døgum ein vegleiðari kann fáa atgongd til eina lotu áðrenn almenna lotubyrjanardagfesting"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Gera MathJax-bókasavnið virkið fyri at sýna støddfrøðiligar formlar. Hetta leggur ein formlaknapp til ritilsins amboðsstong, har formlar verða skrivaðir í LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Skeiðskotur skildir við \"|\". Tá ein starvsfólkaleiðari ritar inn, verður brúkarin sjálvvirkandi innskrivaður á hesi skeið. Dømi: COURSE001|COURSE002. Hetta broytir ikki brúkaraleiklutin."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Skeiðskotur skildir við \"|\". Tá ein lotuumsiti ritar inn, verður brúkarin sjálvvirkandi innskrivaður á hesi skeið. Dømi: COURSE001|COURSE002. Hetta broytir ikki brúkaraleiklutin."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Skeiðskotur skildir við \"|\". Tá ein næmingur ritar inn, verður brúkarin sjálvvirkandi innskrivaður á hesi skeið. Dømi: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Skeiðskotur skildir við \"|\". Tá ein lærari ritar inn, verður brúkarin sjálvvirkandi innskrivaður á hesi skeið. Dømi: COURSE001|COURSE002. Hetta gevur ikki skeiðslærararættindi."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Goym lotuskeiðsvegleiðaran í Dropbox tá vegleiðarin sendir eitt skjal til næmingar"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Goym navnið á almenna vegleiðaranum í Dropbox-amboðinum tá almenni vegleiðarin hevur lagt fíluna upp"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Gera henda møguleika virkin so vegleiðarar kunnu stovna og rætta kanningar"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Skulu kanningarboð nýta teldupostadressu vegleiðarans ella no-reply-adressuna, sum er ásett í høvuðsstillingunum?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Hægsta tal av skeiðum ein lærari/venjari kann stovna. Set til 0 fyri at sláa markið frá. Kann yvirskrivast per brúkara við keypi av BuyCourses-tænastu."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Lat vegleiðarar rætta afturmelding tá teir meta venjingar"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Um almenna næmingakotin skal takast við í fílunavnin tá eitt royndarúrslit verður útflutt til PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Gevur atgongd til allar persónligar fílur uttan avmarking"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Gera cron-uppgávuna app:send-certificate-expiry-reminders virkna, sum minnir næmingar, hvørs prógv eru útrunnin ella eru um at renna út."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Sjálvsett tal av døgum frammanundan at leita eftir prógvum, ið eru um at renna út, nýtt um ikki cron verður koyrd við --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Lat brúkarar og gestir leita eftir framleiddum prógvum frá ovastu valmyndini."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Lat vegleiðarar altíð rætta kunngerðir í virknum ella farnu lotum."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Um almenna næmingakotin skal sýnast við síðuna av navninum á møtiskjálum og listum."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Lat til at tilluta eitt ávíst mál til einstakar tilfeingis."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Nakrir SCORM-pakkar kalla bert LMSSetValue(cmi.core.lesson_status, 'incomplete') eina ferð og senda ongantíð eina veruliga endastøðu ella eina týðandi LMSFinish(). Ger hetta virkið so Chamilo viðger tað hangandi 'incomplete' sum onga støðu, og avger fullfíggjan tá næmingurin fer úr SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Um ein læringarleið er sett til ósjónlig, men lærarin ella vegleiðarin hevur gjørt hana tøka frá skeiðsheimasíðuni, forðar henda stilling Chamilo at goyma leinkjuna á skeiðsheimasíðuni."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Gera stigvísar tillagaðar royndir virknar, har hvør spurningabólkur kann vísa næmingar til annan bólk eftir stigum."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Tá næmingar fullføra eina roynd, verða vanliga fráboðanir sendar vegleiðarum, eisini almenna lotuvegleiðaranum. Ger henda møguleika virkin fyri at sleppa almenna vegleiðaranum undan hesum fráboðanum."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Vís royndarroyndir frá brúkarum í øllum lotum, har almenni vegleiðarin hevur atgongd, í frágreiðingini um bíðandi royndir."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Vís eina ávaring til innritaðar brúkarar áðrenn teirra servaralota rennur út."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Tal av sekundum áðrenn lotan rennur út, tá ávaringin verður víst. Sjálvsetti er 180 sekund."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Ásetur kravda bygnaðin fyri brúkaraloyndarorð. Dømi: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Nýt \"specials\" (fleirtal) fyri at krevja serstøk tekin."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Gera gildiskanning av loyndarorðskravunum omanfyri virkna tá loyndarorð verður stovnað ella dagført."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Listi av teldupostadressum, skildar við komma, at fráboða tá ein fíluheilivágsskannar finnur eina broyting. Lat tómt fyri at fráboða øllum globalum umsitum í staðin."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Lat ytru forritum (t.d. Claude.ai MCP-sambinding) skráseta seg við OAuth 2.1 Dynamic Client Registration og sambinda við hvørs brúkara egna Chamilo-kontu og rættindi. Sløkt sum sjálvsett: discovery-, skrásetingar-, heimildar- og token-endapunktini geva øll 404 til hetta verður sløkt á."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Gørir Chamilo MCP-endapunktið og persónliga MCP API-lykilflatan virkin. Tá sløkt, kunnu verandi API-lyklar, OAuth-atgongdarlyklar og JWT-prógv ikki nýtast á /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "JSON-kort yvir Chamilo-brúkaraleiklutir, ið hava loyvi at nýta MCP. Ein brúkari má samsvara minst einum virknum leikluti. Henda avmarking galdir eisini fyrr framleiddir API-lyklar og verandi OAuth-sambindingar."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Lat álítandi servara-til-servara-samskipanum (t.d. WordPress-handilspláss-íleggini) samleikapróva ímóti almenna /api-endapunktinum við einum ytrum API-lykli per brúkara, framleiddum við konsolskipanini \"chamilo:security:generate-external-api-key\". Sløkt sum sjálvsett: verandi lyklar kunnu ikki nýtast fyrr enn hetta er sløkt á."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Legg vegleiðara og dagfestingar til lotuundirtitilin í lotulistanum."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Annars hava lotuvegleiðarar bert atgongd til lotur eftir longd undir virknari longd."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Tá virkið, kann ein lærari/umsiti senda eina einaferðar innboðsleinkju úr Brúkarar-amboðinum á einum skeiði, so ein óskrásettur persónur kemur til skrásetingarformið og kann skráseta seg hóast almenn sjálvskráseting (allow_registration) er sløkt."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Legg fulla næminganavnið til uppgávufílunøvn tá einstakar innlatingar ella uppgávupakkar verða niðurtiknir."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Lat lærarar framleiða týðingar til øll virkin pallmál í einari WYSIWYG-gerð. Hetta kann nýta nógv AI-tekin."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Tá sløkt, hava umsitarar onga leinkju til skjótt at tilluta vegleiðarar til lotuskeið á skeiðsrættingaríðuni."
+
+msgid "Show courses & sessions"
+msgstr "Vís skeið og lotur"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "Valfrítt JSON. Dømi: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Talva"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Teldupostsendari hjá skeiðsleiðara"
+
+msgid "Card (visual blocks)"
+msgstr "Kort (sjónlig blokk)"
+
+msgid "List (classic)"
+msgstr "Listi (klassiskur)"
+
+msgid "Limit identical emails"
+msgstr "Avmarka eins teldupostar"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Hægsti tali av skeiðum, ein lærari ella venjari kann skapa. Set til 0 fyri at sláa avmarkingina frá."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Hægsti tali av kontum loyvt við sama telduposti. Set til 0 fyri at sláa avmarkingina frá."
+
+msgid "Validation"
+msgstr "Gildiskanning"
+
+msgid "Test/Development"
+msgstr "Roynd/Menning"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Lykil til eyka brúkaraøki at nýta tá leitað verður og sesjónir nevndar frá /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "JSON-uppseting fyri leitingar-forfiltur øki."
 

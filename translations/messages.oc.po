@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cordialament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de fòrmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -24063,6 +24063,18 @@ msgstr "Afichar lo resultat a l'estudiant : Afichar la nòta, lo choix de l'estu
 msgid "Signed in as"
 msgstr "Connectat coma"
 
+msgid "Authorize application"
+msgstr "Autorizar l'aplicacion"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "vòl se connectar a vòstre compte Chamilo."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Aquesta aplicacion poirà agir sus Chamilo exactament coma vos — en utilizant las permissions de vòstre compte existent e pas mai. Ganharà jamai cap d'accès que ja avètz pas."
+
+msgid "Allow"
+msgstr "Autorizar"
+
 msgid "Remember me"
 msgstr "Recordar-me"
 
@@ -31427,6 +31439,9 @@ msgstr "Tornar a la pagina d'assignacion d'utilizaires"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Fonts d'autentificacion assignadas amb succès"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Cap de metòde d'autentificacion es pas seleccionat. Aquò leva cada metòde d'autentificacion pels utilizaires seleccionats sus aquesta URL, çò que pòt empachar lor connexion. Contunhar?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Cònsi: causir «— Simplement cargar —» per estocar sens enviar a persona."
@@ -41216,4 +41231,316 @@ msgstr "Aprendissatge entrelaçat"
 
 msgid "Memory palaces"
 msgstr "Palais de la memòria"
+
+msgid "Logins (Month)"
+msgstr "Connexions (Mes)"
+
+msgid "Logins (Day)"
+msgstr "Connexions (Jorn)"
+
+msgid "Logins (Hour)"
+msgstr "Connexions (Ora)"
+
+msgid "Number of users (Picture)"
+msgstr "Nombre d'utilizaires (Imatge)"
+
+msgid "Allow tutors to register users"
+msgstr "Autorizar los tutors a inscriure d'utilizaires"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Autorizar los tutors a modificar dins las sessions de cors"
+
+msgid "Extend rights for tutors"
+msgstr "Espandir los dreches pels tutors"
+
+msgid "Show session tutor"
+msgstr "Afichar lo tutor de session"
+
+msgid "Default tutor access days after session"
+msgstr "Jorns d'accès per defaut del tutor après la session"
+
+msgid "Default tutor access days before session"
+msgstr "Jorns d'accès per defaut del tutor abans la session"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: amagar lo tutor de cors"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Amagar lo tutor general dins Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Espandir los dreches pels tutors suls sondatges"
+
+msgid "Maximum courses per user"
+msgstr "Nombre maximum de cors per utilizaire"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Autorizar los tutors a comentar en revisant los exercicis"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Inclure lo còdi oficial dins lo nom de fichièr PDF exportat dels resultats de quiz"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron de rapèl d'expiracion de certificat"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Fenèstra de rapèl d'expiracion de certificat (jorns)"
+
+msgid "Allow certificates search"
+msgstr "Autorizar la recèrca de certificats"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Autorizar los tutors a totjorn modificar las anoncias"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Afichar lo còdi oficial dels estudiants dins las fuèlhas de preséncia"
+
+msgid "Restrict course chat to tutors"
+msgstr "Restrénher lo chat de cors als tutors"
+
+msgid "Language by resource"
+msgstr "Lenga per ressorsa"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Completar lo SCO a la sortida quand l'estatut demòra incomplet"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Activar los tèsts adaptatius progressius per destinacion de categoria"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Blocar l'enviament de notificacions de tèst al tutor general"
+
+msgid "Enable session expiration warning"
+msgstr "Activar l'avertiment d'expiracion de session"
+
+msgid "Session expiration warning time"
+msgstr "Temps d'avertiment d'expiracion de session"
+
+msgid "Check password requirements"
+msgstr "Verificar las exigéncias de senhal"
+
+msgid "File integrity check notification recipients"
+msgstr "Destinataris de las notificacions de verificacion d'integritat de fichièrs"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Activar lo servidor d'autorizacion OAuth"
+
+msgid "Enable MCP server"
+msgstr "Activar lo servidor MCP"
+
+msgid "Allow MCP by roles"
+msgstr "Autorizar MCP per ròtles"
+
+msgid "Enable external API keys"
+msgstr "Activar las claus d'API extèrnas"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Sessions per durada totjorn disponiblas als tutors"
+
+msgid "Allow registration via course invitation links"
+msgstr "Autorizar l'inscripcion via ligams d'invitacion de cors"
+
+msgid "Add student fullname in file download name"
+msgstr "Apondre lo nom complet de l'estudiant dins lo nom de telecargament de fichièr"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Autorizar la traduccion IA cap a totas las lengas activas dins los editors WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Desactivar la possibilitat de modificar los tutors de cors"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "En utilizant de sessions, lo comportament per defaut es d'utilizar la visibilitat de las aisinas definida dins lo cors de basa. Aqueste paramètre càmbia aquò per permetre als tutors dels cors de session d'adaptar las visibilitats de las aisinas a lors besonhs."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Los tutors pòdon crear d'utilizaires sus la plataforma e inscriure d'utilizaires a una session."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Activatz aquesta opcion per donar als tutors las meteissas permissions que los formators sus las aisinas d'autoratge"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Afichar lo nom del tutor general de session dins la bóstia de títol de session dins la lista de cors"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Quand es activat, los tutors de cors dins las sessions pòdon inscriure de nòus utilizaires a lor session. Aquesta opcion es autrament solament disponibla als administrators e administrators de session."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Nombre per defaut de jorns qu'un tutor pòt accedir a una session après la data oficiala de fin de session"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Nombre per defaut de jorns qu'un tutor pòt accedir a una session abans la data oficiala de començament de session"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Activar la bibliotèca MathJax per visualizar las formulas matematicas. Aquò apond un boton de formula a la barra d'espleches de l'editor, ont las formulas se escriuon en LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Còdis de corses separats per \"|\". Quand un director de ressorsas umanas se connecta, l'utilizaire es automaticament inscrit a aqueles corses. Exemple : COURSE001|COURSE002. Aquò cambia pas lo ròtle de l'utilizaire."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Còdis de corses separats per \"|\". Quand un administrator de session se connecta, l'utilizaire es automaticament inscrit a aqueles corses. Exemple : COURSE001|COURSE002. Aquò cambia pas lo ròtle de l'utilizaire."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Còdis de corses separats per \"|\". Quand un aprendís se connecta, l'utilizaire es automaticament inscrit a aqueles corses. Exemple : COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Còdis de corses separats per \"|\". Quand un ensenhaire se connecta, l'utilizaire es automaticament inscrit a aqueles corses. Exemple : COURSE001|COURSE002. Aquò dona pas de permissions d'ensenhaire del corse."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Amagar lo tutor del corse de session dins Dropbox quand un document es mandat pel tutor als estudiants"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Amagar lo nom del tutor general dins l'esplech Dropbox quand lo tutor general a cargat lo fichièr"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Activar aquesta opcion per permetre als tutors de crear e modificar d'enquèstas"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Las invitacions d'enquèsta devon utilizar l'adreça electronica del tutor o l'adreça de non-responsa definida dins la seccion de configuracion principala ?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Nombre maximum de corses qu'un ensenhaire/formator pòt crear. Metètz 0 per desactivar la limita. Se pòt subrecargar per utilizaire via un achat de servici BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Permetre als tutors de modificar lo retorn d'informacion en revisant los exercicis"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Inclure o non lo còdi oficial de l'estudiant dins lo nom de fichièr en exportant un resultat de tèst en PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Permet l'accès a totes los fichièrs personals sens restriccion"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Activar lo cron app:send-certificate-expiry-reminders, que rapèla als aprendisses que lors certificats an expirat o son sus lo punt d'expirar."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Nombre per defaut de jorns d'avança per cercar los certificats sus lo punt d'expirar, utilizat levat se lo cron es executat amb --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Permetre als utilizaires e visitaires de cercar los certificats generats dempuèi lo menú de la barra superiora."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Permetre als tutors de totjorn modificar las anoncias dins las sessions activas o passadas."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Afichar o non lo còdi oficial dels estudiants a costat de lor nom dins las fuèlhas e listas de preséncia."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Permetre d'assignar una lenga especifica a de ressorsas individualas."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Qualques paquets SCORM apèlan pas que LMSSetValue(cmi.core.lesson_status, 'incomplete') un còp e mandan jamai un estat terminal real ni un LMSFinish() significatiu. Activatz aquò per que Chamilo tracte aquel 'incomplete' persistent coma cap d'estat, en resolvent l'acabament quand l'aprendís quita lo SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Se un percors d'aprendissatge es definit coma invisible mas l'ensenhaire o lo tutor a decidit de lo far disponible dempuèi la pagina d'acuèlh del corse, aquesta opcion empacha Chamilo d'amagar lo ligam sus la pagina d'acuèlh del corse."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Activar los tèsts adaptatius progressius ont cada categoria de questions pòt redirigir los aprendisses cap a una autra categoria segon lor nota."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Quand los aprendisses acaban un tèst, de notificacions son generalament mandadas als tutors, comprés lo tutor general de session. Activatz aquesta opcion per ometre lo tutor general d'aquestas notificacions."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Afichar las temptativas de tèst dels utilizaires dins totas las sessions ont lo tutor general a accès, dins lo rapòrt dels tèsts en espèra."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Afichar un avertiment als utilizaires autentificats abans l'expiracion de lor session costat servidor."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Nombre de segondas abans l'expiracion de la session quand l'avertiment s'aficha. Lo defaut es 180 segondas."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Definís l'estructura requesida pels senhals d'utilizaire. Exemple : {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Utilizatz \"specials\" (plural) per exigir de caractèrs especials."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Activar la validacion de las exigéncias de senhal definidas çai-dessús pendent la creacion o la mesa a jorn del senhal."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Lista d'adreças electronicas separadas per de virgulas de notificar quand un escan d'integritat de fichièr detecta un cambiament. Daissatz void per notificar totes los administrators globals a la plaça."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Permet a d'aplicacions extèrnas (p. ex. lo connector MCP de Claude.ai) de s'enregistrar via OAuth 2.1 Dynamic Client Registration e de se connectar en utilizant lo compte Chamilo e las permissions de cada utilizaire. Desactivat per defaut : los punts de descobèrta, d'enregistrament, d'autorizacion e de geton tornan totes 404 fins a l'activacion."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Activa lo punt MCP de Chamilo e l'interfàcia de clau API MCP personala. Quand es desactivat, las claus API existentas, los getons d'accès OAuth e las credencials JWT se pòdon pas utilizar sus /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "Mapa JSON dels ròtles d'utilizaire Chamilo autorizats a utilizar MCP. Un utilizaire deu correspondre a almens un ròtle activat. Aquesta restriccion s'aplica tanben a las claus API generadas precedentament e a las connexions OAuth existentas."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Permet a d'integracions servidor a servidor de fisança (p. ex. l'extension de botiga WordPress) de s'autentificar contra lo punt general /api en utilizant una clau API extèrna per utilizaire, generada via la comanda de consòla \"chamilo:security:generate-external-api-key\". Desactivat per defaut : las claus existentas se pòdon pas utilizar fins a l'activacion."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Apondre lo tutor e las datas al sostítol de session dins la lista de sessions."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Siquenon, los tutors de session an pas accès qu'a las sessions per durada pendent la durada activa."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Quand es activat, un ensenhaire/admin pòt mandar un ligam d'invitacion un còp dempuèi l'esplech Utilizaires d'un corse que permet a una persona pas enregistrada d'aténher lo formulari d'inscripcion e de s'inscriure quitament se l'autoinscripcion generala (allow_registration) es desactivada."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Apondre lo nom complet de l'estudiant als noms de fichièrs de trabalh quand se telecargan de somissions individualas o de paquets de trabalhs."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Permet als ensenhaires de generar de traduccions per totas las lengas activas de la plataforma en una sola accion WYSIWYG. Aquò pòt consomar un grand nombre de getons IA."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Quand es desactivat, los administrators an pas de ligam per assignar rapidament de tutors als corses de session sus la pagina d'edicion del corse."
+
+msgid "Show courses & sessions"
+msgstr "Afichar los corses e las sessions"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON opcional. Exemple : {\"speed\": true}"
+
+msgid "Table"
+msgstr "Taula"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Tèma"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Expeditor de corrièl del tutor del cors"
+
+msgid "Card (visual blocks)"
+msgstr "Carta (blòcs visuals)"
+
+msgid "List (classic)"
+msgstr "Lista (classica)"
+
+msgid "Limit identical emails"
+msgstr "Limitar los corrièls identics"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Nombre maximum de corses qu'un ensenhaire o formator pòt crear. Metètz 0 per desactivar lo limit."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Nombre maximum de comptes autorizats amb lo meteis corrièl. Metètz 0 per desactivar lo limit."
+
+msgid "Validation"
+msgstr "Validacion"
+
+msgid "Test/Development"
+msgstr "Tèst/Desvolopament"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Clau del camp extra d'utilizaire d'utilizar quand se recèrca e se nomena las sessions dempuèi /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Configuracion JSON pels camps de prefiltre de recèrca."
 

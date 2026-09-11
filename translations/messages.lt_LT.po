@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Pagarbiai"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulės pavyzdys: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulės pavyzdys: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kintamųjų ribos"
@@ -24068,6 +24068,18 @@ msgstr "Rodyti rezultatą besimokančiam: rodyti balą, besimokančiojo pasirink
 msgid "Signed in as"
 msgstr "Prisijungta kaip"
 
+msgid "Authorize application"
+msgstr "Leisti programai"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "nori prisijungti prie jūsų Chamilo paskyros."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Ši programa galės veikti Chamilo sistemoje lygiai taip pat kaip jūs — naudodama jūsų esamas paskyros teises ir nieko daugiau. Ji niekada negaus prieigos, kurios jūs jau neturite."
+
+msgid "Allow"
+msgstr "Leisti"
+
 msgid "Remember me"
 msgstr "Prisiminti mane"
 
@@ -31432,6 +31444,9 @@ msgstr "Grįžti į vartotojų priskyrimo puslapį"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Autentifikacijos šaltiniai sėkmingai priskirti"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Nepasirinktas joks autentifikavimo metodas. Tai pašalina visus autentifikavimo metodus pasirinktam (-iems) naudotojui (-ams) šiame URL, todėl jie gali negalėti prisijungti. Tęsti?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Patarimas: pasirinkite „— Tik įkelti —“, kad išsaugotumėte be siuntimo niekam."
@@ -41221,4 +41236,316 @@ msgstr "Persipynęs mokymasis"
 
 msgid "Memory palaces"
 msgstr "Atminties rūmai"
+
+msgid "Logins (Month)"
+msgstr "Prisijungimai (mėnuo)"
+
+msgid "Logins (Day)"
+msgstr "Prisijungimai (diena)"
+
+msgid "Logins (Hour)"
+msgstr "Prisijungimai (valanda)"
+
+msgid "Number of users (Picture)"
+msgstr "Naudotojų skaičius (nuotrauka)"
+
+msgid "Allow tutors to register users"
+msgstr "Leisti tutoriui registruoti naudotojus"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Leisti tutoriui redaguoti kursų sesijose"
+
+msgid "Extend rights for tutors"
+msgstr "Išplėsti tutorių teises"
+
+msgid "Show session tutor"
+msgstr "Rodyti sesijos tutorių"
+
+msgid "Default tutor access days after session"
+msgstr "Numatytosios tutoriaus prieigos dienos po sesijos"
+
+msgid "Default tutor access days before session"
+msgstr "Numatytosios tutoriaus prieigos dienos prieš sesiją"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: slėpti kurso tutorių"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Slėpti bendrąjį tutorių Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Išplėsti tutorių teises apklausose"
+
+msgid "Maximum courses per user"
+msgstr "Maksimalus kursų skaičius vienam naudotojui"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Leisti tutoriui komentuoti peržiūrint pratimus"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Įtraukti oficialų kodą į eksportuojamo testo rezultatų PDF failo pavadinimą"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Sertifikato galiojimo priminimo cron"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Sertifikato galiojimo priminimo langas (dienomis)"
+
+msgid "Allow certificates search"
+msgstr "Leisti sertifikatų paiešką"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Leisti tutoriui visada redaguoti skelbimus"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Rodyti studentų oficialų kodą lankomumo lapuose"
+
+msgid "Restrict course chat to tutors"
+msgstr "Apriboti kurso pokalbį tik tutoriui"
+
+msgid "Language by resource"
+msgstr "Kalba pagal išteklių"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Užbaigti SCO išeinant, kai būsena lieka nebaigta"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Įjungti progresinius adaptacinius testus pagal kategorijos paskirtį"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Blokuoti testo pranešimų siuntimą bendrajam tutoriui"
+
+msgid "Enable session expiration warning"
+msgstr "Įjungti sesijos galiojimo pabaigos įspėjimą"
+
+msgid "Session expiration warning time"
+msgstr "Sesijos galiojimo pabaigos įspėjimo laikas"
+
+msgid "Check password requirements"
+msgstr "Tikrinti slaptažodžio reikalavimus"
+
+msgid "File integrity check notification recipients"
+msgstr "Failų vientisumo tikrinimo pranešimų gavėjai"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Įjungti OAuth autorizacijos serverį"
+
+msgid "Enable MCP server"
+msgstr "Įjungti MCP serverį"
+
+msgid "Allow MCP by roles"
+msgstr "Leisti MCP pagal roles"
+
+msgid "Enable external API keys"
+msgstr "Įjungti išorinius API raktus"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Sesijos pagal trukmę visada prieinamos tutoriui"
+
+msgid "Allow registration via course invitation links"
+msgstr "Leisti registraciją per kurso kvietimo nuorodas"
+
+msgid "Add student fullname in file download name"
+msgstr "Įtraukti studento vardą ir pavardę į atsisiunčiamo failo pavadinimą"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Leisti DI vertimą į visas aktyvias kalbas WYSIWYG redaktoriuose"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Išjungti galimybę redaguoti kurso tutorių"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Naudojant sesijas, numatytoji elgsena yra naudoti įrankių matomumą, apibrėžtą baziniame kurse. Šis nustatymas tai keičia ir leidžia sesijos kursų tutoriui pritaikyti įrankių matomumą pagal savo poreikius."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Tutoriai gali kurti naudotojus platformoje ir prenumeruoti naudotojus į sesiją."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Įjunkite šią parinktį, kad tutoriui suteiktumėte tas pačias teises kaip ir treneriams kūrimo įrankiuose"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Rodyti bendrojo sesijos tutoriaus vardą sesijos pavadinimo laukelyje kursų sąraše"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Kai įjungta, kursų tutoriai sesijose gali prenumeruoti naujus naudotojus į savo sesiją. Priešingu atveju ši parinktis prieinama tik administratoriams ir sesijų administratoriams."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Numatytasis dienų skaičius, kiek dėstytojas gali pasiekti sesiją po oficialios sesijos pabaigos datos"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Numatytasis dienų skaičius, kiek dėstytojas gali pasiekti sesiją prieš oficialią sesijos pradžios datą"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Įjungti MathJax biblioteką matematikos formulėms vizualizuoti. Tai prideda formulių mygtuką redaktoriaus įrankių juostoje; formulės rašomos LaTeX kalba."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kursų kodai, atskirti \"|\". Kai prisijungia žmogiškųjų išteklių vadovas, naudotojas automatiškai užregistruojamas į šiuos kursus. Pavyzdys: COURSE001|COURSE002. Tai nekeičia naudotojo vaidmens."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kursų kodai, atskirti \"|\". Kai prisijungia sesijos administratorius, naudotojas automatiškai užregistruojamas į šiuos kursus. Pavyzdys: COURSE001|COURSE002. Tai nekeičia naudotojo vaidmens."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Kursų kodai, atskirti \"|\". Kai prisijungia mokinys, naudotojas automatiškai užregistruojamas į šiuos kursus. Pavyzdys: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Kursų kodai, atskirti \"|\". Kai prisijungia mokytojas, naudotojas automatiškai užregistruojamas į šiuos kursus. Pavyzdys: COURSE001|COURSE002. Tai nesuteikia kurso mokytojo teisių."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Slėpti sesijos kurso dėstytoją Dropbox, kai dokumentą dėstytojas siunčia studentams"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Slėpti bendrojo dėstytojo vardą Dropbox įrankyje, kai failą įkėlė bendrasis dėstytojas"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Įjunkite šią parinktį, kad dėstytojai galėtų kurti ir redaguoti apklausas"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Ar apklausų kvietimuose naudoti dėstytojo el. pašto adresą, ar pagrindinėje konfigūracijoje nurodytą no-reply adresą?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Didžiausias kursų skaičius, kurį mokytojas / treneris gali sukurti. Nustatykite 0, kad apribojimo nebūtų. Gali būti pakeista kiekvienam naudotojui per BuyCourses paslaugos pirkimą."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Leisti dėstytojams redaguoti grįžtamąjį ryšį peržiūrint pratimus"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Ar įtraukti studento oficialų kodą į failo pavadinimą eksportuojant testo rezultatą į PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Leidžia be apribojimų pasiekti visus asmeninius failus"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Įjungti cron užduotį app:send-certificate-expiry-reminders, kuri primena mokiniams, kurių sertifikatai pasibaigė arba netrukus baigsis."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Numatytasis dienų skaičius į priekį, per kurį ieškoma netrukus baigsiančių galioti sertifikatų, naudojamas, jei cron paleidžiamas be --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Leisti naudotojams ir lankytojams ieškoti sugeneruotų sertifikatų viršutinės juostos meniu."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Leisti dėstytojams visada redaguoti skelbimus aktyviose arba praėjusiose sesijose."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Ar lankomumo žiniaraščiuose ir sąrašuose šalia vardo rodyti studentų oficialų kodą."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Leisti atskiriems ištekliams priskirti konkrečią kalbą."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Kai kurie SCORM paketai tik kartą iškviečia LMSSetValue(cmi.core.lesson_status, 'incomplete') ir niekada nesiunčia tikros galutinės būsenos bei prasmingo LMSFinish(). Įjunkite tai, kad Chamilo šią užsilikusią 'incomplete' traktuotų kaip visai jokios būsenos ir užbaigtų, kai mokinys palieka SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Jei mokymosi kelias nustatytas kaip nematomas, bet mokytojas ar dėstytojas nusprendė jį padaryti prieinamą iš kurso pagrindinio puslapio, ši parinktis neleidžia Chamilo slėpti nuorodos kurso pagrindiniame puslapyje."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Įjungti progresinius adaptacinius testus, kuriuose kiekviena klausimų kategorija gali nukreipti mokinius į kitą kategoriją pagal jų rezultatą."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Kai mokiniai baigia testą, pranešimai paprastai siunčiami dėstytojams, įskaitant bendrąjį sesijos dėstytoją. Įjunkite šią parinktį, kad bendrasis dėstytojas nebūtų įtrauktas į šiuos pranešimus."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Laukiančių testų ataskaitoje rodyti naudotojų bandymus visose sesijose, prie kurių turi prieigą bendrasis dėstytojas."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Rodyti autentifikuotiems naudotojams įspėjimą prieš pasibaigiant serverio sesijai."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Sekundžių skaičius iki sesijos pabaigos, kada rodomas įspėjimas. Numatytoji reikšmė – 180 sekundžių."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Apibrėžia privalomą naudotojo slaptažodžių struktūrą. Pavyzdys: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Specialiesiems simboliams reikalauti naudokite \"specials\" (daugiskaita)."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Įjungti aukščiau apibrėžtų slaptažodžio reikalavimų tikrinimą kuriant ar atnaujinant slaptažodį."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Kableliais atskirtas el. pašto adresų sąrašas, kuriems pranešti, kai failų vientisumo nuskaitymas aptinka pakeitimą. Palikite tuščią, kad būtų pranešta visiems globaliems administratoriams."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Leidžia išorinėms programoms (pvz., Claude.ai MCP jungikliui) registruotis per OAuth 2.1 Dynamic Client Registration ir jungtis naudojant kiekvieno naudotojo Chamilo paskyrą ir teises. Pagal numatymą išjungta: atradimo, registracijos, autorizacijos ir žetonų galiniai taškai grąžina 404, kol tai neįjungta."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Įjungia Chamilo MCP galinį tašką ir asmeninę MCP API raktų sąsają. Kai išjungta, esami API raktai, OAuth prieigos žetonai ir JWT kredencialai negali būti naudojami /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "JSON žemėlapis Chamilo naudotojo vaidmenų, kuriems leidžiama naudoti MCP. Naudotojas turi atitikti bent vieną įjungtą vaidmenį. Šis apribojimas taikomas ir anksčiau sugeneruotiems API raktams bei esamiems OAuth ryšiams."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Leidžia patikimoms serveris–serveris integracijoms (pvz., WordPress vitrinos papildiniui) autentifikuotis bendrame /api galiniame taške naudojant kiekvienam naudotojui skirtą išorinį API raktą, sugeneruotą konsolės komanda \"chamilo:security:generate-external-api-key\". Pagal numatymą išjungta: esami raktai negali būti naudojami, kol tai neįjungta."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Pridėti dėstytoją ir datas prie sesijos paantraštės sesijų sąraše."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Kitu atveju sesijos dėstytojai turi prieigą prie sesijų pagal trukmę tik aktyvios trukmės metu."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Kai įjungta, mokytojas / administratorius gali iš kurso Naudotojų įrankio išsiųsti vienkartinę kvietimo nuorodą, leidžiančią neregistruotam asmeniui pasiekti registracijos formą ir užsiregistruoti net tada, kai bendroji savarankiška registracija (allow_registration) išjungta."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Pridėti visą studento vardą prie užduoties failų pavadinimų atsisiunčiant atskirus darbus ar užduočių paketus."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Leidžia mokytojams vienu WYSIWYG veiksmu sugeneruoti vertimus visoms aktyvioms platformos kalboms. Tai gali sunaudoti daug DI žetonų."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Kai išjungta, administratoriai kurso redagavimo puslapyje neturi nuorodos greitai priskirti dėstytojus sesijos kursams."
+
+msgid "Show courses & sessions"
+msgstr "Rodyti kursus ir sesijas"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "Neprivalomas JSON. Pavyzdys: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Lentelė"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Kurso tutoriaus el. laiško siuntėjas"
+
+msgid "Card (visual blocks)"
+msgstr "Kortelės (vaizdiniai blokai)"
+
+msgid "List (classic)"
+msgstr "Sąrašas (klasikinis)"
+
+msgid "Limit identical emails"
+msgstr "Riboti identiškus el. paštus"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Didžiausias kursų skaičius, kurį gali sukurti mokytojas ar treneris. Nustatykite 0, kad apribojimas būtų išjungtas."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Didžiausias paskyrų skaičius su tuo pačiu el. paštu. Nustatykite 0, kad apribojimas būtų išjungtas."
+
+msgid "Validation"
+msgstr "Patvirtinimas"
+
+msgid "Test/Development"
+msgstr "Testavimas/kūrimas"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Papildomo vartotojo lauko raktas, naudojamas ieškant ir pavadinant sesijas iš /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "JSON konfigūracija paieškos išankstinio filtro laukams."
 

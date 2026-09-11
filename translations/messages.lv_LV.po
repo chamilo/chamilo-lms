@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -24067,6 +24067,18 @@ msgstr "Rādīt rezultātu mācībai: Rādīt rezultātu, mācāmā izvēli un v
 msgid "Signed in as"
 msgstr "Ierakstījies kā"
 
+msgid "Authorize application"
+msgstr "Autorizēt lietotni"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "vēlas izveidot savienojumu ar jūsu Chamilo kontu."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Šī lietotne varēs darboties Chamilo tieši tāpat kā jūs — izmantojot jūsu esošās konta atļaujas un neko vairāk. Tā nekad nesaņems piekļuvi, kādas jums jau nav."
+
+msgid "Allow"
+msgstr "Atļaut"
+
 msgid "Remember me"
 msgstr "Atcerēties mani"
 
@@ -31432,6 +31444,9 @@ msgstr "Atpakaļ uz lietotāju piešķiršanas lapu"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Autentifikācijas avoti veiksmīgi piešķirti"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Nav atlasīta neviena autentifikācijas metode. Tas noņem visas autentifikācijas metodes atlasītajam(-iem) lietotājam(-iem) šajā URL, kas var liegt viņiem pieteikties. Turpināt?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Padoms: izvēlieties “— Tikai augšupielādēt —”, lai saglabātu bez nosūtīšanas."
@@ -41221,4 +41236,316 @@ msgstr "Pārmaiņus mācīšanās"
 
 msgid "Memory palaces"
 msgstr "Atmiņas pils"
+
+msgid "Logins (Month)"
+msgstr "Pieteikšanās (mēnesis)"
+
+msgid "Logins (Day)"
+msgstr "Pieteikšanās (diena)"
+
+msgid "Logins (Hour)"
+msgstr "Pieteikšanās (stunda)"
+
+msgid "Number of users (Picture)"
+msgstr "Lietotāju skaits (attēls)"
+
+msgid "Allow tutors to register users"
+msgstr "Atļaut pasniedzējiem reģistrēt lietotājus"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Atļaut pasniedzējiem rediģēt kursu sesijās"
+
+msgid "Extend rights for tutors"
+msgstr "Paplašināt pasniedzēju tiesības"
+
+msgid "Show session tutor"
+msgstr "Rādīt sesijas pasniedzēju"
+
+msgid "Default tutor access days after session"
+msgstr "Noklusētās pasniedzēja piekļuves dienas pēc sesijas"
+
+msgid "Default tutor access days before session"
+msgstr "Noklusētās pasniedzēja piekļuves dienas pirms sesijas"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: slēpt kursa pasniedzēju"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Slēpt vispārējo pasniedzēju Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Paplašināt pasniedzēju tiesības aptaujās"
+
+msgid "Maximum courses per user"
+msgstr "Maksimālais kursu skaits uz lietotāju"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Atļaut pasniedzējiem komentēt, pārskatot vingrinājumus"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Iekļaut oficiālo kodu eksportētā testa rezultātu PDF faila nosaukumā"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Sertifikāta derīguma atgādinājuma cron"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Sertifikāta derīguma atgādinājuma logs (dienas)"
+
+msgid "Allow certificates search"
+msgstr "Atļaut sertifikātu meklēšanu"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Atļaut pasniedzējiem vienmēr rediģēt paziņojumus"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Rādīt studentu oficiālo kodu apmeklējuma lapās"
+
+msgid "Restrict course chat to tutors"
+msgstr "Ierobežot kursa tērzēšanu tikai pasniedzējiem"
+
+msgid "Language by resource"
+msgstr "Valoda pēc resursa"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Pabeigt SCO, izejot, ja statuss paliek nepilnīgs"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Iespējot progresīvos adaptīvos testus pēc kategorijas galamērķa"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Bloķēt testa paziņojumu sūtīšanu vispārējam pasniedzējam"
+
+msgid "Enable session expiration warning"
+msgstr "Iespējot brīdinājumu par sesijas termiņa beigām"
+
+msgid "Session expiration warning time"
+msgstr "Brīdinājuma laiks par sesijas termiņa beigām"
+
+msgid "Check password requirements"
+msgstr "Pārbaudīt paroles prasības"
+
+msgid "File integrity check notification recipients"
+msgstr "Failu integritātes pārbaudes paziņojumu saņēmēji"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Iespējot OAuth autorizācijas serveri"
+
+msgid "Enable MCP server"
+msgstr "Iespējot MCP serveri"
+
+msgid "Allow MCP by roles"
+msgstr "Atļaut MCP pēc lomām"
+
+msgid "Enable external API keys"
+msgstr "Iespējot ārējās API atslēgas"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Sesijas pēc ilguma vienmēr pieejamas pasniedzējiem"
+
+msgid "Allow registration via course invitation links"
+msgstr "Atļaut reģistrāciju, izmantojot kursa ielūguma saites"
+
+msgid "Add student fullname in file download name"
+msgstr "Pievienot studenta pilno vārdu faila lejupielādes nosaukumam"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Atļaut MI tulkošanu visās aktīvajās valodās WYSIWYG redaktoros"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Atspējot iespēju rediģēt kursa pasniedzējus"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Izmantojot sesijas, noklusējuma uzvedība ir izmantot rīku redzamību, kas definēta bāzes kursā. Šis iestatījums to maina, lai sesiju kursu pasniedzēji varētu pielāgot rīku redzamību savām vajadzībām."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Pasniedzēji var izveidot lietotājus platformā un pieteikt lietotājus sesijai."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Iespējojiet šo opciju, lai piešķirtu pasniedzējiem tādas pašas atļaujas kā treneriem autorēšanas rīkos"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Rādīt vispārējā sesijas pasniedzēja vārdu sesijas virsraksta lodziņā kursu sarakstā"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Ja iespējots, kursu pasniedzēji sesijās var pieteikt jaunus lietotājus savai sesijai. Pretējā gadījumā šī opcija ir pieejama tikai administratoriem un sesiju administratoriem."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Noklusētais dienu skaits, cik ilgi tutors var piekļūt sesijai pēc oficiālā sesijas beigu datuma"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Noklusētais dienu skaits, cik ilgi tutors var piekļūt sesijai pirms oficiālā sesijas sākuma datuma"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Iespējot MathJax bibliotēku matemātisko formulu vizualizēšanai. Tas pievieno formulu pogu redaktora rīkjoslai; formulas raksta LaTeX formātā."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kursu kodi, atdalīti ar \"|\". Kad personāla vadītājs piesakās, lietotājs tiek automātiski pieteikts šajos kursos. Piemērs: COURSE001|COURSE002. Tas nemaina lietotāja lomu."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kursu kodi, atdalīti ar \"|\". Kad sesijas administrators piesakās, lietotājs tiek automātiski pieteikts šajos kursos. Piemērs: COURSE001|COURSE002. Tas nemaina lietotāja lomu."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Kursu kodi, atdalīti ar \"|\". Kad izglītojamais piesakās, lietotājs tiek automātiski pieteikts šajos kursos. Piemērs: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Kursu kodi, atdalīti ar \"|\". Kad pasniedzējs piesakās, lietotājs tiek automātiski pieteikts šajos kursos. Piemērs: COURSE001|COURSE002. Tas nepiešķir kursa pasniedzēja tiesības."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Slēpt sesijas kursa tutoru Dropbox, kad tutors nosūta dokumentu studentiem"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Slēpt vispārējā tutora vārdu Dropbox rīkā, kad failu augšupielādējis vispārējais tutors"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Iespējot šo opciju, lai tutori varētu veidot un rediģēt aptaujas"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Vai aptauju ielūgumiem jāizmanto tutora e-pasta adrese vai galvenajā konfigurācijā definētā no-reply adrese?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Maksimālais kursu skaits, ko pasniedzējs/treneris var izveidot. Iestatiet 0, lai atspējotu ierobežojumu. Var ignorēt katram lietotājam, iegādājoties BuyCourses pakalpojumu."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Atļaut tutoriem rediģēt atsauksmes, pārskatot vingrinājumus"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Vai kviza rezultāta eksportā uz PDF faila nosaukumā iekļaut studenta oficiālo kodu"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Atļauj piekļuvi visiem personīgajiem failiem bez ierobežojumiem"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Iespējot cron uzdevumu app:send-certificate-expiry-reminders, kas atgādina izglītojamajiem, kuru sertifikāti ir beigušies vai drīz beigsies."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Noklusētais dienu skaits uz priekšu, lai meklētu drīz beidzamos sertifikātus, ja cron netiek palaists ar --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Atļaut lietotājiem un apmeklētājiem meklēt ģenerētos sertifikātus no augšējās joslas izvēlnes."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Atļaut tutoriem vienmēr rediģēt paziņojumus aktīvās vai pagājušās sesijās."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Vai apmeklējuma lapās un sarakstos blakus vārdam rādīt studentu oficiālo kodu."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Atļaut piešķirt konkrētu valodu atsevišķiem resursiem."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Daži SCORM pakotnes izsauc LMSSetValue(cmi.core.lesson_status, 'incomplete') tikai vienreiz un nekad nesūta īstu beigu statusu, kā arī jēgpilnu LMSFinish(). Iespējojiet šo, lai Chamilo šo paliekošo 'incomplete' uzskatītu par statusa neesamību un pabeigtu, kad izglītojamais atstāj SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Ja mācību ceļš ir iestatīts kā neredzams, bet pasniedzējs vai tutors to padarījis pieejamu no kursa sākumlapas, šī opcija neļauj Chamilo slēpt saiti kursa sākumlapā."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Iespējot progresīvos adaptīvos testus, kuros katra jautājumu kategorija var novirzīt izglītojamos uz citu kategoriju atkarībā no rezultāta."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Kad izglītojamie pabeidz testu, paziņojumi parasti tiek sūtīti tutoriem, tostarp vispārējam sesijas tutoram. Iespējojiet šo opciju, lai vispārējo tutoru no šiem paziņojumiem izslēgtu."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Gaidošo testu pārskatā rādīt testu mēģinājumus no lietotājiem visās sesijās, kurām vispārējam tutoram ir piekļuve."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Rādīt autentificētiem lietotājiem brīdinājumu pirms servera sesijas termiņa beigām."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Sekunžu skaits pirms sesijas termiņa beigām, kad tiek rādīts brīdinājums. Noklusējums ir 180 sekundes."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Definē nepieciešamo lietotāja paroļu struktūru. Piemērs: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Izmantojiet \"specials\" (daudzskaitlī), lai pieprasītu speciālās rakstzīmes."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Iespējot iepriekš definēto paroles prasību pārbaudi paroles izveides vai atjaunināšanas laikā."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Ar komatu atdalīts e-pasta adrešu saraksts, ko paziņot, kad failu integritātes skenēšana konstatē izmaiņas. Atstājiet tukšu, lai paziņotu visiem globālajiem administratoriem."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Atļauj ārējām lietotnēm (piem., Claude.ai MCP savienotājam) reģistrēties, izmantojot OAuth 2.1 Dynamic Client Registration, un savienoties ar katra lietotāja paša Chamilo kontu un tiesībām. Pēc noklusējuma atspējots: atklāšanas, reģistrācijas, autorizācijas un marķieru galapunkti atgriež 404, līdz tas tiek ieslēgts."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Iespējo Chamilo MCP galapunktu un personīgās MCP API atslēgas saskarni. Kad atspējots, esošās API atslēgas, OAuth piekļuves marķieri un JWT akreditācijas datus nevar izmantot uz /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "JSON karte ar Chamilo lietotāja lomām, kurām atļauts izmantot MCP. Lietotājam jāatbilst vismaz vienai iespējotai lomai. Šis ierobežojums attiecas arī uz iepriekš ģenerētām API atslēgām un esošajiem OAuth savienojumiem."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Atļauj uzticamām serveris–serveris integrācijām (piem., WordPress veikala spraudnim) autentificēties pret vispārējo /api galapunktu, izmantojot katram lietotājam ārējo API atslēgu, kas ģenerēta ar konsoles komandu \"chamilo:security:generate-external-api-key\". Pēc noklusējuma atspējots: esošās atslēgas nevar izmantot, līdz tas tiek ieslēgts."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Pievienot tutoru un datumus sesijas apakšvirsrakstam sesiju sarakstā."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Pretējā gadījumā sesijas tutoriem ir piekļuve sesijām pēc ilguma tikai aktīvā ilguma laikā."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Kad iespējots, pasniedzējs/administrators no kursa rīka Lietotāji var nosūtīt vienreizēju ielūguma saiti, kas ļauj nereģistrētai personai sasniegt reģistrācijas veidlapu un reģistrēties pat tad, ja vispārējā pašreģistrācija (allow_registration) ir atspējota."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Pievienot studenta pilno vārdu uzdevumu failu nosaukumiem, lejupielādējot atsevišķus iesniegumus vai uzdevumu pakotnes."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Atļauj pasniedzējiem vienā WYSIWYG darbībā ģenerēt tulkojumus visām aktīvajām platformas valodām. Tas var patērēt lielu skaitu MI tokenu."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Kad atspējots, administratoriem kursa rediģēšanas lapā nav saites, lai ātri piešķirtu tutorius sesijas kursiem."
+
+msgid "Show courses & sessions"
+msgstr "Rādīt kursus un sesijas"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "Neobligāts JSON. Piemērs: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Tabula"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Tēma"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Kursu tutora e-pasta sūtītājs"
+
+msgid "Card (visual blocks)"
+msgstr "Kartītes (vizuālie bloki)"
+
+msgid "List (classic)"
+msgstr "Saraksts (klasiskais)"
+
+msgid "Limit identical emails"
+msgstr "Ierobežot identiskus e-pastus"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Maksimālais kursu skaits, ko skolotājs vai treneris var izveidot. Iestatiet 0, lai atspējotu ierobežojumu."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Maksimālais kontu skaits ar vienu un to pašu e-pastu. Iestatiet 0, lai atspējotu ierobežojumu."
+
+msgid "Validation"
+msgstr "Validācija"
+
+msgid "Test/Development"
+msgstr "Tests/Izstrāde"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Lietotāja papildlauka atslēga, ko izmantot, meklējot un nosaucot sesijas no /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "JSON konfigurācija meklēšanas priekšfiltra laukiem."
 

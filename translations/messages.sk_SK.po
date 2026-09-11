@@ -24081,6 +24081,18 @@ msgstr "Zobraziť výsledok študentovi: Zobraziť skóre, výber študenta a je
 msgid "Signed in as"
 msgstr "Prihlásený ako"
 
+msgid "Authorize application"
+msgstr "Autorizovať aplikáciu"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "chce sa pripojiť k vášmu účtu Chamilo."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Táto aplikácia bude môcť v Chamilo konať rovnako ako vy — s použitím oprávnení vášho existujúceho účtu a ničím viac. Nikdy nezíska prístup, ktorý už nemáte."
+
+msgid "Allow"
+msgstr "Povoliť"
+
 msgid "Remember me"
 msgstr "Zapamätať si ma"
 
@@ -31446,6 +31458,9 @@ msgstr "Späť na stránku priradenia používateľov"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Zdroje autentifikácie boli úspešne priradené"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Nie je vybraná žiadna metóda overenia. Tým sa odstránia všetky metódy overenia pre vybraného používateľa (používateľov) na tejto URL, čo im môže zabrániť v prihlásení. Pokračovať?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Tip: vyberte „— Len nahrať —“ na uloženie bez odoslania komukoľvek."
@@ -41235,4 +41250,316 @@ msgstr "Prekladané učenie"
 
 msgid "Memory palaces"
 msgstr "Pamäťové paláce"
+
+msgid "Logins (Month)"
+msgstr "Prihlásenia (mesiac)"
+
+msgid "Logins (Day)"
+msgstr "Prihlásenia (deň)"
+
+msgid "Logins (Hour)"
+msgstr "Prihlásenia (hodina)"
+
+msgid "Number of users (Picture)"
+msgstr "Počet používateľov (obrázok)"
+
+msgid "Allow tutors to register users"
+msgstr "Povoliť tútorom registrovať používateľov"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Povoliť tútorom úpravy v reláciách kurzov"
+
+msgid "Extend rights for tutors"
+msgstr "Rozšíriť práva tútorov"
+
+msgid "Show session tutor"
+msgstr "Zobraziť tútora relácie"
+
+msgid "Default tutor access days after session"
+msgstr "Predvolené dni prístupu tútora po relácii"
+
+msgid "Default tutor access days before session"
+msgstr "Predvolené dni prístupu tútora pred reláciou"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Schránka: skryť tútora kurzu"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Skryť všeobecného tútora v schránke"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Rozšíriť práva tútorov pri prieskumoch"
+
+msgid "Maximum courses per user"
+msgstr "Maximálny počet kurzov na používateľa"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Povoliť tútorom komentovať pri hodnotení cvičení"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Zahrnúť oficiálny kód do názvu exportovaného PDF s výsledkami kvízu"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron pripomienky vypršania certifikátu"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Okno pripomienky vypršania certifikátu (dni)"
+
+msgid "Allow certificates search"
+msgstr "Povoliť vyhľadávanie certifikátov"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Povoliť tútorom vždy upravovať oznámenia"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Zobraziť oficiálny kód študentov v prezenčných listinách"
+
+msgid "Restrict course chat to tutors"
+msgstr "Obmedziť chat kurzu na tútorov"
+
+msgid "Language by resource"
+msgstr "Jazyk podľa zdroja"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Dokončiť SCO pri odchode, ak stav ostáva neúplný"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Povoliť progresívne adaptívne testy podľa cieľa kategórie"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Blokovať odosielanie upozornení na testy všeobecnému tútorovi"
+
+msgid "Enable session expiration warning"
+msgstr "Povoliť upozornenie na vypršanie relácie"
+
+msgid "Session expiration warning time"
+msgstr "Čas upozornenia na vypršanie relácie"
+
+msgid "Check password requirements"
+msgstr "Kontrolovať požiadavky na heslo"
+
+msgid "File integrity check notification recipients"
+msgstr "Príjemcovia upozornení na kontrolu integrity súborov"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Povoliť autorizačný server OAuth"
+
+msgid "Enable MCP server"
+msgstr "Povoliť server MCP"
+
+msgid "Allow MCP by roles"
+msgstr "Povoliť MCP podľa rolí"
+
+msgid "Enable external API keys"
+msgstr "Povoliť externé kľúče API"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Relácie podľa trvania vždy dostupné tútorom"
+
+msgid "Allow registration via course invitation links"
+msgstr "Povoliť registráciu cez odkazy na pozvánku do kurzu"
+
+msgid "Add student fullname in file download name"
+msgstr "Pridať celé meno študenta do názvu sťahovaného súboru"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Povoliť preklad AI do všetkých aktívnych jazykov v editoroch WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Zakázať možnosť upravovať tútorov kurzu"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Pri používaní relácií je predvolené správanie použiť viditeľnosť nástrojov definovanú v základnom kurze. Toto nastavenie to zmení tak, aby tútori v kurzoch relácií mohli prispôsobiť viditeľnosť nástrojov svojim potrebám."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Tútori môžu vytvárať používateľov na platforme a prihlasovať používateľov do relácie."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Povoľte túto možnosť, aby tútori mali rovnaké oprávnenia ako školitelia pri autorských nástrojoch"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Zobraziť meno všeobecného tútora relácie v poli názvu relácie v zozname kurzov"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Ak je zapnuté, tútori kurzu v reláciách môžu prihlasovať nových používateľov do svojej relácie. Táto možnosť je inak dostupná len administrátorom a administrátorom relácií."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Predvolený počet dní, počas ktorých môže lektor pristupovať k relácii po oficiálnom dátume ukončenia relácie"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Predvolený počet dní, počas ktorých môže lektor pristupovať k relácii pred oficiálnym dátumom začiatku relácie"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Povoliť knižnicu MathJax na zobrazenie matematických vzorcov. Do panela nástrojov editora sa pridá tlačidlo vzorcov, ktoré sa zapisujú v LaTeX-e."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kódy kurzov oddelené znakom \"|\". Pri prihlásení riaditeľa ľudských zdrojov je používateľ automaticky zapísaný do týchto kurzov. Príklad: COURSE001|COURSE002. Rola používateľa sa nemení."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kódy kurzov oddelené znakom \"|\". Pri prihlásení administrátora relácie je používateľ automaticky zapísaný do týchto kurzov. Príklad: COURSE001|COURSE002. Rola používateľa sa nemení."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Kódy kurzov oddelené znakom \"|\". Pri prihlásení študenta je používateľ automaticky zapísaný do týchto kurzov. Príklad: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Kódy kurzov oddelené znakom \"|\". Pri prihlásení učiteľa je používateľ automaticky zapísaný do týchto kurzov. Príklad: COURSE001|COURSE002. Neudeľuje to oprávnenia učiteľa kurzu."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Skryť lektora kurzu relácie v Schránke, keď dokument posiela lektor študentom"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Skryť meno všeobecného lektora v nástroji Schránka, keď súbor nahral všeobecný lektor"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Povoliť túto možnosť, aby lektori mohli vytvárať a upravovať prieskumy"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Majú pozvánky na prieskum používať e-mailovú adresu lektora alebo adresu no-reply definovanú v hlavnej konfigurácii?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Maximálny počet kurzov, ktoré môže učiteľ/lektor vytvoriť. Hodnota 0 limit vypne. Možno prepísať pre jednotlivého používateľa nákupom služby BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Povoliť lektorom upravovať spätnú väzbu pri hodnotení cvičení"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Či zahrnúť oficiálny kód študenta do názvu súboru pri exporte výsledku kvízu do PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Umožňuje prístup ku všetkým osobným súborom bez obmedzenia"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Povoliť cron app:send-certificate-expiry-reminders, ktorý pripomína študentom, ktorým certifikáty vypršali alebo čoskoro vypršia."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Predvolený počet dní vopred na vyhľadávanie certifikátov, ktorým čoskoro vyprší platnosť, ak cron nie je spustený s --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Povoliť používateľom a návštevníkom vyhľadávať vygenerované certifikáty z ponuky v hornej lište."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Povoliť lektorom vždy upravovať oznámenia v aktívnych alebo minulých reláciách."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Či zobrazovať oficiálny kód študentov vedľa ich mena v prezenčných listinách a zoznamoch."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Povoliť priradenie konkrétneho jazyka jednotlivým zdrojom."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Niektoré balíky SCORM volajú LMSSetValue(cmi.core.lesson_status, 'incomplete') len raz a nikdy neodošlú skutočný koncový stav ani zmysluplné LMSFinish(). Povolením tejto možnosti Chamilo považuje pretrvávajúci stav 'incomplete' za žiadny stav a dokončenie vyrieši, keď študent opustí SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Ak je učebná cesta nastavená ako neviditeľná, ale učiteľ alebo lektor ju sprístupnil z úvodnej stránky kurzu, táto možnosť zabráni Chamilu skryť odkaz na úvodnej stránke kurzu."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Povoliť progresívne adaptívne testy, v ktorých každá kategória otázok môže presmerovať študentov do inej kategórie podľa ich skóre."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Keď študenti dokončia test, oznámenia sa zvyčajne posielajú lektorom vrátane všeobecného lektora relácie. Povolením tejto možnosti sa všeobecný lektor z týchto oznámení vynechá."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Zobraziť pokusy o testy používateľov vo všetkých reláciách, ku ktorým má všeobecný lektor prístup, v prehľade čakajúcich testov."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Zobraziť prihláseným používateľom upozornenie pred vypršaním relácie na strane servera."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Počet sekúnd pred vypršaním relácie, kedy sa zobrazí upozornenie. Predvolená hodnota je 180 sekúnd."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Definuje požadovanú štruktúru hesiel používateľov. Príklad: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Na vyžadovanie špeciálnych znakov použite \"specials\" (množné číslo)."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Povoliť overovanie požiadaviek na heslo definovaných vyššie pri vytváraní alebo aktualizácii hesla."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Zoznam e-mailových adries oddelených čiarkou, ktoré sa majú upozorniť, keď kontrola integrity súborov zistí zmenu. Ak je prázdne, upozornia sa všetci globálni administrátori."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Umožňuje externým aplikáciám (napr. konektoru Claude.ai MCP) registráciu cez OAuth 2.1 Dynamic Client Registration a pripojenie pomocou vlastného účtu Chamilo a oprávnení každého používateľa. Predvolene vypnuté: koncové body discovery, registrácie, autorizácie a tokenov vracajú 404, kým sa toto nezapne."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Povolí koncový bod Chamilo MCP a rozhranie osobného API kľúča MCP. Ak je vypnuté, existujúce API kľúče, prístupové tokeny OAuth a poverenia JWT nie je možné použiť na /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "JSON mapa rolí používateľov Chamilo, ktorým je povolené používať MCP. Používateľ musí zodpovedať aspoň jednej povolenej role. Toto obmedzenie platí aj pre skôr vygenerované API kľúče a existujúce pripojenia OAuth."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Umožňuje dôveryhodným integráciám server–server (napr. pluginu obchodu WordPress) overenie voči všeobecnému koncovému bodu /api pomocou externého API kľúča na používateľa, vygenerovaného príkazom konzoly \"chamilo:security:generate-external-api-key\". Predvolene vypnuté: existujúce kľúče nie je možné použiť, kým sa toto nezapne."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Pridať lektora a dátumy do podtitulu relácie v zozname relácií."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "V opačnom prípade majú lektori relácií prístup k reláciám podľa trvania len počas aktívneho trvania."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Ak je povolené, učiteľ/administrátor môže z nástroja Používatelia kurzu odoslať jednorazový pozývací odkaz, ktorý umožní neregistrovanej osobe dostať sa na registračný formulár a zaregistrovať sa, aj keď je všeobecná samoregistrácia (allow_registration) vypnutá."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Pridať celé meno študenta do názvov súborov zadaní pri sťahovaní jednotlivých odovzdaní alebo balíkov zadaní."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Umožňuje učiteľom vygenerovať preklady pre všetky aktívne jazyky platformy jednou akciou WYSIWYG. Môže to spotrebovať veľké množstvo tokenov AI."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Ak je vypnuté, administrátori nemajú na stránke úpravy kurzu odkaz na rýchle priradenie lektorov ku kurzom relácie."
+
+msgid "Show courses & sessions"
+msgstr "Zobraziť kurzy a relácie"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "Voliteľný JSON. Príklad: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Tabuľka"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Téma"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Odosielateľ e-mailu tutora kurzu"
+
+msgid "Card (visual blocks)"
+msgstr "Karty (vizuálne bloky)"
+
+msgid "List (classic)"
+msgstr "Zoznam (klasický)"
+
+msgid "Limit identical emails"
+msgstr "Obmedziť identické e-maily"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Maximálny počet kurzov, ktoré môže učiteľ alebo školiteľ vytvoriť. Nastavte na 0 pre vypnutie limitu."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Maximálny počet účtov s rovnakým e-mailom. Nastavte na 0 pre vypnutie limitu."
+
+msgid "Validation"
+msgstr "Validácia"
+
+msgid "Test/Development"
+msgstr "Test/Vývoj"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Kľúč extra poľa používateľa na vyhľadávanie a pomenovanie relácií z /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Konfigurácia JSON pre polia predfiltra vyhľadávania."
 

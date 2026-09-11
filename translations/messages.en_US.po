@@ -24068,6 +24068,18 @@ msgstr "Show the result to the learner: Show the score, the learner's choice and
 msgid "Signed in as"
 msgstr "Signed in as"
 
+msgid "Authorize application"
+msgstr "Authorize application"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "wants to connect to your Chamilo account."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+
+msgid "Allow"
+msgstr "Allow"
+
 msgid "Remember me"
 msgstr "Remember me"
 

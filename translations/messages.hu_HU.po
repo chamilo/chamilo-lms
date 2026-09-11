@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képlet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -24066,6 +24066,18 @@ msgstr "Eredmény megjelenítése a tanulónak: Megjeleníti a pontszámot, a ta
 msgid "Signed in as"
 msgstr "Bejelentkezve mint"
 
+msgid "Authorize application"
+msgstr "Alkalmazás engedélyezése"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "csatlakozni szeretne a Chamilo-fiókjához."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Ez az alkalmazás pontosan úgy tud majd eljárni a Chamilóban, mint Ön — a meglévő fiókjogosultságait használva, és semmi többet. Soha nem kap olyan hozzáférést, amellyel Ön nem rendelkezik."
+
+msgid "Allow"
+msgstr "Engedélyezés"
+
 msgid "Remember me"
 msgstr "Emlékezz rám"
 
@@ -31431,6 +31443,9 @@ msgstr "Vissza a felhasználó hozzárendelés oldalra"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Hitelesítési források sikeresen hozzárendelve"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Nincs kiválasztva hitelesítési módszer. Ez eltávolítja az összes hitelesítési módszert a kiválasztott felhasználó(k) számára ezen az URL-en, ami megakadályozhatja a bejelentkezést. Folytatja?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Tipp: válassza a „— Csak feltöltés —” lehetőséget, ha nem akarja elküldeni senkinek."
@@ -41220,4 +41235,316 @@ msgstr "Kevert tanulás"
 
 msgid "Memory palaces"
 msgstr "Memóriapaloták"
+
+msgid "Logins (Month)"
+msgstr "Bejelentkezések (hónap)"
+
+msgid "Logins (Day)"
+msgstr "Bejelentkezések (nap)"
+
+msgid "Logins (Hour)"
+msgstr "Bejelentkezések (óra)"
+
+msgid "Number of users (Picture)"
+msgstr "Felhasználók száma (kép)"
+
+msgid "Allow tutors to register users"
+msgstr "Oktatók engedélyezése felhasználók regisztrálására"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Oktatók szerkeszthetik a kurzusokat a munkameneteken belül"
+
+msgid "Extend rights for tutors"
+msgstr "Oktatói jogok kiterjesztése"
+
+msgid "Show session tutor"
+msgstr "Munkamenet oktatójának megjelenítése"
+
+msgid "Default tutor access days after session"
+msgstr "Oktatói hozzáférés alapértelmezett napjai a munkamenet után"
+
+msgid "Default tutor access days before session"
+msgstr "Oktatói hozzáférés alapértelmezett napjai a munkamenet előtt"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: kurzusoktató elrejtése"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Általános oktató elrejtése a Dropboxban"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Oktatói jogok kiterjesztése a kérdőíveken"
+
+msgid "Maximum courses per user"
+msgstr "Felhasználónkénti maximális kurzusok száma"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Oktatók megjegyzést fűzhetnek a gyakorlatok értékelésekor"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Hivatalos kód szerepeltetése az exportált kvízeredmény PDF fájlnevében"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Tanúsítvány lejárati emlékeztető cron"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Tanúsítvány lejárati emlékeztető ablak (nap)"
+
+msgid "Allow certificates search"
+msgstr "Tanúsítványkeresés engedélyezése"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Oktatók mindig szerkeszthetik a közleményeket"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Hallgatók hivatalos kódjának megjelenítése a jelenléti íveken"
+
+msgid "Restrict course chat to tutors"
+msgstr "Kurzuscsevegés korlátozása oktatókra"
+
+msgid "Language by resource"
+msgstr "Nyelv erőforrásonként"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "SCO befejezése kilépéskor, ha az állapot hiányos marad"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Fokozatos adaptív tesztek engedélyezése kategóriacél szerint"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Tesztesemények küldésének tiltása az általános oktatónak"
+
+msgid "Enable session expiration warning"
+msgstr "Munkamenet-lejárati figyelmeztetés engedélyezése"
+
+msgid "Session expiration warning time"
+msgstr "Munkamenet-lejárati figyelmeztetés ideje"
+
+msgid "Check password requirements"
+msgstr "Jelszókövetelmények ellenőrzése"
+
+msgid "File integrity check notification recipients"
+msgstr "Fájlintegritás-ellenőrzés értesítésének címzettjei"
+
+msgid "Enable the OAuth authorization server"
+msgstr "OAuth engedélyezési kiszolgáló engedélyezése"
+
+msgid "Enable MCP server"
+msgstr "MCP-kiszolgáló engedélyezése"
+
+msgid "Allow MCP by roles"
+msgstr "MCP engedélyezése szerepkörök szerint"
+
+msgid "Enable external API keys"
+msgstr "Külső API-kulcsok engedélyezése"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Időtartam szerinti munkamenetek mindig elérhetők az oktatóknak"
+
+msgid "Allow registration via course invitation links"
+msgstr "Regisztráció engedélyezése kurzusmeghívó hivatkozásokkal"
+
+msgid "Add student fullname in file download name"
+msgstr "Hallgató teljes nevének hozzáadása a letöltött fájl nevéhez"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "MI-fordítás engedélyezése minden aktív nyelvre a WYSIWYG szerkesztőkben"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Kurzusoktatók szerkesztésének letiltása"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Munkamenetek használatakor az alapértelmezett viselkedés az alaptanfolyamban meghatározott eszközláthatóság. Ez a beállítás ezt módosítja, hogy a munkamenet-kurzusok oktatói a saját igényeikhez igazíthassák az eszközök láthatóságát."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Az oktatók felhasználókat hozhatnak létre a platformon, és felhasználókat irathatnak be egy munkamenetre."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Engedélyezze ezt a beállítást, hogy az oktatók ugyanazokat a jogosultságokat kapják, mint a trénerek a szerzői eszközökön"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Az általános munkamenet-oktató nevének megjelenítése a munkamenet címdobozában a kurzuslistában"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Ha engedélyezve van, a munkamenetek kurzusoktatói új felhasználókat irathatnak be a munkamenetükre. Ez a lehetőség egyébként csak az adminisztrátorok és a munkamenet-adminisztrátorok számára érhető el."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Alapértelmezett napok száma, ameddig egy tutor a hivatalos munkamenet-záró dátum után hozzáférhet a munkamenethez"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Alapértelmezett napok száma, ameddig egy tutor a hivatalos munkamenet-kezdő dátum előtt hozzáférhet a munkamenethez"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "A MathJax könyvtár engedélyezése matematikai képletek megjelenítéséhez. Ez egy képlet gombot ad a szerkesztő eszköztárához, ahol a képleteket LaTeX-ben írják."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kurzuskódok „|” jellel elválasztva. Amikor egy HR-igazgató bejelentkezik, a felhasználó automatikusan feliratkozik ezekre a kurzusokra. Példa: COURSE001|COURSE002. Ez nem változtatja meg a felhasználói szerepet."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Kurzuskódok „|” jellel elválasztva. Amikor egy munkamenet-adminisztrátor bejelentkezik, a felhasználó automatikusan feliratkozik ezekre a kurzusokra. Példa: COURSE001|COURSE002. Ez nem változtatja meg a felhasználói szerepet."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Kurzuskódok „|” jellel elválasztva. Amikor egy tanuló bejelentkezik, a felhasználó automatikusan feliratkozik ezekre a kurzusokra. Példa: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Kurzuskódok „|” jellel elválasztva. Amikor egy tanár bejelentkezik, a felhasználó automatikusan feliratkozik ezekre a kurzusokra. Példa: COURSE001|COURSE002. Ez nem ad kurzustanári jogosultságokat."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "A munkamenet-kurzus tutorjának elrejtése a Dropboxban, amikor a tutor dokumentumot küld a hallgatóknak"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Az általános tutor nevének elrejtése a Dropbox eszközben, amikor az általános tutor töltötte fel a fájlt"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Engedélyezze ezt a beállítást, hogy a tutorok kérdőíveket hozhassanak létre és szerkeszthessenek"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "A kérdőív-meghívók a tutor e-mail-címét vagy a fő konfigurációban megadott no-reply címet használják?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "A tanár/oktató által létrehozható kurzusok maximális száma. 0 értékkel a korlát kikapcsolható. Felhasználónként felülírható BuyCourses szolgáltatásvásárlással."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "A tutorok szerkeszthetik a visszajelzést a gyakorlatok értékelésekor"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "A hallgató hivatalos kódja szerepeljen-e a fájlnévben kvízeredmény PDF-exportálásakor"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Korlátozás nélküli hozzáférést engedélyez az összes személyes fájlhoz"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Az app:send-certificate-expiry-reminders cron engedélyezése, amely emlékezteti azokat a tanulókat, akiknek a tanúsítványa lejárt vagy hamarosan lejár."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Alapértelmezett napok száma előre a hamarosan lejáró tanúsítványok kereséséhez, hacsak a cront nem --days-ahead paraméterrel futtatják."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Felhasználók és látogatók kereshetnek generált tanúsítványokat a felső sáv menüjéből."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "A tutorok mindig szerkeszthetik a közleményeket aktív vagy múltbeli munkamenetekben."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "A hallgatók hivatalos kódja megjelenjen-e a név mellett a jelenléti íveken és listákon."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Egyedi nyelv hozzárendelésének engedélyezése az egyes erőforrásokhoz."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Egyes SCORM-csomagok csak egyszer hívják meg az LMSSetValue(cmi.core.lesson_status, 'incomplete') függvényt, és soha nem küldenek valódi végállapotot, sem értelmes LMSFinish()-t. Engedélyezze ezt, hogy a Chamilo ezt a megmaradó „incomplete” állapotot ugyanúgy kezelje, mint a státusz hiányát, és a SCO elhagyásakor oldja meg a teljesítést."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Ha egy tanulási útvonal láthatatlanra van állítva, de a tanár vagy tutor a kurzus kezdőlapjáról elérhetővé tette, ez a beállítás megakadályozza, hogy a Chamilo elrejtse a hivatkozást a kurzus kezdőlapján."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Progresszív adaptív tesztek engedélyezése, ahol minden kérdéskategória a pontszám alapján másik kategóriára irányíthatja a tanulókat."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Amikor a tanulók befejeznek egy tesztet, a értesítések általában a tutoroknak mennek, beleértve az általános munkamenet-tutort. Engedélyezze ezt a beállítást, hogy az általános tutort kihagyja ezekből az értesítésekből."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "A függő tesztek jelentésben mutassa a felhasználók tesztkísérleteit minden olyan munkamenetben, amelyhez az általános tutornak hozzáférése van."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Figyelmeztetés megjelenítése a hitelesített felhasználóknak a szerveroldali munkamenet lejárta előtt."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Másodpercek száma a munkamenet lejárta előtt, amikor a figyelmeztetés megjelenik. Az alapértelmezett 180 másodperc."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Meghatározza a felhasználói jelszavak kötelező szerkezetét. Példa: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Speciális karakterekhez a \"specials\" (többes szám) kulcsot használja."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "A fent megadott jelszókövetelmények érvényesítésének engedélyezése jelszó létrehozásakor vagy frissítésekor."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Vesszővel elválasztott e-mail-címek listája, amelyeket értesíteni kell, ha a fájlintegritás-vizsgálat változást észlel. Üresen hagyva minden globális adminisztrátor értesítést kap."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Külső alkalmazások (pl. a Claude.ai MCP-csatlakozó) OAuth 2.1 Dynamic Client Registration révén regisztrálhatnak, és minden felhasználó saját Chamilo-fiókjával és jogosultságaival csatlakozhatnak. Alapértelmezés szerint kikapcsolva: a discovery, registration, authorization és token végpontok 404-et adnak, amíg ezt be nem kapcsolják."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Engedélyezi a Chamilo MCP-végpontot és a személyes MCP API-kulcs felületet. Kikapcsolva a meglévő API-kulcsok, OAuth hozzáférési tokenek és JWT-hitelesítő adatok nem használhatók a /mcp címen."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "JSON-térkép a MCP használatára engedélyezett Chamilo felhasználói szerepekről. A felhasználónak legalább egy engedélyezett szerephez kell illeszkednie. Ez a korlátozás a korábban generált API-kulcsokra és a meglévő OAuth-kapcsolatokra is vonatkozik."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Megbízható szerver–szerver integrációk (pl. a WordPress áruházi bővítmény) a felhasználónkénti külső API-kulccsal hitelesíthetnek az általános /api végponton, amelyet a \"chamilo:security:generate-external-api-key\" konzolparancs generál. Alapértelmezés szerint kikapcsolva: a meglévő kulcsok nem használhatók, amíg ezt be nem kapcsolják."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "A tutor és a dátumok hozzáadása a munkamenet alcíméhez a munkamenetlistában."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Ellenkező esetben a munkamenet-tutorok csak az aktív időtartam alatt férnek hozzá az időtartam szerinti munkamenetekhez."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Ha engedélyezve van, egy tanár/admin egyszeri meghívóhivatkozást küldhet a kurzus Felhasználók eszközéből, amellyel egy nem regisztrált személy eléri a regisztrációs űrlapot, és akkor is regisztrálhat, ha az általános önregisztráció (allow_registration) ki van kapcsolva."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "A hallgató teljes nevének hozzáadása a feladatfájlok nevéhez egyedi beküldések vagy feladatcsomagok letöltésekor."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "A tanárok egy WYSIWYG-művelettel generálhatnak fordításokat az összes aktív platformnyelvre. Ez nagy mennyiségű AI-tokent fogyaszthat."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Ha ki van kapcsolva, az adminisztrátoroknak nincs hivatkozásuk a tutorok gyors hozzárendeléséhez a munkamenet-kurzusokhoz a kurzus szerkesztőoldalán."
+
+msgid "Show courses & sessions"
+msgstr "Kurzusok és munkamenetek megjelenítése"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "Opcionális JSON. Példa: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Táblázat"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Téma"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Kurzus tutor e-mail feladója"
+
+msgid "Card (visual blocks)"
+msgstr "Kártya (vizuális blokkok)"
+
+msgid "List (classic)"
+msgstr "Lista (klasszikus)"
+
+msgid "Limit identical emails"
+msgstr "Azonos e-mailek korlátozása"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "A tanár vagy tréner által létrehozható kurzusok maximális száma. Állítsa 0-ra a korlát letiltásához."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Azonos e-mail címmel engedélyezett fiókok maximális száma. Állítsa 0-ra a korlát letiltásához."
+
+msgid "Validation"
+msgstr "Érvényesítés"
+
+msgid "Test/Development"
+msgstr "Teszt/Fejlesztés"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Felhasználói extra mező kulcsa a munkamenetek kereséséhez és elnevezéséhez a /admin-dashboard/register oldalon."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "JSON-konfiguráció a keresési előszűrő mezőkhöz."
 

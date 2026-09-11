@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Tusaalaha foormuulada: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaalaha qaacidada: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -24063,6 +24063,18 @@ msgstr "Muuji natiijada ardayga: Muuji dhibcaha, doorashada ardayga iyo jawaab-c
 msgid "Signed in as"
 msgstr "Saxiixan sida"
 
+msgid "Authorize application"
+msgstr "Oggolow barnaamijka"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "wuxuu doonayaa inuu ku xiro akoonkaaga Chamilo."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Barnaamijkani wuxuu awood u yeelan doonaa inuu ku dhaqmo Chamilo sida aad adigu u dhaqmi karto — isagoo isticmaalaya oggolaanshaha akoonkaaga jira oo aan wax kale ahayn. Waligiis ma heli doono gelitaan aadan hore u lahayn."
+
+msgid "Allow"
+msgstr "Oggolow"
+
 msgid "Remember me"
 msgstr "Xusuuso aniga"
 
@@ -31427,6 +31439,9 @@ msgstr "Ku noqo bogga meeleynta isticmaale"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Ilaha authentication si guul leh ayaa loo meeleeyay"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Habka xaqiijinta lama dooran. Tani waxay ka saartaa dhammaan hababka xaqiijinta isticmaalayaasha la doortay URL-kan, taasoo laga yaabo inay ka hor istaagto inay galaan. Sii wad?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Tilmaam: dooro “— Kaliya soo rar —” si aad u keydiso iyada oo aan cidna loo dirin."
@@ -41216,4 +41231,316 @@ msgstr "Waxbarashada isku dhafan"
 
 msgid "Memory palaces"
 msgstr "Qasriyada xusuusta"
+
+msgid "Logins (Month)"
+msgstr "Gelitaannada (Bil)"
+
+msgid "Logins (Day)"
+msgstr "Gelitaannada (Maalin)"
+
+msgid "Logins (Hour)"
+msgstr "Gelitaannada (Saacad)"
+
+msgid "Number of users (Picture)"
+msgstr "Tirada isticmaalayaasha (Sawir)"
+
+msgid "Allow tutors to register users"
+msgstr "U oggolow macallimiinta inay diiwaan geliyaan isticmaalayaasha"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "U oggolow macallimiinta inay wax ka beddelaan gudaha kalfadhiyada koorsada"
+
+msgid "Extend rights for tutors"
+msgstr "Kordhi xuquuqda macallimiinta"
+
+msgid "Show session tutor"
+msgstr "Muuji macallinka kalfadhiga"
+
+msgid "Default tutor access days after session"
+msgstr "Maalmaha gelitaanka macallinka caadiga ah ka dib kalfadhiga"
+
+msgid "Default tutor access days before session"
+msgstr "Maalmaha gelitaanka macallinka caadiga ah ka hor kalfadhiga"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: qari macallinka koorsada"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Qari macallinka guud ee Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Kordhi xuquuqda macallimiinta ee sahannada"
+
+msgid "Maximum courses per user"
+msgstr "Koorsooyinka ugu badan isticmaale kasta"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "U oggolow macallimiinta inay faallo ka bixiyaan marka ay dib u eegaan layliyada"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Ku dar koodhka rasmiga ah magaca faylka PDF natiijada imtixaanka la dhoofiyay"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Xusuusin dhicitaanka shahaadada cron"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Daaqadda xusuusinta dhicitaanka shahaadada (maalmo)"
+
+msgid "Allow certificates search"
+msgstr "U oggolow raadinta shahaadooyinka"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "U oggolow macallimiinta inay mar walba wax ka beddelaan ogeysiisyada"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Muuji koodhka rasmiga ah ee ardayda xaashida xaadirinta"
+
+msgid "Restrict course chat to tutors"
+msgstr "Xaddid sheekada koorsada macallimiinta"
+
+msgid "Language by resource"
+msgstr "Luqadda ilaha"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Dhammaystir SCO marka laga tago marka xaaladdu sii ahaato mid aan dhammayn"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Daar imtixaannada la qabsanaya ee horumaraya iyadoo loo eegayo meesha laga tago qaybta"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Jooji dirista ogeysiisyada imtixaanka macallinka guud"
+
+msgid "Enable session expiration warning"
+msgstr "Daar digniinta dhicitaanka kalfadhiga"
+
+msgid "Session expiration warning time"
+msgstr "Waqtiga digniinta dhicitaanka kalfadhiga"
+
+msgid "Check password requirements"
+msgstr "Hubi shuruudaha erayga sirta"
+
+msgid "File integrity check notification recipients"
+msgstr "Qaataha ogeysiinta hubinta daacadnimada faylka"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Daar serverka oggolaanshaha OAuth"
+
+msgid "Enable MCP server"
+msgstr "Daar serverka MCP"
+
+msgid "Allow MCP by roles"
+msgstr "U oggolow MCP doorarka"
+
+msgid "Enable external API keys"
+msgstr "Daar furaha API ee dibadda"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Kalfadhiyada muddada mar walba macallimiinta heli karaan"
+
+msgid "Allow registration via course invitation links"
+msgstr "U oggolow diiwaangelinta iyadoo la isticmaalayo xiriiriyada casuumaadda koorsada"
+
+msgid "Add student fullname in file download name"
+msgstr "Ku dar magaca buuxa ee ardayga magaca soo dejinta faylka"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "U oggolow tarjumaadda AI dhammaan luqadaha firfircoon ee tifaftirayaasha WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Jooji awoodda wax ka beddelka macallimiinta koorsada"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Marka la isticmaalayo kalfadhiyada, dhaqanka caadiga ah waa in la isticmaalo muuqashada qalabka ee lagu qeexay koorsada aasaasiga ah. Dejintani waxay taas beddeshaa si ay ugu oggolaato macallimiinta koorsooyinka kalfadhiga inay u habeeyaan muuqashada qalabka baahidooda."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Macallimiintu waxay abuuri karaan isticmaalayaal madalada oo ay isticmaalayaasha ku qori karaan kalfadhi."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Daar doorashadan si aad macallimiinta u siiso oggolaansho la mid ah tababarayaasha qalabka qoraalka"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Muuji magaca macallinka guud ee kalfadhiga sanduuqa cinwaanka kalfadhiga liiska koorsada"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Marka la daaro, macallimiinta koorsada kalfadhiyada waxay isticmaalayaal cusub ku qori karaan kalfadhigooda. Doorashadani haddii kale waxay u gaar tahay maamulayaasha iyo maamulayaasha kalfadhiga."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Tirada maalmaha caadiga ah ee macallinku ku heli karo kalfadhiga ka dib taariikhda rasmiga ah ee dhammaadka kalfadhiga"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Tirada maalmaha caadiga ah ee macallinku ku heli karo kalfadhiga ka hor taariikhda rasmiga ah ee bilowga kalfadhiga"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Daar maktabadda MathJax si loo muujiyo qaacidooyinka xisaabta. Tani waxay ku dartaa badhanka qaacidada qalabka tifaftiraha, halkaas oo qaacidooyinka lagu qoro LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Koodhadhka koorsooyinka oo lagu kala soocay \"|\". Marka agaasimaha khayraadka aadanaha galo, isticmaaluhu si toos ah ayaa loogu diiwaangeliyaa koorsooyinkan. Tusaale: COURSE001|COURSE002. Tani kama beddesho doorka isticmaalaha."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Koodhadhka koorsooyinka oo lagu kala soocay \"|\". Marka maamulaha kalfadhiga galo, isticmaaluhu si toos ah ayaa loogu diiwaangeliyaa koorsooyinkan. Tusaale: COURSE001|COURSE002. Tani kama beddesho doorka isticmaalaha."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Koodhadhka koorsooyinka oo lagu kala soocay \"|\". Marka ardaygu galo, isticmaaluhu si toos ah ayaa loogu diiwaangeliyaa koorsooyinkan. Tusaale: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Koodhadhka koorsooyinka oo lagu kala soocay \"|\". Marka macallinku galo, isticmaaluhu si toos ah ayaa loogu diiwaangeliyaa koorsooyinkan. Tusaale: COURSE001|COURSE002. Tani ma siiso oggolaanshaha macallinka koorsada."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Qari macallinka koorsada kalfadhiga ee Dropbox marka dukumeenti uu macallinku u diro ardayda"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Qari magaca macallinka guud ee qalabka Dropbox marka macallinka guud uu soo geliyey faylka"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Daar ikhtiyaarkan si macallimiintu u abuuri karaan oo u tafatiri karaan sahanada"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Ma casuumadaha sahanadu ma isticmaalaan cinwaanka iimaylka macallinka mise cinwaanka aan-jawaab-la-hayn ee lagu qeexay qaybta habaynta ugu weyn?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Tirada ugu badan ee koorsooyinka macallin/tababare abuuri karo. Dhig 0 si xadka loo damiyo. Waxaa lagu beddeli karaa isticmaale kasta iyada oo loo marayo iibsiga adeegga BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "U oggolow macallimiinta inay tafatiritaan jawaab-celinta marka ay dib u eegaan layliyada"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "In lagu daro koodhka rasmiga ah ee ardayga magaca faylka marka natiijada imtixaanka loo dhoofiyo PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "U oggolaadaa gelitaanka dhammaan faylasha shakhsiyeed iyada oo aan xaddidnayn"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Daar cron-ka app:send-certificate-expiry-reminders, kaas oo xasuusiya ardayda shahaadooyinkoodu dhacay ama ku dhow yihiin inay dhacaan."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Tirada maalmaha caadiga ah ee horay loo baaro shahaadooyinka ku dhow inay dhacaan, loo isticmaalo haddii aan cron-ka lagu socodsiin --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "U oggolow isticmaalayaasha iyo booqdayaasha inay ka raadiyaan shahaadooyinka la soo saaray liiska sare."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "U oggolow macallimiinta inay had iyo jeer tafatiritaan ogeysiisyada gudaha kalfadhiyada firfircoon ama kuwii hore."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "In la muujiyo koodhka rasmiga ah ee ardayda oo ay weheliyaan magacooda xaashiyaha iyo liisaska xaadirka."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "U oggolow in luqad gaar ah loo qoondeeyo kheyraadka shakhsi ahaaneed."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Qaar ka mid ah xirmooyinka SCORM mar kaliya ayaa u yeedha LMSSetValue(cmi.core.lesson_status, 'incomplete') marna ma diraan xaalad dhammaad dhab ah ama LMSFinish() macno leh. Daar tan si Chamilo ugu daawado 'incomplete' taagan sidii aan xaalad lahayn, iyada oo dhammaystirka la xallinayo marka ardaygu ka tago SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Haddii waddada waxbarashada loo dejiyo mid aan muuqan laakiin macallinka ama macallinku go'aansaday in laga heli karo bogga hore ee koorsada, ikhtiyaarkan wuxuu ka hortagayaa Chamilo inuu qariyo xiriirka bogga hore ee koorsada."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Daar imtixaanno horumarineed oo la qabsanaya halkaas oo qayb kasta oo su'aal ah ardayda u wareejin karto qayb kale iyada oo ku xidhan dhibcohooda."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Marka ardaydu dhammeeyaan imtixaan, ogeysiisyada caadi ahaan waxaa loo diraa macallimiinta, oo ay ku jiraan macallinka guud ee kalfadhiga. Daar ikhtiyaarkan si macallinka guud looga reebo ogeysiisyadan."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Muuji isku dayada imtixaanka ee isticmaalayaasha dhammaan kalfadhiyada uu macallinka guud geli karo warbixinta imtixaannada sugaya."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Muuji digniin isticmaalayaasha la xaqiijiyey ka hor inta aan kalfadhiga dhinaca server-ka dhicin."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Tirada ilbiriqsiyada ka hor dhicitaanka kalfadhiga marka digniinta la muujiyo. Caadiga waa 180 ilbiriqsi."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Qeexaya qaabka loo baahan yahay ee furaha isticmaalaha. Tusaale: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Isticmaal \"specials\" (jamac) si loogu baahdo xarfo gaar ah."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Daar xaqiijinta shuruudaha furaha ee kor lagu qeexay inta lagu jiro abuurista ama cusboonaysiinta furaha."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Liis cinwaanno iimayl oo koma ku kala soocan oo loo ogeysiiyo marka baaritaanka daacadnimada faylku ogaado isbeddel. Ka tag madhan si loo ogeysiiyo maamulaha caalamiga ah oo dhan."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "U oggolaadaa abka dibadda (tusaale isku xiraha Claude.ai MCP) inay isdiiwaangeliyaan iyada oo loo marayo OAuth 2.1 Dynamic Client Registration oo ay ku xirmaan iyagoo isticmaalaya akoonka iyo oggolaanshaha Chamilo ee isticmaale kasta. Caadi ahaan waa dami: helitaanka, diiwaangelinta, oggolaanshaha iyo dhammaadka token-ka dhammaantood waxay soo celiyaan 404 ilaa tan la daaro."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Daar dhammaadka Chamilo MCP iyo interface-ka furaha API ee shakhsiyeed ee MCP. Marka la damo, furayaasha API ee jira, token-yada gelitaanka OAuth iyo aqoonsiga JWT lagama isticmaali karo /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "Khariidad JSON oo doorarka isticmaalaha Chamilo loo oggol yahay inay isticmaalaan MCP. Isticmaaluhu waa inuu ku habboonaadaa ugu yaraan hal door oo daaran. Xaddidani waxay sidoo kale khusaysaa furayaasha API ee horay loo soo saaray iyo xiriirada OAuth ee jira."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "U oggolaadaa isdhexgalka server-ilaa-server ee la aamini karo (tusaale plugin-ka dukaanka WordPress) inay ku xaqiijiyaan dhammaadka guud /api iyagoo isticmaalaya furaha API dibadda ee isticmaale kasta, oo lagu soo saaro amarka console \"chamilo:security:generate-external-api-key\". Caadi ahaan waa dami: furayaasha jira lagama isticmaali karo ilaa tan la daaro."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Ku dar macallinka iyo taariikhaha cinwaanka hoose ee kalfadhiga liiska kalfadhiyada."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Haddii kale, macallimiinta kalfadhiga waxay heli karaan kalfadhiyada muddada kaliya inta lagu jiro muddada firfircoon."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Marka la daaro, macallin/maamule wuxuu ka diri karaa xiriir casuumaad hal mar ah qalabka Isticmaalayaasha ee koorsada taas oo u oggolaanaysa qof aan diiwaangashan inuu gaaro foomka diiwaangelinta oo uu isdiiwaangeliyo xitaa marka isdiiwaangelinta guud (allow_registration) la damo."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Ku dar magaca buuxa ee ardayga magacyada faylasha shaqada marka la soo dejinayo soo-gudbinta shakhsiyeed ama xirmooyinka shaqada."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "U oggolaadaa macallimiinta inay soo saaraan tarjumaado dhammaan luqadaha firfircoon ee madal hal tallaabo WYSIWYG. Tani waxay isticmaali kartaa tiro badan oo calaamado AI ah."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Marka la damo, maamulayaashu ma haystaan xiriir si degdeg ah ugu qoondeeya macallimiinta koorsooyinka kalfadhiga bogga tafatirka koorsada."
+
+msgid "Show courses & sessions"
+msgstr "Muuji koorsooyinka & kalfadhiyada"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON ikhtiyaari ah. Tusaale: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Jadwal"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Mawduuc"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Diraha iimaylka macallinka koorsada"
+
+msgid "Card (visual blocks)"
+msgstr "Kaar (baloogyo muuqaal ah)"
+
+msgid "List (classic)"
+msgstr "Liis (caadi)"
+
+msgid "Limit identical emails"
+msgstr "Xaddid iimaylada isku midka ah"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Tirada ugu badan ee koorsooyinka macallin ama tababare uu abuuri karo. Dhig 0 si aad u joojiso xadka."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Tirada ugu badan ee akoonnada la oggol yahay iimayl isku mid ah. Dhig 0 si aad u joojiso xadka."
+
+msgid "Validation"
+msgstr "Xaqiijin"
+
+msgid "Test/Development"
+msgstr "Tijaabo/Horumarin"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Furaha goobta dheeraadka ah ee isticmaalaha ee loo isticmaalo marka la raadinayo oo la magacaabayo kalfadhiyada laga soo qaado /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Qaabaynta JSON ee goobaha shaandhaynta horudhaca ah ee raadinta."
 

@@ -729,7 +729,10 @@ switch ($action) {
                 }
             }
             // Deleting old attempt.
-            if (isset($attemptList) && !empty($attemptList[$my_question_id])) {
+            if (isset($attemptList) &&
+                !empty($attemptList[$my_question_id]) &&
+                CALCULATED_ANSWER != $objQuestionTmp->type
+            ) {
                 if ($debug) {
                     error_log("delete_attempt exe_id : $exeId, my_question_id: $my_question_id");
                 }
@@ -976,6 +979,43 @@ switch ($action) {
             true,
             true
         );
+        break;
+    case 'calculated_question_result':
+        if (isset($_POST['formula'])) {
+            $result = CalculatedAnswer::calculateFormula(
+                $_POST['formula'],
+                $_POST['toleranceValue'],
+                $_POST['toleranceType'],
+                $_POST['digitNumber']
+            );
+
+            if (3 == count($result) && is_numeric($result[0]) && !is_nan($result[0])) {
+                echo json_encode($result);
+            } else {
+                echo json_encode(['error', 'error', 'error']);
+            }
+        } else {
+            echo json_encode([]);
+        }
+        break;
+    case 'calculated_question_sample':
+        if (isset($_POST['intervals'])) {
+            // The teacher-facing field is not saved yet at preview time, so it still uses the
+            // UI syntax (',' decimal separator, ';' between ranges) instead of the stored one
+            // ('.', '*') — same conversion ExerciseQuestionEditorProcessor applies on save.
+            $intervals = str_replace([',', ';'], ['.', '*'], (string) $_POST['intervals']);
+            $decimals = isset($_POST['decimals']) ? (int) $_POST['decimals'] : 0;
+            $count = isset($_POST['count']) ? max(1, min(500, (int) $_POST['count'])) : 100;
+
+            $values = [];
+            for ($i = 0; $i < $count; $i++) {
+                $values[] = CalculatedAnswer::generateFromIntervals($intervals, $decimals);
+            }
+
+            echo json_encode($values);
+        } else {
+            echo json_encode([]);
+        }
         break;
     case 'get_quiz_embeddable':
         $exercises = ExerciseLib::get_all_exercises_for_course_id(

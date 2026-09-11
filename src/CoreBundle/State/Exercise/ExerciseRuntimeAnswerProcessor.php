@@ -1247,29 +1247,38 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
     }
 
     /**
+     * A calculated-answer question now has a single teacher-defined answer row (no more one row per
+     * variation), so the draft only needs to carry the student's per-formula values — no answer id.
+     * Stored as "name1:value1;name2:value2;...".
+     *
      * @param array<string, mixed> $payload
      *
      * @return array<int, array{answer: string, position: int, secondsSpent: int}>
      */
     private function buildCalculatedRows(CQuizQuestion $question, array $payload, int $secondsSpent): array
     {
-        $studentAnswer = trim((string) ($payload['calculated'] ?? $payload['value'] ?? ''));
-        if ('' === $studentAnswer) {
+        $formulas = $payload['calculatedFormulas'] ?? null;
+        if (!\is_array($formulas)) {
             return [];
         }
 
-        $answerId = $this->toPositiveInt($payload['answerId'] ?? 0);
-        if ($answerId <= 0) {
-            $firstAnswer = $this->getFirstAnswer($question);
-            $answerId = $firstAnswer instanceof CQuizAnswer ? (int) $firstAnswer->getIid() : 0;
+        $pairs = [];
+        foreach ($formulas as $name => $value) {
+            $name = trim((string) $name);
+            $value = trim((string) $value);
+            if ('' === $name || '' === $value) {
+                continue;
+            }
+
+            $pairs[] = $name.':'.$value;
         }
 
-        if ($answerId <= 0) {
+        if ([] === $pairs) {
             return [];
         }
 
         return [[
-            'answer' => $answerId.':'.$studentAnswer,
+            'answer' => implode(';', $pairs),
             'position' => 0,
             'secondsSpent' => $secondsSpent,
         ]];

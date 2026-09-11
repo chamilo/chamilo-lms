@@ -265,17 +265,17 @@ final class ExerciseQuestionEditor
     #[Groups(['exercise_question_editor:read', 'exercise_question_editor:write'])]
     public string $calculatedText = '';
 
-    #[Groups(['exercise_question_editor:read', 'exercise_question_editor:write'])]
-    public string $calculatedFormula = '';
-
     /**
-     * @var array<int, array<string, mixed>>
+     * @var array<int, array{name: string, intervals: string, decimals: int}>
      */
     #[Groups(['exercise_question_editor:read', 'exercise_question_editor:write'])]
-    public array $calculatedRanges = [];
+    public array $calculatedVariables = [];
 
+    /**
+     * @var array<int, array{name: string, formula: string, tolerance: float, toleranceType: string, decimals: int, score: float}>
+     */
     #[Groups(['exercise_question_editor:read', 'exercise_question_editor:write'])]
-    public int $calculatedVariations = 1;
+    public array $calculatedFormulas = [];
 
     #[Groups(['exercise_question_editor:read', 'exercise_question_editor:write'])]
     public string $calculatedComment = '';

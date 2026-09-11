@@ -812,7 +812,7 @@
         <div class="space-y-1">
           <h2 class="text-xl font-semibold text-gray-90">{{ t("Calculated answer") }}</h2>
           <p class="text-sm text-gray-70">
-            {{ t("Please type your text below and use square brackets [...] to define one or more blanks.") }}
+            {{ t("Use [#variable] for a random variable (e.g., [#a]) and [=formula] for a result to calculate (e.g., [=total]).") }}
           </p>
         </div>
 
@@ -822,97 +822,164 @@
           :editor-config="calculatedEditorConfig"
           :full-page="false"
           :title="t('Answer')"
-          @update:model-value="syncCalculatedRanges"
+          @update:model-value="syncCalculatedTokens"
         />
 
         <div class="rounded-lg border border-info/30 bg-support-1 px-4 py-3 text-sm text-support-4">
-          {{ t("If you want only integer values write both limits without decimals") }}
+          {{ t("Ranges accept a simple range (1-10), a list of choices (220|330|440), a range with a step (1-10|2), or several ranges (1-10; 20-30).") }}
         </div>
 
         <div
-          v-if="form.calculatedRanges.length"
+          v-if="form.calculatedVariables.length"
           class="overflow-x-auto rounded-lg border border-gray-20"
         >
           <table class="min-w-full border-collapse text-sm">
             <thead class="bg-gray-15 text-start text-gray-90">
               <tr>
-                <th class="border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Variable ranges") }}</th>
-                <th class="w-40 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Lowest value") }}</th>
-                <th class="w-40 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Highest value") }}</th>
-                <th class="w-44 px-3 py-2 font-semibold">{{ t("Range value") }}</th>
+                <th class="border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Variable") }}</th>
+                <th class="border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Range value") }}</th>
+                <th class="w-32 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Decimals") }}</th>
+                <th class="w-16 px-3 py-2 font-semibold">{{ t("Sample") }}</th>
               </tr>
             </thead>
             <tbody>
               <tr
-                v-for="(range, index) in form.calculatedRanges"
-                :key="`calculated-range-${range.token}-${index}`"
+                v-for="(variable, index) in form.calculatedVariables"
+                :key="`calculated-variable-${variable.name}-${index}`"
                 :class="index % 2 === 0 ? 'bg-white' : 'bg-blue-50'"
               >
-                <td class="border-e border-t border-gray-20 px-3 py-3">
-                  <code class="rounded bg-gray-15 px-2 py-1 text-gray-90">{{ range.token }}</code>
+                <td class="border-r border-t border-gray-20 px-3 py-3">
+                  <code class="rounded bg-gray-15 px-2 py-1 text-gray-90">[#{{ variable.name }}]</code>
                 </td>
                 <td class="border-e border-t border-gray-20 px-3 py-3">
                   <BaseInputText
-                    :id="`exercise-calculated-low-${index}`"
-                    v-model="range.low"
-                    :label="t('Lowest value')"
-                    :name="`lowestValue_${index}`"
-                    @blur="refreshCalculatedRandom(range)"
+                    :id="`exercise-calculated-variable-intervals-${index}`"
+                    v-model="variable.intervals"
+                    :label="t('Range value')"
+                    :name="`blank_intervals_${variable.name}`"
+                    placeholder="1-10"
                   />
                 </td>
-                <td class="border-e border-t border-gray-20 px-3 py-3">
-                  <BaseInputText
-                    :id="`exercise-calculated-high-${index}`"
-                    v-model="range.high"
-                    :label="t('Highest value')"
-                    :name="`highestValue_${index}`"
-                    @blur="refreshCalculatedRandom(range)"
+                <td class="border-r border-t border-gray-20 px-3 py-3">
+                  <BaseInputNumber
+                    :id="`exercise-calculated-variable-decimals-${index}`"
+                    v-model="variable.decimals"
+                    :label="t('Decimals')"
+                    :name="`blank_decimals_${variable.name}`"
+                    :min="0"
+                    :step="1"
                   />
                 </td>
-                <td class="border-t border-gray-20 px-3 py-3 text-gray-80">
-                  {{ t("Range value") }}: {{ range.random }}
+                <td class="border-t border-gray-20 px-3 py-3 text-center">
+                  <BaseButton
+                    :label="t('Sample of 100 draws')"
+                    icon="graph"
+                    only-icon
+                    size="small"
+                    type="secondary-text"
+                    @click="openCalculatedVariableSample(variable)"
+                  />
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <div class="grid gap-4 md:grid-cols-3">
-          <BaseInputText
-            id="exercise-calculated-formula"
-            v-model="form.calculatedFormula"
-            :help-text="t('Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )')"
-            :label="t('Formula')"
-            name="formula"
-          />
-
-          <BaseInputNumber
-            id="exercise-calculated-score"
-            v-model="form.score"
-            :label="t('Score')"
-            name="weighting"
-            :min="0"
-            :step="0.1"
-          />
-
-          <BaseInputNumber
-            id="exercise-calculated-variations"
-            v-model="form.calculatedVariations"
-            :label="t('Question variations')"
-            name="answerVariations"
-            :min="1"
-            :step="1"
-          />
+        <div
+          v-if="form.calculatedFormulas.length"
+          class="overflow-x-auto rounded-lg border border-gray-20"
+        >
+          <table class="min-w-full border-collapse text-sm">
+            <thead class="bg-gray-15 text-left text-gray-90">
+              <tr>
+                <th class="border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Name") }}</th>
+                <th class="border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Formula") }}</th>
+                <th class="w-32 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Tolerance") }}</th>
+                <th class="w-32 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Type") }}</th>
+                <th class="w-28 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Decimals") }}</th>
+                <th class="w-28 px-3 py-2 font-semibold">{{ t("Score") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(formula, index) in form.calculatedFormulas"
+                :key="`calculated-formula-${formula.name}-${index}`"
+                :class="index % 2 === 0 ? 'bg-white' : 'bg-blue-50'"
+              >
+                <td class="border-r border-t border-gray-20 px-3 py-3">
+                  <code class="rounded bg-gray-15 px-2 py-1 text-gray-90">[={{ formula.name }}]</code>
+                </td>
+                <td class="border-r border-t border-gray-20 px-3 py-3">
+                  <BaseInputText
+                    :id="`exercise-calculated-formula-expression-${index}`"
+                    v-model="formula.formula"
+                    :help-text="t('Formula sample: sqrt( a / b ) * ( e ^ ( ln(pi) ) )')"
+                    :label="t('Formula')"
+                    :name="`formula_expression_${formula.name}`"
+                    placeholder="a+b"
+                  />
+                </td>
+                <td class="border-r border-t border-gray-20 px-3 py-3">
+                  <BaseInputNumber
+                    :id="`exercise-calculated-formula-tolerance-${index}`"
+                    v-model="formula.tolerance"
+                    :label="t('Tolerance')"
+                    :name="`formula_tolerance_${formula.name}`"
+                    :min="0"
+                    :step="0.1"
+                  />
+                </td>
+                <td class="border-r border-t border-gray-20 px-3 py-3">
+                  <BaseSelect
+                    :id="`exercise-calculated-formula-tolerance-type-${index}`"
+                    v-model="formula.toleranceType"
+                    :label="t('Type')"
+                    :name="`formula_tolerancetype_${formula.name}`"
+                    :options="calculatedToleranceTypeOptions"
+                  />
+                </td>
+                <td class="border-r border-t border-gray-20 px-3 py-3">
+                  <BaseInputNumber
+                    :id="`exercise-calculated-formula-decimals-${index}`"
+                    v-model="formula.decimals"
+                    :label="t('Decimals')"
+                    :name="`formula_decimals_${formula.name}`"
+                    :min="0"
+                    :step="1"
+                  />
+                </td>
+                <td class="border-t border-gray-20 px-3 py-3">
+                  <BaseInputNumber
+                    :id="`exercise-calculated-formula-score-${index}`"
+                    v-model="formula.score"
+                    :label="t('Score')"
+                    :name="`formula_score_${formula.name}`"
+                    :min="0"
+                    :step="0.5"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <a
-          class="inline-flex w-fit items-center rounded-lg border border-info/30 bg-support-1 px-3 py-2 text-sm font-medium text-support-4 hover:bg-primary/10"
-          href="/main/exercise/evalmathnotation.php"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {{ t("Formula notation") }}
-        </a>
+        <div class="flex flex-wrap items-center gap-4">
+          <a
+            class="inline-flex w-fit items-center rounded-lg border border-info/30 bg-support-1 px-3 py-2 text-sm font-medium text-support-4 hover:bg-primary/10"
+            href="/main/exercise/evalmathnotation.php"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {{ t("Formula notation") }}
+          </a>
+
+          <BaseButton
+            :label="t('Test formulas')"
+            icon="play-box-outline"
+            type="primary"
+            @click="testCalculatedFormulas"
+          />
+        </div>
 
         <BaseTinyEditor
           editor-id="exercise-calculated-comment"
@@ -1771,6 +1838,109 @@
 
       <p class="text-sm text-gray-70">* {{ t("Required field") }}</p>
     </form>
+
+    <BaseDialog
+      v-model:is-visible="calculatedSampleDialogVisible"
+      :style="{ width: '480px' }"
+      :title="t('Sample of 100 draws') + ' — [#' + (calculatedSampleVariable?.name || '') + ']'"
+    >
+      <p class="mb-3 text-sm text-gray-70">
+        <strong>{{ t("Range value") }}:</strong> {{ calculatedSampleVariable?.intervals }}
+        &nbsp;|&nbsp;
+        <strong>{{ t("Decimals") }}:</strong> {{ calculatedSampleVariable?.decimals }}
+      </p>
+
+      <div class="max-h-96 overflow-y-auto">
+        <div
+          v-for="row in calculatedSampleRows"
+          :key="`calculated-sample-${row.value}`"
+          class="flex items-center gap-2 py-0.5"
+        >
+          <span class="w-16 shrink-0 text-right text-xs text-gray-70">{{ row.value }}</span>
+          <div
+            class="h-3 bg-support-3"
+            :style="{ width: (row.count / calculatedSampleMaxCount) * 100 + '%' }"
+          />
+        </div>
+      </div>
+
+      <template #footer>
+        <BaseButton
+          :label="t('New draw')"
+          icon="refresh"
+          type="secondary"
+          @click="regenerateCalculatedSample"
+        />
+      </template>
+    </BaseDialog>
+
+    <BaseDialog
+      v-model:is-visible="calculatedFormulaTestDialogVisible"
+      :style="{ width: '560px' }"
+      :title="t('Test formulas')"
+    >
+      <div class="mb-4 space-y-1">
+        <h3 class="mb-2 text-sm font-semibold text-gray-90">{{ t("Generated variable values") }}</h3>
+        <div
+          v-for="variable in calculatedFormulaTestVariables"
+          :key="`formula-test-variable-${variable.name}`"
+          class="flex items-center justify-between rounded bg-gray-15 px-3 py-1.5 text-sm"
+        >
+          <code>[#{{ variable.name }}]</code>
+          <span>
+            {{ variable.value }}
+            <span class="text-xs text-gray-70">({{ t("Truncated to {0} decimals", [variable.decimals]) }})</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="text-sm font-semibold text-gray-90">{{ t("Formula results") }}</h3>
+        <div
+          v-for="formula in calculatedFormulaTestResults"
+          :key="`formula-test-result-${formula.name}`"
+          class="rounded-lg border border-gray-20 px-3 py-2 text-sm"
+        >
+          <p class="text-gray-90">
+            <code>[={{ formula.name }}]</code> = {{ formula.formula }}
+          </p>
+
+          <p
+            v-if="formula.hasError"
+            class="font-semibold text-danger"
+          >
+            {{ t("Error") }}
+          </p>
+          <template v-else>
+            <p class="font-semibold text-gray-90">
+              {{ formula.result }}
+              <span
+                v-if="formula.tolerance > 0"
+                class="text-xs font-normal text-gray-70"
+              >
+                [{{ formula.min }} - {{ formula.max }}]
+              </span>
+            </p>
+            <p class="text-xs text-gray-70">
+              {{ t("Tolerance: {0}", [formulaToleranceLabel(formula)]) }}
+              &nbsp;|&nbsp;
+              {{ t("Decimals: {0}", [formula.decimals]) }}
+              &nbsp;|&nbsp;
+              {{ t("Score: {0}", [formula.score]) }}
+            </p>
+          </template>
+        </div>
+      </div>
+
+      <template #footer>
+        <BaseButton
+          :label="t('New draw')"
+          icon="refresh"
+          type="secondary"
+          @click="testCalculatedFormulas"
+        />
+      </template>
+    </BaseDialog>
   </section>
 </template>
 
@@ -1781,6 +1951,7 @@ import { useRoute, useRouter } from "vue-router"
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
+import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseInputNumber from "../../components/basecomponents/BaseInputNumber.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
@@ -1953,6 +2124,11 @@ const fillBlanksSeparatorOptions = [
   { label: "$...$", value: 6 },
 ]
 
+const calculatedToleranceTypeOptions = [
+  { label: "±", value: "digit" },
+  { label: "%", value: "percent" },
+]
+
 const form = reactive({
   type: UNIQUE_ANSWER,
   title: "",
@@ -1965,9 +2141,8 @@ const form = reactive({
   fillBlanksCaseInsensitive: false,
   fillBlanksComment: "",
   calculatedText: "",
-  calculatedFormula: "",
-  calculatedRanges: [],
-  calculatedVariations: 1,
+  calculatedVariables: [],
+  calculatedFormulas: [],
   calculatedComment: "",
   annotationImageUrl: "",
   annotationImageData: "",
@@ -2591,9 +2766,8 @@ function fillForm(data) {
   form.fillBlanksCaseInsensitive = true === data.fillBlanksCaseInsensitive
   form.fillBlanksComment = data.fillBlanksComment || ""
   form.calculatedText = data.calculatedText || ""
-  form.calculatedFormula = data.calculatedFormula || ""
-  form.calculatedRanges = normalizeCalculatedRanges(data.calculatedRanges || [], form.calculatedText)
-  form.calculatedVariations = Number(data.calculatedVariations || 1)
+  form.calculatedVariables = normalizeCalculatedVariables(data.calculatedVariables || [], form.calculatedText)
+  form.calculatedFormulas = normalizeCalculatedFormulas(data.calculatedFormulas || [], form.calculatedText)
   form.calculatedComment = data.calculatedComment || ""
   form.annotationImageUrl = data.annotationImageUrl || ""
   form.annotationImageData = ""
@@ -2724,64 +2898,186 @@ function fillForm(data) {
 
 
 
-function extractCalculatedTokens(text) {
-  const matches = String(text || "").match(/\[[^\]]+\]/g) || []
-  return [...new Set(matches.map((token) => token.trim()).filter((token) => token !== ""))]
+function extractCalculatedVariableTokens(text) {
+  const matches = String(text || "").match(/\[#([a-zA-Z0-9_]+)\]/g) || []
+  return [...new Set(matches.map((token) => token.replace(/\[#|\]/g, "")).filter((name) => name !== ""))]
 }
 
-function normalizeCalculatedRanges(ranges = [], text = form.calculatedText) {
-  const previousByToken = new Map()
-  for (const range of Array.isArray(ranges) ? ranges : []) {
-    if (range?.token) {
-      previousByToken.set(String(range.token), range)
+function extractCalculatedFormulaTokens(text) {
+  const matches = String(text || "").match(/\[=([a-zA-Z0-9_]+)\]/g) || []
+  return [...new Set(matches.map((token) => token.replace(/\[=|\]/g, "")).filter((name) => name !== ""))]
+}
+
+function normalizeCalculatedVariables(variables = [], text = form.calculatedText) {
+  const previousByName = new Map()
+  for (const variable of Array.isArray(variables) ? variables : []) {
+    if (variable?.name) {
+      previousByName.set(String(variable.name), variable)
     }
   }
 
-  return extractCalculatedTokens(text).map((token, index) => {
-    const previous = previousByToken.get(token) || {}
-    const low = String(previous.low ?? "1")
-    const high = String(previous.high ?? "20")
-
+  return extractCalculatedVariableTokens(text).map((name) => {
+    const previous = previousByName.get(name) || {}
     return {
-      token,
-      low,
-      high,
-      random: previous.random || buildCalculatedRandomPreview(low, high),
-      position: index + 1,
+      name,
+      intervals: String(previous.intervals ?? "1-20"),
+      decimals: Number(previous.decimals ?? 0),
     }
   })
 }
 
-function buildCalculatedRandomPreview(low, high) {
-  let minimum = Number(low || 0)
-  let maximum = Number(high || 0)
-
-  if (Number.isNaN(minimum)) {
-    minimum = 1
+function normalizeCalculatedFormulas(formulas = [], text = form.calculatedText) {
+  const previousByName = new Map()
+  for (const formula of Array.isArray(formulas) ? formulas : []) {
+    if (formula?.name) {
+      previousByName.set(String(formula.name), formula)
+    }
   }
 
-  if (Number.isNaN(maximum)) {
-    maximum = 20
-  }
-
-  if (maximum < minimum) {
-    const oldMinimum = minimum
-    minimum = maximum
-    maximum = oldMinimum
-  }
-
-  const hasDecimal = String(low).includes(".") || String(high).includes(".")
-  const randomValue = Math.random() * (maximum - minimum) + minimum
-
-  return hasDecimal ? randomValue.toFixed(2) : String(Math.floor(randomValue))
+  return extractCalculatedFormulaTokens(text).map((name) => {
+    const previous = previousByName.get(name) || {}
+    return {
+      name,
+      formula: String(previous.formula ?? ""),
+      tolerance: Number(previous.tolerance ?? 0),
+      toleranceType: "percent" === previous.toleranceType ? "percent" : "digit",
+      decimals: Number(previous.decimals ?? 2),
+      score: Number(previous.score ?? 10),
+    }
+  })
 }
 
-function refreshCalculatedRandom(range) {
-  range.random = buildCalculatedRandomPreview(range.low, range.high)
+function syncCalculatedTokens() {
+  form.calculatedVariables = normalizeCalculatedVariables(form.calculatedVariables, form.calculatedText)
+  form.calculatedFormulas = normalizeCalculatedFormulas(form.calculatedFormulas, form.calculatedText)
 }
 
-function syncCalculatedRanges() {
-  form.calculatedRanges = normalizeCalculatedRanges(form.calculatedRanges, form.calculatedText)
+// Draws 100 values through the legacy `calculated_question_sample` ajax action, which calls
+// CalculatedAnswer::generateFromIntervals() (public/main/exercise/calculated_answer.class.php) —
+// the same interval mini-language parser the exercise runtime uses for real draws — so the
+// preview can never drift from what a student would actually see.
+async function buildCalculatedSample(intervals, decimals) {
+  const values = await exerciseService.getCalculatedSample(getContextParams(), intervals, decimals, 100)
+
+  const counts = new Map()
+  for (const value of values) {
+    counts.set(value, (counts.get(value) || 0) + 1)
+  }
+
+  return [...counts.entries()].sort((a, b) => a[0] - b[0]).map(([value, count]) => ({ value, count }))
+}
+
+const calculatedSampleDialogVisible = ref(false)
+const calculatedSampleVariable = ref(null)
+const calculatedSampleRows = ref([])
+const calculatedSampleMaxCount = computed(() => Math.max(1, ...calculatedSampleRows.value.map((row) => row.count)))
+
+async function openCalculatedVariableSample(variable) {
+  if (!String(variable.intervals || "").trim()) {
+    errorMessage.value = t("Please define a range for this variable first.")
+
+    return
+  }
+
+  calculatedSampleVariable.value = variable
+  calculatedSampleRows.value = await buildCalculatedSample(variable.intervals, variable.decimals)
+  calculatedSampleDialogVisible.value = true
+}
+
+async function regenerateCalculatedSample() {
+  if (!calculatedSampleVariable.value) {
+    return
+  }
+
+  calculatedSampleRows.value = await buildCalculatedSample(
+    calculatedSampleVariable.value.intervals,
+    calculatedSampleVariable.value.decimals,
+  )
+}
+
+const calculatedFormulaTestDialogVisible = ref(false)
+const calculatedFormulaTestVariables = ref([])
+const calculatedFormulaTestResults = ref([])
+
+function formulaToleranceLabel(formula) {
+  if (!(formula.tolerance > 0)) {
+    return "0"
+  }
+
+  return "percent" === formula.toleranceType ? `±${formula.tolerance}%` : `±${formula.tolerance}`
+}
+
+// Draws one value per variable (same server-side generator as the "Sample of 100 draws"
+// preview, see buildCalculatedSample above), substitutes those values into each formula in
+// order, and evaluates each one through the legacy `calculated_question_result` ajax action
+// (CalculatedAnswer::calculateFormula()) — a formula's own result is then available to any
+// formula defined after it, matching how the exercise runtime chains them.
+async function testCalculatedFormulas() {
+  if (!form.calculatedVariables.length) {
+    errorMessage.value = t("Please define at least one blank with the selected marker")
+
+    return
+  }
+
+  if (!form.calculatedFormulas.length) {
+    errorMessage.value = t("Please, write the formula")
+
+    return
+  }
+
+  const calculatedValues = {}
+  const variableRows = []
+
+  for (const variable of form.calculatedVariables) {
+    const [value] = await exerciseService.getCalculatedSample(
+      getContextParams(),
+      variable.intervals,
+      variable.decimals,
+      1,
+    )
+    calculatedValues[variable.name] = value
+    variableRows.push({ name: variable.name, value, decimals: variable.decimals })
+  }
+
+  const formulaRows = []
+
+  for (const formula of form.calculatedFormulas) {
+    let expression = String(formula.formula || "")
+    for (const [name, value] of Object.entries(calculatedValues)) {
+      expression = expression.replace(new RegExp(`\\b${name}\\b`, "g"), value)
+    }
+
+    const [result, min, max] = await exerciseService.getCalculatedFormulaResult(
+      getContextParams(),
+      expression,
+      formula.tolerance,
+      formula.toleranceType,
+      formula.decimals,
+    )
+
+    const hasError = "error" === result
+
+    if (!hasError) {
+      calculatedValues[formula.name] = result
+    }
+
+    formulaRows.push({
+      name: formula.name,
+      formula: formula.formula,
+      result,
+      min,
+      max,
+      tolerance: Number(formula.tolerance || 0),
+      toleranceType: formula.toleranceType,
+      decimals: formula.decimals,
+      score: formula.score,
+      hasError,
+    })
+  }
+
+  calculatedFormulaTestVariables.value = variableRows
+  calculatedFormulaTestResults.value = formulaRows
+  calculatedFormulaTestDialogVisible.value = true
 }
 
 function normalizeFillBlankItems(items = []) {
@@ -3536,14 +3832,19 @@ function buildPayload() {
     fillBlanksCaseInsensitive: true === form.fillBlanksCaseInsensitive,
     fillBlanksComment: form.fillBlanksComment,
     calculatedText: form.calculatedText,
-    calculatedFormula: form.calculatedFormula,
-    calculatedRanges: form.calculatedRanges.map((range, index) => ({
-      token: range.token,
-      low: String(range.low ?? "1"),
-      high: String(range.high ?? "20"),
-      position: index + 1,
+    calculatedVariables: form.calculatedVariables.map((variable) => ({
+      name: variable.name,
+      intervals: String(variable.intervals ?? "1-20"),
+      decimals: Number(variable.decimals || 0),
     })),
-    calculatedVariations: Number(form.calculatedVariations || 1),
+    calculatedFormulas: form.calculatedFormulas.map((formula) => ({
+      name: formula.name,
+      formula: formula.formula,
+      tolerance: Number(formula.tolerance || 0),
+      toleranceType: "percent" === formula.toleranceType ? "percent" : "digit",
+      decimals: Number(formula.decimals || 0),
+      score: Number(formula.score || 0),
+    })),
     calculatedComment: form.calculatedComment,
     annotationImageData: isAnnotationQuestion.value && !isEditMode.value ? form.annotationImageData : "",
     annotationImageName: isAnnotationQuestion.value && !isEditMode.value ? form.annotationImageName : "",
@@ -3714,25 +4015,32 @@ function validateForm() {
   }
 
   if (isCalculatedAnswerQuestion.value) {
-    syncCalculatedRanges()
+    syncCalculatedTokens()
     if (!stripHtml(form.calculatedText)) {
       errorMessage.value = t("Please type the text")
       return false
     }
 
-    if (!extractCalculatedTokens(form.calculatedText).length) {
+    if (!form.calculatedVariables.length) {
       errorMessage.value = t("Please define at least one blank with the selected marker")
       return false
     }
 
-    if (!String(form.calculatedFormula || "").trim()) {
+    if (!form.calculatedFormulas.length) {
       errorMessage.value = t("Please, write the formula")
       return false
     }
 
-    if (Number(form.score || 0) <= 0 || Number(form.calculatedVariations || 0) < 1) {
-      errorMessage.value = t("Required field")
-      return false
+    for (const formula of form.calculatedFormulas) {
+      if (!String(formula.formula || "").trim()) {
+        errorMessage.value = t("Please, write the formula")
+        return false
+      }
+
+      if (Number(formula.score || 0) <= 0) {
+        errorMessage.value = t("Required field")
+        return false
+      }
     }
 
     return true
@@ -3975,7 +4283,7 @@ async function saveQuestion() {
 
 watch(() => form.calculatedText, () => {
   if (isCalculatedAnswerQuestion.value) {
-    syncCalculatedRanges()
+    syncCalculatedTokens()
   }
 })
 

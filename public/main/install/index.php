@@ -93,7 +93,6 @@ if (file_exists($envFile)) {
         ) === '1';
 
     if ($appInstalled && $installerVersion) {
-        $dbVersion = null;
         $dbLooksInitialized = false;
 
         try {
@@ -115,10 +114,6 @@ if (file_exists($envFile)) {
                 $hasAnySetting = $conn->fetchOne('SELECT 1 FROM settings_current LIMIT 1');
                 if ($hasAnySetting !== false && $hasAnySetting !== null) {
                     $dbLooksInitialized = true;
-
-                    $dbVersion = $conn->fetchOne(
-                        "SELECT selected_value FROM settings_current WHERE variable = 'chamilo_database_version' LIMIT 1"
-                    );
                 }
             } catch (\Throwable $e) {
                 // Ignore and try legacy table
@@ -129,10 +124,6 @@ if (file_exists($envFile)) {
                     $hasAnySetting = $conn->fetchOne('SELECT 1 FROM settings LIMIT 1');
                     if ($hasAnySetting !== false && $hasAnySetting !== null) {
                         $dbLooksInitialized = true;
-
-                        $dbVersion = $conn->fetchOne(
-                            "SELECT selected_value FROM settings WHERE variable = 'chamilo_database_version' LIMIT 1"
-                        );
                     }
                 } catch (\Throwable $e) {
                     // No settings tables -> DB is not initialized
@@ -141,17 +132,13 @@ if (file_exists($envFile)) {
         } catch (\Throwable $e) {
             // If we cannot connect, do not block the wizard
             $dbLooksInitialized = false;
-            $dbVersion = null;
         }
 
-        // Block whenever the database is already initialized. The previous
-        // version_compare() gate failed open on a stock install: a fresh 3.0.0
-        // seeds chamilo_database_version to 2.0.0 and never raises it, so
-        // version_compare('2.0.0', '3.0.0', '>=') is false and an anonymous
-        // caller could still drive the wizard's writing steps (rewrite .env,
-        // build a schema, create an administrator). Recovering a half-installed
-        // instance is unaffected: that path has $dbLooksInitialized === false.
-        $dbVersion = is_string($dbVersion) ? trim($dbVersion) : '';
+        // Block whenever the database is already initialized. Comparing a stored
+        // version is deliberately avoided: chamilo_database_version is deprecated
+        // and a fresh install seeds a stale value, which previously let the gate
+        // fail open for an anonymous caller. Recovering a half-installed instance
+        // is unaffected: that path has $dbLooksInitialized === false.
         if ($dbLooksInitialized) {
             header('HTTP/1.1 409 Conflict');
             echo '<!doctype html><meta charset="utf-8"><title>Chamilo already installed</title>';

@@ -1996,32 +1996,14 @@ function isUpdateAvailable(): bool
         return false;
     }
 
-    // Compare versions (DB version vs installer version)
-    $versionInfo = require __DIR__ . '/version.php';
-    $installerVersion = $versionInfo['new_version'] ?? null;
-    if (!$installerVersion) {
-        // Cannot determine installer version -> do not assume update
-        error_log('Installer: Missing installer version info, update check disabled.');
-        return false;
-    }
-
-    $dbVersion = null;
-    try {
-        $dbVersion = get_config_param_from_db('chamilo_database_version');
-    } catch (\Throwable $e) {
-        // If we cannot read version, avoid false positives
-        error_log('Installer: Unable to read DB version, update check disabled. Reason: ' . $e->getMessage());
-        return false;
-    }
-
-    // If the DB looks like Chamilo (settings table exists) but version is missing,
-    // it is likely an old install (e.g., 1.11.x) -> update should be offered.
-    $dbVersion = is_string($dbVersion) ? trim($dbVersion) : '';
-    if ($dbVersion === '') {
-        return true;
-    }
-
-    return version_compare($dbVersion, $installerVersion, '<');
+    // The web installer no longer detects a pending update from a stored
+    // version. It used to compare the deprecated chamilo_database_version
+    // setting against the installer version, but that value is a hand-maintained
+    // literal that migrations never raise, so a fresh install was wrongly
+    // flagged as needing an update. Database upgrades run through
+    // doctrine:migrations:migrate; reaching this point only proves the platform
+    // is already installed, which is not an update.
+    return false;
 }
 
 /**

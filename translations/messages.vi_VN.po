@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ví dụ công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -24068,6 +24068,18 @@ msgstr "Hiển thị kết quả cho người học: Hiển thị điểm số, 
 msgid "Signed in as"
 msgstr "Đăng nhập với tư cách"
 
+msgid "Authorize application"
+msgstr "Ủy quyền ứng dụng"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "muốn kết nối với tài khoản Chamilo của bạn."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Ứng dụng này sẽ có thể thao tác trên Chamilo giống hệt như bạn — sử dụng quyền hiện có của tài khoản bạn và không hơn. Nó sẽ không bao giờ có quyền truy cập mà bạn chưa có."
+
+msgid "Allow"
+msgstr "Cho phép"
+
 msgid "Remember me"
 msgstr "Ghi nhớ tôi"
 
@@ -31433,6 +31445,9 @@ msgstr "Quay lại trang gán người dùng"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Gán nguồn xác thực thành công"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Chưa chọn phương thức xác thực nào. Điều này sẽ gỡ mọi phương thức xác thực của (các) người dùng đã chọn trên URL này, có thể khiến họ không đăng nhập được. Tiếp tục?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Mẹo: chọn “— Chỉ tải lên —” để lưu mà không gửi cho ai."
@@ -41222,4 +41237,316 @@ msgstr "Học đan xen"
 
 msgid "Memory palaces"
 msgstr "Cung điện trí nhớ"
+
+msgid "Logins (Month)"
+msgstr "Lần đăng nhập (Tháng)"
+
+msgid "Logins (Day)"
+msgstr "Lần đăng nhập (Ngày)"
+
+msgid "Logins (Hour)"
+msgstr "Lần đăng nhập (Giờ)"
+
+msgid "Number of users (Picture)"
+msgstr "Số người dùng (Ảnh)"
+
+msgid "Allow tutors to register users"
+msgstr "Cho phép gia sư đăng ký người dùng"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Cho phép gia sư chỉnh sửa trong khóa học của phiên"
+
+msgid "Extend rights for tutors"
+msgstr "Mở rộng quyền cho gia sư"
+
+msgid "Show session tutor"
+msgstr "Hiện gia sư phiên"
+
+msgid "Default tutor access days after session"
+msgstr "Số ngày truy cập mặc định của gia sư sau phiên"
+
+msgid "Default tutor access days before session"
+msgstr "Số ngày truy cập mặc định của gia sư trước phiên"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Hộp thư: ẩn gia sư khóa học"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Ẩn gia sư chung trong Hộp thư"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Mở rộng quyền cho gia sư trên khảo sát"
+
+msgid "Maximum courses per user"
+msgstr "Số khóa học tối đa mỗi người dùng"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Cho phép gia sư nhận xét khi chấm bài tập"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Đưa mã chính thức vào tên tệp PDF kết quả bài kiểm tra xuất ra"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron nhắc hết hạn chứng chỉ"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Cửa sổ nhắc hết hạn chứng chỉ (ngày)"
+
+msgid "Allow certificates search"
+msgstr "Cho phép tìm kiếm chứng chỉ"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Cho phép gia sư luôn chỉnh sửa thông báo"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Hiện mã chính thức của học viên trên bảng điểm danh"
+
+msgid "Restrict course chat to tutors"
+msgstr "Giới hạn trò chuyện khóa học chỉ cho gia sư"
+
+msgid "Language by resource"
+msgstr "Ngôn ngữ theo tài nguyên"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Hoàn thành SCO khi rời đi nếu trạng thái vẫn chưa hoàn thành"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Bật bài kiểm tra thích ứng tiến bộ theo đích danh mục"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Chặn gửi thông báo bài kiểm tra tới gia sư chung"
+
+msgid "Enable session expiration warning"
+msgstr "Bật cảnh báo hết hạn phiên"
+
+msgid "Session expiration warning time"
+msgstr "Thời gian cảnh báo hết hạn phiên"
+
+msgid "Check password requirements"
+msgstr "Kiểm tra yêu cầu mật khẩu"
+
+msgid "File integrity check notification recipients"
+msgstr "Người nhận thông báo kiểm tra tính toàn vẹn tệp"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Bật máy chủ ủy quyền OAuth"
+
+msgid "Enable MCP server"
+msgstr "Bật máy chủ MCP"
+
+msgid "Allow MCP by roles"
+msgstr "Cho phép MCP theo vai trò"
+
+msgid "Enable external API keys"
+msgstr "Bật khóa API bên ngoài"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Phiên theo thời lượng luôn khả dụng cho gia sư"
+
+msgid "Allow registration via course invitation links"
+msgstr "Cho phép đăng ký qua liên kết mời khóa học"
+
+msgid "Add student fullname in file download name"
+msgstr "Thêm họ tên học viên vào tên tệp tải xuống"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Cho phép dịch AI sang tất cả ngôn ngữ đang hoạt động trong trình soạn thảo WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Tắt khả năng chỉnh sửa gia sư khóa học"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Khi dùng phiên, hành vi mặc định là dùng độ hiển thị công cụ được định nghĩa trong khóa học gốc. Cài đặt này thay đổi điều đó để gia sư trong khóa học phiên có thể điều chỉnh độ hiển thị công cụ theo nhu cầu."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Gia sư có thể tạo người dùng trên nền tảng và ghi danh người dùng vào một phiên."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Bật tùy chọn này để cấp cho gia sư cùng quyền với giảng viên trên các công cụ soạn thảo"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Hiện tên gia sư phiên chung trong hộp tiêu đề phiên trên danh sách khóa học"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Khi bật, gia sư khóa học trong phiên có thể ghi danh người dùng mới vào phiên của họ. Nếu không, tùy chọn này chỉ dành cho quản trị viên và quản trị viên phiên."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Số ngày mặc định gia sư có thể truy cập khóa học sau ngày kết thúc chính thức của phiên"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Số ngày mặc định gia sư có thể truy cập khóa học trước ngày bắt đầu chính thức của phiên"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Bật thư viện MathJax để hiển thị công thức toán học. Thêm nút công thức vào thanh công cụ trình soạn thảo, công thức được viết bằng LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Mã khóa học phân tách bằng \"|\". Khi giám đốc nhân sự đăng nhập, người dùng được tự động ghi danh vào các khóa học này. Ví dụ: COURSE001|COURSE002. Không thay đổi vai trò người dùng."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Mã khóa học phân tách bằng \"|\". Khi quản trị viên phiên đăng nhập, người dùng được tự động ghi danh vào các khóa học này. Ví dụ: COURSE001|COURSE002. Không thay đổi vai trò người dùng."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Mã khóa học phân tách bằng \"|\". Khi người học đăng nhập, người dùng được tự động ghi danh vào các khóa học này. Ví dụ: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Mã khóa học phân tách bằng \"|\". Khi giáo viên đăng nhập, người dùng được tự động ghi danh vào các khóa học này. Ví dụ: COURSE001|COURSE002. Không cấp quyền giáo viên khóa học."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Ẩn gia sư khóa học của phiên trong Dropbox khi gia sư gửi tài liệu cho học viên"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Ẩn tên gia sư chung trong công cụ Dropbox khi gia sư chung đã tải tệp lên"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Bật tùy chọn này để cho phép gia sư tạo và chỉnh sửa khảo sát"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Lời mời khảo sát nên dùng địa chỉ e-mail của gia sư hay địa chỉ không trả lời được định nghĩa trong phần cấu hình chính?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Số khóa học tối đa một giáo viên/giảng viên có thể tạo. Đặt 0 để tắt giới hạn. Có thể ghi đè theo từng người dùng qua mua dịch vụ BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Cho phép gia sư chỉnh sửa phản hồi khi chấm bài tập"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Có đưa mã chính thức của học viên vào tên tệp khi xuất kết quả bài kiểm tra sang PDF hay không"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Cho phép truy cập tất cả tệp cá nhân không hạn chế"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Bật cron app:send-certificate-expiry-reminders, nhắc người học có chứng chỉ đã hết hạn hoặc sắp hết hạn."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Số ngày mặc định quét trước các chứng chỉ sắp hết hạn, dùng trừ khi cron chạy với --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Cho phép người dùng và khách tìm kiếm chứng chỉ đã tạo từ menu thanh trên."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Cho phép gia sư luôn chỉnh sửa thông báo trong các phiên đang hoạt động hoặc đã kết thúc."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Có hiển thị mã chính thức của học viên cạnh tên trong bảng điểm danh và danh sách hay không."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Cho phép gán ngôn ngữ cụ thể cho từng tài nguyên."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Một số gói SCORM chỉ gọi LMSSetValue(cmi.core.lesson_status, 'incomplete') một lần và không gửi trạng thái kết thúc thực sự cũng như LMSFinish() có ý nghĩa. Bật tùy chọn này để Chamilo coi 'incomplete' còn lại giống như không có trạng thái, xác định hoàn thành khi người học rời SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Nếu lộ trình học được đặt ẩn nhưng giáo viên hoặc gia sư quyết định hiển thị từ trang chủ khóa học, tùy chọn này ngăn Chamilo ẩn liên kết trên trang chủ khóa học."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Bật bài kiểm tra thích ứng tiến dần, mỗi danh mục câu hỏi có thể chuyển người học sang danh mục khác tùy theo điểm số."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Khi người học hoàn thành bài kiểm tra, thông báo thường được gửi cho gia sư, gồm gia sư phiên chung. Bật tùy chọn này để bỏ gia sư chung khỏi các thông báo này."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Hiển thị lần làm bài của người dùng trong tất cả phiên mà gia sư chung có quyền truy cập trong báo cáo bài kiểm tra đang chờ."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Hiển thị cảnh báo cho người dùng đã xác thực trước khi phiên phía máy chủ hết hạn."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Số giây trước khi phiên hết hạn khi hiển thị cảnh báo. Mặc định là 180 giây."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Định nghĩa cấu trúc bắt buộc cho mật khẩu người dùng. Ví dụ: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Dùng \"specials\" (số nhiều) để yêu cầu ký tự đặc biệt."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Bật kiểm tra các yêu cầu mật khẩu được định nghĩa ở trên khi tạo hoặc cập nhật mật khẩu."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Danh sách địa chỉ e-mail phân tách bằng dấu phẩy để thông báo khi quét toàn vẹn tệp phát hiện thay đổi. Để trống để thông báo mọi quản trị viên toàn cục."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Cho phép ứng dụng bên ngoài (ví dụ trình kết nối MCP Claude.ai) đăng ký qua OAuth 2.1 Dynamic Client Registration và kết nối bằng tài khoản Chamilo cùng quyền của từng người dùng. Tắt mặc định: các điểm cuối discovery, đăng ký, ủy quyền và token đều trả về 404 cho đến khi bật."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Bật điểm cuối MCP của Chamilo và giao diện khóa API MCP cá nhân. Khi tắt, khóa API hiện có, token truy cập OAuth và thông tin JWT không dùng được trên /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "Bản đồ JSON các vai trò người dùng Chamilo được phép dùng MCP. Người dùng phải khớp ít nhất một vai trò đã bật. Hạn chế này cũng áp dụng cho khóa API đã tạo trước và kết nối OAuth hiện có."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Cho phép tích hợp máy chủ-máy chủ tin cậy (ví dụ plugin cửa hàng WordPress) xác thực với điểm cuối /api chung bằng khóa API bên ngoài theo người dùng, tạo qua lệnh console \"chamilo:security:generate-external-api-key\". Tắt mặc định: khóa hiện có không dùng được cho đến khi bật."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Thêm gia sư và ngày vào phụ đề phiên trong danh sách phiên."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Nếu không, gia sư phiên chỉ truy cập các phiên theo thời lượng trong thời gian hoạt động."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Khi bật, giáo viên/quản trị viên có thể gửi liên kết mời một lần từ công cụ Người dùng của khóa học, cho phép người chưa đăng ký đến biểu mẫu đăng ký và đăng ký ngay cả khi tự đăng ký chung (allow_registration) bị tắt."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Thêm họ tên đầy đủ của học viên vào tên tệp bài tập khi tải bài nộp riêng hoặc gói bài tập."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Cho phép giáo viên tạo bản dịch cho tất cả ngôn ngữ nền tảng đang hoạt động trong một thao tác WYSIWYG. Có thể tiêu tốn nhiều token AI."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Khi tắt, quản trị viên không có liên kết để gán nhanh gia sư cho khóa học của phiên trên trang chỉnh sửa khóa học."
+
+msgid "Show courses & sessions"
+msgstr "Hiển thị khóa học & phiên"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON tùy chọn. Ví dụ: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Bảng"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Giao diện"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Người gửi email gia sư khóa học"
+
+msgid "Card (visual blocks)"
+msgstr "Thẻ (khối trực quan)"
+
+msgid "List (classic)"
+msgstr "Danh sách (cổ điển)"
+
+msgid "Limit identical emails"
+msgstr "Giới hạn email trùng nhau"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Số khóa học tối đa mà giáo viên hoặc giảng viên có thể tạo. Đặt thành 0 để tắt giới hạn."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Số tài khoản tối đa được phép dùng cùng một email. Đặt thành 0 để tắt giới hạn."
+
+msgid "Validation"
+msgstr "Xác thực"
+
+msgid "Test/Development"
+msgstr "Kiểm thử/Phát triển"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Khóa trường bổ sung của người dùng dùng khi tìm kiếm và đặt tên phiên từ /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Cấu hình JSON cho các trường bộ lọc trước khi tìm kiếm."
 

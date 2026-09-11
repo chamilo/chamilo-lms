@@ -24068,6 +24068,18 @@ msgstr "向学习者显示结果：显示分数、学习者的选择及其每次
 msgid "Signed in as"
 msgstr "登录为"
 
+msgid "Authorize application"
+msgstr "授权应用"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "希望连接到您的 Chamilo 账户。"
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "此应用将能够以与您相同的方式在 Chamilo 上操作——仅使用您现有账户权限，不会获得您尚未拥有的任何访问权限。"
+
+msgid "Allow"
+msgstr "允许"
+
 msgid "Remember me"
 msgstr "记住我"
 
@@ -31433,6 +31445,9 @@ msgstr "返回用户分配页面"
 
 msgid "Authentication sources assigned successfully"
 msgstr "认证源分配成功"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "未选择任何认证方式。这将移除所选用户在此 URL 上的所有认证方式，可能导致其无法登录。是否继续？"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "提示：选择“— 仅上传 —”以存储而不发送给任何人。"
@@ -41222,4 +41237,316 @@ msgstr "交错学习"
 
 msgid "Memory palaces"
 msgstr "记忆宫殿"
+
+msgid "Logins (Month)"
+msgstr "登录次数（月）"
+
+msgid "Logins (Day)"
+msgstr "登录次数（日）"
+
+msgid "Logins (Hour)"
+msgstr "登录次数（小时）"
+
+msgid "Number of users (Picture)"
+msgstr "用户数量（图片）"
+
+msgid "Allow tutors to register users"
+msgstr "允许辅导教师注册用户"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "允许辅导教师在课程学期内编辑"
+
+msgid "Extend rights for tutors"
+msgstr "扩展辅导教师权限"
+
+msgid "Show session tutor"
+msgstr "显示学期辅导教师"
+
+msgid "Default tutor access days after session"
+msgstr "学期结束后辅导教师默认访问天数"
+
+msgid "Default tutor access days before session"
+msgstr "学期开始前辅导教师默认访问天数"
+
+msgid "Dropbox: hide course tutor"
+msgstr "投递箱：隐藏课程辅导教师"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "在投递箱中隐藏总辅导教师"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "扩展辅导教师在问卷上的权限"
+
+msgid "Maximum courses per user"
+msgstr "每位用户最大学课程数"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "允许辅导教师在批改练习时发表评论"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "在导出的测验结果 PDF 文件名中包含官方编号"
+
+msgid "Certificate expiry reminder cron"
+msgstr "证书到期提醒定时任务"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "证书到期提醒窗口（天）"
+
+msgid "Allow certificates search"
+msgstr "允许搜索证书"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "允许辅导教师始终编辑公告"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "在考勤表中显示学生的官方编号"
+
+msgid "Restrict course chat to tutors"
+msgstr "将课程聊天限制为仅辅导教师"
+
+msgid "Language by resource"
+msgstr "按资源设置语言"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "离开时若状态仍为未完成则完成 SCO"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "按类别目标启用渐进式自适应测验"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "阻止向总辅导教师发送测验通知"
+
+msgid "Enable session expiration warning"
+msgstr "启用学期到期警告"
+
+msgid "Session expiration warning time"
+msgstr "学期到期警告时间"
+
+msgid "Check password requirements"
+msgstr "检查密码要求"
+
+msgid "File integrity check notification recipients"
+msgstr "文件完整性检查通知收件人"
+
+msgid "Enable the OAuth authorization server"
+msgstr "启用 OAuth 授权服务器"
+
+msgid "Enable MCP server"
+msgstr "启用 MCP 服务器"
+
+msgid "Allow MCP by roles"
+msgstr "按角色允许 MCP"
+
+msgid "Enable external API keys"
+msgstr "启用外部 API 密钥"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "按时长的学期始终对辅导教师可用"
+
+msgid "Allow registration via course invitation links"
+msgstr "允许通过课程邀请链接注册"
+
+msgid "Add student fullname in file download name"
+msgstr "在文件下载名称中添加学生全名"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "允许在所见即所得编辑器中将 AI 翻译到所有已启用语言"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "禁用编辑课程辅导教师的功能"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "使用学期时，默认行为是使用基础课程中定义的工具可见性。此设置可改为允许学期课程中的辅导教师根据需要调整工具可见性。"
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "辅导教师可在平台上创建用户并将用户注册到学期。"
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "启用此选项可为辅导教师授予与培训者在创作工具上相同的权限"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "在课程列表的学期标题框中显示总学期辅导教师姓名"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "启用后，学期中的课程辅导教师可将新用户注册到其学期。否则此选项仅对管理员和学期管理员可用。"
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "官方学期结束日期后导师可访问该学期的默认天数"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "官方学期开始日期前导师可访问该学期的默认天数"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "启用 MathJax 库以可视化数学公式。这将在编辑器工具栏中添加公式按钮，公式使用 LaTeX 编写。"
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "用 \"|\" 分隔的课程代码。人力资源主管登录时，用户会自动订阅这些课程。示例：COURSE001|COURSE002。这不会更改用户角色。"
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "用 \"|\" 分隔的课程代码。学期管理员登录时，用户会自动订阅这些课程。示例：COURSE001|COURSE002。这不会更改用户角色。"
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "用 \"|\" 分隔的课程代码。学员登录时，用户会自动订阅这些课程。示例：COURSE001|COURSE002。"
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "用 \"|\" 分隔的课程代码。教师登录时，用户会自动订阅这些课程。示例：COURSE001|COURSE002。这不会授予课程教师权限。"
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "当导师向学生发送文档时，在投递箱中隐藏学期课程导师"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "当总导师上传文件时，在投递箱工具中隐藏总导师姓名"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "启用此选项以允许导师创建和编辑调查问卷"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "调查问卷邀请应使用导师电子邮件地址，还是主配置中定义的无回复地址？"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "教师/培训师可创建的课程数量上限。设为 0 表示不限制。可通过 BuyCourses 服务购买按用户覆盖。"
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "允许导师在批改练习时编辑反馈"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "将测验结果导出为 PDF 时，是否在文件名中包含学生的官方编号"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "允许不受限制地访问所有个人文件"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "启用 app:send-certificate-expiry-reminders 定时任务，向证书已过期或即将过期的学员发送提醒。"
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "扫描即将过期证书的默认提前天数，除非定时任务使用 --days-ahead 运行。"
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "允许用户和访客通过顶部栏菜单搜索已生成的证书。"
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "允许导师始终编辑进行中或已结束学期内的公告。"
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "是否在考勤表和名单中于学生姓名旁显示其官方编号。"
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "允许为单个资源指定特定语言。"
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "部分 SCORM 包只会调用一次 LMSSetValue(cmi.core.lesson_status, 'incomplete')，且从不发送真正的结束状态，也不发送有意义的 LMSFinish()。启用此选项后，Chamilo 将把持续的“incomplete”视为无状态，并在学员离开 SCO 时判定完成。"
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "若学习路径被设为不可见，但教师或导师决定从课程主页提供访问，此选项可防止 Chamilo 隐藏课程主页上的链接。"
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "启用渐进式自适应测验，每个题目类别可根据学员得分将学员重定向到另一类别。"
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "学员完成测验时，通知通常会发送给导师（包括学期总导师）。启用此选项可从这些通知中排除总导师。"
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "在待批测验报告中，显示总导师有权访问的所有学期中用户的测验尝试。"
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "在服务器端会话即将过期前向已登录用户显示警告。"
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "显示警告时距会话过期的秒数。默认为 180 秒。"
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "定义用户密码的必需要求结构。示例：{\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}。使用 \"specials\"（复数）以要求特殊字符。"
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "在创建或更新密码时，启用对上述密码要求的验证。"
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "文件完整性扫描检测到更改时要通知的电子邮件地址列表（逗号分隔）。留空则改为通知所有全局管理员。"
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "允许外部应用（例如 Claude.ai MCP 连接器）通过 OAuth 2.1 动态客户端注册进行注册，并使用每位用户自己的 Chamilo 账户和权限进行连接。默认禁用：发现、注册、授权和令牌端点在开启前均返回 404。"
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "启用 Chamilo MCP 端点和个人 MCP API 密钥界面。禁用时，现有 API 密钥、OAuth 访问令牌和 JWT 凭据无法在 /mcp 上使用。"
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "允许使用 MCP 的 Chamilo 用户角色 JSON 映射。用户必须至少匹配一个已启用角色。此限制也适用于先前生成的 API 密钥和现有 OAuth 连接。"
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "允许受信任的服务器到服务器集成（例如 WordPress 店面插件）使用通过 \"chamilo:security:generate-external-api-key\" 控制台命令生成的每用户外部 API 密钥，对通用 /api 端点进行身份验证。默认禁用：开启前无法使用现有密钥。"
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "在学期列表的学期副标题中添加导师和日期。"
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "否则，学期导师仅在有效持续期内可按持续时间访问学期。"
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "启用后，教师/管理员可从课程的“用户”工具发送一次性邀请链接，使未注册人员即使在禁用一般自行注册（allow_registration）时也能到达注册表单并完成注册。"
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "下载单个作业提交或作业压缩包时，在作业文件名中添加学生全名。"
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "允许教师在一次所见即所得操作中为所有已启用的平台语言生成翻译。这可能消耗大量 AI 令牌。"
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "禁用时，管理员在课程编辑页面没有快速为学期课程分配导师的链接。"
+
+msgid "Show courses & sessions"
+msgstr "显示课程和学期"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "可选 JSON。示例：{\"speed\": true}"
+
+msgid "Table"
+msgstr "表格"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "主题"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "课程导师邮件发件人"
+
+msgid "Card (visual blocks)"
+msgstr "卡片（可视化块）"
+
+msgid "List (classic)"
+msgstr "列表（经典）"
+
+msgid "Limit identical emails"
+msgstr "限制相同邮箱"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "教师或培训师可创建的课程数量上限。设为 0 可禁用该限制。"
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "允许使用同一邮箱的账户数量上限。设为 0 可禁用该限制。"
+
+msgid "Validation"
+msgstr "验证"
+
+msgid "Test/Development"
+msgstr "测试/开发"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "从 /admin-dashboard/register 搜索和命名课程班时使用的用户扩展字段键。"
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "搜索预筛选字段的 JSON 配置。"
 

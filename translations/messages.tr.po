@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Saygılarımızla"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formül örneği: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formül örneği: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Değişken aralıkları"
@@ -24068,6 +24068,18 @@ msgstr "Öğrenmene sonucu göster: Puanı, öğrenmenin seçimi ve her denemede
 msgid "Signed in as"
 msgstr "Şu şekilde giriş yapıldı"
 
+msgid "Authorize application"
+msgstr "Uygulamayı yetkilendir"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "Chamilo hesabınıza bağlanmak istiyor."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Bu uygulama, Chamilo üzerinde tam olarak sizin yapabildiğiniz gibi hareket edebilecek — mevcut hesap izinlerinizi kullanacak ve daha fazlasını değil. Zaten sahip olmadığınız hiçbir erişimi asla elde etmeyecektir."
+
+msgid "Allow"
+msgstr "İzin ver"
+
 msgid "Remember me"
 msgstr "Beni hatırla"
 
@@ -31433,6 +31445,9 @@ msgstr "Kullanıcı atama sayfasına dön"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Kimlik doğrulama kaynakları başarıyla atandı"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Hiçbir kimlik doğrulama yöntemi seçilmedi. Bu, bu URL’de seçilen kullanıcı(lar) için tüm kimlik doğrulama yöntemlerini kaldırır ve oturum açmalarını engelleyebilir. Devam edilsin mi?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "İpucu: Kimseye göndermeden saklamak için “— Yükle —” seçin."
@@ -41222,4 +41237,316 @@ msgstr "Karışık öğrenme"
 
 msgid "Memory palaces"
 msgstr "Hafıza sarayları"
+
+msgid "Logins (Month)"
+msgstr "Girişler (Ay)"
+
+msgid "Logins (Day)"
+msgstr "Girişler (Gün)"
+
+msgid "Logins (Hour)"
+msgstr "Girişler (Saat)"
+
+msgid "Number of users (Picture)"
+msgstr "Kullanıcı sayısı (Resim)"
+
+msgid "Allow tutors to register users"
+msgstr "Eğitmenlerin kullanıcı kaydetmesine izin ver"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Eğitmenlerin kurs oturumları içinde düzenleme yapmasına izin ver"
+
+msgid "Extend rights for tutors"
+msgstr "Eğitmenler için hakları genişlet"
+
+msgid "Show session tutor"
+msgstr "Oturum eğitmenini göster"
+
+msgid "Default tutor access days after session"
+msgstr "Oturumdan sonra varsayılan eğitmen erişim günleri"
+
+msgid "Default tutor access days before session"
+msgstr "Oturumdan önce varsayılan eğitmen erişim günleri"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: kurs eğitmenini gizle"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Dropbox’ta genel eğitmeni gizle"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Anketlerde eğitmenler için hakları genişlet"
+
+msgid "Maximum courses per user"
+msgstr "Kullanıcı başına en fazla kurs sayısı"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Eğitmenlerin alıştırmaları incelerken yorum yapmasına izin ver"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Dışa aktarılan sınav sonucu PDF dosya adına resmi kodu ekle"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Sertifika sona erme hatırlatıcısı cron"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Sertifika sona erme hatırlatma penceresi (gün)"
+
+msgid "Allow certificates search"
+msgstr "Sertifika aramaya izin ver"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Eğitmenlerin duyuruları her zaman düzenlemesine izin ver"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Yoklama listelerinde öğrencilerin resmi kodunu göster"
+
+msgid "Restrict course chat to tutors"
+msgstr "Kurs sohbetini eğitmenlerle sınırla"
+
+msgid "Language by resource"
+msgstr "Kaynağa göre dil"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Durum eksik kaldığında ayrılışta SCO’yu tamamla"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Kategori hedefine göre aşamalı uyarlanabilir testleri etkinleştir"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Genel eğitmene test bildirimlerinin gönderilmesini engelle"
+
+msgid "Enable session expiration warning"
+msgstr "Oturum süresi dolma uyarısını etkinleştir"
+
+msgid "Session expiration warning time"
+msgstr "Oturum süresi dolma uyarı zamanı"
+
+msgid "Check password requirements"
+msgstr "Parola gereksinimlerini kontrol et"
+
+msgid "File integrity check notification recipients"
+msgstr "Dosya bütünlüğü kontrolü bildirim alıcıları"
+
+msgid "Enable the OAuth authorization server"
+msgstr "OAuth yetkilendirme sunucusunu etkinleştir"
+
+msgid "Enable MCP server"
+msgstr "MCP sunucusunu etkinleştir"
+
+msgid "Allow MCP by roles"
+msgstr "Rollere göre MCP’ye izin ver"
+
+msgid "Enable external API keys"
+msgstr "Harici API anahtarlarını etkinleştir"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Süreye göre oturumlar eğitmenler için her zaman kullanılabilir"
+
+msgid "Allow registration via course invitation links"
+msgstr "Kurs davet bağlantılarıyla kayda izin ver"
+
+msgid "Add student fullname in file download name"
+msgstr "Dosya indirme adına öğrencinin tam adını ekle"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "WYSIWYG editörlerinde tüm etkin dillere yapay zekâ çevirisine izin ver"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Kurs eğitmenlerini düzenleme yeteneğini devre dışı bırak"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Oturumlar kullanılırken varsayılan davranış, temel kursta tanımlanan araç görünürlüğünü kullanmaktır. Bu ayar bunu değiştirerek oturum kurslarındaki eğitmenlerin araç görünürlüklerini ihtiyaçlarına göre uyarlamasına izin verir."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Eğitmenler platformda kullanıcı oluşturabilir ve kullanıcıları bir oturuma kaydedebilir."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Eğitmenlere yazarlık araçlarında eğitmenlerle aynı izinleri vermek için bu seçeneği etkinleştirin"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Kurs listesindeki oturum başlığı kutusunda genel oturum eğitmeninin adını göster"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Etkinleştirildiğinde, oturumlardaki kurs eğitmenleri oturumlarına yeni kullanıcılar kaydedebilir. Aksi halde bu seçenek yalnızca yöneticiler ve oturum yöneticileri için kullanılabilir."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Resmi oturum bitiş tarihinden sonra bir eğitmenin oturuma erişebileceği varsayılan gün sayısı"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Resmi oturum başlangıç tarihinden önce bir eğitmenin oturuma erişebileceği varsayılan gün sayısı"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Matematiksel formülleri görüntülemek için MathJax kitaplığını etkinleştirin. Bu, düzenleyici araç çubuğuna LaTeX ile formül yazılan bir formül düğmesi ekler."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "\"|\" ile ayrılmış ders kodları. Bir insan kaynakları yöneticisi oturum açtığında kullanıcı otomatik olarak bu derslere kaydedilir. Örnek: COURSE001|COURSE002. Bu, kullanıcı rolünü değiştirmez."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "\"|\" ile ayrılmış ders kodları. Bir oturum yöneticisi oturum açtığında kullanıcı otomatik olarak bu derslere kaydedilir. Örnek: COURSE001|COURSE002. Bu, kullanıcı rolünü değiştirmez."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "\"|\" ile ayrılmış ders kodları. Bir öğrenen oturum açtığında kullanıcı otomatik olarak bu derslere kaydedilir. Örnek: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "\"|\" ile ayrılmış ders kodları. Bir öğretmen oturum açtığında kullanıcı otomatik olarak bu derslere kaydedilir. Örnek: COURSE001|COURSE002. Bu, ders öğretmeni yetkileri vermez."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Eğitmen belgesi öğrencilere gönderdiğinde Dropbox’ta oturum ders eğitmenini gizle"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Genel eğitmen dosyayı yüklediğinde Dropbox aracında genel eğitmenin adını gizle"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Eğitmenlerin anket oluşturmasına ve düzenlemesine izin vermek için bu seçeneği etkinleştirin"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Anket davetlerinde eğitmenin e-posta adresi mi yoksa ana yapılandırma bölümünde tanımlanan yanıt vermeyen adres mi kullanılsın?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Bir öğretmenin/eğitmenin oluşturabileceği en fazla ders sayısı. Sınırı kapatmak için 0 girin. BuyCourses hizmet satın alımıyla kullanıcı başına geçersiz kılınabilir."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Eğitmenlerin alıştırmaları incelerken geri bildirimi düzenlemesine izin ver"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Sınav sonucunu PDF’ye dışa aktarırken dosya adına öğrencinin resmi kodunun eklenip eklenmeyeceği"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Tüm kişisel dosyalara kısıtlama olmadan erişime izin verir"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Süresi dolmuş veya dolmak üzere olan sertifikaları öğrenenlere hatırlatan app:send-certificate-expiry-reminders cron’unu etkinleştirin."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Süresi dolmak üzere olan sertifikaları taramak için varsayılan gün sayısı; cron --days-ahead ile çalıştırılmadıkça kullanılır."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Kullanıcıların ve ziyaretçilerin üst çubuk menüsünden oluşturulan sertifikaları aramasına izin verin."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Eğitmenlerin etkin veya geçmiş oturumlarda duyuruları her zaman düzenlemesine izin verin."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Yoklama çizelgelerinde ve listelerde öğrencilerin resmi kodunun adlarının yanında gösterilip gösterilmeyeceği."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Tek tek kaynaklara belirli bir dil atamaya izin verin."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Bazı SCORM paketleri LMSSetValue(cmi.core.lesson_status, 'incomplete') çağrısını yalnızca bir kez yapar ve gerçek bir son durum veya anlamlı bir LMSFinish() göndermez. Bu seçeneği etkinleştirerek Chamilo’nun bu kalan 'incomplete' durumunu hiç durum yokmuş gibi işlemesini ve öğrenen SCO’dan ayrıldığında tamamlanmayı çözümlemesini sağlayın."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Bir öğrenme yolu görünmez olarak ayarlanmış olsa da öğretmen veya eğitmenin onu ders ana sayfasından kullanılabilir kılması durumunda, bu seçenek Chamilo’nun ders ana sayfasındaki bağlantıyı gizlemesini önler."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Her soru kategorisinin puana göre öğrenenleri başka bir kategoriye yönlendirebildiği aşamalı uyarlamalı testleri etkinleştirin."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Öğrenenler bir testi tamamladığında bildirimler genellikle genel oturum eğitmeni dahil eğitmenlere gönderilir. Bu seçeneği etkinleştirerek genel eğitmenin bu bildirimlerden çıkarılmasını sağlayın."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Bekleyen testler raporunda genel eğitmenin erişimi olan tüm oturumlardaki kullanıcıların test denemelerini göster."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Kimliği doğrulanmış kullanıcılara sunucu tarafı oturumları sona ermeden önce bir uyarı göster."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Uyarının gösterileceği oturum sona erme süresinden önceki saniye sayısı. Varsayılan 180 saniyedir."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Kullanıcı parolaları için gerekli yapıyı tanımlar. Örnek: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Özel karakter zorunlu kılmak için \"specials\" (çoğul) kullanın."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Parola oluşturma veya güncelleme sırasında yukarıda tanımlanan parola gereksinimlerinin doğrulanmasını etkinleştirin."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Dosya bütünlüğü taraması bir değişiklik tespit ettiğinde bildirilecek virgülle ayrılmış e-posta adresleri listesi. Bunun yerine tüm genel yöneticilere bildirmek için boş bırakın."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Harici uygulamaların (ör. Claude.ai MCP bağlayıcısı) OAuth 2.1 Dinamik İstemci Kaydı ile kaydolmasına ve her kullanıcının kendi Chamilo hesabı ve izinleriyle bağlanmasına izin verir. Varsayılan olarak kapalıdır: bu açılana kadar keşif, kayıt, yetkilendirme ve belirteç uç noktalarının tümü 404 döndürür."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Chamilo MCP uç noktasını ve kişisel MCP API anahtarı arayüzünü etkinleştirir. Kapalıyken mevcut API anahtarları, OAuth erişim belirteçleri ve JWT kimlik bilgileri /mcp üzerinde kullanılamaz."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "MCP kullanmasına izin verilen Chamilo kullanıcı rollerinin JSON haritası. Kullanıcının en az bir etkin rolle eşleşmesi gerekir. Bu kısıtlama daha önce oluşturulmuş API anahtarları ve mevcut OAuth bağlantıları için de geçerlidir."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Güvenilir sunucudan sunucuya bütünleştirmelerin (ör. WordPress vitrin eklentisi) genel /api uç noktasına karşı, \"chamilo:security:generate-external-api-key\" konsol komutuyla üretilen kullanıcı başına harici API anahtarıyla kimlik doğrulamasına izin verir. Varsayılan olarak kapalıdır: bu açılana kadar mevcut anahtarlar kullanılamaz."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Oturum listesinde oturum alt başlığına eğitmeni ve tarihleri ekleyin."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Aksi halde oturum eğitmenleri süreye göre oturumlara yalnızca etkin süre boyunca erişebilir."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Etkinleştirildiğinde, bir öğretmen/yönetici bir dersin Kullanıcılar aracından, kayıtsız bir kişinin kayıt formuna ulaşıp genel kendi kendine kayıt (allow_registration) kapalı olsa bile kayıt olmasını sağlayan tek kullanımlık bir davet bağlantısı gönderebilir."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Bireysel teslimatlar veya ödev paketleri indirilirken ödev dosya adlarına öğrencinin tam adını ekleyin."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Öğretmenlerin tek bir WYSIWYG işleminde tüm etkin platform dilleri için çeviri üretmesine izin verir. Bu, çok sayıda yapay zeka jetonu tüketebilir."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Kapalıyken yöneticilerin ders düzenleme sayfasında oturum derslerine hızlıca eğitmen atamak için bir bağlantısı olmaz."
+
+msgid "Show courses & sessions"
+msgstr "Dersleri ve oturumları göster"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "İsteğe bağlı JSON. Örnek: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Tablo"
+
+msgid "LoginIsEmailTitle"
+msgstr "GirişEpostaBaşlığı"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Kurs eğitmeni e-posta göndericisi"
+
+msgid "Card (visual blocks)"
+msgstr "Kart (görsel bloklar)"
+
+msgid "List (classic)"
+msgstr "Liste (klasik)"
+
+msgid "Limit identical emails"
+msgstr "Aynı e-postaları sınırla"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Bir öğretmen veya eğitmenin oluşturabileceği maksimum kurs sayısı. Sınırı devre dışı bırakmak için 0 olarak ayarlayın."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Aynı e-posta ile izin verilen maksimum hesap sayısı. Sınırı devre dışı bırakmak için 0 olarak ayarlayın."
+
+msgid "Validation"
+msgstr "Doğrulama"
+
+msgid "Test/Development"
+msgstr "Test/Geliştirme"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Oturumları /admin-dashboard/register üzerinden ararken ve adlandırırken kullanılacak kullanıcı ekstra alan anahtarı."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Arama ön filtre alanları için JSON yapılandırması."
 

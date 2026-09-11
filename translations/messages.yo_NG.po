@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ ìṣirò: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ ìṣírò: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -24063,6 +24063,18 @@ msgstr "Han abajade fun akẹkọ: Han ami-ami, yiyan akẹkọ ati esi rẹ lor
 msgid "Signed in as"
 msgstr "Wọle bi"
 
+msgid "Authorize application"
+msgstr "Fún ìṣàfilọ́lẹ̀ ní àṣẹ"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "fẹ́ sopọ̀ mọ́ àkọọ́lẹ̀ Chamilo rẹ."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Ìṣàfilọ́lẹ̀ yìí yóò lè ṣiṣẹ́ lórí Chamilo gẹ́gẹ́ bí ìwọ ṣe lè ṣe — ní lílo àwọn ìyọ̀ǹda àkọọ́lẹ̀ rẹ tó wà tẹ́lẹ̀, kò sí nǹkan mìíràn. Kò ní gba ìráyè kankan tí ìwọ kò ní tẹ́lẹ̀."
+
+msgid "Allow"
+msgstr "Fàyègbà"
+
 msgid "Remember me"
 msgstr "Ranti mi"
 
@@ -31427,6 +31439,9 @@ msgstr "Pada sí ojú ìkàwà ìyàn olùpẹ̀lò"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Awọn orisun ìdáwò tí a yàn ṣàpẹẹrẹ"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Kò sí ọ̀nà ìjẹ́rìísí tí a yàn. Èyí yóò yọ gbogbo ọ̀nà ìjẹ́rìísí fún olùmúlò/àwọn olùmúlò tí a yàn lórí URL yìí, èyí tí ó lè dènà wọn láti wọlé. Tẹ̀síwájú?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Ìmọ̀ràn: yan “— Kàn ṣe ìgbé kàn —” láti fi pamọ́ láìfi ránṣẹ́ sí ẹnikẹ́ni."
@@ -41216,4 +41231,316 @@ msgstr "Ìkẹ́kọ̀ọ́ tí a pọ̀ mọ́ra"
 
 msgid "Memory palaces"
 msgstr "Ààfin ìrántí"
+
+msgid "Logins (Month)"
+msgstr "Àwọn ìwọlé (Oṣù)"
+
+msgid "Logins (Day)"
+msgstr "Àwọn ìwọlé (Ọjọ́)"
+
+msgid "Logins (Hour)"
+msgstr "Àwọn ìwọlé (Wákàtí)"
+
+msgid "Number of users (Picture)"
+msgstr "Iye àwọn olùmúlò (Àwòrán)"
+
+msgid "Allow tutors to register users"
+msgstr "Jẹ́ kí àwọn olùkọ́ forúkọsílẹ̀ àwọn olùmúlò"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Jẹ́ kí àwọn olùkọ́ ṣàtúnṣe nínú àwọn sẹ́ṣàn ìkẹ́kọ̀ọ́"
+
+msgid "Extend rights for tutors"
+msgstr "Fà àwọn ẹ̀tọ́ fún àwọn olùkọ́"
+
+msgid "Show session tutor"
+msgstr "Fi olùkọ́ sẹ́ṣàn hàn"
+
+msgid "Default tutor access days after session"
+msgstr "Ọjọ́ ìráyè olùkọ́ àìyípadà lẹ́yìn sẹ́ṣàn"
+
+msgid "Default tutor access days before session"
+msgstr "Ọjọ́ ìráyè olùkọ́ àìyípadà ṣáájú sẹ́ṣàn"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: fi olùkọ́ ìkẹ́kọ̀ọ́ pamọ́"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Fi olùkọ́ gbogbogbòò pamọ́ nínú Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Fà àwọn ẹ̀tọ́ fún àwọn olùkọ́ lórí àwọn ìwádìí"
+
+msgid "Maximum courses per user"
+msgstr "Òpò ìkẹ́kọ̀ọ́ fún olùmúlò kọ̀ọ̀kan"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Jẹ́ kí àwọn olùkọ́ sọ àsọyé nígbà tí wọ́n ń ṣàyẹ̀wò àwọn iṣẹ́ ìdánwò"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Fi kóòdù òṣèlú sí orúkọ fáìlì PDF èsì ìdánwò tí a gbé jáde"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron ìránnilétí ìparí ìwé ẹ̀rí"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Fèrèsé ìránnilétí ìparí ìwé ẹ̀rí (ọjọ́)"
+
+msgid "Allow certificates search"
+msgstr "Jẹ́ kí wọ́n wá àwọn ìwé ẹ̀rí"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Jẹ́ kí àwọn olùkọ́ máa ṣàtúnṣe àwọn ìkéde nígbà gbogbo"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Fi kóòdù òṣèlú àwọn akẹ́kọ̀ọ́ hàn nínú àwọn ìwé ìwéwà"
+
+msgid "Restrict course chat to tutors"
+msgstr "Dènà ìtàkurọ̀sọ ìkẹ́kọ̀ọ́ sí àwọn olùkọ́ nìkan"
+
+msgid "Language by resource"
+msgstr "Èdè nípa ohun èlò"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Parí SCO nígbà tí a bá kúrò tí ipò ṣì jẹ́ àìparí"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Mú àwọn ìdánwò àdàkọ tó ń tẹ̀síwájú ṣiṣẹ́ nípa ibi ìpín"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Dènà fífi ìfitónilétí ìdánwò ránṣẹ́ sí olùkọ́ gbogbogbòò"
+
+msgid "Enable session expiration warning"
+msgstr "Mú ìkìlọ̀ ìparí sẹ́ṣàn ṣiṣẹ́"
+
+msgid "Session expiration warning time"
+msgstr "Àkókò ìkìlọ̀ ìparí sẹ́ṣàn"
+
+msgid "Check password requirements"
+msgstr "Ṣàyẹ̀wò àwọn ìbéèrè ọ̀rọ̀ ìgbaniwọlé"
+
+msgid "File integrity check notification recipients"
+msgstr "Àwọn olùgbà ìfitónilétí ìyẹ̀wò ìdúróṣinṣin fáìlì"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Mú olupin ìfàṣẹsí OAuth ṣiṣẹ́"
+
+msgid "Enable MCP server"
+msgstr "Mú olupin MCP ṣiṣẹ́"
+
+msgid "Allow MCP by roles"
+msgstr "Jẹ́ kí MCP ṣiṣẹ́ nípa àwọn ipa"
+
+msgid "Enable external API keys"
+msgstr "Mú àwọn kọ́kọ́rọ́ API ìta ṣiṣẹ́"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Àwọn sẹ́ṣàn nípa ìgbà máa ń wà fún àwọn olùkọ́ nígbà gbogbo"
+
+msgid "Allow registration via course invitation links"
+msgstr "Jẹ́ kí ìforúkọsílẹ̀ ṣẹlẹ̀ nípasẹ̀ àwọn ọ̀nà ìpè ìkẹ́kọ̀ọ́"
+
+msgid "Add student fullname in file download name"
+msgstr "Fi orúkọ kíkún akẹ́kọ̀ọ́ kún orúkọ ìgbàsílẹ̀ fáìlì"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Jẹ́ kí ìtumọ̀ AI sí gbogbo èdè tó ń ṣiṣẹ́ nínú àwọn olóòtú WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Pa agbára ṣíṣàtúnṣe àwọn olùkọ́ ìkẹ́kọ̀ọ́"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Nígbà tí a bá ń lo àwọn sẹ́ṣàn, ìṣe àìyípadà ni láti lo ìhàn ohun èlò tí a ṣàlàyé nínú ìkẹ́kọ̀ọ́ ìpìlẹ̀. Ètò yìí yí èyí padà láti jẹ́ kí àwọn olùkọ́ nínú àwọn ìkẹ́kọ̀ọ́ sẹ́ṣàn ṣàtúnṣe ìhàn àwọn ohun èlò sí ohun tí wọ́n nílò."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Àwọn olùkọ́ lè ṣẹ̀dá àwọn olùmúlò lórí pẹpẹ náà kí wọ́n sì forúkọsílẹ̀ àwọn olùmúlò sí sẹ́ṣàn."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Mú àṣàyàn yìí ṣiṣẹ́ láti fún àwọn olùkọ́ ní àwọn ìyọ̀ǹda kannáà pẹ̀lú àwọn olùkọ́ni lórí àwọn ohun èlò ìkọ̀wé"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Fi orúkọ olùkọ́ sẹ́ṣàn gbogbogbòò hàn nínú àpótí àkọlé sẹ́ṣàn nínú àtòkọ ìkẹ́kọ̀ọ́"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Nígbà tí a bá mú un ṣiṣẹ́, àwọn olùkọ́ ìkẹ́kọ̀ọ́ nínú àwọn sẹ́ṣàn lè forúkọsílẹ̀ àwọn olùmúlò tuntun sí sẹ́ṣàn wọn. Bí kò ṣe bẹ́ẹ̀, àṣàyàn yìí wà fún àwọn alákòóso àti àwọn alákòóso sẹ́ṣàn nìkan."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Iye ọjọ aiyipada ti olùkọ́-ìtọ́sọ́nà lè wọlé sí sẹ́ṣàn lẹ́yìn ọjọ́ ìparí sẹ́ṣàn gẹ́gẹ́ bí òfin"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Iye ọjọ aiyipada ti olùkọ́-ìtọ́sọ́nà lè wọlé sí sẹ́ṣàn ṣáájú ọjọ́ ìbẹ̀rẹ̀ sẹ́ṣàn gẹ́gẹ́ bí òfin"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Mú ìkànnì MathJax ṣiṣẹ́ láti fi àwọn ìṣirò ìṣirò hàn. Èyí ṣàfikún bọ́tìnì ìṣirò sí pẹpẹ irinṣẹ́ olóòtú, níbi tí a ti kọ ìṣirò ní LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Àwọn kóòdù ìkẹ́kọ̀ọ́ tí a pín pẹ̀lú \"|\". Nígbà tí olùdarí ètò òṣìṣẹ́ ènìyàn bá wọlé, a máa forúkọ olùmúlò sí àwọn ìkẹ́kọ̀ọ́ wọ̀nyí láìfọwọ́yí. Àpẹẹrẹ: COURSE001|COURSE002. Èyí kò yí ipa olùmúlò padà."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Àwọn kóòdù ìkẹ́kọ̀ọ́ tí a pín pẹ̀lú \"|\". Nígbà tí olùṣàkóso sẹ́ṣàn bá wọlé, a máa forúkọ olùmúlò sí àwọn ìkẹ́kọ̀ọ́ wọ̀nyí láìfọwọ́yí. Àpẹẹrẹ: COURSE001|COURSE002. Èyí kò yí ipa olùmúlò padà."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Àwọn kóòdù ìkẹ́kọ̀ọ́ tí a pín pẹ̀lú \"|\". Nígbà tí akẹ́kọ̀ọ́ bá wọlé, a máa forúkọ olùmúlò sí àwọn ìkẹ́kọ̀ọ́ wọ̀nyí láìfọwọ́yí. Àpẹẹrẹ: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Àwọn kóòdù ìkẹ́kọ̀ọ́ tí a pín pẹ̀lú \"|\". Nígbà tí olùkọ́ bá wọlé, a máa forúkọ olùmúlò sí àwọn ìkẹ́kọ̀ọ́ wọ̀nyí láìfọwọ́yí. Àpẹẹrẹ: COURSE001|COURSE002. Èyí kò fún ni ẹ̀tọ́ olùkọ́ ìkẹ́kọ̀ọ́."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Fi olùkọ́-ìtọ́sọ́nà ìkẹ́kọ̀ọ́ sẹ́ṣàn pamọ́ nínú Dropbox nígbà tí olùkọ́-ìtọ́sọ́nà bá fi ìwé ránṣẹ́ sí àwọn akẹ́kọ̀ọ́"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Fi orúkọ olùkọ́-ìtọ́sọ́nà gbogbogbò pamọ́ nínú irinṣẹ́ Dropbox nígbà tí olùkọ́-ìtọ́sọ́nà gbogbogbò bá gbé fáìlì sókè"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Mú àṣàyàn yìí ṣiṣẹ́ láti jẹ́ kí àwọn olùkọ́-ìtọ́sọ́nà ṣẹ̀dá àti ṣàtúnṣe àwọn ìwádìí"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Ṣé àwọn ìpè ìwádìí yẹ kí ó lo àdírẹ́sì ímeèlì olùkọ́-ìtọ́sọ́nà tàbí àdírẹ́sì no-reply tí a ṣàlàyé nínú abala ìṣètò pàtàkì?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Iye ìkẹ́kọ̀ọ́ tó pọ̀ jù tí olùkọ́/olùkọ́ni lè ṣẹ̀dá. Fi sí 0 láti pa òpin náà. A lè yí i padà fún olùmúlò kọ̀ọ̀kan nípasẹ̀ rírà iṣẹ́ BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Jẹ́ kí àwọn olùkọ́-ìtọ́sọ́nà ṣàtúnṣe ìdáhùn nígbà tí wọ́n ń ṣàyẹ̀wò àwọn ìdánwò"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Bóyá a ó fi kóòdù òfin akẹ́kọ̀ọ́ sínú orúkọ fáìlì nígbà tí a bá ń gbé èsì ìdánwò jáde sí PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Jẹ́ kí a wọlé sí gbogbo àwọn fáìlì ti ara ẹni láìsí ìdíwọ́"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Mú cron app:send-certificate-expiry-reminders ṣiṣẹ́, èyí tí ń rán àwọn akẹ́kọ̀ọ́ létí tí ìwé-ẹ̀rí wọn ti parí tàbí tí ó fẹ́ parí."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Iye ọjọ aiyipada síwájú láti wá àwọn ìwé-ẹ̀rí tí ó fẹ́ parí, tí a máa lò àyàfi tí a bá ṣiṣẹ́ cron pẹ̀lú --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Jẹ́ kí àwọn olùmúlò àti àlejò wá àwọn ìwé-ẹ̀rí tí a ṣẹ̀dá láti inú àkójọpọ̀ pẹpẹ òkè."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Jẹ́ kí àwọn olùkọ́-ìtọ́sọ́nà máa ṣàtúnṣe àwọn ìkéde nínú àwọn sẹ́ṣàn tó ń ṣiṣẹ́ tàbí tí ó ti kọjá nígbà gbogbo."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Bóyá a ó fi kóòdù òfin àwọn akẹ́kọ̀ọ́ hàn lẹ́gbẹ̀ẹ́ orúkọ wọn nínú àwọn ìwé ìwàásì àti àkójọ."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Jẹ́ kí a fi èdè kan pàtó sí àwọn ohun-èlò kọ̀ọ̀kan."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Àwọn ìdìpọ̀ SCORM kan máa ń pe LMSSetValue(cmi.core.lesson_status, 'incomplete') lẹ́ẹ̀kan ṣoṣo, wọn kì í sì fi ipò ìparí gidi ránṣẹ́ tàbí LMSFinish() tó ní ìtumọ̀. Mú èyí ṣiṣẹ́ kí Chamilo ka 'incomplete' tó ń dúró yìí gẹ́gẹ́ bí kò sí ipò kankan, kí ó sì pinnu ìparí nígbà tí akẹ́kọ̀ọ́ bá kúrò nínú SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Tí a bá fi ọ̀nà ìkẹ́kọ̀ọ́ sí àìrí ṣùgbọ́n olùkọ́ tàbí olùkọ́-ìtọ́sọ́nà pinnu láti jẹ́ kó wà lórí ojú-ìwé ìkẹ́kọ̀ọ́, àṣàyàn yìí kò jẹ́ kí Chamilo fi ọ̀nà asopọ̀ náà pamọ́ lórí ojú-ìwé ìkẹ́kọ̀ọ́."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Mú àwọn ìdánwò ìyípadà ìtẹ̀síwájú ṣiṣẹ́ níbi tí ẹ̀ka ìbéèrè kọ̀ọ̀kan lè darí àwọn akẹ́kọ̀ọ́ sí ẹ̀ka mìíràn gẹ́gẹ́ bí àmì wọn."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Nígbà tí àwọn akẹ́kọ̀ọ́ bá parí ìdánwò, a sábà máa fi ìfitónilétí ránṣẹ́ sí àwọn olùkọ́-ìtọ́sọ́nà, pẹ̀lú olùkọ́-ìtọ́sọ́nà sẹ́ṣàn gbogbogbò. Mú àṣàyàn yìí ṣiṣẹ́ láti yọ olùkọ́-ìtọ́sọ́nà gbogbogbò kúrò nínú àwọn ìfitónilétí wọ̀nyí."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Fi àwọn ìgbìyànjú ìdánwò àwọn olùmúlò hàn nínú gbogbo sẹ́ṣàn tí olùkọ́-ìtọ́sọ́nà gbogbogbò ní ààyè sí nínú ìròyìn àwọn ìdánwò tó ń dúró."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Fi ìkìlọ̀ hàn sí àwọn olùmúlò tí wọ́n ti wọlé ṣáájú kí sẹ́ṣàn ìpele-sẹ́fá wọn tó parí."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Iye ìṣẹ́jú-àáyá ṣáájú ìparí sẹ́ṣàn nígbà tí a fi ìkìlọ̀ hàn. Aiyipada jẹ́ ìṣẹ́jú-àáyá 180."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Ó ṣàlàyé ìlànà tí a nílò fún ọ̀rọ̀ ìgbaniwọlé olùmúlò. Àpẹẹrẹ: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Lo \"specials\" (ọ̀pọ̀) láti nílò àwọn àmì pàtàkì."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Mú ìfidímúlẹ̀ àwọn ìbéèrè ọ̀rọ̀ ìgbaniwọlé tí a ṣàlàyé lókè ṣiṣẹ́ nígbà ìṣẹ̀dá tàbí ìmúdójúìwọ̀n ọ̀rọ̀ ìgbaniwọlé."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Àkójọ àdírẹ́sì ímeèlì tí a pín pẹ̀lú ààmì-ìdàpọ̀ láti fi létí nígbà tí ìwádìí ìdúróṣinṣin fáìlì bá rí ìyípadà. Fi sí òfo láti fi létí gbogbo olùṣàkóso àgbáyé dípò."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Jẹ́ kí àwọn ìṣàfilọ́lẹ̀ ìta (bíi asopọ̀ MCP Claude.ai) forúkọ sílẹ̀ nípasẹ̀ OAuth 2.1 Dynamic Client Registration kí wọ́n sì sopọ̀ pẹ̀lú àkántì àti ẹ̀tọ́ Chamilo olùmúlò kọ̀ọ̀kan. A ti pa á tẹ́lẹ̀: gbogbo ìparí ìwádìí, ìforúkọsílẹ̀, ìfàyègbà àti tóòkẹn máa dá 404 padà títí a ó fi tan èyí."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Ó mú ìparí MCP Chamilo àti ojú-ìwé kọ́kọ́rọ́ API MCP ti ara ẹni ṣiṣẹ́. Tí a bá pa á, a kò lè lo àwọn kọ́kọ́rọ́ API tó wà, àwọn tóòkẹn ìwọlé OAuth àti ẹ̀rí JWT lórí /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "Máàpù JSON ti àwọn ipa olùmúlò Chamilo tí a fàyè gba láti lo MCP. Olùmúlò gbọ́dọ̀ bá ipa kan tí a tan pẹ̀lú. Ìdíwọ́ yìí tún kan àwọn kọ́kọ́rọ́ API tí a ti ṣẹ̀dá tẹ́lẹ̀ àti àwọn ìsopọ̀ OAuth tó wà."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Jẹ́ kí àwọn ìsopọ̀ sẹ́fá-sí-sẹ́fá tí a gbẹ́kẹ̀lé (bíi àfikún ìtajà WordPress) ṣe ìfidímúlẹ̀ sí ìparí /api gbogbogbò pẹ̀lú kọ́kọ́rọ́ API ìta fún olùmúlò kọ̀ọ̀kan, tí a ṣẹ̀dá nípasẹ̀ àṣẹ kọ̀nsólù \"chamilo:security:generate-external-api-key\". A ti pa á tẹ́lẹ̀: a kò lè lo àwọn kọ́kọ́rọ́ tó wà títí a ó fi tan èyí."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Fi olùkọ́-ìtọ́sọ́nà àti àwọn ọjọ́ kún àkọlé kékeré sẹ́ṣàn nínú àkójọ sẹ́ṣàn."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Bí kò ṣe bẹ́ẹ̀, àwọn olùkọ́-ìtọ́sọ́nà sẹ́ṣàn ní ààyè sí àwọn sẹ́ṣàn nípasẹ̀ ìgbà nìkan nígbà ìgbà tó ń ṣiṣẹ́."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Nígbà tí a bá tan, olùkọ́/olùṣàkóso lè fi ọ̀nà ìpè ẹ̀ẹ̀kan ránṣẹ́ láti irinṣẹ́ Àwọn olùmúlò ìkẹ́kọ̀ọ́ kan tí ó jẹ́ kí ẹni tí kò forúkọsílẹ̀ dé fọ́ọ̀mù ìforúkọsílẹ̀ kí ó sì forúkọsílẹ̀ kódà nígbà tí ìforúkọsílẹ̀ ara-ẹni gbogbogbò (allow_registration) bá ti pa."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Fi orúkọ kíkún akẹ́kọ̀ọ́ kún orúkọ fáìlì iṣẹ́-àkànṣe nígbà tí a ń ṣàgbékalẹ̀ àwọn ìgbékalẹ̀ kọ̀ọ̀kan tàbí àwọn ìdìpọ̀ iṣẹ́-àkànṣe."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Jẹ́ kí àwọn olùkọ́ ṣẹ̀dá àwọn ìtumọ̀ fún gbogbo èdè pẹpẹ tó ń ṣiṣẹ́ nínú ìṣe WYSIWYG kan. Èyí lè lo ọ̀pọ̀ tóòkẹn AI."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Nígbà tí a bá pa á, àwọn olùṣàkóso kò ní ọ̀nà asopọ̀ láti yára fi àwọn olùkọ́-ìtọ́sọ́nà sí àwọn ìkẹ́kọ̀ọ́ sẹ́ṣàn lórí ojú-ìwé ìṣàtúnṣe ìkẹ́kọ̀ọ́."
+
+msgid "Show courses & sessions"
+msgstr "Fi àwọn ìkẹ́kọ̀ọ́ àti sẹ́ṣàn hàn"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON àṣàyàn. Àpẹẹrẹ: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Tébìlì"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Àkójọpọ̀ àwòrán"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Olùránṣẹ́ ímeèlì olùkọ́ni kọ́ọ̀sì"
+
+msgid "Card (visual blocks)"
+msgstr "Káàdì (àwọn ìdìpọ̀ àfihàn)"
+
+msgid "List (classic)"
+msgstr "Àtòkọ (àtọwọ́dọ́wọ́)"
+
+msgid "Limit identical emails"
+msgstr "Dín àwọn ímeèlì kan náà kù"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Iye kọ́ọ̀sì tó pọ̀ jù tí olùkọ́ tàbí olùkọ́ni lè ṣẹ̀dá. Fi 0 sí i láti pa ìdíwọ̀ náà."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Iye àkọọ́lẹ̀ tó pọ̀ jù tí a fàyè gba pẹ̀lú ímeèlì kan náà. Fi 0 sí i láti pa ìdíwọ̀."
+
+msgid "Validation"
+msgstr "Ìfọwọ́sí"
+
+msgid "Test/Development"
+msgstr "Ìdánwò/Ìdàgbàsókè"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Bọ́tìnì pápá àfikún olùmúlò láti lò nígbà ìwákiri àti orúkọ àwọn sẹ́ṣàn láti /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Ìṣètò JSON fún àwọn pápá àṣàtò ìwákiri tẹ́lẹ̀."
 

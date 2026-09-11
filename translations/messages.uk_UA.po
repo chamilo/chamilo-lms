@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "З повагою"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Приклад формули: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Приклад формули: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Діапазони змінних"
@@ -24063,6 +24063,18 @@ msgstr "Показати результат учневі: показати ба�
 msgid "Signed in as"
 msgstr "Увійшли як"
 
+msgid "Authorize application"
+msgstr "Авторизувати застосунок"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "хоче підключитися до вашого облікового запису Chamilo."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Цей застосунок зможе діяти в Chamilo так само, як і ви — використовуючи наявні права вашого облікового запису і нічого більше. Він ніколи не отримає доступу, якого у вас немає."
+
+msgid "Allow"
+msgstr "Дозволити"
+
 msgid "Remember me"
 msgstr "Запам’ятати мене"
 
@@ -31427,6 +31439,9 @@ msgstr "Повернутися до сторінки призначення ко
 
 msgid "Authentication sources assigned successfully"
 msgstr "Джерела автентифікації призначено успішно"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Не вибрано жодного методу автентифікації. Це видалить усі методи автентифікації для вибраного користувача (користувачів) на цій URL-адресі, що може завадити їм увійти. Продовжити?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Порада: оберіть «— Просто завантажити —» для збереження без надсилання комусь."
@@ -41216,4 +41231,316 @@ msgstr "Переміжне навчання"
 
 msgid "Memory palaces"
 msgstr "Палаци пам’яті"
+
+msgid "Logins (Month)"
+msgstr "Входи (місяць)"
+
+msgid "Logins (Day)"
+msgstr "Входи (день)"
+
+msgid "Logins (Hour)"
+msgstr "Входи (година)"
+
+msgid "Number of users (Picture)"
+msgstr "Кількість користувачів (зображення)"
+
+msgid "Allow tutors to register users"
+msgstr "Дозволити тьюторам реєструвати користувачів"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Дозволити тьюторам редагувати всередині сесій курсу"
+
+msgid "Extend rights for tutors"
+msgstr "Розширити права тьюторів"
+
+msgid "Show session tutor"
+msgstr "Показувати тьютора сесії"
+
+msgid "Default tutor access days after session"
+msgstr "Дні доступу тьютора після сесії за замовчуванням"
+
+msgid "Default tutor access days before session"
+msgstr "Дні доступу тьютора до сесії за замовчуванням"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Скринька: приховати тьютора курсу"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Приховати загального тьютора в скриньці"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Розширити права тьюторів щодо опитувань"
+
+msgid "Maximum courses per user"
+msgstr "Максимальна кількість курсів на користувача"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Дозволити тьюторам коментувати під час перевірки вправ"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Включати офіційний код у назву PDF-файлу експортованих результатів тесту"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron нагадування про закінчення сертифіката"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Вікно нагадування про закінчення сертифіката (дні)"
+
+msgid "Allow certificates search"
+msgstr "Дозволити пошук сертифікатів"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Дозволити тьюторам завжди редагувати оголошення"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Показувати офіційний код студентів у відомостях відвідуваності"
+
+msgid "Restrict course chat to tutors"
+msgstr "Обмежити чат курсу тьюторами"
+
+msgid "Language by resource"
+msgstr "Мова за ресурсом"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Завершувати SCO при виході, якщо статус залишається незавершеним"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Увімкнути прогресивні адаптивні тести за призначенням категорії"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Блокувати надсилання сповіщень про тести загальному тьютору"
+
+msgid "Enable session expiration warning"
+msgstr "Увімкнути попередження про закінчення сесії"
+
+msgid "Session expiration warning time"
+msgstr "Час попередження про закінчення сесії"
+
+msgid "Check password requirements"
+msgstr "Перевіряти вимоги до пароля"
+
+msgid "File integrity check notification recipients"
+msgstr "Отримувачі сповіщень про перевірку цілісності файлів"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Увімкнути сервер авторизації OAuth"
+
+msgid "Enable MCP server"
+msgstr "Увімкнути MCP-сервер"
+
+msgid "Allow MCP by roles"
+msgstr "Дозволити MCP за ролями"
+
+msgid "Enable external API keys"
+msgstr "Увімкнути зовнішні ключі API"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Сесії за тривалістю завжди доступні тьюторам"
+
+msgid "Allow registration via course invitation links"
+msgstr "Дозволити реєстрацію за посиланнями-запрошеннями до курсу"
+
+msgid "Add student fullname in file download name"
+msgstr "Додавати повне ім’я студента до назви файлу завантаження"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Дозволити ШІ-переклад усіма активними мовами в редакторах WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Вимкнути можливість редагувати тьюторів курсу"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Під час використання сесій типова поведінка — застосовувати видимість інструментів, визначену в базовому курсі. Цей параметр змінює це, щоб тьютори в курсах сесій могли адаптувати видимість інструментів до своїх потреб."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Тьютори можуть створювати користувачів на платформі та підписувати користувачів на сесію."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Увімкніть цей параметр, щоб надати тьюторам такі самі права, як у викладачів, щодо інструментів авторства"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Показувати ім’я загального тьютора сесії в полі назви сесії в списку курсів"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Якщо ввімкнено, тьютори курсу в сесіях можуть підписувати нових користувачів на свою сесію. Інакше ця можливість доступна лише адміністраторам і адміністраторам сесій."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Кількість днів за замовчуванням, протягом яких тьютор може мати доступ до сесії після офіційної дати її завершення"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Кількість днів за замовчуванням, протягом яких тьютор може мати доступ до сесії до офіційної дати її початку"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Увімкнути бібліотеку MathJax для відображення математичних формул. Це додає кнопку формул на панель редактора, де формули записуються мовою LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Коди курсів, розділені \"|\". Коли директор з персоналу входить у систему, користувача автоматично підписують на ці курси. Приклад: COURSE001|COURSE002. Це не змінює роль користувача."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Коди курсів, розділені \"|\". Коли адміністратор сесії входить у систему, користувача автоматично підписують на ці курси. Приклад: COURSE001|COURSE002. Це не змінює роль користувача."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Коди курсів, розділені \"|\". Коли учень входить у систему, користувача автоматично підписують на ці курси. Приклад: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Коди курсів, розділені \"|\". Коли викладач входить у систему, користувача автоматично підписують на ці курси. Приклад: COURSE001|COURSE002. Це не надає прав викладача курсу."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Приховати тьютора курсу сесії в Dropbox, коли документ надсилає тьютор студентам"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Приховати ім’я загального тьютора в інструменті Dropbox, коли файл завантажив загальний тьютор"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Увімкніть цей параметр, щоб дозволити тьюторам створювати та редагувати опитування"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Чи мають запрошення до опитувань використовувати адресу електронної пошти тьютора, чи адресу no-reply, визначену в основному розділі конфігурації?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Максимальна кількість курсів, які може створити викладач/тренер. Установіть 0, щоб вимкнути обмеження. Може бути перевизначено для окремого користувача через покупку послуги BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Дозволити тьюторам редагувати відгуки під час перевірки вправ"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Чи включати офіційний код студента в ім’я файлу під час експорту результату тесту в PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Дозволяє доступ до всіх особистих файлів без обмежень"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Увімкнути cron app:send-certificate-expiry-reminders, який нагадує учням, чиї сертифікати вже закінчилися або незабаром закінчаться."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Кількість днів наперед за замовчуванням для пошуку сертифікатів, термін яких незабаром закінчиться, якщо cron не запущено з --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Дозволити користувачам і відвідувачам шукати згенеровані сертифікати з меню верхньої панелі."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Дозволити тьюторам завжди редагувати оголошення в активних або минулих сесіях."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Чи відображати офіційний код студентів поруч з їхнім ім’ям у відомостях відвідуваності та списках."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Дозволити призначати окрему мову окремим ресурсам."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Деякі пакети SCORM лише один раз викликають LMSSetValue(cmi.core.lesson_status, 'incomplete') і ніколи не надсилають справжній кінцевий статус і змістовний LMSFinish(). Увімкніть це, щоб Chamilo трактував таке залишене 'incomplete' так само, як відсутність статусу, і визначав завершення, коли учень залишає SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Якщо навчальний шлях встановлено як невидимий, але викладач або тьютор зробив його доступним з головної сторінки курсу, цей параметр не дає Chamilo приховати посилання на головній сторінці курсу."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Увімкнути прогресивні адаптивні тести, у яких кожна категорія питань може перенаправляти учнів до іншої категорії залежно від їхнього балу."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Коли учні завершують тест, сповіщення зазвичай надсилаються тьюторам, включно із загальним тьютором сесії. Увімкніть цей параметр, щоб виключити загального тьютора з цих сповіщень."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Показувати спроби тестів користувачів з усіх сесій, до яких має доступ загальний тьютор, у звіті про очікувані тести."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Показувати автентифікованим користувачам попередження перед закінченням їхньої серверної сесії."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Кількість секунд до закінчення сесії, коли відображається попередження. За замовчуванням — 180 секунд."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Визначає необхідну структуру паролів користувачів. Приклад: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Використовуйте \"specials\" (у множині), щоб вимагати спеціальні символи."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Увімкнути перевірку вимог до пароля, визначених вище, під час створення або оновлення пароля."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Список адрес електронної пошти через кому для сповіщення, коли сканування цілісності файлів виявляє зміну. Залиште порожнім, щоб сповіщати всіх глобальних адміністраторів."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Дозволяє зовнішнім програмам (наприклад, конектору Claude.ai MCP) реєструватися через OAuth 2.1 Dynamic Client Registration і підключатися з обліковим записом і правами кожного користувача Chamilo. За замовчуванням вимкнено: кінцеві точки discovery, registration, authorization і token повертають 404, доки це не ввімкнено."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Увімкнути кінцеву точку Chamilo MCP і інтерфейс особистого ключа API MCP. Якщо вимкнено, наявні ключі API, токени доступу OAuth і облікові дані JWT не можна використовувати на /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "JSON-карта ролей користувачів Chamilo, яким дозволено використовувати MCP. Користувач має відповідати принаймні одній увімкненій ролі. Це обмеження також стосується раніше згенерованих ключів API і наявних з’єднань OAuth."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Дозволяє довіреним інтеграціям сервер-сервер (наприклад, плагіну вітрини WordPress) автентифікуватися на загальній кінцевій точці /api за допомогою зовнішнього ключа API користувача, згенерованого командою консолі \"chamilo:security:generate-external-api-key\". За замовчуванням вимкнено: наявні ключі не можна використовувати, доки це не ввімкнено."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Додати тьютора та дати до підзаголовка сесії в списку сесій."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Інакше тьютори сесій мають доступ до сесій за тривалістю лише протягом активної тривалості."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Якщо ввімкнено, викладач/адміністратор може надіслати одноразове посилання-запрошення з інструмента «Користувачі» курсу, яке дозволяє незареєстрованій особі відкрити форму реєстрації та зареєструватися навіть тоді, коли загальна самостійна реєстрація (allow_registration) вимкнена."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Додавати повне ім’я студента до імен файлів завдань під час завантаження окремих робіт або пакетів завдань."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Дозволяє викладачам генерувати переклади всіма активними мовами платформи однією дією WYSIWYG. Це може споживати велику кількість токенів ШІ."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Якщо вимкнено, адміністратори не мають посилання для швидкого призначення тьюторів до курсів сесії на сторінці редагування курсу."
+
+msgid "Show courses & sessions"
+msgstr "Показати курси та сесії"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "Необов’язковий JSON. Приклад: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Таблиця"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Тема"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Відправник електронної пошти тьютора курсу"
+
+msgid "Card (visual blocks)"
+msgstr "Картки (візуальні блоки)"
+
+msgid "List (classic)"
+msgstr "Список (класичний)"
+
+msgid "Limit identical emails"
+msgstr "Обмежити однакові електронні адреси"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Максимальна кількість курсів, які може створити викладач або тренер. Встановіть 0, щоб вимкнути обмеження."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Максимальна кількість облікових записів з однією електронною адресою. Встановіть 0, щоб вимкнути обмеження."
+
+msgid "Validation"
+msgstr "Валідація"
+
+msgid "Test/Development"
+msgstr "Тест/Розробка"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Ключ додаткового поля користувача для пошуку та іменування сесій з /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "JSON-конфігурація полів попереднього фільтра пошуку."
 

@@ -1209,6 +1209,13 @@ Enable specific columns in gradebook table.
 // Disable token verification when sending a message
 // $_configuration['disable_token_in_new_message'] = false;
 
+// When composing a message, the recipient search of students (and other non
+// privileged users) is limited to the users sharing a course or a session with
+// them, plus their social network contacts. Set this option to true to restore
+// the platform wide search for everybody (not recommended: it allows any user
+// to enumerate the user base of the portal).
+// $_configuration['allow_platform_wide_message_user_search_for_students'] = false;
+
 // My courses session order. Possible field values: "start_date", "end_date", "name" Order values: "asc" or "desc"
 // $_configuration['my_courses_session_order'] = ['field' => 'end_date', 'order' => 'desc'];
 

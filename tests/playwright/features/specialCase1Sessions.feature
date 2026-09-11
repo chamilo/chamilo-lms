@@ -43,7 +43,8 @@
 #   tinymce fields, "submitExercise"/"submitQuestion"/"submit-question").
 #   Ported using toolExerciseAdmin.feature's own already-proven conventions
 #   instead ("I follow the question type ...", "I fill in the answer N
-#   text/comment with ...", "Save the question").
+#   text/comment with ...", "Modifier la question" — see below, this one
+#   IS translated, unlike the question-type titles).
 # - Question-type TITLE attributes on the "add a question" icon grid are
 #   NOT translated for several types even inside a French course (confirmed
 #   live on "Testing course fr" itself): "Multiple choice - Choose one
@@ -57,9 +58,9 @@
 # - "Image selection question" has no literal modern equivalent named
 #   "image selection" — mapped to "Unique answer with images" (single
 #   choice using images), structurally IDENTICAL to "Multiple choice"'s own
-#   answer-table shape (same "fill in the answer N text/comment", "Save the
-#   question" steps apply unchanged) — the closest real, working equivalent,
-#   not a guess.
+#   answer-table shape (same "fill in the answer N text/comment", "Modifier
+#   la question" steps apply unchanged) — the closest real, working
+#   equivalent, not a guess.
 # - **Real CI failure, root-caused (not guessed): both this and the "Multiple
 #   choice" question above are single-correct-answer types ("Choose one
 #   correct answer.") — NEITHER uses "mark answer N as correct" (that step is
@@ -69,9 +70,23 @@
 #   nonzero score, same as those scenarios: fill every answer's own comment,
 #   then "I fill in "exercise-answer-score-0" with "10"" for answer 1's
 #   score. Omitting this — a real CI run had it omitted — leaves no answer
-#   marked correct, and "Save the question" stays disabled forever: the
+#   marked correct, and the save button stays disabled forever: the
 #   scenario ran for the full 15-minute @long-scenario budget waiting for a
 #   button that could never become clickable.
+# - **Second real CI failure, root-caused via a fresh trace (not guessed):
+#   the save button's own label is translated — unlike the question-type
+#   TITLE attributes noted above, "Save the question" (assets/locales/
+#   fr_FR.json) renders as "Modifier la question" inside this French course.
+#   An earlier attempt at this exact fix was made, then reverted after a
+#   one-off local repro of this step IN ISOLATION showed English text — that
+#   repro simply never went through the course-visit history that actually
+#   triggers the interface-language switch (see "INTERFACE LANGUAGE FOLLOWS
+#   THE COURSE'S OWN LANGUAGE" above). Inside the real, full scenario the
+#   switch has already happened by this point (the preceding step, "I press
+#   'Poursuivre avec la création de questions'", is itself already French),
+#   so pressing the English "Save the question" label found nothing and hung
+#   for the full 15-minute budget — confirmed via a CI trace's page snapshot
+#   showing the rendered button as "Modifier la question" verbatim.
 #
 # FORUM — RESTORED, NOT LEFT COMMENTED OUT:
 # - The Behat source has this whole section commented out with a
@@ -358,7 +373,7 @@ Feature: Special case 1 — course/session creation
     And I fill in the answer 3 comment with "Comment false"
     And I fill in the answer 4 comment with "Comment false"
     And I fill in "exercise-answer-score-0" with "10"
-    And I press "Save the question"
+    And I press "Modifier la question"
     And I wait for the page content to settle
     Then I should see "QRU Question"
 
@@ -374,7 +389,7 @@ Feature: Special case 1 — course/session creation
     And I fill in the answer 3 comment with "Comment false"
     And I fill in the answer 4 comment with "Comment false"
     And I fill in "exercise-answer-score-0" with "10"
-    And I press "Save the question"
+    And I press "Modifier la question"
     And I wait for the page content to settle
     Then I should see "Image selection question"
 
@@ -392,7 +407,7 @@ Feature: Special case 1 — course/session creation
     And I wait for the page content to settle
     And I fill in "question" with "Open Question"
     And I fill in "exercise-manual-question-score" with "5"
-    And I press "Save the question"
+    And I press "Modifier la question"
     And I wait for the page content to settle
     Then I should see "Open Question"
 

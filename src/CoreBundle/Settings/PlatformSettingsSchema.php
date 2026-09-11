@@ -48,7 +48,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'allow_my_files' => 'true',
                     'registered' => 'false',
                     'server_type' => 'prod',
-                    'chamilo_database_version' => '2.0.0',
                     'unoconv_binaries' => '/usr/bin/unoconv',
                     'pdf_img_dpi' => '96',
                     'hosting_limit_users_per_course' => '0',
@@ -146,7 +145,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
     {
         return [
             'registered',
-            'chamilo_database_version',
         ];
     }
 }

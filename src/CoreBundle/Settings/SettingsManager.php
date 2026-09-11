@@ -1191,7 +1191,6 @@ class SettingsManager implements SettingsManagerInterface
             'meta_image_path' => 'Tracking',
             'allow_teachers_to_create_sessions' => 'Session',
             'institution_address' => 'Platform',
-            'chamilo_database_version' => 'null',
             'cron_remind_course_finished_activate' => 'Crons',
             'cron_remind_course_expiration_frequency' => 'Crons',
             'cron_remind_course_expiration_activate' => 'Crons',

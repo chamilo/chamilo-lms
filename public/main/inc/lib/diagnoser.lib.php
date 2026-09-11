@@ -353,18 +353,6 @@ class Diagnoser
             get_lang('The directory should be removed (it is no longer necessary)')
         );
 
-        $app_version = api_get_setting('platform.chamilo_database_version');
-        $array[] = $this->build_setting(
-            self::STATUS_INFORMATION,
-            '[DB]',
-            'chamilo_database_version',
-            '#',
-            $app_version,
-            0,
-            null,
-            'Chamilo DB version'
-        );
-
         $access_url_id = api_get_current_access_url_id();
 
         if (1 === $access_url_id) {

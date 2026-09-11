@@ -17,8 +17,6 @@ use const PHP_SAPI;
 
 final class InstallDbGuardSubscriber implements EventSubscriberInterface
 {
-    private const string VERSION_KEY = 'chamilo_database_version';
-
     public function __construct(
         private readonly Connection $connection
     ) {}
@@ -84,53 +82,14 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
                 }
             }
 
-            // Cheap proof: at least 1 row
+            // A populated settings table proves the install finished:
+            // installSchemas() seeds every platform setting in one pass, so at
+            // least one row means the schema build completed. This replaces the
+            // former chamilo_database_version presence check (that setting was
+            // removed) and stays correct on a fresh install, which never creates
+            // the Doctrine `version` table.
             $hasRow = $this->connection->fetchOne("SELECT 1 FROM {$settingsTable} LIMIT 1");
             if (false === $hasRow || null === $hasRow) {
-                $this->redirectToInstaller($event);
-
-                return;
-            }
-
-            // Read DB version (try common column names; only runs until first success)
-            $version = null;
-            foreach (['selected_value', 'value', 'c_value'] as $col) {
-                try {
-                    $version = $this->connection->fetchOne(
-                        "SELECT {$col} FROM {$settingsTable} WHERE variable = :var LIMIT 1",
-                        ['var' => self::VERSION_KEY]
-                    );
-                    if (!empty($version)) {
-                        break;
-                    }
-                } catch (Throwable) {
-                    // Try next column
-                }
-            }
-
-            if (empty($version)) {
-                // chamilo_database_version is missing. This can mean:
-                // a) Fresh Chamilo 1 DB before migration (should redirect)
-                // b) Migration started but not yet finished (should NOT redirect –
-                //    redirecting here creates an infinite loop because APP_INSTALLED=1
-                //    is written to .env at step 5, before the migration runs).
-                // Distinguish by checking whether the Doctrine migrations version
-                // table exists and has rows (= migration is in progress or failed).
-                try {
-                    $migrationCount = $this->connection->fetchOne(
-                        'SELECT COUNT(*) FROM version'
-                    );
-                    if ($migrationCount > 0) {
-                        // Migration has started (or is running) – allow the request
-                        // through so the installer can display progress / retry.
-                        $isHealthy = true;
-
-                        return;
-                    }
-                } catch (Throwable) {
-                    // version table does not exist yet – fall through to redirect.
-                }
-
                 $this->redirectToInstaller($event);
 
                 return;

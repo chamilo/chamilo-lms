@@ -6211,7 +6211,6 @@ function api_get_locked_settings()
         'languagePriority3',
         'languagePriority4',
         'login_is_email',
-        'chamilo_database_version',
     ];
 }
 

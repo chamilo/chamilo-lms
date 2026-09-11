@@ -1485,11 +1485,11 @@ function escapeInstallerEnvValue(mixed $value): string
         throw new \InvalidArgumentException('Installer .env values cannot contain line breaks.');
     }
 
-    return str_replace(
-        ['\\', "'"],
-        ['\\\\', "\\'"],
-        $value
-    );
+    // .env.dist wraps values in single quotes, and Dotenv has no backslash
+    // escape inside them. Emit the POSIX '\'' idiom so a quote cannot end the
+    // value and let a trailing $(...) run as a shell command.
+    // Example: x'$(id) -> x'\''$(id) -> KEY='x'\''$(id)' (literal, not executed).
+    return str_replace("'", "'\\''", $value);
 }
 
 function updateEnvFile($distFile, $envFile, $params)

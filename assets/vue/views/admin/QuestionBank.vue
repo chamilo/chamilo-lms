@@ -298,7 +298,7 @@
 
               <div
                 class="question-rich-text mt-2 line-clamp-2 text-base font-semibold text-gray-90"
-                v-html="question.titleHtml"
+                v-html="displayTranslatedHtml(question.titleHtml)"
               />
             </div>
           </button>
@@ -337,7 +337,7 @@
           <div
             v-if="question.descriptionHtml"
             class="question-rich-text border-b border-gray-20 bg-white px-5 py-4 text-sm text-gray-700"
-            v-html="question.descriptionHtml"
+            v-html="displayTranslatedHtml(question.descriptionHtml)"
           />
 
           <div class="grid gap-5 p-5 xl:grid-cols-2">
@@ -362,7 +362,7 @@
                 >
                   <div
                     class="question-rich-text text-sm text-gray-800"
-                    v-html="answer.html"
+                    v-html="displayTranslatedHtml(answer.html)"
                   />
                   <div class="mt-2 flex flex-wrap gap-2 text-xs">
                     <span
@@ -455,6 +455,7 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useNotification } from "../../composables/notification"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import adminQuestionBankService from "../../services/adminQuestionBankService"
 import { useSecurityStore } from "../../store/securityStore"
 
@@ -464,6 +465,7 @@ const router = useRouter()
 const securityStore = useSecurityStore()
 const { requireConfirmation } = useConfirmation()
 const { showErrorNotification, showSuccessNotification } = useNotification()
+const { displayTranslatedHtml } = useTranslatedHtml()
 
 const loading = ref(false)
 const exportingPdf = ref(false)

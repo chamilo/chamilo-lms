@@ -45,6 +45,7 @@ use const DATE_ATOM;
 final class MobilePushInstallation
 {
     public const string PLATFORM_ANDROID = 'android';
+    public const string PLATFORM_IOS = 'ios';
 
     #[ApiProperty(identifier: true)]
     #[Groups(['mobile_push_installation:read', 'mobile_push_installation:write'])]
@@ -59,7 +60,7 @@ final class MobilePushInstallation
 
     #[Groups(['mobile_push_installation:read', 'mobile_push_installation:write'])]
     #[Assert\NotBlank]
-    #[Assert\Choice(choices: [self::PLATFORM_ANDROID])]
+    #[Assert\Choice(choices: [self::PLATFORM_ANDROID, self::PLATFORM_IOS])]
     public string $platform = self::PLATFORM_ANDROID;
 
     #[Groups(['mobile_push_installation:read'])]

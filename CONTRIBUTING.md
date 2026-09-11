@@ -227,12 +227,16 @@ If Chamilo is already installed in a development environment and you only want
 to update the code and dependencies, use:
 ~~~~
 git pull origin master
-composer install
+composer install && php bin/console cache:clear && chown -R www-data: var/cache && yarn install && NODE_OPTIONS="--max-old-space-size=4096" yarn dev && php bin/console cache:warmup && chown -R www-data: var/cache
 php bin/console doctrine:migrations:migrate --no-interaction
-php bin/console cache:clear
-yarn install
-NODE_OPTIONS="--max-old-space-size=4096" yarn dev
 ~~~~
+
+Note: the double `chown` in the command above is just to make sure you can use
+your Chamilo portal in the meantime. In some cases, `yarn dev` or 
+`cache:warmup` might take a while to "come back", and in the meantime the 
+changes you have made through composer install might have written some files or
+created some directories to `var/cache` as another user, which might prevent
+Chamilo itself to write its cache there while yarn is running.
 
 If your local clone uses a fork, replace `origin` with the remote that tracks the
 official Chamilo repository (commonly `upstream`).

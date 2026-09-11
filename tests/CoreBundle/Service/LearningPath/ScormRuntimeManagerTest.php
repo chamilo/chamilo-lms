@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Service\LearningPath\ArticulateRiseSuspendDataDecoder;
 use Chamilo\CoreBundle\Service\LearningPath\ScormManifestParser;
 use Chamilo\CoreBundle\Service\LearningPath\ScormRuntimeManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -60,6 +61,48 @@ final class ScormRuntimeManagerTest extends TestCase
             true,
             'terminate',
             true,
+        );
+
+        self::assertSame('completed', $itemView->getStatus());
+    }
+
+    public function testScorm12TerminateKeepsPartialRiseProgressIncompleteWhenCompleteOnLeaveIsEnabled(): void
+    {
+        $itemView = (new CLpItemView())->setStatus('incomplete');
+
+        $this->applyScorm12Values(
+            $itemView,
+            [
+                'cmi.core.lesson_status' => 'incomplete',
+                'cmi.core.exit' => 'suspend',
+                'cmi.suspend_data' => '{"cpv":"3","progress":{"percentComplete":47,"lessons":{}}}',
+            ],
+            ['cmi.core.exit', 'cmi.suspend_data'],
+            true,
+            'terminate',
+            true,
+            ArticulateRiseSuspendDataDecoder::CONTENT_MAKER,
+        );
+
+        self::assertSame('incomplete', $itemView->getStatus());
+    }
+
+    public function testScorm12TerminateCanCompleteRiseWhenSuspendProgressIsFull(): void
+    {
+        $itemView = (new CLpItemView())->setStatus('incomplete');
+
+        $this->applyScorm12Values(
+            $itemView,
+            [
+                'cmi.core.lesson_status' => 'incomplete',
+                'cmi.core.exit' => 'suspend',
+                'cmi.suspend_data' => '{"cpv":"3","progress":{"percentComplete":100,"lessons":{}}}',
+            ],
+            ['cmi.core.exit', 'cmi.suspend_data'],
+            true,
+            'terminate',
+            true,
+            ArticulateRiseSuspendDataDecoder::CONTENT_MAKER,
         );
 
         self::assertSame('completed', $itemView->getStatus());
@@ -130,6 +173,7 @@ final class ScormRuntimeManagerTest extends TestCase
         bool $terminated,
         string $reason,
         bool $completeOnLeaveWhenIncomplete,
+        string $contentMaker = '',
     ): void {
         $settingsManager = $this->createMock(SettingsManager::class);
         $settingsManager
@@ -141,6 +185,7 @@ final class ScormRuntimeManagerTest extends TestCase
             $this->createMock(EntityManagerInterface::class),
             $this->createMock(AssetRepository::class),
             new ScormManifestParser(),
+            new ArticulateRiseSuspendDataDecoder(),
             $settingsManager,
             $this->createMock(UrlGeneratorInterface::class),
             $this->createMock(ExtraFieldRepository::class),
@@ -151,7 +196,7 @@ final class ScormRuntimeManagerTest extends TestCase
 
         $method->invoke(
             $manager,
-            new CLp(),
+            (new CLp())->setContentMaker($contentMaker),
             new CLpItem(),
             $itemView,
             $user,

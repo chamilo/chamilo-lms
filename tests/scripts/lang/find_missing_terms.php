@@ -89,6 +89,34 @@ foreach ($dirsToScan as $dir) {
         }
 
         $lines = coalesceWrappedCalls(file($path));
+
+        // SettingsCurrentFixtures.php and *SettingsSchema.php define plain
+        // 'title'/'comment'/'label'/'help'/'choices' array entries with no
+        // get_lang()/trans() call at their definition site -- the translator
+        // is only invoked later, at admin Settings render time (see
+        // AbstractSettingsSchema::getSettingsInfoFromDatabase() and
+        // ::updateFormFieldsFromSettingsInfo()). New settings added via a
+        // migration + fixture entry otherwise never get scanned. A 'choices'
+        // array can span several lines, so this runs over the whole file
+        // rather than per-line.
+        $baseName = $file->getFilename();
+        $isSettingsFixture = (bool) preg_match('/Settings.*Fixtures\.php$/i', $baseName);
+        $isSettingsSchema = (bool) preg_match('/SettingsSchema\.php$/i', $baseName);
+        if ($isSettingsFixture || $isSettingsSchema) {
+            $settingsTerms = extractSettingsTermsFromFile(implode('', $lines), $isSettingsFixture, $isSettingsSchema);
+            foreach ($settingsTerms as $term) {
+                $isMissing = !isset($msgids[$term]);
+                if ($showAll || $isMissing) {
+                    echo "[".str_pad($termIndex,5, ' ', STR_PAD_LEFT)."] Found \"{$term}\" in {$path} (settings)\n";
+                }
+                $termIndex++;
+                if ($isMissing) {
+                    echo "\033[31m Missing in messages.pot\033[0m\n";
+                    $missing[$term] = true;
+                }
+            }
+        }
+
         foreach ($lines as $num => $line) {
             $terms = extractTermsFromLine($line, $isVue);
             $hiddenTerms = extractHiddenTermsFromLine($line, $isVue);
@@ -413,6 +441,83 @@ function extractTermsFromLine(string $line, bool $isVue): array
     }
 
     return $terms;
+}
+
+/**
+ * Extract translatable strings specific to the Settings subsystem:
+ * - Fixtures files: 'title' and 'comment' values persisted per setting, run
+ *   through the translator whenever the admin Settings page renders them.
+ * - Schema files: a field's own 'label'/'help' override, and a ChoiceType
+ *   field's 'choices' option labels (the array keys) -- also translated at
+ *   render time, as a fallback used before a matching DB row exists and,
+ *   for 'choices', unconditionally.
+ *
+ * Whole-file content rather than per-line: a 'choices' array can span
+ * several lines, which a per-line regex would never see in one piece.
+ *
+ * @return string[]
+ */
+function extractSettingsTermsFromFile(string $content, bool $isFixture, bool $isSchema): array
+{
+    $terms = [];
+
+    if ($isFixture) {
+        foreach (['title', 'comment'] as $key) {
+            $matches = [];
+            preg_match_all('/\''.$key.'\'\s*=>\s*(["\'])'.QUOTED_CONTENT.'\1/', $content, $matches);
+            addUnescapedTerms($matches, $terms);
+        }
+    }
+
+    if ($isSchema) {
+        foreach (['label', 'help'] as $key) {
+            $matches = [];
+            preg_match_all('/\''.$key.'\'\s*=>\s*(["\'])'.QUOTED_CONTENT.'\1/', $content, $matches);
+            addUnescapedTerms($matches, $terms);
+        }
+
+        $starts = [];
+        if (preg_match_all('/\'choices\'\s*=>\s*\[/', $content, $starts, PREG_OFFSET_CAPTURE)) {
+            foreach ($starts[0] as [$match, $offset]) {
+                $openPos = $offset + strlen($match) - 1; // position of the '['
+                $block = extractBalancedBrackets($content, $openPos);
+                if (null === $block) {
+                    continue;
+                }
+                $choiceMatches = [];
+                preg_match_all('/(["\'])'.QUOTED_CONTENT.'\1\s*=>/', $block, $choiceMatches);
+                addUnescapedTerms($choiceMatches, $terms);
+            }
+        }
+    }
+
+    // Many settings have no comment/help text ('comment' => ''), and some
+    // 'choices' arrays use an empty-string value as a blank/"none" option --
+    // neither is a translatable term.
+    return array_values(array_filter($terms, static fn (string $term): bool => '' !== trim($term)));
+}
+
+/**
+ * Given the position of an opening '[' in $content, return the substring
+ * between it and its matching ']' (nested brackets included), or null if
+ * unbalanced.
+ */
+function extractBalancedBrackets(string $content, int $openPos): ?string
+{
+    $depth = 0;
+    $len = strlen($content);
+    for ($i = $openPos; $i < $len; $i++) {
+        if ('[' === $content[$i]) {
+            $depth++;
+        } elseif (']' === $content[$i]) {
+            $depth--;
+            if (0 === $depth) {
+                return substr($content, $openPos + 1, $i - $openPos - 1);
+            }
+        }
+    }
+
+    return null;
 }
 
 function extractHiddenTermsFromLine(string $line, bool $isVue): array

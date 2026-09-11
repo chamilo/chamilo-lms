@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Mangyaring i-type ang iyong text sa ibaba"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad na pagpuno ng form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad na punan ang form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Isulat ang address"
@@ -24063,6 +24063,18 @@ msgstr "Ipakita ang resulta sa mag-aaral: Ipakita ang marka, ang pagpili ng mag-
 msgid "Signed in as"
 msgstr "Naka-sign in bilang"
 
+msgid "Authorize application"
+msgstr "Payagan ang aplikasyon"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "nais kumonekta sa iyong Chamilo account."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Magagawa ng aplikasyong ito na kumilos sa Chamilo tulad ng iyong magagawa — gamit ang umiiral mong mga permiso sa account at wala nang iba. Hindi ito kailanman magkakaroon ng access na wala ka pa."
+
+msgid "Allow"
+msgstr "Payagan"
+
 msgid "Remember me"
 msgstr "Tandaan ako"
 
@@ -26716,7 +26728,7 @@ msgid "Selective display of roles"
 msgstr "Piliin ang pagpapakita ng mga role"
 
 msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
-msgstr "Isang array ng role => true/false na tumutukoy kung dapat ipakita o itago ang naturang role.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
+msgstr "Array ng role => true/false na tumutukoy kung dapat ipakita o itago ang role na iyon.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 
 msgid "Roles display options"
 msgstr "Mga opsyon sa pagpapakita ng mga role"
@@ -31428,6 +31440,9 @@ msgstr "Bumalik sa pahina ng user assignment"
 msgid "Authentication sources assigned successfully"
 msgstr "Matagumpay na naitalaga ang mga authentication sources"
 
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Walang napiling paraan ng pagpapatunay. Inaalis nito ang bawat paraan ng pagpapatunay para sa napiling (mga) user sa URL na ito, na maaaring pigilan silang mag-log in. Magpatuloy?"
+
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Tip: piliin ang “— Just upload —” upang i-store nang hindi nagpapadala sa sinuman."
 
@@ -35584,7 +35599,7 @@ msgid "%s results"
 msgstr "%s resulta"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad na pagpuno ng form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad na punan ang form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Natanggal"
@@ -40981,7 +40996,7 @@ msgid "Update package metadata format must be %d."
 msgstr "Ang format ng metadata ng update package ay dapat %d."
 
 msgid "Update package metadata field \"remove\" must be an array."
-msgstr "Ang field na metadata ng update package na \"remove\" ay dapat isang array."
+msgstr "Ang field na \"remove\" sa metadata ng update package ay dapat na array."
 
 msgid "Update package removal paths must be strings."
 msgstr "Ang mga path ng pagtanggal sa update package ay dapat na string."
@@ -41002,7 +41017,7 @@ msgid "Update package removal path contains a null byte."
 msgstr "May null byte ang path ng pagtanggal sa update package."
 
 msgid "Update package removal path must be relative: %s"
-msgstr "Ang path ng pag-alis ng update package ay dapat relative: %s"
+msgstr "Ang path ng pag-aalis ng update package ay dapat na relative: %s"
 
 msgid "Update package removal path contains an unsafe segment: %s"
 msgstr "May hindi ligtas na segment ang path ng pagtanggal sa update package: %s"
@@ -41216,4 +41231,316 @@ msgstr "Interleaved learning"
 
 msgid "Memory palaces"
 msgstr "Mga palasyo ng memorya"
+
+msgid "Logins (Month)"
+msgstr "Mga login (Buwan)"
+
+msgid "Logins (Day)"
+msgstr "Mga login (Araw)"
+
+msgid "Logins (Hour)"
+msgstr "Mga login (Oras)"
+
+msgid "Number of users (Picture)"
+msgstr "Bilang ng mga user (Larawan)"
+
+msgid "Allow tutors to register users"
+msgstr "Payagan ang mga tutor na magrehistro ng mga user"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Payagan ang mga tutor na mag-edit sa loob ng mga session ng kurso"
+
+msgid "Extend rights for tutors"
+msgstr "Palawakin ang mga karapatan para sa mga tutor"
+
+msgid "Show session tutor"
+msgstr "Ipakita ang tutor ng session"
+
+msgid "Default tutor access days after session"
+msgstr "Default na araw ng access ng tutor pagkatapos ng session"
+
+msgid "Default tutor access days before session"
+msgstr "Default na araw ng access ng tutor bago ang session"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: itago ang tutor ng kurso"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Itago ang pangkalahatang tutor sa Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Palawakin ang mga karapatan ng mga tutor sa mga survey"
+
+msgid "Maximum courses per user"
+msgstr "Pinakamaraming kurso bawat user"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Payagan ang mga tutor na magkomento kapag nagrerepaso ng mga ehersisyo"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Isama ang opisyal na code sa pangalan ng na-export na PDF ng resulta ng quiz"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron ng paalala sa pag-expire ng sertipiko"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Bintana ng paalala sa pag-expire ng sertipiko (mga araw)"
+
+msgid "Allow certificates search"
+msgstr "Payagan ang paghahanap ng mga sertipiko"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Payagan ang mga tutor na palaging mag-edit ng mga anunsyo"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Ipakita ang opisyal na code ng mga mag-aaral sa mga attendance sheet"
+
+msgid "Restrict course chat to tutors"
+msgstr "Limitahan ang chat ng kurso sa mga tutor"
+
+msgid "Language by resource"
+msgstr "Wika ayon sa resource"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Kumpletuhin ang SCO sa pag-alis kapag nananatiling incomplete ang status"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Paganahin ang progressive adaptive tests ayon sa destinasyon ng kategorya"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Harangin ang pagpapadala ng mga abiso ng pagsusulit sa pangkalahatang tutor"
+
+msgid "Enable session expiration warning"
+msgstr "Paganahin ang babala sa pag-expire ng session"
+
+msgid "Session expiration warning time"
+msgstr "Oras ng babala sa pag-expire ng session"
+
+msgid "Check password requirements"
+msgstr "Suriin ang mga kinakailangan sa password"
+
+msgid "File integrity check notification recipients"
+msgstr "Mga tatanggap ng abiso sa pagsusuri ng integridad ng file"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Paganahin ang OAuth authorization server"
+
+msgid "Enable MCP server"
+msgstr "Paganahin ang MCP server"
+
+msgid "Allow MCP by roles"
+msgstr "Payagan ang MCP ayon sa mga tungkulin"
+
+msgid "Enable external API keys"
+msgstr "Paganahin ang mga panlabas na API key"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Palaging available sa mga tutor ang mga session ayon sa tagal"
+
+msgid "Allow registration via course invitation links"
+msgstr "Payagan ang pagpaparehistro sa pamamagitan ng mga link ng imbitasyon sa kurso"
+
+msgid "Add student fullname in file download name"
+msgstr "Idagdag ang buong pangalan ng mag-aaral sa pangalan ng na-download na file"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Payagan ang pagsasalin ng AI sa lahat ng aktibong wika sa mga WYSIWYG editor"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Huwag paganahin ang kakayahang i-edit ang mga tutor ng kurso"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Kapag gumagamit ng mga session, ang default na gawi ay gamitin ang visibility ng tool na tinukoy sa base course. Binabago ng setting na ito iyon upang payagan ang mga tutor sa mga session course na iangkop ang visibility ng mga tool ayon sa kanilang pangangailangan."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Maaaring lumikha ang mga tutor ng mga user sa platform at mag-subscribe ng mga user sa isang session."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Paganahin ang opsyong ito upang bigyan ang mga tutor ng parehong mga permiso ng mga trainer sa mga authoring tool"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Ipakita ang pangalan ng pangkalahatang session tutor sa kahon ng pamagat ng session sa listahan ng kurso"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Kapag naka-enable, maaaring mag-subscribe ang mga tutor ng kurso sa mga session ng mga bagong user sa kanilang session. Kung hindi, available lang ang opsyong ito sa mga administrator at session administrator."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Default na bilang ng mga araw na maaaring ma-access ng tutor ang isang session pagkatapos ng opisyal na petsa ng pagtatapos ng session"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Default na bilang ng mga araw na maaaring ma-access ng tutor ang isang session bago ang opisyal na petsa ng pagsisimula ng session"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Paganahin ang library ng MathJax upang makita ang mga pormulang matematikal. Nagdadagdag ito ng button ng pormula sa toolbar ng editor, kung saan isinusulat ang mga pormula sa LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Mga code ng kurso na pinaghihiwalay ng \"|\". Kapag nag-log in ang isang human resources director, awtomatikong naka-subscribe ang user sa mga kursong ito. Halimbawa: COURSE001|COURSE002. Hindi nito binabago ang tungkulin ng user."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Mga code ng kurso na pinaghihiwalay ng \"|\". Kapag nag-log in ang isang session administrator, awtomatikong naka-subscribe ang user sa mga kursong ito. Halimbawa: COURSE001|COURSE002. Hindi nito binabago ang tungkulin ng user."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Mga code ng kurso na pinaghihiwalay ng \"|\". Kapag nag-log in ang isang mag-aaral, awtomatikong naka-subscribe ang user sa mga kursong ito. Halimbawa: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Mga code ng kurso na pinaghihiwalay ng \"|\". Kapag nag-log in ang isang guro, awtomatikong naka-subscribe ang user sa mga kursong ito. Halimbawa: COURSE001|COURSE002. Hindi nito nagbibigay ng mga permiso ng guro ng kurso."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Itago ang tutor ng session course sa Dropbox kapag nagpadala ang tutor ng dokumento sa mga mag-aaral"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Itago ang pangalan ng pangkalahatang tutor sa tool na Dropbox kapag ang pangkalahatang tutor ang nag-upload ng file"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Paganahin ang opsyong ito upang payagan ang mga tutor na lumikha at mag-edit ng mga survey"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Dapat bang gamitin ng mga imbitasyon sa survey ang e-mail address ng tutor o ang no-reply address na tinukoy sa pangunahing seksyon ng configuration?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Pinakamataas na bilang ng mga kurso na maaaring likhain ng isang guro/trainer. Itakda sa 0 upang huwag paganahin ang limitasyon. Maaaring i-override bawat user sa pamamagitan ng pagbili ng serbisyo ng BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Payagan ang mga tutor na mag-edit ng feedback kapag nagsusuri ng mga ehersisyo"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Kung isasama ang opisyal na code ng mag-aaral sa pangalan ng file kapag nag-e-export ng resulta ng quiz sa PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Nagbibigay-daan sa access sa lahat ng personal na file nang walang restriksyon"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Paganahin ang cron na app:send-certificate-expiry-reminders, na nagpapaalala sa mga mag-aaral na ang kanilang mga sertipiko ay nag-expire na o malapit nang mag-expire."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Default na bilang ng mga araw nang maaga para i-scan ang mga sertipikong malapit nang mag-expire, ginagamit maliban kung patakbuhin ang cron gamit ang --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Payagan ang mga user at bisita na maghanap ng mga nabuong sertipiko mula sa menu ng top bar."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Payagan ang mga tutor na palaging mag-edit ng mga anunsyo sa loob ng aktibo o nakaraang mga session."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Kung ipapakita ang opisyal na code ng mga mag-aaral kasama ang kanilang pangalan sa mga attendance sheet at listahan."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Payagan ang pagtatalaga ng partikular na wika sa mga indibidwal na resource."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Ang ilang SCORM package ay tumatawag lamang ng LMSSetValue(cmi.core.lesson_status, 'incomplete') nang minsan at hindi kailanman nagpapadala ng tunay na terminal status o makabuluhang LMSFinish(). Paganahin ito upang ituring ng Chamilo ang natitirang 'incomplete' na katulad ng walang status, at lutasin ang completion kapag umalis ang mag-aaral sa SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Kung naka-set ang learning path sa invisible ngunit nagpasya ang guro o tutor na gawin itong available mula sa homepage ng kurso, pinipigilan ng opsyong ito ang Chamilo na itago ang link sa homepage ng kurso."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Paganahin ang mga progresibong adaptive test kung saan maaaring i-redirect ng bawat kategorya ng tanong ang mga mag-aaral sa ibang kategorya depende sa kanilang iskor."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Kapag natapos ng mga mag-aaral ang isang test, karaniwang ipinapadala ang mga notification sa mga tutor, kabilang ang pangkalahatang session tutor. Paganahin ang opsyong ito upang hindi isama ang pangkalahatang tutor sa mga notification na ito."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Ipakita ang mga pagtatangka sa test ng mga user sa lahat ng session kung saan may access ang pangkalahatang tutor sa pending tests report."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Magpakita ng babala sa mga naka-authenticate na user bago mag-expire ang kanilang server-side session."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Bilang ng segundo bago mag-expire ang session kapag ipinapakita ang babala. Ang default ay 180 segundo."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Tinutukoy ang kinakailangang istruktura para sa mga password ng user. Halimbawa: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Gamitin ang \"specials\" (pangmaramihan) upang mag-require ng mga espesyal na karakter."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Paganahin ang pagpapatunay ng mga kinakailangan sa password na tinukoy sa itaas sa paglikha o pag-update ng password."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Listahan ng mga e-mail address na pinaghihiwalay ng kuwit na aabisuhan kapag may nakitang pagbabago ang file integrity scan. Iwanang walang laman upang abisuhan ang bawat global administrator sa halip."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Nagbibigay-daan sa mga panlabas na application (hal. ang Claude.ai MCP connector) na magparehistro sa pamamagitan ng OAuth 2.1 Dynamic Client Registration at kumonekta gamit ang sariling Chamilo account at mga permiso ng bawat user. Naka-disable bilang default: ang discovery, registration, authorization at token endpoints ay nagbabalik ng 404 hanggang ito ay i-on."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Pinapagana ang Chamilo MCP endpoint at ang personal na MCP API key interface. Kapag naka-disable, hindi magagamit sa /mcp ang mga umiiral na API key, OAuth access token at JWT credential."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "JSON map ng mga tungkulin ng user ng Chamilo na pinapayagang gumamit ng MCP. Dapat tumugma ang user sa kahit isang naka-enable na tungkulin. Nalalapat din ang restriksyong ito sa mga dating nabuo na API key at umiiral na OAuth connection."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Nagbibigay-daan sa mga pinagkakatiwalaang server-to-server integration (hal. ang WordPress storefront plugin) na mag-authenticate sa pangkalahatang /api endpoint gamit ang per-user na panlabas na API key, na nabuo sa pamamagitan ng console command na \"chamilo:security:generate-external-api-key\". Naka-disable bilang default: hindi magagamit ang mga umiiral na key hanggang ito ay i-on."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Idagdag ang tutor at mga petsa sa subtitle ng session sa listahan ng session."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Kung hindi, ang mga session tutor ay may access lamang sa mga session ayon sa tagal sa panahon ng aktibong tagal."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Kapag naka-enable, maaaring magpadala ang guro/admin ng one-time invitation link mula sa Users tool ng kurso na nagpapahintulot sa hindi rehistradong tao na maabot ang registration form at magrehistro kahit naka-disable ang pangkalahatang self-registration (allow_registration)."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Idagdag ang buong pangalan ng estudyante sa mga pangalan ng file ng assignment kapag nagda-download ng indibidwal na submissions o assignment packages."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Nagpapahintulot sa mga guro na mag-generate ng mga pagsasalin para sa lahat ng aktibong wika ng platform sa isang WYSIWYG action. Maaaring kumonsumo ito ng malaking bilang ng AI tokens."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Kapag naka-disable, walang link ang mga administrator para mabilis na mag-assign ng mga tutor sa session courses sa pahina ng pag-edit ng kurso."
+
+msgid "Show courses & sessions"
+msgstr "Ipakita ang mga kurso at session"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "Opsyonal na JSON. Halimbawa: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Talahanayan"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Nagpapadala ng email ng tutor ng kurso"
+
+msgid "Card (visual blocks)"
+msgstr "Card (mga visual block)"
+
+msgid "List (classic)"
+msgstr "Listahan (klasiko)"
+
+msgid "Limit identical emails"
+msgstr "Limitahan ang magkaparehong email"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Pinakamataas na bilang ng mga kurso na maaaring likhain ng isang guro o trainer. Itakda sa 0 upang i-disable ang limitasyon."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Pinakamataas na bilang ng mga account na pinapayagan na may parehong email. Itakda sa 0 upang i-disable ang limitasyon."
+
+msgid "Validation"
+msgstr "Pagpapatunay"
+
+msgid "Test/Development"
+msgstr "Test/Development"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Susi ng extra field ng user na gagamitin kapag naghahanap at nagpapangalan ng mga session mula sa /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "JSON configuration para sa mga search prefilter field."
 

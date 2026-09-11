@@ -24063,6 +24063,18 @@ msgstr "Onyesha matokeo kwa mwanafunzi: Onyesha alama, chaguo la mwanafunzi na m
 msgid "Signed in as"
 msgstr "Umeingia kama"
 
+msgid "Authorize application"
+msgstr "Idhinisha programu"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "inataka kuunganisha kwenye akaunti yako ya Chamilo."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Programu hii itaweza kutenda kwenye Chamilo kama wewe unavyoweza — kwa kutumia ruhusa zilizopo za akaunti yako na si zaidi. Haitapata ufikiaji wowote ambao wewe huna tayari."
+
+msgid "Allow"
+msgstr "Ruhusu"
+
 msgid "Remember me"
 msgstr "Nikumbuke"
 
@@ -31427,6 +31439,9 @@ msgstr "Rudi kwenye ukurasa wa kuwapa watumiaji"
 
 msgid "Authentication sources assigned successfully"
 msgstr "Vyanzo vya uthibitisho vimepewa kwa mafanikio"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Hakuna mbinu ya uthibitishaji iliyochaguliwa. Hii huondoa kila mbinu ya uthibitishaji kwa mtumiaji/watumiaji waliochaguliwa kwenye URL hii, jambo ambalo linaweza kuwazuia kuingia. Endelea?"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Kidokezo: chagua “— Pakia tu —” ili kuhifadhi bila kutuma kwa mtu yeyote."
@@ -41216,4 +41231,316 @@ msgstr "Kujifunza kwa mchanganyiko"
 
 msgid "Memory palaces"
 msgstr "Majumba ya kumbukumbu"
+
+msgid "Logins (Month)"
+msgstr "Ingia (Mwezi)"
+
+msgid "Logins (Day)"
+msgstr "Ingia (Siku)"
+
+msgid "Logins (Hour)"
+msgstr "Ingia (Saa)"
+
+msgid "Number of users (Picture)"
+msgstr "Idadi ya watumiaji (Picha)"
+
+msgid "Allow tutors to register users"
+msgstr "Ruhusu wakufunzi kusajili watumiaji"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Ruhusu wakufunzi kuhariri ndani ya vipindi vya kozi"
+
+msgid "Extend rights for tutors"
+msgstr "Panua haki za wakufunzi"
+
+msgid "Show session tutor"
+msgstr "Onyesha mkufunzi wa kipindi"
+
+msgid "Default tutor access days after session"
+msgstr "Siku chaguomsingi za ufikiaji wa mkufunzi baada ya kipindi"
+
+msgid "Default tutor access days before session"
+msgstr "Siku chaguomsingi za ufikiaji wa mkufunzi kabla ya kipindi"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Dropbox: ficha mkufunzi wa kozi"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Ficha mkufunzi mkuu katika Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Panua haki za wakufunzi kwenye tafiti"
+
+msgid "Maximum courses per user"
+msgstr "Kozi nyingi zaidi kwa kila mtumiaji"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Ruhusu wakufunzi kutoa maoni wanapokagua mazoezi"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Jumuisha msimbo rasmi katika jina la faili la PDF la matokeo ya jaribio yaliyohamishwa"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron ya ukumbusho wa kuisha kwa cheti"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Dirisha la ukumbusho wa kuisha kwa cheti (siku)"
+
+msgid "Allow certificates search"
+msgstr "Ruhusu utafutaji wa vyeti"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Ruhusu wakufunzi kuhariri matangazo kila wakati"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Onyesha msimbo rasmi wa wanafunzi katika karatasi za mahudhurio"
+
+msgid "Restrict course chat to tutors"
+msgstr "Zuia gumzo la kozi kwa wakufunzi pekee"
+
+msgid "Language by resource"
+msgstr "Lugha kwa rasilimali"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Kamilisha SCO unapoondoka wakati hali inabaki haijakamilika"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Wezesha majaribio yanayobadilika hatua kwa hatua kulingana na marudio ya kategoria"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Zuia kutuma arifa za jaribio kwa mkufunzi mkuu"
+
+msgid "Enable session expiration warning"
+msgstr "Wezesha onyo la kuisha kwa kipindi"
+
+msgid "Session expiration warning time"
+msgstr "Muda wa onyo la kuisha kwa kipindi"
+
+msgid "Check password requirements"
+msgstr "Angalia mahitaji ya nenosiri"
+
+msgid "File integrity check notification recipients"
+msgstr "Wapokeaji wa arifa ya ukaguzi wa uadilifu wa faili"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Wezesha seva ya uidhinishaji ya OAuth"
+
+msgid "Enable MCP server"
+msgstr "Wezesha seva ya MCP"
+
+msgid "Allow MCP by roles"
+msgstr "Ruhusu MCP kulingana na majukumu"
+
+msgid "Enable external API keys"
+msgstr "Wezesha funguo za API za nje"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Vipindi kulingana na muda vinapatikana kila wakati kwa wakufunzi"
+
+msgid "Allow registration via course invitation links"
+msgstr "Ruhusu usajili kupitia viungo vya mwaliko wa kozi"
+
+msgid "Add student fullname in file download name"
+msgstr "Ongeza jina kamili la mwanafunzi katika jina la faili inayopakuliwa"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Ruhusu tafsiri ya AI kwa lugha zote zinazotumika katika vihariri vya WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Zima uwezo wa kuhariri wakufunzi wa kozi"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Unapotumia vipindi, tabia chaguomsingi ni kutumia mwonekano wa zana uliofafanuliwa katika kozi ya msingi. Mpangilio huu hubadilisha hilo ili kuruhusu wakufunzi katika kozi za kipindi kurekebisha mwonekano wa zana kulingana na mahitaji yao."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Wakufunzi wanaweza kuunda watumiaji kwenye jukwaa na kuwasajili watumiaji kwenye kipindi."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Wezesha chaguo hili ili kuwapa wakufunzi ruhusa sawa na wakufunzi wa kozi kwenye zana za uandishi"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Onyesha jina la mkufunzi mkuu wa kipindi katika kisanduku cha kichwa cha kipindi katika orodha ya kozi"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Ikiwashwa, wakufunzi wa kozi katika vipindi wanaweza kujiandikisha watumiaji wapya kwenye kipindi chao. Vinginevyo chaguo hili linapatikana tu kwa wasimamizi na wasimamizi wa vipindi."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Idadi chaguomsingi ya siku ambazo mkufunzi anaweza kufikia kipindi baada ya tarehe rasmi ya mwisho wa kipindi"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Idadi chaguomsingi ya siku ambazo mkufunzi anaweza kufikia kipindi kabla ya tarehe rasmi ya kuanza kwa kipindi"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Washa maktaba ya MathJax ili kuonyesha fomula za hisabati. Hii huongeza kitufe cha fomula kwenye upau wa zana wa mhariri, ambapo fomula huandikwa kwa LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Misimbo ya kozi iliyotenganishwa na \"|\". Mkurugenzi wa rasilimali watu anapoingia, mtumiaji anajiandikishwa kiotomatiki kwenye kozi hizi. Mfano: COURSE001|COURSE002. Hii haibadilishi jukumu la mtumiaji."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Misimbo ya kozi iliyotenganishwa na \"|\". Msimamizi wa kipindi anapoingia, mtumiaji anajiandikishwa kiotomatiki kwenye kozi hizi. Mfano: COURSE001|COURSE002. Hii haibadilishi jukumu la mtumiaji."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Misimbo ya kozi iliyotenganishwa na \"|\". Mwanafunzi anapoingia, mtumiaji anajiandikishwa kiotomatiki kwenye kozi hizi. Mfano: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Misimbo ya kozi iliyotenganishwa na \"|\". Mwalimu anapoingia, mtumiaji anajiandikishwa kiotomatiki kwenye kozi hizi. Mfano: COURSE001|COURSE002. Hii haitoi ruhusa za mwalimu wa kozi."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Ficha mkufunzi wa kozi ya kipindi katika Dropbox wakati hati inatumwa na mkufunzi kwa wanafunzi"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Ficha jina la mkufunzi mkuu katika zana ya Dropbox wakati mkufunzi mkuu alipakia faili"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Washa chaguo hili ili kuruhusu wakufunzi kuunda na kuhariri tafiti"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Je, mialiko ya utafiti itumie anwani ya barua pepe ya mkufunzi au anwani ya no-reply iliyofafanuliwa katika sehemu kuu ya usanidi?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Idadi ya juu zaidi ya kozi ambazo mwalimu/mkufunzi anaweza kuunda. Weka 0 ili kuzima kikomo. Inaweza kubatilishwa kwa kila mtumiaji kupitia ununuzi wa huduma ya BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Ruhusu wakufunzi kuhariri maoni wanapokagua mazoezi"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Ikiwa itajumuisha msimbo rasmi wa mwanafunzi katika jina la faili wakati wa kuhamisha matokeo ya jaribio kwenda PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Inaruhusu ufikiaji wa faili zote za kibinafsi bila kizuizi"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Washa cron ya app:send-certificate-expiry-reminders, inayowakumbusha wanafunzi ambao vyeti vimeisha muda au vinakaribia kuisha."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Idadi chaguomsingi ya siku mbele za kuchanganua vyeti vinavyokaribia kuisha, inayotumika isipokuwa cron iendeshwe na --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Ruhusu watumiaji na wageni kutafuta vyeti vilivyotolewa kutoka kwenye menyu ya upau wa juu."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Ruhusu wakufunzi kuhariri matangazo kila wakati ndani ya vipindi vinavyoendelea au vilivyopita."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Ikiwa itaonyesha msimbo rasmi wa wanafunzi pamoja na jina lao katika karatasi za mahudhurio na orodha."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Ruhusu kugawa lugha mahususi kwa rasilimali binafsi."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Baadhi ya vifurushi vya SCORM huita LMSSetValue(cmi.core.lesson_status, 'incomplete') mara moja tu na kamwe hazitumi hali ya mwisho halisi wala LMSFinish() yenye maana. Washa hii ili Chamilo ichukulie 'incomplete' inayosalia sawa na kutokuwa na hali kabisa, na kutatua ukamilifu mwanafunzi anapoondoka SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Ikiwa njia ya kujifunza imewekwa kuwa isiyoonekana lakini mwalimu au mkufunzi aliamua kuifanya ipatikane kutoka ukurasa wa nyumbani wa kozi, chaguo hili huzuia Chamilo kuficha kiungo kwenye ukurasa wa nyumbani wa kozi."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Washa majaribio yanayobadilika hatua kwa hatua ambapo kila kategoria ya swali inaweza kuelekeza wanafunzi kwenye kategoria nyingine kulingana na alama zao."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Wanafunzi wanapokamilisha jaribio, arifa kwa kawaida hutumwa kwa wakufunzi, ikiwemo mkufunzi mkuu wa kipindi. Washa chaguo hili ili kumwacha mkufunzi mkuu nje ya arifa hizi."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Onyesha majaribio ya watumiaji katika vipindi vyote ambapo mkufunzi mkuu ana ufikiaji katika ripoti ya majaribio yanayosubiri."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Onyesha onyo kwa watumiaji walioidhinishwa kabla kipindi chao cha seva kuisha."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Idadi ya sekunde kabla ya kuisha kwa kipindi wakati onyo linaonyeshwa. Chaguomsingi ni sekunde 180."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Inafafanua muundo unaohitajika wa nywila za watumiaji. Mfano: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Tumia \"specials\" (wingi) ili kuhitaji herufi maalum."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Washa uthibitishaji wa mahitaji ya nywila yaliyofafanuliwa hapo juu wakati wa kuunda au kusasisha nywila."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Orodha ya anwani za barua pepe zilizotenganishwa kwa koma za kutaarifu wakati uchanganuzi wa uadilifu wa faili unapogundua mabadiliko. Acha tupu ili kutaarifu kila msimamizi wa kimataifa badala yake."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Inaruhusu programu za nje (k.m. kiunganishi cha Claude.ai MCP) kujiandikisha kupitia OAuth 2.1 Dynamic Client Registration na kuunganisha kwa kutumia akaunti na ruhusa za Chamilo za kila mtumiaji. Imezimwa kwa chaguomsingi: vituo vya ugunduzi, usajili, uidhinishaji na tokeni vyote hurudisha 404 hadi hii iwashwe."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Inawasha kituo cha Chamilo MCP na kiolesura cha ufunguo wa API wa MCP wa kibinafsi. Ikiwa imezimwa, funguo zilizopo za API, tokeni za ufikiaji za OAuth na hati za JWT haziwezi kutumika kwenye /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "Ramani ya JSON ya majukumu ya watumiaji wa Chamilo yanayoruhusiwa kutumia MCP. Mtumiaji lazima alingane na angalau jukumu moja lililowashwa. Kizuizi hiki kinatumika pia kwa funguo za API zilizotolewa awali na miunganisho iliyopo ya OAuth."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Inaruhusu ujumuishaji wa kuaminika wa seva-kwa-seva (k.m. programu-jalizi ya duka la WordPress) kuthibitisha dhidi ya kituo cha jumla cha /api kwa kutumia ufunguo wa nje wa API kwa kila mtumiaji, unaotolewa kupitia amri ya koni \"chamilo:security:generate-external-api-key\". Imezimwa kwa chaguomsingi: funguo zilizopo haziwezi kutumika hadi hii iwashwe."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Ongeza mkufunzi na tarehe kwenye kichwa kidogo cha kipindi katika orodha ya vipindi."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Vinginevyo, wakufunzi wa vipindi wana ufikiaji wa vipindi kwa muda tu wakati wa muda unaoendelea."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Ikiwashwa, mwalimu/msimamizi anaweza kutuma kiungo cha mwaliko cha mara moja kutoka zana ya Watumiaji ya kozi kinachomruhusu mtu ambaye hajasajiliwa kufikia fomu ya usajili na kujisajili hata wakati usajili wa kujitegemea wa jumla (allow_registration) umezimwa."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Ongeza jina kamili la mwanafunzi kwenye majina ya faili za kazi wakati wa kupakua mawasilisho binafsi au vifurushi vya kazi."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Inaruhusu walimu kutengeneza tafsiri kwa lugha zote zinazotumika za jukwaa katika hatua moja ya WYSIWYG. Hii inaweza kutumia idadi kubwa ya tokeni za AI."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Ikiwa imezimwa, wasimamizi hawana kiungo cha kugawa haraka wakufunzi kwa kozi za kipindi kwenye ukurasa wa kuhariri kozi."
+
+msgid "Show courses & sessions"
+msgstr "Onyesha kozi na vipindi"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON ya hiari. Mfano: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Jedwali"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Mandhari"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Mtumaji barua pepe wa mwalimu wa kozi"
+
+msgid "Card (visual blocks)"
+msgstr "Kadi (vizuizi vya kuona)"
+
+msgid "List (classic)"
+msgstr "Orodha (ya kawaida)"
+
+msgid "Limit identical emails"
+msgstr "Zuia barua pepe zinazofanana"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Idadi ya juu ya kozi ambazo mwalimu au mkufunzi anaweza kuunda. Weka 0 ili kuzima kikomo."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Idadi ya juu ya akaunti zinazoruhusiwa na barua pepe ileile. Weka 0 ili kuzima kikomo."
+
+msgid "Validation"
+msgstr "Uthibitishaji"
+
+msgid "Test/Development"
+msgstr "Jaribio/Maendeleo"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Ufunguo wa uga wa ziada wa mtumiaji wa kutumia wakati wa kutafuta na kutaja vikao kutoka /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Usanidi wa JSON kwa uga za kichujio cha awali cha utafutaji."
 

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Ngobubele"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Umzekelo wefomula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Umzekelo wefomyula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Ulawulo lweguqu"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo womsebenzi wokuzalisa ifomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>I-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -24063,6 +24063,18 @@ msgstr "Bonisa iziphumo kumfundi: Bonisa amanqaku, ukhetho lomfundi kunye nengxe
 msgid "Signed in as"
 msgstr "Ungene njengoko"
 
+msgid "Authorize application"
+msgstr "Gunyazisa usetyenziso"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "ifuna ukuqhagamshela kwiakhawunti yakho ye-Chamilo."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Olu setyenziso luya kukwazi ukwenza kwi-Chamilo kanye njengoko unako — usebenzisa iimvume zeakhawunti yakho ekhoyo kwaye kungabi ngaphezulu. Alusoze lufumane naluphi na ufikelelo ongenalo kakade."
+
+msgid "Allow"
+msgstr "Vumela"
+
 msgid "Remember me"
 msgstr "Khumbula mna"
 
@@ -31428,6 +31440,9 @@ msgstr "Buyela kwiphepha lokwabelana ngabasebenzisi"
 msgid "Authentication sources assigned successfully"
 msgstr "Imithombo yobungqina yabelwe ngempumelelo"
 
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Akukho ndlela yoqinisekiso ekhethiweyo. Oku kususela zonke iindlela zoqinisekiso zomsebenzisi(abasebenzisi) abakhethiweyo kule URL, nto leyo enokubathintela ekungeneni. Uqhubeke?"
+
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Cecel' ingqikelelo: khetha “— Upload nje —” ukugcina ngaphandle kokuthumela kuye nabani."
 
@@ -35584,7 +35599,7 @@ msgid "%s results"
 msgstr "%s iziphumo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo womsebenzi wokuzalisa ifomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>I-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Kususiwe"
@@ -41216,4 +41231,316 @@ msgstr "Ukufunda okudityanisiweyo"
 
 msgid "Memory palaces"
 msgstr "Iibhotwe zenkumbulo"
+
+msgid "Logins (Month)"
+msgstr "Ukungena (Inyanga)"
+
+msgid "Logins (Day)"
+msgstr "Ukungena (Usuku)"
+
+msgid "Logins (Hour)"
+msgstr "Ukungena (Iyure)"
+
+msgid "Number of users (Picture)"
+msgstr "Inani labasebenzisi (Umfanekiso)"
+
+msgid "Allow tutors to register users"
+msgstr "Vumela abahlohli ukuba babhalise abasebenzisi"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Vumela abahlohli ukuba bahlele ngaphakathi kweeseshoni zekhosi"
+
+msgid "Extend rights for tutors"
+msgstr "Yandisa amalungelo abahlohli"
+
+msgid "Show session tutor"
+msgstr "Bonisa umhlohli weseshoni"
+
+msgid "Default tutor access days after session"
+msgstr "Iintsuku zokufikelela komhlohli ezimiselweyo emva kweseshoni"
+
+msgid "Default tutor access days before session"
+msgstr "Iintsuku zokufikelela komhlohli ezimiselweyo phambi kweseshoni"
+
+msgid "Dropbox: hide course tutor"
+msgstr "I-Dropbox: fihla umhlohli wekhosi"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Fihla umhlohli jikelele kwi-Dropbox"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Yandisa amalungelo abahlohli kuphando"
+
+msgid "Maximum courses per user"
+msgstr "Iikhosi eziphezulu ngomsebenzisi ngamnye"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Vumela abahlohli ukuba baphawule xa bephonononga imiqilima"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Faka ikhowudi esemthethweni kwigama lefayile ye-PDF yeziphumo zequiz ezikhutshwayo"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Isikhumbuzi sokuphelelwa kwesatifikethi se-cron"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Ifestile yesikhumbuzi sokuphelelwa kwesatifikethi (iintsuku)"
+
+msgid "Allow certificates search"
+msgstr "Vumela ukukhangela izatifikethi"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Vumela abahlohli ukuba bahlale behlela izaziso"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Bonisa ikhowudi esemthethweni yabafundi kumaphepha okubakho"
+
+msgid "Restrict course chat to tutors"
+msgstr "Thintela incoko yekhosi kubahlohli kuphela"
+
+msgid "Language by resource"
+msgstr "Ulwimi ngomthombo"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Gqibezela i-SCO xa ushiya xa imeko ihlala ingagqitywanga"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Vumela iimvavanyo ezihlengahlengisayo ngenqanaba ngendawo yokuya yodidi"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Thintela ukuthunyelwa kwezaziso zovavanyo kumhlohli jikelele"
+
+msgid "Enable session expiration warning"
+msgstr "Vumela isilumkiso sokuphelelwa kweseshoni"
+
+msgid "Session expiration warning time"
+msgstr "Ixesha lesilumkiso sokuphelelwa kweseshoni"
+
+msgid "Check password requirements"
+msgstr "Jonga iimfuno zegama lokugqithisa"
+
+msgid "File integrity check notification recipients"
+msgstr "Abamkeli bezaziso zokujonga ukunyaniseka kwefayile"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Vumela inkonzo yogunyaziso ye-OAuth"
+
+msgid "Enable MCP server"
+msgstr "Vumela iseva ye-MCP"
+
+msgid "Allow MCP by roles"
+msgstr "Vumela i-MCP ngokweendima"
+
+msgid "Enable external API keys"
+msgstr "Vumela izitshixo ze-API zangaphandle"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Iiseshoni ngexesha zihlala zifumaneka kubahlohli"
+
+msgid "Allow registration via course invitation links"
+msgstr "Vumela ukubhaliswa ngeelinki zesimemo sekhosi"
+
+msgid "Add student fullname in file download name"
+msgstr "Yongeza igama elipheleleyo lomfundi kwigama lokukhuphela ifayile"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Vumela uguqulelo lwe-AI kuzo zonke iilwimi ezisebenzayo kwiieditha ze-WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Khubaza ukukwazi ukuhlela abahlohli bekhosi"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Xa kusetyenziswa iiseshoni, indlela emiselweyo kukusebenzisa ukubonakala kwesixhobo okuchazwe kwikhosi esisiseko. Olu setingi luyalitshintsha oko ukuvumela abahlohli kwiikhosi zeseshoni ukuba bahlengahlengise ukubonakala kwezixhobo ngokweemfuno zabo."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Abahlohli banokudala abasebenzisi kwiqonga kwaye babhalise abasebenzisi kwiseshoni."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Vula le nketho ukunika abacebisi iimvume ezifanayo nezabaqeqeshi kwizixhobo zokubhala"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Bonisa igama lomcebisi jikelele weseshoni kwibhokisi yesihloko seseshoni kuluhlu lwezifundo"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Xa ivuliwe, abacebisi bezifundo kwiiseshini banokubhalisa abasebenzisi abatsha kwiseshini yabo. Le nketho ngenye indlela ifumaneka kuphela kubalawuli nabalawuli beeseshini."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Inani elihlala likho leentsuku umcebisi anokufikelela kwiseshini emva komhla osemthethweni wokuphela kweseshini"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Inani elihlala likho leentsuku umcebisi anokufikelela kwiseshini phambi komhla osemthethweni wokuqala kweseshini"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Vula ithala leencwadi le-MathJax ukubonisa iifomula zemathematika. Oku kongeza iqhosha lefomula kwibha yesixhobo somhleli, apho iifomula zibhalwa nge-LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Iikhowudi zezifundo ezahlulwe nge \"|\". Xa umlawuli wezabasebenzi engena, umsebenzisi ubhaliswa ngokuzenzekelayo kwezi zifundo. Umzekelo: COURSE001|COURSE002. Oku akuyitshintshi indima yomsebenzisi."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Iikhowudi zezifundo ezahlulwe nge \"|\". Xa umlawuli weseshini engena, umsebenzisi ubhaliswa ngokuzenzekelayo kwezi zifundo. Umzekelo: COURSE001|COURSE002. Oku akuyitshintshi indima yomsebenzisi."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Iikhowudi zezifundo ezahlulwe nge \"|\". Xa umfundi engena, umsebenzisi ubhaliswa ngokuzenzekelayo kwezi zifundo. Umzekelo: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Iikhowudi zezifundo ezahlulwe nge \"|\". Xa utitshala engena, umsebenzisi ubhaliswa ngokuzenzekelayo kwezi zifundo. Umzekelo: COURSE001|COURSE002. Oku akuniki iimvume zotitshala wesifundo."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Fihla umcebisi wesifundo seseshini kwi-Dropbox xa uxwebhu luthunyelwa ngumcebisi kubafundi"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Fihla igama lomcebisi jikelele kwisixhobo se-Dropbox xa umcebisi jikelele elayishe ifayile"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Vula le nketho ukuvumela abacebisi ukuba benze kwaye bahlele uphando"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Ingaba izimemo zophando kufuneka zisebenzise idilesi ye-imeyile yomcebisi okanye idilesi yokungaphenduli echazwe kwicandelo lolungiselelo oluyintloko?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Inani eliphezulu lezifundo utitshala/umqeqeshi anokuzidala. Seta ku-0 ukuvala umda. Ingagqithiswa ngomsebenzisi ngamnye ngokuthenga inkonzo ye-BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Vumela abacebisi ukuba bahlele ingxelo xa bephonononga imithambo"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Ukuba kufakwe ikhowudi esemthethweni yomfundi kwigama lefayile xa kuthunyelwa isiphumo sekvizi kwi-PDF"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Ivumela ukufikelela kuzo zonke iifayile zobuqu ngaphandle kwesithintelo"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Vula i-cron ye-app:send-certificate-expiry-reminders, ekhumbuza abafundi izatifikethi zabo eziphelelwe okanye eziphantse ukuphelelwa."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Inani elihlala likho leentsuku ngaphambili ukuhlola izatifikethi eziphantse ukuphelelwa, lisetyenziswa ngaphandle kokuba i-cron iqhutywa nge --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Vumela abasebenzisi neendwendwe ukuba bakhangele izatifikethi ezenziweyo kwimenyu yebha ephezulu."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Vumela abacebisi ukuba bahlale behlela izaziso ngaphakathi kweeseshini ezisebenzayo okanye ezadlulayo."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Ukuba kuboniswe ikhowudi esemthethweni yabafundi ecaleni kwegama labo kwiiphepha zokuzimasa nakuluhlu."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Vumela ukunikezelwa kolwimi oluthile kwizixhobo ngazinye."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Ezinye iipakethe ze-SCORM zibiza i-LMSSetValue(cmi.core.lesson_status, 'incomplete') kanye kuphela kwaye azithumeli isimo sokugqibela sokwenene okanye i-LMSFinish() enentsingiselo. Vula oku ukuze i-Chamilo iphathe loo 'incomplete' ihlalayo njengokungabikho kwesimo konke, isombulule ukugqitywa xa umfundi eshiya i-SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Ukuba indlela yokufunda isetelwe ukuba ingabonakali kodwa utitshala okanye umcebisi wagqiba ekubeni iyifumaneke kwiphepha lasekhaya lesifundo, le nketho ithintela i-Chamilo ukuba ifihle ikhonkco kwiphepha lasekhaya lesifundo."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Vula iimvavanyo ezihlengahlengisayo eziqhubekayo apho udidi ngalunye lwemibuzo lunokuthumela abafundi kolunye udidi ngokuxhomekeke kumanqaku abo."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Xa abafundi begqiba uvavanyo, izaziso zihlala zithunyelwa kubacebisi, kuquka umcebisi jikelele weseshini. Vula le nketho ukushiya umcebisi jikelele kwezi zaziso."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Bonisa iinzame zovavanyo zabasebenzisi kuzo zonke iiseshini apho umcebisi jikelele anofikelelo kwingxelo yovavanyo olulindileyo."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Bonisa isilumkiso kubasebenzisi abaqinisekisiweyo phambi kokuba iseshini yabo yecala leseva iphele."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Inani lemizuzwana phambi kokuphela kweseshini xa isilumkiso siboniswa. Okuhlala kukho yiimizuzwana eyi-180."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Ichaza isakhiwo esifunekayo samagama okugqithisa abasebenzisi. Umzekelo: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Sebenzisa \"specials\" (plural) ukufuna oonobumba abakhethekileyo."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Vula ukuqinisekiswa kweemfuno zegama lokugqithisa ezichazwe ngasentla ngexesha lokudala igama lokugqithisa okanye ukuhlaziya igama lokugqithisa."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Uluhlu lweedilesi ze-imeyile ezahlulwe ngekoma ukwazisa xa uskeno wobunyaniso befayile lubona utshintsho. Shiya kungenanto ukwazisa wonke umlawuli wehlabathi endaweni yoko."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Ivumela izicelo zangaphandle (umz. i-Claude.ai MCP connector) ukuba zibhalise nge-OAuth 2.1 Dynamic Client Registration kwaye ziqhagamshele zisebenzisa iakhawunti ye-Chamilo yomsebenzisi ngamnye neemvume. Ivaliwe ngokuhlala: iindawo zokufumanisa, ukubhalisa, ukugunyazisa kunye neethokheni zonke zibuyisa i-404 de oku kuvulwe."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Ivula indawo ye-Chamilo MCP kunye nojongano lweqhosha le-API ye-MCP yobuqu. Xa ivaliwe, izitshixo ze-API ezikhoyo, iithokheni zofikelelo ze-OAuth kunye nezikhundla ze-JWT azinakusetyenziswa ku /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "Imephu ye-JSON yeendima zabasebenzisi be-Chamilo ezivunyelweyo ukusebenzisa i-MCP. Umsebenzisi kufuneka ahambelane nendima enye evuliweyo. Esi sithintelo sisebenza nakwizitshixo ze-API ezenziwe ngaphambili kunye noqhagamshelo lwe-OAuth olukhoyo."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Ivumela ukudibanisa okuthembekileyo kweseva ukuya kweseva (umz. iplagini yevenkile ye-WordPress) ukuqinisekisa ngokuchasene nendawo ye /api jikelele usebenzisa iqhosha le-API langaphandle ngomsebenzisi, elenziwe nge-console command \"chamilo:security:generate-external-api-key\". Ivaliwe ngokuhlala: izitshixo ezikhoyo azinakusetyenziswa de oku kuvulwe."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Yongeza umcebisi nemihla kwisihloko esingaphantsi seseshini kuluhlu lweeseshini."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Ngenye indlela, abacebisi beeseshini banofikelelo kwiiseshini ngexesha elisebenzayo kuphela ngexesha elisebenzayo."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Xa ivuliwe, utitshala/umlawuli unokuthumela ikhonkco lesimemo elinye kwisixhobo sabasebenzisi sesifundo elivumela umntu ongabhaliswanga ukuba afikelele kwifomu yokubhalisa kwaye abhalise naxa ukubhalisa ngokwakho jikelele (allow_registration) kuvaliwe."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Yongeza igama elipheleleyo lomfundi kumagama eefayile zomsebenzi xa kukhutshelwa izingeniso nganye okanye iipakethe zomsebenzi."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Ivumela ootitshala ukuba benze iinguqulelo zazo zonke iilwimi zeqonga ezisebenzayo kwisenzo esinye se-WYSIWYG. Oku kunokusebenzisa inani elikhulu leethokheni ze-AI."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Xa ivaliwe, abalawuli abanalo ikhonkco lokunikezela ngokukhawuleza abacebisi kwizifundo zeseshini kwiphepha lokuhlela isifundo."
+
+msgid "Show courses & sessions"
+msgstr "Bonisa izifundo neeseshini"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "I-JSON yokhetho. Umzekelo: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Itheyibhile"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Umxholo"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Umthumeli we-imeyile yomqeqeshi wekhosi"
+
+msgid "Card (visual blocks)"
+msgstr "Ikhadi (iibhloko ezibonakalayo)"
+
+msgid "List (classic)"
+msgstr "Uluhlu (oludala)"
+
+msgid "Limit identical emails"
+msgstr "Umkhawulo wee-imeyile ezifanayo"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Inani eliphezulu leekhosi utitshala okanye umqeqeshi anokuzidala. Beka ku-0 ukuze uvale umkhawulo."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Inani eliphezulu leeakhawunti ezivunyelweyo nge-imeyile enye. Beka ku-0 ukuze uvale umkhawulo."
+
+msgid "Validation"
+msgstr "Ukuqinisekisa"
+
+msgid "Test/Development"
+msgstr "Uvavanyo/Uphuhliso"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Iqhosha lentsimi eyongezelelweyo yomsebenzisi elisetyenziswa xa kukhangelwa kwaye kuthiywa iiseshoni ukusuka ku-/admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Uqwalaselo lwe-JSON lwamacandelo okucoca kwangaphambili okukhangela."
 

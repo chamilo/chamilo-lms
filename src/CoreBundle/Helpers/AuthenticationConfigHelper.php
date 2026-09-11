@@ -51,9 +51,7 @@ readonly class AuthenticationConfigHelper
     {
         $urlId = $url ?: $this->accessUrlHelper->getCurrent();
 
-        $authentication = $this->parameterBag->has('authentication')
-            ? $this->parameterBag->get('authentication')
-            : [];
+        $authentication = $this->getAuthenticationParameter();
 
         if ($urlId && isset($authentication[$urlId->getId()])) {
             return $authentication[$urlId->getId()];
@@ -64,6 +62,18 @@ readonly class AuthenticationConfigHelper
         }
 
         return [];
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function getAuthenticationParameter(): array
+    {
+        $authentication = $this->parameterBag->has('authentication')
+            ? $this->parameterBag->get('authentication')
+            : [];
+
+        return \is_array($authentication) ? $authentication : [];
     }
 
     /**
@@ -231,6 +241,65 @@ readonly class AuthenticationConfigHelper
         }
 
         return null;
+    }
+
+    /**
+     * Returns the first enabled OAuth2 provider marked as "force_redirect", with the
+     * URI fragments its "skip_force_redirect_in" list exempts.
+     *
+     * LDAP never appears here: it signs in through the local login form.
+     *
+     * @return array{name: string, skip: array<int, string>}|null
+     */
+    public function getForcedRedirectProvider(?AccessUrl $url = null): ?array
+    {
+        foreach ($this->getEnabledOAuthProviders($url) as $providerName => $providerConfig) {
+            if (!($providerConfig['force_redirect'] ?? false)) {
+                continue;
+            }
+
+            $fragments = [];
+
+            foreach ((array) ($providerConfig['skip_force_redirect_in'] ?? []) as $fragment) {
+                $fragment = trim((string) $fragment);
+
+                if ('' !== $fragment) {
+                    $fragments[] = $fragment;
+                }
+            }
+
+            return ['name' => (string) $providerName, 'skip' => $fragments];
+        }
+
+        return null;
+    }
+
+    /**
+     * Tells whether any access URL declares an enabled provider with force_redirect.
+     *
+     * A cheap guard: it reads the compiled parameter, while getForcedRedirectProvider()
+     * must resolve the current access URL first, which costs a query. A multi-URL
+     * installation still needs that per-URL answer.
+     */
+    public function hasForcedRedirectProviderDeclared(): bool
+    {
+        foreach ($this->getAuthenticationParameter() as $authSources) {
+            if (!\is_array($authSources) || !\is_array($authSources['oauth2'] ?? null)) {
+                continue;
+            }
+
+            foreach ($authSources['oauth2'] as $providerConfig) {
+                if (!\is_array($providerConfig)) {
+                    continue;
+                }
+
+                if (($providerConfig['enabled'] ?? false) && ($providerConfig['force_redirect'] ?? false)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public function getScimConfig(?AccessUrl $accessUrl = null): array

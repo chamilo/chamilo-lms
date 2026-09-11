@@ -361,16 +361,27 @@ function get_config_param($param, $updatePath = '')
         }
     }
 
-    if (file_exists($updatePath.$updateFromConfigFile) &&
-        !is_dir($updatePath.$updateFromConfigFile)
-    ) {
-        require $updatePath.$updateFromConfigFile;
+    // $updateFromConfigFile can arrive from the request (GET). Canonicalise the
+    // full path with realpath() so any ../ is collapsed, then require it only
+    // when it stays inside $updatePath and is the expected legacy config file.
+    // This blocks path traversal that would otherwise require an arbitrary file
+    // (e.g. the PHP error log for code execution, or .env for disclosure).
+    $configFilePath = realpath($updatePath.$updateFromConfigFile);
+    if (false !== $configFilePath) {
+        $configFilePath = str_replace('\\', '/', $configFilePath);
 
-        if (isset($_configuration) && array_key_exists($param, $_configuration)) {
-            return $_configuration[$param];
+        if (!is_dir($configFilePath)
+            && 'configuration.php' === basename($configFilePath)
+            && str_starts_with($configFilePath, $updatePath)
+        ) {
+            require $configFilePath;
+
+            if (isset($_configuration) && array_key_exists($param, $_configuration)) {
+                return $_configuration[$param];
+            }
+
+            return null;
         }
-
-        return null;
     }
 
     error_log('Config array could not be found in get_config_param()', 0);
@@ -1474,11 +1485,11 @@ function escapeInstallerEnvValue(mixed $value): string
         throw new \InvalidArgumentException('Installer .env values cannot contain line breaks.');
     }
 
-    return str_replace(
-        ['\\', "'"],
-        ['\\\\', "\\'"],
-        $value
-    );
+    // .env.dist wraps values in single quotes, and Dotenv has no backslash
+    // escape inside them. Emit the POSIX '\'' idiom so a quote cannot end the
+    // value and let a trailing $(...) run as a shell command.
+    // Example: x'$(id) -> x'\''$(id) -> KEY='x'\''$(id)' (literal, not executed).
+    return str_replace("'", "'\\''", $value);
 }
 
 function updateEnvFile($distFile, $envFile, $params)
@@ -1985,32 +1996,14 @@ function isUpdateAvailable(): bool
         return false;
     }
 
-    // Compare versions (DB version vs installer version)
-    $versionInfo = require __DIR__ . '/version.php';
-    $installerVersion = $versionInfo['new_version'] ?? null;
-    if (!$installerVersion) {
-        // Cannot determine installer version -> do not assume update
-        error_log('Installer: Missing installer version info, update check disabled.');
-        return false;
-    }
-
-    $dbVersion = null;
-    try {
-        $dbVersion = get_config_param_from_db('chamilo_database_version');
-    } catch (\Throwable $e) {
-        // If we cannot read version, avoid false positives
-        error_log('Installer: Unable to read DB version, update check disabled. Reason: ' . $e->getMessage());
-        return false;
-    }
-
-    // If the DB looks like Chamilo (settings table exists) but version is missing,
-    // it is likely an old install (e.g., 1.11.x) -> update should be offered.
-    $dbVersion = is_string($dbVersion) ? trim($dbVersion) : '';
-    if ($dbVersion === '') {
-        return true;
-    }
-
-    return version_compare($dbVersion, $installerVersion, '<');
+    // The web installer no longer detects a pending update from a stored
+    // version. It used to compare the deprecated chamilo_database_version
+    // setting against the installer version, but that value is a hand-maintained
+    // literal that migrations never raise, so a fresh install was wrongly
+    // flagged as needing an update. Database upgrades run through
+    // doctrine:migrations:migrate; reaching this point only proves the platform
+    // is already installed, which is not an update.
+    return false;
 }
 
 /**

@@ -73,6 +73,13 @@ breadcrumb: (route) => {
 },
 ```
 
+A function may also return `""` to omit the crumb, but **only on a route that declares
+`breadcrumbParents`**: the tool and resource branches still compare the raw `meta.breadcrumb`
+property, so there a function is never empty. Declare it when the page's own name exists for
+some requests only. `AdminStatistics` in `assets/vue/router/admin.js` is the reference — its key
+comes from `activeReportLabelKey` (`assets/vue/utils/statisticsReports.js`), which names the
+report in `route.query.report` and returns `""` when there is none.
+
 ### 3. Register every key
 
 A key that is new to the platform goes by hand into three files:
@@ -116,6 +123,10 @@ When several routes share the same ancestors, declare the lists once at the top 
 A route with `breadcrumbParents` owns its whole trail and takes the first branch of
 `buildBreadcrumb`, so nothing else runs for it.
 
+The ancestors are fixed, but the leaf's own crumb is not: an empty key drops it and leaves the
+ancestors standing. That is how a page hangs a report or filter name off a parent that links
+back to its own bare URL, and it is the only branch where a function may return `""`.
+
 ### `breadcrumbResource` — a tool that opens a resource
 
 Declare it on the **parent**, when the trail has to name the thing the user opened.
@@ -143,7 +154,11 @@ for a route whose tool declares it. Nothing else has to be wired.
 ## Do not do these
 
 - **Do not add a rule to `Breadcrumb.vue`.** If a trail seems to need one, the shape is probably
-  already covered by one of the four declarations. Read the component's own builders first.
+  already covered by one of the four declarations. Read the component's own builders first. A
+  rule that names a page or a route never belongs there. Widening a contract the declarations
+  already document is a different thing, and rare: `buildDeclaredParentCrumbs` learned to honour
+  an empty key that way, because `breadcrumb: ""` was documented as "omit" everywhere yet that
+  branch pushed the crumb regardless.
 - **Do not match route names by substring.** A rule like `route.name.includes("Page")` once put a
   "Pages" crumb on every wiki page of every course. It was removed for that reason.
 - **Do not pass translated text as a label.** The component calls `t()` on what you declare.

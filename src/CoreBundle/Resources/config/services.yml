@@ -142,6 +142,8 @@ services:
         $registry: '@doctrine'
         $em: '@doctrine.orm.entity_manager'
 
+    Chamilo\CoreBundle\EventListener\MobileMessagePushListener: ~
+
     Chamilo\CoreBundle\EventListener\AccessUrlValidationListener:
       arguments:
         $accessUrlHelper: '@Chamilo\CoreBundle\Helpers\AccessUrlHelper'

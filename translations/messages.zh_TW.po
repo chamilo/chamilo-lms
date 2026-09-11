@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "敬上"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式範例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式範例：sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "變數範圍"
@@ -24068,6 +24068,18 @@ msgstr "向學習者顯示結果：顯示分數、學習者選擇及其每次嘗
 msgid "Signed in as"
 msgstr "以 %s 登入"
 
+msgid "Authorize application"
+msgstr "授權應用程式"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "想要連線到您的 Chamilo 帳號。"
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "此應用程式將能以與您相同的方式在 Chamilo 上操作——僅使用您現有帳號權限，不會取得您尚未擁有的任何存取權。"
+
+msgid "Allow"
+msgstr "允許"
+
 msgid "Remember me"
 msgstr "記住我"
 
@@ -31433,6 +31445,9 @@ msgstr "返回使用者作業頁面"
 
 msgid "Authentication sources assigned successfully"
 msgstr "驗證來源指派成功"
+
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "未選取任何驗證方式。這會移除此網址上所選使用者的所有驗證方式，可能導致他們無法登入。要繼續嗎？"
 
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "提示：選擇「— 僅上傳 —」以儲存而不發送給任何人。"
@@ -41222,4 +41237,316 @@ msgstr "交錯學習"
 
 msgid "Memory palaces"
 msgstr "記憶宮殿"
+
+msgid "Logins (Month)"
+msgstr "登入次數（月）"
+
+msgid "Logins (Day)"
+msgstr "登入次數（日）"
+
+msgid "Logins (Hour)"
+msgstr "登入次數（時）"
+
+msgid "Number of users (Picture)"
+msgstr "使用者人數（圖片）"
+
+msgid "Allow tutors to register users"
+msgstr "允許導師註冊使用者"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "允許導師在課程期別內編輯"
+
+msgid "Extend rights for tutors"
+msgstr "擴充導師權限"
+
+msgid "Show session tutor"
+msgstr "顯示期別導師"
+
+msgid "Default tutor access days after session"
+msgstr "期別結束後導師預設可存取天數"
+
+msgid "Default tutor access days before session"
+msgstr "期別開始前導師預設可存取天數"
+
+msgid "Dropbox: hide course tutor"
+msgstr "檔案交換箱：隱藏課程導師"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "在檔案交換箱中隱藏一般導師"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "擴充導師對問卷的權限"
+
+msgid "Maximum courses per user"
+msgstr "每位使用者的課程數上限"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "允許導師在批改測驗時留言"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "在匯出的測驗結果 PDF 檔名中包含正式代碼"
+
+msgid "Certificate expiry reminder cron"
+msgstr "證書到期提醒排程"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "證書到期提醒期間（天）"
+
+msgid "Allow certificates search"
+msgstr "允許搜尋證書"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "允許導師隨時編輯公告"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "在出席表中顯示學生正式代碼"
+
+msgid "Restrict course chat to tutors"
+msgstr "將課程聊天限制為僅導師可用"
+
+msgid "Language by resource"
+msgstr "依資源設定語言"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "離開時若狀態仍為未完成則完成 SCO"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "依類別目的地啟用漸進式適性測驗"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "禁止將測驗通知傳送給一般導師"
+
+msgid "Enable session expiration warning"
+msgstr "啟用工作階段到期警告"
+
+msgid "Session expiration warning time"
+msgstr "工作階段到期警告時間"
+
+msgid "Check password requirements"
+msgstr "檢查密碼需求"
+
+msgid "File integrity check notification recipients"
+msgstr "檔案完整性檢查通知收件人"
+
+msgid "Enable the OAuth authorization server"
+msgstr "啟用 OAuth 授權伺服器"
+
+msgid "Enable MCP server"
+msgstr "啟用 MCP 伺服器"
+
+msgid "Allow MCP by roles"
+msgstr "依角色允許 MCP"
+
+msgid "Enable external API keys"
+msgstr "啟用外部 API 金鑰"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "依時長設定的期別對導師一律可用"
+
+msgid "Allow registration via course invitation links"
+msgstr "允許透過課程邀請連結註冊"
+
+msgid "Add student fullname in file download name"
+msgstr "在檔案下載名稱中加入學生全名"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "允許在所見即所得編輯器中將 AI 翻譯套用至所有啟用語言"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "停用編輯課程導師的功能"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "使用期別時，預設會套用基礎課程中定義的工具可見性。此設定改為允許期別課程中的導師依需求調整工具可見性。"
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "導師可在平台上建立使用者，並將使用者加入期別。"
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "啟用此選項可讓導師在編輯工具上擁有與講師相同的權限"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "在課程清單的期別標題區塊中顯示一般期別導師姓名"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "啟用後，期別中的課程導師可將新使用者加入其期別。否則此功能僅供管理員與期別管理員使用。"
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "官方課程結束日期後，導師仍可存取該課程的預設天數"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "官方課程開始日期前，導師可存取該課程的預設天數"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "啟用 MathJax 函式庫以顯示數學公式。這會在編輯器工具列新增公式按鈕，公式以 LaTeX 撰寫。"
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "以 \"|\" 分隔的課程代碼。人力資源主管登入時，會自動訂閱這些課程。範例：COURSE001|COURSE002。不會變更使用者角色。"
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "以 \"|\" 分隔的課程代碼。課程管理員登入時，會自動訂閱這些課程。範例：COURSE001|COURSE002。不會變更使用者角色。"
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "以 \"|\" 分隔的課程代碼。學習者登入時，會自動訂閱這些課程。範例：COURSE001|COURSE002。"
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "以 \"|\" 分隔的課程代碼。教師登入時，會自動訂閱這些課程。範例：COURSE001|COURSE002。不會授予課程教師權限。"
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "當導師將文件傳送給學生時，在檔案箱中隱藏課程導師"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "當總導師上傳檔案時，在檔案箱工具中隱藏總導師姓名"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "啟用此選項以允許導師建立與編輯問卷"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "問卷邀請應使用導師電子郵件，或主設定區中定義的不回覆地址？"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "教師／培訓者可建立的課程數量上限。設為 0 表示不限制。可透過 BuyCourses 服務購買依使用者覆寫。"
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "允許導師在批改練習時編輯回饋"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "將測驗結果匯出為 PDF 時，是否在檔名中包含學生的正式代碼"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "允許不受限制地存取所有個人檔案"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "啟用 app:send-certificate-expiry-reminders 排程，提醒證書已過期或即將過期的學習者。"
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "掃描即將過期證書的預設提前天數，除非排程以 --days-ahead 執行。"
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "允許使用者與訪客從頂部選單搜尋已產生的證書。"
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "允許導師隨時編輯進行中或已結束課程內的公告。"
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "是否在出席表與名單中於學生姓名旁顯示正式代碼。"
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "允許為個別資源指定特定語言。"
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "部分 SCORM 套件只會呼叫一次 LMSSetValue(cmi.core.lesson_status, 'incomplete')，且從不傳送真正的結束狀態或有意義的 LMSFinish()。啟用此選項可讓 Chamilo 將持續的 'incomplete' 視為無狀態，並在學習者離開 SCO 時判定完成。"
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "若學習路徑設為不可見，但教師或導師決定從課程首頁提供，此選項可防止 Chamilo 隱藏課程首頁上的連結。"
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "啟用漸進式適性測驗，各題目類別可依分數將學習者導向另一類別。"
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "學習者完成測驗時，通知通常會傳送給導師（含總課程導師）。啟用此選項可從這些通知中排除總導師。"
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "在待處理測驗報告中，顯示總導師可存取之所有課程中使用者的測驗作答。"
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "在伺服器端工作階段即將過期前，向已驗證使用者顯示警告。"
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "顯示警告時距離工作階段過期的秒數。預設為 180 秒。"
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "定義使用者密碼的必要結構。範例：{\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}。使用 \"specials\"（複數）以要求特殊字元。"
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "在建立或更新密碼時，啟用上述密碼需求的驗證。"
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "檔案完整性掃描偵測到變更時要通知的電子郵件地址清單（逗號分隔）。留空則改為通知所有全域管理員。"
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "允許外部應用程式（例如 Claude.ai MCP 連接器）透過 OAuth 2.1 動態用戶端註冊，並以各使用者自己的 Chamilo 帳號與權限連線。預設停用：在開啟前，探索、註冊、授權與權杖端點皆回傳 404。"
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "啟用 Chamilo MCP 端點與個人 MCP API 金鑰介面。停用時，現有 API 金鑰、OAuth 存取權杖與 JWT 憑證無法用於 /mcp。"
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "允許使用 MCP 的 Chamilo 使用者角色 JSON 對應。使用者必須符合至少一個已啟用角色。此限制亦適用於先前產生的 API 金鑰與現有 OAuth 連線。"
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "允許受信任的伺服器對伺服器整合（例如 WordPress 店面外掛）使用透過 \"chamilo:security:generate-external-api-key\" 主控台指令產生的每位使用者外部 API 金鑰，對一般 /api 端點進行驗證。預設停用：在開啟前無法使用現有金鑰。"
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "在課程清單的課程副標題中加入導師與日期。"
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "否則，課程導師僅能在有效期間內存取依期間設定的課程。"
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "啟用後，教師／管理員可從課程的使用者工具傳送一次性邀請連結，讓未註冊者前往註冊表單並註冊，即使一般自行註冊（allow_registration）已停用。"
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "下載個別繳交作業或作業套件時，在作業檔名中加入學生全名。"
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "允許教師以一次 WYSIWYG 操作為所有啟用的平台語言產生翻譯。這可能消耗大量 AI 權杖。"
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "停用時，管理員在課程編輯頁沒有快速指派導師至課程的連結。"
+
+msgid "Show courses & sessions"
+msgstr "顯示課程與時段"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "選填 JSON。範例：{\"speed\": true}"
+
+msgid "Table"
+msgstr "表格"
+
+msgid "LoginIsEmailTitle"
+msgstr "以電子郵件作為登入帳號"
+
+msgid "Theme"
+msgstr "佈景主題"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "課程導師電子郵件寄件者"
+
+msgid "Card (visual blocks)"
+msgstr "卡片（視覺區塊）"
+
+msgid "List (classic)"
+msgstr "清單（傳統）"
+
+msgid "Limit identical emails"
+msgstr "限制相同電子郵件"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "教師或培訓師可建立的課程數量上限。設為 0 以停用限制。"
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "允許使用相同電子郵件的帳號數量上限。設為 0 以停用限制。"
+
+msgid "Validation"
+msgstr "驗證"
+
+msgid "Test/Development"
+msgstr "測試/開發"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "從 /admin-dashboard/register 搜尋及命名時段時所使用的使用者額外欄位鍵值。"
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "搜尋預先篩選欄位的 JSON 設定。"
 

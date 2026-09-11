@@ -8,6 +8,12 @@ parameters:
                     enabled: false
                     title: 'External'
                     force_as_login_method: false
+                    # When true, an anonymous navigation goes to this provider on its own, with no
+                    # login page. The first enabled provider wins.
+                    # Add "?skipForcedRedirect=1" to any URL to reach the local login form.
+                    force_redirect: false
+                    # URI fragments the redirect never applies to, e.g. ['/catalogue'].
+                    skip_force_redirect_in: []
                     client_id: ''
                     client_secret: ''
                     provider_options:
@@ -33,6 +39,8 @@ parameters:
                     enabled: false
                     title: 'Facebook'
                     force_as_login_method: false
+                    force_redirect: false
+                    skip_force_redirect_in: []
                     client_id: ''
                     client_secret: ''
                     #graph_api_version: 'v20.0'
@@ -41,6 +49,8 @@ parameters:
                     enabled: false
                     title: 'Keycloak'
                     force_as_login_method: false
+                    force_redirect: false
+                    skip_force_redirect_in: []
                     client_id: ''
                     client_secret: ''
                     auth_server_url: ''
@@ -51,6 +61,8 @@ parameters:
                     enabled: false
                     title: 'Azure'
                     force_as_login_method: false
+                    force_redirect: false
+                    skip_force_redirect_in: []
                     client_id: ''
                     client_secret: ''
                     url_api: 'https://graph.microsoft.com'

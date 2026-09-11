@@ -17,6 +17,8 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
@@ -52,6 +54,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private const FEEDBACK_TYPE_POPUP = 3;
     private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
     private const QUESTION_SELECTION_RANDOM = 2;
+    private const STATUS_INCOMPLETE = 'incomplete';
     private const MEDIA_QUESTION = 15;
     private const PAGE_BREAK = 31;
     private const SKILL_ITEM_TYPE_EXERCISE = 1;
@@ -103,9 +106,54 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $this->saveExerciseSkills($quiz, $data, $course, $session);
         $this->saveExerciseExtraFields($quiz, $data);
         $this->saveExerciseGradebookLink($quiz, $data, $course, $session);
+        if ($exerciseId > 0) {
+            $this->deleteCurrentEditorIncompleteAttempts($quiz, $course, $session);
+        }
         $this->entityManager->flush();
 
         return $this->buildResponse($quiz, $course, $session);
+    }
+
+    /**
+     * Legacy exercise/admin.php removes incomplete attempts for the current editor
+     * when exercise settings are edited. Keep the same behavior here so a stale
+     * data_tracking list cannot override a newly saved question/category selection.
+     */
+    private function deleteCurrentEditorIncompleteAttempts(CQuiz $quiz, Course $course, ?Session $session): void
+    {
+        $user = $this->security->getUser();
+        $exerciseId = (int) ($quiz->getIid() ?? 0);
+        if (!$user instanceof User || $exerciseId <= 0) {
+            return;
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('attempt')
+            ->from(TrackEExercise::class, 'attempt')
+            ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(attempt.course) = :courseId')
+            ->andWhere('IDENTITY(attempt.user) = :userId')
+            ->andWhere('attempt.status = :status')
+            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+            ->setParameter('status', self::STATUS_INCOMPLETE)
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(attempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('attempt.session IS NULL');
+        }
+
+        foreach ($queryBuilder->getQuery()->getResult() as $attempt) {
+            if ($attempt instanceof TrackEExercise) {
+                $this->entityManager->remove($attempt);
+            }
+        }
     }
 
     private function createExercise(ExerciseConfiguration $data, Course $course, ?Session $session): CQuiz

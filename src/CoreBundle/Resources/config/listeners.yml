@@ -32,6 +32,13 @@ services:
         tags:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 5}
 
+    # Sends an anonymous visitor to the OAuth2 provider that declares force_redirect.
+    # Priority -10 runs it after AnonymousUserSubscriber (0), so the anonymous account
+    # of a public course keeps its access.
+    Chamilo\CoreBundle\EventListener\ForcedLoginRedirectListener:
+        tags:
+            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: -10}
+
     # Sets the user access in a course listener
     Chamilo\CoreBundle\EventListener\CourseAccessListener:
       tags:

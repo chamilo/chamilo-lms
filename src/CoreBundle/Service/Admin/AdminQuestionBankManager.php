@@ -822,7 +822,7 @@ final readonly class AdminQuestionBankManager
         $html = (string) preg_replace('#<(script|style|iframe|object|embed|form|input|button|meta|link|base)[^>]*>.*?</\1>#is', '', $html);
         $html = strip_tags(
             $html,
-            '<p><br><strong><b><em><i><u><s><ul><ol><li><span><mark><img><a><table><thead><tbody><tfoot><tr><th><td><blockquote><h1><h2><h3><h4><h5><h6><sub><sup><code><pre>'
+            '<div><p><br><strong><b><em><i><u><s><ul><ol><li><span><mark><img><a><table><thead><tbody><tfoot><tr><th><td><blockquote><h1><h2><h3><h4><h5><h6><sub><sup><code><pre>'
         );
         $html = (string) preg_replace('/\s(?:on[a-z]+|style|srcdoc)\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $html);
         $html = (string) preg_replace_callback(

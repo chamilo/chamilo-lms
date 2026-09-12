@@ -32,13 +32,33 @@ class OnlyofficeJwtManager extends JwtManager
 
     public function decode($token, $key, $algorithm = 'HS256')
     {
-        $payload = JWT::decode($token, new Key($key, $algorithm));
+        try {
+            $payload = JWT::decode($token, new Key($key, $algorithm));
+        } catch (UnexpectedValueException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            // A malformed token must be rejected like an invalid one instead of
+            // ending the request on an uncaught error.
+            throw new UnexpectedValueException($e->getMessage(), 0, $e);
+        }
 
         return $payload;
     }
 
+    /**
+     * Key used to sign the hashes exchanged between the editor and the callback.
+     *
+     * It is derived from the platform security key so that the hashes of this
+     * plugin cannot be forged from a token issued by another feature, and so
+     * that they are not signed with the key itself.
+     */
+    public static function getSecurityKey(): string
+    {
+        return hash_hmac('sha256', 'onlyoffice-hash', (string) api_get_security_key());
+    }
+
     public function getHash($object)
     {
-        return $this->encode($object, api_get_security_key());
+        return $this->encode($object, self::getSecurityKey());
     }
 }

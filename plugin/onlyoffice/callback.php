@@ -29,10 +29,10 @@ if (isset($_GET['hash']) && !empty($_GET['hash'])) {
 
     $appSettings = new OnlyofficeAppsettings($plugin);
     $jwtManager = new OnlyofficeJwtManager($appSettings);
-    list($hashData, $error) = $jwtManager->readHash($_GET['hash'], api_get_security_key());
+    list($hashData, $error) = $jwtManager->readHash($_GET['hash'], OnlyofficeJwtManager::getSecurityKey());
     if (null === $hashData) {
         error_log("ONLYOFFICE CALLBACK: ERROR - Invalid hash: ".$error);
-        exit(json_encode(['status' => 'error', 'error' => $error]));
+        exit(json_encode(['status' => 'error', 'error' => 'Invalid hash']));
     }
 
     $type = $hashData->type;
@@ -41,10 +41,23 @@ if (isset($_GET['hash']) && !empty($_GET['hash'])) {
     $docId = $hashData->docId;
     $groupId = $hashData->groupId;
     $sessionId = $hashData->sessionId;
-    $docPath = isset($_GET['docPath']) ? urldecode($_GET['docPath']) : ($hashData->docPath ?? null);
+    // The path is part of the signature: a request parameter must never be able
+    // to change the file the hash was issued for.
+    $docPath = isset($hashData->docPath) ? urldecode($hashData->docPath) : null;
     // Load courseCode for various uses from global scope in other functions
     $courseInfo = api_get_course_info_by_id($courseId);
+    if (empty($courseInfo)) {
+        exit(json_encode(['status' => 'error', 'error' => 'Course not found']));
+    }
     $courseCode = $courseInfo['code'];
+
+    if (!empty($docPath)) {
+        $docPath = OnlyofficeTools::getSafeExercisePath($docPath, $courseInfo);
+        if (null === $docPath) {
+            error_log("ONLYOFFICE CALLBACK: ERROR - Document path not allowed");
+            exit(json_encode(['status' => 'error', 'error' => '403 Access denied']));
+        }
+    }
 
     if (!empty($userId)) {
         $userInfo = api_get_user_info($userId);
@@ -52,7 +65,19 @@ if (isset($_GET['hash']) && !empty($_GET['hash'])) {
         exit(json_encode(['error' => 'User not found']));
     }
 
+    if (empty($userInfo)) {
+        exit(json_encode(['error' => 'User not found']));
+    }
+
     if (api_is_anonymous()) {
+        // The document server calls back without any session: the rights of the
+        // user the hash was issued to are restored for this request only, and the
+        // session is dropped afterwards so that the caller never walks away with
+        // a logged in session.
+        register_shutdown_function(function () {
+            Session::destroy();
+        });
+
         $loggedUser = [
             'user_id' => $userInfo['id'],
             'status' => $userInfo['status'],
@@ -61,8 +86,17 @@ if (isset($_GET['hash']) && !empty($_GET['hash'])) {
 
         Session::write('_user', $loggedUser);
         Login::init_user($loggedUser['user_id'], true);
+    } elseif ((int) $userId !== (int) api_get_user_id()) {
+        // A hash is bound to the user it was issued to: it cannot be replayed
+        // from another account.
+        exit(json_encode(['status' => 'error', 'error' => '403 Access denied']));
     } else {
         $userId = api_get_user_id();
+    }
+
+    if (!empty($docPath) && !OnlyofficeTools::isAllowedToUseExercisePath($docPath)) {
+        error_log("ONLYOFFICE CALLBACK: ERROR - Document not allowed for user ".$userId);
+        exit(json_encode(['status' => 'error', 'error' => '403 Access denied']));
     }
 
     switch ($type) {
@@ -129,7 +163,6 @@ function track(): array
     }
 
     if (!empty($docPath)) {
-        $docPath = urldecode($docPath);
         $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
 
         if (!file_exists($filePath)) {
@@ -139,6 +172,14 @@ function track(): array
         $documentKey = basename($docPath);
         if ($data['status'] == 2 || $data['status'] == 3) {
             if (!empty($data['url'])) {
+                if (!OnlyofficeTools::isAllowedDocumentServerUrl($data['url'], $appSettings)
+                    || !OnlyofficeTools::isSupportedFormat($filePath)
+                ) {
+                    error_log("ONLYOFFICE CALLBACK: ERROR - Document source not allowed");
+
+                    return ['status' => 'error', 'error' => '403 Access denied'];
+                }
+
                 $newContent = file_get_contents($data['url']);
                 if ($newContent === false) {
                     return ['status' => 'error', 'error' => 'Failed to fetch document'];
@@ -214,7 +255,7 @@ function download()
     }
 
     if (!empty($docPath)) {
-        $filePath = api_get_path(SYS_COURSE_PATH).urldecode($docPath);
+        $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
 
         if (!file_exists($filePath)) {
             return ['status' => 'error', 'error' => 'File not found'];
@@ -235,8 +276,10 @@ function download()
         return ['status' => 'error', 'error' => 'Invalid request'];
     }
 
+    $fileName = str_replace(["\r", "\n", '"'], '', $docInfo['title']);
+
     @header('Content-Type: application/octet-stream');
-    @header('Content-Disposition: attachment; filename='.$docInfo['title']);
+    @header('Content-Disposition: attachment; filename="'.$fileName.'"');
 
     readfile($filePath);
     exit;

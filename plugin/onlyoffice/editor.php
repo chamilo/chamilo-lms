@@ -43,6 +43,7 @@ $courseInfo = api_get_course_info();
 if (empty($courseInfo)) {
     api_not_allowed(true);
 }
+api_protect_course_script(true);
 $courseCode = $courseInfo['code'];
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : null;
 $exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : null;
@@ -53,13 +54,28 @@ $fileId = null;
 $fileUrl = null;
 
 if ($docPath) {
-    $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
-    if (!file_exists($filePath)) {
-        error_log("ERROR: Original file not found -> ".$filePath);
-        exit("Error: Document not found.");
+    // The path comes from the request: it may only address a document of the
+    // ONLYOFFICE directory of the current course, in a format handled by the
+    // editor, and an answer only belongs to the user who submitted it.
+    $safeDocPath = OnlyofficeTools::getSafeExercisePath($docPath, $courseInfo);
+    if (null === $safeDocPath
+        || !OnlyofficeTools::isSupportedFormat($safeDocPath)
+        || !OnlyofficeTools::isAllowedToUseExercisePath($safeDocPath)
+    ) {
+        error_log("ERROR: Document not found or not allowed -> ".$docPath);
+        api_not_allowed(true);
     }
 
-    $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+    $docPath = $safeDocPath;
+    $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
+
+    // Without an attempt the editor opens the document attached to the question:
+    // only the course managers may overwrite it.
+    if (empty($exeId) && !api_is_allowed_to_edit(true, true)) {
+        $isReadOnly = 1;
+    }
+
+    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
     $fileUrl = api_get_path(WEB_COURSE_PATH).$docPath;
     $newDocPath = $docPath;
     $userFilePath = $filePath;
@@ -95,11 +111,9 @@ if ($docPath) {
     $jwtManager = new OnlyofficeJwtManager($appSettings);
     $hashUrl = $jwtManager->getHash($data);
     $callbackUrl = api_get_path(WEB_PLUGIN_PATH).'onlyoffice/callback.php?hash='.$hashUrl;
-    if ($exeId) {
-        $callbackUrl .= '&docPath='.urlencode($newDocPath);
-    } else {
-        $callbackUrl .= '&docPath='.urlencode($newDocPath);
-    }
+    // Informative only: the callback reads the path from the signed hash, so this
+    // parameter can no longer override the file the hash was issued for.
+    $callbackUrl .= '&docPath='.urlencode($newDocPath);
 
     $docInfo = [
         'iid' => null,

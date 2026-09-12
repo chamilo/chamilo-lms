@@ -17,6 +17,13 @@
 class OnlyofficeTools
 {
     /**
+     * Sub-directory, relative to the course directory, where the plugin is
+     * allowed to address a file by its raw path: the documents attached to an
+     * exercise and the answers submitted through ONLYOFFICE.
+     */
+    public const EXERCISE_PATH = 'exercises/onlyoffice';
+
+    /**
      * Return button-link to onlyoffice editor for file.
      */
     public static function getButtonEdit(array $document_data): string
@@ -229,5 +236,134 @@ class OnlyofficeTools
         }
 
         return '';
+    }
+
+    /**
+     * Resolve a course-relative document path and check that it stays inside the
+     * ONLYOFFICE directory of the given course.
+     *
+     * Raw paths reach the plugin from the request (editor) and from the signed
+     * hash (callback), so they must never be used to address a file as they are.
+     *
+     * @return string|null the canonical course-relative path, or null when the path is not acceptable
+     */
+    public static function getSafeExercisePath(?string $docPath, ?array $courseInfo): ?string
+    {
+        if (empty($docPath) || empty($courseInfo['directory'])) {
+            return null;
+        }
+
+        $docPath = str_replace('\\', '/', $docPath);
+        if (false !== strpos($docPath, "\0")) {
+            return null;
+        }
+
+        $coursesDir = realpath(api_get_path(SYS_COURSE_PATH));
+        if (false === $coursesDir) {
+            return null;
+        }
+
+        $baseDir = realpath($coursesDir.'/'.$courseInfo['directory'].'/'.self::EXERCISE_PATH);
+        $realPath = realpath($coursesDir.'/'.ltrim($docPath, '/'));
+
+        if (false === $baseDir || false === $realPath || !is_file($realPath)) {
+            return null;
+        }
+
+        if (0 !== strpos($realPath, $baseDir.DIRECTORY_SEPARATOR)) {
+            return null;
+        }
+
+        return substr($realPath, strlen($coursesDir) + 1);
+    }
+
+    /**
+     * Check that the current user may address a file by its raw path.
+     *
+     * The answers are stored in a directory named after the user who submitted
+     * them, so they are only available to their author and to the course
+     * managers.
+     */
+    public static function isAllowedToUseExercisePath(string $docPath): bool
+    {
+        if (!preg_match('#/(\d+)/response_\d+\.[^/]+$#', $docPath, $matches)) {
+            return true;
+        }
+
+        if ((int) $matches[1] === (int) api_get_user_id()) {
+            return true;
+        }
+
+        return api_is_allowed_to_edit(true, true);
+    }
+
+    /**
+     * Check that a file uses a format handled by ONLYOFFICE, so that the plugin
+     * never creates or overwrites, for instance, a PHP script.
+     */
+    public static function isSupportedFormat(string $fileName): bool
+    {
+        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        if (!preg_match('/^[a-z0-9]{1,10}$/', $extension)) {
+            return false;
+        }
+
+        $formatsManager = new OnlyofficeFormatsManager();
+
+        foreach ($formatsManager->getFormatsList() as $name => $format) {
+            if ($extension === (string) $name || $extension === $format->getName()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check that a URL received in a callback body points to the configured
+     * document server.
+     *
+     * The document server is the only legitimate source of a new revision, and
+     * restricting the scheme also prevents the content from being read through a
+     * PHP stream wrapper (data://, file://, php://...).
+     */
+    public static function isAllowedDocumentServerUrl($url, OnlyofficeAppsettings $appSettings): bool
+    {
+        if (!is_string($url) || empty($url)) {
+            return false;
+        }
+
+        $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
+        if (!in_array($scheme, ['http', 'https'], true)) {
+            return false;
+        }
+
+        $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+        if (empty($host)) {
+            return false;
+        }
+
+        $allowedHosts = [];
+        $serverUrls = [
+            $appSettings->getDocumentServerUrl(),
+            $appSettings->getDocumentServerInternalUrl(),
+            $appSettings->getStorageUrl(),
+        ];
+
+        foreach ($serverUrls as $serverUrl) {
+            $serverHost = strtolower((string) parse_url((string) $serverUrl, PHP_URL_HOST));
+            if (!empty($serverHost)) {
+                $allowedHosts[] = $serverHost;
+            }
+        }
+
+        // The document server may be configured with a relative address: there is
+        // then no host to compare with and only the scheme can be enforced.
+        if (empty($allowedHosts)) {
+            return true;
+        }
+
+        return in_array($host, $allowedHosts, true);
     }
 }

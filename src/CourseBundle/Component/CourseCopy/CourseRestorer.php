@@ -3433,7 +3433,11 @@ class CourseRestorer
     ): void {
         // Helper to actually persist + move file
         $persistAttachmentFromFile = function (string $src, string $filename, ?string $comment) use ($entity, $attachRepo, $em): void {
-            if (!is_file($src) || !is_readable($src)) {
+            // Security: the attachment path comes from the backup, so confine it to the
+            // extracted backup. Otherwise a tampered archive reads an arbitrary file of the
+            // server and publishes it as a downloadable attachment.
+            $resolvedSrc = $this->resolveFileInsideBackup($src);
+            if (null === $resolvedSrc) {
                 $this->dlog('restore_events: attachment source not readable', ['src' => $src]);
 
                 return;
@@ -3464,12 +3468,12 @@ class CourseRestorer
             $em->flush();
 
             if (method_exists($attachRepo, 'addFileFromLocalPath')) {
-                $attachRepo->addFileFromLocalPath($attachment, $src);
+                $attachRepo->addFileFromLocalPath($attachment, $resolvedSrc);
             } else {
                 $dstDir = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/calendar/';
                 @mkdir($dstDir, 0775, true);
                 $newName = uniqid('calendar_', true);
-                @copy($src, $dstDir.$newName);
+                @copy($resolvedSrc, $dstDir.$newName);
             }
 
             $this->dlog('restore_events: attachment created', [
@@ -8304,26 +8308,31 @@ class CourseRestorer
             $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
             foreach ($resources[RESOURCE_ASSET] as $asset) {
-                // Security: confine the backup-supplied asset path to prevent a tampered
-                // backup from escaping the course directory (-> arbitrary file write -> RCE).
-                if (!$this->isSafeBackupPath((string) $asset->path)) {
+                // Security: the asset path comes from the backup, so a tampered archive
+                // controls it. Confine the destination to the sub-trees the exporter fills
+                // and neutralize an executable extension, to prevent an arbitrary file
+                // write. The source keeps the real name of the archive entry.
+                $destination = $this->getSafeAssetPath((string) $asset->path);
+                if (null === $destination) {
                     continue;
                 }
 
-                if (is_file($this->course->backup_path.'/'.$asset->path)
-                    && is_readable($this->course->backup_path.'/'.$asset->path)
-                    && is_dir(\dirname($path.$asset->path))
-                    && is_writable(\dirname($path.$asset->path))
+                $source = $this->resolveFileInsideBackup(
+                    $this->course->backup_path.'/'.$asset->path
+                );
+                if (null === $source) {
+                    continue;
+                }
+
+                if (is_dir(\dirname($path.$destination))
+                    && is_writable(\dirname($path.$destination))
                 ) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
                             break;
 
                         case FILE_OVERWRITE:
-                            copy(
-                                $this->course->backup_path.'/'.$asset->path,
-                                $path.$asset->path
-                            );
+                            copy($source, $path.$destination);
 
                             break;
                     }
@@ -8737,6 +8746,119 @@ class CourseRestorer
         }
 
         return true;
+    }
+
+    /**
+     * Same as isSafeBackupPath(), but also rejects an absolute path and a remote URL,
+     * so the value can only ever address a file inside the extracted backup.
+     */
+    private function isSafeRelativeBackupPath(string $path): bool
+    {
+        if ('' === $path || !$this->isSafeBackupPath($path)) {
+            return false;
+        }
+
+        if (str_contains($path, '://')) {
+            return false;
+        }
+
+        $normalized = str_replace('\\', '/', $path);
+
+        return !str_starts_with($normalized, '/') && 1 !== preg_match('#^[a-z]:#i', $normalized);
+    }
+
+    /**
+     * Returns the directories the current backup was extracted to, as real paths with a
+     * trailing slash.
+     *
+     * @return string[]
+     */
+    private function getBackupRoots(): array
+    {
+        $roots = [];
+
+        $candidates = [
+            (string) ($this->course->resources['__meta']['archiver_root'] ?? ''),
+            (string) ($this->course->backup_path ?? ''),
+        ];
+
+        foreach ($candidates as $candidate) {
+            if ('' === $candidate) {
+                continue;
+            }
+
+            $real = realpath(rtrim($candidate, '/'));
+            if (false !== $real) {
+                $roots[] = rtrim($real, '/').'/';
+            }
+        }
+
+        return array_values(array_unique($roots));
+    }
+
+    /**
+     * Resolves a candidate path and keeps it only when it stays inside the extracted
+     * backup. Every path a backup carries is controlled by the user who uploads it, so a
+     * candidate that escapes those roots would reach a file the importer must never read.
+     */
+    private function resolveInsideBackup(string $candidate): ?string
+    {
+        if ('' === $candidate || str_contains($candidate, "\0")) {
+            return null;
+        }
+
+        $real = realpath($candidate);
+        if (false === $real) {
+            return null;
+        }
+
+        foreach ($this->getBackupRoots() as $root) {
+            if (str_starts_with(rtrim($real, '/').'/', $root)) {
+                return $real;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Same as resolveInsideBackup(), but only accepts a readable file.
+     */
+    private function resolveFileInsideBackup(string $candidate): ?string
+    {
+        $real = $this->resolveInsideBackup($candidate);
+
+        if (null === $real || !is_file($real) || !is_readable($real)) {
+            return null;
+        }
+
+        return $real;
+    }
+
+    /**
+     * Confines the destination name of a backup-supplied asset to the sub-trees the course
+     * exporter really fills, and neutralizes an executable extension on that name.
+     */
+    private function getSafeAssetPath(string $path): ?string
+    {
+        if (!$this->isSafeRelativeBackupPath($path)) {
+            return null;
+        }
+
+        $relative = ltrim(str_replace('\\', '/', $path), '/');
+        if ('' === $relative || str_ends_with($relative, '/')) {
+            return null;
+        }
+
+        $allowed = !str_contains($relative, '/')
+            || str_starts_with($relative, 'document/')
+            || str_starts_with($relative, 'upload/learning_path/images/');
+
+        if (!$allowed) {
+            return null;
+        }
+
+        return disable_dangerous_file($relative);
     }
 
     private function extractSingleDocumentEntryFromBackupZip(
@@ -9665,12 +9787,20 @@ class CourseRestorer
                     }
 
                     foreach ($candidates as $abs) {
-                        if (is_file($abs) && is_readable($abs)) {
-                            return ['zip' => $abs, 'temp' => false];
+                        // Security: zip and path come from the backup. Confine the package to
+                        // the extracted backup, so a tampered archive cannot zip an arbitrary
+                        // directory of the server and import it as a lesson.
+                        $resolved = $this->resolveInsideBackup($abs);
+                        if (null === $resolved) {
+                            continue;
                         }
 
-                        if (is_dir($abs) && is_readable($abs)) {
-                            $tmp = $this->zipScormFolder($abs);
+                        if (is_file($resolved) && is_readable($resolved)) {
+                            return ['zip' => $resolved, 'temp' => false];
+                        }
+
+                        if (is_dir($resolved) && is_readable($resolved)) {
+                            $tmp = $this->zipScormFolder($resolved);
                             if ($tmp) {
                                 return ['zip' => $tmp, 'temp' => true];
                             }
@@ -10133,13 +10263,12 @@ class CourseRestorer
         // 1) Strongest source: explicit sidecar zip path (e.g. files/95/<contenthash>)
         $rawZip = trim(str_replace('\\', '/', (string) ($sc->zip ?? '')));
         if ('' !== $rawZip) {
-            $zipCandidates = [];
-
-            if (is_file($rawZip)) {
-                $zipCandidates[] = $rawZip;
-            }
-
-            $zipCandidates[] = $backupPath.'/'.ltrim($rawZip, '/');
+            // Security: zip comes from the backup. Both candidates go through the same
+            // confinement below, so an absolute path of the server is never accepted.
+            $zipCandidates = [
+                $rawZip,
+                $backupPath.'/'.ltrim($rawZip, '/'),
+            ];
 
             $seenZip = [];
             foreach ($zipCandidates as $absZip) {
@@ -10149,8 +10278,9 @@ class CourseRestorer
                 }
                 $seenZip[$absZip] = true;
 
-                if (is_file($absZip) && is_readable($absZip) && filesize($absZip) > 0) {
-                    return ['zip' => $absZip, 'temp' => false];
+                $resolvedZip = $this->resolveFileInsideBackup($absZip);
+                if (null !== $resolvedZip && filesize($resolvedZip) > 0) {
+                    return ['zip' => $resolvedZip, 'temp' => false];
                 }
             }
         }
@@ -10203,17 +10333,23 @@ class CourseRestorer
             }
             $seen[$abs] = true;
 
-            if (is_file($abs) && is_readable($abs) && filesize($abs) > 0) {
-                return ['zip' => $abs, 'temp' => false];
+            // Security: path and name come from the backup. Confine every candidate to the
+            // extracted backup, so a tampered archive cannot zip an arbitrary directory of
+            // the server and import it as a lesson.
+            $resolved = $this->resolveInsideBackup($abs);
+            $resolvedZip = $this->resolveFileInsideBackup($abs.'.zip');
+
+            if (null !== $resolved && is_file($resolved) && is_readable($resolved) && filesize($resolved) > 0) {
+                return ['zip' => $resolved, 'temp' => false];
             }
 
-            if (is_file($abs.'.zip') && is_readable($abs.'.zip') && filesize($abs.'.zip') > 0) {
-                return ['zip' => $abs.'.zip', 'temp' => false];
+            if (null !== $resolvedZip && filesize($resolvedZip) > 0) {
+                return ['zip' => $resolvedZip, 'temp' => false];
             }
 
-            if (is_dir($abs)) {
+            if (null !== $resolved && is_dir($resolved)) {
                 return $this->zipDirectoryToTemp(
-                    $abs,
+                    $resolved,
                     'scorm_'.preg_replace('#[^A-Za-z0-9_\-]#', '_', $normalizedFolder ?: 'package')
                 );
             }
@@ -10389,8 +10525,12 @@ class CourseRestorer
                 $candidate = rtrim($candidate, '/').'/'.$filename;
             }
 
-            if (is_file($candidate) && is_readable($candidate)) {
-                return $candidate;
+            // Security: path, filename and asset_relpath all come from the backup. Confine
+            // the candidate to the extracted backup, so a tampered archive cannot publish an
+            // arbitrary file of the server as an announcement attachment.
+            $resolved = $this->resolveFileInsideBackup($candidate);
+            if (null !== $resolved) {
+                return $resolved;
             }
         }
 

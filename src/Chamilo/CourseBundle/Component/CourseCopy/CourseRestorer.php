@@ -1657,12 +1657,17 @@ class CourseRestorer
                     $attachment_event = Database::query($sql);
                     $attachment_event = Database::fetch_object($attachment_event);
 
-                    if (file_exists($origin_path.$attachment_event->path) &&
-                        !is_dir($origin_path.$attachment_event->path)
+                    // Security: keep the attachment name inside the calendar
+                    // upload directory, it may come from a tampered backup.
+                    $attachmentPath = $this->getSafeAttachmentPath($attachment_event->path);
+
+                    if ('' !== $attachmentPath &&
+                        file_exists($origin_path.$attachmentPath) &&
+                        !is_dir($origin_path.$attachmentPath)
                     ) {
                         $new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
                         $copy_result = copy(
-                            $origin_path.$attachment_event->path,
+                            $origin_path.$attachmentPath,
                             $destination_path.$new_filename
                         );
                         //$copy_result = true;
@@ -1686,13 +1691,18 @@ class CourseRestorer
                     }
                 } else {
                     // get the info of the file
-                    if (!empty($event->attachment_path) &&
-                        is_file($origin_path.$event->attachment_path) &&
-                        is_readable($origin_path.$event->attachment_path)
+                    // Security: the attachment name comes from the (possibly
+                    // tampered) backup archive; strip any directory component so
+                    // it cannot escape the calendar upload directory.
+                    $attachmentPath = $this->getSafeAttachmentPath($event->attachment_path);
+
+                    if ('' !== $attachmentPath &&
+                        is_file($origin_path.$attachmentPath) &&
+                        is_readable($origin_path.$attachmentPath)
                     ) {
                         $new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
                         $copy_result = copy(
-                            $origin_path.$event->attachment_path,
+                            $origin_path.$attachmentPath,
                             $destination_path.$new_filename
                         );
                         if ($copy_result) {
@@ -1833,12 +1843,17 @@ class CourseRestorer
                     $attachment_event = Database::query($sql);
                     $attachment_event = Database::fetch_object($attachment_event);
 
-                    if (file_exists($origin_path.$attachment_event->path) &&
-                        !is_dir($origin_path.$attachment_event->path)
+                    // Security: keep the attachment name inside the announcements
+                    // upload directory, it may come from a tampered backup.
+                    $attachmentPath = $this->getSafeAttachmentPath($attachment_event->path);
+
+                    if ('' !== $attachmentPath &&
+                        file_exists($origin_path.$attachmentPath) &&
+                        !is_dir($origin_path.$attachmentPath)
                     ) {
                         $new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
                         $copy_result = copy(
-                            $origin_path.$attachment_event->path,
+                            $origin_path.$attachmentPath,
                             $destination_path.$new_filename
                         );
 
@@ -1864,12 +1879,17 @@ class CourseRestorer
                     }
                 } else {
                     // get the info of the file
-                    if (!empty($announcement->attachment_path) &&
-                        is_file($origin_path.$announcement->attachment_path) &&
-                        is_readable($origin_path.$announcement->attachment_path)
+                    // Security: the attachment name comes from the (possibly
+                    // tampered) backup archive; strip any directory component so
+                    // it cannot escape the announcements upload directory.
+                    $attachmentPath = $this->getSafeAttachmentPath($announcement->attachment_path);
+
+                    if ('' !== $attachmentPath &&
+                        is_file($origin_path.$attachmentPath) &&
+                        is_readable($origin_path.$attachmentPath)
                     ) {
                         $new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
-                        $copy_result = copy($origin_path.$announcement->attachment_path, $destination_path.$new_filename);
+                        $copy_result = copy($origin_path.$attachmentPath, $destination_path.$new_filename);
 
                         if ($copy_result) {
                             $table_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
@@ -2892,18 +2912,24 @@ class CourseRestorer
                 }
 
                 // Adding the LP image
-                if (!empty($lp->preview_image)) {
-                    $new_filename = uniqid('').substr(
-                        $lp->preview_image,
-                        strlen($lp->preview_image) - 7,
-                        strlen($lp->preview_image)
+                // Security: the preview image name comes from the (possibly
+                // tampered) backup archive. Keep it inside the images directory
+                // and neutralize executable file names before copying it.
+                if (!empty($lp->preview_image) && $this->isSafeBackupPath($lp->preview_image)) {
+                    $previewImage = basename($lp->preview_image);
+                    $new_filename = disable_dangerous_file(
+                        uniqid('').substr(
+                            $previewImage,
+                            strlen($previewImage) - 7,
+                            strlen($previewImage)
+                        )
                     );
 
-                    if (file_exists($origin_path.$lp->preview_image) &&
-                        !is_dir($origin_path.$lp->preview_image)
+                    if (file_exists($origin_path.$previewImage) &&
+                        !is_dir($origin_path.$previewImage)
                     ) {
                         $copy_result = copy(
-                            $origin_path.$lp->preview_image,
+                            $origin_path.$previewImage,
                             $destination_path.$new_filename
                         );
                         if ($copy_result) {
@@ -3541,6 +3567,13 @@ class CourseRestorer
                     dirname($xapiTool->params['launch_url'])
                 );
 
+                // Security: $launchPath is derived from the backup-supplied
+                // launch URL and feeds mkdir() and copyDirTo() on both sides.
+                // Only accept a relative path staying inside the course tree.
+                if (!$this->isSafeRelativeBackupPath($launchPath)) {
+                    continue;
+                }
+
                 $originPath = $this->course->backup_path.'/'.$launchPath;
                 $destinationPath = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/'.$launchPath;
                 $xapiDir = dirname($destinationPath);
@@ -3964,19 +3997,29 @@ class CourseRestorer
             $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
             foreach ($resources[RESOURCE_ASSET] as $asset) {
-                if (is_file($this->course->backup_path.'/'.$asset->path) &&
-                    is_readable($this->course->backup_path.'/'.$asset->path) &&
-                    is_dir(dirname($path.$asset->path)) &&
-                    is_writeable(dirname($path.$asset->path))
+                // Security: $asset->path comes from the (possibly tampered)
+                // backup archive and is used as-is to build the destination
+                // file name. Confine it to the sub-trees the course builder
+                // actually fills and neutralize executable file names, the same
+                // way restore_documents() does.
+                $assetPath = $this->getSafeAssetPath($asset->path);
+                if ('' === $assetPath) {
+                    continue;
+                }
+
+                $originFile = $this->course->backup_path.'/'.$assetPath;
+                $destinationFile = $path.disable_dangerous_file($assetPath);
+
+                if (is_file($originFile) &&
+                    is_readable($originFile) &&
+                    is_dir(dirname($destinationFile)) &&
+                    is_writeable(dirname($destinationFile))
                 ) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
                             break;
                         case FILE_OVERWRITE:
-                            copy(
-                                $this->course->backup_path.'/'.$asset->path,
-                                $path.$asset->path
-                            );
+                            copy($originFile, $destinationFile);
                             break;
                     }
                 }
@@ -4090,6 +4133,84 @@ class CourseRestorer
         }
 
         return true;
+    }
+
+    /**
+     * Validates the name of an attachment coming from an (untrusted) course
+     * backup archive.
+     *
+     * Event and announcement attachments are always stored as a flat file name
+     * inside a fixed upload directory, so any directory component found here is
+     * tampered metadata and is stripped.
+     *
+     * @param mixed $path
+     *
+     * @return string The safe file name, or an empty string
+     */
+    private function getSafeAttachmentPath($path): string
+    {
+        return !$this->isSafeBackupPath($path) ? '' : basename($path);
+    }
+
+    /**
+     * Checks that a path coming from an (untrusted) course backup archive is a
+     * relative path that cannot leave the backup or the course directory.
+     *
+     * On top of isSafeBackupPath(), it rejects absolute paths and absolute URLs,
+     * which would otherwise be concatenated blindly to the backup and course
+     * directories.
+     *
+     * @param mixed $path
+     *
+     * @return bool True when the path is safe to use
+     */
+    private function isSafeRelativeBackupPath($path): bool
+    {
+        return $this->isSafeBackupPath($path) && '' !== $path
+            ? '/' !== $path[0] && false === strpos($path, '://')
+            : false;
+    }
+
+    /**
+     * Validates the relative path of an asset coming from an (untrusted) course
+     * backup archive and returns it normalized, or an empty string when the
+     * asset must be discarded.
+     *
+     * The course builder only registers three kinds of assets: the course image
+     * in the course root, learning path item audio under "document/" and
+     * learning path preview images under "upload/learning_path/images/".
+     * Anything else in the archive is tampered metadata.
+     *
+     * @param mixed $path
+     *
+     * @return string The safe relative path, or an empty string
+     */
+    private function getSafeAssetPath($path): string
+    {
+        if (!$this->isSafeBackupPath($path)) {
+            return '';
+        }
+
+        $path = ltrim($path, '/');
+
+        if ('' === $path) {
+            return '';
+        }
+
+        if (false === strpos($path, '/')) {
+            // Course image, stored in the course root.
+            return $path;
+        }
+
+        $allowedPrefixList = ['document/', 'upload/learning_path/images/'];
+
+        foreach ($allowedPrefixList as $allowedPrefix) {
+            if (0 === strpos($path, $allowedPrefix)) {
+                return $path;
+            }
+        }
+
+        return '';
     }
 
     /**

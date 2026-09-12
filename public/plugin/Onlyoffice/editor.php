@@ -71,6 +71,10 @@ if (empty($courseInfo)) {
     api_not_allowed(true);
 }
 
+// The editor issues signed download and save hashes, so the caller must be
+// allowed inside the current course before any hash is built.
+api_protect_course_script(true);
+
 $courseCode = $courseInfo['code'];
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : null;
 $exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : null;
@@ -366,6 +370,16 @@ if (!empty($resourceNodeId)) {
         'versionToken' => $versionToken,
     ]);
 } elseif (!empty($docId)) {
+    // The document id comes from the request, so it must belong to the course
+    // the caller was authorized for.
+    if (!documentBelongsToCourseForOnlyofficeEditor($docId, $courseId)) {
+        onlyofficeEditorLog('ERROR', 'Document does not belong to the current course', [
+            'docId' => $docId,
+            'courseId' => $courseId,
+        ]);
+        api_not_allowed(true);
+    }
+
     $resolvedC2 = resolveDocumentSourceFromC2ForEditor($docId);
 
     if (null !== $resolvedC2) {
@@ -1082,6 +1096,42 @@ if ($hideChamiloLayout) {
     <?php
 } else {
     Display::display_footer();
+}
+
+/**
+ * Check that a document is linked to the given course.
+ */
+function documentBelongsToCourseForOnlyofficeEditor(int $docId, int $courseId): bool
+{
+    if ($docId <= 0 || $courseId <= 0) {
+        return false;
+    }
+
+    $entityManager = getEntityManagerForOnlyofficeEditor();
+    if (null === $entityManager) {
+        return false;
+    }
+
+    /** @var CDocument|null $document */
+    $document = $entityManager->getRepository(CDocument::class)->find($docId);
+    if (!$document instanceof CDocument) {
+        return false;
+    }
+
+    $resourceNode = $document->getResourceNode();
+    if (!$resourceNode instanceof ResourceNode) {
+        return false;
+    }
+
+    foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+        $linkedCourse = $resourceLink->getCourse();
+
+        if (null !== $linkedCourse && (int) $linkedCourse->getId() === $courseId) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /**

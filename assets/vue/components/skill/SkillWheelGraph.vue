@@ -22,13 +22,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="aspect-square">
-    <div ref="wheelContainer" />
+  <div class="w-full flex justify-center">
+    <div class="w-full max-w-[64rem]">
+      <div
+        ref="wheelContainer"
+        class="w-full"
+      />
 
-    <Skeleton
-      v-if="isLoading"
-      shape="circle"
-      size="100%"
-    />
+      <Skeleton
+        v-if="isLoading"
+        class="w-full aspect-square"
+        shape="circle"
+        size="100%"
+      />
+    </div>
   </div>
 </template>

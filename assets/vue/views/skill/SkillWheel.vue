@@ -238,11 +238,12 @@ async function onSearchProfile(profile) {
         ref="wheelEl"
         @skill-detail="onSkillDetail"
       />
-      <SkillProfileMatches
+      <div
         v-if="canUseProfiles"
         v-show="showProfileMatches"
-        ref="profileMatchesEl"
-      />
+      >
+        <SkillProfileMatches ref="profileMatchesEl" />
+      </div>
     </div>
   </div>
 

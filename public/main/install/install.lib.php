@@ -325,15 +325,10 @@ function get_config_param($param, $updatePath = '')
                 }
 
                 if ('system_version' === $param) {
-                    try {
-                        $databaseVersion = get_config_param_from_db('chamilo_database_version');
-                        if (!empty($databaseVersion)) {
-                            return $databaseVersion;
-                        }
-                    } catch (\Throwable) {
-                        // Fall back to the package metadata below.
-                    }
-
+                    // The source version comes from the package metadata of the tree being
+                    // upgraded. It used to be read from chamilo_database_version first, but
+                    // that setting held values the regular expressions below never matched
+                    // (a 1.11.x database reports "1.11.0.6", not "1.11.28").
                     $versionFiles = [
                         $updatePath.'version.php',
                         $updatePath.'public/main/install/version.php',
@@ -1800,9 +1795,8 @@ function checkCanCreateFile(string $file): bool
  * platform that still has pending Doctrine migrations is a legitimate upgrade and
  * stays open, which is what makes the 2.x -> 3.x web upgrade possible.
  *
- * The decision never reads chamilo_database_version: that setting is deprecated and
- * a fresh install seeds it with a stale schema default. Doctrine's own migration
- * metadata is the source of truth instead. When that metadata is missing the request
+ * Doctrine's own migration metadata is the source of truth. When that metadata is missing
+ * the request
  * is refused, because nothing can then prove that an upgrade is pending.
  */
 function isInstallerLocked(): bool
@@ -1885,9 +1879,7 @@ function getInstallerMigrations(): array
  * Checks if the update option is available.
  *
  * An installed platform whose database still has pending migrations is an upgrade in
- * progress, which is what the 2.x to 3.x web upgrade needs. The deprecated
- * chamilo_database_version setting is never read: migrations never raise it, so a fresh
- * install was once wrongly flagged as needing an update.
+ * progress, which is what the 2.x to 3.x web upgrade needs.
  */
 function isUpdateAvailable(): bool
 {
@@ -1900,8 +1892,7 @@ function isUpdateAvailable(): bool
  * V200 namespace as the existing schema baseline so Doctrine only executes the migrations
  * introduced after it.
  *
- * The detection reads the schema, never chamilo_database_version: that setting is
- * deprecated and carries a stale default. The resource_node table exists only once the
+ * The detection reads the schema. The resource_node table exists only once the
  * V200 namespace has run, so a 1.11.x database never matches. An interrupted 1.11.x
  * migration does not match either, because it already has migration metadata rows.
  */
@@ -1948,42 +1939,6 @@ function baselineV200MigrationsForModernUpgrade(
     }
 
     return $baselineCount;
-}
-
-/**
- * Persist the target Chamilo database version after a successful web upgrade.
- */
-function setChamiloDatabaseVersion(Connection $connection, string $version): void
-{
-    $schema = $connection->createSchemaManager();
-    $updated = false;
-
-    foreach (['settings_current', 'settings'] as $table) {
-        if (!$schema->tablesExist([$table])) {
-            continue;
-        }
-
-        $hasVersionSetting = $connection->fetchOne(
-            "SELECT 1 FROM {$table} WHERE variable = :variable LIMIT 1",
-            ['variable' => 'chamilo_database_version']
-        );
-        if (false === $hasVersionSetting || null === $hasVersionSetting) {
-            continue;
-        }
-
-        $connection->executeStatement(
-            "UPDATE {$table} SET selected_value = :version WHERE variable = :variable",
-            [
-                'version' => $version,
-                'variable' => 'chamilo_database_version',
-            ]
-        );
-        $updated = true;
-    }
-
-    if (!$updated) {
-        throw new \RuntimeException('Could not persist the upgraded Chamilo database version.');
-    }
 }
 
 /**
@@ -2139,7 +2094,6 @@ function getLastExecutedMigration(Connection $connection): string
     return $result['version'] ?? '';
 }
 
-
 /**
  * Executes the database migration and returns the status.
  *
@@ -2215,14 +2169,6 @@ function executeMigration(): array
             if (0 !== $application->run($themesInput, $themesOutput)) {
                 error_log('Could not upload the themes: '.trim($themesOutput->fetch()));
             }
-
-            $versionInfo = require __DIR__.'/version.php';
-            $targetVersion = (string) ($versionInfo['new_version'] ?? '');
-            if ('' === $targetVersion) {
-                throw new RuntimeException('Could not determine the target Chamilo version after migration.');
-            }
-
-            setChamiloDatabaseVersion($connection, $targetVersion);
 
             $resultStatus['status'] = true;
             $resultStatus['message'] = 'Migration and bundled demo course installation completed successfully.';

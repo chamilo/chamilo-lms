@@ -16,7 +16,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
-use Doctrine\Migrations\Query\Query;
 use Doctrine\Migrations\Version\Direction;
 use Doctrine\Migrations\Version\ExecutionResult;
 use Doctrine\Migrations\Version\Version;
@@ -1393,88 +1392,6 @@ function installSettings(
 }
 
 /**
- * Executes DB changes based in the classes defined in
- * /src/CoreBundle/Migrations/Schema/V200/*.
- *
- * @return bool
- */
-function migrate(EntityManager $manager)
-{
-    $debug = true;
-    $connection = $manager->getConnection();
-    $to = null; // if $to == null then schema will be migrated to latest version
-
-    // Loading migration configuration.
-    $config = new PhpFile('./migrations.php');
-    $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
-
-    // Check if old "version" table exists from 1.11.x, use new version.
-    $schema = $manager->getConnection()->createSchemaManager();
-    $dropOldVersionTable = false;
-    if ($schema->tablesExist('version')) {
-        $columns = $schema->listTableColumns('version');
-        if (in_array('id', array_keys($columns), true)) {
-            $dropOldVersionTable = true;
-        }
-    }
-
-    if ($dropOldVersionTable) {
-        error_log('Drop version table');
-        $schema->dropTable('version');
-    }
-
-    // Creates "version" table.
-    $dependency->getMetadataStorage()->ensureInitialized();
-
-    // Loading migrations.
-    $migratorConfigurationFactory = $dependency->getConsoleInputMigratorConfigurationFactory();
-    $result = '';
-    $input = new Symfony\Component\Console\Input\StringInput($result);
-    $migratorConfiguration = $migratorConfigurationFactory->getMigratorConfiguration($input);
-    $migrator = $dependency->getMigrator();
-    $planCalculator = $dependency->getMigrationPlanCalculator();
-    $migrations = $planCalculator->getMigrations();
-    $lastVersion = $migrations->getLast();
-
-    $plan = $dependency->getMigrationPlanCalculator()->getPlanUntilVersion($lastVersion->getVersion());
-
-    foreach ($plan->getItems() as $item) {
-        error_log("Version to be executed: ".$item->getVersion());
-        $item->getMigration()->setEntityManager($manager);
-        $item->getMigration()->setContainer(Container::$container);
-    }
-
-    // Execute migration!!
-    /** @var $migratedVersions */
-    $versions = $migrator->migrate($plan, $migratorConfiguration);
-
-    if ($debug) {
-        /** @var Query[] $queries */
-        $versionCounter = 1;
-        foreach ($versions as $version => $queries) {
-            $total = count($queries);
-            //echo '----------------------------------------------<br />';
-            $message = "VERSION: $version";
-            //echo "$message<br/>";
-            error_log('-------------------------------------');
-            error_log($message);
-            $counter = 1;
-            foreach ($queries as $query) {
-                $sql = $query->getStatement();
-                //echo "<code>$sql</code><br>";
-                error_log("$counter/$total : $sql");
-                $counter++;
-            }
-            $versionCounter++;
-        }
-        //echo '<br/>DONE!<br />';
-        error_log('DONE!');
-    }
-
-    return true;
-}
-
-/**
  * @param string $distFile
  * @param string $envFile
  * @param array  $params
@@ -1843,68 +1760,6 @@ function rrmdir($dir)
         reset($objects);
         rmdir($dir);
     }
-}
-
-/**
- * Control the different steps of the migration through a big switch.
- *
- * @param string        $fromVersion
- * @param EntityManager $manager
- * @param bool          $processFiles
- *
- * @return bool Always returns true except if the process is broken
- */
-function migrateSwitch($fromVersion, $manager, $processFiles = true)
-{
-    error_log('-----------------------------------------');
-    error_log('Starting migration process from '.$fromVersion.' ('.date('Y-m-d H:i:s').')');
-    //echo '<a class="btn btn--secondary" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
-    //echo '<div id="details" style="display:none">';
-    $connection = $manager->getConnection();
-
-    switch ($fromVersion) {
-        case '1.11.0':
-        case '1.11.1':
-        case '1.11.2':
-        case '1.11.4':
-        case '1.11.6':
-        case '1.11.8':
-        case '1.11.10':
-        case '1.11.12':
-        case '1.11.14':
-        case '1.11.16':
-            $start = time();
-            // Migrate using the migration files located in:
-            // /srv/http/chamilo2/src/CoreBundle/Migrations/Schema/V200
-            $result = migrate($manager);
-            error_log('-----------------------------------------');
-
-            if ($result) {
-                error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
-                $sql = "UPDATE settings SET selected_value = '2.0.0'
-                        WHERE variable = 'chamilo_database_version'";
-                $connection->executeQuery($sql);
-                if ($processFiles) {
-                    error_log('Update config files');
-                    include __DIR__.'/update-files-1.11.0-2.0.0.inc.php';
-                    // Only updates the configuration.inc.php with the new version
-                    //include __DIR__.'/update-configuration.inc.php';
-                }
-                $finish = time();
-                $total = round(($finish - $start) / 60);
-                error_log('Database migration finished:  ('.date('Y-m-d H:i:s').') took '.$total.' minutes');
-            } else {
-                error_log('There was an error during running migrations. Check error.log');
-                exit;
-            }
-            break;
-        default:
-            break;
-    }
-
-    //echo '</div>';
-
-    return true;
 }
 
 /**

@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\TrackEAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
@@ -72,6 +73,7 @@ final readonly class AdminStatisticsQueryService
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ResourceLinkRepository $resourceLinkRepository,
+        private LanguageRepository $languageRepository,
         private AccessUrlHelper $accessUrlHelper,
         private SettingsManager $settingsManager,
         private Security $security,
@@ -430,9 +432,16 @@ final readonly class AdminStatisticsQueryService
             }
         }
 
-        $values = [];
+        $totalsByIsocode = [];
         foreach ($queryBuilder->getQuery()->getArrayResult() as $row) {
-            $values[(string) ($row['language'] ?? '')] = (int) $row['total'];
+            $totalsByIsocode[(string) ($row['language'] ?? '')] = (int) $row['total'];
+        }
+
+        $namesByIsocode = $this->languageRepository->findNamesByIsocodes(array_keys($totalsByIsocode));
+
+        $values = [];
+        foreach ($totalsByIsocode as $isocode => $total) {
+            $values[$this->formatLanguageLabel($isocode, $namesByIsocode[$isocode] ?? null)] = $total;
         }
 
         return [
@@ -1116,6 +1125,19 @@ final readonly class AdminStatisticsQueryService
                 ],
             ],
         ];
+    }
+
+    /**
+     * Formats a course language isocode as "Name (isocode)", falling back to
+     * the bare isocode when no matching Language row was found.
+     */
+    private function formatLanguageLabel(string $isocode, ?string $name): string
+    {
+        if ('' === $isocode) {
+            return $this->trans('Unknown');
+        }
+
+        return (null !== $name && '' !== $name) ? \sprintf('%s (%s)', $name, $isocode) : $isocode;
     }
 
     /**

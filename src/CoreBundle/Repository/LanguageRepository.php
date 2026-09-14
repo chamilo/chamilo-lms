@@ -151,6 +151,32 @@ class LanguageRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Looks up display names for a fixed list of isocodes, regardless of
+     * whether the language is currently available/active.
+     *
+     * @param string[] $isocodes
+     *
+     * @return array<string,string> [isocode => original_name]
+     */
+    public function findNamesByIsocodes(array $isocodes): array
+    {
+        $isocodes = array_values(array_unique(array_filter($isocodes, static fn ($isocode) => '' !== $isocode)));
+        if ([] === $isocodes) {
+            return [];
+        }
+
+        $rows = $this->createQueryBuilder('l')
+            ->select('l.isocode AS isocode', 'l.originalName AS originalName')
+            ->where('l.isocode IN (:isocodes)')
+            ->setParameter('isocodes', $isocodes)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return array_column($rows, 'originalName', 'isocode');
+    }
+
     public function findByIsoCode(string $isoCode): ?Language
     {
         $qb = $this->createQueryBuilder('l');

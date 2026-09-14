@@ -1,0 +1,252 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
+namespace Chamilo\Tests\CoreBundle\Installer;
+
+use Chamilo\CoreBundle\Installer\InstallerGate;
+use Chamilo\CoreBundle\Installer\InstallerState;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Regression test for the web installer gate (advisory GHSA-mfgc-693v-xq5v).
+ *
+ * The gate has to answer two questions at once, and an earlier fix answered only the
+ * first: it refused every installed platform, which also refused the legitimate 2.x to
+ * 3.x upgrade and left the wizard's own upgrade path unreachable. These cases pin both
+ * halves, because breaking either one is silent — a closed gate looks like "security
+ * works" until an administrator cannot upgrade, and an open gate looks like "the upgrade
+ * works" until an anonymous caller re-triggers a production migration.
+ *
+ * Doctrine's migration metadata is the only source of truth here. The deprecated
+ * chamilo_database_version setting must never come back: a fresh install seeds it with a
+ * stale schema default, which is what made the version comparison fail open.
+ */
+final class InstallerGateTest extends TestCase
+{
+    private const array MIGRATIONS = [
+        'Chamilo\CoreBundle\Migrations\Schema\V200\Version20200101010000',
+        'Chamilo\CoreBundle\Migrations\Schema\V300\Version20260101010000',
+    ];
+
+    /**
+     * Without .env the code tree was never configured, so the wizard must answer.
+     * This is the 1.11.x upgrade, which unpacks Chamilo 3 into a new directory.
+     */
+    public function testNoEnvFileAllowsTheWizard(): void
+    {
+        $state = InstallerGate::resolve(false, false, $this->databaseWithSettings(), self::MIGRATIONS);
+
+        $this->assertSame(InstallerState::FreshInstall, $state);
+        $this->assertFalse($state->isLocked());
+    }
+
+    /**
+     * APP_INSTALLED is written at step 5, before the migration runs. Refusing the
+     * request here would strand an interrupted install with no way back in.
+     */
+    public function testInstalledFlagWithEmptyDatabaseAllowsTheWizard(): void
+    {
+        $state = InstallerGate::resolve(true, true, $this->emptyDatabase(), self::MIGRATIONS);
+
+        $this->assertSame(InstallerState::Unfinished, $state);
+        $this->assertFalse($state->isLocked());
+    }
+
+    /**
+     * The upgrade case the earlier fix broke: an installed 2.x platform whose database
+     * has not executed the 3.x migrations yet.
+     */
+    public function testInstalledPlatformWithPendingMigrationsAllowsTheUpgrade(): void
+    {
+        $connection = $this->databaseWithSettings();
+        $this->seedMetadata($connection, [self::MIGRATIONS[0]]);
+
+        $state = InstallerGate::resolve(true, true, $connection, self::MIGRATIONS);
+
+        $this->assertSame(InstallerState::UpgradePending, $state);
+        $this->assertFalse($state->isLocked());
+        $this->assertTrue($state->isUpgrade());
+    }
+
+    /**
+     * The abuse the advisory reported: an anonymous caller re-triggering the migration
+     * of a platform that has nothing left to migrate.
+     */
+    public function testInstalledPlatformWithNothingPendingLocksTheWizard(): void
+    {
+        $connection = $this->databaseWithSettings();
+        $this->seedMetadata($connection, self::MIGRATIONS);
+
+        $state = InstallerGate::resolve(true, true, $connection, self::MIGRATIONS);
+
+        $this->assertSame(InstallerState::UpToDate, $state);
+        $this->assertTrue($state->isLocked());
+        $this->assertFalse($state->isUpgrade());
+    }
+
+    /**
+     * An installed platform whose metadata table was never seeded cannot prove that an
+     * upgrade is due, so the gate has to fail closed. The administrator seeds it with
+     * doctrine:migrations:sync-metadata-storage and doctrine:migrations:version.
+     */
+    public function testInstalledPlatformWithoutMetadataLocksTheWizard(): void
+    {
+        $state = InstallerGate::resolve(true, true, $this->databaseWithSettings(), self::MIGRATIONS);
+
+        $this->assertSame(InstallerState::UpToDate, $state);
+        $this->assertTrue($state->isLocked());
+    }
+
+    /**
+     * Found by the real 1.11.x upgrade run, not by reading the code: an existing but
+     * empty metadata table is indistinguishable from a fresh install that was never
+     * seeded. Reporting 393 pending migrations there opened the installer on an
+     * up-to-date platform, and would have let migrate.php replay the whole history over
+     * a final schema.
+     */
+    public function testEmptyMetadataTableLocksTheWizard(): void
+    {
+        $connection = $this->databaseWithSettings();
+        $this->seedMetadata($connection, []);
+
+        $state = InstallerGate::resolve(true, true, $connection, self::MIGRATIONS);
+
+        $this->assertSame(InstallerState::UpToDate, $state);
+        $this->assertTrue($state->isLocked());
+    }
+
+    /**
+     * A 1.11.x database carries an unrelated `version` table. Reading it as Doctrine
+     * metadata would report every migration as pending and open the installer on any
+     * installed platform that still has that leftover table.
+     */
+    public function testLegacyVersionTableIsNotReadAsMetadata(): void
+    {
+        $connection = $this->databaseWithSettings();
+        $connection->executeStatement('CREATE TABLE version (id INTEGER PRIMARY KEY, value VARCHAR(255))');
+        $connection->executeStatement("INSERT INTO version (value) VALUES ('1.11.40')");
+
+        $state = InstallerGate::resolve(true, true, $connection, self::MIGRATIONS);
+
+        $this->assertSame(InstallerState::UpToDate, $state);
+        $this->assertTrue($state->isLocked());
+    }
+
+    /**
+     * An unreachable database proves nothing, so it must not lock an administrator out
+     * of a recovery. resolve() receives null for that case.
+     */
+    public function testUnreachableDatabaseAllowsTheWizard(): void
+    {
+        $state = InstallerGate::resolve(true, true, null, self::MIGRATIONS);
+
+        $this->assertSame(InstallerState::FreshInstall, $state);
+        $this->assertFalse($state->isLocked());
+    }
+
+    /**
+     * Doctrine has stored the version with and without a leading backslash across
+     * releases. A mismatch there would report an up-to-date platform as pending.
+     */
+    public function testLeadingBackslashInStoredVersionStillMatches(): void
+    {
+        $connection = $this->databaseWithSettings();
+        $this->seedMetadata($connection, array_map(static fn (string $m): string => '\\'.$m, self::MIGRATIONS));
+
+        $this->assertFalse(InstallerGate::hasPendingMigrations($connection, self::MIGRATIONS));
+    }
+
+    /**
+     * The 1.11.x settings table is named settings_current, so the gate must accept it
+     * as proof of an initialized database.
+     */
+    public function testLegacySettingsTableCountsAsInitialized(): void
+    {
+        $connection = $this->connection();
+        $connection->executeStatement('CREATE TABLE settings_current (id INTEGER PRIMARY KEY, variable VARCHAR(255))');
+        $connection->executeStatement("INSERT INTO settings_current (variable) VALUES ('platform_language')");
+
+        $this->assertTrue(InstallerGate::isDatabaseInitialized($connection));
+    }
+
+    /**
+     * resource_node separates a 2.x database from a 1.11.x one without reading the
+     * deprecated version setting.
+     */
+    public function testModernSchemaIsDetectedFromResourceNode(): void
+    {
+        $connection = $this->connection();
+        $this->assertFalse(InstallerGate::isModernSchema($connection));
+
+        $connection->executeStatement('CREATE TABLE resource_node (id INTEGER PRIMARY KEY)');
+        $this->assertTrue(InstallerGate::isModernSchema($connection));
+    }
+
+    /**
+     * The migration list must carry class names, because that is what Doctrine stores
+     * in the metadata table. Handing back file paths would never match a stored row and
+     * would report every migration as pending.
+     */
+    public function testMigrationsAreListedAsClassNames(): void
+    {
+        $directory = sys_get_temp_dir().'/chamilo-installer-gate-'.uniqid('', true);
+        mkdir($directory.'/V300', 0o777, true);
+        touch($directory.'/V300/Version20260101010000.php');
+        touch($directory.'/V300/NotAMigration.php');
+
+        $migrations = InstallerGate::migrationsFromConfiguration(
+            ['migrations_paths' => ['Chamilo\CoreBundle\Migrations\Schema\V300' => 'V300']],
+            $directory
+        );
+
+        $this->assertSame(['Chamilo\CoreBundle\Migrations\Schema\V300\Version20260101010000'], $migrations);
+
+        unlink($directory.'/V300/Version20260101010000.php');
+        unlink($directory.'/V300/NotAMigration.php');
+        rmdir($directory.'/V300');
+        rmdir($directory);
+    }
+
+    private function connection(): Connection
+    {
+        return DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);
+    }
+
+    private function emptyDatabase(): Connection
+    {
+        $connection = $this->connection();
+        $connection->executeStatement('CREATE TABLE settings (id INTEGER PRIMARY KEY, variable VARCHAR(255))');
+
+        return $connection;
+    }
+
+    private function databaseWithSettings(): Connection
+    {
+        $connection = $this->emptyDatabase();
+        $connection->executeStatement("INSERT INTO settings (variable) VALUES ('platform_language')");
+
+        return $connection;
+    }
+
+    /**
+     * @param list<string> $executedMigrations
+     */
+    private function seedMetadata(Connection $connection, array $executedMigrations): void
+    {
+        $connection->executeStatement(
+            'CREATE TABLE version (version VARCHAR(1024) NOT NULL, executed_at DATETIME DEFAULT NULL, execution_time INTEGER DEFAULT NULL)'
+        );
+
+        foreach ($executedMigrations as $migration) {
+            $connection->executeStatement(
+                'INSERT INTO version (version, executed_at, execution_time) VALUES (?, ?, ?)',
+                [$migration, '2026-01-01 00:00:00', 1]
+            );
+        }
+    }
+}

@@ -1036,6 +1036,9 @@ class MoodleExport
             return $aOrder <=> $bOrder;
         });
 
+        $isPartialExport = isset($this->course->type) && 'partial' === $this->course->type;
+        $partialSectionNumber = 0;
+
         foreach ($learnpaths as $learnpath) {
             if ((int) $learnpath->lp_type !== 1) {
                 continue;
@@ -1047,9 +1050,15 @@ class MoodleExport
                 'display_order' => (int) ($learnpath->display_order ?? 0),
             ]);
 
-            $sections[] = $sectionExport->getSectionData($learnpath);
+            $sectionData = $sectionExport->getSectionData($learnpath);
+            if ($isPartialExport) {
+                $partialSectionNumber++;
+                $sectionData['number'] = $partialSectionNumber;
+            }
+            $sections[] = $sectionData;
 
             $this->debugLog('getSections learnpath section data exported', [
+                'section_number' => (int) $sectionData['number'],
                 'sections' => count($sections),
             ]);
         }
@@ -1731,7 +1740,11 @@ class MoodleExport
         $sectionExport = new SectionExport($this->course, $activitiesBySection);
 
         foreach ($sections as $section) {
-            $sectionExport->exportSection((int) $section['id'], $exportDir);
+            $sectionExport->exportSection(
+                (int) $section['id'],
+                $exportDir,
+                (int) $section['number']
+            );
         }
     }
 

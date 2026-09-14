@@ -49,6 +49,12 @@
           <code>config/</code>
           <code>public/main/install/</code>
         </i18n-t>
+        <!-- The installer never asks for write permission on its own directory, so it cannot
+             remove it. Give the commands instead, and leave the step to the administrator. -->
+        <pre
+          class="mt-2 overflow-x-auto rounded bg-white px-4 py-3 text-xs text-gray-700"
+          v-text="cleanupCommands"
+        />
       </Message>
       <div class="formgroup-inline">
         <div class="field">
@@ -76,4 +82,7 @@ import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 const { t } = useI18n()
 
 const installerData = inject("installerData")
+
+// Not translated: these are literal shell commands.
+const cleanupCommands = ["chmod -R 0555 config/", "rm -r public/main/install/"].join("\n")
 </script>

@@ -244,6 +244,15 @@ class Imscc13Import
             $zip = new ZipArchive();
             $res = $zip->open($file);
             if (true === $res) {
+                // Guard against ZIP Slip: reject entries with path traversal
+                for ($zi = 0; $zi < $zip->numFiles; ++$zi) {
+                    $entryName = str_replace('\\', '/', (string) $zip->getNameIndex($zi));
+                    if (str_contains($entryName, '../') || str_starts_with($entryName, '/')) {
+                        $zip->close();
+
+                        throw new RuntimeException('Malicious ZIP entry detected');
+                    }
+                }
                 if (!$zip->extractTo($to)) {
                     $zip->close();
 

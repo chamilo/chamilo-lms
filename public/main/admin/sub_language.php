@@ -86,8 +86,8 @@ printf(get_lang('Parent language: %s'), $language_name);
 echo '</div>';
 echo '<br />';
 $txt_search_word = (!empty($_REQUEST['txt_search_word']) ? Security::remove_XSS($_REQUEST['txt_search_word']) : '');
-$html = '<div style="float:left" class="actions">';
-$html .= '<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="GET" action="sub_language.php">';
+$html = '<div style="float:inline-start" class="actions">';
+$html .= '<form style="float:inline-start"  id="Searchlanguage" name="Searchlanguage" method="GET" action="sub_language.php">';
 $html .= '&nbsp;'.get_lang('Original name').'&nbsp; :&nbsp;';
 
 $html .= '<input name="id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['id']).'" />';

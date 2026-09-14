@@ -13,7 +13,7 @@
               <span>{{ term.title }}</span>
               <span
                 v-if="term.ai_assisted"
-                class="ml-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
+                class="ms-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
                 title="AI-assisted"
                 aria-label="AI-assisted"
               >
@@ -23,7 +23,7 @@
               <BaseIcon
                 v-if="isAllowedToEdit && term.sessionId && term.sessionId === sid"
                 :title="t('Session Item')"
-                class="mr-8"
+                class="me-8"
                 icon="session-star"
                 size="small"
               />
@@ -31,7 +31,7 @@
             <div v-if="securityStore.isAuthenticated && props.canEditGlossary && canEdit(term)">
               <BaseButton
                 :label="t('Edit')"
-                class="mr-2"
+                class="me-2"
                 icon="edit"
                 size="small"
                 type="black"
@@ -39,7 +39,7 @@
               />
               <BaseButton
                 :label="t('Delete')"
-                class="mr-2"
+                class="me-2"
                 icon="delete"
                 size="small"
                 type="danger"
@@ -53,6 +53,7 @@
 
         <div
           class="prose max-w-none"
+          dir="auto"
           v-html="sanitize(term.description)"
         ></div>
       </BaseCard>

@@ -10,7 +10,7 @@
     >
       <div class="truncate">
         • <span class="font-medium">{{ it.title }}</span>
-        <span class="ml-2 text-xs px-2 py-0.5 rounded border">
+        <span class="ms-2 text-xs px-2 py-0.5 rounded border">
           {{ it.statusText }}
         </span>
       </div>

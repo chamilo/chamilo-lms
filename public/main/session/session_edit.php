@@ -351,7 +351,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "bg-white",
             "text-body-2",
             "text-gray-90",
-            "file:mr-4",
+            "file:me-4",
             "file:border-0",
             "file:bg-primary",
             "file:px-4",

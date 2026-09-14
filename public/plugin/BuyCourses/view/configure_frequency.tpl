@@ -24,7 +24,7 @@
                     href="{{ back_url }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="mdi mdi-arrow-left"></em>
+                    <em class="mdi mdi-arrow-left rtl:rotate-180"></em>
                     {{ 'Back'|get_lang }}
                 </a>
 
@@ -101,13 +101,13 @@
             <table class="min-w-full divide-y divide-gray-25">
                 <thead class="bg-gray-15">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'Name'|get_lang }}
                         </th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'SubscriptionPeriodDuration'|get_plugin_lang('BuyCoursesPlugin') }}
                         </th>
-                        <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'Options'|get_lang }}
                         </th>
                     </tr>
@@ -130,7 +130,7 @@
                                     {% endif %}
                                 </div>
                             </td>
-                            <td class="px-4 py-4 text-right">
+                            <td class="px-4 py-4 text-end">
                                 {% if frequency.in_use %}
                                     <button
                                         type="button"

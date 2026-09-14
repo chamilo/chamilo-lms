@@ -18,13 +18,13 @@
           v-model="searchQuery"
           :placeholder="t('Search')"
           type="search"
-          class="h-11 min-w-0 flex-grow rounded-l-xl border-gray-25 bg-white px-3 text-body-2 text-gray-90 placeholder:text-gray-50 focus:border-primary focus:ring-primary"
+          class="h-11 min-w-0 flex-grow rounded-s-xl border-gray-25 bg-white px-3 text-body-2 text-gray-90 placeholder:text-gray-50 focus:border-primary focus:ring-primary"
           @input="onSearchInput"
           @keyup.enter="search"
         />
         <button
           type="button"
-          class="flex h-11 w-11 items-center justify-center rounded-r-xl border border-l-0 border-gray-25 bg-gray-15 text-gray-90 transition hover:bg-gray-20"
+          class="flex h-11 w-11 items-center justify-center rounded-e-xl border border-s-0 border-gray-25 bg-gray-15 text-gray-90 transition hover:bg-gray-20"
           @click="search"
         >
           <i
@@ -53,7 +53,7 @@
                 :image-url="friend.friend.illustrationUrl"
               />
               <span
-                class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white"
+                class="absolute -bottom-0.5 -end-0.5 h-3.5 w-3.5 rounded-full border-2 border-white"
                 :class="friend.friend.isOnline ? 'bg-success' : 'bg-gray-50'"
                 :title="friend.friend.isOnline ? t('Online') : t('Offline')"
               ></span>

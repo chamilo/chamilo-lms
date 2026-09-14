@@ -26,7 +26,11 @@
           </div>
         </div>
 
-        <div class="prose max-w-none" v-html="post.fullText"></div>
+        <div
+          class="prose max-w-none"
+          dir="auto"
+          v-html="post.fullText"
+        ></div>
 
         <div v-if="post.attachments?.length" class="mt-6">
           <h4 class="text-sm font-semibold mb-2">{{ t("Attachments") }}</h4>

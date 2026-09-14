@@ -8,7 +8,7 @@
     <div class="space-y-4">
       <!-- Summary -->
       <div class="text-sm text-gray-600">
-        <span class="mr-2">{{ t("Current") }}:</span>
+        <span class="me-2">{{ t("Current") }}:</span>
         <strong>{{ fileTitle }}</strong>
       </div>
 

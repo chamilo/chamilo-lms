@@ -52,7 +52,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
         $hideLabelAttribute = htmlspecialchars($hideLabel, ENT_QUOTES, 'UTF-8');
         $labelHtml = htmlspecialchars($showLabel, ENT_QUOTES, 'UTF-8');
 
-        $toggleScript = "return (function(button){var target=document.getElementById(button.id+'_options');if(!target){return false;}var isExpanded=window.getComputedStyle(target).display!=='none';target.style.display=isExpanded?'none':'block';button.setAttribute('aria-expanded',isExpanded?'false':'true');var icon=button.querySelector('[data-advanced-settings-icon]');if(icon){icon.className=isExpanded?'mdi mdi-chevron-right':'mdi mdi-chevron-down';}var label=button.querySelector('[data-advanced-settings-label]');if(label){label.textContent=isExpanded?button.getAttribute('data-show-label'):button.getAttribute('data-hide-label');}return false;})(this);";
+        $toggleScript = "return (function(button){var target=document.getElementById(button.id+'_options');if(!target){return false;}var isExpanded=window.getComputedStyle(target).display!=='none';target.style.display=isExpanded?'none':'block';button.setAttribute('aria-expanded',isExpanded?'false':'true');var icon=button.querySelector('[data-advanced-settings-icon]');if(icon){icon.className=isExpanded?'mdi mdi-chevron-right rtl:rotate-180':'mdi mdi-chevron-down';}var label=button.querySelector('[data-advanced-settings-label]');if(label){label.textContent=isExpanded?button.getAttribute('data-show-label'):button.getAttribute('data-hide-label');}return false;})(this);";
         $toggleScriptAttribute = htmlspecialchars($toggleScript, ENT_QUOTES, 'UTF-8');
 
         $html = '<div class="legacy-advanced-settings" style="margin: 1rem 0;">';
@@ -73,7 +73,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
                 onclick="'.$toggleScriptAttribute.'"
                 style="display:inline-flex;align-items:center;gap:.35rem;border:0;background:transparent;padding:0;color:#246fa8;font-weight:600;line-height:1.5;cursor:pointer;"
             >
-                <em data-advanced-settings-icon class="mdi mdi-chevron-right" style="font-size:1rem;line-height:1;"></em>
+                <em data-advanced-settings-icon class="mdi mdi-chevron-right rtl:rotate-180" style="font-size:1rem;line-height:1;"></em>
                 <span data-advanced-settings-label>'.$labelHtml.'</span>
             </button>
         ';

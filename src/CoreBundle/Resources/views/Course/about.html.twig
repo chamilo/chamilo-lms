@@ -135,7 +135,7 @@
             }
 
             .course-about-share-label {
-                margin-right: .25rem;
+                margin-inline-end: .25rem;
                 font-weight: 600;
             }
 
@@ -323,18 +323,18 @@
 
         <div class="course-about-topbar">
             <a href="{{ base_url }}/catalogue/courses" class="course-about-back">
-                <em class="mdi mdi-arrow-left" aria-hidden="true"></em>
+                <em class="mdi mdi-arrow-left rtl:rotate-180" aria-hidden="true"></em>
                 <span>{{ 'Back'|trans }}</span>
             </a>
         </div>
 
         <header class="course-about-header">
-            <h1 class="course-about-title">{{ course.title }}</h1>
+            <h1 class="course-about-title" dir="auto">{{ course.title }}</h1>
             {% if teachers and not 'course_about_teacher_name_hide'|api_get_configuration_value %}
                 <ul class="course-about-teacher-summary" aria-label="{{ 'Teachers'|trans }}">
                     <li>{{ 'Teachers'|trans }}:</li>
                     {% for teacher in teachers %}
-                        <li>{{ teacher.complete_name }}{% if not loop.last %},{% endif %}</li>
+                        <li dir="auto">{{ teacher.complete_name }}{% if not loop.last %},{% endif %}</li>
                     {% endfor %}
                 </ul>
             {% endif %}
@@ -397,10 +397,10 @@
                             {% for section in description_sections %}
                                 <article id="course-description-{{ section.iid }}" class="course-about-card course-about-description-item">
                                     {% if section.title %}
-                                        <h3 class="course-about-description-item-title">{{ section.title }}</h3>
+                                        <h3 class="course-about-description-item-title" dir="auto">{{ section.title }}</h3>
                                     {% endif %}
                                     {% if section.content %}
-                                        <div class="rich-html-content">
+                                        <div class="rich-html-content" dir="auto">
                                             {{ section.content|raw }}
                                         </div>
                                     {% endif %}

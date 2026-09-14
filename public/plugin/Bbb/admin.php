@@ -298,7 +298,7 @@ function bbb_admin_style_action_links_html(string $html): string
             $href = strtolower((string) $anchor->getAttribute('href'));
             $classes = [
                 'mb-1',
-                'mr-1',
+                'me-1',
                 'inline-flex',
                 'items-center',
                 'gap-1.5',
@@ -320,7 +320,7 @@ function bbb_admin_style_action_links_html(string $html): string
             if (str_contains($href, 'delete')) {
                 $classes = [
                     'mb-1',
-                    'mr-1',
+                    'me-1',
                     'inline-flex',
                     'items-center',
                     'gap-1.5',
@@ -340,7 +340,7 @@ function bbb_admin_style_action_links_html(string $html): string
             } elseif (str_contains($href, 'publish')) {
                 $classes = [
                     'mb-1',
-                    'mr-1',
+                    'me-1',
                     'inline-flex',
                     'items-center',
                     'gap-1.5',
@@ -558,15 +558,15 @@ function bbb_admin_render_meetings_table(array $meetings, BbbPlugin $plugin): st
             <table class="min-w-full divide-y divide-gray-25">
                 <thead class="bg-gray-15">
                     <tr>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Start date')).'</th>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('End date')).'</th>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Status')).'</th>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape($plugin->get_lang('Records')).'</th>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Course')).'</th>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Session')).'</th>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Participants')).'</th>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('CountUsers')).'</th>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Actions')).'</th>
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Start date')).'</th>
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('End date')).'</th>
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Status')).'</th>
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape($plugin->get_lang('Records')).'</th>
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Course')).'</th>
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Session')).'</th>
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Participants')).'</th>
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('CountUsers')).'</th>
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">'.bbb_admin_escape(get_lang('Actions')).'</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-20">

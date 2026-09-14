@@ -44,11 +44,11 @@
 
                             <div class="mt-4 flex flex-wrap gap-2 text-sm text-gray-70">
                                 <span class="inline-flex items-center rounded-full bg-white px-3 py-1">
-                                    <span class="mdi mdi-calendar-clock ch-tool-icon mr-1"></span>
+                                    <span class="mdi mdi-calendar-clock ch-tool-icon me-1"></span>
                                     {{ meeting.formattedStartTime|default('') }}
                                 </span>
                                 <span class="inline-flex items-center rounded-full bg-white px-3 py-1">
-                                    <span class="mdi mdi-timer-outline ch-tool-icon mr-1"></span>
+                                    <span class="mdi mdi-timer-outline ch-tool-icon me-1"></span>
                                     {{ meeting.formattedDuration|default('') }}
                                 </span>
                             </div>
@@ -59,7 +59,7 @@
                                 class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90"
                                 href="join_meeting.php?meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}"
                             >
-                                <span class="mdi mdi-login-variant ch-tool-icon mr-1 text-white"></span>
+                                <span class="mdi mdi-login-variant ch-tool-icon me-1 text-white"></span>
                                 {{ 'Join'|get_plugin_lang('ZoomPlugin') }}
                             </a>
 
@@ -68,7 +68,7 @@
                                     class="inline-flex items-center justify-center rounded-lg border border-gray-50 bg-white px-4 py-2 text-sm font-semibold text-gray-90 hover:bg-gray-15"
                                     href="meeting.php?meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}"
                                 >
-                                    <span class="mdi mdi-information ch-tool-icon mr-1"></span>
+                                    <span class="mdi mdi-information ch-tool-icon me-1"></span>
                                     {{ 'Details'|get_plugin_lang('ZoomPlugin') }}
                                 </a>
 
@@ -77,7 +77,7 @@
                                     href="start.php?action=delete&meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}"
                                     onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
                                 >
-                                    <span class="mdi mdi-delete ch-tool-icon mr-1 text-white"></span>
+                                    <span class="mdi mdi-delete ch-tool-icon me-1 text-white"></span>
                                     {{ 'Delete'|get_lang }}
                                 </a>
                             {% endif %}

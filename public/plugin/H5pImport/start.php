@@ -280,7 +280,7 @@ if (!function_exists('h5pimport_render_add_form')) {
                                 name="file"
                                 accept=".h5p"
                                 required
-                                class="block w-full rounded-xl border border-gray-25 bg-white text-body-2 text-gray-90 file:mr-4 file:rounded-xl file:border-0 file:bg-primary file:px-4 file:py-2 file:font-semibold file:text-white focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                class="block w-full rounded-xl border border-gray-25 bg-white text-body-2 text-gray-90 file:me-4 file:rounded-xl file:border-0 file:bg-primary file:px-4 file:py-2 file:font-semibold file:text-white focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                             >
                         </div>
 
@@ -646,7 +646,7 @@ switch ($action) {
                             '.$attemptCount.'
                         </span>
                     </td>
-                    <td class="px-5 py-4 align-middle text-right">
+                    <td class="px-5 py-4 align-middle text-end">
                         '.h5pimport_render_actions($plugin, $h5pImport, $pluginIndex, $isAllowedToEdit, $deleteToken).'
                     </td>
                 </tr>
@@ -663,10 +663,10 @@ switch ($action) {
                     <table class="min-w-full divide-y divide-gray-20">
                         <thead class="bg-gray-15">
                             <tr>
-                                <th class="px-5 py-4 text-left text-body-2 font-semibold text-gray-90">'.h5pimport_escape(get_lang('Title')).'</th>
-                                <th class="px-5 py-4 text-left text-body-2 font-semibold text-gray-90">'.h5pimport_escape(get_lang('Description')).'</th>
-                                <th class="px-5 py-4 text-left text-body-2 font-semibold text-gray-90">Launches</th>
-                                <th class="px-5 py-4 text-right text-body-2 font-semibold text-gray-90">'.h5pimport_escape(get_lang('Actions')).'</th>
+                                <th class="px-5 py-4 text-start text-body-2 font-semibold text-gray-90">'.h5pimport_escape(get_lang('Title')).'</th>
+                                <th class="px-5 py-4 text-start text-body-2 font-semibold text-gray-90">'.h5pimport_escape(get_lang('Description')).'</th>
+                                <th class="px-5 py-4 text-start text-body-2 font-semibold text-gray-90">Launches</th>
+                                <th class="px-5 py-4 text-end text-body-2 font-semibold text-gray-90">'.h5pimport_escape(get_lang('Actions')).'</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white">

@@ -26,7 +26,7 @@
               <span class="font-semibold">1</span> {{ t("Generate") }}
             </span>
             <i
-              class="mdi mdi-arrow-right text-gray-40 text-base"
+              class="mdi mdi-arrow-right rtl:rotate-180 text-gray-40 text-base"
               aria-hidden="true"
             ></i>
             <span
@@ -271,7 +271,7 @@
             v-if="importReport.errors.length"
             class="mt-3"
           >
-            <ul class="list-disc ml-5 space-y-1">
+            <ul class="list-disc ms-5 space-y-1">
               <li
                 v-for="(e, idx) in importReport.errors"
                 :key="idx"

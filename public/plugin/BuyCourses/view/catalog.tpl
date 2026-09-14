@@ -28,8 +28,8 @@
 
 <style>
     .bc-translated-html p {margin: 0 0 0.5rem;}
-    .bc-translated-html ul {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: disc;}
-    .bc-translated-html ol {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: decimal;}
+    .bc-translated-html ul {margin-block: 0.5rem; margin-inline: 1.25rem 0; padding-inline-start: 1.25rem; list-style: disc;}
+    .bc-translated-html ol {margin-block: 0.5rem; margin-inline: 1.25rem 0; padding-inline-start: 1.25rem; list-style: decimal;}
     .bc-translated-html li {margin: 0.2rem 0;}
 </style>
 
@@ -63,7 +63,7 @@
                         href="{{ back_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                     >
-                        <em class="mdi mdi-arrow-left"></em>
+                        <em class="mdi mdi-arrow-left rtl:rotate-180"></em>
                         {{ 'Back'|get_lang }}
                     </a>
                 </div>
@@ -237,7 +237,10 @@
 
                                 <div class="space-y-4 p-5">
                                     <div class="space-y-2">
-                                        <h3 class="line-clamp-2 text-lg font-semibold text-gray-90">
+                                        <h3
+                                            class="line-clamp-2 text-lg font-semibold text-gray-90"
+                                            dir="auto"
+                                        >
                                             <a
                                                 class="ajax transition hover:text-primary"
                                                 href="{{ course_description_url }}"
@@ -350,7 +353,10 @@
 
                                 <div class="space-y-4 p-5">
                                     <div class="space-y-2">
-                                        <h3 class="text-lg font-semibold text-gray-90">
+                                        <h3
+                                            class="text-lg font-semibold text-gray-90"
+                                            dir="auto"
+                                        >
                                             <a class="transition hover:text-primary" href="{{ url('index') ~ 'session/' ~ session.id ~ '/about/' }}">
                                                 {{ session.title }}
                                             </a>
@@ -480,12 +486,18 @@
 
                                 <div class="space-y-4 p-5">
                                     <div class="space-y-2">
-                                        <h3 class="text-lg font-semibold text-gray-90">
+                                        <h3
+                                            class="text-lg font-semibold text-gray-90"
+                                            dir="auto"
+                                        >
                                             {{ service.name }}
                                         </h3>
                                     </div>
 
-                                    <div class="bc-translated-html text-sm text-gray-50">
+                                    <div
+                                        class="bc-translated-html text-sm text-gray-50"
+                                        dir="auto"
+                                    >
                                         {{ service.description|raw }}
                                     </div>
 

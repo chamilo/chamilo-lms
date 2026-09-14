@@ -34,7 +34,7 @@
             v-if="previousFolders.length"
             :label="t('Back')"
             class="btn btn--primary"
-            icon="mdi mdi-arrow-left"
+            icon="mdi mdi-arrow-left rtl:rotate-180"
             @click="goBack"
           />
         </div>

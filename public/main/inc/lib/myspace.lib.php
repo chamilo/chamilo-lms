@@ -666,7 +666,7 @@ class MySpace
         }
 
         foreach ($all_datas as $row) {
-            $table->addRow($row, 'align="right"');
+            $table->addRow($row, 'style="text-align:end;"');
         }
         $table->display();
     }
@@ -1845,7 +1845,7 @@ class MySpace
             .'style="width:100%;border:0;padding:0;border-collapse:collapse;">';
         $head .= '<tr>';
         // Course (left aligned).
-        $head .= '<th style="border-left:0;border-bottom:0;">'
+        $head .= '<th style="border-inline-start:0;border-bottom:0;">'
             .'<span>'.get_lang('Course').'</span></th>';
         // Time spent.
         $head .= '<th style="padding:0;border-bottom:0;">'
@@ -1869,7 +1869,7 @@ class MySpace
         $head .= '<th style="padding:0;border-bottom:0;">'
             .'<span>'.get_lang('Number of tests answered').'</span></th>';
         // Latest login.
-        $head .= '<th style="padding:0;border-bottom:0;border-right:0;">'
+        $head .= '<th style="padding:0;border-bottom:0;border-inline-end:0;">'
             .'<span>'.get_lang('Latest login').'</span></th>';
         $head .= '</tr>';
         $head .= '</table>';

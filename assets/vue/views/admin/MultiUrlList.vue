@@ -592,7 +592,7 @@ onBeforeUnmount(() => {
           <dd>
             <ul
               v-if="selectedUser.usergroups.length"
-              class="list-disc pl-5 space-y-1 text-lg font-medium"
+              class="list-disc ps-5 space-y-1 text-lg font-medium"
             >
               <li
                 v-for="(groupTitle, index) in selectedUser.usergroups"
@@ -613,7 +613,7 @@ onBeforeUnmount(() => {
           <dd>
             <ul
               v-if="selectedUser.urls.length"
-              class="list-disc pl-5 space-y-1 text-lg font-medium"
+              class="list-disc ps-5 space-y-1 text-lg font-medium"
             >
               <li
                 v-for="url in selectedUser.urls"
@@ -654,7 +654,7 @@ onBeforeUnmount(() => {
           <dd>
             <ul
               v-if="selectedCourse.urls.length"
-              class="list-disc pl-5 space-y-1 text-lg font-medium"
+              class="list-disc ps-5 space-y-1 text-lg font-medium"
             >
               <li
                 v-for="url in selectedCourse.urls"

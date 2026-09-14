@@ -64,30 +64,30 @@ function addAccessPanel() {
 
         var h = '<a id="access_panel_inclusive" onClick="inclusiveShow();" ';
 		h += ' style="cursor:pointer;position:fixed;background-color:#21618C;z-index:9999997;';
-        h += 'border-top-left-radius:4px;border-bottom-left-radius:4px;';
-        h += 'width:36px;height:94px;right:0px;top: calc(50% - 50px);" >';
+        h += 'border-start-start-radius:4px;border-end-start-radius:4px;';
+        h += 'width:36px;height:94px;inset-inline-end:0px;top: calc(50% - 50px);" >';
 
         h += '<p style="color:white;font-size:11px;line-height:1.3;text-align:center;margin:0px;padding:0px;margin-top:4px;" >' + termAccessible + '</p>';
 		h += '<img id="studioeltools" src="'+ ludiiconplus + '" ';
         h += ' alt="'+termAdapt+'" title="'+termAdapt+'" ';
-        h += ' style="cursor:pointer;margin-left:1px;" /> ';
+        h += ' style="cursor:pointer;margin-inline-start:1px;" /> ';
 		h += '</a>';
         
         var closeiconplus = 'img/classique/cross_mini.png';
         
         h += '<div id="params_close" onCLick="inclusiveHidePanel();" ';
         h += ' style="position:fixed;top:calc(50% - 72px);width:20px;height:20px;';
-        h += 'z-index: 9999998;bottom:0px;right:0px;" >';
+        h += 'z-index: 9999998;bottom:0px;inset-inline-end:0px;" >';
         h += '<img id="studioeltools" src="'+ closeiconplus + '" ';
 		h += ' alt="Masquer" title="Masquer" style="cursor:pointer;" /> ';
         h += '</div>';
 
         h += '<div id="params_panel_inclusive" ';
         h += ' style="position:fixed;background-color:white;';
-        h += 'border-left:solid 2px #21618C;';
+        h += 'border-inline-start:solid 2px #21618C;';
         h += 'border-top:solid 2px #21618C;border-bottom:solid 2px #21618C;';
-        h += 'border-top-left-radius:4px;border-bottom-left-radius:4px;';
-        h += 'z-index: 9999999;width:400px;top:70px;bottom:20px;right:-400px;" >';
+        h += 'border-start-start-radius:4px;border-end-start-radius:4px;';
+        h += 'z-index: 9999999;width:400px;top:70px;bottom:20px;inset-inline-end:-400px;" >';
 
         h += '</div>';
         
@@ -108,7 +108,7 @@ function addParamsPanel(){
     h += ' >';
     
     h += '<a onClick="inclusiveHide();" ';
-    h += 'style="position:absolute;display:block;top:10px;right:10px;padding:9px;margin:0px;';
+    h += 'style="position:absolute;display:block;top:10px;inset-inline-end:10px;padding:9px;margin:0px;';
     h += 'border-radius:4px;width:38px;height:34px;margin:0px;text-align:center;background-color:#dc3545!important;" >';
     h += '<img id="studioeltools" src="'+ crossiconplus + '" /> ';
     h += '</a>';
@@ -262,10 +262,10 @@ function applyFocusLineDiv(){
     if (value_focusoption==1) {
         if (!document.getElementById("focus_line_div")) {
             var h = '<div id="focus_line_div" style="position:fixed;';
-            h += 'top:500px;left:0px;right:0px;bottom:0px;opacity:0.8;';
+            h += 'top:500px;inset-inline-start:0px;inset-inline-end:0px;bottom:0px;opacity:0.8;';
             h += 'bottom:0px;background-color:black;z-index:9999;" ></div>';
             h += '<div id="focus_line_div_2" style="position:fixed;';
-            h += 'top:-1050px;left:0px;right:0px;height:1000px;opacity:0.8;';
+            h += 'top:-1050px;inset-inline-start:0px;inset-inline-end:0px;height:1000px;opacity:0.8;';
             h += 'bottom:0px;background-color:black;z-index:9999;" ></div>';
             $("body").append(h);
             installMouseTrackingDocFocus();

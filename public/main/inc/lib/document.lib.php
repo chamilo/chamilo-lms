@@ -2237,7 +2237,7 @@ class DocumentManager
             case 'wav':
             case 'ogg':
             case 'mp3':
-                $html = '<div style="margin: 0; position: absolute; top: 50%; left: 35%;">';
+                $html = '<div style="margin: 0; position: absolute; top: 50%; inset-inline-start: 35%;">';
                 $html .= '<audio id="'.$id.'" controls="controls" src="'.$file.'" type="audio/mp3" ></audio></div>';
                 break;
             default:
@@ -2305,9 +2305,9 @@ class DocumentManager
 #doc_list.lp-document-tree-root li.lp-document-tree-folder > ul {
     display: none;
     margin-top: 4px;
-    margin-left: 22px;
-    padding-left: 10px;
-    border-left: 1px solid #e5e7eb;
+    margin-inline-start: 22px;
+    padding-inline-start: 10px;
+    border-inline-start: 1px solid #e5e7eb;
 }
 
 #doc_list.lp-document-tree-root li.lp-document-tree-folder.is-expanded > ul {

@@ -38,7 +38,7 @@ function displayTitle(item) {
 }
 
 function depthClass() {
-  const classes = ["", "pl-6", "pl-10", "pl-14", "pl-16"]
+  const classes = ["", "ps-6", "ps-10", "ps-14", "ps-16"]
 
   return classes[Math.min(props.depth, classes.length - 1)]
 }
@@ -94,7 +94,7 @@ function addItem(item) {
         <div class="min-w-0 flex-1">
           <button
             v-if="canManage && item.canAdd"
-            class="block max-w-full truncate text-left text-body-2 hover:underline"
+            class="block max-w-full truncate text-start text-body-2 hover:underline"
             :class="item.visible === false ? 'text-gray-50' : 'text-primary'"
             type="button"
             @click="addItem(item)"

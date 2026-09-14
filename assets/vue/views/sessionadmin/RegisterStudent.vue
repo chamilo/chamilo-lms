@@ -47,10 +47,12 @@
           >
             <h4
               class="font-semibold text-gray-90 mb-2"
+              dir="auto"
               v-html="displayTranslatedHtml(item.title)"
             ></h4>
             <div
               class="text-gray-50"
+              dir="auto"
               v-html="displayTranslatedHtml(item.content)"
             ></div>
           </div>
@@ -112,11 +114,11 @@
         <table class="min-w-full text-sm mt-4 border border-gray-25 rounded">
           <thead class="bg-gray-20 text-gray-90 font-medium">
             <tr>
-              <th class="px-4 py-2 text-left">{{ t("Full name") }}</th>
-              <th class="px-4 py-2 text-left">{{ t("E-mail") }}</th>
-              <th class="px-4 py-2 text-left">{{ t("Active") }}</th>
-              <th class="px-4 py-2 text-left">{{ t("Local user") }}</th>
-              <th class="px-4 py-2 text-right"></th>
+              <th class="px-4 py-2 text-start">{{ t("Full name") }}</th>
+              <th class="px-4 py-2 text-start">{{ t("E-mail") }}</th>
+              <th class="px-4 py-2 text-start">{{ t("Active") }}</th>
+              <th class="px-4 py-2 text-start">{{ t("Local user") }}</th>
+              <th class="px-4 py-2 text-end"></th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-25">
@@ -144,7 +146,7 @@
                   {{ user.hasLocalAccess ? t("Local user") : t("External user") }}
                 </span>
               </td>
-              <td class="px-4 py-2 text-right">
+              <td class="px-4 py-2 text-end">
                 <Button
                   icon="mdi mdi-send"
                   size="small"

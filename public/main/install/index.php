@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\LanguageHelper;
 use Chamilo\CoreBundle\Helpers\ScimHelper;
 use Chamilo\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -1014,8 +1015,11 @@ function getEncoreAssetFromManifest(string $assetName): ?string
 }
 ?>
 <!DOCTYPE html>
-<?php $escapedInstallationLanguage = htmlspecialchars($installationLanguage, ENT_QUOTES, 'UTF-8'); ?>
-<html lang="<?php echo $escapedInstallationLanguage ?>" data-lang="<?php echo $escapedInstallationLanguage ?>" class="no-js h-100">
+<?php
+$escapedInstallationLanguage = htmlspecialchars($installationLanguage, ENT_QUOTES, 'UTF-8');
+$installationTextDirection = in_array($installationLanguage, LanguageHelper::getRtlIsocodes(), true) ? 'rtl' : 'ltr';
+?>
+<html lang="<?php echo $escapedInstallationLanguage ?>" dir="<?php echo $installationTextDirection ?>" data-lang="<?php echo $escapedInstallationLanguage ?>" class="no-js h-100">
 <head>
     <title>
         &mdash; <?php echo $translator->trans('Chamilo installation').' &mdash; '.$translator->trans('Version').' '.$new_version; ?>

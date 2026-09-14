@@ -84,7 +84,7 @@
                 v-if="warnings.length"
                 class="text-xs text-amber-700"
               >
-                <ul class="list-disc pl-4">
+                <ul class="list-disc ps-4">
                   <li
                     v-for="w in warnings"
                     :key="w"
@@ -100,7 +100,7 @@
                 class="rounded border border-gray-100"
               >
                 <button
-                  class="flex w-full items-center justify-between px-3 py-2 text-left text-sm font-medium hover:bg-gray-50"
+                  class="flex w-full items-center justify-between px-3 py-2 text-start text-sm font-medium hover:bg-gray-50"
                   @click="toggle(group.type)"
                 >
                   <span class="flex items-center gap-2"> <i class="mdi mdi-folder-outline"></i>{{ group.title }} </span>
@@ -135,7 +135,7 @@
                         {{ item.label }}
                         <span
                           v-if="isFolder(item)"
-                          class="ml-2 text-[11px] text-gray-400"
+                          class="ms-2 text-[11px] text-gray-400"
                         >
                           (folder — not exportable)
                         </span>
@@ -160,7 +160,7 @@
                         <span>{{ cat.label }}</span>
                         <span
                           v-if="kids(cat).length"
-                          class="ml-2 text-xs text-gray-500"
+                          class="ms-2 text-xs text-gray-500"
                         >
                           ({{ t("contains {0} items", [kids(cat).length]) }})
                         </span>
@@ -170,7 +170,7 @@
                       <div
                         v-for="child in kids(cat)"
                         :key="`${group.type}:${cat.id}:${child.id}`"
-                        class="ml-6 flex items-center gap-2 px-2 py-1 text-sm"
+                        class="ms-6 flex items-center gap-2 px-2 py-1 text-sm"
                       >
                         <template v-if="child.selectable">
                           <input
@@ -197,7 +197,7 @@
                         v-for="grand in kids(kids(cat)[0])"
                         v-if="Array.isArray(kids(cat)) && kids(cat).some(n => Array.isArray(kids(n)) && kids(n).length)"
                         :key="`${group.type}:${cat.id}:${grand.id}`"
-                        class="ml-10 flex items-center gap-2 px-2 py-0.5 text-xs text-gray-600"
+                        class="ms-10 flex items-center gap-2 px-2 py-0.5 text-xs text-gray-600"
                       >
                         <template v-if="grand.selectable">
                           <input

@@ -215,13 +215,13 @@ if (isset($_POST['number_of_groups'])) {
         echo '<table class="min-w-full divide-y divide-gray-25">';
         echo '<thead class="bg-gray-15">';
         echo '<tr>';
-        echo '<th class="px-4 py-3 text-left text-sm font-semibold text-gray-90">'.group_creation_escape(get_lang('Group name')).'</th>';
+        echo '<th class="px-4 py-3 text-start text-sm font-semibold text-gray-90">'.group_creation_escape(get_lang('Group name')).'</th>';
 
         if ($allowGroupCategories) {
-            echo '<th class="px-4 py-3 text-left text-sm font-semibold text-gray-90">'.group_creation_escape(get_lang('Group category')).'</th>';
+            echo '<th class="px-4 py-3 text-start text-sm font-semibold text-gray-90">'.group_creation_escape(get_lang('Group category')).'</th>';
         }
 
-        echo '<th class="px-4 py-3 text-left text-sm font-semibold text-gray-90">'.group_creation_escape(get_lang('seats (optional)')).'</th>';
+        echo '<th class="px-4 py-3 text-start text-sm font-semibold text-gray-90">'.group_creation_escape(get_lang('seats (optional)')).'</th>';
         echo '</tr>';
         echo '</thead>';
         echo '<tbody class="divide-y divide-gray-25 bg-white">';

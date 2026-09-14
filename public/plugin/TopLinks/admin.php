@@ -91,7 +91,7 @@ function toplinks_header(string $title, string $description, string $backUrl): s
                 </div>
                 <a class="inline-flex items-center justify-center rounded-lg border border-gray-25 bg-white px-4 py-2 text-body-2 font-semibold text-gray-90 hover:border-primary hover:text-primary"
                    href="'.toplinks_escape($backUrl).'">
-                    <span class="mdi mdi-arrow-left ch-tool-icon mr-2"></span>'.toplinks_escape(get_lang('Back')).'
+                    <span class="mdi mdi-arrow-left rtl:rotate-180 ch-tool-icon me-2"></span>'.toplinks_escape(get_lang('Back')).'
                 </a>
             </div>
         </section>
@@ -107,7 +107,7 @@ function toplinks_empty_state(string $addUrl): string
             <p class="mb-5 text-body-2 text-gray-50">'.toplinks_escape(toplinks_lang('CreateTopLinksEmpty')).'</p>
             <a class="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-body-2 font-semibold !text-white hover:opacity-90"
                href="'.toplinks_escape($addUrl).'">
-                <span class="mdi mdi-plus-box mr-2"></span>'.toplinks_escape(toplinks_lang('AddLink')).'
+                <span class="mdi mdi-plus-box me-2"></span>'.toplinks_escape(toplinks_lang('AddLink')).'
             </a>
         </section>
     ';
@@ -125,7 +125,7 @@ function toplinks_render_list(array $links, string $pageBaseUrl, TopLinksPlugin 
             </div>
             <a class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-body-2 font-semibold !text-white hover:opacity-90"
                href="'.toplinks_escape($addUrl).'">
-                <span class="mdi mdi-plus-box mr-2"></span>'.toplinks_escape(toplinks_lang('AddLink')).'
+                <span class="mdi mdi-plus-box me-2"></span>'.toplinks_escape(toplinks_lang('AddLink')).'
             </a>
         </div>
     ';
@@ -161,14 +161,14 @@ function toplinks_render_list(array $links, string $pageBaseUrl, TopLinksPlugin 
             $replicateAction = '
                 <a class="inline-flex items-center rounded-lg border border-info px-3 py-2 text-caption font-semibold text-info hover:bg-support-1"
                    href="'.toplinks_escape($replicateUrl).'">
-                    <span class="mdi mdi-content-copy mr-2"></span>'.
+                    <span class="mdi mdi-content-copy me-2"></span>'.
                     toplinks_escape(sprintf(toplinks_lang('ReplicateInXMissingCourses'), $countMissingCourses)).'
                 </a>
             ';
         } else {
             $replicateAction = '
                 <span class="inline-flex items-center rounded-lg border border-gray-25 bg-gray-15 px-3 py-2 text-caption font-semibold text-gray-50">
-                    <span class="mdi mdi-check-circle mr-2"></span>'.toplinks_escape(toplinks_lang('AlreadyReplicatedInAllCourses')).'
+                    <span class="mdi mdi-check-circle me-2"></span>'.toplinks_escape(toplinks_lang('AlreadyReplicatedInAllCourses')).'
                 </span>
             ';
         }
@@ -192,13 +192,13 @@ function toplinks_render_list(array $links, string $pageBaseUrl, TopLinksPlugin 
                     <div class="flex flex-wrap gap-2 md:justify-end">
                         <a class="inline-flex items-center rounded-lg bg-secondary px-3 py-2 text-caption font-semibold !text-secondary-button-text hover:opacity-90"
                            href="'.toplinks_escape($editUrl).'">
-                            <span class="mdi mdi-pencil mr-2"></span>'.toplinks_escape(get_lang('Edit')).'
+                            <span class="mdi mdi-pencil me-2"></span>'.toplinks_escape(get_lang('Edit')).'
                         </a>
                         '.$replicateAction.'
                         <a class="inline-flex items-center rounded-lg bg-danger px-3 py-2 text-caption font-semibold !text-danger-button-text hover:opacity-90"
                            href="'.toplinks_escape($deleteUrl).'"
                            onclick="return confirm(\''.toplinks_escape(get_lang('Please confirm your choice')).'\');">
-                            <span class="mdi mdi-delete mr-2"></span>'.toplinks_escape(get_lang('Delete')).'
+                            <span class="mdi mdi-delete me-2"></span>'.toplinks_escape(get_lang('Delete')).'
                         </a>
                     </div>
                 </div>

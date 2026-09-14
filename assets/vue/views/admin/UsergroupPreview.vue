@@ -197,7 +197,7 @@ onMounted(loadData)
             <div class="text-sm text-gray-60">
               {{ user.email || t("No email") }}
             </div>
-            <div class="text-sm text-gray-50 md:text-right">
+            <div class="text-sm text-gray-50 md:text-end">
               {{ user.username }}
             </div>
           </div>

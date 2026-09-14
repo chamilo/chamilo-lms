@@ -1,5 +1,8 @@
 <template>
-  <section class="space-y-5" @click="handleRuntimeContentClick">
+  <section
+    class="space-y-5"
+    @click="handleRuntimeContentClick"
+  >
     <div
       v-if="!isLearnpathContext"
       class="flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm w-fit"
@@ -24,7 +27,11 @@
       <BaseButton
         v-if="canManage"
         :label="t('Results')"
-        :route="{ name: 'ExerciseReport', params: { ...route.params, exerciseId: getExerciseId() }, query: getContextParams() }"
+        :route="{
+          name: 'ExerciseReport',
+          params: { ...route.params, exerciseId: getExerciseId() },
+          query: getContextParams(),
+        }"
         icon="tracking"
         only-icon
         size="small"
@@ -32,7 +39,10 @@
       />
     </div>
 
-    <div v-if="!isLearnpathContext" class="border-b border-gray-20" />
+    <div
+      v-if="!isLearnpathContext"
+      class="border-b border-gray-20"
+    />
 
     <div
       v-if="isLoading"
@@ -57,6 +67,7 @@
           <div
             v-if="description"
             class="exercise-runtime-html text-sm text-gray-700"
+            dir="auto"
             v-html="displayTranslatedHtml(description)"
           />
         </div>
@@ -131,7 +142,7 @@
             </p>
             <ul
               v-if="legacyRuntimeReasons.length"
-              class="list-disc pl-5 text-xs"
+              class="list-disc ps-5 text-xs"
             >
               <li
                 v-for="reason in legacyRuntimeReasons"
@@ -167,37 +178,66 @@
               {{ currentAttemptLabel }} · {{ progressLabel }}
               <span v-if="hasTimeControl">
                 · {{ timeControlLabel }}:
-                <strong :class="isDisplayedTimeExpired ? 'text-danger' : 'text-gray-90'">{{ formatSeconds(displayedRemainingSeconds) }}</strong>
+                <strong :class="isDisplayedTimeExpired ? 'text-danger' : 'text-gray-90'">{{
+                  formatSeconds(displayedRemainingSeconds)
+                }}</strong>
               </span>
             </div>
             <div v-else>
               {{ t("Start or resume an exercise attempt. Draft answers can be saved before final submission.") }}
             </div>
-            <div v-if="currentCategoryLabel" class="text-support-4">
+            <div
+              v-if="currentCategoryLabel"
+              class="text-support-4"
+            >
               {{ t("Category") }}: {{ currentCategoryLabel }}
             </div>
-            <div v-if="attemptMessage" class="text-support-4">
+            <div
+              v-if="attemptMessage"
+              class="text-support-4"
+            >
               {{ attemptMessage }}
             </div>
-            <div v-if="attemptError" class="text-danger">
+            <div
+              v-if="attemptError"
+              class="text-danger"
+            >
               {{ attemptError }}
             </div>
-            <div v-if="answerSaveMessage" class="text-green-700">
+            <div
+              v-if="answerSaveMessage"
+              class="text-green-700"
+            >
               {{ answerSaveMessage }}
             </div>
-            <div v-if="answerSaveError" class="text-danger">
+            <div
+              v-if="answerSaveError"
+              class="text-danger"
+            >
               {{ answerSaveError }}
             </div>
-            <div v-if="isTimeExpired" class="text-danger">
+            <div
+              v-if="isTimeExpired"
+              class="text-danger"
+            >
               {{ t("Time limit reached. Finishing the attempt.") }}
             </div>
-            <div v-if="isQuestionTimeExpired" class="text-warning">
+            <div
+              v-if="isQuestionTimeExpired"
+              class="text-warning"
+            >
               {{ t("Question time reached. Saving your answer.") }}
             </div>
-            <div v-if="finishMessage" class="text-support-4">
+            <div
+              v-if="finishMessage"
+              class="text-support-4"
+            >
               {{ finishMessage }}
             </div>
-            <div v-if="finishError" class="text-danger">
+            <div
+              v-if="finishError"
+              class="text-danger"
+            >
               {{ finishError }}
             </div>
           </div>
@@ -222,7 +262,10 @@
           <h2 class="text-xl font-semibold text-gray-90">
             {{ reviewReminderTitle }}
           </h2>
-          <p v-if="isReviewAnswersEnabled" class="text-sm text-gray-700">
+          <p
+            v-if="isReviewAnswersEnabled"
+            class="text-sm text-gray-700"
+          >
             {{ t("Review selected questions") }}
           </p>
           <div
@@ -322,11 +365,13 @@
             <div
               v-if="currentRuntimePage.pageBreak.title"
               class="exercise-runtime-html text-lg font-semibold text-gray-90"
+              dir="auto"
               v-html="displayTranslatedHtml(currentRuntimePage.pageBreak.title)"
             />
             <div
               v-if="currentRuntimePage.pageBreak.description"
               class="exercise-runtime-html mt-2 text-sm text-gray-700"
+              dir="auto"
               v-html="displayTranslatedHtml(currentRuntimePage.pageBreak.description)"
             />
           </div>
@@ -341,12 +386,18 @@
             <h2
               v-if="currentRuntimePage.media.title"
               class="exercise-runtime-html text-lg font-semibold text-gray-90"
+              dir="auto"
               v-html="displayTranslatedHtml(currentRuntimePage.media.title)"
             />
             <div
               v-if="currentRuntimePage.media.description || currentRuntimePage.media.content?.description"
               class="exercise-runtime-html mt-2 text-sm text-gray-700"
-              v-html="displayTranslatedHtml(currentRuntimePage.media.description || currentRuntimePage.media.content?.description)"
+              dir="auto"
+              v-html="
+                displayTranslatedHtml(
+                  currentRuntimePage.media.description || currentRuntimePage.media.content?.description,
+                )
+              "
             />
           </div>
         </div>
@@ -364,11 +415,13 @@
               <h2
                 v-if="!settings.hideQuestionTitle && (!isReadingQuestion(question) || isReadingComplete(question))"
                 class="exercise-runtime-html text-lg font-semibold text-gray-90"
+                dir="auto"
                 v-html="displayTranslatedHtml(question.title)"
               />
               <div
                 v-if="question.description && !isReadingQuestion(question)"
                 class="exercise-runtime-html text-sm text-gray-700"
+                dir="auto"
                 v-html="displayTranslatedHtml(question.description)"
               />
             </div>
@@ -385,8 +438,14 @@
             </div>
           </div>
 
-          <div v-if="answers[question.id]" class="space-y-4">
-            <div v-if="isRadioChoice(question)" class="space-y-3">
+          <div
+            v-if="answers[question.id]"
+            class="space-y-4"
+          >
+            <div
+              v-if="isRadioChoice(question)"
+              class="space-y-3"
+            >
               <div
                 v-if="isReadingQuestion(question) && question.reading?.text"
                 class="space-y-3"
@@ -408,6 +467,7 @@
                   </div>
                   <div
                     class="exercise-reading-text exercise-runtime-html text-gray-800"
+                    dir="auto"
                     v-html="readingDisplayHtml(question)"
                   />
                 </div>
@@ -425,12 +485,19 @@
                     type="radio"
                     :value="choice.id"
                   />
-                  <div class="exercise-runtime-html min-w-0 flex-1" v-html="displayTranslatedHtml(choice.answer)" />
+                  <div
+                    class="exercise-runtime-html min-w-0 flex-1"
+                    dir="auto"
+                    v-html="displayTranslatedHtml(choice.answer)"
+                  />
                 </label>
               </template>
             </div>
 
-            <div v-else-if="isCheckboxChoice(question)" class="space-y-3">
+            <div
+              v-else-if="isCheckboxChoice(question)"
+              class="space-y-3"
+            >
               <label
                 v-for="choice in question.choices"
                 :key="choice.id"
@@ -443,17 +510,24 @@
                   type="checkbox"
                   :value="choice.id"
                 />
-                <div class="exercise-runtime-html min-w-0 flex-1" v-html="displayTranslatedHtml(choice.answer)" />
+                <div
+                  class="exercise-runtime-html min-w-0 flex-1"
+                  dir="auto"
+                  v-html="displayTranslatedHtml(choice.answer)"
+                />
               </label>
             </div>
 
-            <div v-else-if="isTrueFalseQuestion(question)" class="space-y-3">
+            <div
+              v-else-if="isTrueFalseQuestion(question)"
+              class="space-y-3"
+            >
               <div
                 v-if="isDegreeCertaintyQuestion(question)"
                 class="overflow-x-auto rounded-lg border border-gray-20"
               >
                 <table class="min-w-full divide-y divide-gray-20 text-sm">
-                  <thead class="bg-gray-10 text-left text-xs font-semibold uppercase tracking-wide text-gray-600">
+                  <thead class="bg-gray-10 text-start text-xs font-semibold uppercase tracking-wide text-gray-600">
                     <tr>
                       <th class="w-full px-4 py-3">
                         {{ t("Statement") }}
@@ -480,7 +554,11 @@
                       :key="choice.id"
                     >
                       <td class="min-w-[18rem] px-4 py-3 align-top">
-                        <div class="exercise-runtime-html font-medium text-gray-90" v-html="displayTranslatedHtml(choice.answer)" />
+                        <div
+                          class="exercise-runtime-html font-medium text-gray-90"
+                          dir="auto"
+                          v-html="displayTranslatedHtml(choice.answer)"
+                        />
                       </td>
                       <td
                         v-for="option in trueFalseChoiceOptions(question)"
@@ -519,7 +597,11 @@
                   :key="choice.id"
                   class="rounded-lg border border-gray-20 p-3"
                 >
-                  <div class="exercise-runtime-html mb-3 font-medium text-gray-90" v-html="displayTranslatedHtml(choice.answer)" />
+                  <div
+                    class="exercise-runtime-html mb-3 font-medium text-gray-90"
+                    dir="auto"
+                    v-html="displayTranslatedHtml(choice.answer)"
+                  />
                   <div class="flex flex-wrap gap-3">
                     <label
                       v-for="option in trueFalseChoiceOptions(question)"
@@ -539,7 +621,10 @@
               </template>
             </div>
 
-            <div v-else-if="isFillBlanksQuestion(question)" class="rounded-lg border border-gray-20 p-4 text-gray-800">
+            <div
+              v-else-if="isFillBlanksQuestion(question)"
+              class="rounded-lg border border-gray-20 p-4 text-gray-800"
+            >
               <ExerciseFillBlanksRuntime
                 v-model="answers[question.id].blanks"
                 :question-id="Number(question.id)"
@@ -547,7 +632,10 @@
               />
             </div>
 
-            <div v-else-if="isMatchingDraggableQuestion(question)" class="space-y-4">
+            <div
+              v-else-if="isMatchingDraggableQuestion(question)"
+              class="space-y-4"
+            >
               <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,22rem)]">
                 <div class="space-y-3">
                   <div class="text-sm font-semibold text-gray-80">
@@ -561,14 +649,20 @@
                     @dragover.prevent
                     @drop.prevent="onMatchingDrop(question, prompt.id)"
                   >
-                    <div class="exercise-runtime-html min-w-0 text-gray-900" v-html="displayTranslatedHtml(prompt.answer)" />
+                    <div
+                      class="exercise-runtime-html min-w-0 text-gray-900"
+                      dir="auto"
+                      v-html="displayTranslatedHtml(prompt.answer)"
+                    />
 
                     <button
                       type="button"
-                      class="min-h-[3.25rem] rounded-lg border border-dashed px-3 py-2 text-left text-sm transition"
-                      :class="selectedMatchingOptionId(question, prompt.id)
-                        ? 'border-primary bg-primary/5 text-gray-900'
-                        : 'border-gray-30 bg-gray-15 text-gray-500 hover:border-primary hover:bg-primary/5'"
+                      class="min-h-[3.25rem] rounded-lg border border-dashed px-3 py-2 text-start text-sm transition"
+                      :class="
+                        selectedMatchingOptionId(question, prompt.id)
+                          ? 'border-primary bg-primary/5 text-gray-900'
+                          : 'border-gray-30 bg-gray-15 text-gray-500 hover:border-primary hover:bg-primary/5'
+                      "
                       @click="assignSelectedMatchingOption(question, prompt.id)"
                     >
                       <template v-if="selectedMatchingOption(question, prompt.id)">
@@ -577,6 +671,7 @@
                         </span>
                         <span
                           class="exercise-runtime-html block"
+                          dir="auto"
                           v-html="displayTranslatedHtml(selectedMatchingOption(question, prompt.id).answer)"
                         />
                         <span
@@ -587,9 +682,11 @@
                         </span>
                       </template>
                       <template v-else>
-                        {{ selectedMatchingOptionForQuestion(question)
-                          ? t("Click to place the selected option here")
-                          : t("Select an option, then click here") }}
+                        {{
+                          selectedMatchingOptionForQuestion(question)
+                            ? t("Click to place the selected option here")
+                            : t("Select an option, then click here")
+                        }}
                       </template>
                     </button>
                   </div>
@@ -605,7 +702,7 @@
                     :key="option.id"
                     type="button"
                     draggable="true"
-                    class="w-full rounded-lg border px-3 py-2 text-left text-sm transition"
+                    class="w-full rounded-lg border px-3 py-2 text-start text-sm transition"
                     :class="matchingOptionButtonClass(question, option.id)"
                     @click="selectMatchingOption(question, option.id)"
                     @dragstart="onMatchingDragStart(option.id)"
@@ -613,8 +710,15 @@
                     <span class="mb-1 block text-xs font-semibold uppercase">
                       {{ matchingOptionDisplayLabel(option) }}
                     </span>
-                    <span class="exercise-runtime-html block" v-html="displayTranslatedHtml(option.answer)" />
-                    <span v-if="isMatchingOptionAssigned(question, option.id)" class="mt-1 block text-xs text-gray-500">
+                    <span
+                      class="exercise-runtime-html block"
+                      dir="auto"
+                      v-html="displayTranslatedHtml(option.answer)"
+                    />
+                    <span
+                      v-if="isMatchingOptionAssigned(question, option.id)"
+                      class="mt-1 block text-xs text-gray-500"
+                    >
                       {{ t("Already matched") }}
                     </span>
                   </button>
@@ -626,13 +730,20 @@
               </div>
             </div>
 
-            <div v-else-if="isMatchingQuestion(question)" class="space-y-3">
+            <div
+              v-else-if="isMatchingQuestion(question)"
+              class="space-y-3"
+            >
               <div
                 v-for="prompt in question.matching.prompts"
                 :key="prompt.id"
                 class="grid gap-3 rounded-lg border border-gray-20 p-3 md:grid-cols-[1fr_16rem] md:items-center"
               >
-                <div class="exercise-runtime-html" v-html="displayTranslatedHtml(prompt.answer)" />
+                <div
+                  class="exercise-runtime-html"
+                  dir="auto"
+                  v-html="displayTranslatedHtml(prompt.answer)"
+                />
                 <select
                   v-model="answers[question.id].matching[prompt.id]"
                   class="rounded border border-gray-30 px-3 py-2 text-sm"
@@ -650,7 +761,10 @@
               </div>
             </div>
 
-            <div v-else-if="isDraggableQuestion(question)" class="space-y-3">
+            <div
+              v-else-if="isDraggableQuestion(question)"
+              class="space-y-3"
+            >
               <div class="rounded-lg border border-gray-20 bg-gray-15 p-3 text-sm text-gray-700">
                 {{ t("Put the items in the correct order.") }}
               </div>
@@ -670,10 +784,16 @@
                     @drop="onDraggableOrderDrop(question, item.id)"
                   >
                     <div class="flex min-w-0 flex-1 items-start gap-3">
-                      <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                      <span
+                        class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary"
+                      >
                         {{ index + 1 }}
                       </span>
-                      <span class="exercise-runtime-html min-w-0 flex-1" v-html="displayTranslatedHtml(item.answer)" />
+                      <span
+                        class="exercise-runtime-html min-w-0 flex-1"
+                        dir="auto"
+                        v-html="displayTranslatedHtml(item.answer)"
+                      />
                     </div>
 
                     <div class="flex shrink-0 flex-wrap gap-2">
@@ -698,7 +818,10 @@
                 </ol>
               </div>
 
-              <ol v-else class="space-y-2">
+              <ol
+                v-else
+                class="space-y-2"
+              >
                 <li
                   v-for="(item, index) in draggableAnswerItems(question)"
                   :key="item.id"
@@ -710,10 +833,16 @@
                 >
                   <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div class="flex min-w-0 flex-1 items-start gap-3">
-                      <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                      <span
+                        class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary"
+                      >
                         {{ index + 1 }}
                       </span>
-                      <span class="exercise-runtime-html min-w-0 flex-1" v-html="displayTranslatedHtml(item.answer)" />
+                      <span
+                        class="exercise-runtime-html min-w-0 flex-1"
+                        dir="auto"
+                        v-html="displayTranslatedHtml(item.answer)"
+                      />
                     </div>
 
                     <div class="flex shrink-0 flex-wrap gap-2">
@@ -739,13 +868,18 @@
               </ol>
 
               <p class="text-xs text-gray-500">
-                {{ isDraggableHorizontal(question)
-                  ? t("You can drag items left or right, or use the move buttons to change the order.")
-                  : t("You can drag items or use the move buttons to change the order.") }}
+                {{
+                  isDraggableHorizontal(question)
+                    ? t("You can drag items left or right, or use the move buttons to change the order.")
+                    : t("You can drag items or use the move buttons to change the order.")
+                }}
               </p>
             </div>
 
-            <div v-else-if="isDropdownQuestion(question)" class="space-y-3">
+            <div
+              v-else-if="isDropdownQuestion(question)"
+              class="space-y-3"
+            >
               <BaseMultiSelect
                 v-model="answers[question.id].dropdown"
                 :input-id="`question_${question.id}_dropdown`"
@@ -757,10 +891,14 @@
               />
             </div>
 
-            <div v-else-if="isCalculatedQuestion(question)" class="space-y-3">
+            <div
+              v-else-if="isCalculatedQuestion(question)"
+              class="space-y-3"
+            >
               <div
                 v-if="currentCalculatedVariation(question).text"
                 class="exercise-runtime-html rounded-lg border border-gray-20 p-3 text-sm text-gray-800"
+                dir="auto"
                 v-html="displayTranslatedHtml(currentCalculatedVariation(question).text)"
               />
               <input
@@ -771,7 +909,10 @@
               />
             </div>
 
-            <div v-else-if="isOpenQuestion(question)" class="space-y-2">
+            <div
+              v-else-if="isOpenQuestion(question)"
+              class="space-y-2"
+            >
               <textarea
                 v-model="answers[question.id].text"
                 class="min-h-32 w-full rounded border border-gray-30 px-3 py-2 text-sm"
@@ -779,7 +920,10 @@
               />
             </div>
 
-            <div v-else-if="isUploadQuestion(question)" class="space-y-2">
+            <div
+              v-else-if="isUploadQuestion(question)"
+              class="space-y-2"
+            >
               <input
                 class="block w-full text-sm text-gray-700"
                 :name="`question_${question.id}_file`"
@@ -815,7 +959,10 @@
               </div>
             </div>
 
-            <div v-else-if="isOralQuestion(question)" class="space-y-3">
+            <div
+              v-else-if="isOralQuestion(question)"
+              class="space-y-3"
+            >
               <div class="rounded-lg border border-gray-20 bg-gray-10 p-3">
                 <div class="mb-2 text-sm font-semibold text-gray-800">
                   {{ t("Record answer") }}
@@ -876,16 +1023,29 @@
               </div>
             </div>
 
-            <div v-else-if="isOnlyofficeQuestion(question)" class="space-y-3">
+            <div
+              v-else-if="isOnlyofficeQuestion(question)"
+              class="space-y-3"
+            >
               <div class="rounded-lg border border-info/30 bg-support-1 p-4 text-sm text-support-4">
                 <div class="mb-2 font-semibold text-gray-90">
                   {{ t("Office document") }}
                 </div>
-                <p v-if="question.onlyoffice?.templateName" class="mb-3">
+                <p
+                  v-if="question.onlyoffice?.templateName"
+                  class="mb-3"
+                >
                   {{ t("Template") }}: {{ question.onlyoffice.templateName }}
                 </p>
-                <p v-if="!canManage" class="mb-3">
-                  {{ t("Complete the document in the editor below. The file will be attached to this attempt for teacher correction.") }}
+                <p
+                  v-if="!canManage"
+                  class="mb-3"
+                >
+                  {{
+                    t(
+                      "Complete the document in the editor below. The file will be attached to this attempt for teacher correction.",
+                    )
+                  }}
                 </p>
                 <div
                   v-if="onlyofficeEditorUrl(question) || (answers[question.id]?.onlyofficeError && !canManage)"
@@ -957,7 +1117,10 @@
               </div>
             </div>
 
-            <div v-else-if="isAnnotationQuestion(question)" class="space-y-3">
+            <div
+              v-else-if="isAnnotationQuestion(question)"
+              class="space-y-3"
+            >
               <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
                 <div
                   v-if="question.annotation.imageUrl"
@@ -1011,7 +1174,11 @@
                   <div class="grid grid-cols-2 gap-2">
                     <button
                       class="rounded border px-3 py-2 text-sm font-semibold"
-                      :class="answers[question.id]?.annotationMode === 'path' ? 'border-primary bg-primary/10 text-primary' : 'border-gray-30 text-gray-700'"
+                      :class="
+                        answers[question.id]?.annotationMode === 'path'
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-gray-30 text-gray-700'
+                      "
                       type="button"
                       @click="setAnnotationMode(question, 'path')"
                     >
@@ -1019,7 +1186,11 @@
                     </button>
                     <button
                       class="rounded border px-3 py-2 text-sm font-semibold"
-                      :class="answers[question.id]?.annotationMode === 'text' ? 'border-primary bg-primary/10 text-primary' : 'border-gray-30 text-gray-700'"
+                      :class="
+                        answers[question.id]?.annotationMode === 'text'
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-gray-30 text-gray-700'
+                      "
                       type="button"
                       @click="setAnnotationMode(question, 'text')"
                     >
@@ -1086,7 +1257,10 @@
               </div>
             </div>
 
-            <div v-else-if="isHotspotQuestion(question)" class="space-y-3">
+            <div
+              v-else-if="isHotspotQuestion(question)"
+              class="space-y-3"
+            >
               <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
                 <div
                   v-if="question.hotspot.imageUrl"
@@ -1182,17 +1356,27 @@
                       <button
                         v-for="(zone, zoneIndex) in hotspotZones(question)"
                         :key="zone.id"
-                        class="w-full rounded-lg border px-3 py-2 text-left text-sm transition hover:bg-gray-10"
-                        :class="Number(answers[question.id].selectedHotspotAnswerId) === Number(zone.id) ? 'border-primary bg-primary/5 text-primary' : 'border-gray-20 text-gray-700'"
+                        class="w-full rounded-lg border px-3 py-2 text-start text-sm transition hover:bg-gray-10"
+                        :class="
+                          Number(answers[question.id].selectedHotspotAnswerId) === Number(zone.id)
+                            ? 'border-primary bg-primary/5 text-primary'
+                            : 'border-gray-20 text-gray-700'
+                        "
                         type="button"
                         @click="selectHotspotZone(question, zone.id)"
                       >
                         <div class="flex items-start gap-2">
-                          <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
+                          <span
+                            class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white"
+                          >
                             {{ zone.position || zoneIndex + 1 }}
                           </span>
                           <span class="min-w-0 flex-1">
-                            <span class="exercise-runtime-html block font-medium" v-html="displayTranslatedHtml(zone.answer)" />
+                            <span
+                              class="exercise-runtime-html block font-medium"
+                              dir="auto"
+                              v-html="displayTranslatedHtml(zone.answer)"
+                            />
                             <span
                               v-if="hotspotPointByAnswer(question, zone.id)"
                               class="mt-1 block text-xs text-success"
@@ -1214,10 +1398,14 @@
               </div>
             </div>
 
-            <div v-else-if="isMediaQuestion(question)" class="space-y-3">
+            <div
+              v-else-if="isMediaQuestion(question)"
+              class="space-y-3"
+            >
               <div
                 v-if="question.content?.description || question.description"
                 class="exercise-runtime-html rounded-lg border border-gray-20 bg-gray-10 p-4 text-gray-800"
+                dir="auto"
                 v-html="displayTranslatedHtml(question.content?.description || question.description)"
               />
               <div
@@ -1228,10 +1416,14 @@
               </div>
             </div>
 
-            <div v-else-if="isPageBreak(question)" class="space-y-3">
+            <div
+              v-else-if="isPageBreak(question)"
+              class="space-y-3"
+            >
               <div
                 v-if="question.content?.description || question.description"
                 class="exercise-runtime-html rounded-lg border border-gray-20 bg-gray-10 p-4 text-gray-800"
+                dir="auto"
                 v-html="displayTranslatedHtml(question.content?.description || question.description)"
               />
               <div
@@ -1267,7 +1459,13 @@
           </div>
 
           <div
-            v-if="!canManage && activeAttempt && !usesPagedNavigation && isDraftSaveSupported(question) && (!isReadingQuestion(question) || isReadingComplete(question))"
+            v-if="
+              !canManage &&
+              activeAttempt &&
+              !usesPagedNavigation &&
+              isDraftSaveSupported(question) &&
+              (!isReadingQuestion(question) || isReadingComplete(question))
+            "
             class="mt-4 flex justify-end border-t border-gray-20 pt-4"
           >
             <BaseButton
@@ -1290,12 +1488,17 @@
                   {{ t(directFeedbackForQuestion(question).title || "Feedback") }}
                 </div>
                 <div>
-                  {{ t("Score") }}: {{ formatScore(directFeedbackForQuestion(question).score) }} / {{ formatScore(directFeedbackForQuestion(question).maxScore) }}
+                  {{ t("Score") }}: {{ formatScore(directFeedbackForQuestion(question).score) }} /
+                  {{ formatScore(directFeedbackForQuestion(question).maxScore) }}
                 </div>
               </div>
               <div class="flex flex-wrap gap-2">
                 <BaseButton
-                  :label="directFeedbackForQuestion(question).afterAction === 'finish' ? t('End test') : t('Proceed with the test')"
+                  :label="
+                    directFeedbackForQuestion(question).afterAction === 'finish'
+                      ? t('End test')
+                      : t('Proceed with the test')
+                  "
                   icon="check"
                   type="primary"
                   @click="proceedAfterFeedback(directFeedbackForQuestion(question))"
@@ -1315,11 +1518,13 @@
                 <div
                   v-if="entry.answer"
                   class="exercise-runtime-html font-medium text-gray-90"
+                  dir="auto"
                   v-html="displayTranslatedHtml(entry.answer)"
                 />
                 <div
                   v-if="entry.comment"
                   class="exercise-runtime-html mt-1 text-gray-700"
+                  dir="auto"
                   v-html="displayTranslatedHtml(entry.comment)"
                 />
               </div>
@@ -1356,7 +1561,13 @@
         >
           <BaseButton
             v-if="showPreviousNavigationButton"
-            :disabled="!canMovePrevious || isSavingAnswer || isQuestionTimeExpired || isAutoAdvancingTimedQuestion || isVisibleReadingInProgress"
+            :disabled="
+              !canMovePrevious ||
+              isSavingAnswer ||
+              isQuestionTimeExpired ||
+              isAutoAdvancingTimedQuestion ||
+              isVisibleReadingInProgress
+            "
             :label="previousNavigationLabel"
             icon="back"
             type="secondary"
@@ -1365,7 +1576,14 @@
           <div class="flex flex-wrap gap-2">
             <BaseButton
               v-if="!canManage && activeAttempt && usesPagedNavigation"
-              :disabled="isSavingAnswer || isTimeExpired || isQuestionTimeExpired || isAutoAdvancingTimedQuestion || isVisibleReadingInProgress || !visibleQuestions.some(isDraftSaveSupported)"
+              :disabled="
+                isSavingAnswer ||
+                isTimeExpired ||
+                isQuestionTimeExpired ||
+                isAutoAdvancingTimedQuestion ||
+                isVisibleReadingInProgress ||
+                !visibleQuestions.some(isDraftSaveSupported)
+              "
               :label="isSavingAnswer ? t('Saving') : t('Save draft')"
               icon="check"
               type="success"
@@ -1373,7 +1591,13 @@
             />
             <BaseButton
               v-if="canMoveNext"
-              :disabled="isSavingAnswer || isTimeExpired || isQuestionTimeExpired || isAutoAdvancingTimedQuestion || isVisibleReadingInProgress"
+              :disabled="
+                isSavingAnswer ||
+                isTimeExpired ||
+                isQuestionTimeExpired ||
+                isAutoAdvancingTimedQuestion ||
+                isVisibleReadingInProgress
+              "
               :label="nextNavigationLabel"
               icon="next"
               icon-position="right"
@@ -1398,7 +1622,16 @@
             />
             <BaseButton
               v-if="!isReviewingMarkedQuestions && !canManage && activeAttempt && canFinishCurrentPage"
-              :disabled="!canSubmit || !canFinishWithConfirmation || isSavingAnswer || isFinishingAttempt || isAutoFinishingExpiredAttempt || isQuestionTimeExpired || isAutoAdvancingTimedQuestion || isVisibleReadingInProgress"
+              :disabled="
+                !canSubmit ||
+                !canFinishWithConfirmation ||
+                isSavingAnswer ||
+                isFinishingAttempt ||
+                isAutoFinishingExpiredAttempt ||
+                isQuestionTimeExpired ||
+                isAutoAdvancingTimedQuestion ||
+                isVisibleReadingInProgress
+              "
               :label="finishButtonLabel"
               icon="check"
               type="primary"
@@ -1476,11 +1709,13 @@
             <div
               v-if="entry.answer"
               class="exercise-runtime-html font-medium text-gray-90"
+              dir="auto"
               v-html="displayTranslatedHtml(entry.answer)"
             />
             <div
               v-if="entry.comment"
               class="exercise-runtime-html mt-1 text-gray-700"
+              dir="auto"
               v-html="displayTranslatedHtml(entry.comment)"
             />
           </div>
@@ -1508,15 +1743,28 @@
     >
       <div class="space-y-4 text-sm text-gray-700">
         <p>
-          {{ t("You finished the questions related to this question category, it is your last chance to go back and revise those questions.") }}
+          {{
+            t(
+              "You finished the questions related to this question category, it is your last chance to go back and revise those questions.",
+            )
+          }}
         </p>
-        <p v-if="categoryReminder?.categoryDescription" class="rounded-lg bg-gray-10 p-3">
+        <p
+          v-if="categoryReminder?.categoryDescription"
+          class="rounded-lg bg-gray-10 p-3"
+        >
           {{ categoryReminder.categoryDescription }}
         </p>
-        <div v-if="categoryReminderError" class="text-danger">
+        <div
+          v-if="categoryReminderError"
+          class="text-danger"
+        >
           {{ categoryReminderError }}
         </div>
-        <div v-if="isReviewAnswersEnabled && categoryReminderQuestions.length > 0" class="space-y-2">
+        <div
+          v-if="isReviewAnswersEnabled && categoryReminderQuestions.length > 0"
+          class="space-y-2"
+        >
           <label
             v-for="question in categoryReminderQuestions"
             :key="`category-reminder-question-${question.id}`"
@@ -1708,7 +1956,10 @@ const runtimePages = computed(() => {
 })
 
 const usesPagedNavigation = computed(() => {
-  if (runtimePages.value.length > 0 && (settings.value.effectiveOneQuestionPerPage || settings.value.usesStructuralPages)) {
+  if (
+    runtimePages.value.length > 0 &&
+    (settings.value.effectiveOneQuestionPerPage || settings.value.usesStructuralPages)
+  ) {
     return true
   }
 
@@ -1718,10 +1969,12 @@ const usesPagedNavigation = computed(() => {
 const hasRuntimeQuestions = computed(() => questions.value.length > 0)
 
 const showLegacyRuntimeFallback = computed(() => {
-  return hasRuntimeQuestions.value
-    && !canManage.value
-    && Boolean(legacyUrls.value?.overview)
-    && (true === settings.value.requiresLegacyRuntime || (Boolean(activeAttempt.value) && true === usesLegacySubmit.value))
+  return (
+    hasRuntimeQuestions.value &&
+    !canManage.value &&
+    Boolean(legacyUrls.value?.overview) &&
+    (true === settings.value.requiresLegacyRuntime || (Boolean(activeAttempt.value) && true === usesLegacySubmit.value))
+  )
 })
 
 const currentRuntimePage = computed(() => {
@@ -1760,32 +2013,57 @@ const visibleQuestions = computed(() => {
 })
 
 const visibleQuestionTotal = computed(() => answerableQuestions.value.length)
-const isVisibleReadingInProgress = computed(() => visibleQuestions.value.some(
-  (question) => isReadingQuestion(question) && !isReadingComplete(question),
-))
+const isVisibleReadingInProgress = computed(() =>
+  visibleQuestions.value.some((question) => isReadingQuestion(question) && !isReadingComplete(question)),
+)
 const isImmediateFeedbackRuntime = computed(() => [1, 3, 4].includes(Number(settings.value.feedbackType || 0)))
-const isReviewAnswersEnabled = computed(() => !isImmediateFeedbackRuntime.value && Number(settings.value.reviewAnswers || 0) > 0)
-const isCheckAnswersBeforeFinishEnabled = computed(() => !isImmediateFeedbackRuntime.value && true === settings.value.checkAllAnswersBeforeEndTest)
-const isFinalAnswerChecklistEnabled = computed(() => !isImmediateFeedbackRuntime.value && (isReviewAnswersEnabled.value || isCheckAnswersBeforeFinishEnabled.value))
+const isReviewAnswersEnabled = computed(
+  () => !isImmediateFeedbackRuntime.value && Number(settings.value.reviewAnswers || 0) > 0,
+)
+const isCheckAnswersBeforeFinishEnabled = computed(
+  () => !isImmediateFeedbackRuntime.value && true === settings.value.checkAllAnswersBeforeEndTest,
+)
+const isFinalAnswerChecklistEnabled = computed(
+  () => !isImmediateFeedbackRuntime.value && (isReviewAnswersEnabled.value || isCheckAnswersBeforeFinishEnabled.value),
+)
 const isReviewingMarkedQuestions = computed(() => reviewQueue.value.length > 0)
 const showReviewReminderScreen = computed(() => {
-  return !canManage.value
-    && Boolean(activeAttempt.value?.attemptId)
-    && isFinalAnswerChecklistEnabled.value
-    && isReviewReminderVisible.value
-    && !isReviewingMarkedQuestions.value
+  return (
+    !canManage.value &&
+    Boolean(activeAttempt.value?.attemptId) &&
+    isFinalAnswerChecklistEnabled.value &&
+    isReviewReminderVisible.value &&
+    !isReviewingMarkedQuestions.value
+  )
 })
 const navigationTotal = computed(() => {
   if (isReviewingMarkedQuestions.value) {
     return Math.max(1, reviewQueue.value.length)
   }
 
-  return usesPagedNavigation.value ? Math.max(1, runtimePages.value.length || visibleQuestionTotal.value) : visibleQuestionTotal.value
+  return usesPagedNavigation.value
+    ? Math.max(1, runtimePages.value.length || visibleQuestionTotal.value)
+    : visibleQuestionTotal.value
 })
-const previousNavigationAllowed = computed(() => !settings.value.preventBackwards && true !== settings.value.blockCategoryQuestions && settings.value.showPreviousButton !== false)
-const showPreviousNavigationButton = computed(() => isReviewingMarkedQuestions.value || (usesPagedNavigation.value && previousNavigationAllowed.value))
-const canMovePrevious = computed(() => isReviewingMarkedQuestions.value ? reviewQueueIndex.value > 0 : showPreviousNavigationButton.value && currentQuestionIndex.value > 0)
-const canMoveNext = computed(() => isReviewingMarkedQuestions.value ? reviewQueueIndex.value < reviewQueue.value.length - 1 : usesPagedNavigation.value && currentQuestionIndex.value < navigationTotal.value - 1)
+const previousNavigationAllowed = computed(
+  () =>
+    !settings.value.preventBackwards &&
+    true !== settings.value.blockCategoryQuestions &&
+    settings.value.showPreviousButton !== false,
+)
+const showPreviousNavigationButton = computed(
+  () => isReviewingMarkedQuestions.value || (usesPagedNavigation.value && previousNavigationAllowed.value),
+)
+const canMovePrevious = computed(() =>
+  isReviewingMarkedQuestions.value
+    ? reviewQueueIndex.value > 0
+    : showPreviousNavigationButton.value && currentQuestionIndex.value > 0,
+)
+const canMoveNext = computed(() =>
+  isReviewingMarkedQuestions.value
+    ? reviewQueueIndex.value < reviewQueue.value.length - 1
+    : usesPagedNavigation.value && currentQuestionIndex.value < navigationTotal.value - 1,
+)
 const canFinishCurrentPage = computed(() => !usesPagedNavigation.value || !canMoveNext.value)
 const currentTimedQuestion = computed(() => {
   if (!activeAttempt.value || canManage.value || true !== settings.value.allowTimePerQuestion) {
@@ -1802,12 +2080,18 @@ const currentTimedQuestion = computed(() => {
   return duration > 0 ? question : null
 })
 const currentTimedQuestionId = computed(() => Number(currentTimedQuestion.value?.id || 0))
-const hasGlobalTimeControl = computed(() => null !== countdownRemainingSeconds.value && undefined !== countdownRemainingSeconds.value)
-const hasQuestionTimeControl = computed(() => null !== questionCountdownRemainingSeconds.value && undefined !== questionCountdownRemainingSeconds.value)
+const hasGlobalTimeControl = computed(
+  () => null !== countdownRemainingSeconds.value && undefined !== countdownRemainingSeconds.value,
+)
+const hasQuestionTimeControl = computed(
+  () => null !== questionCountdownRemainingSeconds.value && undefined !== questionCountdownRemainingSeconds.value,
+)
 const hasTimeControl = computed(() => hasGlobalTimeControl.value || hasQuestionTimeControl.value)
-const displayedRemainingSeconds = computed(() => hasQuestionTimeControl.value ? questionCountdownRemainingSeconds.value : countdownRemainingSeconds.value)
+const displayedRemainingSeconds = computed(() =>
+  hasQuestionTimeControl.value ? questionCountdownRemainingSeconds.value : countdownRemainingSeconds.value,
+)
 const isDisplayedTimeExpired = computed(() => isTimeExpired.value || isQuestionTimeExpired.value)
-const timeControlLabel = computed(() => hasQuestionTimeControl.value ? t("Question time left") : t("Time left"))
+const timeControlLabel = computed(() => (hasQuestionTimeControl.value ? t("Question time left") : t("Time left")))
 const answerableQuestions = computed(() => questions.value.filter((question) => !isStructuralQuestion(question)))
 const imageZoomEnabled = computed(() => {
   const origin = String(getQueryValue(route.query.origin) || "").toLowerCase()
@@ -1826,7 +2110,11 @@ const currentNavigationIndex = computed(() => {
   return Math.min(Math.max(0, index), Math.max(0, navigationTotal.value - 1))
 })
 const progressLabel = computed(() => {
-  if (usesPagedNavigation.value && currentRuntimePage.value && (settings.value.usesStructuralPages || visibleQuestions.value.length > 1)) {
+  if (
+    usesPagedNavigation.value &&
+    currentRuntimePage.value &&
+    (settings.value.usesStructuralPages || visibleQuestions.value.length > 1)
+  ) {
     return `${t("Page")} ${currentNavigationIndex.value + 1} / ${navigationTotal.value}`
   }
 
@@ -1847,9 +2135,10 @@ const currentAttemptLabel = computed(() => {
   return t("Current attempt")
 })
 const currentCategoryLabel = computed(() => {
-  const shouldDisplayCategory = true === settings.value.blockCategoryQuestions
-    || true === settings.value.displayCategoryName
-    || 1 === Number(settings.value.displayCategoryName)
+  const shouldDisplayCategory =
+    true === settings.value.blockCategoryQuestions ||
+    true === settings.value.displayCategoryName ||
+    1 === Number(settings.value.displayCategoryName)
 
   if (!shouldDisplayCategory) {
     return ""
@@ -1858,8 +2147,16 @@ const currentCategoryLabel = computed(() => {
   const question = visibleQuestions.value.find((item) => !isStructuralQuestion(item))
   return displayText(question?.primaryCategoryTitle || "")
 })
-const previousNavigationLabel = computed(() => isReviewingMarkedQuestions.value || !(settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Previous question") : t("Previous page"))
-const nextNavigationLabel = computed(() => isReviewingMarkedQuestions.value || !(settings.value.usesStructuralPages || visibleQuestions.value.length > 1) ? t("Next question") : t("Next page"))
+const previousNavigationLabel = computed(() =>
+  isReviewingMarkedQuestions.value || !(settings.value.usesStructuralPages || visibleQuestions.value.length > 1)
+    ? t("Previous question")
+    : t("Previous page"),
+)
+const nextNavigationLabel = computed(() =>
+  isReviewingMarkedQuestions.value || !(settings.value.usesStructuralPages || visibleQuestions.value.length > 1)
+    ? t("Next question")
+    : t("Next page"),
+)
 const finishButtonLabel = computed(() => {
   if (isFinishingAttempt.value) {
     return t("Finishing")
@@ -1867,9 +2164,15 @@ const finishButtonLabel = computed(() => {
 
   return isReviewAnswersEnabled.value ? t("Review my answers") : t("Finish test")
 })
-const selectedReviewQuestionIds = computed(() => Array.from(reviewQuestionIds.value).map(Number).filter((questionId) => questionId > 0))
+const selectedReviewQuestionIds = computed(() =>
+  Array.from(reviewQuestionIds.value)
+    .map(Number)
+    .filter((questionId) => questionId > 0),
+)
 const categoryReminderQuestions = computed(() => {
-  const ids = Array.isArray(categoryReminder.value?.questionIds) ? categoryReminder.value.questionIds.map(Number).filter((id) => id > 0) : []
+  const ids = Array.isArray(categoryReminder.value?.questionIds)
+    ? categoryReminder.value.questionIds.map(Number).filter((id) => id > 0)
+    : []
 
   return ids
     .map((questionId) => questionMap.value.get(questionId))
@@ -1879,15 +2182,19 @@ const categoryReminderQuestions = computed(() => {
       position: Number(question.position || index + 1),
     }))
 })
-const selectedCategoryReminderQuestionIds = computed(() => categoryReminderQuestions.value
-  .map((question) => Number(question.id || 0))
-  .filter((questionId) => questionId > 0 && reviewQuestionIds.value.has(questionId)))
-const reviewQuestionList = computed(() => answerableQuestions.value.map((question, index) => ({
-  ...question,
-  position: Number(question.position || index + 1),
-  isAnswered: savedQuestionIds.value.has(Number(question.id || 0)),
-  isMarked: reviewQuestionIds.value.has(Number(question.id || 0)),
-})))
+const selectedCategoryReminderQuestionIds = computed(() =>
+  categoryReminderQuestions.value
+    .map((question) => Number(question.id || 0))
+    .filter((questionId) => questionId > 0 && reviewQuestionIds.value.has(questionId)),
+)
+const reviewQuestionList = computed(() =>
+  answerableQuestions.value.map((question, index) => ({
+    ...question,
+    position: Number(question.position || index + 1),
+    isAnswered: savedQuestionIds.value.has(Number(question.id || 0)),
+    isMarked: reviewQuestionIds.value.has(Number(question.id || 0)),
+  })),
+)
 const firstUnansweredReviewQuestionId = computed(() => {
   const question = reviewQuestionList.value.find((item) => !item.isAnswered)
 
@@ -1902,7 +2209,12 @@ const hasVisibleDirectFeedback = computed(() => {
 })
 const showRuntimeNavigationControls = computed(() => !hasVisibleDirectFeedback.value)
 const requiresSavedAnswerConfirmation = computed(() => {
-  return !isImmediateFeedbackRuntime.value && !canManage.value && Boolean(activeAttempt.value?.attemptId) && true === settings.value.confirmSavedAnswers
+  return (
+    !isImmediateFeedbackRuntime.value &&
+    !canManage.value &&
+    Boolean(activeAttempt.value?.attemptId) &&
+    true === settings.value.confirmSavedAnswers
+  )
 })
 const canFinishWithConfirmation = computed(() => {
   return !requiresSavedAnswerConfirmation.value || true === confirmedSavedAnswers.value
@@ -1928,10 +2240,12 @@ function isQuestionMarkedForReview(questionId) {
 }
 
 function showReviewLaterOption(question) {
-  return !canManage.value
-    && Boolean(activeAttempt.value?.attemptId)
-    && isReviewAnswersEnabled.value
-    && !isStructuralQuestion(question)
+  return (
+    !canManage.value &&
+    Boolean(activeAttempt.value?.attemptId) &&
+    isReviewAnswersEnabled.value &&
+    !isStructuralQuestion(question)
+  )
 }
 
 function syncReviewQuestionIds(questionIds = []) {
@@ -2132,7 +2446,7 @@ function reviewSelectedCategoryQuestions() {
 
 async function confirmCategoryReminder() {
   const reminder = categoryReminder.value || {}
-  const action = reminder.lastCategory ? "finish" : (reminder.afterAction || "next")
+  const action = reminder.lastCategory ? "finish" : reminder.afterAction || "next"
   const question = visibleQuestions.value.find(isDraftSaveSupported)
   if (!question) {
     closeCategoryReminder()
@@ -2245,8 +2559,13 @@ function normalizeRuntimePages(pages = []) {
 
     const questionIds = Array.isArray(page.questionIds)
       ? page.questionIds
-        .map((questionId) => Number(questionId || 0))
-        .filter((questionId) => questionId > 0 && questionMap.value.has(questionId) && !isStructuralQuestion(questionMap.value.get(questionId)))
+          .map((questionId) => Number(questionId || 0))
+          .filter(
+            (questionId) =>
+              questionId > 0 &&
+              questionMap.value.has(questionId) &&
+              !isStructuralQuestion(questionMap.value.get(questionId)),
+          )
       : []
 
     if (questionIds.length > 0 || hasRuntimePageContent(page)) {
@@ -2265,19 +2584,18 @@ function hasRuntimePageContent(page = {}) {
   const pageBreak = page.pageBreak || null
 
   return Boolean(
-    nonEmptyText(media?.title)
-    || nonEmptyText(media?.description)
-    || nonEmptyText(media?.content?.description)
-    || nonEmptyText(pageBreak?.title)
-    || nonEmptyText(pageBreak?.description)
-    || nonEmptyText(pageBreak?.content?.description)
+    nonEmptyText(media?.title) ||
+    nonEmptyText(media?.description) ||
+    nonEmptyText(media?.content?.description) ||
+    nonEmptyText(pageBreak?.title) ||
+    nonEmptyText(pageBreak?.description) ||
+    nonEmptyText(pageBreak?.content?.description),
   )
 }
 
 function nonEmptyText(value) {
   return typeof value === "string" && value.trim() !== ""
 }
-
 
 function syncCountdownFromAttempt(attempt) {
   stopCountdownTimer()
@@ -2403,7 +2721,8 @@ async function handleQuestionTimeLimit() {
 }
 
 function getSavedQuestionSecondsSpent(questionId) {
-  const rows = activeAttempt.value?.savedAnswers?.[questionId] || activeAttempt.value?.savedAnswers?.[String(questionId)] || []
+  const rows =
+    activeAttempt.value?.savedAnswers?.[questionId] || activeAttempt.value?.savedAnswers?.[String(questionId)] || []
   if (!Array.isArray(rows)) {
     return 0
   }
@@ -2493,17 +2812,21 @@ function isEmbeddedInLearnpath() {
       const parentPath = window.parent.location?.pathname || ""
       const referrer = document.referrer || ""
 
-      return parentPath.includes("/resources/lp/")
-        || parentPath.includes("/main/lp/")
-        || parentPath.includes("/main/newscorm/")
-        || referrer.includes("/resources/lp/")
-        || referrer.includes("/main/lp/")
-        || referrer.includes("/main/newscorm/")
+      return (
+        parentPath.includes("/resources/lp/") ||
+        parentPath.includes("/main/lp/") ||
+        parentPath.includes("/main/newscorm/") ||
+        referrer.includes("/resources/lp/") ||
+        referrer.includes("/main/lp/") ||
+        referrer.includes("/main/newscorm/")
+      )
     }
   } catch (error) {
-    return (document.referrer || "").includes("/resources/lp/")
-      || (document.referrer || "").includes("/main/lp/")
-      || (document.referrer || "").includes("/main/newscorm/")
+    return (
+      (document.referrer || "").includes("/resources/lp/") ||
+      (document.referrer || "").includes("/main/lp/") ||
+      (document.referrer || "").includes("/main/newscorm/")
+    )
   }
 
   return false
@@ -2512,10 +2835,12 @@ function isEmbeddedInLearnpath() {
 const isLearnpathContext = computed(() => {
   const origin = String(getQueryValue(route.query.origin) || "")
 
-  return origin === "learnpath"
-    || Boolean(getQueryValue(route.query.lp_init))
-    || Boolean(getQueryValue(route.query.learnpath_id))
-    || isEmbeddedInLearnpath()
+  return (
+    origin === "learnpath" ||
+    Boolean(getQueryValue(route.query.lp_init)) ||
+    Boolean(getQueryValue(route.query.learnpath_id)) ||
+    isEmbeddedInLearnpath()
+  )
 })
 
 function syncLearnpathParentFromFinish(response) {
@@ -2604,7 +2929,8 @@ async function loadRuntime() {
     totalScore.value = Number(response.totalScore || 0)
     canManage.value = true === response.canManage
     isPreviewFinished.value = false
-    canStartAttempt.value = hasRuntimeQuestions.value && true === response.canStartAttempt && true !== settings.value.requiresLegacyRuntime
+    canStartAttempt.value =
+      hasRuntimeQuestions.value && true === response.canStartAttempt && true !== settings.value.requiresLegacyRuntime
     activeAttempt.value = response.attempt || null
     canSubmit.value = true === response.canSubmit
     usesLegacySubmit.value = true === response.usesLegacySubmit && Boolean(activeAttempt.value)
@@ -2748,7 +3074,13 @@ function reorderQuestionsFromAttempt(questionIds = []) {
 }
 
 async function goToPreviousQuestion() {
-  if (isVisibleReadingInProgress.value || isTimeExpired.value || isQuestionTimeExpired.value || isAutoAdvancingTimedQuestion.value || !canMovePrevious.value) {
+  if (
+    isVisibleReadingInProgress.value ||
+    isTimeExpired.value ||
+    isQuestionTimeExpired.value ||
+    isAutoAdvancingTimedQuestion.value ||
+    !canMovePrevious.value
+  ) {
     return
   }
 
@@ -2770,7 +3102,13 @@ async function goToPreviousQuestion() {
 }
 
 async function goToNextQuestion() {
-  if (isVisibleReadingInProgress.value || isTimeExpired.value || isQuestionTimeExpired.value || isAutoAdvancingTimedQuestion.value || !canMoveNext.value) {
+  if (
+    isVisibleReadingInProgress.value ||
+    isTimeExpired.value ||
+    isQuestionTimeExpired.value ||
+    isAutoAdvancingTimedQuestion.value ||
+    !canMoveNext.value
+  ) {
     return
   }
 
@@ -2948,23 +3286,24 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none", options
     return
   }
 
-  const response = isUploadQuestion(question) || isOralQuestion(question)
-    ? await saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFeedback, options)
-    : await exerciseService.saveExerciseRuntimeAnswer(
-      {
-        exerciseId,
-        attemptId,
-        questionId: Number(question.id),
-        answer: buildAnswerPayload(question),
-        reviewLater: isQuestionMarkedForReview(question.id),
-        secondsSpent: getQuestionSecondsSpent(question),
-        navigationAction: afterFeedback,
-        confirmCategory: true === options.confirmCategory,
-      },
-      getContextParams(),
-      exerciseId,
-      attemptId,
-    )
+  const response =
+    isUploadQuestion(question) || isOralQuestion(question)
+      ? await saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFeedback, options)
+      : await exerciseService.saveExerciseRuntimeAnswer(
+          {
+            exerciseId,
+            attemptId,
+            questionId: Number(question.id),
+            answer: buildAnswerPayload(question),
+            reviewLater: isQuestionMarkedForReview(question.id),
+            secondsSpent: getQuestionSecondsSpent(question),
+            navigationAction: afterFeedback,
+            confirmCategory: true === options.confirmCategory,
+          },
+          getContextParams(),
+          exerciseId,
+          attemptId,
+        )
 
   if (!response) {
     return
@@ -3005,7 +3344,6 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none", options
   return response
 }
 
-
 async function saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFeedback = "none", options = {}) {
   const questionAnswer = answers.value[question.id] || {}
   if (!questionAnswer.uploadFile && !questionAnswer.oralFile) {
@@ -3039,7 +3377,6 @@ async function saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFe
 
   return response
 }
-
 
 function isRuntimeFeedbackMode() {
   return [1, 3, 4].includes(Number(settings.value.feedbackType || 0))
@@ -3319,7 +3656,11 @@ function buildAnswerPayload(question) {
   }
 
   if (isDraggableQuestion(question)) {
-    return { order: draggableAnswerItems(question).map((item) => Number(item.id || 0)).filter((itemId) => itemId > 0) }
+    return {
+      order: draggableAnswerItems(question)
+        .map((item) => Number(item.id || 0))
+        .filter((itemId) => itemId > 0),
+    }
   }
 
   if (isDropdownQuestion(question)) {
@@ -3329,7 +3670,11 @@ function buildAnswerPayload(question) {
   if (isCalculatedQuestion(question)) {
     return {
       calculated: questionAnswer.calculated || "",
-      answerId: questionAnswer.calculatedAnswerId || currentCalculatedVariation(question).id || question.calculated?.answerId || null,
+      answerId:
+        questionAnswer.calculatedAnswerId ||
+        currentCalculatedVariation(question).id ||
+        question.calculated?.answerId ||
+        null,
     }
   }
 
@@ -3356,20 +3701,22 @@ function buildAnswerPayload(question) {
 }
 
 function isDraftSaveSupported(question) {
-  return isRadioChoice(question)
-    || isCheckboxChoice(question)
-    || isDraftTrueFalseQuestion(question)
-    || isFillBlanksQuestion(question)
-    || isMatchingQuestion(question)
-    || isDraggableQuestion(question)
-    || isDropdownQuestion(question)
-    || isCalculatedQuestion(question)
-    || isHotspotQuestion(question)
-    || isAnnotationQuestion(question)
-    || isDraftFreeAnswerQuestion(question)
-    || isOnlyofficeQuestion(question)
-    || isUploadQuestion(question)
-    || isOralQuestion(question)
+  return (
+    isRadioChoice(question) ||
+    isCheckboxChoice(question) ||
+    isDraftTrueFalseQuestion(question) ||
+    isFillBlanksQuestion(question) ||
+    isMatchingQuestion(question) ||
+    isDraggableQuestion(question) ||
+    isDropdownQuestion(question) ||
+    isCalculatedQuestion(question) ||
+    isHotspotQuestion(question) ||
+    isAnnotationQuestion(question) ||
+    isDraftFreeAnswerQuestion(question) ||
+    isOnlyofficeQuestion(question) ||
+    isUploadQuestion(question) ||
+    isOralQuestion(question)
+  )
 }
 
 function isDraftTrueFalseQuestion(question) {
@@ -3474,7 +3821,8 @@ function applySavedAnswer(question, rows) {
 
   if (isCalculatedQuestion(question)) {
     const [answerId, value] = parseSavedCalculatedAnswer(rows[0]?.answer || "")
-    questionAnswer.calculatedAnswerId = answerId || question.calculated?.answerId || currentCalculatedVariation(question).id || null
+    questionAnswer.calculatedAnswerId =
+      answerId || question.calculated?.answerId || currentCalculatedVariation(question).id || null
     questionAnswer.calculated = value
     return
   }
@@ -3491,7 +3839,7 @@ function applySavedAnswer(question, rows) {
     questionAnswer.hotspotPoints = parseSavedHotspotPoints(rows[0]?.answer || "")
     questionAnswer.selectedHotspotAnswerId = isHotspotDelineationQuestion(question)
       ? null
-      : (firstMissingHotspotZoneId(question) || hotspotZones(question)[0]?.id || null)
+      : firstMissingHotspotZoneId(question) || hotspotZones(question)[0]?.id || null
     return
   }
 
@@ -3503,22 +3851,22 @@ function applySavedAnswer(question, rows) {
   if (isOnlyofficeQuestion(question)) {
     const files = extractSavedAttemptFiles(rows)
     questionAnswer.onlyofficeFiles = files
-    questionAnswer.onlyofficeEditorUrl = files.find((file) => file?.onlyofficeEditorUrl)?.onlyofficeEditorUrl || question.onlyoffice?.editorUrl || ""
+    questionAnswer.onlyofficeEditorUrl =
+      files.find((file) => file?.onlyofficeEditorUrl)?.onlyofficeEditorUrl || question.onlyoffice?.editorUrl || ""
     return
   }
 
   if (isUploadQuestion(question)) {
     const files = extractSavedAttemptFiles(rows)
-    questionAnswer.uploadedFiles = files.length > 0 ? files : (rows.length > 0 ? [{ name: t("Upload file") }] : [])
+    questionAnswer.uploadedFiles = files.length > 0 ? files : rows.length > 0 ? [{ name: t("Upload file") }] : []
     return
   }
 
   if (isOralQuestion(question)) {
     const files = extractSavedAttemptFiles(rows)
-    questionAnswer.uploadedFiles = files.length > 0 ? files : (rows.length > 0 ? [{ name: t("Uploaded audio") }] : [])
+    questionAnswer.uploadedFiles = files.length > 0 ? files : rows.length > 0 ? [{ name: t("Uploaded audio") }] : []
   }
 }
-
 
 function extractSavedAttemptFiles(rows = []) {
   const files = []
@@ -3541,7 +3889,11 @@ function extractSavedAttemptFiles(rows = []) {
 function extractSavedBlankValues(savedAnswer, separator = 0) {
   const [start, end] = getFillBlankSeparators(separator)
   const pattern = new RegExp(`${escapeRegExp(start)}(.*?)${escapeRegExp(end)}`, "g")
-  const matches = [...String(savedAnswer || "").split("::")[0].matchAll(pattern)]
+  const matches = [
+    ...String(savedAnswer || "")
+      .split("::")[0]
+      .matchAll(pattern),
+  ]
   const blanks = {}
 
   for (let index = 0; index < matches.length; index += 3) {
@@ -3612,7 +3964,7 @@ function initializeAnswerState() {
       annotationImageSize: null,
       hotspotPoints: [],
       hotspotImageSize: null,
-      selectedHotspotAnswerId: isHotspotDelineationQuestion(question) ? null : (hotspotZones(question)[0]?.id || null),
+      selectedHotspotAnswerId: isHotspotDelineationQuestion(question) ? null : hotspotZones(question)[0]?.id || null,
       reviewLater: reviewQuestionIds.value.has(Number(question.id || 0)),
     }
 
@@ -3625,7 +3977,6 @@ function initializeAnswerState() {
   selectedMatchingOptions.value = nextSelectedMatchingOptions
   initializeReadingProgress()
 }
-
 
 async function prepareOnlyofficeDocument(question, forceReload = false) {
   const questionAnswer = answers.value[question.id]
@@ -3862,7 +4213,11 @@ function annotationPaths(question) {
   const paths = Array.isArray(questionAnswer.annotationPaths) ? questionAnswer.annotationPaths : []
 
   return paths
-    .map((path) => Array.isArray(path) ? path.filter((point) => Number.isFinite(Number(point.x)) && Number.isFinite(Number(point.y))) : [])
+    .map((path) =>
+      Array.isArray(path)
+        ? path.filter((point) => Number.isFinite(Number(point.x)) && Number.isFinite(Number(point.y)))
+        : [],
+    )
     .filter((path) => path.length > 0)
     .map((points) => ({ points }))
 }
@@ -3871,7 +4226,9 @@ function annotationTexts(question) {
   const questionAnswer = answers.value[question.id] || {}
   const texts = Array.isArray(questionAnswer.annotationTexts) ? questionAnswer.annotationTexts : []
 
-  return texts.filter((item) => String(item.text || "").trim() && Number.isFinite(Number(item.x)) && Number.isFinite(Number(item.y)))
+  return texts.filter(
+    (item) => String(item.text || "").trim() && Number.isFinite(Number(item.x)) && Number.isFinite(Number(item.y)),
+  )
 }
 
 function annotationImageReady(question) {
@@ -3998,7 +4355,9 @@ function onHotspotImageClick(question, event) {
     x: Math.max(0, x),
     y: Math.max(0, y),
   }
-  const existingIndex = questionAnswer.hotspotPoints.findIndex((point) => Number(point.answerId || 0) === selectedAnswerId)
+  const existingIndex = questionAnswer.hotspotPoints.findIndex(
+    (point) => Number(point.answerId || 0) === selectedAnswerId,
+  )
   if (existingIndex >= 0) {
     questionAnswer.hotspotPoints.splice(existingIndex, 1, nextPoint)
   } else {
@@ -4036,7 +4395,9 @@ function removeHotspotPoint(question, answerId, pointIndex = null) {
 
   const numericAnswerId = Number(answerId || 0)
   if (numericAnswerId > 0) {
-    questionAnswer.hotspotPoints = questionAnswer.hotspotPoints.filter((point) => Number(point.answerId || 0) !== numericAnswerId)
+    questionAnswer.hotspotPoints = questionAnswer.hotspotPoints.filter(
+      (point) => Number(point.answerId || 0) !== numericAnswerId,
+    )
     questionAnswer.selectedHotspotAnswerId = numericAnswerId
     return
   }
@@ -4060,7 +4421,7 @@ function clearHotspotDelineation(question) {
 function hotspotZones(question) {
   const zones = Array.isArray(question?.hotspot?.zones) ? question.hotspot.zones : []
 
-  return zones.length ? zones : (Array.isArray(question?.hotspot?.items) ? question.hotspot.items : [])
+  return zones.length ? zones : Array.isArray(question?.hotspot?.items) ? question.hotspot.items : []
 }
 
 function hotspotPointByAnswer(question, answerId) {
@@ -4117,7 +4478,11 @@ function hotspotPlacedPoints(question) {
 }
 
 function hotspotPointLabel(question, point) {
-  return point.label || hotspotZones(question).findIndex((zone) => Number(zone.id || 0) === Number(point.answerId || 0)) + 1 || ''
+  return (
+    point.label ||
+    hotspotZones(question).findIndex((zone) => Number(zone.id || 0) === Number(point.answerId || 0)) + 1 ||
+    ""
+  )
 }
 
 function firstMissingHotspotZoneId(question) {
@@ -4126,7 +4491,9 @@ function firstMissingHotspotZoneId(question) {
   }
 
   const questionAnswer = answers.value[question.id] || {}
-  const placedAnswerIds = new Set((questionAnswer.hotspotPoints || []).map((point) => Number(point.answerId || 0)).filter((value) => value > 0))
+  const placedAnswerIds = new Set(
+    (questionAnswer.hotspotPoints || []).map((point) => Number(point.answerId || 0)).filter((value) => value > 0),
+  )
   const missingZone = hotspotZones(question).find((zone) => !placedAnswerIds.has(Number(zone.id || 0)))
 
   return missingZone?.id || null
@@ -4163,7 +4530,7 @@ function hotspotImageViewBox(question) {
 function hotspotDelineationSvgPoints(question) {
   return hotspotPlacedPoints(question)
     .map((point) => `${Number(point.x || 0)},${Number(point.y || 0)}`)
-    .join(' ')
+    .join(" ")
 }
 
 function parseSavedHotspotPoints(value) {
@@ -4178,7 +4545,9 @@ function parseSavedHotspotPoints(value) {
       const [answerPrefix, pointValue] = trimmedCoordinate.includes(":")
         ? trimmedCoordinate.split(":", 2)
         : ["", trimmedCoordinate]
-      const [x, y] = String(pointValue || "").split(";").map((part) => Number(part))
+      const [x, y] = String(pointValue || "")
+        .split(";")
+        .map((part) => Number(part))
       if (!Number.isFinite(x) || !Number.isFinite(y)) {
         return null
       }
@@ -4233,7 +4602,6 @@ function isDraggableQuestion(question) {
   return Number(question.type) === 18 && question.draggable
 }
 
-
 function draggableOrientation(question) {
   const orientation = String(question.draggable?.orientation || "").toLowerCase()
 
@@ -4245,9 +4613,7 @@ function isDraggableHorizontal(question) {
 }
 
 function draggableInitialOrder(question) {
-  return (question.draggable?.items || [])
-    .map((item) => Number(item.id || 0))
-    .filter((itemId) => itemId > 0)
+  return (question.draggable?.items || []).map((item) => Number(item.id || 0)).filter((itemId) => itemId > 0)
 }
 
 function draggableAnswerItems(question) {
@@ -4441,12 +4807,14 @@ function readingTotalSteps(question) {
 function getReadingProgress(question) {
   const questionId = Number(question?.id || 0)
 
-  return readingProgress.value[questionId] || {
-    started: false,
-    step: -1,
-    totalSteps: readingTotalSteps(question),
-    complete: 0 === readingTotalSteps(question),
-  }
+  return (
+    readingProgress.value[questionId] || {
+      started: false,
+      step: -1,
+      totalSteps: readingTotalSteps(question),
+      complete: 0 === readingTotalSteps(question),
+    }
+  )
 }
 
 function isReadingStarted(question) {
@@ -4783,11 +5151,7 @@ function stopKeepAlivePing() {
 
 function handleRuntimeContentClick(event) {
   const target = event.target
-  if (
-    !(target instanceof HTMLImageElement)
-    || !imageZoomEnabled.value
-    || !target.closest(".exercise-runtime-html")
-  ) {
+  if (!(target instanceof HTMLImageElement) || !imageZoomEnabled.value || !target.closest(".exercise-runtime-html")) {
     return
   }
 
@@ -4881,27 +5245,20 @@ function normalizedGlossaryTerms() {
 }
 
 function wrapGlossaryTermsInContainer(container, expression, descriptions) {
-  const walker = document.createTreeWalker(
-    container,
-    NodeFilter.SHOW_TEXT,
-    {
-      acceptNode(node) {
-        const parent = node.parentElement
-        if (
-          !parent
-          || parent.closest(".glossary-term, a, button, input, select, textarea, script, style, svg")
-        ) {
-          return NodeFilter.FILTER_REJECT
-        }
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement
+      if (!parent || parent.closest(".glossary-term, a, button, input, select, textarea, script, style, svg")) {
+        return NodeFilter.FILTER_REJECT
+      }
 
-        expression.lastIndex = 0
-        const hasMatch = expression.test(node.nodeValue || "")
-        expression.lastIndex = 0
+      expression.lastIndex = 0
+      const hasMatch = expression.test(node.nodeValue || "")
+      expression.lastIndex = 0
 
-        return hasMatch ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
-      },
+      return hasMatch ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
     },
-  )
+  })
 
   const textNodes = []
   while (walker.nextNode()) {
@@ -4945,7 +5302,6 @@ function wrapGlossaryTermsInTextNode(node, expression, descriptions) {
   fragment.append(document.createTextNode(text.slice(lastIndex)))
   node.parentNode?.replaceChild(fragment, node)
 }
-
 
 function submitDisabled() {
   return false
@@ -5057,7 +5413,9 @@ watch(
 .exercise-reading-text :deep(.exercise-reading-word) {
   color: transparent;
   text-shadow: 0 0 5px rgb(0 0 0 / 50%);
-  transition: color 0.12s linear, text-shadow 0.12s linear;
+  transition:
+    color 0.12s linear,
+    text-shadow 0.12s linear;
 }
 
 .exercise-reading-text :deep(.exercise-reading-word-active) {

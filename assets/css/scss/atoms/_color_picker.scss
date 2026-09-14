@@ -2,11 +2,11 @@
   @apply flex flex-col flex-grow-0 flex-shrink-0 basis-0 justify-center gap-0 relative;
 
   label {
-    @apply absolute -top-2.5 left-2 text-caption px-1 bg-white text-primary z-[2] max-w-full truncate;
+    @apply absolute -top-2.5 start-2 text-caption px-1 bg-white text-primary z-[2] max-w-full truncate;
   }
 
   input[type="color"] {
-    @apply h-auto w-12 cursor-pointer p-2 bg-white border-gray-50 border border-r-0 rounded-l-lg transition-none;
+    @apply h-auto w-12 cursor-pointer p-2 bg-white border-gray-50 border border-e-0 rounded-s-lg transition-none;
   }
 
   .p-inputgroup .p-inputtext {

@@ -2,7 +2,7 @@
   <div>
     <div class="mb-4">
       <Button
-        icon="mdi mdi-arrow-left"
+        icon="mdi mdi-arrow-left rtl:rotate-180"
         :label="t('Back to list')"
         class="p-button-secondary"
         @click="router.push({ name: 'PageList', query: $route.query })"

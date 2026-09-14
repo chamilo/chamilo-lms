@@ -2937,8 +2937,8 @@ class PortfolioController
         $tblItems->set_header(2, get_lang('Last update'), true, [], ['class' => 'text-center']);
         $tblItems->set_column_filter(2, $convertFormatDateColumnFilter);
         $tblItems->set_header(3, get_lang('Category'));
-        $tblItems->set_header(4, get_lang('Comments'), false, [], ['class' => 'text-right']);
-        $tblItems->set_header(5, get_lang('Score'), true, [], ['class' => 'text-right']);
+        $tblItems->set_header(4, get_lang('Comments'), false, [], ['class' => 'text-end']);
+        $tblItems->set_header(5, get_lang('Score'), true, [], ['class' => 'text-end']);
 
         if (!$this->course) {
             $tblItems->set_header(6, get_lang('Course'));
@@ -3041,7 +3041,7 @@ class PortfolioController
         $tblComments->set_column_filter(1, $convertFormatDateColumnFilter);
         $tblComments->set_header(2, get_lang('Item title'));
         $tblComments->set_column_filter(2, $portfolioItemColumnFilter);
-        $tblComments->set_header(3, get_lang('Score'), true, [], ['class' => 'text-right']);
+        $tblComments->set_header(3, get_lang('Score'), true, [], ['class' => 'text-end']);
 
         $content = '';
 
@@ -4104,7 +4104,7 @@ class PortfolioController
             40
         );
         $table->set_header(0, get_lang('Name'));
-        $table->set_header(1, get_lang('Actions'), false, ['class' => 'text-right'], ['class' => 'text-right']);
+        $table->set_header(1, get_lang('Actions'), false, ['class' => 'text-end'], ['class' => 'text-end']);
         $table->set_column_filter(
             1,
             function ($id) use ($editIcon, $deleteIcon) {

@@ -21,20 +21,20 @@
 
                 {% if namespace == 'ai_helpers' %}
                     <div class="mb-6 space-y-2 bg-white">
-                        <div class="flex justify-between items-start border-l-4 border-primary pl-8">
+                        <div class="flex justify-between items-start border-s-4 border-primary ps-8">
                             <h3 class="text-gray-90 text-body-1 font-semibold">
                                 {{ "EU AI Act – Transparency & risk notice"|trans }}
                             </h3>
                         </div>
 
-                        <div class="ml-9 text-gray-80 text-body-2 leading-relaxed">
+                        <div class="ms-9 text-gray-80 text-body-2 leading-relaxed">
                             {{ "Under the EU Artificial Intelligence Act (Regulation (EU) 2024/1689), AI systems used in education are generally classified as “high-risk”.
 This software itself is <strong>not</strong> an AI system, but it can integrate optional internal or external AI systems—depending on your configuration—to enhance user task performance.
 These systems could access personal data <em>only if</em> users include such data in their prompts. By design, this software does not share personal data with AI systems without the user's active input.
 By default, all AI features are disabled."|trans|raw }}
                         </div>
 
-                        <div class="ml-9 border-t border-gray-25 pt-4">
+                        <div class="ms-9 border-t border-gray-25 pt-4">
                             <h4 class="text-gray-90 text-body-2 font-semibold mb-2">
                                 {{ "Admin responsibility & disclosures"|trans }}
                             </h4>
@@ -98,7 +98,7 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                             {{ form_widget(field) }}
                         {% else %}
                             <div class="mb-6 rounded-lg bg-white shadow-lg">
-                                <div class="flex justify-between items-start border-l-8 border-primary rounded-l-lg rounded-tr-lg bg-support-2 px-4 py-4 -ml-2 text-body-2">
+                                <div class="flex justify-between items-start border-s-8 border-primary rounded-s-lg rounded-se-lg bg-support-2 px-4 py-4 -ms-2 text-body-2">
                                     <h3 class="text-gray-90 text-body-1 font-semibold">
                                         {{ field.vars.label|trans }}
                                     </h3>
@@ -118,7 +118,7 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                                         {% set serverType = platform.server_type ?? (settings.platform.server_type ?? null) %}
                                         {% if serverType == 'test' %}
                                             <span
-                                                    class="ml-1 text-gray-60 text-lg flex items-center cursor-default debug-setting-icon"
+                                                    class="ms-1 text-gray-60 text-lg flex items-center cursor-default debug-setting-icon"
                                                     title="{{ namespace ~ '.' ~ fieldName }}"
                                                     role="img"
                                                     aria-hidden="true"
@@ -140,17 +140,17 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                                             {% if isLockedOnMain %}
                                                 {# Main URL: show eye-off but NOT clickable when access_url_locked=1 #}
                                                 <span
-                                                        class="ml-1 text-gray-50 text-lg flex items-center cursor-not-allowed"
+                                                        class="ms-1 text-gray-50 text-lg flex items-center cursor-not-allowed"
                                                         title="{{ 'Setting is globally locked (access_url_locked=1)'|trans }}"
                                                 >
                                                     <i class="mdi mdi-eye-off text-gray-50 text-xl"></i>
-                                                    <i class="mdi mdi-lock-outline text-gray-50 text-lg ml-1"></i>
+                                                    <i class="mdi mdi-lock-outline text-gray-50 text-lg ms-1"></i>
                                                 </span>
                                             {% elseif can_toggle_multiurl_setting %}
                                                 {# Main URL + admin: clickable toggle #}
                                                 <button
                                                         type="button"
-                                                        class="ml-1 toggle-changeable flex items-center justify-center"
+                                                        class="ms-1 toggle-changeable flex items-center justify-center"
                                                         data-variable="{{ fieldName }}"
                                                         data-status="{{ changeable }}"
                                                         title="{{ changeable ? 'Setting is editable on sub-URLs'|trans : 'Setting locked for sub-URLs'|trans }}"
@@ -164,7 +164,7 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                                             {% else %}
                                                 {# Other URLs or non-privileged admins: read-only indicator #}
                                                 <span
-                                                        class="ml-1 text-gray-50 text-lg flex items-center cursor-default"
+                                                        class="ms-1 text-gray-50 text-lg flex items-center cursor-default"
                                                         title="{{ changeable ? 'Setting is editable on sub-URLs'|trans : 'Setting locked for sub-URLs'|trans }}"
                                                 >
                                                     {% if changeable %}
@@ -243,8 +243,8 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                         <table class="min-w-full text-sm border border-gray-25 rounded overflow-hidden">
                             <thead class="bg-gray-10">
                             <tr>
-                                <th class="px-3 py-2 text-left">{{ 'Setting'|trans }}</th>
-                                <th class="px-3 py-2 text-left">{{ 'Status'|trans }}</th>
+                                <th class="px-3 py-2 text-start">{{ 'Setting'|trans }}</th>
+                                <th class="px-3 py-2 text-start">{{ 'Status'|trans }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -254,12 +254,12 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                                     <td class="px-3 py-2">
                                         {% if row.ok %}
                                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-success-10 text-success">
-                                                <i class="mdi mdi-check-circle-outline mr-1"></i>
+                                                <i class="mdi mdi-check-circle-outline me-1"></i>
                                                 {{ 'OK'|trans }}
                                             </span>
                                         {% else %}
                                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-danger-10 text-danger">
-                                                <i class="mdi mdi-close-circle-outline mr-1"></i>
+                                                <i class="mdi mdi-close-circle-outline me-1"></i>
                                                 {{ 'Missing'|trans }}
                                             </span>
                                         {% endif %}
@@ -285,9 +285,9 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                             <table class="min-w-full text-sm border border-gray-25 rounded overflow-hidden">
                                 <thead class="bg-gray-10">
                                 <tr>
-                                    <th class="px-3 py-2 text-left">{{ 'Software program'|trans }}</th>
-                                    <th class="px-3 py-2 text-left">{{ 'Path'|trans }}</th>
-                                    <th class="px-3 py-2 text-left">{{ 'Status'|trans }}</th>
+                                    <th class="px-3 py-2 text-start">{{ 'Software program'|trans }}</th>
+                                    <th class="px-3 py-2 text-start">{{ 'Path'|trans }}</th>
+                                    <th class="px-3 py-2 text-start">{{ 'Status'|trans }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -298,12 +298,12 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                                         <td class="px-3 py-2">
                                             {% if tool.ok %}
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-success-10 text-success">
-                                                    <i class="mdi mdi-check-circle-outline mr-1"></i>
+                                                    <i class="mdi mdi-check-circle-outline me-1"></i>
                                                     {{ 'Installed'|trans }}
                                                 </span>
                                             {% else %}
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-danger-10 text-danger">
-                                                    <i class="mdi mdi-alert-circle-outline mr-1"></i>
+                                                    <i class="mdi mdi-alert-circle-outline me-1"></i>
                                                     {{ 'Not installed'|trans }}
                                                 </span>
                                             {% endif %}
@@ -326,10 +326,10 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                                 <table class="min-w-full text-sm border border-gray-25 rounded overflow-hidden bg-white">
                                     <thead class="bg-gray-10">
                                     <tr>
-                                        <th class="px-3 py-2 text-left">{{ 'File extension(s)'|trans }}</th>
-                                        <th class="px-3 py-2 text-left">{{ 'Extractor program'|trans }}</th>
-                                        <th class="px-3 py-2 text-left">{{ 'Typical source formats'|trans }}</th>
-                                        <th class="px-3 py-2 text-left">{{ 'Notes'|trans }}</th>
+                                        <th class="px-3 py-2 text-start">{{ 'File extension(s)'|trans }}</th>
+                                        <th class="px-3 py-2 text-start">{{ 'Extractor program'|trans }}</th>
+                                        <th class="px-3 py-2 text-start">{{ 'Typical source formats'|trans }}</th>
+                                        <th class="px-3 py-2 text-start">{{ 'Notes'|trans }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>

@@ -1,7 +1,7 @@
 <template>
   <h2
     v-text="t('Search users for friends')"
-    class="mr-auto"
+    class="me-auto"
   />
   <hr />
   <div class="user-rel-user-search">
@@ -17,7 +17,7 @@
       <input
         v-model="searchQuery"
         :placeholder="t('Search')"
-        class="search-input mr-3"
+        class="search-input me-3"
         type="text"
       />
       <BaseButton

@@ -266,7 +266,7 @@ $htmlHeadXtra[] = "
 .select2-container .select2-selection--single .select2-selection__arrow { height: 38px !important; }
 
 /* Tiny loading badges near labels */
-.badge { display: inline-block; font-size: 12px; border-radius: 12px; padding: 4px 8px; background: #eef2ff; color: #374151; margin-left: 8px; }
+.badge { display: inline-block; font-size: 12px; border-radius: 12px; padding: 4px 8px; background: #eef2ff; color: #374151; margin-inline-start: 8px; }
 .hidden { display: none !important; }
 
 /* Export overlay shown only while exporting */

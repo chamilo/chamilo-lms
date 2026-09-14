@@ -119,13 +119,13 @@ echo '<form method="post" action="'.api_get_self().'?id_session='.$sessionId.'&s
 echo '  <div class="overflow-hidden rounded-lg border border-gray-30 bg-white shadow-sm">';
 echo '    <div class="overflow-x-auto">';
 echo '      <table class="min-w-full divide-y divide-gray-20 text-sm">';
-echo '        <thead class="bg-gray-10 text-left text-gray-70">';
+echo '        <thead class="bg-gray-10 text-start text-gray-70">';
 echo '          <tr>';
 echo '            <th class="w-12 px-4 py-3"><span class="sr-only">'.get_lang('Select').'</span></th>';
 echo '            <th class="px-4 py-3 font-semibold"><a class="hover:underline" href="'.api_get_self().'?id_session='.$sessionId.'&sort=title">'.get_lang('Course title').'</a></th>';
 echo '            <th class="px-4 py-3 font-semibold"><a class="hover:underline" href="'.api_get_self().'?id_session='.$sessionId.'&sort=nbr_users">'.get_lang('Users').'</a></th>';
 echo '            <th class="px-4 py-3 font-semibold">'.get_lang('Room').'</th>';
-echo '            <th class="px-4 py-3 font-semibold text-right">'.get_lang('Detail').'</th>';
+echo '            <th class="px-4 py-3 font-semibold text-end">'.get_lang('Detail').'</th>';
 echo '          </tr>';
 echo '        </thead>';
 echo '        <tbody class="divide-y divide-gray-20 bg-white">';

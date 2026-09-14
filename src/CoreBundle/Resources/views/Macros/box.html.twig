@@ -11,7 +11,7 @@
                 </h4>
 
                 {% if title_right %}
-                    <div class="float-right">
+                    <div class="float-end">
                         {{ title_right }}
                     </div>
                 {% endif %}
@@ -80,7 +80,7 @@
     <div class="card">
         <div class="card-body p-3">
             <div class="stat-widget-five">
-                <i class="mdi mdi-{{ icon }} text-xl mr-2" aria-hidden="true"></i>
+                <i class="mdi mdi-{{ icon }} text-xl me-2" aria-hidden="true"></i>
                 {{ content }}
                 <div class="box-name">
                     {{ name }}
@@ -287,7 +287,7 @@
                             <span class="mdi mdi-account-outline text-base text-gray-500"></span>
                             {{ 'Status'|trans }}
                         </dt>
-                        <dd class="text-sm font-semibold text-gray-900 text-right">
+                        <dd class="text-sm font-semibold text-gray-900 text-end">
                             {% if user.status == 1 %}
                                 {{ 'Trainer'|trans }}
                             {% elseif user.status == 3 %}
@@ -313,7 +313,7 @@
                         <span class="mdi mdi-badge-account-outline text-base text-gray-500"></span>
                         {{ 'Official code'|trans }}
                     </dt>
-                    <dd class="text-sm font-semibold text-gray-900 text-right break-words">
+                    <dd class="text-sm font-semibold text-gray-900 text-end break-words">
                         {% set code = (user.officialCode is defined ? user.officialCode : '') %}
                         {{ code is not empty ? code : '—' }}
                     </dd>
@@ -325,7 +325,7 @@
                         <span class="mdi mdi-access-point text-base text-gray-500"></span>
                         {{ 'Online'|trans }}
                     </dt>
-                    <dd class="text-sm font-semibold text-gray-900 text-right">
+                    <dd class="text-sm font-semibold text-gray-900 text-end">
                         —
                     </dd>
                 </div>
@@ -336,7 +336,7 @@
                         <span class="mdi mdi-phone-outline text-base text-gray-500"></span>
                         {{ 'Tel'|trans }}
                     </dt>
-                    <dd class="text-sm font-semibold text-gray-900 text-right break-words">
+                    <dd class="text-sm font-semibold text-gray-900 text-end break-words">
                         {% set phone = user.phone|default('') %}
                         {{ phone is empty ? 'No tel'|trans : phone }}
                     </dd>
@@ -349,7 +349,7 @@
                             <span class="mdi mdi-clock-outline text-base text-gray-500"></span>
                             {{ 'Timezone'|trans }}
                         </dt>
-                        <dd class="text-sm font-semibold text-gray-900 text-right break-words">
+                        <dd class="text-sm font-semibold text-gray-900 text-end break-words">
                             {{ user.timezone }}
                         </dd>
                     </div>
@@ -362,7 +362,7 @@
                             <span class="mdi mdi-shield-check-outline text-base text-gray-500"></span>
                             {{ 'Legal'|trans }}
                         </dt>
-                        <dd class="text-sm font-semibold text-gray-900 text-right">
+                        <dd class="text-sm font-semibold text-gray-900 text-end">
                             {{ user.legal.url_send }}
                         </dd>
                     </div>

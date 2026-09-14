@@ -799,7 +799,7 @@ if ('true' === api_get_setting('workflows.plugin_redirection_enabled')) {
 }
 
 $content = '<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
-<blockquote class="w-full overflow-auto bg-gray-100 border-l-4 border-gray-400 p-4 rounded-md text-sm font-mono">
+<blockquote class="w-full overflow-auto bg-gray-100 border-s-4 border-gray-400 p-4 rounded-md text-sm font-mono">
 <pre>
 <b>LastName</b>,<b>FirstName</b>,<b>Email</b>,UserName,Password,AuthSource,OfficialCode,language,PhoneNumber,Status,ExpiryDate,<span class="text-red-500">';
 if (count($list) > 0) {

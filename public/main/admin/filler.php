@@ -91,7 +91,7 @@ Display::display_header($nameTools);
                             <span class="mt-1 inline-flex h-2.5 w-2.5 flex-none rounded-full <?php echo $dot; ?>"></span>
                             <span class="truncate font-medium text-gray-90"><?php echo htmlspecialchars($title); ?></span>
                         </div>
-                        <span class="ml-4 inline-flex items-center rounded-full border px-3 py-1 text-sm <?php echo $badge; ?>">
+                        <span class="ms-4 inline-flex items-center rounded-full border px-3 py-1 text-sm <?php echo $badge; ?>">
             <?php echo htmlspecialchars($statusText); ?>
         </span>
                     </div>

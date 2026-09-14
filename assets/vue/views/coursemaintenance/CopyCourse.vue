@@ -75,13 +75,13 @@
             <input
               v-model.trim="courseQuery"
               :placeholder="t('Search by code or title...')"
-              class="w-full rounded border border-gray-25 p-2 pr-8 text-sm"
+              class="w-full rounded border border-gray-25 p-2 pe-8 text-sm"
               type="text"
             />
             <button
               v-if="courseQuery"
               :aria-label="t('Clear search')"
-              class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-50 hover:text-gray-90"
+              class="absolute end-2 top-1/2 -translate-y-1/2 text-gray-50 hover:text-gray-90"
               @click="courseQuery = ''"
             >
               <i class="mdi mdi-close"></i>

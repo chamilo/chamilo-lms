@@ -15,6 +15,7 @@
       <div
         v-if="block.type === 'html'"
         class="lp-final-item-content w-full"
+        dir="auto"
         v-html="sanitizeHtml(block.content)"
       />
 

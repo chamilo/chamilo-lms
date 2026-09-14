@@ -1,5 +1,5 @@
 <template>
-  <div class="w-64 h-full bg-white border-r border-gray-25 p-4 space-y-1">
+  <div class="w-64 h-full bg-white border-e border-gray-25 p-4 space-y-1">
     <BaseAppLink
       v-for="item in items"
       :key="item.name"

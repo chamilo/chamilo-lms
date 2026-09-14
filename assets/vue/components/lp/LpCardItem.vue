@@ -336,7 +336,7 @@ const progressTextClass = computed(() =>
       v-if="canReorder"
       :aria-label="t('Drag to reorder')"
       :title="t('Drag to reorder')"
-      class="drag-handle absolute left-0 sm:left-3 top-3 w-8 h-8 grid place-content-center rounded-lg text-gray-50 hover:text-gray-90 hover:bg-gray-15 cursor-move"
+      class="drag-handle absolute start-0 sm:start-3 top-3 w-8 h-8 grid place-content-center rounded-lg text-gray-50 hover:text-gray-90 hover:bg-gray-15 cursor-move"
       type="button"
     >
       <svg
@@ -379,8 +379,8 @@ const progressTextClass = computed(() =>
       </svg>
     </button>
 
-    <div class="mt-2 grid grid-cols-[80px_1fr] gap-3 items-start md:pr-10 sm:ml-8 ml-5 mr-2 md:mr-0">
-      <div class="w-20 h-20 rounded-xl overflow-hidden ring-1 ring-gray-25 bg-gray-15 shrink-0 ml-2 sm:ml-0">
+    <div class="mt-2 grid grid-cols-[80px_1fr] gap-3 items-start md:pe-10 sm:ms-8 ms-5 me-2 md:me-0">
+      <div class="w-20 h-20 rounded-xl overflow-hidden ring-1 ring-gray-25 bg-gray-15 shrink-0 ms-2 sm:ms-0">
         <img
           v-if="lp.coverUrl"
           :src="lp.coverUrl"
@@ -421,7 +421,7 @@ const progressTextClass = computed(() =>
         </div>
       </div>
 
-      <div class="min-w-0 flex ml-2 md:ml-0">
+      <div class="min-w-0 flex ms-2 md:ms-0">
         <div class="flex-1">
           <BaseAppLink
             :title="t('Open')"
@@ -470,12 +470,12 @@ const progressTextClass = computed(() =>
             </template>
             <template #menu>
               <div
-                class="absolute right-0 min-w-[18rem] bg-white border border-gray-25 rounded-xl shadow-xl p-2 z-40 mb-2"
+                class="absolute end-0 min-w-[18rem] bg-white border border-gray-25 rounded-xl shadow-xl p-2 z-40 mb-2"
                 style="bottom: calc(-100% + 2.5rem)"
               >
                 <button
                   :disabled="!manageableInContext"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                   type="button"
                   @click="publishAction.command"
                 >
@@ -484,13 +484,13 @@ const progressTextClass = computed(() =>
                 <button
                   v-if="!isCStudioLearningPath"
                   :disabled="!manageableInContext"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                   type="button"
                   @click="attemptModeAction.command"
                 >
                   {{ attemptModeAction.label }}
                 </button>
-                <div class="my-2 rounded-lg bg-gray-15 px-3 py-2 text-left">
+                <div class="my-2 rounded-lg bg-gray-15 px-3 py-2 text-start">
                   <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
                     {{ viewModeAction.label }}
                   </div>
@@ -502,7 +502,7 @@ const progressTextClass = computed(() =>
                 <button
                   v-if="securityStore.isAdmin && isScormLearningPath"
                   :disabled="!manageableInContext"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                   type="button"
                   @click="debugAction.command"
                 >
@@ -511,7 +511,7 @@ const progressTextClass = computed(() =>
                 <button
                   v-if="canSeriousGame"
                   :disabled="!manageableInContext"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                   type="button"
                   @click="seriousGameAction.command"
                 >
@@ -520,7 +520,7 @@ const progressTextClass = computed(() =>
                 <button
                   v-if="canAutoLaunch"
                   :disabled="!manageableInContext"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                   type="button"
                   @click="autoLaunchAction.command"
                 >
@@ -529,20 +529,20 @@ const progressTextClass = computed(() =>
                 <BaseAppLink
                   v-if="isLpSubscriptionMode"
                   :url="advancedAccessUrl"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 md:hidden"
                 >
                   {{ t("Advanced learning path access") }}
                 </BaseAppLink>
                 <BaseAppLink
                   v-if="canDownloadScormPackage"
                   :url="exportScormUrl"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 md:hidden"
                 >
                   {{ t("Export as SCORM") }}
                 </BaseAppLink>
                 <button
                   v-if="canExportChamilo"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 md:hidden"
                   type="button"
                   @click="emit('export-chamilo', lp)"
                 >
@@ -551,7 +551,7 @@ const progressTextClass = computed(() =>
                 <button
                   v-if="canUpdateScorm && !isCStudioLearningPath"
                   :disabled="!manageableInContext"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50 md:hidden"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 disabled:opacity-50 md:hidden"
                   type="button"
                   @click="router.push(updateScormRoute)"
                 >
@@ -559,7 +559,7 @@ const progressTextClass = computed(() =>
                 </button>
                 <button
                   v-if="canExportPdf && !isCStudioLearningPath"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 md:hidden"
                   type="button"
                   @click="emit('export-pdf', lp)"
                 >
@@ -568,14 +568,14 @@ const progressTextClass = computed(() =>
                 <router-link
                   v-if="manageableInContext"
                   :to="settingsRoute"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 md:hidden"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 md:hidden"
                 >
                   {{ t("Settings") }}
                 </router-link>
                 <button
                   v-if="canCopyLearningPath && !isCStudioLearningPath"
                   :disabled="!manageableInContext"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                   type="button"
                   @click="onCopy"
                 >
@@ -584,7 +584,7 @@ const progressTextClass = computed(() =>
                 <div class="my-2 border-t border-gray-25"></div>
                 <button
                   :disabled="!manageableInContext"
-                  class="w-full whitespace-nowrap rounded px-3 py-2 text-left font-semibold text-danger hover:bg-danger/10 disabled:opacity-50"
+                  class="w-full whitespace-nowrap rounded px-3 py-2 text-start font-semibold text-danger hover:bg-danger/10 disabled:opacity-50"
                   type="button"
                   @click="onDelete"
                 >
@@ -596,12 +596,12 @@ const progressTextClass = computed(() =>
         </div>
       </div>
 
-      <p class="col-span-2 md:mt-3 text-caption text-gray-50 ml-2 md:ml-0">
+      <p class="col-span-2 md:mt-3 text-caption text-gray-50 ms-2 md:ms-0">
         {{ dateText }}
       </p>
     </div>
 
-    <div class="mt-auto pt-3 flex items-center ml-5 pl-2 sm:ml-8 sm:pl-0 mr-2 md:mr-0">
+    <div class="mt-auto pt-3 flex items-center ms-5 ps-2 sm:ms-8 sm:ps-0 me-2 md:me-0">
       <div class="flex items-center gap-2">
         <div class="relative w-10 h-10">
           <svg
@@ -646,7 +646,7 @@ const progressTextClass = computed(() =>
 
       <div
         v-if="canEdit"
-        class="ml-auto flex items-center gap-2"
+        class="ms-auto flex items-center gap-2"
       >
         <BaseButton
           :disabled="!manageableInContext"
@@ -761,7 +761,7 @@ const progressTextClass = computed(() =>
           type="tertiary-alternative-text"
           @click="autoLaunchAction.command"
         />
-        <div class="relative hidden md:flex shrink-0 items-center ml-4">
+        <div class="relative hidden md:flex shrink-0 items-center ms-4">
           <BaseDropdownMenu
             v-if="canEdit"
             :dropdown-id="`card-${lp.iid}`"
@@ -777,12 +777,12 @@ const progressTextClass = computed(() =>
             </template>
             <template #menu>
               <div
-                class="absolute right-0 min-w-[18rem] bg-white border border-gray-25 rounded-xl shadow-xl p-2 z-40 mb-2"
+                class="absolute end-0 min-w-[18rem] bg-white border border-gray-25 rounded-xl shadow-xl p-2 z-40 mb-2"
                 style="bottom: calc(-100% + 2.5rem)"
               >
                 <button
                   :disabled="!manageableInContext"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                   type="button"
                   @click="publishAction.command"
                 >
@@ -791,13 +791,13 @@ const progressTextClass = computed(() =>
                 <button
                   v-if="!isCStudioLearningPath"
                   :disabled="!manageableInContext"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                   type="button"
                   @click="attemptModeAction.command"
                 >
                   {{ attemptModeAction.label }}
                 </button>
-                <div class="my-2 rounded-lg bg-gray-15 px-3 py-2 text-left">
+                <div class="my-2 rounded-lg bg-gray-15 px-3 py-2 text-start">
                   <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
                     {{ viewModeAction.label }}
                   </div>
@@ -809,7 +809,7 @@ const progressTextClass = computed(() =>
                 <button
                   v-if="securityStore.isAdmin && isScormLearningPath"
                   :disabled="!manageableInContext"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                   type="button"
                   @click="debugAction.command"
                 >
@@ -818,7 +818,7 @@ const progressTextClass = computed(() =>
                 <button
                   v-if="canSeriousGame"
                   :disabled="!manageableInContext"
-                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                  class="block w-full whitespace-nowrap rounded px-3 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                   type="button"
                   @click="seriousGameAction.command"
                 >
@@ -827,7 +827,7 @@ const progressTextClass = computed(() =>
                 <div class="my-2 border-t border-gray-25"></div>
                 <button
                   :disabled="!manageableInContext"
-                  class="w-full whitespace-nowrap rounded px-3 py-2 text-left font-semibold text-danger hover:bg-danger/10 disabled:opacity-50"
+                  class="w-full whitespace-nowrap rounded px-3 py-2 text-start font-semibold text-danger hover:bg-danger/10 disabled:opacity-50"
                   type="button"
                   @click="onDelete"
                 >
@@ -841,7 +841,7 @@ const progressTextClass = computed(() =>
 
       <div
         v-else
-        class="ml-auto flex items-center gap-2 shrink-0"
+        class="ms-auto flex items-center gap-2 shrink-0"
       >
         <div
           :aria-label="t('Actions')"

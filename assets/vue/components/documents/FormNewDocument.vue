@@ -36,7 +36,7 @@
     >
       <button
         type="button"
-        class="flex w-full items-center justify-between gap-3 text-left"
+        class="flex w-full items-center justify-between gap-3 text-start"
         @click="showEditorDrafts = !showEditorDrafts"
       >
         <span class="flex min-w-0 items-center gap-2 text-sm font-medium text-gray-90">
@@ -486,8 +486,7 @@ export default {
       return `${baseStyle}
         body {
           box-sizing: border-box;
-          padding-left: 0.5rem;
-          padding-right: 0.5rem;
+          padding-inline: 0.5rem;
         }
       `
     },
@@ -1087,7 +1086,7 @@ export default {
     buildAiGeneratedMediaHtml(mediaHtml) {
       const label = this.escapeHtml(this.t("AI generated"))
 
-      return `<span data-ai-generated-media-wrapper="1" style="position:relative;display:inline-block;max-width:100%;">${mediaHtml}<span data-ai-generated-media="1" style="position:absolute;right:8px;bottom:8px;z-index:1;display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(15,23,42,.82);color:#fff;font-size:12px;font-weight:600;line-height:16px;">${label}</span></span>`
+      return `<span data-ai-generated-media-wrapper="1" style="position:relative;display:inline-block;max-width:100%;">${mediaHtml}<span data-ai-generated-media="1" style="position:absolute;inset-inline-end:8px;bottom:8px;z-index:1;display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(15,23,42,.82);color:#fff;font-size:12px;font-weight:600;line-height:16px;">${label}</span></span>`
     },
     insertMediaAfterSelectedBlock(payload) {
       const editor = this.getTinyEditor()

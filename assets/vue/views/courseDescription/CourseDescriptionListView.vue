@@ -77,6 +77,7 @@
           <div class="flex min-w-0 items-center gap-2">
             <div
               class="min-w-0 flex-1 break-words text-lg font-semibold text-gray-90"
+              dir="auto"
               v-html="displayTranslatedHtml(description.title || getDescriptionTypeLabel(description.descriptionType))"
             ></div>
             <BaseIcon
@@ -112,6 +113,7 @@
         <div
           v-if="description.content"
           class="break-words"
+          dir="auto"
           v-html="displayTranslatedHtml(description.content)"
         ></div>
         <p

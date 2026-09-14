@@ -292,7 +292,7 @@ Display::display_header();
 // Action links
 if ('learnpath' !== $origin) {
     $actions = '';
-    // $actions .= '<span style="float:right;">'.search_link().'</span>';
+    // $actions .= '<span style="float:inline-end;">'.search_link().'</span>';
     if ('group' === $origin) {
         $actions .= '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
             Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Groups')).

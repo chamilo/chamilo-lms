@@ -8,7 +8,7 @@
         </p>
 
         <form method="get" action="{{ path('admin_resources_info') }}" style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
-            <select name="type" class="form-control" onchange="this.form.submit()" style="margin-right: 10px;">
+            <select name="type" class="form-control" onchange="this.form.submit()" style="margin-inline-end: 10px;">
                 <option value="">{{ 'Choose a type'|trans }}</option>
                 {% for type in resourceTypes %}
                     <option value="{{ type.id }}" {% if type.id == selectedType %}selected{% endif %}>{{ type.title }}</option>

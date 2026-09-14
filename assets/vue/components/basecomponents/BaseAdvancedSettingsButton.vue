@@ -7,7 +7,7 @@
     >
       <span
         class="mdi"
-        :class="modelValue ? 'mdi-chevron-down' : 'mdi-chevron-right'"
+        :class="modelValue ? 'mdi-chevron-down' : 'mdi-chevron-right rtl:rotate-180'"
         aria-hidden="true"
       />
       <span>{{ showAdvancedSettingsLabel }}</span>

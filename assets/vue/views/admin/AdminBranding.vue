@@ -52,7 +52,7 @@
             <span v-if="headerSvgExists === false" class="text-xs opacity-60">{{ t('No SVG uploaded') }}</span>
             <button
               v-if="headerSvgExists === true"
-              class="btn btn--danger ml-auto"
+              class="btn btn--danger ms-auto"
               @click="removeFile('header_svg')"
               :disabled="isSaving"
             >
@@ -73,7 +73,7 @@
             <span v-if="headerPngExists === false" class="text-xs opacity-60">{{ t('No PNG uploaded') }}</span>
             <button
               v-if="headerPngExists === true"
-              class="btn btn--danger ml-auto"
+              class="btn btn--danger ms-auto"
               @click="removeFile('header_png')"
               :disabled="isSaving"
             >
@@ -148,7 +148,7 @@
             <span v-if="emailSvgExists === false" class="text-xs opacity-60">{{ t('No SVG uploaded') }}</span>
             <button
               v-if="emailSvgExists === true"
-              class="btn btn--danger ml-auto"
+              class="btn btn--danger ms-auto"
               @click="removeFile('email_svg')"
               :disabled="isSaving"
             >
@@ -169,7 +169,7 @@
             <span v-if="emailPngExists === false" class="text-xs opacity-60">{{ t('No PNG uploaded') }}</span>
             <button
               v-if="emailPngExists === true"
-              class="btn btn--danger ml-auto"
+              class="btn btn--danger ms-auto"
               @click="removeFile('email_png')"
               :disabled="isSaving"
             >

@@ -87,7 +87,7 @@
                                             {{ form_widget(field) }}
                                         {% else %}
                                             <div class="mb-6 rounded-lg bg-white shadow-lg">
-                                                <div class="flex justify-between items-start border-l-8 border-primary rounded-l-lg rounded-tr-lg bg-support-2 px-4 py-4 -ml-2 text-body-2">
+                                                <div class="flex justify-between items-start border-s-8 border-primary rounded-s-lg rounded-se-lg bg-support-2 px-4 py-4 -ms-2 text-body-2">
                                                     <h4 class="text-gray-90 text-body-1 font-semibold">{{ field.vars.label|trans }}</h4>
 
                                                     <div class="flex items-center gap-2">
@@ -115,16 +115,16 @@
 
                                                             {% if isLockedOnMain %}
                                                                 <span
-                                                                        class="ml-1 text-gray-50 text-lg flex items-center cursor-not-allowed"
+                                                                        class="ms-1 text-gray-50 text-lg flex items-center cursor-not-allowed"
                                                                         title="{{ 'Setting is globally locked (access_url_locked=1)'|trans }}"
                                                                 >
                                                                     <i class="mdi mdi-eye-off text-gray-50 text-xl"></i>
-                                                                    <i class="mdi mdi-lock-outline text-gray-50 text-lg ml-1"></i>
+                                                                    <i class="mdi mdi-lock-outline text-gray-50 text-lg ms-1"></i>
                                                                 </span>
                                                             {% elseif can_toggle_multiurl_setting %}
                                                                 <button
                                                                         type="button"
-                                                                        class="ml-1 toggle-changeable flex items-center justify-center"
+                                                                        class="ms-1 toggle-changeable flex items-center justify-center"
                                                                         data-variable="{{ fieldName }}"
                                                                         data-status="{{ changeable }}"
                                                                         title="{{ changeable ? 'Setting is editable on sub-URLs'|trans : 'Setting locked for sub-URLs'|trans }}"
@@ -137,7 +137,7 @@
                                                                 </button>
                                                             {% else %}
                                                                 <span
-                                                                        class="ml-1 text-gray-50 text-lg flex items-center cursor-default"
+                                                                        class="ms-1 text-gray-50 text-lg flex items-center cursor-default"
                                                                         title="{{ changeable ? 'Setting is editable on sub-URLs'|trans : 'Setting locked for sub-URLs'|trans }}"
                                                                 >
                                                                     {% if changeable %}

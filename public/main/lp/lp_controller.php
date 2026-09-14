@@ -1661,7 +1661,7 @@ switch ($action) {
 
         Session::write('refresh', 1);
         $htmlHeadXtra[] = '<style>
-      .lp-finalitem-wrap { padding-left: 24px; }
+      .lp-finalitem-wrap { padding-inline-start: 24px; }
       .lp-finalitem-title { font-size: 18px; font-weight: 600; margin: 0 0 12px 0; }
     </style>';
 

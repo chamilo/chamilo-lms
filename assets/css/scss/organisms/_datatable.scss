@@ -21,9 +21,9 @@
       @apply border-0;
     }
 
-    // "1 – 20 / 56" summary — pinned left
+    // "1 – 20 / 56" summary — pinned to the start
     &-current {
-      @apply mr-auto text-body-2 text-gray-50 tabular-nums;
+      @apply me-auto text-body-2 text-gray-50 tabular-nums;
     }
 
     // First / Prev / Next / Last navigation buttons
@@ -65,14 +65,14 @@
 
     // Rows-per-page dropdown — keep it compact (just wide enough for 2–3 digits)
     &-rpp-dropdown {
-      @apply ml-auto mt-2 min-w-0 w-20;
+      @apply ms-auto mt-2 min-w-0 w-20;
 
       .p-select-label {
         @apply px-3 py-1.5 text-body-2;
       }
 
       .p-select-dropdown {
-        @apply pr-2;
+        @apply pe-2;
       }
     }
   }
@@ -112,7 +112,7 @@
     hover:text-primary;
 
     &-icon {
-      @apply ml-2;
+      @apply ms-2;
     }
 
     &.p-highlight {
@@ -120,7 +120,7 @@
     }
 
     .p-sortable-column-badge {
-      @apply rounded-full ml-2 text-tiny font-semibold px-1.5 bg-white;
+      @apply rounded-full ms-2 text-tiny font-semibold px-1.5 bg-white;
     }
   }
 
@@ -225,7 +225,7 @@ $border-color_1: transparent;
           background: transparent;
           border-radius: 50%;
           transition: none;
-          margin-right: 0.5rem;
+          margin-inline-end: 0.5rem;
 
           &:enabled {
             &:hover {
@@ -379,7 +379,7 @@ $border-color_1: transparent;
       >th {
         + {
           th {
-            border-left-width: 0;
+            border-inline-start-width: 0;
           }
         }
       }
@@ -391,7 +391,7 @@ $border-color_1: transparent;
       >td {
         + {
           td {
-            border-left-width: 0;
+            border-inline-start-width: 0;
           }
         }
       }
@@ -417,7 +417,7 @@ $border-color_1: transparent;
       >td {
         + {
           td {
-            border-left-width: 0;
+            border-inline-start-width: 0;
           }
         }
       }

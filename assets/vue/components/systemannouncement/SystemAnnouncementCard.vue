@@ -7,7 +7,7 @@
           v-if="securityStore.isAdmin"
           :label="$t('Edit')"
           :to-url="`/main/admin/system_announcements.php?id=${announcement['id']}&action=edit`"
-          class="ml-auto"
+          class="ms-auto"
           icon="edit"
           only-icon
           size="small"
@@ -16,7 +16,10 @@
       </div>
     </template>
 
-    <div v-html="announcement.content" />
+    <div
+      dir="auto"
+      v-html="announcement.content"
+    />
   </BaseCard>
 </template>
 

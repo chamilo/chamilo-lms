@@ -171,7 +171,7 @@ class Diagnoser
             $active = $key === $current;
             $ring = $active ? 'ring-2 ring-primary/80 bg-primary/5' : 'ring-1 ring-gray-200 hover:ring-gray-300';
             $txt = $active ? 'text-primary' : 'text-gray-700 group-hover:text-gray-900';
-            $badge = $active ? '<span class="ml-auto rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">Active</span>' : '';
+            $badge = $active ? '<span class="ms-auto rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">Active</span>' : '';
             $url = 'system_status.php?section='.$key;
 
             $html .= '
@@ -210,7 +210,7 @@ class Diagnoser
 <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
   <div class="overflow-x-auto">
     <table class="min-w-full text-sm text-gray-800">
-      <thead class="bg-gray-20 text-left text-xs font-semibold text-gray-600">
+      <thead class="bg-gray-20 text-start text-xs font-semibold text-gray-600">
         <tr>';
 
         foreach ($headers as $h) {

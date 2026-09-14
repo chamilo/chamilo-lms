@@ -31,7 +31,7 @@ class DateTimeRangePicker extends DateRangePicker
              <div id="'.$id.'" class="flex flex-row mt-1">
                 <input '.$this->_getAttrString($this->_attributes).'
                     class="form-control" type="text" value="'.$value.'" data-input>
-                <div class="ml-1" id="button-addon3">
+                <div class="ms-1" id="button-addon3">
                     <button class="btn btn--secondary-outline"  type="button" data-toggle>
                         <i class="mdi mdi-calendar"></i>
                     </button>

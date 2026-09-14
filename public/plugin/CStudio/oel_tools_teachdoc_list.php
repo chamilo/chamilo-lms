@@ -96,7 +96,7 @@ $(document).ready(function(){
 
 $htmlHeadXtra[] = "<style>
 	.previous{
-		margin-right:10px;
+		margin-inline-end:10px;
 		cursor:pointer;
 	}
 	.next{

@@ -7,9 +7,9 @@
         <tr>
             <th class="text-center">{{ 'OrderReference'| get_plugin_lang('BuyCoursesPlugin') }}</th>
             <th class="text-center">{{ 'PayoutDate'| get_plugin_lang('BuyCoursesPlugin') }}</th>
-            <th class="text-right">{{ 'Commission'| get_plugin_lang('BuyCoursesPlugin') }}</th>
-            <th class="text-right">{{ 'Names'| get_lang }}</th>
-            <th class="text-right">{{ 'PayPalAccount'| get_plugin_lang('BuyCoursesPlugin') }}</th>
+            <th class="text-end">{{ 'Commission'| get_plugin_lang('BuyCoursesPlugin') }}</th>
+            <th class="text-end">{{ 'Names'| get_lang }}</th>
+            <th class="text-end">{{ 'PayPalAccount'| get_plugin_lang('BuyCoursesPlugin') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -19,13 +19,13 @@
                                                                          data-toggle="modal" data-target="#saleInfo"
                                                                          href="#">{{ payout.reference }}</a></td>
                 <td class="text-center">{{ payout.payout_date }}</td>
-                <td class="text-right"
+                <td class="text-end"
                    >{{ payout.currency ~ ' ' ~ payout.commission }}</td>
-                <td class="text-right">{{ payout.beneficiary }}</td>
+                <td class="text-end">{{ payout.beneficiary }}</td>
                 {% if payout.paypal_account %}
-                    <td class="text-right">{{ payout.paypal_account }}</td>
+                    <td class="text-end">{{ payout.paypal_account }}</td>
                 {% else %}
-                    <td class="text-right"
+                    <td class="text-end"
                        >{{ 'NoPayPalAccountDetected'| get_plugin_lang('BuyCoursesPlugin') }}</td>
                 {% endif %}
             </tr>

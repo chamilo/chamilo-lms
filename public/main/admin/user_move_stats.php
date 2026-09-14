@@ -812,7 +812,7 @@ if (!empty($user_list)) {
         echo '<table class="table table-hover table-striped data_table">';
         echo '<thead>';
         echo '<tr>';
-        echo '<th style="text-align:left;" colspan="'.count($course_list).'">';
+        echo '<th style="text-align:start;" colspan="'.count($course_list).'">';
         echo "<h3>$name #$user_id </h3>  ";
         echo '</th>';
         echo '</tr>';

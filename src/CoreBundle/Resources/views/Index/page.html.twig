@@ -3,7 +3,7 @@
 {% autoescape false %}
 {% set buttons %}
     {% if is_granted('ROLE_ADMIN') and show_edit_page_link %}
-    <div class="d-block text-right">
+    <div class="d-block text-end">
         <a
                 title="{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}"
                 href="{{ url('index') ~ 'internal_page/edit/' ~ slug ~ '/?_locale=' ~ app.request.getLocale()  }}"

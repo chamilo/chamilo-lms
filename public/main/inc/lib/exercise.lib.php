@@ -400,7 +400,7 @@ class ExerciseLib
                 $s .= Display::tag(
                     'tr',
                     $header,
-                    ['style' => 'text-align:left;']
+                    ['style' => 'text-align:start;']
                 );
             } elseif (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $answerType) {
                 $header = Display::tag('th', get_lang('Options'), ['width' => '50%']);
@@ -505,14 +505,14 @@ class ExerciseLib
                 }
 
                 $s .= '<table class="table table-hover table-striped data_table">';
-                $s .= Display::tag('tr', $header, ['style' => 'text-align:left;']);
+                $s .= Display::tag('tr', $header, ['style' => 'text-align:start;']);
 
                 // ajout de la 2eme ligne d'entête pour true/falss et les pourcentages de certitude
                 $header1 = Display::tag('th', '&nbsp;');
                 $cpt1 = 0;
                 foreach ($objQuestionTmp->options as $item) {
                     $colorBorder1 = ($cpt1 == (count($objQuestionTmp->options) - 1))
-                        ? '' : 'border-right: solid #FFFFFF 1px;';
+                        ? '' : 'border-inline-end: solid #FFFFFF 1px;';
                     if ('True' === $item || 'False' === $item) {
                         $header1 .= Display::tag(
                             'th',
@@ -549,10 +549,10 @@ class ExerciseLib
                     if ('True' === $item || 'False' === $item) {
                         $header2 .= Display::tag('td',
                             '&nbsp;',
-                            ['style' => 'background-color: #F7E1D7; color: black;border-right: solid #FFFFFF 1px;']);
+                            ['style' => 'background-color: #F7E1D7; color: black;border-inline-end: solid #FFFFFF 1px;']);
                     } else {
                         $color_border2 = ($counter2 == (count($objQuestionTmp->options) - 1)) ?
-                            '' : 'border-right: solid #FFFFFF 1px;font-size:11px;';
+                            '' : 'border-inline-end: solid #FFFFFF 1px;font-size:11px;';
                         $header2 .= Display::tag(
                             'td',
                             nl2br($descriptionList[$counter2]),
@@ -587,7 +587,7 @@ class ExerciseLib
                     $s .= Display::tag(
                         'tr',
                         $header,
-                        ['style' => 'text-align:left;']
+                        ['style' => 'text-align:start;']
                     );
                 }
             }
@@ -1273,7 +1273,7 @@ class ExerciseLib
                             $s .= '</select></div></td><td width="5%" class="separate">&nbsp;</td>';
                             $s .= '<td width="40%" valign="top" >';
                             if (isset($select_items[$lines_count])) {
-                                $s .= '<div class="text-right">
+                                $s .= '<div class="text-end">
                                         <p class="indent">'.
                                     $select_items[$lines_count]['letter'].'.&nbsp; '.
                                     $select_items[$lines_count]['answer'].'
@@ -1647,7 +1647,7 @@ HTML;
                 $answerList = '
         <div class="card p-4 rounded-md border border-gray-25">
             <h5 class="font-bold text-lg mb-2 text-primary">'.get_lang('Image zones').'</h5>
-            <ol class="list-decimal ml-6 space-y-2 text-primary">
+            <ol class="list-decimal ms-6 space-y-2 text-primary">
         ';
 
                 if (!empty($answers_hotspot)) {
@@ -4510,7 +4510,7 @@ EOT;
                 $res .= "<option value='-1' disabled='disabled'>".$category['title']."</option>";
                 $currentCatId = $category['id'];
             }
-            $res .= "<option ".$tabSelected[$groups[$i]['id']]."style='margin-left:40px' value='".
+            $res .= "<option ".$tabSelected[$groups[$i]['id']]."style='margin-inline-start:40px' value='".
                 $groups[$i]["iid"]."'>".
                 $groups[$i]["name"].
                 "</option>";
@@ -5299,9 +5299,9 @@ EOT;
         $data = self::exerciseResultsInRanking($exerciseId, $courseId, $sessionId);
 
         $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered']);
-        $table->setHeaderContents(0, 0, get_lang('Position'), ['class' => 'text-right']);
+        $table->setHeaderContents(0, 0, get_lang('Position'), ['class' => 'text-end']);
         $table->setHeaderContents(0, 1, get_lang('Username'));
-        $table->setHeaderContents(0, 2, get_lang('Score'), ['class' => 'text-right']);
+        $table->setHeaderContents(0, 2, get_lang('Score'), ['class' => 'text-end']);
         $table->setHeaderContents(0, 3, get_lang('Date'), ['class' => 'text-center']);
 
         foreach ($data as $r => $item) {
@@ -5316,7 +5316,7 @@ EOT;
                 $attrClass = '';
 
                 if (in_array($c, [0, 2])) {
-                    $attrClass = 'text-right';
+                    $attrClass = 'text-end';
                 } elseif (3 == $c) {
                     $attrClass = 'text-center';
                 }

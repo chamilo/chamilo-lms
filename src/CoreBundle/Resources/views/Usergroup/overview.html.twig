@@ -11,7 +11,7 @@
             <div>
                 <a href="/admin/usergroups"
                    title="{{ 'Go back to the list of classes'|trans }}">
-                    <i class="ch-tool-icon mdi mdi-arrow-left-bold-box" style="font-size: 32px"></i>
+                    <i class="ch-tool-icon mdi mdi-arrow-left-bold-box rtl:rotate-180" style="font-size: 32px"></i>
                 </a>
                 <h2>{{ 'Overview class'|trans }} : {{ usergroupName }}</h2>
             </div>
@@ -45,7 +45,7 @@
             {% if usersSubscribedToUsergroup|length > 0 %}
                 <div>
                     <b>{{ 'Users subscribed to the class'|trans }}</b>
-                    <ul style='list-style-type: disc; padding-left: 1.5vw; margin: 20px 0;'>
+                    <ul style='list-style-type: disc; padding-inline-start: 1.5vw; margin: 20px 0;'>
                         {% for user in usersSubscribedToUsergroup %}
                             <li class="user-display">{{ user.identity }} ({{ user.email }})</li>
                         {% endfor %}
@@ -56,7 +56,7 @@
             {% if coursesSubscribedToUsergroup|length > 0 %}
                 <div>
                     <b>{{ 'Courses subscribed to the class'|trans }}</b>
-                    <ul style='list-style-type: disc; padding-left: 1.5vw; margin: 20px 0'>
+                    <ul style='list-style-type: disc; padding-inline-start: 1.5vw; margin: 20px 0'>
                         {% for course in coursesSubscribedToUsergroup %}
                             <li class="user-display">{{ course.name }} ({{ course.code }})</li>
                         {% endfor %}

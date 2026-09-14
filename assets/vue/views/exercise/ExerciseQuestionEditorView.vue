@@ -575,36 +575,36 @@
             <table class="min-w-full border-collapse bg-white text-sm">
               <thead class="bg-gray-15 text-gray-90">
                 <tr>
-                  <th class="w-14 border border-gray-20 px-2 py-2 text-left">{{ t("N°") }}</th>
-                  <th class="min-w-[220px] border border-gray-20 px-2 py-2 text-left">{{ t("Answer") }}</th>
-                  <th class="w-40 border border-gray-20 px-2 py-2 text-left">{{ t("Shape") }}</th>
-                  <th class="min-w-[160px] border border-gray-20 px-2 py-2 text-left">{{ t("Coordinates") }}</th>
+                  <th class="w-14 border border-gray-20 px-2 py-2 text-start">{{ t("N°") }}</th>
+                  <th class="min-w-[220px] border border-gray-20 px-2 py-2 text-start">{{ t("Answer") }}</th>
+                  <th class="w-40 border border-gray-20 px-2 py-2 text-start">{{ t("Shape") }}</th>
+                  <th class="min-w-[160px] border border-gray-20 px-2 py-2 text-start">{{ t("Coordinates") }}</th>
                   <th
                     v-if="!isHotspotCombinationQuestion"
-                    class="w-28 border border-gray-20 px-2 py-2 text-right"
+                    class="w-28 border border-gray-20 px-2 py-2 text-end"
                   >
                     {{ t("Score") }}
                   </th>
                   <th
                     v-if="isHotspotDelineationQuestion"
-                    class="w-36 border border-gray-20 px-2 py-2 text-right"
+                    class="w-36 border border-gray-20 px-2 py-2 text-end"
                   >
                     {{ t("Minimum overlap") }}
                   </th>
                   <th
                     v-if="isHotspotDelineationQuestion"
-                    class="w-36 border border-gray-20 px-2 py-2 text-right"
+                    class="w-36 border border-gray-20 px-2 py-2 text-end"
                   >
                     {{ t("Maximum excess") }}
                   </th>
                   <th
                     v-if="isHotspotDelineationQuestion"
-                    class="w-36 border border-gray-20 px-2 py-2 text-right"
+                    class="w-36 border border-gray-20 px-2 py-2 text-end"
                   >
                     {{ t("Maximum missing") }}
                   </th>
-                  <th class="min-w-[220px] border border-gray-20 px-2 py-2 text-left">{{ t("Feedback") }}</th>
-                  <th class="w-28 border border-gray-20 px-2 py-2 text-right">{{ t("Actions") }}</th>
+                  <th class="min-w-[220px] border border-gray-20 px-2 py-2 text-start">{{ t("Feedback") }}</th>
+                  <th class="w-28 border border-gray-20 px-2 py-2 text-end">{{ t("Actions") }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -728,7 +728,7 @@
                       :name="`hotspot_comment_${index}`"
                     />
                   </td>
-                  <td class="border border-gray-20 px-2 py-2 text-right align-top">
+                  <td class="border border-gray-20 px-2 py-2 text-end align-top">
                     <div class="flex justify-end gap-1">
                       <BaseButton
                         :label="t('Select')"
@@ -834,11 +834,11 @@
           class="overflow-x-auto rounded-lg border border-gray-20"
         >
           <table class="min-w-full border-collapse text-sm">
-            <thead class="bg-gray-15 text-left text-gray-90">
+            <thead class="bg-gray-15 text-start text-gray-90">
               <tr>
-                <th class="border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Variable ranges") }}</th>
-                <th class="w-40 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Lowest value") }}</th>
-                <th class="w-40 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Highest value") }}</th>
+                <th class="border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Variable ranges") }}</th>
+                <th class="w-40 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Lowest value") }}</th>
+                <th class="w-40 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Highest value") }}</th>
                 <th class="w-44 px-3 py-2 font-semibold">{{ t("Range value") }}</th>
               </tr>
             </thead>
@@ -848,10 +848,10 @@
                 :key="`calculated-range-${range.token}-${index}`"
                 :class="index % 2 === 0 ? 'bg-white' : 'bg-blue-50'"
               >
-                <td class="border-r border-t border-gray-20 px-3 py-3">
+                <td class="border-e border-t border-gray-20 px-3 py-3">
                   <code class="rounded bg-gray-15 px-2 py-1 text-gray-90">{{ range.token }}</code>
                 </td>
-                <td class="border-r border-t border-gray-20 px-3 py-3">
+                <td class="border-e border-t border-gray-20 px-3 py-3">
                   <BaseInputText
                     :id="`exercise-calculated-low-${index}`"
                     v-model="range.low"
@@ -860,7 +860,7 @@
                     @blur="refreshCalculatedRandom(range)"
                   />
                 </td>
-                <td class="border-r border-t border-gray-20 px-3 py-3">
+                <td class="border-e border-t border-gray-20 px-3 py-3">
                   <BaseInputText
                     :id="`exercise-calculated-high-${index}`"
                     v-model="range.high"
@@ -1018,13 +1018,13 @@
           class="overflow-x-auto rounded-lg border border-gray-20"
         >
           <table class="min-w-full border-collapse text-sm">
-            <thead class="bg-gray-15 text-left text-gray-90">
+            <thead class="bg-gray-15 text-start text-gray-90">
               <tr>
-                <th class="w-16 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
-                <th class="border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Blank") }}</th>
+                <th class="w-16 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
+                <th class="border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Blank") }}</th>
                 <th
                   v-if="!isFillBlanksCombination"
-                  class="w-40 border-r border-gray-25 px-3 py-2 font-semibold"
+                  class="w-40 border-e border-gray-25 px-3 py-2 font-semibold"
                 >
                   {{ t("Score") }}
                 </th>
@@ -1037,15 +1037,15 @@
                 :key="`blank-${index}`"
                 :class="index % 2 === 0 ? 'bg-white' : 'bg-blue-50'"
               >
-                <td class="border-r border-t border-gray-20 px-3 py-3 font-semibold text-gray-90">
+                <td class="border-e border-t border-gray-20 px-3 py-3 font-semibold text-gray-90">
                   {{ index + 1 }}
                 </td>
-                <td class="border-r border-t border-gray-20 px-3 py-3">
+                <td class="border-e border-t border-gray-20 px-3 py-3">
                   <code class="rounded bg-gray-15 px-2 py-1 text-gray-90">{{ blank.answer }}</code>
                 </td>
                 <td
                   v-if="!isFillBlanksCombination"
-                  class="border-r border-t border-gray-20 px-3 py-3"
+                  class="border-e border-t border-gray-20 px-3 py-3"
                 >
                   <BaseInputNumber
                     :id="`exercise-fill-blank-score-${index}`"
@@ -1132,12 +1132,12 @@
           class="overflow-x-auto rounded-lg border border-gray-20 bg-white shadow-sm"
         >
           <table class="min-w-full border-collapse text-sm">
-            <thead class="bg-gray-15 text-left text-gray-90">
+            <thead class="bg-gray-15 text-start text-gray-90">
               <tr>
-                <th class="w-16 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
-                <th class="w-24 border-r border-gray-25 px-3 py-2 text-center font-semibold">{{ t("Expected") }}</th>
-                <th class="border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
-                <th class="min-w-[320px] border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Comment") }}</th>
+                <th class="w-16 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
+                <th class="w-24 border-e border-gray-25 px-3 py-2 text-center font-semibold">{{ t("Expected") }}</th>
+                <th class="border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
+                <th class="min-w-[320px] border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Comment") }}</th>
                 <th
                   v-if="!isDropdownCombinationQuestion"
                   class="w-40 px-3 py-2 font-semibold"
@@ -1152,10 +1152,10 @@
                 :key="answer.localId"
                 :class="index % 2 === 0 ? 'bg-white' : 'bg-support-2'"
               >
-                <td class="border-r border-t border-gray-20 px-3 py-3 font-semibold text-gray-90">
+                <td class="border-e border-t border-gray-20 px-3 py-3 font-semibold text-gray-90">
                   {{ index + 1 }}
                 </td>
-                <td class="border-r border-t border-gray-20 px-3 py-3 text-center">
+                <td class="border-e border-t border-gray-20 px-3 py-3 text-center">
                   <input
                     v-model="answer.correct"
                     class="h-4 w-4 rounded border-gray-25 text-primary focus:ring-primary"
@@ -1163,10 +1163,10 @@
                     type="checkbox"
                   />
                 </td>
-                <td class="border-r border-t border-gray-20 px-3 py-3 text-gray-90">
+                <td class="border-e border-t border-gray-20 px-3 py-3 text-gray-90">
                   {{ displayText(answer.answer, t('Untitled')) }}
                 </td>
-                <td class="border-r border-t border-gray-20 px-2 py-3 align-top">
+                <td class="border-e border-t border-gray-20 px-2 py-3 align-top">
                   <BaseTinyEditor
                     :editor-id="`exercise-dropdown-comment-${answer.localId}`"
                     v-model="answer.comment"
@@ -1215,14 +1215,14 @@
 
         <div class="overflow-x-auto rounded-lg border border-gray-20">
           <table class="min-w-full border-collapse text-sm">
-            <thead class="bg-gray-15 text-left text-gray-90">
+            <thead class="bg-gray-15 text-start text-gray-90">
               <tr>
-                <th class="w-16 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
-                <th class="min-w-[380px] border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
-                <th class="w-72 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Matches To") }}</th>
+                <th class="w-16 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
+                <th class="min-w-[380px] border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
+                <th class="w-72 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Matches To") }}</th>
                 <th
                   v-if="!isMatchingCombinationQuestion"
-                  class="w-36 border-r border-gray-25 px-3 py-2 font-semibold"
+                  class="w-36 border-e border-gray-25 px-3 py-2 font-semibold"
                 >
                   {{ t("Score") }}
                 </th>
@@ -1235,10 +1235,10 @@
                 :key="pair.localId"
                 :class="index % 2 === 0 ? 'bg-white' : 'bg-blue-50'"
               >
-                <td class="border-r border-t border-gray-20 px-3 py-3 align-middle font-semibold text-gray-90">
+                <td class="border-e border-t border-gray-20 px-3 py-3 align-middle font-semibold text-gray-90">
                   {{ index + 1 }}
                 </td>
-                <td class="border-r border-t border-gray-20 px-2 py-3 align-top">
+                <td class="border-e border-t border-gray-20 px-2 py-3 align-top">
                   <BaseTinyEditor
                     :editor-id="`exercise-matching-pair-${pair.localId}`"
                     v-model="pair.answer"
@@ -1247,7 +1247,7 @@
                     :title="t('Answer')"
                   />
                 </td>
-                <td class="border-r border-t border-gray-20 px-3 py-3 align-middle">
+                <td class="border-e border-t border-gray-20 px-3 py-3 align-middle">
                   <BaseSelect
                     :id="`exercise-matching-pair-option-${pair.localId}`"
                     v-model="pair.optionLocalId"
@@ -1258,7 +1258,7 @@
                 </td>
                 <td
                   v-if="!isMatchingCombinationQuestion"
-                  class="border-r border-t border-gray-20 px-3 py-3 align-middle"
+                  class="border-e border-t border-gray-20 px-3 py-3 align-middle"
                 >
                   <BaseInputNumber
                     :id="`exercise-matching-score-${pair.localId}`"
@@ -1285,9 +1285,9 @@
 
         <div class="overflow-x-auto rounded-lg border border-gray-20">
           <table class="min-w-full border-collapse text-sm">
-            <thead class="bg-gray-15 text-left text-gray-90">
+            <thead class="bg-gray-15 text-start text-gray-90">
               <tr>
-                <th class="w-16 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
+                <th class="w-16 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
                 <th class="min-w-[520px] px-3 py-2 font-semibold">{{ t("Answer") }}</th>
               </tr>
             </thead>
@@ -1297,7 +1297,7 @@
                 :key="option.localId"
                 :class="index % 2 === 0 ? 'bg-white' : 'bg-blue-50'"
               >
-                <td class="border-r border-t border-gray-20 px-3 py-3 align-middle font-semibold text-gray-90">
+                <td class="border-e border-t border-gray-20 px-3 py-3 align-middle font-semibold text-gray-90">
                   {{ getMatchingOptionLabel(index + 1) }}
                 </td>
                 <td class="border-t border-gray-20 px-2 py-3 align-top">
@@ -1380,12 +1380,12 @@
 
         <div class="overflow-x-auto rounded-lg border border-gray-20">
           <table class="min-w-full border-collapse text-sm">
-            <thead class="bg-gray-15 text-left text-gray-90">
+            <thead class="bg-gray-15 text-start text-gray-90">
               <tr>
-                <th class="w-16 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
-                <th class="min-w-[520px] border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
-                <th class="w-52 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Matches To") }}</th>
-                <th class="min-w-[320px] border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Comment") }}</th>
+                <th class="w-16 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
+                <th class="min-w-[520px] border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
+                <th class="w-52 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Matches To") }}</th>
+                <th class="min-w-[320px] border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Comment") }}</th>
                 <th class="w-36 px-3 py-2 font-semibold">{{ t("Score") }}</th>
               </tr>
             </thead>
@@ -1395,10 +1395,10 @@
                 :key="item.localId"
                 :class="index % 2 === 0 ? 'bg-white' : 'bg-blue-50'"
               >
-                <td class="border-r border-t border-gray-20 px-3 py-3 align-middle font-semibold text-gray-90">
+                <td class="border-e border-t border-gray-20 px-3 py-3 align-middle font-semibold text-gray-90">
                   {{ index + 1 }}
                 </td>
-                <td class="border-r border-t border-gray-20 px-2 py-3 align-top">
+                <td class="border-e border-t border-gray-20 px-2 py-3 align-top">
                   <BaseTinyEditor
                     :editor-id="`exercise-draggable-item-${item.localId}`"
                     v-model="item.answer"
@@ -1407,7 +1407,7 @@
                     :title="t('Answer')"
                   />
                 </td>
-                <td class="border-r border-t border-gray-20 px-3 py-3 align-middle">
+                <td class="border-e border-t border-gray-20 px-3 py-3 align-middle">
                   <BaseSelect
                     :id="`exercise-draggable-target-${item.localId}`"
                     v-model="item.targetPosition"
@@ -1416,7 +1416,7 @@
                     :options="draggablePositionSelectOptions"
                   />
                 </td>
-                <td class="border-r border-t border-gray-20 px-2 py-3 align-top">
+                <td class="border-e border-t border-gray-20 px-2 py-3 align-top">
                   <BaseTinyEditor
                     :editor-id="`exercise-draggable-comment-${item.localId}`"
                     v-model="item.comment"
@@ -1638,18 +1638,18 @@
 
         <div class="overflow-x-auto rounded-lg border border-gray-20 bg-white shadow-sm">
           <table class="min-w-full border-collapse text-sm">
-            <thead class="bg-gray-15 text-left text-gray-90">
+            <thead class="bg-gray-15 text-start text-gray-90">
               <tr>
-                <th class="w-16 border-r border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
-                <th class="w-20 border-r border-gray-25 px-3 py-2 text-center font-semibold">{{ t("True") }}</th>
+                <th class="w-16 border-e border-gray-25 px-3 py-2 font-semibold">{{ t("N°") }}</th>
+                <th class="w-20 border-e border-gray-25 px-3 py-2 text-center font-semibold">{{ t("True") }}</th>
                 <th
                   v-if="isTrueFalseQuestion"
-                  class="w-20 border-r border-gray-25 px-3 py-2 text-center font-semibold"
+                  class="w-20 border-e border-gray-25 px-3 py-2 text-center font-semibold"
                 >
                   {{ t("False") }}
                 </th>
-                <th class="min-w-[360px] border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
-                <th class="min-w-[360px] border-r border-gray-25 px-3 py-2 font-semibold">{{ t("Comment") }}</th>
+                <th class="min-w-[360px] border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Answer") }}</th>
+                <th class="min-w-[360px] border-e border-gray-25 px-3 py-2 font-semibold">{{ t("Comment") }}</th>
                 <th
                   v-if="!usesGlobalScore && !usesTrueFalseScores"
                   class="w-40 px-3 py-2 font-semibold"
@@ -1664,10 +1664,10 @@
                 :key="answer.localId"
                 :class="index % 2 === 0 ? 'bg-white' : 'bg-blue-50'"
               >
-                <td class="border-r border-t border-gray-20 px-3 py-4 align-middle font-semibold text-gray-90">
+                <td class="border-e border-t border-gray-20 px-3 py-4 align-middle font-semibold text-gray-90">
                   {{ index + 1 }}
                 </td>
-                <td class="border-r border-t border-gray-20 px-3 py-4 text-center align-middle">
+                <td class="border-e border-t border-gray-20 px-3 py-4 text-center align-middle">
                   <input
                     v-if="isTrueFalseQuestion"
                     v-model="answer.correctChoice"
@@ -1695,7 +1695,7 @@
                 </td>
                 <td
                   v-if="isTrueFalseQuestion"
-                  class="border-r border-t border-gray-20 px-3 py-4 text-center align-middle"
+                  class="border-e border-t border-gray-20 px-3 py-4 text-center align-middle"
                 >
                   <input
                     v-model="answer.correctChoice"
@@ -1705,7 +1705,7 @@
                     :value="2"
                   />
                 </td>
-                <td class="border-r border-t border-gray-20 px-2 py-3 align-top">
+                <td class="border-e border-t border-gray-20 px-2 py-3 align-top">
                   <BaseTinyEditor
                     :editor-id="`exercise-answer-${answer.localId}`"
                     v-model="answer.answer"
@@ -1715,7 +1715,7 @@
                     :use-file-manager="isUniqueAnswerImage"
                   />
                 </td>
-                <td class="border-r border-t border-gray-20 px-2 py-3 align-top">
+                <td class="border-e border-t border-gray-20 px-2 py-3 align-top">
                   <BaseTinyEditor
                     :editor-id="`exercise-answer-comment-${answer.localId}`"
                     v-model="answer.comment"

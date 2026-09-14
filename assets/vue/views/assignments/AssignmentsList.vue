@@ -54,7 +54,7 @@
       v-else
       class="overflow-x-auto p-4"
     >
-      <table class="min-w-full text-left">
+      <table class="min-w-full text-start">
         <thead>
           <tr>
             <th class="px-6 py-3 text-gray-700 font-bold">{{ t("Learners") }}</th>

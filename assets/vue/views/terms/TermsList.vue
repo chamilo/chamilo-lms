@@ -31,7 +31,10 @@
 
       <Column header="Content">
         <template #body="slotProps">
-          <div v-html="sanitizeHtml(slotProps.data.content)"></div>
+          <div
+            dir="auto"
+            v-html="sanitizeHtml(slotProps.data.content)"
+          ></div>
         </template>
       </Column>
 

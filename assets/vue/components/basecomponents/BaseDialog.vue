@@ -58,11 +58,11 @@ const innerCloseLabel = computed(() => (props.closeLabel === "" ? t("Cancel") : 
     class="p-fluid"
   >
     <template #header>
-      <div class="text-left">
+      <div class="text-start">
         <BaseIcon
           v-if="headerIcon"
           :icon="headerIcon"
-          class="mr-2"
+          class="me-2"
         />
         <span class="font-semibold">{{ title }}</span>
       </div>

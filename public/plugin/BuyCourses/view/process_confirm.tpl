@@ -37,7 +37,7 @@
                     href="{{ back_url }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="mdi mdi-arrow-left"></em>
+                    <em class="mdi mdi-arrow-left rtl:rotate-180"></em>
                     {{ 'Back'|get_lang }}
                 </a>
             </div>
@@ -63,12 +63,18 @@
                     <div class="p-6 lg:p-8">
                         <div class="space-y-5">
                             <div class="space-y-2">
-                                <h2 class="text-2xl font-semibold text-gray-90">
+                                <h2
+                                    class="text-2xl font-semibold text-gray-90"
+                                    dir="auto"
+                                >
                                     {{ service.name }}
                                 </h2>
 
                                 {% if service.description %}
-                                    <div class="text-sm leading-7 text-gray-50">
+                                    <div
+                                        class="text-sm leading-7 text-gray-50"
+                                        dir="auto"
+                                    >
                                         {{ service.description|raw }}
                                     </div>
                                 {% endif %}
@@ -110,7 +116,7 @@
                                     </span>
                                     <div>
                                         <div class="font-semibold text-gray-90">{{ 'Buyer'|get_plugin_lang('BuyCoursesPlugin') }}</div>
-                                        <div>{{ service_sale.buyer.name }}</div>
+                                        <div dir="auto">{{ service_sale.buyer.name }}</div>
                                     </div>
                                 </div>
 
@@ -141,7 +147,7 @@
                                         </span>
                                         <div>
                                             <div class="font-semibold text-gray-90">{{ 'Owner'|get_lang }}</div>
-                                            <div>{{ service.owner.name }}</div>
+                                            <div dir="auto">{{ service.owner.name }}</div>
                                         </div>
                                     </div>
                                 {% endif %}
@@ -168,9 +174,9 @@
                                 <table class="min-w-full divide-y divide-gray-25 bg-white text-sm">
                                     <thead class="bg-support-2">
                                         <tr>
-                                            <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'Name'|get_lang }}</th>
-                                            <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                                            <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'SWIFT'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                                            <th class="px-4 py-3 text-start font-semibold text-gray-90">{{ 'Name'|get_lang }}</th>
+                                            <th class="px-4 py-3 text-start font-semibold text-gray-90">{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                                            <th class="px-4 py-3 text-start font-semibold text-gray-90">{{ 'SWIFT'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-25">

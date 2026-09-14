@@ -23,7 +23,7 @@
 }
 
 .custom-panel-heading h4 {
-  @apply m-0 flex-grow pl-2.5;
+  @apply m-0 flex-grow ps-2.5;
 }
 
 .actions {
@@ -109,15 +109,15 @@
     font-size: 18px;
     color: #333;
     flex-grow: 1;
-    text-align: left;
+    text-align: start;
   }
 
   .custom-panel-title {
-    margin-left: 10px;
+    margin-inline-start: 10px;
   }
 
   .pull-right a {
-    margin-left: 10px;
+    margin-inline-start: 10px;
   }
 
   .custom-panel-body {
@@ -150,12 +150,12 @@
     text-align: center;
     flex: 0 0 25%;
     padding: 30px;
-    border-right: 1px solid #ddd;
+    border-inline-end: 1px solid #ddd;
     background-color: #f5f5f5;
     @apply flex;
     flex-direction: column;
     @apply items-center;
-    margin-right: 20px;
+    margin-inline-end: 20px;
   }
 
   .number-post i {
@@ -172,7 +172,7 @@
     @apply flex;
     flex-direction: column;
     flex-grow: 1;
-    padding-left: 15px;
+    padding-inline-start: 15px;
   }
 
   .title-forum {
@@ -187,14 +187,14 @@
   }
 
   .actions-forum {
-    margin-left: auto;
+    margin-inline-start: auto;
     @apply flex items-center;
     justify-content: flex-end;
   }
 
   .actions-forum i {
     font-size: 22px;
-    margin-left: 10px;
+    margin-inline-start: 10px;
     cursor: pointer;
   }
 
@@ -202,7 +202,7 @@
     flex-direction: column;
 
     .number-post {
-      border-right: none;
+      border-inline-end: none;
       border-bottom: 1px solid #ddd;
       order: -1;
       width: 100%;

@@ -137,7 +137,7 @@ class ImsLtiPlugin extends Plugin
 
         $message = '<div class="space-y-2">'
             .'<p class="mb-2">Current platform key pair status.</p>'
-            .'<ul class="list-disc pl-5 space-y-1">'.implode('', $rows).'</ul>'
+            .'<ul class="list-disc ps-5 space-y-1">'.implode('', $rows).'</ul>'
             .'</div>';
 
         $messageType = $isOpenSslAvailable ? ($isEnabled ? 'info' : 'warning') : 'error';

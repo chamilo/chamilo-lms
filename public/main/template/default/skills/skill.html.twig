@@ -39,7 +39,7 @@
             <div class="text-sm font-semibold text-gray-900">{{ 'How it works'|trans }}</div>
         </div>
         <div class="p-6 text-sm text-gray-700">
-            <ol class="list-decimal pl-5 space-y-2">
+            <ol class="list-decimal ps-5 space-y-2">
                 <li>{{ 'Create a profile (Profiles) to define a set of levels.'|trans }}</li>
                 <li>{{ 'Create levels (Levels) and assign them to a profile.'|trans }}</li>
                 <li>{{ 'Assign a profile to each skill from this page.'|trans }}</li>
@@ -74,16 +74,16 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-10">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             {{ 'Title'|trans }}
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             {{ 'Short code'|trans }}
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             {{ 'Profile'|trans }}
                         </th>
-                        <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-end text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             {{ 'Detail'|trans }}
                         </th>
                     </tr>
@@ -116,7 +116,7 @@
                                 {% endif %}
                             </td>
 
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <td class="px-6 py-4 whitespace-nowrap text-end">
                                 <a
                                         href="/main/skills/skill.php?action=edit&id={{ skill.id }}"
                                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-20 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-10 focus:outline-none focus:ring-2 focus:ring-primary/30"

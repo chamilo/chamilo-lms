@@ -27,7 +27,7 @@
           <BaseIcon
             v-if="isAllowedToEdit && link.sessionId && Number(link.sessionId) === sidValue"
             :title="t('Session Item')"
-            class="ml-2"
+            class="ms-2"
             icon="session-star"
             size="normal"
           />
@@ -35,14 +35,14 @@
           <BaseIcon
             v-if="isLinkValid.isValid"
             :title="t('Link is valid')"
-            class="ml-2 text-green-500"
+            class="ms-2 text-green-500"
             icon="check"
             size="normal"
           />
           <BaseIcon
             v-else-if="isLinkValid.isValid === false"
             :title="t('Link is not valid')"
-            class="ml-2 text-red-500"
+            class="ms-2 text-red-500"
             icon="alert"
             size="normal"
           />

@@ -131,7 +131,7 @@ async function save() {
 
         <div
           v-if="flatItems.length"
-          class="max-h-[32rem] space-y-2 overflow-y-auto pr-1"
+          class="max-h-[32rem] space-y-2 overflow-y-auto pe-1"
         >
           <div
             v-for="item in flatItems"
@@ -146,7 +146,7 @@ async function save() {
             />
             <div
               v-if="getItemValue(item.id).authorNames?.length || getItemValue(item.id).price"
-              class="ml-7 mt-1 space-y-1 text-caption text-gray-50"
+              class="ms-7 mt-1 space-y-1 text-caption text-gray-50"
             >
               <div v-if="getItemValue(item.id).authorNames?.length">
                 {{ t("Author") }}: {{ getItemValue(item.id).authorNames.join(", ") }}

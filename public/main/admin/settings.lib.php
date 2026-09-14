@@ -153,7 +153,7 @@ function handleRegions()
 
         echo '          <div class="mt-4 flex flex-wrap gap-2">';
         echo '              <a href="'.htmlspecialchars($pluginUrl, ENT_QUOTES).'" class="btn btn--plain-outline btn--sm">';
-        echo '                  <i class="mdi mdi-arrow-left"></i> Back to plugin';
+        echo '                  <i class="mdi mdi-arrow-left rtl:rotate-180"></i> Back to plugin';
         echo '              </a>';
         echo '              <button class="btn btn--success btn--sm" type="submit" name="submit_plugins">';
         echo '                  <i class="mdi mdi-content-save-outline"></i> '.get_lang('Save settings');
@@ -1126,8 +1126,8 @@ function handlePlugins()
     echo '      <div class="flex-1">';
     echo '          <label for="plugin-admin-search" class="mb-1 block text-sm font-semibold text-gray-70">'.get_lang('Search plugins').'</label>';
     echo '          <div class="relative">';
-    echo '              <i class="mdi mdi-magnify pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-50"></i>';
-    echo '              <input id="plugin-admin-search" type="search" class="w-full rounded-lg border border-gray-25 bg-white py-2 pl-10 pr-3 text-sm text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" placeholder="'.htmlspecialchars(get_lang('Search by name or description'), ENT_QUOTES).'">';
+    echo '              <i class="mdi mdi-magnify pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-gray-50"></i>';
+    echo '              <input id="plugin-admin-search" type="search" class="w-full rounded-lg border border-gray-25 bg-white py-2 ps-10 pe-3 text-sm text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" placeholder="'.htmlspecialchars(get_lang('Search by name or description'), ENT_QUOTES).'">';
     echo '          </div>';
     echo '      </div>';
     echo '      <div class="flex flex-wrap items-center gap-2">';
@@ -1186,7 +1186,7 @@ function handlePlugins()
     echo '<div class="overflow-x-auto rounded-xl border border-gray-25 bg-white shadow-sm">';
     echo '<table class="w-full min-w-[1060px] table-fixed">';
     echo '<thead>';
-    echo '<tr class="bg-gray-10 text-left">';
+    echo '<tr class="bg-gray-10 text-start">';
     echo '<th class="w-[42%] p-3 border-b border-gray-25">'.get_lang('Plugin').'</th>';
     echo '<th class="w-[10%] p-3 border-b border-gray-25">'.get_lang('Version').'</th>';
     echo '<th class="w-[18%] p-3 border-b border-gray-25">'.get_lang('Type').'</th>';
@@ -1426,7 +1426,7 @@ function handlePlugins()
   function showToast(message, type) {
     var bg = type === "success" ? "bg-green-600" : (type === "warning" ? "bg-yellow-600" : "bg-red-600");
     var \$toast = $("<div/>", {
-      class: "fixed top-4 right-4 z-50 text-white px-4 py-3 rounded shadow " + bg,
+      class: "fixed top-4 end-4 z-50 text-white px-4 py-3 rounded shadow " + bg,
       text: message
     }).appendTo("body");
     setTimeout(function(){ \$toast.fadeOut(300, function(){ $(this).remove(); }); }, 3500);
@@ -1929,7 +1929,7 @@ function handleTemplates()
     $action = isset($_GET['action']) ? $_GET['action'] : "invalid";
 
     if ('add' != $action) {
-        echo '<div class="actions" style="margin-left: 1px;">';
+        echo '<div class="actions" style="margin-inline-start: 1px;">';
         echo '<a href="settings.php?category=Templates&action=add">'.
                 Display::getMdiIcon(ObjectIcon::TEMPLATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a template')).'</a>';
         echo '</div>';
@@ -2393,13 +2393,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         if ('1' == $row['access_url_changeable']) {
                             $form->addElement(
                                 'html',
-                                '<div class="float-right"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                '<div class="float-end"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
                                 Display::getMdiIcon(StateIcon::SHARED_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Change setting visibility for the other portals')).'</a></div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
-                                '<div class="float-right"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
+                                '<div class="float-end"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
                                 Display::getMdiIcon(StateIcon::SHARED_VISIBILITY, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Change setting visibility for the other portals')).'</a></div>'
                             );
                         }
@@ -2407,13 +2407,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         if ('1' == $row['access_url_changeable']) {
                             $form->addElement(
                                 'html',
-                                '<div class="float-right">'.
+                                '<div class="float-end">'.
                                 Display::getMdiIcon(StateIcon::SHARED_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Change setting visibility for the other portals')).'</div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
-                                '<div class="float-right">'.
+                                '<div class="float-end">'.
                                 Display::getMdiIcon(StateIcon::SHARED_VISIBILITY, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Change setting visibility for the other portals')).'</div>'
                             );
                         }
@@ -2682,7 +2682,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
 
                 if (false != $url) {
                     $delete_url = '<a href="?delete_watermark">'.get_lang('Remove picture').' '.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove picture')).'</a>';
-                    $form->addElement('html', '<div style="max-height:100px; max-width:100px; margin-left:162px; margin-bottom:10px; clear:both;"><img src="'.$url.'" style="margin-bottom:10px;" />'.$delete_url.'</div>');
+                    $form->addElement('html', '<div style="max-height:100px; max-width:100px; margin-inline-start:162px; margin-bottom:10px; clear:both;"><img src="'.$url.'" style="margin-bottom:10px;" />'.$delete_url.'</div>');
                 }
 
                 $form->addElement('file', 'pdf_export_watermark_path', get_lang('Upload a watermark image'));

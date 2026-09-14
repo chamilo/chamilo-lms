@@ -36,7 +36,7 @@
 
     <slot />
 
-    <div class="text-right">
+    <div class="text-end">
       <Button
         :disabled="v$.item.$invalid"
         :label="t('Save')"

@@ -110,7 +110,7 @@ if (isset($_GET['action'])) {
                         'size' => '4',
                         'maxlength' => '5',
                         'style' => 'width: 6rem; max-width: 6rem;',
-                        'class' => 'text-right',
+                        'class' => 'text-end',
                     ],
                     false,
                     0,

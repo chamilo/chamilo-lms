@@ -2329,11 +2329,17 @@ function render_thread_preview_html(
                         <?php echo Security::remove_XSS($displayName) ?> • <?php echo api_convert_and_format_date($row['post_date']) ?>
                     </div>
 
-                    <div class="font-bold mt-1 mb-1 text-gray-90">
+                    <div
+                        class="font-bold mt-1 mb-1 text-gray-90"
+                        dir="auto"
+                    >
                         <?php echo Security::remove_XSS($row['post_title']) ?>
                     </div>
 
-                    <div class="text-body-2 leading-4">
+                    <div
+                        class="text-body-2 leading-4"
+                        dir="auto"
+                    >
                         <?php echo Security::remove_XSS($row['post_text'], STUDENT) ?>
                     </div>
                 </article>
@@ -3863,7 +3869,7 @@ function displayForumSearchResults(string $searchTerm): void
     }
 
     echo '<div class="text-lg font-semibold mb-4">'.count($search_results).' '.get_lang('Search results').'</div>';
-    echo '<ol class="list-decimal pl-5">'.implode($search_results).'</ol>';
+    echo '<ol class="list-decimal ps-5">'.implode($search_results).'</ol>';
 }
 
 /**
@@ -4601,7 +4607,7 @@ function get_all_post_from_user(int $user_id, int $courseId): string
                 $forum_results .= '<div class="clear"></div><br />';
                 $forum_results .= '<div id="social-forum-title">'.
                     Display::getMdiIcon('comment-quote', 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum->getTitle(), STUDENT).
-                    '<div style="float:right;margin-top:-35px">
+                    '<div style="float:inline-end;margin-top:-35px">
                         <a href="../forum/viewforum.php?'.api_get_cidreq_params($courseId).'&forum='.$forum->getIid().' " >'.
                     get_lang('See forum').'
                         </a>

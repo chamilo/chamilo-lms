@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -39,6 +40,29 @@ final readonly class LanguageHelper
         }
 
         return 'en-US';
+    }
+
+    /**
+     * Returns 'rtl' or 'ltr' for the given ISO code, or for the current request
+     * locale when omitted. A sub-language resolves to its parent's direction the
+     * same way getWcagIso() resolves it to its parent's isocode.
+     */
+    public function getTextDirection(?string $isocode = null): string
+    {
+        $isocode ??= $this->requestStack->getMainRequest()?->getLocale();
+
+        if (empty($isocode)) {
+            return 'ltr';
+        }
+
+        $language = $this->languageRepository->findByIsoCode($isocode);
+        if ($language?->getParent()) {
+            $language = $language->getParent();
+        }
+
+        $resolvedIsocode = $language?->getIsocode() ?? $isocode;
+
+        return \in_array($resolvedIsocode, self::getRtlIsocodes(), true) ? 'rtl' : 'ltr';
     }
 
     /**
@@ -171,5 +195,30 @@ final readonly class LanguageHelper
         }
 
         return preg_match('/^[a-z]{2}$/', $iso) ? $iso : '';
+    }
+
+    /**
+     * Isocodes of languages LanguageFixtures marks as 'direction' => 'rtl'. Public and
+     * static so callers with no DB access yet (e.g. the pre-install web installer) can
+     * still resolve direction without a Language entity lookup. LanguageFixtures remains
+     * the single authority for RTL-ness.
+     *
+     * @return string[]
+     */
+    public static function getRtlIsocodes(): array
+    {
+        static $isocodes = null;
+
+        if (null === $isocodes) {
+            $isocodes = array_column(
+                array_filter(
+                    LanguageFixtures::getLanguages(),
+                    static fn (array $language): bool => 'rtl' === ($language['direction'] ?? null)
+                ),
+                'isocode'
+            );
+        }
+
+        return $isocodes;
     }
 }

@@ -413,7 +413,7 @@ if ($form->validate()) {
                         api_get_path(WEB_PATH).'user_portal.php',
                         ['class' => 'btn btn--primary']
                     ),
-                    ['style' => 'float: left; margin:0px; padding: 0px;']
+                    ['style' => 'float: inline-start; margin:0px; padding: 0px;']
                 );
             } else {
                 $message = Display::return_message(
@@ -441,7 +441,7 @@ if ($form->validate()) {
         if ('true' === api_get_setting('course.course_creation_donate_message_show')) {
             $button = api_get_setting('course.course_creation_donate_link');
             if (!empty($button)) {
-                $message .= Display::return_message(get_lang('Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />However, developing Chamilo and providing this service is expensive and having a little bit of help from you would go a long way to ensure these services improve faster over time.<br /><br />Creating a course on this portal is one of the most resource-intensive operation. Please consider making a contribution to the Chamilo Association before creating this course to help keep this service free for all!').'<br /><br /><div style="display:block; margin-left:42%;">'.$button.'</div>', 'warning', false);
+                $message .= Display::return_message(get_lang('Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />However, developing Chamilo and providing this service is expensive and having a little bit of help from you would go a long way to ensure these services improve faster over time.<br /><br />Creating a course on this portal is one of the most resource-intensive operation. Please consider making a contribution to the Chamilo Association before creating this course to help keep this service free for all!').'<br /><br /><div style="display:block; margin-inline-start:42%;">'.$button.'</div>', 'warning', false);
             }
         }
     }

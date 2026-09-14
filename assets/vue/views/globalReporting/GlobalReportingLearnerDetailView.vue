@@ -276,7 +276,7 @@
       <section class="overflow-hidden rounded-xl border border-gray-25 bg-white shadow-sm">
         <header class="flex flex-wrap items-center gap-3 border-b border-gray-25 p-4">
           <h2 class="text-lg font-semibold text-gray-90">{{ t("Courses") }}</h2>
-          <span class="ml-auto text-sm text-gray-50"> {{ report.total }} {{ t("Results") }} </span>
+          <span class="ms-auto text-sm text-gray-50"> {{ report.total }} {{ t("Results") }} </span>
         </header>
 
         <div class="overflow-x-auto p-4">

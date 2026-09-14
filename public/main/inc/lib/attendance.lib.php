@@ -2594,17 +2594,17 @@ class Attendance
 
             if (!$is_locked_attendance || api_is_platform_admin()) {
                 $actionsLeft = '<a
-                    style="float:left;"
+                    style="float:inline-start;"
                     href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendanceId.'">'.
                     Display::getMdiIcon(ObjectIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Attendance calendar')).
                     '</a>';
                 $actionsLeft .= '<a
-                    id="pdf_export" style="float:left;"
+                    id="pdf_export" style="float:inline-start;"
                     href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendanceId.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
                     Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')).'</a>';
 
                 $actionsLeft .= '<a
-                    id="xls_export" style="float:left;"
+                    id="xls_export" style="float:inline-start;"
                     href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_xls&attendance_id='.$attendanceId.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
                     Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to XLS')).'</a>';
 
@@ -2638,11 +2638,11 @@ class Attendance
                         style="width:100%;background-color:#E1E1E1;margin-top:20px;">
                         <div
                             class="divTableWithFloatingHeader attendance-users-table"
-                            style="width:45%;float:left;margin:0px;padding:0px;">
+                            style="width:45%;float:inline-start;margin:0px;padding:0px;">
                             <table class="tableWithFloatingHeader data_table" width="100%">
                                 <thead>
                                 <tr class="tableFloatingHeader"
-                                    style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px" >
+                                    style="position: absolute; top: 0px; inset-inline-start: 0px; visibility: hidden; margin:0px;padding:0px" >
                                     <th width="10px">#</th>
                                     <th width="10px">'.get_lang('Photo').'</th>
                                     '.$officialCodeHeader.'
@@ -2698,7 +2698,7 @@ class Attendance
 
                 $form .= '<div
                     class="divTableWithFloatingHeader attendance-calendar-table"
-                    style="margin:0px;padding:0px;float:left;width:55%;overflow:auto;overflow-y:hidden;">';
+                    style="margin:0px;padding:0px;float:inline-start;width:55%;overflow:auto;overflow-y:hidden;">';
                 $form .= '<table class="tableWithFloatingHeader data_table" width="100%">';
                 $form .= '<thead>';
                 $result = null;
@@ -2755,7 +2755,7 @@ class Attendance
 
                 $form .= '<tr
                         class="tableFloatingHeader row_odd"
-                        style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px">';
+                        style="position: absolute; top: 0px; inset-inline-start: 0px; visibility: hidden; margin:0px;padding:0px">';
                 $form .= $result;
                 $form .= '</tr>';
                 $form .= '<tr class="tableWithFloatingHeader row_odd tableFloatingHeaderOriginal">';

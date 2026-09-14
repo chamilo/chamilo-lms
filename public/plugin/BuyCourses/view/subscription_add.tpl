@@ -22,7 +22,7 @@
                         href="{{ back_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="mdi mdi-arrow-left"></em>
+                    <em class="mdi mdi-arrow-left rtl:rotate-180"></em>
                     {{ 'Back'|get_lang }}
                 </a>
 
@@ -157,7 +157,7 @@
       '<input type="hidden" name="frequencies[' + rowIndex + '][price]" value="' + selectedFrequencyPrice + '">' +
       selectedFrequencyPrice + ' ' + currencyIso +
       '</td>' +
-      '<td class="px-4 py-4 text-right">' +
+      '<td class="px-4 py-4 text-end">' +
       '<button type="button" class="subscription-delete-frequency inline-flex items-center justify-center gap-2 rounded-xl bg-danger px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-danger/30 focus:ring-offset-2">' +
       '<em class="mdi mdi-close"></em>' +
       '{{ "Delete"|get_lang }}' +

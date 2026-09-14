@@ -56,11 +56,13 @@
         <div class="space-y-3">
           <div
             class="break-words text-xl font-bold text-gray-90"
+            dir="auto"
             v-html="thematicTitle"
           ></div>
           <div
             v-if="thematicContent"
             class="prose max-w-none break-words text-gray-90"
+            dir="auto"
             v-html="thematicContent"
           ></div>
         </div>

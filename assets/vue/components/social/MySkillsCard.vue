@@ -75,7 +75,7 @@
             ></i>
           </span>
 
-          <span class="min-w-0 text-left">
+          <span class="min-w-0 text-start">
             <span class="block text-body-2 font-semibold leading-snug text-gray-90">
               {{ t("Skills wheel") }}
             </span>
@@ -99,7 +99,7 @@
             ></i>
           </span>
 
-          <span class="min-w-0 text-left">
+          <span class="min-w-0 text-start">
             <span class="block text-body-2 font-semibold leading-snug text-gray-90">
               {{ t("Your skill ranking") }}
             </span>

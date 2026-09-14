@@ -91,17 +91,17 @@
                 <table class="min-w-full divide-y divide-gray-25">
                     <thead class="bg-support-2">
                     <tr>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'CreatedAt'|get_plugin_lang('BBBPlugin') }}
                         </th>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'Status'|get_lang }}
                         </th>
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'Records'|get_plugin_lang('BBBPlugin') }}
                         </th>
                         {% if allow_to_edit %}
-                        <th class="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-start text-caption font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'Actions'|get_lang }}
                         </th>
                         {% endif %}

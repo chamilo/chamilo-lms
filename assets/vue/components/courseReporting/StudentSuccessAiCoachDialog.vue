@@ -79,7 +79,7 @@
             :placeholder="t('Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding.')"
             rows="5"
           />
-          <div class="text-right text-xs text-gray-50">{{ teacherPrompt.length }} / 6000</div>
+          <div class="text-end text-xs text-gray-50">{{ teacherPrompt.length }} / 6000</div>
         </div>
 
         <div
@@ -87,7 +87,7 @@
           class="rounded-lg border border-primary/20 bg-primary/5 p-5"
         >
           <div
-            class="flex items-center justify-start gap-4 text-left"
+            class="flex items-center justify-start gap-4 text-start"
             role="status"
             aria-live="polite"
           >
@@ -97,7 +97,7 @@
             >
               <i class="mdi mdi-loading mdi-spin mdi-24px" />
             </span>
-            <div class="min-w-0 text-left">
+            <div class="min-w-0 text-start">
               <div class="font-semibold">{{ statusMessage }}</div>
               <div class="mt-1 text-sm text-gray-50">
                 {{ t("Keep this window open while Chamilo prepares the recommendation.") }}
@@ -147,7 +147,7 @@
 
           <div v-if="result.priorityActions?.length">
             <h4 class="mb-2 font-semibold">{{ t("Priority actions") }}</h4>
-            <ol class="list-decimal space-y-1 pl-5">
+            <ol class="list-decimal space-y-1 ps-5">
               <li
                 v-for="(action, index) in result.priorityActions"
                 :key="`priority-${index}`"

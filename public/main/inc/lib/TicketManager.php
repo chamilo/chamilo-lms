@@ -1002,7 +1002,7 @@ class TicketManager
             $icon = Display::getMdiIcon(
                 $img_source,
                 'ch-tool-icon',
-                'margin-right: 10px; float: left;',
+                'margin-inline-end: 10px; float: inline-start;',
                 ICON_SIZE_SMALL,
                 get_lang('Information'),
             );

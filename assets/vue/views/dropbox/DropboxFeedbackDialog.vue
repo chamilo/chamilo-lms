@@ -38,12 +38,13 @@
                 <div class="truncate text-sm font-medium">
                   {{ item.authorName }}
                 </div>
-                <div class="ml-3 whitespace-nowrap text-xs text-gray-500">
+                <div class="ms-3 whitespace-nowrap text-xs text-gray-500">
                   {{ formatWhen(item.date) }}
                 </div>
               </div>
               <div
                 class="mt-1 rounded-2xl bg-gray-20 px-3 py-2 text-sm leading-relaxed ring-1 ring-gray-50"
+                dir="auto"
                 v-html="item.text"
               />
             </div>

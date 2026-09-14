@@ -1467,7 +1467,7 @@ class SocialManager extends UserManager
                             }
                             $data = '<a href="'.$data.'">'
                                 .'<img src="'.$icon_path.'" alt="icon"'
-                                .' style="margin-right:0.5em;margin-bottom:'.$bottom.'em;" />'
+                                .' style="margin-inline-end:0.5em;margin-bottom:'.$bottom.'em;" />'
                                 .$extraFieldInfo['display_text']
                                 .'</a>';
                             $extra_information_value .= '<li class="list-group-item">'.$data.'</li>';

@@ -72,6 +72,7 @@
             />
             <div
               class="break-words"
+              dir="auto"
               v-html="thematicTitle"
             ></div>
           </div>
@@ -80,6 +81,7 @@
         <div
           v-if="thematicContent"
           class="prose max-w-none break-words text-gray-90"
+          dir="auto"
           v-html="thematicContent"
         ></div>
       </BaseCard>
@@ -127,6 +129,7 @@
             <div
               v-if="slotProps.data.content"
               class="prose max-w-none break-words text-gray-90"
+              dir="auto"
               v-html="slotProps.data.content"
             ></div>
           </template>
@@ -228,7 +231,6 @@ function getContextParams() {
     params.gid = gid
   }
 
-
   return params
 }
 
@@ -317,8 +319,5 @@ onMounted(async () => {
 
 useStudentViewRefresh(loadAdvances)
 
-watch(
-  () => [route.params.thematicId, route.query.cid, route.query.sid, route.query.gid],
-  loadAdvances,
-)
+watch(() => [route.params.thematicId, route.query.cid, route.query.sid, route.query.gid], loadAdvances)
 </script>

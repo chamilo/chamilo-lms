@@ -162,6 +162,7 @@
           <h2 class="text-lg font-semibold text-gray-90">{{ t("Description") }}</h2>
           <div
             class="prose mt-3 max-w-none"
+            dir="auto"
             v-html="detail.ticket.messageHtml"
           />
         </div>
@@ -205,6 +206,7 @@
           <div
             v-if="message.messageHtml"
             class="prose mt-4 max-w-none"
+            dir="auto"
             v-html="message.messageHtml"
           />
 

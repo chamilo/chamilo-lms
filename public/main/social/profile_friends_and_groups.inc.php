@@ -40,9 +40,9 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
         $friend_html .= '<div id="friend-header" >';
 
         if (1 == $number_friends) {
-            $friend_html .= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friend').'</div>';
+            $friend_html .= '<div style="float:inline-start;width:80%">'.$number_friends.' '.get_lang('Friend').'</div>';
         } else {
-            $friend_html .= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friends').'</div>';
+            $friend_html .= '<div style="float:inline-start;width:80%">'.$number_friends.' '.get_lang('Friends').'</div>';
         }
 
         $friend_html .= '</div>'; // close div friend-header

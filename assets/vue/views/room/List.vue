@@ -50,7 +50,7 @@
       </Column>
       <Column :exportable="false">
         <template #body="slotProps">
-          <div class="text-right space-x-2">
+          <div class="text-end space-x-2 rtl:space-x-reverse">
             <Button
               v-tooltip.top="t('Occupation')"
               class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
@@ -80,7 +80,7 @@
     >
       <div class="confirmation-content">
         <i
-          class="mdi mdi-alert-circle-outline mr-2"
+          class="mdi mdi-alert-circle-outline me-2"
           style="font-size: 2rem"
         />
         <span>{{ t("Are you sure you want to delete this item?") }}</span>
@@ -129,7 +129,7 @@
             {{ course.title }}
             <span
               v-if="course.code"
-              class="text-gray-400 text-sm ml-1"
+              class="text-gray-400 text-sm ms-1"
             >({{ course.code }})</span>
           </BaseAppLink>
         </li>

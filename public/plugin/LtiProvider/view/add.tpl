@@ -3,7 +3,7 @@
         {% if back_url is defined and back_url %}
         <div class="mb-5 flex flex-wrap items-center gap-3">
             <a href="{{ back_url }}" class="btn btn--plain">
-                <i class="mdi mdi-arrow-left"></i>
+                <i class="mdi mdi-arrow-left rtl:rotate-180"></i>
                 {{ 'Back'|get_lang }}
             </a>
         </div>

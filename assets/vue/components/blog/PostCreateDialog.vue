@@ -35,7 +35,7 @@
         <BaseButton type="black" icon="paperclip" :label="t('Choose file')" @click="$refs.fileInput.click()" />
       </div>
 
-      <ul v-if="showFilesComputed && files.length" class="text-sm list-disc pl-5">
+      <ul v-if="showFilesComputed && files.length" class="text-sm list-disc ps-5">
         <li v-for="(f, i) in files" :key="i">{{ f.name }} ({{ prettySize(f.size) }})</li>
       </ul>
     </div>

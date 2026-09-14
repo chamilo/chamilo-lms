@@ -796,7 +796,7 @@ function goBack() {
           <BaseCard>
             <template #header>
               <button
-                class="w-full border-l-4 border-secondary px-3 py-2 text-left text-body-1 font-semibold text-gray-90"
+                class="w-full border-s-4 border-secondary px-3 py-2 text-start text-body-1 font-semibold text-gray-90"
                 type="button"
                 @click="resetBuilderSelection"
               >
@@ -1094,7 +1094,7 @@ function goBack() {
                   </div>
                   <div
                     v-if="forum.threads?.length"
-                    class="border-t border-gray-20 bg-gray-10 p-2 pl-6"
+                    class="border-t border-gray-20 bg-gray-10 p-2 ps-6"
                   >
                     <LpBuilderResourceList
                       :can-manage="canManage"
@@ -1192,7 +1192,7 @@ function goBack() {
           class="pointer-events-auto fixed overflow-y-auto rounded-xl border border-gray-20 bg-white p-3 shadow-2xl"
           :style="floatingDropTargetStyle"
         >
-          <div class="mb-3 border-l-4 border-secondary px-3 py-2 text-body-1 font-semibold text-gray-90">
+          <div class="mb-3 border-s-4 border-secondary px-3 py-2 text-body-1 font-semibold text-gray-90">
             {{ builder?.title || t("Learning path") }}
           </div>
 

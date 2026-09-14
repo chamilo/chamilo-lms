@@ -129,6 +129,7 @@
       <div class="bg-gray-10 border border-gray-25 rounded-lg shadow-sm">
         <div
           class="p-4 text-gray-800 prose max-w-none"
+          dir="auto"
           v-html="assignment.description"
         />
       </div>

@@ -33,7 +33,10 @@
       />
     </div>
 
-    <div v-if="!isLearnpathContext" class="border-b border-gray-20" />
+    <div
+      v-if="!isLearnpathContext"
+      class="border-b border-gray-20"
+    />
 
     <div
       v-if="isLoading"
@@ -65,7 +68,7 @@
 
     <template v-if="!isLoading && !errorMessage">
       <header class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm">
-        <div class="border-l-4 border-l-primary p-5">
+        <div class="border-s-4 border-s-primary p-5">
           <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div class="space-y-2">
               <h1 class="text-2xl font-semibold text-gray-90">
@@ -74,6 +77,7 @@
               <div
                 v-if="description"
                 class="exercise-result-html text-sm text-gray-700"
+                dir="auto"
                 v-html="displayTranslatedHtml(description)"
               />
             </div>
@@ -94,6 +98,7 @@
           <div
             v-if="attempt.textWhenFinished"
             class="exercise-result-html mt-4 rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
+            dir="auto"
             v-html="displayTranslatedHtml(attempt.textWhenFinished)"
           />
 
@@ -190,7 +195,10 @@
             class="mt-4 rounded-lg border border-info/30 bg-support-1 p-4 text-sm text-support-4"
           >
             <div class="flex items-center gap-2 font-semibold">
-              <BaseIcon icon="flag-checkered" size="small" />
+              <BaseIcon
+                icon="flag-checkered"
+                size="small"
+              />
               {{ t("Progressive adaptive result") }}
             </div>
             <div class="mt-2">
@@ -206,7 +214,10 @@
       >
         <div class="border-b border-gray-20 bg-gray-10 p-4">
           <div class="flex items-center gap-2">
-            <span class="mdi mdi-history text-base text-primary" aria-hidden="true" />
+            <span
+              class="mdi mdi-history text-base text-primary"
+              aria-hidden="true"
+            />
             <h2 class="text-lg font-semibold text-gray-90">{{ t("Correction history") }}</h2>
           </div>
           <p class="mt-1 text-sm text-gray-600">
@@ -216,7 +227,9 @@
         <div class="overflow-x-auto p-4">
           <table class="min-w-full text-sm">
             <thead>
-              <tr class="border-b border-gray-20 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+              <tr
+                class="border-b border-gray-20 text-start text-xs font-semibold uppercase tracking-wide text-gray-500"
+              >
                 <th class="px-3 py-2">{{ t("Question") }}</th>
                 <th class="px-3 py-2">{{ t("Value") }}</th>
                 <th class="px-3 py-2">{{ t("Feedback") }}</th>
@@ -268,10 +281,12 @@
         <div class="overflow-x-auto p-4">
           <table class="min-w-full text-sm">
             <thead>
-              <tr class="border-b border-gray-20 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                <th class="px-3 py-2 text-right">{{ t("Position") }}</th>
+              <tr
+                class="border-b border-gray-20 text-start text-xs font-semibold uppercase tracking-wide text-gray-500"
+              >
+                <th class="px-3 py-2 text-end">{{ t("Position") }}</th>
                 <th class="px-3 py-2">{{ t("Username") }}</th>
-                <th class="px-3 py-2 text-right">{{ t("Score") }}</th>
+                <th class="px-3 py-2 text-end">{{ t("Score") }}</th>
                 <th class="px-3 py-2 text-center">{{ t("Date") }}</th>
               </tr>
             </thead>
@@ -282,9 +297,9 @@
                 class="border-b border-gray-20"
                 :class="item.currentUser ? 'bg-warning/10' : ''"
               >
-                <td class="px-3 py-2 text-right font-semibold">{{ item.position }}</td>
+                <td class="px-3 py-2 text-end font-semibold">{{ item.position }}</td>
                 <td class="px-3 py-2">{{ item.user }}</td>
-                <td class="px-3 py-2 text-right">{{ formatNumber(item.score) }} / {{ formatNumber(item.maxScore) }}</td>
+                <td class="px-3 py-2 text-end">{{ formatNumber(item.score) }} / {{ formatNumber(item.maxScore) }}</td>
                 <td class="px-3 py-2 text-center">{{ formatDate(item.date) }}</td>
               </tr>
               <tr v-if="!ranking.length">
@@ -310,10 +325,12 @@
         <div class="overflow-x-auto p-4">
           <table class="min-w-full text-sm">
             <thead>
-              <tr class="border-b border-gray-20 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+              <tr
+                class="border-b border-gray-20 text-start text-xs font-semibold uppercase tracking-wide text-gray-500"
+              >
                 <th class="px-3 py-2">{{ t("Categories") }}</th>
-                <th class="px-3 py-2 text-right">{{ t("Absolute score") }}</th>
-                <th class="px-3 py-2 text-right">{{ t("Relative score") }}</th>
+                <th class="px-3 py-2 text-end">{{ t("Absolute score") }}</th>
+                <th class="px-3 py-2 text-end">{{ t("Relative score") }}</th>
               </tr>
             </thead>
             <tbody>
@@ -324,10 +341,10 @@
                 :class="categoryScore.isTotal ? 'bg-gray-10 font-semibold' : ''"
               >
                 <td class="px-3 py-2">{{ categoryScoreTitle(categoryScore) }}</td>
-                <td class="px-3 py-2 text-right">
+                <td class="px-3 py-2 text-end">
                   {{ formatNumber(categoryScore.score) }} / {{ formatNumber(categoryScore.maxScore) }}
                 </td>
-                <td class="px-3 py-2 text-right">{{ formatNumber(categoryScore.percentage) }}%</td>
+                <td class="px-3 py-2 text-end">{{ formatNumber(categoryScore.percentage) }}%</td>
               </tr>
             </tbody>
           </table>
@@ -361,11 +378,13 @@
             <h2
               v-if="question.parent?.title"
               class="exercise-result-html text-lg font-semibold text-gray-90"
+              dir="auto"
               v-html="displayTranslatedHtml(question.parent.title)"
             />
             <div
               v-if="question.parent?.description || question.parent?.content?.description"
               class="exercise-result-html mt-2 text-sm text-gray-700"
+              dir="auto"
               v-html="displayTranslatedHtml(question.parent.description || question.parent.content?.description)"
             />
           </div>
@@ -378,18 +397,22 @@
                   :class="questionStatusIconClass(question)"
                 />
                 <div class="space-y-1">
-                  <div class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                  <div
+                    class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-500"
+                  >
                     <span>{{ questionLabel(question.position) }}</span>
                     <span>·</span>
                     <span>{{ t(question.typeLabel) }}</span>
                   </div>
                   <h2
                     class="exercise-result-html text-lg font-semibold text-gray-90"
+                    dir="auto"
                     v-html="displayTranslatedHtml(question.title)"
                   />
                   <div
                     v-if="question.description"
                     class="exercise-result-html text-sm text-gray-700"
+                    dir="auto"
                     v-html="displayTranslatedHtml(question.description)"
                   />
                 </div>
@@ -404,7 +427,11 @@
                   {{ t("Score") }}: {{ formatNumber(question.score) }} / {{ formatNumber(question.maxScore) }}
                 </span>
                 <span
-                  v-if="visibility.showQuestionScore && !visibility.hideQuestionStatusLabel && questionResultBadgeLabel(question)"
+                  v-if="
+                    visibility.showQuestionScore &&
+                    !visibility.hideQuestionStatusLabel &&
+                    questionResultBadgeLabel(question)
+                  "
                   class="rounded-full px-3 py-1 text-xs font-semibold"
                   :class="questionResultBadgeClass(question)"
                 >
@@ -434,7 +461,11 @@
                       class="mdi mt-0.5 text-base"
                       :class="choiceIconClass(choice)"
                     />
-                    <div class="exercise-result-html flex-1" v-html="displayTranslatedHtml(choice.answer)" />
+                    <div
+                      class="exercise-result-html flex-1"
+                      dir="auto"
+                      v-html="displayTranslatedHtml(choice.answer)"
+                    />
                   </div>
                   <div class="flex flex-wrap gap-2 text-xs font-semibold">
                     <span
@@ -454,6 +485,7 @@
                 <div
                   v-if="choice.comment"
                   class="exercise-result-html mt-2 rounded bg-white/70 p-2 text-xs text-gray-700"
+                  dir="auto"
                   v-html="displayTranslatedHtml(choice.comment)"
                 />
               </div>
@@ -467,7 +499,11 @@
                 :class="trueFalseClass(choice)"
               >
                 <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-                  <div class="exercise-result-html font-medium text-gray-90" v-html="displayTranslatedHtml(choice.answer)" />
+                  <div
+                    class="exercise-result-html font-medium text-gray-90"
+                    dir="auto"
+                    v-html="displayTranslatedHtml(choice.answer)"
+                  />
                   <span
                     class="mdi text-base"
                     :class="trueFalseIconClass(choice)"
@@ -484,7 +520,8 @@
                     v-if="choice.selectedDegreeLabel"
                     class="rounded-full bg-support-1 px-2 py-1 text-support-4"
                   >
-                    {{ t("Degree of certainty that my answer will be considered correct") }}: {{ choice.selectedDegreeLabel }}
+                    {{ t("Degree of certainty that my answer will be considered correct") }}:
+                    {{ choice.selectedDegreeLabel }}
                   </span>
                   <span
                     v-if="choice.correctOptionLabel"
@@ -496,6 +533,7 @@
                 <div
                   v-if="choice.comment"
                   class="exercise-result-html mt-2 rounded bg-white/70 p-2 text-xs text-gray-700"
+                  dir="auto"
                   v-html="displayTranslatedHtml(choice.comment)"
                 />
               </div>
@@ -532,6 +570,7 @@
               <div
                 v-if="question.answer.comment"
                 class="exercise-result-html rounded bg-white/70 p-2 text-xs text-gray-700"
+                dir="auto"
                 v-html="displayTranslatedHtml(question.answer.comment)"
               />
             </template>
@@ -544,7 +583,11 @@
                 :class="matchingClass(prompt)"
               >
                 <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-                  <div class="exercise-result-html font-medium text-gray-90" v-html="displayTranslatedHtml(prompt.answer)" />
+                  <div
+                    class="exercise-result-html font-medium text-gray-90"
+                    dir="auto"
+                    v-html="displayTranslatedHtml(prompt.answer)"
+                  />
                   <span
                     class="mdi text-base"
                     :class="matchingIconClass(prompt)"
@@ -569,11 +612,11 @@
                 <div
                   v-if="prompt.comment"
                   class="exercise-result-html mt-2 rounded bg-white/70 p-2 text-xs text-gray-700"
+                  dir="auto"
                   v-html="displayTranslatedHtml(prompt.comment)"
                 />
               </div>
             </template>
-
 
             <template v-else-if="question.answer.kind === 'draggable'">
               <div class="grid gap-3 md:grid-cols-2">
@@ -583,16 +626,20 @@
                 >
                   <h3 class="mb-3 text-sm font-semibold text-gray-80">{{ t("Your order") }}</h3>
                   <ol
-                    :class="question.answer.orientation === 'h'
-                      ? 'flex gap-2 overflow-x-auto text-sm'
-                      : 'list-decimal space-y-2 pl-5 text-sm'"
+                    :class="
+                      question.answer.orientation === 'h'
+                        ? 'flex gap-2 overflow-x-auto text-sm'
+                        : 'list-decimal space-y-2 ps-5 text-sm'
+                    "
                   >
                     <li
                       v-for="(item, index) in question.answer.studentItems"
                       :key="`student-${item.id}`"
-                      :class="question.answer.orientation === 'h'
-                        ? 'flex min-w-[12rem] items-center gap-2 rounded border border-gray-20 bg-white p-2'
-                        : 'exercise-result-html'"
+                      :class="
+                        question.answer.orientation === 'h'
+                          ? 'flex min-w-[12rem] items-center gap-2 rounded border border-gray-20 bg-white p-2'
+                          : 'exercise-result-html'
+                      "
                     >
                       <span
                         v-if="question.answer.orientation === 'h'"
@@ -601,16 +648,24 @@
                         {{ index + 1 }}
                       </span>
                       <div class="min-w-0 flex-1">
-                        <div class="exercise-result-html" v-html="displayTranslatedHtml(item.answer)" />
+                        <div
+                          class="exercise-result-html"
+                          dir="auto"
+                          v-html="displayTranslatedHtml(item.answer)"
+                        />
                         <div
                           v-if="item.comment && !question.answer.expectedItems?.length"
                           class="exercise-result-html mt-2 rounded bg-white/70 p-2 text-xs text-gray-700"
+                          dir="auto"
                           v-html="displayTranslatedHtml(item.comment)"
                         />
                       </div>
                     </li>
                   </ol>
-                  <p v-if="!question.answer.studentItems?.length" class="text-sm text-gray-500">
+                  <p
+                    v-if="!question.answer.studentItems?.length"
+                    class="text-sm text-gray-500"
+                  >
                     {{ t("No answer") }}
                   </p>
                 </div>
@@ -621,16 +676,20 @@
                 >
                   <h3 class="mb-3 text-sm font-semibold text-success">{{ t("Correct order") }}</h3>
                   <ol
-                    :class="question.answer.orientation === 'h'
-                      ? 'flex gap-2 overflow-x-auto text-sm'
-                      : 'list-decimal space-y-2 pl-5 text-sm'"
+                    :class="
+                      question.answer.orientation === 'h'
+                        ? 'flex gap-2 overflow-x-auto text-sm'
+                        : 'list-decimal space-y-2 ps-5 text-sm'
+                    "
                   >
                     <li
                       v-for="(item, index) in question.answer.expectedItems"
                       :key="`expected-${item.id}`"
-                      :class="question.answer.orientation === 'h'
-                        ? 'flex min-w-[12rem] items-center gap-2 rounded border border-success/30 bg-white p-2'
-                        : 'exercise-result-html'"
+                      :class="
+                        question.answer.orientation === 'h'
+                          ? 'flex min-w-[12rem] items-center gap-2 rounded border border-success/30 bg-white p-2'
+                          : 'exercise-result-html'
+                      "
                     >
                       <span
                         v-if="question.answer.orientation === 'h'"
@@ -639,10 +698,15 @@
                         {{ index + 1 }}
                       </span>
                       <div class="min-w-0 flex-1">
-                        <div class="exercise-result-html" v-html="displayTranslatedHtml(item.answer)" />
+                        <div
+                          class="exercise-result-html"
+                          dir="auto"
+                          v-html="displayTranslatedHtml(item.answer)"
+                        />
                         <div
                           v-if="item.comment"
                           class="exercise-result-html mt-2 rounded bg-white/70 p-2 text-xs text-gray-700"
+                          dir="auto"
                           v-html="displayTranslatedHtml(item.comment)"
                         />
                       </div>
@@ -657,6 +721,7 @@
                 <div
                   v-if="question.answer.text"
                   class="exercise-result-html rounded bg-white p-3 text-gray-800"
+                  dir="auto"
                   v-html="displayTranslatedHtml(question.answer.text)"
                 />
                 <div class="grid gap-2 md:grid-cols-2">
@@ -678,6 +743,7 @@
                 <div
                   v-if="question.answer.comment"
                   class="exercise-result-html rounded bg-white/70 p-2 text-xs text-gray-700"
+                  dir="auto"
                   v-html="displayTranslatedHtml(question.answer.comment)"
                 />
               </div>
@@ -778,17 +844,20 @@
                   <div class="mb-2 text-xs font-semibold uppercase tracking-wide">
                     {{ t("Expected zones") }}
                   </div>
-                  <ul class="list-disc space-y-1 pl-5">
+                  <ul class="list-disc space-y-1 ps-5">
                     <li
                       v-for="zone in question.answer.zones"
                       :key="zone.id"
                     >
                       <span class="font-semibold">{{ displayText(zone.answer, t("Zone")) }}</span>
                       <span> · {{ zone.hotspotType }}</span>
-                      <span v-if="zone.score !== null && zone.score !== undefined"> · {{ t("Score") }}: {{ formatNumber(zone.score) }}</span>
+                      <span v-if="zone.score !== null && zone.score !== undefined">
+                        · {{ t("Score") }}: {{ formatNumber(zone.score) }}</span
+                      >
                       <div
                         v-if="zone.comment"
                         class="exercise-result-html mt-2 rounded bg-white/70 p-2 text-xs text-gray-700"
+                        dir="auto"
                         v-html="displayTranslatedHtml(zone.comment)"
                       />
                     </li>
@@ -879,7 +948,10 @@
                   class="exercise-result-correction-form rounded-lg border border-gray-20 bg-white p-4"
                 >
                   <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-800">
-                    <BaseIcon icon="edit" size="small" />
+                    <BaseIcon
+                      icon="edit"
+                      size="small"
+                    />
                     {{ t("Teacher correction") }}
                   </div>
                   <div
@@ -887,7 +959,10 @@
                     class="mb-3 rounded-lg border border-info/30 bg-support-1 p-3"
                   >
                     <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-support-4">
-                      <BaseIcon icon="robot-outline" size="small" />
+                      <BaseIcon
+                        icon="robot-outline"
+                        size="small"
+                      />
                       {{ t("AI suggestion") }}
                     </div>
 
@@ -897,7 +972,10 @@
                         <select
                           v-model="aiCorrectionForms[question.id].provider"
                           class="rounded border border-gray-30 bg-white px-3 py-2 text-sm font-normal text-gray-90"
-                          :disabled="aiCorrectionForms[question.id].isLoadingProviders || aiCorrectionForms[question.id].isGenerating"
+                          :disabled="
+                            aiCorrectionForms[question.id].isLoadingProviders ||
+                            aiCorrectionForms[question.id].isGenerating
+                          "
                           name="ai_provider"
                           @change="saveAiCorrectionProvider(question)"
                         >
@@ -953,7 +1031,8 @@
                         v-if="aiCorrectionForms[question.id].score !== null"
                         class="inline-flex items-center gap-2 rounded-full border border-info/30 bg-white px-3 py-1 text-xs font-semibold text-info"
                       >
-                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} / {{ formatNumber(question.maxScore || 0) }}
+                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} /
+                        {{ formatNumber(question.maxScore || 0) }}
                       </div>
                       <BaseTextArea
                         v-model="aiCorrectionForms[question.id].feedback"
@@ -1058,7 +1137,10 @@
                         rel="noopener noreferrer"
                         target="_blank"
                       >
-                        <BaseIcon icon="download" size="small" />
+                        <BaseIcon
+                          icon="download"
+                          size="small"
+                        />
                         {{ file.name || t("Download audio") }}
                       </a>
                     </div>
@@ -1093,7 +1175,10 @@
                   class="exercise-result-correction-form rounded-lg border border-gray-20 bg-white p-4"
                 >
                   <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-800">
-                    <BaseIcon icon="edit" size="small" />
+                    <BaseIcon
+                      icon="edit"
+                      size="small"
+                    />
                     {{ t("Teacher correction") }}
                   </div>
                   <div
@@ -1101,7 +1186,10 @@
                     class="mb-3 rounded-lg border border-info/30 bg-support-1 p-3"
                   >
                     <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-support-4">
-                      <BaseIcon icon="robot-outline" size="small" />
+                      <BaseIcon
+                        icon="robot-outline"
+                        size="small"
+                      />
                       {{ t("AI suggestion") }}
                     </div>
 
@@ -1111,7 +1199,10 @@
                         <select
                           v-model="aiCorrectionForms[question.id].provider"
                           class="rounded border border-gray-30 bg-white px-3 py-2 text-sm font-normal text-gray-90"
-                          :disabled="aiCorrectionForms[question.id].isLoadingProviders || aiCorrectionForms[question.id].isGenerating"
+                          :disabled="
+                            aiCorrectionForms[question.id].isLoadingProviders ||
+                            aiCorrectionForms[question.id].isGenerating
+                          "
                           name="ai_provider"
                           @change="saveAiCorrectionProvider(question)"
                         >
@@ -1167,7 +1258,8 @@
                         v-if="aiCorrectionForms[question.id].score !== null"
                         class="inline-flex items-center gap-2 rounded-full border border-info/30 bg-white px-3 py-1 text-xs font-semibold text-info"
                       >
-                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} / {{ formatNumber(question.maxScore || 0) }}
+                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} /
+                        {{ formatNumber(question.maxScore || 0) }}
                       </div>
                       <BaseTextArea
                         v-model="aiCorrectionForms[question.id].feedback"
@@ -1250,7 +1342,7 @@
                   class="rounded-lg border border-gray-20 bg-gray-10 p-3"
                 >
                   <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                    {{ question.answer.kind === 'onlyoffice' ? t("Learner Office document") : t("Learner file") }}
+                    {{ question.answer.kind === "onlyoffice" ? t("Learner Office document") : t("Learner file") }}
                   </div>
                   <div
                     v-if="question.answer.kind === 'onlyoffice' && question.answer.editorUrl"
@@ -1275,15 +1367,21 @@
                       rel="noopener noreferrer"
                       target="_blank"
                     >
-                      <BaseIcon icon="download" size="small" />
-                      {{ file.name || (question.answer.kind === 'onlyoffice' ? t("Download Office document") : t("Download file")) }}
+                      <BaseIcon
+                        icon="download"
+                        size="small"
+                      />
+                      {{
+                        file.name ||
+                        (question.answer.kind === "onlyoffice" ? t("Download Office document") : t("Download file"))
+                      }}
                     </a>
                   </div>
                   <div
                     v-else
                     class="text-sm text-gray-600"
                   >
-                    {{ question.answer.kind === 'onlyoffice' ? t("No submitted document") : t("No uploaded file") }}
+                    {{ question.answer.kind === "onlyoffice" ? t("No submitted document") : t("No uploaded file") }}
                   </div>
                 </div>
 
@@ -1309,7 +1407,10 @@
                   class="exercise-result-correction-form rounded-lg border border-gray-20 bg-white p-4"
                 >
                   <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-800">
-                    <BaseIcon icon="edit" size="small" />
+                    <BaseIcon
+                      icon="edit"
+                      size="small"
+                    />
                     {{ t("Teacher correction") }}
                   </div>
                   <div
@@ -1317,7 +1418,10 @@
                     class="mb-3 rounded-lg border border-info/30 bg-support-1 p-3"
                   >
                     <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-support-4">
-                      <BaseIcon icon="robot-outline" size="small" />
+                      <BaseIcon
+                        icon="robot-outline"
+                        size="small"
+                      />
                       {{ t("AI suggestion") }}
                     </div>
 
@@ -1327,7 +1431,10 @@
                         <select
                           v-model="aiCorrectionForms[question.id].provider"
                           class="rounded border border-gray-30 bg-white px-3 py-2 text-sm font-normal text-gray-90"
-                          :disabled="aiCorrectionForms[question.id].isLoadingProviders || aiCorrectionForms[question.id].isGenerating"
+                          :disabled="
+                            aiCorrectionForms[question.id].isLoadingProviders ||
+                            aiCorrectionForms[question.id].isGenerating
+                          "
                           name="ai_provider"
                           @change="saveAiCorrectionProvider(question)"
                         >
@@ -1383,7 +1490,8 @@
                         v-if="aiCorrectionForms[question.id].score !== null"
                         class="inline-flex items-center gap-2 rounded-full border border-info/30 bg-white px-3 py-1 text-xs font-semibold text-info"
                       >
-                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} / {{ formatNumber(question.maxScore || 0) }}
+                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} /
+                        {{ formatNumber(question.maxScore || 0) }}
                       </div>
                       <BaseTextArea
                         v-model="aiCorrectionForms[question.id].feedback"
@@ -1463,6 +1571,7 @@
               <div
                 v-if="question.answer.description"
                 class="exercise-result-html rounded-lg border border-gray-20 bg-gray-10 p-4 text-gray-800"
+                dir="auto"
                 v-html="displayTranslatedHtml(question.answer.description)"
               />
               <div
@@ -1509,7 +1618,10 @@
                   class="exercise-result-correction-form rounded-lg border border-gray-20 bg-white p-4"
                 >
                   <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-800">
-                    <BaseIcon icon="edit" size="small" />
+                    <BaseIcon
+                      icon="edit"
+                      size="small"
+                    />
                     {{ t("Teacher correction") }}
                   </div>
                   <div
@@ -1517,7 +1629,10 @@
                     class="mb-3 rounded-lg border border-info/30 bg-support-1 p-3"
                   >
                     <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-support-4">
-                      <BaseIcon icon="robot-outline" size="small" />
+                      <BaseIcon
+                        icon="robot-outline"
+                        size="small"
+                      />
                       {{ t("AI suggestion") }}
                     </div>
 
@@ -1527,7 +1642,10 @@
                         <select
                           v-model="aiCorrectionForms[question.id].provider"
                           class="rounded border border-gray-30 bg-white px-3 py-2 text-sm font-normal text-gray-90"
-                          :disabled="aiCorrectionForms[question.id].isLoadingProviders || aiCorrectionForms[question.id].isGenerating"
+                          :disabled="
+                            aiCorrectionForms[question.id].isLoadingProviders ||
+                            aiCorrectionForms[question.id].isGenerating
+                          "
                           name="ai_provider"
                           @change="saveAiCorrectionProvider(question)"
                         >
@@ -1583,7 +1701,8 @@
                         v-if="aiCorrectionForms[question.id].score !== null"
                         class="inline-flex items-center gap-2 rounded-full border border-info/30 bg-white px-3 py-1 text-xs font-semibold text-info"
                       >
-                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} / {{ formatNumber(question.maxScore || 0) }}
+                        {{ t("Suggested score") }}: {{ aiCorrectionForms[question.id].score }} /
+                        {{ formatNumber(question.maxScore || 0) }}
                       </div>
                       <BaseTextArea
                         v-model="aiCorrectionForms[question.id].feedback"
@@ -1668,6 +1787,7 @@
             <div
               v-if="question.feedback"
               class="exercise-result-html rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
+              dir="auto"
               v-html="displayTranslatedHtml(question.feedback)"
             />
           </div>
@@ -1779,7 +1899,6 @@ function getContextParams() {
   }
 }
 
-
 function isEmbeddedInLearnpath() {
   if (typeof window === "undefined") {
     return false
@@ -1790,17 +1909,21 @@ function isEmbeddedInLearnpath() {
       const parentPath = window.parent.location?.pathname || ""
       const referrer = document.referrer || ""
 
-      return parentPath.includes("/resources/lp/")
-        || parentPath.includes("/main/lp/")
-        || parentPath.includes("/main/newscorm/")
-        || referrer.includes("/resources/lp/")
-        || referrer.includes("/main/lp/")
-        || referrer.includes("/main/newscorm/")
+      return (
+        parentPath.includes("/resources/lp/") ||
+        parentPath.includes("/main/lp/") ||
+        parentPath.includes("/main/newscorm/") ||
+        referrer.includes("/resources/lp/") ||
+        referrer.includes("/main/lp/") ||
+        referrer.includes("/main/newscorm/")
+      )
     }
   } catch (error) {
-    return (document.referrer || "").includes("/resources/lp/")
-      || (document.referrer || "").includes("/main/lp/")
-      || (document.referrer || "").includes("/main/newscorm/")
+    return (
+      (document.referrer || "").includes("/resources/lp/") ||
+      (document.referrer || "").includes("/main/lp/") ||
+      (document.referrer || "").includes("/main/newscorm/")
+    )
   }
 
   return false
@@ -1809,10 +1932,12 @@ function isEmbeddedInLearnpath() {
 const isLearnpathContext = computed(() => {
   const origin = String(getQueryValue(route.query.origin) || "")
 
-  return origin === "learnpath"
-    || Boolean(getQueryValue(route.query.lp_init))
-    || Boolean(getQueryValue(route.query.learnpath_id))
-    || isEmbeddedInLearnpath()
+  return (
+    origin === "learnpath" ||
+    Boolean(getQueryValue(route.query.lp_init)) ||
+    Boolean(getQueryValue(route.query.learnpath_id)) ||
+    isEmbeddedInLearnpath()
+  )
 })
 
 function getBaseRouteParams() {
@@ -1844,12 +1969,7 @@ function getCourseHomeQuery() {
   const query = {}
   const sid = getQueryValue(route.query.sid)
 
-  if (
-    sid !== undefined
-    && sid !== null
-    && String(sid) !== ""
-    && Number(sid) > 0
-  ) {
+  if (sid !== undefined && sid !== null && String(sid) !== "" && Number(sid) > 0) {
     query.sid = sid
   }
 
@@ -1857,16 +1977,20 @@ function getCourseHomeQuery() {
 }
 
 const showStandaloneFinalActions = computed(() => {
-  return finalActions.value?.showFinalActions === true
-    && visibility.value?.isReviewMode !== true
-    && !isLearnpathContext.value
-    && getCourseId() > 0
+  return (
+    finalActions.value?.showFinalActions === true &&
+    visibility.value?.isReviewMode !== true &&
+    !isLearnpathContext.value &&
+    getCourseId() > 0
+  )
 })
 
 const shouldShowCategoryScores = computed(() => {
-  return visibility.value?.showScore === true
-    && visibility.value?.showCategoryTable !== false
-    && categoryScores.value.length > 0
+  return (
+    visibility.value?.showScore === true &&
+    visibility.value?.showCategoryTable !== false &&
+    categoryScores.value.length > 0
+  )
 })
 
 function categoryScoreKey(categoryScore) {
@@ -2033,8 +2157,9 @@ function resultHotspotPolylinePoints(points) {
 }
 
 function resultHotspotPolygonZones(question) {
-  return (Array.isArray(question?.answer?.zones) ? question.answer.zones : [])
-    .filter((zone) => Array.isArray(zone.points) && zone.points.length >= 3)
+  return (Array.isArray(question?.answer?.zones) ? question.answer.zones : []).filter(
+    (zone) => Array.isArray(zone.points) && zone.points.length >= 3,
+  )
 }
 
 function resultHotspotZoneClass(zone) {
@@ -2311,7 +2436,6 @@ function isMatchingCorrect(prompt) {
   return Boolean(prompt.correctOptionAnswer && prompt.selectedOptionAnswer === prompt.correctOptionAnswer)
 }
 
-
 function initializeCorrectionForms() {
   const forms = {}
   for (const question of questions.value) {
@@ -2412,10 +2536,12 @@ async function loadAiCorrectionProviders(question) {
     }
 
     state.providers = Array.isArray(data.providers)
-      ? data.providers.filter((provider) => provider?.key).map((provider) => ({
-          key: String(provider.key),
-          label: String(provider.label || provider.key),
-        }))
+      ? data.providers
+          .filter((provider) => provider?.key)
+          .map((provider) => ({
+            key: String(provider.key),
+            label: String(provider.label || provider.key),
+          }))
       : []
     state.providersLoaded = true
   } catch (error) {
@@ -2588,7 +2714,7 @@ async function saveManualCorrection(question, final = true) {
 }
 
 function shouldAutoPrint() {
-  return ['1', 'true', 'pdf', 'print'].includes(String(getQueryValue(route.query.print) || '').toLowerCase())
+  return ["1", "true", "pdf", "print"].includes(String(getQueryValue(route.query.print) || "").toLowerCase())
 }
 
 function scheduleAutoPrintIfRequested() {
@@ -2609,11 +2735,15 @@ function downloadResultPdf() {
     return
   }
 
-  window.open(exerciseService.buildExerciseRuntimeAttemptPdfUrl(getContextParams(), exerciseId, attemptId), "_blank", "noopener")
+  window.open(
+    exerciseService.buildExerciseRuntimeAttemptPdfUrl(getContextParams(), exerciseId, attemptId),
+    "_blank",
+    "noopener",
+  )
 }
 
 function printResult() {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return
   }
 
@@ -2686,7 +2816,14 @@ function displayText(value, fallback = "") {
 onMounted(loadResult)
 
 watch(
-  () => [route.params.exerciseId, route.params.attemptId, route.query.cid, route.query.sid, route.query.gid, route.query.print],
+  () => [
+    route.params.exerciseId,
+    route.params.attemptId,
+    route.query.cid,
+    route.query.sid,
+    route.query.gid,
+    route.query.print,
+  ],
   () => {
     autoPrintDone.value = false
     loadResult()
@@ -2752,7 +2889,7 @@ watch(
   body:has(.exercise-result-print-mode) .exercise-result-print-mode {
     position: absolute !important;
     top: 0 !important;
-    left: 0 !important;
+    inset-inline-start: 0 !important;
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;

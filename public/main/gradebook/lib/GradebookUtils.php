@@ -736,7 +736,7 @@ class GradebookUtils
         //add print header
         if (!$hide_print_button) {
             $print = '<style>#print_div {
-                padding:4px;border: 0 none;position: absolute;top: 0px;right: 0px;
+                padding:4px;border: 0 none;position: absolute;top: 0px;inset-inline-end: 0px;
             }
             @media print {
                 #print_div  {

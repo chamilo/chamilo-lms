@@ -16,7 +16,7 @@
       :label="t('Friendly URL')"
     />
 
-    <div class="text-right my-3">
+    <div class="text-end my-3">
       <Button
         v-if="pageId || v$.item.content.$model"
         :label="t('Preview')"
@@ -119,7 +119,10 @@
         <h1 class="text-3xl font-bold mb-4">
           {{ v$.item.title.$model || t("Untitled") }}
         </h1>
-        <article v-html="v$.item.content.$model"></article>
+        <article
+          dir="auto"
+          v-html="v$.item.content.$model"
+        ></article>
       </div>
 
       <template #footer>

@@ -44,7 +44,7 @@ class MessageManager
                     $deleteLink = '<a title="'.addslashes(get_lang('Delete message')).'"
                        href="'.$url.'&action=delete_message&message_id='.$messageId.'"
                        onclick="if(!confirm(\''.addslashes(api_htmlentities(get_lang('Are you sure you want to delete the selected message?'))).'\')) { return false; }"
-                       class="ml-2">'.
+                       class="ms-2">'.
                         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete message')).'</a>';
                 }
 
@@ -1176,7 +1176,7 @@ class MessageManager
                 }
 
                 $html_items = Display::div($html_items, ['class' => 'message-post', 'id' => 'msg_'.$topic['id']]);
-                $html_items = Display::div($html_items, ['class' => '', 'style' => 'margin-left:'.$indent.'px']);
+                $html_items = Display::div($html_items, ['class' => '', 'style' => 'margin-inline-start:'.$indent.'px']);
                 $array_html_items[] = [$html_items];
             }
 

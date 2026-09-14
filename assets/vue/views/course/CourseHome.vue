@@ -86,7 +86,7 @@
         </div>
         <div
           v-if="showCourseSequence"
-          class="w-full lg:w-[20%] lg:border-l lg:pl-4"
+          class="w-full lg:w-[20%] lg:border-s lg:ps-4"
         >
           <NextCourseSequence />
         </div>
@@ -98,13 +98,13 @@
       >
         <h6 v-text="t('Tools')" />
 
-        <div class="ml-auto">
+        <div class="ms-auto">
           <BaseToggleButton
             :disabled="isCourseLoading || isSorting || isCustomizing || !allowEditToolVisibilityInSession"
             :model-value="false"
             :off-label="t('Show all')"
             :on-label="t('Show all')"
-            class="ml-auto"
+            class="ms-auto"
             off-icon="eye-on"
             on-icon="eye-on"
             size="small"

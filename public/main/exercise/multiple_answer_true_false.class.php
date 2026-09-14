@@ -43,14 +43,14 @@ class MultipleAnswerTrueFalse extends Question
         $html .= '<table class="min-w-full text-sm border border-gray-200 rounded-lg overflow-hidden table table-striped table-hover">';
         $html .= '<thead class="bg-gray-20">';
         $html .= '<tr>';
-        $html .= '<th class="px-3 py-2 text-left font-semibold text-gray-700">'.get_lang('N°').'</th>';
+        $html .= '<th class="px-3 py-2 text-start font-semibold text-gray-700">'.get_lang('N°').'</th>';
         $html .= '<th class="px-3 py-2 text-center font-semibold text-gray-700">'.get_lang('True').'</th>';
         $html .= '<th class="px-3 py-2 text-center font-semibold text-gray-700">'.get_lang('False').'</th>';
-        $html .= '<th class="px-3 py-2 text-left font-semibold text-gray-700">'.get_lang('Answer').'</th>';
+        $html .= '<th class="px-3 py-2 text-start font-semibold text-gray-700">'.get_lang('Answer').'</th>';
 
         // Show column comment when feedback is enabled
         if (EXERCISE_FEEDBACK_TYPE_EXAM != $obj_ex->getFeedbackType()) {
-            $html .= '<th class="px-3 py-2 text-left font-semibold text-gray-700">'.get_lang('Comment').'</th>';
+            $html .= '<th class="px-3 py-2 text-start font-semibold text-gray-700">'.get_lang('Comment').'</th>';
         }
 
         $html .= '</tr>';

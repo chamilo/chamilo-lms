@@ -134,7 +134,7 @@
 
       <div
         v-if="canPrint || canCsvExport || canXlsxExport"
-        class="flex gap-2 xl:ml-auto"
+        class="flex gap-2 xl:ms-auto"
       >
         <BaseButton
           v-if="canPrint"

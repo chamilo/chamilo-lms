@@ -14,7 +14,7 @@
       />
       <Skeleton width="6rem" />
       <Skeleton
-        class="ml-auto"
+        class="ms-auto"
         size="2.5rem"
       />
     </div>
@@ -37,7 +37,7 @@
       {{ request.user.username }}
 
       <BaseButton
-        class="ml-auto"
+        class="ms-auto"
         icon="alert"
         only-icon
         type="danger"
@@ -57,7 +57,7 @@
       />
       <BaseButton
         :label="t('Reject invitation')"
-        class="ml-2"
+        class="ms-2"
         icon="user-delete"
         only-icon
         type="danger"
@@ -76,7 +76,7 @@
 
       <BaseTag
         :label="t('Waiting')"
-        class="ml-auto"
+        class="ms-auto"
         type="info"
       />
     </div>

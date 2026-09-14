@@ -178,8 +178,8 @@ if (!empty($OkMsg)) {
 ?>
 <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
 <tr>
-    <td align="left"></td>
-    <td align="left"></td>
+    <td style="text-align:start;"></td>
+    <td style="text-align:start;"></td>
     <td  align="center">
     <b><?php echo get_lang('Category name'); ?> :</b><br />
     <select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >

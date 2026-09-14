@@ -20,7 +20,7 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>">
 <div style="margin:10px;">
-<div style="text-align:right;"><a href="javascript: window.close();"><?php echo get_lang('Close'); ?></a></div>
+<div style="text-align:end;"><a href="javascript: window.close();"><?php echo get_lang('Close'); ?></a></div>
 <h4>
 <?php echo get_lang('Allowed HTML tags'); ?>
 </h4>
@@ -40,7 +40,7 @@ foreach ($tags as $tag => &$attributes) {
 }
 Display::display_sortable_table($table_header, $table_data, [], [], ['fullpage' => intval($_GET['fullpage'])]);
 ?>
-<div style="text-align:right;"><a href="javascript: window.close();"><?php echo get_lang('Close'); ?></a></div>
+<div style="text-align:end;"><a href="javascript: window.close();"><?php echo get_lang('Close'); ?></a></div>
 </div>
 </body>
 </html>

@@ -27,7 +27,7 @@
                   :key="invitation.id"
                   class="flex items-center border rounded-lg shadow-sm bg-white"
                 >
-                  <div class="ml-4 flex-grow text-center">
+                  <div class="ms-4 flex-grow text-center">
                     <h4 class="m-0">
                       <a
                         :href="'profile.php?u=' + invitation.itemId"

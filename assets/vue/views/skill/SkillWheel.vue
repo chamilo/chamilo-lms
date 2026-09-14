@@ -275,6 +275,7 @@ async function onSearchProfile(profile) {
         <span class="font-semibold">{{ t("Description") }}:</span>
         <div
           class="mt-1"
+          dir="auto"
           v-html="skillDetail.description"
         />
       </div>
@@ -291,7 +292,7 @@ async function onSearchProfile(profile) {
         </div>
         <ul
           v-else-if="skillGradebookLinks.length"
-          class="list-disc pl-4"
+          class="list-disc ps-4"
         >
           <li
             v-for="link in skillGradebookLinks"

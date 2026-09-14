@@ -30,7 +30,7 @@
   }
 
   &__options {
-    @apply absolute flex gap-2 p-2 right-0;
+    @apply absolute flex gap-2 p-2 end-0;
 
     & > a,
     & > button {

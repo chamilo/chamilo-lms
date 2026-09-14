@@ -12,14 +12,14 @@
                     {% endif %}
                 </p>
 
-                <div class="mt-4 rounded-xl border-l-4 border-warning bg-warning/10 p-4 text-warning-dark">
+                <div class="mt-4 rounded-xl border-s-4 border-warning bg-warning/10 p-4 text-warning-dark">
                     <strong>{{ 'Important'|trans }}</strong><br>
                     {{ 'The contents of this course can be sent to an AI provider that might be external to your organization. Make sure you have authorization to share this content. This operation can also represent a considerable cost if used on large courses.'|trans }}
                 </div>
             </section>
 
             {% if error %}
-                <div class="mb-6 rounded-xl border-l-4 border-danger bg-danger/10 p-4 text-danger-dark">
+                <div class="mb-6 rounded-xl border-s-4 border-danger bg-danger/10 p-4 text-danger-dark">
                     {{ error|trans }}
                 </div>
             {% endif %}
@@ -166,7 +166,7 @@
                     <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
                         <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
                             <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'Strengths'|trans }}</h2>
-                            <ul class="m-0 list-disc pl-5">
+                            <ul class="m-0 list-disc ps-5">
                                 {% for item in structured.strengths|default([]) %}
                                     <li>{{ item }}</li>
                                 {% else %}
@@ -177,7 +177,7 @@
 
                         <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
                             <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'Risks'|trans }}</h2>
-                            <ul class="m-0 list-disc pl-5">
+                            <ul class="m-0 list-disc ps-5">
                                 {% for item in structured.risks|default([]) %}
                                     <li>{{ item }}</li>
                                 {% else %}
@@ -188,7 +188,7 @@
 
                         <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
                             <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'Recommendations'|trans }}</h2>
-                            <ul class="m-0 list-disc pl-5">
+                            <ul class="m-0 list-disc ps-5">
                                 {% for item in structured.recommendations|default([]) %}
                                     <li>{{ item }}</li>
                                 {% else %}
@@ -238,7 +238,7 @@
                                                             <div>
                                                                 <strong>{{ item.title|default('Lesson item') }}</strong>
                                                                 {% if item.type|default('') %}
-                                                                    <span class="ml-2 rounded-full bg-gray-25 px-2 py-1 text-xs text-gray-60">{{ item.type }}</span>
+                                                                    <span class="ms-2 rounded-full bg-gray-25 px-2 py-1 text-xs text-gray-60">{{ item.type }}</span>
                                                                 {% endif %}
                                                             </div>
                                                             {% if payload_item and payload_item.editUrl|default('') %}
@@ -279,7 +279,7 @@
                                                                                 <p class="mb-1"><strong>{{ 'Answers'|trans }}:</strong> {{ question.answersFeedback }}</p>
                                                                             {% endif %}
                                                                             {% if question.recommendations|default([]) is not empty %}
-                                                                                <ul class="mb-0 list-disc pl-5">
+                                                                                <ul class="mb-0 list-disc ps-5">
                                                                                     {% for recommendation in question.recommendations %}
                                                                                         <li>{{ recommendation }}</li>
                                                                                     {% endfor %}
@@ -292,7 +292,7 @@
                                                         {% endif %}
 
                                                         {% if item.recommendations|default([]) is not empty %}
-                                                            <ul class="mt-2 mb-0 list-disc pl-5">
+                                                            <ul class="mt-2 mb-0 list-disc ps-5">
                                                                 {% for recommendation in item.recommendations %}
                                                                     <li>{{ recommendation }}</li>
                                                                 {% endfor %}
@@ -304,7 +304,7 @@
                                         {% endif %}
 
                                         {% if lesson.recommendations|default([]) is not empty %}
-                                            <ul class="mt-3 mb-0 list-disc pl-5">
+                                            <ul class="mt-3 mb-0 list-disc ps-5">
                                                 {% for recommendation in lesson.recommendations %}
                                                     <li>{{ recommendation }}</li>
                                                 {% endfor %}
@@ -344,7 +344,7 @@
                                             <p class="text-gray-60">{{ 'No document-specific AI feedback was returned.'|trans }}</p>
                                         {% endif %}
                                         {% if document.recommendations|default([]) is not empty %}
-                                            <ul class="m-0 list-disc pl-5">
+                                            <ul class="m-0 list-disc ps-5">
                                                 {% for recommendation in document.recommendations %}
                                                     <li>{{ recommendation }}</li>
                                                 {% endfor %}
@@ -397,7 +397,7 @@
                                                                 <p class="mb-1"><strong>{{ 'Answers'|trans }}:</strong> {{ question.answersFeedback }}</p>
                                                             {% endif %}
                                                             {% if question.recommendations|default([]) is not empty %}
-                                                                <ul class="mb-0 list-disc pl-5">
+                                                                <ul class="mb-0 list-disc ps-5">
                                                                     {% for recommendation in question.recommendations %}
                                                                         <li>{{ recommendation }}</li>
                                                                     {% endfor %}
@@ -409,7 +409,7 @@
                                             </div>
                                         {% endif %}
                                         {% if exercise.recommendations|default([]) is not empty %}
-                                            <ul class="m-0 list-disc pl-5">
+                                            <ul class="m-0 list-disc ps-5">
                                                 {% for recommendation in exercise.recommendations %}
                                                     <li>{{ recommendation }}</li>
                                                 {% endfor %}

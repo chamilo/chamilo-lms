@@ -655,10 +655,10 @@ foreach ($questionList as $questionId) {
             );
             if ($enableAi && $openAnsGrader) {
                 echo Display::url(
-                    Display::getMdiIcon('robot-outline','mr-1') . get_lang('Suggest with AI'),
+                    Display::getMdiIcon('robot-outline','me-1') . get_lang('Suggest with AI'),
                     '#',
                     [
-                        'class'            => 'btn btn--plain ml-2 ai-grade-btn',
+                        'class'            => 'btn btn--plain ms-2 ai-grade-btn',
                         'data-exe-id'      => $id,
                         'data-question-id' => $questionId,
                         'data-course-id' => api_get_course_int_id()
@@ -1212,7 +1212,7 @@ if ('student_progress' == $origin) {
                 <label for="aiProviderSelect" class="font-semibold"><?php echo  get_lang('AI provider') ?>:</label>
                 <select
                     id="aiProviderSelect"
-                    class="ml-2 border border-gray-200 rounded-md px-2 py-1"
+                    class="ms-2 border border-gray-200 rounded-md px-2 py-1"
                 >
                     <option value=""><?php echo  get_lang('Default') ?></option>
                 </select>
@@ -1221,7 +1221,7 @@ if ('student_progress' == $origin) {
 
             <p class="mb-2">
                 <strong><?php echo  get_lang('Suggested score') ?>:</strong>
-                <span id="aiScorePreview" class="ml-1"></span>
+                <span id="aiScorePreview" class="ms-1"></span>
             </p>
             <p class="mb-1"><strong><?php echo  get_lang('Suggested feedback') ?>:</strong></p>
 

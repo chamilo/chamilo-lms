@@ -149,8 +149,8 @@ class DictionaryPlugin extends Plugin
         $html .= '<table class="min-w-full divide-y divide-gray-20 text-sm">';
         $html .= '<thead class="bg-gray-10">';
         $html .= '<tr>';
-        $html .= '<th class="px-4 py-3 text-left font-semibold text-gray-70">'.$this->escape($this->get_lang('Term')).'</th>';
-        $html .= '<th class="px-4 py-3 text-left font-semibold text-gray-70">'.$this->escape($this->get_lang('Definition')).'</th>';
+        $html .= '<th class="px-4 py-3 text-start font-semibold text-gray-70">'.$this->escape($this->get_lang('Term')).'</th>';
+        $html .= '<th class="px-4 py-3 text-start font-semibold text-gray-70">'.$this->escape($this->get_lang('Definition')).'</th>';
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody class="divide-y divide-gray-20 bg-white">';

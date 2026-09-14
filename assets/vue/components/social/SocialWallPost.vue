@@ -53,7 +53,7 @@
           v-if="canShowActions"
           :is-owner="canDelete"
           :social-post="post"
-          class="ml-auto"
+          class="ms-auto"
           @post-deleted="onPostDeleted(post)"
         />
       </div>
@@ -80,7 +80,10 @@
           </video>
         </div>
 
-        <div v-html="sanitizeHtml(post.content)" />
+        <div
+          dir="auto"
+          v-html="sanitizeHtml(post.content)"
+        />
 
         <LinkPreviewCard
           v-for="previewUrl in extractedUrls"

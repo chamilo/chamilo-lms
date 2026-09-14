@@ -122,7 +122,7 @@
         <h2 class="text-base font-semibold text-gray-90">{{ t("Thread history") }}</h2>
       </div>
 
-      <div class="flex max-h-[24rem] flex-col gap-3 overflow-y-auto pr-1">
+      <div class="flex max-h-[24rem] flex-col gap-3 overflow-y-auto pe-1">
         <article
           v-for="post in posts"
           :key="post.iid"
@@ -141,7 +141,7 @@
                 <span
                   v-if="isTeacherRole(post)"
                   :title="getRoleLabel(post)"
-                  class="absolute -bottom-1 -right-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-white bg-support-2 text-primary shadow-sm"
+                  class="absolute -bottom-1 -end-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-white bg-support-2 text-primary shadow-sm"
                 >
                   <i
                     class="mdi mdi-account-tie text-xs"
@@ -168,6 +168,7 @@
 
           <div
             class="prose prose-sm max-w-none text-gray-800"
+            dir="auto"
             v-html="sanitizePostText(post.postText)"
           />
 
@@ -293,14 +294,20 @@ const forumAvailabilityMessage = computed(() => {
 const canSubmitReply = computed(
   () =>
     isAllowedToEdit.value ||
-    ("open" === forumAvailabilityStatus.value && 0 === Number(forum.value?.locked || 0) && 0 === Number(thread.value?.locked || 0)),
+    ("open" === forumAvailabilityStatus.value &&
+      0 === Number(forum.value?.locked || 0) &&
+      0 === Number(thread.value?.locked || 0)),
 )
 const replyPageTitle = computed(() => {
   if (isGivingRevision.value) {
     return t("Give revision")
   }
 
-  return shouldQuote.value ? t("Quote this message") : parentPostId.value ? t("Reply to this message") : t("Reply to this thread")
+  return shouldQuote.value
+    ? t("Quote this message")
+    : parentPostId.value
+      ? t("Reply to this message")
+      : t("Reply to this thread")
 })
 const hasMessage = computed(() => stripTags(form.text).trim().length > 0)
 
@@ -531,8 +538,12 @@ async function loadInitialData() {
   forum.value = threadPostsData.forum
   thread.value = threadPostsData.thread
   posts.value = Array.isArray(threadPostsData.posts) ? threadPostsData.posts : []
-  parentPost.value = parentPostId.value ? posts.value.find((post) => Number(post.iid || 0) === parentPostId.value) || null : null
-  quotedPost.value = quotePostId.value ? posts.value.find((post) => Number(post.iid || 0) === quotePostId.value) || null : null
+  parentPost.value = parentPostId.value
+    ? posts.value.find((post) => Number(post.iid || 0) === parentPostId.value) || null
+    : null
+  quotedPost.value = quotePostId.value
+    ? posts.value.find((post) => Number(post.iid || 0) === quotePostId.value) || null
+    : null
 
   if (!showPostNotification.value) {
     form.postNotification = false

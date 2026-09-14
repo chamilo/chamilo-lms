@@ -60,7 +60,7 @@ class ScormAnswerHotspot extends Answer
 
         $answerList = '<div
             style="padding: 10px;
-            margin-left: -8px;
+            margin-inline-start: -8px;
             border: 1px solid #4271b5;
             height: 448px;
             width: 200px;"><b>'.get_lang('Image zones').'</b><ol>';

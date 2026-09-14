@@ -161,7 +161,7 @@
       class="rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800"
     >
       <p class="font-semibold">{{ t("Import warnings") }}</p>
-      <ul class="mt-2 list-disc space-y-1 pl-5">
+      <ul class="mt-2 list-disc space-y-1 ps-5">
         <li
           v-for="(rowError, index) in rowErrors"
           :key="index"

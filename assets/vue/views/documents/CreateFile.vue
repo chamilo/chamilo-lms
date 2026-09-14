@@ -49,7 +49,7 @@
             v-for="tag in certificateTags"
             :key="tag"
             :title="$t('Click to insert')"
-            class="text-left px-3 py-2 rounded-lg border border-gray-25 hover:border-gray-20 hover:bg-gray-10"
+            class="text-start px-3 py-2 rounded-lg border border-gray-25 hover:border-gray-20 hover:bg-gray-10"
             type="button"
             @click="insertCertificateTag(tag)"
           >

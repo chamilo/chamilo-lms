@@ -2478,7 +2478,7 @@ HTML;
                 if ($i > 0 && $i < count($content) - 1) {
                     $class .= ' text-center';
                 } elseif ($i === count($content) - 1) {
-                    $class .= ' text-right';
+                    $class .= ' text-end';
                 }
             }
             $html .= '<div class="'.$class.'">'.$content[$i].'</div>';

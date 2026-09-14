@@ -37,6 +37,7 @@
             <div
               v-if="forum.forumComment"
               class="prose prose-sm mt-1 max-w-none text-sm leading-5 text-gray-600"
+              dir="auto"
               v-html="sanitizeForumComment(forum.forumComment)"
             />
 
@@ -173,7 +174,14 @@ defineProps({
   },
 })
 
-defineEmits(["edit-forum", "delete-forum", "toggle-forum-lock", "toggle-forum-visibility", "move-forum", "toggle-forum-notification"])
+defineEmits([
+  "edit-forum",
+  "delete-forum",
+  "toggle-forum-lock",
+  "toggle-forum-visibility",
+  "move-forum",
+  "toggle-forum-notification",
+])
 
 function sanitizeForumComment(value) {
   return sanitizeHtml(value || "")

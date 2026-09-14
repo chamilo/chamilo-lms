@@ -48,14 +48,14 @@
             >
               <i
                 :class="course.status ? 'mdi mdi-check' : 'mdi mdi-alert-circle'"
-                class="mr-1"
+                class="me-1"
               ></i>
               {{ course.status ? t("Complete") : t("Incomplete") }}
             </span>
 
             <div
               v-if="idx < Object.keys(item.dependents).length - 1"
-              class="absolute right-[-40px] top-6 w-10 border-t-2 border-gray-300"
+              class="absolute end-[-40px] top-6 w-10 border-t-2 border-gray-300"
             ></div>
           </div>
         </template>

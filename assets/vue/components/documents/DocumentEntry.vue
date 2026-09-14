@@ -10,7 +10,7 @@
         :data="data"
         :title="documentTitle"
       />
-      {{ documentTitle }}
+      <span dir="auto">{{ documentTitle }}</span>
     </a>
   </div>
 
@@ -26,7 +26,7 @@
         :data="data"
         :title="documentTitle"
       />
-      {{ documentTitle }}
+      <span dir="auto">{{ documentTitle }}</span>
     </a>
     <BaseAppLink
       v-else-if="isPreviewable"
@@ -39,7 +39,7 @@
         :data="data"
         :title="documentTitle"
       />
-      {{ documentTitle }}
+      <span dir="auto">{{ documentTitle }}</span>
     </BaseAppLink>
 
     <BaseAppLink
@@ -53,7 +53,7 @@
         :data="data"
         :title="documentTitle"
       />
-      {{ documentTitle }}
+      <span dir="auto">{{ documentTitle }}</span>
     </BaseAppLink>
   </div>
   <div v-else>
@@ -69,7 +69,7 @@
         :data="data"
         :title="documentTitle"
       />
-      <b>{{ documentTitle }}</b>
+      <b dir="auto">{{ documentTitle }}</b>
     </BaseAppLink>
   </div>
 </template>

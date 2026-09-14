@@ -179,7 +179,7 @@ echo '<form method="post" action="'.$selfUrl.'&sort='.$sort.'&direction='.$query
 echo '  <div class="overflow-hidden rounded-lg border border-gray-30 bg-white shadow-sm">';
 echo '    <div class="overflow-x-auto">';
 echo '      <table class="min-w-full divide-y divide-gray-20 text-sm">';
-echo '        <thead class="bg-gray-10 text-left text-gray-70">';
+echo '        <thead class="bg-gray-10 text-start text-gray-70">';
 echo '          <tr>';
 echo '            <th class="w-12 px-4 py-3"><span class="sr-only">'.get_lang('Select').'</span></th>';
 
@@ -195,7 +195,7 @@ if ($isWesternNameOrder) {
 }
 
 echo '            <th class="px-4 py-3 font-semibold"><a class="hover:underline" href="'.$selfUrl.'&sort=username&direction='.$nextDirection.'">'.get_lang('Login').'</a></th>';
-echo '            <th class="px-4 py-3 font-semibold text-right">'.get_lang('Detail').'</th>';
+echo '            <th class="px-4 py-3 font-semibold text-end">'.get_lang('Detail').'</th>';
 echo '          </tr>';
 echo '        </thead>';
 echo '        <tbody class="divide-y divide-gray-20 bg-white">';
@@ -222,7 +222,7 @@ if (empty($userRows)) {
         }
 
         echo '    <td class="px-4 py-3 align-middle text-gray-70">'.api_htmlentities($userRow['username'], ENT_QUOTES).'</td>';
-        echo '    <td class="px-4 py-3 align-middle text-right"><a href="'.$rowActionUrl.'" aria-label="'.api_htmlentities($rowActionLabel, ENT_QUOTES).'" onclick="return confirm(\''.addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)).'\');">'.Display::getMdiIcon($rowActionIcon, 'ch-tool-icon', null, ICON_SIZE_SMALL, $rowActionLabel).'</a></td>';
+        echo '    <td class="px-4 py-3 align-middle text-end"><a href="'.$rowActionUrl.'" aria-label="'.api_htmlentities($rowActionLabel, ENT_QUOTES).'" onclick="return confirm(\''.addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)).'\');">'.Display::getMdiIcon($rowActionIcon, 'ch-tool-icon', null, ICON_SIZE_SMALL, $rowActionLabel).'</a></td>';
         echo '  </tr>';
     }
 }

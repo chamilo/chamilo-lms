@@ -62,10 +62,13 @@ class TwigListener
         $parentIsocodes = $this->languageRepository->getParentIsocodesByChildIsocode();
         foreach ($languages as &$language) {
             $language['parentIsocode'] = $parentIsocodes[$language['isocode']] ?? null;
+            $language['direction'] = $this->languageHelper->getTextDirection($language['isocode']);
         }
         unset($language);
 
-        // $this->twig->addGlobal('text_direction', api_get_text_direction());
+        $textDirection = $this->languageHelper->getTextDirection();
+
+        $this->twig->addGlobal('text_direction', $textDirection);
         $this->twig->addGlobal('is_authenticated', json_encode($isAuth));
         $this->twig->addGlobal('user_json', $data ?? json_encode([]));
         if (!empty($currentAccessUrl)) {
@@ -82,6 +85,7 @@ class TwigListener
 
     private function addFallbackGlobals(): void
     {
+        $this->twig->addGlobal('text_direction', 'ltr');
         $this->twig->addGlobal('is_authenticated', json_encode(false));
         $this->twig->addGlobal('user_json', json_encode([]));
         $this->twig->addGlobal('is_login_url', 0);

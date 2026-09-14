@@ -30,6 +30,7 @@
       <template #body="{ data }">
         <div
           class="prose max-w-none"
+          dir="auto"
           v-html="sanitize(data.description)"
         ></div>
       </template>
@@ -42,7 +43,7 @@
       <template #body="{ data }">
         <BaseButton
           :label="t('Edit')"
-          class="mr-2"
+          class="me-2"
           icon="edit"
           size="small"
           type="tertiary-text"
@@ -50,7 +51,7 @@
         />
         <BaseButton
           :label="t('Delete')"
-          class="mr-2"
+          class="me-2"
           icon="delete"
           size="small"
           type="danger-text"

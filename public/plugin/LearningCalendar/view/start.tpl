@@ -36,11 +36,18 @@
                     <article class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm transition hover:shadow-md">
                         <div class="flex items-start justify-between gap-4">
                             <div>
-                                <a class="text-lg font-semibold text-primary hover:underline" href="{{ calendar.view_url }}">
+                                <a
+                                    class="text-lg font-semibold text-primary hover:underline"
+                                    dir="auto"
+                                    href="{{ calendar.view_url }}"
+                                >
                                     {{ calendar.title }}
                                 </a>
                                 {% if calendar.description %}
-                                    <div class="mt-2 line-clamp-3 text-sm text-gray-50">
+                                    <div
+                                        class="mt-2 line-clamp-3 text-sm text-gray-50"
+                                        dir="auto"
+                                    >
                                         {{ calendar.description|striptags }}
                                     </div>
                                 {% endif %}

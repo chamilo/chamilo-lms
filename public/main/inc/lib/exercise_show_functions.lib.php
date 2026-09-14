@@ -396,11 +396,11 @@ class ExerciseShowFunctions
         $content .= '<span class="fa fa-square fa-fw fa-2x" aria-hidden="true" style="color:'.
             $hotspotColors[$orderColor].'"></span>';
         $content .= '</td>';
-        $content .= '<td class="text-left" width="25%">';
+        $content .= '<td class="text-start" width="25%">';
         $content .= "$answerId - $answer";
         $content .= '</td>';
         if (false === $exercise->hideComment) {
-            $content .= '<td class="text-left" width="10%">';
+            $content .= '<td class="text-start" width="10%">';
             if (!$hide_expected_answer) {
                 $status = Display::label(get_lang('Incorrect'), 'danger');
                 if ($studentChoice) {
@@ -412,7 +412,7 @@ class ExerciseShowFunctions
             }
             $content .= '</td>';
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type) {
-                $content .= '<td class="text-left" width="60%">';
+                $content .= '<td class="text-start" width="60%">';
                 if ($studentChoice) {
                     $content .= '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
                 } else {
@@ -420,7 +420,7 @@ class ExerciseShowFunctions
                 }
                 $content .= '</td>';
             } else {
-                $content .= '<td class="text-left" width="60%">&nbsp;</td>';
+                $content .= '<td class="text-start" width="60%">&nbsp;</td>';
             }
         }
         $content .= '</tr>';

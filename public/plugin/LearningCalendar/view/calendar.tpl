@@ -37,7 +37,10 @@
                 {% for event in events %}
                     <div class="flex items-center gap-2 rounded-full border border-gray-25 bg-gray-15 px-3 py-1.5">
                         <span class="learning-calendar-legend-color learning-calendar-legend-color--{{ event.color }}"></span>
-                        <span class="font-medium text-gray-70">{{ event.title }}</span>
+                        <span
+                            class="font-medium text-gray-70"
+                            dir="auto"
+                        >{{ event.title }}</span>
                     </div>
                 {% endfor %}
             </div>
@@ -56,7 +59,7 @@
                 title="{{ 'Previous'|get_lang }}"
                 aria-label="{{ 'Previous'|get_lang }}"
             >
-                <span class="mdi mdi-chevron-left" aria-hidden="true"></span>
+                <span class="mdi mdi-chevron-left rtl:rotate-180" aria-hidden="true"></span>
             </button>
 
             <div id="learning-calendar-current-year" class="learning-calendar-year-label"></div>
@@ -68,7 +71,7 @@
                 title="{{ 'Next'|get_lang }}"
                 aria-label="{{ 'Next'|get_lang }}"
             >
-                <span class="mdi mdi-chevron-right" aria-hidden="true"></span>
+                <span class="mdi mdi-chevron-right rtl:rotate-180" aria-hidden="true"></span>
             </button>
         </div>
 

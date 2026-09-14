@@ -299,7 +299,7 @@ $form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addButtonSearch(get_lang('Search'));
 
 // The action bar.
-echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
+echo '<div style="float: inline-end; margin-top: 5px; margin-inline-end: 5px;">';
 echo ' <a href="course_request_accepted.php">';
 echo Display::getMdiIcon(
         StateIcon::COMPLETE,

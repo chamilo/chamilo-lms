@@ -70,16 +70,16 @@ onBeforeUnmount(() => {
 
 <template>
   <div 
-    class="dropdown-menu absolute right-0" 
+    class="dropdown-menu absolute end-0"
     style="position:relative;"
     :data-dropdown-id="dropdownId"
   >
     <span @click="toggleMenu">
       <slot name="button">
-        
+
       </slot>
     </span>
-    <div v-if="isOpen" class="menu-content absolute right-0 mt-2 top-full ">
+    <div v-if="isOpen" class="menu-content absolute end-0 mt-2 top-full ">
       <slot name="menu" />
     </div>
   </div>

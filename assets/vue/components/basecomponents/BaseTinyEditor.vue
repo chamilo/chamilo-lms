@@ -157,6 +157,7 @@ function getLanguageConfig(locale) {
   return { language: lang, language_url: `${url}${file}` }
 }
 const languageConfig = getLanguageConfig(appLocale.value)
+const editorDirectionality = document.documentElement.dir === "rtl" ? "rtl" : "ltr"
 
 const base = (typeof window !== "undefined" ? window.CHAMILO_TINYMCE_BASE_CONFIG : {}) || {}
 
@@ -475,6 +476,7 @@ const defaultEditorConfig = {
     : ["/build/css/editor_content.css"],
   language: languageConfig.language,
   language_url: languageConfig.language_url,
+  directionality: editorDirectionality,
   image_advtab: true,
   image_class_list: buildImageClassList(base.image_class_list),
   extended_valid_elements: ensureExtendedValidElements(base.extended_valid_elements),

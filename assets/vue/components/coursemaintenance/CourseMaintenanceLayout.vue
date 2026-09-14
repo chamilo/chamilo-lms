@@ -21,7 +21,7 @@
         <!-- Course info -->
         <div
           v-if="course"
-          class="text-right"
+          class="text-end"
         >
           <div class="text-body-2 text-gray-90">{{ course.title }}</div>
           <div class="text-tiny text-gray-50">({{ course.code }})</div>

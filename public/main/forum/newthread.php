@@ -225,7 +225,7 @@ $form = newThread(
 
 Display::display_header();
 
-// $actions  '<span style="float:right;">'.search_link().'</span>';
+// $actions  '<span style="float:inline-end;">'.search_link().'</span>';
 $actions = '<a href="viewforum.php?forum='.(int) $_GET['forum'].'&'.$cidreq.'">'.
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum')).'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);

@@ -16,21 +16,21 @@
   }
 
   &-stacked &-button-group {
-    @apply flex flex-col absolute top-[1px] right-[1px] z-10;
+    @apply flex flex-col absolute top-[1px] end-[1px] z-10;
 
     height: calc(100% - 2px);
   }
 
   &-stacked &-increment-button {
-    @apply p-0 rounded-tr-lg;
+    @apply p-0 rounded-se-lg;
   }
 
   &-stacked &-decrement-button {
-    @apply p-0 rounded-br-lg;
+    @apply p-0 rounded-ee-lg;
   }
 
   &-stacked &-input {
-    @apply pr-8;
+    @apply pe-8;
   }
 
   &-horizontal &-button{
@@ -40,7 +40,7 @@
   }
 
   &-horizontal &-increment-button {
-    @apply order-3 rounded-r-lg right-0 border-l-0;
+    @apply order-3 rounded-e-lg end-0 border-s-0;
   }
 
   &-horizontal &-input {
@@ -48,11 +48,11 @@
   }
 
   &-horizontal &-decrement-button {
-    @apply order-1 rounded-l-lg left-0 border-r-0;
+    @apply order-1 rounded-s-lg start-0 border-e-0;
   }
 
   .p-floatlabel:has(&-horizontal) label {
-    @apply ml-8;
+    @apply ms-8;
   }
 
   &-vertical {
@@ -94,15 +94,15 @@
   }
 
   &-clear-icon {
-    @apply absolute top-1/2 -mt-2 cursor-pointer pr-1 text-gray-90;
+    @apply absolute top-1/2 -mt-2 cursor-pointer pe-1 text-gray-90;
   }
 
   &:has(&-clear-icon) &-input {
-    @apply pr-8;
+    @apply pe-8;
   }
 
   &-stacked &-clear-icon {
-    @apply right-8;
+    @apply end-8;
   }
 }
 

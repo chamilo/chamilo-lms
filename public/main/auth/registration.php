@@ -619,7 +619,7 @@ if (false === $userAlreadyRegisteredShowTerms && $courseInvitationGate->canShowF
   background:#fff;
   box-shadow: 0 1px 2px rgba(0,0,0,.05);
   cursor:pointer;
-  text-align:left;
+  text-align:start;
   transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
 .role-card:hover{ background:#F9FAFB; }

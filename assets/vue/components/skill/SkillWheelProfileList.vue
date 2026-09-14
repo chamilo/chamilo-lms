@@ -84,7 +84,7 @@ const emit = defineEmits(["searchProfile"])
         class="flex flex-row gap-2 items-center"
       >
         <Skeleton
-          class="mr-auto"
+          class="me-auto"
           width="10rem"
         />
         <Skeleton size="2.5rem" />
@@ -102,7 +102,7 @@ const emit = defineEmits(["searchProfile"])
         class="flex flex-row gap-2 items-center"
       >
         <span
-          class="mr-auto"
+          class="me-auto"
           v-text="profile.title"
         />
 

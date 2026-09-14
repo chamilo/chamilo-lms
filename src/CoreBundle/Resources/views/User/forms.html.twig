@@ -91,7 +91,7 @@
 {% block sonata_media_type_widget %}
     <div class="col-xs-3 pull-left">
         {% if value is not empty and value.providerReference %}
-            <div class="pull-left" style="margin-right: 5px">
+            <div class="pull-left" style="margin-inline-end: 5px">
                 {% thumbnail value, 'admin' with {'class': 'img-polaroid media-object'} %}
             </div>
 
@@ -103,7 +103,7 @@
             <br/>
             <span type="label">{{ value.providerName|trans({}, 'SonataMediaBundle') }}</span> ~ {{ value.context }}
         {% else %}
-            <div class="pull-left" style="margin-right: 5px">
+            <div class="pull-left" style="margin-inline-end: 5px">
                 <img src="{{ asset('bundles/sonatamedia/grey.png') }}"
                      class="img-polaroid media-object"
                      style="width: 85px; height: 85px"/>

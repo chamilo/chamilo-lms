@@ -339,7 +339,7 @@ function statusClass(status) {
 }
 
 function levelClass(level) {
-  const classes = ["pl-0", "pl-4", "pl-8", "pl-12", "pl-16", "pl-20"]
+  const classes = ["ps-0", "ps-4", "ps-8", "ps-12", "ps-16", "ps-20"]
 
   return classes[Math.min(Math.max(Number(level || 0), 0), classes.length - 1)]
 }
@@ -558,7 +558,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
                   :style="{ width: `${Math.max(0, Math.min(100, Number(data.progress || 0)))}%` }"
                 />
               </div>
-              <span class="w-12 text-right text-sm">{{ formatPercentage(data.progress) }}</span>
+              <span class="w-12 text-end text-sm">{{ formatPercentage(data.progress) }}</span>
             </div>
           </template>
         </Column>
@@ -760,7 +760,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
                 >
                   <summary class="cursor-pointer font-semibold text-gray-90">{{ t("Interaction") }}</summary>
                   <div class="mt-2 overflow-x-auto">
-                    <table class="w-full text-left text-xs">
+                    <table class="w-full text-start text-xs">
                       <thead>
                         <tr class="border-b border-gray-20">
                           <th class="p-2">{{ t("ID") }}</th>
@@ -791,7 +791,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
                 >
                   <summary class="cursor-pointer font-semibold text-gray-90">{{ t("Objectives") }}</summary>
                   <div class="mt-2 overflow-x-auto">
-                    <table class="w-full text-left text-xs">
+                    <table class="w-full text-start text-xs">
                       <thead>
                         <tr class="border-b border-gray-20">
                           <th class="p-2">{{ t("ID") }}</th>

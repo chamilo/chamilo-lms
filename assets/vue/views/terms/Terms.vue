@@ -11,7 +11,10 @@
           class="small"
           v-text="item.subtitle"
         ></p>
-        <div v-html="item.content"></div>
+        <div
+          dir="auto"
+          v-html="item.content"
+        ></div>
       </div>
       <p class="small mt-4 mb-4">{{ term.date_text }}</p>
       <div v-if="!accepted && !blockButton">
@@ -34,6 +37,7 @@
       <div
         v-if="blockButton"
         class="alert alert-warning"
+        dir="auto"
         v-html="infoMessage"
       ></div>
     </div>

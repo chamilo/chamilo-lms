@@ -1,7 +1,7 @@
 <template>
   <h2
     v-text="t('Add friends')"
-    class="mr-auto"
+    class="me-auto"
   />
   <hr />
   <BaseToolbar>

@@ -1188,7 +1188,7 @@ class Career extends Model
 
         $graphHtml = '<div
             id="'.$groupIdTag.'" class="career_group"
-            style=" '.$borderLine.' padding:15px; float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
+            style=" '.$borderLine.' padding:15px; float:inline-start; margin-inline-start:'.$leftGroup.'; width:'.$widthGroup.'%">';
 
         if (!empty($groupLabel)) {
             $graphHtml .= '<h3>'.$groupLabel.'</h3>';
@@ -1210,7 +1210,7 @@ class Career extends Model
             // padding:15px;
             $graphHtml .= '<div
                 id="subgroup_'.$subGroup.'" class="career_subgroup"
-                style="'.$line.' margin-bottom:20px; padding:15px; float:left; margin-left:0px; width:100%">';
+                style="'.$line.' margin-bottom:20px; padding:15px; float:inline-start; margin-inline-start:0px; width:100%">';
             if (!empty($subGroupLabel)) {
                 $graphHtml .= '<h3>'.$subGroupLabel.'</h3>';
             }
@@ -1226,7 +1226,7 @@ class Career extends Model
                 $widthColumn = 85 / count($columnList);
                 $graphHtml .= '<div
                     id="col_'.$column.'" class="career_column"
-                    style="padding:15px;float:left; margin-left:'.$leftColumn.'; width:'.$widthColumn.'%">';
+                    style="padding:15px;float:inline-start; margin-inline-start:'.$leftColumn.'; width:'.$widthColumn.'%">';
                 $maxRow = 0;
                 foreach ($rows as $row => $vertex) {
                     if ($row > $maxRow) {

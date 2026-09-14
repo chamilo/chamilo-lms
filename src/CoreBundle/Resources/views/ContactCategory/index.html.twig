@@ -4,10 +4,10 @@
 
     <div class="flex justify-between items-center mb-4">
         <a href="{{ path('chamilo_contact_category_new') }}" class="btn btn--success inline-flex items-center">
-            <i class="mdi mdi-plus-box mr-2"></i> {{ "Create new"|trans }}
+            <i class="mdi mdi-plus-box me-2"></i> {{ "Create new"|trans }}
         </a>
         <a href="/admin" class="btn btn--secondary inline-flex items-center">
-            <i class="mdi mdi-arrow-left-bold-circle-outline mr-2"></i> {{ "Back to Admin"|trans }}
+            <i class="mdi mdi-arrow-left-bold-circle-outline me-2 rtl:rotate-180"></i> {{ "Back to Admin"|trans }}
         </a>
     </div>
 
@@ -25,8 +25,8 @@
                 <td>{{ contact_category.title }}</td>
                 <td>{{ contact_category.email }}</td>
                 <td class="flex items-center">
-                    <a href="{{ path('chamilo_contact_category_edit', {'id': contact_category.id}) }}" class="btn btn--info inline-flex items-center mr-2">
-                        <i class="mdi mdi-pencil mr-2"></i> {{ "Edit"|trans }}
+                    <a href="{{ path('chamilo_contact_category_edit', {'id': contact_category.id}) }}" class="btn btn--info inline-flex items-center me-2">
+                        <i class="mdi mdi-pencil me-2"></i> {{ "Edit"|trans }}
                     </a>
                     {{ include('@ChamiloCore/ContactCategory/_delete_form.html.twig') }}
                 </td>

@@ -394,7 +394,7 @@ onMounted(() => {
         <BaseAppLink
           v-if="showInfoButton && infoLink && typeof infoLink === 'string'"
           :url="infoLink"
-          class="absolute bottom-0 left-0"
+          class="absolute bottom-0 start-0"
         >
           <BaseButton
             :label="t('Show description')"
@@ -408,7 +408,7 @@ onMounted(() => {
         <BaseAppLink
           v-else-if="showInfoButton && infoLink && typeof infoLink === 'object'"
           :to="infoLink"
-          class="absolute bottom-0 left-0"
+          class="absolute bottom-0 start-0"
         >
           <BaseButton
             :label="t('Show description')"
@@ -422,7 +422,7 @@ onMounted(() => {
         <BaseButton
           v-else-if="allowDescription && infoOpensPopup && hasCatalogueDescription"
           :label="t('Show description')"
-          class="absolute bottom-0 left-0 rounded-none"
+          class="absolute bottom-0 start-0 rounded-none"
           icon="information"
           only-icon
           size="small"
@@ -637,12 +637,14 @@ onMounted(() => {
         <h3
           v-if="item.title"
           class="text-lg font-semibold"
+          dir="auto"
           v-html="displayTranslatedHtml(item.title)"
         ></h3>
 
         <div
           v-if="item.content"
           class="rich-html-content"
+          dir="auto"
           v-html="displayTranslatedHtml(item.content)"
         />
       </section>

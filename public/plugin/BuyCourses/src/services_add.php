@@ -609,8 +609,8 @@ function buycoursesBuildServiceFormEnhancerScript(BuyCoursesPlugin $plugin): str
 .buycourses-service-shell .buycourses-form-field > [class*="col-"] {
     width: 100%;
     max-width: none;
-    padding-right: 0;
-    padding-left: 0;
+    padding-inline-end: 0;
+    padding-inline-start: 0;
     flex: 0 0 100%;
 }
 
@@ -640,7 +640,7 @@ function buycoursesBuildServiceFormEnhancerScript(BuyCoursesPlugin $plugin): str
     font-size: 0.9rem;
     font-weight: 700;
     line-height: 1.35;
-    text-align: left !important;
+    text-align: start !important;
 }
 
 .buycourses-service-shell .buycourses-control {

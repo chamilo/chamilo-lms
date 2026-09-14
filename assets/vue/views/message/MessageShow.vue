@@ -115,6 +115,7 @@
 
     <div
       class="tiny-content"
+      dir="auto"
       v-html="sanitizeHtml(item.content)"
     />
 

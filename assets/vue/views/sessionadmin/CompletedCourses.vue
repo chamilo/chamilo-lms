@@ -10,14 +10,14 @@
     </div>
 
     <div v-else>
-      <table class="w-full text-left border-collapse">
+      <table class="w-full text-start border-collapse">
         <thead class="bg-gray-100">
           <tr>
             <th class="p-2">{{ t("User") }}</th>
             <th class="p-2">{{ t("Course") }}</th>
             <th class="p-2">{{ t("Session") }}</th>
             <th class="p-2">{{ t("Issued at") }}</th>
-            <th class="p-2 text-right">{{ t("Download") }}</th>
+            <th class="p-2 text-end">{{ t("Download") }}</th>
           </tr>
         </thead>
         <tbody>
@@ -30,7 +30,7 @@
             <td class="p-2">{{ cert.course.title }}</td>
             <td class="p-2">{{ cert.session?.title || "-" }}</td>
             <td class="p-2">{{ cert.issuedAt }}</td>
-            <td class="p-2 text-right">
+            <td class="p-2 text-end">
               <a
                 v-if="cert.isDownloadAllowed"
                 :href="cert.downloadUrl"

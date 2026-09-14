@@ -36,13 +36,13 @@
 
         {% if document_list|length > 0 %}
             <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
-                <table class="w-full border-collapse text-left text-sm">
+                <table class="w-full border-collapse text-start text-sm">
                     <thead class="bg-gray-15 text-gray-70">
                         <tr>
                             <th class="px-4 py-3 font-semibold">{{ 'Justification'|get_plugin_lang('Justification') }}</th>
                             <th class="px-4 py-3 font-semibold">{{ 'File'|get_lang }}</th>
                             <th class="px-4 py-3 font-semibold">{{ 'ValidityDate'|get_plugin_lang('Justification') }}</th>
-                            <th class="px-4 py-3 text-right font-semibold">{{ 'Actions'|get_lang }}</th>
+                            <th class="px-4 py-3 text-end font-semibold">{{ 'Actions'|get_lang }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-25">

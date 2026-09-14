@@ -17,12 +17,12 @@
           <input
             v-model.trim="query"
             :placeholder="$t('Search by title or path...')"
-            class="w-64 rounded border border-gray-25 p-2 pr-8 text-sm"
+            class="w-64 rounded border border-gray-25 p-2 pe-8 text-sm"
             type="text"
           />
           <button
             v-if="query"
-            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-50 hover:text-gray-90"
+            class="absolute end-2 top-1/2 -translate-y-1/2 text-gray-50 hover:text-gray-90"
             @click="query = ''"
             :aria-label="$t('Clear')"
           >
@@ -340,7 +340,7 @@ export default {
                     :class="{'opacity-0 pointer-events-none': !(node.children && node.children.length)}"
                     @click="toggleOpen"
                     aria-label="toggle">
-                    <i :class="open ? 'mdi mdi-chevron-down' : 'mdi mdi-chevron-right'"></i>
+                    <i :class="open ? 'mdi mdi-chevron-down' : 'mdi mdi-chevron-right rtl:rotate-180'"></i>
                   </button>
                 </div>
 
@@ -363,7 +363,7 @@ export default {
                     <span v-if="node.meta" class="text-xs text-gray-50 break-all">· {{ node.meta }}</span>
                   </div>
 
-                  <ul v-if="open && node.children && node.children.length" class="mt-2 ml-7 space-y-2">
+                  <ul v-if="open && node.children && node.children.length" class="mt-2 ms-7 space-y-2">
                     <TreeNode
                       v-for="c in node.children"
                       :key="c.uuid || (c.type+':'+(c.id ?? c.title))"
@@ -438,7 +438,7 @@ export default {
           <header class="flex items-center justify-between px-4 py-2 bg-gray-15">
             <div class="flex items-center gap-2">
               <button class="text-gray-50 hover:text-gray-90" @click="toggleOpen" :aria-label="'toggle '+(group.title||group.type)">
-                <i :class="open ? 'mdi mdi-chevron-down' : 'mdi mdi-chevron-right'"></i>
+                <i :class="open ? 'mdi mdi-chevron-down' : 'mdi mdi-chevron-right rtl:rotate-180'"></i>
               </button>
               <span class="font-medium text-gray-90">{{ group.title || group.type }}</span>
               <span class="text-xs text-gray-50">· {{ selectedLeafCount }} / {{ totalLeafCount }}</span>

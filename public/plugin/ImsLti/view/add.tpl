@@ -4,7 +4,7 @@
             href="{{ back_url }}"
             class="mb-6 inline-flex items-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2 text-body-2 font-semibold text-gray-90 shadow-sm transition hover:border-primary hover:text-primary"
         >
-            <i class="mdi mdi-arrow-left" aria-hidden="true"></i>
+            <i class="mdi mdi-arrow-left rtl:rotate-180" aria-hidden="true"></i>
             <span>{{ 'BackToTools'|get_plugin_lang('ImsLtiPlugin') }}</span>
         </a>
 

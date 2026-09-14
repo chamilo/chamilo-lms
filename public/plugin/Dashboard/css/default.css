@@ -31,7 +31,7 @@
     cursor: grab;
     opacity: 0.55;
     position: absolute;
-    right: 0.75rem;
+    inset-inline-end: 0.75rem;
     top: 0.75rem;
     z-index: 2;
 }

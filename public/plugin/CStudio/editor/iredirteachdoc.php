@@ -61,7 +61,7 @@
     </head>
     <body style="width:98%;height:98%;margin:1%;padding:0;" >
         
-        <div id="logsreturn" style="position:fixed;bottom:1px;left:1px;color:red;height:450px;overflow:auto;z-index: 2000;" ></div>
+        <div id="logsreturn" style="position:fixed;bottom:1px;inset-inline-start:1px;color:red;height:450px;overflow:auto;z-index: 2000;" ></div>
 
         <div class="form-progress-contains">
             </br></br>

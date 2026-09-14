@@ -118,7 +118,7 @@ foreach ($stateDocument as $attemptId => $attempt) {
                 'class' => 'btn_xapi_attempt_detail',
                 'data-attempt' => (string) $attemptId,
                 'data-tool' => $toolLaunch->getId(),
-                'style' => 'margin-bottom: 20px; margin-left: 180px;',
+                'style' => 'margin-bottom: 20px; margin-inline-start: 180px;',
                 'role' => 'button',
             ]
         );

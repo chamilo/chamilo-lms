@@ -157,7 +157,11 @@
           </div>
         </template>
 
-        <div class="break-words" v-html="result.item.content"></div>
+        <div
+          class="break-words"
+          dir="auto"
+          v-html="result.item.content"
+        ></div>
 
         <div
           v-if="result.item.tags?.length"

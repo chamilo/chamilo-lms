@@ -204,7 +204,7 @@
                   </div>
                   <div class="text-sm mt-2 text-gray-700">{{ row.excerpt }}</div>
                 </div>
-                <div class="text-xs text-gray-500 text-right">
+                <div class="text-xs text-gray-500 text-end">
                   <div>{{ t("{0} comment(s)", [row.comments]) }}</div>
                   <div class="mt-1 flex items-center gap-1 justify-end">
                     <i class="mdi mdi-star text-amber-500"></i>

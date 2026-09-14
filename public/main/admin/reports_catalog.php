@@ -769,7 +769,7 @@ function renderRoleBadges(array $roles): string
 
     foreach ($roles as $role) {
         $label = $labels[$role] ?? $role;
-        $html .= '<span class="inline-flex rounded-full bg-support-2 px-2.5 py-1 text-xs font-semibold text-gray-800 mr-1 mb-1">'
+        $html .= '<span class="inline-flex rounded-full bg-support-2 px-2.5 py-1 text-xs font-semibold text-gray-800 me-1 mb-1">'
             .Security::remove_XSS($label)
             .'</span>';
     }

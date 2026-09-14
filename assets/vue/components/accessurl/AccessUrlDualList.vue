@@ -54,7 +54,7 @@ const filteredAvailable = computed(() => {
                 :title="t('Add')"
                 @click="emit('add', item)"
               >
-                <span class="mdi mdi-chevron-right ch-tool-icon" />
+                <span class="mdi mdi-chevron-right rtl:rotate-180 ch-tool-icon" />
               </button>
             </li>
           </ul>
@@ -70,7 +70,7 @@ const filteredAvailable = computed(() => {
           :title="t('Add all')"
           @click="emit('add-all', filteredAvailable)"
         >
-          <span class="mdi mdi-chevron-double-right text-green-700" />
+          <span class="mdi mdi-chevron-double-right rtl:rotate-180 text-green-700" />
         </button>
         <button
           type="button"
@@ -79,7 +79,7 @@ const filteredAvailable = computed(() => {
           :title="t('Remove all')"
           @click="emit('remove-all')"
         >
-          <span class="mdi mdi-chevron-double-left text-red-700" />
+          <span class="mdi mdi-chevron-double-left rtl:rotate-180 text-red-700" />
         </button>
 
         <slot name="actions" />
@@ -102,7 +102,7 @@ const filteredAvailable = computed(() => {
                 :title="t('Remove')"
                 @click="emit('remove', item)"
               >
-                <span class="mdi mdi-chevron-left ch-tool-icon" />
+                <span class="mdi mdi-chevron-left rtl:rotate-180 ch-tool-icon" />
               </button>
               <span>{{ item.label }}</span>
             </li>

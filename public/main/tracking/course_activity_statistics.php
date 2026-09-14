@@ -106,7 +106,7 @@ if ($sessionId > 0) {
 }
 echo '</div>';
 echo '</div>';
-echo '<div class="text-sm text-gray-600 md:text-right">';
+echo '<div class="text-sm text-gray-600 md:text-end">';
 echo '<div><strong>'.get_lang('Learners').':</strong> '.$totalStudents.'</div>';
 echo '<div><strong>'.get_lang('Statistics reset date').':</strong> '.Security::remove_XSS(api_get_local_time($resetDate->format('Y-m-d H:i:s'))).'</div>';
 echo '</div>';
@@ -284,7 +284,7 @@ function renderConnectedUsersTable(array $rows): string
         $html .= '<tr>'.
             '<td>'.Security::remove_XSS($name).'</td>'.
             '<td>'.Security::remove_XSS((string) ($row['username'] ?? '')).'</td>'.
-            '<td class="text-right">'.(int) ($row['connection_count'] ?? 0).'</td>'.
+            '<td class="text-end">'.(int) ($row['connection_count'] ?? 0).'</td>'.
             '<td>'.formatTrackingDate($row['first_access'] ?? null).'</td>'.
             '<td>'.formatTrackingDate($row['last_access'] ?? null).'</td>'.
             '<td>'.api_time_to_hms((int) ($row['total_seconds'] ?? 0)).'</td>'.
@@ -324,7 +324,7 @@ function renderInactiveUsersTable(array $rows): string
             '<td>'.Security::remove_XSS((string) ($row['username'] ?? '')).'</td>'.
             '<td>'.Security::remove_XSS((string) ($row['email'] ?? '')).'</td>'.
             '<td>'.formatTrackingDate($row['last_access'] ?? null).'</td>'.
-            '<td class="text-right">'.(int) ($row['connection_count'] ?? 0).'</td>'.
+            '<td class="text-end">'.(int) ($row['connection_count'] ?? 0).'</td>'.
             '</tr>';
     }
 
@@ -355,8 +355,8 @@ function renderResourceUsageTable(array $rows): string
         $tool = (string) ($row['access_tool'] ?? '');
         $html .= '<tr>'.
             '<td>'.Security::remove_XSS($tool ?: get_lang('Unknown')).'</td>'.
-            '<td class="text-right">'.(int) ($row['event_count'] ?? 0).'</td>'.
-            '<td class="text-right">'.(int) ($row['user_count'] ?? 0).'</td>'.
+            '<td class="text-end">'.(int) ($row['event_count'] ?? 0).'</td>'.
+            '<td class="text-end">'.(int) ($row['user_count'] ?? 0).'</td>'.
             '<td>'.formatTrackingDate($row['last_access'] ?? null).'</td>'.
             '</tr>';
     }

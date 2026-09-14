@@ -1,6 +1,8 @@
 <template>
   <section class="space-y-5">
-    <div class="exercise-live-results-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
+    <div
+      class="exercise-live-results-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
+    >
       <BaseButton
         class="exercise-live-results-toolbar__button"
         :label="t('Back to learner score')"
@@ -51,30 +53,32 @@
     <div class="border-b border-gray-20" />
 
     <header class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm">
-      <div class="border-l-4 border-l-primary p-5">
+      <div class="border-s-4 border-s-primary p-5">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div class="space-y-2">
             <h1 class="text-2xl font-semibold text-gray-90">
               {{ displayText(title, t("Learners who're taking the exercise right now")) }}
             </h1>
             <p class="text-sm font-semibold text-gray-700">
-              {{ t('Live results') }} · {{ t('Live window') }}: {{ filters.minutes || DEFAULT_LIVE_MINUTES }} {{ t('Minutes') }}
+              {{ t("Live results") }} · {{ t("Live window") }}: {{ filters.minutes || DEFAULT_LIVE_MINUTES }}
+              {{ t("Minutes") }}
             </p>
             <div
               v-if="description"
               class="exercise-live-results-html text-sm text-gray-700"
+              dir="auto"
               v-html="displayTranslatedHtml(description)"
             />
           </div>
           <div class="flex flex-wrap gap-2">
             <span class="rounded-full bg-info/10 px-3 py-1 text-sm font-semibold text-info">
-              {{ t('Attempts') }}: {{ summary.totalAttempts || 0 }}
+              {{ t("Attempts") }}: {{ summary.totalAttempts || 0 }}
             </span>
             <span class="rounded-full bg-warning/10 px-3 py-1 text-sm font-semibold text-warning">
-              {{ t('Ongoing attempts') }}: {{ summary.ongoingAttempts || 0 }}
+              {{ t("Ongoing attempts") }}: {{ summary.ongoingAttempts || 0 }}
             </span>
             <span class="rounded-full bg-success/10 px-3 py-1 text-sm font-semibold text-success">
-              {{ t('Completed attempts') }}: {{ summary.completedAttempts || 0 }}
+              {{ t("Completed attempts") }}: {{ summary.completedAttempts || 0 }}
             </span>
           </div>
         </div>
@@ -136,58 +140,93 @@
       :values="attempts"
       data-key="id"
     >
-      <Column :header="t('First name')" field="firstName" sortable>
+      <Column
+        :header="t('First name')"
+        field="firstName"
+        sortable
+      >
         <template #body="{ data }">
-          <div class="font-semibold text-gray-90">{{ displayText(data.firstName, '-') }}</div>
+          <div class="font-semibold text-gray-90">{{ displayText(data.firstName, "-") }}</div>
           <div class="text-xs text-gray-500">{{ data.username }}</div>
         </template>
       </Column>
-      <Column :header="t('Last name')" field="lastName" sortable>
+      <Column
+        :header="t('Last name')"
+        field="lastName"
+        sortable
+      >
         <template #body="{ data }">
-          {{ displayText(data.lastName, '-') }}
+          {{ displayText(data.lastName, "-") }}
         </template>
       </Column>
-      <Column :header="t('Started')" field="startedAt" sortable>
+      <Column
+        :header="t('Started')"
+        field="startedAt"
+        sortable
+      >
         <template #body="{ data }">
           {{ formatDate(data.startedAt) }}
         </template>
       </Column>
-      <Column :header="t('Last activity')" field="lastActivityAt" sortable>
+      <Column
+        :header="t('Last activity')"
+        field="lastActivityAt"
+        sortable
+      >
         <template #body="{ data }">
           {{ formatDate(data.lastActivityAt) }}
         </template>
       </Column>
-      <Column :header="t('Duration')" field="duration" sortable>
+      <Column
+        :header="t('Duration')"
+        field="duration"
+        sortable
+      >
         <template #body="{ data }">
           {{ formatSeconds(data.duration) }}
         </template>
       </Column>
-      <Column :header="t('Questions already answered')" field="answeredQuestions" sortable>
+      <Column
+        :header="t('Questions already answered')"
+        field="answeredQuestions"
+        sortable
+      >
         <template #body="{ data }">
           <span class="font-semibold text-gray-90">
             {{ data.answeredQuestions || 0 }}
           </span>
         </template>
       </Column>
-      <Column :header="t('Score')" field="score" sortable>
+      <Column
+        :header="t('Score')"
+        field="score"
+        sortable
+      >
         <template #body="{ data }">
           <span class="font-semibold text-gray-90">
             {{ formatNumber(data.percentage) }} % ({{ formatNumber(data.score) }} / {{ formatNumber(data.maxScore) }})
           </span>
         </template>
       </Column>
-      <Column :header="t('IP')" field="ip">
+      <Column
+        :header="t('IP')"
+        field="ip"
+      >
         <template #body="{ data }">
-          {{ displayText(data.ip, '-') }}
+          {{ displayText(data.ip, "-") }}
         </template>
       </Column>
-      <Column :header="t('Status')" field="status" sortable>
+      <Column
+        :header="t('Status')"
+        field="status"
+        sortable
+      >
         <template #body="{ data }">
           <span
             class="rounded-full px-3 py-1 text-xs font-semibold"
             :class="statusClass(data.status)"
           >
-            {{ t(data.statusLabel || 'Completed') }}
+            {{ t(data.statusLabel || "Completed") }}
           </span>
         </template>
       </Column>
@@ -436,7 +475,14 @@ onBeforeUnmount(() => {
 })
 
 watch(
-  () => [route.params.exerciseId, route.query.cid, route.query.sid, route.query.gid, route.query.status, route.query.minutes],
+  () => [
+    route.params.exerciseId,
+    route.query.cid,
+    route.query.sid,
+    route.query.gid,
+    route.query.status,
+    route.query.minutes,
+  ],
   () => {
     filterForm.status = getQueryValue(route.query.status) || "all"
     filterForm.minutes = Number(getQueryValue(route.query.minutes) || DEFAULT_LIVE_MINUTES)

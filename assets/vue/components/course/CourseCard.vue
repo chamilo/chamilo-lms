@@ -208,7 +208,7 @@
       <!-- Paid service ribbon -->
       <div
         v-if="showBuyCoursesServiceBanner"
-        class="absolute bottom-3 left-0 inline-flex max-w-[80%] items-center gap-2 rounded-r-full bg-primary px-4 py-2 pr-5 text-sm font-semibold text-white shadow-lg ring-1 ring-white/30 backdrop-blur-sm"
+        class="absolute bottom-3 start-0 inline-flex max-w-[80%] items-center gap-2 rounded-e-full bg-primary px-4 py-2 pe-5 text-sm font-semibold text-white shadow-lg ring-1 ring-white/30 backdrop-blur-sm"
         :title="buyCoursesServiceName"
         :aria-label="buyCoursesServiceName"
       >
@@ -222,7 +222,7 @@
       <!-- Certificate badge -->
       <div
         v-if="ui.showCertificate && ui.certificateAvailable"
-        class="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-primary shadow-sm ring-1 ring-primary/15 backdrop-blur"
+        class="absolute start-3 top-3 inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-primary shadow-sm ring-1 ring-primary/15 backdrop-blur"
         aria-label="Certificate available"
       >
         <svg
@@ -259,7 +259,7 @@
       <!-- Notifications popover -->
       <div
         v-if="showNotifications"
-        class="absolute right-3 top-14 z-[60] w-80 pointer-events-auto"
+        class="absolute end-3 top-14 z-[60] w-80 pointer-events-auto"
         role="dialog"
         aria-label="Notifications panel"
         @click.stop
@@ -337,7 +337,7 @@
                   <button
                     v-else
                     type="button"
-                    class="w-full flex items-center justify-between gap-3 text-sm text-gray-90 hover:text-primary text-left"
+                    class="w-full flex items-center justify-between gap-3 text-sm text-gray-90 hover:text-primary text-start"
                     @click.stop="onNotificationClick(it)"
                   >
                     <span class="min-w-0 truncate">

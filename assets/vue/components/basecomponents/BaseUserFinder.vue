@@ -127,7 +127,7 @@ defineExpose({ selectedUsers })
       <div class="flex justify-between items-center gap-4">
         <span
           v-text="t('User list')"
-          class="mr-auto"
+          class="me-auto"
         />
         <BaseButton
           :label="t('Clear filters')"

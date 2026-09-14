@@ -3330,7 +3330,7 @@ class Agenda
                                 //Setting a personal event to green
                                 $icon = Display::div(
                                     $icon,
-                                    ['style' => 'float:right']
+                                    ['style' => 'float:inline-end']
                                 );
 
                                 $link = $value['calendar_type'].'_'.$value['id'].'_'.$value['course_id'].'_'.$value['session_id'];

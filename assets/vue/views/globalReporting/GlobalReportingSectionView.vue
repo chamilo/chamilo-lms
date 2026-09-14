@@ -190,7 +190,7 @@
         </div>
         <span
           v-if="!isMyProgress && !isListPage"
-          class="ml-auto text-sm text-gray-50"
+          class="ms-auto text-sm text-gray-50"
         >
           {{ report.total }} {{ t("Results") }}
         </span>

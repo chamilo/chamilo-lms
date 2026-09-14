@@ -52,7 +52,7 @@
                         <div class="forum_display w-full">
                             <div class="card-forum">
                                 <div class="flex flex-row forum-row">
-                                    <div class="w-1/5 float-left">
+                                    <div class="w-1/5 float-start">
                                         <div class="number-post">
                                             <a href="{{ subitem.url }}" title="{{subitem.title}}">
                                                 {% if subitem.forum_image is not empty %}
@@ -67,7 +67,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="w-4/5 justify-between float-right">
+                                    <div class="w-4/5 justify-between float-end">
                                         <h3 class="text-lg flex flex-row">
                                             <a href="{{ subitem.url }}" title="{{ subitem.title }}" class="{{ subitem.visibility != '1' ? 'text-muted': '' }}">{{ subitem.title }}</a>
                                             {{ subitem.icon_session }}

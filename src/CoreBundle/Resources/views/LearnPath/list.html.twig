@@ -23,7 +23,7 @@
             html += '<input type="hidden" name="lp_id" value="'+lpId+'">';
             html += '<p>{{ "Select items to export:"|trans }}</p>';
             data.items.forEach(item => {
-              html += '<div style="text-align:left;"><label><input type="checkbox" name="items[]" value="'+item.id+'" checked> '+item.title+'</label></div>';
+              html += '<div style="text-align:start;"><label><input type="checkbox" name="items[]" value="'+item.id+'" checked> '+item.title+'</label></div>';
             });
             html += '</form>';
 
@@ -149,27 +149,27 @@
                             <table class="table table-hover table-striped">
                                 <thead>
                                 <tr class="my-2">
-                                    <th class="text-left">
+                                    <th class="text-start">
                                         {{ "Title"|trans }}
                                     </th>
                                     {% if is_allowed_to_edit %}
-                                        <th class="text-left">{{ "Visibility"|trans }}</th>
-                                        <th class="text-left">{{ "Type"|trans }}</th>
-                                        <th class="text-left">{{ "Publication date"|trans }}</th>
-                                        <th class="text-left">{{ "Expiration date"|trans }}</th>
+                                        <th class="text-start">{{ "Visibility"|trans }}</th>
+                                        <th class="text-start">{{ "Type"|trans }}</th>
+                                        <th class="text-start">{{ "Publication date"|trans }}</th>
+                                        <th class="text-start">{{ "Expiration date"|trans }}</th>
                                         <th class="text-center">{{ "Progress"|trans }}</th>
                                         {% if allow_min_time %}
-                                            <th class="text-left">{{ "Time spent / Time required"|trans }}</th>
+                                            <th class="text-start">{{ "Time spent / Time required"|trans }}</th>
                                         {% endif %}
-                                        <th class="text-left">{{ "Authoring options"|trans }}</th>
+                                        <th class="text-start">{{ "Authoring options"|trans }}</th>
                                     {% else %}
                                         {% if not is_invitee %}
                                             <th class="text-center">{{ "Progress"|trans }}</th>
                                         {% endif %}
                                         {% if allow_min_time %}
-                                            <th class="text-left">{{ "Time spent / Time required"|trans }}</th>
+                                            <th class="text-start">{{ "Time spent / Time required"|trans }}</th>
                                         {% endif %}
-                                        <th class="text-left">{{ "Actions"|trans }}</th>
+                                        <th class="text-start">{{ "Actions"|trans }}</th>
                                     {% endif %}
                                 </tr>
                                 </thead>
@@ -180,7 +180,7 @@
                                     text-gray-400
                                     {% endif %}
                                     ">
-                                        <td class="py-2 text-left">
+                                        <td class="py-2 text-start">
                                             {{ row.learnpath_icon }}
                                             <a href="{{ row.url_start }}">
                                                 {{ row.title }}
@@ -188,21 +188,21 @@
                                             </a>
                                         </td>
                                         {% if is_allowed_to_edit %}
-                                            <td class="text-left">{{ row.extra }}</td>
-                                            <td class="text-left">{{ row.maker }}</td>
-                                            <td class="text-left">
+                                            <td class="text-start">{{ row.extra }}</td>
+                                            <td class="text-start">{{ row.maker }}</td>
+                                            <td class="text-start">
                                                 {% if row.start_time %}
                                                     <span class="small">{{ row.start_time }}</span>
                                                 {% endif %}
                                             </td>
-                                            <td class="text-left">
+                                            <td class="text-start">
                                                 <span class="small">{{ row.end_time }}</span>
                                             </td>
                                             <td class="text-center">
                                                 {{ row.dsp_progress }}
                                             </td>
                                             {% if allow_min_time %}
-                                                <td class="text-left">
+                                                <td class="text-start">
                                                     {% if row.info_time_prerequisite %}
                                                         {{ row.info_time_prerequisite }}
                                                     {% endif %}
@@ -215,14 +215,14 @@
                                                 </td>
                                             {% endif %}
                                             {% if allow_min_time %}
-                                                <td class="text-left">
+                                                <td class="text-start">
                                                     {% if row.info_time_prerequisite %}
                                                         {{ row.info_time_prerequisite }}
                                                     {% endif %}
                                                 </td>
                                             {% endif %}
                                         {% endif %}
-                                        <td class="text-left">
+                                        <td class="text-start">
                                             {{ row.action_build }}
                                             {{ row.action_edit }}
                                             {{ row.action_visible }}

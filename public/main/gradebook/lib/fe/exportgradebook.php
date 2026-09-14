@@ -48,8 +48,8 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
     vertical-align: top;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
+    border-inline-end: 1px solid black;
+    border-inline-start: 1px solid black;
 }
 .data_table tr.row_odd{
     background-color: #fafafa;
@@ -61,8 +61,8 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
     padding: 5px;
       vertical-align: top;
     border-bottom: 1px solid black;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
+    border-inline-end: 1px solid black;
+    border-inline-start: 1px solid black;
 }
 </style>
 </head>

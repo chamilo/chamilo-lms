@@ -1303,7 +1303,7 @@ EOT;
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
             // @todo improve UI
             $returnValue .= '<br />
-            <div id="loading_div_' . $id . '" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
+            <div id="loading_div_' . $id . '" class="loading_div" style="display:none;margin-inline-start:40%; margin-top:10px; height:50px;">
                 <div class="wobblebar-loader"></div>
             </div>
             ';
@@ -1680,7 +1680,7 @@ EOT;
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4A4 4 0 008 12H4z"></path>
                 </svg>
                 <span id="upload-status-text">Uploading…</span>
-                <span id="upload-percent" class="ml-1 font-medium">0%</span>
+                <span id="upload-percent" class="ms-1 font-medium">0%</span>
             </div>
         </div>
 

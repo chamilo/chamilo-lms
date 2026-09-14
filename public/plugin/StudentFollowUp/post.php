@@ -250,7 +250,7 @@ $tpl->assign('post_url', $url);
 $tpl->assign(
     'back_link',
     Display::url(
-        '<span class="mdi mdi-arrow-left" aria-hidden="true"></span> '.($createMode ? $plugin->get_lang('BackToTimeline') : get_lang('Back')),
+        '<span class="mdi mdi-arrow-left rtl:rotate-180" aria-hidden="true"></span> '.($createMode ? $plugin->get_lang('BackToTimeline') : get_lang('Back')),
         api_get_path(WEB_PLUGIN_PATH).'StudentFollowUp/posts.php?student_id='.$studentId,
         ['class' => 'btn btn--plain inline-flex items-center gap-2']
     )

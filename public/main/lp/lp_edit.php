@@ -558,7 +558,7 @@ echo '<div class="row">';
 echo '<div class="'.($hideTableOfContents ? 'col-md-12' : 'col-md-8').'" id="pnl-frm">';
 $form->display();
 echo '</div>';
-echo '<div class="'.($hideTableOfContents ? 'hide' : 'col-md-4').' text-right" id="pnl-toc">';
+echo '<div class="'.($hideTableOfContents ? 'hide' : 'col-md-4').' text-end" id="pnl-toc">';
 echo Display::return_icon('course_setting_layout.png');
 echo '</div>';
 echo '</div>';

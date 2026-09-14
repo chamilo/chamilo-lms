@@ -46,8 +46,8 @@
     <ToggleButton
       v-model="sidebarIsOpen"
       class="app-sidebar__button"
-      off-icon="mdi mdi-chevron-right"
-      on-icon="mdi mdi-chevron-left"
+      off-icon="mdi mdi-chevron-right rtl:rotate-180"
+      on-icon="mdi mdi-chevron-left rtl:rotate-180"
     />
   </aside>
 

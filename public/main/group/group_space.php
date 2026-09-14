@@ -69,7 +69,7 @@ $htmlHeadXtra[] = '<style>
 .data_table table {
   width: 100%;
 }
-.thumbnails { list-style: none; padding-left: 0; margin: 0; }
+.thumbnails { list-style: none; padding-inline-start: 0; margin: 0; }
 </style>';
 
 Display::display_header(

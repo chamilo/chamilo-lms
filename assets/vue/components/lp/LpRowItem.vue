@@ -517,7 +517,7 @@ const itemActionsMobile = computed(() =>
       <div class="lp-panel__body">
         <div
           class="lp-panel__cover overflow-hidden rounded-xl"
-          :class="{ 'ml-4': !canEdit }"
+          :class="{ 'ms-4': !canEdit }"
         >
           <img
             v-if="lp.coverUrl"
@@ -632,7 +632,7 @@ const itemActionsMobile = computed(() =>
               @click="buttonAction.command"
             />
 
-            <div class="relative hidden md:flex shrink-0 items-center ml-4">
+            <div class="relative hidden md:flex shrink-0 items-center ms-4">
               <BaseDropdownMenu
                 :dropdown-id="`lp-row-menu-${lp.iid}`"
                 @close="rowMenuOpen = false"
@@ -653,7 +653,7 @@ const itemActionsMobile = computed(() =>
                   >
                     <button
                       :disabled="publishAction.disabled"
-                      class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                      class="block w-full whitespace-nowrap px-4 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                       type="button"
                       @click="publishAction.command"
                     >
@@ -662,7 +662,7 @@ const itemActionsMobile = computed(() =>
                     <button
                       v-if="!isCStudioLearningPath"
                       :disabled="attemptModeAction.disabled"
-                      class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                      class="block w-full whitespace-nowrap px-4 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                       type="button"
                       @click="attemptModeAction.command"
                     >
@@ -671,7 +671,7 @@ const itemActionsMobile = computed(() =>
 
                     <div class="my-1 border-t border-gray-25"></div>
 
-                    <div class="mx-2 my-1 rounded-lg bg-gray-15 px-3 py-2 text-left">
+                    <div class="mx-2 my-1 rounded-lg bg-gray-15 px-3 py-2 text-start">
                       <div class="text-caption font-semibold uppercase tracking-wide text-gray-50">
                         {{ viewModeAction.label }}
                       </div>
@@ -685,7 +685,7 @@ const itemActionsMobile = computed(() =>
                     <button
                       v-if="securityStore.isAdmin && isScormLearningPath"
                       :disabled="debugAction.disabled"
-                      class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                      class="block w-full whitespace-nowrap px-4 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                       type="button"
                       @click="debugAction.command"
                     >
@@ -694,7 +694,7 @@ const itemActionsMobile = computed(() =>
                     <button
                       v-if="canSeriousGame"
                       :disabled="seriousGameAction.disabled"
-                      class="block w-full whitespace-nowrap px-4 py-2 text-left hover:bg-gray-15 disabled:opacity-50"
+                      class="block w-full whitespace-nowrap px-4 py-2 text-start hover:bg-gray-15 disabled:opacity-50"
                       type="button"
                       @click="seriousGameAction.command"
                     >
@@ -705,7 +705,7 @@ const itemActionsMobile = computed(() =>
 
                     <button
                       :disabled="!manageableInContext"
-                      class="block w-full whitespace-nowrap px-4 py-2 text-left font-semibold text-danger hover:bg-danger/10 disabled:opacity-50"
+                      class="block w-full whitespace-nowrap px-4 py-2 text-start font-semibold text-danger hover:bg-danger/10 disabled:opacity-50"
                       type="button"
                       @click="onDelete"
                     >

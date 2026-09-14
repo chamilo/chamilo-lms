@@ -7,7 +7,7 @@
   >
     <div class="space-y-4">
       <div class="text-sm text-gray-600">
-        <span class="mr-1">{{ t('File') }}:</span>
+        <span class="me-1">{{ t('File') }}:</span>
         <strong>{{ fileTitle }}</strong>
       </div>
 

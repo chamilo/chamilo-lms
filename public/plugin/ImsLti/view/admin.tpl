@@ -82,7 +82,10 @@
                                 </div>
 
                                 <div class="flex flex-col gap-2">
-                                    <span class="break-words text-body-2 font-semibold text-gray-90">
+                                    <span
+                                        class="break-words text-body-2 font-semibold text-gray-90"
+                                        dir="auto"
+                                    >
                                         {{ tool.title }}
                                     </span>
 

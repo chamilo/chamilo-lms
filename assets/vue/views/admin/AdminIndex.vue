@@ -201,6 +201,7 @@
         <div
           v-if="blockVersionStatusEl"
           class="block-admin-version__status text-body-2"
+          dir="auto"
           v-html="blockVersionStatusEl"
         />
         <div
@@ -266,6 +267,7 @@
       <div
         v-if="blockSupportStatusEl"
         class="block-admin-support__status text-body-2"
+        dir="auto"
         v-html="blockSupportStatusEl"
       />
       <div
@@ -291,6 +293,7 @@
       <div
         v-if="blockNewsStatusEl"
         class="block-admin-news__status"
+        dir="auto"
         v-html="blockNewsStatusEl"
       />
       <div

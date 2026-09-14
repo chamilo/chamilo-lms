@@ -34,6 +34,7 @@ pageService
 
     <div
       class="tiny-content"
+      dir="auto"
       v-html="page.content"
     ></div>
   </div>

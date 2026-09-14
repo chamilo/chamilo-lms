@@ -47,11 +47,11 @@
             v-if="group.pictureUrl"
             :src="group.pictureUrl"
             :alt="t('Group image')"
-            class="w-16 h-16 rounded-full mr-4"
+            class="w-16 h-16 rounded-full me-4"
           />
           <i
             v-else
-            class="mdi mdi-account-group-outline text-4xl text-gray-500 mr-4"
+            class="mdi mdi-account-group-outline text-4xl text-gray-500 me-4"
           ></i>
           <div class="group-details">
             <a
@@ -78,11 +78,11 @@
             v-if="group.pictureUrl"
             :src="group.pictureUrl"
             :alt="t('Group image')"
-            class="w-16 h-16 rounded-full mr-4"
+            class="w-16 h-16 rounded-full me-4"
           />
           <i
             v-else
-            class="mdi mdi-account-group-outline text-4xl text-gray-500 mr-4"
+            class="mdi mdi-account-group-outline text-4xl text-gray-500 me-4"
           ></i>
           <div class="group-details">
             <a
@@ -109,11 +109,11 @@
             v-if="group.pictureUrl"
             :src="group.pictureUrl"
             :alt="t('Group image')"
-            class="w-16 h-16 rounded-full mr-4"
+            class="w-16 h-16 rounded-full me-4"
           />
           <i
             v-else
-            class="mdi mdi-account-group-outline text-4xl text-gray-500 mr-4"
+            class="mdi mdi-account-group-outline text-4xl text-gray-500 me-4"
           ></i>
           <div class="group-details">
             <a

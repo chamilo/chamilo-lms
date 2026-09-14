@@ -23,7 +23,7 @@
                         href="{{ back_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                     >
-                        <em class="mdi mdi-arrow-left"></em>
+                        <em class="mdi mdi-arrow-left rtl:rotate-180"></em>
                         {{ 'Back'|get_lang }}
                     </a>
 
@@ -140,7 +140,7 @@
                 </p>
             </div>
 
-            <div class="rounded-2xl border border-gray-25 bg-white px-4 py-3 text-right shadow-sm">
+            <div class="rounded-2xl border border-gray-25 bg-white px-4 py-3 text-end shadow-sm">
                 <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
                     {{ 'ExportReportTotalAmount'|get_plugin_lang('BuyCoursesPlugin') }}
                 </div>
@@ -155,16 +155,16 @@
                 <table class="min-w-full divide-y divide-gray-25">
                     <thead class="bg-gray-15">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'SaleSource'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'OrderStatus'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'PaymentMethod'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'SalePrice'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'CouponDiscount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'ProductName'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'UserName'|get_lang }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'Email'|get_lang }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'SaleSource'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'OrderStatus'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'PaymentMethod'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                            <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'SalePrice'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                            <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'CouponDiscount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'ProductName'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'UserName'|get_lang }}</th>
+                            <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">{{ 'Email'|get_lang }}</th>
                         </tr>
                     </thead>
 
@@ -186,8 +186,8 @@
                                 </td>
                                 <td class="px-4 py-4 text-sm text-gray-90">{{ sale.order_date_label|e }}</td>
                                 <td class="px-4 py-4 text-sm text-gray-90">{{ sale.payment_type_label|e }}</td>
-                                <td class="px-4 py-4 text-right text-sm font-semibold text-gray-90">{{ sale.price_label|e }}</td>
-                                <td class="px-4 py-4 text-right text-sm text-gray-90">{{ sale.discount_amount_label|e }}</td>
+                                <td class="px-4 py-4 text-end text-sm font-semibold text-gray-90">{{ sale.price_label|e }}</td>
+                                <td class="px-4 py-4 text-end text-sm text-gray-90">{{ sale.discount_amount_label|e }}</td>
                                 <td class="px-4 py-4 text-sm text-gray-90">{{ sale.product_name|e }}</td>
                                 <td class="px-4 py-4 text-sm text-gray-90">{{ sale.username|e }}</td>
                                 <td class="px-4 py-4 text-sm text-gray-90">{{ sale.email|e }}</td>

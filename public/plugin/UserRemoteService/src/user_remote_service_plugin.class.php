@@ -344,7 +344,7 @@ class UserRemoteServicePlugin extends Plugin
         $html .= '</div>';
         $html .= '<a class="inline-flex items-center gap-2 rounded-lg border border-gray-25 bg-white px-4 py-2 text-sm font-semibold text-gray-90 hover:bg-gray-10" href="'.
             $this->escape(api_get_path(WEB_CODE_PATH).'admin/plugins.php').'">'.
-            '<span class="mdi mdi-arrow-left ch-tool-icon" aria-hidden="true"></span>'.$this->escape(get_lang('Back to plugins')).'</a>';
+            '<span class="mdi mdi-arrow-left rtl:rotate-180 ch-tool-icon" aria-hidden="true"></span>'.$this->escape(get_lang('Back to plugins')).'</a>';
         $html .= '</div>';
         $html .= '</section>';
 
@@ -382,13 +382,13 @@ class UserRemoteServicePlugin extends Plugin
         }
 
         $html = '<div class="overflow-x-auto">';
-        $html .= '<table class="w-full table-auto border-collapse text-left text-sm">';
+        $html .= '<table class="w-full table-auto border-collapse text-start text-sm">';
         $html .= '<thead class="border-b border-gray-25 bg-gray-10 text-xs uppercase tracking-wide text-gray-50">';
         $html .= '<tr>';
         $html .= '<th class="px-4 py-3">'.$this->escape($this->get_lang('ServiceTitle')).'</th>';
         $html .= '<th class="px-4 py-3">'.$this->escape($this->get_lang('ServiceURL')).'</th>';
         $html .= '<th class="px-4 py-3">'.$this->escape($this->get_lang('RedirectAccessURL')).'</th>';
-        $html .= '<th class="px-4 py-3 text-right">'.$this->escape($this->get_lang('Actions')).'</th>';
+        $html .= '<th class="px-4 py-3 text-end">'.$this->escape($this->get_lang('Actions')).'</th>';
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody class="divide-y divide-gray-25">';
@@ -412,7 +412,7 @@ class UserRemoteServicePlugin extends Plugin
             }
             $html .= '</td>';
             $html .= '<td class="px-4 py-3"><code class="break-all rounded bg-gray-10 px-2 py-1 text-xs text-gray-70">'.$this->escape($redirectUrl).'</code></td>';
-            $html .= '<td class="px-4 py-3 text-right">';
+            $html .= '<td class="px-4 py-3 text-end">';
             $html .= '<div class="inline-flex items-center gap-2">';
             $html .= '<a class="ch-tool-icon-button" href="'.$this->escape($iframeUrl).'" title="'.$this->escape($this->get_lang('OpenInIframe')).'">'.
                 '<span class="mdi mdi-open-in-new ch-tool-icon" aria-hidden="true"></span><span class="sr-only">'.$this->escape($this->get_lang('OpenInIframe')).'</span></a>';

@@ -107,7 +107,7 @@ $tocHtml = $itemsRepo->buildTree(
                 "launch.php?tool={$toolLaunch->getId()}&id={$node['id']}&$cidReq",
                 [
                     'target' => 'ifr_content',
-                    'class' => 'block w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary',
+                    'class' => 'block w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-start text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary',
                 ]
             );
         },

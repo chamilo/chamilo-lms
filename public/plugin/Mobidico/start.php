@@ -51,7 +51,7 @@ if (null === $launchUrl) {
                         <p class="mt-2 text-body-2 text-gray-50">'.$escape($translate('CheckMobidicoConfiguration')).'</p>
                         <div class="mt-6">
                             <a class="btn btn--plain-outline inline-flex items-center gap-2" href="'.$escape($backUrl).'">
-                                <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+                                <span class="mdi mdi-arrow-left rtl:rotate-180" aria-hidden="true"></span>
                                 '.$escape($translate('BackToCourse')).'
                             </a>
                         </div>
@@ -106,13 +106,13 @@ $content = '
                 </div>
 
                 <div class="rounded-xl bg-support-1 p-4 text-body-2 text-gray-50">
-                    <span class="mdi mdi-information-outline mr-1 text-primary" aria-hidden="true"></span>
+                    <span class="mdi mdi-information-outline me-1 text-primary" aria-hidden="true"></span>
                     '.$escape($translate('MobidicoPopupHelp')).'
                 </div>
 
                 <div>
                     <a class="inline-flex items-center gap-2 text-body-2 font-semibold text-primary hover:underline" href="'.$escape($backUrl).'">
-                        <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+                        <span class="mdi mdi-arrow-left rtl:rotate-180" aria-hidden="true"></span>
                         '.$escape($translate('BackToCourse')).'
                     </a>
                 </div>

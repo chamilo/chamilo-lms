@@ -136,10 +136,10 @@ function embed_registry_render_list(array $embeds, bool $isAllowedToEdit, EmbedR
     $headers[] = get_lang('Actions');
 
     $html = '<table class="w-full min-w-full border-collapse text-sm">';
-    $html .= '<thead><tr class="border-b border-gray-20 bg-gray-10 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">';
+    $html .= '<thead><tr class="border-b border-gray-20 bg-gray-10 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">';
 
     foreach ($headers as $header) {
-        $alignClass = in_array($header, [get_lang('Members'), get_lang('Actions')], true) ? ' text-right' : '';
+        $alignClass = in_array($header, [get_lang('Members'), get_lang('Actions')], true) ? ' text-end' : '';
         $html .= '<th class="px-4 py-3'.$alignClass.'">'.embed_registry_escape((string) $header).'</th>';
     }
 
@@ -198,10 +198,10 @@ function embed_registry_render_list(array $embeds, bool $isAllowedToEdit, EmbedR
         $html .= '<td class="px-4 py-3"><span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold '.$status['class'].'">'.embed_registry_escape((string) $status['label']).'</span></td>';
 
         if ($isAllowedToEdit) {
-            $html .= '<td class="px-4 py-3 text-right text-gray-70">'.embed_registry_escape($membersCount).'</td>';
+            $html .= '<td class="px-4 py-3 text-end text-gray-70">'.embed_registry_escape($membersCount).'</td>';
         }
 
-        $html .= '<td class="px-4 py-3 text-right"><div class="inline-flex items-center justify-end gap-2">'.implode('', $actions).'</div></td>';
+        $html .= '<td class="px-4 py-3 text-end"><div class="inline-flex items-center justify-end gap-2">'.implode('', $actions).'</div></td>';
         $html .= '</tr>';
     }
 

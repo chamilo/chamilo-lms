@@ -195,14 +195,14 @@ echo Display::page_header(get_lang('Question').': '.$objQuestion->selectTitle())
                 <table class="min-w-full table-auto text-sm">
                     <thead class="bg-gray-15 text-gray-90">
                     <tr>
-                        <th class="px-3 py-2 text-right w-24"><?php echo get_lang('ID'); ?></th>
-                        <th class="px-3 py-2 text-left" style="width: <?php echo $isGlobal ? '90%' : '70%'; ?>;">
+                        <th class="px-3 py-2 text-end w-24"><?php echo get_lang('ID'); ?></th>
+                        <th class="px-3 py-2 text-start" style="width: <?php echo $isGlobal ? '90%' : '70%'; ?>;">
                             <?php echo get_lang('Answer'); ?>
                         </th>
                         <?php if (!$isGlobal) { ?>
-                            <th class="px-3 py-2 text-right w-40"><?php echo get_lang('Score'); ?></th>
+                            <th class="px-3 py-2 text-end w-40"><?php echo get_lang('Score'); ?></th>
                         <?php } ?>
-                        <th class="px-3 py-2 text-right w-24">&nbsp;</th>
+                        <th class="px-3 py-2 text-end w-24">&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-20"></tbody>
@@ -224,7 +224,7 @@ echo Display::page_header(get_lang('Question').': '.$objQuestion->selectTitle())
                         id="weighting"
                         name="weighting"
                         value="<?php echo (float) $objQuestion->weighting; ?>"
-                        class="w-40 sm:w-56 rounded-md border border-gray-20 px-3 py-2 text-right text-gray-90 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                        class="w-40 sm:w-56 rounded-md border border-gray-20 px-3 py-2 text-end text-gray-90 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                     />
                 </div>
             </div>
@@ -314,7 +314,7 @@ echo Display::page_header(get_lang('Question').': '.$objQuestion->selectTitle())
 
         function weightInput(value) {
             return '<input type="number" required min="0" step="any" ' +
-                'class="w-28 rounded-md border border-gray-20 px-2 py-1 text-right text-gray-90 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" ' +
+                'class="w-28 rounded-md border border-gray-20 px-2 py-1 text-end text-gray-90 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" ' +
                 'name="c_weighting[]" value="' + (value || 0) + '">';
         }
 
@@ -331,14 +331,14 @@ echo Display::page_header(get_lang('Question').': '.$objQuestion->selectTitle())
             $.each(answers, function (key, line) {
                 var counter = key + 1;
                 html += '<tr class="hover:bg-support-2">'
-                    + '<td class="px-3 py-2 text-right">' + counter
+                    + '<td class="px-3 py-2 text-end">' + counter
                     +   '<input type="hidden" name="counter[]" value="' + counter + '"></td>'
                     + '<td class="px-3 py-2">' + (line[1] || '')
                     +   '<input type="hidden" name="answer[]" value="' + line[0] + '"></td>';
                 <?php if (!$isGlobal) { ?>
-                html += '<td class="px-3 py-2 text-right">' + weightInput(line[2]) + '</td>';
+                html += '<td class="px-3 py-2 text-end">' + weightInput(line[2]) + '</td>';
                 <?php } ?>
-                html += '<td class="px-3 py-2 text-right">' + removeBtn(key) + '</td></tr>';
+                html += '<td class="px-3 py-2 text-end">' + removeBtn(key) + '</td></tr>';
             });
             $tBody.html(html);
             syncDisabledOptions();

@@ -129,13 +129,13 @@ async function savePrerequisite() {
         <table class="min-w-full divide-y divide-gray-20">
           <thead class="bg-gray-10">
             <tr>
-              <th class="px-4 py-3 text-left text-caption font-semibold uppercase text-gray-70">
+              <th class="px-4 py-3 text-start text-caption font-semibold uppercase text-gray-70">
                 {{ t("Prerequisites") }}
               </th>
-              <th class="w-36 px-4 py-3 text-left text-caption font-semibold uppercase text-gray-70">
+              <th class="w-36 px-4 py-3 text-start text-caption font-semibold uppercase text-gray-70">
                 {{ t("minimum") }}
               </th>
-              <th class="w-36 px-4 py-3 text-left text-caption font-semibold uppercase text-gray-70">
+              <th class="w-36 px-4 py-3 text-start text-caption font-semibold uppercase text-gray-70">
                 {{ t("maximum") }}
               </th>
             </tr>

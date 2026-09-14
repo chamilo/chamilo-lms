@@ -37,7 +37,7 @@
 
     <div
       v-if="children.length"
-      class="ml-5 border-l border-gray-25 pl-3"
+      class="ms-5 border-s border-gray-25 ps-3"
     >
       <HomeCourseCategoryTreeNode
         v-for="child in children"

@@ -6,7 +6,7 @@
   >
     <div
       v-if="link.course"
-      :class="{ 'text-right text-body-2': editStatus }"
+      :class="{ 'text-end text-body-2': editStatus }"
     >
       <span class="mdi mdi-book"></span>
       <a
@@ -21,7 +21,7 @@
 
     <div
       v-if="link.session"
-      :class="{ 'text-right text-body-2': editStatus }"
+      :class="{ 'text-end text-body-2': editStatus }"
     >
       <span class="mdi mdi-book-open" />
       {{ $t("Session") }}: {{ link.session.title }}
@@ -29,7 +29,7 @@
 
     <div
       v-if="link.group"
-      :class="{ 'text-right text-body-2': editStatus }"
+      :class="{ 'text-end text-body-2': editStatus }"
     >
       <span class="mdi mdi-people" />
       {{ $t("Group") }}: {{ link.group.resourceNode.title }}

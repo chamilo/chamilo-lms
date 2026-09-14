@@ -13,7 +13,7 @@
           selectedTab !== index,
       }"
       :to="tab.to"
-      class="px-4 py-2 font-semibold mr-2 sm:mr-3 last:mr-0"
+      class="px-4 py-2 font-semibold me-2 sm:me-3 last:me-0"
       role="tab"
     >
       {{ tab.title }}

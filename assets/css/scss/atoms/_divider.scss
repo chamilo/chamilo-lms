@@ -1,7 +1,7 @@
 .p-divider {
   &-horizontal {
     @apply flex w-full relative items-center px-2
-      before:absolute before:block before:top-1/2 before:left-0 before:w-full before:content-[''] before:border-t before:border-solid before:border-gray-25;
+      before:absolute before:block before:top-1/2 before:start-0 before:w-full before:content-[''] before:border-t before:border-solid before:border-gray-25;
   }
 
   &-horizontal &-content {
@@ -10,7 +10,7 @@
 
   &-vertical {
     @apply flex min-h-full relative justify-center mx-4 py-2
-      before:absolute before:block before:top-0 before:left-1/2 before:h-full before:content-[''] before:border-l before:border-solid before:border-gray-25;
+      before:absolute before:block before:top-0 before:left-1/2 before:h-full before:content-[''] before:border-s before:border-solid before:border-gray-25;
   }
 
   &.p-divider-vertical &-content {

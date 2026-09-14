@@ -469,7 +469,7 @@
                 {{ t("AI response") }}
               </div>
               <div
-                class="max-h-[min(46vh,520px)] overflow-y-auto whitespace-pre-wrap pr-1 text-sm leading-6 text-gray-90"
+                class="max-h-[min(46vh,520px)] overflow-y-auto whitespace-pre-wrap pe-1 text-sm leading-6 text-gray-90"
               >
                 {{ aiHelperAnswer }}
               </div>
@@ -1796,7 +1796,7 @@ body.lp-runtime-document {
 #cstudio-preview-back-button {
   position: fixed;
   top: 14px;
-  right: 20px;
+  inset-inline-end: 20px;
   z-index: 2147483000;
   border: 1px solid #d1d5db;
   border-radius: 999px;
@@ -1860,7 +1860,7 @@ body.lp-runtime-document {
   min-width: var(--lp-sidebar-width);
   height: 100%;
   overflow: visible;
-  border-right: 1px solid #e4e9ed;
+  border-inline-end: 1px solid #e4e9ed;
   background: #ffffff;
   transition:
     width 180ms ease,
@@ -1881,7 +1881,7 @@ body.lp-runtime-document {
   width: var(--lp-sidebar-width) !important;
   min-width: var(--lp-sidebar-width) !important;
   height: 100% !important;
-  margin-left: 0 !important;
+  margin-inline-start: 0 !important;
   padding-top: 0 !important;
   overflow: visible !important;
 }
@@ -1890,7 +1890,7 @@ body.lp-runtime-document {
   flex: 0 0 var(--lp-sidebar-collapsed-width) !important;
   width: var(--lp-sidebar-collapsed-width) !important;
   min-width: var(--lp-sidebar-collapsed-width) !important;
-  margin-left: 0 !important;
+  margin-inline-start: 0 !important;
   overflow: visible !important;
 }
 
@@ -1945,7 +1945,7 @@ body.lp-runtime-document {
   color: #374151;
   font-size: 13px;
   line-height: 1.45;
-  text-align: left;
+  text-align: start;
 }
 
 .lp-runtime-progress-track {
@@ -1975,7 +1975,7 @@ body.lp-runtime-document {
   color: rgb(var(--color-primary-base));
   font-size: 11px;
   font-weight: 600;
-  text-align: right;
+  text-align: end;
 }
 
 .lp-runtime-time {
@@ -2019,7 +2019,7 @@ body.lp-runtime-document {
   border-bottom: 1px solid #edf0f2;
   background: #ffffff;
   color: #333333;
-  text-align: left;
+  text-align: start;
 }
 
 .lp-runtime-section {
@@ -2044,8 +2044,9 @@ body.lp-runtime-document {
 
 .lp-runtime-item {
   min-height: 44px;
-  padding: 0 18px 0 20px;
-  border-left: 4px solid transparent;
+  padding-block: 0;
+  padding-inline: 20px 18px;
+  border-inline-start: 4px solid transparent;
   transition:
     background 150ms ease,
     color 150ms ease,
@@ -2058,7 +2059,7 @@ body.lp-runtime-document {
 
 .lp-runtime-item:not(:disabled):hover,
 .lp-runtime-item--active {
-  border-left-color: rgb(var(--color-primary-base));
+  border-inline-start-color: rgb(var(--color-primary-base));
   background: rgb(var(--color-primary-base) / 0.1);
   color: rgb(var(--color-primary-base));
 }
@@ -2115,23 +2116,23 @@ body.lp-runtime-document {
 }
 
 .lp-runtime-level-1 {
-  padding-left: 34px;
+  padding-inline-start: 34px;
 }
 
 .lp-runtime-level-2 {
-  padding-left: 48px;
+  padding-inline-start: 48px;
 }
 
 .lp-runtime-level-3 {
-  padding-left: 62px;
+  padding-inline-start: 62px;
 }
 
 .lp-runtime-level-4 {
-  padding-left: 76px;
+  padding-inline-start: 76px;
 }
 
 .lp-runtime-level-5 {
-  padding-left: 90px;
+  padding-inline-start: 90px;
 }
 
 .lp-runtime-content {
@@ -2140,13 +2141,14 @@ body.lp-runtime-document {
   height: 100%;
   flex: 1 1 auto;
   overflow: hidden;
-  padding: 20px 30px 20px 38px;
+  padding-block: 20px;
+  padding-inline: 38px 30px;
   background: #ffffff;
   box-sizing: border-box;
 }
 
 .lp-view-collapsed .lp-runtime-content {
-  padding-left: 34px;
+  padding-inline-start: 34px;
 }
 
 #learning_path_main.lp-runtime-player #learning_path_right_zone.lp-runtime-content {
@@ -2154,14 +2156,15 @@ body.lp-runtime-document {
   width: auto !important;
   min-width: 0 !important;
   height: 100% !important;
-  margin-left: 0 !important;
-  padding: 20px 30px 20px 38px !important;
+  margin-inline-start: 0 !important;
+  padding-block: 20px !important;
+  padding-inline: 38px 30px !important;
   overflow: hidden !important;
 }
 
 #learning_path_main.lp-runtime-player.lp-view-collapsed #learning_path_right_zone.lp-runtime-content {
-  margin-left: 0 !important;
-  padding-left: 34px !important;
+  margin-inline-start: 0 !important;
+  padding-inline-start: 34px !important;
 }
 
 .lp-runtime-content--reporting,
@@ -2333,7 +2336,7 @@ button.lp-runtime-menu-link {
 .lp-runtime-collapse {
   position: fixed;
   top: 42px;
-  left: var(--lp-sidebar-width);
+  inset-inline-start: var(--lp-sidebar-width);
   z-index: 1000;
   display: inline-flex;
   width: 40px;
@@ -2344,12 +2347,12 @@ button.lp-runtime-menu-link {
   padding: 0;
   pointer-events: auto;
   transform: translateX(-50%);
-  transition: left 180ms ease;
+  transition: inset-inline-start 180ms ease;
 }
 
 .lp-view-collapsed .lp-runtime-collapse,
 .lp-runtime-collapse--closed {
-  left: var(--lp-sidebar-collapsed-width);
+  inset-inline-start: var(--lp-sidebar-collapsed-width);
 }
 
 :deep(#lp-runtime-collapse-button.p-button) {
@@ -2374,7 +2377,7 @@ button.lp-runtime-menu-link {
 .lp-runtime-navigation {
   position: absolute;
   top: 20px;
-  right: 22px;
+  inset-inline-end: 22px;
   z-index: 120;
   display: inline-flex;
   overflow: hidden;
@@ -2391,7 +2394,7 @@ button.lp-runtime-menu-link {
 }
 
 :deep(#lp-runtime-navigation-previous.p-button) {
-  border-right: 1px solid rgb(255 255 255 / 0.32);
+  border-inline-end: 1px solid rgb(255 255 255 / 0.32);
 }
 
 .lp-runtime-audio {
@@ -2447,21 +2450,21 @@ button.lp-runtime-menu-link {
   .lp-view-collapsed .lp-runtime-sidebar {
     width: 0;
     min-width: 0;
-    border-right: 0;
+    border-inline-end: 0;
   }
 
   .lp-runtime-collapse,
   .lp-view-collapsed .lp-runtime-collapse,
   .lp-runtime-collapse--closed {
     top: 42px;
-    left: auto;
-    right: 12px;
+    inset-inline-start: auto;
+    inset-inline-end: 12px;
     transform: none;
   }
 
   .lp-runtime-navigation {
     top: 16px;
-    right: 16px;
+    inset-inline-end: 16px;
   }
 
   .lp-runtime-audio {

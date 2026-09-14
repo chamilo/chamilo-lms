@@ -172,7 +172,7 @@ $form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addButtonSearch(get_lang('Search'));
 
 // The action bar.
-echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
+echo '<div style="float: inline-end; margin-top: 5px; margin-inline-end: 5px;">';
 echo ' <a href="course_request_review.php">'.
     Display::getMdiIcon('notebook-heart-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Review incoming course requests')).get_lang('Review incoming course requests').'</a>';
 echo ' <a href="course_request_rejected.php">'.

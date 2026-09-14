@@ -59,7 +59,7 @@
 
         <div
           v-if="formData.qualifyGradebook"
-          class="ml-6"
+          class="ms-6"
         >
           <BaseSelect
             v-if="gradebookOptions.length > 1"

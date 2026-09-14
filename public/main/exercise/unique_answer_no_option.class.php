@@ -189,7 +189,7 @@ class UniqueAnswerNoOption extends Question
                 null,
                 null,
                 $i,
-                ['class' => 'checkbox', 'style' => 'margin-left: 0em;']
+                ['class' => 'checkbox', 'style' => 'margin-inline-start: 0em;']
             );
             $form->addHtmlEditor('answer['.$i.']', null, [], $editor_config);
             $form->addHtmlEditor('comment['.$i.']', null, [], $editor_config);

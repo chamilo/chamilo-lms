@@ -1,6 +1,6 @@
 {% macro create(url) %}
 <div class="form-actions flex">
-    <button type="submit" class="btn btn--success btn-lg mr-4">
+    <button type="submit" class="btn btn--success btn-lg me-4">
         <i class="mdi mdi-content-save" aria-hidden="true"></i> {{ 'Create'|trans }}
     </button>
     <a href="{{ app.request.headers.get('referer', url) }}" class="btn btn--danger btn-lg">
@@ -11,7 +11,7 @@
 
 {% macro update(url) %}
 <div class="form-actions flex">
-    <button type="submit" class="btn btn--success btn-lg mr-4">
+    <button type="submit" class="btn btn--success btn-lg me-4">
         <i class="mdi mdi-content-save" aria-hidden="true"></i> {{ 'Save settings'|trans }}
     </button>
     <a href="{{ app.request.headers.get('referer', url) }}" class="btn btn--danger btn-lg">

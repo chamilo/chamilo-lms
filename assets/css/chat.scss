@@ -32,7 +32,7 @@
   background-color: #F9F2E0;
   margin-bottom: 15px;
   border: 1px solid #F9F2E0;
-  border-right: 2px #F7E5B9;
+  border-inline-end: 2px #F7E5B9;
   border-bottom: 3px #F7E5B9;
   border-radius: 10px;
   font-size: 13px;
@@ -42,24 +42,24 @@
 
 .message-teacher .icon-message {
   @apply inline-block;
-  margin-left: -6px;
+  margin-inline-start: -6px;
   margin-top: 10px;
   width: 0;
   height: 0;
   border-top: 0 solid transparent;
   border-bottom: 15px solid transparent;
-  border-left: 15px solid #EBEFF3;
+  border-inline-start: 15px solid #EBEFF3;
 }
 
 .message-student .icon-message {
   @apply inline-block;
-  margin-right: -6px;
+  margin-inline-end: -6px;
   margin-top: 10px;
   width: 0;
   height: 0;
   border-top: 0 solid transparent;
   border-bottom: 15px solid transparent;
-  border-right: 15px solid #F9F2E0;
+  border-inline-end: 15px solid #F9F2E0;
 }
 
 .message-teacher .content-message {
@@ -68,7 +68,7 @@
   margin-bottom: 15px;
   border: 1px solid #EBEFF3;
   border-bottom: 3px #DEE1E5;
-  border-left: 2px #DEE1E5;
+  border-inline-start: 2px #DEE1E5;
   border-radius: 10px;
   font-size: 13px;
   padding: 15px;
@@ -76,15 +76,15 @@
 }
 
 .message-teacher .message-date {
-  @apply italic text-right;
+  @apply italic text-end;
   color: #666;
   font-size: 10px;
-  margin-right: 35px;
+  margin-inline-end: 35px;
   margin-top: 10px;
 }
 
 .message-student .message-date {
-  @apply italic text-right;
+  @apply italic text-end;
   color: #666;
   font-size: 10px;
   margin-top: 10px;
@@ -98,11 +98,11 @@
   color: #666;
 
   .user-image-chat {
-    @apply inline-block float-left;
+    @apply inline-block float-start;
     border: 2px solid #FFF;
     border-radius: 10px;
     height: auto;
-    margin-right: 10px;
+    margin-inline-end: 10px;
     max-height: 40px;
     width: 40px;
   }
@@ -120,7 +120,7 @@
 }
 
 .emoji-menu {
-  margin-left: -234px;
+  margin-inline-start: -234px;
   margin-top: -224px;
   width: 468px;
 }
@@ -146,7 +146,7 @@
 }
 
 #chat-users {
-  @apply ml-0;
+  @apply ms-0;
 
   div.chat-user > div {
     @apply p-1;

@@ -44,9 +44,9 @@
         <Skeleton class="h-6 w-48" />
       </template>
       <div class="flex flex-col gap-4">
-        <Skeleton class="ml-2 h-6 w-52" />
-        <Skeleton class="ml-2 h-6 w-64" />
-        <Skeleton class="ml-2 h-6 w-60" />
+        <Skeleton class="ms-2 h-6 w-52" />
+        <Skeleton class="ms-2 h-6 w-64" />
+        <Skeleton class="ms-2 h-6 w-60" />
       </div>
     </LinkCategoryCard>
 
@@ -148,7 +148,7 @@
               <div class="flex justify-between gap-4">
                 <button
                   type="button"
-                  class="flex min-w-0 items-center gap-2 text-left"
+                  class="flex min-w-0 items-center gap-2 text-start"
                   :aria-expanded="!isCategoryCollapsed(category.info.id)"
                   @click="toggleCategoryCollapse(category.info.id)"
                 >
@@ -267,7 +267,7 @@
               <div class="flex justify-between gap-4">
                 <div class="flex items-center">
                   <BaseIcon
-                    class="mr-2"
+                    class="me-2"
                     icon="folder-generic"
                     size="normal"
                   />

@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <tr class="align-middle">
                     <td class="px-4 py-4 text-sm font-medium text-gray-90">${safeDurationLabel}</td>
                     <td class="px-4 py-4 text-sm text-gray-90">${safePrice}</td>
-                    <td class="px-4 py-4 text-right">
+                    <td class="px-4 py-4 text-end">
                         <button
                             type="button"
                             class="inline-flex items-center justify-center gap-2 rounded-xl bg-danger px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-danger/30 focus:ring-offset-2"
@@ -763,9 +763,9 @@ if ($hasFrequencies) {
                         <table class="min-w-full divide-y divide-gray-25">
                             <thead class="bg-gray-15">
                                 <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">'.$plugin->get_lang('Duration').'</th>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">'.$plugin->get_lang('Price').'</th>
-                                    <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">'.$plugin->get_lang('Actions').'</th>
+                                    <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">'.$plugin->get_lang('Duration').'</th>
+                                    <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">'.$plugin->get_lang('Price').'</th>
+                                    <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">'.$plugin->get_lang('Actions').'</th>
                                 </tr>
                             </thead>
                             <tbody id="subscription-frequencies-body" class="divide-y divide-gray-25 bg-white">

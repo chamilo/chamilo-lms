@@ -21,7 +21,7 @@
                     </a>
                 {% else %}
                     <a class="btn btn--plain inline-flex items-center gap-2" href="{{ back_url }}">
-                        <span class="mdi mdi-arrow-left ch-tool-icon" aria-hidden="true"></span>
+                        <span class="mdi mdi-arrow-left rtl:rotate-180 ch-tool-icon" aria-hidden="true"></span>
                         {{ 'Back' | get_lang }}
                     </a>
                 {% endif %}
@@ -53,13 +53,13 @@
                     <table class="min-w-full divide-y divide-gray-20 text-sm">
                         <thead class="bg-gray-10">
                             <tr>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-70">
+                                <th class="px-4 py-3 text-start font-semibold text-gray-70">
                                     {{ 'Term' | get_plugin_lang('DictionaryPlugin') }}
                                 </th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-70">
+                                <th class="px-4 py-3 text-start font-semibold text-gray-70">
                                     {{ 'Definition' | get_plugin_lang('DictionaryPlugin') }}
                                 </th>
-                                <th class="px-4 py-3 text-right font-semibold text-gray-70">
+                                <th class="px-4 py-3 text-end font-semibold text-gray-70">
                                     {{ 'Actions' | get_lang }}
                                 </th>
                             </tr>
@@ -67,10 +67,16 @@
                         <tbody class="divide-y divide-gray-20 bg-white">
                             {% for term in terms %}
                                 <tr class="hover:bg-gray-10">
-                                    <td class="px-4 py-3 align-top font-semibold text-gray-90">
+                                    <td
+                                        class="px-4 py-3 align-top font-semibold text-gray-90"
+                                        dir="auto"
+                                    >
                                         {{ term.term }}
                                     </td>
-                                    <td class="px-4 py-3 align-top text-gray-70">
+                                    <td
+                                        class="px-4 py-3 align-top text-gray-70"
+                                        dir="auto"
+                                    >
                                         {{ term.definition|nl2br }}
                                     </td>
                                     <td class="px-4 py-3 align-top">

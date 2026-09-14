@@ -332,12 +332,12 @@ if (!empty($msg)) {
 
                 <div class="flex flex-col items-center justify-center gap-3">
                     <button class="inline-flex h-12 w-12 min-w-12 min-h-12 items-center justify-center rounded-xl p-0 text-center border-0 bg-secondary text-secondary-button-text hover:bg-secondary-hover focus:outline-none focus:ring-2 focus:ring-secondary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" title="<?php echo htmlspecialchars(get_lang('Add'), ENT_QUOTES); ?>" aria-label="<?php echo htmlspecialchars(get_lang('Add'), ENT_QUOTES); ?>" data-bs-toggle="tooltip" data-bs-placement="right">
-                        <span class="mdi mdi-arrow-right-bold text-white text-lg" aria-hidden="true"></span>
+                        <span class="mdi mdi-arrow-right-bold rtl:rotate-180 text-white text-lg" aria-hidden="true"></span>
                         <span class="sr-only"><?php echo get_lang('Add'); ?></span>
                     </button>
 
                     <button class="inline-flex h-12 w-12 min-w-12 min-h-12 items-center justify-center rounded-xl p-0 text-center border-0 bg-secondary text-secondary-button-text hover:bg-secondary-hover focus:outline-none focus:ring-2 focus:ring-secondary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" title="<?php echo htmlspecialchars(get_lang('Remove'), ENT_QUOTES); ?>" aria-label="<?php echo htmlspecialchars(get_lang('Remove'), ENT_QUOTES); ?>" data-bs-toggle="tooltip" data-bs-placement="right">
-                        <span class="mdi mdi-arrow-left-bold text-white text-lg" aria-hidden="true"></span>
+                        <span class="mdi mdi-arrow-left-bold rtl:rotate-180 text-white text-lg" aria-hidden="true"></span>
                         <span class="sr-only"><?php echo get_lang('Remove'); ?></span>
                     </button>
 

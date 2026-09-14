@@ -164,10 +164,10 @@ const toggleOpen = () => {
 
 <template>
   <section class="relative w-full rounded-2xl shadow-lg">
-    <header class="relative bg-support-6 rounded-t-2xl flex items-center justify-between pl-2 pr-4 py-3 sm:pl-4">
+    <header class="relative bg-support-6 rounded-t-2xl flex items-center justify-between ps-2 pe-4 py-3 sm:ps-4">
       <span
         aria-hidden
-        class="pointer-events-none absolute inset-y-0 left-0 w-1.5 bg-support-5 rounded-l-2xl"
+        class="pointer-events-none absolute inset-y-0 start-0 w-1.5 bg-support-5 rounded-s-2xl"
       />
       <div class="flex items-center gap-3">
         <button
@@ -203,7 +203,7 @@ const toggleOpen = () => {
           <span>{{ displayTitle }}</span>
           <span
             v-if="isSessionCategory"
-            class="ml-2 text-warning"
+            class="ms-2 text-warning"
             :title="t('Session')"
             >★</span
           >
@@ -244,10 +244,10 @@ const toggleOpen = () => {
 
           <template #menu>
             <div
-              class="absolute right-0 top-full mt-2 w-60 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-50"
+              class="absolute end-0 top-full mt-2 w-60 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-50"
             >
               <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
+                class="w-full text-start px-3 py-2 rounded hover:bg-gray-15"
                 @click="onCatEdit"
               >
                 {{ t("Edit category") }}
@@ -255,7 +255,7 @@ const toggleOpen = () => {
 
               <button
                 v-if="category.subscriptionsAllowed !== false"
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
+                class="w-full text-start px-3 py-2 rounded hover:bg-gray-15"
                 @click="onCatAddUsers"
               >
                 {{ t("Subscribe users to category") }}
@@ -264,7 +264,7 @@ const toggleOpen = () => {
               <div class="my-1 h-px bg-gray-15"></div>
 
               <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
+                class="w-full text-start px-3 py-2 rounded hover:bg-gray-15"
                 @click="onCatTogglePublish"
               >
                 {{ categoryIsPublished ? t("do not publish") : t("Publish on course homepage") }}
@@ -273,7 +273,7 @@ const toggleOpen = () => {
               <div class="my-1 h-px bg-gray-15"></div>
 
               <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger"
+                class="w-full text-start px-3 py-2 rounded hover:bg-gray-15 text-danger"
                 @click="onCatDelete"
               >
                 {{ t("Delete") }}

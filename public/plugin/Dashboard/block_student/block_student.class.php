@@ -116,8 +116,8 @@ class BlockStudent extends Block
                         $course_title = $course['title'];
                         $time = api_time_to_hms(Tracking::get_time_spent_on_the_course($student['user_id'], $courseId));
                         $students_table .= '<tr '.$style.'>
-                                            <td align="right">'.$course_title.'</td>
-                                            <td align="right">'.$time.'</td>
+                                            <td style="text-align:end;">'.$course_title.'</td>
+                                            <td style="text-align:end;">'.$time.'</td>
                                             </tr>';
                     }
                 } else {
@@ -135,7 +135,7 @@ class BlockStudent extends Block
         $content = $students_table;
 
         if (count($students) > 0) {
-            $content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'my_space/index.php?view=admin&display=useroverview">'.get_lang('See more').'</a></div>';
+            $content .= '<div style="text-align:end;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'my_space/index.php?view=admin&display=useroverview">'.get_lang('See more').'</a></div>';
         }
 
         return $content;
@@ -224,7 +224,7 @@ class BlockStudent extends Block
         $content .= $students_table;
 
         if (count($students) > 0) {
-            $content .= '<div style="text-align:right;margin-top:10px;">
+            $content .= '<div style="text-align:end;margin-top:10px;">
                             <a href="'.api_get_path(WEB_CODE_PATH).'my_space/index.php?view=admin&display=yourstudents">'.get_lang('See more').'</a>
                          </div>';
         }

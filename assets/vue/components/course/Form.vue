@@ -32,7 +32,7 @@
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           <button
             v-if="standardCourseOption"
-            class="relative rounded-2xl border p-4 text-left transition"
+            class="relative rounded-2xl border p-4 text-start transition"
             :class="getCourseOptionClasses(standardCourseOption)"
             type="button"
             :disabled="!standardCourseOption.available"
@@ -40,7 +40,7 @@
           >
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0 w-full">
-                <p class="pr-24 text-base font-semibold text-gray-90">
+                <p class="pe-24 text-base font-semibold text-gray-90">
                   {{ standardCourseOption.label || t("Standard course") }}
                 </p>
                 <p class="mt-1 text-sm text-gray-50">
@@ -49,7 +49,7 @@
               </div>
               <span
                 v-if="selectedCourseOptionType === 'standard'"
-                class="pointer-events-none absolute right-4 top-4 z-10 whitespace-nowrap rounded-full bg-support-4 px-3 py-1 text-xs font-semibold text-white shadow-sm"
+                class="pointer-events-none absolute end-4 top-4 z-10 whitespace-nowrap rounded-full bg-support-4 px-3 py-1 text-xs font-semibold text-white shadow-sm"
               >
                 {{ t("Selected") }}
               </span>
@@ -81,7 +81,7 @@
           <article
             v-for="serviceOption in serviceCourseOptions"
             :key="`service-${serviceOption.serviceId}`"
-            class="relative rounded-2xl border p-4 text-left transition"
+            class="relative rounded-2xl border p-4 text-start transition"
             :class="getCourseOptionClasses(serviceOption)"
             :role="serviceOption.available ? 'button' : null"
             :tabindex="serviceOption.available ? 0 : -1"
@@ -91,17 +91,18 @@
           >
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0 w-full">
-                <p class="pr-24 text-base font-semibold text-gray-90">
+                <p class="pe-24 text-base font-semibold text-gray-90">
                   {{ serviceOption.label }}
                 </p>
                 <div
                   class="buycourses-service-description mt-1 text-sm text-gray-50"
+                  dir="auto"
                   v-html="getSafeServiceDescription(serviceOption.description)"
                 />
               </div>
               <span
                 v-if="selectedCourseOptionType === 'service' && selectedBuyCoursesServiceSaleId === serviceOption.serviceSaleId"
-                class="pointer-events-none absolute right-4 top-4 z-10 whitespace-nowrap rounded-full bg-support-4 px-3 py-1 text-xs font-semibold text-white shadow-sm"
+                class="pointer-events-none absolute end-4 top-4 z-10 whitespace-nowrap rounded-full bg-support-4 px-3 py-1 text-xs font-semibold text-white shadow-sm"
               >
                 {{ t("Selected") }}
               </span>
@@ -181,7 +182,7 @@
         />
         <small
           v-if="isCourseCategoryInvalid"
-          class="p-error block mt-1 pl-0.5 text-sm leading-5"
+          class="p-error block mt-1 ps-0.5 text-sm leading-5"
         >
           {{ courseCategoryError }}
         </small>

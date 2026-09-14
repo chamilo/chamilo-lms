@@ -61,7 +61,7 @@
         />
 
         <label class="relative block">
-          <span class="absolute -top-2 left-3 z-10 bg-white px-1 text-xs font-medium text-primary">
+          <span class="absolute -top-2 start-3 z-10 bg-white px-1 text-xs font-medium text-primary">
             {{ t("User") }}
           </span>
           <input
@@ -95,7 +95,7 @@
         />
 
         <label class="relative block">
-          <span class="absolute -top-2 left-3 z-10 bg-white px-1 text-xs font-medium text-primary">
+          <span class="absolute -top-2 start-3 z-10 bg-white px-1 text-xs font-medium text-primary">
             {{ t("Start date") }}
           </span>
           <input
@@ -107,7 +107,7 @@
         </label>
 
         <label class="relative block">
-          <span class="absolute -top-2 left-3 z-10 bg-white px-1 text-xs font-medium text-primary">
+          <span class="absolute -top-2 start-3 z-10 bg-white px-1 text-xs font-medium text-primary">
             {{ t("End date") }}
           </span>
           <input

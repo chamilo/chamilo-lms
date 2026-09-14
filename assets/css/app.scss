@@ -33,7 +33,7 @@
 
   // Buttons with icons.
   .btn > .svg {
-    @apply -ml-1 mr-1 h-4 w-5 fill-current ;
+    @apply -ms-1 me-1 h-4 w-5 fill-current ;
   }
 
   // Forms.
@@ -56,7 +56,7 @@
   // List
 
   .list-group {
-    @apply flex flex-col mr-4;
+    @apply flex flex-col me-4;
   }
 
   .list-group-item {
@@ -71,11 +71,11 @@
     @apply border-collapse w-full mt-2;
 
     thead th {
-      @apply bg-gray-20 text-gray-90 font-semibold text-left p-2 border-b border-gray-30 border-t border-l border-r;
+      @apply bg-gray-20 text-gray-90 font-semibold text-start p-2 border-b border-gray-30 border-t border-s border-e;
     }
 
     tbody td {
-      @apply p-2 border-b border-gray-30 border-l border-r;
+      @apply p-2 border-b border-gray-30 border-s border-e;
     }
 
     tbody tr:nth-child(odd) {
@@ -87,7 +87,7 @@
     }
 
     .checkbox label {
-      @apply pl-4;
+      @apply ps-4;
     }
 
     i.mdi {
@@ -109,7 +109,7 @@
   }
 
   .sortable-buttons-actions {
-    @apply bg-white border-l border-b border-r border-support-1 rounded-b shadow-xl;
+    @apply bg-white border-s border-b border-e border-support-1 rounded-b shadow-xl;
   }
 
 
@@ -218,7 +218,7 @@
 
   // Progress bars
   .progress {
-    @apply rounded-sm ring-1 text-center min-h-full ml-12 mr-4;
+    @apply rounded-sm ring-1 text-center min-h-full ms-12 me-4;
   }
 
   .log-container {
@@ -304,23 +304,23 @@
 }
 
 .col-md-offset-0 {
-  margin-left: 0 !important;
+  margin-inline-start: 0 !important;
 }
 
 .col-md-offset-1 {
-  margin-left: 5% !important;
+  margin-inline-start: 5% !important;
 }
 
 .col-md-offset-2 {
-  margin-left: 10% !important;
+  margin-inline-start: 10% !important;
 }
 
 .col-md-offset-3 {
-  margin-left: 15% !important;
+  margin-inline-start: 15% !important;
 }
 
 .col-md-offset-4 {
-  margin-left: 20% !important;
+  margin-inline-start: 20% !important;
 }
 
 .custom-message {
@@ -343,11 +343,10 @@
 #date_fields label,
 .p-float-label .datepicker-label {
   top: 0px;
-  left: 0.5rem;
+  inset-inline-start: 0.5rem;
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
+  padding-inline: 0.25rem;
   --tw-text-opacity: 1;
   color: rgb(46 117 163 / var(--tw-text-opacity));
   font-size: 12px;
@@ -456,7 +455,7 @@
   .nav-tabs .nav-link {
     @apply block;
     padding: 0.5rem 1rem;
-    margin-right: 0.1rem;
+    margin-inline-end: 0.1rem;
     background: #f8f8f8;
     border: 1px solid #ddd;
     border-radius: 0.25rem 0.25rem 0 0;
@@ -487,7 +486,7 @@ form .field {
   .advmultiselect + label
   {
     font-size: 13px;
-    @apply absolute top-0 left-0 text-support-3 text-caption px-1 bg-white text-primary;
+    @apply absolute top-0 start-0 text-support-3 text-caption px-1 bg-white text-primary;
   }
 }
 
@@ -518,14 +517,14 @@ form .field {
   @apply flex items-center;
 }
 .stat-widget-five .fa, .stat-widget-five .mdi-icon {
-  margin-right: 1rem;
+  margin-inline-end: 1rem;
 }
 
 .toggle-password {
   position: absolute !important;
   top: 65% !important;
   transform: translateY(-50%);
-  right: 0.75rem;
+  inset-inline-end: 0.75rem;
   @apply flex items-center;
   cursor: pointer;
 }
@@ -657,7 +656,7 @@ form .field {
   }
 
   .modal {
-    @apply hidden fixed z-10 left-0 top-0 w-full h-full overflow-auto bg-black bg-opacity-50 pt-16;
+    @apply hidden fixed z-10 start-0 top-0 w-full h-full overflow-auto bg-black bg-opacity-50 pt-16;
   }
 
   .modal-content {
@@ -665,7 +664,7 @@ form .field {
   }
 
   .close-button {
-    @apply text-fontdisabled float-right text-2xl font-bold;
+    @apply text-fontdisabled float-end text-2xl font-bold;
   }
 
   .close-button:hover,
@@ -795,7 +794,7 @@ img.course-tool__icon {
 
 .stats_table {
   thead th {
-    @apply bg-gray-20 text-gray-90 font-semibold text-left px-4 py-3 border-b border-gray-30;
+    @apply bg-gray-20 text-gray-90 font-semibold text-start px-4 py-3 border-b border-gray-30;
   }
 }
 
@@ -807,7 +806,7 @@ img.course-tool__icon {
 
 /* Loader */
 .loader {
-  @apply w-10 h-10 border-4 border-gray-20 border-l-primary rounded-full animate-spin;
+  @apply w-10 h-10 border-4 border-gray-20 border-s-primary rounded-full animate-spin;
 }
 
 .loader-overlay {
@@ -829,8 +828,7 @@ img.course-tool__icon {
 
   #files .row {
     @apply flex items-center justify-between py-2 px-3;
-    margin-left: 0;
-    margin-right: 0;
+    margin-inline: 0;
   }
 
   #files .col-sm-5 {
@@ -838,7 +836,7 @@ img.course-tool__icon {
     width: auto !important;
   }
   #files .col-sm-3 {
-    @apply w-auto flex-shrink-0 ml-4;
+    @apply w-auto flex-shrink-0 ms-4;
   }
 
   .alert {
@@ -875,7 +873,7 @@ img.course-tool__icon {
 .media-group       { border:2px solid #337ab7; background:#f5fafd; padding:1rem; margin:2rem 0; border-radius:4px; }
 .media-content     { margin-bottom:1rem; }
 .media-description { font-style:italic; margin-bottom:1rem; }
-.media-children    { margin-left:1rem; }
+.media-children    { margin-inline-start:1rem; }
 .media-group h4   { margin-top:0; color:#23527c; }
 
 #tool-wiki { @apply flex; flex-direction:column; min-height:100%; }
@@ -884,20 +882,20 @@ img.course-tool__icon {
 #tool-wiki .wiki-footer { clear: both; margin-top: 1rem; }
 .wiki-stats-grid .panel {height:100%}
 .wiki-stats-grid .panel-body a {@apply block; padding:6px 0}
-.wiki-stats-grid .panel-body a .mdi {vertical-align:middle; margin-right:6px}
+.wiki-stats-grid .panel-body a .mdi {vertical-align:middle; margin-inline-end:6px}
 .wiki-breadcrumb {margin:10px 0 15px}
 .wiki-bc-wrap{margin:12px 0}
 .breadcrumb--wiki{@apply flex items-center; flex-wrap:wrap; gap:.5rem;background:linear-gradient(180deg,#ffffff,#f8f9fb);border:1px solid #e7eaef; border-radius:12px; padding:8px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
 .breadcrumb--wiki .breadcrumb-item a{ text-decoration:none; font-weight:600; }
 .breadcrumb--wiki .breadcrumb-item.active{ color:#6c757d; font-weight:600; }
-.breadcrumb--wiki .mdi-inline{vertical-align:-0.15em; margin-right:.35rem;}
-.breadcrumb-actions{margin-left:auto; @apply flex; gap:.5rem}
+.breadcrumb--wiki .mdi-inline{vertical-align:-0.15em; margin-inline-end:.35rem;}
+.breadcrumb-actions{margin-inline-start:auto; @apply flex; gap:.5rem}
 .breadcrumb-actions .btn{padding:6px 10px; border:1px solid #e7eaef; border-radius:10px; @apply bg-white;}
 .wiki-bc-wrap{margin:12px 0}
 .breadcrumb--wiki{@apply flex items-center; flex-wrap:wrap; gap:.5rem;background:linear-gradient(180deg,#ffffff,#f8f9fb);border:1px solid #e7eaef; border-radius:12px; padding:8px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
 .breadcrumb--wiki .breadcrumb-item a{ text-decoration:none; font-weight:600; }
 .breadcrumb--wiki .breadcrumb-item.active{ color:#6c757d; font-weight:600; }
-.mdi-inline{vertical-align:-0.15em; margin-right:.35rem;}
+.mdi-inline{vertical-align:-0.15em; margin-inline-end:.35rem;}
 .wiki-pills{@apply flex; flex-wrap:wrap; gap:8px; margin:8px 0 16px}
 .wiki-pills .pill{display:inline-flex; gap:6px;padding:6px 10px; @apply bg-white items-center; border:1px solid #e7eaef;border-radius:999px; text-decoration:none; font-weight:600;}
 .wiki-pills .pill.active{ background:#eef4ff; border-color:#cddcff; }
@@ -906,11 +904,11 @@ img.course-tool__icon {
   .wd-header{ @apply flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:12px; padding:8px 10px; border:1px solid #dfe3e7; border-radius:4px; background:linear-gradient(#f8f8f8, #eeeeee); }
   .wd-title{ margin:0; font-size:20px; line-height:1.2; font-weight:600; }
   .wd-meta{ margin-top:2px; font-size:12px; color:#6c757d; }
-  .wd-toolbar a{ display:inline-block; margin-left:8px; }
+  .wd-toolbar a{ display:inline-block; margin-inline-start:8px; }
   .wd-card{ margin-top:12px; border:1px solid #e5e7eb; border-radius:4px; @apply bg-white; }
   .wd-card .panel-body{ padding:14px; }
   .wd-form .form-group{ @apply flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
-  .wd-form .control-label{ width:140px; padding-top:7px; margin:0; font-weight:600; text-align:left; }
+  .wd-form .control-label{ width:140px; padding-top:7px; margin:0; font-weight:600; text-align:start; }
   .wd-form .col-sm-10{ flex:1 1 auto; min-width:0; }
   .wd-form .form-control{ width:100%; }
   .wd-form .wd-rating{ max-width:160px; }
@@ -926,7 +924,7 @@ img.course-tool__icon {
  .wd-comment-meta{ font-size:12px; color:#6c757d; @apply flex items-center; gap:6px; flex-wrap:wrap; }
   .wd-dot{ color:#c0c4c8; }
   .wd-comment-text{ white-space:pre-wrap; margin-top:4px; font-size:14px; }
-  .form-horizontal .control-label{ text-align:left; }
+  .form-horizontal .control-label{ text-align:start; }
   textarea.form-control{ min-height:140px; }
 }
 
@@ -942,7 +940,7 @@ img.course-tool__icon {
   &::after {
     content: "ⓘ";
     font-size: 0.7em;
-    margin-left: 0.15rem;
+    margin-inline-start: 0.15rem;
     vertical-align: super;
     opacity: 0.7;
   }
@@ -987,12 +985,20 @@ img.course-tool__icon {
   pointer-events: none;
 }
 
+// KNOWN LIMITATION: NProgress's own JS sets transform: translate3d(-X%, 0, 0)
+// as an inline style on every progress tick, with no direction option
+// (checked node_modules/nprogress/nprogress.js) -- the bar always visually
+// grows from the physical left. Mirroring it would need to override the same
+// `transform` property NProgress animates, which would freeze the fill
+// instead of flipping it; a real fix needs a patched/forked NProgress or a
+// wrapper-element transform verified live in-browser, not attempted here.
+
 #nprogress .bar {
-  @apply fixed left-0 top-0 z-[999999] h-1 w-full bg-primary;
+  @apply fixed start-0 top-0 z-[999999] h-1 w-full bg-primary;
 }
 
 #nprogress .peg {
-  @apply absolute right-0 block h-full w-24 opacity-100;
+  @apply absolute end-0 block h-full w-24 opacity-100;
   box-shadow: 0 0 10px rgb(var(--color-primary-base) / 0.45), 0 0 5px rgb(var(--color-primary-base) / 0.35);
   transform: rotate(3deg) translate(0, -4px);
 }

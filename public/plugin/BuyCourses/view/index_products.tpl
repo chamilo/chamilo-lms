@@ -3,8 +3,8 @@
 
 <style>
     .bc-translated-html p {margin: 0 0 0.5rem;}
-    .bc-translated-html ul {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: disc;}
-    .bc-translated-html ol {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: decimal;}
+    .bc-translated-html ul {margin-block: 0.5rem; margin-inline: 1.25rem 0; padding-inline-start: 1.25rem; list-style: disc;}
+    .bc-translated-html ol {margin-block: 0.5rem; margin-inline: 1.25rem 0; padding-inline-start: 1.25rem; list-style: decimal;}
     .bc-translated-html li {margin: 0.2rem 0;}
 </style>
 

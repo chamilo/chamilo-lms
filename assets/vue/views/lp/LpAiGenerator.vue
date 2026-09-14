@@ -63,7 +63,7 @@
               {{ t("Content") }}
             </span>
             <span
-              class="mdi mdi-arrow-right text-gray-40"
+              class="mdi mdi-arrow-right rtl:rotate-180 text-gray-40"
               aria-hidden="true"
             />
             <span
@@ -73,7 +73,7 @@
               {{ t("Generate") }}
             </span>
             <span
-              class="mdi mdi-arrow-right text-gray-40"
+              class="mdi mdi-arrow-right rtl:rotate-180 text-gray-40"
               aria-hidden="true"
             />
             <span
@@ -222,7 +222,7 @@
 
             <div class="flex items-start justify-between gap-4 border-b border-gray-20 pb-3">
               <dt class="text-gray-50">{{ t("AI provider") }}</dt>
-              <dd class="max-w-48 text-right font-semibold text-gray-90">
+              <dd class="max-w-48 text-end font-semibold text-gray-90">
                 {{ selectedProviderLabel }}
               </dd>
             </div>

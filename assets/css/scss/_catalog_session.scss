@@ -1,6 +1,6 @@
 ::v-deep(.p-paginator) {
   .p-paginator-current {
-    margin-left: auto;
+    margin-inline-start: auto;
   }
 }
 .course-image {
@@ -26,7 +26,7 @@
 ::v-deep(.p-datatable.p-datatable-sessions) {
   .p-datatable-header {
     padding: 1rem;
-    text-align: left;
+    text-align: start;
     font-size: 1.5rem;
   }
 
@@ -35,7 +35,7 @@
   }
 
   .p-datatable-thead > tr > th {
-    text-align: left;
+    text-align: start;
   }
 
   .p-datatable-tbody > tr > td {

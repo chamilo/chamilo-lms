@@ -45,6 +45,7 @@
         <div class="space-y-6">
           <div
             class="prose max-w-none break-words text-gray-90"
+            dir="auto"
             v-html="thematicTitle"
           ></div>
 

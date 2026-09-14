@@ -193,7 +193,7 @@ function openSessionRequirementModal() {
     <Button
       v-if="allowDescription"
       aria-label="Session info"
-      class="absolute top-2 left-2 z-20"
+      class="absolute top-2 start-2 z-20"
       icon="mdi mdi-information"
       size="small"
       text
@@ -201,7 +201,7 @@ function openSessionRequirementModal() {
     />
     <span
       v-if="languages.length"
-      class="absolute top-0 right-0 bg-primary text-white text-xs px-2 py-1 font-semibold rounded-bl-lg z-10"
+      class="absolute top-0 end-0 bg-primary text-white text-xs px-2 py-1 font-semibold rounded-es-lg z-10"
     >
       {{ languages.length === 1 ? languages[0] : $t("Multilingual") }}
     </span>
@@ -330,7 +330,7 @@ function openSessionRequirementModal() {
       class="w-96"
       modal
     >
-      <ul class="list-disc pl-5 text-sm text-gray-700">
+      <ul class="list-disc ps-5 text-sm text-gray-700">
         <template v-if="validCourses.length">
           <li
             v-for="item in validCourses"
@@ -350,7 +350,7 @@ function openSessionRequirementModal() {
       class="w-96"
       modal
     >
-      <ul class="pl-2 text-sm text-gray-800 space-y-3">
+      <ul class="ps-2 text-sm text-gray-800 space-y-3">
         <template v-if="validCourses.length">
           <li
             v-for="item in validCourses"
@@ -385,6 +385,7 @@ function openSessionRequirementModal() {
   >
     <p
       class="text-sm text-gray-700 whitespace-pre-line"
+      dir="auto"
       v-html="session.description || $t('No description')"
     />
   </Dialog>

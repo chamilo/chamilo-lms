@@ -315,7 +315,7 @@
           <table class="min-w-full divide-y divide-gray-20 text-sm">
             <thead>
               <tr>
-                <th class="whitespace-nowrap px-3 py-3 text-left font-semibold text-gray-700">
+                <th class="whitespace-nowrap px-3 py-3 text-start font-semibold text-gray-700">
                   {{ t("User") }}
                 </th>
                 <th

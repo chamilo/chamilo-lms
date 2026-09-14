@@ -145,7 +145,7 @@ if ($count > 0) {
             $blocks[] = [1 => $a_prefix.'<img src="'.$result['thumbnail'].'" />'.$a_suffix.'<br />'.$title.'<br />'.$result['author'],
             ];
         } else {
-            $title = '<div style="text-align:left;">'.$a_prefix.$result['title'].$a_suffix.(!empty($result['author']) ? ' '.$result['author'] : '').'<div>';
+            $title = '<div style="text-align:start;">'.$a_prefix.$result['title'].$a_suffix.(!empty($result['author']) ? ' '.$result['author'] : '').'<div>';
             $blocks[] = [1 => $title];
         }
     }

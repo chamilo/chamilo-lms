@@ -215,18 +215,18 @@ class EvalForm extends FormValidator
             $renderer = &$this->defaultRenderer();
 
             if (api_is_western_name_order()) {
-                $user_info = '<td align="left" >'.$user['firstname'].'</td>';
-                $user_info .= '<td align="left" >'.$user['lastname'].'</td>';
+                $user_info = '<td style="text-align:start;" >'.$user['firstname'].'</td>';
+                $user_info .= '<td style="text-align:start;" >'.$user['lastname'].'</td>';
             } else {
-                $user_info = '<td align="left" >'.$user['lastname'].'</td>';
-                $user_info .= '<td align="left" >'.$user['firstname'].'</td>';
+                $user_info = '<td style="text-align:start;" >'.$user['lastname'].'</td>';
+                $user_info .= '<td style="text-align:start;" >'.$user['firstname'].'</td>';
             }
 
             $template = '<tr>
-		      <td align="left" >'.$user['official_code'].'</td>
-		      <td align="left" >'.$user['username'].'</td>
+		      <td style="text-align:start;" >'.$user['official_code'].'</td>
+		      <td style="text-align:start;" >'.$user['username'].'</td>
 		      '.$user_info.'
-		       <td align="right">
+		       <td style="text-align:end;">
                    <div class="inline-flex w-full items-center justify-end gap-1 whitespace-nowrap">
                        {element}
                        <span class="text-sm text-gray-700">/ '.$this->evaluation_object->get_max().'</span>
@@ -244,7 +244,7 @@ class EvalForm extends FormValidator
                         'maxlength' => 5,
                         'size' => 4,
                         'style' => 'width: 6rem; max-width: 6rem;',
-                        'class' => 'text-right',
+                        'class' => 'text-end',
                     ],
                     false,
                     0,
@@ -272,10 +272,10 @@ class EvalForm extends FormValidator
                 $select->updateSelectWithSelectedOption($this);
 
                 $template = '<tr>
-                  <td align="left" >'.$user['official_code'].'</td>
-                  <td align="left" >'.$user['username'].'</td>
+                  <td style="text-align:start;" >'.$user['official_code'].'</td>
+                  <td style="text-align:start;" >'.$user['username'].'</td>
                   '.$user_info.'
-                   <td align="left">{element} <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+                   <td style="text-align:start;">{element} <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
                   </td>
                </tr>';
             }
@@ -363,7 +363,7 @@ class EvalForm extends FormValidator
                 'maxlength' => 5,
                 'size' => 4,
                 'style' => 'width: 6rem; max-width: 6rem;',
-                'class' => 'text-right',
+                'class' => 'text-end',
             ];
             if ($firstUser) {
                 $scoreColumnProperties['autofocus'] = '';
@@ -382,19 +382,19 @@ class EvalForm extends FormValidator
             );
 
             if (api_is_western_name_order()) {
-                $user_info = '<td align="left" >'.$user[3].'</td>';
-                $user_info .= '<td align="left" >'.$user[2].'</td>';
+                $user_info = '<td style="text-align:start;" >'.$user[3].'</td>';
+                $user_info .= '<td style="text-align:start;" >'.$user[2].'</td>';
             } else {
-                $user_info = '<td align="left" >'.$user[2].'</td>';
-                $user_info .= '<td align="left" >'.$user[3].'</td>';
+                $user_info = '<td style="text-align:start;" >'.$user[2].'</td>';
+                $user_info .= '<td style="text-align:start;" >'.$user[3].'</td>';
             }
             $nr_users++;
 
             $template = '<tr>
-                <td align="left" >'.$user[4].'</td>
-                <td align="left" >'.$user[1].'</td>
+                <td style="text-align:start;" >'.$user[4].'</td>
+                <td style="text-align:start;" >'.$user[1].'</td>
                 '.$user_info.'
-                <td align="right">
+                <td style="text-align:end;">
                     <div class="inline-flex w-full items-center justify-end gap-1 whitespace-nowrap">
                         {element}
                         <span class="text-sm text-gray-700">/ '.$this->evaluation_object->get_max().'</span>
@@ -438,7 +438,7 @@ class EvalForm extends FormValidator
                     'size' => '4',
                     'maxlength' => '5',
                     'style' => 'width: 6rem; max-width: 6rem;',
-                    'class' => 'text-right',
+                    'class' => 'text-end',
                 ],
                 false,
                 0,

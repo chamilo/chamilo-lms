@@ -75,7 +75,7 @@ if ('' === $itemTitle) {
 }
 
 $htmlHeadXtra[] = '<style>
-    .lp-edit-right-wrap { padding-left: 24px; padding-right: 16px; }
+    .lp-edit-right-wrap { padding-inline-start: 24px; padding-inline-end: 16px; }
     .lp-edit-right-title { font-size: 18px; font-weight: 600; margin: 6px 0 14px 0; }
 </style>';
 

@@ -132,7 +132,7 @@ onMounted(loadReport)
             {{ user.email }}
           </p>
         </div>
-        <dl class="ml-auto grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-4">
+        <dl class="ms-auto grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-4">
           <div>
             <dt class="text-gray-500">{{ t("Status") }}</dt>
             <dd class="font-medium">{{ t(user.status || "User") }}</dd>

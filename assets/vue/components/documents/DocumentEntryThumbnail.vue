@@ -1,6 +1,6 @@
 <template>
   <span
-    class="mr-2 flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded border border-gray-10 bg-white"
+    class="me-2 flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded border border-gray-10 bg-white"
   >
     <img
       v-if="showThumbnail"

@@ -84,10 +84,10 @@
   .field,
   .field-checkbox,
   .field-radiobutton {
-    @apply mr-4;
+    @apply me-4;
 
     > label {
-      @apply mr-2 mb-0;
+      @apply me-2 mb-0;
     }
   }
 }
@@ -97,7 +97,7 @@
   @apply mb-4 flex items-center;
 
   > label {
-    @apply ml-2 leading-none;
+    @apply ms-2 leading-none;
   }
 }
 
@@ -112,10 +112,14 @@
 }
 
 select.form-control {
-  @apply pr-8 appearance-none bg-no-repeat;
+  @apply pe-8 appearance-none bg-no-repeat;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
   background-position: right 0.75rem center;
   background-size: 12px;
+
+  [dir="rtl"] & {
+    background-position: left 0.75rem center;
+  }
 }
 
 .html-editor-container {

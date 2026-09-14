@@ -5,7 +5,7 @@
         :label="t('Back to third parties')"
         icon="arrow-left"
         type="secondary"
-        class="mr-2"
+        class="me-2"
         @click="goBack"
       />
       <BaseButton
@@ -16,7 +16,7 @@
       />
     </SectionHeader>
 
-    <p v-if="selectedThirdPartyName" class="text-h3 text-gray-600 mb-4 ml-1">
+    <p v-if="selectedThirdPartyName" class="text-h3 text-gray-600 mb-4 ms-1">
       {{ selectedThirdPartyName }}
     </p>
 

@@ -314,7 +314,7 @@
           >
             <table class="w-full border-collapse border border-gray-25 text-sm">
               <thead>
-                <tr class="bg-gray-10 text-left text-gray-90">
+                <tr class="bg-gray-10 text-start text-gray-90">
                   <th
                     :colspan="report.meta.showStatsPercentage ? 4 : 3"
                     class="border border-gray-25 px-3 py-2 font-semibold"
@@ -322,13 +322,13 @@
                     {{ report.meta.statsTitle || report.title }}
                   </th>
                 </tr>
-                <tr class="border-b border-gray-25 text-left text-gray-90">
+                <tr class="border-b border-gray-25 text-start text-gray-90">
                   <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Name") }}</th>
                   <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Distribution") }}</th>
-                  <th class="border border-gray-25 px-3 py-2 text-right font-semibold">{{ t("Count") }}</th>
+                  <th class="border border-gray-25 px-3 py-2 text-end font-semibold">{{ t("Count") }}</th>
                   <th
                     v-if="report.meta.showStatsPercentage"
-                    class="border border-gray-25 px-3 py-2 text-right font-semibold"
+                    class="border border-gray-25 px-3 py-2 text-end font-semibold"
                   >
                     {{ t("Percentage") }}
                   </th>
@@ -352,15 +352,15 @@
                           class="h-full rounded-full bg-primary"
                         />
                       </div>
-                      <div class="min-w-14 whitespace-nowrap text-right text-xs text-gray-60">
+                      <div class="min-w-14 whitespace-nowrap text-end text-xs text-gray-60">
                         {{ legacyPercentage(stat.value) }}%
                       </div>
                     </div>
                   </td>
-                  <td class="border border-gray-25 px-3 py-2 text-right align-top">{{ legacyInteger(stat.value) }}</td>
+                  <td class="border border-gray-25 px-3 py-2 text-end align-top">{{ legacyInteger(stat.value) }}</td>
                   <td
                     v-if="report.meta.showStatsPercentage"
-                    class="border border-gray-25 px-3 py-2 text-right align-top"
+                    class="border border-gray-25 px-3 py-2 text-end align-top"
                   >
                     {{ legacyPercentage(stat.value) }}%
                   </td>
@@ -725,7 +725,7 @@
             >
               <table class="w-full border-collapse border border-gray-25 text-sm">
                 <thead>
-                  <tr class="bg-gray-10 text-left text-gray-90">
+                  <tr class="bg-gray-10 text-start text-gray-90">
                     <th
                       class="border border-gray-25 px-3 py-2 font-semibold"
                       colspan="3"
@@ -733,10 +733,10 @@
                       {{ group.title }}
                     </th>
                   </tr>
-                  <tr class="border-b border-gray-25 text-left text-gray-90">
+                  <tr class="border-b border-gray-25 text-start text-gray-90">
                     <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Name") }}</th>
                     <th class="border border-gray-25 px-3 py-2 font-semibold">{{ t("Distribution") }}</th>
-                    <th class="border border-gray-25 px-3 py-2 text-right font-semibold">{{ t("Count") }}</th>
+                    <th class="border border-gray-25 px-3 py-2 text-end font-semibold">{{ t("Count") }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -750,7 +750,7 @@
                         <span>{{ item.label }}</span>
                         <span
                           v-if="item.detail"
-                          class="mr-[5px] text-sm text-gray-50"
+                          class="me-[5px] text-sm text-gray-50"
                         >
                           {{ item.detail }}
                         </span>
@@ -767,12 +767,12 @@
                             class="h-full rounded-full bg-primary"
                           />
                         </div>
-                        <div class="min-w-14 whitespace-nowrap text-right text-xs text-gray-60">
+                        <div class="min-w-14 whitespace-nowrap text-end text-xs text-gray-60">
                           {{ legacyGroupPercentage(group.items, item.value) }}%
                         </div>
                       </div>
                     </td>
-                    <td class="border border-gray-25 px-3 py-2 text-right align-top">
+                    <td class="border border-gray-25 px-3 py-2 text-end align-top">
                       {{ legacyInteger(item.value) }}
                     </td>
                   </tr>
@@ -870,7 +870,7 @@
             </Message>
             <article class="rounded-xl border border-gray-25 bg-white p-4 shadow-sm">
               <h3 class="font-semibold text-gray-90">{{ t("How to use this report") }}</h3>
-              <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-70">
+              <ul class="mt-2 list-disc space-y-1 ps-5 text-sm text-gray-70">
                 <li>
                   <strong>{{ t("Disable / Enable") }}</strong
                   >:
@@ -1454,7 +1454,7 @@ const ChartDataTable = defineComponent({
         { class: "mt-4 overflow-x-auto" },
         h("table", { class: "w-full text-sm" }, [
           h("thead", [
-            h("tr", { class: "border-b border-gray-25 text-left text-gray-60" }, [
+            h("tr", { class: "border-b border-gray-25 text-start text-gray-60" }, [
               h("th", { class: "px-2 py-2 font-semibold" }, t("Name")),
               h("th", { class: "px-2 py-2 font-semibold" }, "#"),
               h("th", { class: "px-2 py-2 font-semibold" }, "%"),

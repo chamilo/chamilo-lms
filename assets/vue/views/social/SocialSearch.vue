@@ -9,7 +9,7 @@
       <div class="flex flex-col items-end">
         <div class="w-full flex justify-between items-center mb-2">
           <label
-            class="mr-2"
+            class="me-2"
             for="search-query"
             >{{ t("Users, Groups") }}</label
           >
@@ -22,7 +22,7 @@
         </div>
         <div class="w-full flex justify-between items-center mb-4">
           <label
-            class="mr-2"
+            class="me-2"
             for="search-type"
             >{{ t("Type") }}</label
           >
@@ -64,7 +64,7 @@
           <div class="flex items-center">
             <img
               :src="user.avatar"
-              class="w-16 h-16 rounded-full mr-4"
+              class="w-16 h-16 rounded-full me-4"
             />
             <span>{{ user.name }}</span>
             <span
@@ -85,7 +85,7 @@
           <div>
             <BaseButton
               v-if="user.showInvitationButton"
-              class="mr-2"
+              class="me-2"
               icon="account"
               :label="t('Send invitation')"
               type="secondary"

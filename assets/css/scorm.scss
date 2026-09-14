@@ -21,11 +21,11 @@ See https://support.chamilo.org/issues/6976
 
 #learning_path_left_zone {
     @apply min-w-full min-h-screen pt-14
-        md:min-w-96 md:w-96 md:border-r md:border-gray-25;
+        md:min-w-96 md:w-96 md:border-e md:border-gray-25;
 
     .lp-view-collapsed & {
-        @apply -ml-[100%]
-            md:-ml-80
+        @apply -ms-[100%]
+            md:-ms-80
         ;
 
         .lp-view-zone-container {
@@ -47,7 +47,7 @@ See https://support.chamilo.org/issues/6976
             }
 
             .media-author {
-                @apply text-left flex gap-2;
+                @apply text-start flex gap-2;
 
                 .media-author-avatar {
                     @apply flex-grow-0 flex-shrink-0;
@@ -123,7 +123,7 @@ See https://support.chamilo.org/issues/6976
 
 #author_image {
     border: 1px solid #CCCCCC;
-    float: left;
+    float: inline-start;
     margin: 0;
     padding: 8px;
     position: relative;
@@ -131,7 +131,7 @@ See https://support.chamilo.org/issues/6976
 }
 
 #author_name {
-    float: left;
+    float: inline-start;
     text-align: center;
     width: 100%;
     font-size: 11px;
@@ -159,7 +159,7 @@ See https://support.chamilo.org/issues/6976
 .inner_lp_toc .scorm_item a {
     font-weight: bold;
     font-size: 14px;
-    margin-right: 1px;
+    margin-inline-end: 1px;
     padding-bottom: 2px;
     text-decoration: none;
     color: #2F3E46;
@@ -167,7 +167,7 @@ See https://support.chamilo.org/issues/6976
 
 .inner_lp_toc .scorm_item a.chapter_module {
     font-weight: normal;
-    margin-right: 10px;
+    margin-inline-end: 10px;
 }
 
 .inner_lp_toc .scorm_item_highlight {
@@ -181,22 +181,21 @@ See https://support.chamilo.org/issues/6976
     /*background-image: -ms-linear-gradient(top, #666, #999);*/
     /*background-image: -o-linear-gradient(top, #666, #999);*/
     /*background-image: linear-gradient(top, #666, #999);*/
-    margin-right: 0;
+    margin-inline-end: 0;
     padding: 10px 0 10px 0;
     text-decoration: none;
 }
 
 .inner_lp_toc .scorm_item_highlight a {
     color: #fff;
-    margin-right: 1px;
+    margin-inline-end: 1px;
     text-decoration: none;
     font-weight: bold;
 }
 
 .inner_lp_toc .scorm_item {
     font-size: 16px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-inline: 10px;
     text-decoration: none;
     border-color: rgba(255, 255, 255, 0.3);
 }
@@ -204,32 +203,37 @@ See https://support.chamilo.org/issues/6976
 .inner_lp_toc .scorm_item_section .scorm_item:before {
     content: url('../../public/img/lp_section.png'); /* path from main/lp/lp_controller.php file */
     vertical-align: text-top;
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 /* learning path's classes for section and item for 5 levels of depth */
 .scorm_section_level_0 {
-    margin: 0 0 0 0;
+    margin: 0;
 }
 
 .scorm_section_level_1 {
-    margin: 0 0.5em 0 20px;
+    margin-block: 0;
+    margin-inline: 20px 0.5em;
 }
 
 .scorm_section_level_2 {
-    margin: 0 0.5em 0 40px;
+    margin-block: 0;
+    margin-inline: 40px 0.5em;
 }
 
 .scorm_section_level_3 {
-    margin: 0 0.5em 0 60px;
+    margin-block: 0;
+    margin-inline: 60px 0.5em;
 }
 
 .scorm_section_level_4 {
-    margin: 0 0.5em 0 70px;
+    margin-block: 0;
+    margin-inline: 70px 0.5em;
 }
 
 .scorm_section_level_5 {
-    margin: 0 0.5em 0 10em;
+    margin-block: 0;
+    margin-inline: 10em 0.5em;
 }
 
 #learning_path_breadcrumb_zone .breadcrumb {
@@ -256,7 +260,7 @@ See https://support.chamilo.org/issues/6976
 
 .view-options {
     padding-top: 3px;
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 .panel-default .panel-heading .btn {
@@ -282,7 +286,7 @@ See https://support.chamilo.org/issues/6976
     bottom: 0;
     width: 100%;
     text-align: center;
-    left: 0;
+    inset-inline-start: 0;
 }
 
 #control-bottom.well {
@@ -355,8 +359,8 @@ See https://support.chamilo.org/issues/6976
 /** MENU FLOAT **/
 
 .c-menu-left {
-    @apply fixed h-14 w-full left-0 top-0 p-2 border-b border-gray-30 flex items-center gap-2
-        md:w-96 md:border-r md:bg-white
+    @apply fixed h-14 w-full start-0 top-0 p-2 border-b border-gray-30 flex items-center gap-2
+        md:w-96 md:border-e md:bg-white
     ;
 
     .circle {
@@ -399,12 +403,12 @@ See https://support.chamilo.org/issues/6976
     display: inline-flex;
     position: relative;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     z-index: 5;
 }
 .c-menu-right .circle {
     opacity: 0;
-    margin-left: 50px;
+    margin-inline-start: 50px;
     margin-top: 4px;
     padding: 2px;
     border-radius: 20px;
@@ -426,7 +430,7 @@ See https://support.chamilo.org/issues/6976
 }
 
 .btn-open-pdf {
-    @apply text-tiny absolute -top-4 right-0 text-gray-90;
+    @apply text-tiny absolute -top-4 end-0 text-gray-90;
 
     line-height: 32px;
 }
@@ -495,7 +499,7 @@ See https://support.chamilo.org/issues/6976
 }
 
 .scorm-collapse-list .sub-item {
-    padding-left: 20px;
+    padding-inline-start: 20px;
 }
 
 .tab-none-forum{
@@ -509,7 +513,7 @@ See https://support.chamilo.org/issues/6976
     float: initial;
 }
 .tabs-right{
-    text-align: right;
+    text-align: end;
 }
 
 #learning_path_toc .panel-default{
@@ -520,24 +524,45 @@ See https://support.chamilo.org/issues/6976
     padding: 0;
 }
 .status-heading .panel-heading .item-header{
-    padding: 10px 15px 10px 30px;
+    padding-block: 10px;
+    padding-inline: 30px 15px;
     display: inline-block;
     width: 100%;
     color: #333333;
     font-weight: bold;
     background: url("../../public/img/scorm/folder-item-open.png") #f5f5f5 no-repeat 10px center;
+
+    [dir="rtl"] & {
+        background-position: right 10px center;
+    }
 }
 #learning_path_toc .child_item.lp_item_type_document.scorm_completed{
     background: url(../../public/img/icons/svg/check-completed.svg) right center no-repeat;
+
+    [dir="rtl"] & {
+        background-position: left center;
+    }
 }
 #learning_path_toc .child_item.lp_item_type_document.scorm_not_attempted{
     background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
+
+    [dir="rtl"] & {
+        background-position: left center;
+    }
 }
 #learning_path_toc .root_item.lp_item_type_document.scorm_completed{
     background: url(../../public/img/icons/svg/check-completed.svg) right center no-repeat;
+
+    [dir="rtl"] & {
+        background-position: left center;
+    }
 }
 #learning_path_toc .root_item.lp_item_type_document.scorm_not_attempted{
     background: url(../../public/img/icons/svg/check-not-attempted.svg) right center no-repeat;
+
+    [dir="rtl"] & {
+        background-position: left center;
+    }
 }
 
 .status-heading .panel-heading .item-action{
@@ -546,7 +571,7 @@ See https://support.chamilo.org/issues/6976
     width: 100%;
     background-color: transparent;
     color: #525252;
-    border-left: 1px solid #cdcdcd;
+    border-inline-start: 1px solid #cdcdcd;
 }
 #learning_path_toc .panel-collapse .panel-body{
     padding: 10px 0 10px 10px;
@@ -651,58 +676,70 @@ See https://support.chamilo.org/issues/6976
         }
 
         .section {
-            @apply py-3 pr-4 bg-no-repeat bg-left relative bg-gray-10
-                after:block after:absolute after:bottom-0 after:left-0 after:right-0 after:mr-4 after:border-b after:border-gray-25
+            @apply py-3 pe-4 bg-no-repeat bg-left relative bg-gray-10
+                after:block after:absolute after:bottom-0 after:start-0 after:end-0 after:me-4 after:border-b after:border-gray-25
             ;
 
             background-image: url("../../public/img/scorm/folder-item-closed.png");
 
             &.level_0 {
-                @apply pl-[2.5rem]
-                    after:ml-[1rem]
+                @apply ps-[2.5rem]
+                    after:ms-[1rem]
                 ;
 
                 background-position-x: 1rem;
+
+                [dir="rtl"] & { background-position-x: right 1rem; }
             }
 
             &.level_1 {
-                @apply pl-[3.5rem]
-                    after:ml-[2rem]
+                @apply ps-[3.5rem]
+                    after:ms-[2rem]
                 ;
 
                 background-position-x: 2rem;
+
+                [dir="rtl"] & { background-position-x: right 2rem; }
             }
 
             &.level_2 {
-                @apply pl-[4.5rem]
-                    after:ml-[3rem]
+                @apply ps-[4.5rem]
+                    after:ms-[3rem]
                 ;
 
                 background-position-x: 3rem;
+
+                [dir="rtl"] & { background-position-x: right 3rem; }
             }
 
             &.level_3 {
-                @apply pl-[5.5rem]
-                    after:ml-[4rem]
+                @apply ps-[5.5rem]
+                    after:ms-[4rem]
                 ;
 
                 background-position-x: 4rem;
+
+                [dir="rtl"] & { background-position-x: right 4rem; }
             }
 
             &.level_4 {
-                @apply pl-[6.5rem]
-                    after:ml-[5rem]
+                @apply ps-[6.5rem]
+                    after:ms-[5rem]
                 ;
 
                 background-position-x: 5rem;
+
+                [dir="rtl"] & { background-position-x: right 5rem; }
             }
 
             &.level_5 {
-                @apply pl-[7.5rem]
-                    after:ml-[6rem]
+                @apply ps-[7.5rem]
+                    after:ms-[6rem]
                 ;
 
                 background-position-x: 6rem;
+
+                [dir="rtl"] & { background-position-x: right 6rem; }
             }
         }
 
@@ -726,17 +763,19 @@ See https://support.chamilo.org/issues/6976
         @apply bg-no-repeat bg-transparent bg-left;
 
         a.items-list {
-            @apply py-4 pr-10 relative
-                after:block after:absolute after:bottom-0 after:left-0 after:right-0 after:mr-4 after:border-b after:border-gray-25
+            @apply py-4 pe-10 relative
+                after:block after:absolute after:bottom-0 after:start-0 after:end-0 after:me-4 after:border-b after:border-gray-25
             ;
         }
 
         &.level_0 {
             background-position-x: 1rem;
 
+            [dir="rtl"] & { background-position-x: right 1rem; }
+
             a.items-list {
-                @apply pl-[2.5rem]
-                    after:ml-[1rem]
+                @apply ps-[2.5rem]
+                    after:ms-[1rem]
                 ;
             }
         }
@@ -744,9 +783,11 @@ See https://support.chamilo.org/issues/6976
         &.level_1 {
             background-position-x: 2rem;
 
+            [dir="rtl"] & { background-position-x: right 2rem; }
+
             a.items-list {
-                @apply pl-[3.5rem]
-                    after:ml-[2rem]
+                @apply ps-[3.5rem]
+                    after:ms-[2rem]
                 ;
             }
         }
@@ -754,9 +795,11 @@ See https://support.chamilo.org/issues/6976
         &.level_2 {
             background-position-x: 3rem;
 
+            [dir="rtl"] & { background-position-x: right 3rem; }
+
             a.items-list {
-                @apply pl-[4.5rem]
-                    after:ml-[3rem]
+                @apply ps-[4.5rem]
+                    after:ms-[3rem]
                 ;
             }
         }
@@ -764,9 +807,11 @@ See https://support.chamilo.org/issues/6976
         &.level_3 {
             background-position-x: 4rem;
 
+            [dir="rtl"] & { background-position-x: right 4rem; }
+
             a.items-list {
-                @apply pl-[5.5rem]
-                    after:ml-[4rem]
+                @apply ps-[5.5rem]
+                    after:ms-[4rem]
                 ;
             }
         }
@@ -774,9 +819,11 @@ See https://support.chamilo.org/issues/6976
         &.level_4 {
             background-position-x: 5rem;
 
+            [dir="rtl"] & { background-position-x: right 5rem; }
+
             a.items-list {
-                @apply pl-[6.5rem]
-                    after:ml-[5rem]
+                @apply ps-[6.5rem]
+                    after:ms-[5rem]
                 ;
             }
         }
@@ -784,9 +831,11 @@ See https://support.chamilo.org/issues/6976
         &.level_5 {
             background-position-x: 6rem;
 
+            [dir="rtl"] & { background-position-x: right 6rem; }
+
             a.items-list {
-                @apply pl-[7.5rem]
-                    after:ml-[6rem]
+                @apply ps-[7.5rem]
+                    after:ms-[6rem]
                 ;
             }
         }
@@ -796,7 +845,7 @@ See https://support.chamilo.org/issues/6976
         @apply bg-support-1 text-primary font-semibold;
 
         a.items-list {
-            @apply before:block before:absolute before:top-0 before:left-0 before:w-1 before:bottom-0 before:bg-primary;
+            @apply before:block before:absolute before:top-0 before:start-0 before:w-1 before:bottom-0 before:bg-primary;
         }
     }
 

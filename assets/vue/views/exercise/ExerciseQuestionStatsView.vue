@@ -1,6 +1,8 @@
 <template>
   <section class="space-y-5">
-    <div class="exercise-question-stats-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
+    <div
+      class="exercise-question-stats-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
+    >
       <BaseButton
         class="exercise-question-stats-toolbar__button"
         :label="t('Back to learner score')"
@@ -43,30 +45,31 @@
     <div class="border-b border-gray-20" />
 
     <header class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm">
-      <div class="border-l-4 border-l-primary p-5">
+      <div class="border-s-4 border-s-primary p-5">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div class="space-y-2">
             <h1 class="text-2xl font-semibold text-gray-90">
-              {{ displayText(title, t('Question statistics')) }}
+              {{ displayText(title, t("Question statistics")) }}
             </h1>
             <p class="text-sm font-semibold text-gray-700">
-              {{ t('Question statistics') }}
+              {{ t("Question statistics") }}
             </p>
             <div
               v-if="description"
               class="exercise-question-stats-html text-sm text-gray-700"
+              dir="auto"
               v-html="displayTranslatedHtml(description)"
             />
           </div>
           <div class="flex flex-wrap gap-2">
             <span class="rounded-full bg-info/10 px-3 py-1 text-sm font-semibold text-info">
-              {{ t('Questions') }}: {{ summary.totalQuestions || 0 }}
+              {{ t("Questions") }}: {{ summary.totalQuestions || 0 }}
             </span>
             <span class="rounded-full bg-success/10 px-3 py-1 text-sm font-semibold text-success">
-              {{ t('Answered') }}: {{ summary.totalAnswered || 0 }}
+              {{ t("Answered") }}: {{ summary.totalAnswered || 0 }}
             </span>
             <span class="rounded-full bg-warning/10 px-3 py-1 text-sm font-semibold text-warning">
-              {{ t('Wrong answer') }}: {{ summary.totalWrong || 0 }}
+              {{ t("Wrong answer") }}: {{ summary.totalWrong || 0 }}
             </span>
           </div>
         </div>
@@ -87,59 +90,91 @@
       :values="questions"
       data-key="id"
     >
-      <Column :header="t('Question')" field="title" sortable>
+      <Column
+        :header="t('Question')"
+        field="title"
+        sortable
+      >
         <template #body="{ data }">
           <div class="max-w-xl space-y-1">
             <div class="font-semibold text-gray-90">
-              {{ displayText(data.title, '-') }}
+              {{ displayText(data.title, "-") }}
             </div>
-            <div class="text-xs text-gray-500">
-              #{{ data.questionId }} · {{ t(data.typeLabel || 'Question') }}
-            </div>
+            <div class="text-xs text-gray-500">#{{ data.questionId }} · {{ t(data.typeLabel || "Question") }}</div>
           </div>
         </template>
       </Column>
-      <Column :header="t('Question type')" field="typeLabel" sortable>
+      <Column
+        :header="t('Question type')"
+        field="typeLabel"
+        sortable
+      >
         <template #body="{ data }">
-          {{ t(data.typeLabel || 'Question') }}
+          {{ t(data.typeLabel || "Question") }}
         </template>
       </Column>
-      <Column :header="t('Number of times the question was answered')" field="answeredAttempts" sortable>
+      <Column
+        :header="t('Number of times the question was answered')"
+        field="answeredAttempts"
+        sortable
+      >
         <template #body="{ data }">
           {{ data.answeredAttempts || 0 }}
         </template>
       </Column>
-      <Column :header="t('Lowest score')" field="lowestScore" sortable>
+      <Column
+        :header="t('Lowest score')"
+        field="lowestScore"
+        sortable
+      >
         <template #body="{ data }">
           {{ formatNumber(data.lowestScore) }}
         </template>
       </Column>
-      <Column :header="t('Average score')" field="averageScore" sortable>
+      <Column
+        :header="t('Average score')"
+        field="averageScore"
+        sortable
+      >
         <template #body="{ data }">
           {{ formatNumber(data.averageScore) }}
         </template>
       </Column>
-      <Column :header="t('Highest score')" field="highestScore" sortable>
+      <Column
+        :header="t('Highest score')"
+        field="highestScore"
+        sortable
+      >
         <template #body="{ data }">
           {{ formatNumber(data.highestScore) }}
         </template>
       </Column>
-      <Column :header="t('Score')" field="maxScore" sortable>
+      <Column
+        :header="t('Score')"
+        field="maxScore"
+        sortable
+      >
         <template #body="{ data }">
           {{ formatNumber(data.maxScore) }}
         </template>
       </Column>
-      <Column :header="`${t('Wrong answer')} / ${t('Total')}`" field="wrongAttempts" sortable>
+      <Column
+        :header="`${t('Wrong answer')} / ${t('Total')}`"
+        field="wrongAttempts"
+        sortable
+      >
         <template #body="{ data }">
           <span class="font-semibold text-gray-90">
             {{ data.wrongAttempts || 0 }} / {{ data.answeredAttempts || 0 }}
           </span>
         </template>
       </Column>
-      <Column :header="'%'" field="wrongPercentage" sortable>
-        <template #body="{ data }">
-          {{ formatNumber(data.wrongPercentage) }} %
-        </template>
+      <Column
+        :header="'%'"
+        field="wrongPercentage"
+        sortable
+      >
+        <template #body="{ data }"> {{ formatNumber(data.wrongPercentage) }} % </template>
       </Column>
     </BaseTable>
   </section>

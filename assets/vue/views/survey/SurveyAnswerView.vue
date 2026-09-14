@@ -208,7 +208,7 @@
             <div class="min-w-0 flex-1">
               <h2 class="text-lg font-semibold text-gray-90">
                 <span v-if="survey.displayQuestionNumber">{{ questionNumber(question, index) }}. </span>
-                {{ displayText(question.question, t("Untitled")) }}
+                <span dir="auto">{{ displayText(question.question, t("Untitled")) }}</span>
                 <span
                   v-if="question.isRequired"
                   class="text-red-600"

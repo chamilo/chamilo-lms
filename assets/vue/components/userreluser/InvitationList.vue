@@ -24,7 +24,7 @@
             alt="Item picture"
             class="w-16 h-16 rounded-full"
           />
-          <div class="ml-4 flex-grow">
+          <div class="ms-4 flex-grow">
             <h4 class="text-lg font-semibold">
               <a
                 :href="'profile.php?u=' + invitation.itemId"
@@ -38,7 +38,7 @@
           <div class="flex space-x-2">
             <BaseButton
               v-if="invitation.canAccept"
-              class="ml-2"
+              class="ms-2"
               icon="check"
               :label="t('Accept')"
               type="success"
@@ -46,7 +46,7 @@
             />
             <BaseButton
               v-if="invitation.canDeny"
-              class="ml-2"
+              class="ms-2"
               icon="times"
               :label="t('Deny')"
               type="danger"

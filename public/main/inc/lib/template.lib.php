@@ -545,11 +545,11 @@ class Template
             //hack in order to fix the actions buttons
             $css_file_to_string .= '<style>
                 .td_actions a {
-                    float:left;
+                    float:inline-start;
                     width:100%;
                 }
                 .forum_message_left a {
-                    float:left;
+                    float:inline-start;
                     width:100%;
                 }
                 </style>';

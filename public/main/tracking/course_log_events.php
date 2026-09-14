@@ -174,7 +174,7 @@ echo '  </div>';
 // Row 2: secondary toolbar (tabs + search box).
 echo '  <div class="course-log-events-toolbar flex flex-wrap items-center gap-2">';
 echo        $secondaryMenu;
-echo '      <div class="ml-auto">';
+echo '      <div class="ms-auto">';
 $form->display();
 echo '      </div>';
 echo '  </div>';

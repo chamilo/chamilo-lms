@@ -59,8 +59,7 @@
 .admin-block__bg-image {
   position: absolute;
   bottom: 0;
-  left: 0;
-  right: 0;
+  inset-inline: 0;
   height: 50px;
   background-repeat: repeat-x;
   background-position-x: center;

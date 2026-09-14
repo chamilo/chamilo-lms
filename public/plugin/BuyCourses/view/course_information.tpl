@@ -13,7 +13,10 @@
             <div class="space-y-5 p-6">
                 <div class="space-y-3">
                     <div>
-                        <h2 class="text-2xl font-semibold tracking-tight text-gray-90">
+                        <h2
+                            class="text-2xl font-semibold tracking-tight text-gray-90"
+                            dir="auto"
+                        >
                             {{ course.title }}
                         </h2>
 
@@ -76,7 +79,10 @@
                         {{ 'Description'|get_plugin_lang('BuyCoursesPlugin') }}
                     </h3>
 
-                    <div class="rounded-2xl border border-gray-25 bg-white p-4 text-sm leading-6 text-gray-50">
+                    <div
+                        class="rounded-2xl border border-gray-25 bg-white p-4 text-sm leading-6 text-gray-50"
+                        dir="auto"
+                    >
                         {% if course.description %}
                         {{ course.description }}
                         {% else %}

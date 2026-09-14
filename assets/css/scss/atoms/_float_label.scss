@@ -2,7 +2,7 @@
   @apply block relative;
 
   label {
-    @apply absolute top-1/2 pointer-events-none leading-none left-4 text-gray-50 bg-transparent transition-all duration-200;
+    @apply absolute top-1/2 pointer-events-none leading-none start-4 text-gray-50 bg-transparent transition-all duration-200;
   }
 
   &:has(.p-textarea) label {
@@ -27,7 +27,7 @@
   &:has(textarea[placeholder]) label,
   &:has(.p-datepicker-panel-inline) label,
   &:has(.tox.tox-tinymce) label {
-    @apply top-0 left-2 text-caption px-1 bg-white text-primary z-[1];
+    @apply top-0 start-2 text-caption px-1 bg-white text-primary z-[1];
   }
 
   &:has(input.p-filled) label,

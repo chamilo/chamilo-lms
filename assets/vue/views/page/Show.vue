@@ -8,7 +8,10 @@
     <div class="flex flex-row gap-4">
       <div class="w-2/3 flex justify-center">
         <div class="w-4/5">
-          <div v-html="item.content" />
+          <div
+            dir="auto"
+            v-html="item.content"
+          />
         </div>
       </div>
 

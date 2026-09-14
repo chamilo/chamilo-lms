@@ -11,7 +11,7 @@
 
     <table
       v-else
-      class="w-full text-left border-collapse"
+      class="w-full text-start border-collapse"
     >
       <thead class="bg-gray-100">
         <tr>

@@ -156,8 +156,8 @@
   h6:hover .anchor {
     @apply no-underline leading-none;
     height: 1em;
-    padding-left: 8px;
-    margin-left: -30px;
+    padding-inline-start: 8px;
+    margin-inline-start: -30px;
 
     .octicon-link {
       @apply inline-block;
@@ -165,10 +165,10 @@
   }
 
   .anchor {
-    @apply absolute block top-0 bottom-0 left-0;
-    padding-right: 6px;
-    padding-left: 30px;
-    margin-left: -30px;
+    @apply absolute block top-0 bottom-0 start-0;
+    padding-inline-end: 6px;
+    padding-inline-start: 30px;
+    margin-inline-start: -30px;
 
     &:focus {
       @apply outline-none;
@@ -197,7 +197,7 @@
   ul,
   ol {
     @apply mt-0 mb-0 p-0;
-    padding-left: 2em;
+    padding-inline-start: 2em;
   }
 
   ul ul,
@@ -224,7 +224,7 @@
   }
 
   dd {
-    @apply ml-0;
+    @apply ms-0;
   }
 
   dl {
@@ -246,7 +246,7 @@
     @apply m-0;
     padding: 0 15px;
     color: #777;
-    border-left: 4px solid #ddd;
+    border-inline-start: 4px solid #ddd;
 
     > :first-child {
       @apply mt-0;
@@ -417,8 +417,9 @@
     }
 
     input {
-      @apply float-left align-middle;
-      margin: 0.3em 0 0.25em -1.6em;
+      @apply float-start align-middle;
+      margin-block: 0.3em 0.25em;
+      margin-inline: -1.6em 0;
     }
   }
 }

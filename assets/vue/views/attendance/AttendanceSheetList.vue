@@ -71,7 +71,7 @@
       class="flex justify-center items-center h-64"
     >
       <div class="loader"></div>
-      <span class="ml-4 text-lg text-primary">{{ t("Loading attendance data") }}</span>
+      <span class="ms-4 text-lg text-primary">{{ t("Loading attendance data") }}</span>
     </div>
 
     <!-- Student UI -->
@@ -84,7 +84,7 @@
           class="mb-4 text-sm text-gray-700"
         >
           {{ t("To attend") }}
-          <span class="bg-orange-500 text-white px-2 py-1 rounded ml-2">
+          <span class="bg-orange-500 text-white px-2 py-1 rounded ms-2">
             {{ signedCount }}/{{ totalCount }} ({{ Math.round((signedCount / totalCount) * 100) }}%)
           </span>
         </div>
@@ -105,14 +105,14 @@
             <template v-if="allowMultilevelGrading">
               <div
                 :class="getStateClass(attendanceData[`${currentUserId}-${date.id}`])"
-                class="w-10 h-10 rounded-full mr-2"
+                class="w-10 h-10 rounded-full me-2"
                 :title="getStateLabel(parseInt(attendanceData[`${currentUserId}-${date.id}`]))"
               ></div>
             </template>
             <template v-else>
               <input
                 type="checkbox"
-                class="mr-2"
+                class="me-2"
                 :checked="attendanceData[`${currentUserId}-${date.id}`] === 1"
                 :disabled="!studentCanValidateOwnAttendance"
                 @change="(e) => onStudentAttendanceChange(date.id, e.target.checked)"
@@ -195,17 +195,17 @@
             <table class="w-full border-collapse">
               <thead>
                 <tr class="bg-gray-15 h-28">
-                  <th class="p-3 border border-gray-25 text-left">#</th>
-                  <th class="p-3 border border-gray-25 text-left">{{ t("Photo") }}</th>
+                  <th class="p-3 border border-gray-25 text-start">#</th>
+                  <th class="p-3 border border-gray-25 text-start">{{ t("Photo") }}</th>
                   <th
                     v-if="showOfficialCode"
-                    class="p-3 border border-gray-25 text-left"
+                    class="p-3 border border-gray-25 text-start"
                   >
                     {{ t("Official code") }}
                   </th>
-                  <th class="p-3 border border-gray-25 text-left">{{ t("Last name") }}</th>
-                  <th class="p-3 border border-gray-25 text-left w-32">{{ t("First name") }}</th>
-                  <th class="p-3 border border-gray-25 text-left">{{ t("Not attended") }}</th>
+                  <th class="p-3 border border-gray-25 text-start">{{ t("Last name") }}</th>
+                  <th class="p-3 border border-gray-25 text-start w-32">{{ t("First name") }}</th>
+                  <th class="p-3 border border-gray-25 text-start">{{ t("Not attended") }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -435,7 +435,7 @@
                       </div>
                       <div
                         v-if="canEdit"
-                        class="absolute top-2 right-2 flex gap-3"
+                        class="absolute top-2 end-2 flex gap-3"
                       >
                         <BaseButton
                           v-if="allowComments && !isColumnLocked(date.id)"
@@ -476,7 +476,7 @@
           />
           <div
             v-if="isSaving"
-            class="ml-2 loader"
+            class="ms-2 loader"
           ></div>
         </div>
       </div>

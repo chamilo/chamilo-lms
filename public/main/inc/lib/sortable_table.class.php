@@ -524,14 +524,14 @@ class SortableTable extends HTML_Table
             // @todo This style css must be moved to default.css only for dev
             echo '<style>
                     .main-grid { width:100%;}
-                    .sub-header { width:100%; padding-top: 10px; padding-right: 10px; padding-left: 10px; height:30px;}
+                    .sub-header { width:100%; padding-top: 10px; padding-inline-end: 10px; padding-inline-start: 10px; height:30px;}
                     .grid_container { width:100%;}
-                    .grid_item { height: 120px; width:98px;  float:left; padding:5px; margin:8px;}
-                    .grid_element_0 { width:100px; height: 100px; float:left; text-align:center; margin-bottom:5px;}
-                    .grid_element_1 { width:100px; float:left; text-align:center;margin-bottom:5px;}
-                    .grid_element_2 { width:150px; float:left;}
-                    .grid_selectbox { width:30%; float:left;}
-                    .grid_title     { width:30%; float:left;}
+                    .grid_item { height: 120px; width:98px;  float:inline-start; padding:5px; margin:8px;}
+                    .grid_element_0 { width:100px; height: 100px; float:inline-start; text-align:center; margin-bottom:5px;}
+                    .grid_element_1 { width:100px; float:inline-start; text-align:center;margin-bottom:5px;}
+                    .grid_element_2 { width:150px; float:inline-start;}
+                    .grid_selectbox { width:30%; float:inline-start;}
+                    .grid_title     { width:30%; float:inline-start;}
                     .grid_nav         { }
             </style>';
 

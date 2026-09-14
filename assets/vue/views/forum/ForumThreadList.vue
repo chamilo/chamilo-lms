@@ -85,7 +85,7 @@
               <span
                 v-if="isTeacherRole(thread)"
                 :title="getRoleLabel(thread)"
-                class="absolute -bottom-1 -right-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white bg-support-2 text-primary shadow-sm"
+                class="absolute -bottom-1 -end-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white bg-support-2 text-primary shadow-sm"
               >
                 <i
                   class="mdi mdi-account-tie text-sm"
@@ -105,6 +105,7 @@
                 <router-link
                   :to="getThreadRoute(thread)"
                   class="min-w-0 truncate text-base font-semibold text-primary hover:underline"
+                  dir="auto"
                 >
                   {{ thread.title }}
                 </router-link>

@@ -46,7 +46,7 @@
           <span v-else>{{ installerData.stepData.passForm }}</span>
           <Button
             icon="mdi mdi-eye"
-            class="p-button-text ml-2"
+            class="p-button-text ms-2"
             @click="toggleAdminPass"
             :aria-label="showAdminPass ? t('Hide password') : t('Show password')"
           />

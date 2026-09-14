@@ -1446,14 +1446,14 @@ class learnpath
         $previousIcon = '';
         $nextIcon = '';
         if (false === $hideArrows) {
-            $icon = Display::getMdiIcon('chevron-left');
+            $icon = Display::getMdiIcon('chevron-left', 'rtl:rotate-180');
             $previousIcon = '
             <button class="icon-toolbar" id="scorm-previous" type="button"
                 onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
                 '.$icon.'<span class="sr-only">'.$previousText.'</span>
             </button>';
 
-            $icon = Display::getMdiIcon('chevron-right');
+            $icon = Display::getMdiIcon('chevron-right', 'rtl:rotate-180');
             $nextIcon = '
             <button class="icon-toolbar" id="scorm-next" type="button"
                 onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
@@ -1475,7 +1475,7 @@ class learnpath
               </span>';
         } else {
             $navbar = '
-             <span id="'.$barId.'" class="buttons text-right">
+             <span id="'.$barId.'" class="buttons text-end">
                 '.$reportingIcon.'
                 '.$previousIcon.'
                 '.$nextIcon.'
@@ -4543,7 +4543,7 @@ class learnpath
                 $return .= '</div>';*/
                 $return .= Display::div(
                     Display::url(get_lang('Save'), '#', ['id' => 'listSubmit', 'class' => 'btn btn--primary']),
-                    ['style' => 'float:left; margin-top:15px;width:100%']
+                    ['style' => 'float:inline-start; margin-top:15px;width:100%']
                 );
             } else {
                 //$return_audio .= self::return_new_tree($update_audio);
@@ -6514,9 +6514,9 @@ document.addEventListener("DOMContentLoaded", function () {
         $return .= '      <table class="min-w-full divide-y divide-gray-200">';
         $return .= '        <thead class="bg-gray-20">';
         $return .= '          <tr>';
-        $return .= '            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">'.get_lang('Prerequisites').'</th>';
-        $return .= '            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-36">'.get_lang('minimum').'</th>';
-        $return .= '            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-36">'.get_lang('maximum').'</th>';
+        $return .= '            <th class="px-6 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider">'.get_lang('Prerequisites').'</th>';
+        $return .= '            <th class="px-6 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider w-36">'.get_lang('minimum').'</th>';
+        $return .= '            <th class="px-6 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider w-36">'.get_lang('maximum').'</th>';
         $return .= '          </tr>';
         $return .= '        </thead>';
         $return .= '        <tbody class="divide-y divide-gray-100 bg-white">';
@@ -6591,7 +6591,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 $indentPx = (int) ($item['lvl'] ?? 0) * 20;
 
                 $radio = '
-                <label for="id'.$itemId.'" class="flex items-center gap-3 select-none '.$labelClass.'" style="padding-left:'.$indentPx.'px;">
+                <label for="id'.$itemId.'" class="flex items-center gap-3 select-none '.$labelClass.'" style="padding-inline-start:'.$indentPx.'px;">
                     <input
                         '.$checked.' '.$disabledAttr.'
                         id="id'.$itemId.'"
@@ -7074,7 +7074,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         var btn = document.createElement('button');
                         btn.type = 'button';
                         btn.className =
-                            'lp-template-pill w-full text-left px-3 py-2 mb-2 rounded-lg border border-gray-25 ' +
+                            'lp-template-pill w-full text-start px-3 py-2 mb-2 rounded-lg border border-gray-25 ' +
                             'bg-white text-xs text-gray-90 hover:border-primary hover:bg-support-1 hover:text-primary ' +
                             'transition flex flex-col';
                         btn.setAttribute('data-template', encoded);
@@ -7302,7 +7302,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 border: 0;
                 background: transparent;
                 padding: 0;
-                text-align: left;
+                text-align: start;
                 cursor: pointer;
             }
             .lp-link-category-title {

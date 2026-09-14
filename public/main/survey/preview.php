@@ -244,7 +244,7 @@ if (
 
     $form->addHtml(
         '<a href="'.$prevUrl.'" class="btn btn--plain-outline">
-            <i class="mdi mdi-arrow-left mr-2"></i>'.get_lang('Previous question').'
+            <i class="mdi mdi-arrow-left rtl:rotate-180 me-2"></i>'.get_lang('Previous question').'
         </a>'
     );
 }

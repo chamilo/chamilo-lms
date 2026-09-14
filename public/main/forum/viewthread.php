@@ -272,7 +272,7 @@ if ('learnpath' === $origin) {
 }
 
 // Top actions (kept as-is, could be compacted later if desired)
-$actions = '<span style="float:right;">'.search_link().'</span>';
+$actions = '<span style="float:inline-end;">'.search_link().'</span>';
 if ('learnpath' != $origin) {
     $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
         .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum')).'</a>';

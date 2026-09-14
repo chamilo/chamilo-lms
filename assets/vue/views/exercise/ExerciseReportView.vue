@@ -1,6 +1,8 @@
 <template>
   <section class="space-y-5">
-    <div class="exercise-report-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
+    <div
+      class="exercise-report-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
+    >
       <BaseButton
         class="exercise-report-toolbar__button"
         :label="t('Return to exercises list')"
@@ -143,7 +145,7 @@
       @submit.prevent="confirmCleanBeforeDate"
     >
       <label class="flex flex-col gap-1 text-sm font-semibold text-gray-700">
-        {{ t('Before date') }}
+        {{ t("Before date") }}
         <input
           v-model="cleanBeforeDateValue"
           class="rounded border border-gray-30 px-3 py-2 text-sm font-normal text-gray-90"
@@ -202,7 +204,7 @@
               name="extraData"
               type="checkbox"
             />
-            <span>{{ t('Extra fields') }}</span>
+            <span>{{ t("Extra fields") }}</span>
           </label>
           <label class="inline-flex items-center gap-2">
             <input
@@ -211,7 +213,7 @@
               name="includeAllUsers"
               type="checkbox"
             />
-            <span>{{ t('Include all users') }}</span>
+            <span>{{ t("Include all users") }}</span>
           </label>
           <label class="inline-flex items-center gap-2">
             <input
@@ -220,7 +222,7 @@
               name="onlyBestAttempts"
               type="checkbox"
             />
-            <span>{{ t('Only best attempts') }}</span>
+            <span>{{ t("Only best attempts") }}</span>
           </label>
         </div>
       </div>
@@ -229,27 +231,28 @@
     <div class="border-b border-gray-20" />
 
     <header class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm">
-      <div class="border-l-4 border-l-primary p-5">
+      <div class="border-s-4 border-s-primary p-5">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div class="space-y-2">
             <h1 class="text-2xl font-semibold text-gray-90">
-              {{ displayText(title, t('Learner score')) }}
+              {{ displayText(title, t("Learner score")) }}
             </h1>
             <div
               v-if="description"
               class="exercise-report-html text-sm text-gray-700"
+              dir="auto"
               v-html="displayTranslatedHtml(description)"
             />
           </div>
           <div class="flex flex-wrap gap-2">
             <span class="rounded-full bg-info/10 px-3 py-1 text-sm font-semibold text-info">
-              {{ t('Attempts') }}: {{ attempts.length }}
+              {{ t("Attempts") }}: {{ attempts.length }}
             </span>
             <span
               v-if="pendingCorrectionCount > 0"
               class="rounded-full bg-warning/10 px-3 py-1 text-sm font-semibold text-warning"
             >
-              {{ t('Pending corrections') }}: {{ pendingCorrectionCount }}
+              {{ t("Pending corrections") }}: {{ pendingCorrectionCount }}
             </span>
           </div>
         </div>
@@ -261,7 +264,9 @@
       class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
       @submit.prevent="applyFilters"
     >
-      <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-end">
+      <div
+        class="grid gap-3 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-end"
+      >
         <BaseInputText
           id="exercise-report-first-name"
           v-model="filterForm.firstName"
@@ -352,65 +357,108 @@
         sortable
       >
         <template #body="{ data }">
-          {{ displayText(data.officialCode, '-') }}
+          {{ displayText(data.officialCode, "-") }}
         </template>
       </Column>
-      <Column :header="t('First name')" field="firstName" sortable>
+      <Column
+        :header="t('First name')"
+        field="firstName"
+        sortable
+      >
         <template #body="{ data }">
-          <div class="font-semibold text-gray-90">{{ displayText(data.firstName, '-') }}</div>
-          <div v-if="showUsername" class="text-xs text-gray-500">{{ data.username }}</div>
+          <div class="font-semibold text-gray-90">{{ displayText(data.firstName, "-") }}</div>
+          <div
+            v-if="showUsername"
+            class="text-xs text-gray-500"
+          >
+            {{ data.username }}
+          </div>
         </template>
       </Column>
-      <Column :header="t('Last name')" field="lastName" sortable>
+      <Column
+        :header="t('Last name')"
+        field="lastName"
+        sortable
+      >
         <template #body="{ data }">
-          {{ displayText(data.lastName, '-') }}
+          {{ displayText(data.lastName, "-") }}
         </template>
       </Column>
-      <Column :header="t('Group')" field="groupName">
+      <Column
+        :header="t('Group')"
+        field="groupName"
+      >
         <template #body="{ data }">
-          {{ displayText(data.groupName, '-') }}
+          {{ displayText(data.groupName, "-") }}
         </template>
       </Column>
-      <Column :header="t('Duration')" field="duration" sortable>
+      <Column
+        :header="t('Duration')"
+        field="duration"
+        sortable
+      >
         <template #body="{ data }">
           {{ formatSeconds(data.duration) }}
         </template>
       </Column>
-      <Column :header="t('Start Date')" field="startedAt" sortable>
+      <Column
+        :header="t('Start Date')"
+        field="startedAt"
+        sortable
+      >
         <template #body="{ data }">
           {{ formatDate(data.startedAt) }}
         </template>
       </Column>
-      <Column :header="t('End Date')" field="completedAt" sortable>
+      <Column
+        :header="t('End Date')"
+        field="completedAt"
+        sortable
+      >
         <template #body="{ data }">
           {{ formatDate(data.completedAt) }}
         </template>
       </Column>
-      <Column :header="t('Score')" field="score" sortable>
+      <Column
+        :header="t('Score')"
+        field="score"
+        sortable
+      >
         <template #body="{ data }">
           <span class="font-semibold text-gray-90">
             {{ formatNumber(data.percentage) }} % ({{ formatNumber(data.score) }} / {{ formatNumber(data.maxScore) }})
           </span>
         </template>
       </Column>
-      <Column v-if="showIp" :header="t('IP')" field="ip">
+      <Column
+        v-if="showIp"
+        :header="t('IP')"
+        field="ip"
+      >
         <template #body="{ data }">
-          {{ displayText(data.ip, '-') }}
+          {{ displayText(data.ip, "-") }}
         </template>
       </Column>
-      <Column :header="t('Status')" field="status" sortable>
+      <Column
+        :header="t('Status')"
+        field="status"
+        sortable
+      >
         <template #body="{ data }">
           <span
             class="rounded-full px-3 py-1 text-xs font-semibold"
             :class="statusClass(data.status)"
           >
-            {{ t(data.statusLabel || 'Completed') }}
+            {{ t(data.statusLabel || "Completed") }}
           </span>
         </template>
       </Column>
-      <Column :header="t('Learning path')" field="learningPath">
+      <Column
+        :header="t('Learning path')"
+        field="learningPath"
+      >
         <template #body="{ data }">
-          {{ displayText(data.learningPath, '-') }}
+          {{ displayText(data.learningPath, "-") }}
         </template>
       </Column>
       <Column :header="t('Detail')">
@@ -421,7 +469,11 @@
               class="exercise-report-row-action"
               :label="data.pendingCorrection ? t('Correct') : t('Review')"
               only-icon
-              :route="{ name: 'ExerciseResult', params: { ...getExerciseRouteParams(), attemptId: data.attemptId }, query: getReviewContextParams() }"
+              :route="{
+                name: 'ExerciseResult',
+                params: { ...getExerciseRouteParams(), attemptId: data.attemptId },
+                query: getReviewContextParams(),
+              }"
               :icon="data.pendingCorrection ? safeIcon('edit') : safeIcon('eye-on', 'information')"
               size="small"
               :type="data.pendingCorrection ? 'secondary-text' : 'primary-text'"
@@ -535,7 +587,9 @@ const filterForm = reactive({
   status: getQueryValue(route.query.status) || "",
   groupId: getQueryValue(route.query.groupId) || getQueryValue(route.query.group_id) || "",
 })
-const isSearchVisible = ref(Boolean(filterForm.firstName || filterForm.lastName || filterForm.status || filterForm.groupId))
+const isSearchVisible = ref(
+  Boolean(filterForm.firstName || filterForm.lastName || filterForm.status || filterForm.groupId),
+)
 
 const statusOptions = computed(() => [
   { label: t("All"), value: "" },
@@ -549,16 +603,18 @@ const exportFormatOptions = computed(() => [
 ])
 const pendingCorrectionCount = computed(() => attempts.value.filter((attempt) => attempt.pendingCorrection).length)
 const selectedAttemptIds = computed(() =>
-  selectedAttempts.value.map((attempt) => Number(attempt.attemptId || attempt.id || 0)).filter((attemptId) => attemptId > 0),
+  selectedAttempts.value
+    .map((attempt) => Number(attempt.attemptId || attempt.id || 0))
+    .filter((attemptId) => attemptId > 0),
 )
 const hasSelectedAttempts = computed(() => selectedAttemptIds.value.length > 0)
 const hasFilters = computed(() =>
   Boolean(
     getQueryValue(route.query.firstName) ||
-      getQueryValue(route.query.lastName) ||
-      getQueryValue(route.query.status) ||
-      getQueryValue(route.query.groupId) ||
-      getQueryValue(route.query.group_id),
+    getQueryValue(route.query.lastName) ||
+    getQueryValue(route.query.status) ||
+    getQueryValue(route.query.groupId) ||
+    getQueryValue(route.query.group_id),
   ),
 )
 const availableIcons = Object.keys(chamiloIconToClass)
@@ -650,7 +706,7 @@ function getAttemptPdfUrl(attempt) {
   const attemptId = Number(attempt?.attemptId || 0)
 
   if (!exerciseId || !attemptId) {
-    return '#'
+    return "#"
   }
 
   return exerciseService.buildExerciseRuntimeAttemptPdfUrl(getContextParams(), exerciseId, attemptId)
@@ -945,7 +1001,12 @@ async function recalculateAttempt(attempt) {
   errorMessage.value = ""
   successMessage.value = ""
   try {
-    const response = await exerciseService.recalculateExerciseRuntimeAttempt({}, getContextParams(), exerciseId, attemptId)
+    const response = await exerciseService.recalculateExerciseRuntimeAttempt(
+      {},
+      getContextParams(),
+      exerciseId,
+      attemptId,
+    )
     if (!response?.success) {
       throw new Error(response?.message || "Could not load data")
     }
@@ -1100,7 +1161,15 @@ function displayText(value, fallback = "") {
 onMounted(loadReport)
 
 watch(
-  () => [route.params.exerciseId, route.query.cid, route.query.sid, route.query.gid, route.query.firstName, route.query.lastName, route.query.status],
+  () => [
+    route.params.exerciseId,
+    route.query.cid,
+    route.query.sid,
+    route.query.gid,
+    route.query.firstName,
+    route.query.lastName,
+    route.query.status,
+  ],
   () => {
     filterForm.firstName = getQueryValue(route.query.firstName) || ""
     filterForm.lastName = getQueryValue(route.query.lastName) || ""
@@ -1114,7 +1183,6 @@ watch(
 </script>
 
 <style scoped>
-
 :deep(.exercise-report-toolbar__button) {
   min-width: 2.5rem;
   width: 2.5rem;

@@ -716,7 +716,7 @@ if ($allowSocialTool) {
     $normalImage = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
 
     $imageToShow = '<div id="image-message-container">';
-    $imageToShow .= '<a class="expand-image float-right" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
+    $imageToShow .= '<a class="expand-image float-end" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
     $imageToShow .= '</div>';
 
     $content = $imageToShow.$form->returnForm();

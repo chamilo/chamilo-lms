@@ -10,7 +10,7 @@
 
   <BaseButton
     :label="t('Add')"
-    class="ml-auto"
+    class="ms-auto"
     icon="plus"
     type="success"
     @click="onClickCreateEvent"

@@ -47,7 +47,7 @@
         @click="goBackToLearningPath"
       />
       <label class="flex items-center gap-2 text-xs text-gray-600">
-        <span>{{ t('View') }}</span>
+        <span>{{ t("View") }}</span>
         <select
           v-model="viewType"
           class="rounded border border-gray-30 bg-white px-2 py-1 text-xs"
@@ -151,7 +151,9 @@
         :class="['rounded-xl border border-gray-20 bg-white p-4 shadow-sm', getPostLevelClass(post)]"
       >
         <div class="grid gap-4 md:grid-cols-[10rem_minmax(0,1fr)]">
-          <aside class="flex flex-row items-center gap-3 md:flex-col md:items-center md:border-r md:border-gray-20 md:pr-4 md:text-center">
+          <aside
+            class="flex flex-row items-center gap-3 md:flex-col md:items-center md:border-e md:border-gray-20 md:pe-4 md:text-center"
+          >
             <div class="relative shrink-0">
               <BaseUserAvatar
                 :alt="post.posterFullName || t('Unknown user')"
@@ -161,7 +163,7 @@
               <span
                 v-if="isTeacherRole(post)"
                 :title="getRoleLabel(post)"
-                class="absolute -bottom-1 -right-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white bg-support-2 text-primary shadow-sm"
+                class="absolute -bottom-1 -end-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white bg-support-2 text-primary shadow-sm"
               >
                 <i
                   class="mdi mdi-account-tie text-sm"
@@ -178,13 +180,17 @@
                 v-if="getPostRelativeTime(post) || getPostDateValue(post)"
                 class="mt-1 text-xs text-gray-500"
               >
-                <span :title="formatDate(getPostDateValue(post)) || getPostRelativeTime(post)">{{ getPostRelativeTime(post) }}</span>
+                <span :title="formatDate(getPostDateValue(post)) || getPostRelativeTime(post)">{{
+                  getPostRelativeTime(post)
+                }}</span>
               </div>
             </div>
           </aside>
 
           <div class="min-w-0">
-            <div class="mb-3 flex flex-col gap-3 border-b border-gray-20 pb-3 md:flex-row md:items-start md:justify-between">
+            <div
+              class="mb-3 flex flex-col gap-3 border-b border-gray-20 pb-3 md:flex-row md:items-start md:justify-between"
+            >
               <div class="min-w-0">
                 <h2 class="truncate text-base font-semibold text-gray-90">{{ post.title }}</h2>
                 <div class="mt-1 flex flex-wrap gap-2 text-xs text-gray-500">
@@ -205,13 +211,13 @@
                     v-if="post.revisionRequested"
                     class="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700"
                   >
-                    {{ t('Revision requested') }}
+                    {{ t("Revision requested") }}
                   </span>
                   <span
                     v-if="post.revisionLanguage"
                     class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
                   >
-                    {{ t('Revision') }}
+                    {{ t("Revision") }}
                   </span>
                 </div>
               </div>
@@ -321,6 +327,7 @@
 
             <div
               class="prose prose-sm max-w-none text-gray-800"
+              dir="auto"
               v-html="sanitizePostText(post.postText)"
             />
 
@@ -333,7 +340,7 @@
                   icon="attachment"
                   size="small"
                 />
-                {{ t('Attachments') }}
+                {{ t("Attachments") }}
               </h3>
               <ul class="flex flex-col gap-2">
                 <li
@@ -352,7 +359,7 @@
                       rel="noopener noreferrer"
                       target="_blank"
                     >
-                      {{ attachment.filename || attachment.path || t('Attachment') }}
+                      {{ attachment.filename || attachment.path || t("Attachment") }}
                     </a>
                     <span class="shrink-0 text-xs text-gray-500">{{ formatSize(attachment.size) }}</span>
                   </div>
@@ -372,9 +379,7 @@
         </div>
       </article>
 
-      <div class="flex items-center justify-center text-xs text-gray-500">
-        {{ posts.length }} / {{ totalItems }}
-      </div>
+      <div class="flex items-center justify-center text-xs text-gray-500">{{ posts.length }} / {{ totalItems }}</div>
 
       <div
         v-if="hasMorePosts"
@@ -542,16 +547,16 @@ const baseQuery = computed(() => ({
   gid: gid.value || null,
 }))
 const hasEditMessage = computed(() => stripTags(editForm.text).trim().length > 0)
-const viewType = ref(["flat", "threaded", "nested"].includes(String(route.query.view || "")) ? String(route.query.view) : "flat")
+const viewType = ref(
+  ["flat", "threaded", "nested"].includes(String(route.query.view || "")) ? String(route.query.view) : "flat",
+)
 const viewTypeOptions = computed(() => [
   { label: t("Flat"), value: "flat" },
   { label: t("Threaded"), value: "threaded" },
   { label: t("Nested"), value: "nested" },
 ])
 const displayedPosts = computed(() => buildDisplayedPosts(posts.value, viewType.value))
-const hasMorePosts = computed(
-  () => currentPage.value < totalPages.value && posts.value.length < totalItems.value,
-)
+const hasMorePosts = computed(() => currentPage.value < totalPages.value && posts.value.length < totalItems.value)
 
 function sanitizePostText(value) {
   return sanitizeHtml(value || "")
@@ -629,7 +634,7 @@ function buildDisplayedPosts(items, mode) {
 function getPostLevelClass(post) {
   const level = Math.min(Number(post.level || 0), 4)
 
-  return ["", "ml-4", "ml-8", "ml-12", "ml-16"][level]
+  return ["", "ms-4", "ms-8", "ms-12", "ms-16"][level]
 }
 
 function getReplyToPostRoute(post) {
@@ -671,7 +676,6 @@ function isPostVisible(post) {
 
   return true === post.visible || 1 === post.visible || "1" === String(post.visible)
 }
-
 
 function showModerationStatus(post) {
   const status = getModerationStatus(post)
@@ -961,7 +965,9 @@ async function loadPosts() {
     posts.value = data.posts || []
     updatePagination(data, 1)
     if (!route.query.view && forum.value?.defaultView) {
-      viewType.value = ["flat", "threaded", "nested"].includes(forum.value.defaultView) ? forum.value.defaultView : "flat"
+      viewType.value = ["flat", "threaded", "nested"].includes(forum.value.defaultView)
+        ? forum.value.defaultView
+        : "flat"
     }
   } catch (error) {
     loadError.value = true
@@ -1005,12 +1011,13 @@ async function loadNextPage() {
   }
 }
 
-
 async function toggleThreadVisibility() {
   const wasVisible = isThreadVisible(thread.value)
 
   try {
-    const response = await forumService.toggleThreadVisibility(threadId.value, baseQuery.value, { visible: !wasVisible })
+    const response = await forumService.toggleThreadVisibility(threadId.value, baseQuery.value, {
+      visible: !wasVisible,
+    })
     if (thread.value) {
       thread.value.threadVisible = response.visible
     }
@@ -1038,14 +1045,15 @@ async function toggleThreadSticky() {
   try {
     const response = await forumService.toggleThreadSticky(threadId.value, baseQuery.value, {})
 
-    notifications.showSuccessNotification(response.threadSticky ? t("Thread marked as sticky") : t("Thread unmarked as sticky"))
+    notifications.showSuccessNotification(
+      response.threadSticky ? t("Thread marked as sticky") : t("Thread unmarked as sticky"),
+    )
     await loadPosts()
   } catch (error) {
     console.error("Error toggling forum thread sticky status:", error)
     notifications.showErrorNotification(t("Could not update thread"))
   }
 }
-
 
 async function toggleThreadNotification() {
   if (!thread.value) {
@@ -1058,7 +1066,9 @@ async function toggleThreadNotification() {
     })
 
     thread.value.subscribed = response.subscribed
-    notifications.showSuccessNotification(response.subscribed ? t("Thread notifications enabled") : t("Thread notifications disabled"))
+    notifications.showSuccessNotification(
+      response.subscribed ? t("Thread notifications enabled") : t("Thread notifications disabled"),
+    )
     await loadPosts()
   } catch (error) {
     console.error("Error toggling forum thread notification:", error)
@@ -1078,13 +1088,16 @@ async function deleteThread() {
     await forumService.deleteThread(threadId.value, baseQuery.value, {})
 
     notifications.showSuccessNotification(t("Thread deleted"))
-    await router.push({ name: "ForumThreadList", params: { node: parentId.value, forumId: forumId.value }, query: route.query })
+    await router.push({
+      name: "ForumThreadList",
+      params: { node: parentId.value, forumId: forumId.value },
+      query: route.query,
+    })
   } catch (error) {
     console.error("Error deleting forum thread:", error)
     notifications.showErrorNotification(t("Could not delete thread"))
   }
 }
-
 
 async function approvePost(post) {
   try {
@@ -1181,7 +1194,11 @@ async function deletePost(post) {
     notifications.showSuccessNotification(response.threadDeleted ? t("Thread deleted") : t("Post deleted"))
 
     if (response.threadDeleted) {
-      await router.push({ name: "ForumThreadList", params: { node: parentId.value, forumId: forumId.value }, query: route.query })
+      await router.push({
+        name: "ForumThreadList",
+        params: { node: parentId.value, forumId: forumId.value },
+        query: route.query,
+      })
       return
     }
 
@@ -1239,7 +1256,11 @@ async function savePostMove() {
     if (Number(response.targetThreadId || 0) !== threadId.value) {
       await router.push({
         name: "ForumPostList",
-        params: { node: parentId.value, forumId: Number(response.targetForumId || forumId.value), threadId: Number(response.targetThreadId || threadId.value) },
+        params: {
+          node: parentId.value,
+          forumId: Number(response.targetForumId || forumId.value),
+          threadId: Number(response.targetThreadId || threadId.value),
+        },
         query: route.query,
       })
       return
@@ -1258,7 +1279,9 @@ async function askRevision(post) {
   try {
     const response = await forumService.askPostRevision(post.iid, baseQuery.value, {})
     post.revisionRequested = response.revisionRequested
-    notifications.showSuccessNotification(response.revisionRequested ? t("Revision requested") : t("Revision request removed"))
+    notifications.showSuccessNotification(
+      response.revisionRequested ? t("Revision requested") : t("Revision request removed"),
+    )
     await loadPosts()
   } catch (error) {
     console.error("Error asking forum post revision:", error)

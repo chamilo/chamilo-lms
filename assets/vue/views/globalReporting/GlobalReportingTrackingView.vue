@@ -52,7 +52,7 @@
             />
           </div>
 
-          <div class="flex items-center gap-2 md:ml-auto">
+          <div class="flex items-center gap-2 md:ms-auto">
             <BaseButton
               :label="t('Export to XLS')"
               icon="file-excel"
@@ -108,7 +108,7 @@
                     <BaseIcon
                       icon="session-star"
                       size="small"
-                      class="ml-1 inline-flex"
+                      class="ms-1 inline-flex"
                     />
                     ({{ data.sessionTitle }})
                   </template>

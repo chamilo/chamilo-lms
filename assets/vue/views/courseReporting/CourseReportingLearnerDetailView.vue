@@ -62,7 +62,7 @@
       >
         <table class="w-full min-w-[42rem] border-collapse text-sm">
           <thead>
-            <tr class="border-b border-gray-25 text-left">
+            <tr class="border-b border-gray-25 text-start">
               <th class="px-3 py-2 font-semibold">{{ t("Document") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Path") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Date") }}</th>
@@ -89,7 +89,7 @@
       >
         <table class="w-full min-w-[48rem] border-collapse text-sm">
           <thead>
-            <tr class="border-b border-gray-25 text-left">
+            <tr class="border-b border-gray-25 text-start">
               <th class="px-3 py-2 font-semibold">{{ t("Topic") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Forum") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Replies") }}</th>
@@ -120,7 +120,7 @@
       >
         <table class="w-full min-w-[48rem] border-collapse text-sm">
           <thead>
-            <tr class="border-b border-gray-25 text-left">
+            <tr class="border-b border-gray-25 text-start">
               <th class="px-3 py-2 font-semibold">{{ t("Post") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Topic") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Forum") }}</th>
@@ -149,7 +149,7 @@
       >
         <table class="w-full min-w-[52rem] border-collapse text-sm">
           <thead>
-            <tr class="border-b border-gray-25 text-left">
+            <tr class="border-b border-gray-25 text-start">
               <th class="px-3 py-2 font-semibold">{{ t("Login date") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Logout date") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Time") }}</th>
@@ -180,7 +180,7 @@
       >
         <table class="w-full min-w-[36rem] border-collapse text-sm">
           <thead>
-            <tr class="border-b border-gray-25 text-left">
+            <tr class="border-b border-gray-25 text-start">
               <th class="px-3 py-2 font-semibold">{{ t("Tool") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Date") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("IP address") }}</th>

@@ -14,7 +14,7 @@
         <h4 class="font-semibold text-gray-700 mb-2">
           {{ section.name }}
         </h4>
-        <ul class="list-disc pl-5 text-sm text-gray-700">
+        <ul class="list-disc ps-5 text-sm text-gray-700">
           <li
             v-for="req in section.requirements"
             :key="req.name"
@@ -24,7 +24,10 @@
               v-if="req.status !== null"
               :class="req.status ? 'mdi mdi-check-circle text-green-500' : 'mdi mdi-alert-circle text-red-500'"
             ></i>
-            <span v-html="req.adminLink || req.name"></span>
+            <span
+              dir="auto"
+              v-html="req.adminLink || req.name"
+            ></span>
           </li>
         </ul>
       </div>

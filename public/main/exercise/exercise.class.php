@@ -3317,7 +3317,7 @@ class Exercise
 .ch-modal { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 16px; }
 .ch-modal::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,.3); }
 .ch-panel { position: relative; width: 100%; max-width: 520px; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,.08); padding: 16px; color:#111827; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif; }
-.ch-close { position:absolute; right: 10px; top:10px; cursor:pointer; color:#6b7280; }
+.ch-close { position:absolute; inset-inline-end: 10px; top:10px; cursor:pointer; color:#6b7280; }
             `;
             var s = document.createElement('style');
             s.id = 'ch-modal-styles';
@@ -3412,7 +3412,7 @@ class Exercise
 .ch-modal { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 16px; }
 .ch-modal::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,.3); }
 .ch-panel { position: relative; width: 100%; max-width: 520px; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,.08); padding: 16px; color:#111827; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif; }
-.ch-close { position:absolute; right: 10px; top:10px; cursor:pointer; color:#6b7280; }
+.ch-close { position:absolute; inset-inline-end: 10px; top:10px; cursor:pointer; color:#6b7280; }
             `;
             var s = document.createElement('style');
             s.id = 'ch-modal-styles';
@@ -6031,19 +6031,19 @@ class Exercise
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Overlapping area').'</b></td>
                                     <td>'.get_lang('Minimum').' '.$threadhold1.'</td>
-                                    <td class="text-right '.($overlap_color ? 'text-success' : 'text-error').'">'
+                                    <td class="text-end '.($overlap_color ? 'text-success' : 'text-error').'">'
                                     .$overlap.'</td>
                                 </tr>
                                 <tr>
                                     <td><b>'.get_lang('Excessive area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold2.'</td>
-                                    <td class="text-right '.($excess_color ? 'text-success' : 'text-error').'">'
+                                    <td class="text-end '.($excess_color ? 'text-success' : 'text-error').'">'
                                     .$excess.'</td>
                                 </tr>
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Missing area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold3.'</td>
-                                    <td class="text-right '.($missing_color ? 'text-success' : 'text-error').'">'
+                                    <td class="text-end '.($missing_color ? 'text-success' : 'text-error').'">'
                                     .$missing.'</td>
                                 </tr>
                             </table>';
@@ -9464,7 +9464,7 @@ class Exercise
                     '.$alt_title.'
                     id="tooltip_'.$exerciseId.'"
                     href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$exerciseId.'"
-                    style = "'.$style.';float:left;"
+                    style = "'.$style.';float:inline-start;"
                     >
                      '.Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, ICON_SIZE_SMALL, $title).$title.
                         '</a>'.$sessionStar;

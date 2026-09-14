@@ -310,7 +310,7 @@ function bbb_listing_build_header_html(BbbPlugin $plugin, bool $status, int $use
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div class="space-y-2">
                 <div class="inline-flex items-center rounded-full bg-support-2 px-3 py-1 text-caption font-semibold text-support-4">
-                    <em class="mdi mdi-video-outline mr-2"></em>'.htmlspecialchars($plugin->get_lang('Videoconference'), ENT_QUOTES).'
+                    <em class="mdi mdi-video-outline me-2"></em>'.htmlspecialchars($plugin->get_lang('Videoconference'), ENT_QUOTES).'
                 </div>
                 <h2 class="mb-0 text-2xl font-semibold text-gray-90">'.htmlspecialchars($plugin->get_lang('Videoconference'), ENT_QUOTES).'</h2>
                 <p class="mb-0 text-body-2 text-gray-50">'.htmlspecialchars($plugin->get_lang('RecordList'), ENT_QUOTES).'</p>
@@ -824,12 +824,12 @@ if ($conferenceManager && $allowToEdit) {
   <button type="button" id="bbb-pre-btn"
           class="btn btn--icon"
           title="{$title}"
-          style="position:absolute; right:0; top:-8px;">
+          style="position:absolute; inset-inline-end:0; top:-8px;">
     {$iconHtml}
   </button>
 
   <div id="bbb-pre-pop" class="hidden rounded-2xl border border-gray-25 bg-white p-4 shadow-xl"
-       style="position:absolute; right:0; top:40px; z-index:50;
+       style="position:absolute; inset-inline-end:0; top:40px; z-index:50;
               width:min(820px, calc(100vw - 4rem));
               max-width:calc(100vw - 4rem);">
     <div class="mb-3 text-body-2 text-gray-50">{$help}</div>

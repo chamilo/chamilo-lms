@@ -3,10 +3,10 @@
     <div class="flex flex-row">
       <div
         v-if="recorderState.isRecording"
-        class="flex rounded-md mr-2 mb-2 py-2 px-3 border border-error"
+        class="flex rounded-md me-2 mb-2 py-2 px-3 border border-error"
       >
         <BaseIcon
-          class="self-center mr-2 text-error motion-safe:animate-pulse"
+          class="self-center me-2 text-error motion-safe:animate-pulse"
           icon="microphone"
         />
         <p class="self-center font-semibold text-error">
@@ -17,7 +17,7 @@
       <BaseButton
         v-if="showButtons && recorderState.isRecording"
         :label="t('Stop recording')"
-        class="mr-2 mb-2"
+        class="me-2 mb-2"
         icon="stop"
         type="danger"
         @click="stop"
@@ -25,7 +25,7 @@
       <BaseButton
         v-else-if="showButtons"
         :label="t('Start recording')"
-        class="mr-2 mb-2"
+        class="me-2 mb-2"
         icon="microphone"
         type="primary"
         @click="record"

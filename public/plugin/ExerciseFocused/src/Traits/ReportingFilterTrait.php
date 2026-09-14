@@ -276,8 +276,8 @@ trait ReportingFilterTrait
         $table->setData($tableData);
         $table->setColAttributes($courseId ? 3 : 6, ['class' => 'text-center']);
         $table->setColAttributes($courseId ? 4 : 7, ['class' => 'text-center']);
-        $table->setColAttributes($courseId ? 5 : 8, ['class' => 'text-right']);
-        $table->setColAttributes($courseId ? 6 : 9, ['class' => 'text-right']);
+        $table->setColAttributes($courseId ? 5 : 8, ['class' => 'text-end']);
+        $table->setColAttributes($courseId ? 6 : 9, ['class' => 'text-end']);
         $table->setColAttributes($courseId ? 7 : 10, ['class' => 'text-center']);
         $table->setColAttributes($courseId ? 8 : 11, ['class' => 'text-center space-x-2 space-y-2']);
 

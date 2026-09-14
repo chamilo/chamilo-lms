@@ -2,9 +2,9 @@
     {% if data is not empty %}
         <div class="glossary mt-5">
             {% for item in data %}
-            <div class="item-glossary mb-4 pl-2 pr-2">
+            <div class="item-glossary mb-4 ps-2 pe-2">
                 {% if item.edit %}
-                    <div class="float-right">
+                    <div class="float-end">
                         <div class="btn-group" role="group">
                             <a href="{{ item.edit }}" class="btn btn-light btn-sm">
                                 {{ 'ActionIcon::EDIT' | mdi_icon }}

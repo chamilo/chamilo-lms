@@ -12,7 +12,7 @@
     />
     <label
       :for="id"
-      :class="['ml-2', disabled ? 'cursor-not-allowed text-gray-50' : 'cursor-pointer']"
+      :class="['ms-2', disabled ? 'cursor-not-allowed text-gray-50' : 'cursor-pointer']"
       >{{ label }}</label
     >
   </div>

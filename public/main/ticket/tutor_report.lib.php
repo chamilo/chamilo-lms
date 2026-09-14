@@ -144,9 +144,9 @@ function showResults($courseInfo, $weeksCount, $page)
             </select>';
 
     if (14 == $weeksCount) {
-        $html .= '<span style="float:right;"><a href="tutor.php?page='.(1 == $page ? 2 : 1).'">'.(1 == $page ? 'Siguiente' : 'Anterior').'</a></span>';
+        $html .= '<span style="float:inline-end;"><a href="tutor.php?page='.(1 == $page ? 2 : 1).'">'.(1 == $page ? 'Siguiente' : 'Anterior').'</a></span>';
     }
-    //$html .= '<span style="float:right;"><a href="'.api_get_self().'?action=export'.$get_parameter.$get_parameter2.'">'.Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a></span>';
+    //$html .= '<span style="float:inline-end;"><a href="'.api_get_self().'?action=export'.$get_parameter.$get_parameter2.'">'.Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a></span>';
 
     $html .= '</form>';
     $html .= '<table class="reports">';

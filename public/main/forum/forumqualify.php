@@ -299,7 +299,7 @@ echo '<section class="w-full">
             <h1 class="text-xl font-semibold text-gray-90">'.htmlspecialchars($userToQualifyInfo['complete_name']).'</h1>
             <p class="text-sm text-gray-50">'.get_lang('Thread').': '.prepare4display($threadEntity->getTitle()).'</p>
         </div>
-        <div class="grid grid-cols-2 gap-4 text-right text-sm text-gray-50">
+        <div class="grid grid-cols-2 gap-4 text-end text-sm text-gray-50">
             <div class="flex flex-col">
                 <span class="text-xs uppercase tracking-wide">'.get_lang('Users in course').'</span>
                 <span class="mt-1 text-base font-semibold text-gray-90">'.$result['user_course'].'</span>
@@ -361,11 +361,11 @@ if (isset($rows)) {
         if ('0' == $row['visible']) {
             $titleclass = 'forum_message_post_title_2_be_approved text-gray-90 font-semibold text-base';
             $messageclass = 'forum_message_post_text_2_be_approved text-gray-90 text-sm leading-relaxed';
-            $leftclass = 'forum_message_left_2_be_approved align-top bg-support-2 border-r border-gray-20 px-4 py-3 text-xs text-gray-90';
+            $leftclass = 'forum_message_left_2_be_approved align-top bg-support-2 border-e border-gray-20 px-4 py-3 text-xs text-gray-90';
         } else {
             $titleclass = 'forum_message_post_title text-gray-90 font-semibold text-base';
             $messageclass = 'forum_message_post_text text-gray-90 text-sm leading-relaxed';
-            $leftclass = 'forum_message_left align-top bg-support-2 border-r border-gray-20 px-4 py-3 text-xs text-gray-90';
+            $leftclass = 'forum_message_left align-top bg-support-2 border-e border-gray-20 px-4 py-3 text-xs text-gray-90';
         }
 
         echo '<tr>';
@@ -441,9 +441,9 @@ if (api_is_allowed_to_edit() && $counter > 0) {
     $table_list .= '<div class="overflow-x-auto">';
     $table_list .= '<table class="table w-full text-sm bg-white border border-gray-20 rounded-2xl shadow-sm">';
     $table_list .= '<tr class="bg-gray-15">';
-    $table_list .= '<th class="px-4 py-2 text-left w-1/2">'.get_lang('Who changed').'</th>';
-    $table_list .= '<th class="px-4 py-2 text-left w-1/6">'.get_lang('Note changed').'</th>';
-    $table_list .= '<th class="px-4 py-2 text-left w-1/3">'.get_lang('Date changed').'</th>';
+    $table_list .= '<th class="px-4 py-2 text-start w-1/2">'.get_lang('Who changed').'</th>';
+    $table_list .= '<th class="px-4 py-2 text-start w-1/6">'.get_lang('Note changed').'</th>';
+    $table_list .= '<th class="px-4 py-2 text-start w-1/3">'.get_lang('Date changed').'</th>';
     $table_list .= '</tr>';
 
     for ($i = 0; $i < count($historyList); $i++) {

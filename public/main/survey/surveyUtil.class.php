@@ -3708,15 +3708,15 @@ class SurveyUtil
         echo '      <table class="min-w-full table-auto divide-y divide-gray-20">';
         echo '        <thead class="bg-gray-10">';
         echo '          <tr>';
-        echo '            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Survey name').'</th>';
-        echo '            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Status').'</th>';
-        echo '            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Anonymous').'</th>';
+        echo '            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Survey name').'</th>';
+        echo '            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Status').'</th>';
+        echo '            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Anonymous').'</th>';
 
         if ($mandatoryAllowed) {
-            echo '            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Mandatory?').'</th>';
+            echo '            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Mandatory?').'</th>';
         }
 
-        echo '            <th scope="col" class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Actions').'</th>';
+        echo '            <th scope="col" class="px-6 py-4 text-end text-xs font-semibold uppercase tracking-wide text-gray-500">'.get_lang('Actions').'</th>';
         echo '          </tr>';
         echo '        </thead>';
         echo '        <tbody class="divide-y divide-gray-20 bg-white">';
@@ -3758,11 +3758,11 @@ class SurveyUtil
                 echo '            <td class="px-6 py-4 align-middle text-sm font-medium text-gray-900">'.$mandatory.'</td>';
             }
 
-            echo '            <td class="px-6 py-4 align-middle text-right">';
+            echo '            <td class="px-6 py-4 align-middle text-end">';
 
             if ($item['is_link']) {
                 echo '              <a href="'.$url.'" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-20 bg-white text-blue-700 shadow-sm hover:border-blue-300 hover:bg-blue-50" title="'.$statusLabel.'">';
-                echo '                <span class="mdi mdi-arrow-right-circle-outline ch-tool-icon" aria-hidden="true"></span>';
+                echo '                <span class="mdi mdi-arrow-right-circle-outline rtl:rotate-180 ch-tool-icon" aria-hidden="true"></span>';
                 echo '                <span class="sr-only">'.$statusLabel.'</span>';
                 echo '              </a>';
             } else {

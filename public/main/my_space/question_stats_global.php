@@ -208,7 +208,7 @@ $isGlobal = 'question_stats_global.php' === $currentScript;
 $isDetail = 'question_stats_global_detail.php' === $currentScript;
 
 $questionTabs =
-    '<div class="inline-flex items-center ml-4">'.
+    '<div class="inline-flex items-center ms-4">'.
     '<div class="inline-flex rounded-full bg-gray-10 border border-gray-25 px-1 py-1 text-body-2">'.
     '<a href="'.$webCodePath.'my_space/question_stats_global.php"'
     .' class="px-3 py-1 rounded-full transition '
@@ -217,7 +217,7 @@ $questionTabs =
         : 'text-gray-50 hover:bg-gray-15 hover:text-gray-90').'"'
     .'>'.get_lang('Question stats').'</a>'.
     '<a href="'.$webCodePath.'my_space/question_stats_global_detail.php"'
-    .' class="ml-1 px-3 py-1 rounded-full transition '
+    .' class="ms-1 px-3 py-1 rounded-full transition '
     .($isDetail
         ? 'bg-white text-gray-90 shadow-sm'
         : 'text-gray-50 hover:bg-gray-15 hover:text-gray-90').'"'

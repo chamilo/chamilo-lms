@@ -3474,7 +3474,7 @@ class CourseManager
                     $data .= Display::getMdiIcon(
                         ActionIcon::DELETE,
                         'ch-tool-icon',
-                        'vertical-align:middle;float:right;',
+                        'vertical-align:middle;float:inline-end;',
                         ICON_SIZE_SMALL,
                         get_lang('Delete')
                     );
@@ -3484,7 +3484,7 @@ class CourseManager
                     $data .= Display::getMdiIcon(
                         ActionIcon::EDIT,
                         'ch-tool-icon',
-                        'vertical-align:middle;float:right; padding-right:4px;',
+                        'vertical-align:middle;float:inline-end; padding-inline-end:4px;',
                         ICON_SIZE_SMALL,
                         get_lang('Edit')
                     );

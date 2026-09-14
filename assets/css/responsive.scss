@@ -21,15 +21,14 @@
 
   #main_content .span3 {
     #login_block {
-      @apply float-left;
+      @apply float-start;
       width: 160px;
     }
 
     #help_block {
-      @apply float-right;
+      @apply float-end;
       width: 60px;
-      margin-left: 10px;
-      margin-right: 10px;
+      margin-inline: 10px;
     }
   }
 
@@ -44,13 +43,13 @@
   #course_tools {
     .row > [class*="span"],
     .row-fluid > [class*="span"] {
-      @apply float-left;
-      margin-left: 20px;
+      @apply float-start;
+      margin-inline-start: 20px;
     }
   }
 
   .course-tool {
-    @apply float-left;
+    @apply float-start;
     height: 110px;
     width: 160px;
 
@@ -101,11 +100,11 @@
 
   .section-mycourses {
     #top_main_content {
-      margin-right: 15px;
+      margin-inline-end: 15px;
     }
 
     #main_content {
-      margin-right: 15px;
+      margin-inline-end: 15px;
       width: 260px;
     }
 
@@ -154,9 +153,9 @@
   // Thematic course
   .score-thematic {
     .score {
-      @apply text-left float-left;
+      @apply text-start float-start;
       width: 90px;
-      padding-left: 5px;
+      padding-inline-start: 5px;
     }
 
     .name-student {
@@ -174,7 +173,7 @@
     }
 
     .accordion-toggle {
-      @apply mr-0;
+      @apply me-0;
     }
   }
 
@@ -186,7 +185,7 @@
     @apply float-none text-white;
     line-height: 20px;
     padding-bottom: 7px;
-    padding-right: 10px;
+    padding-inline-end: 10px;
     padding-top: 7px;
   }
 
@@ -206,8 +205,7 @@
   .new_actions .nav-tabs > li > a,
   .new_actions .nav-pills > li > a {
     @apply border-none;
-    padding-right: 7px;
-    padding-left: 7px;
+    padding-inline: 7px;
   }
 
   legend {
@@ -236,7 +234,7 @@
     }
 
     #footer_right {
-      @apply block float-left text-center w-full;
+      @apply block float-start text-center w-full;
     }
   }
 
@@ -301,7 +299,7 @@
     #course_block {
       @apply float-none clear-both bg-none border-none shadow-none;
       width: 250px;
-      margin-left: 10px;
+      margin-inline-start: 10px;
     }
   }
 
@@ -352,7 +350,7 @@
   .fc-header-title h2 {
     @apply font-normal uppercase;
     font-size: 19px;
-    left: 20px;
+    inset-inline-start: 20px;
     top: 179px;
   }
 
@@ -371,12 +369,12 @@
   #course_tools {
     .row > [class*="span"],
     .row-fluid > [class*="span"] {
-      @apply float-left ml-0;
+      @apply float-start ms-0;
     }
   }
 
   .course-tool {
-    @apply float-left;
+    @apply float-start;
     height: 150px;
     width: 50%;
 
@@ -394,15 +392,14 @@
 
   #main_content .span3 {
     #login_block {
-      @apply float-left;
+      @apply float-start;
       width: 280px;
     }
 
     #help_block {
-      @apply float-right;
+      @apply float-end;
       width: 100px;
-      margin-left: 10px;
-      margin-right: 10px;
+      margin-inline: 10px;
     }
   }
 
@@ -448,12 +445,12 @@
 
   .section-mycourses {
     #top_main_content {
-      @apply mr-0;
+      @apply me-0;
     }
 
     #main_content {
       @apply w-full;
-      margin-right: 15px;
+      margin-inline-end: 15px;
     }
 
     .course-box .course-box-actions {
@@ -493,12 +490,12 @@
     width: 97%;
 
     .block_user_info {
-      @apply clear-both float-left;
+      @apply clear-both float-start;
       width: 445px;
     }
 
     .block_tools_info {
-      @apply float-left;
+      @apply float-start;
       width: 225px;
 
       #help_block {
@@ -507,7 +504,7 @@
     }
 
     #user_image_block {
-      @apply float-left bg-none border-none;
+      @apply float-start bg-none border-none;
       width: 100px;
 
       img {
@@ -517,13 +514,13 @@
     }
 
     #course_block {
-      @apply float-left bg-none border-none shadow-none;
+      @apply float-start bg-none border-none shadow-none;
     }
 
     #profile_block {
-      @apply float-left bg-none border-none shadow-none;
+      @apply float-start bg-none border-none shadow-none;
       width: 250px;
-      margin-left: 10px;
+      margin-inline-start: 10px;
     }
 
     .well {
@@ -547,8 +544,7 @@
   .nav-list > li > a {
     @apply text-base;
     padding-bottom: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-inline: 15px;
     padding-top: 10px;
   }
 
@@ -567,15 +563,14 @@
     @apply text-sm;
     color: #666666;
     padding-bottom: 3px;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-inline: 15px;
     padding-top: 3px;
   }
 
   #course_tools {
     .row > [class*="span"],
     .row-fluid > [class*="span"] {
-      @apply float-left;
+      @apply float-start;
     }
   }
 
@@ -661,7 +656,7 @@
     z-index: auto;
 
     .nav > li {
-      @apply float-left;
+      @apply float-start;
 
       > a {
         @apply border-0;
@@ -686,17 +681,17 @@
   // Section fixes
   .section-mycampus {
     #top_main_content .content-column {
-      @apply float-left;
+      @apply float-start;
       width: 720px;
     }
 
     #homepage {
-      @apply float-left;
+      @apply float-start;
       width: 720px;
     }
 
     #hot_courses {
-      @apply float-left;
+      @apply float-start;
       width: 660px;
     }
   }
@@ -712,7 +707,7 @@
 
   #top_main_content {
     .span9 {
-      @apply float-left;
+      @apply float-start;
       width: 720px;
     }
 
@@ -782,9 +777,9 @@
   }
 
   .well_border .row .span2 .thumbnail {
-    @apply bg-white float-left border-none shadow-none;
+    @apply bg-white float-start border-none shadow-none;
     background-image: none;
-    margin-right: 10px;
+    margin-inline-end: 10px;
   }
 
   .section-mycampus .hot-course-box,
@@ -793,7 +788,7 @@
   }
 
   .course-box-thumbnail-box {
-    @apply float-left;
+    @apply float-start;
   }
 
   #announcements {
@@ -807,10 +802,10 @@
     }
 
     .form-search .span3 {
-      @apply float-left;
+      @apply float-start;
       width: 65%;
       height: 34px;
-      margin-right: 5px;
+      margin-inline-end: 5px;
     }
 
     .row .span6 .well_border ul li {
@@ -862,8 +857,7 @@
 
     .nav-tabs > li > a,
     .nav-pills > li > a {
-      padding-left: 6px;
-      padding-right: 6px;
+      padding-inline: 6px;
     }
 
     .dropdown-toggle {
@@ -898,14 +892,13 @@
 @media (min-width: 980px) and (max-width: 1200px) {
   .subnav .nav-tabs > li > a,
   .subnav .nav-pills > li > a {
-    padding-left: 6px;
-    padding-right: 6px;
+    padding-inline: 6px;
   }
 
   #course_tools {
     .row > [class*="span"],
     .row-fluid > [class*="span"] {
-      @apply float-left;
+      @apply float-start;
     }
   }
 
@@ -930,7 +923,7 @@
   #course_tools {
     .row > [class*="span"],
     .row-fluid > [class*="span"] {
-      @apply float-left;
+      @apply float-start;
     }
   }
 
@@ -939,20 +932,18 @@
   }
 
   .btn-invitations {
-    margin-left: 120px;
+    margin-inline-start: 120px;
   }
 
   .btn-msg {
-    padding-left: 27px;
+    padding-inline-start: 27px;
   }
 
   .btn-inv {
-    padding-left: 27px;
-    padding-right: 5px;
+    padding-inline: 27px 5px;
   }
 
   .btn-inv-off {
-    padding-left: 27px;
-    padding-right: 5px;
+    padding-inline: 27px 5px;
   }
 }

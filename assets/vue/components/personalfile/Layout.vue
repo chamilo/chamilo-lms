@@ -6,7 +6,7 @@
     <div class="md:basis-2/3 lg:basis-3/4 2xl:basis-5/6">
       <h2
         v-text="t('My files')"
-        class="mr-auto"
+        class="me-auto"
       />
       <hr />
       <router-view></router-view>

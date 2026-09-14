@@ -1,7 +1,7 @@
 <template>
   <h2
     v-text="t('Friends')"
-    class="mr-auto"
+    class="me-auto"
   />
   <hr />
   <BaseToolbar v-if="isCurrentUser">

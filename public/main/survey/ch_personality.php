@@ -21,7 +21,7 @@ class ch_personality extends survey_question
         $this->html .= '	</tr>';
         // Horizontal or vertical
         $this->html .= '	<tr>';
-        $this->html .= '		<td align="right" valign="top">&nbsp;</td>';
+        $this->html .= '		<td style="text-align:end;" valign="top">&nbsp;</td>';
         $this->html .= '		<td>';
         $this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
         if (empty($formData['horizontalvertical']) || 'horizontal' == $formData['horizontalvertical']) {
@@ -61,7 +61,7 @@ class ch_personality extends survey_question
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => &$value) {
                 $this->html .= '<tr>';
-                $this->html .= '<td align="right"><label for="answers['.$key.']">'.($key + 1).'</label></td>';
+                $this->html .= '<td style="text-align:end;"><label for="answers['.$key.']">'.($key + 1).'</label></td>';
                 $this->html .= '<td width="550">';
                 $dataValue = api_html_entity_decode(stripslashes($formData['answers'][$key]));
                 $dataValue = Security::remove_XSS($dataValue);

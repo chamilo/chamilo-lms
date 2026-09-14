@@ -407,7 +407,7 @@
             </div>
             <div class="flex items-center justify-between gap-3">
               <dt class="text-gray-50">{{ t("Latest login") }}</dt>
-              <dd class="flex items-center gap-2 text-right font-medium text-gray-90">
+              <dd class="flex items-center gap-2 text-end font-medium text-gray-90">
                 <BaseIcon
                   icon="agenda-event"
                   size="small"
@@ -637,11 +637,11 @@
           >
             <table class="w-full border-collapse text-sm">
               <thead>
-                <tr class="border-b border-gray-25 bg-gray-10 text-left text-gray-70">
+                <tr class="border-b border-gray-25 bg-gray-10 text-start text-gray-70">
                   <th class="px-3 py-2 font-semibold">{{ t("Learner") }}</th>
                   <th class="px-3 py-2 font-semibold">{{ t("Username") }}</th>
                   <th class="px-3 py-2 font-semibold">{{ t("Active") }}</th>
-                  <th class="px-3 py-2 text-right font-semibold">{{ t("Details") }}</th>
+                  <th class="px-3 py-2 text-end font-semibold">{{ t("Details") }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -660,7 +660,7 @@
                       {{ t(learner.active ? "Active" : "Inactive") }}
                     </span>
                   </td>
-                  <td class="px-3 py-2 text-right">
+                  <td class="px-3 py-2 text-end">
                     <BaseButton
                       :label="t('Details')"
                       icon="next"

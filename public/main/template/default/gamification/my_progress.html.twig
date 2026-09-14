@@ -6,7 +6,7 @@
                     {{ user_avatar }}
                     <div class="username">{{ user|user_complete_name }}</div>
                     <div class="star-progress">
-                        <span class="float-right">{{ '%s points'|get_lang|format(gamification_points) }}</span>
+                        <span class="float-end">{{ '%s points'|get_lang|format(gamification_points) }}</span>
 
                         {% if gamification_stars > 0 %}
                             {% for i in 1..gamification_stars %}
@@ -26,7 +26,7 @@
                             <span class="sr-only">{{ gamification_progress }} Complete (success)</span>
                         </div>
                     </div>
-                    <div class="progress-percentage text-right">{{ '%s %%'|get_lang|format(gamification_progress) }}</div>
+                    <div class="progress-percentage text-end">{{ '%s %%'|get_lang|format(gamification_progress) }}</div>
                 </div>
             </div>
         </div>

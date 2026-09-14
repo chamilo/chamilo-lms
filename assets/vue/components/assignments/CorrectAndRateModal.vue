@@ -14,6 +14,7 @@
         </h4>
         <div
           class="prose max-w-none text-sm text-gray-700 mt-2"
+          dir="auto"
           v-html="safeParentDescription"
         />
       </div>
@@ -48,6 +49,7 @@
         <div
           v-else-if="isHtmlFragment"
           class="prose max-w-none text-sm text-gray-50"
+          dir="auto"
           v-html="submissionHtmlSafe"
         />
 
@@ -93,7 +95,7 @@
               <span>{{ t("What will be sent to the AI") }}</span>
             </div>
 
-            <ul class="list-disc pl-5 space-y-1">
+            <ul class="list-disc ps-5 space-y-1">
               <li>{{ t("Assignment title + instructions") }}</li>
               <li v-if="submissionHasText">{{ t("Student submission (text)") }}</li>
               <li v-else>{{ t("Student submission (text): none") }}</li>

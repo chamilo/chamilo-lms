@@ -84,6 +84,7 @@ async function saveExtraContent() {
       <div
         v-if="modelExtraContent?.content"
         class="text-body-2"
+        dir="auto"
         v-html="modelExtraContent.content"
       />
     </template>
@@ -105,6 +106,7 @@ async function saveExtraContent() {
   <div
     v-else-if="modelExtraContent?.content"
     class="text-body-2"
+    dir="auto"
     v-html="modelExtraContent.content"
   />
 </template>

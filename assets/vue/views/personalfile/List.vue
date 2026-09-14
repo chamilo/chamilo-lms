@@ -32,7 +32,7 @@
           <Button
             v-if="previousFolders.length"
             class="!rounded-xl !border !border-gray-25 !bg-white !px-4 !py-2 !text-gray-90 hover:!bg-gray-10"
-            icon="mdi mdi-arrow-left"
+            icon="mdi mdi-arrow-left rtl:rotate-180"
             :label="$t('Back')"
             @click="goBack"
           />
@@ -104,7 +104,7 @@
                   <template v-if="slotProps.data?.resourceNode?.firstResourceFile">
                     <button
                       type="button"
-                      class="block max-w-full truncate text-left text-body-2 font-semibold text-gray-90 transition hover:text-primary"
+                      class="block max-w-full truncate text-start text-body-2 font-semibold text-gray-90 transition hover:text-primary"
                       @click="isTinyPicker ? returnToEditor(slotProps.data) : showHandler(slotProps.data)"
                     >
                       {{ slotProps.data.resourceNode.title }}
@@ -137,7 +137,7 @@
                   <template v-else>
                     <button
                       type="button"
-                      class="block max-w-full truncate text-left text-body-2 font-semibold text-gray-90 transition hover:text-primary"
+                      class="block max-w-full truncate text-start text-body-2 font-semibold text-gray-90 transition hover:text-primary"
                       @click="handleClickFile(slotProps.data)"
                     >
                       {{ slotProps.data.resourceNode.title }}

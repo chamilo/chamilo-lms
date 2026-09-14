@@ -230,7 +230,7 @@
               />
 
               <span
-                class="absolute bottom-2 right-2 rounded px-2 py-1 text-xs font-semibold shadow"
+                class="absolute bottom-2 end-2 rounded px-2 py-1 text-xs font-semibold shadow"
                 style="background-color: rgba(15, 23, 42, 0.82); color: #fff"
               >
                 {{ t("AI generated") }}

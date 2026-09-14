@@ -203,7 +203,7 @@
         class="overflow-hidden rounded-3xl border border-gray-20 bg-white shadow-sm"
       >
         <div class="overflow-x-auto">
-          <table class="min-w-full text-left text-sm">
+          <table class="min-w-full text-start text-sm">
             <thead class="bg-support-2">
               <tr>
                 <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Date") }}</th>

@@ -191,7 +191,7 @@
             v-if="lockManifestOrigin"
             class="mt-2 flex overflow-hidden rounded-xl border border-gray-25 bg-white shadow-sm focus-within:border-primary focus-within:ring-1 focus-within:ring-primary"
           >
-            <span class="flex shrink-0 items-center border-r border-gray-20 bg-support-2 px-3 font-mono text-caption text-gray-70">
+            <span class="flex shrink-0 items-center border-e border-gray-20 bg-support-2 px-3 font-mono text-caption text-gray-70">
               {{ manifestSourceOrigin }}/
             </span>
             <input
@@ -346,7 +346,7 @@
         v-else
         class="mt-5 rounded-2xl border border-gray-20 bg-support-2 p-4 text-body-2 text-gray-50"
       >
-        <span class="mdi mdi-download-lock-outline mr-2 text-primary" />
+        <span class="mdi mdi-download-lock-outline me-2 text-primary" />
         {{ t("Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment.") }}
       </div>
 
@@ -366,7 +366,7 @@
         v-else
         class="mt-4 rounded-2xl border border-gray-20 bg-support-2 p-3 text-caption text-gray-50"
       >
-        <span class="mdi mdi-shield-lock-outline mr-1 text-primary" />
+        <span class="mdi mdi-shield-lock-outline me-1 text-primary" />
         {{ t("Signature verification cannot be skipped in this environment.") }}
       </p>
 
@@ -544,7 +544,7 @@
       </div>
 
       <div class="mt-4 rounded-2xl border border-warning bg-support-2 p-3 text-caption text-warning">
-        <span class="mdi mdi-alert-outline mr-1" />
+        <span class="mdi mdi-alert-outline me-1" />
         {{ t("This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection.") }}
       </div>
 
@@ -628,7 +628,7 @@
       </div>
 
       <div class="mt-4 rounded-2xl border border-danger bg-white p-4 text-body-2 text-danger">
-        <span class="mdi mdi-alert-outline mr-1" />
+        <span class="mdi mdi-alert-outline me-1" />
         {{ t("This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing.") }}
       </div>
 
@@ -763,7 +763,7 @@
       </div>
 
       <div class="mt-4 rounded-2xl border border-info bg-support-2 p-3 text-caption text-info">
-        <span class="mdi mdi-information-outline mr-1" />
+        <span class="mdi mdi-information-outline me-1" />
         {{ t("Run these commands manually from the server after confirming the file update result and backups.") }}
       </div>
 
@@ -857,7 +857,7 @@
         </div>
 
         <div class="mt-4 rounded-2xl border border-danger bg-white p-3 text-caption font-semibold text-danger">
-          <span class="mdi mdi-alert-outline mr-1" />
+          <span class="mdi mdi-alert-outline me-1" />
           {{ t("This updater does not create a database backup. Create and verify a backup before running migrations.") }}
         </div>
 
@@ -990,7 +990,7 @@
               <p class="text-body-2 font-semibold text-danger">
                 {{ t("Executed unavailable migrations") }}
               </p>
-              <ul class="mt-2 list-disc space-y-1 pl-5 font-mono text-caption text-gray-90">
+              <ul class="mt-2 list-disc space-y-1 ps-5 font-mono text-caption text-gray-90">
                 <li
                   v-for="migration in migrationSafetyExecutedUnavailable"
                   :key="migration"
@@ -1014,7 +1014,7 @@
               <p class="text-body-2 font-semibold text-danger">
                 {{ t("Pending migrations before this update") }}
               </p>
-              <ul class="mt-2 list-disc space-y-1 pl-5 font-mono text-caption text-gray-90">
+              <ul class="mt-2 list-disc space-y-1 ps-5 font-mono text-caption text-gray-90">
                 <li
                   v-for="migration in migrationSafetyPendingBeforeTarget"
                   :key="migration.class"
@@ -1082,7 +1082,7 @@
           v-if="!status.allowUiPostApplyCommands"
           class="mt-4 rounded-2xl border border-warning bg-support-2 p-3 text-caption font-semibold text-gray-90"
         >
-          <span class="mdi mdi-alert-outline mr-1" />
+          <span class="mdi mdi-alert-outline me-1" />
           {{ t("Running post-apply actions from the UI is disabled in production mode.") }}
         </div>
 
@@ -1091,7 +1091,7 @@
           class="mt-4 space-y-4"
         >
           <div class="rounded-2xl border border-danger bg-white p-3 text-caption text-danger">
-            <span class="mdi mdi-alert-outline mr-1" />
+            <span class="mdi mdi-alert-outline me-1" />
             {{ t("These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing.") }}
           </div>
 
@@ -1220,7 +1220,7 @@
               v-if="!migrationSafety?.migrationSafety?.valid"
               class="rounded-xl border border-warning bg-support-2 p-3 text-caption font-semibold text-gray-90"
             >
-              <span class="mdi mdi-alert-outline mr-1" />
+              <span class="mdi mdi-alert-outline me-1" />
               {{ t("Run and pass the migration safety review before executing database migrations.") }}
             </div>
           </div>
@@ -1754,7 +1754,7 @@ const InlineError = defineComponent({
           role: "alert",
         },
         [
-          h("span", { class: "mdi mdi-alert-circle-outline mr-1", "aria-hidden": "true" }),
+          h("span", { class: "mdi mdi-alert-circle-outline me-1", "aria-hidden": "true" }),
           props.message,
         ],
       )
@@ -1813,14 +1813,14 @@ const ResultPanel = defineComponent({
           props.errors.length
             ? h(
                 "ul",
-                { class: "mt-3 list-disc pl-6 text-body-2 text-danger" },
+                { class: "mt-3 list-disc ps-6 text-body-2 text-danger" },
                 props.errors.map((error) => h("li", { key: error }, error)),
               )
             : null,
           props.warnings.length
             ? h(
                 "ul",
-                { class: "mt-3 list-disc pl-6 text-body-2 text-gray-90" },
+                { class: "mt-3 list-disc ps-6 text-body-2 text-gray-90" },
                 props.warnings.map((warning) => h("li", { key: warning }, warning)),
               )
             : null,
@@ -1859,9 +1859,9 @@ const CheckTable = defineComponent({
         h("table", { class: "min-w-full divide-y divide-gray-20 text-body-2" }, [
           h("thead", { class: "bg-support-2" }, [
             h("tr", [
-              h("th", { class: "px-4 py-3 text-left font-semibold text-gray-50" }, t("Status")),
-              h("th", { class: "px-4 py-3 text-left font-semibold text-gray-50" }, t("Check")),
-              h("th", { class: "px-4 py-3 text-left font-semibold text-gray-50" }, t("Message")),
+              h("th", { class: "px-4 py-3 text-start font-semibold text-gray-50" }, t("Status")),
+              h("th", { class: "px-4 py-3 text-start font-semibold text-gray-50" }, t("Check")),
+              h("th", { class: "px-4 py-3 text-start font-semibold text-gray-50" }, t("Message")),
             ]),
           ]),
           h(

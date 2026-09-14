@@ -161,6 +161,7 @@
           </div>
           <div
             class="max-h-64 overflow-y-auto rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm"
+            dir="auto"
             v-html="messagePreviews.expiring"
           />
         </div>
@@ -171,6 +172,7 @@
           </div>
           <div
             class="max-h-64 overflow-y-auto rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm"
+            dir="auto"
             v-html="messagePreviews.expired"
           />
         </div>

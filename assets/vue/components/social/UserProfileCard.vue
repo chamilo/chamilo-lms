@@ -195,7 +195,7 @@
 
               <div
                 v-if="showDetails"
-                class="w-full rounded-xl border border-gray-25 bg-white p-3 text-left text-tiny text-gray-50 break-all"
+                class="w-full rounded-xl border border-gray-25 bg-white p-3 text-start text-tiny text-gray-50 break-all"
               >
                 <strong class="text-gray-90">{{ t("Endpoint") }}:</strong>
                 <br />

@@ -201,16 +201,16 @@ defineExpose({
     </template>
 
     <template #paginatorfirstpagelinkicon>
-      <i class="mdi mdi-page-first" />
+      <i class="mdi mdi-page-first rtl:rotate-180" />
     </template>
     <template #paginatorprevpagelinkicon>
-      <i class="mdi mdi-chevron-left" />
+      <i class="mdi mdi-chevron-left rtl:rotate-180" />
     </template>
     <template #paginatornextpagelinkicon>
-      <i class="mdi mdi-chevron-right" />
+      <i class="mdi mdi-chevron-right rtl:rotate-180" />
     </template>
     <template #paginatorlastpagelinkicon>
-      <i class="mdi mdi-page-last" />
+      <i class="mdi mdi-page-last rtl:rotate-180" />
     </template>
   </DataTable>
 </template>

@@ -218,7 +218,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                 } else {
                     $template = '
                         <div class="mb-6 {error_class}">
-                            <label {label-for} class="ch-form-label h-4 md:w-1/4 flex justify-left md:justify-end pr-3 text-gray-600 '.$size[0].' " >
+                            <label {label-for} class="ch-form-label h-4 md:w-1/4 flex justify-start md:justify-end pe-3 text-gray-600 '.$size[0].' " >
                                 <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                                 {label}
                             </label>

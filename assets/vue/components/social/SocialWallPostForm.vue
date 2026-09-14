@@ -37,7 +37,7 @@
 
         <BaseButton
           :label="$t('Post')"
-          class="ml-auto"
+          class="ms-auto"
           icon="send"
           size="small"
           type="primary"

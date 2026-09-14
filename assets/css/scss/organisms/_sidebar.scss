@@ -1,6 +1,6 @@
 .app-sidebar {
-  @apply block bg-white fixed left-0 transition-[width] duration-150 items-stretch w-full text-gray-50 z-10
-    sm:bg-gray-15 sm:border-r sm:border-solid sm:border-gray-25 sm:w-60;
+  @apply block bg-white fixed start-0 transition-[width] duration-150 items-stretch w-full text-gray-50 z-10
+    sm:bg-gray-15 sm:border-e sm:border-solid sm:border-gray-25 sm:w-60;
   height: calc(100vh - 4.5rem - 1px);
   top: calc(5.125rem + 1px);
 
@@ -29,7 +29,7 @@
     }
 
     .logout-text {
-      @apply ml-2 text-body-2;
+      @apply ms-2 text-body-2;
     }
 
     &:hover {
@@ -38,7 +38,7 @@
   }
 
   &__button {
-    @apply bg-white border border-solid border-gray-25 rounded-full top-6 -right-4 text-primary p-1.5;
+    @apply bg-white border border-solid border-gray-25 rounded-full top-6 -end-4 text-primary p-1.5;
     display: none !important;
     font-size: 20px;
     line-height: 20px;
@@ -59,7 +59,7 @@
     @apply flex flex-col gap-1;
 
     .p-panelmenu-header-action {
-      @apply flex items-center gap-2 select-none cursor-pointer relative pl-9 py-3 pr-6 overflow-hidden outline-none text-body-2 font-semibold;
+      @apply flex items-center gap-2 select-none cursor-pointer relative ps-9 py-3 pe-6 overflow-hidden outline-none text-body-2 font-semibold;
     }
 
     .p-menuitem-link {
@@ -81,10 +81,10 @@
 
     &.p-panelmenu-header-active,
     &:hover {
-      @apply bg-support-1 border-l-4 border-primary border-solid text-primary;
+      @apply bg-support-1 border-s-4 border-primary border-solid text-primary;
 
       .p-panelmenu-header-action {
-        @apply pl-8;
+        @apply ps-8;
       }
     }
 
@@ -93,7 +93,7 @@
       .p-panelmenu-header-action {
 
         .p-submenu-icon {
-          @apply ml-auto text-body-2 font-semibold;
+          @apply ms-auto text-body-2 font-semibold;
         }
       }
     }
@@ -141,7 +141,7 @@
     @apply m-0 p-0 outline-none;
 
     .p-menuitem-link {
-      @apply flex items-center gap-2 select-none cursor-pointer relative pl-9 py-3 pr-6 overflow-hidden outline-none text-body-2;
+      @apply flex items-center gap-2 select-none cursor-pointer relative ps-9 py-3 pe-6 overflow-hidden outline-none text-body-2;
     }
   }
 
@@ -156,10 +156,10 @@
       > .p-menuitem-content {
 
         .p-menuitem-link {
-          @apply pl-8 py-3 pr-6;
+          @apply ps-8 py-3 pe-6;
 
           .p-menuitem-icon {
-            @apply mr-2 leading-none;
+            @apply me-2 leading-none;
           }
 
           .p-menuitem-text {
@@ -231,7 +231,7 @@
         @apply sm:mx-5 sm:my-3 sm:py-3 sm:px-3 text-center;
 
         .logout-text {
-          @apply sm:hidden sm:mr-0;
+          @apply sm:hidden sm:me-0;
         }
       }
     }

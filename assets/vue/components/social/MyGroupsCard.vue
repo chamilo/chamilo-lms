@@ -18,12 +18,12 @@
           v-model="searchQuery"
           :placeholder="t('Search')"
           type="search"
-          class="h-11 min-w-0 flex-grow rounded-l-xl border-gray-25 bg-white px-3 text-body-2 text-gray-90 placeholder:text-gray-50 focus:border-primary focus:ring-primary"
+          class="h-11 min-w-0 flex-grow rounded-s-xl border-gray-25 bg-white px-3 text-body-2 text-gray-90 placeholder:text-gray-50 focus:border-primary focus:ring-primary"
           @keyup.enter="search"
         />
         <button
           type="button"
-          class="flex h-11 w-11 items-center justify-center rounded-r-xl border border-l-0 border-gray-25 bg-gray-15 text-gray-90 transition hover:bg-gray-20"
+          class="flex h-11 w-11 items-center justify-center rounded-e-xl border border-s-0 border-gray-25 bg-gray-15 text-gray-90 transition hover:bg-gray-20"
           @click="search"
         >
           <i
@@ -70,7 +70,7 @@
             </span>
 
             <i
-              class="mdi mdi-chevron-right text-gray-50 transition group-hover:text-gray-90"
+              class="mdi mdi-chevron-right rtl:rotate-180 text-gray-50 transition group-hover:text-gray-90"
               aria-hidden="true"
             ></i>
           </a>

@@ -47,6 +47,7 @@
         />
         <div
           class="p-toast-detail"
+          dir="auto"
           v-html="slotProps.message.detail"
         />
       </div>

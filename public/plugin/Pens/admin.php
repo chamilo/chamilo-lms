@@ -55,7 +55,7 @@ echo '</div>';
 echo '<div class="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">';
 echo '<table class="w-full text-sm">';
 echo '<thead class="bg-gray-20">';
-echo '<tr class="text-left">';
+echo '<tr class="text-start">';
 echo '<th class="p-3 border-b border-gray-200">'.htmlspecialchars($plugin->get_lang('PensId'), ENT_QUOTES, 'UTF-8').'</th>';
 echo '<th class="p-3 border-b border-gray-200">'.htmlspecialchars($plugin->get_lang('PensPackageId'), ENT_QUOTES, 'UTF-8').'</th>';
 echo '<th class="p-3 border-b border-gray-200">'.htmlspecialchars($plugin->get_lang('PensClient'), ENT_QUOTES, 'UTF-8').'</th>';
@@ -117,7 +117,7 @@ echo '</div>';
 
 echo '<div class="mt-6 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">';
 echo '<div class="font-semibold mb-2">'.htmlspecialchars($plugin->get_lang('PensCurrentBehavior'), ENT_QUOTES, 'UTF-8').'</div>';
-echo '<ul class="list-disc pl-5 space-y-1">';
+echo '<ul class="list-disc ps-5 space-y-1">';
 echo '<li>'.htmlspecialchars($plugin->get_lang('PensBehaviorReceive'), ENT_QUOTES, 'UTF-8').'</li>';
 echo '<li>'.htmlspecialchars($plugin->get_lang('PensBehaviorDownload'), ENT_QUOTES, 'UTF-8').'</li>';
 echo '<li>'.htmlspecialchars($plugin->get_lang('PensBehaviorStore'), ENT_QUOTES, 'UTF-8').'</li>';

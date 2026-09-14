@@ -61,16 +61,16 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-10">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             {{ 'Name'|trans }}
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             {{ 'Short name'|trans }}
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             {{ 'Profile'|trans }}
                         </th>
-                        <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-end text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             {{ 'Actions'|trans }}
                         </th>
                     </tr>
@@ -103,7 +103,7 @@
                                 {% endif %}
                             </td>
 
-                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <td class="px-6 py-4 whitespace-nowrap text-end">
                                 <div class="inline-flex items-center gap-2">
                                     <a
                                             href="/main/skills/skill_level.php?action=edit&id={{ item.id }}"

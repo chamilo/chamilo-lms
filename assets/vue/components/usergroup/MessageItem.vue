@@ -17,6 +17,7 @@
       </div>
       <div
         class="message-content"
+        dir="auto"
         v-html="sanitizeHtml(message.content)"
       ></div>
       <div

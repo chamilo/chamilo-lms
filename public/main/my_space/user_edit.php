@@ -263,7 +263,7 @@ echo '<style>
 /* Make the radio + password inline group breathe a little */
 #user_edit .form-group .form-control[type="password"] {
     display: inline-block;
-    margin-left: 0.5rem;
+    margin-inline-start: 0.5rem;
 }
 
 /* Align submit button to the left with some top margin */

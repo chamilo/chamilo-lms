@@ -140,7 +140,7 @@
                   <template v-if="slotProps.data?.resourceNode?.firstResourceFile">
                     <button
                       type="button"
-                      class="block max-w-full truncate text-left text-body-2 font-semibold text-gray-90 transition hover:text-primary"
+                      class="block max-w-full truncate text-start text-body-2 font-semibold text-gray-90 transition hover:text-primary"
                       @click="returnToEditor(slotProps.data)"
                     >
                       {{ slotProps.data.resourceNode.title }}
@@ -166,7 +166,7 @@
                   <template v-else>
                     <button
                       type="button"
-                      class="block max-w-full truncate text-left text-body-2 font-semibold text-gray-90 transition hover:text-primary"
+                      class="block max-w-full truncate text-start text-body-2 font-semibold text-gray-90 transition hover:text-primary"
                       @click="handleClick(slotProps.data)"
                     >
                       {{ slotProps.data.resourceNode.title }}

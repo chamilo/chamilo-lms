@@ -45,7 +45,7 @@ img {
 }
 
 #lang_form {
-  @apply text-left text-xs;
+  @apply text-start text-xs;
   margin: 2px 0 10px 0;
   padding: 2px;
 
@@ -77,7 +77,7 @@ img {
 
 // Layout divs
 #contentfloatholder {
-  @apply float-left w-full relative;
+  @apply float-start w-full relative;
 
   &:after {
     @apply block h-0 invisible;
@@ -87,8 +87,8 @@ img {
 }
 
 #centerwrap {
-  @apply float-left w-full;
-  margin-right: -95%;
+  @apply float-start w-full;
+  margin-inline-end: -95%;
 }
 
 #toolnav {
@@ -96,11 +96,11 @@ img {
 }
 
 * html #toolnav {
-  @apply mr-0;
+  @apply me-0;
 }
 
 * html #center {
-  @apply ml-0;
+  @apply ms-0;
   height: 1%;
 }
 
@@ -155,10 +155,10 @@ img {
 .normal-message,
 .error-message {
   @apply relative;
-  margin: 10px auto 10px -250px;
+  margin: 10px auto;
   width: 500px;
   left: 50%;
-  right: 50%;
+  transform: translateX(-50%);
   border: 1px solid;
   padding: 5px;
 }
@@ -194,7 +194,7 @@ img {
 
 // Document styles
 .comment {
-  @apply ml-8;
+  @apply ms-8;
 }
 
 .invisible {
@@ -303,12 +303,12 @@ a:active {
 }
 
 input.link_alike {
-  @apply bg-white font-bold text-left p-0 m-0;
+  @apply bg-white font-bold text-start p-0 m-0;
   border-width: 0;
   color: #4171b5;
 
   &:hover {
-    @apply bg-white font-bold text-left p-0 m-0;
+    @apply bg-white font-bold text-start p-0 m-0;
     border-width: 0;
     color: #FF0000;
   }
@@ -320,13 +320,13 @@ a.nobold {
   &:active {
     @apply font-normal;
     color: #999;
-    margin: 0 0 0 25px;
+    margin-inline-start: 25px;
   }
 
   &:hover {
     @apply font-normal underline;
     color: #999;
-    margin: 0 0 0 25px;
+    margin-inline-start: 25px;
   }
 }
 
@@ -373,24 +373,14 @@ div.row {
   }
 
   div.label {
-    @apply inline-block float-left text-right;
+    @apply inline-block float-start text-end;
     width: 18%;
   }
 
   div.formw {
-    @apply inline-block;
+    @apply inline-block float-end text-start;
     width: 80%;
   }
-}
-
-[dir=ltr] div.row div.label,
-[dir=rtl] div.row div.formw {
-  @apply float-left text-right;
-}
-
-[dir=rtl] div.row div.label,
-[dir=ltr] div.row div.formw {
-  @apply float-right text-left;
 }
 
 span.form_required {
@@ -434,9 +424,9 @@ input[text] {
 
 // Data table styles
 .cell_header {
-  @apply font-bold text-left;
+  @apply font-bold text-start;
   background-color: #EEEEFF;
-  padding-left: 5px;
+  padding-inline-start: 5px;
 }
 
 .data_table {
@@ -444,7 +434,7 @@ input[text] {
   padding: 5px;
 
   th {
-    @apply text-left;
+    @apply text-start;
     border: 1px solid gray;
     background-color: #E5EDF9;
   }
@@ -467,21 +457,21 @@ input[text] {
   }
 
   td {
-    @apply p-1 text-left;
+    @apply p-1 text-start;
     border-bottom: 1px solid #b0b0b0;
-    border-right: 1px dotted #e1e1e1;
-    border-left: 1px dotted #e1e1e1;
+    border-inline-end: 1px dotted #e1e1e1;
+    border-inline-start: 1px dotted #e1e1e1;
   }
 }
 
 .data_table_no_border {
-  @apply border-collapse w-full text-left text-xs;
+  @apply border-collapse w-full text-start text-xs;
   border-spacing: 0;
   margin-bottom: 15px;
   margin-top: 8px;
 
   td {
-    @apply text-left align-middle;
+    @apply text-start align-middle;
     line-height: normal;
     padding: 6px;
   }
@@ -505,19 +495,19 @@ input[text] {
 
 // Home page divs
 .home_cats {
-  @apply float-left relative m-0 bg-white;
+  @apply float-start relative m-0 bg-white;
   width: 45%;
   padding: 8px 0 0;
 }
 
 .home_news {
-  @apply float-right relative m-0 bg-white;
+  @apply float-end relative m-0 bg-white;
   width: 45%;
   padding: 8px 0 0;
 }
 
 label.left {
-  @apply float-left;
+  @apply float-start;
   width: 15em;
   margin: 0 0 0.5em 0;
 }
@@ -527,11 +517,11 @@ form br {
 }
 
 * html .label {
-  @apply mr-2.5;
+  @apply me-2.5;
 }
 
 * html .data {
-  @apply ml-0;
+  @apply ms-0;
   height: 1%;
 }
 
@@ -546,7 +536,7 @@ form br {
 
 // Admin section
 div.admin_section {
-  @apply float-left;
+  @apply float-start;
   width: 40%;
   padding: 5px;
   margin: 10px 20px;
@@ -602,8 +592,8 @@ div.system_announcement {
 }
 
 div.system_announcement_content {
-  @apply ml-5 pl-1;
-  border-left: 1px solid gray;
+  @apply ms-5 ps-1;
+  border-inline-start: 1px solid gray;
 }
 
 // Print-specific classes

@@ -21,11 +21,11 @@
 }
 
 .tiny-content ul {
-  @apply list-disc pl-6;
+  @apply list-disc ps-6;
 }
 
 .tiny-content ol {
-  @apply list-decimal pl-6;
+  @apply list-decimal ps-6;
 }
 
 // Specific styles for TinyMCE content
@@ -117,7 +117,7 @@ mjx-container svg {
   &:before {
     content: "\f15c";
     font-family: FontAwesome;
-    @apply font-normal mr-1;
+    @apply font-normal me-1;
   }
 }
 
@@ -168,7 +168,7 @@ mjx-container svg {
     color: #8c8b8b;
     content: '\002702';
     font-size: 18px;
-    left: 40px;
+    inset-inline-start: 40px;
     padding: 0 3px;
     top: -12px;
   }
@@ -234,7 +234,7 @@ figure.image.pull-right {
 }
 
 figure.image figcaption {
-  @apply m-0 pl-1 pt-0 text-left;
+  @apply m-0 ps-1 pt-0 text-start;
   background-color: #f3f3f3;
   border-radius: 0;
 }

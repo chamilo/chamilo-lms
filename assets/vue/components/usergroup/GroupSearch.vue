@@ -8,7 +8,7 @@
     <div class="flex flex-col items-end">
       <div class="w-full flex justify-between items-center mb-2">
         <label
-          class="mr-2"
+          class="me-2"
           for="search-query"
           >{{ t("Groups") }}</label
         >

@@ -1,7 +1,7 @@
 /* CardGame C2 widget */
 .cardgame-launcher {
     position: fixed;
-    right: 24px;
+    inset-inline-end: 24px;
     bottom: 110px;
     width: 56px;
     height: 56px;
@@ -27,7 +27,7 @@
 .cardgame-launcher__badge {
     position: absolute;
     top: 6px;
-    right: 8px;
+    inset-inline-end: 8px;
     color: #facc15;
     font-size: 18px;
     line-height: 1;
@@ -116,7 +116,7 @@
 
 .cardgame-piece-mask {
     min-height: 140px;
-    border-right: 1px dashed rgba(15, 23, 42, 0.2);
+    border-inline-end: 1px dashed rgba(15, 23, 42, 0.2);
     border-bottom: 1px dashed rgba(15, 23, 42, 0.2);
     background: url('b-back.jpg') center center / cover no-repeat;
     transition: opacity 0.25s ease;
@@ -210,7 +210,7 @@
 
 @media (max-width: 768px) {
     .cardgame-launcher {
-        right: 16px;
+        inset-inline-end: 16px;
         bottom: 96px;
     }
 

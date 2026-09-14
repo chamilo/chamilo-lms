@@ -526,10 +526,10 @@ class AddCourse
         $exercise->exercise = get_lang('Sample test');
         $html = '<table width="100%" border="0" cellpadding="0" cellspacing="0">
                         <tr>
-                        <td width="220" valign="top" align="left">
+                        <td width="220" valign="top" style="text-align:start;">
                             <img src="'.api_get_path(WEB_PUBLIC_PATH).'img/document/images/mr_chamilo/doubts.png">
                         </td>
-                        <td valign="top" align="left">'.get_lang('Irony').'</td></tr>
+                        <td valign="top" style="text-align:start;">'.get_lang('Irony').'</td></tr>
                     </table>';
         $exercise->type = 1;
         $exercise->setRandom(0);

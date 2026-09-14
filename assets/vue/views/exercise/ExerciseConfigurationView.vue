@@ -247,7 +247,7 @@
             >
               <table class="min-w-full divide-y divide-gray-20 text-sm">
                 <thead>
-                  <tr class="text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                  <tr class="text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
                     <th class="px-3 py-2">{{ t("Categories") }}</th>
                     <th class="px-3 py-2">{{ t("Available questions") }}</th>
                     <th class="px-3 py-2">{{ t("Number of questions") }}</th>

@@ -118,7 +118,11 @@
             </div>
           </div>
 
-          <div class="mt-3 break-words" v-html="comment.content"></div>
+          <div
+            class="mt-3 break-words"
+            dir="auto"
+            v-html="comment.content"
+          ></div>
 
           <div
             v-if="comment.attachments?.length"
@@ -153,7 +157,7 @@
       <PortfolioCommentTree
         v-if="comment.children?.length"
         :comments="comment.children"
-        class="ml-6 mt-4 border-l border-gray-20 pl-4"
+        class="ms-6 mt-4 border-s border-gray-20 ps-4"
         @action="$emit('action', $event)"
         @copy-students="$emit('copy-students', $event)"
         @delete="$emit('delete', $event)"

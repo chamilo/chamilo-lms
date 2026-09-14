@@ -10,7 +10,10 @@
             <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-primary">
                 {{ 'ZoomVideoConferences'|get_plugin_lang('ZoomPlugin') }}
             </p>
-            <h1 class="text-2xl font-bold text-gray-90">
+            <h1
+                class="text-2xl font-bold text-gray-90"
+                dir="auto"
+            >
                 {{ meeting_topic|default('') ?: ('Meeting'|get_lang) }}
             </h1>
             <div class="mt-3 flex flex-wrap gap-2 text-sm text-gray-70">
@@ -26,13 +29,13 @@
                 {% endif %}
                 {% if meeting.formattedStartTime is defined and meeting.formattedStartTime %}
                     <span class="inline-flex rounded-full bg-gray-15 px-3 py-1">
-                        <span class="mdi mdi-calendar-clock ch-tool-icon mr-1"></span>
+                        <span class="mdi mdi-calendar-clock ch-tool-icon me-1"></span>
                         {{ meeting.formattedStartTime }}
                     </span>
                 {% endif %}
                 {% if meeting.formattedDuration is defined and meeting.formattedDuration %}
                     <span class="inline-flex rounded-full bg-gray-15 px-3 py-1">
-                        <span class="mdi mdi-timer-outline ch-tool-icon mr-1"></span>
+                        <span class="mdi mdi-timer-outline ch-tool-icon me-1"></span>
                         {{ meeting.formattedDuration }}
                     </span>
                 {% endif %}
@@ -45,7 +48,7 @@
                     class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90"
                     href="join_meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}"
                 >
-                    <span class="mdi mdi-login-variant ch-tool-icon mr-1 text-white"></span>
+                    <span class="mdi mdi-login-variant ch-tool-icon me-1 text-white"></span>
                     {{ 'ViewMeeting'|get_plugin_lang('ZoomPlugin') }}
                 </a>
             {% endif %}
@@ -58,7 +61,7 @@
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <span class="mdi mdi-video ch-tool-icon mr-1 text-white"></span>
+                        <span class="mdi mdi-video ch-tool-icon me-1 text-white"></span>
                         {{ 'StartMeeting'|get_plugin_lang('ZoomPlugin') }}
                     </a>
                 {% endif %}
@@ -67,7 +70,7 @@
                     class="inline-flex items-center justify-center rounded-lg border border-gray-50 bg-white px-4 py-2 text-sm font-semibold text-gray-90 hover:bg-gray-15"
                     href="activity.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}"
                 >
-                    <span class="mdi mdi-chart-line ch-tool-icon mr-1"></span>
+                    <span class="mdi mdi-chart-line ch-tool-icon me-1"></span>
                     {{ 'Activity'|get_plugin_lang('ZoomPlugin') }}
                 </a>
             {% endif %}
@@ -75,7 +78,10 @@
     </div>
 
     {% if meeting_agenda %}
-        <div class="mb-6 rounded-xl bg-gray-15 p-4 text-sm text-gray-90">
+        <div
+            class="mb-6 rounded-xl bg-gray-15 p-4 text-sm text-gray-90"
+            dir="auto"
+        >
             {{ meeting_agenda|nl2br }}
         </div>
     {% endif %}
@@ -111,7 +117,7 @@
                     class="inline-flex items-center justify-center rounded-lg border border-gray-50 bg-white px-4 py-2 text-sm font-semibold text-gray-90 hover:bg-gray-15"
                     type="button"
                 >
-                    <span class="mdi mdi-content-copy ch-tool-icon mr-1"></span>
+                    <span class="mdi mdi-content-copy ch-tool-icon me-1"></span>
                     {{ 'Copy text' | get_lang }}
                 </button>
             </div>

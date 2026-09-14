@@ -220,7 +220,7 @@ $selector = DocumentManager::build_directory_selector(
 $page .= $selector;
 
 $page .= '<ul class="lp_resource">';
-$page .= '<li class="doc_folder" style="margin-left: 36px;">'.get_lang('Audio').'</li>';
+$page .= '<li class="doc_folder" style="margin-inline-start: 36px;">'.get_lang('Audio').'</li>';
 $page .= '<li class="doc_folder">';
 $page .= '<ul class="lp_resource">'.$documentTree.'</ul>';
 $page .= '</div>';

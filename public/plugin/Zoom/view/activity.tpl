@@ -28,10 +28,10 @@
         <table class="min-w-full divide-y divide-gray-25 text-sm">
             <thead class="bg-gray-15">
                 <tr>
-                    <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'Type'|get_lang }}</th>
-                    <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'Action'|get_plugin_lang('ZoomPlugin') }}</th>
-                    <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'Date'|get_lang }}</th>
-                    <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'Details'|get_lang }}</th>
+                    <th class="px-4 py-3 text-start font-semibold text-gray-90">{{ 'Type'|get_lang }}</th>
+                    <th class="px-4 py-3 text-start font-semibold text-gray-90">{{ 'Action'|get_plugin_lang('ZoomPlugin') }}</th>
+                    <th class="px-4 py-3 text-start font-semibold text-gray-90">{{ 'Date'|get_lang }}</th>
+                    <th class="px-4 py-3 text-start font-semibold text-gray-90">{{ 'Details'|get_lang }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-25 bg-white">

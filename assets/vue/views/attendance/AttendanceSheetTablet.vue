@@ -58,10 +58,10 @@
         <table class="w-full border-collapse">
           <thead>
             <tr class="bg-gray-15">
-              <th class="p-3 text-left">#</th>
-              <th class="p-3 text-left">{{ t("Photo") }}</th>
-              <th class="p-3 text-left">{{ t("Last name") }}</th>
-              <th class="p-3 text-left">{{ t("First name") }}</th>
+              <th class="p-3 text-start">#</th>
+              <th class="p-3 text-start">{{ t("Photo") }}</th>
+              <th class="p-3 text-start">{{ t("Last name") }}</th>
+              <th class="p-3 text-start">{{ t("First name") }}</th>
               <th class="p-3 text-center">{{ t("Attended") }}</th>
               <th
                 class="p-3 text-center"

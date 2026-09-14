@@ -13,8 +13,7 @@
 
   .row {
     @apply flex flex-wrap;
-    margin-left: -16px;
-    margin-right: -16px;
+    margin-inline: -16px;
   }
 
   .col {
@@ -30,7 +29,7 @@
 
   .course-short ul li {
     display: inline;
-    margin-right: 8px;
+    margin-inline-end: 8px;
   }
 
   .social-buttons {
@@ -48,7 +47,7 @@
   }
 
   .social-buttons a em {
-    margin-right: 8px;
+    margin-inline-end: 8px;
   }
 
   .social-buttons a.facebook {

@@ -141,7 +141,7 @@
     class="mb-4 rounded-xl border border-gray-20 bg-white px-4 py-3 text-sm shadow-sm"
   >
     <span class="font-semibold">{{ t("Default certificate") }}:</span>
-    <span class="ml-1">{{ defaultCertificateTitle || t("No data available") }}</span>
+    <span class="ms-1">{{ defaultCertificateTitle || t("No data available") }}</span>
     <div
       v-if="certificateTemplateFallback"
       class="mt-1 text-yellow-700"
@@ -189,7 +189,7 @@
             <span
               v-if="slotProps.data?.ai_assisted"
               aria-label="AI-assisted"
-              class="ml-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
+              class="ms-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
               title="AI-assisted"
             >
               <span aria-hidden="true">🤖</span>
@@ -198,7 +198,7 @@
 
             <BaseIcon
               v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
-              class="mr-8"
+              class="me-8"
               icon="session-star"
             />
           </div>
@@ -444,7 +444,7 @@
   >
     <div class="confirmation-content">
       <BaseIcon
-        class="mr-2"
+        class="me-2"
         icon="alert"
         size="big"
       />
@@ -460,7 +460,7 @@
   >
     <div class="confirmation-content">
       <BaseIcon
-        class="mr-2"
+        class="me-2"
         icon="alert"
         size="big"
       />
@@ -691,14 +691,14 @@
   >
     <div class="confirmation-content">
       <BaseIcon
-        class="mr-2"
+        class="me-2"
         icon="alert"
         size="big"
       />
       <p class="mb-2">
         {{ t("The following documents are used in learning paths:") }}
       </p>
-      <ul class="pl-4 mb-4">
+      <ul class="ps-4 mb-4">
         <li
           v-for="lp in lpListWarning"
           :key="lp.lpId + lp.documentTitle"

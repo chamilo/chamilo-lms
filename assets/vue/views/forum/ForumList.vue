@@ -112,7 +112,9 @@
         v-if="forumsWithoutCategory.length"
         class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm"
       >
-        <div class="flex flex-col gap-3 border-b border-gray-20 bg-gray-15 p-4 md:flex-row md:items-center md:justify-between">
+        <div
+          class="flex flex-col gap-3 border-b border-gray-20 bg-gray-15 p-4 md:flex-row md:items-center md:justify-between"
+        >
           <div class="flex items-center gap-2">
             <BaseIcon
               icon="folder-open"
@@ -149,7 +151,9 @@
         :key="category.iid"
         class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm"
       >
-        <div class="flex flex-col gap-3 border-b border-gray-20 bg-gray-15 p-4 md:flex-row md:items-center md:justify-between">
+        <div
+          class="flex flex-col gap-3 border-b border-gray-20 bg-gray-15 p-4 md:flex-row md:items-center md:justify-between"
+        >
           <div class="min-w-0">
             <div class="flex items-center gap-2">
               <BaseIcon
@@ -182,6 +186,7 @@
             <div
               v-if="category.catComment"
               class="prose prose-sm mt-1 max-w-none text-sm leading-5 text-gray-600"
+              dir="auto"
               v-html="sanitizeCategoryComment(category.catComment)"
             />
           </div>
@@ -443,7 +448,7 @@
               name="forum_start_time"
               type="hidden"
             />
-            <span class="text-xs text-gray-500">{{ t('The forum will be visible starting from this date') }}</span>
+            <span class="text-xs text-gray-500">{{ t("The forum will be visible starting from this date") }}</span>
           </div>
           <div class="flex flex-col gap-1">
             <BaseCalendar
@@ -457,7 +462,7 @@
               name="forum_end_time"
               type="hidden"
             />
-            <span class="text-xs text-gray-500">{{ t('Once this date has passed, the forum will be closed') }}</span>
+            <span class="text-xs text-gray-500">{{ t("Once this date has passed, the forum will be closed") }}</span>
           </div>
         </div>
 
@@ -478,9 +483,9 @@
             </div>
             <div class="flex flex-1 flex-col gap-2">
               <div>
-                <h3 class="text-sm font-semibold text-gray-90">{{ t('Forum image') }}</h3>
+                <h3 class="text-sm font-semibold text-gray-90">{{ t("Forum image") }}</h3>
                 <p class="text-xs text-gray-500">
-                  {{ t('This image replaces the default forum icon shown next to the forum title.') }}
+                  {{ t("This image replaces the default forum icon shown next to the forum title.") }}
                 </p>
               </div>
               <div class="flex flex-wrap items-center gap-2">
@@ -509,7 +514,7 @@
                 v-if="forumForm.imageFile"
                 class="text-xs text-gray-500"
               >
-                {{ t('Selected image') }}: {{ forumForm.imageFile.name }}
+                {{ t("Selected image") }}: {{ forumForm.imageFile.name }}
               </p>
             </div>
           </div>
@@ -749,7 +754,11 @@ function isCategoryVisible(category) {
     return true
   }
 
-  return true === category.forumCategoryVisible || 1 === category.forumCategoryVisible || "1" === String(category.forumCategoryVisible)
+  return (
+    true === category.forumCategoryVisible ||
+    1 === category.forumCategoryVisible ||
+    "1" === String(category.forumCategoryVisible)
+  )
 }
 
 function isForumVisible(forum) {
@@ -1122,7 +1131,9 @@ async function deleteForum(forum) {
 async function toggleCategoryLock(category) {
   try {
     await forumService.toggleCategoryLock(category.iid, baseQuery.value, {})
-    notifications.showSuccessNotification(Number(category.locked || 0) ? t("Forum category unlocked") : t("Forum category locked"))
+    notifications.showSuccessNotification(
+      Number(category.locked || 0) ? t("Forum category unlocked") : t("Forum category locked"),
+    )
     await loadForums()
   } catch (error) {
     console.error("Error toggling forum category lock:", error)
@@ -1173,7 +1184,6 @@ async function toggleForumVisibility(forum) {
   }
 }
 
-
 async function toggleForumNotification(forum) {
   try {
     const response = await forumService.toggleForumSubscription(forum.iid, baseQuery.value, {
@@ -1181,7 +1191,9 @@ async function toggleForumNotification(forum) {
     })
 
     forum.subscribed = response.subscribed
-    notifications.showSuccessNotification(response.subscribed ? t("Forum notifications enabled") : t("Forum notifications disabled"))
+    notifications.showSuccessNotification(
+      response.subscribed ? t("Forum notifications enabled") : t("Forum notifications disabled"),
+    )
     await loadForums()
   } catch (error) {
     console.error("Error toggling forum notification:", error)

@@ -241,7 +241,7 @@ $form = show_add_post_form(
 Display::display_header();
 
 if ('learnpath' !== $origin) {
-    // $actionsLeft = '<span style="float:right;">'.search_link().'</span>';
+    // $actionsLeft = '<span style="float:inline-end;">'.search_link().'</span>';
     $actionsLeft = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'">';
     $actionsLeft .= Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to thread')).'</a>';
 

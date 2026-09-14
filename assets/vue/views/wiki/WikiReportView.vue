@@ -251,7 +251,7 @@
               class="grid gap-2 py-3 sm:grid-cols-[minmax(0,2fr)_minmax(8rem,1fr)]"
             >
               <dt class="text-sm text-gray-700">{{ t(row.label) }}</dt>
-              <dd class="text-sm font-semibold text-gray-90 sm:text-right">
+              <dd class="text-sm font-semibold text-gray-90 sm:text-end">
                 {{ row.value }}
               </dd>
             </div>
@@ -267,7 +267,7 @@
               class="grid gap-2 py-3 sm:grid-cols-[minmax(0,2fr)_minmax(8rem,1fr)]"
             >
               <dt class="text-sm text-gray-700">{{ t(row.label) }}</dt>
-              <dd class="text-sm font-semibold text-gray-90 sm:text-right">
+              <dd class="text-sm font-semibold text-gray-90 sm:text-end">
                 {{ row.value }}
               </dd>
             </div>
@@ -281,14 +281,14 @@
           <div class="overflow-x-auto">
             <table class="w-full border-collapse text-sm">
               <thead>
-                <tr class="border-b border-gray-30 text-left">
+                <tr class="border-b border-gray-30 text-start">
                   <th class="px-3 py-2 font-semibold text-gray-90">
                     {{ t("Metric") }}
                   </th>
-                  <th class="px-3 py-2 text-right font-semibold text-gray-90">
+                  <th class="px-3 py-2 text-end font-semibold text-gray-90">
                     {{ t("Latest version") }}
                   </th>
-                  <th class="px-3 py-2 text-right font-semibold text-gray-90">
+                  <th class="px-3 py-2 text-end font-semibold text-gray-90">
                     {{ t("All versions") }}
                   </th>
                 </tr>
@@ -300,10 +300,10 @@
                   class="border-b border-gray-20"
                 >
                   <td class="px-3 py-2 text-gray-700">{{ t(row.label) }}</td>
-                  <td class="px-3 py-2 text-right font-medium text-gray-90">
+                  <td class="px-3 py-2 text-end font-medium text-gray-90">
                     {{ row.latest }}
                   </td>
-                  <td class="px-3 py-2 text-right font-medium text-gray-90">
+                  <td class="px-3 py-2 text-end font-medium text-gray-90">
                     {{ row.allVersions }}
                   </td>
                 </tr>

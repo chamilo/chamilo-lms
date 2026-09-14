@@ -60,7 +60,7 @@ $content .= '<p class="mt-2 text-sm text-gray-50">'.
     '</p>';
 $content .= '</div>';
 $content .= '<a class="inline-flex items-center justify-center rounded-lg border border-gray-25 bg-white px-4 py-2 text-sm font-semibold text-gray-90 shadow-sm hover:bg-gray-15" href="'.Security::remove_XSS($backUrl).'">';
-$content .= '<span class="mdi mdi-arrow-left mr-2" aria-hidden="true"></span>'.Security::remove_XSS(get_lang('Back to plugins'));
+$content .= '<span class="mdi mdi-arrow-left rtl:rotate-180 me-2" aria-hidden="true"></span>'.Security::remove_XSS(get_lang('Back to plugins'));
 $content .= '</a>';
 $content .= '</div>';
 
@@ -99,9 +99,9 @@ if (empty($list)) {
     $content .= '<table class="min-w-full divide-y divide-gray-25 text-sm">';
     $content .= '<thead class="bg-gray-15">';
     $content .= '<tr>';
-    $content .= '<th class="px-6 py-3 text-left font-semibold text-gray-90">'.Security::remove_XSS(get_lang('User')).'</th>';
-    $content .= '<th class="px-6 py-3 text-left font-semibold text-gray-90">URL</th>';
-    $content .= '<th class="px-6 py-3 text-right font-semibold text-gray-90">'.Security::remove_XSS(get_lang('Actions')).'</th>';
+    $content .= '<th class="px-6 py-3 text-start font-semibold text-gray-90">'.Security::remove_XSS(get_lang('User')).'</th>';
+    $content .= '<th class="px-6 py-3 text-start font-semibold text-gray-90">URL</th>';
+    $content .= '<th class="px-6 py-3 text-end font-semibold text-gray-90">'.Security::remove_XSS(get_lang('Actions')).'</th>';
     $content .= '</tr>';
     $content .= '</thead>';
     $content .= '<tbody class="divide-y divide-gray-20 bg-white">';
@@ -126,9 +126,9 @@ if (empty($list)) {
             Security::remove_XSS($itemUrl).
             '</a>';
         $content .= '</td>';
-        $content .= '<td class="px-6 py-4 text-right align-top">';
+        $content .= '<td class="px-6 py-4 text-end align-top">';
         $content .= '<a class="inline-flex items-center justify-center rounded-lg bg-danger px-3 py-2 text-sm font-semibold text-danger-button-text shadow-sm hover:opacity-90" href="'.Security::remove_XSS($deleteUrl).'" onclick="return confirm(\''.Security::remove_XSS(get_lang('Are you sure?')).'\');">';
-        $content .= '<span class="mdi mdi-delete mr-2" aria-hidden="true"></span>'.Security::remove_XSS(get_lang('Delete'));
+        $content .= '<span class="mdi mdi-delete me-2" aria-hidden="true"></span>'.Security::remove_XSS(get_lang('Delete'));
         $content .= '</a>';
         $content .= '</td>';
         $content .= '</tr>';

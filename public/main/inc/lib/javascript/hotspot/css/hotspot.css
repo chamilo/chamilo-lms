@@ -67,7 +67,7 @@
 }
 .input-group.hotspot-0.active select {
     border-color: rgb(66, 113, 181);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 .input-group.hotspot-1.active {
     border-color: rgb(254, 142, 22);
@@ -79,7 +79,7 @@
 }
 .input-group.hotspot-1.active select {
     border-color: rgb(254, 142, 22);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 .input-group.hotspot-2.active {
     border-color: rgb(69, 199, 240);
@@ -91,7 +91,7 @@
 }
 .input-group.hotspot-2.active select {
     border-color: rgb(69, 199, 240);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 .input-group.hotspot-3.active {
     border-color: rgb(188, 214, 49);
@@ -103,7 +103,7 @@
 }
 .input-group.hotspot-3.active select {
     border-color: rgb(188, 214, 49);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 .input-group.hotspot-4.active {
     border-color: rgb(214, 49, 115);
@@ -115,7 +115,7 @@
 }
 .input-group.hotspot-4.active select {
     border-color: rgb(214, 49, 115);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 .input-group.hotspot-5.active {
     border-color: rgb(215, 215, 215);
@@ -127,7 +127,7 @@
 }
 .input-group.hotspot-5.active select {
     border-color: rgb(215, 215, 215);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 .input-group.hotspot-6.active {
     border-color: rgb(144, 175, 221);
@@ -139,7 +139,7 @@
 }
 .input-group.hotspot-6.active select {
     border-color: rgb(144, 175, 221);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 .input-group.hotspot-7.active {
     border-color: rgb(175, 134, 64);
@@ -151,7 +151,7 @@
 }
 .input-group.hotspot-7.active select {
     border-color: rgb(175, 134, 64);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 .input-group.hotspot-8.active {
     border-color: rgb(79, 146, 66);
@@ -163,7 +163,7 @@
 }
 .input-group.hotspot-8.active select {
     border-color: rgb(79, 146, 66);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 .input-group.hotspot-9.active {
     border-color: rgb(244, 235, 36);
@@ -175,7 +175,7 @@
 }
 .input-group.hotspot-9.active select {
     border-color: rgb(244, 235, 36);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 .input-group.hotspot-10.active {
     border-color: rgb(237, 32, 36);
@@ -187,7 +187,7 @@
 }
 .input-group.hotspot-10.active select {
     border-color: rgb(237, 32, 36);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 .input-group.hotspot-11.active {
     border-color: rgb(59, 59, 59);
@@ -199,7 +199,7 @@
 }
 .input-group.hotspot-11.active select {
     border-color: rgb(59, 59, 59);
-    border-left-color: #CCC;
+    border-inline-start-color: #CCC;
 }
 
 .input-group.hotspot-0 select:focus,

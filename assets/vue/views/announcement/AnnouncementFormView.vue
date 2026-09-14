@@ -190,7 +190,7 @@
 
                 <div
                   v-if="form.sendByEmail && !form.emailAlreadySent"
-                  class="space-y-3 pl-6"
+                  class="space-y-3 ps-6"
                 >
                   <BaseCheckbox
                     v-if="form.sendToSessionsAvailable"
@@ -254,7 +254,7 @@
 
                 <div
                   v-if="form.addToCalendar"
-                  class="space-y-4 pl-6"
+                  class="space-y-4 ps-6"
                 >
                   <div class="grid gap-4 md:grid-cols-2">
                     <BaseCalendar
@@ -295,7 +295,7 @@
                   <input
                     id="announcement_attachments"
                     ref="attachmentInputRef"
-                    class="block w-full rounded-lg border border-gray-30 bg-white px-3 py-2 text-sm text-gray-700 file:mr-3 file:rounded-md file:border-0 file:bg-gray-20 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-gray-90 hover:file:bg-gray-25"
+                    class="block w-full rounded-lg border border-gray-30 bg-white px-3 py-2 text-sm text-gray-700 file:me-3 file:rounded-md file:border-0 file:bg-gray-20 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-gray-90 hover:file:bg-gray-25"
                     multiple
                     name="attachments[]"
                     type="file"
@@ -381,7 +381,7 @@
         <p class="mb-2 font-semibold text-gray-90">
           {{ t("Announcement will be sent to") }}
         </p>
-        <ul class="list-disc space-y-1 pl-6 text-sm text-gray-700">
+        <ul class="list-disc space-y-1 ps-6 text-sm text-gray-700">
           <li
             v-for="recipient in previewRecipients"
             :key="recipient"

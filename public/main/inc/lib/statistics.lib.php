@@ -559,7 +559,7 @@ class Statistics
                 color: #5f6b7a;
                 white-space: nowrap;
                 min-width: 52px;
-                text-align: right;
+                text-align: end;
             }
             .ch-stats-cols th{ vertical-align: middle; }
         </style>';
@@ -781,7 +781,7 @@ class Statistics
             if (1 == $day) {
                 $label = get_lang('Today');
             }
-            $label .= " <span class=\"muted right\" style=\"float: right; margin-right: 5px;\">[$localDate - $localEndDate]</span>";
+            $label .= " <span class=\"muted right\" style=\"float: inline-end; margin-inline-end: 5px;\">[$localDate - $localEndDate]</span>";
             $sql = "SELECT count($field) AS number
                     FROM $table $table_url
                     WHERE ";

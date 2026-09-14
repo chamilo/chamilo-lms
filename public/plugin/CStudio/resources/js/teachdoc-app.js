@@ -47,7 +47,7 @@ $(document).ready(function(){
 	}
 	
 	$("#dictionary_listOfUsers").parent().parent().css("display","none");
-	$("#dictionary_submit").parent().prepend('<a style="margin-right:10px;" href="oel_tools_teachdoc_list.php" class="btn btn-default" ><b>Annuler</b></a>');
+	$("#dictionary_submit").parent().prepend('<a style="margin-inline-end:10px;" href="oel_tools_teachdoc_list.php" class="btn btn-default" ><b>Annuler</b></a>');
 	
 	$("#dictionary_submit").click(function(e){
 		

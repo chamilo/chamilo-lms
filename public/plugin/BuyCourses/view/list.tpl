@@ -30,7 +30,7 @@
                             href="{{ back_url }}"
                             class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                         >
-                            <em class="mdi mdi-arrow-left"></em>
+                            <em class="mdi mdi-arrow-left rtl:rotate-180"></em>
                             {{ 'Back'|get_lang }}
                         </a>
                     {% endif %}
@@ -73,7 +73,7 @@
             <table id="courses_table" class="min-w-full divide-y divide-gray-25">
                 <thead class="bg-gray-15">
                 <tr>
-                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    <th class="px-6 py-4 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'Title'|get_lang }}
                     </th>
                     <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
@@ -82,7 +82,7 @@
                     <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}
                     </th>
-                    <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    <th class="px-6 py-4 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
                     </th>
                     {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 2) %}
@@ -90,7 +90,7 @@
                         {{ tax_name }}
                     </th>
                     {% endif %}
-                    <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    <th class="px-6 py-4 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'Options'|get_lang }}
                     </th>
                 </tr>
@@ -175,7 +175,7 @@
                         {% endif %}
                     </td>
 
-                    <td class="px-6 py-4 text-right text-sm font-semibold text-gray-90">
+                    <td class="px-6 py-4 text-end text-sm font-semibold text-gray-90">
                         {% if buy_data and buy_data.price_formatted %}
                         <span class="whitespace-nowrap">{{ buy_data.price_formatted }}</span>
                         {% else %}
@@ -193,7 +193,7 @@
                     </td>
                     {% endif %}
 
-                    <td class="px-6 py-4 text-right">
+                    <td class="px-6 py-4 text-end">
                         <a
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type': product_type_course}|url_encode }}"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
@@ -317,7 +317,7 @@
             <table id="session_table" class="min-w-full divide-y divide-gray-25">
                 <thead class="bg-gray-15">
                 <tr>
-                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    <th class="px-6 py-4 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'Title'|get_lang }}
                     </th>
                     <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
@@ -329,7 +329,7 @@
                     <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}
                     </th>
-                    <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    <th class="px-6 py-4 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
                     </th>
                     {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 3) %}
@@ -337,7 +337,7 @@
                         {{ tax_name }}
                     </th>
                     {% endif %}
-                    <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    <th class="px-6 py-4 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'Options'|get_lang }}
                     </th>
                 </tr>
@@ -377,7 +377,7 @@
                         {% endif %}
                     </td>
 
-                    <td class="px-6 py-4 text-right text-sm font-semibold text-gray-90">
+                    <td class="px-6 py-4 text-end text-sm font-semibold text-gray-90">
                         {% if buy_data and buy_data.price_formatted is defined %}
                         <span class="whitespace-nowrap">{{ buy_data.price_formatted }}</span>
                         {% else %}
@@ -395,7 +395,7 @@
                     </td>
                     {% endif %}
 
-                    <td class="px-6 py-4 text-right">
+                    <td class="px-6 py-4 text-end">
                         <a
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type': product_type_session}|url_encode }}"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
@@ -525,10 +525,10 @@
             <table id="services_table" class="min-w-full divide-y divide-gray-25">
                 <thead class="bg-gray-15">
                 <tr>
-                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    <th class="px-6 py-4 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'Service'|get_plugin_lang('BuyCoursesPlugin') }}
                     </th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    <th class="px-6 py-4 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'Description'|get_lang }}
                     </th>
                     <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
@@ -543,7 +543,7 @@
                     <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'Owner'|get_lang }}
                     </th>
-                    <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    <th class="px-6 py-4 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
                     </th>
                     {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 4) %}
@@ -551,7 +551,7 @@
                         {{ tax_name }}
                     </th>
                     {% endif %}
-                    <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">
+                    <th class="px-6 py-4 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                         {{ 'Options'|get_lang }}
                     </th>
                 </tr>
@@ -607,7 +607,7 @@
                         {{ item.owner_name }}
                     </td>
 
-                    <td class="px-6 py-4 text-right text-sm font-semibold text-gray-90">
+                    <td class="px-6 py-4 text-end text-sm font-semibold text-gray-90">
                         <span class="whitespace-nowrap">{{ item.price_formatted }}</span>
                     </td>
 
@@ -621,7 +621,7 @@
                     </td>
                     {% endif %}
 
-                    <td class="px-6 py-4 text-right">
+                    <td class="px-6 py-4 text-end">
                         <div class="inline-flex flex-wrap items-center justify-end gap-2">
                             <a
                                     href="{{ url('index') ~ 'plugin/BuyCourses/src/services_edit.php?' ~ {'id': item.id}|url_encode }}"

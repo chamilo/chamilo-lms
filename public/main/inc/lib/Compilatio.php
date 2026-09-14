@@ -571,7 +571,7 @@ class Compilatio
                         );
                     break;
                 case 'ANALYSE_PROCESSING':
-                    $actionCompilatio .= "<div style='font-weight:bold;text-align:left'>"
+                    $actionCompilatio .= "<div style='font-weight:bold;text-align:start'>"
                         .get_lang('Compilatio analysis in progress')
                         ."</div>";
                     $actionCompilatio .= "<div style='font-size:80%;font-style:italic;margin-bottom:5px;'>"

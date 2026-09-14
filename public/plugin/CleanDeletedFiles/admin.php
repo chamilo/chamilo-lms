@@ -57,7 +57,7 @@ if ('POST' === strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? ''))) {
             $operationMessageType = $deleteResult['success'] ? 'confirmation' : 'warning';
 
             if (!empty($deleteResult['deleted_paths'])) {
-                $operationMessage .= '<br><strong>Deleted:</strong><ul class="m-0 mt-2 list-disc pl-5">';
+                $operationMessage .= '<br><strong>Deleted:</strong><ul class="m-0 mt-2 list-disc ps-5">';
                 foreach ($deleteResult['deleted_paths'] as $deletedPath) {
                     $operationMessage .= '<li><code>'.htmlspecialchars((string) $deletedPath, ENT_QUOTES).'</code></li>';
                 }
@@ -65,7 +65,7 @@ if ('POST' === strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? ''))) {
             }
 
             if (!empty($deleteResult['errors'])) {
-                $operationMessage .= '<br><strong>Skipped or failed:</strong><ul class="m-0 mt-2 list-disc pl-5">';
+                $operationMessage .= '<br><strong>Skipped or failed:</strong><ul class="m-0 mt-2 list-disc ps-5">';
                 foreach ($deleteResult['errors'] as $error) {
                     $operationMessage .= '<li>'.htmlspecialchars((string) $error, ENT_QUOTES).'</li>';
                 }

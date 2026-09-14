@@ -292,7 +292,7 @@ provide("isCustomizing", isCustomizing)
       <p class="mb-3 text-lg">{{ t("Dropdowns") }}</p>
       <div class="flex flex-row gap-3">
         <BaseButton
-          class="mr-3 mb-2"
+          class="me-3 mb-2"
           icon="cog"
           only-icon
           popup-identifier="menu"

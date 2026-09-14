@@ -21,7 +21,7 @@
         v-for="section in sections"
         :key="section.key"
         type="button"
-        class="group block rounded-2xl bg-white p-4 text-left shadow-sm transition hover:shadow-md"
+        class="group block rounded-2xl bg-white p-4 text-start shadow-sm transition hover:shadow-md"
         :class="
           section.key === currentSection
             ? 'ring-2 ring-primary/80 bg-primary/5'
@@ -46,7 +46,7 @@
               </h3>
               <span
                 v-if="section.key === currentSection"
-                class="ml-auto rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary"
+                class="ms-auto rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary"
               >
                 {{ t("Active") }}
               </span>
@@ -97,7 +97,7 @@
           <button
             type="button"
             name="php-cache-toggle"
-            class="flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-left transition hover:bg-support-2"
+            class="flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-start transition hover:bg-support-2"
             :aria-expanded="phpCacheExpanded ? 'true' : 'false'"
             aria-controls="php-cache-panel"
             @click="togglePhpCache"
@@ -357,7 +357,7 @@
             id="database-load-toggle"
             type="button"
             name="database-load-toggle"
-            class="flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-left transition hover:bg-support-2"
+            class="flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-start transition hover:bg-support-2"
             :aria-expanded="dbExpanded ? 'true' : 'false'"
             aria-controls="database-load-panel"
             @click="toggleDbLoad"
@@ -563,7 +563,7 @@
             id="webserver-load-toggle"
             type="button"
             name="webserver-load-toggle"
-            class="flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-left transition hover:bg-support-2"
+            class="flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-start transition hover:bg-support-2"
             :aria-expanded="wsExpanded ? 'true' : 'false'"
             aria-controls="webserver-load-panel"
             @click="toggleWsLoad"
@@ -612,7 +612,7 @@
                 {{ t("Last updated") }}: {{ formatLastVisit(wsFetchedAt) }}
                 <span
                   v-if="wsFetchedAt"
-                  class="ml-1 font-mono"
+                  class="ms-1 font-mono"
                 >
                   ({{ wsFetchedAt }})
                 </span>

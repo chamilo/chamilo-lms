@@ -101,7 +101,7 @@ if (!$displayScore->is_custom() || empty($displays)) {
             $html .= '<td width="550">'.ExerciseLib::convertScoreToModel($bar).'</td>';
         }
 
-        $html .= '<td align="right">'.$nr_items[$key].'</td>';
+        $html .= '<td style="text-align:end;">'.$nr_items[$key].'</td>';
         $html .= '</tr>';
         $counter++;
     }

@@ -64,8 +64,8 @@ class DatePicker extends HTML_QuickForm_text
         <label>'.$requiredSymbol.$label.'</label>
         <div id="'.$id.'_container" class="flex items-center mt-1 flatpickr-wrapper" data-wrap="true">
             <input '.$this->_getAttrString($this->_attributes).' value="'.$value.'" data-input>
-            <div class="flex space-x-1 ml-2" id="button-addon3">
-                <button class="btn btn--secondary-outline mr-2" type="button" data-toggle>
+            <div class="flex space-x-1 ms-2" id="button-addon3">
+                <button class="btn btn--secondary-outline me-2" type="button" data-toggle>
                   '.Display::getMdiIcon(ObjectIcon::AGENDA).'
                 </button>
                 <button class="btn btn--secondary-outline" type="button" data-clear>

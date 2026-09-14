@@ -2,6 +2,7 @@
   <div
     ref="container"
     class="exercise-runtime-html text-gray-800"
+    dir="auto"
     v-html="renderedHtml"
   />
 </template>

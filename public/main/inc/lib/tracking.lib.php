@@ -639,7 +639,7 @@ class Tracking
                             }
                             $output .= '<tr class="'.$oddclass.'">
                                     <td></td>
-                                    <td style="width:70px;float:left;">'.$extend_attempt_link.'</td>
+                                    <td style="width:70px;float:inline-start;">'.$extend_attempt_link.'</td>
                                     <td colspan="3">'.get_lang('Attempt').' '.$attemptCount.'</td>
                                     <td colspan="2">'.learnpathItem::humanize_status($lesson_status, true, $type).'</td>
                                     <td colspan="2">'.$view_score.'</td>

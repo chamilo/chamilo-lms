@@ -122,7 +122,7 @@
                 :style="{ width: `${normalizedTotalAverage}%` }"
               ></div>
             </div>
-            <span class="min-w-12 text-right text-sm font-semibold text-gray-90"> {{ normalizedTotalAverage }}% </span>
+            <span class="min-w-12 text-end text-sm font-semibold text-gray-90"> {{ normalizedTotalAverage }}% </span>
           </div>
         </div>
       </BaseCard>
@@ -169,6 +169,7 @@
                   </p>
                   <div
                     class="mt-1 break-words text-xl font-bold text-gray-90"
+                    dir="auto"
                     v-html="thematic.title"
                   ></div>
                 </div>
@@ -272,6 +273,7 @@
               <div
                 v-if="thematic.content"
                 class="prose max-w-none break-words text-gray-90"
+                dir="auto"
                 v-html="thematic.content"
               ></div>
             </section>
@@ -299,11 +301,13 @@
                 >
                   <div
                     class="mb-2 break-words text-base font-semibold text-gray-90"
+                    dir="auto"
                     v-html="plan.title"
                   ></div>
                   <div
                     v-if="plan.description"
                     class="prose max-w-none break-words text-gray-90"
+                    dir="auto"
                     v-html="plan.description"
                   ></div>
                 </article>
@@ -352,6 +356,7 @@
                   <div
                     v-if="advance.content"
                     class="prose mt-2 max-w-none break-words text-gray-90"
+                    dir="auto"
                     v-html="advance.content"
                   ></div>
 
@@ -478,7 +483,6 @@ function getContextParams() {
   if (gid > 0) {
     params.gid = gid
   }
-
 
   return params
 }

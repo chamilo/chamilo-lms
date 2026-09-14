@@ -367,8 +367,7 @@ onBeforeUnmount(() => {
 .lp-impress-breadcrumb {
   position: fixed;
   top: 0;
-  right: 0;
-  left: 0;
+  inset-inline: 0;
   z-index: 30;
   display: flex;
   align-items: center;
@@ -482,18 +481,17 @@ onBeforeUnmount(() => {
 }
 
 .lp-impress-edge--previous {
-  left: 0;
+  inset-inline-start: 0;
 }
 
 .lp-impress-edge--next {
-  right: 0;
+  inset-inline-end: 0;
 }
 
 .lp-impress-hint {
   position: absolute;
-  right: 0;
   bottom: 32px;
-  left: 0;
+  inset-inline: 0;
   z-index: 12;
   color: rgb(255 255 255 / 90%);
   font-size: 18px;

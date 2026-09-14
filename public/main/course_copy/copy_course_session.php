@@ -107,7 +107,7 @@ function course_copy_actions_bar(): string
     return '
         <div class="flex items-center justify-between">
             <a href="'.$backUrl.'" class="inline-flex items-center gap-2 rounded-md bg-gray-10 px-3 py-2 text-sm font-medium text-gray-90 shadow-sm hover:bg-gray-20 focus:outline-none focus:ring-2 focus:ring-gray-30">
-                <i class="mdi mdi-arrow-left"></i>
+                <i class="mdi mdi-arrow-left rtl:rotate-180"></i>
                 <span>'.get_lang('Back to').' '.get_lang('Administration').'</span>
             </a>
         </div>
@@ -758,9 +758,9 @@ if (Security::check_token('post') && (
 
         echo '</div>'; // .course-copy-selective
 
-        echo '<div class="mt-4 text-right">
+        echo '<div class="mt-4 text-end">
             <a href="javascript:window.history.go(-1);" class="inline-flex items-center gap-2 rounded-md bg-gray-10 px-3 py-2 text-sm font-medium text-gray-90 shadow-sm hover:bg-gray-20 focus:outline-none focus:ring-2 focus:ring-gray-30">
-                <i class="mdi mdi-arrow-left"></i>
+                <i class="mdi mdi-arrow-left rtl:rotate-180"></i>
                 <span>'.get_lang('Back').' '.get_lang('To').' '.get_lang('Administration').'</span>
             </a>
           </div>';

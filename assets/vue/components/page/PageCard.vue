@@ -7,7 +7,7 @@
           v-if="isAdmin"
           :label="t('Edit')"
           :route="{ name: 'PageUpdate', query: { id: page['@id'] } }"
-          class="ml-auto"
+          class="ms-auto"
           icon="edit"
           only-icon
           size="small"
@@ -16,7 +16,10 @@
       </div>
     </template>
 
-    <div v-html="safeContent" />
+    <div
+      dir="auto"
+      v-html="safeContent"
+    />
   </BaseCard>
 </template>
 

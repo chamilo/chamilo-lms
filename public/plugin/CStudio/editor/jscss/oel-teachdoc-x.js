@@ -1773,7 +1773,7 @@ function installqcm(obj){
 			
 			//CASE A COCHER
 			caseHtml = caseHtml + '<table class="qcmt cochecase cochecase' + obj.id + '" ' ;
-			caseHtml = caseHtml + ' style="z-index:1;position:absolute;' + marginT + 'left:0px;top:0px;color:' + color + ';';
+			caseHtml = caseHtml + ' style="z-index:1;position:absolute;' + marginT + 'inset-inline-start:0px;top:0px;color:' + color + ';';
 			if(obj.boite==''){
 				caseHtml = caseHtml + 'border:solid 1px ' + color + ';" >';
 			}else{
@@ -2095,7 +2095,7 @@ function installqcmbarre(obj){
 			
 			//CASE A COCHER
 			caseHtml = caseHtml + '<table class="qcmt cochecase cochecase' + obj.id + '" ' ;
-			caseHtml = caseHtml + ' style="z-index:1;position:absolute;left:0px;top:0px;color:' + color + ';';
+			caseHtml = caseHtml + ' style="z-index:1;position:absolute;inset-inline-start:0px;top:0px;color:' + color + ';';
 			if(obj.boite==''){
 				caseHtml = caseHtml + 'border:solid 1px ' + color + ';" >';
 			}else{
@@ -2147,7 +2147,7 @@ function installqcmbarre(obj){
 			//A gauche
 				h = h + caseHtml;
 				h = h + '<td class="selectqcmline qcmline' + obj.id ;
-				h = h + ' ' + styright + '" style="text-align:left;padding-left:10px;' + borcolor + '" ';
+				h = h + ' ' + styright + '" style="text-align:start;padding-inline-start:10px;' + borcolor + '" ';
 			
 			if(actionmini!=''){
 				h = h + ' onclick="' + actionmini + '" ';
@@ -2211,7 +2211,7 @@ function getJePasse(randomname,obj,barre){
 	
 	//CASE A COCHER
 	cc = cc + '<table class="qcmt cochecase cochecase' + obj.id + '" ' ;
-	cc = cc + ' style="z-index:1;position:absolute;left:0px;top:0px;color:' + color + ';';
+	cc = cc + ' style="z-index:1;position:absolute;inset-inline-start:0px;top:0px;color:' + color + ';';
 	
 	if(obj.boite==''){
 		cc = cc + 'border:solid 1px ' + color + ';" >';

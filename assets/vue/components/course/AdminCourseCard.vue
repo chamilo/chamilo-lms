@@ -12,7 +12,7 @@
         />
         <button
           :aria-label="isFavorite ? t('Unmark favorite') : t('Mark favorite')"
-          class="absolute top-2 right-2 grid place-content-center w-10 h-10 rounded-full bg-white/80 backdrop-blur text-yellow-400 hover:text-yellow-500 shadow"
+          class="absolute top-2 end-2 grid place-content-center w-10 h-10 rounded-full bg-white/80 backdrop-blur text-yellow-400 hover:text-yellow-500 shadow"
           @click.stop="toggleFavorite"
         >
           <i :class="isFavorite ? 'mdi mdi-star' : 'mdi mdi-star-outline'" />

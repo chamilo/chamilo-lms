@@ -1,6 +1,6 @@
 .lp-panel {
   @apply relative z-0 rounded-lg border border-gray-30 shadow-none bg-white
-    sm:rounded-r-lg sm:rounded-l-none sm:border-0 sm:border-none sm:bg-support-6 sm:shadow-xl;
+    sm:rounded-e-lg sm:rounded-s-none sm:border-0 sm:border-none sm:bg-support-6 sm:shadow-xl;
 
   &:focus-within,
   &--menu-open {
@@ -9,11 +9,11 @@
 
   & &__container {
     @apply relative rounded-lg p-4 w-full
-      sm:py-2 sm:pr-4 sm:pl-0 sm:rounded-r-lg sm:rounded-l-none
+      sm:py-2 sm:pe-4 sm:ps-0 sm:rounded-e-lg sm:rounded-s-none
       md:flex md:gap-4;
 
     &:before {
-      @apply sm:content-[""] sm:absolute sm:rounded-l-lg sm:bg-secondary sm:w-1 sm:h-full sm:-left-1 sm:top-0;
+      @apply sm:content-[""] sm:absolute sm:rounded-s-lg sm:bg-secondary sm:w-1 sm:h-full sm:-start-1 sm:top-0;
     }
   }
 
@@ -26,9 +26,9 @@
   }
 
   &__body {
-    @apply flex gap-4 items-start ml-8 -mt-6
-      sm:ml-6
-      md:-ml-2 md:mt-0;
+    @apply flex gap-4 items-start ms-8 -mt-6
+      sm:ms-6
+      md:-ms-2 md:mt-0;
   }
 
   &__cover {
@@ -53,7 +53,7 @@
   }
 
   &__title {
-    @apply font-semibold text-gray-90 text-body-1 text-left leading-none
+    @apply font-semibold text-gray-90 text-body-1 text-start leading-none
       hover:underline
       focus:underline focus:underline-offset-2;
   }
@@ -67,7 +67,7 @@
     }
 
     &--mobile {
-      @apply mt-4 block ml-8
+      @apply mt-4 block ms-8
         md:hidden;
     }
   }
@@ -95,8 +95,8 @@
   }
 
   &__actions {
-    @apply ml-6 mt-4 flex items-center justify-between
-      md:ml-auto md:mt-0 md:flex-col md:items-end md:justify-start;
+    @apply ms-6 mt-4 flex items-center justify-between
+      md:ms-auto md:mt-0 md:flex-col md:items-end md:justify-start;
   }
 
   &__action-buttons {
@@ -132,7 +132,7 @@
   }
 
   &__student {
-    @apply ml-auto flex items-center gap-3;
+    @apply ms-auto flex items-center gap-3;
   }
 
   &__student-actions {

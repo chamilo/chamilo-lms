@@ -35,7 +35,7 @@
       <div>
         <i
           :class="chamiloIconToClass['folder-generic']"
-          class="mr-1"
+          class="me-1"
         ></i>
         {{ t("Category") }}: <strong>{{ currentCat?.title }}</strong>
       </div>
@@ -120,7 +120,7 @@
           </template>
           <template v-else>
             <a
-              class="mr-2 inline-flex items-center"
+              class="me-2 inline-flex items-center"
               :title="t('Download')"
               :href="downloadUrl(data.id)"
               target="_blank"
@@ -182,7 +182,7 @@
       <Column
         :header="t('Edit')"
         headerStyle="width:16rem"
-        bodyClass="text-right"
+        bodyClass="text-end"
       >
         <template #body="{ data }">
           <!-- Folder actions -->

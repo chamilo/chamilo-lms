@@ -23,7 +23,7 @@
       :multiple="false"
       :show-buttons="showAudioRecorderButtons"
       :show-recorded-audios="false"
-      class="self-center mr-2 mb-4"
+      class="self-center me-2 mb-4"
       @recorded-audio="processAudio($event)"
     />
 
@@ -33,14 +33,14 @@
     >
       <BaseButton
         :label="t('Start recording')"
-        class="mr-2"
+        class="me-2"
         icon="restart"
         type="black"
         @click="recordAudio"
       />
       <BaseButton
         :label="t('Save recorded audio')"
-        class="mr-2"
+        class="me-2"
         icon="send"
         type="success"
         @click="saveAudio"

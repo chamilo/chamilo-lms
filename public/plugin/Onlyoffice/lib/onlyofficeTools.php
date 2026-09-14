@@ -109,7 +109,7 @@ class OnlyofficeTools
         $urlToEdit = $urlToEdit.'docId='.$documentId;
 
         if ($canView && !$accessRights) {
-            return Display::url(Display::return_icon('../../plugin/Onlyoffice/resources/onlyoffice_view.png', $plugin->get_lang('openByOnlyoffice')), $urlToEdit, ['style' => 'float:right; margin-right:8px']);
+            return Display::url(Display::return_icon('../../plugin/Onlyoffice/resources/onlyoffice_view.png', $plugin->get_lang('openByOnlyoffice')), $urlToEdit, ['style' => 'float:inline-end; margin-inline-end:8px']);
         }
 
         return '';

@@ -35,12 +35,12 @@
 
 .question_options .checkbox,
 .question_options .radio {
-  margin-left: 5px;
+  margin-inline-start: 5px;
 }
 
 .question_options .radio input[type="radio"], .question_options .checkbox input[type="checkbox"] {
-  float: left;
-  margin-right: 5px;
+  float: inline-start;
+  margin-inline-end: 5px;
 }
 
 .question_options input[type="text"] {
@@ -83,7 +83,7 @@
   position: relative;
 
   .btn-group {
-    margin-right: 5px;
+    margin-inline-end: 5px;
     position:relative;
   }
 
@@ -100,7 +100,7 @@
 
   .btn-group .dropdown-toggle::after {
     content: "▼";
-    margin-left: 5px;
+    margin-inline-start: 5px;
   }
 
   .btn-group .dropdown-toggle[data-toggle="dropdown"] {
@@ -110,7 +110,7 @@
   .dropdown-menu {
     position: absolute;
     top: 100%;
-    left: 0;
+    inset-inline-start: 0;
     z-index: 1000;
     display: none;
     @apply bg-white;
@@ -145,8 +145,8 @@
 
     .btn-group .dropdown-toggle::after {
       content: "▼";
-      margin-left: auto;
-      margin-right: 10px;
+      margin-inline-start: auto;
+      margin-inline-end: 10px;
     }
   }
 }
@@ -244,7 +244,7 @@
 
   .ui-sortable-handle {
     font-size: 25px !important;
-    margin-right: 5px;
+    margin-inline-end: 5px;
   }
 }
 
@@ -279,7 +279,7 @@
     @apply flex-col;
 
     > div {
-      @apply text-left w-full py-2;
+      @apply text-start w-full py-2;
     }
   }
 }
@@ -344,8 +344,8 @@
 
     .exercise-unique-answer-image {
       .radio {
-        padding-left: 10px;
-        margin-left: 0;
+        padding-inline-start: 10px;
+        margin-inline-start: 0;
       }
     }
 
@@ -436,11 +436,11 @@
         @apply border rounded-md relative;
 
         &.window_left_question {
-          @apply text-right p-3 pr-5;
+          @apply text-end p-3 pe-5;
         }
 
         &.window_right_question {
-          @apply p-3 pl-5;
+          @apply p-3 ps-5;
         }
       }
     }
@@ -458,7 +458,7 @@
       @apply mb-4 flex border bg-gray-10 rounded-md;
 
       &-title {
-        @apply font-bold p-3 rounded-l-md text-white;
+        @apply font-bold p-3 rounded-s-md text-white;
 
         &--error {
           @apply bg-error;
@@ -486,7 +486,7 @@
       }
 
       &--no-ribbon {
-        @apply border-l-8;
+        @apply border-s-8;
 
         img {
           @apply inline;
@@ -499,7 +499,7 @@
     @apply mb-4;
 
     th {
-      @apply text-left;
+      @apply text-start;
     }
   }
 }

@@ -256,7 +256,7 @@
         <header class="flex items-start gap-2 border-b border-gray-20 bg-gray-10 p-3">
           <button
             type="button"
-            class="flex min-w-0 flex-1 items-start gap-3 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            class="flex min-w-0 flex-1 items-start gap-3 rounded-lg text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
             :aria-controls="`admin-question-bank-details-${question.id}`"
             :aria-expanded="isQuestionExpanded(question.id)"
             @click="toggleQuestion(question.id)"
@@ -264,7 +264,7 @@
             <i
               aria-hidden="true"
               class="mdi mt-2 shrink-0 text-lg text-primary transition-transform duration-200"
-              :class="isQuestionExpanded(question.id) ? 'mdi-chevron-down' : 'mdi-chevron-right'"
+              :class="isQuestionExpanded(question.id) ? 'mdi-chevron-down' : 'mdi-chevron-right rtl:rotate-180'"
             />
 
             <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-gray-20 bg-white">
@@ -298,6 +298,7 @@
 
               <div
                 class="question-rich-text mt-2 line-clamp-2 text-base font-semibold text-gray-90"
+                dir="auto"
                 v-html="displayTranslatedHtml(question.titleHtml)"
               />
             </div>
@@ -337,6 +338,7 @@
           <div
             v-if="question.descriptionHtml"
             class="question-rich-text border-b border-gray-20 bg-white px-5 py-4 text-sm text-gray-700"
+            dir="auto"
             v-html="displayTranslatedHtml(question.descriptionHtml)"
           />
 
@@ -362,6 +364,7 @@
                 >
                   <div
                     class="question-rich-text text-sm text-gray-800"
+                    dir="auto"
                     v-html="displayTranslatedHtml(answer.html)"
                   />
                   <div class="mt-2 flex flex-wrap gap-2 text-xs">

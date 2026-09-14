@@ -303,7 +303,7 @@ if ('learnpath' !== $origin) {
             .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back to').' '.get_lang('Groups'), null, ICON_SIZE_MEDIUM)
             .'</a>';
     } else {
-        $actions .= '<span style="float:right;">'.search_link().'</span>';
+        $actions .= '<span style="float:inline-end;">'.search_link().'</span>';
         $actions .= '<a href="'.$forumUrl.'index.php?'.api_get_cidreq().'">'
             .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum overview'))
             .'</a>';

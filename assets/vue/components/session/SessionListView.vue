@@ -10,7 +10,7 @@
         class="flex cursor-pointer"
         @click="toggleExpand(session.id)"
       >
-        <div class="w-1.5 bg-primary rounded-l-xl" />
+        <div class="w-1.5 bg-primary rounded-s-xl" />
 
         <div class="flex-1 px-6 py-4 flex items-center justify-between">
           <div>

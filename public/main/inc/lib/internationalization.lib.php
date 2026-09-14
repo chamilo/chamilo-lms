@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\LanguageHelper;
 use ChamiloSession as Session;
 use Westsworld\TimeAgo;
 
@@ -200,18 +201,9 @@ function api_get_platform_isocodes()
  */
 function api_get_text_direction($iso = '')
 {
-    $languages = LanguageFixtures::getLanguages();
-    $rightDirection = array_column($languages, 'direction', 'isocode');
+    $languageHelper = Container::$container->get(LanguageHelper::class);
 
-    if (empty($iso)) {
-        $iso = api_get_language_isocode();
-    }
-
-    if (isset($rightDirection[$iso])) {
-        return 'rtl';
-    }
-
-    return 'ltr';
+    return $languageHelper->getTextDirection(empty($iso) ? null : $iso);
 }
 
 /**

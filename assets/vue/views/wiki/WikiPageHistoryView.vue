@@ -209,6 +209,7 @@
           <div
             class="break-words text-gray-90 [&_a]:font-medium [&_img]:max-w-full [&_table]:max-w-full"
             @click="handleContentClick"
+            dir="auto"
             v-html="historyData.selectedVersion.content"
           ></div>
 
@@ -249,6 +250,7 @@
                   class="border border-gray-20 px-3 py-2 align-top"
                   :data-change-type="change.type"
                   :style="getLineCellStyle(change.type)"
+                  dir="auto"
                   v-html="change.content"
                 ></td>
               </tr>

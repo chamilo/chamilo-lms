@@ -10,7 +10,7 @@
     .bc-info-button--disabled {border-color: transparent; background: #e6edf3; color: #8a96a8; cursor: not-allowed;}
     .bc-info-notice {display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 12px 14px; border: 1px solid #f5dca8; border-radius: 14px; background: #fff8e7; color: #6b4e16; font-size: 13px; font-weight: 700;}
     .bc-info-hero {display: grid; grid-template-columns: 300px minmax(0, 1fr); overflow: hidden; border: 1px solid #e6edf3; border-radius: 28px; background: #fff; box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);}
-    .bc-info-hero__image-wrap {width: 300px; background: #f3f6f9; border-right: 1px solid #e6edf3;}
+    .bc-info-hero__image-wrap {width: 300px; background: #f3f6f9; border-inline-end: 1px solid #e6edf3;}
     .bc-info-hero__image {display: block; width: 100%; height: 100%; min-height: 260px; object-fit: cover;}
     .bc-info-hero__body {padding: 30px;}
     .bc-info-badges {display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;}
@@ -19,8 +19,8 @@
     .bc-info-title {margin: 0; color: #111827; font-size: 28px; font-weight: 800; line-height: 1.25;}
     .bc-info-description {max-width: 900px; margin: 10px 0 0; color: #8a96a8; font-size: 14px; line-height: 1.6;}
     .bc-translated-html p {margin: 0 0 0.5rem;}
-    .bc-translated-html ul {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: disc;}
-    .bc-translated-html ol {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: decimal;}
+    .bc-translated-html ul {margin-block: 0.5rem; margin-inline: 1.25rem 0; padding-inline-start: 1.25rem; list-style: disc;}
+    .bc-translated-html ol {margin-block: 0.5rem; margin-inline: 1.25rem 0; padding-inline-start: 1.25rem; list-style: decimal;}
     .bc-translated-html li {margin: 0.2rem 0;}
     .bc-info-stats {display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 24px;}
     .bc-info-stat {min-width: 0; padding: 16px; border-radius: 18px; background: #f7fafc;}
@@ -35,7 +35,7 @@
     .bc-summary-box {margin-top: 14px; padding: 14px 16px; border: 1px solid #e6edf3; border-radius: 16px;}
     .bc-summary-box__label {color: #111827; font-size: 14px; font-weight: 800;}
     .bc-summary-box__value {margin-top: 6px; color: #8a96a8; font-size: 14px;}
-    @media (max-width: 1100px) {.bc-info-hero {grid-template-columns: 1fr;} .bc-info-hero__image-wrap {width: 100%; border-right: 0; border-bottom: 1px solid #e6edf3;} .bc-info-hero__image {height: 240px; min-height: 240px;} .bc-info-stats {grid-template-columns: repeat(2, minmax(0, 1fr));} .bc-info-grid {grid-template-columns: 1fr;}}
+    @media (max-width: 1100px) {.bc-info-hero {grid-template-columns: 1fr;} .bc-info-hero__image-wrap {width: 100%; border-inline-end: 0; border-bottom: 1px solid #e6edf3;} .bc-info-hero__image {height: 240px; min-height: 240px;} .bc-info-stats {grid-template-columns: repeat(2, minmax(0, 1fr));} .bc-info-grid {grid-template-columns: 1fr;}}
     @media (max-width: 640px) {.bc-info-page {padding: 20px 12px;} .bc-info-actions {align-items: stretch; flex-direction: column;} .bc-info-actions__right, .bc-info-button {width: 100%;} .bc-info-hero__body {padding: 22px;} .bc-info-stats {grid-template-columns: 1fr;} .bc-info-title {font-size: 24px;}}
 </style>
 

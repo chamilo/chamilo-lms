@@ -35,7 +35,7 @@ foreach ($types as $type) {
     $rowsHtml .= '
         <tr class="border-b border-gray-25 hover:bg-gray-15">
             <td class="px-4 py-3 text-body-2 text-gray-90 font-mono">'.$type.'</td>
-            <td class="px-4 py-3 text-body-2 text-right">'.$action.'</td>
+            <td class="px-4 py-3 text-body-2 text-end">'.$action.'</td>
         </tr>
     ';
 }
@@ -64,10 +64,10 @@ $content = '
         <table class="w-full">
             <thead class="bg-support-2">
                 <tr class="border-b border-gray-25">
-                    <th class="px-4 py-3 text-left text-tiny font-semibold text-gray-90 uppercase tracking-wider">
+                    <th class="px-4 py-3 text-start text-tiny font-semibold text-gray-90 uppercase tracking-wider">
                         '.get_lang('Type').'
                     </th>
-                    <th class="px-4 py-3 text-right text-tiny font-semibold text-gray-90 uppercase tracking-wider">
+                    <th class="px-4 py-3 text-end text-tiny font-semibold text-gray-90 uppercase tracking-wider">
                         '.get_lang('Detail').'
                     </th>
                 </tr>

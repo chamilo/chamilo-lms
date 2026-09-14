@@ -160,6 +160,7 @@ watch(
       <div
         v-if="!isLoading && hasIntroContent"
         class="mb-4"
+        dir="auto"
         v-html="displayedIntroText"
       />
     </template>
@@ -184,7 +185,10 @@ watch(
           />
         </div>
 
-        <div v-html="displayedIntroText" />
+        <div
+          dir="auto"
+          v-html="displayedIntroText"
+        />
       </div>
 
       <EmptyState

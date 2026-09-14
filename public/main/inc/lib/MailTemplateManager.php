@@ -112,9 +112,9 @@ class MailTemplateManager extends Model
         $html .= '<table class="w-full min-w-full table-auto">';
         $html .= '<thead class="border-b border-gray-25 bg-gray-15">';
         $html .= '<tr>';
-        $html .= '<th class="px-4 py-3 text-left text-sm font-semibold text-gray-90">'.get_lang('Name').'</th>';
-        $html .= '<th class="px-4 py-3 text-left text-sm font-semibold text-gray-90">'.get_lang('Type').'</th>';
-        $html .= '<th class="w-40 px-4 py-3 text-left text-sm font-semibold text-gray-90">'.get_lang('Actions').'</th>';
+        $html .= '<th class="px-4 py-3 text-start text-sm font-semibold text-gray-90">'.get_lang('Name').'</th>';
+        $html .= '<th class="px-4 py-3 text-start text-sm font-semibold text-gray-90">'.get_lang('Type').'</th>';
+        $html .= '<th class="w-40 px-4 py-3 text-start text-sm font-semibold text-gray-90">'.get_lang('Actions').'</th>';
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody class="divide-y divide-gray-25">';

@@ -1,6 +1,8 @@
 <template>
   <section class="space-y-5">
-    <div class="exercise-report-by-question-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
+    <div
+      class="exercise-report-by-question-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
+    >
       <BaseButton
         class="exercise-report-by-question-toolbar__button"
         :label="t('Back to learner score')"
@@ -43,30 +45,31 @@
     <div class="border-b border-gray-20" />
 
     <header class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm">
-      <div class="border-l-4 border-l-primary p-5">
+      <div class="border-s-4 border-s-primary p-5">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div class="space-y-2">
             <h1 class="text-2xl font-semibold text-gray-90">
-              {{ displayText(title, t('Report by question')) }}
+              {{ displayText(title, t("Report by question")) }}
             </h1>
             <p class="text-sm font-semibold text-gray-700">
-              {{ t('Answer distribution') }}
+              {{ t("Answer distribution") }}
             </p>
             <div
               v-if="description"
               class="exercise-report-by-question-html text-sm text-gray-700"
+              dir="auto"
               v-html="displayTranslatedHtml(description)"
             />
           </div>
           <div class="flex flex-wrap gap-2">
             <span class="rounded-full bg-info/10 px-3 py-1 text-sm font-semibold text-info">
-              {{ t('Questions') }}: {{ summary.totalQuestions || 0 }}
+              {{ t("Questions") }}: {{ summary.totalQuestions || 0 }}
             </span>
             <span class="rounded-full bg-success/10 px-3 py-1 text-sm font-semibold text-success">
-              {{ t('Configured answers') }}: {{ summary.totalAnswers || 0 }}
+              {{ t("Configured answers") }}: {{ summary.totalAnswers || 0 }}
             </span>
             <span class="rounded-full bg-warning/10 px-3 py-1 text-sm font-semibold text-warning">
-              {{ t('Selection') }}: {{ summary.totalSelections || 0 }}
+              {{ t("Selection") }}: {{ summary.totalSelections || 0 }}
             </span>
           </div>
         </div>
@@ -84,21 +87,21 @@
       v-if="summary.specialCountingQuestions"
       class="rounded-xl border border-info/30 bg-info/10 p-4 text-sm text-info"
     >
-      {{ t('Detailed answer counting for some question types is not available in the migrated report yet.') }}
+      {{ t("Detailed answer counting for some question types is not available in the migrated report yet.") }}
     </div>
 
     <div
       v-if="isLoading"
       class="rounded-xl border border-gray-20 bg-white p-6 text-center text-sm text-gray-600 shadow-sm"
     >
-      {{ t('Loading') }}...
+      {{ t("Loading") }}...
     </div>
 
     <div
       v-else-if="questions.length === 0 && !errorMessage"
       class="rounded-xl border border-gray-20 bg-white p-6 text-center text-sm text-gray-600 shadow-sm"
     >
-      {{ t('No report by question data found') }}
+      {{ t("No report by question data found") }}
     </div>
 
     <template v-else>
@@ -107,70 +110,91 @@
         :key="question.id"
         class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm"
       >
-      <div class="border-l-4 border-l-primary p-4">
-        <div class="flex flex-col gap-2 lg:flex-row lg:items-start lg:justify-between">
-          <div class="space-y-1">
-            <h2 class="text-lg font-semibold text-gray-90">
-              {{ displayText(question.title, '-') }}
-            </h2>
-            <p class="text-xs text-gray-500">
-              #{{ question.questionId }} · {{ t(question.typeLabel || 'Question') }} · {{ t('Score') }}: {{ formatNumber(question.maxScore) }}
-            </p>
-          </div>
-          <span class="w-fit rounded-full bg-gray-15 px-3 py-1 text-sm font-semibold text-gray-700">
-            {{ t('Selection') }}: {{ question.totalSelections || 0 }}
-          </span>
-        </div>
-      </div>
-
-      <div
-        v-if="question.usesSpecialCounting && !question.countingAvailable"
-        class="border-t border-gray-20 bg-info/5 px-4 py-3 text-sm text-info"
-      >
-        {{ t('Detailed answer counting for this question type is not available in the migrated report yet.') }}
-      </div>
-
-      <BaseTable
-        :text-for-empty="t('No answer distribution found')"
-        :total-items="question.answers.length"
-        :values="question.answers"
-        data-key="id"
-      >
-        <Column :header="t('Answer')" field="answer" sortable>
-          <template #body="{ data }">
-            <div class="max-w-xl space-y-1">
-              <div class="font-semibold text-gray-90">
-                {{ displayText(data.answer, '-') }}
-              </div>
-              <div class="text-xs text-gray-500">
-                #{{ data.answerId }} · {{ t('Score') }}: {{ formatNumber(data.score) }}
-              </div>
+        <div class="border-s-4 border-s-primary p-4">
+          <div class="flex flex-col gap-2 lg:flex-row lg:items-start lg:justify-between">
+            <div class="space-y-1">
+              <h2 class="text-lg font-semibold text-gray-90">
+                {{ displayText(question.title, "-") }}
+              </h2>
+              <p class="text-xs text-gray-500">
+                #{{ question.questionId }} · {{ t(question.typeLabel || "Question") }} · {{ t("Score") }}:
+                {{ formatNumber(question.maxScore) }}
+              </p>
             </div>
-          </template>
-        </Column>
-        <Column :header="t('Correct')" field="correct" sortable>
-          <template #body="{ data }">
-            <span
-              class="rounded-full px-2 py-1 text-xs font-semibold"
-              :class="!question.usesSpecialCounting && data.correct ? 'bg-success/10 text-success' : 'bg-gray-15 text-gray-700'"
-            >
-              {{ question.usesSpecialCounting ? '—' : data.correct ? t('Yes') : t('No') }}
+            <span class="w-fit rounded-full bg-gray-15 px-3 py-1 text-sm font-semibold text-gray-700">
+              {{ t("Selection") }}: {{ question.totalSelections || 0 }}
             </span>
-          </template>
-        </Column>
-        <Column :header="t('Number of times this answer was selected')" field="selectedCount" sortable>
-          <template #body="{ data }">
-            <span class="font-semibold text-gray-90">
-              {{ formatCount(data.selectedCount) }}
-            </span>
-          </template>
-        </Column>
-        <Column :header="t('Selection')" field="selectedPercentage" sortable>
-          <template #body="{ data }">
-            {{ data.selectedCount === null ? '—' : `${formatNumber(data.selectedPercentage)} %` }}
-          </template>
-        </Column>
-      </BaseTable>
+          </div>
+        </div>
+
+        <div
+          v-if="question.usesSpecialCounting && !question.countingAvailable"
+          class="border-t border-gray-20 bg-info/5 px-4 py-3 text-sm text-info"
+        >
+          {{ t("Detailed answer counting for this question type is not available in the migrated report yet.") }}
+        </div>
+
+        <BaseTable
+          :text-for-empty="t('No answer distribution found')"
+          :total-items="question.answers.length"
+          :values="question.answers"
+          data-key="id"
+        >
+          <Column
+            :header="t('Answer')"
+            field="answer"
+            sortable
+          >
+            <template #body="{ data }">
+              <div class="max-w-xl space-y-1">
+                <div class="font-semibold text-gray-90">
+                  {{ displayText(data.answer, "-") }}
+                </div>
+                <div class="text-xs text-gray-500">
+                  #{{ data.answerId }} · {{ t("Score") }}: {{ formatNumber(data.score) }}
+                </div>
+              </div>
+            </template>
+          </Column>
+          <Column
+            :header="t('Correct')"
+            field="correct"
+            sortable
+          >
+            <template #body="{ data }">
+              <span
+                class="rounded-full px-2 py-1 text-xs font-semibold"
+                :class="
+                  !question.usesSpecialCounting && data.correct
+                    ? 'bg-success/10 text-success'
+                    : 'bg-gray-15 text-gray-700'
+                "
+              >
+                {{ question.usesSpecialCounting ? "—" : data.correct ? t("Yes") : t("No") }}
+              </span>
+            </template>
+          </Column>
+          <Column
+            :header="t('Number of times this answer was selected')"
+            field="selectedCount"
+            sortable
+          >
+            <template #body="{ data }">
+              <span class="font-semibold text-gray-90">
+                {{ formatCount(data.selectedCount) }}
+              </span>
+            </template>
+          </Column>
+          <Column
+            :header="t('Selection')"
+            field="selectedPercentage"
+            sortable
+          >
+            <template #body="{ data }">
+              {{ data.selectedCount === null ? "—" : `${formatNumber(data.selectedPercentage)} %` }}
+            </template>
+          </Column>
+        </BaseTable>
       </article>
     </template>
   </section>

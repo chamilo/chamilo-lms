@@ -31,7 +31,7 @@
           :key="categoryName"
         >
           <button
-            class="text-left w-full"
+            class="text-start w-full"
             @click="toggleCategory(categoryName)"
           >
             <span class="underline">{{ categoryName }}</span>
@@ -223,7 +223,7 @@
     :title="t('Read the Terms and Conditions')"
     :close-label="t('Close')"
   >
-    <div class="overflow-y-auto max-h-[70vh] pr-2">
+    <div class="overflow-y-auto max-h-[70vh] pe-2">
       <template
         v-for="(term, index) in termsAndConditions.items"
         :key="`term-${index}`"
@@ -240,6 +240,7 @@
         <div
           v-html="term.content"
           class="mb-4"
+          dir="auto"
         ></div>
         <hr class="my-4" />
       </template>

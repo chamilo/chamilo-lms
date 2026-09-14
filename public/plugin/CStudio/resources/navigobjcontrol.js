@@ -821,7 +821,7 @@ function displayInterfaceLogsTable() {
     if (window.location.href.indexOf("&tablelogs=1")!=-1) {
         if (!document.getElementById("actionDevWin")) {
             var h = '<div id="actionDevWin" ';
-            h += ' style="position:fixed;right:5px;bottom:0px;width:370px;';
+            h += ' style="position:fixed;inset-inline-end:5px;bottom:0px;width:370px;';
             h += 'height:450px;background-color:#4A235A;z-index:120;" ';
             h += ' class="actionDevWin noselect" >';
             h += '<div style="color:white;height:24px;line-height:24px;background-color:black;" >';
@@ -1481,7 +1481,7 @@ function installMenuLocation() {
 
         }
         
-        var sty = ' style="position:absolute;left:3px;top:6px;" ';
+        var sty = ' style="position:absolute;inset-inline-start:3px;top:6px;" ';
         
         if (pageBindex>1) {
             if (isObjSub($('.subMenuSco'+pageBindex))) {
@@ -3377,7 +3377,7 @@ function showScoParamsWindow()
 
         if (projOptions.indexOf("D")!=-1) {
             bdDiv += '<div class="btninfosparams" >';
-            bdDiv += '<img src="img/classique/pyramid-colors.png" style="float:left;" width="120" height="120" />';
+            bdDiv += '<img src="img/classique/pyramid-colors.png" style="float:inline-start;" width="120" height="120" />';
             bdDiv += '<div onClick="selectLayerA()" class="cursordifficulty cursordifficultyA" style="margin-top:12px!important;" >Easy</div>';
             bdDiv += '<div onClick="selectLayerB()" class="cursordifficulty cursordifficultyB" >Normal</div>';
             bdDiv += '<div onClick="selectLayerC()" class="cursordifficulty cursordifficultyC" >Expert</div>';

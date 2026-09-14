@@ -538,7 +538,7 @@ class AnnouncementManager
                     Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).
                     "</a>";
             }
-            $html .= "<tr><th style='text-align:right'>".$modifyIcons."</th></tr>";
+            $html .= "<tr><th style='text-align:end'>".$modifyIcons."</th></tr>";
         } else {
             if (false === $isVisible) {
                 api_not_allowed(true);

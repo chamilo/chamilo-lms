@@ -58,13 +58,13 @@
 
       <div
         v-if="progress.detailUrl"
-        class="flex-shrink-0 md:ml-auto"
+        class="flex-shrink-0 md:ms-auto"
       >
         <router-link
           :to="progress.detailUrl"
           class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg border text-[0.7rem] font-semibold bg-gray-25 hover:bg-gray-50 whitespace-nowrap"
         >
-          <span class="mr-1">
+          <span class="me-1">
             {{ progress.labels?.seeDetail || t("See detail") }}
           </span>
           <i class="mdi mdi-open-in-new text-xs" />

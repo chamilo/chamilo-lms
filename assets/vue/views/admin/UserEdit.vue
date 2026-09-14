@@ -30,7 +30,7 @@
       class="rounded-xl border border-red-200 bg-red-50 p-4 text-body-2 text-red-700"
     >
       <p class="font-semibold">{{ errorMessage }}</p>
-      <ul class="mt-2 list-disc pl-5">
+      <ul class="mt-2 list-disc ps-5">
         <li
           v-for="(conflict, index) in conflictMessages"
           :key="index"
@@ -159,7 +159,7 @@
                   :type="showPassword ? 'text' : 'password'"
                 />
                 <button
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  class="absolute end-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                   :title="showPassword ? t('Hide password') : t('Show password')"
                   type="button"
                   @click="showPassword = !showPassword"

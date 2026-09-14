@@ -46,7 +46,7 @@ $htmlHeadXtra[] = <<<HTML
     .pending-work-grid-wrapper .ui-jqgrid-hbox {
         float: none;
         width: 100% !important;
-        padding-right: 0 !important;
+        padding-inline-end: 0 !important;
     }
 
     .pending-work-grid-wrapper .ui-jqgrid-htable,
@@ -56,8 +56,8 @@ $htmlHeadXtra[] = <<<HTML
     }
 
     .pending-work-grid-wrapper .ui-jqgrid-hdiv {
-        border-top-left-radius: 0.75rem;
-        border-top-right-radius: 0.75rem;
+        border-start-start-radius: 0.75rem;
+        border-start-end-radius: 0.75rem;
         overflow: hidden;
     }
 
@@ -91,7 +91,7 @@ $htmlHeadXtra[] = <<<HTML
     .pending-work-grid-wrapper .ui-jqgrid-btable td[aria-describedby$="_work_name"],
     .pending-work-grid-wrapper .ui-jqgrid-btable td[aria-describedby$="_fullname"],
     .pending-work-grid-wrapper .ui-jqgrid-btable td[aria-describedby$="_title"] {
-        text-align: left;
+        text-align: start;
     }
 
     .pending-work-grid-wrapper .ui-jqgrid-btable td[aria-describedby$="_qualification"],

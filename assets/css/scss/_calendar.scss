@@ -37,7 +37,7 @@
   @apply inline-flex gap-2;
 }
 .calendar-mode-toggle:deep(.p-togglebutton) {
-  @apply ml-0 rounded-full border border-gray-300 bg-transparent px-4 py-2 font-semibold text-gray-25 transition-colors hover:bg-white/70 hover:text-gray-50 min-w-[10rem] justify-center;
+  @apply ms-0 rounded-full border border-gray-300 bg-transparent px-4 py-2 font-semibold text-gray-25 transition-colors hover:bg-white/70 hover:text-gray-50 min-w-[10rem] justify-center;
 }
 .calendar-mode-toggle:deep(.p-togglebutton[aria-pressed="true"]) {
   @apply bg-white text-gray-90 border-gray-25 shadow-sm ring-1 ring-gray-20;

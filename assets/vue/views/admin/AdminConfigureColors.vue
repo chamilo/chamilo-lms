@@ -48,13 +48,13 @@ function goBranding() {
           class="inline-flex items-center rounded-full bg-gray-50 border border-gray-200 text-gray-700 px-2.5 py-1 text-xs"
         >
           {{ t("Color theme") }}:
-          <strong class="ml-1">{{ selectedColorThemeTitle || "—" }}</strong>
+          <strong class="ms-1">{{ selectedColorThemeTitle || "—" }}</strong>
         </span>
         <span
           class="inline-flex items-center rounded-full bg-gray-50 border border-gray-200 text-gray-700 px-2.5 py-1 text-xs"
         >
           {{ t("Visual theme (assets)") }}:
-          <code class="ml-1">{{ effectiveSlug }}</code>
+          <code class="ms-1">{{ effectiveSlug }}</code>
         </span>
       </div>
 
@@ -99,7 +99,7 @@ function goBranding() {
         {{ t("Switch the active theme if you want to upload logos for a different one.") }}
       </p>
       <BrandingSection :slug="effectiveSlug" />
-      <div class="mt-4 text-right">
+      <div class="mt-4 text-end">
         <a
           class="text-sm underline opacity-70 hover:opacity-100"
           href="#top"

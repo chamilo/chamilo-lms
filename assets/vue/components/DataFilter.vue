@@ -23,7 +23,7 @@
           {{ $t("Filter") }}
         </q-btn>
         <q-btn
-          class="ml-2"
+          class="ms-2"
           text
           variant="secondary"
           @click="handleReset"
@@ -57,7 +57,7 @@
     <!--          </b-button>-->
     <!--          <b-button-->
     <!--            variant="secondary"-->
-    <!--            class="ml-2"-->
+    <!--            class="ms-2"-->
     <!--            text-->
     <!--            @click="handleReset"-->
     <!--          >-->

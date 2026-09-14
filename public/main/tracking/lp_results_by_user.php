@@ -87,7 +87,7 @@ if (!$export_to_csv) {
     Display :: display_header(get_lang('Reporting'));
     echo '<div class="actions" style ="font-size:10pt;">';
     if ($global) {
-        echo '<div style="float:right"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
+        echo '<div style="float:inline-end"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
                 '.Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CSV export')).'
                 &nbsp;'.get_lang('CSV export').'</a>'.
                 '<a href="javascript: void(0);" onclick="javascript: window.print()">

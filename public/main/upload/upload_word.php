@@ -22,8 +22,8 @@ $form_style = '<style>
     background: url("'.Display::returnIconPath('learnpath.png').'") 0px 0px no-repeat;
     padding: 2px 0px 2px 22px;
 }
-#dynamic_div_container{float:left;margin-right:10px;}
-#dynamic_div_waiter_container{float:left;}
+#dynamic_div_container{float:inline-start;margin-inline-end:10px;}
+#dynamic_div_waiter_container{float:inline-start;}
 </style>';
 
 $htmlHeadXtra[] = $form_style;
@@ -64,13 +64,13 @@ $interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => 
 $nameTools = get_lang("Woogie : Word conversion");
 Display :: display_header($nameTools);
 
-echo '<span style="color: #5577af; font-size: 16px; font-family: Arial; margin-left: 10px;">'.
+echo '<span style="color: #5577af; font-size: 16px; font-family: Arial; margin-inline-start: 10px;">'.
     get_lang("MS Word to course converter").'</span><br>';
 $message = get_lang('Welcome to Woogie Rapid Learning<ul type="1"><li>Browse your hard disk to find any .doc, .sxw or .odt file<li>Upload it to Woogie. It will convert it into a SCORM course<li>You will then be able to add audio comments on each page and insert quizzes and other activities between pages</ul>');
 echo '<br />';
 $s_style = "border-width: 1px;
          border-style: solid;
-         margin-left: 0;
+         margin-inline-start: 0;
          margin-top: 10px;
          margin-bottom: 0px;
          min-height: 30px;
@@ -83,7 +83,7 @@ $s_style = "border-width: 1px;
 
 $s_style_error = "border-width: 1px;
          border-style: solid;
-         margin-left: 0;
+         margin-inline-start: 0;
          margin-top: 10px;
          margin-bottom: 10px;
          min-height: 30px;
@@ -94,14 +94,14 @@ $s_style_error = "border-width: 1px;
          border-color: #FF0000;
          color: #000;";
 
-echo '<div style="'.$s_style.'"><div style="float:left; margin-right:10px;">
+echo '<div style="'.$s_style.'"><div style="float:inline-start; margin-inline-end:10px;">
 <img src="'.Display::returnIconPath('message_normal.png').'" alt="'.$alt_text.'" '.$attribute_list.'  /></div>
-<div style="margin-left: 43px">'.$message.'</div></div>';
+<div style="margin-inline-start: 43px">'.$message.'</div></div>';
 
 if (!empty($errorMessage)) {
-    echo '<div style="'.$s_style_error.'"><div style="float:left; margin-right:10px;">
+    echo '<div style="'.$s_style_error.'"><div style="float:inline-start; margin-inline-end:10px;">
     <img src="'.Display::returnIconPath('message_error.png').'" alt="'.$alt_text.'" '.$attribute_list.'  /></div>
-    <div style="margin-left: 43px">'.$errorMessage.'</div></div>';
+    <div style="margin-inline-start: 43px">'.$errorMessage.'</div></div>';
 }
 
 $form = new FormValidator('update_course', 'POST', '', '', 'style="margin: 0;"');

@@ -1821,7 +1821,7 @@ function getMenuTop(){
 	h += '<p>' + cstudioTranslateTerm('Version') + ': ' + versionCS;
 	h += '<p><a target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and pro services</a></p>';
 	
-	h += '<a href="#" style="position:absolute;right:0px;bottom:0px;color:#E5E8E8;" onClick="displayDevAdminParams()" >...</a>';
+	h += '<a href="#" style="position:absolute;inset-inline-end:0px;bottom:0px;color:#E5E8E8;" onClick="displayDevAdminParams()" >...</a>';
 	h += '</p>';
 	
 	h += '</div>';
@@ -1912,28 +1912,28 @@ function getMenuR(){
 	h += '<div class="uPIcon minIcon" title="Move page up" aria-label="Move page up" onClick="upContextMenuSub(0);" >'+getISVG('arrow',0)+'</div>';
 	h += '<div class="dowNIcon minIcon" title="Move page down" aria-label="Move page down" onClick="upContextMenuSub(1);" >'+getISVG('arrow',180)+'</div>';
 	
-	h += '<p style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;left:12px;top:90px;padding:0px;margin:0 5px 0;" >';
+	h += '<p style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;inset-inline-start:12px;top:90px;padding:0px;margin:0 5px 0;" >';
 	h += '<input style="margin:0 5px 0 0;" type="radio" class=checkBehaviorWind id="Behavior0" name="behaviorPage" ></input>';
 	h += '<label class="trd" for="Behavior0">Free access page</label>';
 	h += '</p>';
 	
-	h += '<p style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;left:12px;top:118px;padding:0px;margin:0 5px 0;" >';
+	h += '<p style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;inset-inline-start:12px;top:118px;padding:0px;margin:0 5px 0;" >';
 	h += '<input style="margin:0 5px 0 0;" type="radio" class=checkBehaviorWind id="Behavior1" name="behaviorPage" ></input>';
 	h += '<label class="trd" for="Behavior1">The page is subject to the progression</label>';
 	h += '</p>';
 
-	h += '<p style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;left:12px;top:146px;padding:0px;margin:0 5px 0;" >';
+	h += '<p style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;inset-inline-start:12px;top:146px;padding:0px;margin:0 5px 0;" >';
 	h += '<input style="margin:0 5px 0 0;" type="radio" class=checkBehaviorWind id="Behavior2" name="behaviorPage" ></input>';
 	h += '<label class="trd" for="Behavior2">You must resolve this page to continue</label>';
 	h += '</p>';
 
-	h += '<p id="Behavior3Zone" style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;left:12px;top:174px;padding:0px;margin:0 5px 0;" >';
+	h += '<p id="Behavior3Zone" style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;inset-inline-start:12px;top:174px;padding:0px;margin:0 5px 0;" >';
 	h += '<input style="margin:0 5px 0 0;" type="radio" class=checkBehaviorWind id="Behavior3" name="behaviorPage" ></input>';
 	h += '<label class="trd" for="Behavior3">Not published</label>';
 	h += '</p>';
 
 	/*
-	h += '<p id="Behavior4Zone" style="position:absolute;left:12px;top:180px;padding:5px;margin:5px;display:none;" >';
+	h += '<p id="Behavior4Zone" style="position:absolute;inset-inline-start:12px;top:180px;padding:5px;margin:5px;display:none;" >';
 	h += '<input type="radio" class=checkBehaviorWind id="Behavior4" name="behaviorPage" ></input>';
 	h += '<label class="trd" for="Behavior4" >Custom display</label>';
 	h += '</p>';
@@ -1951,16 +1951,16 @@ function getMenuR(){
 	h += '</div>';
 
 	h += '<a class="cstudio-delete-page-action" title="Delete this page" aria-label="Delete this page" onClick="deleteContextMenuSub();" ';
-	h += ' style="position:absolute;bottom:10px;left:5px;"  >';
+	h += ' style="position:absolute;bottom:10px;inset-inline-start:5px;"  >';
 	h += '<i class="mdi mdi-delete cstudio-mdi-icon" aria-hidden="true"></i>';
 	h += '<img class="cstudio-legacy-icon" src="icon/delete-icon-24.png" /></a>';
 
 	h += '<a onClick="closeAllEditWindows();" ';
-	h += ' style="position:absolute;bottom:10px;right:120px;" ';
+	h += ' style="position:absolute;bottom:10px;inset-inline-end:120px;" ';
 	h += ' class="ludiButtonCancel trd" type="button" >Cancel</a>';
 	
 	h += '<a onClick="saveContextMenuSub();" ';
-	h += ' style="position:absolute;bottom:10px;right:10px;" ';
+	h += ' style="position:absolute;bottom:10px;inset-inline-end:10px;" ';
 	h += ' class="ludiButtonSaveMenu trd" type="button" value="Save" >Save</a>';
 	
 	h += '</div>';
@@ -3391,7 +3391,7 @@ function displayAudioEdit(myObj){
 		bdDiv += '<div class="cstudio-media-help">' + cstudioEscapeHtml(cstudioTranslateTerm('Accepted format: MP3. Maximum file size:')) + ' ' + cstudioEscapeHtml(cstudioGetUploadMaxSizeLabel()) + '</div>';
 		
 		bdDiv += '<br/>';
-		bdDiv += '<div style="padding:25px;text-align:right;" >';
+		bdDiv += '<div style="padding:25px;text-align:end;" >';
 		bdDiv += '<input onClick="saveAudioEdit()" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Save" /><br/>';
 		bdDiv += '</div>';
@@ -3475,7 +3475,7 @@ function displayVideoEdit(myObj){
 		bdDiv += '<div class="cstudio-media-help">' + cstudioEscapeHtml(cstudioTranslateTerm('Accepted format: MP4. Maximum file size:')) + ' ' + cstudioEscapeHtml(cstudioGetUploadMaxSizeLabel()) + '</div>';
 		
 		bdDiv += '<br/>';
-		bdDiv += '<div style="padding:25px;text-align:right;" >';
+		bdDiv += '<div style="padding:25px;text-align:end;" >';
 		bdDiv += '<input onClick="saveVideoEdit()" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Save" /><br/>';
 		bdDiv += '</div>';
@@ -3586,11 +3586,11 @@ function displayQcmEdit(myObj) {
 		bdDiv += 'style="padding:25px;padding-top:5px;padding-bottom:15px;font-size:16px;" >';
 		
 
-		bdDiv += '<div style="position:absolute;left:5px;bottom:20px;width:200px;" >';
+		bdDiv += '<div style="position:absolute;inset-inline-start:5px;bottom:20px;width:200px;" >';
 		bdDiv += addMultiOptions();
 		bdDiv += '</div>';
 
-		bdDiv += '<div style="padding:10px;text-align:right;" >';
+		bdDiv += '<div style="padding:10px;text-align:end;" >';
 
 		bdDiv += '<input onClick="saveQcmEdit()" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Save" /><br/>';
@@ -3794,7 +3794,7 @@ function inLineTextArea(idRef) {
 	bdDiv += '<p style="padding:4px;margin:5px;" >';
 	bdDiv += '<textarea id="area'+idRef+'" name="area'+idRef+'" ';
 	bdDiv += 'rows="5" cols="38" ';
-	bdDiv += 'style="width:485px;font-size:13px;padding:2px;margin-left:27px;resize:none;" ></textarea>';
+	bdDiv += 'style="width:485px;font-size:13px;padding:2px;margin-inline-start:27px;resize:none;" ></textarea>';
 	bdDiv += '</p>';
 	return bdDiv;
 
@@ -3879,7 +3879,7 @@ function saveQcmEdit() {
 			renderH += "<img src='img/qcm/"+letbeg+"atgreen0.png' class='checkboxqcm' />";
 		}
 		renderH += "</td>";
-		renderH += "<td style='text-align:left;' >" + TtextAnswerA + "</td>";
+		renderH += "<td style='text-align:start;' >" + TtextAnswerA + "</td>";
 		renderH += "</tr>";	
 	}
 	if(TtextAnswerB!=''){
@@ -3890,7 +3890,7 @@ function saveQcmEdit() {
 			renderH += "<img src='img/qcm/"+letbeg+"atgreen0.png' class='checkboxqcm' />";
 		}
 		renderH += "</td>";
-		renderH += "<td style='text-align:left;'  >" + TtextAnswerB + "</td>";
+		renderH += "<td style='text-align:start;'  >" + TtextAnswerB + "</td>";
 		renderH += "</tr>";	
 	}
 	if(TtextAnswerC!=''){
@@ -3901,7 +3901,7 @@ function saveQcmEdit() {
 			renderH += "<img src='img/qcm/"+letbeg+"atgreen0.png' class='checkboxqcm' />";
 		}
 		renderH += "</td>";
-		renderH += "<td style='text-align:left;'  >" + TtextAnswerC + "</td>";
+		renderH += "<td style='text-align:start;'  >" + TtextAnswerC + "</td>";
 		renderH += "</tr>";	
 	}
 	if(TtextAnswerD!=''){
@@ -3912,7 +3912,7 @@ function saveQcmEdit() {
 			renderH += "<img src='img/qcm/"+letbeg+"atgreen0.png' class='checkboxqcm' />";
 		}
 		renderH += "</td>";
-		renderH += "<td style='text-align:left;'  >" + TtextAnswerD + "</td>";
+		renderH += "<td style='text-align:start;'  >" + TtextAnswerD + "</td>";
 		renderH += "</tr>";	
 	}
 	if(TtextAnswerE!=''){
@@ -3923,7 +3923,7 @@ function saveQcmEdit() {
 			renderH += "<img src='img/qcm/"+letbeg+"atgreen0.png' class='checkboxqcm' />";
 		}
 		renderH += "</td>";
-		renderH += "<td style='text-align:left;'  >" + TtextAnswerE + "</td>";
+		renderH += "<td style='text-align:start;'  >" + TtextAnswerE + "</td>";
 		renderH += "</tr>";	
 	}
 	if(TtextAnswerF!=''){
@@ -3934,7 +3934,7 @@ function saveQcmEdit() {
 			renderH += "<img src='img/qcm/"+letbeg+"atgreen0.png' class='checkboxqcm' />";
 		}
 		renderH += "</td>";
-		renderH += "<td style='text-align:left;'  >" + TtextAnswerF + "</td>";
+		renderH += "<td style='text-align:start;'  >" + TtextAnswerF + "</td>";
 		renderH += "</tr>";	
 	}
 
@@ -4018,14 +4018,14 @@ function addMultiOptions(){
 
 	var code = 'Multi';
 	var label = 'Multi answer';
-    var bdDiv = '<div style="position:relative;margin-left:10px;';
+    var bdDiv = '<div style="position:relative;margin-inline-start:10px;';
     bdDiv += 'width:240px;margin-bottom:4px;" >';
     bdDiv += '<label style="margin-top:1px;" class="el-switch el-switch-green" >';
     bdDiv += '<input id="checkbox'+code+'" type="checkbox" name="switch" >';
     bdDiv += '<span class="el-switch-style"></span>';
     bdDiv += '</label>';
     bdDiv += '<div class="margin-r trd" ';
-    bdDiv += ' style="position:absolute;left:50px;top:0px;padding:5px;" >';
+    bdDiv += ' style="position:absolute;inset-inline-start:50px;top:0px;padding:5px;" >';
     bdDiv += '&nbsp;'+label+'</div>';
     bdDiv += '</div>';
 
@@ -4288,10 +4288,10 @@ function getInnerTextEngine() {
 	bdDiv += '<p style="padding:5px;margin:0px;" >';
 	bdDiv += '<textarea id="areaTeachDocText'+indexTxtEdition+'" name="areaTeachDocText'+indexTxtEdition+'" ';
 	bdDiv += 'rows="25"';
-	bdDiv += 'style="width:100%;font-size:13px;padding:2px;margin-left:20px;resize:none;" ></textarea>';
+	bdDiv += 'style="width:100%;font-size:13px;padding:2px;margin-inline-start:20px;resize:none;" ></textarea>';
 	bdDiv += '</p>';
 
-	bdDiv += '<div style="padding:25px;padding-top:10px;padding-bottom:5px;text-align:right;" >';
+	bdDiv += '<div style="padding:25px;padding-top:10px;padding-bottom:5px;text-align:end;" >';
 	bdDiv += '<input onClick="saveTeachDocTextEdit()" ';
 	bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Save" /><br/>';
 	bdDiv += '</div>';
@@ -4495,16 +4495,16 @@ function displayBtnEdit(myObj){
 		// div 3
 		bdDiv += '<div style="border:solid 0px purple;padding:5px;padding-top:1px;margin:0px;margin-bottom:1px;height:30px;" >';
 		
-		bdDiv += '<div style="padding:5px;width:70px;float:left;text-align:right;" >';
+		bdDiv += '<div style="padding:5px;width:70px;float:inline-start;text-align:end;" >';
 		bdDiv += '<span class="trd" >Bouton</span>&nbsp;1&nbsp;:&nbsp;</div>';
 
 		bdDiv += '<input id="inputButtonLink" type="text" value="" ';
-		bdDiv += ' style="width:150px;font-size:12px;padding:5px;float:left;" />';
+		bdDiv += ' style="width:150px;font-size:12px;padding:5px;float:inline-start;" />';
 
-		bdDiv += '<div class="trd" style="padding:5px;width:66px;float:left;text-align:right;" >';
+		bdDiv += '<div class="trd" style="padding:5px;width:66px;float:inline-start;text-align:end;" >';
 		bdDiv += 'Style&nbsp;:&nbsp;</div>';
 
-		bdDiv += '<input style="float:left;display:none;" ';
+		bdDiv += '<input style="float:inline-start;display:none;" ';
 		bdDiv += ' id="inputButtonStyle" type="text" value="" />';
 
 		bdDiv += '<div class="buttonOverV" onClick="showWinBtnSty()" >';
@@ -4517,14 +4517,14 @@ function displayBtnEdit(myObj){
 		}
 		
 		bdDiv += '<input id="colorButton6" type="text" value="" ';
-		bdDiv += ' style="float:left;margin-left:5px;width:20px;font-size:12px;padding:5px;display:none;" />';
+		bdDiv += ' style="float:inline-start;margin-inline-start:5px;width:20px;font-size:12px;padding:5px;display:none;" />';
 
 		bdDiv += '<a id="showButtonLink" onClick="$(\'#infosButtonLink\').show();" ';
-		bdDiv += ' style="float:left;width:25px;font-size:12px;padding:5px;cursor:pointer;" >';
+		bdDiv += ' style="float:inline-start;width:25px;font-size:12px;padding:5px;cursor:pointer;" >';
 		bdDiv += getISVG('access',0) + '</a>';
 
 		bdDiv += '<input id="infosButtonLink" type="text" value="" ';
-		bdDiv += ' style="display:none;margin-left:5px;width:210px;font-size:12px;padding:5px;float:left;" />';
+		bdDiv += ' style="display:none;margin-inline-start:5px;width:210px;font-size:12px;padding:5px;float:inline-start;" />';
 
 		bdDiv += '</div>';
 		// div 3
@@ -4535,23 +4535,23 @@ function displayBtnEdit(myObj){
 		bdDiv += oelActionsBarBtn();
 		bdDiv += '</div>';
 
-		bdDiv += '<div id="editEditorFrameBtn" style="padding:0px;margin-left:68px;display:none;" >';
+		bdDiv += '<div id="editEditorFrameBtn" style="padding:0px;margin-inline-start:68px;display:none;" >';
 		bdDiv += '<p>iframe</p>';
 		bdDiv += '</div>';
 
-		bdDiv += '<div id="editEditorPagesLink" style="padding:0px;margin-left:-10px;margin-top:10px;display:none;" >';
+		bdDiv += '<div id="editEditorPagesLink" style="padding:0px;margin-inline-start:-10px;margin-top:10px;display:none;" >';
 		bdDiv += '<p>List of pages</p>';
 		bdDiv += '</div>';
 
-		bdDiv += '<div id="editEditorFrameLink" style="padding:0px;margin-left:-10px;margin-top:10px;display:none;" >';
+		bdDiv += '<div id="editEditorFrameLink" style="padding:0px;margin-inline-start:-10px;margin-top:10px;display:none;" >';
 		bdDiv += '<p>links</p>';
 		bdDiv += '</div>';
 
-		bdDiv += '<div id="editEditorDownloadLink" style="padding:0px;margin-left:-10px;margin-top:10px;display:none;" >';
+		bdDiv += '<div id="editEditorDownloadLink" style="padding:0px;margin-inline-start:-10px;margin-top:10px;display:none;" >';
 		bdDiv += '<p>download</p>';
 		bdDiv += '</div>';
 
-		bdDiv += '<div style="padding:25px;padding-top:10px;padding-bottom:5px;text-align:right;" >';
+		bdDiv += '<div style="padding:25px;padding-top:10px;padding-bottom:5px;text-align:end;" >';
 		bdDiv += '<input id="saveBtnBoutonStyle" onClick="saveBtnEditWindows()" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Save" /><br/>';
 		bdDiv += '</div>';
@@ -4806,7 +4806,7 @@ function oelBtnStyles() {
 	
 	bdDiv += '<div class="oel-btn-title" >';
 	bdDiv += '<span class="trad" >Choose a style<span>';
-	bdDiv += '<img onClick="hideWinBtnSty();" style="float:right;cursor:pointer;" src="img/crosstrans.png" />';
+	bdDiv += '<img onClick="hideWinBtnSty();" style="float:inline-end;cursor:pointer;" src="img/crosstrans.png" />';
 	bdDiv += '</div>';
 
 	bdDiv += '<div class="oel-btn-block" onClick="applyBtnSty(1);" >';
@@ -5015,10 +5015,10 @@ function oeLinksShow(datatext4){
     
 	var p = ''
 
-	p += '<div style="padding:5px;width:120px;float:left;text-align:right;" >';
+	p += '<div style="padding:5px;width:120px;float:inline-start;text-align:end;" >';
 	p += 'Link&nbsp;:&nbsp;</div>';
 	p += '<input id="inputWebLink" type="text" value="" ';
-	p += ' style="width:400px;font-size:12px;padding:5px;float:left;" />';
+	p += ' style="width:400px;font-size:12px;padding:5px;float:inline-start;" />';
 
   	return p;
 	
@@ -5027,10 +5027,10 @@ function oeLinksShow(datatext4){
 function oeLinksDownload(datatext4){
     
 	var p = ''
-	p += '<div style="padding:5px;width:120px;float:left;text-align:right;" >';
+	p += '<div style="padding:5px;width:120px;float:inline-start;text-align:end;" >';
 	p += 'File&nbsp;:&nbsp;</div>';
 	p += '<input id="inputDonwloadLink" readonly="readonly" type="text" value="" ';
-	p += ' style="background:#D5D8DC;width:450px;font-size:12px;padding:5px;float:left;" />';
+	p += ' style="background:#D5D8DC;width:450px;font-size:12px;padding:5px;float:inline-start;" />';
 	p += '&nbsp;<input onClick="filterGlobalFiles=\'\';oeApplyDownloadTxt();showFileManagerStudio2(23,\'inputDonwloadLink\',0);" ';
 	p += ' class="gjs-one-bg ludiButtonSave plugInputMin trd" type="button" value="..." />';
 	
@@ -5041,7 +5041,7 @@ function oeLinksDownload(datatext4){
 function oePagesShow(datatext4){
 
 	var h = '';
-	h += '<div style="padding:5px;width:120px;float:left;text-align:right;font-size:17px;" >';
+	h += '<div style="padding:5px;width:120px;float:inline-start;text-align:end;font-size:17px;" >';
 	h += '<span class="trd" >Page</span>&nbsp;:&nbsp;</div>';
 
     var ct  = $('.ludimenuteachdoc').find('li').length;
@@ -5668,7 +5668,7 @@ editor.on('change:selectedComponent', model => {
 });
 
 var dragOpts = ' data-gjs-draggable="false" data-gjs-droppable="false" data-gjs-editable="false" ';
-var cssI = " style='position:absolute;cursor:pointer;background-image:url(\"img/editdoc.png\");background-position:center center;background-repeat:no-repeat;right:2px;top:3px;width:50px;height:50px;z-index: 1000;' ";
+var cssI = " style='position:absolute;cursor:pointer;background-image:url(\"img/editdoc.png\");background-position:center center;background-repeat:no-repeat;inset-inline-end:2px;top:3px;width:50px;height:50px;z-index: 1000;' ";
 
 //var baseButton = '<div class="row" ' + dragOpts + ' style="position:relative;" id="i25td">';
 //baseButton += '<div class="cell" ' + dragOpts + ' style="text-align:center;position:relative;" >';
@@ -5771,7 +5771,7 @@ function correctPositionsEditor(){
 function oelBtnSelectColors() {
 
     var bdDiv = '<a id="showButtonColors" onClick="showWinBtnCol();" ';
-    bdDiv += ' style="float:left;width:25px;font-size:12px;padding:5px;';
+    bdDiv += ' style="float:inline-start;width:25px;font-size:12px;padding:5px;';
     bdDiv += 'padding-top:0px;margin-top:0px;cursor:pointer;" >';
     bdDiv += '<img style="width:30px;height:29px;" src="icon/rapid-style.png" /></a>';
     return bdDiv;
@@ -5786,7 +5786,7 @@ function oelBtnColors() {
 	
 	bdDiv += '<div class="oel-btn-title" >';
 	bdDiv += '<span class="trad" >Choose a color</span>';
-	bdDiv += '<img onClick="hideWinBtnCol();" style="float:right;cursor:pointer;" src="img/crosstrans.png" />';
+	bdDiv += '<img onClick="hideWinBtnCol();" style="float:inline-end;cursor:pointer;" src="img/crosstrans.png" />';
 	bdDiv += '</div>';
 
 	bdDiv += '<div class="oel-btn-block-color globcolor0" onClick="applyBtnColor(0);" ></div>';
@@ -6588,7 +6588,7 @@ function displayObjectMenu(toolItem) {
         var bdDiv = '<div id="ObjMenuParams" class="objMenuParamFloat" >';
         bdDiv += '<div id="objMenuTitleFloat" class="objMenuTitleFloat" >Objet</div>';
         
-        var styl = 'style="float:left;padding:5px;margin:3px;width:96%;"';
+        var styl = 'style="float:inline-start;padding:5px;margin:3px;width:96%;"';
 
         bdDiv += '<p class="trd" style="padding:5px;margin:5px;margin-top:28px;margin-bottom:0px;" >Display / Hide :</p>';
         
@@ -6624,8 +6624,8 @@ function displayObjectMenu(toolItem) {
 
         bdDiv += bdDiv2;
 
-        bdDiv += '<p style="float:right;text-align:right;" >';
-        bdDiv += '<input style="width:110px;display:inline-block;cursor:pointer;margin-right:10px;" ';
+        bdDiv += '<p style="float:inline-end;text-align:end;" >';
+        bdDiv += '<input style="width:110px;display:inline-block;cursor:pointer;margin-inline-end:10px;" ';
         bdDiv += ' onClick="saveObjMenuCheckBox();" ';
         bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Save" /><br/>';
         bdDiv += '</p>';
@@ -6944,7 +6944,7 @@ function displayPlugTeachEdit(myObj){
 
 		bdDiv += getinputFXObj(typesource);
 		
-		bdDiv += '<div style="padding:25px;padding-top:10px;padding-bottom:5px;text-align:right;" >';
+		bdDiv += '<div style="padding:25px;padding-top:10px;padding-bottom:5px;text-align:end;" >';
 		bdDiv += '<input onClick="savePlugTeach(\''+typesource+'\')" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Save" /><br/>';
 		bdDiv += '</div>';
@@ -7374,12 +7374,12 @@ function helperSolutionCheckPlugTeach(i,typesource,txt){
 	var bdDiv = '<div class="plugPmarg" >';
 	bdDiv += '<div class="plugLabelDiv" >';
 	bdDiv += '&nbsp;&nbsp;</div>';
-	bdDiv += '<label style="margin-top:1px;float:left;" class="el-switch el-switch-green" >';
+	bdDiv += '<label style="margin-top:1px;float:inline-start;" class="el-switch el-switch-green" >';
     bdDiv += '<input id="checkSol'+ i + typesource +'" type="checkbox" name="switch" >';
     bdDiv += '<span class="el-switch-style"></span>';
     bdDiv += '</label>';
 
-    bdDiv += '<div style="position:relative;float:left;width:350px;left:15px;top:0px;padding:5px;" >';
+    bdDiv += '<div style="position:relative;float:inline-start;width:350px;inset-inline-start:15px;top:0px;padding:5px;" >';
     bdDiv += '<span class="trd" >Show solution button</span></div>';
 
 	bdDiv += '</div>';
@@ -7524,11 +7524,11 @@ var baseRenderLUDIQcm = '<table class="qcmbarre" onMouseDown="parent.displayEdit
 baseRenderLUDIQcm += '<tr><td colspan=2 style="padding:15px;" class=quizzTextqcm >'+cstudioTranslateTerm('Quizz text')+'</td></tr>';
 
 baseRenderLUDIQcm += '<tr class=quizzTextTr ><td class=quizzTextTd ><img class=checkboxqcm src="img/qcm/matgreen0.png" />';
-baseRenderLUDIQcm += '</td><td style="text-align:left;" >'+returnTradTerm("Answer 1")+'</td></tr>';
+baseRenderLUDIQcm += '</td><td style="text-align:start;" >'+returnTradTerm("Answer 1")+'</td></tr>';
 baseRenderLUDIQcm += '<tr class=quizzTextTr ><td class=quizzTextTd ><img class=checkboxqcm src="img/qcm/matgreen0.png" />';
-baseRenderLUDIQcm += '</td><td style="text-align:left;" >'+returnTradTerm("Answer 2")+'</td></tr>';
+baseRenderLUDIQcm += '</td><td style="text-align:start;" >'+returnTradTerm("Answer 2")+'</td></tr>';
 baseRenderLUDIQcm += '<tr class=quizzTextTr ><td class=quizzTextTd ><img class=checkboxqcm src="img/qcm/matgreen0.png" />';
-baseRenderLUDIQcm += '</td><td style="text-align:left;" >'+returnTradTerm("Answer 3")+'</td></tr>';
+baseRenderLUDIQcm += '</td><td style="text-align:start;" >'+returnTradTerm("Answer 3")+'</td></tr>';
 baseRenderLUDIQcm += cstudioBuildQuizCheckButtonHtml();
 baseRenderLUDIQcm +='</table>';
 
@@ -7908,10 +7908,10 @@ function renderpluginblank(var1,var2) {
 
     var2 = var2.replace(regex,"<span style='color:red;' >????</span>");
     
-    h = '<p style="font-size:18px;text-align:left;" >' + encodeTxtToHVP(var1) + '</p>';
-    h += '<p style="font-size:18px;text-align:left;" >' + encodeTxtToHVP(var2) + '</p>';
+    h = '<p style="font-size:18px;text-align:start;" >' + encodeTxtToHVP(var1) + '</p>';
+    h += '<p style="font-size:18px;text-align:start;" >' + encodeTxtToHVP(var2) + '</p>';
     h += '<img src="img/classique/hvp_check.png" ';
-    h += ' style="width:130px;height:45px;float:left;" />';
+    h += ' style="width:130px;height:45px;float:inline-start;" />';
     h += '<span class=typesource >blank</span>';
     
     return h;
@@ -8072,7 +8072,7 @@ function cstudioEnsureChamiloResourceDialog(){
 	h += '<div id="CStudioChamiloResourceEmpty" style="display:none;margin-top:18px;padding:12px;background:#f8f9f9;color:#566573;">No available resources were found in this course.</div>';
 	h += '</div>';
 	h += '<div id="CStudioChamiloResourceError" style="display:none;padding:12px;background:#fdecea;color:#922b21;"></div>';
-	h += '<div style="padding-top:22px;text-align:right;">';
+	h += '<div style="padding-top:22px;text-align:end;">';
 	h += '<input id="CStudioChamiloResourceSave" onClick="saveChamiloResourceSelection()" class="gjs-one-bg ludiButtonSave" type="button" value="Insert" />';
 	h += '</div>';
 	h += '</div>';
@@ -8165,7 +8165,7 @@ function renderpluginchamiloresource(resourceTool, resourceKey, title, launchUrl
 	safeHeight = Math.min(safeHeight, 1600);
 
 	var h = '<div class="topinactiveteach"></div>';
-	h += '<div style="padding:6px 8px;text-align:left;font-size:13px;background:#f4f6f7;border-bottom:1px solid #d5dbdb;">';
+	h += '<div style="padding:6px 8px;text-align:start;font-size:13px;background:#f4f6f7;border-bottom:1px solid #d5dbdb;">';
 	h += cstudioEscapeHtml(title);
 	h += '</div>';
 	h += '<iframe class="cstudio-chamilo-resource-frame" style="width:100%;min-height:350px;z-index:1;height:' + safeHeight + 'px;overflow:auto;" ';
@@ -8279,16 +8279,16 @@ function select2minidia(var2) {
 	bdDiv += '&nbsp;:&nbsp;</div>';
     
     bdDiv += '<img class="avatarminidiasel avatarminidiasel1" onClick="selectAminidia(this)" ';
-    bdDiv += 'style="border:2px #E6E6E6 solid;width:60px;height:84px;float:left;" src="img/classique/man-conducting-survey.png" />';
+    bdDiv += 'style="border:2px #E6E6E6 solid;width:60px;height:84px;float:inline-start;" src="img/classique/man-conducting-survey.png" />';
     
     bdDiv += '<img class="avatarminidiasel avatarminidiasel2" onClick="selectAminidia(this)" ';
-    bdDiv += 'style="border:2px #E6E6E6 solid;width:54px;height:84px;float:left;" src="img/classique/woman-conducting-survey.png" />';
+    bdDiv += 'style="border:2px #E6E6E6 solid;width:54px;height:84px;float:inline-start;" src="img/classique/woman-conducting-survey.png" />';
     
     bdDiv += '<img class="avatarminidiasel avatarminidiasel3" onClick="selectAminidia(this)" ';
-    bdDiv += 'style="border:2px #E6E6E6 solid;width:50px;height:84px;float:left;" src="img/classique/woman-question.png" />';
+    bdDiv += 'style="border:2px #E6E6E6 solid;width:50px;height:84px;float:inline-start;" src="img/classique/woman-question.png" />';
 
     bdDiv += '<img class="avatarminidiasel avatarminidiasel9" onClick="selectMyAvatar(this)" ';
-    bdDiv += 'style="border:2px #E6E6E6 solid;width:54px;height:84px;float:left;" src="img/classique/selectavatar.png" />';
+    bdDiv += 'style="border:2px #E6E6E6 solid;width:54px;height:84px;float:inline-start;" src="img/classique/selectavatar.png" />';
 
     bdDiv += '<input id="datatext2minidia" type="text" value="' + var2 + '" ';
 	bdDiv += ' class="plugInputDiv" style="display:none;" />';
@@ -8389,10 +8389,10 @@ function renderpluginfilltext(var1,var2) {
 
     var2 = var2.replace(regex,"<span style='color:blue;' >[______]</span>");
     
-    h = '<p style="font-size:18px;text-align:left;" >' +  encodeTxtToHVP(var1) + '</p>';
-    h += '<p style="font-size:18px;text-align:left;" >' +  encodeTxtToHVP(var2)+ '</p>';
+    h = '<p style="font-size:18px;text-align:start;" >' +  encodeTxtToHVP(var1) + '</p>';
+    h += '<p style="font-size:18px;text-align:start;" >' +  encodeTxtToHVP(var2)+ '</p>';
     h += '<img src="img/classique/hvp_check.png" ';
-    h += ' style="width:130px;height:45px;float:left;" />';
+    h += ' style="width:130px;height:45px;float:inline-start;" />';
     h += '<span class=typesource >filltext</span>';
     
     return h;
@@ -8411,10 +8411,10 @@ function getISVG(name,rot) {
         retSvg = '<svg ' + transform + ' style="width:30px;height:30px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" ><path fill="'+colorA+'" d="M37.533 46.789l-15.7.097 28.611-29.96L79.4 46.53l-15.7.097.205 35.196-26.167.162z"/></svg>';
     }
     if (name =='access') {
-        retSvg = '<svg ' + transform + ' style="margin-left:6px;margin-top:-1px;width:25px;height:25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6 6" ><g transform="scale(.125)" fill="'+colorA+'" ><path d="M24 2a22 22 0 1 0 22 22A21.9 21.9 0 0 0 24 2zm0 40a18 18 0 1 1 18-18 18.1 18.1 0 0 1-18 18z"/><circle cx="24" cy="13" r="3"/><path d="M35 17H13a2 2 0 0 0 0 4h7v4.8l-2 9.8a2.1 2.1 0 0 0 1.6 2.4h.4a2.1 2.1 0 0 0 2-1.6l1.8-9.4h.4l1.8 9.4a2.1 2.1 0 0 0 2 1.6h.4a2.1 2.1 0 0 0 1.6-2.4l-2-9.8V21h7a2 2 0 0 0 0-4z"/></g></svg>';
+        retSvg = '<svg ' + transform + ' style="margin-inline-start:6px;margin-top:-1px;width:25px;height:25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6 6" ><g transform="scale(.125)" fill="'+colorA+'" ><path d="M24 2a22 22 0 1 0 22 22A21.9 21.9 0 0 0 24 2zm0 40a18 18 0 1 1 18-18 18.1 18.1 0 0 1-18 18z"/><circle cx="24" cy="13" r="3"/><path d="M35 17H13a2 2 0 0 0 0 4h7v4.8l-2 9.8a2.1 2.1 0 0 0 1.6 2.4h.4a2.1 2.1 0 0 0 2-1.6l1.8-9.4h.4l1.8 9.4a2.1 2.1 0 0 0 2 1.6h.4a2.1 2.1 0 0 0 1.6-2.4l-2-9.8V21h7a2 2 0 0 0 0-4z"/></g></svg>';
     }
     if (name =='colorwheel') {
-        retSvg = '<?xml version="1.0" encoding="UTF-8"?><svg style="margin-left:6px;margin-top:-1px;width:25px;height:25px;" version="1.1" viewBox="0 0 73 73" xmlns="http://www.w3.org/2000/svg" ><g transform="matrix(1.3914 0 0 1.3987 1.1137 .9272)">';
+        retSvg = '<?xml version="1.0" encoding="UTF-8"?><svg style="margin-inline-start:6px;margin-top:-1px;width:25px;height:25px;" version="1.1" viewBox="0 0 73 73" xmlns="http://www.w3.org/2000/svg" ><g transform="matrix(1.3914 0 0 1.3987 1.1137 .9272)">';
         retSvg += '<path d="m3.4085 38.255c1.1039 1.9046 2.4622 3.6782 4.0602 5.2766 4.8167 4.8163 11.22 7.4688 18.031 7.4688 6.8116 0 13.215-2.6525 18.031-7.4688 1.5984-1.5984 2.9564-3.3719 4.0602-5.2766 2.2229-3.8354 3.4085-8.2034 3.4085-12.755s-1.1856-8.9193-3.4085-12.755c-1.1039-1.9046-2.4622-3.6785-4.0602-5.2766-4.8163-4.8163-11.22-7.4688-18.031-7.4688-6.8112 0-13.215 2.6525-18.031 7.4688-1.5984 1.598-2.9568 3.3719-4.0602 5.2766-2.2229 3.8354-3.4085 8.2038-3.4085 12.755s1.1856 8.9193 3.4085 12.755zm15.584-12.755c0-1.1844 0.31945-2.2945 0.8747-3.2525 1.1268-1.9439 3.2287-3.2556 5.633-3.2556 2.4042 0 4.5062 1.3117 5.6334 3.2556 0.55486 0.95757 0.8747 2.0681 0.8747 3.2525s-0.31984 2.2945-0.8747 3.2521c-1.1268 1.9443-3.2291 3.2556-5.6334 3.2556-2.4042 0-4.5062-1.3113-5.6334-3.2556-0.55486-0.95757-0.87431-2.0677-0.87431-3.2521z" fill="#ff8398"/>';
         retSvg += '<path d="m25.5 41.504v9.4964c6.8116 0 13.215-2.6525 18.031-7.4688 1.5984-1.5984 2.9564-3.3719 4.0602-5.2766l-8.2298-4.7517c-2.7673 4.7828-7.9384 8.0007-13.862 8.0007z" fill="#54e360"/><path d="m41.504 25.5c0 2.9155-0.78014 5.6489-2.1424 8.003l8.2298 4.7517c2.2229-3.8354 3.4085-8.2034 3.4085-12.755s-1.1856-8.9193-3.4085-12.755l-8.2298 4.7513c1.3622 2.3544 2.1424 5.0879 2.1424 8.0034z" fill="#008adf"/><path d="m11.638 33.503-8.2298 4.7517c1.1039 1.9046 2.4622 3.6782 4.0602 5.2766 4.8167 4.8163 11.22 7.4688 18.031 7.4688v-9.4964c-5.9233 0-11.094-3.2178-13.862-8.0007z" fill="#ffd400"/><path d="m39.362 17.497 8.2298-4.7513c-1.1039-1.9046-2.4622-3.6785-4.0602-5.2766-4.8163-4.8163-11.22-7.4688-18.031-7.4688v9.496c5.9233 0 11.094 3.2182 13.862 8.0007z" fill="#0065a3"/><path d="m3.4085 38.255 8.2298-4.7517c-1.3622-2.354-2.142-5.0875-2.142-8.003s0.77975-5.6489 2.142-8.003l-8.2298-4.7517c-2.2229 3.8354-3.4085 8.2038-3.4085 12.755s1.1856 8.9193 3.4085 12.755z" fill="#ff9100"/><path d="m25.5 9.496v-9.496c-6.8112 0-13.215 2.6525-18.031 7.4688-1.5984 1.598-2.9568 3.3719-4.0602 5.2766l8.2298 4.7517c2.7673-4.7828 7.9384-8.001 13.862-8.001z" fill="#ff4949"/><path d="m32.008 25.5c0 1.1844-0.31984 2.2945-0.8747 3.2521l8.2283 4.7509c1.3622-2.354 2.1424-5.0875 2.1424-8.003 0-2.9159-0.78014-5.6489-2.1424-8.0034l-8.2283 4.7509c0.55486 0.95757 0.8747 2.0681 0.8747 3.2525z" fill="#0065a3"/><path d="m31.133 22.248 8.2283-4.7505c-2.7673-4.7828-7.9384-8.001-13.862-8.001v9.496c2.4042 0 4.5062 1.3117 5.6334 3.2556z" fill="#005183"/><path d="m25.5 32.008v9.496c5.9233 0 11.094-3.2178 13.862-8.0007l-8.2283-4.7505c-1.1268 1.9439-3.2291 3.2552-5.6334 3.2552z" fill="#00ab5e"/><path d="m25.5 41.504v-9.496c-2.4042 0-4.5062-1.3113-5.6334-3.2556l-8.2283 4.7509c2.7673 4.7828 7.9384 8.0007 13.862 8.0007z" fill="#ff9f04"/><path d="m18.992 25.5c0-1.1844 0.31945-2.2945 0.8747-3.2525l-8.2287-4.7505c-1.3622 2.354-2.142 5.0875-2.142 8.003s0.77975 5.6489 2.142 8.003l8.2283-4.7509c-0.55486-0.95757-0.87431-2.0677-0.87431-3.2521z" fill="#ff4b00"/><path d="m25.5 18.992v-9.496c-5.9233 0-11.094 3.2182-13.862 8.001l8.2287 4.7505c1.1268-1.9439 3.2287-3.2556 5.633-3.2556z" fill="#e80048"/></g></svg>';
     }
@@ -8510,12 +8510,12 @@ function installConsole(){
         if ($("#consoleArea").length==0) {
 
             var bdDiv = '<div id="consoleArea" ';
-            bdDiv += ' style="position:absolute;left:20px;';
+            bdDiv += ' style="position:absolute;inset-inline-start:20px;';
             bdDiv += 'bottom:0px;width:350px;height:150px;background-color:black;z-index:1000;" ';
             bdDiv += ' >';
             bdDiv += '<input id="consolecommand" type="text" value="" onkeypress="if (event.keyCode==13) { processcommand(); }" ';
             bdDiv += ' style="position:absolute;background-color:black;color:white;border:none;';
-            bdDiv += 'left:10px;bottom:10px;width:320px;height:20px;" />';
+            bdDiv += 'inset-inline-start:10px;bottom:10px;width:320px;height:20px;" />';
             bdDiv += '</div>';
             $('body').append(bdDiv);
 
@@ -8570,10 +8570,10 @@ function launchCustomCode() {
         bdDiv += '<div class="gjs-mdl-row saveCustomCode1">';
         bdDiv += '<div class="gjs-mdl-col-12">';
         bdDiv += '<textarea id="customCodeCss" class="gjs-mdl-textarea" rows="20" spellcheck="false" ';
-        bdDiv += ' style="font-size:16px;background-color:black;color:white;margin-left:1%;width:97%;" ></textarea>';
+        bdDiv += ' style="font-size:16px;background-color:black;color:white;margin-inline-start:1%;width:97%;" ></textarea>';
         bdDiv += '</div></div>';
-        bdDiv += '<div class="gjs-mdl-row saveCustomCode1" style="text-align:right;margin-bottom:20px;" >';
-        bdDiv += '<input onClick="saveCustomCode()" style="margin-top:10px;float:right;" ';
+        bdDiv += '<div class="gjs-mdl-row saveCustomCode1" style="text-align:end;margin-bottom:20px;" >';
+        bdDiv += '<input onClick="saveCustomCode()" style="margin-top:10px;float:inline-end;" ';
         bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Save" /><br/>';
         bdDiv += '</div>';
 		bdDiv += '<div class="gjs-mdl-collector saveCustomCode2" style="display: none">';
@@ -8656,7 +8656,7 @@ function renderpluginsorttheparagraphs(var1,var2) {
         var2 = 'Step 1,Step 2,Step 3,Step 4';
     }
 
-    var h = '<p style="font-size:18px;text-align:left;" >' + encodeTxtToHVP(var1) + '</p>';
+    var h = '<p style="font-size:18px;text-align:start;" >' + encodeTxtToHVP(var1) + '</p>';
    
     var ArrayWords = (var2 + ',,,,,,').split(',');
 
@@ -8769,10 +8769,10 @@ function renderpluginmarkwords(var1,var2) {
         var2 = var2.replace(fullTerm,"<span style='color:blue;' >" + myTerm + "</span>");
     }
 
-    h = '<p style="font-size:18px;text-align:left;" >' +  encodeTxtToHVP(var1) + '</p>';
-    h += '<p style="font-size:18px;text-align:left;" >' +  encodeTxtToHVP(var2) + '</p>';
+    h = '<p style="font-size:18px;text-align:start;" >' +  encodeTxtToHVP(var1) + '</p>';
+    h += '<p style="font-size:18px;text-align:start;" >' +  encodeTxtToHVP(var2) + '</p>';
     h += '<img src="img/classique/hvp_check.png" ';
-    h += ' style="width:130px;height:45px;float:left;" />';
+    h += ' style="width:130px;height:45px;float:inline-start;" />';
     h += '<span class=typesource >markwords</span>';
     
     return h;
@@ -8987,7 +8987,7 @@ function loadSelectAreaSchemaImage(srcImage) {
 	bdFrm += ' style="height:170px;text-align:center;" >';
 
 	bdFrm += '<div onClick="initEditionSchema(\''+ srcImage +'\')" class="objectSchemaList" ';
-	bdFrm += ' style="margin-left:300px;" >';
+	bdFrm += ' style="margin-inline-start:300px;" >';
 	bdFrm += '<img src="' + srcImage + '" />';
 	bdFrm += '<div class="ludiEditIcoLarge" ></div>';
 	bdFrm += '</div>';
@@ -9138,7 +9138,7 @@ function displayImageMapEdit(myObj){
 		bdDiv += '</div>';
 
 
-		bdDiv += '<div class="controlMapEdit" style="padding:25px;text-align:right;" >';
+		bdDiv += '<div class="controlMapEdit" style="padding:25px;text-align:end;" >';
 		bdDiv += '<input onClick="saveMapEdit()" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Save" /><br/>';
 		bdDiv += '</div>';
@@ -9351,7 +9351,7 @@ function launchPageRenderToImg(){
 		
 		if ($("#frameRenderToImgRapid").length==0) {
 			var bdDiv = '<div id="frameRenderToImgRapid" ';
-			bdDiv += ' style="position:absolute;left:560px;top:0px;opacity:0.02;';
+			bdDiv += ' style="position:absolute;inset-inline-start:560px;top:0px;opacity:0.02;';
 			bdDiv += 'width:190px;height:190px;overflow:hidden;z-index:1500;"  >';
 			bdDiv += '<iframe id="pageToImgRapid" border=0 scrolling="no" ';
 			bdDiv += ' src="view-page.php?mod=page&reload=1&id=' + idPageHtml + '" ';
@@ -9428,7 +9428,7 @@ function displayPageRenderToImg(){
 }
 function displayObjectMenuExtend(toolItem) {
 
-    var styl2 = 'style="float:left;padding:5px;margin:3px;width:44%;" ';
+    var styl2 = 'style="float:inline-start;padding:5px;margin:3px;width:44%;" ';
     
     var bdDiv2 = ''; 
     bdDiv2 += '<p ' + styl2 + ' >';
@@ -9493,7 +9493,7 @@ function displayPageDevUpdate(init) {
         bdDiv += '<div id="divUpdateLogs" class="divUpdateLogs" ></div>';
 
         bdDiv += '<p><input onClick="closeUpdateWin();" ';
-		bdDiv += ' style="position:relative;left:50%;border:solid 1px gray;padding:7px;cursor:pointer;color:white;" ';
+		bdDiv += ' style="position:relative;inset-inline-start:50%;border:solid 1px gray;padding:7px;cursor:pointer;color:white;" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave closeUpdateBtn trd" type="button" value="&nbsp;&nbsp;OK&nbsp;&nbsp;" /></p>';
 
         bdDiv += '</div>';
@@ -10483,8 +10483,8 @@ function displayEditThemeParamsProject(){
         bdDiv += '<div class="innerLeftBannerTeach" >';
         bdDiv += '</div>';
 
-		bdDiv += '<div class="innerEditTitleTeach trd" style="margin-left:5px;" >Page style</div>';
-		bdDiv += '<div class="innerEditTitleTeach trd" style="margin-left:10px;">Quiz style</div>';
+		bdDiv += '<div class="innerEditTitleTeach trd" style="margin-inline-start:5px;" >Page style</div>';
+		bdDiv += '<div class="innerEditTitleTeach trd" style="margin-inline-start:10px;">Quiz style</div>';
 
         bdDiv += '<div class="innerEditColorsTeach" >';
         bdDiv += getCollectionsColorsThemes();
@@ -10956,7 +10956,7 @@ function displayGlobalParams(){
         bdDiv += '<div class="cstudio-options-field-row" style="position:relative;margin:15px;" >';
         bdDiv += '<span>&nbsp;&nbsp;<span class="trd" >Language of the project</span>&nbsp;:&nbsp;</span>';
         bdDiv += cstudioBuildProjectLanguageSelect();
-        bdDiv += '<div class="cstudio-option-help trd" style="margin-left:20px;margin-top:6px;font-size:12px;line-height:1.4;color:#667085;">The project language is used by CStudio content and defaults to the course language.</div>';
+        bdDiv += '<div class="cstudio-option-help trd" style="margin-inline-start:20px;margin-top:6px;font-size:12px;line-height:1.4;color:#667085;">The project language is used by CStudio content and defaults to the course language.</div>';
         bdDiv += '</div>';
         
         if (modeUIeol=='a') {
@@ -11003,13 +11003,13 @@ function displayGlobalParams(){
         bdDiv += addCheckOptions('Add Life bar','V');
 
         bdDiv += '<img src="img/life_bar.png" ';
-        bdDiv += ' style="position:absolute;right:90px;top:15px;" />';
+        bdDiv += ' style="position:absolute;inset-inline-end:90px;top:15px;" />';
 
         bdDiv += '<img id="editgameover" src="img/editgo.png" onClick="initEditionSchema(\'img_cache/' + lfIdent + '/gameoverscreen.svg\')" ';
-        bdDiv += ' style="position:absolute;right:90px;top:117px;';
+        bdDiv += ' style="position:absolute;inset-inline-end:90px;top:117px;';
         bdDiv += 'border-radius:15px;cursor:pointer;display:none" />';
 
-        bdDiv += '<p style="margin-left:30px;" >';
+        bdDiv += '<p style="margin-inline-start:30px;" >';
         bdDiv += '<table class="tablelifes" >';
         bdDiv += '<tr>';
         bdDiv += '<td>&nbsp;<input type="radio" name="lifebarname" id="H3" value="H3" />&nbsp;</td>';
@@ -11383,17 +11383,17 @@ function uploadGameOverImage() {
 function addCheckOptions(label,code,helpText){
 
     var translatedHelp = helpText ? cstudioTranslateTerm(helpText) : '';
-    var bdDiv = '<div class="cstudio-option-check-row" style="position:relative;margin-left:20px;';
+    var bdDiv = '<div class="cstudio-option-check-row" style="position:relative;margin-inline-start:20px;';
     bdDiv += 'width:440px;margin-bottom:' + (helpText ? '10px' : '4px') + ';" >';
     bdDiv += '<label style="margin-top:1px;" class="el-switch el-switch-green" title="' + cstudioEscapeHtml(translatedHelp || cstudioTranslateTerm(label)) + '" >';
     bdDiv += '<input id="checkbox'+code+'" type="checkbox" name="switch" >';
     bdDiv += '<span class="el-switch-style"></span>';
     bdDiv += '</label>';
     bdDiv += '<div class="margin-r trd" ';
-    bdDiv += ' style="position:absolute;left:50px;top:0px;padding:5px;" title="' + cstudioEscapeHtml(translatedHelp || cstudioTranslateTerm(label)) + '" >';
+    bdDiv += ' style="position:absolute;inset-inline-start:50px;top:0px;padding:5px;" title="' + cstudioEscapeHtml(translatedHelp || cstudioTranslateTerm(label)) + '" >';
     bdDiv += '&nbsp;'+label+'</div>';
     if (helpText) {
-        bdDiv += '<div class="cstudio-option-help" style="margin-left:50px;margin-top:25px;padding-right:8px;font-size:12px;line-height:1.4;color:#667085;">';
+        bdDiv += '<div class="cstudio-option-help" style="margin-inline-start:50px;margin-top:25px;padding-inline-end:8px;font-size:12px;line-height:1.4;color:#667085;">';
         bdDiv += cstudioEscapeHtml(translatedHelp);
         bdDiv += '</div>';
     }
@@ -11631,7 +11631,7 @@ function displayEditTemplates(){
 
 		bdDiv += '<div id="allTemplatesSave" class="gjs-am-add-asset" ';
 		bdDiv += 'style="padding:25px;padding-top:0px;font-size:16px;display:none;" >';
-        bdDiv += '<div style="padding:25px;padding-top:5px;padding-right:15px;text-align:right;" >';
+        bdDiv += '<div style="padding:25px;padding-top:5px;padding-inline-end:15px;text-align:end;" >';
 		bdDiv += '<input onClick="saveTemplatesGlobal()" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Save" /><br/>';
 		bdDiv += '</div>';
@@ -12843,7 +12843,7 @@ function displayDevAdminParams(){
 		bdDiv += '</div>';
 
 		listPagesCS = listPagesCS.replace(/;/g,' ');
-        bdDiv += '<p style="position:relative;margin-left:20px;" >list [pages] : <small>(' + listPagesCS + ')</small></p>';
+        bdDiv += '<p style="position:relative;margin-inline-start:20px;" >list [pages] : <small>(' + listPagesCS + ')</small></p>';
 		
 		var statusStr = "SESSIONADMIN";
 		
@@ -12851,16 +12851,16 @@ function displayDevAdminParams(){
 		if (userStatusCS==1) { statusStr = "COURSEMANAGER"; }
 		if (userStatusCS==11) { statusStr = "PLATFORM_ADMIN"; }
 		
-		bdDiv += '<p style="position:relative;margin-left:20px;" > user[status] : <small>' + statusStr + ' (' + userStatusCS + ')</small></p>';
+		bdDiv += '<p style="position:relative;margin-inline-start:20px;" > user[status] : <small>' + statusStr + ' (' + userStatusCS + ')</small></p>';
 		
-		bdDiv += '<p style="position:relative;margin-left:20px;" > colorsPath : <small>' + colorsPath + '</small></p>';
-		bdDiv += '<p style="position:relative;margin-left:20px;" > quizzThemePath : <small>' + quizzthemePath + '</small></p>';
+		bdDiv += '<p style="position:relative;margin-inline-start:20px;" > colorsPath : <small>' + colorsPath + '</small></p>';
+		bdDiv += '<p style="position:relative;margin-inline-start:20px;" > quizzThemePath : <small>' + quizzthemePath + '</small></p>';
 
-		bdDiv += '<p style="position:relative;margin-left:20px;" > optionsCS : <small>' + optionsCS + '</small></p>';
-		bdDiv += '<p style="position:relative;margin-left:20px;" > optionsCS CDT : <small>' + optionsCSCDT + '</small></p>';
-		bdDiv += '<p style="position:relative;margin-left:20px;" > optionsGlobalPage Project : <small>' + optionsGlobalPage + '</small></p>';
+		bdDiv += '<p style="position:relative;margin-inline-start:20px;" > optionsCS : <small>' + optionsCS + '</small></p>';
+		bdDiv += '<p style="position:relative;margin-inline-start:20px;" > optionsCS CDT : <small>' + optionsCSCDT + '</small></p>';
+		bdDiv += '<p style="position:relative;margin-inline-start:20px;" > optionsGlobalPage Project : <small>' + optionsGlobalPage + '</small></p>';
 		
-		bdDiv += '<div style="position:relative;margin-left:20px;" onClick="deleteAllTopMenu();closeAllEditWindows();loadTerminalStudio();" >&nbsp;>&nbsp;>&nbsp;Terminal</div>';
+		bdDiv += '<div style="position:relative;margin-inline-start:20px;" onClick="deleteAllTopMenu();closeAllEditWindows();loadTerminalStudio();" >&nbsp;>&nbsp;>&nbsp;Terminal</div>';
 		bdDiv += '<p><br/></p>';
 		
 		bdDiv += '<div class="gjs-mdl-collector" style="display: none"></div>';
@@ -13152,8 +13152,8 @@ function loadWindowImgActiv() {
 
 	interf += '<textarea id="actionZAtextArea" name="actionZAtextArea" class="actionZAtextArea" rows="3" cols="46"></textarea>';
 
-	interf += '<input id="urlextraimg" class="form-control extraimg" style="position:absolute;left:10px;top:85px;width:80%;display:none;" />';
-	interf += '<a onclick="showFileManagerToInput(100);" style="position:absolute;right:15px;top:85px;display:none;" class="btn btn-info extraimg" >...</a>';
+	interf += '<input id="urlextraimg" class="form-control extraimg" style="position:absolute;inset-inline-start:10px;top:85px;width:80%;display:none;" />';
+	interf += '<a onclick="showFileManagerToInput(100);" style="position:absolute;inset-inline-end:15px;top:85px;display:none;" class="btn btn-info extraimg" >...</a>';
 
 	interf += '<a class="btn btn-info actionBtnApplyZA ludiButtonSave trd" onclick="applyActionEditZA()">Apply</a>';
 
@@ -14331,13 +14331,13 @@ function innerQuickActiveAreaManager(idtmp) {
     h += '<div class="editPage" onClick="loadTxtEditorZii();" ></div>';
     h += '</div>';
 
-    h += '<p style="width:97%;text-align:center;margin:15px;padding:5px;float:left;" >';
+    h += '<p style="width:97%;text-align:center;margin:15px;padding:5px;float:inline-start;" >';
     h += '<a onClick="saveQuickActiveAreaM(\''+idtmp+'\');" ';
     h += ' class="btn btn-info" >&nbsp;OK&nbsp;</a></p>';
 
     var imgLoad = '<img src="'+ _p['web_plugin'] + 'chamidoc_tools/resources/img/delete-icon-24.png" />';
     h += '<a onClick="if (confirm(\'Delete ?\')) DeleteTxtLinkZii(\''+idtmp+'\');" ';
-    h += ' style="position:absolute;left:5px;bottom:5px;background:white;color:white;" ';
+    h += ' style="position:absolute;inset-inline-start:5px;bottom:5px;background:white;color:white;" ';
     h += ' class="btn btn-classic" >&nbsp;' + imgLoad + '&nbsp;</a>';
 
     h += '</div>';
@@ -14350,19 +14350,19 @@ function innerQuickActiveAreaManager(idtmp) {
     h += ' name="content_option_area" class="ckeditor" >';
     h += convertDataToHtml(editorTxtZii) + '</textarea>';
 
-    h += '<p style="width:97%;text-align:center;margin:5px;padding:5px;float:left;" >';
+    h += '<p style="width:97%;text-align:center;margin:5px;padding:5px;float:inline-start;" >';
     h += '<a onclick="ApplyTxtEditorZii();" ';
     h += ' class="btn btn-info" >&nbsp;Apply&nbsp;</a></p>';
 
     h += '</div>';
 
     h += '<div id="innerQuickActiveAreaTxtLink" class="innerQuickActiveAreaTxtLink" >';
-    h += '<p>Data link :&nbsp;<a style="float:right;cursor:pointer;" ';
+    h += '<p>Data link :&nbsp;<a style="float:inline-end;cursor:pointer;" ';
     h += ' onClick="helpLinkZii();" >&darr;</a>&nbsp;&nbsp;&nbsp;&nbsp;</p>';
     h += '<input type="text" value="' + convertDataToHtml(editorlinkZii) + '" ';
     h += ' id="content_option_link" style="width:97%;" />';
 
-    h += '<p style="width:97%;text-align:center;margin:5px;padding:5px;float:left;" >';;
+    h += '<p style="width:97%;text-align:center;margin:5px;padding:5px;float:inline-start;" >';;
     h += '<a onclick="ApplyTxtLinkZii();" class="btn btn-info" >&nbsp;Apply&nbsp;</a>';
     h += '</p>';
 
@@ -15077,7 +15077,7 @@ function selectFXObj(typesource){
 		if (langselectUI=='fr_FR') {
 			txtInsert = 'Insérer';
 		}
-		b += '<div style="position:absolute;right:0px;bottom:0px;padding:10px;padding-top:10px;text-align:right;" >';
+		b += '<div style="position:absolute;inset-inline-end:0px;bottom:0px;padding:10px;padding-top:10px;text-align:end;" >';
 		b += '<input id="ludiButtonSaveFxObj" onClick="applyFXObj(\''+typesource+'\')" ';
 		b += ' class="gjs-one-bg ludiButtonSave trad" type="button" value="'+txtInsert+'" /><br/>';
 		b += '</div>';
@@ -15568,7 +15568,7 @@ function launchEditGlossManager(typedit,idterm) {
     h += '</div>';
 
 	h += '<a onClick="deleteGlossaryProcess(\''+idterm+'\');" ';
-	h += ' style="position:absolute;bottom:10px;left:5px;cursor:pointer;"  >';
+	h += ' style="position:absolute;bottom:10px;inset-inline-start:5px;cursor:pointer;"  >';
 	h += '<img src="icon/delete-icon-24.png" /></a>';
 
     h += '<div class="blockGlossaryLine2" >';
@@ -15577,11 +15577,11 @@ function launchEditGlossManager(typedit,idterm) {
     h += '<textarea id="areaGlossText' + indexGlossEdition + '"  ';
     h += ' name="areaTeachDocText' + indexGlossEdition + '" ';
 	h += 'rows=4 ';
-	h += 'style="width:98%;font-size:13px;padding:2px;margin-left:20px;resize:none;" ';  
+	h += 'style="width:98%;font-size:13px;padding:2px;margin-inline-start:20px;resize:none;" ';  
 	h += ' >' + defTerm2 + '</textarea>';
     
 	// Buttons
-    h += '<div style="text-align:right;" >';
+    h += '<div style="text-align:end;" >';
 	h += '<a onClick="closeGlossaryT()" ';
     h += ' class="ludiButtonCancel trd" type="button" >Cancel</a>&nbsp;';
    
@@ -17723,7 +17723,7 @@ function displaySubPageEdit(i){
 		bdDiv += '<br/>';
 		bdDiv += '</div>';
 
-		bdDiv += '<div class="gjs-am-add-asset oelTitlePage" style="padding:16px;padding-left:40px;" >';
+		bdDiv += '<div class="gjs-am-add-asset oelTitlePage" style="padding:16px;padding-inline-start:40px;" >';
 		bdDiv += '<input type="radio" ';
 		bdDiv += 'id="typenode2" name="typenode" ></input>';
 		bdDiv += '<label style="cursor:pointer;" class="trd" for=typenode2 >Content&nbsp;</label>&nbsp;&nbsp;';
@@ -17740,7 +17740,7 @@ function displaySubPageEdit(i){
 
 		bdDiv += loadPageTemplatesDOM()
 
-		bdDiv += '<div class="oelInputAdd1" style="padding:25px;text-align:right;" >';
+		bdDiv += '<div class="oelInputAdd1" style="padding:25px;text-align:end;" >';
 
 		bdDiv += '<input id="inputAddSubPage" onClick="saveNextSubLudi()" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Add" /><br/>';
@@ -17838,7 +17838,7 @@ function loadPageTemplatesDOM(){
 	bdDiv += '<p class="tpl-page-title trd" >Choose a template style</p>';
 	bdDiv += '</div>';
 	
-	bdDiv += '<div class="oelInputAdd2" style="position:relative;padding:25px;padding-top:15px;text-align:right;display:none;" >';
+	bdDiv += '<div class="oelInputAdd2" style="position:relative;padding:25px;padding-top:15px;text-align:end;display:none;" >';
 	bdDiv += '<input id="inputAddSubPage" onClick="saveNextSubLudiFinal()" ';
 	bdDiv += ' class="gjs-one-bg ludiButtonSave trd" type="button" value="Valid" /><br/>';
 	bdDiv += '</div>';
@@ -17976,10 +17976,10 @@ function displaySubPageExport(i){
         bdDiv += '<p style="text-align:center;" ><img src="img/cube-oe.gif" /></p>';
 		bdDiv += '</div>';
 		
-		bdDiv += '<div class="areaPageExportSave" style="padding:25px;text-align:right;" >';
+		bdDiv += '<div class="areaPageExportSave" style="padding:25px;text-align:end;" >';
 
 		bdDiv += '<div id="inputAddPageExportFake" ';
-		bdDiv += ' style="width:100px;text-align:center;padding:2px;float:right;" ';
+		bdDiv += ' style="width:100px;text-align:center;padding:2px;float:inline-end;" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave trd" ><img src="img/loadsave.gif" /></div>';
 
 		bdDiv += '<input id="inputAddPageExport" onClick="processSaveTemplate();" ';

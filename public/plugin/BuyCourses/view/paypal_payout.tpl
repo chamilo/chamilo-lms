@@ -22,7 +22,7 @@
                     href="{{ back_url }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="mdi mdi-arrow-left"></em>
+                    <em class="mdi mdi-arrow-left rtl:rotate-180"></em>
                     {{ 'Back'|get_lang }}
                 </a>
 
@@ -95,19 +95,19 @@
                                 class="h-4 w-4 rounded border-gray-25 text-primary focus:ring-primary"
                             >
                         </th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}
                         </th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}
                         </th>
-                        <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'Commission'|get_plugin_lang('BuyCoursesPlugin') }}
                         </th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'PayPalAccount'|get_plugin_lang('BuyCoursesPlugin') }}
                         </th>
-                        <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-50">
+                        <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'Options'|get_lang }}
                         </th>
                     </tr>
@@ -140,7 +140,7 @@
                                 {{ payout.date }}
                             </td>
 
-                            <td class="px-4 py-4 text-right text-sm font-semibold text-gray-90">
+                            <td class="px-4 py-4 text-end text-sm font-semibold text-gray-90">
                                 {{ payout.commission_formatted }}
                             </td>
 
@@ -154,7 +154,7 @@
                                 {% endif %}
                             </td>
 
-                            <td class="px-4 py-4 text-right">
+                            <td class="px-4 py-4 text-end">
                                 <button
                                     id="{{ payout.id }}"
                                     type="button"

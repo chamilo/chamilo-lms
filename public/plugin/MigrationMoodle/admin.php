@@ -106,7 +106,7 @@ $htmlHeadXtra[] = '<style>
 .migration-moodle-summary__item { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: .75rem; padding: .75rem; }
 .migration-moodle-summary__label { color: #64748b; font-size: .75rem; font-weight: 700; text-transform: uppercase; }
 .migration-moodle-summary__value { color: #0f172a; font-size: 1.125rem; font-weight: 700; }
-.migration-moodle-tree, .migration-moodle-tree ol { list-style: none; margin: 0; padding-left: 1.25rem; }
+.migration-moodle-tree, .migration-moodle-tree ol { list-style: none; margin: 0; padding-inline-start: 1.25rem; }
 .migration-moodle-tree > li { margin-bottom: .35rem; }
 .migration-moodle-task { align-items: center; display: flex; gap: .5rem; min-height: 2rem; }
 .migration-moodle-task__icon { align-items: center; border-radius: 999px; display: inline-flex; height: 1.5rem; justify-content: center; width: 1.5rem; }

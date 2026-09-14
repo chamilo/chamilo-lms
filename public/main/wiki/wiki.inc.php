@@ -1908,8 +1908,8 @@ final class WikiManager
         $contentHtml .=
             '<div id="tool-wiki" class="wiki-root">'.
             '<div id="mainwiki" class="wiki-wrap">'.
-            '  <div id="wikititle" class="wiki-card wiki-title"><h1>'.$pageTitle.'</h1></div>'.
-            '  <div id="wikicontent" class="wiki-card wiki-prose">'.$pageWiki.'</div>'.
+            '  <div id="wikititle" class="wiki-card wiki-title"><h1 dir="auto">'.$pageTitle.'</h1></div>'.
+            '  <div id="wikicontent" class="wiki-card wiki-prose" dir="auto">'.$pageWiki.'</div>'.
             '  <div id="wikifooter" class="wiki-card wiki-footer">'.
             '       <div class="meta">'.$footerMeta.'</div>'.$categories.
             '  </div>'.
@@ -1928,7 +1928,7 @@ final class WikiManager
         return
             '<div class="wiki-actions" style="display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid #ddd;border-radius:4px;background:#fff">'.
             '  <div class="wiki-actions-left" style="display:inline-flex;gap:6px">'.$left.'</div>'.
-            '  <div class="wiki-actions-right" style="display:inline-flex;gap:6px;margin-left:auto">'.$right.'</div>'.
+            '  <div class="wiki-actions-right" style="display:inline-flex;gap:6px;margin-inline-start:auto">'.$right.'</div>'.
             '</div>';
     }
 
@@ -3102,7 +3102,7 @@ final class WikiManager
                 if (!$confirmedPost) {
                     $actionUrl = $this->url(['action' => 'deletewiki']);
                     $msg  = '<p>'.get_lang('Are you sure you want to delete this Wiki?').'</p>';
-                    $msg .= '<form method="post" action="'.Security::remove_XSS($actionUrl).'" style="display:inline-block;margin-right:1rem;">';
+                    $msg .= '<form method="post" action="'.Security::remove_XSS($actionUrl).'" style="display:inline-block;margin-inline-end:1rem;">';
                     $msg .= '<input type="hidden" name="confirm_delete" value="1">';
                     $msg .= '<button type="submit" class="btn btn-danger">'.get_lang('Yes').'</button>';
                     $msg .= '&nbsp;&nbsp;<a class="btn btn-default" href="'.$this->url().'">'.get_lang('No').'</a>';
@@ -3776,7 +3776,7 @@ final class WikiManager
         $postUrl = $this->url(['action' => 'delete', 'title' => $page]);
 
         $msg  = '<p>'.sprintf(get_lang('Are you sure you want to delete this page and its history?'), '<b>'.api_htmlentities($niceName).'</b>').'</p>';
-        $msg .= '<form method="post" action="'.Security::remove_XSS($postUrl).'" style="display:inline-block;margin-right:1rem;">';
+        $msg .= '<form method="post" action="'.Security::remove_XSS($postUrl).'" style="display:inline-block;margin-inline-end:1rem;">';
         $msg .= '<input type="hidden" name="confirm_delete" value="1">';
         $msg .= '<button type="submit" class="btn btn-danger">'.get_lang('Yes').'</button>';
         $msg .= '&nbsp;&nbsp;<a class="btn btn-default" href="'.$ctx['baseUrl'].'&action=allpages">'.get_lang('No').'</a>';
@@ -4299,7 +4299,7 @@ final class WikiManager
                 $act = 'locknotifyall';
             }
 
-            echo '<div class="actions"><span style="float:right;">'.
+            echo '<div class="actions"><span style="float:inline-end;">'.
                 '<a href="'.$url.'&action=recentchanges&actionpage='.$act.'&title='.api_htmlentities(urlencode($page)).'">'.$notifyBlock.'</a>'.
                 '</span>'.get_lang('Latest changes').'</div>';
         } else {
@@ -6329,7 +6329,7 @@ mpdf-->'.$contentPdf;
             'WikiCategories_table'
         );
         $table->set_header(0, get_lang('Name'), false);
-        $table->set_header(1, get_lang('Actions'), false, ['class' => 'text-right'], ['class' => 'text-right']);
+        $table->set_header(1, get_lang('Actions'), false, ['class' => 'text-end'], ['class' => 'text-end']);
         $table->display();
     }
 

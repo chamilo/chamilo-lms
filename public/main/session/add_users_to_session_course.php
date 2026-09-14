@@ -891,7 +891,7 @@ echo Display::page_header($tool_name.' ('.$session_info['name'].') - '.$courseIn
                     aria-label="<?php echo get_lang('Remove selected user'); ?>"
                     onclick="remove_item(document.getElementById('destination_users'))"
                 >
-                    <i class="mdi mdi-chevron-left" aria-hidden="true"></i>
+                    <i class="mdi mdi-chevron-left rtl:rotate-180" aria-hidden="true"></i>
                 </button>
             <?php } else { ?>
                 <button
@@ -902,7 +902,7 @@ echo Display::page_header($tool_name.' ('.$session_info['name'].') - '.$courseIn
                     aria-label="<?php echo get_lang('Add selected user'); ?>"
                     onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"
                 >
-                    <i class="mdi mdi-chevron-right" aria-hidden="true"></i>
+                    <i class="mdi mdi-chevron-right rtl:rotate-180" aria-hidden="true"></i>
                 </button>
 
                 <button
@@ -913,7 +913,7 @@ echo Display::page_header($tool_name.' ('.$session_info['name'].') - '.$courseIn
                     aria-label="<?php echo get_lang('Remove selected user'); ?>"
                     onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"
                 >
-                    <i class="mdi mdi-chevron-left" aria-hidden="true"></i>
+                    <i class="mdi mdi-chevron-left rtl:rotate-180" aria-hidden="true"></i>
                 </button>
             <?php } ?>
             <button name="next" class="btn btn--success mb-4" type="button"

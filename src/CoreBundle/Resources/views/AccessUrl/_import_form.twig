@@ -31,7 +31,7 @@
 {% if report is defined and report is not empty %}
     <div class="mt-8 border border-gray-300 rounded-md p-4 bg-gray-10">
         <h3 class="text-md font-semibold mb-3">{{ 'Import report'|trans }}</h3>
-        <ul class="list-none pl-0 text-sm text-gray-700 space-y-2">
+        <ul class="list-none ps-0 text-sm text-gray-700 space-y-2">
             {% for line in report %}
                 <li class="flex items-start gap-2">
                     {{ line|raw }}

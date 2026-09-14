@@ -282,22 +282,22 @@ ob_start(); ?>
         .group   {background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,.05);overflow:hidden;margin-bottom:16px;}
         .g-head  {display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #eef2f7;background:#f8fafc}
         .g-title {font-weight:700;color:#0f172a}
-        .badge   {display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;margin-left:8px}
+        .badge   {display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;margin-inline-start:8px}
         .online  {background:#e6f8ec;color:#14804a}
         .offline {background:#f1f5f9;color:#334155}
 
         table{width:100%;border-collapse:collapse}
-        th,td{padding:10px 12px;border-bottom:1px solid #eef2f7;text-align:left;font-size:13px}
+        th,td{padding:10px 12px;border-bottom:1px solid #eef2f7;text-align:start;font-size:13px}
         thead th{background:#fbfdff;color:#111827}
         .usercell{display:flex;align-items:center;gap:10px}
         .avatar{width:32px;height:32px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#64748b;border:1px solid #e5e7eb}
         .muted{color:#64748b;font-size:12px}
 
         .bar{position:relative;height:8px;border-radius:999px;background:#eef2f7;overflow:hidden}
-        .bar > span{position:absolute;left:0;top:0;height:100%;background:#22c55e}
+        .bar > span{position:absolute;inset-inline-start:0;top:0;height:100%;background:#22c55e}
         .row-meta{display:flex;align-items:center;gap:8px;color:#475569;font-size:12px}
         .chip{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;background:#f8fafc;border:1px solid #eef2f7}
-        .emoji-list span{margin-right:8px}
+        .emoji-list span{margin-inline-end:8px}
         .btn-slim{padding:8px 14px;border:1px solid #64748b;border-radius:8px;color:#334155;text-decoration:none;background:#fff}
         .btn-primary{padding:8px 14px;border-radius:8px;background:#2563eb;color:#fff;border:none}
         .toolbar{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px}
@@ -336,7 +336,7 @@ ob_start(); ?>
     <div class="field">
         <a id="csv" class="btn-slim"><?php echo $plugin->get_lang('ExportCSV')?></a>
     </div>
-    <label class="chip" style="margin-left:auto"><input id="auto" type="checkbox" checked> <?php echo $plugin->get_lang('AutoRefresh10s')?></label>
+    <label class="chip" style="margin-inline-start:auto"><input id="auto" type="checkbox" checked> <?php echo $plugin->get_lang('AutoRefresh10s')?></label>
     </div>
 
     <div class="cards">

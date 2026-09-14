@@ -87,7 +87,7 @@
                     </div>
                   </div>
 
-                  <div class="text-right">
+                  <div class="text-end">
                     <div class="text-sm text-gray-60">{{ t("Completion") }}</div>
                     <div class="text-lg font-semibold text-gray-90">{{ filledCount }}/16</div>
                   </div>
@@ -111,7 +111,7 @@
                     v-for="(section, idx) in sectionsDefinition"
                     :key="section.type"
                     type="button"
-                    class="w-full flex items-center justify-between gap-2 rounded-xl border border-gray-25 px-3 py-2 text-left hover:bg-gray-15"
+                    class="w-full flex items-center justify-between gap-2 rounded-xl border border-gray-25 px-3 py-2 text-start hover:bg-gray-15"
                     @click="focusSection(idx, section.type)"
                   >
                     <span class="text-sm text-gray-90 line-clamp-1"> {{ idx + 1 }}. {{ section.title }} </span>
@@ -234,6 +234,7 @@
             >
               <div
                 class="space-y-4"
+                dir="auto"
                 v-html="previewContent"
               />
             </Dialog>

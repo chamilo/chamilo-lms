@@ -11,7 +11,7 @@
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    <span class="mdi mdi-open-in-new mr-2" aria-hidden="true"></span>
+                    <span class="mdi mdi-open-in-new me-2" aria-hidden="true"></span>
                     {{ 'CreateContent'|get_plugin_lang('EmbedRegistryPlugin') }}
                 </a>
             </div>
@@ -43,7 +43,10 @@
                 <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-blue-700">
                     {{ 'Current'|get_lang }}
                 </p>
-                <h2 class="m-0 text-xl font-semibold text-gray-90">
+                <h2
+                    class="m-0 text-xl font-semibold text-gray-90"
+                    dir="auto"
+                >
                     {{ current_embed.title }}
                 </h2>
                 <p class="mt-2 text-sm text-gray-50">

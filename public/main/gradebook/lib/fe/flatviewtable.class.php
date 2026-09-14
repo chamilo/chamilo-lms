@@ -345,7 +345,7 @@ class FlatViewTable extends SortableTable
 
         $header = null;
         if ($this->limit_enabled && $totalitems > GRADEBOOK_ITEM_LIMIT) {
-            $header .= '<table style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'
+            $header .= '<table style="width: 100%; text-align: end; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'
                 .'<tbody>'
                 .'<tr>';
 

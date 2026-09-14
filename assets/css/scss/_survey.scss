@@ -140,7 +140,7 @@ form#question-survey .survey_question .radio-inline {
   display: inline-flex;
   @apply items-center;
   gap: .35rem;
-  margin-right: .6rem;
+  margin-inline-end: .6rem;
 }
 
 .survey_question .field {

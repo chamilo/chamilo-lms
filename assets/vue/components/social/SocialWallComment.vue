@@ -16,7 +16,10 @@
       <q-item-label lines="1">
         <p class="text-weight-medium">{{ comment.sender.fullName }}</p>
       </q-item-label>
-      <q-item-label v-html="sanitizeHtml(comment.content)" />
+      <q-item-label
+        dir="auto"
+        v-html="sanitizeHtml(comment.content)"
+      />
       <q-item-label
         :title="abbreviatedDatetime(comment.sendDate)"
         caption

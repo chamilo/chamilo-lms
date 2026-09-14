@@ -287,6 +287,7 @@
         <div
           class="break-words text-gray-90 [&_a]:font-medium [&_img]:max-w-full [&_table]:max-w-full"
           @click="handleContentClick"
+          dir="auto"
           v-html="wikiPage.task"
         ></div>
 
@@ -374,6 +375,7 @@
           v-if="wikiPage.exists && wikiPage.content"
           class="break-words text-gray-90 [&_a]:font-medium [&_img]:max-w-full [&_table]:max-w-full"
           @click="handleContentClick"
+          dir="auto"
           v-html="wikiPage.content"
         ></div>
 

@@ -1,24 +1,20 @@
 .skill-wheel {
   .container-fluid {
     width: 100%;
-    padding-right: var(--bs-gutter-x, .75rem);
-    padding-left: var(--bs-gutter-x, .75rem);
-    margin-right: auto;
-    margin-left: auto;
+    padding-inline: var(--bs-gutter-x, .75rem);
+    margin-inline: auto;
   }
 
   .row {
     @apply flex;
     flex-wrap: wrap;
-    margin-right: calc(var(--bs-gutter-x, .75rem) / -2);
-    margin-left: calc(var(--bs-gutter-x, .75rem) / -2);
+    margin-inline: calc(var(--bs-gutter-x, .75rem) / -2);
   }
 
   .col-md-3, .col-md-9 {
     position: relative;
     width: 100%;
-    padding-right: var(--bs-gutter-x, .75rem);
-    padding-left: var(--bs-gutter-x, .75rem);
+    padding-inline: var(--bs-gutter-x, .75rem);
   }
 
   .col-md-3 {
@@ -122,7 +118,7 @@
   }
 
   ul {
-    padding-left: 0;
+    padding-inline-start: 0;
     list-style: none;
   }
 
@@ -137,7 +133,7 @@
   }
 
   .text-right {
-    text-align: right;
+    text-align: end;
   }
 
   .skills-badges{
@@ -194,8 +190,7 @@
   .skill-options .btn-block {
     box-sizing: border-box;
     @apply block;
-    padding-left: 0;
-    padding-right: 0;
+    padding-inline: 0;
     width: 100%;
   }
 
@@ -211,15 +206,19 @@
   }
 
   .skill-options .skill-winner li {
-    float: left;
-    margin-right: 1em;
+    float: inline-start;
+    margin-inline-end: 1em;
     padding-bottom: 1em;
   }
 
   .skill-options .skill-winner li a {
     background: url("/public/img/icons/16/winner.png") no-repeat;
-    padding-left: 1.5em;
+    padding-inline-start: 1.5em;
     padding-bottom: 1em;
+
+    [dir="rtl"] & {
+      background-position: right;
+    }
   }
 
   .search-skill ul.holder li.bit-input input {
@@ -328,8 +327,8 @@
     text-align: center;
     width: 120px;
     z-index: 40;
-    float: left;
-    margin-left: 20px;
+    float: inline-start;
+    margin-inline-start: 20px;
     margin-bottom: 20px;
     margin-top: 10px;
     position: relative;
@@ -349,7 +348,7 @@
     display: none;
     position: fixed;
     z-index: 1050;
-    left: 0;
+    inset-inline-start: 0;
     top: 0;
     width: 100%;
     height: 100%;
@@ -403,8 +402,8 @@
 
   .panel-heading {
     padding: 10px 15px;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+    border-start-start-radius: 3px;
+    border-start-end-radius: 3px;
     background-color: #f5f5f5;
     border-color: #ddd;
   }

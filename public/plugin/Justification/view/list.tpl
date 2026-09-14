@@ -18,7 +18,7 @@
 
     {% if list|length > 0 %}
         <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-sm">
-            <table class="w-full border-collapse text-left text-sm">
+            <table class="w-full border-collapse text-start text-sm">
                 <thead class="bg-gray-15 text-gray-70">
                     <tr>
                         <th class="px-4 py-3 font-semibold">{{ 'Name'|get_lang }}</th>
@@ -26,7 +26,7 @@
                         <th class="px-4 py-3 font-semibold">{{ 'ValidityDuration'|get_plugin_lang('Justification') }}</th>
                         <th class="px-4 py-3 font-semibold">{{ 'DateManualOn'|get_plugin_lang('Justification') }}</th>
                         {% if can_manage_documents %}
-                            <th class="px-4 py-3 text-right font-semibold">{{ 'Actions'|get_lang }}</th>
+                            <th class="px-4 py-3 text-end font-semibold">{{ 'Actions'|get_lang }}</th>
                         {% endif %}
                     </tr>
                 </thead>

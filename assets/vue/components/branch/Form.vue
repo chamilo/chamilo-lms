@@ -30,7 +30,7 @@
 
       <div
         v-if="showAdvanced"
-        class="mt-4 flex flex-col gap-2 border-l-2 border-gray-200 pl-4"
+        class="mt-4 flex flex-col gap-2 border-s-2 border-gray-200 ps-4"
       >
         <BaseSelect
           id="item_parent"

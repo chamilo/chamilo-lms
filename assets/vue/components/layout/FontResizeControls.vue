@@ -19,7 +19,7 @@
       />
       <span
         v-if="0 !== fontSizeStep"
-        class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-white"
+        class="absolute -end-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-white"
         aria-hidden="true"
       >
         {{ currentStepLabel }}
@@ -28,7 +28,7 @@
 
     <div
       v-if="isMenuOpen"
-      class="absolute right-0 top-full z-50 mt-2 w-44 rounded-2xl border border-gray-200 bg-white p-2 shadow-lg"
+      class="absolute end-0 top-full z-50 mt-2 w-44 rounded-2xl border border-gray-200 bg-white p-2 shadow-lg"
       role="menu"
       @click.stop
     >

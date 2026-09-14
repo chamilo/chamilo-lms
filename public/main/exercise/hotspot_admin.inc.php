@@ -782,7 +782,7 @@ if (isset($modifyAnswers)) {
                                     </select>
                                 </p>
                             </td>
-                            <td align="left">
+                            <td style="text-align:start;">
                                 <p>
                                     <textarea class="form-control" wrap="virtual" rows="3" cols="25"
                                               name="comment[<?php echo $i; ?>]"
@@ -811,7 +811,7 @@ if (isset($modifyAnswers)) {
                                     <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="noerror"/>
                                     <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="0;0|0|0"/>
                                 </td>
-                                <td align="left">
+                                <td style="text-align:start;">
                                     <textarea class="form-control" wrap="virtual" rows="3" cols="25"
                                               name="comment[<?php echo $i; ?>]"
                                               style="width: 100%"><?php echo Security::remove_XSS($comment[$i]); ?></textarea>
@@ -847,7 +847,7 @@ if (isset($modifyAnswers)) {
                                 <input class="form-control" type="text" name="reponse[<?php echo $i; ?>]"
                                        value="<?php echo isset($reponse[$i]) ? Security::remove_XSS($reponse[$i]) : ''; ?>"/>
                             </td>
-                            <td colspan="2" align="left">
+                            <td colspan="2" style="text-align:start;">
                                 <textarea class="form-control" wrap="virtual" rows="3" cols="25"
                                           name="comment[<?php echo $i; ?>]"
                                           style="width: 100%"><?php echo isset($comment[$i]) ? Security::remove_XSS($comment[$i]) : ''; ?></textarea>
@@ -885,7 +885,7 @@ if (isset($modifyAnswers)) {
 
                         $form->setDefaults(['comment['.$i.']' => $commentValue]);
                         $return = $form->returnForm(); ?>
-                        <td colspan="2" align="left"><?php echo $return; ?></td>
+                        <td colspan="2" style="text-align:start;"><?php echo $return; ?></td>
                         <?php
                     } ?>
                     <td>
@@ -983,7 +983,7 @@ if (isset($modifyAnswers)) {
                         <td colspan="2">
                             <?php echo get_lang('The learner made no mistake'); ?>
                         </td>
-                        <td colspan="2" align="left">
+                        <td colspan="2" style="text-align:start;">
                             <textarea class="form-control" wrap="virtual" rows="3" cols="25"
                                       name="comment_noerror"><?php echo isset($comment_noerror) ? Security::remove_XSS($comment_noerror): ''; ?></textarea>
                         </td>

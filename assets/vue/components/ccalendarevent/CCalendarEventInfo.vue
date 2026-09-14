@@ -11,7 +11,10 @@
 
     <hr />
 
-    <div v-html="event.content" />
+    <div
+      dir="auto"
+      v-html="event.content"
+    />
 
     <CalendarEventSubscriptionsInfo
       v-if="type.subscription === event.invitationType"

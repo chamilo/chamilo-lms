@@ -56,11 +56,11 @@ if (isset($_GET['id'])) {
 <body style="background:white;" >
 
 <?php if ('template' == $mod) { ?>
-<div id="baseHtmltoRender" style="position:absolute;left:0px;width:650px;" >
+<div id="baseHtmltoRender" style="position:absolute;inset-inline-start:0px;width:650px;" >
 <?php } ?>
 
 <?php if ('page' == $mod) { ?>
-<div id="baseHtmltoRender" style="position:absolute;left:0px;width:700px;" >
+<div id="baseHtmltoRender" style="position:absolute;inset-inline-start:0px;width:700px;" >
 <?php } ?>
 
 <?php
@@ -153,13 +153,13 @@ echo '?v='.$version.'" rel="stylesheet" />';
 </div>
 
 <?php if ('template' == $mod) { ?>
-    <div id="renderHtmlCanvas" style="position:absolute;left:0px;top:0px;width:100px;height:140px;" >
+    <div id="renderHtmlCanvas" style="position:absolute;inset-inline-start:0px;top:0px;width:100px;height:140px;" >
         <img id="imgHtmlCanvas" style="width:100%;" src="img/cube-oe.gif" />
     </div>
 <?php } ?>
 
 <?php if ('page' == $mod) { ?>
-    <div id="renderHtmlCanvas" style="position:absolute;left:0px;top:0px;width:200px;height:280px;" >
+    <div id="renderHtmlCanvas" style="position:absolute;inset-inline-start:0px;top:0px;width:200px;height:280px;" >
         <img id="imgHtmlCanvas" style="width:100%;" id="imgHtmlCanvas" src="img/cube-oe.gif" />
     </div>
 <?php } ?>

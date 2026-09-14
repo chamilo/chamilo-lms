@@ -57,7 +57,7 @@
                 >
                   <div class="truncate">
                     <span class="font-medium">{{ f.name }}</span>
-                    <span class="text-gray-500 ml-2">({{ humanSize(f.size) }})</span>
+                    <span class="text-gray-500 ms-2">({{ humanSize(f.size) }})</span>
                   </div>
                   <button
                     class="text-gray-400 hover:text-red-600"
@@ -165,7 +165,7 @@
 
         <div
           v-if="isUploading"
-          class="text-xs text-gray-500 mt-2 text-right"
+          class="text-xs text-gray-500 mt-2 text-end"
         >
           {{ t("Uploading... please keep this tab open.") }}
         </div>

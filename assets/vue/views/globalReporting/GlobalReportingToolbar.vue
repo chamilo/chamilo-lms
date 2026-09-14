@@ -33,7 +33,7 @@
 
     <div
       v-if="showCourseQuestionTabs"
-      class="ml-2 inline-flex items-center rounded-full border border-gray-25 bg-gray-10 p-1"
+      class="ms-2 inline-flex items-center rounded-full border border-gray-25 bg-gray-10 p-1"
     >
       <router-link
         :to="{ name: 'GlobalReportingQuestionStats' }"
@@ -51,7 +51,7 @@
 
     <div
       v-if="showPrint || showCsv"
-      class="ml-auto flex items-center gap-2"
+      class="ms-auto flex items-center gap-2"
     >
       <BaseButton
         v-if="showPrint"

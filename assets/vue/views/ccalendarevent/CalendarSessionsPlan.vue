@@ -66,7 +66,7 @@
             <div
               v-for="w in 52"
               :key="`w-${w}`"
-              class="text-xs text-center px-1 py-2 border-l"
+              class="text-xs text-center px-1 py-2 border-s"
             >
               {{ w }}
             </div>
@@ -103,7 +103,7 @@
               </div>
             </div>
 
-            <div class="weeks-cell border-l">
+            <div class="weeks-cell border-s">
               <div
                 v-if="showBar(s)"
                 class="bar"

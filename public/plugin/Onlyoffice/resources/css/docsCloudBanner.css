@@ -37,7 +37,7 @@
     color: #000;
     font-size: 14px;
     text-align: justify;
-    padding-left: 15px;
+    padding-inline-start: 15px;
 }
 
 #onlyofficeDocsCloudBannerContentText h2 {
@@ -59,7 +59,7 @@
 
 @media (max-width: 580px) {
     #onlyofficeDocsCloudBannerPicWrapper {
-        padding: 20px 0 0 5px;
+        padding-block: 20px 0; padding-inline: 5px 0;
         width: 30%;
     }
     #onlyofficeDocsCloudBannerContent {
@@ -68,12 +68,12 @@
     }
     #onlyofficeDocsCloudBannerContentText {
         width: 100%;
-        padding-right: 5px;
+        padding-inline-end: 5px;
     }
     #onlyofficeDocsCloudBannerContentButtonWrapper {
         width: 100%;
-        padding: 15px 0 15px 15px;
-        text-align: left;
+        padding-block: 15px; padding-inline: 15px 0;
+        text-align: start;
     }
     #onlyofficeDocsCloudBannerContent {
         flex-direction: column;

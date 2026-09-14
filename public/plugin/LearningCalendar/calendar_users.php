@@ -128,13 +128,13 @@ if (empty($users)) {
     $content .= '<div class="p-8 text-center text-gray-50">'.get_lang('No data available').'</div>';
 } else {
     $content .= '<div class="overflow-x-auto">';
-    $content .= '<table class="w-full text-left text-sm">';
+    $content .= '<table class="w-full text-start text-sm">';
     $content .= '<thead class="bg-gray-15 text-xs uppercase tracking-wide text-gray-50">';
     $content .= '<tr>';
     $content .= '<th class="px-6 py-3">'.get_lang('First name').'</th>';
     $content .= '<th class="px-6 py-3">'.get_lang('Last name').'</th>';
     $content .= '<th class="px-6 py-3">'.get_lang('Username').'</th>';
-    $content .= '<th class="px-6 py-3 text-right">'.get_lang('Actions').'</th>';
+    $content .= '<th class="px-6 py-3 text-end">'.get_lang('Actions').'</th>';
     $content .= '</tr>';
     $content .= '</thead><tbody class="divide-y divide-gray-25">';
     foreach ($users as $user) {
@@ -150,7 +150,7 @@ if (empty($users)) {
         $content .= '<td class="px-6 py-3 font-medium text-gray-90">'.Security::remove_XSS($user['firstname'] ?? '').'</td>';
         $content .= '<td class="px-6 py-3 text-gray-70">'.Security::remove_XSS($user['lastname'] ?? '').'</td>';
         $content .= '<td class="px-6 py-3 text-gray-50">'.Security::remove_XSS($user['username'] ?? '').'</td>';
-        $content .= '<td class="px-6 py-3 text-right">';
+        $content .= '<td class="px-6 py-3 text-end">';
         $content .= '<form method="post" action="'.$escapedPostUrl.'" class="inline-block" onsubmit="return confirm('.$removeConfirm.');">';
         $content .= '<input type="hidden" name="sec_token" value="'.$escapedToken.'">';
         $content .= '<input type="hidden" name="form_action" value="remove_user">';

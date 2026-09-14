@@ -288,7 +288,7 @@ onMounted(() => {
                 :title="t('Add')"
                 @click="moveToGroup(user)"
               >
-                <span class="mdi mdi-chevron-right ch-tool-icon" />
+                <span class="mdi mdi-chevron-right rtl:rotate-180 ch-tool-icon" />
               </button>
             </li>
           </ul>
@@ -304,7 +304,7 @@ onMounted(() => {
           :title="t('Add all')"
           @click="moveAllToGroup"
         >
-          <span class="mdi mdi-chevron-double-right text-green-700" />
+          <span class="mdi mdi-chevron-double-right rtl:rotate-180 text-green-700" />
         </button>
         <button
           type="button"
@@ -312,7 +312,7 @@ onMounted(() => {
           :title="t('Remove all')"
           @click="moveAllFromGroup"
         >
-          <span class="mdi mdi-chevron-double-left text-red-700" />
+          <span class="mdi mdi-chevron-double-left rtl:rotate-180 text-red-700" />
         </button>
       </div>
 
@@ -333,7 +333,7 @@ onMounted(() => {
                 :title="t('Remove')"
                 @click="moveFromGroup(user)"
               >
-                <span class="mdi mdi-chevron-left ch-tool-icon" />
+                <span class="mdi mdi-chevron-left rtl:rotate-180 ch-tool-icon" />
               </button>
               <span>{{ user.label }}</span>
             </li>

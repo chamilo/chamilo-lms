@@ -6,7 +6,7 @@
     }
 
     &__category-list {
-      @apply absolute top-2 left-2 flex flex-wrap gap-1 pointer-events-none;
+      @apply absolute top-2 start-2 flex flex-wrap gap-1 pointer-events-none;
     }
 
     &__title {
@@ -26,10 +26,10 @@
     }
 
     &__notification-button {
-      @apply absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-50 pointer-events-auto hover:bg-white/90;
+      @apply absolute end-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-50 pointer-events-auto hover:bg-white/90;
 
       &--badge::before {
-        @apply absolute right-0 top-0 h-4 w-4 rounded-full bg-danger content-[""];
+        @apply absolute end-0 top-0 h-4 w-4 rounded-full bg-danger content-[""];
       }
     }
 
@@ -42,7 +42,7 @@
     }
 
     &__language {
-      @apply absolute bottom-2 right-2;
+      @apply absolute bottom-2 end-2;
     }
   }
 }

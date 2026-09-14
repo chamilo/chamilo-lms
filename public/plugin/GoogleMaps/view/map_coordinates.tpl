@@ -6,14 +6,14 @@
             <p class="text-gray-500">{{ users_coordinates_map_help }}</p>
         </div>
         <a class="btn btn--secondary" href="{{ admin_url }}">
-            <em class="mdi mdi-arrow-left"></em> {{ 'Back'|get_lang }}
+            <em class="mdi mdi-arrow-left rtl:rotate-180"></em> {{ 'Back'|get_lang }}
         </a>
     </div>
 </section>
 
 {% if warnings is not empty %}
     <section class="bg-yellow-50 border border-yellow-200 text-yellow-900 rounded-2xl p-4 mb-6">
-        <ul class="list-disc ml-5">
+        <ul class="list-disc ms-5">
             {% for warning in warnings %}
                 <li>{{ warning|raw }}</li>
             {% endfor %}

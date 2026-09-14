@@ -113,7 +113,7 @@ class BlockDaily extends Block
                     $course[3] = get_lang('Not available');
                 }
                 foreach ($course as $cell) {
-                    $data_table .= '<td align="right">'.$cell.'</td>';
+                    $data_table .= '<td style="text-align:end;">'.$cell.'</td>';
                 }
                 $data_table .= '</tr>';
                 $i++;
@@ -124,7 +124,7 @@ class BlockDaily extends Block
         }
         $content .= $data_table;
         if (!empty($course_data)) {
-            $content .= '<div style="text-align:right;margin-top:10px;">
+            $content .= '<div style="text-align:end;margin-top:10px;">
             <a href="'.api_get_path(WEB_CODE_PATH).'my_space/course.php">'.get_lang('See more').'</a></div>';
         }
         //$content .= '</div>';

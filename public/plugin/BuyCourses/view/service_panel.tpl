@@ -21,7 +21,7 @@
     .bc-empty {padding: 20px; border: 1px dashed #dbe5ee; border-radius: 20px; background: #f7fafc; color: #8a96a8; font-size: 14px;}
     .bc-service-list {display: grid; gap: 18px;}
     .bc-service-card {display: grid; grid-template-columns: 240px minmax(0, 1fr); overflow: hidden; border: 1px solid #e6edf3; border-radius: 24px; background: #fff; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);}
-    .bc-service-card__image-wrap {width: 240px; min-height: 100%; background: #f3f6f9; border-right: 1px solid #e6edf3;}
+    .bc-service-card__image-wrap {width: 240px; min-height: 100%; background: #f3f6f9; border-inline-end: 1px solid #e6edf3;}
     .bc-service-card__image {display: block; width: 100%; height: 100%; min-height: 230px; object-fit: cover;}
     .bc-service-card__body {min-width: 0; padding: 22px;}
     .bc-service-card__top {display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;}
@@ -48,10 +48,10 @@
     .bc-actions {display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px;}
     .bc-table-wrap {overflow-x: auto;}
     .bc-table {width: 100%; border-collapse: collapse; font-size: 14px;}
-    .bc-table th {padding: 14px 16px; background: #f7fafc; color: #8a96a8; font-weight: 800; text-align: left; white-space: nowrap;}
+    .bc-table th {padding: 14px 16px; background: #f7fafc; color: #8a96a8; font-weight: 800; text-align: start; white-space: nowrap;}
     .bc-table td {padding: 14px 16px; border-top: 1px solid #e6edf3; color: #111827; vertical-align: top;}
     .bc-table td.bc-muted {color: #8a96a8;}
-    @media (max-width: 992px) {.bc-service-card {grid-template-columns: 1fr;} .bc-service-card__image-wrap {width: 100%; border-right: 0; border-bottom: 1px solid #e6edf3;} .bc-service-card__image {height: 220px; min-height: 220px;} .bc-benefits__grid {grid-template-columns: 1fr;} .bc-recurring-box {align-items: flex-start; flex-direction: column;}}
+    @media (max-width: 992px) {.bc-service-card {grid-template-columns: 1fr;} .bc-service-card__image-wrap {width: 100%; border-inline-end: 0; border-bottom: 1px solid #e6edf3;} .bc-service-card__image {height: 220px; min-height: 220px;} .bc-benefits__grid {grid-template-columns: 1fr;} .bc-recurring-box {align-items: flex-start; flex-direction: column;}}
     @media (max-width: 640px) {.bc-panel {padding: 20px 12px;} .bc-section {padding: 20px; border-radius: 22px;} .bc-meta-grid {grid-template-columns: 1fr;} .bc-tabs {align-items: stretch;} .bc-tabs__links, .bc-tabs .bc-button {width: 100%;} .bc-tab, .bc-button {width: 100%;}}
 </style>
 

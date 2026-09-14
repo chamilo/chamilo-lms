@@ -3,7 +3,7 @@
     width: auto;
     z-index: 9000;
     bottom: 0px;
-    right: 20px;
+    inset-inline-end: 20px;
     display: block;
 }
 
@@ -16,7 +16,7 @@
 
 #chatboxtitlemain {
     font-weight: normal;
-    float: left;
+    float: inline-start;
     font-size: 12px;
     padding-top: 2px;
     cursor: pointer;
@@ -25,7 +25,7 @@
 .user_status_main {
     width: 18px;
     display: inline;
-    float: left;
+    float: inline-start;
 }
 
 .chatbox {
@@ -44,16 +44,16 @@
     background-color: #4080ff;
     color: #fff;
     width: 80%;
-    float: right !important;
+    float: inline-end !important;
     border-radius: 12px;
 }
 
 .chatboxmessage {
     background-color: #ebedf2;
     color: #2a2f35;
-    margin-left: 1em;
+    margin-inline-start: 1em;
     width: 80%;
-    float: left;
+    float: inline-start;
     border-radius: 12px;
 }
 
@@ -86,12 +86,12 @@
 .user_status {
     width: 8px;
     display: inline-block;
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 .chatimage {
     display: inline-block;
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 .chatboxtitle {
@@ -101,7 +101,7 @@
     width: auto;
     cursor: pointer;
     overflow: hidden;
-    padding-left: 2px;
+    padding-inline-start: 2px;
     text-overflow: ellipsis;
     white-space: nowrap;
     line-height: 10px;
@@ -165,17 +165,17 @@
 }
 
 .chatboxinfo {
-    margin-left: -1em;
+    margin-inline-start: -1em;
     color: #666666;
 }
 
 .chatboxmessagefrom {
-    margin-left: -1em;
+    margin-inline-start: -1em;
     font-weight: bold;
 }
 
 .chatboxoptions {
-    float: right;
+    float: inline-end;
 }
 
 .chatboxoptions a {
@@ -190,7 +190,7 @@
 }
 
 .chatbox_checks {
-    float: right;
+    float: inline-end;
 }
 
 .chatbox_checked {

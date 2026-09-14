@@ -526,7 +526,7 @@ Display::display_header(get_lang('PendingAttempts'));
             <?php } else { ?>
                 <div class="overflow-x-auto">
                     <table class="w-full table-auto border-collapse text-sm">
-                        <thead class="bg-gray-15 text-left text-gray-90">
+                        <thead class="bg-gray-15 text-start text-gray-90">
                         <tr>
                             <th class="px-4 py-3"><?php echo pending_exercise_h(get_lang('Course')); ?></th>
                             <th class="px-4 py-3"><?php echo pending_exercise_h(get_lang('Exercise')); ?></th>
@@ -544,7 +544,7 @@ Display::display_header(get_lang('PendingAttempts'));
                             <th class="px-4 py-3"><?php echo pending_exercise_h(get_lang('Score')); ?></th>
                             <th class="px-4 py-3"><?php echo pending_exercise_h(get_lang('IP')); ?></th>
                             <th class="px-4 py-3"><?php echo pending_exercise_h(get_lang('Status')); ?></th>
-                            <th class="px-4 py-3 text-right"><?php echo pending_exercise_h(get_lang('Actions')); ?></th>
+                            <th class="px-4 py-3 text-end"><?php echo pending_exercise_h(get_lang('Actions')); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -591,7 +591,7 @@ Display::display_header(get_lang('PendingAttempts'));
                                 <td class="px-4 py-3"><?php echo pending_exercise_h($row['score'].' / '.$row['max_score']); ?></td>
                                 <td class="px-4 py-3"><?php echo pending_exercise_h($row['user_ip']); ?></td>
                                 <td class="px-4 py-3"><?php echo pending_exercise_h($statusLabel); ?></td>
-                                <td class="px-4 py-3 text-right">
+                                <td class="px-4 py-3 text-end">
                                     <a href="<?php echo pending_exercise_h($reportUrl); ?>" class="btn btn--primary btn--sm">
                                         <?php echo pending_exercise_h(get_lang('View')); ?>
                                     </a>

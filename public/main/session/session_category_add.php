@@ -310,7 +310,7 @@ if (!empty($return)) {
                             type="submit"
                             value="<?php echo get_lang('Add category'); ?>"
                         >
-                            <em class="fa fa-plus mr-2"></em>
+                            <em class="fa fa-plus me-2"></em>
                             <span><?php echo get_lang('Add category'); ?></span>
                         </button>
                     </div>

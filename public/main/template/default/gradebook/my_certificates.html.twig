@@ -5,18 +5,18 @@
             <thead>
                 <tr>
                     <th>{{ 'Course'|get_lang }}</th>
-                    <th class="text-right">{{ 'Score'|get_lang }}</th>
+                    <th class="text-end">{{ 'Score'|get_lang }}</th>
                     <th class="text-center">{{ 'Date'|get_lang }}</th>
-                    <th class="text-right">&nbsp;</th>
+                    <th class="text-end">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
                 {% for row in course_list %}
                     <tr>
                         <td>{{ row.course }}</td>
-                        <td class="text-right">{{ row.score }}</td>
+                        <td class="text-end">{{ row.score }}</td>
                         <td class="text-center">{{ row.date }}</td>
-                        <td class="text-right">
+                        <td class="text-end">
                             {% if row.link is not empty %}
                                 <a href="{{ row.link }}" target="_blank" rel="noopener" class="btn btn--plain">
                                     <em class="fa fa-external-link"></em> {{ 'Certificate'|get_lang }}
@@ -38,9 +38,9 @@
                 <tr>
                     <th>{{ 'Session'|get_lang }}</th>
                     <th>{{ 'Course'|get_lang }}</th>
-                    <th class="text-right">{{ 'Score'|get_lang }}</th>
+                    <th class="text-end">{{ 'Score'|get_lang }}</th>
                     <th class="text-center">{{ 'Date'|get_lang }}</th>
-                    <th class="text-right">&nbsp;</th>
+                    <th class="text-end">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,9 +48,9 @@
                     <tr>
                         <td>{{ row.session }}</td>
                         <td>{{ row.course }}</td>
-                        <td class="text-right">{{ row.score }}</td>
+                        <td class="text-end">{{ row.score }}</td>
                         <td class="text-center">{{ row.date }}</td>
-                        <td class="text-right">
+                        <td class="text-end">
                             {% if row.link is not empty %}
                                 <a href="{{ row.link }}" target="_blank" rel="noopener" class="btn btn--plain">
                                     <em class="fa fa-external-link"></em> {{ 'Certificate'|get_lang }}

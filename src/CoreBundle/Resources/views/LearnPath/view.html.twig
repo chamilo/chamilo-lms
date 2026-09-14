@@ -39,7 +39,7 @@
                 class="lp-modern-view flex h-screen min-h-screen w-full overflow-hidden bg-gray-20 text-gray-90 {{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }} {{ toc_hidden == 1 ? 'lp-toc-hidden' : '' }}"
         >
             {% if render_left_zone %}
-                <div id="learning_path_left_zone" class="sidebar-scorm h-full overflow-hidden border-r border-gray-25 bg-white" aria-hidden="{{ toc_hidden == 1 ? 'true' : 'false' }}">
+                <div id="learning_path_left_zone" class="sidebar-scorm h-full overflow-hidden border-e border-gray-25 bg-white" aria-hidden="{{ toc_hidden == 1 ? 'true' : 'false' }}">
                     <div class="lp-view-zone-container">
                         <div id="scorm-info">
                             <div id="panel-scorm">
@@ -51,7 +51,10 @@
                                             <div class="media-author-avatar">
                                                 {{ lp_preview_image }}
                                             </div>
-                                            <div class="media-author-description">
+                                            <div
+                                                class="media-author-description"
+                                                dir="auto"
+                                            >
                                                 {{ lp_author }}
                                             </div>
                                         </div>
@@ -131,7 +134,7 @@
                                                     {% endfor %}
                                                 {% endif %}
                                             </div>
-                                            <div class="col-xs-6 text-right">
+                                            <div class="col-xs-6 text-end">
                                                 {{ "%s points"|trans|format(gamification_points) }}
                                             </div>
                                         </div>
@@ -165,7 +168,7 @@
                 <div class="lp-view-zone-container flex h-full flex-col overflow-hidden bg-white">
                     <div class="lp-view-tabs relative flex min-h-0 flex-1 flex-col overflow-visible bg-white">
                         <div id="navTabBar" class="nav-tabs-bar">
-                            <div class="text-left">
+                            <div class="text-start">
                                 <h2 class="text-h3">{{ lp_title_scorm }}</h2>
 
                                 {% if lp_flow_next_button is defined and lp_flow_next_button is not empty %}
@@ -225,7 +228,7 @@
                                                         id="lp-video-next-button"
                                                         class="inline-flex min-h-10 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-transparent bg-[rgb(var(--color-primary-base))] px-4 py-2 text-sm font-semibold text-white hover:brightness-95"
                                                 >
-                                                    <span class="mdi mdi-arrow-right-circle-outline" aria-hidden="true"></span>
+                                                    <span class="mdi mdi-arrow-right-circle-outline rtl:rotate-180" aria-hidden="true"></span>
                                                     {{ "Next step"|trans }}
                                                 </button>
                                                 <button
@@ -274,7 +277,7 @@
                                                     title="AI study helper"
                                             >
                                                 <i class="mdi mdi-robot-happy-outline text-2xl" aria-hidden="true"></i>
-                                                <span class="mdi mdi-auto-fix absolute -right-1 -top-1 rounded-full bg-white px-1 py-0.5 text-xs leading-none text-primary shadow-sm" aria-hidden="true"></span>
+                                                <span class="mdi mdi-auto-fix absolute -end-1 -top-1 rounded-full bg-white px-1 py-0.5 text-xs leading-none text-primary shadow-sm" aria-hidden="true"></span>
                                                 <span class="pointer-events-none absolute left-1/2 top-full mt-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-90 px-2.5 py-1 text-xs font-medium text-white shadow-lg group-hover:block group-focus:block">
                                                     AI study helper
                                                 </span>
@@ -302,7 +305,7 @@
                                                         <i class="mdi mdi-close text-xl" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
-                                                <div class="lp-ai-learning-helper-body min-h-0 overflow-y-auto pr-1">
+                                                <div class="lp-ai-learning-helper-body min-h-0 overflow-y-auto pe-1">
                                                     <div class="mb-4 rounded-xl border border-gray-25 bg-gray-15 p-3">
                                                         <div class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-50">Selected text</div>
                                                         <div id="lp-ai-learning-helper-selection" class="max-h-32 overflow-auto text-sm text-gray-90"></div>
@@ -339,7 +342,7 @@
                                                     </div>
                                                     <div id="lp-ai-learning-helper-answer-wrap" class="hidden rounded-xl border border-gray-25 bg-white p-4">
                                                         <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-50">AI response</div>
-                                                        <div id="lp-ai-learning-helper-answer" class="max-h-[min(46vh,520px)] overflow-y-auto whitespace-pre-wrap pr-1 text-sm leading-6 text-gray-90"></div>
+                                                        <div id="lp-ai-learning-helper-answer" class="max-h-[min(46vh,520px)] overflow-y-auto whitespace-pre-wrap pe-1 text-sm leading-6 text-gray-90"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1119,9 +1122,9 @@
                     "  overflow-x: hidden !important;",
                     "}",
                     "body {",
-                    "  margin-left: 0 !important;",
-                    "  padding-left: 0 !important;",
-                    "  padding-right: 18px !important;",
+                    "  margin-inline-start: 0 !important;",
+                    "  padding-inline-start: 0 !important;",
+                    "  padding-inline-end: 18px !important;",
                     "}",
                     "#main_content, .container, .container-fluid, .lp_item_content, .document-view, .exercise-overview {",
                     "  box-sizing: border-box !important;",

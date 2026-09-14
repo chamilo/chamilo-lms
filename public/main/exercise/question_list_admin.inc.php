@@ -181,9 +181,9 @@ if (isset($exerciseId) && $exerciseId > 0) {
                 <div class="col-sm-5"><strong>'.get_lang('Questions').'</strong></div>
                 <div class="col-sm-1 text-center"><strong>'.get_lang('Type').'</strong></div>
                 <div class="col-sm-2"><strong>'.get_lang('Category').'</strong></div>
-                <div class="col-sm-1 text-right"><strong>'.get_lang('Difficulty').'</strong></div>
-                <div class="col-sm-1 text-right"><strong>'.get_lang('Score').'</strong></div>
-                <div class="col-sm-2 text-right"><strong>'.get_lang('Detail').'</strong></div>
+                <div class="col-sm-1 text-end"><strong>'.get_lang('Difficulty').'</strong></div>
+                <div class="col-sm-1 text-end"><strong>'.get_lang('Score').'</strong></div>
+                <div class="col-sm-2 text-end"><strong>'.get_lang('Detail').'</strong></div>
             </div>
             <div id="question_list">
         ';
@@ -312,15 +312,15 @@ if (isset($exerciseId) && $exerciseId > 0) {
                                     <span class="xs">'.get_lang('Category').' </span>'
                                     .cut($questionCategory, 42).'
                                 </div>
-                                <div class="level text-right col-sm-1 col-xs-6">
+                                <div class="level text-end col-sm-1 col-xs-6">
                                     <span class="xs">'.get_lang('Difficulty').' </span>'
                                     .$questionLevel.'
                                 </div>
-                                <div class="score text-right col-sm-1 col-xs-6">
+                                <div class="score text-end col-sm-1 col-xs-6">
                                     <span class="xs">'.get_lang('Score').' </span>'
                                     .$questionScore.'
                                 </div>
-                                <div class="btn-actions text-right col-sm-2 col-xs-6">
+                                <div class="btn-actions text-end col-sm-2 col-xs-6">
                                     <div class="edition">'.$btnActions.'</div>
                                 </div>
                             </div>

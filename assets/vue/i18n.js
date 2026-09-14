@@ -64,6 +64,16 @@ function findRealParentLocale(code, keys) {
   return parentIso && keys.includes(parentIso) ? parentIso : null
 }
 
+// Each entry in window.languages already carries its resolved 'rtl'/'ltr' direction
+// (TwigListener::__invoke() / LanguageHelper::getTextDirection() -- sub-languages
+// inherit their parent's direction server-side, so no extra resolution is needed here).
+function findTextDirection(code) {
+  const languages = window.languages || []
+  const entry = languages.find((l) => l.isocode === code)
+
+  return entry?.direction === "rtl" ? "rtl" : "ltr"
+}
+
 // Build fallback chain (prefer the real parent language, then the bare base
 // code if a bundle for it happens to exist, then English)
 function buildFallbackChain(base, resolved, keys) {
@@ -143,6 +153,7 @@ export async function setLocale(code) {
 
   if (typeof document !== "undefined") {
     document.documentElement.dataset.lang = target.resolved
+    document.documentElement.dir = findTextDirection(target.resolved)
   }
 }
 

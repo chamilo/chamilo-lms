@@ -368,7 +368,7 @@ switch ($action) {
             $table = new SortableTableFromArray($documentAndFolders, 1, count($documentAndFolders));
             $table->set_header(0, get_lang('Type'), false, [], ['class' => 'text-center', 'width' => '60px']);
             $table->set_header(1, get_lang('Name'), false);
-            $table->set_header(2, get_lang('Size'), false, [], ['class' => 'text-right', 'style' => 'width: 80px;']);
+            $table->set_header(2, get_lang('Size'), false, [], ['class' => 'text-end', 'style' => 'width: 80px;']);
             $table->set_header(3, get_lang('Date'), false, [], ['class' => 'text-center', 'style' => 'width: 200px;']);
             $table->set_header(4, get_lang('Detail'), false, [], ['class' => 'text-center']);
             $table->display();

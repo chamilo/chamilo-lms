@@ -135,7 +135,7 @@ function displayForm()
     $html .= '<tr><td width="15%"><b>'.get_lang(
             'Origin courses from session'
         ).':</b></td>';
-    $html .= '<td width="10%" align="left">'.api_get_session_name(
+    $html .= '<td width="10%" style="text-align:start;">'.api_get_session_name(
             $sessionId
         ).'</td>';
     $html .= '<td width="50%">';
@@ -145,7 +145,7 @@ function displayForm()
     $html .= '<tr><td width="15%"><b>'.get_lang(
             'Destination courses from session'
         ).':</b></td>';
-    $html .= '<td width="10%" align="left"><div id="ajax_sessions_list_destination">';
+    $html .= '<td width="10%" style="text-align:start;"><div id="ajax_sessions_list_destination">';
     $html .= '<select name="sessions_list_destination" onchange="javascript: xajax_searchCourses(this.value,\'destination\');">';
     if (empty($sessions)) {
         $html .= '<option value = "0">'.get_lang(
@@ -384,7 +384,7 @@ if (('course_select_form' === $action) ||
 
         CourseSelectForm :: display_form($course, $hiddenFields, true);
 
-        echo '<div style="float:right"><a href="javascript:window.history.go(-1);">'.
+        echo '<div style="float:inline-end"><a href="javascript:window.history.go(-1);">'.
             Display::getMdiIcon(
                 ActionIcon::BACK,
                 'ch-tool-icon',

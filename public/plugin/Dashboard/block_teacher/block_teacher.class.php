@@ -110,8 +110,8 @@ class BlockTeacher extends Block
                 $teachers_table .= '
                                     <tr class="'.$class_tr.'">
                                         <td>'.api_get_person_name($firstname, $lastname).' ('.$username.')</td>
-                                        <td align="right">'.$time_on_platform.'</td>
-                                        <td align="right">'.$last_connection.'</td>
+                                        <td style="text-align:end;">'.$time_on_platform.'</td>
+                                        <td style="text-align:end;">'.$last_connection.'</td>
                                     </tr>
                                     ';
                 $i++;
@@ -124,7 +124,7 @@ class BlockTeacher extends Block
         $content = $teachers_table;
 
         if (count($teachers) > 0) {
-            $content .= '<div style="text-align:right;margin-top:10px;">
+            $content .= '<div style="text-align:end;margin-top:10px;">
             <a href="'.api_get_path(WEB_CODE_PATH).'my_space/index.php?view=admin">'.get_lang('See more').'</a></div>';
         }
 
@@ -168,7 +168,7 @@ class BlockTeacher extends Block
                 }
                 $teachers_table .= '<tr class="'.$class_tr.'">
                                         <td>'.api_get_person_name($firstname, $lastname).' ('.$username.')</td>
-                                        <td align="right">'.$time_on_platform.'</td>
+                                        <td style="text-align:end;">'.$time_on_platform.'</td>
                                     </tr>';
 
                 $i++;
@@ -179,7 +179,7 @@ class BlockTeacher extends Block
         }
         $content .= $teachers_table;
         if (count($teachers) > 0) {
-            $content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'my_space/teachers.php">'.get_lang('See more').'</a></div>';
+            $content .= '<div style="text-align:end;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'my_space/teachers.php">'.get_lang('See more').'</a></div>';
         }
 
         return $content;

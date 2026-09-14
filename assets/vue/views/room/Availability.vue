@@ -97,7 +97,7 @@
         </Column>
         <Column :header="t('Conflicts')">
           <template #body="slotProps">
-            <ul class="list-disc pl-4">
+            <ul class="list-disc ps-4">
               <li
                 v-for="(conflict, idx) in slotProps.data.conflicts"
                 :key="idx"

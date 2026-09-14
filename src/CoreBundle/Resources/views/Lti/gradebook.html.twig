@@ -10,7 +10,7 @@
                     href="{{ backUrl }}"
                     class="mb-6 inline-flex items-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2 text-body-2 font-semibold text-gray-90 shadow-sm transition hover:border-primary hover:text-primary"
             >
-                <span class="mdi mdi-arrow-left text-lg" aria-hidden="true"></span>
+                <span class="mdi mdi-arrow-left rtl:rotate-180 text-lg" aria-hidden="true"></span>
                 <span>{{ 'Back'|trans }}</span>
             </a>
 
@@ -125,10 +125,10 @@
 
           wrapper.find("table").removeClass("table-fixed").addClass("w-full table-auto border-separate border-spacing-y-4");
           wrapper.find("tr").addClass("align-top");
-          wrapper.find("th").addClass("pb-2 text-left text-body-2 font-semibold text-gray-90");
+          wrapper.find("th").addClass("pb-2 text-start text-body-2 font-semibold text-gray-90");
           wrapper.find("td").addClass("align-top");
 
-          wrapper.find("table tr td:first-child").addClass("w-64 pr-6 align-top text-body-2 font-semibold text-gray-90");
+          wrapper.find("table tr td:first-child").addClass("w-64 pe-6 align-top text-body-2 font-semibold text-gray-90");
           wrapper.find("table tr td:last-child").addClass("align-top");
 
           wrapper.find("table tr:first-child td").addClass("pt-3");

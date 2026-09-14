@@ -9,7 +9,7 @@
     <div
       v-for="(option, index) in options"
       :key="option.value"
-      class="flex items-center mr-2"
+      class="flex items-center me-2"
     >
       <RadioButton
         v-model="value"
@@ -19,7 +19,7 @@
       />
       <label
         :for="`${name}-${index}`"
-        class="ml-2 cursor-pointer"
+        class="ms-2 cursor-pointer"
         >{{ option.label }}</label
       >
     </div>

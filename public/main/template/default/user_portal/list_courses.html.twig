@@ -33,7 +33,7 @@
 
         {% set title %}
             {% if item.edit_actions != '' %}
-                <div class="float-right">
+                <div class="float-end">
                     {% if item.document == '' %}
                         <a class="btn btn-outline-primary btn-sm" href="{{ item.edit_actions }}">
                             {{ 'ActionIcon::EDIT' | mdi_icon }}

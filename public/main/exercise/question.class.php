@@ -1852,7 +1852,13 @@ abstract class Question
             'used' => isset($score['score']) ? $score['score'] : '',
             'missing' => isset($score['weight']) ? $score['weight'] : '',
         ];
-        $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
+        // Not using Display::page_subheader2() here: its internal Security::remove_XSS()
+        // call strips the dir attribute (HTMLPurifier's default Core attribute collection
+        // doesn't include it), so the question text is purified first and the dir="auto"
+        // wrapper is added after, letting mixed-direction question text render correctly
+        // without moving the "N. " counter prefix to the wrong side.
+        $header .= '<div class="page-header section-header mb-6"><h4 class="section-header__title">'
+            .$counterLabel.'. <span dir="auto">'.Security::remove_XSS($this->question).'</span></h4></div>';
 
         $showRibbon = true;
         // dont display score for certainty degree questions

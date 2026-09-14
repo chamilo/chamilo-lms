@@ -179,7 +179,7 @@ $htmlHeadXtra[] = <<<CSSJS
   /* Panel titles: ensure spacing between icon and text */
   #course-log-main-panel .panel-title i.ch-tool-icon,
   .panel .panel-title i.ch-tool-icon {
-    margin-right: 6px;
+    margin-inline-end: 6px;
     vertical-align: middle;
   }
 
@@ -199,7 +199,7 @@ $htmlHeadXtra[] = <<<CSSJS
     }
 
     .ch-icon-title i.ch-tool-icon {
-      margin-right: 0 !important;
+      margin-inline-end: 0 !important;
       line-height: 1;
       vertical-align: middle;
     }
@@ -333,7 +333,7 @@ $htmlHeadXtra[] = <<<CSSJS
   .user-teacher,
   .user-coachs {
     list-style: none;
-    padding-left: 0;
+    padding-inline-start: 0;
     margin: 4px 0 0;
   }
 
@@ -397,7 +397,7 @@ $htmlHeadXtra[] = <<<CSSJS
 
   .course-log-session-list {
     list-style: none;
-    padding-left: 0;
+    padding-inline-start: 0;
     margin: 0;
   }
 
@@ -452,7 +452,7 @@ $htmlHeadXtra[] = <<<CSSJS
 }
 #advanced_search_options #extra_fields .field-radiobutton {
   width: 50%;
-  float: left;
+  float: inline-start;
 }
 
 /* Inputs and selects full width */

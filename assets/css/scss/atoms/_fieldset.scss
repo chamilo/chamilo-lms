@@ -2,7 +2,7 @@
   @apply border border-solid border-support-3 rounded-lg pt-2 px-3.5 pb-3.5;
 
   &-legend {
-    @apply text-body-1 font-semibold px-1 -ml-1;
+    @apply text-body-1 font-semibold px-1 -ms-1;
   }
 
   &-content {
@@ -23,7 +23,7 @@
       @apply outline-none;
 
       .p-fieldset-toggler {
-        @apply mr-1;
+        @apply me-1;
       }
 
       &:focus,

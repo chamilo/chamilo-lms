@@ -4,11 +4,11 @@
       <div
         v-for="(tag, index) in tags"
         :key="index"
-        class="bg-blue-500 text-white mr-1 mb-1 px-2.5 py-1 rounded-full flex items-center text-sm"
+        class="bg-blue-500 text-white me-1 mb-1 px-2.5 py-1 rounded-full flex items-center text-sm"
       >
         {{ tag }}
         <span
-          class="ml-2 cursor-pointer font-bold"
+          class="ms-2 cursor-pointer font-bold"
           @click.stop="removeTag(index)"
           >&times;</span
         >

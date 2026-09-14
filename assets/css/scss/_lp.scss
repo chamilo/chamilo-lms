@@ -138,12 +138,12 @@
 
   .ch-tool-icon {
     color: #555;
-    margin-right: 10px;
+    margin-inline-end: 10px;
     cursor: pointer;
   }
 
   .button_actions a {
-    margin-right: 5px;
+    margin-inline-end: 5px;
   }
 
   .btn-toolbar {
@@ -156,31 +156,31 @@
  * ---------------------------------------------------------------------- */
 #doc_list {
   .list-group-item {
-    padding-left: 10px;
+    padding-inline-start: 10px;
     @apply block;
     border: 1px solid #eee;
   }
 
   .nested-1 {
-    padding-left: 20px;
+    padding-inline-start: 20px;
   }
   .nested-2 {
-    padding-left: 25px;
+    padding-inline-start: 25px;
   }
   .nested-3 {
-    padding-left: 30px;
+    padding-inline-start: 30px;
     border: none;
   }
   .nested-4 {
-    padding-left: 35px;
+    padding-inline-start: 35px;
     border: none;
   }
   .nested-5 {
-    padding-left: 40px;
+    padding-inline-start: 40px;
     border: none;
   }
   .nested-6 {
-    padding-left: 45px;
+    padding-inline-start: 45px;
     border: none;
   }
 }
@@ -191,15 +191,13 @@
 #dropzone {
   position: relative;
   overflow: hidden;
-  direction: ltr;
   cursor: pointer;
   text-align: center;
   color: #333;
   font-weight: bold;
   border-radius: 10px;
   width: auto;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
   height: auto;
   line-height: 50px;
   background-color: rgb(var(--color-primary-base) / 0.06);
@@ -313,7 +311,7 @@
 }
 #learning_path_main.lp-toc-hidden #learning_path_left_zone .lp-view-zone-container {
     position: fixed !important;
-    left: -10000px !important;
+    inset-inline-start: -10000px !important;
     top: 0 !important;
     width: 360px !important;
     height: 100vh !important;
@@ -322,7 +320,7 @@
 #learning_path_right_zone.lp-content-full {
     flex: 1 1 auto !important;
     width: 100% !important;
-    margin-left: 0 !important;
+    margin-inline-start: 0 !important;
 }
 
 /* ============================================================
@@ -344,12 +342,12 @@
     box-shadow: none !important;
 }
 
-/* Base anchor: top-left */
+/* Base anchor: top-start */
 #btn-menu-float {
     position: fixed !important;
     top: 12px !important;
-    left: 12px !important;
-    right: auto !important;
+    inset-inline-start: 12px !important;
+    inset-inline-end: auto !important;
     width: 40px !important;
     height: 40px !important;
     padding: 0 !important;
@@ -357,17 +355,17 @@
     z-index: 999999 !important;
 }
 
-/* Top-right mode (only when .lp-toc-hidden is active) */
+/* Top-end mode (only when .lp-toc-hidden is active) */
 #btn-menu-float.lp-menu-top-right {
-    left: auto !important;
-    right: 12px !important;
+    inset-inline-start: auto !important;
+    inset-inline-end: 12px !important;
 }
 
 /* Hamburger button: absolute so it never shifts */
 #btn-menu-float .menu-button {
     position: absolute !important;
     top: 0 !important;
-    left: 0 !important;
+    inset-inline-start: 0 !important;
 
     width: 40px !important;
     height: 40px !important;
@@ -384,8 +382,8 @@
 }
 
 #btn-menu-float.lp-menu-top-right .menu-button {
-    left: auto !important;
-    right: 0 !important;
+    inset-inline-start: auto !important;
+    inset-inline-end: 0 !important;
 }
 
 #btn-menu-float .menu-button.menu-button-selected {
@@ -397,8 +395,8 @@
 #btn-menu-float .circle {
     position: absolute !important;
     top: 0 !important;
-    left: 48px !important;
-    right: auto !important;
+    inset-inline-start: 48px !important;
+    inset-inline-end: auto !important;
     display: none !important;
     flex-direction: row !important;
     align-items: center !important;
@@ -413,8 +411,8 @@
 /* Vertical panel: under the hamburger, aligned to it */
 #btn-menu-float.lp-menu-vertical .circle {
     top: 48px !important;
-    left: 0 !important;
-    right: auto !important;
+    inset-inline-start: 0 !important;
+    inset-inline-end: auto !important;
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 8px !important;
@@ -422,10 +420,10 @@
     white-space: normal !important;
 }
 
-/* Vertical + top-right: under the hamburger, right aligned */
+/* Vertical + top-end: under the hamburger, end aligned */
 #btn-menu-float.lp-menu-top-right.lp-menu-vertical .circle {
-    left: auto !important;
-    right: 0 !important;
+    inset-inline-start: auto !important;
+    inset-inline-end: 0 !important;
     align-items: flex-end !important;
 }
 
@@ -512,7 +510,7 @@
     width: 300px !important;
     min-width: 300px !important;
     background: #ffffff !important;
-    border-right: 1px solid #e4e9ed !important;
+    border-inline-end: 1px solid #e4e9ed !important;
     box-shadow: none !important;
     z-index: 20;
 }
@@ -523,7 +521,7 @@
     min-width: 64px !important;
     overflow: visible !important;
     background: #ffffff !important;
-    border-right: 1px solid #e4e9ed !important;
+    border-inline-end: 1px solid #e4e9ed !important;
 }
 
 #learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_left_zone .lp-view-zone-container {
@@ -539,13 +537,14 @@
 
 #learning_path_main.lp-modern-view #learning_path_right_zone {
     background: #ffffff !important;
-    padding: 20px 30px 20px 38px !important;
+    padding-block: 20px !important;
+    padding-inline: 38px 30px !important;
     min-width: 0 !important;
 }
 
 #learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_right_zone {
-    margin-left: 0 !important;
-    padding-left: 34px !important;
+    margin-inline-start: 0 !important;
+    padding-inline-start: 34px !important;
     box-sizing: border-box !important;
 }
 
@@ -559,8 +558,7 @@
 #learning_path_main.lp-modern-view #content_id,
 #learning_path_main.lp-modern-view #content_id_blank {
     position: relative !important;
-    left: auto !important;
-    right: auto !important;
+    inset-inline: auto !important;
     top: auto !important;
     transform: none !important;
     box-sizing: border-box !important;
@@ -572,13 +570,13 @@
 }
 
 #learning_path_main.lp-modern-view.lp-view-collapsed #tab-iframe {
-    padding-left: 0 !important;
+    padding-inline-start: 0 !important;
     box-sizing: border-box !important;
 }
 
 #learning_path_main.lp-modern-view.lp-view-collapsed #content_id,
 #learning_path_main.lp-modern-view.lp-view-collapsed #content_id_blank {
-    margin-left: 0 !important;
+    margin-inline-start: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
 }
@@ -592,11 +590,11 @@
     content: "" !important;
     position: fixed !important;
     top: 0 !important;
-    left: 0 !important;
+    inset-inline-start: 0 !important;
     width: 64px !important;
     height: 100vh !important;
     background: #ffffff !important;
-    border-right: 1px solid #e4e9ed !important;
+    border-inline-end: 1px solid #e4e9ed !important;
     z-index: 999996 !important;
     pointer-events: none !important;
 }
@@ -767,7 +765,7 @@
     font-size: 11px !important;
     font-weight: 600 !important;
     line-height: 1 !important;
-    text-align: right !important;
+    text-align: end !important;
     white-space: nowrap !important;
     text-indent: 0 !important;
 }
@@ -819,10 +817,11 @@
     gap: 10px !important;
     width: 100% !important;
     min-height: 44px !important;
-    padding: 0 18px 0 20px !important;
+    padding-block: 0 !important;
+    padding-inline: 20px 18px !important;
     color: #333333 !important;
     text-decoration: none !important;
-    border-left: 4px solid transparent !important;
+    border-inline-start: 4px solid transparent !important;
     border-bottom: 1px solid #edf0f2 !important;
     transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
 }
@@ -841,7 +840,7 @@
 #learning_path_main.lp-modern-view .scorm_highlight > .item > .lp-item-row,
 #learning_path_main.lp-modern-view .scorm_highlight > .section > .lp-section-row {
     background: rgb(var(--color-primary-base) / 0.10) !important;
-    border-left-color: rgb(var(--color-primary-base)) !important;
+    border-inline-start-color: rgb(var(--color-primary-base)) !important;
     color: rgb(var(--color-primary-base)) !important;
     font-weight: 700 !important;
 }
@@ -849,7 +848,7 @@
 #learning_path_main.lp-modern-view .parent_of_current_item > .status-heading .panel-heading > a,
 #learning_path_main.lp-modern-view .current_item > .status-heading .panel-heading > a {
     background: rgb(var(--color-primary-base) / 0.10) !important;
-    border-left-color: rgb(var(--color-primary-base)) !important;
+    border-inline-start-color: rgb(var(--color-primary-base)) !important;
     color: rgb(var(--color-primary-base)) !important;
     font-weight: 700 !important;
 }
@@ -900,18 +899,18 @@
 }
 
 #learning_path_main.lp-modern-view .item-children {
-    border-left: 1px solid #e4e9ed;
-    margin-left: 22px;
+    border-inline-start: 1px solid #e4e9ed;
+    margin-inline-start: 22px;
 }
 
 #learning_path_main.lp-modern-view .level_1 .lp-item-row,
-#learning_path_main.lp-modern-view .level_1 .lp-section-row { padding-left: 30px !important; }
+#learning_path_main.lp-modern-view .level_1 .lp-section-row { padding-inline-start: 30px !important; }
 #learning_path_main.lp-modern-view .level_2 .lp-item-row,
-#learning_path_main.lp-modern-view .level_2 .lp-section-row { padding-left: 42px !important; }
+#learning_path_main.lp-modern-view .level_2 .lp-section-row { padding-inline-start: 42px !important; }
 #learning_path_main.lp-modern-view .level_3 .lp-item-row,
-#learning_path_main.lp-modern-view .level_3 .lp-section-row { padding-left: 54px !important; }
+#learning_path_main.lp-modern-view .level_3 .lp-section-row { padding-inline-start: 54px !important; }
 #learning_path_main.lp-modern-view .level_4 .lp-item-row,
-#learning_path_main.lp-modern-view .level_4 .lp-section-row { padding-left: 66px !important; }
+#learning_path_main.lp-modern-view .level_4 .lp-section-row { padding-inline-start: 66px !important; }
 
 #learning_path_main.lp-modern-view .lp-empty-state {
     margin: 18px;
@@ -955,7 +954,7 @@
 
 #learning_path_main.lp-modern-view #btn-menu-float {
     top: 16px !important;
-    left: 16px !important;
+    inset-inline-start: 16px !important;
     width: 42px !important;
     height: 42px !important;
 }
@@ -978,7 +977,7 @@
 
 #learning_path_main.lp-modern-view #btn-menu-float .circle {
     top: 50px !important;
-    left: 0 !important;
+    inset-inline-start: 0 !important;
     min-width: 190px !important;
     padding: 8px !important;
     border: 1px solid #e4e9ed !important;
@@ -1013,7 +1012,7 @@
 #learning_path_main.lp-modern-view #lp-view-expand-toggle.lp-side-toggle {
     position: fixed !important;
     top: 42px !important;
-    left: 282px !important;
+    inset-inline-start: 282px !important;
     z-index: 999998 !important;
     width: 38px !important;
     height: 38px !important;
@@ -1033,7 +1032,7 @@
     content: "" !important;
     position: fixed !important;
     top: 0 !important;
-    left: 300px !important;
+    inset-inline-start: 300px !important;
     width: 1px !important;
     height: 100vh !important;
     background: #e4e9ed !important;
@@ -1042,7 +1041,7 @@
 }
 
 #learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_left_zone::after {
-    left: 64px !important;
+    inset-inline-start: 64px !important;
 }
 
 #learning_path_main.lp-modern-view #lp-view-expand-toggle.lp-side-toggle:hover {
@@ -1056,7 +1055,7 @@
 }
 
 #learning_path_main.lp-modern-view.lp-view-collapsed #lp-view-expand-toggle.lp-side-toggle {
-    left: 46px !important;
+    inset-inline-start: 46px !important;
 }
 
 #learning_path_main.lp-modern-view #btn-menu-float .circle .icon-toolbar .sr-only {
@@ -1092,7 +1091,7 @@
 #learning_path_main.lp-modern-view .lp-view-primary-nav {
     position: fixed !important;
     top: 16px !important;
-    right: 22px !important;
+    inset-inline-end: 22px !important;
     z-index: 999998 !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -1120,7 +1119,7 @@
     align-items: center !important;
     justify-content: center !important;
     border: 0 !important;
-    border-right: 1px solid rgba(255,255,255,0.20) !important;
+    border-inline-end: 1px solid rgba(255,255,255,0.20) !important;
     border-radius: 0 !important;
     background: transparent !important;
     color: #ffffff !important;
@@ -1131,7 +1130,7 @@
 }
 
 #learning_path_main.lp-modern-view .lp-view-primary-nav .icon-toolbar:last-child {
-    border-right: 0 !important;
+    border-inline-end: 0 !important;
 }
 
 #learning_path_main.lp-modern-view .lp-view-primary-nav .icon-toolbar:hover {
@@ -1164,7 +1163,7 @@
 
     #learning_path_main.lp-modern-view .lp-view-primary-nav {
         top: 14px !important;
-        right: 14px !important;
+        inset-inline-end: 14px !important;
     }
 
     #learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_left_zone {
@@ -1199,15 +1198,15 @@
 #learning_path_main.lp-modern-view.lp-view-collapsed #learning_path_right_zone {
     position: fixed !important;
     top: 0 !important;
-    right: 0 !important;
+    inset-inline-end: 0 !important;
     bottom: 0 !important;
-    left: var(--lp-collapsed-content-left) !important;
+    inset-inline-start: var(--lp-collapsed-content-left) !important;
     width: auto !important;
     max-width: calc(100vw - var(--lp-collapsed-content-left)) !important;
     min-width: 0 !important;
     height: 100vh !important;
     max-height: 100vh !important;
-    margin-left: 0 !important;
+    margin-inline-start: 0 !important;
     padding: 28px 30px !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
@@ -1218,15 +1217,14 @@
 #learning_path_main.lp-modern-view.lp-view-collapsed #lp-view-content,
 #learning_path_main.lp-modern-view.lp-view-collapsed #wrapper-iframe {
     position: relative !important;
-    left: auto !important;
-    right: auto !important;
+    inset-inline: auto !important;
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
     height: 100% !important;
     max-height: 100% !important;
-    margin-left: 0 !important;
-    padding-left: 0 !important;
+    margin-inline-start: 0 !important;
+    padding-inline-start: 0 !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
     transform: none !important;
@@ -1235,16 +1233,15 @@
 #learning_path_main.lp-modern-view.lp-view-collapsed #content_id,
 #learning_path_main.lp-modern-view.lp-view-collapsed #content_id_blank {
     position: relative !important;
-    left: auto !important;
-    right: auto !important;
+    inset-inline: auto !important;
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
     height: 100% !important;
     max-height: 100% !important;
-    margin-left: 0 !important;
-    padding-left: 0 !important;
+    margin-inline-start: 0 !important;
+    padding-inline-start: 0 !important;
     box-sizing: border-box !important;
     transform: none !important;
 }
@@ -1335,7 +1332,7 @@
   color: #374151;
   font-size: 13px;
   line-height: 1.45;
-  text-align: left;
+  text-align: start;
   overflow-wrap: anywhere;
 }
 
@@ -1350,16 +1347,14 @@
 }
 
 #learning_path_main.lp-modern-view #panel-scorm .row {
-  margin-right: 0;
-  margin-left: 0;
+  margin-inline: 0;
 }
 
 #learning_path_main.lp-modern-view #panel-scorm .row > [class*="col-"] {
   float: none;
   width: 100%;
-  padding-right: 0;
-  padding-left: 0;
-  text-align: left;
+  padding-inline: 0;
+  text-align: start;
 }
 
 #learning_path_main.lp-modern-view #panel-scorm .row > [class*="col-"] + [class*="col-"] {
@@ -1425,7 +1420,7 @@
 #lp_item_list .button_actions button,
 #lp_item_list .btn-toolbar a,
 #lp_item_list .btn-toolbar button {
-  margin-right: 0;
+  margin-inline-end: 0;
 }
 
 #lp_item_list .ch-tool-icon,

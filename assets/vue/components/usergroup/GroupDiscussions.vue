@@ -3,7 +3,7 @@
     <div class="discussions-header relative">
       <BaseButton
         :label="t('Create thread')"
-        class="create-thread-btn absolute right-0"
+        class="create-thread-btn absolute end-0"
         icon="add-topic"
         type="success"
         @click="showCreateThreadDialog = true"

@@ -62,7 +62,7 @@
 
     <Column :exportable="false">
       <template #body="slotProps">
-        <div class="text-right space-x-2">
+        <div class="text-end space-x-2 rtl:space-x-reverse">
           <BaseButton
             v-if="securityStore.isAuthenticated"
             :label="t('Edit')"

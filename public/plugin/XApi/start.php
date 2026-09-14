@@ -32,7 +32,7 @@ function xapi_mdi_icon(string $iconClass): string
     return Display::tag('span', '', [
         'class' => 'mdi '.$iconClass,
         'aria-hidden' => 'true',
-        'style' => 'margin-right: 6px;',
+        'style' => 'margin-inline-end: 6px;',
     ]);
 }
 
@@ -189,7 +189,7 @@ $table->set_column_filter(
 );
 
 if ($isAllowedToEdit) {
-    $thAttributes = ['class' => 'text-right', 'style' => 'width: 330px;'];
+    $thAttributes = ['class' => 'text-end', 'style' => 'width: 330px;'];
 
     $table->set_header(1, get_lang('Actions'), false, $thAttributes, $thAttributes);
     $table->set_column_filter(

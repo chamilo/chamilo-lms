@@ -20,7 +20,7 @@
 
     <div
       v-if="isOpen"
-      class="absolute left-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl"
+      class="absolute start-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl"
     >
       <div class="border-b border-gray-25 bg-support-2 px-4 py-3">
         <p class="m-0 text-body-2 font-semibold text-gray-90">
@@ -54,7 +54,7 @@
 
           <div
             v-if="item.children?.length"
-            class="ml-5 border-l border-gray-25 pl-2"
+            class="ms-5 border-s border-gray-25 ps-2"
           >
             <a
               v-for="child in item.children"

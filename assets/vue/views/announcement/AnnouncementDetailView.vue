@@ -106,6 +106,7 @@
       <div
         v-if="announcement.content"
         class="break-words"
+        dir="auto"
         v-html="announcement.content"
       ></div>
       <p

@@ -158,6 +158,7 @@
                   >
                     <div
                       class="chd-bubble__content"
+                      dir="auto"
                       v-html="renderMessage(msg)"
                     />
                     <div class="chd-bubble__meta">
@@ -2370,8 +2371,6 @@ onBeforeUnmount(() => {
   position: absolute;
   top: 6px;
   inset-inline-end: 6px;
-  right: 6px;
-  left: auto;
   width: 10px;
   height: 10px;
   background: #e53935;
@@ -2379,20 +2378,16 @@ onBeforeUnmount(() => {
   box-shadow: 0 0 0 2px #fff;
   z-index: 2;
 }
-html[dir="rtl"] .chd .chd-fab.has-unread::after {
-  left: 6px;
-  right: auto;
-}
 .chd .chd-contacts .chd-contact-row {
   position: relative;
-  padding-right: 18px;
+  padding-inline-end: 18px;
   overflow: visible;
   z-index: 0;
 }
 .chd .chd-contacts .chd-contact-dot {
   position: absolute;
   top: 50%;
-  right: 8px;
+  inset-inline-end: 8px;
   transform: translateY(-50%);
   width: 8px;
   height: 8px;
@@ -2400,10 +2395,6 @@ html[dir="rtl"] .chd .chd-fab.has-unread::after {
   border-radius: 9999px;
   box-shadow: 0 0 0 2px #fff;
   z-index: 2;
-}
-html[dir="rtl"] .chd .chd-contacts .chd-contact-dot {
-  left: 8px;
-  right: auto;
 }
 .chd-avatar--fallback {
   display: inline-flex;

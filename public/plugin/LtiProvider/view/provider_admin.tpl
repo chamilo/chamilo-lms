@@ -34,7 +34,7 @@
                     <th class="text-center">{{ 'DeploymentId'|get_plugin_lang('LtiProviderPlugin') }}</th>
                     <th class="text-center">{{ 'URLs'|get_plugin_lang('LtiProviderPlugin') }}</th>
                     <th class="text-center">{{ 'ToolProvider'|get_plugin_lang('LtiProviderPlugin') }}</th>
-                    <th class="text-right">{{ 'Actions'|get_lang }}</th>
+                    <th class="text-end">{{ 'Actions'|get_lang }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -61,7 +61,7 @@
                         </div>
                     </td>
                     <td class="align-middle text-center">{{ platform.getToolProvider }}</td>
-                    <td class="align-middle text-right whitespace-nowrap">
+                    <td class="align-middle text-end whitespace-nowrap">
                         <div class="flex justify-end gap-2">
                             <a
                                     href="{{ url('index') }}plugin/LtiProvider/edit.php?{{ url_params }}"

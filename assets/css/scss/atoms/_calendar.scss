@@ -2,7 +2,7 @@
   @apply inline-flex max-w-full;
 
   &:has(&-dropdown) .p-datepicker-input {
-    @apply rounded-r-none;
+    @apply rounded-e-none;
   }
 
   &-input {
@@ -10,7 +10,7 @@
   }
 
   &-dropdown {
-    @apply cursor-pointer inline-flex select-none items-center justify-center overflow-hidden relative rounded-r-lg bg-white outline-none transition-colors
+    @apply cursor-pointer inline-flex select-none items-center justify-center overflow-hidden relative rounded-e-lg bg-white outline-none transition-colors
       focus-visible:outline-none;
 
     /*width: dt('datepicker.dropdown.width');*/
@@ -28,11 +28,11 @@
   }
 
   &:has(&-input-icon-container) &-input {
-    @apply pr-12;
+    @apply pe-12;
   }
 
   &-input-icon-container {
-    @apply cursor-pointer absolute top-3 right-4 text-gray-90;
+    @apply cursor-pointer absolute top-3 end-4 text-gray-90;
   }
 
   &:has(&-input:disabled) &-input-icon-container {
@@ -91,8 +91,8 @@
 
   &-calendar-container &-calendar {
     @apply flex-auto border-0 p-0
-      first:pl-0 first:border-l-0
-      last:pr-0;
+      first:ps-0 first:border-s-0
+      last:pe-0;
   }
 
   &-day-view {
@@ -238,11 +238,11 @@
   }
 
   &:has(&-clear-icon) &-input {
-    @apply pr-12;
+    @apply pe-12;
   }
 
   &:has(&-input-icon-container):has(&-clear-icon) &-input {
-    @apply pr-12;
+    @apply pe-12;
   }
 
   .p-inputgroup &-dropdown {
@@ -250,10 +250,10 @@
   }
 
   .p-inputgroup > &:last-child:has(&-dropdown) > &-input {
-    @apply rounded-r-none;
+    @apply rounded-e-none;
   }
 
   .p-inputgroup > &:last-child &-dropdown {
-    @apply rounded-r-lg;
+    @apply rounded-e-lg;
   }
 }

@@ -27,11 +27,11 @@ $table->set_header(0, '', false);
 $table->setHideColumn(0);
 $table->set_header(1, get_lang('Survey name'));
 $table->set_header(2, get_lang('Code'), true, ['class' => 'text-center'], ['class' => 'text-center']);
-$table->set_header(3, get_lang('Questions'), true, ['class' => 'text-right'], ['class' => 'text-right']);
+$table->set_header(3, get_lang('Questions'), true, ['class' => 'text-end'], ['class' => 'text-end']);
 $table->set_header(4, get_lang('Author'));
 $table->set_header(5, get_lang('Available from'), true, ['class' => 'text-center'], ['class' => 'text-center']);
 $table->set_header(6, get_lang('Until'), true, ['class' => 'text-center'], ['class' => 'text-center']);
-$table->set_header(7, get_lang('Invite'), true, ['class' => 'text-right'], ['class' => 'text-right']);
+$table->set_header(7, get_lang('Invite'), true, ['class' => 'text-end'], ['class' => 'text-end']);
 $table->set_header(8, get_lang('Anonymous'), true, ['class' => 'text-center'], ['class' => 'text-center']);
 $table->set_column_filter(8, ['SurveyUtil', 'anonymous_filter']);
 

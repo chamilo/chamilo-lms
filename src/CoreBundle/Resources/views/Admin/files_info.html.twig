@@ -84,7 +84,7 @@
                    name="search"
                    value="{{ search }}"
                    placeholder="{{ 'Search...'|trans }}"
-                   class="form-control max-w-xs mr-2">
+                   class="form-control max-w-xs me-2">
             <button type="submit" class="btn btn--primary">{{ 'Search'|trans }}</button>
         </form>
 
@@ -145,7 +145,7 @@
                             <td class="col-links">
                                 {{ links }}
                                 {% if isOrphan %}
-                                    <span class="ml-1 inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800">
+                                    <span class="ms-1 inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800">
                                         {{ 'Orphan'|trans }}
                                     </span>
                                 {% endif %}
@@ -209,11 +209,11 @@
                 <p class="mb-3 flex items-start gap-2">
                     <strong class="mt-0.5">{{ 'Course(s):'|trans }}</strong>
                     <span id="file-course-tags"
-                          class="inline-flex flex-wrap gap-2 ml-1 text-sm"></span>
+                          class="inline-flex flex-wrap gap-2 ms-1 text-sm"></span>
                     <button
                             type="button"
                             id="add-course-btn"
-                            class="mdi mdi-plus-circle-outline ml-1 text-lg leading-none cursor-pointer"
+                            class="mdi mdi-plus-circle-outline ms-1 text-lg leading-none cursor-pointer"
                             style="border: none; background: transparent;"
                             title="{{ 'Attach this file to another course'|trans }}"
                     ></button>
@@ -450,7 +450,7 @@
             var pill = document.createElement("span");
             pill.className =
               "inline-flex items-center rounded-full bg-slate-100 text-slate-800 " +
-              "text-xs font-medium px-2 py-1 mr-1 mb-1 border border-slate-200";
+              "text-xs font-medium px-2 py-1 me-1 mb-1 border border-slate-200";
 
             var labelText = "[" + (c.code || "") + "] " + (c.title || "");
             var courseUrl = buildCourseDocumentsUrl(c);
@@ -474,7 +474,7 @@
               var removeBtn = document.createElement("button");
               removeBtn.type = "button";
               removeBtn.className =
-                "ml-1 text-xs leading-none text-slate-500 hover:text-red-600 focus:outline-none";
+                "ms-1 text-xs leading-none text-slate-500 hover:text-red-600 focus:outline-none";
               removeBtn.innerHTML = "&times;";
               removeBtn.title = "{{ 'Detach from this course'|trans|e('js') }}";
 

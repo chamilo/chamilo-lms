@@ -33,7 +33,7 @@
         <span
           v-if="item.icon"
           :class="item.icon"
-          class="mr-2"
+          class="me-2"
         />
         <span>{{ item.label }}</span>
       </a>

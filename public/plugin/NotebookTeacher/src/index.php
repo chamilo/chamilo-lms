@@ -107,7 +107,7 @@ switch ($action) {
             echo '</div>';
             $backLabel = Security::remove_XSS(get_lang('Back to the notes list'));
             echo '<a href="index.php?'.api_get_cidreq().'&student_id='.$studentId.'" class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-25 bg-white text-primary shadow-sm transition hover:bg-primary/10" title="'.$backLabel.'" aria-label="'.$backLabel.'">'.
-                '<span class="mdi mdi-arrow-left text-xl" aria-hidden="true"></span>'.
+                '<span class="mdi mdi-arrow-left rtl:rotate-180 text-xl" aria-hidden="true"></span>'.
                 '<span class="sr-only">'.$backLabel.'</span>'.
                 '</a>';
             echo '</div>';
@@ -179,7 +179,7 @@ switch ($action) {
             echo '</div>';
             $backLabel = Security::remove_XSS(get_lang('Back to the notes list'));
             echo '<a href="index.php?'.api_get_cidreq().'&student_id='.$studentId.'" class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-25 bg-white text-primary shadow-sm transition hover:bg-primary/10" title="'.$backLabel.'" aria-label="'.$backLabel.'">'.
-                '<span class="mdi mdi-arrow-left text-xl" aria-hidden="true"></span>'.
+                '<span class="mdi mdi-arrow-left rtl:rotate-180 text-xl" aria-hidden="true"></span>'.
                 '<span class="sr-only">'.$backLabel.'</span>'.
                 '</a>';
             echo '</div>';

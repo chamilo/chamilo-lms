@@ -82,7 +82,7 @@
       class="rounded-xl border border-orange-200 bg-orange-50 p-4"
     >
       <h3 class="font-semibold text-orange-800">{{ t("Some users could not be subscribed") }}</h3>
-      <ul class="mt-2 list-disc pl-5 text-sm text-orange-800">
+      <ul class="mt-2 list-disc ps-5 text-sm text-orange-800">
         <li
           v-for="row in failedRows"
           :key="row.id"

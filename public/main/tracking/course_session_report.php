@@ -345,7 +345,7 @@ echo '<div class="actions">';
 if ($global) {
     echo MySpace::getTopMenu();
 } else {
-    echo '<div style="float:left; clear:left">
+    echo '<div style="float:inline-start; clear:inline-start">
             <a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.
         get_lang('Report on learners').'</a>&nbsp;|
             <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.

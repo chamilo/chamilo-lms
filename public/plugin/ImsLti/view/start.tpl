@@ -1,5 +1,8 @@
 {% if tool.description %}
-<p class="lead">{{ tool.description|e|nl2br }}</p>
+<p
+    class="lead"
+    dir="auto"
+>{{ tool.description|e|nl2br }}</p>
 {% endif %}
 
 <div class="embed-responsive embed-responsive-4by3">

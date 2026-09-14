@@ -107,7 +107,7 @@
           {{ t("No data available") }}
         </div>
         <div v-else class="overflow-x-auto">
-          <table class="w-full border-collapse text-left text-sm">
+          <table class="w-full border-collapse text-start text-sm">
             <thead>
               <tr class="border-b border-gray-25">
                 <th class="p-3">{{ t("Title") }}</th>

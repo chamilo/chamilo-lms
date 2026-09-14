@@ -30,7 +30,7 @@
         />
       </div>
 
-      <div class="flex gap-2 lg:ml-auto">
+      <div class="flex gap-2 lg:ms-auto">
         <BaseButton
           :label="t('Print')"
           icon="file-text"
@@ -200,7 +200,7 @@
 
         <button
           type="button"
-          class="no-print ml-auto inline-flex items-center gap-2 text-sm font-semibold text-primary"
+          class="no-print ms-auto inline-flex items-center gap-2 text-sm font-semibold text-primary"
           @click="advancedOpen = !advancedOpen"
         >
           <i :class="advancedOpen ? 'mdi mdi-chevron-up' : 'mdi mdi-chevron-down'" />
@@ -503,7 +503,7 @@
       <div class="overflow-x-auto p-4">
         <table class="w-full border-collapse text-sm">
           <thead>
-            <tr class="bg-gray-15 text-left">
+            <tr class="bg-gray-15 text-start">
               <th class="px-3 py-2 font-semibold">{{ t("Name") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Time") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Average time in the course") }}</th>

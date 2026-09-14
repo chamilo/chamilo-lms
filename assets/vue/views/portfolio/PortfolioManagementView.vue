@@ -68,6 +68,7 @@
             <div
               v-if="isCategories && row.description"
               class="mt-1 text-sm text-gray-600"
+              dir="auto"
               v-html="row.description"
             ></div>
             <div class="mt-1 text-xs text-gray-500">

@@ -40,7 +40,10 @@
       sortable
     >
       <template #body="slotProps">
-        <div v-html="sanitizeHtml(slotProps.data.description)"></div>
+        <div
+          dir="auto"
+          v-html="sanitizeHtml(slotProps.data.description)"
+        ></div>
       </template>
     </Column>
 

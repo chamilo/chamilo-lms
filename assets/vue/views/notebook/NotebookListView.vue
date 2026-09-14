@@ -119,6 +119,7 @@
         <div
           v-if="note.content"
           class="break-words"
+          dir="auto"
           v-html="note.content"
         ></div>
 

@@ -132,7 +132,7 @@ if (1 == $Vtab) {
         $formOptions .= '<label for="displayTemplateArea" class="maskpartform noselect trd" >View custom page templates</label>';
         $formOptions .= '</p>';
 
-        $formOptions .= "<p style='margin-left:24px;margin-top:0px;margin-bottom:5px;' >";
+        $formOptions .= "<p style='margin-inline-start:24px;margin-top:0px;margin-bottom:5px;' >";
         if (1 == $VonlyUserTemplates) {
             $formOptions .= '<input type="checkbox" class="maskpartform" id="onlyUserTemplates" value="1" name="onlyUserTemplates" checked />';
         } else {
@@ -151,7 +151,7 @@ if (1 == $Vtab) {
         $formOptions .= '</p>';
 
         $formOptions .= '<p>';
-        $formOptions .= '<label for="listDefaultTemplates" style="margin-left:24px;font-style:italic;" ';
+        $formOptions .= '<label for="listDefaultTemplates" style="margin-inline-start:24px;font-style:italic;" ';
         $formOptions .= ' class="maskpartform noselect trd" >List of templates id : </label>';
         $formOptions .= '<input type="text" class="maskpartform" id="listDefaultTemplates" value="'.htmlspecialchars((string) $VlistDefaultTemplates, ENT_QUOTES, 'UTF-8').'" name="listDefaultTemplates" />';
         $formOptions .= '<input type="hidden" name="cotk" value="'.htmlspecialchars($cotk, ENT_QUOTES, 'UTF-8').'" />';

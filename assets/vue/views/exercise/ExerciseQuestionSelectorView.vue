@@ -1,6 +1,8 @@
 <template>
   <section class="space-y-5">
-    <div class="exercise-question-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
+    <div
+      class="exercise-question-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
+    >
       <BaseButton
         class="exercise-question-toolbar__button"
         :label="backButtonLabel"
@@ -155,13 +157,13 @@
           <table class="min-w-full border-collapse text-sm">
             <thead class="bg-gray-15 text-gray-90">
               <tr>
-                <th class="w-14 px-3 py-3 text-left font-semibold">{{ t("Order") }}</th>
-                <th class="px-3 py-3 text-left font-semibold">{{ t("Question") }}</th>
+                <th class="w-14 px-3 py-3 text-start font-semibold">{{ t("Order") }}</th>
+                <th class="px-3 py-3 text-start font-semibold">{{ t("Question") }}</th>
                 <th class="w-32 px-3 py-3 text-center font-semibold">{{ t("Type") }}</th>
                 <th class="w-40 px-3 py-3 text-center font-semibold">{{ t("Category") }}</th>
                 <th class="w-28 px-3 py-3 text-center font-semibold">{{ t("Difficulty") }}</th>
                 <th class="w-24 px-3 py-3 text-center font-semibold">{{ t("Score") }}</th>
-                <th class="w-44 px-3 py-3 text-right font-semibold">{{ t("Detail") }}</th>
+                <th class="w-44 px-3 py-3 text-end font-semibold">{{ t("Detail") }}</th>
               </tr>
             </thead>
             <tbody>
@@ -221,7 +223,8 @@
                       <span
                         v-else
                         class="sr-only"
-                      >{{ t(question.typeLabel) }}</span>
+                        >{{ t(question.typeLabel) }}</span
+                      >
                     </span>
                   </td>
                   <td class="px-3 py-3 text-center align-middle">
@@ -234,7 +237,10 @@
                     {{ formatScore(question.score) }}
                   </td>
                   <td class="px-3 py-3 align-middle">
-                    <div class="flex justify-end gap-1" @click.stop>
+                    <div
+                      class="flex justify-end gap-1"
+                      @click.stop
+                    >
                       <BaseButton
                         :label="expandedQuestionId === question.id ? t('Hide preview') : t('Preview')"
                         :icon="expandedQuestionId === question.id ? 'fold' : 'information'"
@@ -286,7 +292,10 @@
                   v-if="expandedQuestionId === question.id"
                   class="border-t border-gray-20 bg-white"
                 >
-                  <td colspan="7" class="px-6 py-4">
+                  <td
+                    colspan="7"
+                    class="px-6 py-4"
+                  >
                     <article class="space-y-4 rounded-lg border border-gray-20 bg-gray-5 p-4">
                       <div class="flex flex-wrap items-start justify-between gap-3">
                         <div>
@@ -295,6 +304,7 @@
                           </h3>
                           <div
                             class="prose prose-sm max-w-none text-gray-90"
+                            dir="auto"
                             v-html="displayTranslatedHtml(question.title)"
                           />
                         </div>
@@ -306,6 +316,7 @@
                       <div
                         v-if="hasHtmlContent(question.description)"
                         class="prose prose-sm max-w-none rounded bg-white p-3 text-gray-80"
+                        dir="auto"
                         v-html="displayTranslatedHtml(question.description)"
                       />
 
@@ -349,13 +360,13 @@
                           <table class="min-w-full border-collapse bg-white text-sm">
                             <thead class="bg-gray-15 text-gray-90">
                               <tr>
-                                <th class="w-16 border border-gray-20 px-2 py-2 text-left">{{ t("N°") }}</th>
-                                <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Answer") }}</th>
-                                <th class="w-32 border border-gray-20 px-2 py-2 text-left">{{ t("Shape") }}</th>
-                                <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Coordinates") }}</th>
+                                <th class="w-16 border border-gray-20 px-2 py-2 text-start">{{ t("N°") }}</th>
+                                <th class="border border-gray-20 px-2 py-2 text-start">{{ t("Answer") }}</th>
+                                <th class="w-32 border border-gray-20 px-2 py-2 text-start">{{ t("Shape") }}</th>
+                                <th class="border border-gray-20 px-2 py-2 text-start">{{ t("Coordinates") }}</th>
                                 <th
                                   v-if="!isHotspotCombinationQuestionType(question.type)"
-                                  class="w-24 border border-gray-20 px-2 py-2 text-right"
+                                  class="w-24 border border-gray-20 px-2 py-2 text-end"
                                 >
                                   {{ t("Score") }}
                                 </th>
@@ -370,14 +381,17 @@
                                 <td class="border border-gray-20 px-2 py-2 align-top">
                                   <div
                                     class="prose prose-sm max-w-none"
+                                    dir="auto"
                                     v-html="displayTranslatedHtml(item.answer)"
                                   />
                                 </td>
-                                <td class="border border-gray-20 px-2 py-2 align-top">{{ t(item.hotspotTypeLabel || item.hotspotType) }}</td>
+                                <td class="border border-gray-20 px-2 py-2 align-top">
+                                  {{ t(item.hotspotTypeLabel || item.hotspotType) }}
+                                </td>
                                 <td class="border border-gray-20 px-2 py-2 align-top">{{ item.coordinates }}</td>
                                 <td
                                   v-if="!isHotspotCombinationQuestionType(question.type)"
-                                  class="border border-gray-20 px-2 py-2 text-right align-top"
+                                  class="border border-gray-20 px-2 py-2 text-end align-top"
                                 >
                                   {{ formatScore(item.score) }}
                                 </td>
@@ -393,6 +407,7 @@
                       >
                         <div
                           class="prose prose-sm max-w-none rounded bg-white p-3 text-gray-80"
+                          dir="auto"
                           v-html="displayTranslatedHtml(question.fillBlanks.text)"
                         />
                         <div class="flex flex-wrap gap-2 text-xs font-semibold">
@@ -419,10 +434,10 @@
                           <table class="min-w-full border-collapse bg-white text-sm">
                             <thead class="bg-gray-15 text-gray-90">
                               <tr>
-                                <th class="w-16 border border-gray-20 px-2 py-2 text-left">{{ t("N°") }}</th>
-                                <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Blank") }}</th>
-                                <th class="w-24 border border-gray-20 px-2 py-2 text-right">{{ t("Score") }}</th>
-                                <th class="w-32 border border-gray-20 px-2 py-2 text-right">{{ t("Input width") }}</th>
+                                <th class="w-16 border border-gray-20 px-2 py-2 text-start">{{ t("N°") }}</th>
+                                <th class="border border-gray-20 px-2 py-2 text-start">{{ t("Blank") }}</th>
+                                <th class="w-24 border border-gray-20 px-2 py-2 text-end">{{ t("Score") }}</th>
+                                <th class="w-32 border border-gray-20 px-2 py-2 text-end">{{ t("Input width") }}</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -434,10 +449,10 @@
                                 <td class="border border-gray-20 px-2 py-2 align-top">
                                   <code class="rounded bg-gray-15 px-2 py-1 text-gray-90">{{ blank.answer }}</code>
                                 </td>
-                                <td class="border border-gray-20 px-2 py-2 text-right align-top">
+                                <td class="border border-gray-20 px-2 py-2 text-end align-top">
                                   {{ formatScore(blank.score) }}
                                 </td>
-                                <td class="border border-gray-20 px-2 py-2 text-right align-top">
+                                <td class="border border-gray-20 px-2 py-2 text-end align-top">
                                   {{ blank.inputSize || 200 }}
                                 </td>
                               </tr>
@@ -447,6 +462,7 @@
                         <div
                           v-if="hasHtmlContent(question.fillBlanks.comment)"
                           class="prose prose-sm max-w-none rounded bg-white p-3 text-gray-80"
+                          dir="auto"
                           v-html="displayTranslatedHtml(question.fillBlanks.comment)"
                         />
                       </div>
@@ -475,13 +491,13 @@
                           <table class="min-w-full border-collapse bg-white text-sm">
                             <thead class="bg-gray-15 text-gray-90">
                               <tr>
-                                <th class="w-16 border border-gray-20 px-2 py-2 text-left">{{ t("N°") }}</th>
-                                <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Question") }}</th>
-                                <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Matches To") }}</th>
-                                <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Feedback") }}</th>
+                                <th class="w-16 border border-gray-20 px-2 py-2 text-start">{{ t("N°") }}</th>
+                                <th class="border border-gray-20 px-2 py-2 text-start">{{ t("Question") }}</th>
+                                <th class="border border-gray-20 px-2 py-2 text-start">{{ t("Matches To") }}</th>
+                                <th class="border border-gray-20 px-2 py-2 text-start">{{ t("Feedback") }}</th>
                                 <th
                                   v-if="!isMatchingCombinationQuestionType(question.type)"
-                                  class="w-24 border border-gray-20 px-2 py-2 text-right"
+                                  class="w-24 border border-gray-20 px-2 py-2 text-end"
                                 >
                                   {{ t("Score") }}
                                 </th>
@@ -496,6 +512,7 @@
                                 <td class="border border-gray-20 px-2 py-2 align-top">
                                   <div
                                     class="prose prose-sm max-w-none"
+                                    dir="auto"
                                     v-html="displayTranslatedHtml(pair.answer)"
                                   />
                                 </td>
@@ -503,18 +520,20 @@
                                   <span class="font-semibold text-gray-90">{{ pair.optionLabel }}</span>
                                   <div
                                     class="prose prose-sm max-w-none"
+                                    dir="auto"
                                     v-html="displayTranslatedHtml(pair.optionAnswer)"
                                   />
                                 </td>
                                 <td class="border border-gray-20 px-2 py-2 align-top">
                                   <div
                                     class="prose prose-sm max-w-none"
+                                    dir="auto"
                                     v-html="displayTranslatedHtml(pair.comment)"
                                   />
                                 </td>
                                 <td
                                   v-if="!isMatchingCombinationQuestionType(question.type)"
-                                  class="border border-gray-20 px-2 py-2 text-right align-top"
+                                  class="border border-gray-20 px-2 py-2 text-end align-top"
                                 >
                                   {{ formatScore(pair.score) }}
                                 </td>
@@ -530,7 +549,8 @@
                       >
                         <div class="flex flex-wrap gap-2 text-xs font-semibold">
                           <span class="rounded-full bg-gray-15 px-2 py-1 text-gray-80">
-                            {{ t("Orientation") }}: {{ question.draggable.orientation === 'v' ? t("Vertical") : t("Horizontal") }}
+                            {{ t("Orientation") }}:
+                            {{ question.draggable.orientation === "v" ? t("Vertical") : t("Horizontal") }}
                           </span>
                         </div>
 
@@ -541,10 +561,10 @@
                           <table class="min-w-full border-collapse bg-white text-sm">
                             <thead class="bg-gray-15 text-gray-90">
                               <tr>
-                                <th class="w-16 border border-gray-20 px-2 py-2 text-left">{{ t("N°") }}</th>
-                                <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Answer") }}</th>
+                                <th class="w-16 border border-gray-20 px-2 py-2 text-start">{{ t("N°") }}</th>
+                                <th class="border border-gray-20 px-2 py-2 text-start">{{ t("Answer") }}</th>
                                 <th class="w-32 border border-gray-20 px-2 py-2 text-center">{{ t("Matches To") }}</th>
-                                <th class="w-24 border border-gray-20 px-2 py-2 text-right">{{ t("Score") }}</th>
+                                <th class="w-24 border border-gray-20 px-2 py-2 text-end">{{ t("Score") }}</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -556,13 +576,14 @@
                                 <td class="border border-gray-20 px-2 py-2 align-top">
                                   <div
                                     class="prose prose-sm max-w-none"
+                                    dir="auto"
                                     v-html="displayTranslatedHtml(item.answer)"
                                   />
                                 </td>
                                 <td class="border border-gray-20 px-2 py-2 text-center align-top">
                                   {{ item.targetPosition }}
                                 </td>
-                                <td class="border border-gray-20 px-2 py-2 text-right align-top">
+                                <td class="border border-gray-20 px-2 py-2 text-end align-top">
                                   {{ formatScore(item.score) }}
                                 </td>
                               </tr>
@@ -578,12 +599,12 @@
                         <table class="min-w-full border-collapse bg-white text-sm">
                           <thead class="bg-gray-15 text-gray-90">
                             <tr>
-                              <th class="w-28 border border-gray-20 px-2 py-2 text-left">
+                              <th class="w-28 border border-gray-20 px-2 py-2 text-start">
                                 {{ isTrueFalseQuestionType(question.type) ? t("Expected choice") : t("True") }}
                               </th>
-                              <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Options") }}</th>
-                              <th class="border border-gray-20 px-2 py-2 text-left">{{ t("Feedback") }}</th>
-                              <th class="w-24 border border-gray-20 px-2 py-2 text-right">{{ t("Score") }}</th>
+                              <th class="border border-gray-20 px-2 py-2 text-start">{{ t("Options") }}</th>
+                              <th class="border border-gray-20 px-2 py-2 text-start">{{ t("Feedback") }}</th>
+                              <th class="w-24 border border-gray-20 px-2 py-2 text-end">{{ t("Score") }}</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -608,16 +629,18 @@
                               <td class="border border-gray-20 px-2 py-2 align-top">
                                 <div
                                   class="prose prose-sm max-w-none"
+                                  dir="auto"
                                   v-html="displayTranslatedHtml(answer.answer)"
                                 />
                               </td>
                               <td class="border border-gray-20 px-2 py-2 align-top">
                                 <div
                                   class="prose prose-sm max-w-none"
+                                  dir="auto"
                                   v-html="displayTranslatedHtml(answer.comment)"
                                 />
                               </td>
-                              <td class="border border-gray-20 px-2 py-2 text-right align-top">
+                              <td class="border border-gray-20 px-2 py-2 text-end align-top">
                                 {{ formatScore(answer.score) }}
                               </td>
                             </tr>
@@ -671,11 +694,16 @@ const draggedQuestionId = ref(null)
 
 const exerciseId = Number(getQueryValue(route.params.exerciseId) || 0)
 const summaryText = computed(() =>
-  formatTranslatedText("{0} questions, for a total score (all questions) of {1}.", [questionCount.value, formatScore(totalScore.value)]),
+  formatTranslatedText("{0} questions, for a total score (all questions) of {1}.", [
+    questionCount.value,
+    formatScore(totalScore.value),
+  ]),
 )
 const learningPathContext = computed(() => isLearningPathContext())
 const learningPathBackRoute = computed(() => buildLearningPathBackRoute())
-const backButtonLabel = computed(() => (learningPathContext.value ? t("Back to learning path") : t("Return to exercises list")))
+const backButtonLabel = computed(() =>
+  learningPathContext.value ? t("Back to learning path") : t("Return to exercises list"),
+)
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -789,43 +817,47 @@ function isVueQuestionType(questionTypeOrId) {
     return true
   }
 
-  return [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31].includes(getQuestionTypeId(questionTypeOrId))
+  return [
+    1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+  ].includes(getQuestionTypeId(questionTypeOrId))
 }
 
 function questionTypeHelp(questionTypeOrId) {
   const type = getQuestionTypeId(questionTypeOrId)
 
-  return {
-    1: "Choose one correct answer.",
-    2: "Select one or more correct answers.",
-    3: "Complete missing words inside a text.",
-    4: "Match each item with the correct option. Score per item.",
-    5: "Learners write a free text answer.",
-    6: "Select areas in an image.",
-    8: "Draw or delineate an area.",
-    9: "Score only when the exact selection is correct.",
-    10: "Single choice with a fixed Don't know option.",
-    11: "Mark each statement as True, False or Don't know.",
-    12: "Full True/False combination must be correct.",
-    13: "Record or evaluate an oral answer.",
-    14: "Multiple answer with one global score.",
-    15: "Add content, media or reading context without score.",
-    16: "Calculated question with formulas and variables.",
-    17: "Single choice question using images.",
-    18: "Put items in the expected order.",
-    19: "Drag items to match them with options. Score per item.",
-    20: "Annotation question with an image upload.",
-    21: "Add a reading text with scrolling speed settings.",
-    22: "True/False answer with certainty percentage selected during the attempt.",
-    23: "Learners upload a file as their answer. The teacher assigns the score during correction.",
-    24: "Matching with one global combination score.",
-    25: "Full draggable matching combination with one global score.",
-    26: "Hotspot with one global combination score.",
-    27: "Fill blanks with one global combination score.",
-    28: "Dropdown options with one global combination score.",
-    29: "Dropdown options where selected answers can have their own score.",
-    31: "Insert a page break inside the test without score.",
-  }[type] || "Question type"
+  return (
+    {
+      1: "Choose one correct answer.",
+      2: "Select one or more correct answers.",
+      3: "Complete missing words inside a text.",
+      4: "Match each item with the correct option. Score per item.",
+      5: "Learners write a free text answer.",
+      6: "Select areas in an image.",
+      8: "Draw or delineate an area.",
+      9: "Score only when the exact selection is correct.",
+      10: "Single choice with a fixed Don't know option.",
+      11: "Mark each statement as True, False or Don't know.",
+      12: "Full True/False combination must be correct.",
+      13: "Record or evaluate an oral answer.",
+      14: "Multiple answer with one global score.",
+      15: "Add content, media or reading context without score.",
+      16: "Calculated question with formulas and variables.",
+      17: "Single choice question using images.",
+      18: "Put items in the expected order.",
+      19: "Drag items to match them with options. Score per item.",
+      20: "Annotation question with an image upload.",
+      21: "Add a reading text with scrolling speed settings.",
+      22: "True/False answer with certainty percentage selected during the attempt.",
+      23: "Learners upload a file as their answer. The teacher assigns the score during correction.",
+      24: "Matching with one global combination score.",
+      25: "Full draggable matching combination with one global score.",
+      26: "Hotspot with one global combination score.",
+      27: "Fill blanks with one global combination score.",
+      28: "Dropdown options with one global combination score.",
+      29: "Dropdown options where selected answers can have their own score.",
+      31: "Insert a page break inside the test without score.",
+    }[type] || "Question type"
+  )
 }
 
 function questionTypeHref(questionType) {
@@ -878,9 +910,7 @@ function questionTypeCardClass(questionType) {
 }
 
 function questionTypeIconClass(questionType) {
-  return [
-    "relative flex h-16 w-16 items-center justify-center transition group-hover:scale-105",
-  ]
+  return ["relative flex h-16 w-16 items-center justify-center transition group-hover:scale-105"]
 }
 
 function isSingleCorrectAnswerQuestion(type) {
@@ -986,7 +1016,6 @@ function useFallbackIcon(event) {
 function useSmallFallbackIcon(event) {
   event.target.src = "/img/icons/64/new_question.png"
 }
-
 
 function decodeHtml(value) {
   if (!value) {
@@ -1112,7 +1141,10 @@ async function runQuestionAction(payload) {
     await loadQuestionSelector()
   } catch (error) {
     console.error("Error processing exercise question action", error)
-    errorMessage.value = error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("Could not update exercise questions")
+    errorMessage.value =
+      error?.response?.data?.detail ||
+      error?.response?.data?.["hydra:description"] ||
+      t("Could not update exercise questions")
     await loadQuestionSelector()
   } finally {
     isActionSaving.value = false
@@ -1144,7 +1176,10 @@ async function finishLearningPathCreation() {
     await router.push(learningPathBackRoute.value)
   } catch (error) {
     console.error("Error adding exercise to learning path", error)
-    errorMessage.value = error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("Could not add the exercise to the learning path")
+    errorMessage.value =
+      error?.response?.data?.detail ||
+      error?.response?.data?.["hydra:description"] ||
+      t("Could not add the exercise to the learning path")
   } finally {
     isAttachingToLearningPath.value = false
   }

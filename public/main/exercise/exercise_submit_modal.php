@@ -617,7 +617,7 @@ if ($destinationId === $questionId) {
     $links .= Display::getMdiIcon(
         ActionIcon::REFRESH,
         'ch-tool-icon',
-        'padding-left:0px;padding-right:5px;',
+        'padding-inline-start:0px;padding-inline-end:5px;',
         ICON_SIZE_SMALL
     )
         .'<a onclick="return chExerciseSendEx('.$index.', true);" href="#">'
@@ -629,7 +629,7 @@ if ($destinationId === $questionId) {
     $links .= Display::getMdiIcon(
         StateIcon::COMPLETE,
         'ch-tool-icon',
-        'padding-left:0px;padding-right:5px;',
+        'padding-inline-start:0px;padding-inline-end:5px;',
         ICON_SIZE_SMALL
     )
         .'<a onclick="return chExerciseSendEx(-1, false);" href="#">'
@@ -643,7 +643,7 @@ if ($destinationId === $questionId) {
     $icon = Display::getMdiIcon(
         ObjectIcon::TEST,
         'ch-tool-icon',
-        'padding-left:0px;padding-right:5px;',
+        'padding-inline-start:0px;padding-inline-end:5px;',
         ICON_SIZE_SMALL
     );
     $links .= '<a onclick="return chExerciseSendEx('.$index.', false);" href="#">'
@@ -655,7 +655,7 @@ if ($destinationId === $questionId) {
     $icon = Display::getMdiIcon(
         ObjectIcon::LINK,
         'ch-tool-icon',
-        'padding-left:0px;padding-right:5px;',
+        'padding-inline-start:0px;padding-inline-end:5px;',
         ICON_SIZE_SMALL
     );
     $fullUrl = api_get_path(WEB_PATH).ltrim($destinationId, '/');
@@ -664,4 +664,4 @@ if ($destinationId === $questionId) {
 
 // Body + navigation block.
 echo '<div>'.$contents.'</div>';
-echo '<div style="padding-left: 450px"><h5>'.$links.'</h5></div>';
+echo '<div style="padding-inline-start: 450px"><h5>'.$links.'</h5></div>';

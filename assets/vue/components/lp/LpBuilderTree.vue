@@ -204,7 +204,7 @@ async function handleStructureChanged() {
             />
 
             <button
-              class="min-w-0 flex-1 text-left"
+              class="min-w-0 flex-1 text-start"
               type="button"
               @click="emit('select', element.id)"
             >
@@ -216,7 +216,7 @@ async function handleStructureChanged() {
 
           <div
             v-if="canManage"
-            class="mt-1 flex items-center gap-1 pl-9"
+            class="mt-1 flex items-center gap-1 ps-9"
           >
             <BaseButton
               :label="$t('Edit')"
@@ -248,7 +248,7 @@ async function handleStructureChanged() {
 
         <div
           v-if="element.isSection"
-          class="ml-5 mt-2 border-l border-gray-20 pl-3"
+          class="ms-5 mt-2 border-s border-gray-20 ps-3"
         >
           <LpBuilderTree
             :can-manage="canManage"

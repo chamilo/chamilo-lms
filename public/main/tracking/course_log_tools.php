@@ -232,7 +232,7 @@ if ($lpReporting && null !== $course) {
                 $lp_avg_progress = round($lp_avg_progress, 1).'%';
             }
 
-            echo '<tr><td>'.$lp['lp_name'].'</td><td align="right">'.$lp_avg_progress.'</td></tr>';
+            echo '<tr><td>'.$lp['lp_name'].'</td><td style="text-align:end;">'.$lp_avg_progress.'</td></tr>';
 
             if ($export_csv) {
                 $temp = [$lp['lp_name'], $lp_avg_progress];
@@ -306,7 +306,7 @@ if ($exerciseReporting && $hasCourseEntity) {
                 $exercise->getTitle(),
                 $url
             );
-            echo '</td><td align="right">'.$quiz_avg_score.'</td></tr>';
+            echo '</td><td style="text-align:end;">'.$quiz_avg_score.'</td></tr>';
 
             if ($export_csv) {
                 $temp = [$exercise->getTitle(), $quiz_avg_score];
@@ -372,9 +372,9 @@ echo Display::page_subheader(
     get_lang('See detail').'</a>'
 );
 echo '<table class="data_table">';
-echo '<tr><td>'.get_lang('Forums Number').'</td><td align="right">'.$count_number_of_forums_by_course.'</td></tr>';
-echo '<tr><td>'.get_lang('Threads number').'</td><td align="right">'.$count_number_of_threads_by_course.'</td></tr>';
-echo '<tr><td>'.get_lang('Posts number').'</td><td align="right">'.$count_number_of_posts_by_course.'</td></tr>';
+echo '<tr><td>'.get_lang('Forums Number').'</td><td style="text-align:end;">'.$count_number_of_forums_by_course.'</td></tr>';
+echo '<tr><td>'.get_lang('Threads number').'</td><td style="text-align:end;">'.$count_number_of_threads_by_course.'</td></tr>';
+echo '<tr><td>'.get_lang('Posts number').'</td><td style="text-align:end;">'.$count_number_of_posts_by_course.'</td></tr>';
 echo '</table></div>';
 echo '<div class="clear"></div>';
 
@@ -414,7 +414,7 @@ if ($showChatReporting) {
         get_lang('Connections to the chat during last %s days'),
         '7'
     );
-    echo '</td><td align="right">'.$chat_connections_during_last_x_days_by_course.'</td></tr>';
+    echo '</td><td style="text-align:end;">'.$chat_connections_during_last_x_days_by_course.'</td></tr>';
 
     echo '</table></div>';
     echo '<div class="clear"></div>';
@@ -450,7 +450,7 @@ if ($showTrackingReporting) {
         foreach ($tools_most_used as $row) {
             echo '<tr>
                     <td>'.get_lang(ucfirst($row['access_tool'])).'</td>
-                    <td align="right">'.sprintf(get_lang('%d clicks'), $row['count_access_tool']).'</td>
+                    <td style="text-align:end;">'.sprintf(get_lang('%d clicks'), $row['count_access_tool']).'</td>
                   </tr>';
             if ($export_csv) {
                 $temp = [
@@ -520,7 +520,7 @@ if ($documentReporting && $hasCourseEntity) {
                 $viewLink
             );
             echo '</td>
-                    <td align="right">'.sprintf(get_lang('%d clicks'), $row['count_down']).'</td>
+                    <td style="text-align:end;">'.sprintf(get_lang('%d clicks'), $row['count_down']).'</td>
                   </tr>';
 
             if ($export_csv) {
@@ -577,7 +577,7 @@ if ($linkReporting) {
                 $row['title'].' ('.$row['url'].')',
                 $row['url']
             );
-            echo '</td><td align="right">'.sprintf(get_lang('%d clicks'), $row['count_visits']).'</td></tr>';
+            echo '</td><td style="text-align:end;">'.sprintf(get_lang('%d clicks'), $row['count_visits']).'</td></tr>';
 
             if ($export_csv) {
                 $temp = [

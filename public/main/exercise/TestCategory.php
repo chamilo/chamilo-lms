@@ -1119,7 +1119,7 @@ class TestCategory
             $count = $category->getQuestions()->count();
             $rowname = self::protectJSDialogQuote($category->getTitle());
             $label = 1 === $count ? $count.' '.get_lang('Question') : $count.' '.get_lang('Questions');
-            $content = "<span style='float:right'>".$label."</span>";
+            $content = "<span style='float:inline-end'>".$label."</span>";
             $content .= '<div class="sectioncomment">';
             $content .= $category->getDescription();
             $content .= '</div>';

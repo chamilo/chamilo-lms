@@ -10,7 +10,7 @@
             <div>
                 <a href="{{ courseClassesUrl }}"
                    title="{{ 'Go back to course classes'|trans }}">
-                    <i class="ch-tool-icon mdi mdi-arrow-left-bold-box" style="font-size: 32px"></i>
+                    <i class="ch-tool-icon mdi mdi-arrow-left-bold-box rtl:rotate-180" style="font-size: 32px"></i>
                 </a>
                 <h2>{{ 'Overview class'|trans }} : {{ usergroupName }}</h2>
             </div>
@@ -44,7 +44,7 @@
             {% if usersSubscribedToCourse|length > 0 %}
                 <div>
                 <b>{{ 'Users subscribed to the course'|trans }}</b>
-                <ul style='list-style-type: disc; padding-left: 1.5vw;margin: 20px 0;'>
+                <ul style='list-style-type: disc; padding-inline-start: 1.5vw;margin: 20px 0;'>
                     {% for user in usersSubscribedToCourse %}
                             <li class="user-display">{{ user.identity }} ( {{ user.email }} )</li>
                     {% endfor %}
@@ -55,7 +55,7 @@
             {% if usersNotSubscribedToCourse|length > 0 %}
                 <div>
                 <b>{{ 'Users not subscribed to the course'|trans }}</b>
-                <ul style='list-style-type: disc; padding-left: 1.5vw; margin: 20px'>
+                <ul style='list-style-type: disc; padding-inline-start: 1.5vw; margin: 20px'>
                     {% for user in usersNotSubscribedToCourse %}
                             <li class="user-display">{{ user.identity }} ( {{ user.email }} )</li>
                     {% endfor %}

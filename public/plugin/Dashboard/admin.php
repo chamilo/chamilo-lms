@@ -343,7 +343,7 @@ echo '
                     '.$plugin->get_lang('ResetDashboardLayout').'
                 </button>
                 <a class="btn btn--plain" href="'.api_get_path(WEB_CODE_PATH).'admin/index.php">
-                    <span class="mdi mdi-arrow-left" aria-hidden="true"></span>
+                    <span class="mdi mdi-arrow-left rtl:rotate-180" aria-hidden="true"></span>
                     '.$plugin->get_lang('BackToAdministration').'
                 </a>
             </div>

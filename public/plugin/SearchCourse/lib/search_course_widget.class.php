@@ -150,13 +150,13 @@ class SearchCourseWidget
 
         $content .= '
             <div class="overflow-x-auto">
-                <table class="w-full border-collapse text-left text-sm">
+                <table class="w-full border-collapse text-start text-sm">
                     <thead class="bg-gray-10 text-xs uppercase text-gray-50">
                         <tr>
                             <th class="px-4 py-3">'.self::escape(get_lang('Course')).'</th>
                             <th class="px-4 py-3">'.self::escape(get_lang('Teacher')).'</th>
                             <th class="px-4 py-3">'.self::escape(get_lang('Visibility')).'</th>
-                            <th class="px-4 py-3 text-right">'.self::escape(get_lang('Actions')).'</th>
+                            <th class="px-4 py-3 text-end">'.self::escape(get_lang('Actions')).'</th>
                         </tr>
                     </thead>
                     <tbody>';
@@ -204,7 +204,7 @@ class SearchCourseWidget
                 </td>
                 <td class="px-4 py-3 text-gray-70">'.self::escape($tutor).'</td>
                 <td class="px-4 py-3">'.$this->renderVisibilityBadge($visibility).'</td>
-                <td class="px-4 py-3 text-right">'.$this->renderActions($course, $userCourses).'</td>
+                <td class="px-4 py-3 text-end">'.$this->renderActions($course, $userCourses).'</td>
             </tr>';
     }
 

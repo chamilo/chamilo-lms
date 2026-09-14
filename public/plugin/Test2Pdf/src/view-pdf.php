@@ -71,7 +71,7 @@ ob_start();
                         href="<?php echo htmlspecialchars($courseHomeUrl, ENT_QUOTES, 'UTF-8'); ?>"
                         class="inline-flex items-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2 text-body-2 font-medium text-gray-90 transition hover:bg-gray-10"
                     >
-                        <em class="mdi mdi-arrow-left text-base" aria-hidden="true"></em>
+                        <em class="mdi mdi-arrow-left rtl:rotate-180 text-base" aria-hidden="true"></em>
                         <span><?php echo htmlspecialchars($backLabel, ENT_QUOTES, 'UTF-8'); ?></span>
                     </a>
                 </div>
@@ -96,7 +96,7 @@ ob_start();
                     <table class="min-w-full table-auto divide-y divide-gray-25">
                         <thead class="bg-gray-10">
                         <tr>
-                            <th class="px-6 py-4 text-left text-body-2 font-semibold text-gray-90">
+                            <th class="px-6 py-4 text-start text-body-2 font-semibold text-gray-90">
                                 <?php echo htmlspecialchars($exerciseLabel, ENT_QUOTES, 'UTF-8'); ?>
                             </th>
                             <th class="px-6 py-4 text-center text-body-2 font-semibold text-gray-90">

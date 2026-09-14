@@ -32,10 +32,10 @@
   }
 
   &-handle {
-    @apply absolute flex justify-center items-center bg-white text-gray-90 h-3 w-3 top-0.5 left-0.5 rounded-full transition-colors;
+    @apply absolute flex justify-center items-center bg-white text-gray-90 h-3 w-3 top-0.5 start-0.5 rounded-full transition-colors;
 
     .p-toggleswitch.p-toggleswitch-checked & {
-      @apply translate-x-4;
+      @apply ltr:translate-x-4 rtl:-translate-x-4;
     }
 
     .p-toggleswitch:not(.p-disabled):has(.p-toggleswitch-input:hover) & { }

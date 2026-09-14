@@ -539,7 +539,7 @@
           class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm"
         >
           <table class="w-full border-collapse text-sm">
-            <thead class="bg-gray-15 text-left text-gray-90">
+            <thead class="bg-gray-15 text-start text-gray-90">
               <tr>
                 <th class="w-1/2 border border-gray-25 px-3 py-2 font-semibold">
                   {{ t("Test name") }}

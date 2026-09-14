@@ -11,7 +11,7 @@
 
     label {
       cursor: pointer;
-      padding-left: 0;
+      padding-inline-start: 0;
       color: rgba(0, 0, 0, 0.5);
       min-height: 20px;
       margin-bottom: 0;
@@ -25,7 +25,7 @@
       width: 0;
       height: 0;
       overflow: hidden;
-      left: 0;
+      inset-inline-start: 0;
       pointer-events: none;
     }
   }

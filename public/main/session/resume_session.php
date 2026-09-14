@@ -162,12 +162,12 @@ $courseListToShow .= '<div class="flex items-center gap-3">'.$courseListActions.
 $courseListToShow .= '</div>';
 $courseListToShow .= '<div class="overflow-x-auto">';
 $courseListToShow .= '<table id="session-list-course" class="min-w-full divide-y divide-gray-20 text-sm">';
-$courseListToShow .= '<thead class="bg-gray-10 text-left text-gray-70"><tr>';
+$courseListToShow .= '<thead class="bg-gray-10 text-start text-gray-70"><tr>';
 $courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Course title').'</th>';
 $courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Course tutor').'</th>';
 $courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Room').'</th>';
 $courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Users number').'</th>';
-$courseListToShow .= '<th class="px-4 py-3 font-semibold text-right">'.get_lang('Detail').'</th>';
+$courseListToShow .= '<th class="px-4 py-3 font-semibold text-end">'.get_lang('Detail').'</th>';
 $courseListToShow .= '</tr></thead><tbody class="divide-y divide-gray-20 bg-white">';
 
 if (0 === $session->getNbrCourses()) {

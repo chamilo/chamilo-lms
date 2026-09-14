@@ -93,7 +93,7 @@ class BlockGlobalInfo extends Block
                 }
                 $data_table .= '<tr class="'.$class_tr.'">';
                 foreach ($data as $cell) {
-                    $data_table .= '<td align="right">'.$cell.'</td>';
+                    $data_table .= '<td style="text-align:end;">'.$cell.'</td>';
                 }
                 $data_table .= '</tr>';
                 $i++;

@@ -369,9 +369,9 @@ if ('add' != $action) {
         $column_header[] = [get_lang('Latest sent on'), true];
 
         if (0 == api_get_session_id()) {
-            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
+            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: end"'];
         } elseif (api_is_allowed_to_session_edit(false, true)) {
-            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
+            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: end"'];
         }
 
         $column_header[] = ['RealDate', true];
@@ -562,9 +562,9 @@ if ('add' != $action) {
         $column_header[] = [get_lang('Latest sent on'), true, ''];
 
         if (0 == api_get_session_id()) {
-            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
+            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: end"'];
         } elseif (api_is_allowed_to_session_edit(false, true)) {
-            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
+            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: end"'];
         }
 
         $column_header[] = ['RealDate', true];

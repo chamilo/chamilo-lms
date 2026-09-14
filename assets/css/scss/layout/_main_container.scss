@@ -7,13 +7,13 @@
 }
 
 .app-main {
-  @apply flex flex-col h-screen transition-[margin-left] duration-150 pb-4 px-4
+  @apply flex flex-col h-screen transition-[margin-inline-start] duration-150 pb-4 px-4
     sm:h-auto sm:min-h-dvh
     md:pb-8 md:px-8;
   padding-top: calc(5.125rem + 1rem + 1px);
 
   &:not(.app-main--no-sidebar) {
-    @apply sm:ml-60;
+    @apply sm:ms-60;
   }
 }
 
@@ -25,6 +25,6 @@
   }
 
   .app-main:not(.app-main--no-sidebar) {
-    @apply sm:ml-[88px];
+    @apply sm:ms-[88px];
   }
 }

@@ -663,7 +663,7 @@
                 state +
                 '.png" class="checkboxqcm">' +
                 '</td>' +
-                '<td style="text-align:left;">' +
+                '<td style="text-align:start;">' +
                 escapeHtml(answer.text || '') +
                 '</td>' +
                 '</tr>'

@@ -1,12 +1,12 @@
 .app-topbar {
-  @apply flex bg-white border-b border-solid border-gray-25 fixed left-0 top-0 w-full z-10 py-4;
+  @apply flex bg-white border-b border-solid border-gray-25 fixed start-0 top-0 w-full z-10 py-4;
 
   .p-menubar {
     @apply text-gray-90 container mx-auto;
 
     .p-menubar-start {
-      @apply ml-4 mr-auto
-        md:ml-0;
+      @apply ms-4 me-auto
+        md:ms-0;
     }
 
     .p-menubar-button {
@@ -39,8 +39,8 @@
 
           > .p-menubar-item-content .p-menubar-item-link {
             @apply py-3 px-9
-              hover:border-l-4 hover:border-primary hover:border-solid hover:pl-8 hover:bg-support-1
-              focus:border-l-4 focus:border-primary focus:border-solid focus:pl-8 focus:bg-support-1;
+              hover:border-s-4 hover:border-primary hover:border-solid hover:ps-8 hover:bg-support-1
+              focus:border-s-4 focus:border-primary focus:border-solid focus:ps-8 focus:bg-support-1;
           }
         }
 
@@ -61,7 +61,7 @@
         }
 
         .p-menubar-submenu {
-          @apply absolute border-0 bottom-16 left-6;
+          @apply absolute border-0 bottom-16 start-6;
           width: calc(100vw - 3rem);
         }
       }
@@ -74,7 +74,7 @@
 
     > .p-menubar-item:last-child .p-menubar-submenu {
       @apply max-h-[15.5rem] overflow-y-auto
-        md:right-0;
+        md:end-0;
     }
   }
 
@@ -111,7 +111,7 @@
   }
 
   &__start {
-    @apply ml-4 mr-auto;
+    @apply ms-4 me-auto;
   }
 
   &__items {
@@ -139,7 +139,7 @@
       }
 
       &__badge {
-        @apply bg-error text-white rounded-full text-tiny font-semibold absolute text-center h-4 w-4 top-0 right-0;
+        @apply bg-error text-white rounded-full text-tiny font-semibold absolute text-center h-4 w-4 top-0 end-0;
       }
 
       &.router-link-exact-active .mdi {
@@ -149,7 +149,7 @@
   }
 
   &__end {
-    @apply ml-6 mr-4 flex items-center gap-6;
+    @apply ms-6 me-4 flex items-center gap-6;
 
     .user-avatar {
       @apply rounded-full w-8 h-8 text-white bg-primary leading-6 text-body-2 font-semibold;
@@ -181,6 +181,7 @@
 .app-topbars .p-menubar {
   .p-menubar-submenu {
     .p-submenu-icon {
+      @apply rtl:rotate-180;
     }
 
     >.p-menubar-item:hover,

@@ -247,7 +247,7 @@ function c2_style_plugin_settings_form_html(string $html): string
             c2_add_tailwind_classes_to_element($th, [
                 'px-4',
                 'py-3',
-                'text-left',
+                'text-start',
                 'text-xs',
                 'font-semibold',
                 'uppercase',
@@ -646,7 +646,7 @@ $content = '
     <h2 class="section-header__title">'.$pluginTitleEscaped.'</h2>
     <div class="section-header__actions">
         <a href="'.$backUrl.'" class="btn btn--plain-outline">
-            <em class="mdi mdi-arrow-left"></em>
+            <em class="mdi mdi-arrow-left rtl:rotate-180"></em>
             '.htmlspecialchars(get_lang('Back to plugins'), ENT_QUOTES, 'UTF-8').'
         </a>
     </div>

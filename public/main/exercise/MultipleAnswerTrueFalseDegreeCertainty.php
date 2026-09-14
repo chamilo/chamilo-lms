@@ -403,46 +403,46 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         <table class="fc-border-separate" cellspacing="0" style="width:600px;
             margin: auto; border: 3px solid #A39E9E;" >
             <tr style="border-bottom: 1px solid #A39E9E;">
-                <td style="width:15%; height:30px; background-color: #088A08; border-right: 1px solid #A39E9E;">
+                <td style="width:15%; height:30px; background-color: #088A08; border-inline-end: 1px solid #A39E9E;">
                     &nbsp;
                 </td>
-                <td style="padding-left:10px;">
+                <td style="padding-inline-start:10px;">
                     <b><?php echo get_lang('Very sure'); ?> :</b>
                     <?php echo get_lang('Your answer was correct and you were 80% sure about it. Congratulations!'); ?>
                 </td>
             </tr>
             <tr style="border-bottom: 1px solid #A39E9E;">
-                <td style="width:15%; height:30px; background-color: #A9F5A9; border-right: 1px solid #A39E9E;">
+                <td style="width:15%; height:30px; background-color: #A9F5A9; border-inline-end: 1px solid #A39E9E;">
                     &nbsp;
                 </td>
-                <td style="padding-left:10px;">
+                <td style="padding-inline-start:10px;">
                     <b><?php echo get_lang('Pretty sure'); ?> :</b>
                     <?php echo get_lang('Your answer was correct but you were not completely sure (only 60% to 70% sure)'); ?>
                 </td>
             </tr>
             <tr style="border: 1px solid #A39E9E;">
-                <td style="width:15%; height:30px; background-color: #FFFFFF; border-right: 1px solid #A39E9E;">
+                <td style="width:15%; height:30px; background-color: #FFFFFF; border-inline-end: 1px solid #A39E9E;">
                     &nbsp;
                 </td>
-                <td style="padding-left:10px;">
+                <td style="padding-inline-start:10px;">
                     <b><?php echo get_lang('Declared ignorance'); ?> :</b>
                     <?php echo get_lang('You didn\'t know the answer - only 50% sure'); ?>
                 </td>
             </tr>
             <tr style="border: 1px solid #A39E9E;">
-                <td style="width:15%; height:30px; background-color: #F6CECE; border-right: 1px solid #A39E9E;">
+                <td style="width:15%; height:30px; background-color: #F6CECE; border-inline-end: 1px solid #A39E9E;">
                     &nbsp;
                 </td>
-                <td style="padding-left:10px;">
+                <td style="padding-inline-start:10px;">
                     <b><?php echo get_lang('Unsure'); ?> :</b>
                     <?php echo get_lang('Your answer was incorrect, but you guessed it was (60% to 70% sure)'); ?>
                 </td>
             </tr>
             <tr style="border-bottom: 1px solid #A39E9E;">
-                <td style="width:15%; height:30px; background-color: #FE2E2E; border-right: 1px solid #A39E9E;">
+                <td style="width:15%; height:30px; background-color: #FE2E2E; border-inline-end: 1px solid #A39E9E;">
                     &nbsp;
                 </td>
-                <td style="padding-left:10px;">
+                <td style="padding-inline-start:10px;">
                     <b><?php echo get_lang('Very unsure'); ?> :</b>
                     <?php echo get_lang('Your answer was incorrect although you were about 80% (or more) sure it was wrong'); ?>
                 </td>
@@ -847,7 +847,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             if (1 == $i || 2 == $i) {
                 $html .= '<td width="'
                     .$colWidth
-                    .'px" style="border-right: 1px dotted #7FC5FF; vertical-align: bottom;font-size: '
+                    .'px" style="border-inline-end: 1px dotted #7FC5FF; vertical-align: bottom;font-size: '
                     .$textSize
                     .'%;">'
                 ;

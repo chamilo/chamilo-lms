@@ -118,7 +118,7 @@ switch ($action) {
                     //------Blog comments
                     $result = Blog::getBlogCommentsFromUser($courseId, $user_id, $course_code);
                     if (!empty($result)) {
-                        echo '<div  style="background:#FAF9F6; padding-left:10px;">';
+                        echo '<div  style="background:#FAF9F6; padding-inline-start:10px;">';
                         Display::page_subheader2(api_xml_http_response_encode(get_lang('Blog comments')));
                         echo api_xml_http_response_encode($result);
                         echo '</div>';

@@ -6533,7 +6533,7 @@ SQL;
             return $decoded;
         }
 
-        $unserialized = @unserialize($value);
+        $unserialized = @unserialize($value, ['allowed_classes' => false]);
         if (is_array($unserialized)) {
             return $unserialized;
         }

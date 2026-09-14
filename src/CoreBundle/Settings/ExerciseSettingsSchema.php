@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Json;
 
 class ExerciseSettingsSchema extends AbstractSettingsSchema
 {
@@ -142,7 +143,9 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                     'Score div percent' => '3',
                 ],
             ])
-            ->add('exercise_additional_teacher_modify_actions', TextareaType::class)
+            ->add('exercise_additional_teacher_modify_actions', TextareaType::class, [
+                'constraints' => [new Json()],
+            ])
             ->add('quiz_confirm_saved_answers', YesNoType::class)
             ->add('allow_exercise_categories', YesNoType::class)
             ->add('allow_quiz_results_page_config', YesNoType::class)

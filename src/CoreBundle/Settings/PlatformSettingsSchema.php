@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Json;
 
 class PlatformSettingsSchema extends AbstractSettingsSchema
 {
@@ -123,7 +124,9 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('generate_random_login', YesNoType::class)
             ->add('timepicker_increment', TextType::class)
             ->add('user_status_show_options_enabled', YesNoType::class)
-            ->add('user_status_show_option', TextareaType::class)
+            ->add('user_status_show_option', TextareaType::class, [
+                'constraints' => [new Json()],
+            ])
             ->add('platform_logo_url', TextType::class)
             ->add('use_career_external_id_as_identifier_in_diagrams', YesNoType::class)
             ->add('portfolio_advanced_sharing', YesNoType::class)

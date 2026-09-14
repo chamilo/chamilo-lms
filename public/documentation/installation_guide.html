@@ -390,7 +390,51 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
 
     <h3>4.5. Execution</h3>
     <a id="cli-upgrade-exec" class="anchor"></a>
-      // To be completed
+      Configure the new Chamilo 3 tree first: create the .env file with your database credentials
+      (copy .env.dist and fill in DATABASE_HOST, DATABASE_PORT, DATABASE_NAME, DATABASE_USER and
+      DATABASE_PASSWORD), and point them to the 1.11.* database you want to upgrade.<br>
+      Then run the migrations from the root of the Chamilo 3 tree, with UPDATE_PATH set to the root
+      directory of your 1.11.* installation. That variable tells the migrations where to read your
+      course files and uploads from.
+    <pre>
+        cd [/var/www/chamilo3]
+        UPDATE_PATH=[/var/www/chamilo-1.11] php bin/console doctrine:migrations:migrate --no-interaction
+        php bin/console cache:clear --env=prod
+        php bin/console cache:warmup --env=prod
+        sudo chown -R www-data: var/
+    </pre>
+      The command prints each migration as it runs and ends with "Successfully migrated to version".
+      If it stops earlier, fix the reported cause and run it again: migrations already applied are
+      recorded and are not repeated.<br>
+      Duration follows the size of your database and of your course files. As a reference point, a
+      1.11.28 platform with 238 tables, 11 courses, 63 users and 1489 course files took 6 minutes and
+      1.7 GB of memory, and ran 393 migrations. A large production platform takes hours.<br>
+      When the migration ends, set APP_INSTALLED=1 in your .env file, then follow section 3.7 to
+      restrict permissions and delete the public/main/install/ directory.
+
+    <h3>4.6. Upgrading from Chamilo 2.x instead</h3>
+    <a id="cli-upgrade-from-2x" class="anchor"></a>
+      An existing Chamilo 2.x installation keeps its own directory and its own database: you copy the
+      new code over it and run the migrations, with no UPDATE_PATH.<br>
+      One step comes first, and its order matters. Chamilo installs its schema directly from the entity
+      definitions, so an installation created by the installer holds the final schema with an *empty*
+      migration history. Installations created before Chamilo 3.0 were never given that history, and
+      doctrine:migrations:migrate would then try to replay every migration from the beginning over a
+      schema that is already current. The web installer also reads that history to decide whether an
+      upgrade is pending, and refuses the request while it is empty.<br>
+      So seed it once, *before* you copy the Chamilo 3 code, with your current version still in place.
+      The commands mark every migration the deployed code carries as already executed; run them after
+      copying the new code and they would mark the new migrations too, so your upgrade would never run.
+    <pre>
+        php bin/console doctrine:migrations:sync-metadata-storage --no-interaction
+        php bin/console doctrine:migrations:version --add --all --no-interaction
+        php bin/console doctrine:migrations:status
+    </pre>
+      In the status output, "Executed" must equal "Available" and "New" must be 0. The first command
+      creates the history table; the second one fails on its own if that table does not exist yet, so
+      do not skip it.<br>
+      Now copy the Chamilo 3 code over your installation and run the migrations as in section 4.5,
+      without UPDATE_PATH.
 
   <h2>5. Web panel upgrade from 1.11.*</h2>
   <a id="web-upgrade" class="anchor"></a>
@@ -405,6 +449,18 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
     On step 2 of the installation wizard, make sure you select "Upgrade from a previous version of Chamilo" and click "Continue".<br>
     Follow the wizard to complete the upgrade.<br>
     Please be aware that upgrading your system might take hours or even days, depending on the size and complexity of your database. Refer to the Chamilo forum or to official providers for help.
+
+    <h3>5.3. Upgrading from Chamilo 2.x through the web panel</h3>
+    <a id="web-upgrade-from-2x" class="anchor"></a>
+    The wizard has no login of its own, so it answers only while it still has work to do. On an
+    installed platform it opens when the database has migrations left to execute, and it answers
+    "409 Conflict - Chamilo is already installed" once there are none.<br>
+    This means an installation whose migration history was never seeded is refused, because nothing
+    proves that an upgrade is pending. Seed it first, with your current version still deployed, as
+    described in section 4.6, then copy the Chamilo 3 code and open your URL.<br>
+    If the wizard refuses your request and you expected an upgrade, run
+    <em>php bin/console doctrine:migrations:status</em>. If "Executed" is 0 on a platform that works,
+    the history is the cause.
 
   <h2>6. Installing on Windows with WAMP</h2>
   <a id="windows-install-wamp" class="anchor"></a>

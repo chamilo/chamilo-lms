@@ -7,6 +7,8 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Installer\InstallerGate;
+use Chamilo\CoreBundle\Installer\InstallerState;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -14,7 +16,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
-use Doctrine\Migrations\Query\Query;
 use Doctrine\Migrations\Version\Direction;
 use Doctrine\Migrations\Version\ExecutionResult;
 use Doctrine\Migrations\Version\Version;
@@ -1391,88 +1392,6 @@ function installSettings(
 }
 
 /**
- * Executes DB changes based in the classes defined in
- * /src/CoreBundle/Migrations/Schema/V200/*.
- *
- * @return bool
- */
-function migrate(EntityManager $manager)
-{
-    $debug = true;
-    $connection = $manager->getConnection();
-    $to = null; // if $to == null then schema will be migrated to latest version
-
-    // Loading migration configuration.
-    $config = new PhpFile('./migrations.php');
-    $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
-
-    // Check if old "version" table exists from 1.11.x, use new version.
-    $schema = $manager->getConnection()->createSchemaManager();
-    $dropOldVersionTable = false;
-    if ($schema->tablesExist('version')) {
-        $columns = $schema->listTableColumns('version');
-        if (in_array('id', array_keys($columns), true)) {
-            $dropOldVersionTable = true;
-        }
-    }
-
-    if ($dropOldVersionTable) {
-        error_log('Drop version table');
-        $schema->dropTable('version');
-    }
-
-    // Creates "version" table.
-    $dependency->getMetadataStorage()->ensureInitialized();
-
-    // Loading migrations.
-    $migratorConfigurationFactory = $dependency->getConsoleInputMigratorConfigurationFactory();
-    $result = '';
-    $input = new Symfony\Component\Console\Input\StringInput($result);
-    $migratorConfiguration = $migratorConfigurationFactory->getMigratorConfiguration($input);
-    $migrator = $dependency->getMigrator();
-    $planCalculator = $dependency->getMigrationPlanCalculator();
-    $migrations = $planCalculator->getMigrations();
-    $lastVersion = $migrations->getLast();
-
-    $plan = $dependency->getMigrationPlanCalculator()->getPlanUntilVersion($lastVersion->getVersion());
-
-    foreach ($plan->getItems() as $item) {
-        error_log("Version to be executed: ".$item->getVersion());
-        $item->getMigration()->setEntityManager($manager);
-        $item->getMigration()->setContainer(Container::$container);
-    }
-
-    // Execute migration!!
-    /** @var $migratedVersions */
-    $versions = $migrator->migrate($plan, $migratorConfiguration);
-
-    if ($debug) {
-        /** @var Query[] $queries */
-        $versionCounter = 1;
-        foreach ($versions as $version => $queries) {
-            $total = count($queries);
-            //echo '----------------------------------------------<br />';
-            $message = "VERSION: $version";
-            //echo "$message<br/>";
-            error_log('-------------------------------------');
-            error_log($message);
-            $counter = 1;
-            foreach ($queries as $query) {
-                $sql = $query->getStatement();
-                //echo "<code>$sql</code><br>";
-                error_log("$counter/$total : $sql");
-                $counter++;
-            }
-            $versionCounter++;
-        }
-        //echo '<br/>DONE!<br />';
-        error_log('DONE!');
-    }
-
-    return true;
-}
-
-/**
  * @param string $distFile
  * @param string $envFile
  * @param array  $params
@@ -1844,68 +1763,6 @@ function rrmdir($dir)
 }
 
 /**
- * Control the different steps of the migration through a big switch.
- *
- * @param string        $fromVersion
- * @param EntityManager $manager
- * @param bool          $processFiles
- *
- * @return bool Always returns true except if the process is broken
- */
-function migrateSwitch($fromVersion, $manager, $processFiles = true)
-{
-    error_log('-----------------------------------------');
-    error_log('Starting migration process from '.$fromVersion.' ('.date('Y-m-d H:i:s').')');
-    //echo '<a class="btn btn--secondary" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
-    //echo '<div id="details" style="display:none">';
-    $connection = $manager->getConnection();
-
-    switch ($fromVersion) {
-        case '1.11.0':
-        case '1.11.1':
-        case '1.11.2':
-        case '1.11.4':
-        case '1.11.6':
-        case '1.11.8':
-        case '1.11.10':
-        case '1.11.12':
-        case '1.11.14':
-        case '1.11.16':
-            $start = time();
-            // Migrate using the migration files located in:
-            // /srv/http/chamilo2/src/CoreBundle/Migrations/Schema/V200
-            $result = migrate($manager);
-            error_log('-----------------------------------------');
-
-            if ($result) {
-                error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
-                $sql = "UPDATE settings SET selected_value = '2.0.0'
-                        WHERE variable = 'chamilo_database_version'";
-                $connection->executeQuery($sql);
-                if ($processFiles) {
-                    error_log('Update config files');
-                    include __DIR__.'/update-files-1.11.0-2.0.0.inc.php';
-                    // Only updates the configuration.inc.php with the new version
-                    //include __DIR__.'/update-configuration.inc.php';
-                }
-                $finish = time();
-                $total = round(($finish - $start) / 60);
-                error_log('Database migration finished:  ('.date('Y-m-d H:i:s').') took '.$total.' minutes');
-            } else {
-                error_log('There was an error during running migrations. Check error.log');
-                exit;
-            }
-            break;
-        default:
-            break;
-    }
-
-    //echo '</div>';
-
-    return true;
-}
-
-/**
  * @return string
  */
 function generateRandomToken()
@@ -1936,153 +1793,135 @@ function checkCanCreateFile(string $file): bool
 }
 
 /**
- * Checks if the update option is available.
+ * Decides whether the unauthenticated installer endpoints must refuse the request.
  *
- * This function checks the APP_INSTALLED environment variable to determine if the application is already installed.
- * If the APP_INSTALLED variable is set to '1', it indicates that an update is available.
+ * The installer carries no authentication of its own, so an already installed and
+ * up-to-date platform must never expose it (see GHSA-mfgc-693v-xq5v). An installed
+ * platform that still has pending Doctrine migrations is a legitimate upgrade and
+ * stays open, which is what makes the 2.x -> 3.x web upgrade possible.
  *
- * @return bool True if the application is already installed (APP_INSTALLED='1'), otherwise false.
+ * The decision never reads chamilo_database_version: that setting is deprecated and
+ * a fresh install seeds it with a stale schema default. Doctrine's own migration
+ * metadata is the source of truth instead. When that metadata is missing the request
+ * is refused, because nothing can then prove that an upgrade is pending.
  */
-function isUpdateAvailable(): bool
+function isInstallerLocked(): bool
 {
-    $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
-    if (!file_exists($envFile)) {
-        return false; // No .env -> fresh install
-    }
-
-    $dotenv = new Dotenv();
-    try {
-        $dotenv->loadEnv($envFile);
-    } catch (\Throwable $e) {
-        // Unable to load .env reliably -> do not assume update
-        error_log('Installer: Unable to load .env, update check disabled. Reason: ' . $e->getMessage());
-        return false;
-    }
-
-    // Must be an installed platform
-    if (($_ENV['APP_INSTALLED'] ?? '') !== '1') {
-        // Not marked as installed -> no update flow
-        return false;
-    }
-
-    // DB connectivity and "looks installed" checks
-    try {
-        connectToDatabase(
-            $_ENV['DATABASE_HOST'] ?? 'localhost',
-            $_ENV['DATABASE_USER'] ?? '',
-            $_ENV['DATABASE_PASSWORD'] ?? '',
-            $_ENV['DATABASE_NAME'] ?? '',
-            (int) ($_ENV['DATABASE_PORT'] ?? 3306)
-        );
-
-        $conn = Database::getManager()->getConnection();
-        $schema = $conn->createSchemaManager();
-        $tables = $schema->listTableNames();
-
-        if (count($tables) === 0) {
-            // Empty database -> treat as not installed -> no update suggestion
-            return false;
-        }
-
-        // Must have at least one of the settings tables to consider it a Chamilo DB
-        $hasSettings = $schema->tablesExist(['settings']) || $schema->tablesExist(['settings_current']);
-        if (!$hasSettings) {
-            // Not a Chamilo database schema -> no update suggestion
-            return false;
-        }
-    } catch (\Throwable $e) {
-        // If DB does not exist or credentials are wrong, do NOT suggest update.
-        error_log('Installer: Database is not reachable, update is NOT available. Reason: ' . $e->getMessage());
-        return false;
-    }
-
-    // The web installer no longer detects a pending update from a stored
-    // version. It used to compare the deprecated chamilo_database_version
-    // setting against the installer version, but that value is a hand-maintained
-    // literal that migrations never raise, so a fresh install was wrongly
-    // flagged as needing an update. Database upgrades run through
-    // doctrine:migrations:migrate; reaching this point only proves the platform
-    // is already installed, which is not an update.
-    return false;
+    return resolveInstallerState()->isLocked();
 }
 
 /**
- * Return the migration PHP files configured for the web installer.
+ * Resolves the installer state from the environment file and the configured database.
+ *
+ * The result is computed once per request: both the gate and the wizard read it, and
+ * each call otherwise opens a database connection.
+ */
+function resolveInstallerState(): InstallerState
+{
+    static $state = null;
+
+    if ($state instanceof InstallerState) {
+        return $state;
+    }
+
+    $envFile = api_get_path(SYMFONY_SYS_PATH).'.env';
+
+    if (!file_exists($envFile)) {
+        // No .env: a fresh install, or an upgrade from 1.11.x into a new code tree.
+        return $state = InstallerState::FreshInstall;
+    }
+
+    try {
+        (new Dotenv())->loadEnv($envFile);
+    } catch (Throwable $e) {
+        // Keep going: the checks below still gate the request.
+    }
+
+    $appInstalled = '1' === trim((string) (
+        $_SERVER['APP_INSTALLED']
+        ?? $_ENV['APP_INSTALLED']
+        ?? getenv('APP_INSTALLED')
+        ?? ''
+    ), " \t\n\r\0\x0B'\"");
+
+    $connection = null;
+
+    if ($appInstalled) {
+        try {
+            connectToDatabase(
+                (string) ($_SERVER['DATABASE_HOST'] ?? $_ENV['DATABASE_HOST'] ?? getenv('DATABASE_HOST') ?? 'localhost'),
+                (string) ($_SERVER['DATABASE_USER'] ?? $_ENV['DATABASE_USER'] ?? getenv('DATABASE_USER') ?? ''),
+                (string) ($_SERVER['DATABASE_PASSWORD'] ?? $_ENV['DATABASE_PASSWORD'] ?? getenv('DATABASE_PASSWORD') ?? ''),
+                (string) ($_SERVER['DATABASE_NAME'] ?? $_ENV['DATABASE_NAME'] ?? getenv('DATABASE_NAME') ?? ''),
+                (int) ($_SERVER['DATABASE_PORT'] ?? $_ENV['DATABASE_PORT'] ?? getenv('DATABASE_PORT') ?? 3306)
+            );
+
+            $connection = Database::getManager()->getConnection();
+        } catch (Throwable $e) {
+            // Unreachable database: nothing proves the platform is installed.
+            $connection = null;
+        }
+    }
+
+    return $state = InstallerGate::resolve(
+        true,
+        $appInstalled,
+        $connection,
+        getInstallerMigrations()
+    );
+}
+
+/**
+ * Return the migration classes configured for the web installer.
  *
  * @return string[]
  */
-function getInstallerMigrationFiles(): array
+function getInstallerMigrations(): array
 {
-    $configuration = require __DIR__.'/migrations.php';
-    $files = [];
-
-    foreach (($configuration['migrations_paths'] ?? []) as $migrationPath) {
-        $absolutePath = realpath(__DIR__.'/'.$migrationPath);
-        if (false === $absolutePath) {
-            continue;
-        }
-
-        foreach (glob($absolutePath.'/Version*.php') ?: [] as $file) {
-            $files[] = $file;
-        }
-    }
-
-    sort($files);
-
-    return array_values(array_unique($files));
+    return InstallerGate::migrationsFromConfiguration(require __DIR__.'/migrations.php', __DIR__);
 }
 
 /**
- * Read the Chamilo database version from the settings table used by the source database.
+ * Checks if the update option is available.
+ *
+ * An installed platform whose database still has pending migrations is an upgrade in
+ * progress, which is what the 2.x to 3.x web upgrade needs. The deprecated
+ * chamilo_database_version setting is never read: migrations never raise it, so a fresh
+ * install was once wrongly flagged as needing an update.
  */
-function getChamiloDatabaseVersion(Connection $connection): string
+function isUpdateAvailable(): bool
 {
-    $schema = $connection->createSchemaManager();
-
-    foreach (['settings_current', 'settings'] as $table) {
-        if (!$schema->tablesExist([$table])) {
-            continue;
-        }
-
-        try {
-            $version = $connection->fetchOne(
-                "SELECT selected_value FROM {$table} WHERE variable = :variable LIMIT 1",
-                ['variable' => 'chamilo_database_version']
-            );
-        } catch (\Throwable) {
-            continue;
-        }
-
-        if (is_string($version) && '' !== trim($version)) {
-            return trim($version);
-        }
-    }
-
-    return '';
+    return resolveInstallerState()->isUpgrade();
 }
 
 /**
- * A fresh Chamilo 2.x install is created from the final 2.x schema and therefore has
- * no Doctrine migration metadata table. Before upgrading it to 3.x, mark the V200
- * migration namespace as the existing schema baseline so Doctrine only executes the
- * migrations introduced after the 2.x baseline.
+ * A Chamilo 2.x install created before the installer seeded the migration metadata holds
+ * the final 2.x schema with an empty `version` table. Before upgrading it to 3.x, mark the
+ * V200 namespace as the existing schema baseline so Doctrine only executes the migrations
+ * introduced after it.
+ *
+ * The detection reads the schema, never chamilo_database_version: that setting is
+ * deprecated and carries a stale default. The resource_node table exists only once the
+ * V200 namespace has run, so a 1.11.x database never matches. An interrupted 1.11.x
+ * migration does not match either, because it already has migration metadata rows.
  */
 function baselineV200MigrationsForModernUpgrade(
     DependencyFactory $dependency,
     Connection $connection
 ): int {
-    $databaseVersion = getChamiloDatabaseVersion($connection);
-    if (
-        '' === $databaseVersion
-        || version_compare($databaseVersion, '2.0.0', '<')
-        || version_compare($databaseVersion, '3.0.0', '>=')
-    ) {
+    if (!$connection->createSchemaManager()->tablesExist(['resource_node'])) {
         return 0;
     }
 
     $metadataStorage = $dependency->getMetadataStorage();
     $metadataStorage->ensureInitialized();
     $executedMigrations = $metadataStorage->getExecutedMigrations();
+
+    // Any executed migration means this database is mid-upgrade, not a 2.x baseline.
+    if (0 !== \count($executedMigrations->getItems())) {
+        return 0;
+    }
+
     $baselineCount = 0;
     $migrationPath = realpath(__DIR__.'/../../../src/CoreBundle/Migrations/Schema/V200');
 
@@ -2156,7 +1995,7 @@ function checkMigrationStatus(): array
 {
     Database::setManager(initializeEntityManager());
     $connection = Database::getManager()->getConnection();
-    $totalMigrations = count(getInstallerMigrationFiles());
+    $totalMigrations = count(getInstallerMigrations());
     $schema = $connection->createSchemaManager();
 
     if (!$schema->tablesExist(['version'])) {

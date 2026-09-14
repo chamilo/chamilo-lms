@@ -8,8 +8,10 @@ namespace Chamilo\Tests\CoreBundle\Installer;
 
 use Chamilo\CoreBundle\Installer\InstallerGate;
 use Chamilo\CoreBundle\Installer\InstallerState;
+use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Schema\DefaultSchemaManagerFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -214,7 +216,16 @@ final class InstallerGateTest extends TestCase
 
     private function connection(): Connection
     {
-        return DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);
+        // Without the factory DBAL 3 emits a deprecation, which the CI counts as a
+        // failure. It goes through Configuration: the parameter array has a declared
+        // shape, and an extra key there is an error for Psalm.
+        $configuration = new Configuration();
+        $configuration->setSchemaManagerFactory(new DefaultSchemaManagerFactory());
+
+        return DriverManager::getConnection(
+            ['driver' => 'pdo_sqlite', 'memory' => true],
+            $configuration
+        );
     }
 
     private function emptyDatabase(): Connection

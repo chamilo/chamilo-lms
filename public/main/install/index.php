@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ScimHelper;
+use Chamilo\CoreBundle\Installer\InstallerGate;
 use Chamilo\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -76,82 +77,21 @@ $envFile = api_get_path(SYMFONY_SYS_PATH).'.env';
 $versionInfo = require __DIR__.'/version.php';
 $installerVersion = $versionInfo['new_version'] ?? null;
 
-if (file_exists($envFile)) {
-    $dotenv = new Dotenv();
-    try {
-        // Load .env without crashing if incomplete
-        $dotenv->loadEnv($envFile);
-    } catch (\Throwable $e) {
-        // Ignore and let the wizard continue
-    }
-
-    $appInstalled = (string) (
-            $_SERVER['APP_INSTALLED']
-            ?? $_ENV['APP_INSTALLED']
-            ?? getenv('APP_INSTALLED')
-            ?? ''
-        ) === '1';
-
-    if ($appInstalled && $installerVersion) {
-        $dbLooksInitialized = false;
-
-        try {
-            $dbHost = (string) ($_SERVER['DATABASE_HOST'] ?? $_ENV['DATABASE_HOST'] ?? getenv('DATABASE_HOST') ?? 'localhost');
-            $dbUser = (string) ($_SERVER['DATABASE_USER'] ?? $_ENV['DATABASE_USER'] ?? getenv('DATABASE_USER') ?? '');
-            $dbPass = (string) ($_SERVER['DATABASE_PASSWORD'] ?? $_ENV['DATABASE_PASSWORD'] ?? getenv('DATABASE_PASSWORD') ?? '');
-            $dbName = (string) ($_SERVER['DATABASE_NAME'] ?? $_ENV['DATABASE_NAME'] ?? getenv('DATABASE_NAME') ?? '');
-            $dbPort = (int) ($_SERVER['DATABASE_PORT'] ?? $_ENV['DATABASE_PORT'] ?? getenv('DATABASE_PORT') ?? 3306);
-
-            // Connect using the legacy installer helpers
-            connectToDatabase($dbHost, $dbUser, $dbPass, $dbName, $dbPort);
-
-            $conn = Database::getManager()->getConnection();
-
-            // Fast "is initialized?" proof:
-            // - if settings_current (or settings) exists AND has at least 1 row, we treat it as initialized.
-            // Avoid schema introspection for performance and reliability.
-            try {
-                $hasAnySetting = $conn->fetchOne('SELECT 1 FROM settings_current LIMIT 1');
-                if ($hasAnySetting !== false && $hasAnySetting !== null) {
-                    $dbLooksInitialized = true;
-                }
-            } catch (\Throwable $e) {
-                // Ignore and try legacy table
-            }
-
-            if (!$dbLooksInitialized) {
-                try {
-                    $hasAnySetting = $conn->fetchOne('SELECT 1 FROM settings LIMIT 1');
-                    if ($hasAnySetting !== false && $hasAnySetting !== null) {
-                        $dbLooksInitialized = true;
-                    }
-                } catch (\Throwable $e) {
-                    // No settings tables -> DB is not initialized
-                }
-            }
-        } catch (\Throwable $e) {
-            // If we cannot connect, do not block the wizard
-            $dbLooksInitialized = false;
-        }
-
-        // Block whenever the database is already initialized. Comparing a stored
-        // version is deliberately avoided: chamilo_database_version is deprecated
-        // and a fresh install seeds a stale value, which previously let the gate
-        // fail open for an anonymous caller. Recovering a half-installed instance
-        // is unaffected: that path has $dbLooksInitialized === false.
-        if ($dbLooksInitialized) {
-            header('HTTP/1.1 409 Conflict');
-            echo '<!doctype html><meta charset="utf-8"><title>Chamilo already installed</title>';
-            echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
-            echo '<h1>Chamilo is already installed</h1>';
-            echo '<p>The install wizard is disabled because the platform is already installed and up-to-date.</p>';
-            echo '<p>If you need a fresh install, set <code>APP_INSTALLED=0</code> or remove <code>.env</code> first.</p>';
-            echo '</div>';
-            exit;
-        }
-
-        // If APP_INSTALLED=1 but DB is NOT initialized, we intentionally allow the wizard to run.
-    }
+// The wizard has no authentication of its own, so it stays reachable only while it
+// still has work to do: a fresh install, a half-installed instance, or an installed
+// platform with pending migrations (the 1.11.x and 2.x upgrades).
+if (isInstallerLocked()) {
+    header('HTTP/1.1 409 Conflict');
+    echo '<!doctype html><meta charset="utf-8"><title>Chamilo already installed</title>';
+    echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
+    echo '<h1>Chamilo is already installed</h1>';
+    echo '<p>The install wizard is disabled because the platform is already installed and up-to-date.</p>';
+    echo '<p>If an upgrade is pending, run <code>php bin/console doctrine:migrations:status</code> to check it.';
+    echo ' An installation that predates the migration metadata seeding needs';
+    echo ' <code>php bin/console doctrine:migrations:version --add --all</code> once.</p>';
+    echo '<p>If you need a fresh install, set <code>APP_INSTALLED=0</code> or remove <code>.env</code> first.</p>';
+    echo '</div>';
+    exit;
 }
 
 $httpRequest = Request::createFromGlobals();
@@ -264,6 +204,11 @@ $upgradeFromVersion = [
     '1.11.30',
     '1.11.32',
     '1.11.34',
+    '1.11.36',
+    '1.11.38',
+    '1.11.40',
+    // Not released yet: security fixes planned for the 1.11 branch.
+    '1.11.42',
 ];
 
 $my_old_version = '';
@@ -298,24 +243,19 @@ if (!empty($_POST['updatePath'])) {
 $checkMigrationStatus = [];
 $isUpdateAvailable = isUpdateAvailable();
 
+// A modern upgrade is recognised from the schema, not from chamilo_database_version:
+// that setting is deprecated and a fresh install seeds it with a stale default.
+// isInstallerLocked() above already refused an installed platform with no pending
+// migration, so reaching this point with a 2.x schema means an upgrade is due.
+$isModernUpdate = false;
+
 if ($isUpdateAvailable) {
     try {
-        $databaseVersion = getChamiloDatabaseVersion(Database::getManager()->getConnection());
-        if ('' !== $databaseVersion) {
-            // For Chamilo 2.x and newer, the database is the reliable source version.
-            // The current 3.x code tree already contains its own version.php, so using
-            // the target code path here would incorrectly report the target version.
-            $my_old_version = $databaseVersion;
-        }
+        $isModernUpdate = InstallerGate::isModernSchema(Database::getManager()->getConnection());
     } catch (\Throwable $e) {
-        error_log('Installer: Could not determine source database version: '.$e->getMessage());
+        error_log('Installer: Could not inspect the source database schema: '.$e->getMessage());
     }
 }
-
-$isModernUpdate = $isUpdateAvailable
-    && '' !== $my_old_version
-    && version_compare($my_old_version, '2.0.0', '>=')
-    && version_compare($my_old_version, $new_version, '<');
 
 if ($isModernUpdate && empty($proposedUpdatePath)) {
     // Chamilo 2.x already stores DB configuration in .env and its 2.x schema no
@@ -846,6 +786,33 @@ if (isset($_POST['step2'])) {
             $input = new ArrayInput([]);
             $command = $application->find('doctrine:schema:create');
             $result = $command->run($input, new ConsoleOutput());
+
+            // The schema above is built from the entities, so it is already the final one.
+            // Record every migration as executed: without this baseline a later
+            // doctrine:migrations:migrate would replay the whole history over a current
+            // schema, and the installer gate could not tell a pending upgrade apart from
+            // an up-to-date platform.
+            if (0 === $result) {
+                error_log('Seed migration metadata');
+
+                // sync-metadata-storage creates the `version` table, which the next
+                // command needs; it errors out on its own otherwise.
+                foreach (['doctrine:migrations:sync-metadata-storage', 'doctrine:migrations:version'] as $baselineName) {
+                    $baselineInput = new ArrayInput(
+                        'doctrine:migrations:version' === $baselineName
+                            ? ['--add' => true, '--all' => true]
+                            : []
+                    );
+                    $baselineInput->setInteractive(false);
+                    $baselineResult = $application->find($baselineName)->run($baselineInput, new ConsoleOutput());
+
+                    if (0 !== $baselineResult) {
+                        error_log('Installer: could not seed the migration metadata ('.$baselineName.').');
+
+                        break;
+                    }
+                }
+            }
 
             // Load fixtures (no errors)
             if (0 === $result) {

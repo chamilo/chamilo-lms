@@ -713,14 +713,22 @@ SQL,
     protected function getUpdateRootPath(): string
     {
         $updateRootPath = getenv('UPDATE_PATH');
+        $projectDir = $this->container->getParameter('kernel.project_dir');
 
-        if (!empty($updateRootPath)) {
-            error_log('getUpdateRootPath ::: '.$updateRootPath);
-
-            return rtrim($updateRootPath, '/');
+        if (empty($updateRootPath)) {
+            return $projectDir;
         }
 
-        return $this->container->getParameter('kernel.project_dir');
+        // The value arrives from a request. realpath() collapses any ../ and
+        // returns false for a stream wrapper, so phar:// and its siblings are
+        // refused here rather than reaching an include further down.
+        $resolved = realpath($updateRootPath);
+
+        if (false === $resolved) {
+            return $projectDir;
+        }
+
+        return rtrim($resolved, '/');
     }
 
     protected static function pluginNameReplacements(): array

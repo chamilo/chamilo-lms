@@ -118,6 +118,8 @@ if (empty($userInfo)) {
     ]));
 }
 
+$identityCameFromHash = false;
+
 if (api_is_anonymous()) {
     $loggedUser = [
         'user_id' => $userInfo['id'],
@@ -127,10 +129,18 @@ if (api_is_anonymous()) {
 
     Session::write('_user', $loggedUser);
     Login::init_user($loggedUser['user_id'], true);
+    $identityCameFromHash = true;
 }
 
 if (PHP_SESSION_ACTIVE === session_status()) {
-    session_write_close();
+    if ($identityCameFromHash) {
+        // The hash names the user, and the document server is not a browser:
+        // keep that identity in memory for this request only, so the caller
+        // never receives a session it could reuse.
+        session_abort();
+    } else {
+        session_write_close();
+    }
 }
 
 switch ($type) {

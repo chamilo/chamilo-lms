@@ -94,7 +94,6 @@ if (file_exists($envFile)) {
         ) === '1';
 
     if ($appInstalled && $installerVersion) {
-        $dbVersion = null;
         $dbLooksInitialized = false;
 
         try {
@@ -116,10 +115,6 @@ if (file_exists($envFile)) {
                 $hasAnySetting = $conn->fetchOne('SELECT 1 FROM settings_current LIMIT 1');
                 if ($hasAnySetting !== false && $hasAnySetting !== null) {
                     $dbLooksInitialized = true;
-
-                    $dbVersion = $conn->fetchOne(
-                        "SELECT selected_value FROM settings_current WHERE variable = 'chamilo_database_version' LIMIT 1"
-                    );
                 }
             } catch (\Throwable $e) {
                 // Ignore and try legacy table
@@ -130,10 +125,6 @@ if (file_exists($envFile)) {
                     $hasAnySetting = $conn->fetchOne('SELECT 1 FROM settings LIMIT 1');
                     if ($hasAnySetting !== false && $hasAnySetting !== null) {
                         $dbLooksInitialized = true;
-
-                        $dbVersion = $conn->fetchOne(
-                            "SELECT selected_value FROM settings WHERE variable = 'chamilo_database_version' LIMIT 1"
-                        );
                     }
                 } catch (\Throwable $e) {
                     // No settings tables -> DB is not initialized
@@ -142,12 +133,14 @@ if (file_exists($envFile)) {
         } catch (\Throwable $e) {
             // If we cannot connect, do not block the wizard
             $dbLooksInitialized = false;
-            $dbVersion = null;
         }
 
-        // Block ONLY if DB is initialized AND version is up-to-date.
-        $dbVersion = is_string($dbVersion) ? trim($dbVersion) : '';
-        if ($dbLooksInitialized && $dbVersion !== '' && version_compare($dbVersion, $installerVersion, '>=')) {
+        // Block whenever the database is already initialized. Comparing a stored
+        // version is deliberately avoided: chamilo_database_version is deprecated
+        // and a fresh install seeds a stale value, which previously let the gate
+        // fail open for an anonymous caller. Recovering a half-installed instance
+        // is unaffected: that path has $dbLooksInitialized === false.
+        if ($dbLooksInitialized) {
             header('HTTP/1.1 409 Conflict');
             echo '<!doctype html><meta charset="utf-8"><title>Chamilo already installed</title>';
             echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
@@ -172,7 +165,15 @@ $langParam = $httpRequest->attributes->get('language_list')
     ?? $httpRequest->request->get('language_list');
 if ($langParam !== null && $langParam !== '') {
     $search = ['../', '\\0'];
-    $installationLanguage = str_replace($search, '', urldecode($langParam));
+    $candidate = str_replace($search, '', urldecode($langParam));
+    // Accept only a locale-shaped value. This value reaches the Symfony
+    // Translator, which throws Invalid "<value>" locale verbatim into the PHP
+    // error log for anything else; reflecting attacker text (e.g. inline PHP)
+    // there is the write half of a log-poisoning chain. Fall back to the
+    // default rather than pass an unvalidated locale through.
+    $installationLanguage = 1 === preg_match('/^[A-Za-z0-9_-]{1,32}$/', $candidate)
+        ? $candidate
+        : 'en_US';
     ChamiloSession::write('install_language', $installationLanguage);
 } elseif (ChamiloSession::has('install_language')) {
     $installationLanguage = ChamiloSession::read('install_language');

@@ -43,23 +43,27 @@
 #   tinymce fields, "submitExercise"/"submitQuestion"/"submit-question").
 #   Ported using toolExerciseAdmin.feature's own already-proven conventions
 #   instead ("I follow the question type ...", "I fill in the answer N
-#   text/comment with ...", "Save the question").
+#   text/comment with ...", "Modifier la question" — see below, this one
+#   IS translated, unlike the question-type titles).
 # - Question-type TITLE attributes on the "add a question" icon grid are
-#   NOT translated for several types even inside a French course (confirmed
-#   live on "Testing course fr" itself): "Multiple choice - Choose one
-#   correct answer.", "Open question - Learners write a free text answer."
-#   and "Unique answer with images - Single choice question using images."
-#   all render in English regardless of course language — an existing app
-#   i18n gap, not something this port needs to work around.
+#   translated per-type, inconsistently, not uniformly kept in English as
+#   an earlier pass through this file assumed. "Multiple choice - Choose
+#   one correct answer." stays English (confirmed live, and the key is
+#   simply absent from assets/locales/fr_FR.json — an i18n gap, not a
+#   deliberate "keep English" behavior, so this one happens to still work).
+#   "Open question" and "Unique answer with images" are NOT gaps: both have
+#   real fr_FR.json entries ("Question ouverte", "Sélection d'image") and
+#   render translated inside this French course — see the third real CI
+#   failure below for how that was found.
 # - "QRU" (question à réponse unique) maps to the modern "Multiple choice"
 #   type (single correct answer via radio, confirmed live via its own title
 #   text "Choose one correct answer.").
 # - "Image selection question" has no literal modern equivalent named
 #   "image selection" — mapped to "Unique answer with images" (single
 #   choice using images), structurally IDENTICAL to "Multiple choice"'s own
-#   answer-table shape (same "fill in the answer N text/comment", "Save the
-#   question" steps apply unchanged) — the closest real, working equivalent,
-#   not a guess.
+#   answer-table shape (same "fill in the answer N text/comment", "Modifier
+#   la question" steps apply unchanged) — the closest real, working
+#   equivalent, not a guess.
 # - **Real CI failure, root-caused (not guessed): both this and the "Multiple
 #   choice" question above are single-correct-answer types ("Choose one
 #   correct answer.") — NEITHER uses "mark answer N as correct" (that step is
@@ -69,9 +73,36 @@
 #   nonzero score, same as those scenarios: fill every answer's own comment,
 #   then "I fill in "exercise-answer-score-0" with "10"" for answer 1's
 #   score. Omitting this — a real CI run had it omitted — leaves no answer
-#   marked correct, and "Save the question" stays disabled forever: the
+#   marked correct, and the save button stays disabled forever: the
 #   scenario ran for the full 15-minute @long-scenario budget waiting for a
 #   button that could never become clickable.
+# - **Second real CI failure, root-caused via a fresh trace (not guessed):
+#   the save button's own label is translated — unlike the question-type
+#   TITLE attributes noted above, "Save the question" (assets/locales/
+#   fr_FR.json) renders as "Modifier la question" inside this French course.
+#   An earlier attempt at this exact fix was made, then reverted after a
+#   one-off local repro of this step IN ISOLATION showed English text — that
+#   repro simply never went through the course-visit history that actually
+#   triggers the interface-language switch (see "INTERFACE LANGUAGE FOLLOWS
+#   THE COURSE'S OWN LANGUAGE" above). Inside the real, full scenario the
+#   switch has already happened by this point (the preceding step, "I press
+#   'Poursuivre avec la création de questions'", is itself already French),
+#   so pressing the English "Save the question" label found nothing and hung
+#   for the full 15-minute budget — confirmed via a CI trace's page snapshot
+#   showing the rendered button as "Modifier la question" verbatim.
+# - **Third real CI failure, root-caused via a fresh trace (not guessed):
+#   once the French-button fix above let the scenario reach its SECOND
+#   question, "I follow the question type 'Unique answer with images'"
+#   hung for the full 15-minute budget the same way — the question-type grid
+#   itself was rendering fine (confirmed via the trace's own page snapshot),
+#   but this specific type's own title is "Sélection d'image - Single choice
+#   question using images." inside this French course, not the English
+#   "Unique answer with images" this step was still looking for. Checked
+#   assets/locales/fr_FR.json directly: unlike "Multiple choice" (no French
+#   entry at all, a real gap), "Unique answer with images" and "Open
+#   question" both have genuine translations ("Sélection d'image",
+#   "Question ouverte") that render here. Fixed both occurrences in this
+#   file to the actual rendered French titles.
 #
 # FORUM — RESTORED, NOT LEFT COMMENTED OUT:
 # - The Behat source has this whole section commented out with a
@@ -358,11 +389,11 @@ Feature: Special case 1 — course/session creation
     And I fill in the answer 3 comment with "Comment false"
     And I fill in the answer 4 comment with "Comment false"
     And I fill in "exercise-answer-score-0" with "10"
-    And I press "Save the question"
+    And I press "Modifier la question"
     And I wait for the page content to settle
     Then I should see "QRU Question"
 
-    And I follow the question type "Unique answer with images"
+    And I follow the question type "Sélection d'image"
     And I wait for the page content to settle
     And I fill in "question" with "Image selection question"
     And I fill in the answer 1 text with "Image A"
@@ -374,7 +405,7 @@ Feature: Special case 1 — course/session creation
     And I fill in the answer 3 comment with "Comment false"
     And I fill in the answer 4 comment with "Comment false"
     And I fill in "exercise-answer-score-0" with "10"
-    And I press "Save the question"
+    And I press "Modifier la question"
     And I wait for the page content to settle
     Then I should see "Image selection question"
 
@@ -388,11 +419,11 @@ Feature: Special case 1 — course/session creation
     And I fill in "title" with "Open question exercise"
     And I press "Poursuivre avec la création de questions"
     And I wait for the page content to settle
-    And I follow the question type "Open question"
+    And I follow the question type "Question ouverte"
     And I wait for the page content to settle
     And I fill in "question" with "Open Question"
     And I fill in "exercise-manual-question-score" with "5"
-    And I press "Save the question"
+    And I press "Modifier la question"
     And I wait for the page content to settle
     Then I should see "Open Question"
 

@@ -205,23 +205,63 @@
       .join(" | ")
   }
 
+  // Parses "tag[attr|attr]" entries; anything that doesn't match this app's
+  // own simple bracket syntax is kept as an opaque, unmergeable segment.
+  function parseExtendedValidElementEntries(str) {
+    return String(str || "")
+      .split(",")
+      .map((entry) => entry.trim())
+      .filter(Boolean)
+      .map((entry) => {
+        const match = entry.match(/^([a-zA-Z0-9*-]+)\[([^\]]*)\]$/)
+        if (!match) {
+          return { raw: entry, tag: null, attrs: [] }
+        }
+        return { raw: entry, tag: match[1], attrs: match[2].split("|").filter(Boolean) }
+      })
+  }
+
+  // Merges attributes into an existing "tag[...]" entry instead of appending
+  // a second, competing one for the same tag. TinyMCE's schema does NOT
+  // merge same-tag extended_valid_elements entries on its own — the LAST
+  // one for a given tag silently replaces every earlier one — so two
+  // independent features each adding their own "span[...]" entry (mathjax's
+  // data-latex, translatehtml's lang) would fight over which attributes
+  // actually survive, purely depending on call order. Real CI failure: with
+  // both mathjax and translatehtml enabled, whichever call happened to run
+  // last won, silently dropping the other's attributes — confirmed via a
+  // live TinyMCE schema dump showing only one side's attributes present.
   function appendExtendedValidElements(raw, addition) {
-    const current = String(raw || "").trim()
     const next = String(addition || "").trim()
 
     if (!next) {
-      return current
+      return String(raw || "").trim()
     }
 
-    if (!current) {
-      return next
-    }
+    const entries = parseExtendedValidElementEntries(raw)
 
-    if (current.includes(next)) {
-      return current
-    }
+    parseExtendedValidElementEntries(next).forEach((addEntry) => {
+      if (!addEntry.tag) {
+        if (!entries.some((entry) => entry.raw === addEntry.raw)) {
+          entries.push(addEntry)
+        }
+        return
+      }
 
-    return `${current},${next}`
+      const existing = entries.find((entry) => entry.tag === addEntry.tag)
+      if (!existing) {
+        entries.push(addEntry)
+        return
+      }
+
+      addEntry.attrs.forEach((attr) => {
+        if (!existing.attrs.includes(attr)) {
+          existing.attrs.push(attr)
+        }
+      })
+    })
+
+    return entries.map((entry) => (entry.tag ? `${entry.tag}[${entry.attrs.join("|")}]` : entry.raw)).join(",")
   }
 
   function appendValidChildren(raw, additions) {
@@ -663,12 +703,23 @@
       merged.toolbar = dedupeToolbar(base.toolbar, localConfig.toolbar)
     }
 
+    // Always allow lang on span/div, regardless of whether the translatehtml
+    // AUTHORING plugin/toolbar button is enabled: rendering already-authored
+    // multi-language content (translatehtml.js's own DOM-based show/hide
+    // logic) is independent from editor.translate_html, which only toggles
+    // the "insert a new translated block" UI. Real CI failure, root-caused
+    // via a live schema dump: with the plugin disabled, this rule used to be
+    // skipped entirely, so TinyMCE's default span schema (class/data-latex/
+    // contenteditable only) silently stripped `lang` from every span on
+    // save — existing translated content stopped rendering for every
+    // fallback tier, not just editing being disabled.
+    merged.extended_valid_elements = appendExtendedValidElements(
+      merged.extended_valid_elements,
+      "span[lang|class|style],div[lang|class|style]",
+    )
+
     if (pluginNames.has("translatehtml")) {
       merged.toolbar = appendToolbarCommand(merged.toolbar || localConfig.toolbar || base.toolbar || "", "translatehtml")
-      merged.extended_valid_elements = appendExtendedValidElements(
-        merged.extended_valid_elements,
-        "span[lang|class|style],div[lang|class|style]",
-      )
     }
 
     // "mathjax" is opt-in (the enabled_mathjax setting), so it reaches this

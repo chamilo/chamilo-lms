@@ -195,6 +195,42 @@ Feature: Group tool
     Given I am a platform administrator
     And I am on course "TEMP" homepage
 
+  # Real CI failure, root-caused via a from-scratch reinstall of
+  # playwright.chamilo.net (not guessed): every "select ... from
+  # 'group_members'" step below hung for its full timeout because the
+  # select's candidate list is built from users actually ENROLLED in TEMP —
+  # and on a genuinely fresh install, fapple and acostea are NOT enrolled
+  # unless something subscribes them first. This file relied on
+  # course_user_registration.feature having already run and left them
+  # subscribed ("for further tests"), but fullyParallel:false only
+  # serializes scenarios WITHIN one file — a different file's subscribe
+  # scenario running in a different worker is never guaranteed to finish
+  # before this file's own first "Add fapple to the Group 0001" reaches its
+  # course-enrolled-only select, so on an unlucky worker schedule (or when
+  # this file is the only one run, as in the from-scratch reproduction) the
+  # select comes up with zero candidates. toolAssessments.feature's own
+  # header comment already documents this exact race for the identical
+  # (acostea, TEMP) pairing and explicitly names this file as one that
+  # "leaves acostea subscribed and never tears her down" — but unlike that
+  # file, every scenario here is built around fapple's and acostea's own
+  # specific identities (fapple in Group 0001/0003/0005, acostea in Group
+  # 0002/0005, both baked into later access-control assertions), so
+  # swapping to a dedicated throwaway user — that file's own fix — is not an
+  # option here. Subscribing idempotently instead: "I follow 'Register' if
+  # it is visible" is a no-op when a concurrent file already subscribed
+  # them, so this can never conflict with the other files that equally
+  # depend on the same persistent (fapple/acostea, TEMP) state — nothing
+  # here unsubscribes them either, for the same reason.
+  Scenario: Subscribe fapple and acostea to TEMP so they can be added to groups
+    Given I am on "/main/user/subscribe_user.php?keyword=fapple&type=5&cid=3"
+    And wait for the page to be loaded
+    Then I follow "Register" if it is visible
+    And wait very long for the page to be loaded
+    Given I am on "/main/user/subscribe_user.php?keyword=acostea&type=5&cid=3"
+    And wait for the page to be loaded
+    Then I follow "Register" if it is visible
+    And wait very long for the page to be loaded
+
   Scenario: Create a group directory
     # group.php auto-creates a "Default groups" category as a side effect of
     # loading the page, but ONLY the very first time it's visited for a course
@@ -846,12 +882,21 @@ Feature: Group tool
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
     And I wait for the page content to settle
     Then I should see "Access to this resource has been denied"
+    # Group 0003 is TOOL_PRIVATE (announcements_state=2), not TOOL_PUBLIC like
+    # Group 0001 above: GroupVoter::VIEW denies acostea (not a member) at the
+    # CidReqListener stage, before the SPA (and its per-announcement Vue check)
+    # ever loads — the site-root redirect this file's own header comment
+    # already documents as a distinct denial mode, not the Vue "Access to this
+    # resource has been denied" message that only fires for a PUBLIC group's
+    # per-announcement recipient check (Group 0001 above). Root-caused via a
+    # live trace showing the generic app shell (no course/group content, no
+    # denial message at all) rather than a Vue error screen.
     Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
     And I wait for the page content to settle
-    Then I should see "Access to this resource has been denied"
+    Then the URL should be the site root
     Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
     And I wait for the page content to settle
-    Then I should see "Access to this resource has been denied"
+    Then the URL should be the site root
     Then I visit URL saved with name "announcement_only_for_fapple_private"
     And I wait for the page content to settle
     And I should see "Announcement description only for fapple Group 0005"

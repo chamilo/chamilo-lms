@@ -17,8 +17,6 @@ use const PHP_SAPI;
 
 final class InstallDbGuardSubscriber implements EventSubscriberInterface
 {
-    private const string VERSION_KEY = 'chamilo_database_version';
-
     public function __construct(
         private readonly Connection $connection
     ) {}
@@ -101,35 +99,11 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
             // A 1.11.x database carries an unrelated `version` table, but it never reaches
             // this point: it has no `settings` table, so detectSettingsTable() above has
             // already redirected it.
-            if ($this->hasMigrationMetadata()) {
-                $isHealthy = true;
-
-                return;
-            }
-
-            // Fallback for an installation created before the installer seeded that
-            // metadata: the presence of chamilo_database_version is the only marker it
-            // has. Never its value — that setting is deprecated and carries a stale
-            // default. Column names differ across the 1.11.x and 2.x schemas.
-            $version = null;
-
-            foreach (['selected_value', 'value', 'c_value'] as $col) {
-                try {
-                    $version = $this->connection->fetchOne(
-                        "SELECT {$col} FROM {$settingsTable} WHERE variable = :var LIMIT 1",
-                        ['var' => self::VERSION_KEY]
-                    );
-
-                    if (!empty($version)) {
-                        break;
-                    }
-                } catch (Throwable) {
-                    // Try next column
-                }
-            }
-
-            if (empty($version)) {
-                // No metadata and no marker: a 1.11.x database before its migration.
+            if (!$this->hasMigrationMetadata()) {
+                // An empty history means the platform was never migrated, or was installed
+                // before the installer recorded it. Either way the installer is where the
+                // administrator has to go; its own message names the two commands that
+                // record the history.
                 $this->redirectToInstaller($event);
 
                 return;

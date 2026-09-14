@@ -1100,7 +1100,7 @@ class Plugin
                 return $result;
             }
 
-            $unserialized = @unserialize($value);
+            $unserialized = @unserialize($value, ['allowed_classes' => false]);
 
             if (false !== $unserialized || 'b:0;' === $value) {
                 $appendValue($unserialized);

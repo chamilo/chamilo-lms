@@ -396,9 +396,17 @@
             v-if="activeReport === 'users_online' && onlineCards.length"
             class="mx-auto w-full max-w-6xl"
           >
-            <div class="mb-4 flex items-center justify-between gap-4">
+            <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
               <h2 class="text-lg font-semibold text-gray-90">{{ t("Users online") }}</h2>
-              <div class="text-sm text-gray-50">{{ report.meta.generatedAt }}</div>
+              <div class="flex items-center gap-3">
+                <BaseCheckbox
+                  id="admin-statistics-users-online-auto-refresh"
+                  v-model="usersOnlineAutoRefresh"
+                  name="users_online_auto_refresh"
+                  :label="t('Auto-refresh every 5 seconds')"
+                />
+                <div class="text-sm text-gray-50">{{ report.meta.generatedAt }}</div>
+              </div>
             </div>
 
             <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1280,7 +1288,8 @@ const zombieSortField = ref("firstname")
 const zombieSortOrder = ref(-1)
 const maintenanceLoading = ref(false)
 const tableRows = ref(20)
-const ONLINE_REFRESH_INTERVAL_MS = 15_000
+const ONLINE_REFRESH_INTERVAL_MS = 5_000
+const usersOnlineAutoRefresh = ref(false)
 let usersOnlineRefreshTimer = null
 let usersOnlineRefreshInFlight = false
 const courseLastVisitSortField = ref("courseId")
@@ -2101,7 +2110,7 @@ async function refreshUsersOnlineReport() {
 
 function startUsersOnlineRefresh() {
   stopUsersOnlineRefresh()
-  if (activeReport.value !== "users_online") {
+  if (activeReport.value !== "users_online" || !usersOnlineAutoRefresh.value) {
     return
   }
 
@@ -2313,6 +2322,10 @@ watch(
   },
   { deep: true, immediate: true },
 )
+
+watch(usersOnlineAutoRefresh, () => {
+  startUsersOnlineRefresh()
+})
 
 onBeforeUnmount(stopUsersOnlineRefresh)
 </script>

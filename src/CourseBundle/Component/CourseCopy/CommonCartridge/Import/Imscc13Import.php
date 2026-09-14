@@ -20,13 +20,14 @@ use Throwable;
 use ZipArchive;
 
 use const DIRECTORY_SEPARATOR;
+use const LIBXML_NONET;
 use const PCLZIP_OPT_PATH;
 
 class Imscc13Import
 {
     public const string FORMAT_IMSCC13 = 'imscc13';
 
-    public function log(string $message, string|int $level = 'info', $a = null, $depth = null, bool $display = false): void
+    public function log(string $message, int|string $level = 'info', $a = null, $depth = null, bool $display = false): void
     {
         // Minimal, central logger for importer
         error_log("(imscc13) $message , level: $level , extra: ".json_encode($a));

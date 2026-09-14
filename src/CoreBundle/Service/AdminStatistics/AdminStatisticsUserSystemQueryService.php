@@ -2206,29 +2206,17 @@ final readonly class AdminStatisticsUserSystemQueryService
             }
         }
 
+        $categoryIdByGroupKey = $this->findGradebookCategoryIdsForGroups($groups, $withSessions);
+        $certifiedUsersByCategory = $this->findCertifiedUserIdsByCategory(array_values(array_unique($categoryIdByGroupKey)));
+
         $items = [];
         foreach ($groups as $label => $group) {
-            $gradebookCriteria = ['course' => $group['courseId']];
-            if ($withSessions) {
-                $gradebookCriteria['session'] = $group['sessionId'];
-            }
-            $gradebook = $this->entityManager->getRepository(GradebookCategory::class)->findOneBy($gradebookCriteria);
+            $categoryId = $categoryIdByGroupKey[$label] ?? null;
+            $certifiedUsers = null !== $categoryId ? ($certifiedUsersByCategory[$categoryId] ?? []) : [];
             $finished = 0;
-            if ($gradebook instanceof GradebookCategory && null !== $gradebook->getId()) {
-                $certificateUserIds = $this->entityManager->createQueryBuilder()
-                    ->select('IDENTITY(certificate.user) AS userId')
-                    ->from(GradebookCertificate::class, 'certificate')
-                    ->andWhere('IDENTITY(certificate.category) = :categoryId')
-                    ->setParameter('categoryId', (int) $gradebook->getId(), Types::INTEGER)
-                    ->andWhere('IDENTITY(certificate.user) IN (:users)')
-                    ->setParameter('users', array_values(array_unique($group['users'])), ArrayParameterType::INTEGER)
-                    ->getQuery()->getSingleColumnResult()
-                ;
-                $certificateUsers = array_fill_keys(array_map(static fn ($userId): int => (int) $userId, $certificateUserIds), true);
-                foreach ($group['users'] as $userId) {
-                    if (isset($certificateUsers[$userId])) {
-                        ++$finished;
-                    }
+            foreach ($group['users'] as $userId) {
+                if (isset($certifiedUsers[$userId])) {
+                    ++$finished;
                 }
             }
             $items[] = [
@@ -2240,6 +2228,82 @@ final readonly class AdminStatisticsUserSystemQueryService
         }
 
         return $items;
+    }
+
+    /**
+     * Resolves the GradebookCategory id for every course/session group in a single
+     * query pair (one query, or two when scoping by session), instead of one
+     * findOneBy() per group — the loop this replaced ran into the thousands of
+     * round trips on campuses with large course catalogs.
+     *
+     * @param array<string, array{courseId:int,sessionId:?int,users:int[]}> $groups
+     *
+     * @return array<string, int> group label => GradebookCategory id
+     */
+    private function findGradebookCategoryIdsForGroups(array $groups, bool $withSessions): array
+    {
+        if ([] === $groups) {
+            return [];
+        }
+
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('IDENTITY(category.course) AS courseId', 'category.id AS id')
+            ->from(GradebookCategory::class, 'category')
+            ->andWhere('IDENTITY(category.course) IN (:courseIds)')
+            ->setParameter('courseIds', array_values(array_unique(array_column($groups, 'courseId'))), ArrayParameterType::INTEGER)
+            ->orderBy('category.id', 'ASC')
+        ;
+        if ($withSessions) {
+            $qb->addSelect('IDENTITY(category.session) AS sessionId')
+                ->andWhere('IDENTITY(category.session) IN (:sessionIds)')
+                ->setParameter('sessionIds', array_values(array_unique(array_column($groups, 'sessionId'))), ArrayParameterType::INTEGER)
+            ;
+        }
+
+        // findOneBy() had no explicit order either; ordering by id here keeps which
+        // category "wins" for a course with more than one deterministic across runs.
+        $categoryIdByCourseSession = [];
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $key = ((int) $row['courseId']).':'.($withSessions ? (int) $row['sessionId'] : '');
+            $categoryIdByCourseSession[$key] ??= (int) $row['id'];
+        }
+
+        $categoryIdByGroupKey = [];
+        foreach ($groups as $label => $group) {
+            $key = $group['courseId'].':'.($withSessions ? $group['sessionId'] : '');
+            if (isset($categoryIdByCourseSession[$key])) {
+                $categoryIdByGroupKey[$label] = $categoryIdByCourseSession[$key];
+            }
+        }
+
+        return $categoryIdByGroupKey;
+    }
+
+    /**
+     * @param int[] $categoryIds
+     *
+     * @return array<int, array<int, true>> GradebookCategory id => set of certified user ids
+     */
+    private function findCertifiedUserIdsByCategory(array $categoryIds): array
+    {
+        if ([] === $categoryIds) {
+            return [];
+        }
+
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('IDENTITY(certificate.category) AS categoryId', 'IDENTITY(certificate.user) AS userId')
+            ->from(GradebookCertificate::class, 'certificate')
+            ->andWhere('IDENTITY(certificate.category) IN (:categoryIds)')
+            ->setParameter('categoryIds', $categoryIds, ArrayParameterType::INTEGER)
+            ->getQuery()->getArrayResult()
+        ;
+
+        $certifiedUsersByCategory = [];
+        foreach ($rows as $row) {
+            $certifiedUsersByCategory[(int) $row['categoryId']][(int) $row['userId']] = true;
+        }
+
+        return $certifiedUsersByCategory;
     }
 
     private function incrementPercent(int $current, int $old): string

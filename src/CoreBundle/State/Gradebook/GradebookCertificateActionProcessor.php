@@ -55,6 +55,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
 
     private const MAX_NOTIFY_EXPIRY_RECIPIENTS = 500;
     private const ACTION_USE_SYSTEM_TEMPLATE = 'use_system_template';
+    private const ACTION_CREATE_DEFAULT_DOCUMENT = 'create_default_document';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -126,6 +127,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             self::ACTION_SET_EXPIRY_DATE => $this->setExpiryDate($data, $category, $resolved),
             self::ACTION_NOTIFY_EXPIRY => $this->notifyExpiry($data, $category, $resolved),
             self::ACTION_USE_SYSTEM_TEMPLATE => $this->useSystemTemplate($resolved),
+            self::ACTION_CREATE_DEFAULT_DOCUMENT => $this->createDefaultDocument($resolved),
             default => throw new BadRequestHttpException('Unsupported Gradebook certificate action.'),
         };
 
@@ -330,6 +332,38 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
         return $affected;
     }
 
+    /**
+     * Restores the legacy first-visit behaviour (DocumentManager::generateDefaultCertificate(),
+     * previously triggered as a side effect of rendering the pre-Vue gradebook table page):
+     * duplicates the platform's default certificate template into the course and attaches it,
+     * so the certificate document manager is never left empty on a course that has no
+     * certificate document yet. No-op — returns the existing attachment count unchanged — when
+     * the root category already has a document.
+     */
+    private function createDefaultDocument(GradebookContext $resolved): int
+    {
+        if ($this->certificateGenerator->usesCustomCertificate($resolved->course)) {
+            throw new BadRequestHttpException('CustomCertificate templates must use the existing plugin workflow.');
+        }
+
+        $rootCategory = $resolved->rootCategory;
+        if (!$rootCategory instanceof GradebookCategory) {
+            throw new NotFoundHttpException('The Gradebook was not found.');
+        }
+
+        $document = $this->certificateGenerator->createDefaultCertificateDocument(
+            $rootCategory,
+            $resolved->course,
+            $resolved->session,
+            $resolved->user,
+        );
+
+        $affected = $this->applyTemplateToCategoryTree($rootCategory, $document);
+        $this->entityManager->flush();
+
+        return $affected;
+    }
+
     private function applyTemplateToCategoryTree(GradebookCategory $category, ?CDocument $document): int
     {
         $category->setDocument($document);
@@ -501,6 +535,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
             self::ACTION_SET_EXPIRY_DATE => 'Certificate expiry date updated.',
             self::ACTION_NOTIFY_EXPIRY => 'Certificate expiry reminders sent: '.$affected.'.',
             self::ACTION_USE_SYSTEM_TEMPLATE => 'System default certificate template restored.',
+            self::ACTION_CREATE_DEFAULT_DOCUMENT => 'Default certificate document created.',
             default => '',
         };
     }

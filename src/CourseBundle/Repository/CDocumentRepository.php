@@ -477,6 +477,7 @@ final class CDocumentRepository extends ResourceRepository
         int $visibility,
         ?Session $session = null,
         ?CGroup $group = null,
+        ?string $filetype = null,
     ): ResourceNode {
         /** @var User|null $user */
         $user = api_get_user_entity();
@@ -485,7 +486,7 @@ final class CDocumentRepository extends ResourceRepository
 
         $doc = new CDocument();
         $doc->setTitle($title);
-        $doc->setFiletype('file');
+        $doc->setFiletype($filetype ?? 'file');
         $doc->setComment($comment);
         $doc->setParentResourceNode($parent->getId());
 

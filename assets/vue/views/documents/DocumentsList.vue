@@ -960,6 +960,7 @@ const certificateTemplateFallback = ref(false)
 const certificateCategoryId = ref(null)
 const certificateCsrfToken = ref("")
 const isSettingDefaultCertificate = ref(false)
+const hasAttemptedDefaultCertificateCreation = ref(false)
 
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher && !platformConfigStore.isStudentViewActive)
 const showUseSystemDefaultCertificateButton = computed(() => {
@@ -1957,6 +1958,21 @@ async function loadCertificateManagement() {
     defaultCertificateTitle.value = String(template?.title || "")
     certificateAttachedDocumentId.value = Number(template?.attachedDocumentId || 0) || null
     certificateTemplateFallback.value = Boolean(template?.fallback)
+
+    // Restore the legacy first-visit behaviour (DocumentManager::generateDefaultCertificate(),
+    // previously triggered as a side effect of rendering the pre-Vue gradebook table page):
+    // a course/category that has never had a certificate document attached gets the
+    // platform's default template duplicated into it automatically, once per page visit —
+    // hasAttemptedDefaultCertificateCreation prevents retrying after a failed attempt.
+    if (
+      !certificateAttachedDocumentId.value &&
+      certificateCategoryId.value &&
+      certificateCsrfToken.value &&
+      !hasAttemptedDefaultCertificateCreation.value
+    ) {
+      hasAttemptedDefaultCertificateCreation.value = true
+      await createDefaultCertificateDocument()
+    }
   } catch (error) {
     console.error("[Documents] Error loading Gradebook certificate settings:", error)
     certificateCategoryId.value = null
@@ -1965,6 +1981,23 @@ async function loadCertificateManagement() {
     defaultCertificateTitle.value = ""
     certificateAttachedDocumentId.value = null
     certificateTemplateFallback.value = false
+  }
+}
+
+async function createDefaultCertificateDocument() {
+  try {
+    await gradebookService.runCertificateAction(
+      {
+        action: "create_default_document",
+        categoryId: Number(certificateCategoryId.value),
+        submittedCsrfToken: certificateCsrfToken.value,
+      },
+      getGradebookCertificateContextParams(),
+    )
+    await loadCertificateManagement()
+    triggerTableLoad()
+  } catch (error) {
+    console.error("[Documents] Error creating the default Gradebook certificate document:", error)
   }
 }
 

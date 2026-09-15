@@ -11,10 +11,12 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
@@ -263,6 +265,83 @@ final readonly class GradebookCertificateGenerator
             'attachedDocumentId' => $attachedDocumentId,
             'fallback' => null !== $attachedDocumentId,
         ];
+    }
+
+    /**
+     * Restores the legacy first-visit behaviour: when a course's Gradebook category has no
+     * certificate document attached yet, duplicate the platform's default template
+     * (public/main/gradebook/certificate_template/template.html) into the course's
+     * /certificates folder and attach it — exactly what the pre-Vue gradebook table page did
+     * via DocumentManager::generateDefaultCertificate() as a side effect of rendering. The
+     * modern document-management UI (filetype=certificate) has no equivalent trigger, so a
+     * category with no document attached stays empty forever without this.
+     *
+     * No-op, returning the existing document, when one is already attached — matching the
+     * legacy function's own guard (get_default_certificate_id() short-circuit).
+     */
+    public function createDefaultCertificateDocument(
+        GradebookCategory $category,
+        Course $course,
+        ?Session $session,
+        User $creator,
+    ): CDocument {
+        $existing = $category->getDocument();
+        if ($existing instanceof CDocument) {
+            return $existing;
+        }
+
+        $fallback = $this->projectDir.'/public/main/gradebook/certificate_template/template.html';
+        if (!is_file($fallback)) {
+            throw new RuntimeException('The default certificate template file is missing.');
+        }
+
+        $html = file_get_contents($fallback);
+        if (false === $html) {
+            throw new RuntimeException('The default certificate template could not be read.');
+        }
+        // Only the image base path is substituted here, exactly like getTemplateHtml()'s own
+        // fallback branch: the ((...)) placeholders (course title, user name, QR code, ...)
+        // are left intact for renderTemplate() to fill in per student at generation time.
+        $html = str_replace('{IMG_PATH}', '/main/gradebook/certificate_template/', $html);
+
+        $title = $this->translator->trans('Default certificate');
+        $uploaded = CreateUploadedFileHelper::fromString($title.'.html', 'text/html', $html);
+
+        $documentsRoot = $this->documentRepository->ensureCourseDocumentsRootNode($course);
+        $certificatesFolder = $this->documentRepository->ensureFolder(
+            $course,
+            $documentsRoot,
+            'certificates',
+            ResourceLink::VISIBILITY_PENDING,
+            $session,
+        );
+
+        $resourceNode = $this->documentRepository->createFileInFolder(
+            $course,
+            $certificatesFolder,
+            $uploaded,
+            '',
+            ResourceLink::VISIBILITY_PENDING,
+            $session,
+            null,
+            'certificate',
+        );
+
+        /** @var CDocument|null $document */
+        $document = $this->entityManager->getRepository(CDocument::class)->findOneBy(['resourceNode' => $resourceNode]);
+        if (!$document instanceof CDocument) {
+            throw new RuntimeException('The default certificate document could not be created.');
+        }
+
+        // Explicit, rather than relying on createFileInFolder()'s own api_get_user_entity()
+        // fallback: a caller outside a web session (e.g. a future CLI/batch caller) would
+        // otherwise hit the same "no Security token to stamp a creator" failure already seen
+        // and fixed for achievement-certificate generation.
+        $document->setCreator($creator);
+        $category->setDocument($document);
+        $this->entityManager->flush();
+
+        return $document;
     }
 
     /**

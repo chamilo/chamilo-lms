@@ -31,7 +31,7 @@ class SectionExport
     /**
      * Export a section and its activities to the specified directory.
      */
-    public function exportSection(int $sectionId, string $exportDir): void
+    public function exportSection(int $sectionId, string $exportDir, ?int $sectionNumber = null): void
     {
         $sectionDir = $exportDir."/sections/section_{$sectionId}";
 
@@ -56,6 +56,10 @@ class SectionExport
                 'timemodified' => time(),
                 'activities' => $this->getActivitiesForGeneral(),
             ];
+        }
+
+        if (null !== $sectionNumber) {
+            $sectionData['number'] = $sectionNumber;
         }
 
         $this->createSectionXml($sectionData, $sectionDir);

@@ -70,7 +70,7 @@ class GradebookCertificateRepository extends ResourceRepository
      * Backward-compatible metadata update.
      * If you adopt the Resource flow, you may pass an empty $fileName; it will still update score/timestamps.
      */
-    public function registerUserInfoAboutCertificate(int $catId, int $userId, float $scoreCertificate, string $fileName = ''): void
+    public function registerUserInfoAboutCertificate(int $catId, int $userId, float $scoreCertificate, string $fileName = '', ?User $creator = null): void
     {
         $fileName = ltrim($fileName, '/');
         $existingCertificate = $this->getCertificateByUserId(0 === $catId ? null : $catId, $userId);
@@ -85,6 +85,12 @@ class GradebookCertificateRepository extends ResourceRepository
                 $certificate->setCategory($category);
             }
             $certificate->setUser($user);
+            if ($creator instanceof User) {
+                // Console commands run with no Security token: ResourceListener needs an
+                // explicit creator here, matching its own "use $resource->setCreator()"
+                // hint, since it has no logged-in user to fall back on.
+                $certificate->setCreator($creator);
+            }
             $certificate->setPathCertificate($fileName ?: null);
             $certificate->setScoreCertificate($scoreCertificate);
             $certificate->setCreatedAt(new DateTime());

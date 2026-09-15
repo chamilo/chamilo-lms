@@ -6,11 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
-use Category;
+use Chamilo\CoreBundle\Command\Concerns\BoundedConsoleOptionsTrait;
+use Chamilo\CoreBundle\Component\Gradebook\AchievementCertificateBatchService;
 use Chamilo\CoreBundle\Component\Gradebook\CourseCompletionRuleEvaluator;
-use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\User;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
@@ -21,11 +20,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Throwable;
-use UserManager;
 
 use const PHP_INT_MAX;
-use const STUDENT;
 
 #[AsCommand(
     name: 'chamilo:migration:process-achievement-certificates',
@@ -33,19 +31,23 @@ use const STUDENT;
 )]
 final class ProcessAchievementCertificatesCommand extends Command
 {
-    private const CERTIFICATE_SUBJECT_FIELD =
-        'plugin_gradingelectronic_certificate_notification_subject';
-    private const CERTIFICATE_MESSAGE_FIELD =
-        'plugin_gradingelectronic_certificate_notification_message';
+    use BoundedConsoleOptionsTrait;
 
-    private readonly CourseCompletionRuleEvaluator $evaluator;
+    private readonly AchievementCertificateBatchService $service;
 
     public function __construct(
         private readonly Connection $connection,
         private readonly EntityManagerInterface $entityManager,
         private readonly KernelInterface $kernel,
+        TokenStorageInterface $tokenStorage,
     ) {
-        $this->evaluator = new CourseCompletionRuleEvaluator($connection);
+        // CoreBundle Component classes are excluded from service auto-discovery.
+        $this->service = new AchievementCertificateBatchService(
+            $connection,
+            $entityManager,
+            new CourseCompletionRuleEvaluator($connection),
+            $tokenStorage
+        );
 
         parent::__construct();
     }
@@ -133,7 +135,7 @@ final class ProcessAchievementCertificatesCommand extends Command
         $io->title('Process achievement certificates');
 
         try {
-            $this->bootstrapLegacy();
+            $this->service->bootstrapLegacy($this->kernel);
 
             $courseId = $this->positiveOption($input, 'course-id');
             if (null === $courseId) {
@@ -188,7 +190,7 @@ final class ProcessAchievementCertificatesCommand extends Command
                     return Command::INVALID;
                 }
 
-                $this->assertValidSender($senderId);
+                $this->service->assertValidSender($senderId);
             }
 
             $course = $this->connection->fetchAssociative(
@@ -201,15 +203,17 @@ final class ProcessAchievementCertificatesCommand extends Command
 
             if (
                 'course-rule' === $completionMode
-                && !$this->evaluator->supports($courseId)
+                && !$this->service->supports($courseId)
             ) {
                 throw new RuntimeException(\sprintf('Course %d has no persisted completion rule. Use --completion-mode=gradebook only for a course whose legacy automatic process was verified to use the native gradebook result.', $courseId));
             }
 
-            $notification = $this->resolveNotification($courseId);
-            if (!isset($notification['subject'], $notification['message'])) {
-                throw new RuntimeException(\sprintf('Course %d has no unambiguous certificate notification subject/message configuration.', $courseId));
-            }
+            // Course-specific subject/message are optional: Certificate::generate() already
+            // falls back to a translated default when either is empty, exactly like the
+            // manual "Generate" button (LegacyGradebookCertificateBridge) does. Requiring
+            // this course extra field to exist would block generation for every course that
+            // never configured it — which is the common case, not an error.
+            $notification = $this->service->resolveNotification($courseId) + ['subject' => '', 'message' => ''];
 
             $category = $this->resolveCategory($courseId, $categoryId);
             $resolvedCategoryId = (int) $category['id'];
@@ -231,7 +235,7 @@ final class ProcessAchievementCertificatesCommand extends Command
                 ['Course ID' => $courseId],
                 ['Category ID' => $resolvedCategoryId],
                 ['Category title' => (string) $category['title']],
-                ['Minimum score' => $this->formatNumber($minimumScore)],
+                ['Minimum score' => $this->service->formatNumber($minimumScore)],
                 ['Completion source' => 'course-rule' === $completionMode
                     ? 'persisted course completion rule'
                     : 'native gradebook (explicit)'],
@@ -267,9 +271,10 @@ final class ProcessAchievementCertificatesCommand extends Command
                 }
 
                 $currentBatchSize = min($batchSize, $remainingScan);
-                $candidateIds = $this->loadPendingUserIds(
+                $candidateIds = $this->service->loadPendingUserIds(
                     $courseId,
                     $resolvedCategoryId,
+                    0,
                     $lastUserId,
                     $currentBatchSize,
                     $userId
@@ -284,12 +289,13 @@ final class ProcessAchievementCertificatesCommand extends Command
                     $summary['last_user_id'] = $candidateUserId;
                     ++$summary['scanned'];
 
-                    $evaluation = $this->evaluateCandidate(
+                    $evaluation = $this->service->evaluateCandidate(
                         $completionMode,
                         $candidateUserId,
                         $courseId,
                         (string) $course['code'],
                         $minimumScore,
+                        0,
                         $categoryEntity
                     );
 
@@ -306,7 +312,7 @@ final class ProcessAchievementCertificatesCommand extends Command
                                 'incomplete',
                                 null === $evaluation['score']
                                     ? '-'
-                                    : $this->formatNumber((float) $evaluation['score']),
+                                    : $this->service->formatNumber((float) $evaluation['score']),
                             ];
                         }
 
@@ -318,10 +324,10 @@ final class ProcessAchievementCertificatesCommand extends Command
                         $previewRows[] = [
                             $candidateUserId,
                             'would generate',
-                            $this->formatNumber((float) $evaluation['score']),
+                            $this->service->formatNumber((float) $evaluation['score']),
                         ];
                     } else {
-                        $created = $this->generateCertificate(
+                        $created = $this->service->generateCertificate(
                             $categoryEntity,
                             $candidateUserId,
                             $sendNotification,
@@ -333,14 +339,14 @@ final class ProcessAchievementCertificatesCommand extends Command
                             $previewRows[] = [
                                 $candidateUserId,
                                 'generated',
-                                $this->formatNumber((float) $evaluation['score']),
+                                $this->service->formatNumber((float) $evaluation['score']),
                             ];
                         } else {
                             ++$summary['failed'];
                             $previewRows[] = [
                                 $candidateUserId,
                                 'failed',
-                                $this->formatNumber((float) $evaluation['score']),
+                                $this->service->formatNumber((float) $evaluation['score']),
                             ];
                         }
                     }
@@ -407,149 +413,11 @@ final class ProcessAchievementCertificatesCommand extends Command
     }
 
     /**
-     * @return array{complete: bool, score: float|int|null, ...}
-     */
-    private function evaluateCandidate(
-        string $completionMode,
-        int $userId,
-        int $courseId,
-        string $courseCode,
-        float $minimumScore,
-        GradebookCategory $category
-    ): array {
-        if ('course-rule' === $completionMode) {
-            return $this->evaluator->evaluate(
-                $userId,
-                $courseId,
-                $courseCode,
-                $minimumScore,
-                0
-            );
-        }
-
-        $score = Category::getCurrentScore(
-            $userId,
-            $category,
-            true,
-            $courseId,
-            0
-        );
-
-        return [
-            'complete' => (float) $score >= $minimumScore,
-            'score' => $score,
-        ];
-    }
-
-    private function bootstrapLegacy(): void
-    {
-        $globalFile = $this->kernel->getProjectDir().'/public/main/inc/global.inc.php';
-        if (!is_file($globalFile)) {
-            throw new RuntimeException(\sprintf('Legacy bootstrap was not found: %s', $globalFile));
-        }
-
-        require_once $globalFile;
-    }
-
-    private function assertValidSender(int $senderId): void
-    {
-        /** @var User|null $sender */
-        $sender = $this->entityManager->find(User::class, $senderId);
-
-        if (!$sender instanceof User || !$sender->isActive()) {
-            throw new RuntimeException(\sprintf('Sender %d was not found or is inactive.', $senderId));
-        }
-
-        if (!UserManager::is_admin($senderId)) {
-            throw new RuntimeException(\sprintf('Sender %d must be a platform administrator.', $senderId));
-        }
-    }
-
-    /**
-     * @return array{subject?: string, message?: string}
-     */
-    private function resolveNotification(int $courseId): array
-    {
-        $fieldIds = [];
-
-        foreach (
-            [
-                'subject' => self::CERTIFICATE_SUBJECT_FIELD,
-                'message' => self::CERTIFICATE_MESSAGE_FIELD,
-            ] as $key => $variable
-        ) {
-            $fieldId = $this->connection->fetchOne(
-                'SELECT id
-                 FROM extra_field
-                 WHERE item_type = :itemType
-                   AND variable = :variable
-                 LIMIT 1',
-                [
-                    'itemType' => ExtraField::COURSE_FIELD_TYPE,
-                    'variable' => $variable,
-                ]
-            );
-
-            if (false === $fieldId || (int) $fieldId <= 0) {
-                return [];
-            }
-
-            $fieldIds[$key] = (int) $fieldId;
-        }
-
-        $notification = [];
-
-        foreach ($fieldIds as $key => $fieldId) {
-            $rows = $this->connection->fetchFirstColumn(
-                'SELECT field_value
-                 FROM extra_field_values
-                 WHERE field_id = :fieldId
-                   AND item_id = :courseId
-                 ORDER BY id',
-                [
-                    'fieldId' => $fieldId,
-                    'courseId' => $courseId,
-                ]
-            );
-
-            if (\count($rows) > 1) {
-                throw new RuntimeException(\sprintf('Course %d has duplicate values for %s.', $courseId, 'subject' === $key ? self::CERTIFICATE_SUBJECT_FIELD : self::CERTIFICATE_MESSAGE_FIELD));
-            }
-
-            $notification[$key] = trim((string) ($rows[0] ?? ''));
-        }
-
-        if ('' === $notification['subject'] && '' === $notification['message']) {
-            return [];
-        }
-
-        return $notification;
-    }
-
-    /**
      * @return array{id: int|string, title: string, certif_min_score: float|string}
      */
     private function resolveCategory(int $courseId, ?int $requestedCategoryId): array
     {
-        $params = ['courseId' => $courseId];
-        $categoryFilter = '';
-
-        if (null !== $requestedCategoryId) {
-            $categoryFilter = ' AND id = :categoryId';
-            $params['categoryId'] = $requestedCategoryId;
-        }
-
-        $categories = $this->connection->fetchAllAssociative(
-            'SELECT id, title, certif_min_score
-             FROM gradebook_category
-             WHERE c_id = :courseId
-               AND (parent_id IS NULL OR parent_id = 0)
-               AND COALESCE(session_id, 0) = 0
-               AND generate_certificates = 1'
-            .$categoryFilter.'
-             ORDER BY id',
-            $params
-        );
+        $categories = $this->service->loadEligibleCategories($courseId, 0, $requestedCategoryId);
 
         if ([] === $categories) {
             throw new RuntimeException(\sprintf('No eligible root certificate category was found for course %d.', $courseId));
@@ -568,99 +436,11 @@ final class ProcessAchievementCertificatesCommand extends Command
     }
 
     /**
-     * @return list<int>
-     */
-    private function loadPendingUserIds(
-        int $courseId,
-        int $categoryId,
-        int $afterUserId,
-        int $batchSize,
-        ?int $requestedUserId
-    ): array {
-        $userFilter = '';
-        $params = [
-            'courseId' => $courseId,
-            'categoryId' => $categoryId,
-            'studentStatus' => STUDENT,
-            'afterUserId' => $afterUserId,
-        ];
-
-        if (null !== $requestedUserId) {
-            $userFilter = ' AND course_user.user_id = :requestedUserId';
-            $params['requestedUserId'] = $requestedUserId;
-        }
-
-        $rows = $this->connection->fetchFirstColumn(
-            'SELECT DISTINCT course_user.user_id
-             FROM course_rel_user course_user
-             INNER JOIN user selected_user
-                ON selected_user.id = course_user.user_id
-               AND selected_user.active = 1
-             LEFT JOIN gradebook_certificate certificate
-                ON certificate.cat_id = :categoryId
-               AND certificate.user_id = course_user.user_id
-             WHERE course_user.c_id = :courseId
-               AND course_user.status = :studentStatus
-               AND course_user.user_id > :afterUserId
-               AND certificate.id IS NULL'
-            .$userFilter.'
-             ORDER BY course_user.user_id ASC
-             LIMIT '.$batchSize,
-            $params
-        );
-
-        return array_map('intval', $rows);
-    }
-
-    /**
-     * @param array{subject: string, message: string, sender_id: int} $notification
-     */
-    private function generateCertificate(
-        GradebookCategory $category,
-        int $userId,
-        bool $sendNotification,
-        array $notification
-    ): bool {
-        Category::generateUserCertificate(
-            $category,
-            $userId,
-            $sendNotification,
-            true,
-            $notification
-        );
-
-        $certificate = $this->connection->fetchAssociative(
-            'SELECT id, resource_node_id
-             FROM gradebook_certificate
-             WHERE cat_id = :categoryId
-               AND user_id = :userId
-             ORDER BY id DESC
-             LIMIT 1',
-            [
-                'categoryId' => (int) $category->getId(),
-                'userId' => $userId,
-            ]
-        );
-
-        return false !== $certificate
-            && (int) ($certificate['id'] ?? 0) > 0
-            && (int) ($certificate['resource_node_id'] ?? 0) > 0;
-    }
-
-    /**
      * @param array<string, int> $summary
      */
     private function generationLimitReached(array $summary, int $limit, bool $dryRun): bool
     {
-        if (0 === $limit) {
-            return false;
-        }
-
-        $processed = $dryRun
-            ? $summary['would_generate']
-            : $summary['generated'];
-
-        return $processed >= $limit;
+        return $this->service->generationLimitReached($summary, $limit, $dryRun);
     }
 
     /**
@@ -673,70 +453,5 @@ final class ProcessAchievementCertificatesCommand extends Command
         }
 
         return 0 !== $scanLimit && $summary['scanned'] >= $scanLimit;
-    }
-
-    private function positiveOption(InputInterface $input, string $name): ?int
-    {
-        $rawValue = trim((string) $input->getOption($name));
-
-        if ('' === $rawValue || !ctype_digit($rawValue) || (int) $rawValue <= 0) {
-            return null;
-        }
-
-        return (int) $rawValue;
-    }
-
-    private function optionalPositiveOption(InputInterface $input, string $name): ?int
-    {
-        $rawValue = trim((string) $input->getOption($name));
-
-        if ('' === $rawValue) {
-            return null;
-        }
-
-        if (!ctype_digit($rawValue) || (int) $rawValue <= 0) {
-            throw new RuntimeException(\sprintf('--%s must be a positive integer.', $name));
-        }
-
-        return (int) $rawValue;
-    }
-
-    private function boundedPositiveOption(
-        InputInterface $input,
-        string $name,
-        int $maximum
-    ): int {
-        $value = $this->optionalPositiveOption($input, $name);
-
-        if (null === $value || $value > $maximum) {
-            throw new RuntimeException(\sprintf('--%s must be between 1 and %d.', $name, $maximum));
-        }
-
-        return $value;
-    }
-
-    private function boundedNonNegativeOption(
-        InputInterface $input,
-        string $name,
-        int $maximum
-    ): int {
-        $rawValue = trim((string) $input->getOption($name));
-
-        if ('' === $rawValue || !ctype_digit($rawValue)) {
-            throw new RuntimeException(\sprintf('--%s must be a non-negative integer.', $name));
-        }
-
-        $value = (int) $rawValue;
-
-        if ($value > $maximum) {
-            throw new RuntimeException(\sprintf('--%s must be between 0 and %d.', $name, $maximum));
-        }
-
-        return $value;
-    }
-
-    private function formatNumber(float $value): string
-    {
-        return rtrim(rtrim(number_format($value, 4, '.', ''), '0'), '.');
     }
 }

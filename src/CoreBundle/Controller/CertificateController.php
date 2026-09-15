@@ -345,13 +345,16 @@ class CertificateController extends AbstractController
             if ($fs) {
                 $basePath = rtrim((string) $node->getPath(), '/');
 
-                // Helper to create sharded path: resource/7/4/3/<filename>
+                // Helper to create sharded path: 7/4/3/<filename>
+                // No "resource/" prefix: $fs is already rooted at the resource storage
+                // directory (see oneup_flysystem.yaml's resource_adapter), matching how
+                // FlysystemStorage::resolveUri() resolves the same file when it was written.
                 $sharded = static function (string $filename): string {
                     $a = $filename[0] ?? '_';
                     $b = $filename[1] ?? '_';
                     $c = $filename[2] ?? '_';
 
-                    return \sprintf('resource/%s/%s/%s/%s', $a, $b, $c, $filename);
+                    return \sprintf('%s/%s/%s/%s', $a, $b, $c, $filename);
                 };
 
                 try {

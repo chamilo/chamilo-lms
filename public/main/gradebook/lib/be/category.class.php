@@ -2211,12 +2211,20 @@ class Category implements GradebookItem
             return false;
         }
 
+        // Explicit creator for ResourceListener: console commands (this platform-wide/
+        // per-course certificate generation) run with no Security token to fall back on,
+        // unlike a browser session. $notification['sender_id'] is already the acting
+        // admin in that case; api_get_user_id() covers the normal web-UI path.
+        $creatorId = (int) ($notification['sender_id'] ?? 0);
+        $creator = $creatorId > 0 ? api_get_user_entity($creatorId) : null;
+
         // Store score info (used to display/track generation moment).
         GradebookUtils::registerUserInfoAboutCertificate(
             $categoryId,
             $user_id,
             $scoreForCertificate,
-            api_get_utc_datetime()
+            api_get_utc_datetime(),
+            $creator
         );
 
         // Now fetch the (possibly existing) certificate.

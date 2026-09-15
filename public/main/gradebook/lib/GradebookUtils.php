@@ -583,16 +583,19 @@ class GradebookUtils
     /**
      * register user info about certificate.
      *
-     * @param int    $cat_id            The category id
-     * @param int    $user_id           The user id
-     * @param float  $score_certificate The score obtained for certified
-     * @param string $date_certificate  The date when you obtained the certificate
+     * @param int                                     $cat_id            The category id
+     * @param int                                     $user_id           The user id
+     * @param float                                   $score_certificate The score obtained for certified
+     * @param string                                  $date_certificate  The date when you obtained the certificate
+     * @param \Chamilo\CoreBundle\Entity\User|null $creator Explicit resource creator (console commands run with no
+     *                                                       Security token to fall back on; pass the acting admin)
      */
     public static function registerUserInfoAboutCertificate(
         $cat_id,
         $user_id,
         $score_certificate,
-        $date_certificate
+        $date_certificate,
+        $creator = null
     ) {
         $repository = Container::getGradeBookCertificateRepository();
 
@@ -600,7 +603,8 @@ class GradebookUtils
             (int) $cat_id,
             (int) $user_id,
             (float) api_float_val($score_certificate),
-            ''
+            '',
+            $creator
         );
     }
 

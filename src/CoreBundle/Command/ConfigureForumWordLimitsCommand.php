@@ -82,26 +82,36 @@ final class ConfigureForumWordLimitsCommand extends Command
 
         $schemaManager = $this->connection->createSchemaManager();
 
-        if (!$schemaManager->tablesExist(['settings_current'])) {
-            $io->error('settings_current table does not exist.');
+        $candidateTables = ['settings', 'settings_current'];
+        $tables = [];
 
-            return Command::FAILURE;
-        }
+        foreach ($candidateTables as $table) {
+            if (!$schemaManager->tablesExist([$table])) {
+                continue;
+            }
 
-        $availableVariables = (int) $this->connection->fetchOne(
-            <<<'SQL'
+            $availableVariables = (int) $this->connection->fetchOne(
+                sprintf(
+                    <<<'SQL'
 SELECT COUNT(DISTINCT variable)
-FROM settings_current
+FROM %s
 WHERE category = 'forum'
   AND variable IN (?, ?)
 SQL,
-            [
-                self::FIRST_VARIABLE,
-                self::SUBSEQUENT_VARIABLE,
-            ]
-        );
+                    $table
+                ),
+                [
+                    self::FIRST_VARIABLE,
+                    self::SUBSEQUENT_VARIABLE,
+                ]
+            );
 
-        if (2 !== $availableVariables) {
+            if (2 === $availableVariables) {
+                $tables[] = $table;
+            }
+        }
+
+        if ([] === $tables) {
             $io->error(
                 'Forum word-limit settings are missing. Run the corresponding migration first.'
             );
@@ -112,6 +122,7 @@ SQL,
         $io->definitionList(
             ['First reply minimum' => $first],
             ['Subsequent reply minimum' => $subsequent],
+            ['Tables' => implode(', ', $tables)],
             ['Dry run' => $dryRun ? 'yes' : 'no'],
         );
 
@@ -119,12 +130,6 @@ SQL,
             $io->success('Dry-run completed. No settings were changed.');
 
             return Command::SUCCESS;
-        }
-
-        $tables = ['settings_current'];
-
-        if ($schemaManager->tablesExist(['settings'])) {
-            $tables[] = 'settings';
         }
 
         $this->connection->beginTransaction();
@@ -154,12 +159,12 @@ SQL,
                         self::SUBSEQUENT_VARIABLE,
                     ]
                 );
-            }
 
-            $invalidRows = (int) $this->connection->fetchOne(
-                <<<'SQL'
+                $invalidRows = (int) $this->connection->fetchOne(
+                    sprintf(
+                        <<<'SQL'
 SELECT COUNT(*)
-FROM settings_current
+FROM %s
 WHERE category = 'forum'
   AND (
       (variable = ? AND selected_value <> ?)
@@ -167,18 +172,24 @@ WHERE category = 'forum'
       (variable = ? AND selected_value <> ?)
   )
 SQL,
-                [
-                    self::FIRST_VARIABLE,
-                    (string) $first,
-                    self::SUBSEQUENT_VARIABLE,
-                    (string) $subsequent,
-                ]
-            );
-
-            if (0 !== $invalidRows) {
-                throw new \RuntimeException(
-                    'Forum word-limit settings verification failed.'
+                        $table
+                    ),
+                    [
+                        self::FIRST_VARIABLE,
+                        (string) $first,
+                        self::SUBSEQUENT_VARIABLE,
+                        (string) $subsequent,
+                    ]
                 );
+
+                if (0 !== $invalidRows) {
+                    throw new \RuntimeException(
+                        sprintf(
+                            'Forum word-limit settings verification failed for table %s.',
+                            $table
+                        )
+                    );
+                }
             }
 
             $this->connection->commit();

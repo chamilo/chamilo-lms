@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Installer\MigrationHistoryRecorder;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
@@ -51,6 +52,7 @@ class IndexBlocksController extends BaseController
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly AccessUrlRepository $accessUrlRepository,
         AuthenticationConfigHelper $authConfigHelper,
+        private readonly MigrationHistoryRecorder $migrationHistoryRecorder,
     ) {
         $this->isLdapActive = $authConfigHelper->getLdapConfig()['enabled'];
     }
@@ -1016,13 +1018,13 @@ class IndexBlocksController extends BaseController
         $nameSender = $this->settingsManager->getSetting('mail.mailer_from_name', true);
         if ((empty($mailDsn) || 'null://null' == $mailDsn) || empty($mailSender) || empty($nameSender)) {
             $items[] = [
-                'className' => 'item-health-check-mail-settings text-error',
+                'class' => 'item-health-check-mail-settings text-error',
                 'url' => '/admin/settings/mail',
                 'label' => $this->translator->trans('E-mail settings need to be configured'),
             ];
         } else {
             $items[] = [
-                'className' => 'item-health-check-mail-settings text-success',
+                'class' => 'item-health-check-mail-settings text-success',
                 'url' => '/admin/settings/mail',
                 'label' => $this->translator->trans('E-mail settings are OK'),
             ];
@@ -1031,13 +1033,13 @@ class IndexBlocksController extends BaseController
         // Check if the admin user has access to all URLs
         if (api_is_admin_in_all_active_urls()) {
             $items[] = [
-                'className' => 'item-health-check-admin-urls text-success',
+                'class' => 'item-health-check-admin-urls text-success',
                 'url' => '/admin/urls/manage',
                 'label' => $this->translator->trans('All URLs have at least one admin assigned'),
             ];
         } else {
             $items[] = [
-                'className' => 'item-health-check-admin-urls text-error',
+                'class' => 'item-health-check-admin-urls text-error',
                 'url' => '/admin/urls/assign-users',
                 'label' => $this->translator->trans('At least one URL has no admin assigned'),
             ];
@@ -1057,7 +1059,7 @@ class IndexBlocksController extends BaseController
         $envIsWritable = is_file($envPath) && is_writable($envPath);
 
         $items[] = [
-            'className' => 'item-health-check-env-perms '.($envIsWritable ? 'text-error' : 'text-success'),
+            'class' => 'item-health-check-env-perms '.($envIsWritable ? 'text-error' : 'text-success'),
             'url' => $securityGuideUrl,
             'label' => \sprintf(
                 $this->translator->trans($envIsWritable ? '%s is writeable' : '%s is not writeable'),
@@ -1070,7 +1072,7 @@ class IndexBlocksController extends BaseController
         $configIsWritable = is_dir($configPath) && is_writable($configPath);
 
         $items[] = [
-            'className' => 'item-health-check-config-perms '.($configIsWritable ? 'text-error' : 'text-success'),
+            'class' => 'item-health-check-config-perms '.($configIsWritable ? 'text-error' : 'text-success'),
             'url' => $securityGuideUrl,
             'label' => \sprintf(
                 $this->translator->trans($configIsWritable ? '%s is writeable' : '%s is not writeable'),
@@ -1083,7 +1085,7 @@ class IndexBlocksController extends BaseController
         $cacheIsWritable = is_dir($cachePath) && is_writable($cachePath);
 
         $items[] = [
-            'className' => 'item-health-check-cache-perms '.($cacheIsWritable ? 'text-success' : 'text-error'),
+            'class' => 'item-health-check-cache-perms '.($cacheIsWritable ? 'text-success' : 'text-error'),
             'url' => $optimizationGuideUrl,
             'label' => \sprintf(
                 $this->translator->trans($cacheIsWritable ? '%s is writeable' : '%s is not writeable'),
@@ -1096,10 +1098,30 @@ class IndexBlocksController extends BaseController
         $installExists = is_dir($installPath);
 
         $items[] = [
-            'className' => 'item-health-check-install-folder '.($installExists ? 'text-warning' : 'text-success'),
+            'class' => 'item-health-check-install-folder '.($installExists ? 'text-warning' : 'text-success'),
             'url' => $securityGuideUrl,
             'label' => $this->translator->trans($installExists ? 'Install folder is still present' : 'Install folder is not present'),
         ];
+
+        // An empty migration history blocks every future update. While it is empty the
+        // item carries an action and records the history in place; once recorded there is
+        // nothing left to do, so it stays as plain text with no destination.
+        $historyIsEmpty = $this->migrationHistoryRecorder->isEmpty();
+
+        $migrationHistoryItem = [
+            'class' => 'item-health-check-migration-history '.($historyIsEmpty ? 'text-error' : 'text-success'),
+            'label' => $this->translator->trans(
+                $historyIsEmpty
+                    ? 'No migration history: click to record it, or no update will run'
+                    : 'Migration history is recorded'
+            ),
+        ];
+
+        if ($historyIsEmpty) {
+            $migrationHistoryItem['action'] = 'record-migration-history';
+        }
+
+        $items[] = $migrationHistoryItem;
 
         return $items;
     }

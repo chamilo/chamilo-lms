@@ -24,9 +24,9 @@ use PHPUnit\Framework\TestCase;
  * works" until an administrator cannot upgrade, and an open gate looks like "the upgrade
  * works" until an anonymous caller re-triggers a production migration.
  *
- * Doctrine's migration metadata is the only source of truth here. The deprecated
- * chamilo_database_version setting must never come back: a fresh install seeds it with a
- * stale schema default, which is what made the version comparison fail open.
+ * Doctrine's migration metadata is the only source of truth here. A stored version
+ * setting must never come back: it was a hand-written literal no migration ever raised,
+ * which is what made the version comparison fail open.
  */
 final class InstallerGateTest extends TestCase
 {

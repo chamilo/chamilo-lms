@@ -30,7 +30,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
         'cron_remind_course_expiration_activate',
         'donotlistcampus',
         'server_type',
-        'chamilo_database_version',
         'unoconv_binaries',
         'session_admin_access_to_all_users_on_all_urls',
         'split_users_upload_directory',
@@ -1096,11 +1095,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'timezone',
                     'title' => 'Default timezone',
                     'comment' => 'Select the default timezone for this portal. This will help set the timezone (if the feature is enabled) for each new user or for any user that has not set a specific timezone yet. Timezones help show all time-related information on screen in the specific timezone of each user.',
-                ],
-                [
-                    'name' => 'chamilo_database_version',
-                    'title' => 'Current version of the database schema used by Chamilo',
-                    'comment' => 'Displays the current DB version to match the Chamilo core version.',
                 ],
                 [
                     'name' => 'notification_event',

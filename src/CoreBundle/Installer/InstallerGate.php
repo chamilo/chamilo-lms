@@ -19,9 +19,9 @@ use const PATHINFO_FILENAME;
  * Doctrine migrations is a legitimate upgrade and stays reachable, which is what makes
  * the 2.x to 3.x web upgrade work.
  *
- * The decision never reads chamilo_database_version. That setting is deprecated, and a
- * fresh install seeds it with a stale schema default, so it once let the gate fail open.
- * Doctrine's own migration metadata answers instead.
+ * Doctrine's own migration metadata is the source of truth. The gate used to be able to
+ * read a stored version setting instead; that setting was a hand-written literal no
+ * migration ever raised, so comparing it against the code version failed open.
  */
 final class InstallerGate
 {

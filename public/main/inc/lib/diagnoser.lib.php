@@ -353,16 +353,41 @@ class Diagnoser
             get_lang('The directory should be removed (it is no longer necessary)')
         );
 
-        $app_version = api_get_setting('platform.chamilo_database_version');
+        // The database state is the last executed Doctrine migration. The former
+        // chamilo_database_version setting is gone: it was a hand-written literal that
+        // migrations never raised, so it reported a version the database never had.
+        $lastMigration = '-';
+        $executedMigrations = 0;
+
+        try {
+            $connection = Database::getManager()->getConnection();
+            $executedMigrations = (int) $connection->fetchOne('SELECT COUNT(*) FROM version');
+
+            if ($executedMigrations > 0) {
+                // Ordered by name, not by executed_at: a history recorded in one go
+                // (doctrine:migrations:version --add --all, or the admin health check
+                // item) leaves that column NULL for every row. The class name sorts
+                // correctly on its own — the namespace orders the series and the fixed
+                // width timestamp orders each one.
+                $lastMigration = (string) $connection->fetchOne(
+                    'SELECT version FROM version ORDER BY version DESC LIMIT 1'
+                );
+            }
+        } catch (Throwable $e) {
+            // No migration metadata table: reported as an empty history below.
+        }
+
         $array[] = $this->build_setting(
-            self::STATUS_INFORMATION,
+            $executedMigrations > 0 ? self::STATUS_INFORMATION : self::STATUS_WARNING,
             '[DB]',
-            'chamilo_database_version',
+            'last_executed_migration',
             '#',
-            $app_version,
+            $lastMigration,
             0,
             null,
-            'Chamilo DB version'
+            $executedMigrations > 0
+                ? $executedMigrations.' migrations executed'
+                : 'No migration history. Record it once with doctrine:migrations:sync-metadata-storage, then doctrine:migrations:version --add --all, or no future update will run.'
         );
 
         $access_url_id = api_get_current_access_url_id();

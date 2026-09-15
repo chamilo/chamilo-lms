@@ -244,10 +244,9 @@ if (!empty($_POST['updatePath'])) {
 $checkMigrationStatus = [];
 $isUpdateAvailable = isUpdateAvailable();
 
-// A modern upgrade is recognised from the schema, not from chamilo_database_version:
-// that setting is deprecated and a fresh install seeds it with a stale default.
-// isInstallerLocked() above already refused an installed platform with no pending
-// migration, so reaching this point with a 2.x schema means an upgrade is due.
+// A modern upgrade is recognised from the schema. isInstallerLocked() above already
+// refused an installed platform with no pending migration, so reaching this point with
+// a 2.x schema means an upgrade is due.
 $isModernUpdate = false;
 
 if ($isUpdateAvailable) {

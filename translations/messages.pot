@@ -41482,3 +41482,15 @@ msgstr ""
 
 msgid "JSON configuration for search prefilter fields."
 msgstr ""
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr ""
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr ""
+
+msgid "No migration history: click to record it, or no update will run"
+msgstr ""
+
+msgid "Migration history is recorded"
+msgstr ""

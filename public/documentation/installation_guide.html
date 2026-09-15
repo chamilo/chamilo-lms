@@ -444,20 +444,37 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
     For all requirements previous to the installation wizard, see the command line upgrade instructions above.
     Note the installation folder for Chamilo 3 will be different from the installation folder from Chamilo 1, as explained in the "Files" section above.
 
-    <h3>5.2. Installation wizard</h3>
+    <h3>5.2. Enable the upgrade</h3>
+    <a id="web-upgrade-enable" class="anchor"></a>
+    The installer carries no login of its own, so it refuses to upgrade an installed platform
+    until you authorise it on the server. Create an empty file named
+    <em>UPGRADE_ENABLED</em> in the project root, next to <em>.env</em> and
+    <em>composer.json</em>:
+    <pre>
+        cd [/var/www/chamilo]
+        touch UPGRADE_ENABLED
+    </pre>
+    It goes in the project root, not in <em>public/</em>: from there nobody can ask over HTTP
+    whether your platform is currently open for upgrading.<br>
+    Without that file the installer answers "No UPGRADE_ENABLED found in the project root".<br>
+    The installer deletes the file for you when the upgrade finishes. If your project root is
+    read-only, it says so instead, and you delete the file by hand &mdash; until you do, the
+    installer stays open.
+
+    <h3>5.3. Installation wizard</h3>
     <a id="web-upgrade-wizard" class="anchor"></a>
     On step 2 of the installation wizard, make sure you select "Upgrade from a previous version of Chamilo" and click "Continue".<br>
     Follow the wizard to complete the upgrade.<br>
     Please be aware that upgrading your system might take hours or even days, depending on the size and complexity of your database. Refer to the Chamilo forum or to official providers for help.
 
-    <h3>5.3. Upgrading from Chamilo 2.x through the web panel</h3>
+    <h3>5.4. Upgrading from Chamilo 2.x through the web panel</h3>
     <a id="web-upgrade-from-2x" class="anchor"></a>
     The wizard has no login of its own, so it answers only while it still has work to do. On an
     installed platform it opens when the database has migrations left to execute, and it answers
     "409 Conflict - Chamilo is already installed" once there are none.<br>
     This means an installation whose migration history was never seeded is refused, because nothing
     proves that an upgrade is pending. Seed it first, with your current version still deployed, as
-    described in section 4.6, then copy the Chamilo 3 code and open your URL.<br>
+    described in section 4.6, then copy the Chamilo 3 code, create the UPGRADE_ENABLED file of section 5.2, and open your URL.<br>
     If the wizard refuses your request and you expected an upgrade, run
     <em>php bin/console doctrine:migrations:status</em>. If "Executed" is 0 on a platform that works,
     the history is the cause.

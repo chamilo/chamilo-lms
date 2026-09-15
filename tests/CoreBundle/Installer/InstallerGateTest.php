@@ -76,6 +76,62 @@ final class InstallerGateTest extends TestCase
     }
 
     /**
+     * Pending migrations are not enough on their own. The endpoints carry no
+     * authentication, so an upgrade also needs the flag file an administrator creates on
+     * the server. Without that deliberate act, an anonymous caller could start a
+     * production migration the moment new code is uploaded.
+     */
+    public function testPendingMigrationsWithoutTheFlagFileLockTheWizard(): void
+    {
+        $connection = $this->databaseWithSettings();
+        $this->seedMetadata($connection, [self::MIGRATIONS[0]]);
+
+        $state = InstallerGate::resolve(true, true, $connection, self::MIGRATIONS, false);
+
+        $this->assertSame(InstallerState::UpgradeNotAuthorised, $state);
+        $this->assertTrue($state->isLocked());
+        $this->assertFalse($state->isUpgrade());
+    }
+
+    /**
+     * The flag file only authorises an upgrade; it never opens a platform that has
+     * nothing pending.
+     */
+    public function testTheFlagFileAloneDoesNotOpenAnUpToDatePlatform(): void
+    {
+        $connection = $this->databaseWithSettings();
+        $this->seedMetadata($connection, self::MIGRATIONS);
+
+        $state = InstallerGate::resolve(true, true, $connection, self::MIGRATIONS, true);
+
+        $this->assertSame(InstallerState::UpToDate, $state);
+        $this->assertTrue($state->isLocked());
+    }
+
+    /**
+     * The flag file is read from the project root, never from the document root: a file
+     * under public/ could be probed over HTTP to learn that an upgrade is under way.
+     */
+    public function testTheFlagFileIsReadFromTheGivenDirectory(): void
+    {
+        $projectDir = sys_get_temp_dir().'/chamilo-upgrade-flag-'.uniqid('', true);
+        mkdir($projectDir, 0o777, true);
+
+        $this->assertFalse(InstallerGate::isUpgradeAuthorised($projectDir));
+
+        touch($projectDir.'/'.InstallerGate::UPGRADE_FLAG_FILE);
+        $this->assertTrue(InstallerGate::isUpgradeAuthorised($projectDir));
+
+        $this->assertTrue(InstallerGate::revokeUpgradeAuthorisation($projectDir));
+        $this->assertFalse(InstallerGate::isUpgradeAuthorised($projectDir));
+
+        // Revoking an authorisation that is already gone is not a failure.
+        $this->assertTrue(InstallerGate::revokeUpgradeAuthorisation($projectDir));
+
+        rmdir($projectDir);
+    }
+
+    /**
      * The abuse the advisory reported: an anonymous caller re-triggering the migration
      * of a platform that has nothing left to migrate.
      */

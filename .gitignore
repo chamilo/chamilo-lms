@@ -101,3 +101,7 @@ yarn-error.log
 
 ### Ignore local Claude settings
 .claude/settings.local.json
+
+### The flag that authorises a web upgrade. Created by the administrator, deleted by
+### the installer: it must never travel with the code.
+/UPGRADE_ENABLED

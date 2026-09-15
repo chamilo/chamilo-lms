@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Installer\MigrationHistoryAlreadyRecordedException;
+use Chamilo\CoreBundle\Installer\MigrationHistoryRecorder;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -154,7 +156,33 @@ final class SystemStatusController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly SettingsManager $settingsManager,
         private readonly TranslatorInterface $translator,
+        private readonly MigrationHistoryRecorder $migrationHistoryRecorder,
     ) {}
+
+    /**
+     * Records every shipped migration as executed, for an administrator with no shell
+     * access. Refuses a history that already holds rows.
+     */
+    #[Route('/admin/system-status-migration-history', name: 'admin_system_status_record_migration_history', methods: ['POST'])]
+    public function recordMigrationHistory(): JsonResponse
+    {
+        try {
+            $recorded = $this->migrationHistoryRecorder->record();
+        } catch (MigrationHistoryAlreadyRecordedException $e) {
+            return new JsonResponse(['success' => false, 'message' => $e->getMessage()], 409);
+        } catch (Throwable $e) {
+            return new JsonResponse(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+
+        return new JsonResponse([
+            'success' => true,
+            'recorded' => $recorded,
+            'message' => \sprintf(
+                $this->translator->trans('%s migrations recorded. Your platform can now be updated normally.'),
+                $recorded
+            ),
+        ]);
+    }
 
     #[Route('/admin/system-status-data', name: 'admin_system_status_data', methods: ['GET'])]
     public function __invoke(Request $request): JsonResponse

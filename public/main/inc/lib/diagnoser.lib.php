@@ -364,8 +364,13 @@ class Diagnoser
             $executedMigrations = (int) $connection->fetchOne('SELECT COUNT(*) FROM version');
 
             if ($executedMigrations > 0) {
+                // Ordered by name, not by executed_at: a history recorded in one go
+                // (doctrine:migrations:version --add --all, or the admin health check
+                // item) leaves that column NULL for every row. The class name sorts
+                // correctly on its own — the namespace orders the series and the fixed
+                // width timestamp orders each one.
                 $lastMigration = (string) $connection->fetchOne(
-                    'SELECT version FROM version ORDER BY executed_at DESC LIMIT 1'
+                    'SELECT version FROM version ORDER BY version DESC LIMIT 1'
                 );
             }
         } catch (Throwable $e) {

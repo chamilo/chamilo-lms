@@ -46,6 +46,13 @@ final class InstallerGate
     private const array METADATA_COLUMNS = ['version', 'executed_at', 'execution_time'];
 
     /**
+     * Name of the file an administrator creates in the project root to authorise an
+     * upgrade. It sits outside the document root on purpose: nobody can probe over HTTP
+     * whether a platform is currently open for upgrading.
+     */
+    public const string UPGRADE_FLAG_FILE = 'UPGRADE_ENABLED';
+
+    /**
      * Resolves what the installer may do for the given environment and database.
      *
      * A null connection means the database is unreachable. Nothing then proves the
@@ -53,12 +60,14 @@ final class InstallerGate
      * administrator out of a recovery.
      *
      * @param list<string> $availableMigrations every migration class the code tree ships
+     * @param bool         $upgradeAuthorised   whether the flag file is present
      */
     public static function resolve(
         bool $envFileExists,
         bool $appInstalled,
         ?Connection $connection,
-        array $availableMigrations
+        array $availableMigrations,
+        bool $upgradeAuthorised = true
     ): InstallerState {
         if (!$envFileExists || !$appInstalled || !$connection instanceof Connection) {
             return InstallerState::FreshInstall;
@@ -69,10 +78,40 @@ final class InstallerGate
         }
 
         if (self::hasPendingMigrations($connection, $availableMigrations)) {
-            return InstallerState::UpgradePending;
+            // Pending migrations alone are not enough. The endpoints carry no
+            // authentication, so the upgrade also needs a deliberate act on the server:
+            // an administrator creating the flag file.
+            return $upgradeAuthorised
+                ? InstallerState::UpgradePending
+                : InstallerState::UpgradeNotAuthorised;
         }
 
         return InstallerState::UpToDate;
+    }
+
+    /**
+     * Tells whether the flag file that authorises an upgrade is present.
+     */
+    public static function isUpgradeAuthorised(string $projectDir): bool
+    {
+        return is_file(rtrim($projectDir, '/').'/'.self::UPGRADE_FLAG_FILE);
+    }
+
+    /**
+     * Removes the flag file once the upgrade is over, so the endpoints close behind it.
+     *
+     * Returns false when the file is still there, which happens on a read-only project
+     * root. The caller then tells the administrator to delete it by hand.
+     */
+    public static function revokeUpgradeAuthorisation(string $projectDir): bool
+    {
+        $flagFile = rtrim($projectDir, '/').'/'.self::UPGRADE_FLAG_FILE;
+
+        if (!is_file($flagFile)) {
+            return true;
+        }
+
+        return @unlink($flagFile) && !is_file($flagFile);
     }
 
     /**

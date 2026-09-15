@@ -1867,7 +1867,8 @@ function resolveInstallerState(): InstallerState
         true,
         $appInstalled,
         $connection,
-        getInstallerMigrations()
+        getInstallerMigrations(),
+        InstallerGate::isUpgradeAuthorised(api_get_path(SYMFONY_SYS_PATH))
     );
 }
 
@@ -2224,8 +2225,17 @@ function executeMigration(): array
 
             setChamiloDatabaseVersion($connection, $targetVersion);
 
+            // Close the door behind the upgrade. A read-only project root keeps the file,
+            // and then the administrator has to remove it by hand.
+            $flagFile = InstallerGate::UPGRADE_FLAG_FILE;
+            $projectDir = api_get_path(SYMFONY_SYS_PATH);
+
             $resultStatus['status'] = true;
-            $resultStatus['message'] = 'Migration and bundled demo course installation completed successfully.';
+            $resultStatus['message'] = InstallerGate::revokeUpgradeAuthorisation($projectDir)
+                ? 'Migration and bundled demo course installation completed successfully.'
+                : 'Migration and bundled demo course installation completed successfully.'
+                    .' Could not delete '.$flagFile.': remove it by hand from the project root,'
+                    .' otherwise the installer stays open.';
             $resultStatus['progress_percentage'] = 100;
         } else {
             $resultStatus['message'] = 'Migration completed with errors.';

@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ScimHelper;
 use Chamilo\CoreBundle\Installer\InstallerGate;
+use Chamilo\CoreBundle\Installer\InstallerState;
 use Chamilo\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -81,15 +82,28 @@ $installerVersion = $versionInfo['new_version'] ?? null;
 // still has work to do: a fresh install, a half-installed instance, or an installed
 // platform with pending migrations (the 1.11.x and 2.x upgrades).
 if (isInstallerLocked()) {
+    $needsUpgradeFlag = InstallerState::UpgradeNotAuthorised === resolveInstallerState();
+
     header('HTTP/1.1 409 Conflict');
-    echo '<!doctype html><meta charset="utf-8"><title>Chamilo already installed</title>';
+    echo '<!doctype html><meta charset="utf-8">';
+    echo '<title>'.($needsUpgradeFlag ? 'Upgrade not enabled' : 'Chamilo already installed').'</title>';
     echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
-    echo '<h1>Chamilo is already installed</h1>';
-    echo '<p>The install wizard is disabled because the platform is already installed and up-to-date.</p>';
-    echo '<p>If an upgrade is pending, run <code>php bin/console doctrine:migrations:status</code> to check it.';
-    echo ' An installation that predates the migration metadata seeding needs';
-    echo ' <code>php bin/console doctrine:migrations:version --add --all</code> once.</p>';
-    echo '<p>If you need a fresh install, set <code>APP_INSTALLED=0</code> or remove <code>.env</code> first.</p>';
+
+    if ($needsUpgradeFlag) {
+        echo '<h1>No '.InstallerGate::UPGRADE_FLAG_FILE.' found in the project root</h1>';
+        echo '<p>This platform has pending migrations, but the upgrade is not enabled yet.</p>';
+        echo '<p>Create an empty <code>'.InstallerGate::UPGRADE_FLAG_FILE.'</code> file next to';
+        echo ' <code>.env</code>, then reload this page. The installer deletes it once the upgrade';
+        echo ' is over.</p>';
+    } else {
+        echo '<h1>Chamilo is already installed</h1>';
+        echo '<p>The install wizard is disabled because the platform is already installed and up-to-date.</p>';
+        echo '<p>If an upgrade is pending, run <code>php bin/console doctrine:migrations:status</code> to check it.';
+        echo ' An installation that predates the migration metadata seeding needs';
+        echo ' <code>php bin/console doctrine:migrations:version --add --all</code> once.</p>';
+        echo '<p>If you need a fresh install, set <code>APP_INSTALLED=0</code> or remove <code>.env</code> first.</p>';
+    }
+
     echo '</div>';
     exit;
 }

@@ -30,6 +30,12 @@ enum InstallerState: string
     case UpgradePending = 'upgrade_pending';
 
     /**
+     * The platform is installed and has migrations pending, but the administrator has
+     * not authorised the upgrade: the flag file is absent from the project root.
+     */
+    case UpgradeNotAuthorised = 'upgrade_not_authorised';
+
+    /**
      * The platform is installed and nothing is pending. The installer must refuse
      * the request: it has no authentication of its own.
      */
@@ -40,7 +46,7 @@ enum InstallerState: string
      */
     public function isLocked(): bool
     {
-        return self::UpToDate === $this;
+        return self::UpToDate === $this || self::UpgradeNotAuthorised === $this;
     }
 
     /**

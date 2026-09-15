@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Installer\InstallerGate;
+use Chamilo\CoreBundle\Installer\InstallerState;
+
 ini_set('memory_limit', '4G');
 ini_set('max_execution_time', 0);
 require_once __DIR__.'/../../../vendor/autoload.php';
@@ -16,7 +19,9 @@ if (isInstallerLocked()) {
     header('Content-Type: application/json');
     echo json_encode([
         'status' => false,
-        'message' => 'Chamilo is already installed.',
+        'message' => InstallerState::UpgradeNotAuthorised === resolveInstallerState()
+            ? 'No '.InstallerGate::UPGRADE_FLAG_FILE.' found in the project root.'
+            : 'Chamilo is already installed.',
         'progress_percentage' => 0,
         'current_migration' => '',
         'redirect_to_step7' => false,

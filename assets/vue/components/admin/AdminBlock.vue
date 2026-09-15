@@ -52,7 +52,21 @@
           role="menuitem"
         >
           <div class="p-menu-item-content">
+            <!-- An item may carry an action instead of a destination. The parent view
+                 owns what the action does; this component only reports the click. -->
+            <button
+              v-if="item.action"
+              type="button"
+              class="p-menu-item-link"
+              @click="emit('itemAction', item)"
+            >
+              <span
+                class="p-menu-item-label"
+                v-text="item.label"
+              />
+            </button>
             <BaseAppLink
+              v-else-if="item.route || item.url"
               :to="item.route"
               :url="item.url"
               class="p-menu-item-link"
@@ -62,6 +76,17 @@
                 v-text="item.label"
               />
             </BaseAppLink>
+            <!-- An item with neither a destination nor an action is plain text: a health
+                 check result the administrator has nothing to do about. -->
+            <span
+              v-else
+              class="p-menu-item-link"
+            >
+              <span
+                class="p-menu-item-label"
+                v-text="item.label"
+              />
+            </span>
           </div>
         </li>
       </ul>
@@ -89,6 +114,8 @@ import { useVisualTheme } from "../../composables/theme"
 const { getThemeAssetUrl } = useVisualTheme()
 
 const { t } = useI18n()
+
+const emit = defineEmits(["itemAction"])
 
 const modelExtraContent = defineModel("extraContent", {
   type: Object,

@@ -164,6 +164,7 @@
       :title="t('Health check')"
       :bg-index="12"
       icon="health-check"
+      @item-action="onHealthCheckAction"
     />
 
     <!-- Small / secondary blocks: sent to the bottom -->
@@ -316,10 +317,15 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useIndexBlocks } from "../../composables/admin/indexBlocks"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import baseService from "../../services/baseService"
+import { useConfirmation } from "../../composables/useConfirmation"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 
 const securityStore = useSecurityStore()
+const { requireConfirmation } = useConfirmation()
+const { showErrorNotification, showSuccessNotification } = useNotification()
 
 const doNotListCampus = ref(false)
 
@@ -347,6 +353,40 @@ const {
 
 function checkVersionOnSubmit() {
   checkVersion(doNotListCampus.value)
+}
+
+/**
+ * Runs the action a health check item carries, if any is known here.
+ *
+ * @param {{action: string}} item the clicked item
+ * @returns {void}
+ */
+function onHealthCheckAction(item) {
+  if ("record-migration-history" !== item.action) {
+    return
+  }
+
+  requireConfirmation({
+    message: t(
+      "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.",
+    ),
+    accept: recordMigrationHistory,
+  })
+}
+
+/**
+ * Records the migration history, then reloads the blocks so the item turns green.
+ *
+ * @returns {Promise<void>}
+ */
+async function recordMigrationHistory() {
+  try {
+    const result = await baseService.post("/admin/system-status-migration-history", {})
+    showSuccessNotification(result.message)
+    await loadBlocks()
+  } catch (e) {
+    showErrorNotification(e)
+  }
 }
 
 const isLoadingBlocks = ref(true)

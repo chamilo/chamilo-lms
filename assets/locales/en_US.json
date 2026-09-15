@@ -4251,5 +4251,6 @@
     "Number of messages received": "Number of messages received",
     "Number of messages sent": "Number of messages sent",
     "Contacts count": "Contacts count",
-    "Sessions by date": "Sessions by date"
+    "Sessions by date": "Sessions by date",
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
 }

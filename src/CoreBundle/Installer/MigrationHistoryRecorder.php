@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Installer;
 
-use DateTimeImmutable;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Version\Direction;
 use Doctrine\Migrations\Version\ExecutionResult;
@@ -83,9 +82,11 @@ final class MigrationHistoryRecorder
         $recorded = 0;
 
         foreach ($this->dependencyFactory->getMigrationRepository()->getMigrations()->getItems() as $migration) {
-            $result = new ExecutionResult($migration->getVersion(), Direction::UP, new DateTimeImmutable());
-            $result->setTime(0.0);
-            $storage->complete($result);
+            // Direction and ExecutionResult are marked @internal, but there is no public
+            // way to mark a migration as executed: doctrine:migrations:version builds the
+            // very same pair. Stay on that exact call so an upstream change breaks here
+            // the same day it breaks the command.
+            $storage->complete(new ExecutionResult($migration->getVersion(), Direction::UP));
             ++$recorded;
         }
 

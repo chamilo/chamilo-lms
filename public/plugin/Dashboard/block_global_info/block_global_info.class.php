@@ -114,12 +114,11 @@ class BlockGlobalInfo extends Block
     public function get_global_information_data()
     {
         // Two-dimensional array with data about the system
-        $path = api_get_path(WEB_CODE_PATH);
         // Check total number of users
         return [
-            [get_lang('Number of users'), '<a href="'.$path.'admin/user_list.php">'.Statistics::countUsers().'</a>'],
+            [get_lang('Number of users'), '<a href="/admin/user-list">'.Statistics::countUsers().'</a>'],
             // Check only active users
-            [get_lang('Number of active users'), '<a href="'.$path.'admin/user_list.php?keyword_firstname=&amp;keyword_lastname=&amp;keyword_username=&amp;keyword_email=&amp;keyword_officialcode=&amp;keyword_status=%25&amp;keyword_active=1&amp;submit=&amp;_qf__advanced_search=">'.Statistics::countUsers(null, null, null, true).'</a>'],
+            [get_lang('Number of active users'), '<a href="/admin/user-list">'.Statistics::countUsers(null, null, null, true).'</a>'],
             // Check number of courses
             [get_lang('Total number of courses'), '<a href="/admin/course-list">'.Statistics::countCourses().'</a>'],
             [get_lang('Number of public courses'), '<a href="/admin/course-list?keyword_visibility='.COURSE_VISIBILITY_OPEN_WORLD.'">'.Statistics::countCoursesByVisibility([COURSE_VISIBILITY_OPEN_WORLD]).'</a>'],

@@ -833,7 +833,7 @@ class AdminController extends BaseController
         if (null === $user) {
             $this->addFlash('error', 'User not found.');
 
-            return $this->redirect('/main/admin/user_list.php');
+            return $this->redirect('/admin/user-list');
         }
 
         $deleted = $em

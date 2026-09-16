@@ -14,10 +14,15 @@
   }
 
   .p-menu {
-    @apply border-none m-0 p-0 w-full;
+    @apply border-none m-0 p-0 w-full text-gray-90;
 
     &-item {
+      // Health check items carry their own text-* colour on the <li> (see
+      // IndexBlocksController::getItemsHealthCheck). The shared rule paints the
+      // content, which would hide it, so inherit from the <li> and keep the
+      // default colour on the menu itself.
       &-content {
+        color: inherit;
       }
 
       &-link {

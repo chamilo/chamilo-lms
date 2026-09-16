@@ -7036,9 +7036,32 @@ class DocumentManager
         $fileMoved = false;
         $file_renamed_from_disk = false;
 
+        $originalExtension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        $newExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
         $originalMime = self::file_get_mime_type($base_work_dir.$path);
         $newMime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file['tmp_name']);
-        if ($originalMime != $newMime) {
+
+        // finfo/libmagic detects the content of an OOXML file (zip-based
+        // Word/Excel/PowerPoint) but cannot tell apart its "template"
+        // variant (dotx/xltx/potx) from the regular "document" one
+        // (docx/xlsx/pptx): both are reported with the same MIME type.
+        // So a replacement is also accepted when both mime types belong
+        // to the same OOXML family (wordprocessingml/spreadsheetml/
+        // presentationml), even if they don't match exactly.
+        $sameOoxmlFamily = false;
+        if (0 === strpos($originalMime, 'application/vnd.openxmlformats-officedocument.')
+            && 0 === strpos($newMime, 'application/vnd.openxmlformats-officedocument.')
+        ) {
+            preg_match('#officedocument\.(\w+)#', $originalMime, $originalFamily);
+            preg_match('#officedocument\.(\w+)#', $newMime, $newFamily);
+            $sameOoxmlFamily = ($originalFamily[1] ?? null) === ($newFamily[1] ?? null);
+        }
+
+        $validReplacement = $originalExtension === $newExtension
+            && ($originalMime === $newMime || $sameOoxmlFamily);
+
+        if (!$validReplacement) {
             Display::addFlash(Display::return_message(get_lang('FileError'), 'error'));
 
             return false;

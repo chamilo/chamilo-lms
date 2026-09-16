@@ -142,6 +142,7 @@ final readonly class GradebookCertificateGenerator
         User $user,
         Course $course,
         ?Session $session,
+        ?User $creator = null,
     ): GradebookCertificate {
         $eligibility = $this->getEligibility($category, $user, $course, $session);
         if (!$eligibility['eligible']) {
@@ -154,7 +155,7 @@ final readonly class GradebookCertificateGenerator
         }
 
         if ($this->requiresLegacyTemplateCompatibility($template)) {
-            return $this->legacyCertificateBridge->generate($category, $user);
+            return $this->legacyCertificateBridge->generate($category, $user, $creator);
         }
 
         $this->skillAwarder->award($category, $user, $course, $session);

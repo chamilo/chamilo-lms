@@ -28,13 +28,19 @@ final readonly class LegacyGradebookCertificateBridge
         private GradebookCertificateRepository $certificateRepository,
     ) {}
 
-    public function generate(GradebookCategory $category, User $user): GradebookCertificate
+    public function generate(GradebookCategory $category, User $user, ?User $creator = null): GradebookCertificate
     {
         if (!class_exists(Category::class)) {
             throw new RuntimeException('The legacy Gradebook certificate compatibility bridge is unavailable.');
         }
 
-        Category::generateUserCertificate($category, (int) $user->getId());
+        // Category::generateUserCertificate() only resolves an explicit creator (for
+        // ResourceListener, required outside a real request) from $notification['sender_id'] —
+        // see category.class.php. Without it, a CLI caller with no Security token throws
+        // "User creator not found" the moment it persists the certificate resource.
+        $notification = $creator instanceof User ? ['sender_id' => (int) $creator->getId()] : [];
+
+        Category::generateUserCertificate($category, (int) $user->getId(), false, false, $notification);
 
         $certificate = $this->certificateRepository->getCertificateByUserId(
             (int) $category->getId(),

@@ -469,7 +469,7 @@ final class CompleteLpFinalItemsCommand extends Command
             ->where('v.lp = :lp')
             ->andWhere('(v.progress IS NULL OR v.progress < 100)')
             ->andWhere('IDENTITY(v.user) > :afterUserId')
-            ->setParameter('lp', $lp)
+            ->setParameter('lp', $lp->getIid())
             ->setParameter('afterUserId', $afterUserId)
             ->orderBy('v.user', 'ASC')
             ->setMaxResults($batchSize)

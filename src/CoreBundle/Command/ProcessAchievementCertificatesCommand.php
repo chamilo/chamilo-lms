@@ -413,7 +413,7 @@ final class ProcessAchievementCertificatesCommand extends Command
     }
 
     /**
-     * @return array{id: int|string, title: string, certif_min_score: float|string}
+     * @return array{id: int|string, title: string, certif_min_score: float|string, session_id: int|string}
      */
     private function resolveCategory(int $courseId, ?int $requestedCategoryId): array
     {

@@ -211,7 +211,7 @@ final readonly class LearningPathRuntimeProgressManager
     /**
      * @return array<int, CLpItem>
      */
-    private function getItems(CLp $lp): array
+    public function getItems(CLp $lp): array
     {
         /** @var array<int, CLpItem> $items */
         return $this->lpItemRepository->findBy(
@@ -223,7 +223,7 @@ final readonly class LearningPathRuntimeProgressManager
     /**
      * @return array<int, CLpItemView>
      */
-    private function indexLatestItemViews(CLpView $view): array
+    public function indexLatestItemViews(CLpView $view): array
     {
         /** @var array<int, CLpItemView> $rows */
         $rows = $this->entityManager->getRepository(CLpItemView::class)->findBy(
@@ -562,7 +562,7 @@ final readonly class LearningPathRuntimeProgressManager
         return max(0, min(100, $progress));
     }
 
-    private function isCompletedStatus(string $status): bool
+    public function isCompletedStatus(string $status): bool
     {
         return \in_array(strtolower(trim($status)), self::COMPLETED_STATUSES, true);
     }

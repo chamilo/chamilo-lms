@@ -113,6 +113,7 @@ HTML;
         ?Session $session,
         User $user,
         bool $canEdit,
+        ?User $creator = null,
     ): void {
         if ($canEdit || $this->isExcludedUserType($user)) {
             return;
@@ -137,9 +138,9 @@ HTML;
 
             if ($eligibility['eligible']) {
                 if ($this->gradebookCertificateGenerator->usesCustomCertificate($course)) {
-                    $this->legacyGradebookCertificateBridge->generate($category, $user);
+                    $this->legacyGradebookCertificateBridge->generate($category, $user, $creator);
                 } elseif ($category->getGenerateCertificates()) {
-                    $this->gradebookCertificateGenerator->generate($category, $user, $course, $session);
+                    $this->gradebookCertificateGenerator->generate($category, $user, $course, $session, $creator);
                 } else {
                     $this->gradebookSkillAwarder->award($category, $user, $course, $session);
                 }

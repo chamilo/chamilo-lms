@@ -261,11 +261,20 @@ Feature: Course tools basic testing
     Then I should not see an error
 
 
+  # The legacy /main/course_info/maintenance.php entry point was blanked when the
+  # tool moved to the Vue SPA, and has now been deleted, so this scenario reaches
+  # the tool the way a user does. Two things confirmed live rather than read off
+  # the code: the tool is NOT in the course tool list (CourseHome.vue routes every
+  # `category === "admin"` tool into the "More actions" menu instead), and its SPA
+  # route carries the course RESOURCE NODE id, which the scenario cannot know up
+  # front — so the menu entry is the only stable way in.
   Scenario: Make sure the backup tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/course_info/maintenance.php?cid=3"
-    And I wait for the page to be loaded
+    And I wait up to 30 seconds for the element "button[aria-label='More actions']" to appear
+    And I click the "button[aria-label='More actions']" element
+    And I follow "Course maintenance"
+    And I wait up to 30 seconds for the element ".cm-root" to appear
     Then I should not see an error
 
   # Ported from tests/behat/features/course.feature — rewritten, not

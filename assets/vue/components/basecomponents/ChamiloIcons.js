@@ -9,6 +9,7 @@ export const chamiloIconToClass = {
   "account-key": "mdi mdi-account-key",
   "account-multiple-plus": "",
   "alert": "mdi mdi-alert",
+  "alert-circle": "mdi mdi-alert-circle",
   "arrow-down-bold": "",
   "arrow-right-bold": "",
   "arrow-up-bold": "",

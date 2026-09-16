@@ -60,6 +60,11 @@
               class="p-menu-item-link"
               @click="emit('itemAction', item)"
             >
+              <BaseIcon
+                v-if="item.statusIcon"
+                :icon="item.statusIcon"
+                size="small"
+              />
               <span
                 class="p-menu-item-label"
                 v-text="item.label"
@@ -71,6 +76,11 @@
               :url="item.url"
               class="p-menu-item-link"
             >
+              <BaseIcon
+                v-if="item.statusIcon"
+                :icon="item.statusIcon"
+                size="small"
+              />
               <span
                 class="p-menu-item-label"
                 v-text="item.label"
@@ -82,6 +92,11 @@
               v-else
               class="p-menu-item-link"
             >
+              <BaseIcon
+                v-if="item.statusIcon"
+                :icon="item.statusIcon"
+                size="small"
+              />
               <span
                 class="p-menu-item-label"
                 v-text="item.label"
@@ -155,6 +170,27 @@ const inputId = computed(() => {
 
 const buttonId = computed(() => `${inputId.value}_button`)
 
+// The backend states an item's condition as the text-* colour class it puts on
+// the <li> (see IndexBlocksController::getItemsHealthCheck). The icon reads that
+// same class, so the icon and the colour can never disagree.
+const STATUS_ICON_BY_CLASS = {
+  "text-success": "check",
+  "text-warning": "alert",
+  "text-error": "alert-circle",
+}
+
+/**
+ * Find the status icon of a menu item from the text-* colour class it carries.
+ *
+ * @param {Object} item - A menu item as returned by the admin blocks endpoint.
+ * @returns {string|null} A chamiloIconToClass key, or null when the item states no condition.
+ */
+function statusIconOf(item) {
+  const match = (item.class || "").split(" ").find((name) => name in STATUS_ICON_BY_CLASS)
+
+  return match ? STATUS_ICON_BY_CLASS[match] : null
+}
+
 const visibleItems = computed(() =>
   props.items
     .map((item) => {
@@ -164,7 +200,8 @@ const visibleItems = computed(() =>
 
       return item
     })
-    .filter((item) => item.visible),
+    .filter((item) => item.visible)
+    .map((item) => ({ ...item, statusIcon: statusIconOf(item) })),
 )
 
 const bgImageUrl = computed(() => (props.bgIndex !== null ? getThemeAssetUrl(BG_SPRITE_PATH) : null))

@@ -28,7 +28,7 @@ use Throwable;
 )]
 final class DisableUserConditionsCommand extends Command
 {
-    private const string EXTRA_FIELD_VARIABLE_TERM_ACTIVATED = 'termactivated';
+    private const string EXTRA_FIELD_VARIABLE_LEGAL_ACCEPT = 'legal_accept';
 
     private const int USER_STATUS_STUDENT = 5;
     private const int USER_ACTIVE_ENABLED = 1;
@@ -112,10 +112,10 @@ final class DisableUserConditionsCommand extends Command
             return Command::FAILURE;
         }
 
-        $termActivatedFieldId = $this->getUserExtraFieldId(self::EXTRA_FIELD_VARIABLE_TERM_ACTIVATED);
+        $legalAcceptFieldId = $this->getUserExtraFieldId(self::EXTRA_FIELD_VARIABLE_LEGAL_ACCEPT);
 
-        if ($termActivatedFieldId <= 0) {
-            $output->writeln('<error>User extra field "termactivated" was not found.</error>');
+        if ($legalAcceptFieldId <= 0) {
+            $output->writeln('<error>User extra field "legal_accept" was not found.</error>');
 
             return Command::FAILURE;
         }
@@ -142,7 +142,7 @@ final class DisableUserConditionsCommand extends Command
         if (null === $caseFilter || '1' === (string) $caseFilter) {
             $this->processCaseWithoutContractAndInactive(
                 $output,
-                $termActivatedFieldId,
+                $legalAcceptFieldId,
                 $date3Months,
                 $senderId,
                 $apply,
@@ -165,7 +165,7 @@ final class DisableUserConditionsCommand extends Command
         if (null === $caseFilter || '2' === (string) $caseFilter) {
             $this->processCaseValidatedContractAndInactive(
                 $output,
-                $termActivatedFieldId,
+                $legalAcceptFieldId,
                 $date6Months,
                 $senderId,
                 $apply,
@@ -288,7 +288,7 @@ final class DisableUserConditionsCommand extends Command
                 AND ev.field_id = :fieldId
                 $itemTypeCondition
             WHERE
-                LOWER(COALESCE(ev.$valueColumn, '')) NOT IN ('1', 'true', 'yes')
+                COALESCE(ev.$valueColumn, '') = ''
                 AND u.active = :active
                 AND u.status = :studentStatus
                 $userFilterSql
@@ -449,7 +449,7 @@ final class DisableUserConditionsCommand extends Command
                 AND ev.field_id = :fieldId
                 $itemTypeCondition
             WHERE
-                LOWER(COALESCE(ev.$valueColumn, '')) IN ('1', 'true', 'yes')
+                COALESCE(ev.$valueColumn, '') != ''
                 AND u.active = :active
                 AND u.status = :studentStatus
                 $userFilterSql

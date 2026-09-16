@@ -33,7 +33,7 @@ if (PHP_SAPI == 'cli') {
 }
 $userReportList = [];
 $extraFieldValue = new ExtraField('user');
-$extraFieldInfo = $extraFieldValue->get_handler_field_info_by_field_variable('termactivated');
+$extraFieldInfo = $extraFieldValue->get_handler_field_info_by_field_variable('legal_accept');
 $fieldId = $extraFieldInfo['id'];
 $senderInfo = api_get_user_info($senderId);
 if (empty($senderInfo)) {
@@ -195,7 +195,7 @@ $sql = "SELECT u.id
         INNER JOIN extra_field_values ev
         ON u.id = ev.item_id AND field_id = $fieldId
         WHERE
-            ev.field_value = 1 AND
+            ev.field_value IS NOT NULL AND ev.field_value != '' AND
             u.active = 1
             $statusCondition
         ";

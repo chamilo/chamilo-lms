@@ -23,6 +23,10 @@ parameters:
     # but send no Origin before enforcing on them.
     env(CHAMILO_CSRF_ENFORCE): '1'
     chamilo.csrf.enforce: '%env(bool:CHAMILO_CSRF_ENFORCE)%'
+    # The kernel resolves trusted_proxies on every boot, so a checkout with no
+    # .env yet (a fresh clone running composer install) fails without this
+    # default. Empty means "trust no proxy".
+    env(TRUSTED_PROXIES): ''
     .container.dumper.inline_factories: true
     twig:
         form:

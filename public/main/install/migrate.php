@@ -58,6 +58,7 @@ $response = [
     'log_terminal' => '<pre class="terminal">' . $logContent . '</pre>',
     'progress_percentage' => $response['progress_percentage'],
     'message' => $response['message'],
+    'upgrade_flag_warning' => $response['upgrade_flag_warning'] ?? '',
     'current_migration' => $response['current_migration'],
     'redirect_to_step7' => $response['status'] === true,
 ];

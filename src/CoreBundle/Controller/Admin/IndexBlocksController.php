@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Installer\InstallerGate;
 use Chamilo\CoreBundle\Installer\MigrationHistoryRecorder;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
@@ -1102,6 +1103,22 @@ class IndexBlocksController extends BaseController
             'url' => $securityGuideUrl,
             'label' => $this->translator->trans($installExists ? 'Install folder is still present' : 'Install folder is not present'),
         ];
+
+        // The flag file authorises the unauthenticated upgrade endpoints
+        // (GHSA-mfgc-693v-xq5v). The installer deletes it once the upgrade finishes;
+        // a read-only project root can leave it behind, and nothing else warns the
+        // administrator to remove it by hand. Say nothing when it is absent, which is
+        // the normal state outside of an upgrade.
+        if (InstallerGate::isUpgradeAuthorised($projectDir)) {
+            $items[] = [
+                'class' => 'item-health-check-upgrade-flag text-error',
+                'url' => '/documentation/installation_guide.html#web-upgrade-enable',
+                'label' => \sprintf(
+                    $this->translator->trans('%s is present in the project root: delete it to close the upgrade endpoints'),
+                    InstallerGate::UPGRADE_FLAG_FILE
+                ),
+            ];
+        }
 
         // An empty migration history blocks every future update. While it is empty the
         // item carries an action and records the history in place; once recorded there is

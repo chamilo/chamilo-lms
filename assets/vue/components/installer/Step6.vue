@@ -331,6 +331,14 @@
       />
     </div>
     <Message
+      v-if="upgradeFlagWarning"
+      :closable="false"
+      severity="warn"
+      class="mb-4"
+    >
+      {{ upgradeFlagWarning }}
+    </Message>
+    <Message
       :closable="false"
       severity="info"
       class="mb-4"
@@ -429,6 +437,7 @@ const currentMigration = ref("")
 const successDialogVisible = ref(false)
 const errorDialogVisible = ref(false)
 const errorMessage = ref("")
+const upgradeFlagWarning = ref("")
 
 const showAdminPass = ref(false)
 const toggleAdminPass = () => {
@@ -465,6 +474,7 @@ function startMigration(updatePath) {
       isButtonDisabled.value = false
 
       if (response.redirect_to_step7) {
+        upgradeFlagWarning.value = response.upgrade_flag_warning || ""
         successDialogVisible.value = true
       } else {
         errorDialogVisible.value = true
@@ -480,7 +490,8 @@ function startMigration(updatePath) {
 
     try {
       const response = JSON.parse(xhr.responseText)
-      errorMessage.value = response.message || `${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}`
+      errorMessage.value =
+        response.message || `${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}`
     } catch {
       errorMessage.value = `${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}`
     }

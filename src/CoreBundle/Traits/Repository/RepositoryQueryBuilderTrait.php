@@ -10,7 +10,7 @@ use Doctrine\ORM\QueryBuilder;
 
 trait RepositoryQueryBuilderTrait
 {
-    protected function getOrCreateQueryBuilder(QueryBuilder $qb = null, string $alias = 'resource'): QueryBuilder
+    protected function getOrCreateQueryBuilder(?QueryBuilder $qb = null, string $alias = 'resource'): QueryBuilder
     {
         return $qb ?: $this->createQueryBuilder($alias);
     }

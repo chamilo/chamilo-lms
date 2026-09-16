@@ -2175,13 +2175,15 @@ function executeMigration(): array
             // and then the administrator has to remove it by hand.
             $flagFile = InstallerGate::UPGRADE_FLAG_FILE;
             $projectDir = api_get_path(SYMFONY_SYS_PATH);
+            $upgradeFlagWarning = InstallerGate::revokeUpgradeAuthorisation($projectDir)
+                ? ''
+                : 'Could not delete '.$flagFile.': remove it by hand from the project root,'
+                    .' otherwise the installer stays open.';
 
             $resultStatus['status'] = true;
-            $resultStatus['message'] = InstallerGate::revokeUpgradeAuthorisation($projectDir)
-                ? 'Migration and bundled demo course installation completed successfully.'
-                : 'Migration and bundled demo course installation completed successfully.'
-                    .' Could not delete '.$flagFile.': remove it by hand from the project root,'
-                    .' otherwise the installer stays open.';
+            $resultStatus['message'] = 'Migration and bundled demo course installation completed successfully.'
+                .('' !== $upgradeFlagWarning ? ' '.$upgradeFlagWarning : '');
+            $resultStatus['upgrade_flag_warning'] = $upgradeFlagWarning;
             $resultStatus['progress_percentage'] = 100;
         } else {
             $resultStatus['message'] = 'Migration completed with errors.';

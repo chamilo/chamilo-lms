@@ -18,6 +18,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Shared by chamilo:update_vue_translations and LocaleController, which must agree key
  * for key. vue-i18n numbers its placeholders ({0}) and reads { } @ $ | as syntax;
  * gettext uses %s and %d and treats nothing specially.
+ *
+ * The two format transforms are static, because tests/scripts/lang/sync_json_translations.php
+ * needs them without a container.
  */
 final class VueTranslationsBuilder
 {
@@ -74,18 +77,18 @@ final class VueTranslationsBuilder
         $messages = [];
 
         foreach ($this->masterKeys() as $vueKey) {
-            $gettextKey = $this->toGettextKey($vueKey);
+            $gettextKey = self::toGettextKey($vueKey);
 
             if (!$catalogue->defines($gettextKey, 'messages')) {
                 // The Vue key may carry a numeric placeholder, which gettext spells %d.
-                $gettextKey = $this->toGettextKey($vueKey, true);
+                $gettextKey = self::toGettextKey($vueKey, true);
 
                 if (!$catalogue->defines($gettextKey, 'messages')) {
                     continue;
                 }
             }
 
-            $messages[$vueKey] = $this->toVueValue($catalogue->get($gettextKey, 'messages'));
+            $messages[$vueKey] = self::toVueValue($catalogue->get($gettextKey, 'messages'));
         }
 
         return $messages;
@@ -124,7 +127,7 @@ final class VueTranslationsBuilder
      *
      * {0} maps to %s, or to %d for catalogues that spell it that way: callers try both.
      */
-    public function toGettextKey(string $vueKey, bool $numericPlaceholder = false): string
+    public static function toGettextKey(string $vueKey, bool $numericPlaceholder = false): string
     {
         return preg_replace('/\{([0-9]+)\}/', $numericPlaceholder ? '%d' : '%s', $vueKey);
     }
@@ -135,15 +138,15 @@ final class VueTranslationsBuilder
      * Escaping runs first, so a literal brace is quoted before the placeholders, which
      * the compiler must read as syntax, are introduced.
      */
-    public function toVueValue(string $translated): string
+    public static function toVueValue(string $translated): string
     {
-        return $this->replaceMarkersGettextToVue($this->escapeVueI18nSpecialChars($translated));
+        return self::replaceMarkersGettextToVue(self::escapeVueI18nSpecialChars($translated));
     }
 
     /**
      * Numbers the gettext placeholders the way vue-i18n reads them: %s -> {0}, {1}, ...
      */
-    private function replaceMarkersGettextToVue(string $text): string
+    private static function replaceMarkersGettextToVue(string $text): string
     {
         $count = 0;
 
@@ -162,7 +165,7 @@ final class VueTranslationsBuilder
     /**
      * The message compiler reads { } @ $ | as syntax, so a literal one has to be quoted.
      */
-    private function escapeVueI18nSpecialChars(string $text): string
+    private static function escapeVueI18nSpecialChars(string $text): string
     {
         return preg_replace_callback(
             '/[\{\}\@\$\|]/',

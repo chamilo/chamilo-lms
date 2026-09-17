@@ -18,7 +18,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
-use const JSON_UNESCAPED_UNICODE;
 
 #[AsCommand(
     name: 'chamilo:update_vue_translations',
@@ -78,7 +77,11 @@ class UpdateVueTranslations extends Command
                 foreach ($translations as $variable => $translation) {
                     $newLanguage[$variable] = $this->translateKey($variable, $language);
                 }
-                $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                // No JSON_UNESCAPED_UNICODE: the committed files escape their accented
+                // characters, and tests/scripts/lang/sync_json_translations.php writes them
+                // the same way. Adding it here rewrites every accented line of all ~70
+                // files on each run, a diff that says nothing about the change.
+                $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
                 $fileToSave = $vueLocalePath.'en_US.json';
 
                 if (false === @file_put_contents($fileToSave, $newLanguageToString)) {
@@ -93,7 +96,7 @@ class UpdateVueTranslations extends Command
                 $newLanguage[$variable] = $this->translateKey($variable, $language);
             }
             $newLanguage = array_filter($newLanguage);
-            $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             $newLanguageToString = str_replace('</br>', '<br>', $newLanguageToString);
             $fileToSave = $vueLocalePath.$iso.'.json';
 
@@ -134,14 +137,14 @@ class UpdateVueTranslations extends Command
      */
     private function translateKey(string $vueKey, Language $language): string
     {
-        $gettextKey = $this->builder->toGettextKey($vueKey);
+        $gettextKey = VueTranslationsBuilder::toGettextKey($vueKey);
         $translated = $this->builder->translateWithFallback($gettextKey, $language);
 
         if (empty($translated)) {
-            $gettextKey = $this->builder->toGettextKey($vueKey, true);
+            $gettextKey = VueTranslationsBuilder::toGettextKey($vueKey, true);
             $translated = $this->builder->translateWithFallback($gettextKey, $language);
         }
 
-        return $this->builder->toVueValue($translated);
+        return VueTranslationsBuilder::toVueValue($translated);
     }
 }

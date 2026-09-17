@@ -43,7 +43,7 @@ final readonly class FcmV1MobilePushProvider implements MobilePushProviderInterf
 
     public function send(
         MobilePushInstallation $installation,
-        int $messageId
+        MobilePushNotification $notification
     ): MobilePushDelivery {
         try {
             $credentials = $this->loadCredentials();
@@ -59,18 +59,19 @@ final readonly class FcmV1MobilePushProvider implements MobilePushProviderInterf
                         'message' => [
                             'token' => $installation->getToken(),
                             'notification' => [
-                                'title' => 'Chamilo',
-                                'body' => 'You have a new message.',
+                                'title' => $notification->title,
+                                'body' => $notification->body,
                             ],
                             'data' => [
                                 'type' => 'message',
-                                'messageId' => (string) $messageId,
+                                'messageId' => (string) $notification->messageId,
                                 'installationId' => $installation->getInstallationId(),
                             ],
                             'android' => [
                                 'priority' => 'high',
                                 'notification' => [
                                     'sound' => 'default',
+                                    'icon' => 'ic_stat_chamilo',
                                 ],
                             ],
                         ],

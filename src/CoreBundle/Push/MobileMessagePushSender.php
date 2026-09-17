@@ -57,6 +57,11 @@ final readonly class MobileMessagePushSender
             return;
         }
 
+        $notification = MobilePushNotification::fromMessage($message);
+        if (null === $notification) {
+            return;
+        }
+
         $installations = $this->installationRepository->findForRecipientsAndAccessUrl(
             array_values($recipients),
             $accessUrl
@@ -68,7 +73,7 @@ final readonly class MobileMessagePushSender
                     continue;
                 }
 
-                $delivery = $provider->send($installation, $message->getId());
+                $delivery = $provider->send($installation, $notification);
 
                 if ($delivery->invalidToken) {
                     $this->installationRepository->removeInvalidInstallation($installation);

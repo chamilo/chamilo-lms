@@ -76,7 +76,7 @@ final class Version20260902053000 extends AbstractMigrationChamilo
             }
 
             $this->addSql(
-                sprintf(
+                \sprintf(
                     'DELETE FROM %s WHERE category = ? AND variable IN (?, ?)',
                     $table
                 ),
@@ -115,7 +115,7 @@ final class Version20260902053000 extends AbstractMigrationChamilo
         string $comment,
     ): void {
         $this->addSql(
-            sprintf(
+            \sprintf(
                 <<<'SQL'
 INSERT INTO %1$s (
     access_url,

@@ -18,6 +18,7 @@ use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use RuntimeException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Throwable;
@@ -135,10 +136,7 @@ final class AchievementCertificateBatchService
         }
 
         if (1 !== \count($fieldIds)) {
-            throw new \RuntimeException(\sprintf(
-                'Multiple course extra fields were found for %s.',
-                self::GRADING_ELECTRONIC_COURSE_FIELD
-            ));
+            throw new RuntimeException(\sprintf('Multiple course extra fields were found for %s.', self::GRADING_ELECTRONIC_COURSE_FIELD));
         }
 
         $values = $this->connection->fetchFirstColumn(
@@ -158,11 +156,7 @@ final class AchievementCertificateBatchService
         }
 
         if (1 !== \count($values)) {
-            throw new \RuntimeException(\sprintf(
-                'Course %d has multiple values for %s.',
-                $courseId,
-                self::GRADING_ELECTRONIC_COURSE_FIELD
-            ));
+            throw new RuntimeException(\sprintf('Course %d has multiple values for %s.', $courseId, self::GRADING_ELECTRONIC_COURSE_FIELD));
         }
 
         return '' !== trim((string) $values[0]);
@@ -369,7 +363,7 @@ final class AchievementCertificateBatchService
         }
 
         if (1 !== \count($fieldIds)) {
-            throw new \RuntimeException('Multiple course completion rule extra fields were found.');
+            throw new RuntimeException('Multiple course completion rule extra fields were found.');
         }
 
         $values = $this->connection->fetchFirstColumn(
@@ -389,18 +383,12 @@ final class AchievementCertificateBatchService
         }
 
         if (1 !== \count($values)) {
-            throw new \RuntimeException(\sprintf(
-                'Course %d has multiple completion rule values.',
-                $courseId
-            ));
+            throw new RuntimeException(\sprintf('Course %d has multiple completion rule values.', $courseId));
         }
 
         $rule = json_decode((string) $values[0], true);
         if (!\is_array($rule) || !isset($rule['components']) || !\is_array($rule['components'])) {
-            throw new \RuntimeException(\sprintf(
-                'Course %d has an invalid completion rule while resolving its certificate category.',
-                $courseId
-            ));
+            throw new RuntimeException(\sprintf('Course %d has an invalid completion rule while resolving its certificate category.', $courseId));
         }
 
         return array_values(array_filter(

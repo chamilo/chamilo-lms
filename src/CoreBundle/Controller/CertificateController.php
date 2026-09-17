@@ -93,17 +93,13 @@ SQL,
                 '' === $fileName
                 || !str_ends_with(strtolower($fileName), '.html')
             ) {
-                throw new NotFoundHttpException(
-                    'The requested certificate does not exist.'
-                );
+                throw new NotFoundHttpException('The requested certificate does not exist.');
             }
 
             $hash = substr($fileName, 0, -5);
 
             if ('' === $hash) {
-                throw new NotFoundHttpException(
-                    'The requested certificate does not exist.'
-                );
+                throw new NotFoundHttpException('The requested certificate does not exist.');
             }
 
             $html = $this->readCertificateHtml($certificate, $hash);
@@ -111,9 +107,7 @@ SQL,
             $html = (string) ($legacyReference['html_content'] ?? '');
 
             if ('' === trim($html)) {
-                throw new NotFoundHttpException(
-                    'The historical certificate content is not available.'
-                );
+                throw new NotFoundHttpException('The historical certificate content is not available.');
             }
         }
 
@@ -196,11 +190,7 @@ SQL,
                 ]
             );
         } catch (MpdfException $e) {
-            throw new RuntimeException(
-                'Failed to generate PDF: '.$e->getMessage(),
-                500,
-                $e
-            );
+            throw new RuntimeException('Failed to generate PDF: '.$e->getMessage(), 500, $e);
         }
     }
 

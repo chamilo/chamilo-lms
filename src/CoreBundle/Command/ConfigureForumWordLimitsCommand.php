@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Doctrine\DBAL\Connection;
+use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -91,7 +92,7 @@ final class ConfigureForumWordLimitsCommand extends Command
             }
 
             $availableVariables = (int) $this->connection->fetchOne(
-                sprintf(
+                \sprintf(
                     <<<'SQL'
 SELECT COUNT(DISTINCT variable)
 FROM %s
@@ -137,7 +138,7 @@ SQL,
         try {
             foreach ($tables as $table) {
                 $this->connection->executeStatement(
-                    sprintf(
+                    \sprintf(
                         <<<'SQL'
 UPDATE %s
 SET selected_value = CASE variable
@@ -161,7 +162,7 @@ SQL,
                 );
 
                 $invalidRows = (int) $this->connection->fetchOne(
-                    sprintf(
+                    \sprintf(
                         <<<'SQL'
 SELECT COUNT(*)
 FROM %s
@@ -183,12 +184,7 @@ SQL,
                 );
 
                 if (0 !== $invalidRows) {
-                    throw new \RuntimeException(
-                        sprintf(
-                            'Forum word-limit settings verification failed for table %s.',
-                            $table
-                        )
-                    );
+                    throw new RuntimeException(\sprintf('Forum word-limit settings verification failed for table %s.', $table));
                 }
             }
 
@@ -203,7 +199,7 @@ SQL,
             return Command::FAILURE;
         }
 
-        $io->success(sprintf(
+        $io->success(\sprintf(
             'Forum word limits configured: first=%d subsequent=%d.',
             $first,
             $subsequent

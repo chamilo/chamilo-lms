@@ -67,22 +67,16 @@ final class RepairLegacyCertificateHistoryCommand extends Command
             '' === $sourceDatabase
             || 1 !== preg_match('/^[A-Za-z0-9_]+$/', $sourceDatabase)
         ) {
-            throw new RuntimeException(
-                'A valid --source-database value is required.'
-            );
+            throw new RuntimeException('A valid --source-database value is required.');
         }
 
         if ('' === $legacyRoot) {
-            throw new RuntimeException(
-                'A --legacy-root value is required.'
-            );
+            throw new RuntimeException('A --legacy-root value is required.');
         }
 
         $resolvedLegacyRoot = realpath($legacyRoot);
         if (false === $resolvedLegacyRoot) {
-            throw new RuntimeException(
-                sprintf('Legacy root does not exist: %s', $legacyRoot)
-            );
+            throw new RuntimeException(\sprintf('Legacy root does not exist: %s', $legacyRoot));
         }
 
         $usersRoot = realpath(
@@ -90,12 +84,7 @@ final class RepairLegacyCertificateHistoryCommand extends Command
         );
 
         if (false === $usersRoot) {
-            throw new RuntimeException(
-                sprintf(
-                    'Legacy users directory was not found under %s/app/upload/users.',
-                    $resolvedLegacyRoot
-                )
-            );
+            throw new RuntimeException(\sprintf('Legacy users directory was not found under %s/app/upload/users.', $resolvedLegacyRoot));
         }
 
         $manager = $this->registry->getManagerForClass(
@@ -103,9 +92,7 @@ final class RepairLegacyCertificateHistoryCommand extends Command
         );
 
         if (!$manager instanceof EntityManagerInterface) {
-            throw new RuntimeException(
-                'Doctrine ORM entity manager was not resolved.'
-            );
+            throw new RuntimeException('Doctrine ORM entity manager was not resolved.');
         }
 
         $connection = $manager->getConnection();
@@ -116,12 +103,10 @@ final class RepairLegacyCertificateHistoryCommand extends Command
                 ['gradebook_certificate_legacy_reference']
             )
         ) {
-            throw new RuntimeException(
-                'gradebook_certificate_legacy_reference does not exist. Run the forward migration first.'
-            );
+            throw new RuntimeException('gradebook_certificate_legacy_reference does not exist. Run the forward migration first.');
         }
 
-        $sourceTable = sprintf(
+        $sourceTable = \sprintf(
             '`%s`.gradebook_certificate',
             $sourceDatabase
         );
@@ -131,15 +116,7 @@ final class RepairLegacyCertificateHistoryCommand extends Command
                 'SELECT COUNT(*) FROM '.$sourceTable
             );
         } catch (Throwable $exception) {
-            throw new RuntimeException(
-                sprintf(
-                    'Unable to read %s: %s',
-                    $sourceTable,
-                    $exception->getMessage()
-                ),
-                0,
-                $exception
-            );
+            throw new RuntimeException(\sprintf('Unable to read %s: %s', $sourceTable, $exception->getMessage()), 0, $exception);
         }
 
         $currentCount = (int) $connection->fetchOne(
@@ -185,7 +162,7 @@ final class RepairLegacyCertificateHistoryCommand extends Command
                 continue;
             }
 
-            $candidate = sprintf(
+            $candidate = \sprintf(
                 '%s/%s/%d/certificate/%s',
                 $usersRoot,
                 substr((string) $legacyUserId, 0, 1),
@@ -211,7 +188,7 @@ final class RepairLegacyCertificateHistoryCommand extends Command
 
             $content = file_get_contents($resolvedFile);
 
-            if (!is_string($content) || '' === $content) {
+            if (!\is_string($content) || '' === $content) {
                 $missingFiles[] = $certificateId;
 
                 continue;
@@ -224,13 +201,13 @@ final class RepairLegacyCertificateHistoryCommand extends Command
         }
 
         $output->writeln(
-            sprintf(
+            \sprintf(
                 'Legacy certificate audit: source=%d current=%d missing=%d readable_missing_files=%d unreadable_missing_files=%d dry_run=%s',
                 $sourceCount,
                 $currentCount,
-                count($missingRows),
-                count($preparedFiles),
-                count($missingFiles),
+                \count($missingRows),
+                \count($preparedFiles),
+                \count($missingFiles),
                 $dryRun ? 'yes' : 'no'
             )
         );
@@ -311,23 +288,15 @@ final class RepairLegacyCertificateHistoryCommand extends Command
 
             if (
                 $referenceCount !== $sourceCount
-                || $archivedMissingCount !== count($missingRows)
+                || $archivedMissingCount !== \count($missingRows)
             ) {
-                throw new RuntimeException(
-                    sprintf(
-                        'Repair verification failed: references=%d/%d archived_missing=%d/%d.',
-                        $referenceCount,
-                        $sourceCount,
-                        $archivedMissingCount,
-                        count($missingRows)
-                    )
-                );
+                throw new RuntimeException(\sprintf('Repair verification failed: references=%d/%d archived_missing=%d/%d.', $referenceCount, $sourceCount, $archivedMissingCount, \count($missingRows)));
             }
 
             $connection->commit();
 
             $output->writeln(
-                sprintf(
+                \sprintf(
                     '<info>Legacy certificate history repaired: references=%d archived_missing=%d.</info>',
                     $referenceCount,
                     $archivedMissingCount
@@ -340,11 +309,7 @@ final class RepairLegacyCertificateHistoryCommand extends Command
                 $connection->rollBack();
             }
 
-            throw new RuntimeException(
-                'Legacy certificate repair failed: '.$exception->getMessage(),
-                0,
-                $exception
-            );
+            throw new RuntimeException('Legacy certificate repair failed: '.$exception->getMessage(), 0, $exception);
         }
     }
 }

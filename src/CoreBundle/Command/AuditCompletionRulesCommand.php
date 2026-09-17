@@ -1473,6 +1473,7 @@ SQL,
 
             if (isset($mappings[$legacyId])) {
                 $conflicts[$legacyId] = true;
+
                 continue;
             }
 

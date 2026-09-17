@@ -245,10 +245,8 @@ final class ForumPostProcessor implements ProcessorInterface
             ? $subsequentMinimum
             : $firstMinimum;
 
-        if ($minimum > 0 && \str_word_count($text) < $minimum) {
-            throw new BadRequestHttpException(
-                \sprintf('%d word minimum requirement not met', $minimum)
-            );
+        if ($minimum > 0 && str_word_count($text) < $minimum) {
+            throw new BadRequestHttpException(\sprintf('%d word minimum requirement not met', $minimum));
         }
     }
 

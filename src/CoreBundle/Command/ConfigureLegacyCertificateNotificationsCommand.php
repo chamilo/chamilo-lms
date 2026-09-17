@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -292,10 +293,7 @@ SQL,
         }
 
         if (1 !== \count($fields)) {
-            throw new RuntimeException(\sprintf(
-                'Multiple course extra fields were found for %s.',
-                $variable
-            ));
+            throw new RuntimeException(\sprintf('Multiple course extra fields were found for %s.', $variable));
         }
 
         $expectedValueType = self::SUBJECT_VARIABLE === $variable
@@ -303,12 +301,7 @@ SQL,
             : ExtraField::FIELD_TYPE_TEXTAREA;
 
         if ($expectedValueType !== (int) $fields[0]['value_type']) {
-            throw new RuntimeException(\sprintf(
-                'Course extra field %s has value_type %d; expected %d.',
-                $variable,
-                (int) $fields[0]['value_type'],
-                $expectedValueType
-            ));
+            throw new RuntimeException(\sprintf('Course extra field %s has value_type %d; expected %d.', $variable, (int) $fields[0]['value_type'], $expectedValueType));
         }
 
         $values = $this->connection->fetchFirstColumn(
@@ -328,11 +321,7 @@ SQL,
         }
 
         if (1 !== \count($values)) {
-            throw new RuntimeException(\sprintf(
-                'Course %d has multiple values for %s.',
-                $courseId,
-                $variable
-            ));
+            throw new RuntimeException(\sprintf('Course %d has multiple values for %s.', $courseId, $variable));
         }
 
         $existingValue = (string) $values[0];
@@ -367,22 +356,14 @@ SQL,
 
         if (1 === \count($fields)) {
             if ($valueType !== (int) $fields[0]['value_type']) {
-                throw new RuntimeException(\sprintf(
-                    'Course extra field %s has value_type %d; expected %d.',
-                    $variable,
-                    (int) $fields[0]['value_type'],
-                    $valueType
-                ));
+                throw new RuntimeException(\sprintf('Course extra field %s has value_type %d; expected %d.', $variable, (int) $fields[0]['value_type'], $valueType));
             }
 
             return (int) $fields[0]['id'];
         }
 
         if (\count($fields) > 1) {
-            throw new RuntimeException(\sprintf(
-                'Multiple course extra fields were found for %s.',
-                $variable
-            ));
+            throw new RuntimeException(\sprintf('Multiple course extra fields were found for %s.', $variable));
         }
 
         $this->connection->insert('extra_field', [
@@ -390,7 +371,7 @@ SQL,
             'value_type' => $valueType,
             'variable' => $variable,
             'display_text' => $displayText,
-            'created_at' => new \DateTimeImmutable(),
+            'created_at' => new DateTimeImmutable(),
         ], [
             'created_at' => 'datetime_immutable',
         ]);
@@ -416,7 +397,7 @@ SQL,
         );
 
         if ([] === $rows) {
-            $now = new \DateTimeImmutable();
+            $now = new DateTimeImmutable();
 
             $this->connection->insert('extra_field_values', [
                 'field_id' => $fieldId,
@@ -433,11 +414,7 @@ SQL,
         }
 
         if (1 !== \count($rows)) {
-            throw new RuntimeException(\sprintf(
-                'Course %d has multiple values for field %d.',
-                $courseId,
-                $fieldId
-            ));
+            throw new RuntimeException(\sprintf('Course %d has multiple values for field %d.', $courseId, $fieldId));
         }
 
         $existingValue = (string) ($rows[0]['field_value'] ?? '');
@@ -447,18 +424,14 @@ SQL,
         }
 
         if ('' !== trim($existingValue)) {
-            throw new RuntimeException(\sprintf(
-                'Course %d already has a different non-empty value for field %d.',
-                $courseId,
-                $fieldId
-            ));
+            throw new RuntimeException(\sprintf('Course %d already has a different non-empty value for field %d.', $courseId, $fieldId));
         }
 
         $this->connection->update(
             'extra_field_values',
             [
                 'field_value' => $value,
-                'updated_at' => new \DateTimeImmutable(),
+                'updated_at' => new DateTimeImmutable(),
             ],
             ['id' => (int) $rows[0]['id']],
             ['updated_at' => 'datetime_immutable']

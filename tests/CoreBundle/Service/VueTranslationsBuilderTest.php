@@ -15,12 +15,9 @@ use Symfony\Component\Translation\Translator;
 /**
  * Pins the map LocaleController serves for a sublanguage.
  *
- * A sublanguage is created after the assets were built, so webpack never saw it and the
- * browser can only get its terms over HTTP. Two halves have to hold for that to work, and
- * both are silent when they break: the answer must carry the locale's own terms and
- * nothing else, and the placeholder spelling must survive the trip from gettext to
- * vue-i18n. A wrong answer here shows up as one untranslated string in one language, which
- * nobody reports.
+ * Both halves break silently: the answer must carry the locale's own terms and nothing
+ * else, and the placeholder spelling must survive the trip from gettext to vue-i18n. A
+ * wrong answer shows up as one untranslated string in one language, which nobody reports.
  */
 final class VueTranslationsBuilderTest extends TestCase
 {
@@ -61,9 +58,8 @@ final class VueTranslationsBuilderTest extends TestCase
     }
 
     /**
-     * The whole point of the endpoint: send the overrides, not the language. A key the
-     * sublanguage never touched must be absent, so the parent's bundle keeps answering it
-     * through the fallback chain.
+     * Send the overrides, not the language: an untouched key must stay absent, so the
+     * parent's bundle keeps answering it through the fallback chain.
      */
     public function testOnlyTheTermsTheLocaleDefinesAreReturned(): void
     {
@@ -85,10 +81,8 @@ final class VueTranslationsBuilderTest extends TestCase
     }
 
     /**
-     * The two formats spell a placeholder differently. The key travels one way to find the
-     * message id, and the value travels back — so a term with a placeholder is the case
-     * that proves both conversions, and the only one that can silently produce a broken
-     * string on screen.
+     * The key travels one way to find the message id and the value travels back, so a
+     * placeholder proves both conversions at once.
      */
     public function testPlaceholdersSurviveTheRoundTrip(): void
     {
@@ -104,9 +98,7 @@ final class VueTranslationsBuilderTest extends TestCase
     }
 
     /**
-     * vue-i18n reads { } @ $ | as syntax, so a literal one has to be quoted before the
-     * numbered placeholders are introduced. Reversing that order would escape the
-     * placeholders themselves and print them verbatim.
+     * Reversing the order would escape the placeholders themselves and print them raw.
      */
     public function testLiteralSyntaxCharactersAreEscapedBeforePlaceholders(): void
     {
@@ -121,8 +113,7 @@ final class VueTranslationsBuilderTest extends TestCase
     }
 
     /**
-     * A locale with no file of its own is not an error. Every language shipped with the
-     * code is in that position, and the browser already has its bundle.
+     * Not an error: every language shipped with the code has no .po of its own.
      */
     public function testALocaleWithoutAPoFileAnswersNothing(): void
     {
@@ -130,9 +121,8 @@ final class VueTranslationsBuilderTest extends TestCase
     }
 
     /**
-     * The file is read on every build, never the translator's compiled catalogue. In prod
-     * that catalogue ignores the .po's modification time, so an administrator's edit would
-     * stay invisible until someone cleared the cache by hand.
+     * The file is read every time, never the compiled catalogue, which in prod ignores
+     * the .po's modification time and would hide an administrator's edit.
      */
     public function testAnEditedFileIsReadAgain(): void
     {

@@ -15,18 +15,15 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
+use const JSON_FORCE_OBJECT;
+
 /**
  * Serves the vue-i18n messages a locale defines on its own.
  *
- * Only a sublanguage needs this. The languages shipped with the code have a file in
- * assets/locales/, which webpack enumerates at build time and hands the browser as its
- * own chunk. A sublanguage is created after that build — by the 1.11.x upgrade, or by an
- * administrator in Administration > Languages — so nothing would reach the browser
- * without a rebuild, which a production server cannot be asked to run.
- *
- * The terms come from var/translations/messages.<iso>.po, which both the upgrade and the
- * administration page write, and which the Symfony translator already reads at runtime.
- * That file is the single source of truth; this endpoint only reshapes it for vue-i18n.
+ * Only a sublanguage needs it: webpack enumerates assets/locales/ at build time, so a
+ * language created afterwards would need a rebuild to reach the browser. The terms come
+ * from var/translations/messages.<iso>.po, which the upgrade and the administration page
+ * both write.
  */
 class LocaleController extends BaseController
 {
@@ -40,8 +37,7 @@ class LocaleController extends BaseController
     ) {}
 
     /**
-     * The iso comes from the URL, so it is never used to build a path. It selects a row
-     * first, and the path below is composed from the stored isocode.
+     * The iso from the URL selects a row first; the path below uses the stored isocode.
      */
     #[Route('/locales/{iso}.json', name: 'chamilo_locale_messages', methods: ['GET'])]
     public function messages(string $iso): JsonResponse
@@ -54,8 +50,7 @@ class LocaleController extends BaseController
 
         $storedIso = $language->getIsocode();
 
-        // An administrator editing a term rewrites the .po file, so its modification time
-        // is the cache version. No invalidation hook is needed, and none can be forgotten.
+        // An edit rewrites the .po, so its modification time is the cache version.
         $poFile = $this->projectDir.'/var/translations/messages.'.$storedIso.'.po';
         $version = is_file($poFile) ? (string) filemtime($poFile) : '0';
 
@@ -68,9 +63,8 @@ class LocaleController extends BaseController
             }
         );
 
-        $response = new JsonResponse($messages);
-        // Private: the answer is the same for everyone, but a shared cache keyed by URL
-        // would outlive an administrator's edit, which the .po time above already handles.
+        // FORCE_OBJECT: a locale that overrides nothing must answer {}, not [].
+        $response = JsonResponse::fromJsonString(json_encode($messages, JSON_FORCE_OBJECT));
         $response->setPrivate();
         $response->setMaxAge(0);
 

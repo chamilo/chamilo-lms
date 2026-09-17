@@ -97,11 +97,8 @@ class UpdateVueTranslations extends Command
             $newLanguageToString = str_replace('</br>', '<br>', $newLanguageToString);
             $fileToSave = $vueLocalePath.$iso.'.json';
 
-            // The write is suppressed and answered here on purpose. This command also runs
-            // from a migration, over the web, where assets/ belongs to the deployment user
-            // and the web server cannot write it. One warning per language then reaches the
-            // HTTP response and breaks the installer's JSON reply; one reported line does
-            // not.
+            // Suppressed and answered here: this also runs from a migration over the web,
+            // where one warning per language would break the installer's JSON reply.
             if (false === @file_put_contents($fileToSave, $newLanguageToString)) {
                 $unwritable[] = $iso;
 
@@ -133,9 +130,7 @@ class UpdateVueTranslations extends Command
     /**
      * Answers one vue-i18n key for one language, in the shape the JSON files hold.
      *
-     * The mapping lives in VueTranslationsBuilder, because LocaleController answers the
-     * same question at runtime for a sublanguage. Two copies of it would drift, and the
-     * drift would only show as a wrong string in one of the two paths.
+     * The mapping lives in VueTranslationsBuilder, shared with LocaleController.
      */
     private function translateKey(string $vueKey, Language $language): string
     {

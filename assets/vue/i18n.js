@@ -14,15 +14,17 @@ localeContext.keys().forEach((key) => {
   }
 })
 
-// Every language the server declares, as TwigListener prints it. Read through a guard:
-// the template falls back to an empty object when the global is missing.
+/**
+ * The languages the server declares in window.languages (TwigListener).
+ *
+ * @returns {Array<Object>} the list, or [] when the global is missing
+ */
 function declaredLanguages() {
   return Array.isArray(window.languages) ? window.languages : []
 }
 
-// A sub-language has no chunk, because require.context above ran before it existed.
-// It still has to count as available, or resolveBestLocale() would answer its parent and
-// the terms an administrator wrote would never be asked for.
+// A sub-language has no chunk (require.context ran before it existed), but it must still
+// count as available or resolveBestLocale() would answer its parent instead.
 const availableLocales = [
   ...Object.keys(localeLoaders),
   ...declaredLanguages()
@@ -30,9 +32,12 @@ const availableLocales = [
     .filter((isocode) => isocode && !localeLoaders[isocode]),
 ]
 
+// English is spelled en_US in assets/locales and in translations: there is no en.json.
+const FALLBACK_LOCALE = "en_US"
+
 // Resolve the best available bundle for a requested code
 function resolveBestLocale(requested, keys) {
-  if (!keys.length) return { requested, resolved: "en", base: null }
+  if (!keys.length) return { requested, resolved: FALLBACK_LOCALE, base: null }
 
   const lowerMap = new Map(keys.map((k) => [k.toLowerCase(), k]))
   const raw = String(requested || "").trim()
@@ -59,7 +64,7 @@ function resolveBestLocale(requested, keys) {
   if (prefDash) return { requested: raw, resolved: prefDash, base }
 
   // 5) fallback to English
-  return { requested: raw, resolved: "en", base }
+  return { requested: raw, resolved: FALLBACK_LOCALE, base }
 }
 
 // Chamilo sub-languages (an admin-created variant of an existing language, e.g.
@@ -90,24 +95,27 @@ function buildFallbackChain(base, resolved, keys) {
     chain.push(base)
   }
 
-  chain.push("en")
+  if (!chain.includes(FALLBACK_LOCALE) && resolved !== FALLBACK_LOCALE) {
+    chain.push(FALLBACK_LOCALE)
+  }
+
   return chain
 }
 
 const loadedLocales = new Set()
 
-// A sub-language is created after the assets were built -- by the 1.11.x upgrade, or by
-// an administrator in Administration > Languages -- so require.context above never saw
-// it and it has no chunk. Its terms come over HTTP instead, from LocaleController, which
-// reads the same var/translations/messages.<iso>.po the server already translates from.
-// Only the handful of terms the sub-language overrides come back; the parent's bundle
-// covers the rest through the fallback chain.
-function isServerOnlyLocale(code) {
-  return !localeLoaders[code] && declaredLanguages().some((language) => language.isocode === code)
+/**
+ * Tells whether the server declares this code as a sub-language (it has a parent).
+ *
+ * @param {string} code - locale code, e.g. "cs_66"
+ * @returns {boolean} true when the server owns this locale's terms
+ */
+function isSubLanguage(code) {
+  return declaredLanguages().some((language) => language.isocode === code && language.parentIsocode)
 }
 
 /**
- * Fetches one sub-language's own terms from the server.
+ * Fetches a sub-language's own terms from LocaleController.
  *
  * @param {string} code - locale code, e.g. "cs_66"
  * @returns {Promise<Object|null>} the messages, or null when they cannot be read
@@ -120,8 +128,6 @@ async function fetchServerLocale(code) {
 
     return response.ok ? await response.json() : null
   } catch {
-    // The fallback chain already covers this locale, so a failed fetch degrades to the
-    // parent language rather than to untranslated keys.
     return null
   }
 }
@@ -133,18 +139,21 @@ async function ensureLocaleLoaded(code) {
     return
   }
 
-  if (!localeLoaders[code]) {
-    if (!isServerOnlyLocale(code)) {
-      return
-    }
-
+  // The server wins for a sub-language: a file of the same name under assets/locales is a
+  // build-time snapshot, and it goes stale as soon as an administrator edits a term.
+  if (isSubLanguage(code)) {
     const messages = await fetchServerLocale(code)
 
     if (messages) {
       i18n.global.setLocaleMessage(code, messages)
       loadedLocales.add(code)
-    }
 
+      return
+    }
+    // Fall through to the frozen bundle, or to the parent through the fallback chain.
+  }
+
+  if (!localeLoaders[code]) {
     return
   }
 
@@ -179,7 +188,7 @@ const i18n = createI18n({
 })
 
 // Resolves once the boot locale's messages (and its fallback chain -- the real
-// parent locale for a sub-language, or else "<base>" -- plus "en") are loaded
+// parent locale for a sub-language, or else "<base>" -- plus en_US) are loaded
 // and registered. main.js awaits this before mounting the app, so templates
 // never render raw translation keys.
 export const i18nReady = loadLocaleWithFallbacks(initial.resolved, initial.base)

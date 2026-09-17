@@ -1336,7 +1336,7 @@ class Statistics
         $content = $form->returnForm();
 
         $values = $form->exportValues();
-        $date_diff = $values['date_diff'];
+        $date_diff = (int) $values['date_diff'];
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $accessUrlUtil = Container::getAccessUrlUtil();
 
@@ -1349,12 +1349,12 @@ class Statistics
                         access_url_id = $urlId
                    GROUP BY c_id
                    HAVING c_id <> ''
-                   AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ".$date_diff;
+                   AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) >= ".$date_diff;
         } else {
             $sql = "SELECT * FROM $table t
                    GROUP BY c_id
                    HAVING c_id <> ''
-                   AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ".$date_diff;
+                   AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) >= ".$date_diff;
         }
         $sql .= ' ORDER BY `'.$columns[$column].'` '.$sql_order[$direction];
         $from = ($page_nr - 1) * $per_page;

@@ -342,7 +342,7 @@ final readonly class AdminStatisticsQueryService
         $queryBuilder
             ->groupBy('last_access.c_id')
             ->having("last_access.c_id <> ''")
-            ->andHaving('DATEDIFF(:utcNow, last_access.access_date) <= :dateDiff')
+            ->andHaving('DATEDIFF(:utcNow, last_access.access_date) >= :dateDiff')
             ->setParameter('utcNow', (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s'), Types::STRING)
             ->setParameter('dateDiff', $dateDiff, Types::INTEGER)
             ->orderBy(['last_access.c_id', 'last_access.c_id', 'last_access.access_date'][$column], $direction)

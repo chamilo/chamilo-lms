@@ -41495,7 +41495,7 @@ msgstr ""
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr ""
 
-msgid "No migration history: click to record it, or no update will run"
+msgid "No migration history: click to fix (or updates might break)"
 msgstr ""
 
 msgid "Migration history is recorded"

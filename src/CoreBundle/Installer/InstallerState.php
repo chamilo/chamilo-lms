@@ -25,7 +25,8 @@ enum InstallerState: string
 
     /**
      * The platform is installed and the code tree carries migrations it has not
-     * executed yet. This is the 2.x to 3.x upgrade.
+     * executed yet. This is the 2.x to 3.x upgrade, and also a 1.11.x database, whose
+     * whole migration history is pending by definition.
      */
     case UpgradePending = 'upgrade_pending';
 

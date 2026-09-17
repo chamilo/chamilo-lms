@@ -439,6 +439,18 @@ if (isset($_POST['step2'])) {
     $current_step = 5;
     // STEP 5 : CONFIGURATION SETTINGS
     if ('update' === $installType) {
+        // The .env written below makes this platform installed for the gate, so every
+        // later request needs the upgrade authorisation. The 1.11.x path arrives here
+        // without it: the gate answered FreshInstall while .env was absent. Authorise the
+        // upgrade now, or the next request refuses the wizard. executeMigration() deletes
+        // the file once the upgrade is over.
+        if (!InstallerGate::grantUpgradeAuthorisation(api_get_path(SYMFONY_SYS_PATH))) {
+            error_log(
+                'Installer: could not create '.InstallerGate::UPGRADE_FLAG_FILE.' in the project root.'
+                .' Create it by hand, otherwise the upgrade stops after this step.'
+            );
+        }
+
         // Create .env file
         $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
         $distFile = api_get_path(SYMFONY_SYS_PATH) . '.env.dist';

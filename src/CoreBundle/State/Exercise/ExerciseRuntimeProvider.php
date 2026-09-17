@@ -2095,9 +2095,12 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             $bits = explode(':', $item);
             if (str_starts_with($item, '#') && \count($bits) >= 4) {
                 $name = ltrim($bits[0], '#');
+                // Backward compatibility with the old "name:min:max:decimals" encoding (bits[2] holds max);
+                // the current format leaves bits[2] empty and encodes the whole range in bits[1].
+                $intervals = '' !== $bits[2] ? $bits[1].'-'.$bits[2] : $bits[1];
                 $variables[$name] = [
                     'name' => $name,
-                    'intervals' => $bits[1],
+                    'intervals' => $intervals,
                     'decimals' => (int) $bits[3],
                 ];
             } elseif (str_starts_with($item, '=') && \count($bits) >= 6) {

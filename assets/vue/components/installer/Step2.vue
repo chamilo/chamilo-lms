@@ -201,10 +201,12 @@
         (!installerData.updatePath || installerData.badUpdatePath || installerData.upgradeNotAuthorised)
       "
     >
+      <br />
+
       <Message
         v-if="installerData.badUpdatePath"
         :closable="false"
-        severity="warning"
+        severity="warn"
       >
         <strong v-text="t('Error')" /><br />
         Chamilo {{ installerData.upgradeFromVersion[0].split(".").slice(0, 2).join(".") }}
@@ -214,7 +216,7 @@
       <Message
         v-if="installerData.upgradeNotAuthorised"
         :closable="false"
-        severity="warning"
+        severity="warn"
       >
         <strong v-text="t('Error')" /><br />
         {{
@@ -224,6 +226,8 @@
           )
         }}
       </Message>
+
+      <br />
 
       <!-- form inputs for old version path -->
       <div class="field">
@@ -301,7 +305,7 @@
         <!-- Check wether a Chamilo configuration file already exists -->
         <Message
           :closable="false"
-          severity="warning"
+          severity="warn"
         >
           {{ t("Warning! The installer has detected an existing Chamilo platform on your system") }}
         </Message>

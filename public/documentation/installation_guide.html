@@ -414,6 +414,14 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
 
     <h3>4.6. Upgrading from Chamilo 2.x instead</h3>
     <a id="cli-upgrade-from-2x" class="anchor"></a>
+      Before you start, and before you upload this new Chamilo version package on top of your existing Chamilo folder, it is *critical* to
+      <ul>
+        <li>delete the <em>vendor</em> folder from your Chamilo 1.11.* system (before overwriting with the new Chamilo package)</li>
+        <li>delete the <em>var/cache/</em> folder from your Chamilo 1.11.* system</li>
+	<li>use the <em>No migration history</em> link in the <em>Health check</em> block if it appears, or see the <em>doctrine:migrations:version</em> command below if working from the command line. This will fix an issue caused by a 2.0 installation</li>
+      </ul>
+      The <em>vendor</em> folder contains PHP libraries and autoload configurations from Chamilo 1.11 which might leave folders that conflict with other folders in later versions of Chamilo.<br />
+
       An existing Chamilo 2.x installation keeps its own directory and its own database: you copy the
       new code over it and run the migrations, with no UPDATE_PATH.<br>
       One step comes first, and its order matters. Chamilo installs its schema directly from the entity

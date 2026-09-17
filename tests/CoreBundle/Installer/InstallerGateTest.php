@@ -179,20 +179,63 @@ final class InstallerGateTest extends TestCase
     }
 
     /**
-     * A 1.11.x database carries an unrelated `version` table. Reading it as Doctrine
-     * metadata would report every migration as pending and open the installer on any
-     * installed platform that still has that leftover table.
+     * A 1.11.x database carries an unrelated `version` table. Its rows must never count
+     * as executed migrations: that would report a pending upgrade from a leftover table
+     * rather than from the schema.
      */
     public function testLegacyVersionTableIsNotReadAsMetadata(): void
     {
-        $connection = $this->databaseWithSettings();
-        $connection->executeStatement('CREATE TABLE version (id INTEGER PRIMARY KEY, value VARCHAR(255))');
-        $connection->executeStatement("INSERT INTO version (value) VALUES ('1.11.40')");
+        $this->assertFalse(
+            InstallerGate::hasPendingMigrations($this->legacyDatabase(), self::MIGRATIONS)
+        );
+    }
 
-        $state = InstallerGate::resolve(true, true, $connection, self::MIGRATIONS);
+    /**
+     * The lockout this fixed, found by the real 1.11.x upgrade run: step 4 writes .env
+     * before any migration runs, and from the next request on the gate saw an installed
+     * platform whose metadata was unusable, so it answered UpToDate and refused the rest
+     * of the wizard. The schema tells the two apart: no resource_node means 1.11.x, and
+     * the whole migration history is pending there.
+     */
+    public function testLegacyDatabaseIsAnUpgradeAndNotAnUpToDatePlatform(): void
+    {
+        $state = InstallerGate::resolve(true, true, $this->legacyDatabase(), self::MIGRATIONS);
 
-        $this->assertSame(InstallerState::UpToDate, $state);
+        $this->assertSame(InstallerState::UpgradePending, $state);
+        $this->assertFalse($state->isLocked());
+        $this->assertTrue($state->isUpgrade());
+    }
+
+    /**
+     * The 1.11.x upgrade needs the same authorisation as the 2.x one. The wizard grants
+     * it to itself at step 4, because the gate let it in without the file while .env was
+     * still absent.
+     */
+    public function testLegacyDatabaseWithoutTheFlagFileLocksTheWizard(): void
+    {
+        $state = InstallerGate::resolve(true, true, $this->legacyDatabase(), self::MIGRATIONS, false);
+
+        $this->assertSame(InstallerState::UpgradeNotAuthorised, $state);
         $this->assertTrue($state->isLocked());
+    }
+
+    /**
+     * Granting the authorisation is what step 4 calls, and it must be repeatable: the
+     * wizard can reach that step more than once.
+     */
+    public function testGrantingTheAuthorisationCreatesTheFlagFileOnce(): void
+    {
+        $projectDir = sys_get_temp_dir().'/chamilo-upgrade-grant-'.uniqid('', true);
+        mkdir($projectDir, 0o777, true);
+
+        $this->assertTrue(InstallerGate::grantUpgradeAuthorisation($projectDir));
+        $this->assertTrue(InstallerGate::isUpgradeAuthorised($projectDir));
+
+        $this->assertTrue(InstallerGate::grantUpgradeAuthorisation($projectDir));
+        $this->assertTrue(InstallerGate::isUpgradeAuthorised($projectDir));
+
+        InstallerGate::revokeUpgradeAuthorisation($projectDir);
+        rmdir($projectDir);
     }
 
     /**
@@ -292,10 +335,31 @@ final class InstallerGateTest extends TestCase
         return $connection;
     }
 
+    /**
+     * An installed Chamilo 2.x or 3.x platform: configuration rows and the 2.x schema.
+     * resource_node has to be there, because the gate reads its absence as a 1.11.x
+     * database whose whole migration history is pending.
+     */
     private function databaseWithSettings(): Connection
     {
         $connection = $this->emptyDatabase();
         $connection->executeStatement("INSERT INTO settings (variable) VALUES ('platform_language')");
+        $connection->executeStatement('CREATE TABLE resource_node (id INTEGER PRIMARY KEY)');
+
+        return $connection;
+    }
+
+    /**
+     * A Chamilo 1.11.x database: settings under the old table name, no 2.x schema, and
+     * the unrelated `version` table that branch carries.
+     */
+    private function legacyDatabase(): Connection
+    {
+        $connection = $this->connection();
+        $connection->executeStatement('CREATE TABLE settings_current (id INTEGER PRIMARY KEY, variable VARCHAR(255))');
+        $connection->executeStatement("INSERT INTO settings_current (variable) VALUES ('platform_language')");
+        $connection->executeStatement('CREATE TABLE version (id INTEGER PRIMARY KEY, version VARCHAR(20))');
+        $connection->executeStatement("INSERT INTO version (version) VALUES ('1.11.40')");
 
         return $connection;
     }

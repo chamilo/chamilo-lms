@@ -22,6 +22,10 @@ use const PATHINFO_FILENAME;
  * Doctrine's own migration metadata is the source of truth. The gate used to be able to
  * read a stored version setting instead; that setting was a hand-written literal no
  * migration ever raised, so comparing it against the code version failed open.
+ *
+ * A 1.11.x database is the one case that metadata cannot answer, because its `version`
+ * table is not Doctrine's. The schema answers there: a configured database without the
+ * 2.x tables has its whole migration history pending.
  */
 final class InstallerGate
 {
@@ -77,6 +81,17 @@ final class InstallerGate
             return InstallerState::Unfinished;
         }
 
+        // A configured database without the 2.x schema is a 1.11.x platform, and every
+        // migration the code tree ships is pending there. Doctrine's metadata cannot say
+        // so: the 1.11.x `version` table carries other columns, so it reads as unusable
+        // metadata and the platform would look up-to-date. The schema answers instead,
+        // and it never mistakes an installed 2.x or 3.x platform for this case.
+        if (!self::isModernSchema($connection)) {
+            return $upgradeAuthorised
+                ? InstallerState::UpgradePending
+                : InstallerState::UpgradeNotAuthorised;
+        }
+
         if (self::hasPendingMigrations($connection, $availableMigrations)) {
             // Pending migrations alone are not enough. The endpoints carry no
             // authentication, so the upgrade also needs a deliberate act on the server:
@@ -87,6 +102,29 @@ final class InstallerGate
         }
 
         return InstallerState::UpToDate;
+    }
+
+    /**
+     * Creates the flag file on behalf of the wizard's own upgrade path.
+     *
+     * The 1.11.x upgrade unpacks the new code tree next to no .env, so the gate answers
+     * FreshInstall and the wizard opens without the file. Writing .env then makes the
+     * platform installed, and the upgrade stops on the next request unless the wizard
+     * authorises itself at that same moment. Nothing is granted that the caller did not
+     * already hold: a tree without .env exposes the whole installer anyway.
+     *
+     * Returns false on a read-only project root. The caller then tells the administrator
+     * to create the file by hand.
+     */
+    public static function grantUpgradeAuthorisation(string $projectDir): bool
+    {
+        $flagFile = rtrim($projectDir, '/').'/'.self::UPGRADE_FLAG_FILE;
+
+        if (is_file($flagFile)) {
+            return true;
+        }
+
+        return false !== @file_put_contents($flagFile, '') && is_file($flagFile);
     }
 
     /**

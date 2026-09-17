@@ -305,9 +305,15 @@ if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($
             $proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYMFONY_SYS_PATH) : $_POST['updatePath']);
 
             if (file_exists($proposedUpdatePath)) {
-                $isLegacy111Update = 1 === preg_match('/^1\.11\.\d+$/', (string) $my_old_version);
+                // Recompute from the path just submitted rather than trusting $my_old_version:
+                // that value was derived earlier from the stale 'old_version' hidden field (echoed
+                // back from the previous, path-less render), which otherwise silently overrides the
+                // correct detection for this submission.
+                $detectedOldVersion = get_config_param('system_version', $proposedUpdatePath);
+                $isLegacy111Update = 1 === preg_match('/^1\.11\.\d+$/', (string) $detectedOldVersion);
                 if ($isLegacy111Update || $isModernUpdate) {
                     $_POST['step2'] = 1;
+                    $my_old_version = $detectedOldVersion;
                 } else {
                     $badUpdatePath = true;
                 }

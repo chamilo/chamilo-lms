@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -35,6 +36,24 @@ class CForumPostRepository extends ResourceRepository
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
 
         return $this->getCount($qb);
+    }
+
+    public function countUserPostsInForumThread(
+        CForum $forum,
+        CForumThread $thread,
+        User $user,
+    ): int {
+        return (int) $this->createQueryBuilder('post')
+            ->select('COUNT(post.iid)')
+            ->andWhere('post.forum = :forum')
+            ->andWhere('post.thread = :thread')
+            ->andWhere('post.user = :user')
+            ->setParameter('forum', $forum)
+            ->setParameter('thread', $thread)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /*public function findAllInCourseByThread(

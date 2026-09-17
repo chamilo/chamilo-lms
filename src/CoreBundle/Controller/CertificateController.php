@@ -50,6 +50,88 @@ class CertificateController extends AbstractController
         private readonly string $projectDir,
     ) {}
 
+    #[Route('/index.php', name: 'chamilo_certificate_legacy_public_view', methods: ['GET'])]
+    public function legacyView(Request $request): Response
+    {
+        $certificateId = $request->query->getInt('id');
+        if ($certificateId <= 0) {
+            throw new NotFoundHttpException('The requested certificate does not exist.');
+        }
+
+        $connection = $this->entityManager->getConnection();
+        $schemaManager = $connection->createSchemaManager();
+
+        if (!$schemaManager->tablesExist(['gradebook_certificate_legacy_reference'])) {
+            throw new NotFoundHttpException('The requested certificate does not exist.');
+        }
+
+        $legacyReference = $connection->fetchAssociative(
+            <<<'SQL'
+SELECT
+    certificate_id,
+    path_certificate,
+    html_content
+FROM gradebook_certificate_legacy_reference
+WHERE certificate_id = :certificateId
+LIMIT 1
+SQL,
+            ['certificateId' => $certificateId]
+        );
+
+        if (false === $legacyReference) {
+            throw new NotFoundHttpException('The requested certificate does not exist.');
+        }
+
+        $certificate = $this->certificateRepository->find($certificateId);
+
+        if ($certificate instanceof GradebookCertificate) {
+            $fileName = basename(
+                ltrim(trim((string) $certificate->getPathCertificate()), '/')
+            );
+
+            if (
+                '' === $fileName
+                || !str_ends_with(strtolower($fileName), '.html')
+            ) {
+                throw new NotFoundHttpException(
+                    'The requested certificate does not exist.'
+                );
+            }
+
+            $hash = substr($fileName, 0, -5);
+
+            if ('' === $hash) {
+                throw new NotFoundHttpException(
+                    'The requested certificate does not exist.'
+                );
+            }
+
+            $html = $this->readCertificateHtml($certificate, $hash);
+        } else {
+            $html = (string) ($legacyReference['html_content'] ?? '');
+
+            if ('' === trim($html)) {
+                throw new NotFoundHttpException(
+                    'The historical certificate content is not available.'
+                );
+            }
+        }
+
+        $html = str_replace(' media="screen"', '', $html);
+
+        if ('export' === strtolower(
+            trim((string) $request->query->get('action', ''))
+        )) {
+            return $this->renderCertificatePdfFromHtml($html, $request);
+        }
+
+        return new Response(
+            '<!DOCTYPE html>'.$html,
+            200,
+            ['Content-Type' => 'text/html; charset=UTF-8']
+        );
+    }
+
     #[Route('/{hash}.html', name: 'chamilo_certificate_public_view', methods: ['GET'])]
     public function view(string $hash): Response
     {
@@ -80,6 +162,14 @@ class CertificateController extends AbstractController
         // Read HTML and render PDF
         $html = $this->readCertificateHtml($certificate, $hash);
         $html = str_replace(' media="screen"', '', $html);
+
+        return $this->renderCertificatePdfFromHtml($html, $request);
+    }
+
+    private function renderCertificatePdfFromHtml(
+        string $html,
+        Request $request
+    ): Response {
         $html = $this->localizePublicAssetsForPdf($html, $request);
 
         try {
@@ -93,6 +183,7 @@ class CertificateController extends AbstractController
                 'margin_footer' => 0,
                 'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
             ], SafeMpdfHttpClient::container());
+
             $mpdf->WriteHTML($html);
             $pdfBinary = $mpdf->Output('', Destination::STRING_RETURN);
 
@@ -105,7 +196,11 @@ class CertificateController extends AbstractController
                 ]
             );
         } catch (MpdfException $e) {
-            throw new RuntimeException('Failed to generate PDF: '.$e->getMessage(), 500, $e);
+            throw new RuntimeException(
+                'Failed to generate PDF: '.$e->getMessage(),
+                500,
+                $e
+            );
         }
     }
 

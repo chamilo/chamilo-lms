@@ -84,7 +84,7 @@ final class ProcessAllAchievementCertificatesCommand extends Command
                 'completion-mode',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Completion source: course-rule or gradebook. In gradebook mode, a context (the base course, or one of its sessions) is skipped when it has more than one eligible root category (re-run it individually with chamilo:migration:process-achievement-certificates --category-id).',
+                'Completion source: course-rule, gradebook or auto. Auto prefers a persisted course rule and falls back to gradebook only for courses carrying verified legacy GradingElectronic evidence.',
                 'course-rule'
             )
             ->addOption(
@@ -158,8 +158,8 @@ final class ProcessAllAchievementCertificatesCommand extends Command
             $this->service->bootstrapLegacy($this->kernel);
 
             $completionMode = strtolower(trim((string) $input->getOption('completion-mode')));
-            if (!\in_array($completionMode, ['course-rule', 'gradebook'], true)) {
-                $io->error('--completion-mode must be course-rule or gradebook.');
+            if (!\in_array($completionMode, ['course-rule', 'gradebook', 'auto'], true)) {
+                $io->error('--completion-mode must be course-rule, gradebook or auto.');
 
                 return Command::INVALID;
             }
@@ -198,9 +198,11 @@ final class ProcessAllAchievementCertificatesCommand extends Command
             }
 
             $io->definitionList(
-                ['Completion source' => 'course-rule' === $completionMode
-                    ? 'persisted course completion rule'
-                    : 'native gradebook (contexts with exactly one eligible root category)'],
+                ['Completion source' => match ($completionMode) {
+                    'course-rule' => 'persisted course completion rule',
+                    'gradebook' => 'native gradebook',
+                    'auto' => 'automatic per course: persisted rule first, verified legacy gradebook fallback',
+                }],
                 ['Mode' => $dryRun ? 'dry-run' : ($sendNotification ? 'generate and notify' : 'generate only, no notification')],
                 ['Sender ID (resource creator)' => $dryRun ? 'not used' : (string) $senderId],
                 ['Generation limit' => 0 === $limit ? 'unlimited' : (string) $limit],
@@ -211,6 +213,8 @@ final class ProcessAllAchievementCertificatesCommand extends Command
             $summary = [
                 'courses_scanned' => 0,
                 'courses_skipped_no_rule' => 0,
+                'courses_course_rule' => 0,
+                'courses_legacy_gradebook' => 0,
                 'sessions_skipped_ambiguous_category' => 0,
                 'contexts_processed' => 0,
                 'scanned' => 0,
@@ -275,6 +279,8 @@ final class ProcessAllAchievementCertificatesCommand extends Command
             $io->definitionList(
                 ['Courses scanned' => $summary['courses_scanned']],
                 ['Courses skipped (no completion rule)' => $summary['courses_skipped_no_rule']],
+                ['Courses using course rule' => $summary['courses_course_rule']],
+                ['Courses using legacy gradebook fallback' => $summary['courses_legacy_gradebook']],
                 ['Contexts skipped (ambiguous root category)' => $summary['sessions_skipped_ambiguous_category']],
                 ['Contexts processed (base course + sessions)' => $summary['contexts_processed']],
                 ['Scanned pending users' => $summary['scanned']],
@@ -344,10 +350,26 @@ final class ProcessAllAchievementCertificatesCommand extends Command
         array &$summary,
         array &$previewRows
     ): void {
-        if ('course-rule' === $completionMode && !$this->service->supports($courseId)) {
+        $effectiveCompletionMode = $completionMode;
+
+        if ('auto' === $completionMode) {
+            if ($this->service->supports($courseId)) {
+                $effectiveCompletionMode = 'course-rule';
+                ++$summary['courses_course_rule'];
+            } elseif ($this->service->hasLegacyGradebookConfirmation($courseId)) {
+                $effectiveCompletionMode = 'gradebook';
+                ++$summary['courses_legacy_gradebook'];
+            } else {
+                ++$summary['courses_skipped_no_rule'];
+
+                return;
+            }
+        } elseif ('course-rule' === $completionMode && !$this->service->supports($courseId)) {
             ++$summary['courses_skipped_no_rule'];
 
             return;
+        } elseif ('course-rule' === $completionMode) {
+            ++$summary['courses_course_rule'];
         }
 
         $categories = $this->service->loadEligibleCategories($courseId, null);
@@ -381,10 +403,28 @@ final class ProcessAllAchievementCertificatesCommand extends Command
                 return;
             }
 
-            if (\count($sessionCategories) > 1) {
+            $resolvedCategory = 1 === \count($sessionCategories)
+                ? $sessionCategories[0]
+                : null;
+
+            if (null === $resolvedCategory && 'auto' === $completionMode) {
+                $resolvedCategory = $this->service->resolveAmbiguousCategory(
+                    $courseId,
+                    $sessionId,
+                    $sessionCategories,
+                    $effectiveCompletionMode
+                );
+            }
+
+            if (null === $resolvedCategory) {
                 ++$summary['sessions_skipped_ambiguous_category'];
+
+                $reason = 'auto' === $completionMode
+                    ? 'multiple eligible root categories (%s) and no unique completion/history match'
+                    : 'multiple eligible root categories (%s)';
+
                 $io->note(\sprintf(
-                    'Course %d, session %d skipped: multiple eligible root categories (%s). Process it individually with chamilo:migration:process-achievement-certificates --category-id.',
+                    'Course %d, session %d skipped: '.$reason.'. Process it individually with chamilo:migration:process-achievement-certificates --category-id.',
                     $courseId,
                     $sessionId,
                     implode(', ', array_map(static fn (array $c): string => (string) $c['id'], $sessionCategories))
@@ -399,8 +439,8 @@ final class ProcessAllAchievementCertificatesCommand extends Command
                 $courseId,
                 $courseCode,
                 $sessionId,
-                $sessionCategories[0],
-                $completionMode,
+                $resolvedCategory,
+                $effectiveCompletionMode,
                 $userId,
                 $limit,
                 $scanLimit,

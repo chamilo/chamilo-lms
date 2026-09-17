@@ -29,6 +29,8 @@ class ForumSettingsSchema extends AbstractSettingsSchema
                     'allow_forum_category_language_filter' => 'false',
                     'subscribe_users_to_forum_notifications_also_in_base_course' => 'false',
                     'community_managers_user_list' => '',
+                    'first_reply_min_words' => '0',
+                    'subsequent_reply_min_words' => '0',
                 ]
             )
         ;
@@ -61,6 +63,8 @@ class ForumSettingsSchema extends AbstractSettingsSchema
             ->add('allow_forum_category_language_filter', YesNoType::class)
             ->add('subscribe_users_to_forum_notifications_also_in_base_course', YesNoType::class)
             ->add('community_managers_user_list', TextareaType::class)
+            ->add('first_reply_min_words', TextType::class)
+            ->add('subsequent_reply_min_words', TextType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

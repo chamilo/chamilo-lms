@@ -152,6 +152,8 @@ final class ForumPostProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('A valid user is required.');
         }
 
+        $this->assertReplyWordMinimum($text, $forum, $thread, $user);
+
         $now = new DateTime('now', new DateTimeZone('UTC'));
         $visible = !$this->requiresModeration($forum, $isTeacher);
         $status = $visible ? CForumPost::STATUS_VALIDATED : CForumPost::STATUS_WAITING_MODERATION;
@@ -205,6 +207,49 @@ final class ForumPostProcessor implements ProcessorInterface
             'requiresApproval' => !$visible,
             'message' => $visible ? 'Reply added.' : 'Your message has to be approved before people can view it.',
         ], Response::HTTP_CREATED);
+    }
+
+    private function assertReplyWordMinimum(
+        string $text,
+        CForum $forum,
+        CForumThread $thread,
+        User $user,
+    ): void {
+        $firstMinimum = max(
+            0,
+            (int) ($this->settingsManager->getSetting(
+                'forum.first_reply_min_words',
+                true
+            ) ?? 0)
+        );
+
+        $subsequentMinimum = max(
+            0,
+            (int) ($this->settingsManager->getSetting(
+                'forum.subsequent_reply_min_words',
+                true
+            ) ?? 0)
+        );
+
+        if (0 === $firstMinimum && 0 === $subsequentMinimum) {
+            return;
+        }
+
+        $previousPosts = $this->postRepository->countUserPostsInForumThread(
+            $forum,
+            $thread,
+            $user
+        );
+
+        $minimum = $previousPosts >= 1
+            ? $subsequentMinimum
+            : $firstMinimum;
+
+        if ($minimum > 0 && \str_word_count($text) < $minimum) {
+            throw new BadRequestHttpException(
+                \sprintf('%d word minimum requirement not met', $minimum)
+            );
+        }
     }
 
     private function updatePost(Request $request, mixed $data): JsonResponse

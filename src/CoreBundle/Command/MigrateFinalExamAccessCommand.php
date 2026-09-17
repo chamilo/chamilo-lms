@@ -92,7 +92,6 @@ final class MigrateFinalExamAccessCommand extends Command
         '9516' => 4,
         '1302' => 30,
         '6742' => 65,
-        'AERIALDRIVEROPERATOR' => 512,
     ];
 
     public function __construct(

@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
+use Chamilo\CoreBundle\Component\Gradebook\CourseCompletionRuleEvaluator;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use JsonException;
@@ -28,6 +30,8 @@ use const JSON_UNESCAPED_SLASHES;
 )]
 final class AuditCompletionRulesCommand extends Command
 {
+    private const string SOURCE = 'legacy_course_completion_rule';
+
     private const string SOURCE_DATA_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
 
     private const string EXERCISE_RULE_FIELD_VARIABLE = 'final_exam_access_rule';
@@ -587,7 +591,7 @@ final class AuditCompletionRulesCommand extends Command
 
             $report = [
                 'generated_at' => gmdate('c'),
-                'audit_version' => 4,
+                'audit_version' => 5,
                 'legacy_source_sha256' => self::SOURCE_DATA_SHA256,
                 'selected_rule_count' => \count($selectedRules),
                 'tracking_backup_available' => $hasTrackingBackup,
@@ -705,6 +709,7 @@ final class AuditCompletionRulesCommand extends Command
             'exercise_resolved_from_history' => 0,
             'exercise_resolved_from_final_exam_rule' => 0,
             'exercise_verified_direct_with_context' => 0,
+            'exercise_verified_persisted_rule_with_context' => 0,
             'exercise_resolved_from_course_sequence_anchor' => 0,
             'exercise_candidate_role_match' => 0,
             'exercise_candidate_display_order' => 0,
@@ -901,6 +906,11 @@ SQL,
             $legacyIds,
             $hasTrackingBackup
         );
+        $persistedMappings = $this->findPersistedExerciseMappings(
+            $courseCode,
+            $courseId,
+            $legacyIds
+        );
         $courseSequenceAnchorOffset = $this->findCourseSequenceAnchorOffset(
             $courseCode,
             $legacyIds,
@@ -913,6 +923,7 @@ SQL,
             'resolved_from_history' => 0,
             'resolved_from_final_exam_rule' => 0,
             'verified_direct_with_context' => 0,
+            'verified_persisted_rule_with_context' => 0,
             'resolved_from_course_sequence_anchor' => 0,
             'candidate_role_match' => 0,
             'candidate_display_order' => 0,
@@ -1021,6 +1032,34 @@ SQL,
                         $evidence[] = 'same_course_verified_final_exam_offset';
                         $evidence[] = 'display_order_offset_match';
                     }
+                }
+            }
+
+            if ('unresolved' === $status && isset($persistedMappings[$legacyId])) {
+                $persistedMapping = $persistedMappings[$legacyId];
+                $persistedCandidate = $candidateById[$persistedMapping['current_exercise_id']] ?? null;
+                $expectedWeight = $legacyWeight * 100.0;
+
+                if (
+                    null !== $persistedCandidate
+                    && abs($persistedMapping['weight'] - $expectedWeight) < 0.000001
+                    && (int) $persistedCandidate['learning_path_items'] > 0
+                    && (int) $persistedCandidate['attempt_rows'] > 0
+                    && (int) $persistedCandidate['question_count'] > 0
+                ) {
+                    $selectedId = $persistedMapping['current_exercise_id'];
+                    $strategy = 'persisted_completion_rule_with_usage_context';
+                    $confidence = 'medium';
+                    $status = 'verified_persisted_rule_with_context';
+                    $evidence = $this->candidateEvidence(
+                        $persistedCandidate,
+                        $legacyId,
+                        $legacyRole
+                    );
+                    $evidence[] = 'persisted_completion_rule_mapping';
+                    $evidence[] = 'persisted_mapping_weight_match';
+                    $evidence[] = 'persisted_mapping_has_lp_usage';
+                    $evidence[] = 'persisted_mapping_has_attempt_usage';
                 }
             }
 
@@ -1345,6 +1384,114 @@ SQL,
     }
 
     /**
+     * @param list<int> $legacyIds
+     *
+     * @return array<int, array{current_exercise_id: int, weight: float, status: string, confidence: string}>
+     */
+    private function findPersistedExerciseMappings(string $courseCode, int $courseId, array $legacyIds): array
+    {
+        $rows = $this->connection->fetchAllAssociative(
+            <<<'SQL'
+SELECT values_table.field_value
+FROM extra_field field
+INNER JOIN extra_field_values values_table
+    ON values_table.field_id = field.id
+WHERE field.item_type = :itemType
+  AND field.variable = :variable
+  AND values_table.item_id = :courseId
+ORDER BY values_table.id
+SQL,
+            [
+                'itemType' => ExtraField::COURSE_FIELD_TYPE,
+                'variable' => CourseCompletionRuleEvaluator::COURSE_RULE_FIELD_VARIABLE,
+                'courseId' => $courseId,
+            ]
+        );
+
+        if (1 !== \count($rows)) {
+            return [];
+        }
+
+        try {
+            $rule = json_decode((string) $rows[0]['field_value'], true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            return [];
+        }
+
+        if (!\is_array($rule)) {
+            return [];
+        }
+
+        $source = trim((string) ($rule['source'] ?? ''));
+        $sourceHash = trim((string) ($rule['legacy_source_sha256'] ?? ''));
+        if (
+            self::SOURCE !== $source
+            && !hash_equals(self::SOURCE_DATA_SHA256, $sourceHash)
+        ) {
+            return [];
+        }
+
+        if (
+            $courseCode !== trim((string) ($rule['source_course_code'] ?? ''))
+            || $courseId !== (int) ($rule['source_course_id'] ?? 0)
+        ) {
+            return [];
+        }
+
+        $legacyIdLookup = array_fill_keys($legacyIds, true);
+        $allowedStatuses = [
+            'resolved_from_history',
+            'resolved_from_final_exam_rule',
+            'verified_direct_with_context',
+            'resolved_from_course_sequence_anchor',
+            'verified_from_migrated_course_metadata',
+        ];
+        $mappings = [];
+        $conflicts = [];
+
+        foreach ((array) ($rule['components'] ?? []) as $component) {
+            if (!\is_array($component) || 'exercise' !== (string) ($component['type'] ?? '')) {
+                continue;
+            }
+
+            $legacyId = (int) ($component['source_resource_id'] ?? 0);
+            $currentId = null === ($component['resource_id'] ?? null)
+                ? null
+                : (int) $component['resource_id'];
+            $status = trim((string) ($component['status'] ?? ''));
+            $confidence = trim((string) ($component['confidence'] ?? ''));
+
+            if (
+                !isset($legacyIdLookup[$legacyId])
+                || null === $currentId
+                || $currentId <= 0
+                || !\in_array($status, $allowedStatuses, true)
+                || !\in_array($confidence, ['medium', 'high'], true)
+            ) {
+                continue;
+            }
+
+            if (isset($mappings[$legacyId])) {
+                $conflicts[$legacyId] = true;
+                continue;
+            }
+
+            $mappings[$legacyId] = [
+                'current_exercise_id' => $currentId,
+                'weight' => (float) ($component['weight'] ?? 0.0),
+                'status' => $status,
+                'confidence' => $confidence,
+            ];
+        }
+
+        foreach (array_keys($conflicts) as $legacyId) {
+            unset($mappings[$legacyId]);
+        }
+
+        return $mappings;
+    }
+
+    /**
      * @return list<int>
      */
     private function findConfiguredFinalExamIds(int $courseId): array
@@ -1525,6 +1672,7 @@ SQL,
             'resolved_from_history' => 0,
             'resolved_from_final_exam_rule' => 0,
             'verified_direct_with_context' => 0,
+            'verified_persisted_rule_with_context' => 0,
             'resolved_from_course_sequence_anchor' => 0,
             'candidate_role_match' => 0,
             'candidate_display_order' => 0,
@@ -1576,6 +1724,7 @@ SQL,
             'resolved_from_history' => 0,
             'resolved_from_final_exam_rule' => 0,
             'verified_direct_with_context' => 0,
+            'verified_persisted_rule_with_context' => 0,
             'resolved_from_course_sequence_anchor' => 0,
             'candidate_role_match' => 0,
             'candidate_display_order' => 0,
@@ -1618,6 +1767,7 @@ SQL,
             'resolved_from_history',
             'resolved_from_final_exam_rule',
             'verified_direct_with_context',
+            'verified_persisted_rule_with_context',
             'resolved_from_course_sequence_anchor',
         ];
         $mappings = [];
@@ -1695,6 +1845,7 @@ SQL,
             'resolved_from_history',
             'resolved_from_final_exam_rule',
             'verified_direct_with_context',
+            'verified_persisted_rule_with_context',
             'resolved_from_course_sequence_anchor',
             'candidate_role_match',
             'candidate_display_order',
@@ -1708,6 +1859,7 @@ SQL,
             $courseReport['exercises']['resolved_from_history']
             + $courseReport['exercises']['resolved_from_final_exam_rule']
             + $courseReport['exercises']['verified_direct_with_context']
+            + $courseReport['exercises']['verified_persisted_rule_with_context']
             + $courseReport['exercises']['resolved_from_course_sequence_anchor'];
         $summary['exercise_review_required'] +=
             $courseReport['exercises']['candidate_role_match']
@@ -1736,11 +1888,12 @@ SQL,
             ['Works' => $this->formatResourceAudit($courseReport['works'])],
             ['Evaluations' => $this->formatResourceAudit($courseReport['evaluations'])],
             ['Exercises' => \sprintf(
-                '%d total; %d history; %d final-rule; %d direct-context; %d sequence-anchor; %d role candidates; %d order candidates; %d ambiguous; %d unresolved',
+                '%d total; %d history; %d final-rule; %d direct-context; %d persisted-context; %d sequence-anchor; %d role candidates; %d order candidates; %d ambiguous; %d unresolved',
                 $courseReport['exercises']['total'],
                 $courseReport['exercises']['resolved_from_history'],
                 $courseReport['exercises']['resolved_from_final_exam_rule'],
                 $courseReport['exercises']['verified_direct_with_context'],
+                $courseReport['exercises']['verified_persisted_rule_with_context'],
                 $courseReport['exercises']['resolved_from_course_sequence_anchor'],
                 $courseReport['exercises']['candidate_role_match'],
                 $courseReport['exercises']['candidate_display_order'],
@@ -1764,6 +1917,7 @@ SQL,
                 'resolved_from_history',
                 'resolved_from_final_exam_rule',
                 'verified_direct_with_context',
+                'verified_persisted_rule_with_context',
                 'resolved_from_course_sequence_anchor',
             ], true)) {
                 continue;
@@ -1837,11 +1991,12 @@ SQL,
             ['Work references' => \sprintf('%d total; %d resolved; %d missing', $summary['work_references'], $summary['work_resolved'], $summary['work_missing'])],
             ['Evaluation references' => \sprintf('%d total; %d resolved; %d missing', $summary['evaluation_references'], $summary['evaluation_resolved'], $summary['evaluation_missing'])],
             ['Exercise references' => \sprintf(
-                '%d total; %d history; %d final-rule; %d direct-context; %d sequence-anchor; %d role candidates; %d order candidates; %d ambiguous; %d unresolved',
+                '%d total; %d history; %d final-rule; %d direct-context; %d persisted-context; %d sequence-anchor; %d role candidates; %d order candidates; %d ambiguous; %d unresolved',
                 $summary['exercise_references'],
                 $summary['exercise_resolved_from_history'],
                 $summary['exercise_resolved_from_final_exam_rule'],
                 $summary['exercise_verified_direct_with_context'],
+                $summary['exercise_verified_persisted_rule_with_context'],
                 $summary['exercise_resolved_from_course_sequence_anchor'],
                 $summary['exercise_candidate_role_match'],
                 $summary['exercise_candidate_display_order'],

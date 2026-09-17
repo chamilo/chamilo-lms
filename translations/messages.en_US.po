@@ -14471,6 +14471,9 @@ msgstr "Please go back to Step 1"
 msgid "has not been found in that directory"
 msgstr "has not been found in that directory"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+
 msgid "Old version's root path"
 msgstr "Old version's root path"
 

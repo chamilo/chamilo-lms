@@ -195,7 +195,12 @@
       </table>
     </div>
 
-    <div v-if="'update' === installerData.installType && (!installerData.updatePath || installerData.badUpdatePath)">
+    <div
+      v-if="
+        'update' === installerData.installType &&
+        (!installerData.updatePath || installerData.badUpdatePath || installerData.upgradeNotAuthorised)
+      "
+    >
       <Message
         v-if="installerData.badUpdatePath"
         :closable="false"
@@ -204,6 +209,20 @@
         <strong v-text="t('Error')" /><br />
         Chamilo {{ installerData.upgradeFromVersion[0].split(".").slice(0, 2).join(".") }}
         {{ t("has not been found in that directory") }}
+      </Message>
+
+      <Message
+        v-if="installerData.upgradeNotAuthorised"
+        :closable="false"
+        severity="warning"
+      >
+        <strong v-text="t('Error')" /><br />
+        {{
+          t(
+            "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named {0} in the project root, next to .env, then continue.",
+            [installerData.upgradeFlagFile],
+          )
+        }}
       </Message>
 
       <!-- form inputs for old version path -->

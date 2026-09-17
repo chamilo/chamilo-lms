@@ -207,9 +207,9 @@ final class InstallerGateTest extends TestCase
     }
 
     /**
-     * The 1.11.x upgrade needs the same authorisation as the 2.x one. The wizard grants
-     * it to itself at step 4, because the gate let it in without the file while .env was
-     * still absent.
+     * The 1.11.x upgrade needs the same authorisation as the 2.x one. The wizard asks for
+     * it on the requirements step, before the database form: the gate lets the wizard in
+     * without the file while .env is still absent, and step 4 writes that .env.
      */
     public function testLegacyDatabaseWithoutTheFlagFileLocksTheWizard(): void
     {
@@ -245,25 +245,6 @@ final class InstallerGateTest extends TestCase
         $this->assertSame(InstallerState::UpgradePending, $state);
         $this->assertFalse($state->isLocked());
         $this->assertTrue($state->isUpgrade());
-    }
-
-    /**
-     * Granting the authorisation is what step 4 calls, and it must be repeatable: the
-     * wizard can reach that step more than once.
-     */
-    public function testGrantingTheAuthorisationCreatesTheFlagFileOnce(): void
-    {
-        $projectDir = sys_get_temp_dir().'/chamilo-upgrade-grant-'.uniqid('', true);
-        mkdir($projectDir, 0o777, true);
-
-        $this->assertTrue(InstallerGate::grantUpgradeAuthorisation($projectDir));
-        $this->assertTrue(InstallerGate::isUpgradeAuthorised($projectDir));
-
-        $this->assertTrue(InstallerGate::grantUpgradeAuthorisation($projectDir));
-        $this->assertTrue(InstallerGate::isUpgradeAuthorised($projectDir));
-
-        InstallerGate::revokeUpgradeAuthorisation($projectDir);
-        rmdir($projectDir);
     }
 
     /**

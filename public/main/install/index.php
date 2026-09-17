@@ -247,6 +247,7 @@ $new_version = $versionData['new_version'];
 
 /* STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 $badUpdatePath = false;
+$upgradeNotAuthorised = false;
 $emptyUpdatePath = true;
 $proposedUpdatePath = '';
 
@@ -300,7 +301,14 @@ if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($
         $_POST['step2'] = 1;
     } else {
         $installType = 'update';
-        if (isset($_POST['step2_update_8'])) {
+
+        // An upgrade needs a deliberate act on the server, because these endpoints carry
+        // no authentication. Ask for it here, before the database form: step 4 writes
+        // .env, and from that request on the gate treats this platform as installed and
+        // refuses the wizard without the flag file.
+        $upgradeNotAuthorised = !InstallerGate::isUpgradeAuthorised(api_get_path(SYMFONY_SYS_PATH));
+
+        if (!$upgradeNotAuthorised && isset($_POST['step2_update_8'])) {
             $emptyUpdatePath = false;
             $proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYMFONY_SYS_PATH) : $_POST['updatePath']);
 
@@ -392,7 +400,7 @@ $total_steps = 7;
 $current_step = 1;
 if (!$_POST) {
     $current_step = 1;
-} elseif ($httpRequest->request->get('language_list') || !empty($_POST['step1']) || ((isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) && ($emptyUpdatePath || $badUpdatePath))) {
+} elseif ($httpRequest->request->get('language_list') || !empty($_POST['step1']) || ((isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) && ($emptyUpdatePath || $badUpdatePath || $upgradeNotAuthorised))) {
     $current_step = 2;
 } elseif (!empty($_POST['step2']) || (isset($_POST['step2_update_8']) || isset($_POST['step2_update_6']))) {
     $current_step = 3;
@@ -439,18 +447,6 @@ if (isset($_POST['step2'])) {
     $current_step = 5;
     // STEP 5 : CONFIGURATION SETTINGS
     if ('update' === $installType) {
-        // The .env written below makes this platform installed for the gate, so every
-        // later request needs the upgrade authorisation. The 1.11.x path arrives here
-        // without it: the gate answered FreshInstall while .env was absent. Authorise the
-        // upgrade now, or the next request refuses the wizard. executeMigration() deletes
-        // the file once the upgrade is over.
-        if (!InstallerGate::grantUpgradeAuthorisation(api_get_path(SYMFONY_SYS_PATH))) {
-            error_log(
-                'Installer: could not create '.InstallerGate::UPGRADE_FLAG_FILE.' in the project root.'
-                .' Create it by hand, otherwise the upgrade stops after this step.'
-            );
-        }
-
         // Create .env file
         $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
         $distFile = api_get_path(SYMFONY_SYS_PATH) . '.env.dist';
@@ -913,7 +909,7 @@ if (isset($_POST['step2'])) {
             }
         }
     }
-} elseif (isset($_POST['step1']) || $badUpdatePath) {
+} elseif (isset($_POST['step1']) || $badUpdatePath || $upgradeNotAuthorised) {
     //STEP 1 : REQUIREMENTS
     //make sure that proposed path is set, shouldn't be necessary but...
     if (empty($proposedUpdatePath)) {
@@ -946,6 +942,10 @@ $installerData = [
     'installType' => $installType,
 
     'badUpdatePath' => $badUpdatePath,
+
+    'upgradeNotAuthorised' => $upgradeNotAuthorised,
+
+    'upgradeFlagFile' => InstallerGate::UPGRADE_FLAG_FILE,
 
     'upgradeFromVersion' => $upgradeFromVersion,
 

@@ -227,6 +227,7 @@
     "Not writable": "Not writable",
     "Error": "Error",
     "has not been found in that directory": "has not been found in that directory",
+    "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named {0} in the project root, next to .env, then continue.": "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named {0} in the project root, next to .env, then continue.",
     "Previous": "Previous",
     "Upgrade Chamilo LMS version": "Upgrade Chamilo LMS version",
     "For more details {0}": "For more details {0}",

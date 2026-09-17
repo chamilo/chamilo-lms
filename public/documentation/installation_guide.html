@@ -451,9 +451,10 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
     <a id="web-upgrade-all" class="anchor"></a>
     For all requirements previous to the installation wizard, see the command line upgrade instructions above.
     Note the installation folder for Chamilo 3 will be different from the installation folder from Chamilo 1, as explained in the "Files" section above.<br>
+    <br>
     If you used sublanguages in Chamilo 1.11, the upgrade converts them and writes their terms
-    into <em>var/translations/</em>, which your web server already needs to write. Nothing else
-    is required: the interface reads them from there, with no rebuild.
+    into <em>var/translations/</em>, which your web server already needs permissions to write to. 
+    Nothing else is required: the interface reads them from there, with no rebuild.
 
     <h3>5.2. Enable the upgrade</h3>
     <a id="web-upgrade-enable" class="anchor"></a>

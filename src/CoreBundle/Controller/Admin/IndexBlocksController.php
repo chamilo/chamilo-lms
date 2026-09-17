@@ -1129,7 +1129,7 @@ class IndexBlocksController extends BaseController
             'class' => 'item-health-check-migration-history '.($historyIsEmpty ? 'text-error' : 'text-success'),
             'label' => $this->translator->trans(
                 $historyIsEmpty
-                    ? 'No migration history: click to record it, or no update will run'
+                    ? 'No migration history: click to fix (or updates might break)'
                     : 'Migration history is recorded'
             ),
         ];

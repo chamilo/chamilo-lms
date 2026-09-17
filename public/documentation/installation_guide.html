@@ -443,10 +443,9 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
     <a id="web-upgrade-all" class="anchor"></a>
     For all requirements previous to the installation wizard, see the command line upgrade instructions above.
     Note the installation folder for Chamilo 3 will be different from the installation folder from Chamilo 1, as explained in the "Files" section above.<br>
-    If you used sublanguages in Chamilo 1.11, make sure the <em>assets/locales/</em> folder is
-    writeable by the web server too. The upgrade converts your sublanguages and writes one
-    translation file per language there. Without that permission the upgrade still finishes, and
-    it reports the failure in the server log, but your sublanguages stay untranslated.
+    If you used sublanguages in Chamilo 1.11, the upgrade converts them and writes their terms
+    into <em>var/translations/</em>, which your web server already needs to write. Nothing else
+    is required: the interface reads them from there, with no rebuild.
 
     <h3>5.2. Enable the upgrade</h3>
     <a id="web-upgrade-enable" class="anchor"></a>
@@ -474,16 +473,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
     <a id="web-upgrade-wizard" class="anchor"></a>
     On step 2 of the installation wizard, make sure you select "Upgrade from a previous version of Chamilo" and click "Continue".<br>
     Follow the wizard to complete the upgrade.<br>
-    Please be aware that upgrading your system might take hours or even days, depending on the size and complexity of your database. Refer to the Chamilo forum or to official providers for help.<br>
-    If you used sublanguages, one step is left after the wizard: rebuild the assets by hand.
-    <pre>
-        cd [/var/www/chamilo]
-        yarn install
-        yarn build
-    </pre>
-    The list of languages the interface offers is fixed when the assets are built, so the
-    translation files the upgrade wrote reach your users only after this step. Until you run it,
-    a user on a sublanguage sees its parent language instead.
+    Please be aware that upgrading your system might take hours or even days, depending on the size and complexity of your database. Refer to the Chamilo forum or to official providers for help.
 
     <h3>5.4. Upgrading from Chamilo 2.x through the web panel</h3>
     <a id="web-upgrade-from-2x" class="anchor"></a>

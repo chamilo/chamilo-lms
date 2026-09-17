@@ -233,12 +233,12 @@ function cstudioTranslateUiLabel(label) {
     var fallbackTranslations = {
         fr: {
             'Learning paths list': 'Liste des parcours',
-            'Opening CStudio editor...': 'Ouverture de l’éditeur CStudio...',
+            'Opening Chamidoc Studio editor...': 'Ouverture de l’éditeur Chamidoc Studio...',
             'Back': 'Retour'
         },
         es: {
             'Learning paths list': 'Lista de lecciones',
-            'Opening CStudio editor...': 'Abriendo el editor CStudio...',
+            'Opening Chamidoc Studio editor...': 'Abriendo el editor Chamidoc Studio...',
             'Back': 'Volver'
         }
     };
@@ -681,7 +681,7 @@ function refreshCStudioCreateButtonUrl() {
 }
 
 function showCStudioLpRedirectOverlay() {
-    var loadingLabel = cstudioTranslateUiLabel('Opening CStudio editor...');
+    var loadingLabel = cstudioTranslateUiLabel('Opening Chamidoc Studio editor...');
 
     $('#cstudio-lp-redirect-overlay').remove();
     $('#cstudio-preview-back-button').remove();
@@ -689,7 +689,7 @@ function showCStudioLpRedirectOverlay() {
     var html = '';
     html += '<div id="cstudio-lp-redirect-overlay" role="status" aria-live="polite">';
     html += '<div class="cstudio-lp-redirect-card">';
-    html += '<img src="/plugin/CStudio/img/base/oel_tools.jpg" alt="CStudio" />';
+    html += '<img src="/plugin/CStudio/img/base/oel_tools.jpg" alt="Chamidoc Studio" />';
     html += '<div class="cstudio-lp-redirect-progress"><span></span></div>';
     html += '<p>' + loadingLabel + '</p>';
     html += '</div>';
@@ -746,7 +746,7 @@ function installCStudioPreviewBackButton(teachdocLstIds, retries) {
 
     var href = buildCStudioEditorRedirectUrl(lpId);
     var label = cstudioTranslateUiLabel('Back');
-    var loadingLabel = cstudioTranslateUiLabel('Opening CStudio editor...');
+    var loadingLabel = cstudioTranslateUiLabel('Opening Chamidoc Studio editor...');
 
     var style = '';
     style += '<style id="cstudio-preview-back-style">';

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\Tests\CoreBundle\Service;
+namespace Chamilo\Tests\CoreBundle\Translation;
 
 use Chamilo\CoreBundle\Entity\Language;
-use Chamilo\CoreBundle\Service\VueTranslationsBuilder;
+use Chamilo\CoreBundle\Translation\VueTranslationsBuilder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Translation\Translator;

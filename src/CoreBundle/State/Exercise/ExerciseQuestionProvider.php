@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State\Exercise;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use CalculatedAnswer;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestion;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -543,7 +544,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         }
 
         return [
-            'wordingHtml' => \CalculatedAnswer::getQuestionWordingForTeacherPreview($answer->getAnswer()),
+            'wordingHtml' => CalculatedAnswer::getQuestionWordingForTeacherPreview($answer->getAnswer()),
         ];
     }
 

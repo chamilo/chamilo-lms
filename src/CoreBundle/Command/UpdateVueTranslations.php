@@ -62,8 +62,16 @@ class UpdateVueTranslations extends Command
         $dir = $this->parameterBag->get('kernel.project_dir');
 
         $vueLocalePath = $dir.'/assets/locales/';
-        $englishJson = file_get_contents($vueLocalePath.'en_US.json');
+        $englishJson = @file_get_contents($vueLocalePath.'en_US.json');
+
+        if (false === $englishJson) {
+            $output->writeln("<error>Could not read {$vueLocalePath}en_US.json. Nothing was written.</error>");
+
+            return Command::FAILURE;
+        }
+
         $translations = json_decode($englishJson, true);
+        $unwritable = [];
 
         foreach ($languages as $language) {
             $iso = $language->getIsocode();
@@ -83,7 +91,10 @@ class UpdateVueTranslations extends Command
                 }
                 $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $fileToSave = $vueLocalePath.'en_US.json';
-                file_put_contents($fileToSave, $newLanguageToString);
+
+                if (false === @file_put_contents($fileToSave, $newLanguageToString)) {
+                    $unwritable[] = $iso;
+                }
 
                 continue;
             }
@@ -104,9 +115,34 @@ class UpdateVueTranslations extends Command
             $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
             $newLanguageToString = str_replace('</br>', '<br>', $newLanguageToString);
             $fileToSave = $vueLocalePath.$iso.'.json';
-            file_put_contents($fileToSave, $newLanguageToString);
+
+            // The write is suppressed and answered here on purpose. This command also runs
+            // from a migration, over the web, where assets/ belongs to the deployment user
+            // and the web server cannot write it. One warning per language then reaches the
+            // HTTP response and breaks the installer's JSON reply; one reported line does
+            // not.
+            if (false === @file_put_contents($fileToSave, $newLanguageToString)) {
+                $unwritable[] = $iso;
+
+                continue;
+            }
+
             $output->writeln("json file generated for iso $iso: $fileToSave");
         }
+
+        if ([] !== $unwritable) {
+            $output->writeln('');
+            $output->writeln(\sprintf(
+                '<error>Could not write %d of the locale files in %s: %s. Make that directory and its'
+                    .' files writable by the user running this command, then run it again.</error>',
+                \count($unwritable),
+                $vueLocalePath,
+                implode(', ', $unwritable)
+            ));
+
+            return Command::FAILURE;
+        }
+
         $output->writeln('');
         $output->writeln("Now you can commit the changes in $vueLocalePath ");
 

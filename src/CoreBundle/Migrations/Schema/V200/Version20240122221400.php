@@ -161,11 +161,22 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         ]);
         $output = new BufferedOutput();
 
-        $application->run($input, $output);
+        $exitCode = $application->run($input, $output);
 
         $content = $output->fetch();
 
         error_log($content);
+
+        // Never fail the upgrade for this. The locale JSON files are build-time assets of
+        // the code tree, so the web server usually cannot write them, and the sublanguage
+        // rows above are already migrated by then. Say so once, and go on.
+        if (0 !== $exitCode) {
+            error_log(
+                'Migration: chamilo:update_vue_translations could not update assets/locales.'
+                .' The sublanguages were migrated, but their Vue translations were not written.'
+                .' Run the command again from the command line, then rebuild the assets.'
+            );
+        }
     }
 
     private function recursiveRemoveDirectory($directory): void

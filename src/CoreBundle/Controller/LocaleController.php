@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
-use Chamilo\CoreBundle\Service\VueTranslationsBuilder;
+use Chamilo\CoreBundle\Translation\VueTranslationsBuilder;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;

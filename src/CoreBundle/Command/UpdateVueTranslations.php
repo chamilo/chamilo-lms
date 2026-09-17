@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
-use Chamilo\CoreBundle\Service\VueTranslationsBuilder;
+use Chamilo\CoreBundle\Translation\VueTranslationsBuilder;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

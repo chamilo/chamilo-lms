@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Service;
+namespace Chamilo\CoreBundle\Translation;
 
 use Chamilo\CoreBundle\Entity\Language;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

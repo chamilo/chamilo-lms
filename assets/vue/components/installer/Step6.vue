@@ -467,7 +467,24 @@ function startMigration(updatePath) {
     }
 
     if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText)
+      let response
+
+      try {
+        response = JSON.parse(xhr.responseText)
+      } catch {
+        // A 200 that is not JSON means the server wrote something else first: a PHP
+        // notice, or nothing at all when the connection dropped. Show that text instead
+        // of dying in the console, because it is the only copy of the reason.
+        loading.value = false
+        isButtonDisabled.value = false
+        errorDialogVisible.value = true
+        errorMessage.value = `${t("Please check the following error:")} ${
+          xhr.responseText.trim().slice(0, 1000) || `${xhr.status} - ${xhr.statusText}`
+        }`
+
+        return
+      }
+
       progressPercentage.value = response.progress_percentage
       currentMigration.value = response.current_migration
       loading.value = false
@@ -507,7 +524,18 @@ function pollMigrationStatus() {
     const xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText)
+        let response
+
+        try {
+          response = JSON.parse(xhr.responseText)
+        } catch {
+          // Keep polling: one unreadable answer must not stop the progress bar for the
+          // rest of a migration that can run for hours.
+          pollMigrationStatus()
+
+          return
+        }
+
         progressPercentage.value = response.progress_percentage
         currentMigration.value = response.current_migration
 

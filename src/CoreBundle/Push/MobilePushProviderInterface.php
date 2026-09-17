@@ -16,6 +16,6 @@ interface MobilePushProviderInterface
 
     public function send(
         MobilePushInstallation $installation,
-        int $messageId
+        MobilePushNotification $notification
     ): MobilePushDelivery;
 }

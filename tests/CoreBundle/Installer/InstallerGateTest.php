@@ -220,6 +220,34 @@ final class InstallerGateTest extends TestCase
     }
 
     /**
+     * A 1.11.x upgrade interrupted partway through the V200 migrations, which is what a
+     * closed browser or a dead process leaves behind. resource_node already exists, so
+     * the schema no longer says 1.11.x and the metadata rule has to answer instead. The
+     * two rules meet with no gap because Doctrine records each migration as it completes,
+     * and six complete before the one that creates resource_node
+     * (V200\Version20170525122900) — so the metadata is never empty by then. Reproduced
+     * against a real 1.11.40 database before this case was written.
+     */
+    public function testInterruptedLegacyUpgradeStillAllowsTheWizard(): void
+    {
+        $connection = $this->legacyDatabase();
+        // The installer renames the 1.11.x table before Doctrine creates its own.
+        $connection->executeStatement('ALTER TABLE version RENAME TO version_1_11');
+        $this->seedMetadata($connection, [self::MIGRATIONS[0]]);
+        $connection->executeStatement('CREATE TABLE resource_node (id INTEGER PRIMARY KEY)');
+
+        // The answer comes from the metadata, not from the 1.11.x leftovers.
+        $this->assertTrue(InstallerGate::hasPendingMigrations($connection, self::MIGRATIONS));
+        $this->assertTrue(InstallerGate::isModernSchema($connection));
+
+        $state = InstallerGate::resolve(true, true, $connection, self::MIGRATIONS);
+
+        $this->assertSame(InstallerState::UpgradePending, $state);
+        $this->assertFalse($state->isLocked());
+        $this->assertTrue($state->isUpgrade());
+    }
+
+    /**
      * Granting the authorisation is what step 4 calls, and it must be repeatable: the
      * wizard can reach that step more than once.
      */

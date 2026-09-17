@@ -14,7 +14,21 @@ localeContext.keys().forEach((key) => {
   }
 })
 
-const availableLocales = Object.keys(localeLoaders)
+// Every language the server declares, as TwigListener prints it. Read through a guard:
+// the template falls back to an empty object when the global is missing.
+function declaredLanguages() {
+  return Array.isArray(window.languages) ? window.languages : []
+}
+
+// A sub-language has no chunk, because require.context above ran before it existed.
+// It still has to count as available, or resolveBestLocale() would answer its parent and
+// the terms an administrator wrote would never be asked for.
+const availableLocales = [
+  ...Object.keys(localeLoaders),
+  ...declaredLanguages()
+    .map((language) => language.isocode)
+    .filter((isocode) => isocode && !localeLoaders[isocode]),
+]
 
 // Resolve the best available bundle for a requested code
 function resolveBestLocale(requested, keys) {
@@ -82,10 +96,55 @@ function buildFallbackChain(base, resolved, keys) {
 
 const loadedLocales = new Set()
 
+// A sub-language is created after the assets were built -- by the 1.11.x upgrade, or by
+// an administrator in Administration > Languages -- so require.context above never saw
+// it and it has no chunk. Its terms come over HTTP instead, from LocaleController, which
+// reads the same var/translations/messages.<iso>.po the server already translates from.
+// Only the handful of terms the sub-language overrides come back; the parent's bundle
+// covers the rest through the fallback chain.
+function isServerOnlyLocale(code) {
+  return !localeLoaders[code] && declaredLanguages().some((language) => language.isocode === code)
+}
+
+/**
+ * Fetches one sub-language's own terms from the server.
+ *
+ * @param {string} code - locale code, e.g. "cs_66"
+ * @returns {Promise<Object|null>} the messages, or null when they cannot be read
+ */
+async function fetchServerLocale(code) {
+  try {
+    const response = await fetch(`/locales/${encodeURIComponent(code)}.json`, {
+      headers: { Accept: "application/json" },
+    })
+
+    return response.ok ? await response.json() : null
+  } catch {
+    // The fallback chain already covers this locale, so a failed fetch degrades to the
+    // parent language rather than to untranslated keys.
+    return null
+  }
+}
+
 // Downloads one locale's messages on first use and registers them with vue-i18n.
 // A no-op for locales already loaded (repeated switches back and forth are free).
 async function ensureLocaleLoaded(code) {
-  if (!code || loadedLocales.has(code) || !localeLoaders[code]) {
+  if (!code || loadedLocales.has(code)) {
+    return
+  }
+
+  if (!localeLoaders[code]) {
+    if (!isServerOnlyLocale(code)) {
+      return
+    }
+
+    const messages = await fetchServerLocale(code)
+
+    if (messages) {
+      i18n.global.setLocaleMessage(code, messages)
+      loadedLocales.add(code)
+    }
+
     return
   }
 

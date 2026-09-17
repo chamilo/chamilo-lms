@@ -14467,6 +14467,9 @@ msgstr ""
 msgid "has not been found in that directory"
 msgstr ""
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr ""
+
 msgid "Old version's root path"
 msgstr ""
 

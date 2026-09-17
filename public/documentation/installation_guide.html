@@ -446,23 +446,25 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
 
     <h3>5.2. Enable the upgrade</h3>
     <a id="web-upgrade-enable" class="anchor"></a>
-    The installer carries no login of its own, so it refuses to upgrade an installed platform
-    until the upgrade is authorised on the server. The authorisation is an empty file named
-    <em>UPGRADE_ENABLED</em>, in the project root, next to <em>.env</em> and
-    <em>composer.json</em>. It goes in the project root, not in <em>public/</em>: from there
-    nobody can ask over HTTP whether your platform is currently open for upgrading.<br>
-    Coming from 1.11.*, you have nothing to do here: your Chamilo 3 directory has no
-    <em>.env</em> yet, so the wizard opens for you, and it creates the file itself on the
-    database step. Coming from 2.x, your platform is already installed, so you create the file
-    yourself before you open the URL &mdash; see section 5.4.<br>
+    The installer carries no login of its own, so it refuses to upgrade until you authorise the
+    upgrade on the server. Create an empty file named <em>UPGRADE_ENABLED</em> in the project
+    root, next to <em>.env</em> and <em>composer.json</em>:
     <pre>
         cd [/var/www/chamilo]
         touch UPGRADE_ENABLED
     </pre>
-    Without that file the installer answers "No UPGRADE_ENABLED found in the project root".<br>
-    The installer deletes the file when the upgrade finishes. If your project root is
-    read-only, the wizard can neither create nor delete it: create it by hand before you start,
-    and delete it by hand at the end &mdash; until you do, the installer stays open.
+    It goes in the project root, not in <em>public/</em>: from there nobody can ask over HTTP
+    whether your platform is currently open for upgrading.<br>
+    Only you create that file. The installer never writes it for you, whichever version you come
+    from: the whole point of the file is that its presence proves a person decided on the
+    server.<br>
+    Coming from 1.11.*, the wizard opens without it, because your Chamilo 3 directory has no
+    <em>.env</em> yet. It asks for the file on the requirements step, when you choose the upgrade
+    and before it asks for your database. Coming from 2.x, the wizard answers
+    "No UPGRADE_ENABLED found in the project root" straight away.<br>
+    The installer deletes the file when the upgrade finishes. If your project root is read-only,
+    it says so instead, and you delete the file by hand &mdash; until you do, the installer stays
+    open.
 
     <h3>5.3. Installation wizard</h3>
     <a id="web-upgrade-wizard" class="anchor"></a>

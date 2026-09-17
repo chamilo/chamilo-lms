@@ -105,30 +105,11 @@ final class InstallerGate
     }
 
     /**
-     * Creates the flag file on behalf of the wizard's own upgrade path.
-     *
-     * The 1.11.x upgrade unpacks the new code tree next to no .env, so the gate answers
-     * FreshInstall and the wizard opens without the file. Writing .env then makes the
-     * platform installed, and the upgrade stops on the next request unless the wizard
-     * authorises itself at that same moment. Nothing is granted that the caller did not
-     * already hold: a tree without .env exposes the whole installer anyway.
-     *
-     * Returns false on a read-only project root. The caller then tells the administrator
-     * to create the file by hand.
-     */
-    public static function grantUpgradeAuthorisation(string $projectDir): bool
-    {
-        $flagFile = rtrim($projectDir, '/').'/'.self::UPGRADE_FLAG_FILE;
-
-        if (is_file($flagFile)) {
-            return true;
-        }
-
-        return false !== @file_put_contents($flagFile, '') && is_file($flagFile);
-    }
-
-    /**
      * Tells whether the flag file that authorises an upgrade is present.
+     *
+     * Only an administrator creates it. The wizard never writes it for itself: the file's
+     * whole value is that its presence proves a human decided on the server, and a wizard
+     * that could create it would leave that presence proving nothing.
      */
     public static function isUpgradeAuthorised(string $projectDir): bool
     {

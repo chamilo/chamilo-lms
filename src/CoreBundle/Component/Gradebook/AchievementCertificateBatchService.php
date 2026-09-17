@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container as LegacyContainer;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -40,6 +41,12 @@ final class AchievementCertificateBatchService
         'plugin_gradingelectronic_certificate_notification_subject';
     private const CERTIFICATE_MESSAGE_FIELD =
         'plugin_gradingelectronic_certificate_notification_message';
+    private const GRADING_ELECTRONIC_COURSE_FIELD =
+        'plugin_gradingelectronic_course_id';
+
+    private const int LINK_EXERCISE = 1;
+    private const int LINK_STUDENT_PUBLICATION = 3;
+    private const int LINK_FORUM_THREAD = 5;
 
     public function __construct(
         private readonly Connection $connection,
@@ -107,6 +114,58 @@ final class AchievementCertificateBatchService
     public function supports(int $courseId): bool
     {
         return $this->evaluator->supports($courseId);
+    }
+
+    public function hasLegacyGradebookConfirmation(int $courseId): bool
+    {
+        $fieldIds = $this->connection->fetchFirstColumn(
+            'SELECT id
+             FROM extra_field
+             WHERE item_type = :itemType
+               AND variable = :variable
+             ORDER BY id',
+            [
+                'itemType' => ExtraField::COURSE_FIELD_TYPE,
+                'variable' => self::GRADING_ELECTRONIC_COURSE_FIELD,
+            ]
+        );
+
+        if ([] === $fieldIds) {
+            return false;
+        }
+
+        if (1 !== \count($fieldIds)) {
+            throw new \RuntimeException(\sprintf(
+                'Multiple course extra fields were found for %s.',
+                self::GRADING_ELECTRONIC_COURSE_FIELD
+            ));
+        }
+
+        $values = $this->connection->fetchFirstColumn(
+            'SELECT field_value
+             FROM extra_field_values
+             WHERE field_id = :fieldId
+               AND item_id = :courseId
+             ORDER BY id',
+            [
+                'fieldId' => (int) $fieldIds[0],
+                'courseId' => $courseId,
+            ]
+        );
+
+        if ([] === $values) {
+            return false;
+        }
+
+        if (1 !== \count($values)) {
+            throw new \RuntimeException(\sprintf(
+                'Course %d has multiple values for %s.',
+                $courseId,
+                self::GRADING_ELECTRONIC_COURSE_FIELD
+            ));
+        }
+
+        return '' !== trim((string) $values[0]);
     }
 
     /**
@@ -220,6 +279,274 @@ final class AchievementCertificateBatchService
              ORDER BY session_id, id',
             $params
         );
+    }
+
+    /**
+     * Resolve multiple eligible root categories without selecting one merely
+     * by numeric ID. For the base course in course-rule mode, completion-rule
+     * components are the primary evidence. Historical certificate usage is
+     * the fallback. A non-unique result remains unresolved.
+     *
+     * @param list<array{id: int|string, title: string, certif_min_score: float|string, session_id: int|string}> $categories
+     *
+     * @return array{id: int|string, title: string, certif_min_score: float|string, session_id: int|string}|null
+     */
+    public function resolveAmbiguousCategory(
+        int $courseId,
+        int $sessionId,
+        array $categories,
+        string $completionMode
+    ): ?array {
+        if ([] === $categories) {
+            return null;
+        }
+
+        if (1 === \count($categories)) {
+            return $categories[0];
+        }
+
+        $categoryIds = array_map(
+            static fn (array $category): int => (int) $category['id'],
+            $categories
+        );
+        $candidates = $categoryIds;
+
+        // The migrated completion rule describes the base-course structure.
+        // Do not project those course-level links onto a session context.
+        if (0 === $sessionId && 'course-rule' === $completionMode) {
+            $components = $this->loadCompletionRuleComponentsForCategoryResolution($courseId);
+            $scores = $this->scoreCategoriesByCompletionComponents($categoryIds, $components);
+
+            if ([] !== $scores) {
+                arsort($scores);
+                $bestScore = (int) reset($scores);
+
+                if ($bestScore > 0) {
+                    $bestIds = array_map(
+                        'intval',
+                        array_keys(array_filter(
+                            $scores,
+                            static fn (int $score): bool => $score === $bestScore
+                        ))
+                    );
+
+                    if (1 === \count($bestIds)) {
+                        return $this->findCategoryRow($categories, $bestIds[0]);
+                    }
+
+                    $candidates = $bestIds;
+                }
+            }
+        }
+
+        $historyCategoryId = $this->resolveCategoryByCertificateHistory($candidates);
+        if (null === $historyCategoryId) {
+            return null;
+        }
+
+        return $this->findCategoryRow($categories, $historyCategoryId);
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function loadCompletionRuleComponentsForCategoryResolution(int $courseId): array
+    {
+        $fieldIds = $this->connection->fetchFirstColumn(
+            'SELECT id
+             FROM extra_field
+             WHERE item_type = :itemType
+               AND variable = :variable
+             ORDER BY id',
+            [
+                'itemType' => ExtraField::COURSE_FIELD_TYPE,
+                'variable' => CourseCompletionRuleEvaluator::COURSE_RULE_FIELD_VARIABLE,
+            ]
+        );
+
+        if ([] === $fieldIds) {
+            return [];
+        }
+
+        if (1 !== \count($fieldIds)) {
+            throw new \RuntimeException('Multiple course completion rule extra fields were found.');
+        }
+
+        $values = $this->connection->fetchFirstColumn(
+            'SELECT field_value
+             FROM extra_field_values
+             WHERE field_id = :fieldId
+               AND item_id = :courseId
+             ORDER BY id',
+            [
+                'fieldId' => (int) $fieldIds[0],
+                'courseId' => $courseId,
+            ]
+        );
+
+        if ([] === $values) {
+            return [];
+        }
+
+        if (1 !== \count($values)) {
+            throw new \RuntimeException(\sprintf(
+                'Course %d has multiple completion rule values.',
+                $courseId
+            ));
+        }
+
+        $rule = json_decode((string) $values[0], true);
+        if (!\is_array($rule) || !isset($rule['components']) || !\is_array($rule['components'])) {
+            throw new \RuntimeException(\sprintf(
+                'Course %d has an invalid completion rule while resolving its certificate category.',
+                $courseId
+            ));
+        }
+
+        return array_values(array_filter(
+            $rule['components'],
+            static fn (mixed $component): bool => \is_array($component)
+        ));
+    }
+
+    /**
+     * @param list<int>                  $categoryIds
+     * @param list<array<string, mixed>> $components
+     *
+     * @return array<int, int>
+     */
+    private function scoreCategoriesByCompletionComponents(
+        array $categoryIds,
+        array $components
+    ): array {
+        $scores = array_fill_keys($categoryIds, 0);
+
+        foreach ($categoryIds as $categoryId) {
+            foreach ($components as $component) {
+                $type = trim((string) ($component['type'] ?? ''));
+                $resourceId = $this->positiveComponentIdOrNull($component['resource_id'] ?? null);
+                $sourceId = $this->positiveComponentIdOrNull($component['source_resource_id'] ?? null);
+
+                if ('evaluation' === $type && null !== $resourceId) {
+                    $scores[$categoryId] += (int) $this->connection->fetchOne(
+                        'SELECT COUNT(*)
+                         FROM gradebook_evaluation
+                         WHERE id = :resourceId
+                           AND category_id = :categoryId',
+                        [
+                            'resourceId' => $resourceId,
+                            'categoryId' => $categoryId,
+                        ]
+                    );
+
+                    continue;
+                }
+
+                $linkType = match ($type) {
+                    'exercise' => self::LINK_EXERCISE,
+                    'work' => self::LINK_STUDENT_PUBLICATION,
+                    'forum' => self::LINK_FORUM_THREAD,
+                    default => null,
+                };
+
+                if (null === $linkType) {
+                    continue;
+                }
+
+                $resourceIds = array_values(array_unique(array_filter(
+                    [$resourceId, $sourceId],
+                    static fn (?int $id): bool => null !== $id && $id > 0
+                )));
+
+                if ([] === $resourceIds) {
+                    continue;
+                }
+
+                $scores[$categoryId] += (int) $this->connection->fetchOne(
+                    'SELECT COUNT(*)
+                     FROM gradebook_link
+                     WHERE category_id = :categoryId
+                       AND type = :type
+                       AND ref_id IN (:resourceIds)',
+                    [
+                        'categoryId' => $categoryId,
+                        'type' => $linkType,
+                        'resourceIds' => $resourceIds,
+                    ],
+                    ['resourceIds' => ArrayParameterType::INTEGER]
+                );
+            }
+        }
+
+        return $scores;
+    }
+
+    /**
+     * @param list<int> $categoryIds
+     */
+    private function resolveCategoryByCertificateHistory(array $categoryIds): ?int
+    {
+        if ([] === $categoryIds) {
+            return null;
+        }
+
+        $counts = array_fill_keys($categoryIds, 0);
+        $rows = $this->connection->executeQuery(
+            'SELECT cat_id AS category_id, COUNT(*) AS certificate_count
+             FROM gradebook_certificate
+             WHERE cat_id IN (:categoryIds)
+             GROUP BY cat_id',
+            ['categoryIds' => $categoryIds],
+            ['categoryIds' => ArrayParameterType::INTEGER]
+        )->fetchAllAssociative();
+
+        foreach ($rows as $row) {
+            $categoryId = (int) $row['category_id'];
+
+            if (\array_key_exists($categoryId, $counts)) {
+                $counts[$categoryId] = (int) $row['certificate_count'];
+            }
+        }
+
+        arsort($counts);
+        $bestCount = (int) reset($counts);
+
+        if ($bestCount <= 0) {
+            return null;
+        }
+
+        $bestIds = array_map(
+            'intval',
+            array_keys(array_filter(
+                $counts,
+                static fn (int $count): bool => $count === $bestCount
+            ))
+        );
+
+        return 1 === \count($bestIds) ? $bestIds[0] : null;
+    }
+
+    /**
+     * @param list<array{id: int|string, title: string, certif_min_score: float|string, session_id: int|string}> $categories
+     *
+     * @return array{id: int|string, title: string, certif_min_score: float|string, session_id: int|string}|null
+     */
+    private function findCategoryRow(array $categories, int $categoryId): ?array
+    {
+        foreach ($categories as $category) {
+            if ((int) $category['id'] === $categoryId) {
+                return $category;
+            }
+        }
+
+        return null;
+    }
+
+    private function positiveComponentIdOrNull(mixed $value): ?int
+    {
+        $value = (int) $value;
+
+        return $value > 0 ? $value : null;
     }
 
     /**

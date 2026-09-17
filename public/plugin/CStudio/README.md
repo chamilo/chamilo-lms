@@ -138,7 +138,7 @@ cd /path/to/chamilo/public/plugin/
    - Navigate to **Administration** → **Plugins**
 
 2. **Install Chamidoc**
-   - Find "C-Studio Open eLearning Tools" in the plugin list
+   - Find "Chamidoc Studio Open eLearning Tools" in the plugin list
    - Click **Install**
    - Configure initial settings
 

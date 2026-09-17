@@ -142,7 +142,7 @@
   "Learning path thumbnail (click to change)": "Miniatura del itinerario de aprendizaje (clic para cambiar)",
   "Reset thumbnail": "Restablecer miniatura",
   "Delete page": "Eliminar página",
-  "Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.": "Limpiar trazas elimina el progreso guardado de los estudiantes para este itinerario CStudio. No elimina páginas ni contenido del proyecto.",
+  "Clean traces removes the saved learner progress for this Chamidoc Studio learning path. It does not delete pages or project content.": "Limpiar trazas elimina el progreso guardado de los estudiantes para este itinerario Chamidoc Studio. No elimina páginas ni contenido del proyecto.",
   "Quiz text": "Texto del quiz",
   "Object schema": "Esquema de objeto",
   "Layout": "Diseño",

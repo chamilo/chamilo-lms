@@ -121,12 +121,12 @@ function cstudioGetFallbackTranslatedTerm(term) {
             'Free access page': 'Page en accès libre',
             'Learning paths list': 'Liste des parcours',
             'Clean data': 'Nettoyer les traces',
-            'Create a browser-friendly web page that can be opened outside the CStudio editor.': 'Crée une page web consultable dans un navigateur en dehors de l’éditeur CStudio.',
-            'Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.': 'Nettoie les traces de progression enregistrées pour cet apprenant dans ce parcours CStudio. Cela ne supprime pas les pages ni le contenu du projet.',
+            'Create a browser-friendly web page that can be opened outside the Chamidoc Studio editor.': 'Crée une page web consultable dans un navigateur en dehors de l’éditeur Chamidoc Studio.',
+            'Clean traces removes the saved learner progress for this Chamidoc Studio learning path. It does not delete pages or project content.': 'Nettoie les traces de progression enregistrées pour cet apprenant dans ce parcours Chamidoc Studio. Cela ne supprime pas les pages ni le contenu du projet.',
             'Language of the project': 'Langue du projet',
-            'The project language is used by CStudio content and defaults to the course language.': 'La langue du projet est utilisée par le contenu CStudio et reprend par défaut la langue du cours.',
+            'The project language is used by Chamidoc Studio content and defaults to the course language.': 'La langue du projet est utilisée par le contenu Chamidoc Studio et reprend par défaut la langue du cours.',
             'Automatic language translation': 'Traduction automatique',
-            'Enables CStudio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.': 'Active les outils de traduction automatique de CStudio pour ce projet lorsque les services de traduction sont configurés. La langue du projet sélectionnée est utilisée comme langue cible.',
+            'Enables Chamidoc Studio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.': 'Active les outils de traduction automatique de Chamidoc Studio pour ce projet lorsque les services de traduction sont configurés. La langue du projet sélectionnée est utilisée comme langue cible.',
             'Progressive documents': 'Documents progressifs',
             'Shows progressive difficulty choices in the player when the content includes progressive levels. Learners can choose the level that matches their progress.': 'Affiche des choix de difficulté progressive dans le lecteur lorsque le contenu contient des niveaux progressifs. Les apprenants peuvent choisir le niveau adapté à leur progression.'
         },
@@ -152,12 +152,12 @@ function cstudioGetFallbackTranslatedTerm(term) {
             'Free access page': 'Página de acceso libre',
             'Learning paths list': 'Lista de lecciones',
             'Clean data': 'Limpiar trazas',
-            'Create a browser-friendly web page that can be opened outside the CStudio editor.': 'Crea una página web compatible con navegador que se puede abrir fuera del editor CStudio.',
-            'Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.': 'Limpia las trazas de progreso guardadas del alumno para esta lección CStudio. No elimina páginas ni contenido del proyecto.',
+            'Create a browser-friendly web page that can be opened outside the Chamidoc Studio editor.': 'Crea una página web compatible con navegador que se puede abrir fuera del editor Chamidoc Studio.',
+            'Clean traces removes the saved learner progress for this Chamidoc Studio learning path. It does not delete pages or project content.': 'Limpia las trazas de progreso guardadas del alumno para esta lección Chamidoc Studio. No elimina páginas ni contenido del proyecto.',
             'Language of the project': 'Idioma del proyecto',
-            'The project language is used by CStudio content and defaults to the course language.': 'El idioma del proyecto se usa en el contenido CStudio y toma por defecto el idioma del curso.',
+            'The project language is used by Chamidoc Studio content and defaults to the course language.': 'El idioma del proyecto se usa en el contenido Chamidoc Studio y toma por defecto el idioma del curso.',
             'Automatic language translation': 'Traducción automática',
-            'Enables CStudio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.': 'Activa las herramientas de traducción automática de CStudio para este proyecto cuando los servicios de traducción estén configurados. El idioma del proyecto seleccionado se usa como idioma de destino.',
+            'Enables Chamidoc Studio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.': 'Activa las herramientas de traducción automática de Chamidoc Studio para este proyecto cuando los servicios de traducción estén configurados. El idioma del proyecto seleccionado se usa como idioma de destino.',
             'Progressive documents': 'Documentos progresivos',
             'Shows progressive difficulty choices in the player when the content includes progressive levels. Learners can choose the level that matches their progress.': 'Muestra opciones de dificultad progresiva en el reproductor cuando el contenido incluye niveles progresivos. Los alumnos pueden elegir el nivel que corresponda a su progreso.'
         }
@@ -1810,16 +1810,16 @@ function getMenuTop(){
 	// h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();loadTerminalStudio();" >Terminal</div>';
 
 	if (modeUIeol=='a') {
-		h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();" ><a style="text-decoration:none;" target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and pro services</a></div>';
+		h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();" ><a style="text-decoration:none;" target="_blank" href="https://www.chamidoc.com/" >Help and pro services</a></div>';
 	} else {
-		h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();" ><a style="text-decoration:none;" target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and pro services</a></div>';
+		h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();" ><a style="text-decoration:none;" target="_blank" href="https://www.chamidoc.com/" >Help and pro services</a></div>';
 	}
 	h += '</div>';
 	
 	h += '<div class="topmenuabout" >';
 	h += '<p>CS engine 2018 - 2025</p>';
 	h += '<p>' + cstudioTranslateTerm('Version') + ': ' + versionCS;
-	h += '<p><a target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and pro services</a></p>';
+	h += '<p><a target="_blank" href="https://www.chamidoc.com/" >Help and pro services</a></p>';
 	
 	h += '<a href="#" style="position:absolute;inset-inline-end:0px;bottom:0px;color:#E5E8E8;" onClick="displayDevAdminParams()" >...</a>';
 	h += '</p>';
@@ -3251,7 +3251,7 @@ function displaySubProgressClean(){
 		
 		bdDiv += '<div class="gjs-am-add-asset" ';
 		bdDiv += 'style="padding:25px;font-size:16px;" >';
-		bdDiv += '<p class="trd cstudio-clean-data-help">Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.</p>';
+		bdDiv += '<p class="trd cstudio-clean-data-help">Clean traces removes the saved learner progress for this Chamidoc Studio learning path. It does not delete pages or project content.</p>';
 		bdDiv += '<br/>';
 		bdDiv += '<img class="brossIcons" src="img/bross.png" />';
 		bdDiv += '<br/>';
@@ -9614,7 +9614,7 @@ function getListUpdate(){
     b += "<ul>";
     b += '<li>New avatar image in littledialog</li>';
     b += '<li>New option Custom Display for a page</li>';
-    b += '<li>Create a browser-friendly web page that can be opened outside the CStudio editor.</li>';
+    b += '<li>Create a browser-friendly web page that can be opened outside the Chamidoc Studio editor.</li>';
     b += '<li>You can link to or embed your document.</li>';
     b += '<li>Accept pptx , odp and otp files in download action</li>';
     b += "</ul>";
@@ -10235,7 +10235,7 @@ function displaySubToTheWeb(){
 		bdDiv += '<div class="gjs-am-add-asset" ';
 		bdDiv += 'style="padding:25px;font-size:16px;" >';
 
-		bdDiv += '<p class="trd" style="text-align:center;" >Create a browser-friendly web page that can be opened outside the CStudio editor.</p>';
+		bdDiv += '<p class="trd" style="text-align:center;" >Create a browser-friendly web page that can be opened outside the Chamidoc Studio editor.</p>';
 		
 		bdDiv += '<div class="progressExport progressExport3" style="display:none;" ><div class="pourcentExport" ></div></div>';
 		bdDiv += '<div class="logMsgLoadSco" ><br/></div>';
@@ -10956,13 +10956,13 @@ function displayGlobalParams(){
         bdDiv += '<div class="cstudio-options-field-row" style="position:relative;margin:15px;" >';
         bdDiv += '<span>&nbsp;&nbsp;<span class="trd" >Language of the project</span>&nbsp;:&nbsp;</span>';
         bdDiv += cstudioBuildProjectLanguageSelect();
-        bdDiv += '<div class="cstudio-option-help trd" style="margin-inline-start:20px;margin-top:6px;font-size:12px;line-height:1.4;color:#667085;">The project language is used by CStudio content and defaults to the course language.</div>';
+        bdDiv += '<div class="cstudio-option-help trd" style="margin-inline-start:20px;margin-top:6px;font-size:12px;line-height:1.4;color:#667085;">The project language is used by Chamidoc Studio content and defaults to the course language.</div>';
         bdDiv += '</div>';
         
         if (modeUIeol=='a') {
             bdDiv += addCheckOptions('Option Accessibility Tools','I');
         }
-        bdDiv += addCheckOptions('Automatic language translation','G', 'Enables CStudio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.');
+        bdDiv += addCheckOptions('Automatic language translation','G', 'Enables Chamidoc Studio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.');
         if (modeUIeol=='a') {
             bdDiv += addCheckOptions('Progressive documents','D', 'Shows progressive difficulty choices in the player when the content includes progressive levels. Learners can choose the level that matches their progress.');
         }
@@ -16138,7 +16138,7 @@ function RapidStyleWindows() {
             finalHeightStyleBox = '475px';
         } else {
             bdDiv += '<a style="cursor:pointer;" target="_blank" ';
-            bdDiv += ' href="https://www.batisseurs-numeriques.fr/c-studio-extends.html" class="styleBlocSelect" >';
+            bdDiv += ' href="https://www.chamidoc.com/" class="styleBlocSelect" >';
             bdDiv += '<div class="showBlocTitleClass titleIconDocH1" >';
             bdDiv += 'Extended styles ...';
             bdDiv += '</div></a>';

@@ -80,9 +80,13 @@ class CalculatedAnswer extends Question
             return null;
         }
 
+        // Backward compatibility with the old "name:min:max:decimals" encoding (parts[2] holds max);
+        // the current format leaves parts[2] empty and encodes the whole range in parts[1].
+        $intervals = '' !== $parts[2] ? $parts[1].'-'.$parts[2] : $parts[1];
+
         return [
             'name' => ltrim($parts[0], '#'),
-            'intervals' => $parts[1], // "220-230*320-330"
+            'intervals' => $intervals, // "220-230*320-330"
             'decimals' => (int) ($parts[3] ?? 0),
         ];
     }

@@ -192,7 +192,7 @@ function getMigratedValue($lines, $score = 10): string
     }
 
     // add formula part
-    // @@@=Ord:valA*Abs+valB:0:percent:2:1;#Abs:-10:10:0;#valA:-10:10:0;#valB:0:10:0;
+    // @@@=Ord:valA*Abs+valB:0:percent:2:1;#Abs:-10-10::0;#valA:-10-10::0;#valB:0-10::0;
     // @@@=
     //     Ord:                formula result name
     //     valA*Abs+valB:      formula to calculate Ord using math and variable
@@ -202,11 +202,11 @@ function getMigratedValue($lines, $score = 10): string
     //     1                   score for good answer
     //     ;                   variable block separated with ;
     //     #Abs:               variable Abs
-    //     -10:10:0;           interval min:max:decimal number
+    //     -10-10::0;          interval min-max (dash-joined) :: decimal number
     //     #valA:              variable valA
-    //     -10:10:0;           interval min:max:decimal number
+    //     -10-10::0;          interval min-max (dash-joined) :: decimal number
     //     #valB:              variable valB
-    //     0:10:0              interval min:max:decimal number
+    //     0-10::0             interval min-max (dash-joined) :: decimal number
     //     ;
     //
 
@@ -226,8 +226,7 @@ function getMigratedValue($lines, $score = 10): string
 
     foreach ($vars as $var) {
         $dbString .= '#' . $var . ':';
-        $dbString .= $intervals[$var]['min'] . ':';
-        $dbString .= $intervals[$var]['max'] . ':';
+        $dbString .= $intervals[$var]['min'] . '-' . $intervals[$var]['max'] . '::';
         $dbString .= $intervals[$var]['decimals'] . ';';
     }
 

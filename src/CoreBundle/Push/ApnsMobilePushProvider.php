@@ -51,7 +51,7 @@ final readonly class ApnsMobilePushProvider implements MobilePushProviderInterfa
 
     public function send(
         MobilePushInstallation $installation,
-        int $messageId
+        MobilePushNotification $notification
     ): MobilePushDelivery {
         try {
             $config = $this->getConfiguration();
@@ -78,13 +78,13 @@ final readonly class ApnsMobilePushProvider implements MobilePushProviderInterfa
                     'json' => [
                         'aps' => [
                             'alert' => [
-                                'title' => 'Chamilo',
-                                'body' => 'You have a new message.',
+                                'title' => $notification->title,
+                                'body' => $notification->body,
                             ],
                             'sound' => 'default',
                         ],
                         'type' => 'message',
-                        'messageId' => (string) $messageId,
+                        'messageId' => (string) $notification->messageId,
                         'installationId' => $installation->getInstallationId(),
                     ],
                 ]

@@ -365,7 +365,7 @@ function onHealthCheckAction(item) {
 
   requireConfirmation({
     message: t(
-      "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.",
+      "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.",
     ),
     accept: recordMigrationHistory,
   })

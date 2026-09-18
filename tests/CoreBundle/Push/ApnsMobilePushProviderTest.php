@@ -86,7 +86,8 @@ final class ApnsMobilePushProviderTest extends TestCase
                         && 'org.chamilo.mobile' === ($options['headers']['apns-topic'] ?? null);
                 })
             )
-            ->willReturn($response);
+            ->willReturn($response)
+        ;
 
         $cache = $this->createMock(CacheInterface::class);
         $cache->method('get')->willReturn('provider-token');

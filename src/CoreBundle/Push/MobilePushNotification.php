@@ -6,10 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Push;
 
-use Symfony\Component\DependencyInjection\Attribute\Exclude;
-
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\User;
+use Symfony\Component\DependencyInjection\Attribute\Exclude;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
 
 #[Exclude]
 final readonly class MobilePushNotification

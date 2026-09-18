@@ -9,8 +9,23 @@ namespace Chamilo\Tests\CoreBundle\Installer;
 use Chamilo\CoreBundle\Installer\MigrationHistoryRecorder;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Exception as DriverException;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Schema\DefaultSchemaManagerFactory;
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
+use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
+use Doctrine\Migrations\DependencyFactory;
+use Doctrine\Migrations\Metadata\AvailableMigration;
+use Doctrine\Migrations\Metadata\AvailableMigrationsSet;
+use Doctrine\Migrations\Metadata\ExecutedMigrationsList;
+use Doctrine\Migrations\Metadata\Storage\MetadataStorage;
+use Doctrine\Migrations\MigrationsRepository;
+use Doctrine\Migrations\Version\ExecutionResult;
+use Doctrine\Migrations\Version\Version;
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -92,6 +107,107 @@ final class MigrationHistoryRecorderTest extends TestCase
         $namespaces = MigrationHistoryRecorder::recordableNamespaces($connection);
 
         self::assertSame(['V200'], $namespaces);
+    }
+
+    /**
+     * Regression test for a duplicate-key error reported in production: two overlapping
+     * requests to the admin "record migration history" action both read the history as
+     * empty before either had inserted a row, so both tried to record the same versions.
+     *
+     * record()'s own isEmpty() guard cannot catch this -- by the time either request
+     * checks it, the history genuinely is still empty -- so this exercises the recording
+     * loop itself with a storage double that reproduces the loser's exact experience: the
+     * version it is about to insert was, in the moment between its own read and its own
+     * insert, already inserted by the other request. Recording must treat that version as
+     * already handled rather than let the resulting unique-constraint violation fail the
+     * whole batch and leave the remaining, genuinely pending versions unrecorded.
+     */
+    public function testAVersionWonByAConcurrentRequestIsSkippedNotFailed(): void
+    {
+        $winnerVersion = new Version('Chamilo\CoreBundle\Migrations\Schema\V300\Version20260728130000');
+        $ownVersion = new Version('Chamilo\CoreBundle\Migrations\Schema\V300\Version20260728140000');
+
+        $migration = new class extends AbstractMigration {
+            public function __construct() {}
+
+            public function up(Schema $schema): void {}
+        };
+
+        $repository = new class($winnerVersion, $ownVersion, $migration) implements MigrationsRepository {
+            public function __construct(
+                private readonly Version $winnerVersion,
+                private readonly Version $ownVersion,
+                private readonly AbstractMigration $migration,
+            ) {}
+
+            public function hasMigration(string $version): bool
+            {
+                return true;
+            }
+
+            public function getMigration(Version $version): AvailableMigration
+            {
+                return new AvailableMigration($version, $this->migration);
+            }
+
+            public function getMigrations(): AvailableMigrationsSet
+            {
+                return new AvailableMigrationsSet([
+                    new AvailableMigration($this->winnerVersion, $this->migration),
+                    new AvailableMigration($this->ownVersion, $this->migration),
+                ]);
+            }
+        };
+
+        $storage = new class($winnerVersion) implements MetadataStorage {
+            public int $completed = 0;
+
+            public function __construct(
+                private readonly Version $winnerVersion
+            ) {}
+
+            public function ensureInitialized(): void {}
+
+            public function getExecutedMigrations(): ExecutedMigrationsList
+            {
+                // Neither version has been recorded from this request's point of view --
+                // this is precisely how the history looks right before the race.
+                return new ExecutedMigrationsList([]);
+            }
+
+            public function complete(ExecutionResult $result): void
+            {
+                ++$this->completed;
+
+                if ($result->getVersion()->equals($this->winnerVersion)) {
+                    // Another, concurrent request already inserted this exact version
+                    // between our getExecutedMigrations() read and this insert.
+                    throw new UniqueConstraintViolationException(new class extends Exception implements DriverException {
+                        public function getSQLState(): string
+                        {
+                            return '23000';
+                        }
+                    }, null);
+                }
+            }
+
+            public function reset(): void {}
+        };
+
+        $connection = $this->chamilo30Database();
+        $dependencyFactory = DependencyFactory::fromConnection(
+            new ConfigurationArray([]),
+            new ExistingConnection($connection)
+        );
+        $dependencyFactory->setService(MetadataStorage::class, $storage);
+        $dependencyFactory->setService(MigrationsRepository::class, $repository);
+
+        $recorder = new MigrationHistoryRecorder($dependencyFactory);
+
+        $recorded = $recorder->record();
+
+        self::assertSame(1, $recorded, 'Only the version this request actually won should count as recorded.');
+        self::assertSame(2, $storage->completed, 'Both versions must still be attempted -- the race loser is not skipped in advance.');
     }
 
     private function connection(): Connection

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Installer;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Version\Direction;
 use Doctrine\Migrations\Version\ExecutionResult;
@@ -145,6 +146,15 @@ final class MigrationHistoryRecorder
      * that never ran, and their schema changes would then never be applied — a silent
      * corruption no tool can detect afterwards.
      *
+     * The initial `isEmpty()` check above is not enough on its own to make this call
+     * idempotent: two overlapping requests (a double click, two admin tabs) can both pass
+     * it before either has inserted a row. Skipping versions `getExecutedMigrations()`
+     * already lists closes most of that window; the row itself is still primary-keyed on
+     * the version, so a second request that slips through the same window as the first
+     * gets a unique-constraint violation on the insert instead of a stale in-memory read
+     * — that case is treated as success too, since the goal state (this version marked
+     * executed) is already reached by whichever request got there first.
+     *
      * @throws MigrationHistoryAlreadyRecordedException when the history is not empty
      */
     public function record(): int
@@ -156,15 +166,25 @@ final class MigrationHistoryRecorder
         $storage = $this->dependencyFactory->getMetadataStorage();
         $storage->ensureInitialized();
 
+        $alreadyExecuted = $storage->getExecutedMigrations();
         $recorded = 0;
 
         foreach ($this->migrationsToRecord() as $version) {
-            // Direction and ExecutionResult are marked @internal, but there is no public
-            // way to mark a migration as executed: doctrine:migrations:version builds the
-            // very same pair. Stay on that exact call so an upstream change breaks here
-            // the same day it breaks the command.
-            $storage->complete(new ExecutionResult($version, Direction::UP));
-            ++$recorded;
+            if ($alreadyExecuted->hasMigration($version)) {
+                continue;
+            }
+
+            try {
+                // Direction and ExecutionResult are marked @internal, but there is no
+                // public way to mark a migration as executed: doctrine:migrations:version
+                // builds the very same pair. Stay on that exact call so an upstream
+                // change breaks here the same day it breaks the command.
+                $storage->complete(new ExecutionResult($version, Direction::UP));
+                ++$recorded;
+            } catch (UniqueConstraintViolationException) {
+                // A concurrent request recorded this exact version between the
+                // getExecutedMigrations() read above and this insert.
+            }
         }
 
         return $recorded;

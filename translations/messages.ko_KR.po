@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "감사합니다"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "수식 예: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "수식 예제: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "변수 범위"
@@ -14469,6 +14469,9 @@ msgstr "1단계로 돌아가 주세요"
 msgid "has not been found in that directory"
 msgstr "해당 디렉토리에서 발견되지 않았습니다"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "설치 프로그램에는 자체 로그인이 없으므로 업그레이드는 서버에서 승인되어야 합니다. 프로젝트 루트에서 .env 옆에 %s라는 이름의 빈 파일을 만든 다음 계속하세요."
+
 msgid "Old version's root path"
 msgstr "이전 버전의 루트 경로"
 
@@ -20564,6 +20567,9 @@ msgstr "상위 언어: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "용어를 검색한 후 저장 버튼을 클릭하여 하위 언어 %s에 대한 새 용어를 정의하십시오. 새 용어가 나타나는 것을 보려면 사용자 언어를 전환해야 합니다."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "여기에 저장한 용어는 이미 마이그레이션된 인터페이스에 즉시 표시됩니다. 아직 마이그레이션되지 않은 페이지는 컴파일된 카탈로그를 읽으므로 php bin/console cache:clear로 캐시를 지울 때까지 이전 텍스트를 유지합니다. 각 용어를 편집한 후가 아니라 편집을 마쳤을 때 한 번만 실행하세요."
 
 msgid "See sequences"
 msgstr "시퀀스 보기"
@@ -41547,4 +41553,19 @@ msgstr "/admin-dashboard/register에서 세션을 검색하고 이름을 지정�
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "검색 사전 필터 필드를 위한 JSON 구성입니다."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "이 작업은 이 버전에 포함된 모든 마이그레이션을 이미 실행된 것으로 표시합니다. 최신 상태이며 이력을 한 번도 기록하지 않은 플랫폼에서만 수행하세요."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s개의 마이그레이션이 기록되었습니다. 이제 플랫폼을 정상적으로 업데이트할 수 있습니다."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "마이그레이션 이력 없음: 클릭하여 수정(그렇지 않으면 업데이트가 실패할 수 있음)"
+
+msgid "Migration history is recorded"
+msgstr "마이그레이션 이력이 기록되어 있습니다"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "프로젝트 루트에 %s가 있습니다. 업그레이드 엔드포인트를 닫으려면 삭제하세요."
 

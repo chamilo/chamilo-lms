@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "ရိုးသားစွာ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ဖော်မြူလာ နမူနာ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ဖော်မြူလာ နမူနာ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ပြောင်းလဲနိုင်သော အကွာအဝေးများ"
@@ -14470,6 +14470,9 @@ msgstr "အဆင့် ၁ သို့ ပြန်သွားပါ"
 msgid "has not been found in that directory"
 msgstr "ထိုဖိုင်တွဲတွင် မတွေ့ရှိပါ"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "ထည့်သွင်းသူတွင် ကိုယ်ပိုင် လော့ဂ်အင် မရှိသောကြောင့် အဆင့်မြှင့်တင်မှုကို ဆာဗာပေါ်တွင် ခွင့်ပြုရမည်။ ပရောဂျက် အမြစ်တွင် .env ဘေး၌ %s အမည်ရှိ ဗလာဖိုင်တစ်ခု ဖန်တီးပြီး ဆက်လုပ်ပါ။"
+
 msgid "Old version's root path"
 msgstr "ဗားရှင်းအဟောင်း၏ မူလလမ်းကြောင်း"
 
@@ -20565,6 +20568,9 @@ msgstr "မိခင်ဘာသာစကား- %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "အချို့သောဝေါဟာရများကို ရှာဖွေခြင်းဖြင့် ဘာသာစကားခွဲ %s အတွက် ဝေါဟာရအသစ်များကို သတ်မှတ်ပါ၊ ထို့နောက် သိမ်းဆည်းခလုတ်ကို နှိပ်ခြင်းဖြင့် ဘာသာပြန်တစ်ခုချင်းစီကို သိမ်းဆည်းပါ�। ထို့နောက် ဝေါဟာရအသစ်များ ပေါ်လွင်လာသည်ကို မြင်ရန် သင့်ကိုယ်ပိုင်အသုံးပြုသူဘာသာစကားကို ပြောင်းရမည်ဖြစ်သည်။"
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "ဤနေရာတွင် သိမ်းထားသော စကားလုံးသည် ရွှေ့ပြောင်းပြီးသော အင်တာဖေ့စ်တွင် ချက်ချင်း ပေါ်လာသည်။ မရွှေ့ပြောင်းရသေးသော စာမျက်နှာများသည် စုစည်းထားသော ကတ်တလောက်ကို ဖတ်သောကြောင့် php bin/console cache:clear ဖြင့် ကက်ရှ်ကို ရှင်းလင်းသည်အထိ အဟောင်းစာသားကို ဆက်သုံးသည်။ တည်းဖြတ်ပြီးဆုံးသောအခါ တစ်ကြိမ်သာ လုပ်ပါ၊ စကားလုံးတစ်ခုချင်းပြီးတိုင်း မလုပ်ပါနှင့်။"
 
 msgid "See sequences"
 msgstr "အစီအစဉ်များကို ကြည့်ပါ"
@@ -41547,4 +41553,19 @@ msgstr "/admin-dashboard/register မှ ဆက်ရှင်များကိ
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "ရှာဖွေမှု ကြိုတင်စစ်ထုတ်အကွက်များအတွက် JSON ဖွဲ့စည်းမှု။"
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "ဤလုပ်ဆောင်ချက်သည် ဤဗားရှင်းမှ ပေးပို့သော ရွှေ့ပြောင်းမှုအားလုံးကို လုပ်ပြီးသားအဖြစ် မှတ်သားသည်။ နောက်ဆုံးပေါ်ဖြစ်ပြီး သမိုင်းမှတ်တမ်း မရှိဖူးသော ပလက်ဖောင်းတွင်သာ လုပ်ပါ။"
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "ရွှေ့ပြောင်းမှု %s ခု မှတ်တမ်းတင်ပြီး။ သင့်ပလက်ဖောင်းကို ယခု ပုံမှန် အပ်ဒိတ်လုပ်နိုင်ပါပြီ။"
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "ရွှေ့ပြောင်းမှု သမိုင်းမရှိ: ပြင်ရန် နှိပ်ပါ (သို့မဟုတ် အပ်ဒိတ်များ ပျက်နိုင်သည်)"
+
+msgid "Migration history is recorded"
+msgstr "ရွှေ့ပြောင်းမှု သမိုင်း မှတ်တမ်းတင်ပြီး"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "ပရောဂျက် အမြစ်တွင် %s ရှိနေသည်: အဆင့်မြှင့် အဆုံးမှတ်များကို ပိတ်ရန် ၎င်းကို ဖျက်ပါ"
 

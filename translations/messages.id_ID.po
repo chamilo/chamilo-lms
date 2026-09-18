@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Hormat kami"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh rumus: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh rumus: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rentang variabel"
@@ -14469,6 +14469,9 @@ msgstr "Harap kembali ke Langkah 1"
 msgid "has not been found in that directory"
 msgstr "tidak ditemukan di direktori tersebut"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Penginstal tidak memiliki login sendiri, jadi peningkatan harus diotorisasi di server. Buat berkas kosong bernama %s di akar proyek, di samping .env, lalu lanjutkan."
+
 msgid "Old version's root path"
 msgstr "Path root versi lama"
 
@@ -20564,6 +20567,9 @@ msgstr "Bahasa induk: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Tentukan istilah baru untuk sub-bahasa %s dengan mencari istilah tertentu, kemudian simpan setiap terjemahan dengan mengklik tombol simpan. Kemudian Anda harus mengganti bahasa pengguna Anda sendiri untuk melihat istilah baru muncul."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Istilah yang disimpan di sini langsung tampil di antarmuka yang sudah dimigrasikan. Halaman yang belum dimigrasikan membaca katalog terkompilasi, jadi mereka tetap menampilkan teks lama sampai Anda mengosongkan cache dengan php bin/console cache:clear. Lakukan itu sekali setelah selesai mengedit, bukan setelah setiap istilah."
 
 msgid "See sequences"
 msgstr "Lihat urutan"
@@ -41547,4 +41553,19 @@ msgstr "Kunci bidang tambahan pengguna yang digunakan saat mencari dan menamai s
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Konfigurasi JSON untuk bidang prapenyaring pencarian."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Ini menandai setiap migrasi yang dikirimkan versi ini sebagai sudah dijalankan. Lakukan ini hanya pada platform yang sudah mutakhir dan belum pernah mencatat riwayatnya."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migrasi tercatat. Platform Anda sekarang dapat diperbarui secara normal."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Tidak ada riwayat migrasi: klik untuk memperbaiki (atau pembaruan mungkin rusak)"
+
+msgid "Migration history is recorded"
+msgstr "Riwayat migrasi tercatat"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s ada di akar proyek: hapus untuk menutup titik akhir peningkatan"
 

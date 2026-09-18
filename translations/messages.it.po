@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Cordialmente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Esempio di formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Esempio di formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervalli variabili"
@@ -14480,6 +14480,9 @@ msgstr "Prego, ritorna al Passo 1"
 msgid "has not been found in that directory"
 msgstr "non è stato trovato in questa directory"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "L'installatore non ha un proprio accesso, quindi un aggiornamento deve essere autorizzato sul server. Crea un file vuoto denominato %s nella radice del progetto, accanto a .env, quindi continua."
+
 msgid "Old version's root path"
 msgstr "Percorso iniziale della versione precedente"
 
@@ -20580,6 +20583,9 @@ msgstr "Lingua principale: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Definisci nuovi termini per la lingua secondaria %s cercandone qualcuno, poi salva ogni traduzione cliccando sul tasto salva. Dovrai poi commutare sulla tua lingua per vedere i nuovi termini."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Un termine salvato qui compare immediatamente nell'interfaccia già migrata. Le pagine non ancora migrate leggono un catalogo compilato, quindi mantengono il testo precedente finché non si svuota la cache con php bin/console cache:clear. Fallo una volta al termine delle modifiche, non dopo ogni termine."
 
 msgid "See sequences"
 msgstr "Vedi sequenze"
@@ -41563,4 +41569,19 @@ msgstr "Chiave del campo extra utente da usare per la ricerca e la denominazione
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Configurazione JSON per i campi di prefiltro della ricerca."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Questo contrassegna ogni migrazione fornita da questa versione come già eseguita. Fallo solo su una piattaforma aggiornata che non ha mai registrato la propria cronologia."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migrazioni registrate. La piattaforma può ora essere aggiornata normalmente."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Nessuna cronologia delle migrazioni: fai clic per correggere (o gli aggiornamenti potrebbero non funzionare)"
+
+msgid "Migration history is recorded"
+msgstr "La cronologia delle migrazioni è registrata"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s è presente nella radice del progetto: eliminalo per chiudere gli endpoint di aggiornamento"
 

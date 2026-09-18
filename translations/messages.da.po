@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med venlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-eksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervaller"
@@ -14471,6 +14471,9 @@ msgstr "Gå venligst tilbage til trin 1"
 msgid "has not been found in that directory"
 msgstr "er ikke fundet i den mappe"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Installationsprogrammet har ikke sit eget login, så en opgradering skal godkendes på serveren. Opret en tom fil med navnet %s i projektets rod, ved siden af .env, og fortsæt derefter."
+
 msgid "Old version's root path"
 msgstr "Gammel versions rodsti"
 
@@ -20566,6 +20569,9 @@ msgstr "Overordnet sprog: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Definer nye termer for under-sproget %s ved at søge efter et term, og gem derefter hver oversættelse ved at klikke på gem-knappen. Du skal derefter skifte dit eget brugersprog for at se de nye termer."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Et udtryk, der gemmes her, vises med det samme i den grænseflade, der allerede er migreret. De sider, der endnu ikke er migreret, læser et kompileret katalog, så de beholder den gamle tekst, indtil du rydder cachen med php bin/console cache:clear. Gør det én gang, når du er færdig med at redigere, ikke efter hvert udtryk."
 
 msgid "See sequences"
 msgstr "Se sekvenser"
@@ -41549,4 +41555,19 @@ msgstr "Nøgle til brugerens ekstra felt, der bruges ved søgning og navngivning
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-konfiguration til søgeforfilterfelter."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Dette markerer alle migreringer, der følger med denne version, som allerede udført. Gør kun dette på en platform, der er opdateret og aldrig har registreret sin historik."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migreringer registreret. Din platform kan nu opdateres normalt."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Ingen migrationshistorik: klik for at rette (ellers kan opdateringer gå i stykker)"
+
+msgid "Migration history is recorded"
+msgstr "Migreringshistorik er registreret"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s findes i projektets rod: slet den for at lukke opgraderingsendepunkterne"
 

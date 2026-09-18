@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Sincerament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -14479,6 +14479,9 @@ msgstr "Torneu al Pas 1"
 msgid "has not been found in that directory"
 msgstr "No s'ha trobat en aquest directori"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "L'instal·lador no té cap inici de sessió propi, de manera que una actualització s'ha d'autoritzar al servidor. Creeu un fitxer buit anomenat %s a l'arrel del projecte, al costat de .env, i continueu."
+
 msgid "Old version's root path"
 msgstr "Ruta de l'arrel de la versió antiga"
 
@@ -20579,6 +20582,9 @@ msgstr "Llengua pare: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Registri nous termes del sub-idioma %s buscant un terme i després fent clic al botó de guardar per cada traducció. Després haurà de canviar el seu perfil per utilitzar el sub-idioma per veure els nous termes."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Un terme desat aquí es mostra de seguida a la interfície que ja s'ha migrat. Les pàgines que encara no s'han migrat llegeixen un catàleg compilat, de manera que conserven el text antic fins que buideu la memòria cau amb php bin/console cache:clear. Feu-ho un cop quan acabeu d'editar, no després de cada terme."
 
 msgid "See sequences"
 msgstr "Veure seqüències"
@@ -41562,4 +41568,19 @@ msgstr "Clau del camp extra d'usuari per cercar i anomenar sessions des de /admi
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Configuració JSON per als camps de prefiltre de cerca."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Això marca totes les migracions incloses en aquesta versió com a ja executades. Feu-ho només en una plataforma que estigui actualitzada i que mai no hagi registrat el seu historial."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "S'han registrat %s migracions. La vostra plataforma ja es pot actualitzar amb normalitat."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Sense historial de migració: feu clic per corregir (o les actualitzacions podrien trencar-se)"
+
+msgid "Migration history is recorded"
+msgstr "L'historial de migracions està registrat"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s és present a l'arrel del projecte: elimineu-lo per tancar els punts d'accés d'actualització"
 

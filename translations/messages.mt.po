@@ -14471,6 +14471,9 @@ msgstr "Jekk jogħġbok mur lura għall-Pass 1"
 msgid "has not been found in that directory"
 msgstr "ma nstabx f’dik id-direttorja"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr ""
+
 msgid "Old version's root path"
 msgstr "Mogħdija ewlenija tal-verżjoni l-antika"
 
@@ -15375,7 +15378,7 @@ msgid "Database server configuration and metadata"
 msgstr ""
 
 msgid "Disk usage per course vs disk quota"
-msgstr ""
+msgstr "Użu tad-diska għal kull kors vs kwota tad-diska"
 
 msgid "Information about your webserver configuration"
 msgstr "Informazzjoni dwar il-konfigurazzjoni tas-webserver tiegħek"
@@ -20566,6 +20569,9 @@ msgstr "Lingwa prinċipali: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Iddefinixxi termini ġodda għas-sottolingwa %s billi tfittex xi terminu, imbagħad issejvja kull traduzzjoni billi tikklikkja l-buttuna tas-salvataġġ. Imbagħad ikollok tibdel il-lingwa tal-utent tiegħek biex tara t-termini l-ġodda jidhru."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Terminu ssejvjat hawn jidher mill-ewwel fl-interfaċċa li diġà ġiet migrata. Il-paġni li għadhom ma ġewx migrati jaqraw katalgu kkompilat, għalhekk iżommu t-test il-qadim sakemm tnaddaf il-cache b'php bin/console cache:clear. Agħmel dan darba meta tispiċċa teditja, mhux wara kull terminu."
 
 msgid "See sequences"
 msgstr "Ara s-sekwenzi"
@@ -41548,4 +41554,19 @@ msgstr "Ċavetta tal-qasam extra tal-utent biex tintuża meta tfittex u ssemmi s
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Konfigurazzjoni JSON għall-oqsma tal-prefiltru tat-tiftix."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Dan jimmarka kull migrazzjoni mibgħuta minn din il-verżjoni bħala diġà eżegwita. Agħmel dan biss fuq pjattaforma li hija aġġornata u qatt ma rreġistrat l-istorja tagħha."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migrazzjonijiet irreġistrati. Il-pjattaforma tiegħek issa tista' tiġi aġġornata normalment."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "L-ebda storja ta' migrazzjoni: ikklikkja biex tissewwa (jew l-aġġornamenti jistgħu jinkisru)"
+
+msgid "Migration history is recorded"
+msgstr "L-istorja tal-migrazzjoni hija rreġistrata"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s huwa preżenti fl-għerq tal-proġett: ħassru biex tagħlaq l-endpoints tal-aġġornament"
 

@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képlet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képlet minta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -14469,6 +14469,9 @@ msgstr "Kérem térjen vissza az 1. lépéshez"
 msgid "has not been found in that directory"
 msgstr "nem található abban a könyvtárban"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "A telepítőnek nincs saját bejelentkezése, ezért a frissítést a szerveren kell engedélyezni. Hozzon létre egy üres fájlt %s néven a projekt gyökerében, a .env fájl mellett, majd folytassa."
+
 msgid "Old version's root path"
 msgstr "A korábbi verzió gyökérkönyvtára"
 
@@ -20564,6 +20567,9 @@ msgstr "Szülő nyelv: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Új kifejezések meghatározása az alnyelv %s számára: keressen egy kifejezést, majd mentse minden fordítást a mentés gombra kattintva. Ezután váltson a saját felhasználói nyelvére, hogy lássa az új kifejezéseket."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Az itt mentett kifejezés azonnal megjelenik a már áttelepített felületen. Az még nem áttelepített oldalak egy lefordított katalógust olvasnak, ezért a régi szöveget tartják, amíg nem üríti a gyorsítótárat a php bin/console cache:clear paranccsal. Ezt egyszer tegye meg a szerkesztés befejezésekor, ne minden kifejezés után."
 
 msgid "See sequences"
 msgstr "Sorozatok megtekintése"
@@ -41547,4 +41553,19 @@ msgstr "Felhasználói extra mező kulcsa a munkamenetek kereséséhez és elnev
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-konfiguráció a keresési előszűrő mezőkhöz."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Ez minden, ebben a verzióban szállított migrációt már végrehajtottként jelöl. Csak olyan platformon tegye ezt, amely naprakész, és soha nem rögzítette a történetét."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migráció rögzítve. A platform mostantól normálisan frissíthető."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Nincs migrációs előzmény: kattintson a javításhoz (különben a frissítések elromolhatnak)"
+
+msgid "Migration history is recorded"
+msgstr "A migrációs előzmény rögzítve van"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "A(z) %s jelen van a projekt gyökerében: törölje a frissítési végpontok lezárásához"
 

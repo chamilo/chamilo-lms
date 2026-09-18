@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Pagarbiai"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulės pavyzdys: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulės pavyzdys: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kintamųjų ribos"
@@ -14471,6 +14471,9 @@ msgstr "Prašome grįžti į 1 žingsnį"
 msgid "has not been found in that directory"
 msgstr "nerastas tame kataloge"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Diegimo programa neturi savo prisijungimo, todėl atnaujinimą reikia autorizuoti serveryje. Sukurkite tuščią failą pavadinimu %s projekto šakniniame kataloge, šalia .env, tada tęskite."
+
 msgid "Old version's root path"
 msgstr "Senos versijos šakninis kelias"
 
@@ -20566,6 +20569,9 @@ msgstr "Tėvinė kalba: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Apibrėžkite naujus terminus subkalbai %s ieškodami kažkokio termino, tada išsaugokite kiekvieną vertimą spustelėdami išsaugojimo mygtuką. Tada turėsite pakeisti savo vartotojo kalbą, kad pamatytumėte naujus terminus."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Čia išsaugotas terminas iš karto rodomas jau perkeltose sąsajos dalyse. Dar neperkelti puslapiai skaito sukompiliuotą katalogą, todėl jie palieka seną tekstą, kol neišvalysite podėlio komanda php bin/console cache:clear. Tai darykite vieną kartą baigę redaguoti, o ne po kiekvieno termino."
 
 msgid "See sequences"
 msgstr "Žiūrėti sekas"
@@ -41548,4 +41554,19 @@ msgstr "Papildomo vartotojo lauko raktas, naudojamas ieškant ir pavadinant sesi
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON konfigūracija paieškos išankstinio filtro laukams."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Tai pažymi visas šios versijos migracijas kaip jau įvykdytas. Darykite tai tik platformoje, kuri yra atnaujinta ir niekada neregistravo savo istorijos."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "Užregistruota migracijų: %s. Dabar platformą galima atnaujinti įprastai."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Nėra migracijų istorijos: spustelėkite, kad pataisytumėte (kitaip atnaujinimai gali sugesti)"
+
+msgid "Migration history is recorded"
+msgstr "Migracijų istorija užregistruota"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s yra projekto šakniniame kataloge: ištrinkite jį, kad uždarytumėte atnaujinimo galinius taškus"
 

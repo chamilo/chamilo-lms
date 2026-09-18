@@ -14466,6 +14466,9 @@ msgstr "পদক্ষেপ ১-এ ফিরে যান"
 msgid "has not been found in that directory"
 msgstr "সেই ডিরেক্টরিতে খুঁজে পাওয়া যায়নি"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "ইনস্টলারের নিজস্ব কোনো লগইন নেই, তাই সার্ভারে আপগ্রেড অনুমোদিত হতে হবে। প্রকল্পের রুটে .env-এর পাশে %s নামে একটি খালি ফাইল তৈরি করুন, তারপর চালিয়ে যান।"
+
 msgid "Old version's root path"
 msgstr "পুরানো সংস্করণের রুট পাথ"
 
@@ -20561,6 +20564,9 @@ msgstr "মূল ভাষা: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "উপ-ভাষা %s-এর জন্য নতুন শব্দার্থ সংজ্ঞায়িত করুন কোনো শব্দ খুঁজে, তারপর সংরক্ষণ বোতামে ক্লিক করে প্রত্যেক অনুবাদ সংরক্ষণ করুন। তারপর নতুন শব্দগুলো দেখতে আপনার নিজের ব্যবহারকারী ভাষা পরিবর্তন করতে হবে।"
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "এখানে সংরক্ষিত একটি শব্দ ইতিমধ্যে মাইগ্রেট করা ইন্টারফেসে সাথে সাথে দেখা যায়। যে পৃষ্ঠাগুলো এখনও মাইগ্রেট হয়নি সেগুলো একটি কম্পাইল করা ক্যাটালগ পড়ে, তাই php bin/console cache:clear দিয়ে ক্যাশ পরিষ্কার না করা পর্যন্ত পুরনো পাঠ্য থাকবে। সম্পাদনা শেষে একবার করুন, প্রতিটি শব্দের পরে নয়।"
 
 msgid "See sequences"
 msgstr "ক্রম দেখুন"
@@ -41543,4 +41549,19 @@ msgstr "/admin-dashboard/register থেকে সেশন অনুসন্�
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "অনুসন্ধান প্রিফিল্টার ফিল্ডের জন্য JSON কনফিগারেশন।"
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "এটি এই সংস্করণে পাঠানো প্রতিটি মাইগ্রেশনকে ইতিমধ্যে সম্পাদিত হিসেবে চিহ্নিত করে। শুধুমাত্র এমন প্ল্যাটফর্মে করুন যা আপ টু ডেট এবং কখনও তার ইতিহাস রেকর্ড করেনি।"
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%sটি মাইগ্রেশন রেকর্ড করা হয়েছে। আপনার প্ল্যাটফর্ম এখন স্বাভাবিকভাবে আপডেট করা যেতে পারে।"
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "মাইগ্রেশন ইতিহাস নেই: ঠিক করতে ক্লিক করুন (অথবা আপডেট ভেঙে যেতে পারে)"
+
+msgid "Migration history is recorded"
+msgstr "মাইগ্রেশন ইতিহাস রেকর্ড করা হয়েছে"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "প্রকল্পের রুটে %s রয়েছে: আপগ্রেড এন্ডপয়েন্ট বন্ধ করতে এটি মুছুন"
 

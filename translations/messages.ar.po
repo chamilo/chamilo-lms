@@ -14480,6 +14480,9 @@ msgstr "يرجى العودة إلى الخطوة 1"
 msgid "has not been found in that directory"
 msgstr "لم يتم العثور عليه في ذلك المجلد"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "لا يملك المثبّت تسجيل دخول خاصًا به، لذا يجب تفويض الترقية على الخادم. أنشئ ملفًا فارغًا باسم %s في جذر المشروع، بجوار .env، ثم تابع."
+
 msgid "Old version's root path"
 msgstr "مسار الجذر للإصدار القديم"
 
@@ -20579,6 +20582,9 @@ msgstr "اللغة الرئيسية: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "تحديد مصطلحات جديدة للغة الفرعية %s من خلال البحث عن المصطلح وحفظ الترجمة الجديدة، ثم يمكنك تغيير لغتك الى اللغة الفرعية لترى ظهور المصطلحات الجديدة المترجمة"
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "يظهر المصطلح المحفوظ هنا فورًا في الواجهة التي تم ترحيلها بالفعل. الصفحات التي لم تُرحَّل بعد تقرأ فهرسًا مُجمَّعًا، لذا تحتفظ بالنص القديم حتى تمسح الذاكرة المؤقتة باستخدام php bin/console cache:clear. افعل ذلك مرة واحدة عند الانتهاء من التحرير، وليس بعد كل مصطلح."
 
 msgid "See sequences"
 msgstr "مشاهدة التتابع"
@@ -41561,4 +41567,19 @@ msgstr "مفتاح الحقل الإضافي للمستخدم لاستخدامه
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "إعداد JSON لحقول التصفية المسبقة للبحث."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "يؤشر هذا كل ترحيل مُضمَّن في هذا الإصدار على أنه نُفِّذ بالفعل. افعل ذلك فقط على منصة محدَّثة ولم تسجّل تاريخها قط."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "تم تسجيل %s ترحيلًا. يمكن الآن تحديث منصتك بشكل طبيعي."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "لا يوجد سجل ترحيل: انقر للإصلاح (وإلا قد تتعطل التحديثات)"
+
+msgid "Migration history is recorded"
+msgstr "تم تسجيل سجل الترحيلات"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s موجود في جذر المشروع: احذفه لإغلاق نقاط نهاية الترقية"
 

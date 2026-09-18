@@ -26,6 +26,9 @@ final class ExerciseRegressionTopicContentTest extends TestCase
         self::assertSame([0, 1, 3], $content['multiple_choice']['correct_indexes']);
         self::assertSame(['Training', 'Evaluation'], $content['ordering']['items']);
         self::assertStringContainsString('{blank1}', $content['fill_blanks']['template']);
+        self::assertSame('Why is human oversight important?', $content['reading']['title']);
+        self::assertSame(['It helps review AI outputs', 'It removes all data', 'It makes evaluation unnecessary'], $content['reading']['options']);
+        self::assertSame(0, $content['reading']['correct_index']);
     }
 
     public function testParserRejectsIncompleteTopicContent(): void
@@ -46,6 +49,7 @@ final class ExerciseRegressionTopicContentTest extends TestCase
             $factory->create(ExerciseRegressionFixtureQuestionFactory::FILL_IN_BLANKS),
             $factory->create(ExerciseRegressionFixtureQuestionFactory::UNIQUE_ANSWER_IMAGE),
             $factory->create(ExerciseRegressionFixtureQuestionFactory::DRAGGABLE),
+            $factory->create(ExerciseRegressionFixtureQuestionFactory::READING_COMPREHENSION),
             $factory->create(ExerciseRegressionFixtureQuestionFactory::ANSWER_IN_OFFICE_DOC),
         ];
 
@@ -67,9 +71,17 @@ final class ExerciseRegressionTopicContentTest extends TestCase
         self::assertSame('Training', $payloads[3]->draggableItems[0]['answer']);
         self::assertSame('Evaluation', $payloads[3]->draggableItems[1]['answer']);
 
-        self::assertSame(30, $payloads[4]->type);
-        self::assertSame('Write a short report explaining one responsible use of AI.', $payloads[4]->title);
-        self::assertNotEmpty($payloads[4]->onlyofficeTemplateData);
+        self::assertSame(21, $payloads[4]->type);
+        self::assertSame('Why is human oversight important?', $payloads[4]->title);
+        self::assertStringContainsString('Human oversight remains important', $payloads[4]->description);
+        self::assertCount(3, $payloads[4]->answers);
+        self::assertTrue($payloads[4]->answers[0]['correct']);
+        self::assertSame('It helps review AI outputs', $payloads[4]->answers[0]['answer']);
+        self::assertSame(10.0, $payloads[4]->answers[0]['score']);
+
+        self::assertSame(30, $payloads[5]->type);
+        self::assertSame('Write a short report explaining one responsible use of AI.', $payloads[5]->title);
+        self::assertNotEmpty($payloads[5]->onlyofficeTemplateData);
     }
 
     /**
@@ -135,8 +147,11 @@ final class ExerciseRegressionTopicContentTest extends TestCase
             ],
             'annotation' => ['question' => 'Mark the highlighted test region and relate it to model evaluation.'],
             'reading' => [
-                'title' => 'Responsible use of AI',
-                'passage' => 'AI systems can assist people with complex tasks. Their outputs should be evaluated for accuracy and bias. Sensitive data should be protected. Human oversight remains important.',
+                'title' => 'Why is human oversight important?',
+                'passage' => 'AI systems can assist people with complex tasks. Their outputs should be evaluated for accuracy and bias. Sensitive data should be protected. Human oversight remains important because people should review consequential AI outputs.',
+                'options' => ['It helps review AI outputs', 'It removes all data', 'It makes evaluation unnecessary'],
+                'correct_index' => 0,
+                'feedback' => 'Human oversight helps people review AI outputs before consequential use.',
             ],
             'upload' => ['question' => 'Upload a short note describing one AI use case and one risk.'],
             'dropdown' => [

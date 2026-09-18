@@ -264,6 +264,22 @@ function pagePrepareFileCopy($filename, $courseSys, $bh, $courseDirImg, $totempl
 
     $VDB = new VirtualDatabase();
 
+    // $filename may be this plugin's own img-cache.php proxy URL, saved as an
+    // absolute, server-specific link (see migration Version20260918000000 for
+    // the data-side fix of already-saved rows). Resolve it back to the
+    // relative "editor/img_cache/..." form so the copy logic below -- which
+    // already understands that relative form via the "mg_cache/" check --
+    // picks it up, instead of silently skipping it just because it starts
+    // with "http".
+    if (str_contains($filename, 'img-cache.php')) {
+        $normalized = preg_replace('/img-cache\.php([^?])/', 'img-cache.php?$1', $filename);
+        $query = parse_url($normalized, PHP_URL_QUERY);
+        parse_str($query ?? '', $queryParams);
+        if (isset($queryParams['path']) && '' !== $queryParams['path']) {
+            $filename = 'img_cache/'.rawurldecode($queryParams['path']);
+        }
+    }
+
     echo $filename.'</br>';
     $isHttp = strpos($filename, 'http');
 

@@ -14936,7 +14936,7 @@ msgid "has not been found in that directory"
 msgstr "n'a pas été trouvé dans ce répertoire"
 
 msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
-msgstr "L'installateur n'a pas de connexion propre, une mise à niveau doit donc être autorisée sur le serveur. Créez un fichier vide nommé %s à la racine du projet, à côté de .env, puis continuez."
+msgstr "L'installateur ne dispose pas d'une procédure de login. Une mise à niveau doit donc être autorisée depuis le serveur. Créez un fichier vide nommé %s à la racine du projet, à côté de .env, puis continuez."
 
 msgid "Old version's root path"
 msgstr "Chemin de base de l'ancienne version"

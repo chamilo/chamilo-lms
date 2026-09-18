@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulen adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulako adibidea: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -14471,6 +14471,9 @@ msgstr "Mesedez, itzuli 1. urratsera"
 msgid "has not been found in that directory"
 msgstr "ez da direktorio honetan aurkitu"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Instalatzaileak ez du bere saio-hasierarik, beraz, bertsio-berritzea zerbitzarian baimendu behar da. Sortu %s izeneko fitxategi hutsa proiektuaren erroan, .env-ren ondoan, eta jarraitu."
+
 msgid "Old version's root path"
 msgstr "bertsio zaharraren erroko ibilbidea"
 
@@ -20571,6 +20574,9 @@ msgstr "Guraso hizkuntza: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Definitu azpi-hizkuntzarako %s ezaugarri berriak bilatuz ezaugarri bat bilatuz gero, gorde itzuli bakoitza gorde botoian klik eginez. Ondoren zure erabiltzaile hizkuntza aldatu beharko duzu ezaugarri berriak agertzeko."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Hemen gordetako terminoak berehala agertzen dira jada migratuta dagoen interfazean. Oraindik migratu ez diren orrialdeek katalogo konpilatua irakurtzen dute, beraz, testu zaharra gordetzen dute php bin/console cache:clear komandoarekin cachea garbitu arte. Egin hori behin edizioa amaitzean, ez termino bakoitzaren ondoren."
 
 msgid "See sequences"
 msgstr "Ikusi sekuentziak"
@@ -41554,4 +41560,19 @@ msgstr "Erabiltzailearen eremu gehigarriaren gakoa, saioak /admin-dashboard/regi
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Bilaketaren aurre-iragazkien eremuen JSON konfigurazioa."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Honek bertsio honek bidalitako migrazio guztiak jada exekutatuta gisa markatzen ditu. Egin hau soilik eguneratuta dagoen eta inoiz bere historia erregistratu ez duen plataforma batean."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migrazio erregistratu dira. Zure plataforma orain normaltasunez eguneratu daiteke."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Ez dago migrazio-historiarik: egin klik konpontzeko (bestela eguneratzeak hautsi daitezke)"
+
+msgid "Migration history is recorded"
+msgstr "Migrazio-historia erregistratuta dago"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s proiektuaren erroan dago: ezabatu bertsio-berritze amaiera-puntuak ixteko"
 

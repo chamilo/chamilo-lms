@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Ystävällisin terveisin,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Kaavan esimerkki: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Kaavaesimerkki: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muuttujien alueet"
@@ -14471,6 +14471,9 @@ msgstr "Palaa vaiheeseen 1"
 msgid "has not been found in that directory"
 msgstr "ei löytynyt kyseisestä hakemistosta"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Asennusohjelmalla ei ole omaa kirjautumista, joten päivitys on valtuutettava palvelimella. Luo tyhjä tiedosto nimeltä %s projektin juureen, .env-tiedoston viereen, ja jatka sitten."
+
 msgid "Old version's root path"
 msgstr "Vanha version juuripolku"
 
@@ -20566,6 +20569,9 @@ msgstr "Yläkieli: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Määritä uusia termejä alakielelle %s etsimällä termiä, tallenna sitten kunkin käännös tallennusnäppäimellä. Sinun täytyy vaihtaa oma käyttäjäkielesi nähdäksesi uudet termit."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Tähän tallennettu termi näkyy heti käyttöliittymässä, joka on jo siirretty. Sivut, joita ei ole vielä siirretty, lukevat käännetyn luettelon, joten ne säilyttävät vanhan tekstin, kunnes tyhjennät välimuistin komennolla php bin/console cache:clear. Tee se kerran, kun olet valmis muokkaamaan, ei jokaisen termin jälkeen."
 
 msgid "See sequences"
 msgstr "Näytä sekvenssit"
@@ -41549,4 +41555,19 @@ msgstr "Käyttäjän lisäkentän avain, jota käytetään istuntojen hakemiseen
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-määritys haun esisuodatinkentille."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Tämä merkitsee kaikki tämän version mukana toimitetut migraatiot jo suoritetuiksi. Tee tämä vain alustalla, joka on ajan tasalla eikä ole koskaan tallentanut historiaansa."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migraatiota tallennettu. Alustasi voidaan nyt päivittää normaalisti."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Ei migraatiohistoriaa: napsauta korjataksesi (tai päivitykset saattavat rikkoutua)"
+
+msgid "Migration history is recorded"
+msgstr "Migraatiohistoria on tallennettu"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s on projektin juuressa: poista se sulkeaksesi päivityspäätepisteet"
 

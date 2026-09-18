@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Ειλικρινά"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Δείγμα τύπου: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Παράδειγμα τύπου: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Μεταβλητά όρια"
@@ -14479,6 +14479,9 @@ msgstr "Παρακαλούμε επιστρέψτε στο Βήμα 1"
 msgid "has not been found in that directory"
 msgstr "δεν βρέθηκε σε αυτόν τον κατάλογο"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Ο εγκαταστάτης δεν διαθέτει δική του σύνδεση, επομένως η αναβάθμιση πρέπει να εξουσιοδοτηθεί στον διακομιστή. Δημιουργήστε ένα κενό αρχείο με όνομα %s στη ρίζα του έργου, δίπλα στο .env, και συνεχίστε."
+
 msgid "Old version's root path"
 msgstr "Ρίζα παλαιάς έκδοσης"
 
@@ -20579,6 +20582,9 @@ msgstr "Γονική γλώσσα: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Ορίστε νέους όρους για την υπο-γλώσσα %s αναζητώντας κάποιον όρο, στη συνέχεια αποθηκεύστε κάθε μετάφραση κάνοντας κλικ στο κουμπί αποθήκευσης. Θα πρέπει στη συνέχεια να αλλάξετε τη γλώσσα του δικού σας χρήστη για να δείτε τους νέους όρους να εμφανίζονται."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Ένας όρος που αποθηκεύεται εδώ εμφανίζεται αμέσως στη διεπαφή που έχει ήδη μεταφερθεί. Οι σελίδες που δεν έχουν ακόμη μεταφερθεί διαβάζουν έναν μεταγλωττισμένο κατάλογο, οπότε διατηρούν το παλιό κείμενο μέχρι να καθαρίσετε την προσωρινή μνήμη με php bin/console cache:clear. Κάντε το μία φορά όταν ολοκληρώσετε την επεξεργασία, όχι μετά από κάθε όρο."
 
 msgid "See sequences"
 msgstr "Προβολή ακολουθιών"
@@ -41562,4 +41568,19 @@ msgstr "Κλειδί επιπλέον πεδίου χρήστη για αναζ�
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Διαμόρφωση JSON για πεδία προφίλτρου αναζήτησης."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Αυτό επισημαίνει κάθε μετεγκατάσταση που περιλαμβάνεται σε αυτή την έκδοση ως ήδη εκτελεσμένη. Κάντε το μόνο σε πλατφόρμα που είναι ενημερωμένη και δεν έχει καταγράψει ποτέ το ιστορικό της."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "Καταγράφηκαν %s μετεγκαταστάσεις. Η πλατφόρμα σας μπορεί πλέον να ενημερωθεί κανονικά."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Δεν υπάρχει ιστορικό μετεγκατάστασης: κάντε κλικ για διόρθωση (ή οι ενημερώσεις ενδέχεται να προκαλέσουν βλάβη)"
+
+msgid "Migration history is recorded"
+msgstr "Το ιστορικό μετεγκατάστασης έχει καταγραφεί"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "Το %s υπάρχει στη ρίζα του έργου: διαγράψτε το για να κλείσετε τα σημεία πρόσβασης αναβάθμισης"
 

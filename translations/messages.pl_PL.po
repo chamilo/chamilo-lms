@@ -14470,6 +14470,9 @@ msgstr "Proszę wrócić do kroku 1"
 msgid "has not been found in that directory"
 msgstr "nie znaleziono w katalogu"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Instalator nie ma własnego logowania, więc aktualizacja musi zostać autoryzowana na serwerze. Utwórz pusty plik o nazwie %s w katalogu głównym projektu, obok pliku .env, a następnie kontynuuj."
+
 msgid "Old version's root path"
 msgstr "Stara wersja ścieżki katalogu głównego"
 
@@ -20570,6 +20573,9 @@ msgstr "Język nadrzędny: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Zdefiniuj nowe terminy dla pod-języka %s, wyszukując jakiś termin, a następnie zapisz każde tłumaczenie klikając przycisk zapisu. Następnie musisz przełączyć język użytkownika, aby zobaczyć nowe terminy."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Termin zapisany tutaj pojawia się od razu w interfejsie, który został już zmigrowany. Strony, które nie zostały jeszcze zmigrowane, odczytują skompilowany katalog, więc zachowują stary tekst, dopóki nie wyczyścisz pamięci podręcznej poleceniem php bin\/console cache:clear. Zrób to raz po zakończeniu edycji, a nie po każdym terminie."
 
 msgid "See sequences"
 msgstr "Zobacz sekwencje"
@@ -41553,4 +41559,19 @@ msgstr "Klucz dodatkowego pola użytkownika używany przy wyszukiwaniu i nazywan
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Konfiguracja JSON dla pól prefiltra wyszukiwania."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "To oznacza każdą migrację dostarczoną w tej wersji jako już wykonaną. Wykonaj to tylko na platformie, która jest aktualna i nigdy nie zapisała swojej historii."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "Zarejestrowano %s migracji. Platformę można teraz aktualizować w zwykły sposób."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Brak historii migracji: kliknij, aby naprawić (w przeciwnym razie aktualizacje mogą się nie powieść)"
+
+msgid "Migration history is recorded"
+msgstr "Historia migracji jest zapisana"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s znajduje się w katalogu głównym projektu: usuń go, aby zamknąć punkty końcowe aktualizacji"
 

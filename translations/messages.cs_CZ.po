@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "S pozdravem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ukázka vzorce: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukázka vzorce: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy proměnných"
@@ -14466,6 +14466,9 @@ msgstr "Prosím vraťte se na Krok 1"
 msgid "has not been found in that directory"
 msgstr "nebyl nalezen v této složce"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Instalátor nemá vlastní přihlášení, proto musí být aktualizace autorizována na serveru. Vytvořte prázdný soubor s názvem %s v kořenovém adresáři projektu, vedle souboru .env, a poté pokračujte."
+
 msgid "Old version's root path"
 msgstr "Kořenová cesta staré verze"
 
@@ -20561,6 +20564,9 @@ msgstr "Rodičovský jazyk: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Definujte nové termíny pro podjazyk %s vyhledáním nějakého termínu, poté uložte každý překlad kliknutím na tlačítko uložit. Poté musíte přepnout jazyk svého uživatele, abyste viděli nové termíny."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Termín uložený zde se okamžitě zobrazí v rozhraní, které již bylo migrováno. Stránky, které ještě nebyly migrovány, čtou zkompilovaný katalog, proto si ponechají starý text, dokud nevyčistíte mezipaměť příkazem php bin/console cache:clear. Udělejte to jednou po dokončení úprav, ne po každém termínu."
 
 msgid "See sequences"
 msgstr "Zobrazit sekvence"
@@ -41543,4 +41549,19 @@ msgstr "Klíč extra pole uživatele pro vyhledávání a pojmenování relací 
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Konfigurace JSON pro pole předfiltru vyhledávání."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Tímto se každá migrace dodaná touto verzí označí jako již provedená. Proveďte to pouze na platformě, která je aktuální a nikdy nezaznamenala svou historii."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migrací zaznamenáno. Vaši platformu nyní lze aktualizovat běžným způsobem."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Žádná historie migrace: klikněte pro opravu (nebo aktualizace mohou selhat)"
+
+msgid "Migration history is recorded"
+msgstr "Historie migrací je zaznamenána"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s je přítomen v kořenovém adresáři projektu: odstraňte jej, abyste uzavřeli koncové body aktualizace"
 

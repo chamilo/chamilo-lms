@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "शुभकामना"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चलहरूको दायरा"
@@ -14470,6 +14470,9 @@ msgstr "कृपया चरण १ मा फर्कनुहोस्"
 msgid "has not been found in that directory"
 msgstr "त्यो डाइरेक्टरीमा फेला परेन"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "इन्स्टलरको आफ्नै लगइन हुँदैन, त्यसैले सर्भरमा अपग्रेडलाई अनुमति दिनुपर्छ। परियोजनाको मूलमा .env को छेउमा %s नामको खाली फाइल बनाउनुहोस्, त्यसपछि जारी राख्नुहोस्।"
+
 msgid "Old version's root path"
 msgstr "पुरानो संस्करणको रुट पथ"
 
@@ -20565,6 +20568,9 @@ msgstr "आम भाषा: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "केही शब्द खोजेर उपभाषा %s का लागि नयाँ शब्दहरू परिभाषित गर्नुहोस्, त्यसपछि सेभ बटन थिचेर प्रत्येक अनुवाद सेभ गर्नुहोस्। नयाँ शब्दहरू देख्न आफ्नो प्रयोगकर्ता भाषा परिवर्तन गर्नुपर्नेछ।"
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "यहाँ सुरक्षित गरिएको शब्द पहिले नै माइग्रेट भइसकेको इन्टरफेसमा तुरुन्तै देखिन्छ। अझै माइग्रेट नभएका पृष्ठहरूले कम्पाइल गरिएको क्याटलग पढ्छन्, त्यसैले तपाईंले php bin\/console cache:clear बाट क्यास खाली नगरेसम्म पुरानो पाठ रहन्छ। सम्पादन सकिएपछि एक पटक मात्र गर्नुहोस्, प्रत्येक शब्दपछि होइन।"
 
 msgid "See sequences"
 msgstr "क्रमहरू हेर्नुहोस्"
@@ -41547,4 +41553,19 @@ msgstr "/admin-dashboard/register बाट सत्रहरू खोज्�
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "खोज प्रिफिल्टर फिल्डहरूको लागि JSON कन्फिगरेसन।"
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "यसले यस संस्करणले पठाएका सबै माइग्रेसनलाई पहिले नै कार्यान्वयन भइसकेको भनी चिन्ह लगाउँछ। यो केवल अद्यावधिक भएको र कहिल्यै इतिहास रेकर्ड नगरेको प्लेटफर्ममा मात्र गर्नुहोस्।"
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s माइग्रेसन रेकर्ड गरियो। तपाईंको प्लेटफर्म अब सामान्य रूपमा अद्यावधिक गर्न सकिन्छ।"
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "माइग्रेसन इतिहास छैन: ठीक गर्न क्लिक गर्नुहोस् (नत्र अद्यावधिक बिग्रन सक्छ)"
+
+msgid "Migration history is recorded"
+msgstr "माइग्रेसन इतिहास रेकर्ड गरिएको छ"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "परियोजना मूलमा %s छ: अपग्रेड एन्डपोइन्ट बन्द गर्न यसलाई मेटाउनुहोस्"
 

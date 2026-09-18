@@ -371,7 +371,7 @@ msgid "Sincerely"
 msgstr "敬具"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "数式の例: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "数式の例: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "変数範囲"
@@ -14535,6 +14535,9 @@ msgstr "ステップ 1 に戻ってください"
 msgid "has not been found in that directory"
 msgstr "そのディレクトリに見つかりません"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "インストーラーには独自のログインがないため、アップグレードはサーバー上で承認する必要があります。プロジェクトルートの .env の隣に %s という名前の空ファイルを作成してから続行してください。"
+
 msgid "Old version's root path"
 msgstr "旧バージョンのルートパス"
 
@@ -20630,6 +20633,9 @@ msgstr "親言語: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "用語を検索し、保存ボタンをクリックしてサブ言語 %s の新しい用語を定義してください。その後、自分のユーザ言語を切り替えて新しい用語が表示されることを確認してください。"
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "ここに保存した用語は、すでに移行済みのインターフェースにすぐに表示されます。まだ移行されていないページはコンパイル済みカタログを読み込むため、php bin/console cache:clear でキャッシュをクリアするまで古いテキストのままです。編集が終わったら一度だけ実行し、各用語の後には実行しないでください。"
 
 msgid "See sequences"
 msgstr "シーケンスを表示"
@@ -41613,4 +41619,19 @@ msgstr "/admin-dashboard/register からセッションを検索および命名�
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "検索プリフィルターフィールドのJSON設定。"
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "この操作は、このバージョンで提供されたすべてのマイグレーションを実行済みとしてマークします。最新で、履歴が一度も記録されていないプラットフォームでのみ実行してください。"
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s 件のマイグレーションを記録しました。プラットフォームは通常どおり更新できるようになりました。"
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "マイグレーション履歴がありません: クリックして修正（しないと更新が失敗する可能性があります）"
+
+msgid "Migration history is recorded"
+msgstr "マイグレーション履歴が記録されています"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "プロジェクトルートに %s があります: アップグレード用エンドポイントを閉じるには削除してください"
 

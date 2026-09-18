@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ví dụ công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -14471,6 +14471,9 @@ msgstr "Vui lòng quay lại Bước 1"
 msgid "has not been found in that directory"
 msgstr "không tìm thấy trong thư mục đó"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Trình cài đặt không có đăng nhập riêng, nên việc nâng cấp phải được ủy quyền trên máy chủ. Tạo một tệp trống tên %s trong thư mục gốc dự án, cạnh .env, rồi tiếp tục."
+
 msgid "Old version's root path"
 msgstr "Đường dẫn gốc phiên bản cũ"
 
@@ -20566,6 +20569,9 @@ msgstr "Ngôn ngữ cha: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Định nghĩa các thuật ngữ mới cho ngôn ngữ con %s bằng cách tìm kiếm một thuật ngữ, sau đó lưu từng bản dịch bằng cách nhấp nút lưu. Sau đó bạn phải chuyển ngôn ngữ người dùng của mình để xem các thuật ngữ mới xuất hiện."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Thuật ngữ lưu ở đây hiện ngay trên giao diện đã được chuyển đổi. Các trang chưa chuyển đổi vẫn đọc danh mục đã biên dịch, nên chúng giữ văn bản cũ cho đến khi bạn xóa bộ nhớ đệm bằng php bin/console cache:clear. Chỉ làm vậy một lần khi hoàn tất chỉnh sửa, không phải sau mỗi thuật ngữ."
 
 msgid "See sequences"
 msgstr "Xem chuỗi"
@@ -41549,4 +41555,19 @@ msgstr "Khóa trường bổ sung của người dùng dùng khi tìm kiếm và
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Cấu hình JSON cho các trường bộ lọc trước khi tìm kiếm."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Thao tác này đánh dấu mọi migration đi kèm phiên bản này là đã thực thi. Chỉ làm vậy trên nền tảng đã cập nhật và chưa từng ghi lịch sử."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migration đã được ghi nhận. Nền tảng của bạn giờ có thể được cập nhật bình thường."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Không có lịch sử migration: nhấn để sửa (hoặc các bản cập nhật có thể bị lỗi)"
+
+msgid "Migration history is recorded"
+msgstr "Lịch sử migration đã được ghi nhận"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s đang có trong thư mục gốc dự án: xóa nó để đóng các điểm cuối nâng cấp"
 

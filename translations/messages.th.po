@@ -14471,6 +14471,9 @@ msgstr "กรุณากลับไปขั้นตอนที่ 1"
 msgid "has not been found in that directory"
 msgstr "ไม่พบในไดเรกทอรีนั้น"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "ตัวติดตั้งไม่มีระบบเข้าสู่ระบบของตัวเอง ดังนั้นการอัปเกรดต้องได้รับอนุญาตบนเซิร์ฟเวอร์ สร้างไฟล์ว่างชื่อ %s ที่รากโปรเจกต์ ข้างไฟล์ .env จากนั้นดำเนินการต่อ"
+
 msgid "Old version's root path"
 msgstr "เส้นทางรากของเวอร์ชันเก่า"
 
@@ -20566,6 +20569,9 @@ msgstr "ภาษาแม่: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "กำหนดคำศัพท์ใหม่สำหรับภาษาย่อย %s โดยค้นหาคำศัพท์ จากนั้นบันทึกการแปลแต่ละอันโดยคลิกปุ่มบันทึก จากนั้นคุณต้องเปลี่ยนภาษาผู้ใช้ของคุณเองเพื่อดูคำศัพท์ใหม่ปรากฏ"
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "คำที่บันทึกที่นี่จะแสดงทันทีในส่วนติดต่อที่โยกย้ายแล้ว หน้าที่ยังไม่ได้โยกย้ายจะอ่านแคตตาล็อกที่คอมไพล์แล้ว จึงยังใช้ข้อความเก่าจนกว่าคุณจะล้างแคชด้วย php bin/console cache:clear ทำครั้งเดียวเมื่อแก้ไขเสร็จ ไม่ใช่หลังทุกคำ"
 
 msgid "See sequences"
 msgstr "ดูลำดับ"
@@ -41549,4 +41555,19 @@ msgstr "คีย์ฟิลด์เพิ่มเติมของผู้
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "การกำหนดค่า JSON สำหรับฟิลด์กรองล่วงหน้าในการค้นหา"
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "การดำเนินการนี้จะทำเครื่องหมายว่าการโยกย้ายทั้งหมดที่มาพร้อมเวอร์ชันนี้ได้ดำเนินการแล้ว ทำเฉพาะบนแพลตฟอร์มที่เป็นปัจจุบันและไม่เคยบันทึกประวัติไว้"
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "บันทึกการโยกย้ายแล้ว %s รายการ แพลตฟอร์มของคุณสามารถอัปเดตได้ตามปกติแล้ว"
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "ไม่มีประวัติการโยกย้าย: คลิกเพื่อแก้ไข (มิฉะนั้นการอัปเดตอาจเสียหาย)"
+
+msgid "Migration history is recorded"
+msgstr "บันทึกประวัติการโยกย้ายแล้ว"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "พบ %s ที่รากโปรเจกต์: ลบออกเพื่อปิดจุดสิ้นสุดการอัปเกรด"
 

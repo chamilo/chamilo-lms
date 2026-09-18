@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "敬上"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式範例：sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式範例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "變數範圍"
@@ -14471,6 +14471,9 @@ msgstr "請回到步驟 1"
 msgid "has not been found in that directory"
 msgstr "在該目錄中找不到"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "安裝程式本身沒有登入功能，因此升級必須在伺服器上授權。請在專案根目錄（.env 旁）建立一個名為 %s 的空檔案，然後繼續。"
+
 msgid "Old version's root path"
 msgstr "舊版本根路徑"
 
@@ -20566,6 +20569,9 @@ msgstr "父語言：%s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "透過搜尋詞彙，為子語言 %s 定義新詞彙，然後點擊儲存按鈕儲存每個翻譯。之後您需要切換自己的使用者語言，才能看到新詞彙出現。"
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "此處儲存的詞彙會立即顯示在已遷移的介面中。尚未遷移的頁面會讀取編譯後的目錄，因此會保留舊文字，直到您使用 php bin/console cache:clear 清除快取。請在完成編輯後執行一次，不必每個詞彙都執行。"
 
 msgid "See sequences"
 msgstr "檢視順序"
@@ -41549,4 +41555,19 @@ msgstr "從 /admin-dashboard/register 搜尋及命名時段時所使用的使用
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "搜尋預先篩選欄位的 JSON 設定。"
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "這會將此版本隨附的所有遷移標記為已執行。僅在已是最新且從未記錄過歷史的平台上執行此操作。"
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "已記錄 %s 筆遷移。您的平台現在可以正常更新。"
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "沒有遷移歷史：點選以修正（否則更新可能會失敗）"
+
+msgid "Migration history is recorded"
+msgstr "遷移歷史已記錄"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "專案根目錄中存在 %s：請刪除以關閉升級端點"
 

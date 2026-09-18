@@ -14486,6 +14486,9 @@ msgstr "ກະລຸນາກັບໄປທີ່ຂັ້ນຕອນທີ 1"
 msgid "has not been found in that directory"
 msgstr "ບໍ່ພົບໃນໄດເລກະທໍຣີນັ້ນ"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "ຕົວຕິດຕັ້ງບໍ່ມີການເຂົ້າສູ່ລະບົບເປັນຂອງຕົນເອງ ສະນັ້ນການອັບເກຣດຕ້ອງໄດ້ຮັບອະນຸຍາດຢູ່ເຊີບເວີ. ສ້າງໄຟລ໌ວ່າງຊື່ %s ຢູ່ຮາກຂອງໂຄງການ ຂ້າງ .env ແລ້ວສືບຕໍ່."
+
 msgid "Old version's root path"
 msgstr "ເສັ້ນທາງຫຼັກຂອງເວີຊັນເກົ່າ"
 
@@ -20597,6 +20600,9 @@ msgstr "ພາສາແມ່: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "ກຳນົດຄຳສັບໃໝ່ສຳລັບພາສາຍ່ອຍ %s ໂດຍການຄົ້ນຫາຄຳສັບໃດໜຶ່ງ, ຈາກນັ້ນບັນທຶກແຕ່ລະການແປໂດຍການຄລິກປຸ່ມບັນທຶກ. ຫຼັງຈາກນັ້ນທ່ານຈະຕ້ອງປ່ຽນພາສາຜູ້ໃຊ້ຂອງທ່ານເອງເພື່ອເບິ່ງຄຳສັບໃໝ່ປະກົດຂຶ້ນ."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "ຄຳທີ່ບັນທຶກຢູ່ນີ້ຈະສະແດງທັນທີໃນສ່ວນຕິດຕໍ່ທີ່ຍ້າຍມາແລ້ວ. ໜ້າທີ່ຍັງບໍ່ໄດ້ຍ້າຍຈະອ່ານແຄັດຕະລັອກທີ່ຄອມໄພລ໌ແລ້ວ ສະນັ້ນຈະຄົງຂໍ້ຄວາມເກົ່າຈົນກວ່າທ່ານຈະລຶບແຄຊດ້ວຍ php bin/console cache:clear. ເຮັດຄັ້ງດຽວເມື່ອແກ້ໄຂສຳເລັດ ບໍ່ແມ່ນຫຼັງແຕ່ລະຄຳ."
 
 msgid "See sequences"
 msgstr "ເບິ່ງລຳດັບ"
@@ -41414,154 +41420,154 @@ msgid "When enabled, course tutors in sessions can subscribe new users to their 
 msgstr "ເມື່ອເປີດໃຊ້ ຜູ້ສອນຄອສໃນເຊດຊັນສາມາດລົງທະບຽນຜູ້ໃຊ້ໃໝ່ເຂົ້າເຊດຊັນຂອງຕົນໄດ້. ຖ້າບໍ່ດັ່ງນັ້ນ ຕົວເລືອກນີ້ມີສະເພາະຜູ້ບໍລິຫານ ແລະ ຜູ້ບໍລິຫານເຊດຊັນເທົ່ານັ້ນ."
 
 msgid "Default number of days a tutor can access a session after the official session end date"
-msgstr ""
+msgstr "ຈຳນວນວັນເລີ່ມຕົ້ນທີ່ຜູ້ສອນເສີມສາມາດເຂົ້າເຖິງເຊດຊັນຫຼັງວັນສິ້ນສຸດເຊດຊັນຢ່າງເປັນທາງການ"
 
 msgid "Default number of days a tutor can access a session before the official session start date"
-msgstr ""
+msgstr "ຈຳນວນວັນເລີ່ມຕົ້ນທີ່ຜູ້ສອນເສີມສາມາດເຂົ້າເຖິງເຊດຊັນກ່ອນວັນເລີ່ມເຊດຊັນຢ່າງເປັນທາງການ"
 
 msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
-msgstr ""
+msgstr "ເປີດໃຊ້ຫ້ອງສະໝຸດ MathJax ເພື່ອສະແດງສູດຄະນິດສາດ. ນີ້ຈະເພີ່ມປຸ່ມສູດໃນແຖບເຄື່ອງມືຂອງບັນນາທິການ ບ່ອນທີ່ຂຽນສູດດ້ວຍ LaTeX."
 
 msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
-msgstr ""
+msgstr "ລະຫັດຫຼັກສູດແຍກດ້ວຍ \"|\". ເມື່ອຜູ້ອຳນວຍການຊັບພະຍາກອນມະນຸດເຂົ້າສູ່ລະບົບ ຜູ້ໃຊ້ຈະຖືກລົງທະບຽນເຂົ້າຫຼັກສູດເຫຼົ່ານີ້ອັດຕະໂນມັດ. ຕົວຢ່າງ: COURSE001|COURSE002. ນີ້ບໍ່ປ່ຽນບົດບາດຜູ້ໃຊ້."
 
 msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
-msgstr ""
+msgstr "ລະຫັດຫຼັກສູດແຍກດ້ວຍ \"|\". ເມື່ອຜູ້ບໍລິຫານເຊດຊັນເຂົ້າສູ່ລະບົບ ຜູ້ໃຊ້ຈະຖືກລົງທະບຽນເຂົ້າຫຼັກສູດເຫຼົ່ານີ້ອັດຕະໂນມັດ. ຕົວຢ່າງ: COURSE001|COURSE002. ນີ້ບໍ່ປ່ຽນບົດບາດຜູ້ໃຊ້."
 
 msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
-msgstr ""
+msgstr "ລະຫັດຫຼັກສູດແຍກດ້ວຍ \"|\". ເມື່ອຜູ້ຮຽນເຂົ້າສູ່ລະບົບ ຜູ້ໃຊ້ຈະຖືກລົງທະບຽນເຂົ້າຫຼັກສູດເຫຼົ່ານີ້ອັດຕະໂນມັດ. ຕົວຢ່າງ: COURSE001|COURSE002."
 
 msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
-msgstr ""
+msgstr "ລະຫັດຫຼັກສູດແຍກດ້ວຍ \"|\". ເມື່ອຄູສອນເຂົ້າສູ່ລະບົບ ຜູ້ໃຊ້ຈະຖືກລົງທະບຽນເຂົ້າຫຼັກສູດເຫຼົ່ານີ້ອັດຕະໂນມັດ. ຕົວຢ່າງ: COURSE001|COURSE002. ນີ້ບໍ່ໃຫ້ສິດຄູສອນຂອງຫຼັກສູດ."
 
 msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
-msgstr ""
+msgstr "ເຊື່ອງຜູ້ສອນເສີມຫຼັກສູດເຊດຊັນໃນ Dropbox ເມື່ອເອກະສານຖືກສົ່ງໂດຍຜູ້ສອນເສີມໃຫ້ນັກຮຽນ"
 
 msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
-msgstr ""
+msgstr "ເຊື່ອງຊື່ຜູ້ສອນເສີມທົ່ວໄປໃນເຄື່ອງມື Dropbox ເມື່ອຜູ້ສອນເສີມທົ່ວໄປອັບໂຫຼດໄຟລ໌"
 
 msgid "Enable this option to allow tutors to create and edit surveys"
-msgstr ""
+msgstr "ເປີດຕົວເລືອກນີ້ເພື່ອອະນຸຍາດໃຫ້ຜູ້ສອນເສີມສ້າງແລະແກ້ໄຂແບບສຳຫຼວດ"
 
 msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
-msgstr ""
+msgstr "ຄວນໃຊ້ທີ່ຢູ່ອີເມວຜູ້ສອນເສີມ ຫຼື ທີ່ຢູ່ບໍ່ຕອບກັບທີ່ກຳນົດໃນສ່ວນການຕັ້ງຄ່າຫຼັກ ສຳລັບຄຳເຊີນແບບສຳຫຼວດ?"
 
 msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
-msgstr ""
+msgstr "ຈຳນວນຫຼັກສູດສູງສຸດທີ່ຄູສອນ/ຜູ້ຝຶກສາມາດສ້າງ. ຕັ້ງເປັນ 0 ເພື່ອປິດຂີດຈຳກັດ. ສາມາດລົບລ້າງຕາມຜູ້ໃຊ້ຜ່ານການຊື້ບໍລິການ BuyCourses."
 
 msgid "Allow tutors to edit feedback when reviewing exercises"
-msgstr ""
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ສອນເສີມແກ້ໄຂຄຳເຫັນເມື່ອກວດແບບຝຶກຫັດ"
 
 msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
-msgstr ""
+msgstr "ຈະລວມລະຫັດທາງການຂອງນັກຮຽນໃນຊື່ໄຟລ໌ເມື່ອສົ່ງອອກຜົນແບບທົດສອບເປັນ PDF ຫຼືບໍ່"
 
 msgid "Allows access to all personal files without restriction"
-msgstr ""
+msgstr "ອະນຸຍາດໃຫ້ເຂົ້າເຖິງໄຟລ໌ສ່ວນຕົວທັງໝົດໂດຍບໍ່ຈຳກັດ"
 
 msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
-msgstr ""
+msgstr "ເປີດໃຊ້ cron app:send-certificate-expiry-reminders ເພື່ອເຕືອນຜູ້ຮຽນທີ່ໃບຢັ້ງຢືນໝົດອາຍຸແລ້ວ ຫຼື ກຳລັງຈະໝົດອາຍຸ."
 
 msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
-msgstr ""
+msgstr "ຈຳນວນວັນເລີ່ມຕົ້ນລ່ວງໜ້າເພື່ອສະແກນໃບຢັ້ງຢືນທີ່ກຳລັງຈະໝົດອາຍຸ ໃຊ້ຈົນກວ່າ cron ຈະຖືກເປີດດ້ວຍ --days-ahead."
 
 msgid "Allow users and visitors to search generated certificates from the top bar menu."
-msgstr ""
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ໃຊ້ແລະຜູ້ເຂົ້າຊົມຄົ້ນຫາໃບຢັ້ງຢືນທີ່ສ້າງແລ້ວຈາກເມນູແຖບເທິງ."
 
 msgid "Allow tutors to always edit announcements inside active or past sessions."
-msgstr ""
+msgstr "ອະນຸຍາດໃຫ້ຜູ້ສອນເສີມແກ້ໄຂປະກາດໃນເຊດຊັນທີ່ກຳລັງດຳເນີນ ຫຼື ຜ່ານມາໄດ້ສະເໝີ."
 
 msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
-msgstr ""
+msgstr "ຈະສະແດງລະຫັດທາງການຂອງນັກຮຽນຄຽງຊື່ໃນໃບລາຍງານການເຂົ້າຮຽນແລະລາຍຊື່ ຫຼືບໍ່."
 
 msgid "Allow assigning a specific language to individual resources."
-msgstr ""
+msgstr "ອະນຸຍາດໃຫ້ກຳນົດພາສາສະເພາະໃຫ້ແຕ່ລະຊັບພະຍາກອນ."
 
 msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
-msgstr ""
+msgstr "ບາງແພັກເກດ SCORM ເອີ້ນ LMSSetValue(cmi.core.lesson_status, 'incomplete') ພຽງຄັ້ງດຽວ ແລະບໍ່ສົ່ງສະຖານະສຸດທ້າຍຈິງ ຫຼື LMSFinish() ທີ່ມີຄວາມໝາຍ. ເປີດນີ້ເພື່ອໃຫ້ Chamilo ຖື 'incomplete' ທີ່ຄ້າງຢູ່ເທົ່າກັບບໍ່ມີສະຖານະ ແລະຕັດສິນການສຳເລັດເມື່ອຜູ້ຮຽນອອກຈາກ SCO."
 
 msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
-msgstr ""
+msgstr "ຖ້າເສັ້ນທາງການຮຽນຖືກຕັ້ງເປັນບໍ່ເຫັນ ແຕ່ຄູ ຫຼື ຜູ້ສອນເສີມເລືອກໃຫ້ມີຢູ່ໜ້າຫຼັກຫຼັກສູດ ຕົວເລືອກນີ້ປ້ອງກັນບໍ່ໃຫ້ Chamilo ເຊື່ອງລິ້ງໃນໜ້າຫຼັກຫຼັກສູດ."
 
 msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
-msgstr ""
+msgstr "ເປີດໃຊ້ແບບທົດສອບປັບຕົວແບບກ້າວໜ້າ ທີ່ແຕ່ລະໝວດຄຳຖາມສາມາດສົ່ງຜູ້ຮຽນໄປໝວດອື່ນຕາມຄະແນນ."
 
 msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
-msgstr ""
+msgstr "ເມື່ອຜູ້ຮຽນເຮັດແບບທົດສອບສຳເລັດ ການແຈ້ງເຕືອນມັກຖືກສົ່ງໃຫ້ຜູ້ສອນເສີມ ລວມຜູ້ສອນເສີມເຊດຊັນທົ່ວໄປ. ເປີດຕົວເລືອກນີ້ເພື່ອຍົກເວັ້ນຜູ້ສອນເສີມທົ່ວໄປຈາກການແຈ້ງເຕືອນເຫຼົ່ານີ້."
 
 msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
-msgstr ""
+msgstr "ສະແດງຄວາມພະຍາຍາມເຮັດແບບທົດສອບຂອງຜູ້ໃຊ້ໃນທຸກເຊດຊັນທີ່ຜູ້ສອນເສີມທົ່ວໄປເຂົ້າເຖິງໄດ້ ໃນລາຍງານແບບທົດສອບທີ່ຄ້າງ."
 
 msgid "Show a warning to authenticated users before their server-side session expires."
-msgstr ""
+msgstr "ສະແດງຄຳເຕືອນໃຫ້ຜູ້ໃຊ້ທີ່ເຂົ້າສູ່ລະບົບແລ້ວກ່ອນເຊດຊັນຝັ່ງເຊີບເວີໝົດອາຍຸ."
 
 msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
-msgstr ""
+msgstr "ຈຳນວນວິນາທີກ່ອນເຊດຊັນໝົດອາຍຸທີ່ຈະສະແດງຄຳເຕືອນ. ຄ່າເລີ່ມຕົ້ນແມ່ນ 180 ວິນາທີ."
 
 msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
-msgstr ""
+msgstr "ກຳນົດໂຄງສ້າງທີ່ຕ້ອງການສຳລັບລະຫັດຜ່ານຜູ້ໃຊ້. ຕົວຢ່າງ: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. ໃຊ້ \"specials\" (ພາສາຫຼາຍ) ເພື່ອຮຽກຮ້ອງຕົວອັກສອນພິເສດ."
 
 msgid "Enable validation of the password requirements defined above during password creation or password update."
-msgstr ""
+msgstr "ເປີດການກວດສອບຂໍ້ກຳນົດລະຫັດຜ່ານທີ່ກຳນົດຂ້າງເທິງ ໃນຂະນະສ້າງ ຫຼື ອັບເດດລະຫັດຜ່ານ."
 
 msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
-msgstr ""
+msgstr "ລາຍຊື່ທີ່ຢູ່ອີເມວແຍກດ້ວຍຈຸດຂັ້ນ ເພື່ອແຈ້ງເຕືອນເມື່ອການສະແກນຄວາມສົມບູນຂອງໄຟລ໌ພົບການປ່ຽນແປງ. ປ່ອຍວ່າງເພື່ອແຈ້ງຜູ້ບໍລິຫານທົ່ວໄປທຸກຄົນແທນ."
 
 msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
-msgstr ""
+msgstr "ອະນຸຍາດໃຫ້ແອັບພາຍນອກ (ເຊັ່ນ ຕົວເຊື່ອມ Claude.ai MCP) ລົງທະບຽນຜ່ານ OAuth 2.1 Dynamic Client Registration ແລະເຊື່ອມຕໍ່ດ້ວຍບັນຊີ Chamilo ແລະສິດຂອງແຕ່ລະຜູ້ໃຊ້. ປິດໂດຍຄ່າເລີ່ມຕົ້ນ: ຈຸດຄົ້ນພົບ ການລົງທະບຽນ ການອະນຸຍາດ ແລະໂທເຄັນທັງໝົດສົ່ງຄືນ 404 ຈົນກວ່າຈະເປີດ."
 
 msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
-msgstr ""
+msgstr "ເປີດຈຸດປາຍທາງ MCP ຂອງ Chamilo ແລະສ່ວນຕິດຕໍ່ກຸນແຈ API MCP ສ່ວນຕົວ. ເມື່ອປິດ ກຸນແຈ API ທີ່ມີຢູ່ ໂທເຄັນ OAuth ແລະຂໍ້ມູນຢືນຢັນ JWT ບໍ່ສາມາດໃຊ້ຢູ່ /mcp."
 
 msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
-msgstr ""
+msgstr "ແຜນທີ່ JSON ຂອງບົດບາດຜູ້ໃຊ້ Chamilo ທີ່ອະນຸຍາດໃຫ້ໃຊ້ MCP. ຜູ້ໃຊ້ຕ້ອງກົງກັບຢ່າງໜ້ອຍໜຶ່ງບົດບາດທີ່ເປີດ. ຂໍ້ຈຳກັດນີ້ໃຊ້ກັບກຸນແຈ API ທີ່ສ້າງກ່ອນ ແລະການເຊື່ອມຕໍ່ OAuth ທີ່ມີຢູ່."
 
 msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
-msgstr ""
+msgstr "ອະນຸຍາດໃຫ້ການເຊື່ອມຕໍ່ເຊີບເວີກັບເຊີບເວີທີ່ເຊື່ອຖືໄດ້ (ເຊັ່ນ ປລັກອິນໜ້າຮ້ານ WordPress) ຢືນຢັນຕົວຕົນກັບຈຸດປາຍທາງ /api ທົ່ວໄປ ດ້ວຍກຸນແຈ API ພາຍນອກຕໍ່ຜູ້ໃຊ້ ທີ່ສ້າງດ້ວຍຄຳສັ່ງຄອນໂຊນ \"chamilo:security:generate-external-api-key\". ປິດໂດຍຄ່າເລີ່ມຕົ້ນ: ກຸນແຈທີ່ມີຢູ່ບໍ່ສາມາດໃຊ້ໄດ້ຈົນກວ່າຈະເປີດ."
 
 msgid "Add the tutor and dates to the session subtitle in the session list."
-msgstr ""
+msgstr "ເພີ່ມຜູ້ສອນເສີມແລະວັນທີໃສ່ຄຳບັນຍາຍຍ່ອຍຂອງເຊດຊັນໃນລາຍຊື່ເຊດຊັນ."
 
 msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
-msgstr ""
+msgstr "ຖ້າບໍ່ດັ່ງນັ້ນ ຜູ້ສອນເສີມເຊດຊັນຈະເຂົ້າເຖິງເຊດຊັນຕາມໄລຍະເວລາໄດ້ພຽງໃນຊ່ວງເວລາທີ່ໃຊ້ງານ."
 
 msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
-msgstr ""
+msgstr "ເມື່ອເປີດ ຄູ/ຜູ້ບໍລິຫານສາມາດສົ່ງລິ້ງເຊີນຄັ້ງດຽວຈາກເຄື່ອງມືຜູ້ໃຊ້ຂອງຫຼັກສູດ ໃຫ້ຜູ້ທີ່ຍັງບໍ່ລົງທະບຽນເຂົ້າແບບຟອມລົງທະບຽນໄດ້ ເຖິງແມ່ນວ່າການລົງທະບຽນດ້ວຍຕົນເອງທົ່ວໄປ (allow_registration) ຈະຖືກປິດ."
 
 msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
-msgstr ""
+msgstr "ເພີ່ມຊື່ເຕັມຂອງນັກຮຽນໃສ່ຊື່ໄຟລ໌ວຽກງານ ເມື່ອດາວໂຫຼດການສົ່ງສ່ວນບຸກຄົນ ຫຼື ແພັກເກດວຽກງານ."
 
 msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
-msgstr ""
+msgstr "ອະນຸຍາດໃຫ້ຄູສ້າງການແປສຳລັບທຸກພາສາແພລດຟອມທີ່ເປີດໃຊ້ໃນການກະທຳ WYSIWYG ຄັ້ງດຽວ. ອາດໃຊ້ໂທເຄັນ AI ຈຳນວນຫຼາຍ."
 
 msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
-msgstr ""
+msgstr "ເມື່ອປິດ ຜູ້ບໍລິຫານຈະບໍ່ມີລິ້ງເພື່ອມອບຜູ້ສອນເສີມໃຫ້ຫຼັກສູດເຊດຊັນຢ່າງວ່ອງໄວໃນໜ້າແກ້ໄຂຫຼັກສູດ."
 
 msgid "Show courses & sessions"
-msgstr ""
+msgstr "ສະແດງຫຼັກສູດ ແລະ ເຊດຊັນ"
 
 msgid "Optional JSON. Example: {\"speed\": true}"
-msgstr ""
+msgstr "JSON ທາງເລືອກ. ຕົວຢ່າງ: {\"speed\": true}"
 
 msgid "Table"
-msgstr ""
+msgstr "ຕາຕະລາງ"
 
 msgid "LoginIsEmailTitle"
-msgstr ""
+msgstr "LoginIsEmailTitle"
 
 msgid "Theme"
-msgstr ""
+msgstr "ຮູບແບບສີສັນ"
 
 msgid "mistery-man"
-msgstr ""
+msgstr "mistery-man"
 
 msgid "identicon"
-msgstr ""
+msgstr "identicon"
 
 msgid "monsterid"
-msgstr ""
+msgstr "monsterid"
 
 msgid "wavatar"
-msgstr ""
+msgstr "wavatar"
 
 msgid "Course tutor email sender"
 msgstr "ຜູ້ສົ່ງອີເມວຜູ້ສອນຫຼັກສູດ"
@@ -41592,4 +41598,19 @@ msgstr "ຄີຊ່ອງຂໍ້ມູນເພີ່ມເຕີມຂອງ
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "ການຕັ້ງຄ່າ JSON ສຳລັບຊ່ອງຂໍ້ມູນການກັ່ນຕອງລ່ວງໜ້າຂອງການຄົ້ນຫາ."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "ນີ້ຈະໝາຍວ່າການເຄື່ອນຍ້າຍທຸກລາຍການທີ່ສົ່ງມາກັບເວີຊັນນີ້ໄດ້ຖືກປະຕິບັດແລ້ວ. ເຮັດສິ່ງນີ້ພຽງແຕ່ໃນແພລດຟອມທີ່ອັບເດດແລ້ວ ແລະບໍ່ເຄີຍບັນທຶກປະຫວັດຂອງມັນ."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "ບັນທຶກການເຄື່ອນຍ້າຍ %s ລາຍການແລ້ວ. ແພລດຟອມຂອງທ່ານສາມາດອັບເດດໄດ້ຕາມປົກກະຕິແລ້ວ."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "ບໍ່ມີປະຫວັດການເຄື່ອນຍ້າຍ: ຄລິກເພື່ອແກ້ໄຂ (ຫຼືການອັບເດດອາດຈະເສຍຫາຍ)"
+
+msgid "Migration history is recorded"
+msgstr "ບັນທຶກປະຫວັດການເຄື່ອນຍ້າຍແລ້ວ"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "ມີ %s ຢູ່ໃນໂຟລເດີຮາກຂອງໂຄງການ: ລຶບມັນເພື່ອປິດຈຸດສິ້ນສຸດການອັບເກຣດ"
 

@@ -41566,8 +41566,8 @@ msgstr "This marks every migration shipped by this version as already executed. 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrations recorded. Your platform can now be updated normally."
 
-msgid "No migration history: click to record it, or no update will run"
-msgstr "No migration history: click to record it, or no update will run"
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "No migration history: click to fix (or updates might break)"
 
 msgid "Migration history is recorded"
 msgstr "Migration history is recorded"

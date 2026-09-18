@@ -14936,7 +14936,7 @@ msgid "has not been found in that directory"
 msgstr "n'a pas été trouvé dans ce répertoire"
 
 msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
-msgstr "L'installateur n'a pas de connexion propre, une mise à niveau doit donc être autorisée sur le serveur. Créez un fichier vide nommé %s à la racine du projet, à côté de .env, puis continuez."
+msgstr "L'installateur ne dispose pas d'une procédure de login. Une mise à niveau doit donc être autorisée depuis le serveur. Créez un fichier vide nommé %s à la racine du projet, à côté de .env, puis continuez."
 
 msgid "Old version's root path"
 msgstr "Chemin de base de l'ancienne version"
@@ -43436,14 +43436,11 @@ msgstr "Clé du champ supplémentaire utilisateur à utiliser lors de la recherc
 msgid "JSON configuration for search prefilter fields."
 msgstr "Configuration JSON pour les champs de préfiltre de recherche."
 
-msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
-msgstr "Ceci enregistre les migrations déjà présentes dans votre base de données et laisse les plus récentes en attente afin que la mise à jour puisse les exécuter. Vos données ne sont pas modifiées."
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Ceci marque toutes les migrations livrées par cette version comme déjà exécutées. Ne le faites que sur une plateforme à jour qui n'a jamais enregistré son historique."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrations enregistrées. Votre plateforme peut maintenant être mise à jour normalement."
-
-msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
-msgstr "%s migrations enregistrées, et %s sont encore en attente. Exécutez la mise à jour pour les appliquer."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Aucun historique de migration : cliquez pour corriger (sinon les mises à jour pourraient échouer)"

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Cordialmente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ejemplo de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ejemplo de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rangos de las variables"
@@ -14483,7 +14483,7 @@ msgid "has not been found in that directory"
 msgstr "no ha sido encontrado en este directorio"
 
 msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
-msgstr "El instalador no tiene inicio de sesión propio, por lo que una actualización debe autorizarse en el servidor. Cree un archivo vacío llamado %s en la raíz del proyecto, junto a .env, y continúe."
+msgstr "El instalador no tiene proceso de login, por lo que una actualización debe autorizarse desde el mismo disco del servidor. Cree un archivo vacío llamado %s en la raíz del proyecto, junto a .env, y continúe."
 
 msgid "Old version's root path"
 msgstr "path raíz de la versión antigua"
@@ -42694,14 +42694,11 @@ msgstr "Clave del campo extra de usuario para buscar y nombrar sesiones desde /a
 msgid "JSON configuration for search prefilter fields."
 msgstr "Configuración JSON para los campos de prefiltro de búsqueda."
 
-msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
-msgstr "Esto registra las migraciones que su base de datos ya contiene y deja las más recientes pendientes para que la actualización las ejecute. Sus datos no se modifican."
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Esto marca todas las migraciones incluidas en esta versión como ya ejecutadas. Hágalo solo en una plataforma que esté actualizada y que nunca haya registrado su historial."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migraciones registradas. Su plataforma ahora puede actualizarse con normalidad."
-
-msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
-msgstr "%s migraciones registradas y %s aún pendientes. Ejecute la actualización para aplicarlas."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Sin historial de migración: haga clic para corregir (o las actualizaciones podrían romperse)"

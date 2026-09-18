@@ -41560,11 +41560,14 @@ msgstr "User extra field key to use when searching and naming sessions from /adm
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON configuration for search prefilter fields."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrations recorded. Your platform can now be updated normally."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrations recorded, and %s are still pending. Run the update to execute them."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "No migration history: click to fix (or updates might break)"

@@ -41556,11 +41556,14 @@ msgstr "คีย์ฟิลด์เพิ่มเติมของผู้
 msgid "JSON configuration for search prefilter fields."
 msgstr "การกำหนดค่า JSON สำหรับฟิลด์กรองล่วงหน้าในการค้นหา"
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "การดำเนินการนี้จะทำเครื่องหมายว่าการโยกย้ายทั้งหมดที่มาพร้อมเวอร์ชันนี้ได้ดำเนินการแล้ว ทำเฉพาะบนแพลตฟอร์มที่เป็นปัจจุบันและไม่เคยบันทึกประวัติไว้"
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "ระบบจะบันทึกการย้ายข้อมูลที่ฐานข้อมูลของคุณมีอยู่แล้ว และปล่อยรายการที่ใหม่กว่าให้ค้างสถานะรอดำเนินการ เพื่อให้การอัปเดตสามารถดำเนินการได้ ข้อมูลของคุณจะไม่ถูกแก้ไข"
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "บันทึกการโยกย้ายแล้ว %s รายการ แพลตฟอร์มของคุณสามารถอัปเดตได้ตามปกติแล้ว"
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "บันทึกการย้ายข้อมูลแล้ว %s รายการ และยังคงรอดำเนินการ %s รายการ เรียกใช้การอัปเดตเพื่อดำเนินการ"
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "ไม่มีประวัติการโยกย้าย: คลิกเพื่อแก้ไข (มิฉะนั้นการอัปเดตอาจเสียหาย)"

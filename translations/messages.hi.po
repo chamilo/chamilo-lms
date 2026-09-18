@@ -41550,11 +41550,14 @@ msgstr "उपयोगकर्ता अतिरिक्त फ़ील्�
 msgid "JSON configuration for search prefilter fields."
 msgstr "खोज प्रीफ़िल्टर फ़ील्ड के लिए JSON कॉन्फ़िगरेशन।"
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "यह इस संस्करण द्वारा भेजे गए प्रत्येक माइग्रेशन को पहले से निष्पादित के रूप में चिह्नित करता है। यह केवल उस प्लेटफ़ॉर्म पर करें जो अद्यतित है और जिसने कभी अपना इतिहास दर्ज नहीं किया है।"
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "यह उन माइग्रेशन को रिकॉर्ड करता है जो आपके डेटाबेस में पहले से मौजूद हैं, और नए माइग्रेशन को लंबित छोड़ देता है ताकि अपडेट उन्हें निष्पादित कर सके। आपका डेटा संशोधित नहीं होता।"
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s माइग्रेशन दर्ज किए गए। आपका प्लेटफ़ॉर्म अब सामान्य रूप से अपडेट किया जा सकता है।"
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s माइग्रेशन रिकॉर्ड किए गए, और %s अभी भी लंबित हैं। उन्हें निष्पादित करने के लिए अपडेट चलाएँ।"
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "कोई माइग्रेशन इतिहास नहीं: ठीक करने के लिए क्लिक करें (अन्यथा अपडेट टूट सकते हैं)"

@@ -4188,7 +4188,7 @@
     "Page break": "Salt de pagina",
     "Matching combination": "Combinason d'associacion",
     "No negative score": "Cap puntuacion negativa",
-    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Exemple de f\u00f2rmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
+    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Exemple de f\u00f2rmula : sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
     "Group agenda": "Agenda de grop",
     "Use system default certificate": "Utilizar lo certificat per defaut del sist\u00e8ma",
     "The attached certificate is unavailable. The system default certificate will be used.": "Lo certificat estacat es pas disponible. Lo certificat per defaut del sist\u00e8ma ser\u00e0 utilizat.",
@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Nombre de messatges enviats",
     "Contacts count": "Nombre de contactes",
     "Sessions by date": "Sessions per data",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Aqu\u00f2 marca cada migracion liurada per aquesta version coma ja executada. Fas\u00e8tz aqu\u00f2 solament sus una plataforma a jorn que n'a jamai enregistrat son ist\u00f2ria."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Aqu\u00f2 marca cada migracion liurada per aquesta version coma ja executada. Fas\u00e8tz aqu\u00f2 solament sus una plataforma a jorn que n'a jamai enregistrat son ist\u00f2ria.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Aqu\u00f2 enregistra las migracions que v\u00f2stra basa de donadas p\u00f2rta ja, e daissa las mai recentas en esp\u00e8ra per que la mesa a jorn las p\u00f2sca executar. V\u00f2stras donadas son pas modificadas."
 }

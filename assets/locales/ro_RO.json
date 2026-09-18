@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Numarul de mesaje trimise",
     "Contacts count": "Numarul de contacte",
     "Sessions by date": "Sesiuni pe dat\u0103",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Aceasta marcheaz\u0103 fiecare migrare livrat\u0103 de aceast\u0103 versiune ca deja executat\u0103. Face\u021bi acest lucru doar pe o platform\u0103 actualizat\u0103 care nu \u0219i-a \u00eenregistrat niciodat\u0103 istoricul."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Aceasta marcheaz\u0103 fiecare migrare livrat\u0103 de aceast\u0103 versiune ca deja executat\u0103. Face\u021bi acest lucru doar pe o platform\u0103 actualizat\u0103 care nu \u0219i-a \u00eenregistrat niciodat\u0103 istoricul.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Aceasta \u00eenregistreaz\u0103 migr\u0103rile pe care baza de date le con\u021bine deja \u0219i las\u0103 pe cele mai noi \u00een a\u0219teptare, astfel \u00eenc\u00e2t actualizarea s\u0103 le poat\u0103 executa. Datele nu sunt modificate."
 }

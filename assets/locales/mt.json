@@ -4234,5 +4234,6 @@
     "Number of messages sent": "Numru ta' messa\u0121\u0121i mibg\u0127uta",
     "Contacts count": "Numru ta' kuntatti",
     "Sessions by date": "Sessjonijiet skont id-data",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dan jimmarka kull migrazzjoni mibg\u0127uta minn din il-ver\u017cjoni b\u0127ala di\u0121\u00e0 e\u017cegwita. Ag\u0127mel dan biss fuq pjattaforma li hija a\u0121\u0121ornata u qatt ma rre\u0121istrat l-istorja tag\u0127ha."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dan jimmarka kull migrazzjoni mibg\u0127uta minn din il-ver\u017cjoni b\u0127ala di\u0121\u00e0 e\u017cegwita. Ag\u0127mel dan biss fuq pjattaforma li hija a\u0121\u0121ornata u qatt ma rre\u0121istrat l-istorja tag\u0127ha.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Dan jirre\u0121istra l-migrazzjonijiet li d-database tieg\u0127ek di\u0121\u00e0 \u0121\u0121orr, u j\u0127alli dawk aktar \u0121odda pendenti biex l-a\u0121\u0121ornament ikun jista' je\u017cegwihom. Id-data tieg\u0127ek ma ti\u0121ix modifikata."
 }

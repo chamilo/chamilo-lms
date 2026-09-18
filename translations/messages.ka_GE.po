@@ -41550,11 +41550,14 @@ msgstr "მომხმარებლის დამატებითი ვ�
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON კონფიგურაცია ძიების წინასწარი ფილტრის ველებისთვის."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "ეს აღნიშნავს ამ ვერსიით მოწოდებულ ყველა მიგრაციას, როგორც უკვე შესრულებულს. გააკეთეთ ეს მხოლოდ პლატფორმაზე, რომელიც განახლებულია და არასდროს ჩაუწერია თავისი ისტორია."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "ეს აღრიცხავს მიგრაციებს, რომლებიც თქვენს მონაცემთა ბაზას უკვე აქვს, და ტოვებს უფრო ახლებს მოლოდინში, რათა განახლებამ შეასრულოს ისინი. თქვენი მონაცემები არ იცვლება."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s მიგრაცია ჩაიწერა. თქვენი პლატფორმა ახლა შეიძლება განახლდეს ჩვეულებრივად."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s მიგრაცია აღირიცხა და %s კვლავ მოლოდინშია. გაუშვით განახლება მათ შესასრულებლად."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "მიგრაციის ისტორია არ არის: დააწკაპუნეთ გამოსასწორებლად (წინააღმდეგ შემთხვევაში განახლებები შეიძლება გაფუჭდეს)"

@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "مثال الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نموذج الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -41568,11 +41568,14 @@ msgstr "مفتاح الحقل الإضافي للمستخدم لاستخدامه
 msgid "JSON configuration for search prefilter fields."
 msgstr "إعداد JSON لحقول التصفية المسبقة للبحث."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "يؤشر هذا كل ترحيل مُضمَّن في هذا الإصدار على أنه نُفِّذ بالفعل. افعل ذلك فقط على منصة محدَّثة ولم تسجّل تاريخها قط."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "يسجّل هذا الترحيلات التي تحملها قاعدة بياناتك بالفعل، ويترك الأحدث معلّقة حتى يتمكن التحديث من تنفيذها. لا يتم تعديل بياناتك."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "تم تسجيل %s ترحيلًا. يمكن الآن تحديث منصتك بشكل طبيعي."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "تم تسجيل %s ترحيل، ولا يزال %s معلّقًا. شغّل التحديث لتنفيذها."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "لا يوجد سجل ترحيل: انقر للإصلاح (وإلا قد تتعطل التحديثات)"

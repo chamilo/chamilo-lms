@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Egoki"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulako adibidea: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula-adibidea: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Aldagaien tarteak"
@@ -41561,11 +41561,14 @@ msgstr "Erabiltzailearen eremu gehigarriaren gakoa, saioak /admin-dashboard/regi
 msgid "JSON configuration for search prefilter fields."
 msgstr "Bilaketaren aurre-iragazkien eremuen JSON konfigurazioa."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Honek bertsio honek bidalitako migrazio guztiak jada exekutatuta gisa markatzen ditu. Egin hau soilik eguneratuta dagoen eta inoiz bere historia erregistratu ez duen plataforma batean."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Honek zure datu-baseak dagoeneko dituen migrazioak erregistratzen ditu eta berriagoak zain uzten ditu, eguneratzeak exekutatu ditzan. Zure datuak ez dira aldatzen."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrazio erregistratu dira. Zure plataforma orain normaltasunez eguneratu daiteke."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrazio erregistratu dira, eta %s oraindik zain daude. Exekutatu eguneratzea horiek burutzeko."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Ez dago migrazio-historiarik: egin klik konpontzeko (bestela eguneratzeak hautsi daitezke)"

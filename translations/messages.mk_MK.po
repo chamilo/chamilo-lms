@@ -41554,11 +41554,14 @@ msgstr "Клуч на дополнително поле на корисник з
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON конфигурација за полиња за претфилтер при пребарување."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Ова ги означува сите миграции испорачани со оваа верзија како веќе извршени. Направете го ова само на платформа што е ажурирана и никогаш не ја запишала својата историја."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Ова ги запишува миграциите што вашата база на податоци веќе ги содржи и ги остава поновите во чекање за да може ажурирањето да ги изврши. Вашите податоци не се менуваат."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "Запишани се %s миграции. Вашата платформа сега може да се ажурира нормално."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s миграции се запишани, а %s сè уште се во чекање. Стартувајте го ажурирањето за да ги извршите."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Нема историја на миграции: кликнете за да поправите (или ажурирањата може да се расипат)"

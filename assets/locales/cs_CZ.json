@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Po\u010det odeslan\u00fdch zpr\u00e1v",
     "Contacts count": "Po\u010det kontakt\u016f",
     "Sessions by date": "Relace podle data",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "T\u00edmto se ka\u017ed\u00e1 migrace dodan\u00e1 touto verz\u00ed ozna\u010d\u00ed jako ji\u017e proveden\u00e1. Prove\u010fte to pouze na platform\u011b, kter\u00e1 je aktu\u00e1ln\u00ed a nikdy nezaznamenala svou historii."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "T\u00edmto se ka\u017ed\u00e1 migrace dodan\u00e1 touto verz\u00ed ozna\u010d\u00ed jako ji\u017e proveden\u00e1. Prove\u010fte to pouze na platform\u011b, kter\u00e1 je aktu\u00e1ln\u00ed a nikdy nezaznamenala svou historii.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Toto zaznamen\u00e1 migrace, kter\u00e9 va\u0161e datab\u00e1ze ji\u017e obsahuje, a nov\u011bj\u0161\u00ed ponech\u00e1 jako \u010dekaj\u00edc\u00ed, aby je aktualizace mohla spustit. Va\u0161e data se nem\u011bn\u00ed."
 }

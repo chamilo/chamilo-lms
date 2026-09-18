@@ -338,7 +338,7 @@ msgid "Sincerely"
 msgstr "ດ້ວຍຄວາມຈິງໃຈ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ຕົວຢ່າງສູດ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ຕົວຢ່າງສູດ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ຊ່ວງຂອງຕົວປ່ຽນ"
@@ -41599,11 +41599,14 @@ msgstr "ຄີຊ່ອງຂໍ້ມູນເພີ່ມເຕີມຂອງ
 msgid "JSON configuration for search prefilter fields."
 msgstr "ການຕັ້ງຄ່າ JSON ສຳລັບຊ່ອງຂໍ້ມູນການກັ່ນຕອງລ່ວງໜ້າຂອງການຄົ້ນຫາ."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "ນີ້ຈະໝາຍວ່າການເຄື່ອນຍ້າຍທຸກລາຍການທີ່ສົ່ງມາກັບເວີຊັນນີ້ໄດ້ຖືກປະຕິບັດແລ້ວ. ເຮັດສິ່ງນີ້ພຽງແຕ່ໃນແພລດຟອມທີ່ອັບເດດແລ້ວ ແລະບໍ່ເຄີຍບັນທຶກປະຫວັດຂອງມັນ."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "ນີ້ບັນທຶກການເຄື່ອນຍ້າຍທີ່ຖານຂໍ້ມູນຂອງທ່ານມີຢູ່ແລ້ວ ແລະປ່ອຍໃຫ້ການເຄື່ອນຍ້າຍໃໝ່ກວ່າຄ້າງຢູ່ ເພື່ອໃຫ້ການອັບເດດສາມາດປະຕິບັດໄດ້. ຂໍ້ມູນຂອງທ່ານບໍ່ຖືກປ່ຽນແປງ."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "ບັນທຶກການເຄື່ອນຍ້າຍ %s ລາຍການແລ້ວ. ແພລດຟອມຂອງທ່ານສາມາດອັບເດດໄດ້ຕາມປົກກະຕິແລ້ວ."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "ບັນທຶກການເຄື່ອນຍ້າຍ %s ລາຍການແລ້ວ ແລະຍັງຄ້າງຢູ່ %s ລາຍການ. ດຳເນີນການອັບເດດເພື່ອປະຕິບັດພວກມັນ."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "ບໍ່ມີປະຫວັດການເຄື່ອນຍ້າຍ: ຄລິກເພື່ອແກ້ໄຂ (ຫຼືການອັບເດດອາດຈະເສຍຫາຍ)"

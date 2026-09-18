@@ -41620,11 +41620,14 @@ msgstr "/admin-dashboard/register からセッションを検索および命名�
 msgid "JSON configuration for search prefilter fields."
 msgstr "検索プリフィルターフィールドのJSON設定。"
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "この操作は、このバージョンで提供されたすべてのマイグレーションを実行済みとしてマークします。最新で、履歴が一度も記録されていないプラットフォームでのみ実行してください。"
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "データベースに既に適用されているマイグレーションを記録し、新しいものは保留のままにして、更新時に実行できるようにします。データは変更されません。"
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s 件のマイグレーションを記録しました。プラットフォームは通常どおり更新できるようになりました。"
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s 件のマイグレーションが記録され、%s 件がまだ保留中です。更新を実行して適用してください。"
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "マイグレーション履歴がありません: クリックして修正（しないと更新が失敗する可能性があります）"

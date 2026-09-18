@@ -41570,11 +41570,14 @@ msgstr "Ključ dodatnega polja uporabnika za iskanje in poimenovanje sej iz /adm
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON konfiguracija za polja predfiltra iskanja."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "To označi vsako migracijo, ki jo prinaša ta različica, kot že izvedeno. To storite samo na platformi, ki je posodobljena in nikoli ni zabeležila svoje zgodovine."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "To zabeleži migracije, ki jih vaša podatkovna zbirka že vsebuje, in novejše pusti v čakanju, da jih posodobitev lahko izvede. Vaši podatki niso spremenjeni."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migracij zabeleženih. Vašo platformo je zdaj mogoče posodabljati običajno."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migracij zabeleženih in %s jih še čaka. Zaženite posodobitev, da jih izvedete."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Ni zgodovine migracij: kliknite za popravek (sicer lahko posodobitve ne uspejo)"

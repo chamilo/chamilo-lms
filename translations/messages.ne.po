@@ -41554,11 +41554,14 @@ msgstr "/admin-dashboard/register बाट सत्रहरू खोज्�
 msgid "JSON configuration for search prefilter fields."
 msgstr "खोज प्रिफिल्टर फिल्डहरूको लागि JSON कन्फिगरेसन।"
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "यसले यस संस्करणले पठाएका सबै माइग्रेसनलाई पहिले नै कार्यान्वयन भइसकेको भनी चिन्ह लगाउँछ। यो केवल अद्यावधिक भएको र कहिल्यै इतिहास रेकर्ड नगरेको प्लेटफर्ममा मात्र गर्नुहोस्।"
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "यसले तपाईंको डाटाबेसमा पहिले नै रहेका माइग्रेसनहरू रेकर्ड गर्छ र नयाँहरूलाई पेन्डिङ छाड्छ ताकि अपडेटले तिनीहरूलाई कार्यान्वयन गर्न सकोस्। तपाईंको डाटा परिमार्जन हुँदैन।"
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s माइग्रेसन रेकर्ड गरियो। तपाईंको प्लेटफर्म अब सामान्य रूपमा अद्यावधिक गर्न सकिन्छ।"
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s माइग्रेसनहरू रेकर्ड गरिएका छन्, र %s अझै पेन्डिङ छन्। तिनीहरू कार्यान्वयन गर्न अपडेट चलाउनुहोस्।"
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "माइग्रेसन इतिहास छैन: ठीक गर्न क्लिक गर्नुहोस् (नत्र अद्यावधिक बिग्रन सक्छ)"

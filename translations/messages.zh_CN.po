@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "此致敬礼"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式示例: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式示例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "变量范围"
@@ -41556,11 +41556,14 @@ msgstr "从 /admin-dashboard/register 搜索和命名课程班时使用的用户
 msgid "JSON configuration for search prefilter fields."
 msgstr "搜索预筛选字段的 JSON 配置。"
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "此操作会将本版本附带的所有迁移标记为已执行。仅在平台已是最新且从未记录过迁移历史时执行此操作。"
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "这会记录数据库中已有的迁移，并将较新的迁移保持为待处理状态，以便更新时执行。您的数据不会被修改。"
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "已记录 %s 条迁移。您的平台现在可以正常更新。"
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "已记录 %s 个迁移，还有 %s 个待处理。请运行更新以执行它们。"
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "无迁移历史：点击修复（否则更新可能会失败）"

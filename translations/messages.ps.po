@@ -41550,11 +41550,14 @@ msgstr "د کارن اضافي ساحې کیلي چې د /admin-dashboard/regist
 msgid "JSON configuration for search prefilter fields."
 msgstr "د لټون د مخکیني فلټر ساحو لپاره JSON ترتیب."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "دا هر مهاجرت چې د دې نسخه لخوا لیږل شوی دمخه اجرا شوی په توګه نښه کوي. یوازې دا په هغه پلیټ فارم کې وکړئ چې تازه دی او هیڅکله یې خپل تاریخ ثبت نه کړی."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "دا هغه مهاجرتونه ثبتوي چې ستاسو ډیټابیس دمخه لري، او نوي یې په انتظار کې پریږدي ترڅو تازه کول یې اجرا کړي. ستاسو معلومات نه بدلېږي."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s مهاجرتونه ثبت شول. ستاسو پلیټ فارم اوس په نورمال ډول تازه کیدی شي."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s مهاجرتونه ثبت شوي، او %s لا هم په انتظار کې دي. تازه کول پرمخ یوسئ ترڅو یې اجرا کړئ."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "د مهاجرت تاریخ نشته: د سمولو لپاره کلیک وکړئ (یا تازه معلومات ممکن مات شي)"

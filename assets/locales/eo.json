@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Nombro de senditaj mesa\u011doj",
     "Contacts count": "Nombro de kontaktuloj",
     "Sessions by date": "Sesioj la\u016d dato",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Tio markas \u0109iun migrigon liveritan de \u0109i tiu versio kiel jam plenumitan. Faru tion nur sur platformo kiu estas \u011disdata kaj neniam registris sian historion."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Tio markas \u0109iun migrigon liveritan de \u0109i tiu versio kiel jam plenumitan. Faru tion nur sur platformo kiu estas \u011disdata kaj neniam registris sian historion.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Tio registras la migradojn, kiujn via datumbazo jam enhavas, kaj lasas la pli novajn atendantaj, por ke la \u011disdatigo povu efektivigi ilin. Viaj datumoj ne estas \u015dan\u011ditaj."
 }

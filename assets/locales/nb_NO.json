@@ -4184,7 +4184,7 @@
     "Page break": "Sideskift",
     "Matching combination": "Matching kombinasjon",
     "No negative score": "Ingen negativ poengsum",
-    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Eksempel p\u00e5 formel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
+    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
     "Add this question to the test: {0}": "Legg til dette sp\u00f8rsm\u00e5let i testen: {0}",
     "Edit question: {0}": "Rediger sp\u00f8rsm\u00e5l: {0}",
     "Add a question: {0}": "Legg til et sp\u00f8rsm\u00e5l: {0}",
@@ -4254,5 +4254,6 @@
     "Number of messages sent": "Antall meldinger sendt",
     "Contacts count": "Antall kontakter",
     "Sessions by date": "\u00d8kter etter dato",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dette merker hver migrering som f\u00f8lger med denne versjonen som allerede utf\u00f8rt. Gj\u00f8r dette bare p\u00e5 en plattform som er oppdatert og aldri har registrert historikken sin."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dette merker hver migrering som f\u00f8lger med denne versjonen som allerede utf\u00f8rt. Gj\u00f8r dette bare p\u00e5 en plattform som er oppdatert og aldri har registrert historikken sin.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Dette registrerer migreringene databasen din allerede har, og lar de nyere st\u00e5 som ventende slik at oppdateringen kan kj\u00f8re dem. Dataene dine blir ikke endret."
 }

@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Me respekt"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Shembull formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Shembull formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Vargjet e variablave"
@@ -41554,11 +41554,14 @@ msgstr "Çelësi i fushës shtesë të përdoruesit për kërkim dhe emërtim t�
 msgid "JSON configuration for search prefilter fields."
 msgstr "Konfigurimi JSON për fushat e parafiltrimit të kërkimit."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Kjo shënon çdo migrim të përfshirë në këtë version si tashmë të ekzekutuar. Bëjeni këtë vetëm në një platformë që është e përditësuar dhe nuk ka regjistruar kurrë historikun e saj."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Kjo regjistron migrimet që baza juaj e të dhënave tashmë i ka dhe i lë të rejat në pritje, që përditësimi t’i ekzekutojë. Të dhënat tuaja nuk ndryshohen."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrime të regjistruara. Platforma juaj tani mund të përditësohet normalisht."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrime të regjistruara dhe %s janë ende në pritje. Ekzekutoni përditësimin për t’i kryer ato."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Nuk ka historik migrimesh: klikoni për ta rregulluar (ose përditësimet mund të prishen)"

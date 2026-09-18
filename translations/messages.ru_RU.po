@@ -41557,11 +41557,14 @@ msgstr "Ключ дополнительного поля пользовател�
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-конфигурация полей предварительного фильтра поиска."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Это помечает все миграции этой версии как уже выполненные. Делайте это только на актуальной платформе, которая никогда не записывала свою историю."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Это фиксирует миграции, которые уже есть в вашей базе данных, и оставляет более новые в ожидании, чтобы обновление могло их выполнить. Ваши данные не изменяются."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "Записано миграций: %s. Теперь платформу можно обновлять обычным способом."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "Зафиксировано миграций: %s, ещё ожидают выполнения: %s. Запустите обновление, чтобы выполнить их."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Нет истории миграций: нажмите, чтобы исправить (иначе обновления могут сломаться)"

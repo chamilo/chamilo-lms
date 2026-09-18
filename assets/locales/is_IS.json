@@ -4254,5 +4254,6 @@
     "Number of messages sent": "Fj\u00f6ldi sendra skilabo\u00f0a",
     "Contacts count": "Fj\u00f6ldi tengili\u00f0a",
     "Sessions by date": "Setur eftir dagsetningu",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "\u00deetta merkir allar flutningar sem fylgja \u00feessari \u00fatg\u00e1fu sem \u00feegar framkv\u00e6mdar. Ger\u00f0u \u00feetta a\u00f0eins \u00e1 vettvangi sem er uppf\u00e6r\u00f0ur og hefur aldrei skr\u00e1\u00f0 s\u00f6gu s\u00edna."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "\u00deetta merkir allar flutningar sem fylgja \u00feessari \u00fatg\u00e1fu sem \u00feegar framkv\u00e6mdar. Ger\u00f0u \u00feetta a\u00f0eins \u00e1 vettvangi sem er uppf\u00e6r\u00f0ur og hefur aldrei skr\u00e1\u00f0 s\u00f6gu s\u00edna.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "\u00deetta skr\u00e1ir flutningana sem gagnagrunnurinn \u00feinn ber \u00feegar, og skilur \u00fe\u00e1 n\u00fdrri eftir \u00ed bi\u00f0 svo uppf\u00e6rslan geti framkv\u00e6mt \u00fe\u00e1. G\u00f6gnunum \u00fe\u00ednum er ekki breytt."
 }

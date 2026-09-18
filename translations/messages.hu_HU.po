@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képlet minta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -41554,11 +41554,14 @@ msgstr "Felhasználói extra mező kulcsa a munkamenetek kereséséhez és elnev
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-konfiguráció a keresési előszűrő mezőkhöz."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Ez minden, ebben a verzióban szállított migrációt már végrehajtottként jelöl. Csak olyan platformon tegye ezt, amely naprakész, és soha nem rögzítette a történetét."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Ez rögzíti az adatbázisban már meglévő migrációkat, és az újabbakat függőben hagyja, hogy a frissítés végrehajthassa őket. Az adatok nem módosulnak."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migráció rögzítve. A platform mostantól normálisan frissíthető."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migráció rögzítve, %s pedig még függőben van. Futtassa a frissítést a végrehajtásukhoz."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Nincs migrációs előzmény: kattintson a javításhoz (különben a frissítések elromolhatnak)"

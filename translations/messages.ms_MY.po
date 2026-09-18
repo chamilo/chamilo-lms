@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Sekiranya ini"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh formula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Julat pembolehubah"
@@ -41554,11 +41554,14 @@ msgstr "Kunci medan tambahan pengguna untuk digunakan semasa mencari dan menamak
 msgid "JSON configuration for search prefilter fields."
 msgstr "Konfigurasi JSON untuk medan prapenapis carian."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Ini menandakan setiap migrasi yang dihantar oleh versi ini sebagai sudah dilaksanakan. Hanya lakukan ini pada platform yang terkini dan tidak pernah merekodkan sejarahnya."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Ini merekodkan migrasi yang sudah wujud dalam pangkalan data anda, dan meninggalkan yang lebih baharu sebagai tertunda supaya kemas kini dapat melaksanakannya. Data anda tidak diubah suai."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrasi direkodkan. Platform anda kini boleh dikemas kini seperti biasa."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrasi direkodkan, dan %s masih tertunda. Jalankan kemas kini untuk melaksanakannya."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Tiada sejarah migrasi: klik untuk membetulkan (atau kemas kini mungkin rosak)"

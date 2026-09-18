@@ -41555,11 +41555,14 @@ msgstr "Lietotāja papildlauka atslēga, ko izmantot, meklējot un nosaucot sesi
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON konfigurācija meklēšanas priekšfiltra laukiem."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Tas atzīmē visas šīs versijas piegādātās migrācijas kā jau izpildītas. Dariet to tikai platformā, kas ir atjaunināta un nekad nav reģistrējusi savu vēsturi."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Tas reģistrē migrācijas, kuras jūsu datubāze jau satur, un atstāj jaunākās gaidīšanas režīmā, lai atjauninājums tās varētu izpildīt. Jūsu dati netiek mainīti."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "Reģistrētas %s migrācijas. Jūsu platformu tagad var atjaunināt parasti."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrācijas reģistrētas, un %s joprojām ir gaidīšanas režīmā. Palaižiet atjauninājumu, lai tās izpildītu."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Nav migrācijas vēstures: noklikšķiniet, lai labotu (vai atjauninājumi var sabojāties)"

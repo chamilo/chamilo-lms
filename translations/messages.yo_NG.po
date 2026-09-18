@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Pẹ̀lẹ́"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Àpẹẹrẹ fọ́múlà: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Àpẹẹrẹ fọ́múlà: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Àwùjọ ìdípadì ìyàtọ̀"
@@ -41550,11 +41550,14 @@ msgstr "Bọ́tìnì pápá àfikún olùmúlò láti lò nígbà ìwákiri àti
 msgid "JSON configuration for search prefilter fields."
 msgstr "Ìṣètò JSON fún àwọn pápá àṣàtò ìwákiri tẹ́lẹ̀."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Èyí samisi gbogbo ìkópadà tí ẹ̀yà yìí gbé jáde gẹ́gẹ́ bíi èyí tí a ti ṣe tẹ́lẹ̀. Ṣe èyí nìkan lórí pẹpẹ tí ó ti wà ní ìgbàlódé tí kò sì tíì kọ ìtàn rẹ̀ sílẹ̀."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Èyí ń ṣàkọsílẹ̀ àwọn ìṣípòpadà tí àkójọpọ̀-dátà rẹ ti ní tẹ́lẹ̀, ó sì fi àwọn tuntun sílẹ̀ ní ìdúró kí ìmúdójúìwọ̀n lè ṣiṣẹ́ wọn. A kò yí dátà rẹ padà."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s ìkópadà ni a kọ sílẹ̀. Pẹpẹ rẹ lè jẹ́ ìmúdójúìwọ̀n ní ìṣe déédé báyìí."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s ìṣípòpadà ti jẹ́ kíkọsílẹ̀, %s sì ń dúró. Ṣe ìmúdójúìwọ̀n láti ṣiṣẹ́ wọn."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Kò sí ìtàn ìkópadà: tẹ̀ ẹ́ láti tún ṣe (tàbí ìmúdójúìwọ̀n lè bàjẹ́)"

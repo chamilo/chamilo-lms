@@ -4254,5 +4254,6 @@
     "Number of messages sent": "Saadetud s\u00f5numite arv",
     "Contacts count": "Kontaktide arv",
     "Sessions by date": "Sessioonid kuup\u00e4eva j\u00e4rgi",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "See m\u00e4rgib k\u00f5ik selle versiooniga kaasas olevad migratsioonid juba t\u00e4idetuks. Tehke seda ainult platvormil, mis on ajakohane ja pole kunagi oma ajalugu salvestanud."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "See m\u00e4rgib k\u00f5ik selle versiooniga kaasas olevad migratsioonid juba t\u00e4idetuks. Tehke seda ainult platvormil, mis on ajakohane ja pole kunagi oma ajalugu salvestanud.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "See salvestab migratsioonid, mis teie andmebaasis juba olemas on, ja j\u00e4tab uuemad ootele, et uuendus saaks need t\u00e4ita. Teie andmeid ei muudeta."
 }

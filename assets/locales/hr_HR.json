@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Broj poslanih poruka",
     "Contacts count": "Broj kontakata",
     "Sessions by date": "Sesije po datumu",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ovo ozna\u010dava svaku migraciju isporu\u010denu s ovom verzijom kao ve\u0107 izvr\u0161enu. U\u010dinite to samo na platformi koja je a\u017eurna i nikada nije zabilje\u017eila svoju povijest."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ovo ozna\u010dava svaku migraciju isporu\u010denu s ovom verzijom kao ve\u0107 izvr\u0161enu. U\u010dinite to samo na platformi koja je a\u017eurna i nikada nije zabilje\u017eila svoju povijest.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Ovo bilje\u017ei migracije koje va\u0161a baza podataka ve\u0107 sadr\u017ei i ostavlja novije na \u010dekanju kako bi ih a\u017euriranje moglo izvr\u0161iti. Va\u0161i podaci se ne mijenjaju."
 }

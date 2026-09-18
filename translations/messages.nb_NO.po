@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vennlig hilsen"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Eksempel på formel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formeleksempel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelområder"
@@ -41555,11 +41555,14 @@ msgstr "Nøkkel for ekstra brukerfelt som brukes ved søk og navngiving av økte
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-konfigurasjon for søkeforfilterfelt."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Dette merker hver migrering som følger med denne versjonen som allerede utført. Gjør dette bare på en plattform som er oppdatert og aldri har registrert historikken sin."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Dette registrerer migreringene databasen din allerede har, og lar de nyere stå som ventende slik at oppdateringen kan kjøre dem. Dataene dine blir ikke endret."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migreringer registrert. Plattformen din kan nå oppdateres på vanlig måte."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migreringer registrert, og %s er fortsatt ventende. Kjør oppdateringen for å utføre dem."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Ingen migreringshistorikk: klikk for å rette (ellers kan oppdateringer feile)"

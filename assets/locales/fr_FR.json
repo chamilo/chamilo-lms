@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Nombre de messages envoy\u00e9s",
     "Contacts count": "Nombre de contacts",
     "Sessions by date": "Sessions par dates",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ceci marque toutes les migrations livr\u00e9es par cette version comme d\u00e9j\u00e0 ex\u00e9cut\u00e9es. Ne le faites que sur une plateforme \u00e0 jour qui n'a jamais enregistr\u00e9 son historique."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ceci marque toutes les migrations livr\u00e9es par cette version comme d\u00e9j\u00e0 ex\u00e9cut\u00e9es. Ne le faites que sur une plateforme \u00e0 jour qui n'a jamais enregistr\u00e9 son historique.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Ceci enregistre les migrations d\u00e9j\u00e0 pr\u00e9sentes dans votre base de donn\u00e9es et laisse les plus r\u00e9centes en attente afin que la mise \u00e0 jour puisse les ex\u00e9cuter. Vos donn\u00e9es ne sont pas modifi\u00e9es."
 }

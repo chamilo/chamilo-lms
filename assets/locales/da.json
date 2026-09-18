@@ -4188,7 +4188,7 @@
     "Page break": "Side slut",
     "Matching combination": "Matchning, kombination",
     "No negative score": "Ingen negativ score",
-    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
+    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Formel-eksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
     "Group agenda": "Gruppeagenda",
     "Use system default certificate": "Brug systemets standardcertifikat",
     "The attached certificate is unavailable. The system default certificate will be used.": "Det vedh\u00e6ftede certifikat er ikke tilg\u00e6ngeligt. Systemets standardcertifikat vil blive brugt.",
@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Antal afsendte beskeder",
     "Contacts count": "Antal kontakter",
     "Sessions by date": "Sessioner efter dato",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dette markerer alle migreringer, der f\u00f8lger med denne version, som allerede udf\u00f8rt. G\u00f8r kun dette p\u00e5 en platform, der er opdateret og aldrig har registreret sin historik."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dette markerer alle migreringer, der f\u00f8lger med denne version, som allerede udf\u00f8rt. G\u00f8r kun dette p\u00e5 en platform, der er opdateret og aldrig har registreret sin historik.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Dette registrerer de migrationer, som din database allerede indeholder, og lader de nyere st\u00e5 som afventende, s\u00e5 opdateringen kan udf\u00f8re dem. Dine data \u00e6ndres ikke."
 }

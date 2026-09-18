@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Tusaale formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaalaha qaaciddada: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -41550,11 +41550,14 @@ msgstr "Furaha goobta dheeraadka ah ee isticmaalaha ee loo isticmaalo marka la r
 msgid "JSON configuration for search prefilter fields."
 msgstr "Qaabaynta JSON ee goobaha shaandhaynta horudhaca ah ee raadinta."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Tani waxay calaamadinaysaa wareejin kasta oo noocan la keenay in mar hore la fuliyay. Kaliya samee tan madal cusub oo aan waligeed taariikhdeeda diiwaangelin."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Tani waxay diiwaangelisaa socdaalka kaydkaaga xogta uu horay u hayo, waxayna ka tagtaa kuwa cusub ee sugaya si cusboonaysiinta ay u fulin karto. Xogtaada lama beddelo."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s wareejin ayaa la diiwaangeliyay. Madalkaaga hadda si caadi ah ayaa loo cusboonaysiin karaa."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s socdaal ayaa la diiwaangeliyay, %s-na weli way sugayaan. Socodsii cusboonaysiinta si loo fulo."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Ma jiro taariikh wareejin: riix si aad u saxdo (ama cusboonaysiinta way jabi karaan)"

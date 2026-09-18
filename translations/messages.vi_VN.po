@@ -41556,11 +41556,14 @@ msgstr "Khóa trường bổ sung của người dùng dùng khi tìm kiếm và
 msgid "JSON configuration for search prefilter fields."
 msgstr "Cấu hình JSON cho các trường bộ lọc trước khi tìm kiếm."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Thao tác này đánh dấu mọi migration đi kèm phiên bản này là đã thực thi. Chỉ làm vậy trên nền tảng đã cập nhật và chưa từng ghi lịch sử."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Thao tác này ghi nhận các migration mà cơ sở dữ liệu của bạn đã có và để các migration mới hơn ở trạng thái chờ để quá trình cập nhật có thể thực thi chúng. Dữ liệu của bạn không bị thay đổi."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migration đã được ghi nhận. Nền tảng của bạn giờ có thể được cập nhật bình thường."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migration đã được ghi nhận, và %s vẫn đang chờ. Chạy cập nhật để thực thi chúng."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Không có lịch sử migration: nhấn để sửa (hoặc các bản cập nhật có thể bị lỗi)"

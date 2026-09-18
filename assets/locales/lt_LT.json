@@ -4253,5 +4253,6 @@
     "Number of messages sent": "I\u0161si\u0173st\u0173 \u017einu\u010di\u0173 skai\u010dius",
     "Contacts count": "Kontakt\u0173 skai\u010dius",
     "Sessions by date": "Sesijos pagal dat\u0105",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Tai pa\u017eymi visas \u0161ios versijos migracijas kaip jau \u012fvykdytas. Darykite tai tik platformoje, kuri yra atnaujinta ir niekada neregistravo savo istorijos."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Tai pa\u017eymi visas \u0161ios versijos migracijas kaip jau \u012fvykdytas. Darykite tai tik platformoje, kuri yra atnaujinta ir niekada neregistravo savo istorijos.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Tai u\u017efiksuoja migracijas, kurias j\u016bs\u0173 duomen\u0173 baz\u0117 jau turi, ir palieka naujesnes laukian\u010diomis, kad atnaujinimas gal\u0117t\u0173 jas \u012fvykdyti. J\u016bs\u0173 duomenys n\u0117ra kei\u010diami."
 }

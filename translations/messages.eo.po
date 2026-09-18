@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ekzemplo de formulo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ekzemplo de formulo: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -41556,11 +41556,14 @@ msgstr "Ŝlosilo de ekstra uzantkampo uzenda kiam oni serĉas kaj nomas sesiojn 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-agordo por antaŭfiltrilaj kampoj de serĉo."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Tio markas ĉiun migrigon liveritan de ĉi tiu versio kiel jam plenumitan. Faru tion nur sur platformo kiu estas ĝisdata kaj neniam registris sian historion."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Tio registras la migradojn, kiujn via datumbazo jam enhavas, kaj lasas la pli novajn atendantaj, por ke la ĝisdatigo povu efektivigi ilin. Viaj datumoj ne estas ŝanĝitaj."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrigoj registritaj. Via platformo nun povas esti ĝisdatigita normale."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migradoj registritaj, kaj %s ankoraŭ atendas. Rulu la ĝisdatigon por efektivigi ilin."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Neniu migrada historio: klaku por ripari (aŭ ĝisdatigoj povus rompiĝi)"

@@ -4188,7 +4188,7 @@
     "Page break": "Orriaren amaiera",
     "Matching combination": "Loturaren konbinazioa",
     "No negative score": "Ez dago puntuazio negatiborik",
-    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Formulako adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
+    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Formula-adibidea: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
     "Group agenda": "Taldearen agenda",
     "Use system default certificate": "Erabili sistemaren ziurtagiri lehenetsia",
     "The attached certificate is unavailable. The system default certificate will be used.": "Erantsitako ziurtagiria ez dago erabilgarri. Sistemaren ziurtagiri lehenetsia erabiliko da.",
@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Bidalitako mezu kopurua",
     "Contacts count": "Harreman kopurua",
     "Sessions by date": "Saioak dataz",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Honek bertsio honek bidalitako migrazio guztiak jada exekutatuta gisa markatzen ditu. Egin hau soilik eguneratuta dagoen eta inoiz bere historia erregistratu ez duen plataforma batean."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Honek bertsio honek bidalitako migrazio guztiak jada exekutatuta gisa markatzen ditu. Egin hau soilik eguneratuta dagoen eta inoiz bere historia erregistratu ez duen plataforma batean.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Honek zure datu-baseak dagoeneko dituen migrazioak erregistratzen ditu eta berriagoak zain uzten ditu, eguneratzeak exekutatu ditzan. Zure datuak ez dira aldatzen."
 }

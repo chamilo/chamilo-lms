@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primjer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primjer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raspon varijabli"
@@ -26722,7 +26722,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfiguracija LDAP konekcije"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] <\/pre>"
+msgstr "Niz koji definiše host i port za LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Postavi datum isteka pri prvoj prijavi"
@@ -41550,11 +41550,14 @@ msgstr "Ključ dodatnog polja korisnika koji se koristi pri pretraživanju i ime
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON konfiguracija za polja predfiltera pretrage."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Ovo označava svaku migraciju isporučenu ovom verzijom kao već izvršenu. Uradite ovo samo na platformi koja je ažurirana i nikada nije zabilježila svoju historiju."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Ovo bilježi migracije koje vaša baza podataka već sadrži i ostavlja novije na čekanju kako bi ih ažuriranje moglo izvršiti. Vaši podaci se ne mijenjaju."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migracija zabilježeno. Vaša platforma se sada može ažurirati normalno."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migracija zabilježeno, a %s je još na čekanju. Pokrenite ažuriranje da biste ih izvršili."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Nema historije migracije: kliknite da popravite (ili ažuriranja mogu pokvariti)"

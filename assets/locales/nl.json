@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Aantal verzonden berichten",
     "Contacts count": "Aantal contacten",
     "Sessions by date": "Sessies op datum",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dit markeert elke migratie die bij deze versie hoort als al uitgevoerd. Doe dit alleen op een platform dat up-to-date is en nooit zijn geschiedenis heeft vastgelegd."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dit markeert elke migratie die bij deze versie hoort als al uitgevoerd. Doe dit alleen op een platform dat up-to-date is en nooit zijn geschiedenis heeft vastgelegd.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Dit registreert de migraties die uw database al bevat en laat de nieuwere in behandeling, zodat de update ze kan uitvoeren. Uw gegevens worden niet gewijzigd."
 }

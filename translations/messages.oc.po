@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cordialament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de fòrmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de fòrmula : sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -41550,11 +41550,14 @@ msgstr "Clau del camp extra d'utilizaire d'utilizar quand se recèrca e se nomen
 msgid "JSON configuration for search prefilter fields."
 msgstr "Configuracion JSON pels camps de prefiltre de recèrca."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Aquò marca cada migracion liurada per aquesta version coma ja executada. Fasètz aquò solament sus una plataforma a jorn que n'a jamai enregistrat son istòria."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Aquò enregistra las migracions que vòstra basa de donadas pòrta ja, e daissa las mai recentas en espèra per que la mesa a jorn las pòsca executar. Vòstras donadas son pas modificadas."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migracions enregistradas. Vòstra plataforma pòt ara èsser mesa a jorn normalament."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migracions enregistradas, e %s son encara en espèra. Lancatz la mesa a jorn per las executar."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Pas d'istòria de migracion : clicatz per corregir (o las mesas a jorn poirián se copar)"

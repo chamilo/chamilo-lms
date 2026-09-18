@@ -41550,11 +41550,14 @@ msgstr "Lykil til eyka brúkaraøki at nýta tá leitað verður og sesjónir ne
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-uppseting fyri leitingar-forfiltur øki."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Hetta merkir allar flytingar, ið fylgja við hesi útgávu, sum longu framdar. Ger hetta bert á einum palli, ið er dagførdur og ongantíð hevur skrásett sína søgu."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Hetta skrásetur tær migreringar, sum dátugrunnurin longu hevur, og letur tær nýggjari vera í bíðistøðu, so dagføringin kann framkvæma tær. Dátan verður ikki broytt."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s flytingar skrásettar. Pallurin kann nú dagførast vanliga."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migreringar skrásettar, og %s eru enn í bíðistøðu. Koyr dagføringina fyri at framkvæma tær."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Ongin flytingarsøga: trýst fyri at rætta (ella kunnu dagføringar brotna)"

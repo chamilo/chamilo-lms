@@ -41569,11 +41569,14 @@ msgstr "Chave do campo extra do usuário a usar ao pesquisar e nomear sessões a
 msgid "JSON configuration for search prefilter fields."
 msgstr "Configuração JSON para campos de pré-filtro de pesquisa."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Isto marca todas as migrações desta versão como já executadas. Faça isso apenas em uma plataforma atualizada que nunca registrou seu histórico."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Isto registra as migrações que o seu banco de dados já possui e deixa as mais recentes pendentes para que a atualização possa executá-las. Os seus dados não são modificados."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrações registradas. Sua plataforma agora pode ser atualizada normalmente."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrações registradas e %s ainda pendentes. Execute a atualização para aplicá-las."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Sem histórico de migração: clique para corrigir (ou as atualizações podem falhar)"

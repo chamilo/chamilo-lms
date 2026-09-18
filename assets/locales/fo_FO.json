@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Tal av sendum bo\u00f0um",
     "Contacts count": "Tal av sambondum",
     "Sessions by date": "Sessi\u00f3nir eftir dag",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Hetta merkir allar flytingar, i\u00f0 fylgja vi\u00f0 hesi \u00fatg\u00e1vu, sum longu framdar. Ger hetta bert \u00e1 einum palli, i\u00f0 er dagf\u00f8rdur og ongant\u00ed\u00f0 hevur skr\u00e1sett s\u00edna s\u00f8gu."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Hetta merkir allar flytingar, i\u00f0 fylgja vi\u00f0 hesi \u00fatg\u00e1vu, sum longu framdar. Ger hetta bert \u00e1 einum palli, i\u00f0 er dagf\u00f8rdur og ongant\u00ed\u00f0 hevur skr\u00e1sett s\u00edna s\u00f8gu.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Hetta skr\u00e1setur t\u00e6r migreringar, sum d\u00e1tugrunnurin longu hevur, og letur t\u00e6r n\u00fdggjari vera \u00ed b\u00ed\u00f0ist\u00f8\u00f0u, so dagf\u00f8ringin kann framkv\u00e6ma t\u00e6r. D\u00e1tan ver\u00f0ur ikki broytt."
 }

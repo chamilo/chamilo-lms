@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Numri i mesazheve t\u00eb d\u00ebrguara",
     "Contacts count": "Numri i kontakteve",
     "Sessions by date": "Sesionet sipas dat\u00ebs",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Kjo sh\u00ebnon \u00e7do migrim t\u00eb p\u00ebrfshir\u00eb n\u00eb k\u00ebt\u00eb version si tashm\u00eb t\u00eb ekzekutuar. B\u00ebjeni k\u00ebt\u00eb vet\u00ebm n\u00eb nj\u00eb platform\u00eb q\u00eb \u00ebsht\u00eb e p\u00ebrdit\u00ebsuar dhe nuk ka regjistruar kurr\u00eb historikun e saj."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Kjo sh\u00ebnon \u00e7do migrim t\u00eb p\u00ebrfshir\u00eb n\u00eb k\u00ebt\u00eb version si tashm\u00eb t\u00eb ekzekutuar. B\u00ebjeni k\u00ebt\u00eb vet\u00ebm n\u00eb nj\u00eb platform\u00eb q\u00eb \u00ebsht\u00eb e p\u00ebrdit\u00ebsuar dhe nuk ka regjistruar kurr\u00eb historikun e saj.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Kjo regjistron migrimet q\u00eb baza juaj e t\u00eb dh\u00ebnave tashm\u00eb i ka dhe i l\u00eb t\u00eb rejat n\u00eb pritje, q\u00eb p\u00ebrdit\u00ebsimi t\u2019i ekzekutoj\u00eb. T\u00eb dh\u00ebnat tuaja nuk ndryshohen."
 }

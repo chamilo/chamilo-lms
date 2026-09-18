@@ -41556,11 +41556,14 @@ msgstr "Nyckel för extra användarfält som används vid sökning och namngivni
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-konfiguration för sökförfilterfält."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Detta markerar varje migrering som medföljer den här versionen som redan utförd. Gör detta endast på en plattform som är uppdaterad och aldrig har registrerat sin historik."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Detta registrerar de migreringar som din databas redan har och lämnar de nyare väntande så att uppdateringen kan köra dem. Dina data ändras inte."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migreringar registrerade. Din plattform kan nu uppdateras som vanligt."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migreringar registrerade, och %s är fortfarande väntande. Kör uppdateringen för att utföra dem."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Ingen migreringshistorik: klicka för att åtgärda (annars kan uppdateringar sluta fungera)"

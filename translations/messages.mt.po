@@ -41555,11 +41555,14 @@ msgstr "Ċavetta tal-qasam extra tal-utent biex tintuża meta tfittex u ssemmi s
 msgid "JSON configuration for search prefilter fields."
 msgstr "Konfigurazzjoni JSON għall-oqsma tal-prefiltru tat-tiftix."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Dan jimmarka kull migrazzjoni mibgħuta minn din il-verżjoni bħala diġà eżegwita. Agħmel dan biss fuq pjattaforma li hija aġġornata u qatt ma rreġistrat l-istorja tagħha."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Dan jirreġistra l-migrazzjonijiet li d-database tiegħek diġà ġġorr, u jħalli dawk aktar ġodda pendenti biex l-aġġornament ikun jista' jeżegwihom. Id-data tiegħek ma tiġix modifikata."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrazzjonijiet irreġistrati. Il-pjattaforma tiegħek issa tista' tiġi aġġornata normalment."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrazzjonijiet irreġistrati, u %s għadhom pendenti. Mexxi l-aġġornament biex teżegwihom."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "L-ebda storja ta' migrazzjoni: ikklikkja biex tissewwa (jew l-aġġornamenti jistgħu jinkisru)"

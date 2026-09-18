@@ -4253,5 +4253,6 @@
     "Number of messages sent": "L\u00e4hetettyjen viestien m\u00e4\u00e4r\u00e4",
     "Contacts count": "Yhteysten m\u00e4\u00e4r\u00e4",
     "Sessions by date": "Sessiot p\u00e4iv\u00e4m\u00e4\u00e4r\u00e4n mukaan",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "T\u00e4m\u00e4 merkitsee kaikki t\u00e4m\u00e4n version mukana toimitetut migraatiot jo suoritetuiksi. Tee t\u00e4m\u00e4 vain alustalla, joka on ajan tasalla eik\u00e4 ole koskaan tallentanut historiaansa."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "T\u00e4m\u00e4 merkitsee kaikki t\u00e4m\u00e4n version mukana toimitetut migraatiot jo suoritetuiksi. Tee t\u00e4m\u00e4 vain alustalla, joka on ajan tasalla eik\u00e4 ole koskaan tallentanut historiaansa.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "T\u00e4m\u00e4 kirjaa tietokannassasi jo olevat migraatiot ja j\u00e4tt\u00e4\u00e4 uudemmat odottamaan, jotta p\u00e4ivitys voi suorittaa ne. Tietojasi ei muuteta."
 }

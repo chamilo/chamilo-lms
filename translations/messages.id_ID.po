@@ -41554,11 +41554,14 @@ msgstr "Kunci bidang tambahan pengguna yang digunakan saat mencari dan menamai s
 msgid "JSON configuration for search prefilter fields."
 msgstr "Konfigurasi JSON untuk bidang prapenyaring pencarian."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Ini menandai setiap migrasi yang dikirimkan versi ini sebagai sudah dijalankan. Lakukan ini hanya pada platform yang sudah mutakhir dan belum pernah mencatat riwayatnya."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Ini mencatat migrasi yang sudah ada di basis data Anda, dan membiarkan yang lebih baru tetap tertunda agar pembaruan dapat menjalankannya. Data Anda tidak diubah."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrasi tercatat. Platform Anda sekarang dapat diperbarui secara normal."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrasi tercatat, dan %s masih tertunda. Jalankan pembaruan untuk menjalankannya."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Tidak ada riwayat migrasi: klik untuk memperbaiki (atau pembaruan mungkin rusak)"

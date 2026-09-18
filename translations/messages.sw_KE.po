@@ -41550,11 +41550,14 @@ msgstr "Ufunguo wa uga wa ziada wa mtumiaji wa kutumia wakati wa kutafuta na kut
 msgid "JSON configuration for search prefilter fields."
 msgstr "Usanidi wa JSON kwa uga za kichujio cha awali cha utafutaji."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Hii huashiria kila uhamishaji ulioletwa na toleo hili kama uliotekelezwa tayari. Fanya hivi tu kwenye jukwaa lililo sasishwa na ambalo halijawahi kurekodi historia yake."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Hii hurekodi uhamishaji ambao hifadhidata yako tayari ina, na huacha zile mpya zikisubiri ili sasisho liweze kuzitekeleza. Data yako haibadilishwi."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "Uhamishaji %s umerekodiwa. Jukwaa lako sasa linaweza kusasishwa kawaida."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "Uhamishaji %s umerekodiwa, na %s bado unasubiri. Endesha sasisho ili kuvitekeleza."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Hakuna historia ya uhamishaji: bofya kurekebisha (au masasisho yanaweza kuharibika)"

@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Bilangan mesej dihantar",
     "Contacts count": "Kiraan kenalan",
     "Sessions by date": "Sesi mengikut tarikh",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ini menandakan setiap migrasi yang dihantar oleh versi ini sebagai sudah dilaksanakan. Hanya lakukan ini pada platform yang terkini dan tidak pernah merekodkan sejarahnya."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ini menandakan setiap migrasi yang dihantar oleh versi ini sebagai sudah dilaksanakan. Hanya lakukan ini pada platform yang terkini dan tidak pernah merekodkan sejarahnya.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Ini merekodkan migrasi yang sudah wujud dalam pangkalan data anda, dan meninggalkan yang lebih baharu sebagai tertunda supaya kemas kini dapat melaksanakannya. Data anda tidak diubah suai."
 }

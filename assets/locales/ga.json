@@ -4253,5 +4253,6 @@
     "Number of messages sent": "L\u00edon teachtaireachta\u00ed seolta",
     "Contacts count": "L\u00edon teagmh\u00e1lacha",
     "Sessions by date": "Seisi\u00fain de r\u00e9ir d\u00e1ta",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Marc\u00e1lann s\u00e9 seo gach imirce a sheol an leagan seo mar a forghn\u00edomha\u00edodh cheana. N\u00e1 d\u00e9an \u00e9 seo ach ar ard\u00e1n at\u00e1 cothrom le d\u00e1ta agus n\u00e1r thaifead a stair riamh."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Marc\u00e1lann s\u00e9 seo gach imirce a sheol an leagan seo mar a forghn\u00edomha\u00edodh cheana. N\u00e1 d\u00e9an \u00e9 seo ach ar ard\u00e1n at\u00e1 cothrom le d\u00e1ta agus n\u00e1r thaifead a stair riamh.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Taifeadann s\u00e9 seo na himirceanna at\u00e1 i do bhunachar sonra\u00ed cheana, agus f\u00e1gann s\u00e9 na cinn nua ar feitheamh ionas gur f\u00e9idir leis an nuashonr\u00fa iad a fhorghn\u00edomh\u00fa. N\u00ed athra\u00edtear do shonra\u00ed."
 }

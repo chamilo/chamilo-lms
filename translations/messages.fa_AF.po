@@ -41550,11 +41550,14 @@ msgstr "کلید فیلد اضافی کاربر برای جستجو و نام‌
 msgid "JSON configuration for search prefilter fields."
 msgstr "پیکربندی JSON برای فیلدهای پیش‌فیلتر جستجو."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "این همه مهاجرت‌های ارائه‌شده توسط این نسخه را به‌عنوان اجراشده علامت می‌زند. این کار را فقط روی بستری انجام دهید که به‌روز است و هرگز تاریخچهٔ خود را ثبت نکرده است."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "این، مهاجرت‌هایی را که پایگاه‌داده شما از قبل دارد ثبت می‌کند و مهاجرت‌های جدیدتر را در حالت انتظار می‌گذارد تا به‌روزرسانی بتواند آن‌ها را اجرا کند. داده‌های شما تغییر نمی‌کند."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s مهاجرت ثبت شد. بستر شما اکنون می‌تواند به‌طور عادی به‌روزرسانی شود."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s مهاجرت ثبت شد و %s هنوز در انتظار است. به‌روزرسانی را اجرا کنید تا آن‌ها اجرا شوند."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "بدون تاریخچهٔ مهاجرت: برای رفع کلیک کنید (در غیر این صورت به‌روزرسانی‌ها ممکن است خراب شوند)"

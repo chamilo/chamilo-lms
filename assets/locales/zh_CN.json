@@ -4188,7 +4188,7 @@
     "Page break": "\u5206\u9875",
     "Matching combination": "\u5339\u914d\u7ec4\u5408\u9898",
     "No negative score": "\u65e0\u8d1f\u5206",
-    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "\u516c\u5f0f\u793a\u4f8b: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
+    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "\u516c\u5f0f\u793a\u4f8b\uff1asqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
     "Group agenda": "\u5c0f\u7ec4\u65e5\u7a0b",
     "Use system default certificate": "\u4f7f\u7528\u7cfb\u7edf\u9ed8\u8ba4\u8bc1\u4e66",
     "The attached certificate is unavailable. The system default certificate will be used.": "\u6240\u9644\u8bc1\u4e66\u4e0d\u53ef\u7528\u3002\u5c06\u4f7f\u7528\u7cfb\u7edf\u9ed8\u8ba4\u8bc1\u4e66\u3002",
@@ -4253,5 +4253,6 @@
     "Number of messages sent": "\u5df2\u53d1\u9001\u6d88\u606f\u6761\u6570",
     "Contacts count": "\u8054\u7cfb\u4eba\u6570\u76ee",
     "Sessions by date": "\u6309\u65e5\u671f\u4f1a\u8bdd",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "\u6b64\u64cd\u4f5c\u4f1a\u5c06\u672c\u7248\u672c\u9644\u5e26\u7684\u6240\u6709\u8fc1\u79fb\u6807\u8bb0\u4e3a\u5df2\u6267\u884c\u3002\u4ec5\u5728\u5e73\u53f0\u5df2\u662f\u6700\u65b0\u4e14\u4ece\u672a\u8bb0\u5f55\u8fc7\u8fc1\u79fb\u5386\u53f2\u65f6\u6267\u884c\u6b64\u64cd\u4f5c\u3002"
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "\u6b64\u64cd\u4f5c\u4f1a\u5c06\u672c\u7248\u672c\u9644\u5e26\u7684\u6240\u6709\u8fc1\u79fb\u6807\u8bb0\u4e3a\u5df2\u6267\u884c\u3002\u4ec5\u5728\u5e73\u53f0\u5df2\u662f\u6700\u65b0\u4e14\u4ece\u672a\u8bb0\u5f55\u8fc7\u8fc1\u79fb\u5386\u53f2\u65f6\u6267\u884c\u6b64\u64cd\u4f5c\u3002",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "\u8fd9\u4f1a\u8bb0\u5f55\u6570\u636e\u5e93\u4e2d\u5df2\u6709\u7684\u8fc1\u79fb\uff0c\u5e76\u5c06\u8f83\u65b0\u7684\u8fc1\u79fb\u4fdd\u6301\u4e3a\u5f85\u5904\u7406\u72b6\u6001\uff0c\u4ee5\u4fbf\u66f4\u65b0\u65f6\u6267\u884c\u3002\u60a8\u7684\u6570\u636e\u4e0d\u4f1a\u88ab\u4fee\u6539\u3002"
 }

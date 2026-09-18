@@ -41554,11 +41554,14 @@ msgstr "Օգտատիրոջ լրացուցիչ դաշտի բանալին՝ /admin
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON կարգավորում որոնման նախազտիչ դաշտերի համար։"
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Սա նշում է այս տարբերակի բոլոր միգրացիաները որպես արդեն կատարված։ Արեք սա միայն այն հարթակում, որը արդի է և երբեք չի գրանցել իր պատմությունը։"
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Սա գրանցում է այն միգրացիաները, որոնք արդեն կան ձեր տվյալների բազայում, և նորերը թողնում է սպասման մեջ, որպեսզի թարմացումը կարողանա կատարել դրանք։ Ձեր տվյալները չեն փոփոխվում։"
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s միգրացիա գրանցված է։ Ձեր հարթակը այժմ կարող է թարմացվել սովորական կերպով։"
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s միգրացիա գրանցված է, և %s դեռ սպասման մեջ են։ Գործարկեք թարմացումը՝ դրանք կատարելու համար։"
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Միգրացիայի պատմություն չկա․ սեղմեք ուղղելու համար (հակառակ դեպքում թարմացումները կարող են խափանվել)"

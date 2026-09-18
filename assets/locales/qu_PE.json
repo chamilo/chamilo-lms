@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Willakuykuna rantikusqa kamay",
     "Contacts count": "Contactokuna kamay",
     "Sessions by date": "P'unchawmanta sesionkuna",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Kayqa kay versi\u00f3npa apachimunqan llapa migraci\u00f3nkunata \u00f1a rurasqa\u00f1am nispa unanchan. Kaytaqa ruyaylla kunan pacha kachkaq, mana hayk'aqpas historialninta qillqasqa plataforma nisqallapi."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Kayqa kay versi\u00f3npa apachimunqan llapa migraci\u00f3nkunata \u00f1a rurasqa\u00f1am nispa unanchan. Kaytaqa ruyaylla kunan pacha kachkaq, mana hayk'aqpas historialninta qillqasqa plataforma nisqallapi.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Kayqa qillqan database-niyki \u00f1a apasqan migracioneskunata, musuqkunataq suyasqa saqin musuqyachiy chaykunata ruwananpaq. Willakuyniyki mana tikrasqachu."
 }

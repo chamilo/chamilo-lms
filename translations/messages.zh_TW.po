@@ -41556,11 +41556,14 @@ msgstr "從 /admin-dashboard/register 搜尋及命名時段時所使用的使用
 msgid "JSON configuration for search prefilter fields."
 msgstr "搜尋預先篩選欄位的 JSON 設定。"
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "這會將此版本隨附的所有遷移標記為已執行。僅在已是最新且從未記錄過歷史的平台上執行此操作。"
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "這會記錄資料庫已套用的遷移，並將較新的遷移保留為待處理，以便更新時執行。您的資料不會被修改。"
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "已記錄 %s 筆遷移。您的平台現在可以正常更新。"
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "已記錄 %s 項遷移，另有 %s 項仍待處理。請執行更新以套用它們。"
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "沒有遷移歷史：點選以修正（否則更新可能會失敗）"

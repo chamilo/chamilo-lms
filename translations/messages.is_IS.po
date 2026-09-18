@@ -41555,11 +41555,14 @@ msgstr "Lykill auka reits notanda til notkunar við leit og nafngift lotna frá 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-stillingar fyrir forsíusvið leitar."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Þetta merkir allar flutningar sem fylgja þessari útgáfu sem þegar framkvæmdar. Gerðu þetta aðeins á vettvangi sem er uppfærður og hefur aldrei skráð sögu sína."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Þetta skráir flutningana sem gagnagrunnurinn þinn ber þegar, og skilur þá nýrri eftir í bið svo uppfærslan geti framkvæmt þá. Gögnunum þínum er ekki breytt."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s flutningar skráðir. Vettvangurinn þinn má nú uppfæra með venjulegum hætti."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s flutningar skráðir, og %s eru enn í bið. Keyrðu uppfærsluna til að framkvæma þá."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Engin flutningssaga: smelltu til að laga (annars gætu uppfærslur bilað)"

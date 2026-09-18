@@ -41556,11 +41556,14 @@ msgstr "Käyttäjän lisäkentän avain, jota käytetään istuntojen hakemiseen
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-määritys haun esisuodatinkentille."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Tämä merkitsee kaikki tämän version mukana toimitetut migraatiot jo suoritetuiksi. Tee tämä vain alustalla, joka on ajan tasalla eikä ole koskaan tallentanut historiaansa."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Tämä kirjaa tietokannassasi jo olevat migraatiot ja jättää uudemmat odottamaan, jotta päivitys voi suorittaa ne. Tietojasi ei muuteta."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migraatiota tallennettu. Alustasi voidaan nyt päivittää normaalisti."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migraatiota kirjattu, ja %s on vielä odottamassa. Suorita päivitys niiden suorittamiseksi."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Ei migraatiohistoriaa: napsauta korjataksesi (tai päivitykset saattavat rikkoutua)"

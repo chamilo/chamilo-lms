@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cori lis rispetts"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Esempli di formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Esempli di formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rangs variabii"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:dirit d'autor,, no:senza dirit d'autor"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Cartele,, application/msword:MsWord,, application/octet-stream:Flus octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Cartele,, application\/msword:MsWord,, application\/octet-stream:Flus octet,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:esercizi,,      simulation:simulazion,,      questionnaire:cuestionari,,      diagram:diagrami,,      figure:figure,,      graph:graf,,      index:indis,,      slide:diapositivis,,      table:tabile,,      narrative text:test narativ,,      exam:sîs,,      experiment:esperiments,,      problem statement:enunzi de problem,,      self assessment:auto valutazion,,      lecture:lecion"
@@ -41550,11 +41550,14 @@ msgstr "Clâf dal cjamp extra utent di doprâ cuant che si cîr e si nômine lis
 msgid "JSON configuration for search prefilter fields."
 msgstr "Configurazion JSON pai cjamps di prefiltri di ricercje."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Chest al segne ogni migrazion furnide di cheste version come za eseguide. Fâs lu dome suntune plateforme inzornade che no à mai regjistrât la sô storie."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Chest al regjistre lis migrazions che la tô base di dâts e à za, e al lasse chês plui gnovis in spiete cussì che l'inzornament lis puedi eseguî. I tiei dâts no vegnin modificâts."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrazions regjistradis. La tô plateforme e pues cumò jessi inzornade in mût normâl."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrazions regjistradis, e %s a son ancjemò in spiete. Fâs l'inzornament par eseguîlis."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Nissune storie di migrazion: fâs clic par justâ (o i inzornaments a podarès rompi)"

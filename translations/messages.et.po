@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Lugupidamisega"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Valemi näide: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Valemi näide: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muutujate vahemikud"
@@ -41555,11 +41555,14 @@ msgstr "Kasutaja lisavälja võti, mida kasutatakse sessioonide otsimisel ja nim
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-konfiguratsioon otsingu eelfiltri väljadele."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "See märgib kõik selle versiooniga kaasas olevad migratsioonid juba täidetuks. Tehke seda ainult platvormil, mis on ajakohane ja pole kunagi oma ajalugu salvestanud."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "See salvestab migratsioonid, mis teie andmebaasis juba olemas on, ja jätab uuemad ootele, et uuendus saaks need täita. Teie andmeid ei muudeta."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migratsiooni salvestatud. Teie platvormi saab nüüd tavaliselt uuendada."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migratsiooni salvestatud ja %s on veel ootel. Käivitage uuendus nende täitmiseks."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Migratsiooniajalugu puudub: klõpsake parandamiseks (või uuendused võivad katki minna)"

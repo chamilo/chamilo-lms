@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Le meas"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Sampla foirmle: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Sampla foirmle: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raonta athróg"
@@ -41554,11 +41554,14 @@ msgstr "Eochair réimse breise úsáideora le húsáid agus seisiúin á gcuarda
 msgid "JSON configuration for search prefilter fields."
 msgstr "Cumraíocht JSON do réimsí réamhscagtha cuardaigh."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Marcálann sé seo gach imirce a sheol an leagan seo mar a forghníomhaíodh cheana. Ná déan é seo ach ar ardán atá cothrom le dáta agus nár thaifead a stair riamh."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Taifeadann sé seo na himirceanna atá i do bhunachar sonraí cheana, agus fágann sé na cinn nua ar feitheamh ionas gur féidir leis an nuashonrú iad a fhorghníomhú. Ní athraítear do shonraí."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s imirce taifeadta. Is féidir d’ardán a nuashonrú de ghnáth anois."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "Tá %s imirceanna taifeadta, agus tá %s fós ar feitheamh. Rith an nuashonrú chun iad a fhorghníomhú."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Gan stair imirce: cliceáil chun é a shocrú (nó d’fhéadfadh nuashonruithe briseadh)"

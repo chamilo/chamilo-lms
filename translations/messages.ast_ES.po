@@ -41556,11 +41556,14 @@ msgstr "Clave del campu extra d'usuariu pa usar al buscar y nomar sesiones dende
 msgid "JSON configuration for search prefilter fields."
 msgstr "Configuración JSON pa campos de prefiltru de busca."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Esto marca toles migraciones unviaes por esta versión como yá executaes. Fai esto namás nuna plataforma que tea actualizada y que nunca rexistrara'l so historial."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Esto rexistra les migraciones que yá tien la to base de datos y dexa les más nueves pendientes pa que l'actualización pueda executales. Los tos datos nun se modifiquen."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migraciones rexistraes. La to plataforma agora pue anovase de forma normal."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migraciones rexistraes, y %s siguen pendientes. Executa l'actualización pa executales."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Ensin historial de migración: fai clic pa iguar (o les actualizaciones podrían romper)"

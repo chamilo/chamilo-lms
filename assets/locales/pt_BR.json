@@ -4253,5 +4253,6 @@
     "Number of messages sent": "N\u00famero de mensagens enviadas",
     "Contacts count": "N\u00famero de contatos",
     "Sessions by date": "Sess\u00f5es por data",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Isto marca todas as migra\u00e7\u00f5es desta vers\u00e3o como j\u00e1 executadas. Fa\u00e7a isso apenas em uma plataforma atualizada que nunca registrou seu hist\u00f3rico."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Isto marca todas as migra\u00e7\u00f5es desta vers\u00e3o como j\u00e1 executadas. Fa\u00e7a isso apenas em uma plataforma atualizada que nunca registrou seu hist\u00f3rico.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Isto registra as migra\u00e7\u00f5es que o seu banco de dados j\u00e1 possui e deixa as mais recentes pendentes para que a atualiza\u00e7\u00e3o possa execut\u00e1-las. Os seus dados n\u00e3o s\u00e3o modificados."
 }

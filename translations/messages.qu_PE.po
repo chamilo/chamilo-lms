@@ -41556,11 +41556,14 @@ msgstr "Usuarioq extra campo llaven maskaypi hinaspa sessionkunata sutichanapaq 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON configuración maskay prefiltro campokunapaq."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Kayqa kay versiónpa apachimunqan llapa migraciónkunata ña rurasqañam nispa unanchan. Kaytaqa ruyaylla kunan pacha kachkaq, mana hayk'aqpas historialninta qillqasqa plataforma nisqallapi."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Kayqa qillqan database-niyki ña apasqan migracioneskunata, musuqkunataq suyasqa saqin musuqyachiy chaykunata ruwananpaq. Willakuyniyki mana tikrasqachu."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migraciónkuna qillqasqa. Plataformaykiqa kunan normalta musuqyachikunman."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migraciones qillqasqa, %s-taqraq suyasqa kachkan. Musuqyachiyta ruway chaykunata ruwananpaq."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Mana migración historialchu: ñit'iy allichanapaq (mana chayqa musuqyachiqkuna p'akisqaman hamunman)"

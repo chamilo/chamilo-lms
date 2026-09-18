@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Idadi ya ujumbe uliotumwa",
     "Contacts count": "Idadi ya watu wa mawasiliano",
     "Sessions by date": "Mikao kwa tarehe",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Hii huashiria kila uhamishaji ulioletwa na toleo hili kama uliotekelezwa tayari. Fanya hivi tu kwenye jukwaa lililo sasishwa na ambalo halijawahi kurekodi historia yake."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Hii huashiria kila uhamishaji ulioletwa na toleo hili kama uliotekelezwa tayari. Fanya hivi tu kwenye jukwaa lililo sasishwa na ambalo halijawahi kurekodi historia yake.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Hii hurekodi uhamishaji ambao hifadhidata yako tayari ina, na huacha zile mpya zikisubiri ili sasisho liweze kuzitekeleza. Data yako haibadilishwi."
 }

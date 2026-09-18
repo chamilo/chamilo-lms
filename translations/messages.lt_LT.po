@@ -41555,11 +41555,14 @@ msgstr "Papildomo vartotojo lauko raktas, naudojamas ieškant ir pavadinant sesi
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON konfigūracija paieškos išankstinio filtro laukams."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Tai pažymi visas šios versijos migracijas kaip jau įvykdytas. Darykite tai tik platformoje, kuri yra atnaujinta ir niekada neregistravo savo istorijos."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Tai užfiksuoja migracijas, kurias jūsų duomenų bazė jau turi, ir palieka naujesnes laukiančiomis, kad atnaujinimas galėtų jas įvykdyti. Jūsų duomenys nėra keičiami."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "Užregistruota migracijų: %s. Dabar platformą galima atnaujinti įprastai."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migracijų užfiksuota ir %s vis dar laukia. Paleiskite atnaujinimą, kad jas įvykdytumėte."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Nėra migracijų istorijos: spustelėkite, kad pataisytumėte (kitaip atnaujinimai gali sugesti)"

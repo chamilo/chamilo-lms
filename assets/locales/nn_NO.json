@@ -4188,7 +4188,7 @@
     "Page break": "Sideskift",
     "Matching combination": "Matching-kombinasjon",
     "No negative score": "Ingen negative poeng",
-    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Formel-d\u00f8me: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
+    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Formeleksempel: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
     "Group agenda": "Gruppeagenda",
     "Use system default certificate": "Bruk systemets standardsertifikat",
     "The attached certificate is unavailable. The system default certificate will be used.": "Det vedlagde sertifikatet er ikkje tilgjengeleg. Systemets standardsertifikat vil bli brukt.",
@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Tal p\u00e5 sendingar",
     "Contacts count": "Kontaktteljing",
     "Sessions by date": "\u00d8kter etter dato",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dette merkar kvar migrasjon som f\u00f8lgjer med denne versjonen som allereie utf\u00f8rt. Gjer dette berre p\u00e5 ei plattform som er oppdatert og som aldri har registrert historia si."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dette merkar kvar migrasjon som f\u00f8lgjer med denne versjonen som allereie utf\u00f8rt. Gjer dette berre p\u00e5 ei plattform som er oppdatert og som aldri har registrert historia si.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Dette registrerer migrasjonane databasen din allereie har, og let dei nyare vere ventande slik at oppdateringa kan k\u00f8yra dei. Dataa dine vert ikkje endra."
 }

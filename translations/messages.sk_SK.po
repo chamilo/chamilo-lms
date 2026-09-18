@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Príklad vzorca: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukážka vzorca: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -41569,11 +41569,14 @@ msgstr "Kľúč extra poľa používateľa na vyhľadávanie a pomenovanie relá
 msgid "JSON configuration for search prefilter fields."
 msgstr "Konfigurácia JSON pre polia predfiltra vyhľadávania."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Týmto sa všetky migrácie dodané v tejto verzii označia ako už vykonané. Robte to len na platforme, ktorá je aktuálna a nikdy nezaznamenala svoju históriu."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Toto zaznamená migrácie, ktoré vaša databáza už obsahuje, a novšie ponechá ako čakajúce, aby ich aktualizácia mohla vykonať. Vaše údaje sa nemenia."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "Zaznamenaných migrácií: %s. Vašu platformu teraz môžete aktualizovať bežným spôsobom."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrácií bolo zaznamenaných a %s ešte čaká. Spustite aktualizáciu, aby sa vykonali."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Žiadna história migrácií: kliknite na opravu (inak sa aktualizácie môžu pokaziť)"

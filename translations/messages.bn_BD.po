@@ -41550,11 +41550,14 @@ msgstr "/admin-dashboard/register থেকে সেশন অনুসন্�
 msgid "JSON configuration for search prefilter fields."
 msgstr "অনুসন্ধান প্রিফিল্টার ফিল্ডের জন্য JSON কনফিগারেশন।"
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "এটি এই সংস্করণে পাঠানো প্রতিটি মাইগ্রেশনকে ইতিমধ্যে সম্পাদিত হিসেবে চিহ্নিত করে। শুধুমাত্র এমন প্ল্যাটফর্মে করুন যা আপ টু ডেট এবং কখনও তার ইতিহাস রেকর্ড করেনি।"
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "এটি আপনার ডাটাবেসে ইতিমধ্যে থাকা মাইগ্রেশনগুলো রেকর্ড করে এবং নতুনগুলোকে মুলতুবি রাখে যাতে আপডেট সেগুলো সম্পাদন করতে পারে। আপনার ডেটা পরিবর্তন করা হয় না।"
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%sটি মাইগ্রেশন রেকর্ড করা হয়েছে। আপনার প্ল্যাটফর্ম এখন স্বাভাবিকভাবে আপডেট করা যেতে পারে।"
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%sটি মাইগ্রেশন রেকর্ড করা হয়েছে, এবং %sটি এখনও মুলতুবি রয়েছে। সেগুলো সম্পাদন করতে আপডেট চালান।"
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "মাইগ্রেশন ইতিহাস নেই: ঠিক করতে ক্লিক করুন (অথবা আপডেট ভেঙে যেতে পারে)"

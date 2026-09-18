@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "ရိုးသားစွာ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ဖော်မြူလာ နမူနာ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ဖော်မြူလာ နမူနာ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ပြောင်းလဲနိုင်သော အကွာအဝေးများ"
@@ -41554,11 +41554,14 @@ msgstr "/admin-dashboard/register မှ ဆက်ရှင်များကိ
 msgid "JSON configuration for search prefilter fields."
 msgstr "ရှာဖွေမှု ကြိုတင်စစ်ထုတ်အကွက်များအတွက် JSON ဖွဲ့စည်းမှု။"
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "ဤလုပ်ဆောင်ချက်သည် ဤဗားရှင်းမှ ပေးပို့သော ရွှေ့ပြောင်းမှုအားလုံးကို လုပ်ပြီးသားအဖြစ် မှတ်သားသည်။ နောက်ဆုံးပေါ်ဖြစ်ပြီး သမိုင်းမှတ်တမ်း မရှိဖူးသော ပလက်ဖောင်းတွင်သာ လုပ်ပါ။"
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "ဤသည်မှာ သင့်ဒေတာဘေ့စ်တွင် ရှိပြီးသား မိုက်ဂရေးရှင်းများကို မှတ်တမ်းတင်ပြီး အသစ်များကို ဆိုင်းငံ့ထားကာ အပ်ဒိတ်က ၎င်းတို့ကို လုပ်ဆောင်နိုင်စေသည်။ သင့်ဒေတာကို ပြင်ဆင်မည်မဟုတ်ပါ။"
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "ရွှေ့ပြောင်းမှု %s ခု မှတ်တမ်းတင်ပြီး။ သင့်ပလက်ဖောင်းကို ယခု ပုံမှန် အပ်ဒိတ်လုပ်နိုင်ပါပြီ။"
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s မိုက်ဂရေးရှင်းများ မှတ်တမ်းတင်ပြီး %s ခု ဆိုင်းငံ့ထားဆဲဖြစ်သည်။ ၎င်းတို့ကို လုပ်ဆောင်ရန် အပ်ဒိတ်ကို ဖွင့်ပါ။"
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "ရွှေ့ပြောင်းမှု သမိုင်းမရှိ: ပြင်ရန် နှိပ်ပါ (သို့မဟုတ် အပ်ဒိတ်များ ပျက်နိုင်သည်)"

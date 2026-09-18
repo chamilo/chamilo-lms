@@ -41556,11 +41556,14 @@ msgstr "Oturumları /admin-dashboard/register üzerinden ararken ve adlandırır
 msgid "JSON configuration for search prefilter fields."
 msgstr "Arama ön filtre alanları için JSON yapılandırması."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Bu, bu sürümle gelen her geçişi zaten yürütülmüş olarak işaretler. Bunu yalnızca güncel olan ve geçmişini hiç kaydetmemiş bir platformda yapın."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Bu, veritabanınızın zaten taşıdığı geçişleri kaydeder ve yenilerini beklemeye alır, böylece güncelleme bunları çalıştırabilir. Verileriniz değiştirilmez."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s geçiş kaydedildi. Platformunuz artık normal şekilde güncellenebilir."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s geçiş kaydedildi ve %s hâlâ bekliyor. Bunları çalıştırmak için güncellemeyi çalıştırın."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Geçiş geçmişi yok: düzeltmek için tıklayın (aksi halde güncellemeler bozulabilir)"

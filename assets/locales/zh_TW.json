@@ -4253,5 +4253,6 @@
     "Number of messages sent": "\u5df2\u767c\u9001\u8a0a\u606f\u6578\u91cf",
     "Contacts count": "\u806f\u7d61\u4eba\u6578\u91cf",
     "Sessions by date": "\u6309\u65e5\u671f\u7684\u8ab2\u7a0b",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "\u9019\u6703\u5c07\u6b64\u7248\u672c\u96a8\u9644\u7684\u6240\u6709\u9077\u79fb\u6a19\u8a18\u70ba\u5df2\u57f7\u884c\u3002\u50c5\u5728\u5df2\u662f\u6700\u65b0\u4e14\u5f9e\u672a\u8a18\u9304\u904e\u6b77\u53f2\u7684\u5e73\u53f0\u4e0a\u57f7\u884c\u6b64\u64cd\u4f5c\u3002"
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "\u9019\u6703\u5c07\u6b64\u7248\u672c\u96a8\u9644\u7684\u6240\u6709\u9077\u79fb\u6a19\u8a18\u70ba\u5df2\u57f7\u884c\u3002\u50c5\u5728\u5df2\u662f\u6700\u65b0\u4e14\u5f9e\u672a\u8a18\u9304\u904e\u6b77\u53f2\u7684\u5e73\u53f0\u4e0a\u57f7\u884c\u6b64\u64cd\u4f5c\u3002",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "\u9019\u6703\u8a18\u9304\u8cc7\u6599\u5eab\u5df2\u5957\u7528\u7684\u9077\u79fb\uff0c\u4e26\u5c07\u8f03\u65b0\u7684\u9077\u79fb\u4fdd\u7559\u70ba\u5f85\u8655\u7406\uff0c\u4ee5\u4fbf\u66f4\u65b0\u6642\u57f7\u884c\u3002\u60a8\u7684\u8cc7\u6599\u4e0d\u6703\u88ab\u4fee\u6539\u3002"
 }

@@ -41554,11 +41554,14 @@ msgstr "/admin-dashboard/register இலிருந்து அமர்வு
 msgid "JSON configuration for search prefilter fields."
 msgstr "தேடல் முன்வடிகட்டி புலங்களுக்கான JSON உள்ளமைவு."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "இந்தப் பதிப்பால் வழங்கப்பட்ட ஒவ்வொரு இடப்பெயர்வையும் ஏற்கனவே செயல்படுத்தப்பட்டதாக இது குறிக்கிறது. புதுப்பித்த நிலையில் உள்ள மற்றும் அதன் வரலாற்றை ஒருபோதும் பதிவு செய்யாத தளத்தில் மட்டுமே இதைச் செய்யுங்கள்."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "இது உங்கள் தரவுத்தளம் ஏற்கனவே கொண்டுள்ள இடம்பெயர்வுகளைப் பதிவுசெய்து, புதியவற்றை நிலுவையில் விடுகிறது, இதனால் புதுப்பிப்பு அவற்றை இயக்க முடியும். உங்கள் தரவு மாற்றப்படாது."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s இடப்பெயர்வுகள் பதிவு செய்யப்பட்டன. உங்கள் தளத்தை இப்போது இயல்பாகப் புதுப்பிக்கலாம்."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s இடம்பெயர்வுகள் பதிவுசெய்யப்பட்டன, மேலும் %s இன்னும் நிலுவையில் உள்ளன. அவற்றை இயக்க புதுப்பிப்பை இயக்கவும்."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "இடப்பெயர்வு வரலாறு இல்லை: சரிசெய்ய சொடுக்கவும் (இல்லையெனில் புதுப்பிப்புகள் உடைபடலாம்)"

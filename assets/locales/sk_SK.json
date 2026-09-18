@@ -4188,7 +4188,7 @@
     "Page break": "Koniec str\u00e1nky",
     "Matching combination": "Kombin\u00e1cia prira\u010fovania",
     "No negative score": "\u017diadne z\u00e1porn\u00e9 sk\u00f3re",
-    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Pr\u00edklad vzorca: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
+    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "Uk\u00e1\u017eka vzorca: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
     "Group agenda": "Agenda skupiny",
     "Use system default certificate": "Pou\u017ei\u0165 predvolen\u00fd syst\u00e9mov\u00fd certifik\u00e1t",
     "The attached certificate is unavailable. The system default certificate will be used.": "Pripojen\u00fd certifik\u00e1t nie je dostupn\u00fd. Pou\u017eije sa predvolen\u00fd syst\u00e9mov\u00fd certifik\u00e1t.",
@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Po\u010det odoslan\u00fdch spr\u00e1v",
     "Contacts count": "Po\u010det kontaktov",
     "Sessions by date": "Rel\u00e1cie pod\u013ea d\u00e1tumu",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "T\u00fdmto sa v\u0161etky migr\u00e1cie dodan\u00e9 v tejto verzii ozna\u010dia ako u\u017e vykonan\u00e9. Robte to len na platforme, ktor\u00e1 je aktu\u00e1lna a nikdy nezaznamenala svoju hist\u00f3riu."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "T\u00fdmto sa v\u0161etky migr\u00e1cie dodan\u00e9 v tejto verzii ozna\u010dia ako u\u017e vykonan\u00e9. Robte to len na platforme, ktor\u00e1 je aktu\u00e1lna a nikdy nezaznamenala svoju hist\u00f3riu.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Toto zaznamen\u00e1 migr\u00e1cie, ktor\u00e9 va\u0161a datab\u00e1za u\u017e obsahuje, a nov\u0161ie ponech\u00e1 ako \u010dakaj\u00face, aby ich aktualiz\u00e1cia mohla vykona\u0165. Va\u0161e \u00fadaje sa nemenia."
 }

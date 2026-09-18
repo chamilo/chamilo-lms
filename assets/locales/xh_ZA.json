@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Inani lemiyalezo ethunyelweyo",
     "Contacts count": "Inani leqabane",
     "Sessions by date": "Iiseshini ngomhla",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Oku kuphawula yonke imfuduso ezithunyelwe yile nguqulelo njengelezi sele zenziwe. Yenza oku kuphela kwiqonga elihlaziyiweyo nelingazange libhale imbali yalo."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Oku kuphawula yonke imfuduso ezithunyelwe yile nguqulelo njengelezi sele zenziwe. Yenza oku kuphela kwiqonga elihlaziyiweyo nelingazange libhale imbali yalo.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Oku kubhala iintshukumo zokufuduka esele zikho kwidathabheyisi yakho, kwaye zishiye ezintsha zilindele ukuze uhlaziyo luziphethe. Idatha yakho ayitshintshwa."
 }

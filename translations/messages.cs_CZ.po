@@ -41550,11 +41550,14 @@ msgstr "Klíč extra pole uživatele pro vyhledávání a pojmenování relací 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Konfigurace JSON pro pole předfiltru vyhledávání."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Tímto se každá migrace dodaná touto verzí označí jako již provedená. Proveďte to pouze na platformě, která je aktuální a nikdy nezaznamenala svou historii."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Toto zaznamená migrace, které vaše databáze již obsahuje, a novější ponechá jako čekající, aby je aktualizace mohla spustit. Vaše data se nemění."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrací zaznamenáno. Vaši platformu nyní lze aktualizovat běžným způsobem."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrací zaznamenáno a %s stále čeká. Spusťte aktualizaci, abyste je provedli."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Žádná historie migrace: klikněte pro opravu (nebo aktualizace mohou selhat)"

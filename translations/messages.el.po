@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Ειλικρινά"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Παράδειγμα τύπου: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Δείγμα τύπου: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Μεταβλητά όρια"
@@ -41569,11 +41569,14 @@ msgstr "Κλειδί επιπλέον πεδίου χρήστη για αναζ�
 msgid "JSON configuration for search prefilter fields."
 msgstr "Διαμόρφωση JSON για πεδία προφίλτρου αναζήτησης."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "Αυτό επισημαίνει κάθε μετεγκατάσταση που περιλαμβάνεται σε αυτή την έκδοση ως ήδη εκτελεσμένη. Κάντε το μόνο σε πλατφόρμα που είναι ενημερωμένη και δεν έχει καταγράψει ποτέ το ιστορικό της."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Αυτό καταγράφει τις μεταναστεύσεις που ήδη φέρει η βάση δεδομένων σας και αφήνει τις νεότερες σε εκκρεμότητα ώστε η ενημέρωση να τις εκτελέσει. Τα δεδομένα σας δεν τροποποιούνται."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "Καταγράφηκαν %s μετεγκαταστάσεις. Η πλατφόρμα σας μπορεί πλέον να ενημερωθεί κανονικά."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s μεταναστεύσεις καταγράφηκαν και %s είναι ακόμη σε εκκρεμότητα. Εκτελέστε την ενημέρωση για να τις εφαρμόσετε."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "Δεν υπάρχει ιστορικό μετεγκατάστασης: κάντε κλικ για διόρθωση (ή οι ενημερώσεις ενδέχεται να προκαλέσουν βλάβη)"

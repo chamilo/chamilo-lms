@@ -4253,5 +4253,6 @@
     "Number of messages sent": "Antalet skickade meddelanden",
     "Contacts count": "Antal kontakter",
     "Sessions by date": "Sessioner per datum",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Detta markerar varje migrering som medf\u00f6ljer den h\u00e4r versionen som redan utf\u00f6rd. G\u00f6r detta endast p\u00e5 en plattform som \u00e4r uppdaterad och aldrig har registrerat sin historik."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Detta markerar varje migrering som medf\u00f6ljer den h\u00e4r versionen som redan utf\u00f6rd. G\u00f6r detta endast p\u00e5 en plattform som \u00e4r uppdaterad och aldrig har registrerat sin historik.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Detta registrerar de migreringar som din databas redan har och l\u00e4mnar de nyare v\u00e4ntande s\u00e5 att uppdateringen kan k\u00f6ra dem. Dina data \u00e4ndras inte."
 }

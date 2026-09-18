@@ -4188,7 +4188,7 @@
     "Page break": "Oldal alja",
     "Matching combination": "P\u00e1ros\u00edt\u00e1s kombin\u00e1ci\u00f3",
     "No negative score": "Nincs negat\u00edv pontsz\u00e1m",
-    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "K\u00e9plet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
+    "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )": "K\u00e9pletminta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )",
     "Group agenda": "Csoport napirend",
     "Use system default certificate": "Rendszer alap\u00e9rtelmezett tan\u00fas\u00edtv\u00e1ny\u00e1nak haszn\u00e1lata",
     "The attached certificate is unavailable. The system default certificate will be used.": "A csatolt tan\u00fas\u00edtv\u00e1ny nem \u00e9rhet\u0151 el. A rendszer alap\u00e9rtelmezett tan\u00fas\u00edtv\u00e1nya lesz haszn\u00e1lva.",
@@ -4253,5 +4253,6 @@
     "Number of messages sent": "K\u00fcld\u00f6tt \u00fczenetek sz\u00e1ma",
     "Contacts count": "Kapcsolatok sz\u00e1ma",
     "Sessions by date": "\u00dcl\u00e9sek d\u00e1tum szerint",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ez minden, ebben a verzi\u00f3ban sz\u00e1ll\u00edtott migr\u00e1ci\u00f3t m\u00e1r v\u00e9grehajtottk\u00e9nt jel\u00f6l. Csak olyan platformon tegye ezt, amely naprak\u00e9sz, \u00e9s soha nem r\u00f6gz\u00edtette a t\u00f6rt\u00e9net\u00e9t."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ez minden, ebben a verzi\u00f3ban sz\u00e1ll\u00edtott migr\u00e1ci\u00f3t m\u00e1r v\u00e9grehajtottk\u00e9nt jel\u00f6l. Csak olyan platformon tegye ezt, amely naprak\u00e9sz, \u00e9s soha nem r\u00f6gz\u00edtette a t\u00f6rt\u00e9net\u00e9t.",
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Ez r\u00f6gz\u00edti az adatb\u00e1zisban m\u00e1r megl\u00e9v\u0151 migr\u00e1ci\u00f3kat, \u00e9s az \u00fajabbakat f\u00fcgg\u0151ben hagyja, hogy a friss\u00edt\u00e9s v\u00e9grehajthassa \u0151ket. Az adatok nem m\u00f3dosulnak."
 }

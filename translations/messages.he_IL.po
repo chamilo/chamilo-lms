@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "בכנות"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "דוגמה לנוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "דוגמת נוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "טווחים משתנים"
@@ -41567,11 +41567,14 @@ msgstr "מפתח שדה נוסף של משתמש לשימוש בחיפוש וב�
 msgid "JSON configuration for search prefilter fields."
 msgstr "תצורת JSON לשדות סינון מוקדם בחיפוש."
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
-msgstr "פעולה זו מסמנת כל מיגרציה שסופקה בגרסה זו כאילו כבר בוצעה. עשו זאת רק בפלטפורמה מעודכנת שמעולם לא תיעדה את ההיסטוריה שלה."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "פעולה זו רושמת את המיגרציות שכבר קיימות במסד הנתונים שלך, ומשאירה את החדשות יותר במצב ממתין כדי שהעדכון יוכל לבצע אותן. הנתונים שלך אינם משתנים."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s מיגרציות תועדו. כעת ניתן לעדכן את הפלטפורמה כרגיל."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s מיגרציות נרשמו, ו-%s עדיין ממתינות. הפעל את העדכון כדי לבצע אותן."
 
 msgid "No migration history: click to fix (or updates might break)"
 msgstr "אין היסטוריית מיגרציות: לחצו לתיקון (או שעדכונים עלולים להישבר)"

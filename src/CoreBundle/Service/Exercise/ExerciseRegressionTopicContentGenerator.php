@@ -152,7 +152,13 @@ Required JSON shape:
     "feedback": "..."
   },
   "annotation": {"question": "..."},
-  "reading": {"title": "...", "passage": "A self-contained passage of 3 to 5 sentences about the topic."},
+  "reading": {
+    "title": "A question that can be answered from the passage.",
+    "passage": "A self-contained passage of 3 to 5 sentences about the topic.",
+    "options": ["...", "...", "..."],
+    "correct_index": 0,
+    "feedback": "..."
+  },
   "upload": {"question": "..."},
   "dropdown": {
     "question": "...",
@@ -170,6 +176,7 @@ Rules:
 - single_choice must have exactly 3 distinct options and exactly one correct option.
 - multiple_choice must have exactly 4 distinct options and at least 2 correct options.
 - dropdown must have exactly 3 distinct options and exactly one correct option.
+- reading must have exactly 3 distinct options, exactly one correct option, and the correct option must be directly supported by the passage.
 - fill_blanks must use both literal tokens {blank1} and {blank2}; answers must contain only the missing words/short phrases.
 - matching must contain exactly 2 unambiguous pairs.
 - ordering must contain exactly 2 items in the correct order.

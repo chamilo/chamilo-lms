@@ -253,7 +253,28 @@ provide("isCustomizing", isCustomizing)
 
 const courseItems = ref([])
 
-const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
+const routerTools = [
+  "document",
+  "link",
+  "glossary",
+  "agenda",
+  "student_publication",
+  "course_homepage",
+  "announcement",
+  "attendance",
+  "course_description",
+  "course_progress",
+  "dropbox",
+  "forum",
+  "gradebook",
+  "group",
+  "learnpath",
+  "member",
+  "notebook",
+  "portfolio",
+  "survey",
+  "wiki",
+]
 const courseSettingsStore = useCourseSettings()
 
 function getCourseSettingInt(variable) {
@@ -291,7 +312,7 @@ const COURSE_TOOL_SKELETON_COUNT = 16
 const TOOL_VISIBILITY_VISIBLE = 2
 
 function normalizeToolNavigation(tool) {
-  if (routerTools.includes(tool.title)) {
+  if (routerTools.includes(tool.tool?.title)) {
     tool.to = tool.url
   }
 

@@ -1713,14 +1713,17 @@ class CourseManager
         $rs = Database::query($sql);
         $users = [];
 
-        $extra_fields = UserManager::get_extra_fields(
-            0,
-            100,
-            null,
-            'ASC',
-            true,
-            true
-        );
+        $extra_fields = [];
+        if ($add_reports) {
+            $extra_fields = UserManager::get_extra_fields(
+                0,
+                100,
+                null,
+                'ASC',
+                true,
+                true
+            );
+        }
 
         $counter = 1;
         $count_rows = Database::num_rows($rs);

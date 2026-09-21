@@ -551,6 +551,64 @@ class ExtraFieldOption extends Model
     }
 
     /**
+     * Batched variant of get_field_options_by_field() for several fields at once,
+     * to avoid one query per field when listing options for a whole set of extra fields.
+     *
+     * @return array Options grouped by field_id; a field with no options is absent from the array
+     */
+    public function get_field_options_by_fields(array $field_ids, $ordered_by = null): array
+    {
+        $field_ids = array_map('intval', $field_ids);
+        if (empty($field_ids)) {
+            return [];
+        }
+
+        $orderBy = null;
+        switch ($ordered_by) {
+            case 'id':
+                $orderBy = ['id' => 'ASC'];
+                break;
+            case 'field_id':
+                $orderBy = ['field' => 'ASC'];
+                break;
+            case 'option_value':
+                $orderBy = ['optionValue' => 'ASC'];
+                break;
+            case 'display_text':
+                $orderBy = ['displayText' => 'ASC'];
+                break;
+            case 'priority':
+                $orderBy = ['priority' => 'ASC'];
+                break;
+            case 'priority_message':
+                $orderBy = ['priorityMessage' => 'ASC'];
+                break;
+            case 'option_order':
+                $orderBy = ['optionOrder' => 'ASC'];
+                break;
+        }
+
+        $result = Container::getExtraFieldOptionsRepository()->findBy(['field' => $field_ids], $orderBy);
+
+        $optionsByField = [];
+        /** @var ExtraFieldOptions $row */
+        foreach ($result as $row) {
+            $fieldId = $row->getField()->getId();
+            $optionsByField[$fieldId][] = [
+                'id' => $row->getId(),
+                'field_id' => $fieldId,
+                'option_value' => $row->getValue(),
+                'display_text' => $row->getDisplayText(),
+                'priority' => $row->getPriority(),
+                'priority_message' => $row->getPriorityMessage(),
+                'option_order' => $row->getOptionOrder(),
+            ];
+        }
+
+        return $optionsByField;
+    }
+
+    /**
      * Get options for a specific field as array or in JSON format suited for the double-select format.
      *
      * @param int  $option_value_id Option value ID

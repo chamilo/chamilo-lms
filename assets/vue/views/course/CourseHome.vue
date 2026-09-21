@@ -568,7 +568,7 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 const { isAllowedToEdit } = useIsAllowedToEdit()
 
 async function enforceCourseLegalAgreement() {
-  if (!course.value?.id) {
+  if (!course.value?.id || platformConfigStore.plugins?.courselegal?.enabled !== true) {
     return
   }
 

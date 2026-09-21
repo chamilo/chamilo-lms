@@ -96,6 +96,35 @@
           </div>
 
           <div
+            v-if="certificate.viewUrl"
+            class="mt-4 flex flex-wrap items-center gap-4 rounded-xl border-2 border-success/40 bg-success/10 p-4"
+          >
+            <BaseIcon
+              icon="certificate"
+              class="text-4xl text-success"
+            />
+            <div class="flex-1">
+              <div class="text-base font-semibold text-gray-90">{{ t("Certificate") }}</div>
+              <div class="text-sm text-gray-700">{{ t("You have earned a certificate for this exercise") }}</div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <BaseButton
+                :label="t('View')"
+                :to-url="certificate.viewUrl"
+                icon="eye-on"
+                type="primary"
+              />
+              <BaseButton
+                v-if="certificate.downloadUrl"
+                :label="t('Download')"
+                :to-url="certificate.downloadUrl"
+                icon="download"
+                type="primary"
+              />
+            </div>
+          </div>
+
+          <div
             v-if="attempt.textWhenFinished"
             class="exercise-result-html mt-4 rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
             dir="auto"
@@ -1857,6 +1886,7 @@ const title = ref("")
 const description = ref("")
 const attempt = ref({})
 const visibility = ref({})
+const certificate = ref({})
 const questions = ref([])
 const categoryScores = ref([])
 const ranking = ref([])
@@ -2087,6 +2117,7 @@ async function loadResult() {
     description.value = response.description || ""
     attempt.value = response.attempt || {}
     visibility.value = response.visibility || {}
+    certificate.value = response.certificate || {}
     questions.value = Array.isArray(response.questions) ? response.questions : []
     categoryScores.value = Array.isArray(response.categoryScores) ? response.categoryScores : []
     ranking.value = Array.isArray(response.ranking) ? response.ranking : []

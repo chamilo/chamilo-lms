@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Service\Survey;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Service\Mcp\McpTextAiService;
@@ -44,6 +45,8 @@ final readonly class TrainingSatisfactionSurveyCreator
         ?string $provider,
         bool $publish,
         bool $anonymous,
+        ?Session $session = null,
+        string $codePrefix = 'mcp-sat',
     ): array {
         if ($this->isSurveyCreationDisabled()) {
             throw new RuntimeException('Survey creation is disabled by the platform configuration.');
@@ -70,7 +73,7 @@ final readonly class TrainingSatisfactionSurveyCreator
         $availableUntil = (clone $availableFrom)->add(new DateInterval('P1Y'));
 
         $survey = (new CSurvey())
-            ->setCode($this->generateCode((int) $course->getId()))
+            ->setCode($this->generateCode((int) $course->getId(), $codePrefix))
             ->setTitle($title)
             ->setSubtitle('')
             ->setLang($language)
@@ -91,7 +94,7 @@ final readonly class TrainingSatisfactionSurveyCreator
             ->setFormFields('')
             ->setParent($course)
             ->setCreator($user)
-            ->addCourseLink($course, null, null, $visibility)
+            ->addCourseLink($course, $session, null, $visibility)
         ;
 
         $this->surveyRepository->create($survey);
@@ -138,19 +141,30 @@ final readonly class TrainingSatisfactionSurveyCreator
 
         $this->entityManager->flush();
 
-        $verifiedInCourse = (int) $this->entityManager->createQueryBuilder()
+        $verificationQueryBuilder = $this->entityManager->createQueryBuilder()
             ->select('COUNT(surveyVerification.iid)')
             ->from(CSurvey::class, 'surveyVerification')
             ->innerJoin('surveyVerification.resourceNode', 'verificationNode')
             ->innerJoin('verificationNode.resourceLinks', 'verificationLink')
             ->andWhere('surveyVerification.iid = :surveyId')
             ->andWhere('IDENTITY(verificationLink.course) = :courseId')
-            ->andWhere('verificationLink.session IS NULL')
             ->andWhere('verificationLink.group IS NULL')
             ->andWhere('verificationLink.userGroup IS NULL')
             ->andWhere('verificationLink.user IS NULL')
             ->setParameter('surveyId', $surveyId, Types::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+        ;
+
+        if (null === $session) {
+            $verificationQueryBuilder->andWhere('verificationLink.session IS NULL');
+        } else {
+            $verificationQueryBuilder
+                ->andWhere('IDENTITY(verificationLink.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        }
+
+        $verifiedInCourse = (int) $verificationQueryBuilder
             ->getQuery()
             ->getSingleScalarResult() > 0
         ;
@@ -190,7 +204,8 @@ final readonly class TrainingSatisfactionSurveyCreator
             'content_url' => '/resources/survey/'
                 .(int) $course->getResourceNode()?->getId()
                 .'/'.$surveyId
-                .'/questions?cid='.(int) $course->getId(),
+                .'/questions?cid='.(int) $course->getId()
+                .(null !== $session ? '&sid='.(int) $session->getId() : ''),
         ];
     }
 
@@ -218,10 +233,17 @@ final readonly class TrainingSatisfactionSurveyCreator
         return $language;
     }
 
-    private function generateCode(int $courseId): string
+    private function generateCode(int $courseId, string $prefix): string
     {
+        $prefix = strtolower(trim($prefix));
+        $prefix = preg_replace('/[^a-z0-9_-]+/', '-', $prefix) ?? 'survey';
+        $prefix = trim($prefix, '-_');
+        if ('' === $prefix) {
+            $prefix = 'survey';
+        }
+
         return mb_substr(
-            'mcp-sat-'.$courseId.'-'.date('YmdHis').'-'.bin2hex(random_bytes(2)),
+            $prefix.'-'.$courseId.'-'.date('YmdHis').'-'.bin2hex(random_bytes(2)),
             0,
             40,
         );

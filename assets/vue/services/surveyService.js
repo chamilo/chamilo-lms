@@ -68,6 +68,17 @@ export default {
     )
   },
 
+  async createTrainingSatisfactionSurvey(payload = {}, params = {}) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/survey/templates/training-satisfaction${queryString}`,
+      payload,
+      {},
+      surveyRequestConfig(),
+    )
+  },
+
   async getSurveyMeeting(params = {}, surveyId = null) {
     const endpoint = surveyId ? `/api/survey/meeting/${surveyId}` : "/api/survey/meeting"
 

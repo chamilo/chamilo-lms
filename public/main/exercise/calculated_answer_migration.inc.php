@@ -1,57 +1,7 @@
 <?php
 
-// FINAL WORDING <p>alors on dit que tralala et racine([#eaa]) + d fois [#ea] / [#pia]</p>
-// $lines =
-//     [
-//         "<p>alors on dit que tralala et racine(5.06) + d fois 2.91 / 6.48</p> [3.6]@@sqrt([e])+3*[ea]/[pi]",
-//         "<p>alors on dit que tralala et racine(-14.03) + d fois 11.39 / 14.59</p> [6.09]@@sqrt([e])+3*[ea]/[pi]",
-//         "<p>alors on dit que tralala et racine(13.05) + d fois 5.49 / 17.67</p> [4.54]@@sqrt([e])+3*[ea]/[pi]",
-//         "<p>alors on dit que tralala et racine(2.6) + d fois 15.84 / 6.09</p> [9.42]@@sqrt([e])+3*[ea]/[pi]",
-//         "<p>alors on dit que tralala et racine(18.93) + d fois 2.68 / 7.31</p> [5.45]@@sqrt([e])+3*[ea]/[pi]"
-//     ];
-
-// foreach ($lines as $lineTab) {
-
-    // echo "<hr><textarea style='width:600px; height:94%;'>";
-    // ob_start();
-    // $result = getMigratedValue($lineTab);
-    // ob_clean();
-    // // migrateCalculatedAnswerWording($lines);
-    // // echo "</textarea>";
-    // echo "<textarea style='color: darkred; float: right; width:45%; height:20%'>";
-    // echo $result;
-    // echo "</textarea>";
-// }
-
-
-/*
-4+2
-4++5
-4+-8
-4--9
-4-2
-4+2
-4++5
-4+-8
-4--9
-4-2
-
-
-1.
-les "- " qui n'ont pas de chiffre avant le - ne sont pas des maths
-les "+ " qui n'ont pas de chiffre avant le + ne sont pas des maths
-les remplacer par ###- ### et ###+ ### pour les récupérer plus tard
-
-2. les +\d et -\d qui ont un chiffre avant sont une opération + ou -
-
-3. les +\d et -\d qui n'ont pas un chiffre avant sont le signe du nombre
-
-*/
-
-
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
-
 
 /**
  * @param $questionEntity
@@ -127,14 +77,15 @@ function getMigratedValue($lines, $score = 10): string
     if (count($parts) !== 4) {
         return '';
     }
-
-    $wording = sanitazeWording($parts[1]);
+    $wording = sanitizeWording($parts[1]);
     $result = $parts[2];
     $formula = $parts[3];
 
     // check if number of float = number of variable in formula
 
     $vars = array_values(array_unique(getVariables($formula)));
+    $vars = array_values(getVariables($formula));
+
     $floatTemplates = getFloat($wording);
     $allFloats = getFloats($lines);
     $equalities = [];
@@ -177,8 +128,7 @@ function getMigratedValue($lines, $score = 10): string
     $wording = replaceFloatsInWording($wording, $vars, $constantFloats);
 
 
-    // replace ###...### with correct values
-    // ###minus et ###plus
+    // replace ###minus### with the correct literal value
     $wording = preg_replace('/###minus ###/', '- ', $wording);
 
     // replace ###constant...### with value
@@ -192,7 +142,7 @@ function getMigratedValue($lines, $score = 10): string
     }
 
     // add formula part
-    // @@@=Ord:valA*Abs+valB:0:percent:2:1;#Abs:-10-10::0;#valA:-10-10::0;#valB:0-10::0;
+    // @@@=Ord:valA*Abs+valB:0:percent:2:1;#Abs:-10:10:0;#valA:-10:10:0;#valB:0:10:0;
     // @@@=
     //     Ord:                formula result name
     //     valA*Abs+valB:      formula to calculate Ord using math and variable
@@ -202,11 +152,11 @@ function getMigratedValue($lines, $score = 10): string
     //     1                   score for good answer
     //     ;                   variable block separated with ;
     //     #Abs:               variable Abs
-    //     -10-10::0;          interval min-max (dash-joined) :: decimal number
+    //     -10:10:0;           interval min:max:decimal number
     //     #valA:              variable valA
-    //     -10-10::0;          interval min-max (dash-joined) :: decimal number
+    //     -10:10:0;           interval min:max:decimal number
     //     #valB:              variable valB
-    //     0-10::0             interval min-max (dash-joined) :: decimal number
+    //     0:10:0              interval min:max:decimal number
     //     ;
     //
 
@@ -224,10 +174,17 @@ function getMigratedValue($lines, $score = 10): string
     $dbString .= $score . ';';
     $intervals = getIntervals($vars, $allFloats);
 
+    $doneVars = [];
+
     foreach ($vars as $var) {
+        if (in_array($var, $doneVars)) {
+            continue;
+        }
         $dbString .= '#' . $var . ':';
-        $dbString .= $intervals[$var]['min'] . '-' . $intervals[$var]['max'] . '::';
+        $dbString .= $intervals[$var]['min'] . ':';
+        $dbString .= $intervals[$var]['max'] . ':';
         $dbString .= $intervals[$var]['decimals'] . ';';
+        $doneVars[] = $var;
     }
 
     return $dbString;
@@ -247,13 +204,12 @@ function parseFullLine($line): array
 
 
 /**
- * "- " with no digit before are not math context
- * "+ " and "+" with no digit before are not math context
- * replace it with with ###minus ### or ###plus ### pour les récupérer plus tard
+ * "- " with no digit before are not math context, replace it with
+ * ###minus ### pour le récupérer plus tard
  * @param $wording
  * @return string
  */
-function sanitazeWording($wording): string
+function sanitizeWording($wording): string
 {
     // case <p>14.83    + -9.07-78.52</p> plus and minus are math
     $wording = preg_replace('/(\d) *([+-]) *(-?\d)/',
@@ -264,12 +220,6 @@ function sanitazeWording($wording): string
     $wording = preg_replace('/(^|\D)( *)- /',
         '$1$2###minus ###',
         $wording);
-
-    // case <p>+ 10.27</p> or <p>+10.27</p> plus not for math, because
-    // v1 calculated answer dont add + before positive generated numbers
-    // $wording = preg_replace('/(^|\D)( *)\+/',
-    //     '$1$2###plus###',
-    //     $wording);
 
     // 9-8 is 9 - 8 // 9--8 is 9 - -8
     $wording = preg_replace("/(\d *)-(-?\d)/", "$1 - $2", $wording);
@@ -286,7 +236,6 @@ function getVariables($formula): array
     preg_match_all("/\[([^]]+)\]/", $formula, $matches);
 
     $res = $matches[1];
-
     // variable name cannot be e nor pi
     foreach ($matches[1] as $index => $var) {
         if ($var === 'e' or $var === 'pi') {
@@ -399,11 +348,6 @@ function getIntervals($vars, $floats): array
  */
 function replaceFloatsInWording($wording, $vars, $constants): string
 {
-
-    print_r($wording);
-    print_r($vars);
-    print_r($constants);
-
     $wording = preg_replace_callback(
         "/(-?\d+\.?\d*)/",
         function () use ($vars, $constants) {

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\BuyCoursesExpiryHelper;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -1650,6 +1651,12 @@ class BuyCoursesPlugin extends Plugin
         if ($buyerId <= 0) {
             return;
         }
+
+        // Reopen any course this buyer had closed for exceeding their course-creation
+        // limit while unsubscribed. This must run regardless of whether the service
+        // below has benefit extra-field configurations, so it happens before that check.
+        (new BuyCoursesExpiryHelper(Database::getManager()->getConnection()))
+            ->reactivateClosedCoursesForUser($buyerId);
 
         $configurations = $this->getServiceBenefitConfigurations((int) $serviceSale['service_id']);
         if (empty($configurations)) {

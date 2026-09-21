@@ -6399,6 +6399,14 @@ class CourseRestorer
                     $path = $resolvePath($it);
                     $ref = (string) ($it['ref'] ?? ($it['identifier'] ?? ''));
 
+                    $this->setLearningPathQuizVisibilityToDraft(
+                        $itype,
+                        $path,
+                        $courseEnt,
+                        $sessionEnt,
+                        $em
+                    );
+
                     $item = (new CLpItem())
                         ->setLp($lp)
                         ->setParent($pItem)
@@ -6504,6 +6512,14 @@ class CourseRestorer
                         $itTitle = (string) ($it['title'] ?? '');
                         $path = $resolvePath($it);
                         $ref = (string) ($it['ref'] ?? ($it['identifier'] ?? ''));
+
+                        $this->setLearningPathQuizVisibilityToDraft(
+                            $itype,
+                            $path,
+                            $courseEnt,
+                            $sessionEnt,
+                            $em
+                        );
 
                         $order = isset($it['display_order']) ? (int) $it['display_order'] : (++$fallbackOrder);
 
@@ -6614,6 +6630,50 @@ class CourseRestorer
                 'title' => $title,
             ]);
         }
+    }
+
+    private function setLearningPathQuizVisibilityToDraft(
+        string $itemType,
+        string $path,
+        CourseEntity $course,
+        ?SessionEntity $session,
+        EntityManagerInterface $em
+    ): void {
+        if (!\in_array(strtolower(trim($itemType)), ['quiz', 'exercise'], true) || !ctype_digit($path)) {
+            return;
+        }
+
+        $quizId = (int) $path;
+        if ($quizId <= 0) {
+            return;
+        }
+
+        $quiz = $em->getRepository(CQuiz::class)->find($quizId);
+        if (!$quiz instanceof CQuiz) {
+            $this->dlog('LP: restored quiz not found while applying LP visibility', [
+                'quiz_iid' => $quizId,
+            ]);
+
+            return;
+        }
+
+        $resourceNode = $quiz->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $resourceLink = $resourceNode->getResourceLinkByContext($course, $session);
+        if (!$resourceLink instanceof ResourceLink && null !== $session) {
+            $resourceLink = $resourceNode->getResourceLinkByContext($course);
+        }
+        if (!$resourceLink instanceof ResourceLink
+            || ResourceLink::VISIBILITY_DRAFT === $resourceLink->getVisibility()
+        ) {
+            return;
+        }
+
+        $resourceLink->setVisibility(ResourceLink::VISIBILITY_DRAFT);
+        $em->persist($resourceLink);
     }
 
     /**

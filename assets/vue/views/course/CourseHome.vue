@@ -622,7 +622,7 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 }
 
 async function enforceCourseLegalAgreement() {
-  if (!course.value?.id) {
+  if (!course.value?.id || platformConfigStore.plugins?.courselegal?.enabled !== true) {
     return
   }
 

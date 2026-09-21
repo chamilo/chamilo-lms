@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Helpers\ExerciseHotspotGeometryHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptScoringService;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseCertificateManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -102,6 +103,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
         private ExerciseHotspotGeometryHelper $exerciseHotspotGeometryHelper,
         private ExerciseAttemptScoringService $exerciseAttemptScoringService,
+        private ExerciseCertificateManager $exerciseCertificateManager,
     ) {}
 
     /**
@@ -210,6 +212,10 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         $learnpathTracking = $this->synchronizeLearnpathTracking($request, $attempt, $quiz, $course, $session, $user);
 
         $this->entityManager->flush();
+
+        // Side effect only: the result page (ExerciseRuntimeResultProvider) reads the certificate
+        // back separately, so its own eligibility check runs on the score just persisted above.
+        $this->exerciseCertificateManager->generateOnFinish($quiz, $course, $session, $user);
 
         $response = new ExerciseRuntimeFinish();
         $response->exerciseId = $exerciseId;

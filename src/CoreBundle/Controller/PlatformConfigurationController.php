@@ -275,6 +275,9 @@ class PlatformConfigurationController extends AbstractController
             $configuration['plugins']['justification'] = [
                 'enabled' => $pluginHelper->isPluginEnabled('Justification'),
             ];
+            $configuration['plugins']['courselegal'] = [
+                'enabled' => $pluginHelper->isPluginEnabled('CourseLegal'),
+            ];
         } else {
             $configuration['settings']['security.allow_captcha'] = $settingsManager->getSetting('security.allow_captcha', true);
         }

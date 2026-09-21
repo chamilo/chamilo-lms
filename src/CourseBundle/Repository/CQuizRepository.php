@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use DateTime;
 use Doctrine\ORM\QueryBuilder;
@@ -47,7 +48,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         }
 
         $this->addCategoryQueryBuilder($categoryId, $qb);
-        $this->addOnlyVisiblesQueryBuilder($onlyVisibles, $qb);
+        $this->addOnlyVisiblesQueryBuilder($onlyVisibles, $qb, $course);
 
         if (false === $includeDeleted) {
             $this->addNotDeletedQueryBuilder($qb);
@@ -262,18 +263,41 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
     }
 
     /**
-     * If $active is provided (any value), enforce links.visibility = 2 (visible).
-     * If $active is null, do not add a visibility filter here.
+     * If $onlyVisibles is true, keep published exercises plus exercises the learning path
+     * builder demoted to DRAFT visibility solely because they were added to a learning path
+     * (learnpath.class.php::add_item(), LearningPathBuilderMutationProcessor) — those stay
+     * hidden from direct course browsing but remain legitimately usable, e.g. as a Gradebook
+     * link. Mirrors the exception ExerciseLearnpathVisibilityHelper applies on the runtime side.
+     * If $onlyVisibles is false, no visibility filter is added here.
      */
-    private function addOnlyVisiblesQueryBuilder(bool $onlyVisibles = false, ?QueryBuilder $qb = null): void
+    private function addOnlyVisiblesQueryBuilder(bool $onlyVisibles, ?QueryBuilder $qb, Course $course): void
     {
         if (!$onlyVisibles) {
             return;
         }
 
-        $this->getOrCreateQueryBuilder($qb)
-            ->andWhere('links.visibility = :visibility')
+        $qb = $this->getOrCreateQueryBuilder($qb);
+
+        $lpItemExists = $this->getEntityManager()->createQueryBuilder()
+            ->select('1')
+            ->from(CLpItem::class, 'lpItem')
+            ->innerJoin('lpItem.lp', 'lp')
+            ->innerJoin('lp.resourceNode', 'lpNode')
+            ->innerJoin('lpNode.resourceLinks', 'lpLink')
+            ->andWhere('lpItem.itemType = :lpItemType')
+            ->andWhere('lpItem.path = resource.iid')
+            ->andWhere('IDENTITY(lpLink.course) = :lpCourseId')
+            ->andWhere('lpLink.deletedAt IS NULL')
+        ;
+
+        $qb
+            ->andWhere($qb->expr()->orX(
+                'links.visibility = :visibility',
+                $qb->expr()->exists($lpItemExists->getDQL())
+            ))
             ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
+            ->setParameter('lpItemType', 'quiz')
+            ->setParameter('lpCourseId', (int) $course->getId())
         ;
     }
 }

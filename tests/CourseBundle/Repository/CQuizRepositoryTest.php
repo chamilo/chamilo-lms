@@ -7,8 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
+use Chamilo\CourseBundle\Repository\CLpItemRepository;
+use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -169,5 +173,55 @@ class CQuizRepositoryTest extends AbstractApiTest
 
         $qb = $repo->findAllByCourse($course, null, null, true, false);
         $this->assertCount(2, $qb->getQuery()->getResult());
+    }
+
+    /**
+     * The learning path builder demotes an exercise's link to DRAFT visibility as soon as it
+     * is added to a learning path (LearningPathBuilderMutationProcessor, learnpath.class.php),
+     * on purpose, so it stops cluttering the course's direct exercise list. That must not make
+     * it disappear from Gradebook's "Add online activity -> Tests" picker too, or a teacher can
+     * no longer grade an exercise the moment it is placed inside a learning path.
+     */
+    public function testFindAllByCourseIncludesDraftExerciseLinkedFromLearningPath(): void
+    {
+        $repo = self::getContainer()->get(CQuizRepository::class);
+        $lpRepo = self::getContainer()->get(CLpRepository::class);
+        $lpItemRepo = self::getContainer()->get(CLpItemRepository::class);
+
+        $course = $this->createCourse('new');
+        $teacher = $this->createUser('teacher');
+
+        $exercise = (new CQuiz())
+            ->setTitle('exercise in lp')
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->addCourseLink($course, null, null, ResourceLink::VISIBILITY_DRAFT)
+        ;
+        $repo->create($exercise);
+
+        $lp = (new CLp())
+            ->setTitle('lp')
+            ->setParent($course)
+            ->setCreator($teacher)
+            ->setLpType(CLp::LP_TYPE)
+            ->addCourseLink($course)
+        ;
+        $lpRepo->createLp($lp);
+
+        $quizItem = (new CLpItem())
+            ->setLp($lp)
+            ->setParent($lp->getItems()->first())
+            ->setItemType('quiz')
+            ->setTitle('exercise in lp')
+            ->setPath((string) $exercise->getIid())
+            ->setDisplayOrder(1)
+        ;
+        $lpItemRepo->create($quizItem);
+
+        $qb = $repo->findAllByCourse($course, null, null, true, false);
+        $result = $qb->getQuery()->getResult();
+
+        $this->assertCount(1, $result);
+        $this->assertSame($exercise->getIid(), $result[0]->getIid());
     }
 }

@@ -41489,10 +41489,13 @@ msgstr ""
 msgid "JSON configuration for search prefilter fields."
 msgstr ""
 
-msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
 msgstr ""
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr ""
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
 msgstr ""
 
 msgid "No migration history: click to fix (or updates might break)"

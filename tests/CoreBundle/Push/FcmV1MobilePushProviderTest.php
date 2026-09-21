@@ -15,6 +15,8 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+use const JSON_THROW_ON_ERROR;
+
 final class FcmV1MobilePushProviderTest extends TestCase
 {
     private ?string $credentialsFile = null;
@@ -71,7 +73,8 @@ final class FcmV1MobilePushProviderTest extends TestCase
                         && 'ic_stat_chamilo' === ($message['android']['notification']['icon'] ?? null);
                 })
             )
-            ->willReturn($response);
+            ->willReturn($response)
+        ;
 
         $cache = $this->createMock(CacheInterface::class);
         $cache->method('get')->willReturn('oauth-token');

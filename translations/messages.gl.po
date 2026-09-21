@@ -14479,6 +14479,9 @@ msgstr "Por favor, volva ao Paso 1"
 msgid "has not been found in that directory"
 msgstr "non se atopou neste directorio"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "O instalador non ten un inicio de sesión propio, polo que unha actualización debe ser autorizada no servidor. Cree un ficheiro baleiro chamado %s na raíz do proxecto, xunto a .env, e continúe."
+
 msgid "Old version's root path"
 msgstr "path raíz da antiga versión"
 
@@ -20579,6 +20582,9 @@ msgstr "Lingua pai: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Defina novos termos para a sublingua %s buscando algún termo, despois garde cada tradución facendo clic no botón de gardar. Despois terá que cambiar a lingua do seu usuario para ver aparecer os novos termos."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Un termo gardado aquí móstrase de inmediato na interface que xa foi migrada. As páxinas que aínda non foron migradas len un catálogo compilado, polo que conservan o texto antigo ata que limpe a caché con php bin/console cache:clear. Fágao unha vez cando remate de editar, non despois de cada termo."
 
 msgid "See sequences"
 msgstr "Ver secuencias"
@@ -41562,4 +41568,22 @@ msgstr "Chave do campo extra de usuario para usar ao buscar e nomear sesións de
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Configuración JSON para os campos de prefiltro de busca."
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Isto rexistra as migracións que a súa base de datos xa leva e deixa as máis novas pendentes para que a actualización poida executalas. Os seus datos non se modifican."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migracións rexistradas. A súa plataforma xa se pode actualizar normalmente."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migracións rexistradas, e %s aínda están pendentes. Execute a actualización para executalas."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Sen historial de migracións: prema para corrixir (ou as actualizacións poderían fallar)"
+
+msgid "Migration history is recorded"
+msgstr "O historial de migracións está rexistrado"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s está presente na raíz do proxecto: elimíneo para pechar os puntos de acceso de actualización"
 

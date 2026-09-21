@@ -2048,7 +2048,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:geen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octet-stroom,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octetstream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:oefening,,      simulation:simulatie,,      questionnaire:enquête,,      diagram:diagram,,      figure:figuur,,      graph:grafiek,,      index:index,,      slide:dia,,      table:tabel,,      narrative text:vertellende tekst,,      exam:examen,,      experiment:experiment,,      problem statement:probleemstelling,,      self assessment:zelftest,,      lecture:voordracht"
@@ -14516,6 +14516,9 @@ msgstr "Gelieve terug te gaan naar stap 1"
 msgid "has not been found in that directory"
 msgstr "is niet gevonden in die folder"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "De installer heeft geen eigen login, dus een upgrade moet op de server worden goedgekeurd. Maak een leeg bestand met de naam %s in de projectroot, naast .env, en ga verder."
+
 msgid "Old version's root path"
 msgstr "Basispad van de oudere versies"
 
@@ -21011,6 +21014,9 @@ msgstr ""
 "Definieer nieuwe termen voor subtaal %s door een term te zoeken, sla "
 "vervolgens elke vertaling op door op de knop Opslaan te klikken. U moet dan "
 "uw eigen gebruikerstaal wijzigen om de nieuwe termen te zien verschijnen."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Een term die hier is opgeslagen, verschijnt meteen in de interface die al is gemigreerd. Pagina's die nog niet zijn gemigreerd, lezen een gecompileerde catalogus, dus ze behouden de oude tekst tot u de cache wist met php bin/console cache:clear. Doe dat eenmaal wanneer u klaar bent met bewerken, niet na elke term."
 
 msgid "See sequences"
 msgstr "Zie sequenties"
@@ -37681,7 +37687,7 @@ msgid "%s results"
 msgstr "%s resultaten"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Voorbeeld invulformulieractiviteit: bereken de Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Leeftijd</strong></td>            <td width=\"75%\" style=\"\">[25] jaar</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Geslacht</strong></td>            <td style=\"\" text-align:=\"\">[M] (M of V)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Gewicht</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Lengte</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Gewicht/Lengte<sup>2</sup> (Zie <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Voorbeeld invulformulieractiviteit: bereken de Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Leeftijd</strong></td>            <td width=\"75%\" style=\"\">[25] jaar</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Geslacht</strong></td>            <td style=\"\" text-align:=\"\">[M] (M of V)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Gewicht</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Lengte</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Gewicht/Lengte<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Verwijderd"
@@ -43625,4 +43631,22 @@ msgstr "Sleutel van extra gebruikersveld om te gebruiken bij het zoeken en benoe
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-configuratie voor zoekprefiltervelden."
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Dit registreert de migraties die uw database al bevat en laat de nieuwere in behandeling, zodat de update ze kan uitvoeren. Uw gegevens worden niet gewijzigd."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migraties vastgelegd. Uw platform kan nu normaal worden bijgewerkt."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migraties geregistreerd, en %s staan nog in behandeling. Voer de update uit om ze uit te voeren."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Geen migratiegeschiedenis: klik om te herstellen (anders kunnen updates mislukken)"
+
+msgid "Migration history is recorded"
+msgstr "Migratiegeschiedenis is vastgelegd"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s is aanwezig in de projectroot: verwijder het om de upgrade-eindpunten te sluiten"
 

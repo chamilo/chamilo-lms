@@ -67,6 +67,14 @@ final class CourseAccessResolver
             return $this->courseRolesForAccessibleCourse($user, $course);
         }
 
+        // Course::CLOSED is not a full lockout: legacy Chamilo (api_protect_course_script())
+        // kept it accessible to the course's own teacher(s) — only HIDDEN, handled above,
+        // is admin-only. A closed course's teacher gets no contextual role otherwise, which
+        // would 403 them out of their own course tools.
+        if (Course::CLOSED === $course->getVisibility() && $course->hasUserAsTeacher($user)) {
+            return [ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER];
+        }
+
         return [];
     }
 

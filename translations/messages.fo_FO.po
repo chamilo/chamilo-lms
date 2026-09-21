@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Við kærleika"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formuldømi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formuldømi: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variablumørk"
@@ -14466,6 +14466,9 @@ msgstr "Vinarliga far aftur til skref 1"
 msgid "has not been found in that directory"
 msgstr "er ikki funnin í hesum skranak"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Innsetarin hevur onga egnu innriting, so ein uppføring má góðkennast á servaranum. Stovna eina tóma fílu nevnd %s í rótini á verkætlanini, við síðuna av .env, og halt síðani fram."
+
 msgid "Old version's root path"
 msgstr "Gamla útgávunnar rótarslóð"
 
@@ -20561,6 +20564,9 @@ msgstr "Foreldur mál: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Upprita nýggja terminologi fyri undirmálið %s við at søkja eitt orð, so goym hvørja týðingu við at klikka á goym knappin. Tá ið tú hevur gjørt tað, skalt tú broyta títt egnu málsstillingar fyri at síggja nýggju terminologina."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Eitt heiti, ið er goymt her, vísist beinanvegin í tí brúkaraflatanum, sum longu er fluttur. Síðurnar, ið ikki eru fluttar enn, lesa eitt samansett yvirlit, so tær varðveita gamla tekstin, inntil tú reinsar goymsluna við php bin/console cache:clear. Ger tað einaferð, tá tú ert liðug/ur at rætta, ikki eftir hvørt heiti."
 
 msgid "See sequences"
 msgstr "Sí sekvensir"
@@ -41543,4 +41549,22 @@ msgstr "Lykil til eyka brúkaraøki at nýta tá leitað verður og sesjónir ne
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-uppseting fyri leitingar-forfiltur øki."
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Hetta skrásetur tær migreringar, sum dátugrunnurin longu hevur, og letur tær nýggjari vera í bíðistøðu, so dagføringin kann framkvæma tær. Dátan verður ikki broytt."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s flytingar skrásettar. Pallurin kann nú dagførast vanliga."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migreringar skrásettar, og %s eru enn í bíðistøðu. Koyr dagføringina fyri at framkvæma tær."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Ongin flytingarsøga: trýst fyri at rætta (ella kunnu dagføringar brotna)"
+
+msgid "Migration history is recorded"
+msgstr "Flytingarsøga er skrásett"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s er til staðar í rótini á verkætlanini: strika hana fyri at lata uppføringarendapunktini"
 

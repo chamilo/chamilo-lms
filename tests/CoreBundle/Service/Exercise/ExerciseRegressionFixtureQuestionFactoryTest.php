@@ -57,6 +57,13 @@ final class ExerciseRegressionFixtureQuestionFactoryTest extends TestCase
         $annotation = $factory->create(20);
         self::assertStringStartsWith('data:image/png;base64,', $annotation->annotationImageData);
 
+        $reading = $factory->create(21);
+        self::assertSame('[QA T21] What is Chamilo?', $reading->title);
+        self::assertCount(3, $reading->answers);
+        self::assertCount(1, array_filter($reading->answers, static fn (array $answer): bool => true === $answer['correct']));
+        self::assertSame('An open-source learning management system', $reading->answers[0]['answer']);
+        self::assertSame(10.0, $reading->answers[0]['score']);
+
         $calculated = $factory->create(16);
         self::assertCount(2, $calculated->calculatedVariables);
         self::assertCount(1, $calculated->calculatedFormulas);

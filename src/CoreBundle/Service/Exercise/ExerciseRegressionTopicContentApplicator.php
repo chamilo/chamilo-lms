@@ -116,6 +116,12 @@ final class ExerciseRegressionTopicContentApplicator
                 case ExerciseRegressionFixtureQuestionFactory::READING_COMPREHENSION:
                     $payload->title = (string) $content['reading']['title'];
                     $payload->description = $this->paragraph((string) $content['reading']['passage']);
+                    $payload->answers = $this->choiceAnswers(
+                        $content['reading']['options'],
+                        [(int) $content['reading']['correct_index']],
+                        10.0,
+                    );
+                    $this->applyFeedback($payload, $content['reading']);
 
                     break;
 

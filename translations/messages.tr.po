@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Saygılarımızla"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formül örneği: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formül örneği: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Değişken aralıkları"
@@ -14471,6 +14471,9 @@ msgstr "o dizinde bulunamadı"
 msgid "has not been found in that directory"
 msgstr "Eski sürümün kök yolu"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Yükleyicinin kendi oturum açma bilgisi yoktur, bu nedenle yükseltmenin sunucuda yetkilendirilmesi gerekir. Proje kök dizininde, .env dosyasının yanında %s adlı boş bir dosya oluşturun, ardından devam edin."
+
 msgid "Old version's root path"
 msgstr "Bazı dosyalar veya klasörler yazma iznine sahip değil. Chamilo'yu kurabilmek için önce izinlerini değiştirmelisiniz (CHMOD kullanarak). Lütfen %s kurulum kılavuzunu %s okuyun"
 
@@ -20566,6 +20569,9 @@ msgstr "Ana dil: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Alt dil %s için yeni terimler tanımlamak için bir terim arayın, ardından her çeviriyi kaydet düğmesine tıklayarak kaydedin. Yeni terimleri görmek için kendi kullanıcı dilinizi değiştirmeniz gerekecek."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Burada kaydedilen bir terim, halihazırda taşınmış arayüzde hemen görünür. Henüz taşınmamış sayfalar derlenmiş bir katalog okur, bu nedenle php bin/console cache:clear ile önbelleği temizleyene kadar eski metni gösterir. Bunu her terimden sonra değil, düzenlemeyi bitirdiğinizde bir kez yapın."
 
 msgid "See sequences"
 msgstr "Dizileri görüntüle"
@@ -41549,4 +41555,22 @@ msgstr "Oturumları /admin-dashboard/register üzerinden ararken ve adlandırır
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Arama ön filtre alanları için JSON yapılandırması."
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Bu, veritabanınızın zaten taşıdığı geçişleri kaydeder ve yenilerini beklemeye alır, böylece güncelleme bunları çalıştırabilir. Verileriniz değiştirilmez."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s geçiş kaydedildi. Platformunuz artık normal şekilde güncellenebilir."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s geçiş kaydedildi ve %s hâlâ bekliyor. Bunları çalıştırmak için güncellemeyi çalıştırın."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Geçiş geçmişi yok: düzeltmek için tıklayın (aksi halde güncellemeler bozulabilir)"
+
+msgid "Migration history is recorded"
+msgstr "Geçiş geçmişi kaydedildi"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s proje kök dizininde mevcut: yükseltme uç noktalarını kapatmak için silin"
 

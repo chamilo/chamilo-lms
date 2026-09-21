@@ -14479,6 +14479,9 @@ msgstr "Prosím choďte späť na Krok 1"
 msgid "has not been found in that directory"
 msgstr "nebol nájdený v tomto katalógu"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Inštalátor nemá vlastné prihlásenie, preto musí byť aktualizácia autorizovaná na serveri. Vytvorte prázdny súbor s názvom %s v koreňovom adresári projektu, vedľa súboru .env, a potom pokračujte."
+
 msgid "Old version's root path"
 msgstr "Stará verzia koreňovej cesty"
 
@@ -20579,6 +20582,9 @@ msgstr "Rodný jazyk: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Definujte nové termíny pre podjazyk %s vyhľadaním termínu, potom uložte každú preklad kliknutím na tlačidlo uložiť. Potom prepnite svoj používateľský jazyk, aby ste videli nové termíny."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Termín uložený tu sa okamžite zobrazí v rozhraní, ktoré už bolo migrované. Stránky, ktoré ešte neboli migrované, čítajú skompilovaný katalóg, preto si ponechajú starý text, kým nevyčistíte vyrovnávaciu pamäť príkazom php bin/console cache:clear. Urobte to raz, keď skončíte s úpravami, nie po každom termíne."
 
 msgid "See sequences"
 msgstr "Pozri postupne"
@@ -41562,4 +41568,22 @@ msgstr "Kľúč extra poľa používateľa na vyhľadávanie a pomenovanie relá
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Konfigurácia JSON pre polia predfiltra vyhľadávania."
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Toto zaznamená migrácie, ktoré vaša databáza už obsahuje, a novšie ponechá ako čakajúce, aby ich aktualizácia mohla vykonať. Vaše údaje sa nemenia."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "Zaznamenaných migrácií: %s. Vašu platformu teraz môžete aktualizovať bežným spôsobom."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migrácií bolo zaznamenaných a %s ešte čaká. Spustite aktualizáciu, aby sa vykonali."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Žiadna história migrácií: kliknite na opravu (inak sa aktualizácie môžu pokaziť)"
+
+msgid "Migration history is recorded"
+msgstr "História migrácií je zaznamenaná"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s je prítomný v koreňovom adresári projektu: odstráňte ho, aby ste zatvorili koncové body aktualizácie"
 

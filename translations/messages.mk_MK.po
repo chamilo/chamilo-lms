@@ -14469,6 +14469,9 @@ msgstr "Ве молиме вратете се на Чекор 1"
 msgid "has not been found in that directory"
 msgstr "не беше пронајдено во тој директориум"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Инсталерот нема сопствено најавување, па надградбата мора да се овласти на серверот. Создадете празна датотека со име %s во коренот на проектот, до .env, потоа продолжете."
+
 msgid "Old version's root path"
 msgstr "Коренска патека на старата верзија"
 
@@ -20564,6 +20567,9 @@ msgstr "Родителски јазик: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Дефинирај нови термини за подјазикот %s со пребарување на некој термин, потоа зачувај го секој превод со кликнување на копчето за зачувување. Потоа ќе мора да го смениш јазикот на твојот кориснички профил за да ги видиш новите термини."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Терминот зачуван овде веднаш се прикажува во интерфејсот што веќе е мигриран. Страниците што сè уште не се мигрирани читаат компајлиран каталог, па го задржуваат стариот текст додека не ја исчистите кешот со php bin/console cache:clear. Направете го тоа еднаш кога ќе завршите со уредување, не по секој термин."
 
 msgid "See sequences"
 msgstr "Погледни секвенци"
@@ -41547,4 +41553,22 @@ msgstr "Клуч на дополнително поле на корисник з
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON конфигурација за полиња за претфилтер при пребарување."
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Ова ги запишува миграциите што вашата база на податоци веќе ги содржи и ги остава поновите во чекање за да може ажурирањето да ги изврши. Вашите податоци не се менуваат."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "Запишани се %s миграции. Вашата платформа сега може да се ажурира нормално."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s миграции се запишани, а %s сè уште се во чекање. Стартувајте го ажурирањето за да ги извршите."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Нема историја на миграции: кликнете за да поправите (или ажурирањата може да се расипат)"
+
+msgid "Migration history is recorded"
+msgstr "Историјата на миграции е запишана"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s е присутен во коренот на проектот: избришете го за да ги затворите крајните точки за надградба"
 

@@ -12,6 +12,9 @@ use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 final class BuyCoursesExpiryHelper
 {
     private const string TABLE_SETTINGS = 'settings';

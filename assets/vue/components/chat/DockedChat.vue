@@ -138,6 +138,21 @@
                   <strong>{{ t("Select a contact") }}</strong>
                 </template>
               </div>
+              <div class="chd-chat__head-actions">
+                <button
+                  v-if="canStartVideoCall"
+                  :aria-label="t('Start video call')"
+                  :title="t('Start video call')"
+                  class="chd-btn chd-btn--ghost chd-btn--icon"
+                  type="button"
+                  @click="startVideoCall"
+                >
+                  <i
+                    aria-hidden="true"
+                    class="mdi mdi-video-outline"
+                  />
+                </button>
+              </div>
             </div>
 
             <!-- Scrollable messages area -->
@@ -269,6 +284,171 @@
           </main>
         </section>
       </div>
+
+      <div
+        v-if="videoCallVisible"
+        class="chd-video-overlay"
+        role="presentation"
+      >
+        <section
+          :aria-label="t('Video call')"
+          aria-modal="true"
+          class="chd-video-dialog"
+          role="dialog"
+        >
+          <header class="chd-video-dialog__head">
+            <div class="chd-peer">
+              <img
+                v-if="videoCallPeer?.image"
+                :src="videoCallPeer.image"
+                alt=""
+                class="chd-avatar"
+              />
+              <i
+                v-else
+                aria-hidden="true"
+                class="mdi mdi-account chd-avatar chd-avatar--fallback"
+              />
+              <div class="chd-peer__meta">
+                <strong class="chd-truncate">{{ videoCallPeer?.name || t("Video call") }}</strong>
+                <span class="chd-text--muted">{{ videoCallStatusLabel }}</span>
+              </div>
+            </div>
+          </header>
+
+          <div
+            v-if="videoCallState === 'incoming'"
+            class="chd-video-incoming"
+          >
+            <i
+              aria-hidden="true"
+              class="mdi mdi-video-outline chd-video-incoming__icon"
+            />
+            <strong>{{ t("Incoming video call") }}</strong>
+            <span class="chd-text--muted">{{ videoCallPeer?.name || t("User") }}</span>
+          </div>
+
+          <div
+            v-else-if="videoCallState === 'error'"
+            class="chd-video-incoming"
+          >
+            <i
+              aria-hidden="true"
+              class="mdi mdi-alert-circle-outline chd-video-incoming__icon"
+            />
+            <strong>{{ t("Video call could not be started") }}</strong>
+            <span class="chd-text--muted">{{ videoCallError }}</span>
+          </div>
+
+          <div
+            v-else
+            class="chd-video-stage"
+          >
+            <video
+              ref="remoteVideoElement"
+              autoplay
+              class="skip chd-video-remote"
+              playsinline
+            />
+            <div
+              v-if="!remoteStream"
+              class="chd-video-waiting"
+            >
+              <i
+                aria-hidden="true"
+                class="mdi mdi-account"
+              />
+              <span>{{ videoCallStatusLabel }}</span>
+            </div>
+            <video
+              ref="localVideoElement"
+              autoplay
+              class="skip chd-video-local"
+              muted
+              playsinline
+            />
+          </div>
+
+          <footer class="chd-video-controls">
+            <template v-if="videoCallState === 'incoming'">
+              <button
+                class="chd-video-control chd-video-control--danger"
+                type="button"
+                @click="rejectVideoCall"
+              >
+                <i
+                  aria-hidden="true"
+                  class="mdi mdi-phone-hangup"
+                />
+                <span>{{ t("Decline") }}</span>
+              </button>
+              <button
+                class="chd-video-control chd-video-control--accept"
+                type="button"
+                @click="acceptVideoCall"
+              >
+                <i
+                  aria-hidden="true"
+                  class="mdi mdi-video"
+                />
+                <span>{{ t("Accept") }}</span>
+              </button>
+            </template>
+
+            <template v-else-if="videoCallState === 'error'">
+              <button
+                class="chd-video-control"
+                type="button"
+                @click="resetVideoCall"
+              >
+                <i
+                  aria-hidden="true"
+                  class="mdi mdi-close"
+                />
+                <span>{{ t("Close") }}</span>
+              </button>
+            </template>
+
+            <template v-else>
+              <button
+                :aria-label="microphoneEnabled ? t('Mute microphone') : t('Unmute microphone')"
+                :title="microphoneEnabled ? t('Mute microphone') : t('Unmute microphone')"
+                class="chd-video-control"
+                type="button"
+                @click="toggleVideoMicrophone"
+              >
+                <i
+                  :class="microphoneEnabled ? 'mdi mdi-microphone' : 'mdi mdi-microphone-off'"
+                  aria-hidden="true"
+                />
+              </button>
+              <button
+                :aria-label="cameraEnabled ? t('Turn camera off') : t('Turn camera on')"
+                :title="cameraEnabled ? t('Turn camera off') : t('Turn camera on')"
+                class="chd-video-control"
+                type="button"
+                @click="toggleVideoCamera"
+              >
+                <i
+                  :class="cameraEnabled ? 'mdi mdi-video' : 'mdi mdi-video-off'"
+                  aria-hidden="true"
+                />
+              </button>
+              <button
+                class="chd-video-control chd-video-control--danger"
+                type="button"
+                @click="hangUpVideoCall"
+              >
+                <i
+                  aria-hidden="true"
+                  class="mdi mdi-phone-hangup"
+                />
+                <span>{{ videoCallState === "outgoing" ? t("Cancel") : t("Hang up") }}</span>
+              </button>
+            </template>
+          </footer>
+        </section>
+      </div>
     </div>
   </Teleport>
 </template>
@@ -278,11 +458,13 @@ import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { getCourseContext } from "../../utils/courseContext"
+import { usePlatformConfig } from "../../store/platformConfig"
 import DOMPurify from "dompurify"
 import baseService from "../../services/baseService"
 
 const { t } = useI18n({ useScope: "global" })
 const route = useRoute()
+const platformConfigurationStore = usePlatformConfig()
 
 /**
  * cidreq context (course/session/group).
@@ -490,6 +672,14 @@ const API = {
   preview: RG(["chat_api_preview", "chamilo_core_chat_api_preview"], "/account/chat/api/preview"),
   presence: RG(["chat_api_presence", "chamilo_core_chat_api_presence"], "/account/chat/api/presence"),
   ack: RG(["chat_api_ack", "chamilo_core_chat_api_ack"], "/account/chat/api/ack"),
+  video_signal: RG(
+    ["chat_api_video_signal", "chamilo_core_chat_api_video_signal"],
+    "/account/chat/api/video/signal",
+  ),
+  video_signals: RG(
+    ["chat_api_video_signals", "chamilo_core_chat_api_video_signals"],
+    "/account/chat/api/video/signals",
+  ),
   tutor_context: RG(
     ["chat_api_tutor_context", "chamilo_core_chat_api_tutor_context"],
     "/account/chat/api/tutor_context",
@@ -543,6 +733,67 @@ const fabHasUnread = computed(() => unreadTotal.value > 0 || fabUnread.value > 0
 
 let hbTimer = null
 let contactsTimer = null
+
+const VIDEO_SIGNAL_POLL_MS = 1000
+const VIDEO_CALL_TIMEOUT_MS = 30000
+const VIDEO_ICE_SERVERS = [
+  { urls: "stun:stun.l.google.com:19302" },
+]
+
+const videoCallState = ref("idle")
+const videoCallPeer = ref(null)
+const videoCallId = ref("")
+const videoCallError = ref("")
+const incomingVideoOffer = ref("")
+const localStream = ref(null)
+const remoteStream = ref(null)
+const localVideoElement = ref(null)
+const remoteVideoElement = ref(null)
+const microphoneEnabled = ref(true)
+const cameraEnabled = ref(true)
+const pendingRemoteIce = []
+const earlyIceByCall = new Map()
+let peerConnection = null
+let videoSignalTimer = null
+let videoSignalPollRunning = false
+let videoCallTimeout = null
+
+const videoChatSupported = computed(() => {
+  return (
+    typeof window !== "undefined" &&
+    typeof window.RTCPeerConnection === "function" &&
+    !!navigator?.mediaDevices?.getUserMedia
+  )
+})
+
+const videoChatEnabled = computed(() => {
+  if (!videoChatSupported.value) return false
+  const hidden = platformConfigurationStore.getSetting?.("chat.hide_chat_video")
+  return hidden === false || hidden === 0 || String(hidden).toLowerCase() === "false" || String(hidden) === "0"
+})
+
+const videoCallVisible = computed(() => videoCallState.value !== "idle")
+const canStartVideoCall = computed(() => {
+  const pid = Number(activePeer.value?.id || 0)
+  return videoChatEnabled.value && pid > 0 && videoCallState.value === "idle" && userStatus.value === 1
+})
+
+const videoCallStatusLabel = computed(() => {
+  switch (videoCallState.value) {
+    case "incoming":
+      return t("Incoming video call")
+    case "outgoing":
+      return t("Calling...")
+    case "connecting":
+      return t("Connecting...")
+    case "connected":
+      return t("Connected")
+    case "error":
+      return t("Connection failed")
+    default:
+      return t("Video call")
+  }
+})
 
 function qs(obj) {
   return new URLSearchParams(obj).toString()
@@ -903,6 +1154,402 @@ async function post(url, params, expectJson = true) {
 
   return r.data
 }
+
+function createVideoCallId() {
+  if (window.crypto?.randomUUID) {
+    return window.crypto.randomUUID()
+  }
+
+  const bytes = new Uint8Array(16)
+  window.crypto?.getRandomValues?.(bytes)
+  const fallback = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("")
+
+  return fallback || `${Date.now()}-${Math.random().toString(16).slice(2)}-call`
+}
+
+function setVideoElementStream(element, stream) {
+  if (!element) return
+  if (element.srcObject !== stream) element.srcObject = stream || null
+}
+
+watch([localVideoElement, localStream], ([element, stream]) => setVideoElementStream(element, stream))
+watch([remoteVideoElement, remoteStream], ([element, stream]) => setVideoElementStream(element, stream))
+
+async function sendVideoSignal(to, type, callId, payload = {}) {
+  if (!videoChatEnabled.value || Number(to) <= 0 || !callId) return null
+
+  return post(API.video_signal, {
+    to: Number(to),
+    type,
+    call_id: callId,
+    payload: JSON.stringify(payload || {}),
+  })
+}
+
+function clearVideoCallTimeout() {
+  if (videoCallTimeout) {
+    window.clearTimeout(videoCallTimeout)
+    videoCallTimeout = null
+  }
+}
+
+function stopLocalVideoStream() {
+  if (localStream.value) {
+    localStream.value.getTracks().forEach((track) => track.stop())
+  }
+  localStream.value = null
+  microphoneEnabled.value = true
+  cameraEnabled.value = true
+}
+
+function closePeerConnection() {
+  if (peerConnection) {
+    peerConnection.onicecandidate = null
+    peerConnection.ontrack = null
+    peerConnection.onconnectionstatechange = null
+    peerConnection.close()
+  }
+  peerConnection = null
+  remoteStream.value = null
+  pendingRemoteIce.splice(0)
+}
+
+function resetVideoCall() {
+  const previousCallId = videoCallId.value
+  clearVideoCallTimeout()
+  closePeerConnection()
+  stopLocalVideoStream()
+  if (previousCallId) earlyIceByCall.delete(previousCallId)
+  videoCallState.value = "idle"
+  videoCallPeer.value = null
+  videoCallId.value = ""
+  videoCallError.value = ""
+  incomingVideoOffer.value = ""
+}
+
+function failVideoCall(message) {
+  clearVideoCallTimeout()
+  closePeerConnection()
+  stopLocalVideoStream()
+  videoCallError.value = message || t("Video call could not be started")
+  videoCallState.value = "error"
+}
+
+async function requestLocalVideoStream() {
+  if (localStream.value) return localStream.value
+
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: true,
+    video: true,
+  })
+  localStream.value = stream
+  microphoneEnabled.value = stream.getAudioTracks().some((track) => track.enabled)
+  cameraEnabled.value = stream.getVideoTracks().some((track) => track.enabled)
+
+  return stream
+}
+
+async function flushPendingRemoteIce() {
+  if (!peerConnection?.remoteDescription) return
+
+  while (pendingRemoteIce.length > 0) {
+    const candidate = pendingRemoteIce.shift()
+    try {
+      await peerConnection.addIceCandidate(candidate)
+    } catch {
+      // A stale ICE candidate must not terminate the whole call.
+    }
+  }
+}
+
+function takeEarlyIce(callId) {
+  const items = earlyIceByCall.get(callId) || []
+  earlyIceByCall.delete(callId)
+  items.forEach((candidate) => pendingRemoteIce.push(candidate))
+}
+
+function bufferEarlyIce(signal) {
+  const callId = String(signal?.call_id || "")
+  const payload = signal?.payload || {}
+  if (!callId || !payload?.candidate) return
+
+  const list = earlyIceByCall.get(callId) || []
+  list.push(payload)
+  if (list.length > 25) list.shift()
+  earlyIceByCall.set(callId, list)
+
+  while (earlyIceByCall.size > 10) {
+    const oldestCallId = earlyIceByCall.keys().next().value
+    if (!oldestCallId) break
+    earlyIceByCall.delete(oldestCallId)
+  }
+}
+
+function createVideoPeerConnection(peerId, callId) {
+  closePeerConnection()
+
+  const pc = new RTCPeerConnection({ iceServers: VIDEO_ICE_SERVERS })
+  peerConnection = pc
+
+  localStream.value?.getTracks().forEach((track) => {
+    pc.addTrack(track, localStream.value)
+  })
+
+  pc.ontrack = (event) => {
+    const [stream] = event.streams || []
+    if (stream) {
+      remoteStream.value = stream
+      return
+    }
+
+    const fallback = remoteStream.value || new MediaStream()
+    fallback.addTrack(event.track)
+    remoteStream.value = fallback
+  }
+
+  pc.onicecandidate = (event) => {
+    if (!event.candidate) return
+    const candidate = event.candidate.toJSON ? event.candidate.toJSON() : event.candidate
+    sendVideoSignal(peerId, "ice", callId, candidate).catch(() => {})
+  }
+
+  pc.onconnectionstatechange = () => {
+    if (pc !== peerConnection) return
+
+    if (pc.connectionState === "connected") {
+      clearVideoCallTimeout()
+      videoCallState.value = "connected"
+      return
+    }
+
+    if (pc.connectionState === "failed") {
+      failVideoCall(t("The video connection failed"))
+    }
+  }
+
+  return pc
+}
+
+async function startVideoCall() {
+  const peer = activePeer.value
+  const peerId = Number(peer?.id || 0)
+  if (!canStartVideoCall.value || peerId <= 0) return
+
+  videoCallPeer.value = {
+    id: peerId,
+    name: peer?.name || t("User"),
+    image: peer?.image || "",
+  }
+  videoCallId.value = createVideoCallId()
+  videoCallError.value = ""
+  videoCallState.value = "outgoing"
+
+  try {
+    await requestLocalVideoStream()
+    const callId = videoCallId.value
+    const pc = createVideoPeerConnection(peerId, callId)
+    const offer = await pc.createOffer()
+    await pc.setLocalDescription(offer)
+    const sent = await sendVideoSignal(peerId, "offer", callId, { sdp: offer.sdp || "" })
+    if (sent?.ok !== true) throw new Error("video_signal_not_sent")
+
+    videoCallTimeout = window.setTimeout(() => {
+      if (videoCallState.value !== "outgoing") return
+      sendVideoSignal(peerId, "cancel", callId, { reason: "timeout" }).catch(() => {})
+      resetVideoCall()
+    }, VIDEO_CALL_TIMEOUT_MS)
+  } catch (error) {
+    console.error("[VideoChat] Could not start call", error)
+    failVideoCall(t("Camera or microphone access could not be obtained"))
+  }
+}
+
+async function acceptVideoCall() {
+  const peerId = Number(videoCallPeer.value?.id || 0)
+  const callId = videoCallId.value
+  const offerSdp = incomingVideoOffer.value
+  if (videoCallState.value !== "incoming" || peerId <= 0 || !callId || !offerSdp) return
+
+  clearVideoCallTimeout()
+  videoCallState.value = "connecting"
+
+  try {
+    await requestLocalVideoStream()
+    const pc = createVideoPeerConnection(peerId, callId)
+    takeEarlyIce(callId)
+    await pc.setRemoteDescription({ type: "offer", sdp: offerSdp })
+    await flushPendingRemoteIce()
+    const answer = await pc.createAnswer()
+    await pc.setLocalDescription(answer)
+    const sent = await sendVideoSignal(peerId, "answer", callId, { sdp: answer.sdp || "" })
+    if (sent?.ok !== true) throw new Error("video_signal_not_sent")
+  } catch (error) {
+    console.error("[VideoChat] Could not accept call", error)
+    await sendVideoSignal(peerId, "reject", callId, { reason: "media_error" }).catch(() => {})
+    failVideoCall(t("Camera or microphone access could not be obtained"))
+  }
+}
+
+async function rejectVideoCall() {
+  const peerId = Number(videoCallPeer.value?.id || 0)
+  const callId = videoCallId.value
+  if (peerId > 0 && callId) {
+    await sendVideoSignal(peerId, "reject", callId, { reason: "declined" }).catch(() => {})
+  }
+  resetVideoCall()
+}
+
+async function hangUpVideoCall() {
+  const peerId = Number(videoCallPeer.value?.id || 0)
+  const callId = videoCallId.value
+  const signalType = videoCallState.value === "outgoing" ? "cancel" : "hangup"
+
+  if (peerId > 0 && callId) {
+    await sendVideoSignal(peerId, signalType, callId).catch(() => {})
+  }
+  resetVideoCall()
+}
+
+function toggleVideoMicrophone() {
+  const tracks = localStream.value?.getAudioTracks?.() || []
+  if (!tracks.length) return
+  microphoneEnabled.value = !microphoneEnabled.value
+  tracks.forEach((track) => {
+    track.enabled = microphoneEnabled.value
+  })
+}
+
+function toggleVideoCamera() {
+  const tracks = localStream.value?.getVideoTracks?.() || []
+  if (!tracks.length) return
+  cameraEnabled.value = !cameraEnabled.value
+  tracks.forEach((track) => {
+    track.enabled = cameraEnabled.value
+  })
+}
+
+async function handleVideoSignal(signal) {
+  const type = String(signal?.type || "")
+  const from = Number(signal?.from || 0)
+  const callId = String(signal?.call_id || "")
+  if (from <= 0 || !callId) return
+
+  if (type === "offer") {
+    if (videoCallState.value !== "idle") {
+      if (videoCallId.value !== callId || Number(videoCallPeer.value?.id || 0) !== from) {
+        await sendVideoSignal(from, "reject", callId, { reason: "busy" }).catch(() => {})
+      }
+      return
+    }
+
+    const sdp = String(signal?.payload?.sdp || "")
+    if (!sdp) return
+
+    videoCallId.value = callId
+    videoCallPeer.value = {
+      id: from,
+      name: String(signal?.from_name || t("User")),
+      image: String(signal?.from_avatar || ""),
+    }
+    incomingVideoOffer.value = sdp
+    videoCallError.value = ""
+    videoCallState.value = "incoming"
+    clearVideoCallTimeout()
+    videoCallTimeout = window.setTimeout(() => {
+      if (videoCallState.value !== "incoming" || videoCallId.value !== callId) return
+      sendVideoSignal(from, "reject", callId, { reason: "timeout" }).catch(() => {})
+      resetVideoCall()
+    }, VIDEO_CALL_TIMEOUT_MS)
+    return
+  }
+
+  const currentPeerId = Number(videoCallPeer.value?.id || 0)
+  const isCurrentCall = videoCallId.value === callId && currentPeerId === from
+
+  if (type === "ice") {
+    const candidate = signal?.payload || {}
+    if (!candidate?.candidate) return
+    if (!isCurrentCall) {
+      bufferEarlyIce(signal)
+      return
+    }
+
+    if (peerConnection?.remoteDescription) {
+      try {
+        await peerConnection.addIceCandidate(candidate)
+      } catch {
+        // Ignore a single invalid/stale candidate.
+      }
+    } else {
+      pendingRemoteIce.push(candidate)
+    }
+    return
+  }
+
+  if (!isCurrentCall) return
+
+  if (type === "answer" && videoCallState.value === "outgoing" && peerConnection) {
+    const sdp = String(signal?.payload?.sdp || "")
+    if (!sdp) return
+    clearVideoCallTimeout()
+    videoCallState.value = "connecting"
+    try {
+      await peerConnection.setRemoteDescription({ type: "answer", sdp })
+      takeEarlyIce(callId)
+      await flushPendingRemoteIce()
+    } catch (error) {
+      console.error("[VideoChat] Could not apply remote answer", error)
+      failVideoCall(t("The video connection failed"))
+    }
+    return
+  }
+
+  if (["reject", "cancel", "hangup"].includes(type)) {
+    resetVideoCall()
+  }
+}
+
+async function pollVideoSignals() {
+  if (!videoChatEnabled.value || videoSignalPollRunning) return
+  videoSignalPollRunning = true
+  try {
+    const response = await getJSON(API.video_signals)
+    const signals = Array.isArray(response?.signals) ? response.signals : []
+    for (const signal of signals) {
+      await handleVideoSignal(signal)
+    }
+  } catch {
+    // Video signaling is optional: keep normal text chat working if polling fails.
+  } finally {
+    videoSignalPollRunning = false
+  }
+}
+
+function startVideoSignalPolling() {
+  if (!videoChatEnabled.value || !canRenderDock.value || userStatus.value !== 1 || videoSignalTimer) return
+  pollVideoSignals().catch(() => {})
+  videoSignalTimer = window.setInterval(() => {
+    pollVideoSignals().catch(() => {})
+  }, VIDEO_SIGNAL_POLL_MS)
+}
+
+function stopVideoSignalPolling() {
+  if (videoSignalTimer) {
+    window.clearInterval(videoSignalTimer)
+    videoSignalTimer = null
+  }
+  videoSignalPollRunning = false
+}
+
+watch([videoChatEnabled, canRenderDock], ([enabled, renderDock]) => {
+  if (enabled && renderDock && userStatus.value === 1) {
+    startVideoSignalPolling()
+    return
+  }
+
+  stopVideoSignalPolling()
+  if (!renderDock && videoCallState.value !== "idle") resetVideoCall()
+})
 
 function byChronoId(a, b) {
   const da = Number(a?.date) || 0
@@ -1603,13 +2250,20 @@ function stopHeartbeat() {
 async function goOnline() {
   await post(API.status, { status: 1 })
   userStatus.value = 1
+  startVideoSignalPolling()
 }
 async function toggleStatus() {
   const newStatus = userStatus.value === 1 ? 0 : 1
   await post(API.status, { status: newStatus })
   userStatus.value = newStatus
-  if (newStatus === 1) startHeartbeat()
-  else stopHeartbeat()
+  if (newStatus === 1) {
+    startHeartbeat()
+    startVideoSignalPolling()
+  } else {
+    stopHeartbeat()
+    stopVideoSignalPolling()
+    if (videoCallState.value !== "idle") resetVideoCall()
+  }
 }
 
 const isAiThread = computed(() => Number(activePeer.value?.id || 0) === AI_PEER_ID)
@@ -2339,6 +2993,7 @@ onMounted(async () => {
   await loadTutorContext()
   await startSession()
 
+  if (videoChatEnabled.value) startVideoSignalPolling()
   if (userStatus.value === 1) startHeartbeat()
 
   try {
@@ -2349,6 +3004,13 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  if (videoCallState.value !== "idle") {
+    const peerId = Number(videoCallPeer.value?.id || 0)
+    const callId = videoCallId.value
+    if (peerId > 0 && callId) sendVideoSignal(peerId, "hangup", callId).catch(() => {})
+  }
+  stopVideoSignalPolling()
+  resetVideoCall()
   stopHeartbeat()
   clearInterval(contactsTimer)
   contactsTimer = null
@@ -2505,5 +3167,156 @@ onBeforeUnmount(() => {
 .chd-selection-chip__close:hover {
   background: rgba(0, 0, 0, 0.08);
   opacity: 1;
+}
+
+.chd-chat__head-actions {
+  display: flex;
+  align-items: center;
+  margin-inline-start: auto;
+}
+
+.chd-btn--icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+}
+
+.chd-video-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.chd-video-dialog {
+  width: min(720px, 100%);
+  overflow: hidden;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.35);
+}
+
+.chd-video-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.chd-video-stage {
+  position: relative;
+  min-height: 360px;
+  background: #111827;
+}
+
+.chd-video-remote {
+  display: block;
+  width: 100%;
+  min-height: 360px;
+  max-height: 70vh;
+  object-fit: cover;
+  background: #111827;
+}
+
+.chd-video-local {
+  position: absolute;
+  inset-inline-end: 16px;
+  bottom: 16px;
+  width: min(180px, 32%);
+  aspect-ratio: 4 / 3;
+  border: 2px solid #fff;
+  border-radius: 12px;
+  object-fit: cover;
+  background: #1f2937;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.chd-video-waiting {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #fff;
+}
+
+.chd-video-waiting .mdi {
+  font-size: 64px;
+}
+
+.chd-video-incoming {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px;
+  text-align: center;
+}
+
+.chd-video-incoming__icon {
+  font-size: 64px;
+}
+
+.chd-video-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.chd-video-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 9999px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.chd-video-control--accept {
+  color: #fff;
+  background: #15803d;
+  border-color: #15803d;
+}
+
+.chd-video-control--danger {
+  color: #fff;
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+@media (max-width: 640px) {
+  .chd-video-overlay {
+    padding: 0;
+  }
+
+  .chd-video-dialog {
+    width: 100%;
+    min-height: 100%;
+    border-radius: 0;
+  }
+
+  .chd-video-stage,
+  .chd-video-remote {
+    min-height: 55vh;
+  }
 }
 </style>

@@ -214,6 +214,7 @@ class PlatformConfigurationController extends AbstractController
                 'display.table_row_list',
                 'social.allow_social_tool',
                 'chat.allow_global_chat',
+                'chat.hide_chat_video',
                 'survey.show_pending_survey_in_menu',
                 'search.search_enabled',
                 'search.search_prefilter_prefix',

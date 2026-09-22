@@ -3,6 +3,7 @@ import { computed, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
 import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
@@ -161,6 +162,14 @@ const isLpVisible = computed(() => {
 })
 
 const manageableInContext = computed(() => props.lp?.manageableInContext !== false)
+
+const isPrerequisiteLocked = computed(
+  () => !props.canEdit && Number(props.lp?.prerequisite ?? 0) > 0 && props.lp?.prerequisiteCompleted === false,
+)
+
+const prerequisiteLockedTooltip = computed(() =>
+  t('You must complete the learning path "{0}" before you can access this one.', [props.lp?.prerequisiteName || ""]),
+)
 
 const managementParams = computed(() => ({
   cid: props.legacyContext.cid || 0,
@@ -561,12 +570,24 @@ const itemActionsMobile = computed(() =>
 
         <div class="lp-panel__info">
           <BaseAppLink
+            v-if="!isPrerequisiteLocked"
             :title="t('Open')"
             :to="openRoute"
             class="lp-panel__title"
           >
             {{ lp.title || t("Learning path title here") }}
           </BaseAppLink>
+          <span
+            v-else
+            :title="prerequisiteLockedTooltip"
+            class="lp-panel__title flex items-center gap-1.5 cursor-not-allowed opacity-60"
+          >
+            <BaseIcon
+              icon="lock"
+              size="small"
+            />
+            {{ lp.title || t("Learning path title here") }}
+          </span>
           <p
             v-if="dateText"
             class="lp-panel__dates lp-panel__dates--desktop"
@@ -579,6 +600,17 @@ const itemActionsMobile = computed(() =>
           >
             <span class="lp-panel__prerequisite-label">{{ t("Prerequisites") }}</span>
             <span class="lp-panel__prerequisite-value">{{ lp.prerequisiteName }}</span>
+            <span
+              v-if="isPrerequisiteLocked"
+              :title="prerequisiteLockedTooltip"
+              class="ms-2 inline-flex items-center gap-1 rounded bg-red-100 px-2 py-0.5 text-caption font-medium text-red-700"
+            >
+              <BaseIcon
+                icon="lock"
+                size="small"
+              />
+              {{ t("Locked") }}
+            </span>
           </div>
         </div>
 
@@ -612,6 +644,17 @@ const itemActionsMobile = computed(() =>
       >
         <span class="lp-panel__prerequisite-label">{{ t("Prerequisites") }}</span>
         <span class="lp-panel__prerequisite-value">{{ lp.prerequisiteName }}</span>
+        <span
+          v-if="isPrerequisiteLocked"
+          :title="prerequisiteLockedTooltip"
+          class="ms-2 inline-flex items-center gap-1 rounded bg-red-100 px-2 py-0.5 text-caption font-medium text-red-700"
+        >
+          <BaseIcon
+            icon="lock"
+            size="small"
+          />
+          {{ t("Locked") }}
+        </span>
       </div>
 
       <template v-if="canEdit">
@@ -787,7 +830,8 @@ const itemActionsMobile = computed(() =>
             />
 
             <BaseButton
-              :label="t('Open')"
+              :disabled="isPrerequisiteLocked"
+              :label="isPrerequisiteLocked ? prerequisiteLockedTooltip : t('Open')"
               :route="openRoute"
               icon="link-external"
               only-icon

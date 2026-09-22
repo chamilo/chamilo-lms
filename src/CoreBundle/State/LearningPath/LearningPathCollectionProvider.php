@@ -105,13 +105,23 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
         }
 
         $user = $this->security->getUser();
+        $prerequisiteState = $user instanceof User
+            ? $this->resolvePrerequisiteState($learningPaths, $course, $session, $group, $user)
+            : [];
+
         if (!$canManage) {
+            $showBlockedPrerequisite = $this->isTruthySetting(
+                $this->settingsManager->getSetting('lp.show_prerequisite_as_blocked', true),
+            );
+
             $learningPaths = $this->filterByAvailability(
                 $learningPaths,
                 $course,
                 $session,
                 $user instanceof User ? $user : null,
                 $group,
+                $prerequisiteState,
+                $showBlockedPrerequisite,
             );
         }
 
@@ -121,6 +131,12 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
             $progress = $this->learningPathRepository->lastProgressForUser($learningPaths, $user, $session);
             foreach ($learningPaths as $learningPath) {
                 $learningPath->setProgress($progress[(int) $learningPath->getIid()] ?? 0);
+
+                $prerequisiteId = $learningPath->getPrerequisite();
+                if ($prerequisiteId > 0 && isset($prerequisiteState[$prerequisiteId])) {
+                    $learningPath->setPrerequisiteName($prerequisiteState[$prerequisiteId]['name']);
+                    $learningPath->setPrerequisiteCompleted($prerequisiteState[$prerequisiteId]['completed']);
+                }
             }
         }
 
@@ -128,7 +144,83 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
     }
 
     /**
+     * Resolves, for every distinct prerequisite referenced by $learningPaths, the prerequisite
+     * learning path's title and whether the current user has completed it.
+     *
      * @param array<int, CLp> $learningPaths
+     *
+     * @return array<int, array{name: string, completed: bool}>
+     */
+    private function resolvePrerequisiteState(
+        array $learningPaths,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        User $user,
+    ): array {
+        $prerequisiteIds = [];
+        foreach ($learningPaths as $learningPath) {
+            $prerequisiteId = $learningPath->getPrerequisite();
+            if ($prerequisiteId > 0) {
+                $prerequisiteIds[$prerequisiteId] = $prerequisiteId;
+            }
+        }
+
+        if ([] === $prerequisiteIds) {
+            return [];
+        }
+
+        $lpById = [];
+        foreach ($learningPaths as $learningPath) {
+            $lpById[(int) $learningPath->getIid()] = $learningPath;
+        }
+
+        $prerequisiteLps = [];
+        $missingIds = [];
+        foreach ($prerequisiteIds as $prerequisiteId) {
+            if (isset($lpById[$prerequisiteId])) {
+                $prerequisiteLps[$prerequisiteId] = $lpById[$prerequisiteId];
+            } else {
+                $missingIds[] = $prerequisiteId;
+            }
+        }
+
+        if ([] !== $missingIds) {
+            /** @var array<int, CLp> $missingLps */
+            $missingLps = $this->learningPathRepository->findBy(['iid' => $missingIds]);
+            foreach ($missingLps as $missingLp) {
+                // A prerequisite id can only ever point to another learning path of the same
+                // course (that's the only option the settings form offers), but the field is
+                // a plain integer column with no DB-level constraint tying it to this course.
+                // Re-check the context link here so a prerequisite id tampered with (e.g. a
+                // direct API write) can never leak another course's learning path title.
+                if ($this->getContextResourceLink($missingLp, $course, $session, $group) instanceof ResourceLink) {
+                    $prerequisiteLps[(int) $missingLp->getIid()] = $missingLp;
+                }
+            }
+        }
+
+        $progress = $this->learningPathRepository->lastProgressForUser($prerequisiteLps, $user, $session);
+
+        $state = [];
+        foreach ($prerequisiteIds as $prerequisiteId) {
+            $prerequisite = $prerequisiteLps[$prerequisiteId] ?? null;
+            if (!$prerequisite instanceof CLp) {
+                continue;
+            }
+
+            $state[$prerequisiteId] = [
+                'name' => $prerequisite->getTitle(),
+                'completed' => ($progress[$prerequisiteId] ?? 0) >= 100,
+            ];
+        }
+
+        return $state;
+    }
+
+    /**
+     * @param array<int, CLp>                                  $learningPaths
+     * @param array<int, array{name: string, completed: bool}> $prerequisiteState
      *
      * @return array<int, CLp>
      */
@@ -138,6 +230,8 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
         ?Session $session,
         ?User $user,
         ?CGroup $group,
+        array $prerequisiteState,
+        bool $showBlockedPrerequisite,
     ): array {
         $showUnavailableWithDates = $this->isTruthySetting(
             $this->settingsManager->getSetting('lp.lp_start_and_end_date_visible_in_student_view', true),
@@ -145,7 +239,15 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
 
         return array_values(array_filter(
             $learningPaths,
-            function (CLp $learningPath) use ($course, $session, $user, $group, $showUnavailableWithDates): bool {
+            function (CLp $learningPath) use (
+                $course,
+                $session,
+                $user,
+                $group,
+                $showUnavailableWithDates,
+                $prerequisiteState,
+                $showBlockedPrerequisite,
+            ): bool {
                 if ($user instanceof User && !$this->advancedAccessHelper->isAllowed($course, $learningPath, $session, $user)) {
                     return false;
                 }
@@ -154,6 +256,14 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
                 if (null !== $category) {
                     $categoryLink = $this->getContextResourceLink($category, $course, $session, $group);
                     if (!$categoryLink instanceof ResourceLink || ResourceLink::VISIBILITY_PUBLISHED !== $categoryLink->getVisibility()) {
+                        return false;
+                    }
+                }
+
+                $prerequisiteId = $learningPath->getPrerequisite();
+                if ($prerequisiteId > 0 && !$showBlockedPrerequisite) {
+                    $completed = $prerequisiteState[$prerequisiteId]['completed'] ?? true;
+                    if (!$completed) {
                         return false;
                     }
                 }

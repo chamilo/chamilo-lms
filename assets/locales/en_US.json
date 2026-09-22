@@ -1151,6 +1151,7 @@
     "Drag to reorder": "Drag to reorder",
     "Clean temporary files": "Clean temporary files",
     "Prerequisites": "Prerequisites",
+    "You must complete the learning path \"{0}\" before you can access this one.": "You must complete the learning path \"{0}\" before you can access this one.",
     "Publish / Hide": "Publish / Hide",
     "Edit learnpath": "Edit learnpath",
     "Select which items to include in the PDF": "Select which items to include in the PDF",

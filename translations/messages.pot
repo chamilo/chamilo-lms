@@ -41509,3 +41509,6 @@ msgstr ""
 
 msgid "You have earned a certificate for this exercise"
 msgstr ""
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr ""

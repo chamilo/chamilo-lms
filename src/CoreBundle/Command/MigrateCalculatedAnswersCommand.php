@@ -43,6 +43,12 @@ final class MigrateCalculatedAnswersCommand extends Command
         );
     }
 
+    /**
+     * @psalm-suppress UndefinedFunction migrateCalculatedAnswer() is declared, with no namespace,
+     * in the legacy .inc.php file required below -- Psalm does not scan that file (it is not
+     * part of any composer autoload map), so it cannot see the declaration even though it exists
+     * at runtime.
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

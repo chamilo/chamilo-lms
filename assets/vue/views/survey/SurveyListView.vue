@@ -22,6 +22,17 @@
           size="small"
           type="primary-text"
         />
+        <BaseButton
+          v-if="canCreate"
+          class="survey-list-toolbar__button"
+          :is-loading="isCreatingSatisfactionSurvey"
+          :label="t('Create satisfaction survey')"
+          icon="template-selected"
+          only-icon
+          size="small"
+          type="primary-text"
+          @click="createSatisfactionSurvey"
+        />
         <span
           v-if="canCreate"
           class="mx-1 h-6 w-px bg-gray-20"
@@ -482,6 +493,7 @@ const settings = ref({})
 const canManage = ref(false)
 const canCreate = ref(false)
 const isLoading = ref(false)
+const isCreatingSatisfactionSurvey = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
 const selectedSurveyIds = ref([])
@@ -538,6 +550,37 @@ function buildMeetingCreateRoute() {
     name: "SurveyMeetingCreate",
     params: { node: route.params.node },
     query: getContextParams(),
+  }
+}
+
+async function createSatisfactionSurvey() {
+  errorMessage.value = ""
+  successMessage.value = ""
+  isCreatingSatisfactionSurvey.value = true
+
+  try {
+    const response = await surveyService.createTrainingSatisfactionSurvey(
+      { title: t("Training satisfaction survey") },
+      getContextParams(),
+    )
+
+    if (!response?.surveyId) {
+      throw new Error("Missing survey identifier")
+    }
+
+    await router.push(
+      buildQuestionsRoute({
+        iid: response.surveyId,
+      }),
+    )
+  } catch (error) {
+    console.error("Error creating training satisfaction survey", error)
+    errorMessage.value =
+      error?.response?.data?.detail ||
+      error?.response?.data?.["hydra:description"] ||
+      t("Could not create satisfaction survey")
+  } finally {
+    isCreatingSatisfactionSurvey.value = false
   }
 }
 

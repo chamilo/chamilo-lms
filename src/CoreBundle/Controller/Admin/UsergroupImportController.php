@@ -8,9 +8,8 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
-use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
-use Doctrine\DBAL\Types\Types;
+use Chamilo\CoreBundle\Helpers\UsergroupHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,6 +25,7 @@ class UsergroupImportController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly UsergroupHelper $usergroupHelper,
     ) {}
 
     #[Route('/usergroup-import-data', name: 'admin_usergroup_import', methods: ['POST'])]
@@ -85,19 +85,18 @@ class UsergroupImportController extends AbstractController
 
             if ('' !== $usersStr) {
                 $usernames = array_filter(array_map('trim', explode(',', $usersStr)));
+                $userIds = [];
                 foreach ($usernames as $username) {
                     $user = $this->findUserByUsername($username);
-                    if (null === $user) {
-                        continue;
+                    if (null !== $user) {
+                        $userIds[] = (int) $user->getId();
                     }
-
-                    $rel = new UsergroupRelUser();
-                    $rel->setUsergroup($ug);
-                    $rel->setUser($user);
-                    $rel->setRelationType(0);
-                    $this->em->persist($rel);
                 }
-                $this->em->flush();
+
+                // Delegates to the same cascade "Add users" uses (courses/sessions the class
+                // is linked to), even though a class just created here has none yet — see
+                // userImport() below for the case where it matters.
+                $this->usergroupHelper->subscribeUsers((int) $ug->getId(), $userIds, false, 0);
             }
 
             ++$imported;
@@ -173,45 +172,15 @@ class UsergroupImportController extends AbstractController
                 }
             }
 
-            if ($unsubscribe) {
-                $this->em->createQueryBuilder()
-                    ->delete(UsergroupRelUser::class, 'ru')
-                    ->where('ru.usergroup = :ugId')
-                    ->setParameter('ugId', $ugId, Types::INTEGER)
-                    ->getQuery()
-                    ->execute()
-                ;
-            }
+            // Delegates to the same cascade "Add users" uses: subscribes newly added users to
+            // every course/session linked to the class (and, when $unsubscribe is checked,
+            // unsubscribes members this CSV batch no longer lists — from the class AND, unless
+            // the platform is configured to keep them, from those same courses/sessions too).
+            // $unsubscribe as $deleteUsersNotPresent is what makes $userIds "the full desired
+            // membership" when checked; left unchecked, it's purely additive and never removes
+            // an existing member the CSV didn't mention.
+            $this->usergroupHelper->subscribeUsers($ugId, $userIds, $unsubscribe, 0);
 
-            foreach ($userIds as $userId) {
-                $existing = $this->em->createQueryBuilder()
-                    ->select('COUNT(ru.id)')
-                    ->from(UsergroupRelUser::class, 'ru')
-                    ->where('ru.usergroup = :ugId')
-                    ->andWhere('ru.user = :userId')
-                    ->setParameter('ugId', $ugId, Types::INTEGER)
-                    ->setParameter('userId', $userId, Types::INTEGER)
-                    ->getQuery()
-                    ->getSingleScalarResult()
-                ;
-
-                if ((int) $existing > 0) {
-                    continue;
-                }
-
-                $user = $this->em->find(User::class, $userId);
-                if (null === $user) {
-                    continue;
-                }
-
-                $rel = new UsergroupRelUser();
-                $rel->setUsergroup($usergroup);
-                $rel->setUser($user);
-                $rel->setRelationType(0);
-                $this->em->persist($rel);
-            }
-
-            $this->em->flush();
             $imported += \count($usernames);
         }
 

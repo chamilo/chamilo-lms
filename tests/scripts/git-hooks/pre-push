@@ -50,6 +50,17 @@ done
 # Paths in this repository never contain spaces, so a plain word list is safe.
 files=""
 for file in $(printf '%s\n' "$changed" | grep -E '\.php$' | sort -u); do
+    # Keep file-level exclusions in sync with $ecsConfig->skip() in ecs.php.
+    # The hook passes files explicitly to ECS, so filter skipped legacy paths here too.
+    case "$file" in
+        src/CoreBundle/Component/HTMLPurifier/Filter/AllowIframes.php|\
+        src/CoreBundle/Traits/Repository/*|\
+        src/CourseBundle/Component/*|\
+        src/CoreBundle/Entity/ResourceInterface.php)
+            continue
+            ;;
+    esac
+
     if [ -f "$file" ]; then
         files="$files $file"
     fi

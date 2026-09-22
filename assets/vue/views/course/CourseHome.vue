@@ -227,6 +227,7 @@ import baseService from "../../services/baseService"
 import CourseIntroduction from "../../components/course/CourseIntroduction.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
+import { useCourseHomeToolsStore } from "../../store/courseHomeToolsStore"
 import NextCourseSequence from "../../components/course/NextCourseSequence.vue"
 import CourseThematicProgress from "../../components/course/CourseThematicProgress.vue"
 import PluginRegion from "../../components/layout/PluginRegion.vue"
@@ -235,8 +236,13 @@ import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
 const platformConfigStore = usePlatformConfig()
+const courseHomeToolsStore = useCourseHomeToolsStore()
 const { course, session } = storeToRefs(cidReqStore)
 const { getSetting } = storeToRefs(platformConfigStore)
+
+// Needed before the initial loadCourseTools() call below, to key its cache read/write.
+const { isAllowedToEdit } = useIsAllowedToEdit()
+const cacheRole = computed(() => (isAllowedToEdit.value ? "edit" : "view"))
 
 const tools = ref([])
 const shortcuts = ref([])
@@ -253,7 +259,28 @@ provide("isCustomizing", isCustomizing)
 
 const courseItems = ref([])
 
-const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
+const routerTools = [
+  "document",
+  "link",
+  "glossary",
+  "agenda",
+  "student_publication",
+  "course_homepage",
+  "announcement",
+  "attendance",
+  "course_description",
+  "course_progress",
+  "dropbox",
+  "forum",
+  "gradebook",
+  "group",
+  "learnpath",
+  "member",
+  "notebook",
+  "portfolio",
+  "survey",
+  "wiki",
+]
 const courseSettingsStore = useCourseSettings()
 
 function getCourseSettingInt(variable) {
@@ -291,7 +318,7 @@ const COURSE_TOOL_SKELETON_COUNT = 16
 const TOOL_VISIBILITY_VISIBLE = 2
 
 function normalizeToolNavigation(tool) {
-  if (routerTools.includes(tool.title)) {
+  if (routerTools.includes(tool.tool?.title)) {
     tool.to = tool.url
   }
 
@@ -396,14 +423,31 @@ const isAiCourseAnalyzerEnabled = computed(() => {
  * Load tools for the course, split admin tools into the cog menu
  * and keep the rest in the main tools grid.
  * This function is reused on initial load and when toggling student view.
+ *
+ * Reads/writes a short-lived cache (courseHomeToolsStore) so a mistaken tool click followed
+ * by a breadcrumb-back doesn't re-fetch or re-show the skeleton. Pass force=true whenever the
+ * data may have just changed server-side (bulk visibility change, student-view toggle).
  */
-async function loadCourseTools(showSkeleton = true) {
+async function loadCourseTools(showSkeleton = true, force = false) {
+  const courseId = course.value.id
+  const sessionId = session.value?.id || 0
+
+  if (!force) {
+    const cached = courseHomeToolsStore.getFresh(courseId, sessionId, cacheRole.value)
+    if (cached) {
+      tools.value = cached.tools
+      courseItems.value = cached.courseItems
+      isCourseLoading.value = false
+      return
+    }
+  }
+
   if (showSkeleton) {
     isCourseLoading.value = true
   }
 
   try {
-    const cTools = await courseService.loadCTools(course.value.id, session.value?.id)
+    const cTools = await courseService.loadCTools(courseId, sessionId)
 
     const normalizedTools = cTools.map((rawTool) => {
       const tool = normalizeToolNavigation({ ...rawTool })
@@ -449,6 +493,10 @@ async function loadCourseTools(showSkeleton = true) {
 
     tools.value = regularTools
     courseItems.value = adminMenuItems
+    courseHomeToolsStore.setEntry(courseId, sessionId, cacheRole.value, {
+      tools: regularTools,
+      courseItems: adminMenuItems,
+    })
   } catch (error) {
     console.error("[CourseHome] Failed to load course tools", error)
     tools.value = []
@@ -505,6 +553,11 @@ async function changeVisibility(tool) {
       `/r/course_tool/links/${tool.resourceNode.id}/change_visibility?cid=${course.value.id}&sid=${session.value?.id}`,
     )
     setToolVisibility(tool, data.visibility)
+    // Keep the short-lived cache in sync so a quick breadcrumb-back doesn't show the old visibility.
+    courseHomeToolsStore.setEntry(course.value.id, session.value?.id || 0, cacheRole.value, {
+      tools: tools.value,
+      courseItems: courseItems.value,
+    })
   } catch (error) {
     console.log(error)
   }
@@ -515,7 +568,7 @@ async function onClickShowAll() {
     await baseService.post(
       `/r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`,
     )
-    await loadCourseTools(false)
+    await loadCourseTools(false, true)
   } catch (error) {
     console.log(error)
   }
@@ -526,7 +579,7 @@ async function onClickHideAll() {
     await baseService.post(
       `/r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`,
     )
-    await loadCourseTools(false)
+    await loadCourseTools(false, true)
   } catch (error) {
     console.log(error)
   }
@@ -563,12 +616,13 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 
   // Send the updated values to the server
   await courseService.updateToolOrder(toolItem, newIndex, course.value.id, session.value?.id)
+  // The reordered array only lives in the DOM (Sortable.js), not in tools.value, so the cached
+  // snapshot can't be patched in place here — drop it and let the next load refetch instead.
+  courseHomeToolsStore.invalidate(course.value.id, session.value?.id || 0, cacheRole.value)
 }
 
-const { isAllowedToEdit } = useIsAllowedToEdit()
-
 async function enforceCourseLegalAgreement() {
-  if (!course.value?.id) {
+  if (!course.value?.id || platformConfigStore.plugins?.courselegal?.enabled !== true) {
     return
   }
 
@@ -591,7 +645,7 @@ onMounted(() => {
   enforceCourseLegalAgreement()
 })
 
-useStudentViewRefresh(() => loadCourseTools(false))
+useStudentViewRefresh(() => loadCourseTools(false, true))
 
 const allowEditToolVisibilityInSession = computed(() => {
   const isInASession = session.value?.id

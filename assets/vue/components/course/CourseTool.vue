@@ -183,7 +183,7 @@ const resolvedToolTo = computed(() => {
 })
 
 const resolvedToolUrl = computed(() => {
-  return exerciseToolRoute.value ? null : props.tool.url || null
+  return resolvedToolTo.value ? null : props.tool.url || null
 })
 
 const isVisible = computed(() => {

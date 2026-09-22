@@ -72,19 +72,34 @@ final class CalculatedAnswerMigrationTest extends TestCase
         );
     }
 
-    public function testSkipsWhenAWordingBlankIsNeverUsedByTheFormula(): void
+    public function testMigratesAnUnusedBlankThatVariesOnEveryLineAsAnExtraDecoyVariable(): void
     {
-        // "age" varies independently in the wording but the formula never
-        // references it -- the original (substituted) bracket name is lost,
-        // so there is no safe way to tell this apart from a genuine second
-        // formula variable. Guessing an assignment risks silently computing
-        // the wrong result, so this must be left for manual review instead.
+        // Real-world case: "et 2/5/6/8" is a second number that changes on
+        // every line but the formula only ever adds 1 to the first one. The
+        // unused blank is auto-assigned a synthetic variable name ("z") and
+        // kept randomized in the wording, without being wired into the formula.
+        //
+        // Known limitation (accepted, not handled): this assignment is purely
+        // positional -- the first wording blank always gets the real formula
+        // variable's name, the rest get synthetic names. If the *unused* blank
+        // had come BEFORE the real variable in the wording instead (e.g. an
+        // "age, weight" question where the formula only uses weight), the
+        // names would be swapped onto the wrong ranges and the migrated
+        // question would silently score using the wrong number. There is no
+        // general fix for that ordering case, so it is not covered here.
         $lines = [
-            'You are 25 years old and weigh 70 kg. [140]@@[weight]*2',
-            'You are 30 years old and weigh 80 kg. [160]@@[weight]*2',
+            '1 et 2 [2]@@[a]+1',
+            '2 et 5 [3]@@[a]+1',
+            '3 et 6 [4]@@[a]+1',
+            '4 et 8 [5]@@[a]+1',
         ];
 
-        self::assertSame('', getMigratedValue($lines, 10));
+        $migrated = getMigratedValue($lines, 10);
+
+        self::assertSame(
+            '[#a] et [#z]  = [=result]@@@=result:a+1:0:digit:0:10;#a:1-4::0;#z:2-8::0;',
+            $migrated
+        );
     }
 
     public function testReturnsEmptyStringWhenTheLineDoesNotMatchTheLegacyShape(): void

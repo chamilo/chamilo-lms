@@ -83,7 +83,6 @@ function getMigratedValue($lines, $score = 10): string
 
     // check if number of float = number of variable in formula
 
-    $vars = array_values(array_unique(getVariables($formula)));
     $vars = array_values(getVariables($formula));
 
     $floatTemplates = getFloat($wording);
@@ -121,8 +120,21 @@ function getMigratedValue($lines, $score = 10): string
         } else {
             // problem... we got more differentes floats than variables
             // should not happened
+            // create missing variables in case 1 et 2 [2]@@[a]+1
+            $nbvar = count($floatTemplates) - count($vars);
+
+            if ($nbvar > 0) {
+                for ($i = 0; $i < $nbvar; $i++) {
+                    $addVar = 'z';
+                    while (in_array($addVar, $vars)) {
+                        $addVar .= 'z';
+                    }
+                    $vars[] = $addVar;
+                }
+            }
         }
     }
+
     $allFloats = getFloatRemovingEqualities($allFloats, $equalities);
 
     $wording = replaceFloatsInWording($wording, $vars, $constantFloats);
@@ -352,7 +364,6 @@ function replaceFloatsInWording($wording, $vars, $constants): string
         function () use ($vars, $constants) {
             static $index = 0;
             static $varIndex = 0;
-            $res = '';
             if (array_key_exists($index, $constants)) {
                 $res = '###constant' . $index . '###';
             } else {

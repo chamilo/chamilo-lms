@@ -257,10 +257,14 @@ final class ExerciseRegressionTopicContentParser
     private function readingBlock(array $root): array
     {
         $block = $this->block($root, 'reading');
+        $options = $this->stringList($block, 'options', 3, 3);
 
         return [
             'title' => $this->shortString($block, 'title'),
             'passage' => $this->longString($block, 'passage'),
+            'options' => $options,
+            'correct_index' => $this->integer($block, 'correct_index', 0, \count($options) - 1),
+            'feedback' => $this->optionalShortString($block, 'feedback'),
         ];
     }
 

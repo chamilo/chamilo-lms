@@ -19,9 +19,18 @@
 
     <div
       v-else-if="errorMessage"
-      class="lp-runtime-screen-state lp-runtime-screen-state--error"
+      class="lp-runtime-screen-state lp-runtime-screen-state--error flex flex-col items-center gap-4"
     >
-      {{ errorMessage }}
+      <BaseIcon
+        icon="lock"
+        size="big"
+      />
+      <p>{{ errorMessage }}</p>
+      <BaseButton
+        :label="t('Back to learning paths')"
+        :route="{ name: 'LpList', query: route.query }"
+        type="plain"
+      />
     </div>
 
     <template v-else-if="runtime">

@@ -14471,6 +14471,9 @@ msgstr "Por favor, torne al Pasu 1"
 msgid "has not been found in that directory"
 msgstr "nun s'atopó nesti direutoriu"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "L'instalador nun tien entamu de sesión propiu, asina qu'una anovación tien de ser autorizada nel sirvidor. Crea un ficheru vacíu llamáu %s na raigañu del proyeutu, xunto a .env, y continua."
+
 msgid "Old version's root path"
 msgstr "Ruta a la versión vieya"
 
@@ -20566,6 +20569,9 @@ msgstr "Llingua pai: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Definir términos nuevos pa la sub-llingua %s buscando dellos términos, lluéu guardar cada traducción clicando nel botón de guardar. Despuéu tendrás de camudar la llingua del to usuariu pa ver apaecer los términos nuevos."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Un términu guardáu equí amuésase darréu na interfaz que yá se migró. Les páxines que tovía nun se migraron lleen un catálogu compiláu, asina que caltienen el testu antiguu hasta que llimpies la caché con php bin/console cache:clear. Fai eso una vegada cuando termines d'editar, non dempués de cada términu."
 
 msgid "See sequences"
 msgstr "Ver secuencias"
@@ -41549,4 +41555,22 @@ msgstr "Clave del campu extra d'usuariu pa usar al buscar y nomar sesiones dende
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "Configuración JSON pa campos de prefiltru de busca."
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Esto rexistra les migraciones que yá tien la to base de datos y dexa les más nueves pendientes pa que l'actualización pueda executales. Los tos datos nun se modifiquen."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migraciones rexistraes. La to plataforma agora pue anovase de forma normal."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migraciones rexistraes, y %s siguen pendientes. Executa l'actualización pa executales."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Ensin historial de migración: fai clic pa iguar (o les actualizaciones podrían romper)"
+
+msgid "Migration history is recorded"
+msgstr "L'historial de migraciones ta rexistráu"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s ta presente na raigañu del proyeutu: desanícialu pa zarrar los puntos d'anovación"
 

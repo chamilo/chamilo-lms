@@ -85,8 +85,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(OrderFilter::class, properties: ['cru.sort' => 'ASC', 'c.title' => 'ASC'])]
 #[ORM\Table(name: 'course_rel_user')]
-#[ORM\Index(columns: ['id', 'user_id'], name: 'course_rel_user_user_id')]
-#[ORM\Index(columns: ['id', 'c_id', 'user_id'], name: 'course_rel_user_c_id_user_id')]
+#[ORM\Index(columns: ['user_id', 'id'], name: 'course_rel_user_user_id')]
+#[ORM\Index(columns: ['c_id', 'user_id', 'id'], name: 'course_rel_user_c_id_user_id')]
 #[ORM\Entity(repositoryClass: CourseRelUserRepository::class)]
 class CourseRelUser implements Stringable
 {

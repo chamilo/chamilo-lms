@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Með kveðju"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formúlu dæmi: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Dæmi um formúlu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Breytusvið"
@@ -14471,6 +14471,9 @@ msgstr "Vinsamlegast farðu aftur í skref 1"
 msgid "has not been found in that directory"
 msgstr "fannst ekki í þeirri möppu"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Uppsetningarforritið hefur enga eigin innskráningu, svo uppfærsla verður að vera heimiluð á þjóninum. Búðu til tóma skrá með nafninu %s í rót verkefnisins, við hliðina á .env, og haltu svo áfram."
+
 msgid "Old version's root path"
 msgstr "Gamla útgáfunnar rótarslóð"
 
@@ -20566,6 +20569,9 @@ msgstr "Móðurmál: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Skilgreindu ný hugtök fyrir undirmál %s með því að leita að hugtaki og vista síðan hverja þýðingu með því að smella á vistunarhnappinn. Þú verður síðan að skipta um eigið notendamál til að sjá nýju hugtökin birtast."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Hugtak sem vistað er hér birtist strax í viðmótinu sem þegar hefur verið flutt. Síðurnar sem enn hafa ekki verið fluttar lesa samansettan skrá, svo þær halda gamla textanum uns þú hreinsar skyndiminnið með php bin/console cache:clear. Gerðu það einu sinni þegar þú lýkur breytingum, ekki eftir hvert hugtak."
 
 msgid "See sequences"
 msgstr "Sjá raðir"
@@ -41548,4 +41554,22 @@ msgstr "Lykill auka reits notanda til notkunar við leit og nafngift lotna frá 
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON-stillingar fyrir forsíusvið leitar."
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Þetta skráir flutningana sem gagnagrunnurinn þinn ber þegar, og skilur þá nýrri eftir í bið svo uppfærslan geti framkvæmt þá. Gögnunum þínum er ekki breytt."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s flutningar skráðir. Vettvangurinn þinn má nú uppfæra með venjulegum hætti."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s flutningar skráðir, og %s eru enn í bið. Keyrðu uppfærsluna til að framkvæma þá."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Engin flutningssaga: smelltu til að laga (annars gætu uppfærslur bilað)"
+
+msgid "Migration history is recorded"
+msgstr "Flutningssaga er skráð"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s er til staðar í rót verkefnisins: eyða henni til að loka uppfærsluslóðum"
 

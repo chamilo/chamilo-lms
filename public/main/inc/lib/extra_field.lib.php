@@ -938,19 +938,15 @@ class ExtraField extends Model
         $result = Database::query($sql);
         $extraFields = Database::store_result($result, 'ASSOC');
 
-        $extraFieldRepo = Container::getExtraFieldRepository();
-        $option = new ExtraFieldOption($this->type);
         if (!empty($extraFields)) {
+            $option = new ExtraFieldOption($this->type);
+            $optionsByField = $option->get_field_options_by_fields(
+                array_column($extraFields, 'id'),
+                $order_field_options_by
+            );
             foreach ($extraFields as &$extraField) {
-                $extraFieldId = $extraField['id'];
-                /** @var EntityExtraField $field */
-                $field = $extraFieldRepo->find($extraFieldId);
-                $extraField['display_text'] = $field->getDisplayText();
-                $extraField['options'] = $option->get_field_options_by_field(
-                    $extraField['id'],
-                    false,
-                    $order_field_options_by
-                );
+                // display_text is already present on the row selected above.
+                $extraField['options'] = $optionsByField[$extraField['id']] ?? false;
             }
         }
 

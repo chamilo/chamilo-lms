@@ -2888,7 +2888,7 @@ function showFileManagerStudio(t,src,callbackfct){
 							type: "POST",data : formData,
 							success: function(data,textStatus,jqXHR){
 
-								if(data.indexOf("error")==-1&&data.indexOf("img_cache")!=-1){
+								if(data.indexOf("error")==-1&&data.indexOf("img-cache.php")!=-1){
 									pushImageToColl(data);
 								}else{
 									pushImageToColl(file.url);

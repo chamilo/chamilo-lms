@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Opsezi varijabli"
@@ -14472,6 +14472,9 @@ msgstr "Molimo vratite se na Korak 1"
 msgid "has not been found in that directory"
 msgstr "nije pronađen u tom direktorijumu"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Instaler nema sopstvenu prijavu, pa nadogradnju mora da odobri server. Kreirajte prazan fajl pod imenom %s u korenu projekta, pored .env, zatim nastavite."
+
 msgid "Old version's root path"
 msgstr "Korenska putanja stare verzije"
 
@@ -20567,6 +20570,9 @@ msgstr "Roditeljski jezik: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Definišite nove termine za pod-jezik %s pretragom nekog termina, zatim sačuvajte svaki prevod klikom na dugme za čuvanje. Zatim ćete morati da promenite jezik svog korisnika da biste videli nove termine."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Termin sačuvan ovde odmah se prikazuje u interfejsu koji je već migriran. Stranice koje još nisu migrirane čitaju kompajlirani katalog, pa zadržavaju stari tekst dok ne obrišete keš naredbom php bin/console cache:clear. Uradite to jednom kada završite uređivanje, ne posle svakog termina."
 
 msgid "See sequences"
 msgstr "Pogledaj sekvence"
@@ -41550,4 +41556,22 @@ msgstr "Ključ dodatnog polja korisnika koji se koristi pri pretraživanju i ime
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON konfiguracija za polja predfiltera pretrage."
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Ovo beleži migracije koje vaša baza podataka već sadrži i ostavlja novije na čekanju kako bi ih ažuriranje moglo izvršiti. Vaši podaci se ne menjaju."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migracija zabeleženo. Vaša platforma sada može da se ažurira uobičajeno."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s migracija je zabeleženo, a %s je još na čekanju. Pokrenite ažuriranje da biste ih izvršili."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Nema istorije migracija: kliknite da popravite (inače ažuriranja mogu da pokvare)"
+
+msgid "Migration history is recorded"
+msgstr "Istorija migracija je zabeležena"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s je prisutan u korenu projekta: obrišite ga da zatvorite krajnje tačke nadogradnje"
 

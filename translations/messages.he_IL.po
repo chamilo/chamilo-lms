@@ -14478,6 +14478,9 @@ msgstr "אנא חזור לשלב 1"
 msgid "has not been found in that directory"
 msgstr "לא נמצא בספרייה זו"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "למתקין אין התחברות משלו, ולכן יש לאשר שדרוג בשרת. צרו קובץ ריק בשם %s בשורש הפרויקט, ליד .env, ואז המשיכו."
+
 msgid "Old version's root path"
 msgstr "נתיב השורש של הגרסה הישנה"
 
@@ -20577,6 +20580,9 @@ msgstr "שפת אב: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "הגדר מונחים חדשים עבור שפת המשנה %s על ידי חיפוש מונח כלשהו, ​​ולאחר מכן שמור כל תרגום על ידי לחיצה על כפתור השמירה. לאחר מכן תצטרך להחליף שפת משתמש משלך כדי לראות את המונחים החדשים מופיעים."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "מונח שנשמר כאן מופיע מיד בממשק שכבר הועבר. הדפים שעדיין לא הועברו קוראים קטלוג מהודר, ולכן הם שומרים על הטקסט הישן עד שתנקו את המטמון באמצעות php bin/console cache:clear. עשו זאת פעם אחת כשתסיימו לערוך, לא אחרי כל מונח."
 
 msgid "See sequences"
 msgstr "ראה רצפים"
@@ -41560,4 +41566,22 @@ msgstr "מפתח שדה נוסף של משתמש לשימוש בחיפוש וב�
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "תצורת JSON לשדות סינון מוקדם בחיפוש."
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "פעולה זו רושמת את המיגרציות שכבר קיימות במסד הנתונים שלך, ומשאירה את החדשות יותר במצב ממתין כדי שהעדכון יוכל לבצע אותן. הנתונים שלך אינם משתנים."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s מיגרציות תועדו. כעת ניתן לעדכן את הפלטפורמה כרגיל."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s מיגרציות נרשמו, ו-%s עדיין ממתינות. הפעל את העדכון כדי לבצע אותן."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "אין היסטוריית מיגרציות: לחצו לתיקון (או שעדכונים עלולים להישבר)"
+
+msgid "Migration history is recorded"
+msgstr "היסטוריית המיגרציות מתועדת"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s קיים בשורש הפרויקט: מחקו אותו כדי לסגור את נקודות הקצה של השדרוג"
 

@@ -264,9 +264,17 @@ final class ExerciseRegressionFixtureQuestionFactory
                 break;
 
             case self::READING_COMPREHENSION:
+                $data->title = '[QA T21] What is Chamilo?';
                 $data->description = '<p>Chamilo is an open-source learning management system. Read this passage before continuing.</p>';
-                $data->score = 0.0;
-                $data->globalScore = 0.0;
+                $data->answers = $this->choiceAnswers(
+                    [
+                        'An open-source learning management system',
+                        'A database server',
+                        'An operating system',
+                    ],
+                    [0],
+                    10.0,
+                );
 
                 break;
 

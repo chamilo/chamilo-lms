@@ -418,7 +418,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
       <ul>
         <li>delete the <em>vendor</em> folder from your Chamilo 1.11.* system (before overwriting with the new Chamilo package)</li>
         <li>delete the <em>var/cache/</em> folder from your Chamilo 1.11.* system</li>
-	<li>use the <em>No migration history</em> link in the <em>Health check</em> block if it appears, or see the <em>doctrine:migrations:version</em> command below if working from the command line. This will fix an issue caused by a 2.0 installation</li>
+	<li>seed the Doctrine migration history, which a 2.0 installation never received. With a shell, run the <em>doctrine:migrations:version</em> commands below <em>while your current version is still deployed</em>. Without a shell, copy the new code first and then use the <em>No migration history</em> link of the <em>Health check</em> block of the administration page: it records only what your database proves it already carries, and leaves the newer migrations pending for the update to execute</li>
       </ul>
       The <em>vendor</em> folder contains PHP libraries and autoload configurations from Chamilo 1.11 which might leave folders that conflict with other folders in later versions of Chamilo.<br />
 
@@ -442,6 +442,43 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
       creates the history table; the second one fails on its own if that table does not exist yet, so
       do not skip it.<br>
       Now copy the Chamilo 3 code over your installation and run the migrations as in section 4.5,
+      without UPDATE_PATH.
+
+    <h3>4.7. Recovering when you copied the new code first</h3>
+    <a id="cli-upgrade-history-recovery" class="anchor"></a>
+      This section is for a platform that already carries the Chamilo 3 code over a 2.x database whose
+      migration history was never seeded. Two symptoms identify it: the web installer answers
+      "Chamilo is already installed" although the platform is a 2.x one, and
+      doctrine:migrations:status reports "Executed" 0.<br>
+      The history is empty, and the code on disk is no longer the code that created the database. So
+      <em>do not</em> record it with --add --all: that marks every migration the <em>deployed</em>
+      code carries, which records the migrations your upgrade still needs as already done. They then
+      never run, and nothing warns you afterwards — the database simply misses the columns they
+      create.<br>
+      There are two ways out, and the first one needs no shell at all.<br>
+      <em>Way one, from the administration page.</em> Open the <em>Health check</em> block and use the
+      <em>No migration history</em> link. It reads your schema, records only the migration namespaces
+      your database proves it already carries, and leaves the newer ones pending. The notification
+      reports both counts: with the Chamilo 3.0.0 code over a 2.0.x database, 347 recorded and 46 still
+      pending. Then run the upgrade, either through the wizard of section 5.4 or with the command of
+      section 4.5.<br>
+      <em>Way two, from a shell.</em> Seed everything, then remove from the history the namespaces
+      your previous version did not carry. Every 2.0.x release, from 2.0.0 to 2.0.3, carries the same
+      344 migrations, all of them in the V200 namespace; Chamilo 3.0.0 carries 393, adding the V210
+      and V300 namespaces and three V200 migrations. Those three V200 ones are dated copies of
+      migrations that also live in V210 and V300, added so the 1.11.x path applies their columns
+      early, and each one checks the schema before it acts. So recording the whole V200 namespace
+      loses nothing: their V210 and V300 twins stay pending and do the work.
+    <pre>
+        php bin/console doctrine:migrations:sync-metadata-storage --no-interaction
+        php bin/console doctrine:migrations:version --add --all --no-interaction
+    </pre>
+      Then, in your database, remove the migrations that must still run:
+    <pre>
+        DELETE FROM version WHERE version LIKE '%V210%' OR version LIKE '%V300%';
+    </pre>
+      Check the result with doctrine:migrations:status. For a 2.0.x source and Chamilo 3.0.0,
+      "Executed" must be 347, "Available" 393 and "New" 46. Then run the upgrade as in section 4.5,
       without UPDATE_PATH.
 
   <h2>5. Web panel upgrade from 1.11.*</h2>
@@ -494,7 +531,9 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
     described in section 4.6, then copy the Chamilo 3 code, create the UPGRADE_ENABLED file of section 5.2, and open your URL.<br>
     If the wizard refuses your request and you expected an upgrade, run
     <em>php bin/console doctrine:migrations:status</em>. If "Executed" is 0 on a platform that works,
-    the history is the cause.
+    the history is the cause. You are then in the case of section 4.7. The shortest way out needs no
+    shell: the <em>No migration history</em> link of the administration page records what your schema
+    proves and leaves the rest pending, after which the wizard opens.
 
   <h2>6. Installing on Windows with WAMP</h2>
   <a id="windows-install-wamp" class="anchor"></a>

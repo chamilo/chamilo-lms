@@ -428,6 +428,12 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[Groups(['lp:read'])]
     private bool $manageableInContext = false;
 
+    #[Groups(['lp:read'])]
+    private ?string $prerequisiteName = null;
+
+    #[Groups(['lp:read'])]
+    private ?bool $prerequisiteCompleted = null;
+
     public function __construct()
     {
         $now = new DateTime();
@@ -974,6 +980,26 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     public function setManageableInContext(bool $manageableInContext): void
     {
         $this->manageableInContext = $manageableInContext;
+    }
+
+    public function getPrerequisiteName(): ?string
+    {
+        return $this->prerequisiteName;
+    }
+
+    public function setPrerequisiteName(?string $prerequisiteName): void
+    {
+        $this->prerequisiteName = $prerequisiteName;
+    }
+
+    public function isPrerequisiteCompleted(): ?bool
+    {
+        return $this->prerequisiteCompleted;
+    }
+
+    public function setPrerequisiteCompleted(?bool $prerequisiteCompleted): void
+    {
+        $this->prerequisiteCompleted = $prerequisiteCompleted;
     }
 
     public function getResourceIdentifier(): int|Uuid

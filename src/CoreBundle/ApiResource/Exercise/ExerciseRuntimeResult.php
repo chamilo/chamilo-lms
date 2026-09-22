@@ -128,6 +128,16 @@ final class ExerciseRuntimeResult
     #[Groups(['exercise_runtime_result:read'])]
     public bool $canManage = false;
 
+    /**
+     * The certificate this exercise earned the attempt's owner, when it is the sole validation
+     * element of its Gradebook category and the category's certification requirements are met.
+     * [] otherwise. See ExerciseCertificateManager.
+     *
+     * @var array<string, mixed>
+     */
+    #[Groups(['exercise_runtime_result:read'])]
+    public array $certificate = [];
+
     public function getExerciseId(): ?int
     {
         return $this->exerciseId;

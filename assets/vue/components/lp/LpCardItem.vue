@@ -3,6 +3,7 @@ import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 import lpService from "../../services/lpService"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
@@ -150,6 +151,14 @@ const isLpVisible = computed(() => {
 })
 
 const manageableInContext = computed(() => props.lp?.manageableInContext !== false)
+
+const isPrerequisiteLocked = computed(
+  () => !props.canEdit && Number(props.lp?.prerequisite ?? 0) > 0 && props.lp?.prerequisiteCompleted === false,
+)
+
+const prerequisiteLockedTooltip = computed(() =>
+  t('You must complete the learning path "{0}" before you can access this one.', [props.lp?.prerequisiteName || ""]),
+)
 
 const canUpdateScorm = computed(() => {
   if (!props.canEdit) {
@@ -424,12 +433,24 @@ const progressTextClass = computed(() =>
       <div class="min-w-0 flex ms-2 md:ms-0">
         <div class="flex-1">
           <BaseAppLink
+            v-if="!isPrerequisiteLocked"
             :title="t('Open')"
             :to="openRoute"
             class="lp-panel__title"
           >
             {{ lp.title || t("Learning path title here") }}
           </BaseAppLink>
+          <span
+            v-else
+            :title="prerequisiteLockedTooltip"
+            class="lp-panel__title flex items-center gap-1.5 cursor-not-allowed opacity-60"
+          >
+            <BaseIcon
+              icon="lock"
+              size="small"
+            />
+            {{ lp.title || t("Learning path title here") }}
+          </span>
           <div
             v-if="lp.prerequisiteName"
             class="mt-1 text-caption text-support-5 flex items-center gap-1.5"
@@ -448,6 +469,17 @@ const progressTextClass = computed(() =>
             </svg>
             <span class="font-medium">{{ t("Prerequisites") }}</span>
             <span class="text-support-5">{{ lp.prerequisiteName }}</span>
+            <span
+              v-if="isPrerequisiteLocked"
+              :title="prerequisiteLockedTooltip"
+              class="ms-1 inline-flex items-center gap-1 rounded bg-red-100 px-2 py-0.5 text-caption font-medium text-red-700"
+            >
+              <BaseIcon
+                icon="lock"
+                size="small"
+              />
+              {{ t("Locked") }}
+            </span>
           </div>
         </div>
         <div class="relative w-8 h-8 block md:hidden">
@@ -869,7 +901,8 @@ const progressTextClass = computed(() =>
           />
 
           <BaseButton
-            :label="t('Open')"
+            :disabled="isPrerequisiteLocked"
+            :label="isPrerequisiteLocked ? prerequisiteLockedTooltip : t('Open')"
             :route="openRoute"
             icon="link-external"
             only-icon

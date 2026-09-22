@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Բանաձևի օրինակ: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Բանաձևի օրինակ՝ sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -14470,6 +14470,9 @@ msgstr "Խնդրում ենք վերադառնալ 1-ին քայլին"
 msgid "has not been found in that directory"
 msgstr "չի հայտնաբերվել այդ թղթապանակում"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Տեղադրիչը սեփական մուտք չունի, ուստի թարմացումը պետք է թույլատրվի սերվերում։ Ստեղծեք դատարկ ֆայլ՝ %s անունով նախագծի արմատում, .env-ի կողքին, ապա շարունակեք։"
+
 msgid "Old version's root path"
 msgstr "Հին տարբերակի արմատային ուղի"
 
@@ -20565,6 +20568,9 @@ msgstr "Հայրենի լեզու՝ %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Սահմանեք նոր տերմիններ ենթալեզվի համար %s՝ որոշակի տերմին փնտրելով, ապա պահպանեք յուրաքանչյուր թարգմանությունը սեղմակի սեղմելով: Այնուհետև անցեք ձեր օգտատիրոջ լեզուն փոխելով՝ նոր տերմինները տեսնելու համար:"
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Այստեղ պահված տերմինը անմիջապես երևում է արդեն տեղափոխված միջերեսում։ Դեռ չտեղափոխված էջերը կարդում են կազմված կատալոգ, ուստի պահում են հին տեքստը, մինչև չմաքրեք քեշը php bin/console cache:clear հրամանով։ Դա արեք մեկ անգամ խմբագրումն ավարտելիս, ոչ թե յուրաքանչյուր տերմինից հետո։"
 
 msgid "See sequences"
 msgstr "Տեսնել հաջորդականությունները"
@@ -41547,4 +41553,22 @@ msgstr "Օգտատիրոջ լրացուցիչ դաշտի բանալին՝ /admin
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON կարգավորում որոնման նախազտիչ դաշտերի համար։"
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "Սա գրանցում է այն միգրացիաները, որոնք արդեն կան ձեր տվյալների բազայում, և նորերը թողնում է սպասման մեջ, որպեսզի թարմացումը կարողանա կատարել դրանք։ Ձեր տվյալները չեն փոփոխվում։"
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s միգրացիա գրանցված է։ Ձեր հարթակը այժմ կարող է թարմացվել սովորական կերպով։"
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s միգրացիա գրանցված է, և %s դեռ սպասման մեջ են։ Գործարկեք թարմացումը՝ դրանք կատարելու համար։"
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Միգրացիայի պատմություն չկա․ սեղմեք ուղղելու համար (հակառակ դեպքում թարմացումները կարող են խափանվել)"
+
+msgid "Migration history is recorded"
+msgstr "Միգրացիայի պատմությունը գրանցված է"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s առկա է նախագծի արմատում․ ջնջեք այն՝ թարմացման վերջնակետերը փակելու համար"
 

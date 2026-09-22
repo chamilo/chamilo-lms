@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول بېلګه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول نمونه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -14466,6 +14466,9 @@ msgstr "مه واپس مرحلې ۱ ته لاړ شئ"
 msgid "has not been found in that directory"
 msgstr "د هغه پوش کې نه موندل شوی"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "نصب کوونکی خپل ننوتل نه لري، نو لوړول باید په سرور کې اجازه ورکړل شي. په د پروژې ریښه کې د %s په نوم یو تش فایل جوړ کړئ، د .env تر څنګ، بیا دوام ورکړئ."
+
 msgid "Old version's root path"
 msgstr "د پخوانۍ نسخې ریښتینې لاره"
 
@@ -20561,6 +20564,9 @@ msgstr "والد ژبه: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "د زیری ژبې %s لپاره نوي اصطلاحات تعریف کړئ په دې ډول چې ځینې اصطلاح لټون وکړئ، بیا هره ژباړه د خوندي تڼۍ کلیک کولو له لارې خوندي کړئ. نو به خپل کاروونکي ژبه بدله کړئ ترڅو نوي اصطلاحات ښکاره شي."
+
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "یوه اصطلاح چې دلته خوندي شي سمدلاسه په هغه انٹرفیس کې ښکاري چې لا دمخه مهاجرت شوی دی. هغه پاڼې چې لا نه دي مهاجرت شوي یو تالیف شوی کتلاګ لوستل کوي، نو دوی زوړ متن ساتي تر څو تاسو کیش د php bin/console cache:clear سره پاک کړئ. دا یو ځل وکړئ کله چې سمون پای ته ورسوئ، نه د هرې اصطلاح وروسته."
 
 msgid "See sequences"
 msgstr "تسلسلات وګورئ"
@@ -41543,4 +41549,22 @@ msgstr "د کارن اضافي ساحې کیلي چې د /admin-dashboard/regist
 
 msgid "JSON configuration for search prefilter fields."
 msgstr "د لټون د مخکیني فلټر ساحو لپاره JSON ترتیب."
+
+msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgstr "دا هغه مهاجرتونه ثبتوي چې ستاسو ډیټابیس دمخه لري، او نوي یې په انتظار کې پریږدي ترڅو تازه کول یې اجرا کړي. ستاسو معلومات نه بدلېږي."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s مهاجرتونه ثبت شول. ستاسو پلیټ فارم اوس په نورمال ډول تازه کیدی شي."
+
+msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
+msgstr "%s مهاجرتونه ثبت شوي، او %s لا هم په انتظار کې دي. تازه کول پرمخ یوسئ ترڅو یې اجرا کړئ."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "د مهاجرت تاریخ نشته: د سمولو لپاره کلیک وکړئ (یا تازه معلومات ممکن مات شي)"
+
+msgid "Migration history is recorded"
+msgstr "د مهاجرت تاریخ ثبت شوی دی"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s د پروژې په ریښه کې شتون لري: د لوړولو پای ټکي بندولو لپاره یې حذف کړئ"
 

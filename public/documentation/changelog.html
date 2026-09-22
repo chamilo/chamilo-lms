@@ -24,6 +24,7 @@
     <div class="toc">
         <h2>Releases</h2>
         <ul>
+            <li><a href="#3.0.1">3.0.1 - Houte-si-Plou</a></li>
             <li><a href="#3.0-stable">3.0 stable - Grand Canyon Village</a></li>
             <li><a href="#3.0-beta.1">3.0 beta 1 - Oncletum</a></li>
             <li><a href="#2.0.3">2.0.3 - Axbridge</a></li>
@@ -38,6 +39,91 @@
             <li><a href="#2.0-beta.1">2.0 beta 1 - Aquarium</a></li>
         </ul>
     </div>
+
+    <a id="3.0.1"></a>
+    <h1>Chamilo 3.0.1 - Houte-si-Plou, 2026-09-19</h1>
+    <h3>Release notes - summary</h3>
+    <p>
+        A security and stability patch release on top of 3.0 stable. It ships a batch of security hardening
+        fixes (installer command injection and path traversal guards, OnlyOffice editor hash handling, course
+        restorer path confinement, unsafe-serialization removal, and further installation-lockdown fixes for
+        GHSA-mfgc-693v-xq5v), a safer web-based upgrade flow (an explicit UPGRADE_ENABLED gate, recorded
+        migration history, and restored 1.11.x/2.x upgrade support), and a round of fixes to the Tracking
+        statistics reports, plus smaller fixes across Mobile push delivery, the Skill wheel, exercises, and
+        admin question filtering.
+    </p>
+    <h3>Release name</h3>
+    <p><a href="https://fr.wikipedia.org/wiki/Houte-Si-Plou" target="_blank">Houte-si-Plou</a> is the name of a number of villages in Wallonia, Belgium. The meaning of the name today is often associated with a very far away/lost place.</p>
+
+    <h3>Security fixes</h3>
+    <ul aria-live="off">
+        <li>[2026-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/260525b33a6b">260525b3</a>) Security: Stop the installer from creating its own upgrade authorisation file</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/709834aeec66">709834ae</a>) Security: Neuter legacy installer endpoint</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/3d60924cd228">3d60924c</a>) Security: Add zip-slip guard in Imscc13Import::unzip()</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/2b9412b0686c">2b9412b0</a>) Security: Filter parameter for previous Chamilo installation folder - refs GHSA-mfgc-693v-xq5v</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/ea57ad795d7d">ea57ad79</a>) Security: Remove unsafe serializations - refs GHSA-7cmm-g9fg-fm2m</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/019f3136b36b">019f3136</a>) Security: Fix deserialization issue in show_tabs - refs GHSA-c38m-3hxh-9437</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/a74825884923">a7482588</a>) Security: Prevent access to migrate.php on existing Chamilo installations - refs GHSA-mfgc-693v-xq5v</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/65890fa9504a">65890fa9</a>) Security: Disable the email search filter on the user collection for unprivileged users</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/eb78ef911f25">eb78ef91</a>) Security: Confine backup-supplied paths in the course restorer</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/db5dcaf1095f">db5dcaf1</a>) Security: Onlyoffice: Stop the callback from saving a session built from the hash</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/5d139ad283fd">5d139ad2</a>) Security: Onlyoffice: Check course access and document ownership before issuing an editor hash</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/959fd567ab03">959fd567</a>) Security: Fix installer .env command injection</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/5810b8c89c44">5810b8c8</a>) Security: Prevent arbitrary file inclusion in the installer update step</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/a85196f098ec">a85196f0</a>) Security: Block the installer once the database is initialized</li>
+    </ul>
+
+    <h3>Added</h3>
+    <ul aria-live="off">
+        <li>[2026-09-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/3e9bc925dfaa">3e9bc925</a>) Exercise: add answers to reading comprehension regression fixture</li>
+        <li>[2026-09-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/1257366d316a">1257366d</a>) Mobile: add iOS APNs push delivery</li>
+    </ul>
+
+    <h3>Changed</h3>
+    <ul aria-live="off">
+        <li>[2026-09-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/e71018696078">e7101869</a>) Internal: Update generic Chamilo HTML head tags</li>
+        <li>[2026-09-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/f473bce24b76">f473bce2</a>) Plugin: CStudio: Improve export/import absolute path for assets</li>
+        <li>[2026-09-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/e714ca456b3d">e714ca45</a>) Plugin: CStudio: Update to Chamidoc logo</li>
+        <li>[2026-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/ea0da6c9241c">ea0da6c9</a>) Mobile: improve message notification push content</li>
+        <li>[2026-09-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/46f0490fa247">46f0490f</a>) Internal: Add an empty default for TRUSTED_PROXIES so a fresh clone can run composer install</li>
+        <li>[2026-09-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/6b4bddb7cc48">6b4bddb7</a>) Internal: Declare the query builder parameter nullable to silence a PHP 8.4 deprecation</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/33d0a115fa22">33d0a115</a> - <a href="https://task.beeznest.com/issues/23674">BT#23674</a>) User: Workflow: fix the setting's category from platform to workflows to be able to get the value of the setting for the script to continue</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/f8d04fcd76d8">f8d04fcd</a>) QA: Configure the schema manager factory in the installer gate test</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/7f260ed0497d">7f260ed0</a>) Documentation: Complete the command line upgrade instructions</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/780d1281473b">780d1281</a>) QA: Cover the installer upgrade gate states</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/f1abfe88ede8">f1abfe88</a>) Skill: Fix skill wheel search and navigation</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/5d3957e12a3d">5d3957e1</a>) Admin: filter multilingual question content by language</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/467b58743438">467b5874</a>) Documentation: Improve doc about quick updates of Chamilo during development</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/0efa9e9b0eaf">0efa9e9b</a> - <a href="https://task.beeznest.com/issues/23246">BT#23246</a>) Migration: avoid error on orphaned legacy data</li>
+        <li>[2026-09-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/83efb7bd9f53">83efb7bd</a>) Tracking: Point the administration report links at their real destination</li>
+        <li>[2026-09-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/3ac8cbf7ba53">3ac8cbf7</a>) Tracking: Restore the Global statistics entry in the reports catalog</li>
+        <li>[2026-09-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/9e41ea481d89">9e41ea48</a>) Tracking: Clean up the statistics report menu code</li>
+        <li>[2026-09-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/03e27b1cd160">03e27b1c</a>) Tracking: Name the selected report in the statistics breadcrumb</li>
+        <li>[2026-09-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/43a98f1b6d84">43a98f1b</a>) Exercise: reset stale attempts after configuration changes</li>
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/25eb28bd616c">25eb28bd</a>) Tracking: Use the shared section header on the statistics page</li>
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/219a9a386785">219a9a38</a>) Tracking: Show the statistics errors and confirmations as notifications</li>
+        <li>[2026-09-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/d24df517f229">d24df517</a>) Tracking: Point the Global statistics link to the Vue statistics page</li>
+    </ul>
+
+    <h3>Fixed</h3>
+    <ul aria-live="off">
+        <li>[2026-09-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/65729276758b">65729276</a>) Install: Avoid fatal error on rare unplanned state of table 'version'</li>
+        <li>[2026-09-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/788b7249ad43">788b7249</a>) Install: Record only the migration namespaces the database schema proves</li>
+        <li>[2026-09-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/2ff207f994a1">2ff207f9</a>) Install: Add documentation about upgrading from v2 to v3 and removing vendor/ and var/cache/</li>
+        <li>[2026-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/475e563a9073">475e563a</a>) Install: Report unwritable locale files once instead of one warning per language</li>
+        <li>[2026-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/d6347802a681">d6347802</a>) Install: Show the server answer when the migration reply is not JSON</li>
+        <li>[2026-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/ce28448e710d">ce28448e</a>) Install: Fix the severity of the warnings on the requirements step</li>
+        <li>[2026-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/0e48fd1a62de">0e48fd1a</a>) Install: Fix the wizard refusing the 1.11.x upgrade after the database step</li>
+        <li>[2026-09-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/5d14baf9fef0">5d14baf9</a>) Install: Fix issue not detecting the right version in updates from 1.11</li>
+        <li>[2026-09-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/81ede2cf3485">81ede2cf</a>) Install: Add warnings about leaving UPGRADE_ENABLED file after upgrade</li>
+        <li>[2026-09-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/dad9e0c8fe54">dad9e0c8</a>) Install: Require an UPGRADE_ENABLED file in the project root to upgrade from the web</li>
+        <li>[2026-09-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/5103a22f7161">5103a22f</a>) Install: Let an administrator record the migration history from the web panel</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/b36ba6f572d6">b36ba6f5</a>) Install: Read the migration metadata before the deprecated version setting</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/7a5657b3426a">7a5657b3</a>) Install: Remove the unreachable 1.11.x migration switch</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/007020bc93b3">007020bc</a>) Install: Show the cleanup commands on the last wizard step</li>
+        <li>[2026-09-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/b0137cfd7e13">b0137cfd</a>) Install: Allow the web upgrade from 1.11.x and 2.x again</li>
+        <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/0c8ff4a08993">0c8ff4a0</a>) Install: Drop reliance on the deprecated chamilo_database_version value</li>
+    </ul>
 
     <a id="3.0-stable"></a>
     <h1>Chamilo 3.0 stable, 2026-09-09</h1>

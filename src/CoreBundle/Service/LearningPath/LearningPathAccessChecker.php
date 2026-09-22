@@ -22,6 +22,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class LearningPathAccessChecker
 {
@@ -30,6 +31,7 @@ final readonly class LearningPathAccessChecker
         private Security $security,
         private LpAdvancedAccessHelper $advancedAccessHelper,
         private CLpRepository $learningPathRepository,
+        private TranslatorInterface $translator,
     ) {}
 
     public function isLearningPathVisibleOnCourseHome(
@@ -145,7 +147,10 @@ final readonly class LearningPathAccessChecker
 
         $latestView = $this->findLatestView($prerequisite, $course, $session, $user);
         if (!$latestView instanceof CLpView || (int) $latestView->getProgress() < 100) {
-            return 'The learning path prerequisite is not completed.';
+            return $this->translator->trans(
+                'You must complete the learning path "%s" before you can access this one.',
+                ['%s' => $prerequisite->getTitle()],
+            );
         }
 
         return null;

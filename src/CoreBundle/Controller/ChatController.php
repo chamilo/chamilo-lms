@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\MessageTag;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\LanguageHelper;
@@ -21,6 +22,7 @@ use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ChatRepository;
 use Chamilo\CoreBundle\Repository\MessageTagRepository;
+use Chamilo\CoreBundle\Service\Chat\VideoChatSignalService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
@@ -38,6 +40,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Event;
 use Security;
+use SocialManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -63,6 +66,9 @@ final class ChatController extends AbstractController
     private const string AI_TUTOR_UNAVAILABLE_MESSAGE = 'AI tutor is temporarily unavailable. Please try again later.';
     private const int AI_SELECTED_TEXT_CONTEXT_MAX_CHARS = 12000;
     private const int AI_CURRENT_PATH_MAX_CHARS = 2048;
+    private const array VIDEO_SIGNAL_TYPES = ['offer', 'answer', 'ice', 'reject', 'cancel', 'hangup'];
+    private const int VIDEO_SIGNAL_MAX_SDP_LENGTH = 20000;
+    private const int VIDEO_SIGNAL_MAX_CANDIDATE_LENGTH = 4096;
 
     public function __construct(
         private readonly CidReqHelper $cidReqHelper,
@@ -1181,6 +1187,106 @@ final class ChatController extends AbstractController
         return new JsonResponse(['presence' => $map]);
     }
 
+    #[Route(
+        path: '/account/chat/api/video/signals',
+        name: 'chamilo_core_chat_api_video_signals',
+        options: ['expose' => true],
+        methods: ['GET']
+    )]
+    public function globalVideoSignals(VideoChatSignalService $signalService): JsonResponse
+    {
+        $me = $this->getCurrentUserIdOrNull();
+        if (null === $me) {
+            return new JsonResponse(['error' => 'unauthorized'], 401);
+        }
+
+        if (!$this->isVideoChatEnabled()) {
+            return $this->globalChatDisabledJson(['signals' => []]);
+        }
+
+        try {
+            return new JsonResponse(['signals' => $signalService->pull((int) $me)]);
+        } catch (Throwable $exception) {
+            error_log('[VideoChat] Could not read signaling queue: '.$exception->getMessage());
+
+            return new JsonResponse(['signals' => [], 'error' => 'signal_transport_unavailable']);
+        }
+    }
+
+    #[Route(
+        path: '/account/chat/api/video/signal',
+        name: 'chamilo_core_chat_api_video_signal',
+        options: ['expose' => true],
+        methods: ['POST']
+    )]
+    public function globalVideoSignal(
+        Request $req,
+        ManagerRegistry $doctrine,
+        VideoChatSignalService $signalService
+    ): JsonResponse {
+        $me = $this->getCurrentUserIdOrNull();
+        if (null === $me) {
+            return new JsonResponse(['error' => 'unauthorized'], 401);
+        }
+
+        if (!$this->isVideoChatEnabled()) {
+            return $this->globalChatDisabledJson(['ok' => false]);
+        }
+
+        $to = (int) $req->request->get('to', 0);
+        $type = trim((string) $req->request->get('type', ''));
+        $callId = trim((string) $req->request->get('call_id', ''));
+
+        if ($to <= 0 || $to === (int) $me || !\in_array($type, self::VIDEO_SIGNAL_TYPES, true)) {
+            return new JsonResponse(['ok' => false, 'error' => 'bad_params'], 400);
+        }
+
+        if (1 !== preg_match('/^[A-Za-z0-9-]{16,64}$/', $callId)) {
+            return new JsonResponse(['ok' => false, 'error' => 'invalid_call_id'], 400);
+        }
+
+        /** @var User|null $target */
+        $target = $doctrine->getRepository(User::class)->find($to);
+        if (!$target instanceof User || !$target->isActive()) {
+            return new JsonResponse(['ok' => false, 'error' => 'peer_not_found'], 404);
+        }
+
+        $relation = SocialManager::get_relation_between_contacts((int) $me, $to);
+        if (!\in_array($relation, [UserRelUser::USER_RELATION_TYPE_FRIEND, UserRelUser::USER_RELATION_TYPE_GOODFRIEND], true)) {
+            return new JsonResponse(['ok' => false, 'error' => 'peer_not_allowed'], 403);
+        }
+
+        $payload = $this->normalizeVideoSignalPayload(
+            $type,
+            (string) $req->request->get('payload', '{}')
+        );
+        if (null === $payload) {
+            return new JsonResponse(['ok' => false, 'error' => 'invalid_payload'], 400);
+        }
+
+        $fromInfo = api_get_user_info((int) $me, true);
+        $signal = [
+            'id' => bin2hex(random_bytes(8)),
+            'call_id' => $callId,
+            'type' => $type,
+            'from' => (int) $me,
+            'from_name' => (string) ($fromInfo['complete_name'] ?? ''),
+            'from_avatar' => (string) ($fromInfo['avatar_small'] ?? ''),
+            'payload' => $payload,
+            'timestamp' => time(),
+        ];
+
+        try {
+            $signalService->push($to, $signal);
+        } catch (Throwable $exception) {
+            error_log('[VideoChat] Could not write signaling queue: '.$exception->getMessage());
+
+            return new JsonResponse(['ok' => false, 'error' => 'signal_transport_unavailable'], 503);
+        }
+
+        return new JsonResponse(['ok' => true, 'signal_id' => $signal['id']]);
+    }
+
     #[Route(path: '/account/chat/api/ack', name: 'chamilo_core_chat_api_ack', options: ['expose' => true], methods: ['POST'])]
     public function globalAck(
         Request $req,
@@ -1841,6 +1947,64 @@ final class ChatController extends AbstractController
         }
 
         return $doctrine->getRepository(Course::class)->find($cid);
+    }
+
+    /**
+     * @return null|array<string, mixed>
+     */
+    private function normalizeVideoSignalPayload(string $type, string $rawPayload): ?array
+    {
+        $payload = json_decode($rawPayload, true);
+        if (!\is_array($payload)) {
+            return null;
+        }
+
+        if ('offer' === $type || 'answer' === $type) {
+            $sdp = (string) ($payload['sdp'] ?? '');
+            if ('' === trim($sdp) || mb_strlen($sdp) > self::VIDEO_SIGNAL_MAX_SDP_LENGTH) {
+                return null;
+            }
+
+            return ['sdp' => $sdp];
+        }
+
+        if ('ice' === $type) {
+            $candidate = (string) ($payload['candidate'] ?? '');
+            if ('' === trim($candidate) || mb_strlen($candidate) > self::VIDEO_SIGNAL_MAX_CANDIDATE_LENGTH) {
+                return null;
+            }
+
+            $sdpMid = isset($payload['sdpMid']) ? mb_substr((string) $payload['sdpMid'], 0, 255) : null;
+            $sdpMLineIndex = isset($payload['sdpMLineIndex']) ? (int) $payload['sdpMLineIndex'] : null;
+            if (null !== $sdpMLineIndex && ($sdpMLineIndex < 0 || $sdpMLineIndex > 255)) {
+                return null;
+            }
+
+            return [
+                'candidate' => $candidate,
+                'sdpMid' => $sdpMid,
+                'sdpMLineIndex' => $sdpMLineIndex,
+                'usernameFragment' => isset($payload['usernameFragment'])
+                    ? mb_substr((string) $payload['usernameFragment'], 0, 255)
+                    : null,
+            ];
+        }
+
+        $reason = mb_substr(trim((string) ($payload['reason'] ?? '')), 0, 120);
+
+        return '' === $reason ? [] : ['reason' => $reason];
+    }
+
+    /**
+     * Global chat video enable switch.
+     */
+    private function isVideoChatEnabled(): bool
+    {
+        if (!$this->isGlobalChatEnabled()) {
+            return false;
+        }
+
+        return 'true' !== (string) $this->settingsManager->getSetting('chat.hide_chat_video', true);
     }
 
     /**

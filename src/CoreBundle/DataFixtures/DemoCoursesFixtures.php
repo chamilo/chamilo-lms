@@ -71,6 +71,7 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
             AccessUserFixtures::class,
             AccessUserUrlFixtures::class,
             LanguageFixtures::class,
+            ResourceFormatFixtures::class,
         ];
     }
 

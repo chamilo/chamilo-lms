@@ -332,10 +332,10 @@ function buildCourseContextRootCrumb() {
 /**
  * Build the course title crumb linking back to the course home page.
  *
- * @returns {Array} One crumb item, or empty array if not in a course or already on CourseHome.
+ * @returns {Array} One crumb item, or empty array if there is no active course.
  */
 function buildCourseTitleCrumb() {
-  if (!course.value || route.name === "CourseHome") {
+  if (!course.value) {
     return []
   }
 

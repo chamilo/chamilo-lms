@@ -332,7 +332,22 @@ $form->setDefaults([
     'user' => $searchUser,
 ]);
 
-$servicesSales = $plugin->getServiceSales(0, $selectedStatus);
+$pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
+$currentPage = max(1, $httpRequest->query->getInt('page', 1));
+$hasSearch = '' !== $searchUser;
+
+if ($hasSearch) {
+    // The search term is matched in PHP against fields derived after hydration below,
+    // so the full status-filtered set is needed before it can be paginated.
+    $servicesSales = $plugin->getServiceSales(0, $selectedStatus);
+} else {
+    $totalItems = (int) $plugin->getServiceSales(0, $selectedStatus, 0, 0, 0, 0, 'count');
+    $pagesCount = $totalItems > 0 ? (int) ceil($totalItems / $pageSize) : 1;
+    $currentPage = min($currentPage, $pagesCount);
+    $first = $pageSize * ($currentPage - 1);
+    $servicesSales = $plugin->getServiceSales(0, $selectedStatus, 0, 0, $first, $pageSize);
+}
+
 $paymentTypeLabels = $plugin->getPaymentTypes();
 
 foreach ($servicesSales as &$sale) {
@@ -359,7 +374,7 @@ foreach ($servicesSales as &$sale) {
 }
 unset($sale);
 
-if ('' !== $searchUser) {
+if ($hasSearch) {
     $normalizedSearch = api_strtolower($searchUser);
 
     $servicesSales = array_values(array_filter(
@@ -388,6 +403,14 @@ usort(
     $servicesSales,
     static fn (array $a, array $b): int => strtotime((string) ($b['buy_date'] ?? '')) <=> strtotime((string) ($a['buy_date'] ?? ''))
 );
+
+if ($hasSearch) {
+    $totalItems = count($servicesSales);
+    $pagesCount = $totalItems > 0 ? (int) ceil($totalItems / $pageSize) : 1;
+    $currentPage = min($currentPage, $pagesCount);
+    $first = $pageSize * ($currentPage - 1);
+    $servicesSales = array_slice($servicesSales, $first, $pageSize);
+}
 
 $interbreadcrumb[] = [
     'url' => '../index.php',
@@ -425,7 +448,12 @@ $template->assign('form', styleBuyCoursesFormHtml($form->returnForm()));
 $template->assign('showing_services', true);
 $template->assign('services_are_included', $includeServices);
 $template->assign('sale_list', $servicesSales);
-$template->assign('sales_count', count($servicesSales));
+$template->assign('sales_count', $totalItems);
+
+$template->assign('pagination_current_page', $currentPage);
+$template->assign('pagination_pages_count', $pagesCount);
+$template->assign('pagination_total_items', $totalItems);
+$template->assign('pagination_base_path', 'service_sales_report.php');
 
 $template->assign('selected_status', $selectedStatus);
 $template->assign('selected_status_label', $saleStatuses[$selectedStatus] ?? null);

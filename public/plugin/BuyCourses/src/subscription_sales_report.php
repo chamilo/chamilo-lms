@@ -420,23 +420,50 @@ $form->setDefaults([
     'email' => $email,
 ]);
 
+$pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
+$currentPage = max(1, $httpRequest->query->getInt('page', 1));
+
+$totalItems = 0;
+
+switch ($selectedFilterType) {
+    case '0':
+        $totalItems = (int) $plugin->getSubscriptionSaleListByStatus($selectedStatus, 0, 0, 'count');
+        break;
+
+    case '1':
+        $totalItems = (int) $plugin->getSubscriptionSaleListByUser($searchTerm, 0, 0, 'count');
+        break;
+
+    case '2':
+        $totalItems = (int) $plugin->getSubscriptionSaleListByDate($dateStart, $dateEnd, 0, 0, 'count');
+        break;
+
+    case '3':
+        $totalItems = (int) $plugin->getSubscriptionSaleListByEmail($email, 0, 0, 'count');
+        break;
+}
+
+$pagesCount = $totalItems > 0 ? (int) ceil($totalItems / $pageSize) : 1;
+$currentPage = min($currentPage, $pagesCount);
+$first = $pageSize * ($currentPage - 1);
+
 $sales = [];
 
 switch ($selectedFilterType) {
     case '0':
-        $sales = $plugin->getSubscriptionSaleListByStatus($selectedStatus);
+        $sales = $plugin->getSubscriptionSaleListByStatus($selectedStatus, $first, $pageSize);
         break;
 
     case '1':
-        $sales = $plugin->getSubscriptionSaleListByUser($searchTerm);
+        $sales = $plugin->getSubscriptionSaleListByUser($searchTerm, $first, $pageSize);
         break;
 
     case '2':
-        $sales = $plugin->getSubscriptionSaleListByDate($dateStart, $dateEnd);
+        $sales = $plugin->getSubscriptionSaleListByDate($dateStart, $dateEnd, $first, $pageSize);
         break;
 
     case '3':
-        $sales = $plugin->getSubscriptionSaleListByEmail($email);
+        $sales = $plugin->getSubscriptionSaleListByEmail($email, $first, $pageSize);
         break;
 }
 
@@ -504,7 +531,12 @@ $template->assign('selected_filter_label', $filterTypeLabels[$selectedFilterType
 
 $template->assign('services_are_included', $includeServices);
 $template->assign('sale_list', $sales);
-$template->assign('sales_count', count($sales));
+$template->assign('sales_count', $totalItems);
+
+$template->assign('pagination_current_page', $currentPage);
+$template->assign('pagination_pages_count', $pagesCount);
+$template->assign('pagination_total_items', $totalItems);
+$template->assign('pagination_base_path', 'subscription_sales_report.php');
 
 $template->assign('sale_status_canceled', BuyCoursesPlugin::SALE_STATUS_CANCELED);
 $template->assign('sale_status_pending', BuyCoursesPlugin::SALE_STATUS_PENDING);

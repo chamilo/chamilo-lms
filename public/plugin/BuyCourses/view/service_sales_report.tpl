@@ -312,6 +312,10 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="border-t border-gray-25 bg-gray-15 px-6 py-4">
+            {% include 'BuyCourses/view/pagination.tpl' %}
+        </div>
     </section>
 </div>
 

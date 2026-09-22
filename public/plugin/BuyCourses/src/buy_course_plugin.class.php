@@ -5643,23 +5643,29 @@ class BuyCoursesPlugin extends Plugin
     /**
      * List services sales.
      *
-     * @param int $buyerId  buyer id
-     * @param int $status   status
-     * @param int $nodeType The node Type ( User = 1 , Course = 2 , Session = 3 )
-     * @param int $nodeId   the nodeId
+     * @param int    $buyerId    buyer id
+     * @param int    $status     status
+     * @param int    $nodeType   The node Type ( User = 1 , Course = 2 , Session = 3 )
+     * @param int    $nodeId     the nodeId
+     * @param int    $first      Pagination offset
+     * @param int    $pageSize   Pagination page size. 0 means no pagination
+     * @param string $typeResult Optional. 'all' or 'count'
      *
-     * @return array
+     * @return array|int The sale list, or the total row count when $typeResult is 'count'
      */
     public function getServiceSales(
         int $buyerId = 0,
         int $status = 0,
         int $nodeType = 0,
-        int $nodeId = 0
-    ): array {
+        int $nodeId = 0,
+        int $first = 0,
+        int $pageSize = 0,
+        string $typeResult = 'all'
+    ): array|int {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
 
-        $defaultOrder = 'ss.id ASC';
+        $defaultOrder = 'id DESC';
         $whereParts = [];
         $whereValues = [];
 
@@ -5680,9 +5686,7 @@ class BuyCoursesPlugin extends Plugin
             $whereValues[] = $nodeId;
         }
 
-        $conditions = [
-            'ORDER' => $defaultOrder,
-        ];
+        $conditions = [];
 
         if (!empty($whereParts)) {
             $conditions['WHERE'] = [
@@ -5690,7 +5694,26 @@ class BuyCoursesPlugin extends Plugin
             ];
         }
 
+        $conditions['ORDER'] = $defaultOrder;
+
+        if ($pageSize > 0) {
+            $conditions['LIMIT'] = "$first, $pageSize";
+        }
+
         $innerJoins = "INNER JOIN $servicesTable s ON ss.service_id = s.id";
+
+        if ('count' === $typeResult) {
+            $countConditions = $conditions;
+            unset($countConditions['ORDER']);
+
+            return Database::select(
+                'DISTINCT ss.id',
+                "$servicesSaleTable ss $innerJoins",
+                $countConditions,
+                'count'
+            );
+        }
+
         $return = Database::select(
             'DISTINCT ss.id',
             "$servicesSaleTable ss $innerJoins",
@@ -9047,12 +9070,19 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get a list of subscription sales by the status.
      *
-     * @param int $status The status to filter
+     * @param int    $status     The status to filter
+     * @param int    $first      Pagination offset
+     * @param int    $pageSize   Pagination page size. 0 means no pagination
+     * @param string $typeResult Optional. 'all' or 'count'
      *
-     * @return array The sale list. Otherwise, return false
+     * @return array|int The sale list, or the total row count when $typeResult is 'count'
      */
-    public function getSubscriptionSaleListByStatus(int $status = self::SALE_STATUS_PENDING)
-    {
+    public function getSubscriptionSaleListByStatus(
+        int $status = self::SALE_STATUS_PENDING,
+        int $first = 0,
+        int $pageSize = 0,
+        string $typeResult = 'all'
+    ) {
         $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
         $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
@@ -9062,13 +9092,24 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $userTable u ON s.user_id = u.id
         ";
 
+        $conditions = [
+            'where' => ['s.status = ?' => $status],
+            'order' => 'id DESC',
+        ];
+
+        if ($pageSize > 0) {
+            $conditions['limit'] = "$first, $pageSize";
+        }
+
+        if ('count' === $typeResult) {
+            unset($conditions['order']);
+        }
+
         return Database::select(
             ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
             "$saleTable s $innerJoins",
-            [
-                'where' => ['s.status = ?' => $status],
-                'order' => 'id DESC',
-            ]
+            $conditions,
+            $typeResult
         );
     }
 
@@ -9174,16 +9215,23 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get a list of subscription sales by the user.
      *
-     * @param string $term The search term
+     * @param string $term       The search term
+     * @param int    $first      Pagination offset
+     * @param int    $pageSize   Pagination page size. 0 means no pagination
+     * @param string $typeResult Optional. 'all' or 'count'
      *
-     * @return array The sale list. Otherwise, return false
+     * @return array|int The sale list, or the total row count when $typeResult is 'count'
      */
-    public function getSubscriptionSaleListByUser(string $term)
-    {
+    public function getSubscriptionSaleListByUser(
+        string $term,
+        int $first = 0,
+        int $pageSize = 0,
+        string $typeResult = 'all'
+    ) {
         $term = trim($term);
 
         if (empty($term)) {
-            return [];
+            return 'count' === $typeResult ? 0 : [];
         }
 
         $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
@@ -9194,17 +9242,28 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $userTable u ON s.user_id = u.id
         ";
 
+        $conditions = [
+            'where' => [
+                'u.username LIKE %?% OR ' => $term,
+                'u.lastname LIKE %?% OR ' => $term,
+                'u.firstname LIKE %?%' => $term,
+            ],
+            'order' => 'id DESC',
+        ];
+
+        if ($pageSize > 0) {
+            $conditions['limit'] = "$first, $pageSize";
+        }
+
+        if ('count' === $typeResult) {
+            unset($conditions['order']);
+        }
+
         return Database::select(
             ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
             "$saleTable s $innerJoins",
-            [
-                'where' => [
-                    'u.username LIKE %?% OR ' => $term,
-                    'u.lastname LIKE %?% OR ' => $term,
-                    'u.firstname LIKE %?%' => $term,
-                ],
-                'order' => 'id DESC',
-            ]
+            $conditions,
+            $typeResult
         );
     }
 
@@ -9245,17 +9304,26 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get a list of subscription sales by date range.
      *
-     * @return array The sale list. Otherwise, return false
+     * @param int    $first      Pagination offset
+     * @param int    $pageSize   Pagination page size. 0 means no pagination
+     * @param string $typeResult Optional. 'all' or 'count'
+     *
+     * @return array|int The sale list, or the total row count when $typeResult is 'count'
      */
-    public function getSubscriptionSaleListByDate(string $dateStart, string $dateEnd)
-    {
+    public function getSubscriptionSaleListByDate(
+        string $dateStart,
+        string $dateEnd,
+        int $first = 0,
+        int $pageSize = 0,
+        string $typeResult = 'all'
+    ) {
         $dateStart = trim($dateStart);
         $dateEnd = trim($dateEnd);
         if (empty($dateStart)) {
-            return [];
+            return 'count' === $typeResult ? 0 : [];
         }
         if (empty($dateEnd)) {
-            return [];
+            return 'count' === $typeResult ? 0 : [];
         }
         $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
         $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
@@ -9265,31 +9333,49 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $userTable u ON s.user_id = u.id
         ";
 
+        $conditions = [
+            'where' => [
+                's.date BETWEEN ? AND ' => $dateStart,
+                ' ? ' => $dateEnd,
+            ],
+            'order' => 'id DESC',
+        ];
+
+        if ($pageSize > 0) {
+            $conditions['limit'] = "$first, $pageSize";
+        }
+
+        if ('count' === $typeResult) {
+            unset($conditions['order']);
+        }
+
         return Database::select(
             ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
             "$saleTable s $innerJoins",
-            [
-                'where' => [
-                    's.date BETWEEN ? AND ' => $dateStart,
-                    ' ? ' => $dateEnd,
-                ],
-                'order' => 'id DESC',
-            ]
+            $conditions,
+            $typeResult
         );
     }
 
     /**
      * Get a list of subscription sales by the user Email.
      *
-     * @param string $term The search term
+     * @param string $term       The search term
+     * @param int    $first      Pagination offset
+     * @param int    $pageSize   Pagination page size. 0 means no pagination
+     * @param string $typeResult Optional. 'all' or 'count'
      *
-     * @return array The sale list. Otherwise, return false
+     * @return array|int The sale list, or the total row count when $typeResult is 'count'
      */
-    public function getSubscriptionSaleListByEmail(string $term)
-    {
+    public function getSubscriptionSaleListByEmail(
+        string $term,
+        int $first = 0,
+        int $pageSize = 0,
+        string $typeResult = 'all'
+    ) {
         $term = trim($term);
         if (empty($term)) {
-            return [];
+            return 'count' === $typeResult ? 0 : [];
         }
         $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
         $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
@@ -9299,15 +9385,26 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $userTable u ON s.user_id = u.id
         ";
 
+        $conditions = [
+            'where' => [
+                'u.email LIKE %?% ' => $term,
+            ],
+            'order' => 'id DESC',
+        ];
+
+        if ($pageSize > 0) {
+            $conditions['limit'] = "$first, $pageSize";
+        }
+
+        if ('count' === $typeResult) {
+            unset($conditions['order']);
+        }
+
         return Database::select(
             ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
             "$saleTable s $innerJoins",
-            [
-                'where' => [
-                    'u.email LIKE %?% ' => $term,
-                ],
-                'order' => 'id DESC',
-            ]
+            $conditions,
+            $typeResult
         );
     }
 

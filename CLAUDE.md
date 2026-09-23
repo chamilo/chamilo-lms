@@ -135,6 +135,17 @@ npx prettier --check .      # Check formatting
 
 It is possible to test the application through the web, as admin, by calling locally: http://my.chamilo.net with credentials admin/admin.
 
+### Documentation screenshots
+
+When you create or replace a screenshot for the English documentation in `chamilo-docs`
+(`3.x/en/.gitbook/assets/*.png` — see that repo's `.claude/commands/document-feature.md`, Step 5),
+also add or update its entry in that repo's screenshot catalogue:
+`chamilo-docs/3.x/en/.gitbook/assets/screenshot-catalogue.yaml`. Record the filename, the doc page
+it appears on, the `my.chamilo.net` URL, the account role needed, and any steps beyond plain
+navigation (opening a dialog, specific demo data, etc.). Without this, the same screenshot can't be
+faithfully reproduced in another language — that catalogue is what `chamilo-docs`'
+`/localize-screenshots` skill reads instead of re-guessing the page from scratch every time.
+
 ### Playwright (browser automation tests)
 
 The browser-driven test suite uses **Playwright** with `playwright-bdd`, so `.feature` files stay plain Gherkin — only the step definitions are TypeScript. It replaced Behat, which has been removed entirely (see the note at the end of this section). This is the only browser-driven suite: all new coverage goes here.

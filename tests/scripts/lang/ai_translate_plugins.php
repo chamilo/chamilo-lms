@@ -98,6 +98,7 @@ $batchSize = 50;
 $langNameToCode = [
     'arabic'              => 'ar',
     'asturian'            => 'ast_ES',
+    'azerbaijani'         => 'az',
     'basque'              => 'eu_ES',
     'bosnian'             => 'bs_BA',
     'brazilian'           => 'pt_BR',
@@ -314,6 +315,7 @@ function pluginGetLanguageName(string $code): string
     static $map = [
         'ar'    => 'Arabic',
         'ast_ES'=> 'Asturian',
+        'az'    => 'Azerbaijani',
         'bg'    => 'Bulgarian',
         'bs_BA' => 'Bosnian',
         'ca_ES' => 'Catalan',

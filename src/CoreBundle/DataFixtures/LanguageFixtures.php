@@ -646,6 +646,14 @@ class LanguageFixtures extends Fixture
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
+            [
+                'original_name' => 'Azərbaycanca',
+                'english_name' => 'azerbaijani',
+                'isocode' => 'az',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
         ];
     }
 }

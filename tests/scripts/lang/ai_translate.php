@@ -119,6 +119,7 @@ function getLanguageName(string $code): string {
     static $map = [
         'ar'    => 'Arabic',
         'ast_ES'=> 'Asturian (Spain)',
+        'az'    => 'Azerbaijani',
         'bg'    => 'Bulgarian',
         'bn_BD' => 'Bengali (Bangladesh)',
         'bo_CN' => 'Tibetan (China)',

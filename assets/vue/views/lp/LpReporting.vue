@@ -214,6 +214,16 @@ function goBack() {
     return
   }
 
+  if ("toolbox" === route.query.returnTo) {
+    router.push({
+      name: "ToolboxList",
+      params: { node: route.params.node },
+      query: contextParams.value,
+    })
+
+    return
+  }
+
   if ("global-reporting-learner-course-detail" === route.query.returnTo) {
     const returnUserId = Number(route.query.returnUserId || route.query.studentId || 0)
     const returnCourseId = Number(route.query.returnCourseId || route.query.cid || 0)

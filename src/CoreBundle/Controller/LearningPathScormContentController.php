@@ -146,6 +146,18 @@ final class LearningPathScormContentController extends AbstractController
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Cache-Control', 'private, max-age=300');
 
+        if ('toolbox' === strtolower(trim((string) $lp->getContentMaker()))
+            && \in_array($extension, ['htm', 'html', 'xht', 'xhtml'], true)
+        ) {
+            $response->headers->set(
+                'Content-Security-Policy',
+                "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src data: blob:; font-src data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'",
+            );
+            $response->headers->set('Referrer-Policy', 'no-referrer');
+            $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+            $response->headers->set('Cross-Origin-Resource-Policy', 'same-origin');
+        }
+
         return $response;
     }
 

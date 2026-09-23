@@ -81,7 +81,7 @@
             @click.prevent="leaveRuntime(runtimeHomeUrl)"
           >
             <BaseIcon
-              :icon="isCStudioContent ? 'learning-paths' : 'home'"
+              :icon="isToolboxContent ? 'robot' : isCStudioContent ? 'learning-paths' : 'home'"
               size="small"
             />
             <span>{{ homeLabel }}</span>
@@ -101,7 +101,7 @@
           </button>
 
           <router-link
-            v-if="runtime.canEdit && !isCStudioContent"
+            v-if="runtime.canEdit && !isCStudioContent && !isToolboxContent"
             :to="builderRoute"
             class="lp-runtime-menu-link"
           >
@@ -113,7 +113,7 @@
           </router-link>
 
           <router-link
-            v-if="runtime.canEdit"
+            v-if="runtime.canEdit && !isToolboxContent"
             :to="settingsRoute"
             class="lp-runtime-menu-link"
           >
@@ -304,6 +304,7 @@
             !isReportingMode &&
             !isImpressMode &&
             !isCStudioContent &&
+            !isToolboxContent &&
             progressValue >= 100 &&
             runtime.nextLearningPathUrl
           "
@@ -387,10 +388,11 @@
           />
 
           <iframe
-            v-else-if="runtime.contentUrl"
+            v-else-if="activeContentUrl"
             ref="contentFrame"
-            :src="runtime.contentUrl"
+            :src="activeContentUrl"
             :title="currentItem?.title || runtime.title"
+            :sandbox="runtime.isToolboxContent ? toolboxSandbox : undefined"
             allowfullscreen
             class="lp-runtime-iframe"
             @load="handleIframeLoad"
@@ -533,6 +535,8 @@ const { showErrorNotification } = useNotification()
 
 const runtime = ref(null)
 const contentFrame = ref(null)
+const activeContentUrl = ref("")
+const toolboxSandbox = "allow-scripts allow-forms allow-modals allow-pointer-lock"
 const isLoading = ref(false)
 const isChangingItem = ref(false)
 const isSyncingRuntime = ref(false)
@@ -564,6 +568,9 @@ let trackingTimer = null
 let lastBeaconAt = 0
 let scormRuntimeContext = null
 let scormRuntimeKey = ""
+let toolboxCommitQueue = Promise.resolve()
+let toolboxPendingCommit = null
+let toolboxPendingCommitCount = 0
 let restoreTeacherViewPromise = null
 let youtubeApiPromise = null
 let aiHelperFrameCleanup = null
@@ -573,6 +580,7 @@ let embeddedVideoWatchGeneration = 0
 const lpId = computed(() => Number(route.params.lpId || 0))
 const hasCStudioEditorContext = computed(() => String(route.query.teachdoc || "").toLowerCase() === "edit")
 const isCStudioContent = computed(() => Boolean(runtime.value?.isCStudioContent) || hasCStudioEditorContext.value)
+const isToolboxContent = computed(() => Boolean(runtime.value?.isToolboxContent))
 const isCStudioPreview = computed(() => {
   const previewValue = String(route.query.cstudio_preview || "").toLowerCase()
 
@@ -713,7 +721,7 @@ const contentStageKey = computed(() =>
   [
     Number(runtime.value?.currentItemId || 0),
     String(currentItem.value?.itemType || ""),
-    String(runtime.value?.contentUrl || ""),
+    String(activeContentUrl.value || ""),
     Number(iframeReloadKey.value || 0),
   ].join(":"),
 )
@@ -734,6 +742,9 @@ const formattedTotalTime = computed(() => formatDuration(displayedTotalTime.valu
 const formattedMinimumTime = computed(() => formatDuration(Number(runtime.value?.minimumTime || 0)))
 const visibleItems = computed(() => (runtime.value?.items || []).filter((item) => !hasCollapsedAncestor(item)))
 const homeLabel = computed(() => {
+  if (isToolboxContent.value) {
+    return t("Toolbox")
+  }
   if (isCStudioContent.value) {
     return t("Learning paths")
   }
@@ -848,6 +859,7 @@ async function openRuntimeReporting() {
     return
   }
 
+  await waitForToolboxScormCommits()
   await flushScormRuntime("runtime-reporting")
   contentFrame.value = null
   iframeLoading.value = false
@@ -876,6 +888,9 @@ async function closeRuntimeReporting() {
     params: route.params,
     query,
   })
+
+  const data = await fetchRuntime(query.item_id || 0)
+  applyRuntime(data, { contentChanged: true })
 }
 
 async function leaveRuntime(url) {
@@ -884,6 +899,7 @@ async function leaveRuntime(url) {
     return
   }
 
+  await waitForToolboxScormCommits()
   await flushScormRuntime("runtime-exit")
   await restoreTeacherViewAfterRuntime()
   window.location.assign(targetUrl)
@@ -1064,6 +1080,74 @@ async function flushScormRuntime(reason = "flush") {
   await scormRuntimeContext.flush(reason)
 }
 
+function queueToolboxScormCommit(itemId, payload) {
+  const queuedPayload = {
+    ...payload,
+    values: { ...(payload?.values || {}) },
+    changedKeys: [...(payload?.changedKeys || [])],
+  }
+
+  toolboxPendingCommit = {
+    itemId,
+    payload: queuedPayload,
+  }
+  toolboxPendingCommitCount += 1
+
+  const persist = async () => {
+    let persisted = false
+
+    try {
+      await lpService.commitScormRuntime(lpId.value, itemId, contextParams.value, queuedPayload)
+      persisted = true
+    } catch (error) {
+      console.warn("Unable to persist Toolbox SCORM progress.", error)
+      throw error
+    } finally {
+      toolboxPendingCommitCount = Math.max(0, toolboxPendingCommitCount - 1)
+      if (toolboxPendingCommitCount === 0 && persisted) {
+        toolboxPendingCommit = null
+      }
+    }
+  }
+
+  toolboxCommitQueue = toolboxCommitQueue.then(persist, persist)
+
+  return toolboxCommitQueue
+}
+
+async function waitForToolboxScormCommits() {
+  while (toolboxPendingCommitCount > 0) {
+    const queue = toolboxCommitQueue
+    try {
+      await queue
+    } catch (_) {
+      // The commit failure is already logged by queueToolboxScormCommit().
+    }
+
+    if (queue === toolboxCommitQueue && toolboxPendingCommitCount === 0) {
+      break
+    }
+  }
+}
+
+function flushPendingToolboxCommitBeacon(reason = "pagehide") {
+  if (!toolboxPendingCommit) {
+    return
+  }
+
+  const { itemId, payload } = toolboxPendingCommit
+  const values = { ...(payload.values || {}) }
+  const sessionTimeKey = payload.version === "2004" ? "cmi.session_time" : "cmi.core.session_time"
+  delete values[sessionTimeKey]
+
+  lpService.commitScormRuntimeBeacon(lpId.value, itemId, contextParams.value, {
+    ...payload,
+    values,
+    changedKeys: (payload.changedKeys || []).filter((key) => key !== sessionTimeKey),
+    reason,
+  })
+}
+
 function handleScormNavigate(navRequest, data) {
   const request = String(navRequest || "").trim()
 
@@ -1150,6 +1234,7 @@ async function returnToCStudio() {
   }
 
   isReturningToCStudio.value = true
+  await waitForToolboxScormCommits()
   await flushScormRuntime("cstudio-return")
   await restoreTeacherViewAfterRuntime()
   window.location.assign(cStudioEditorUrl.value)
@@ -1534,6 +1619,9 @@ function applyRuntime(data, { contentChanged = false } = {}) {
 
   installScormRuntime(data, { forceRecreate: contentChanged })
   runtime.value = data
+  if (contentChanged) {
+    activeContentUrl.value = String(data?.contentUrl || "")
+  }
   previewImageFailed.value = false
   runtimeLoadedAt.value = Date.now()
   clockTick.value = Date.now()
@@ -1655,12 +1743,13 @@ async function openItem(itemId) {
   hideVideoNextOverlay()
   clearEmbeddedVideoWatchers()
   resetAiLearningHelper()
-  contentFrame.value = null
   isChangingItem.value = true
   iframeLoading.value = true
 
   try {
+    await waitForToolboxScormCommits()
     await flushScormRuntime("navigation")
+    contentFrame.value = null
     await lpService.openRuntimeItem(lpId.value, contextParams.value, {
       itemId: id,
       allowNewAttempt: true,
@@ -1720,12 +1809,63 @@ function handleImpressActiveChange(item) {
   }
 }
 
-function handleRuntimeMessage(event) {
+async function handleRuntimeMessage(event) {
   if (event.source !== contentFrame.value?.contentWindow) {
     return
   }
 
-  scheduleRuntimeRefresh()
+  const data = event?.data
+  if (runtime.value?.isToolboxContent && data?.type === "chamilo-toolbox-scorm-commit") {
+    const values = data?.values
+    const changedKeys = data?.changedKeys
+    const config = runtime.value?.scorm || {}
+    const itemId = Number(runtime.value?.currentItemId || 0)
+    const itemViewId = Number(config.itemViewId || 0)
+    const version = String(config.version || "")
+
+    if (
+      route.query.isStudentView === "false" ||
+      !values ||
+      typeof values !== "object" ||
+      Array.isArray(values) ||
+      !Array.isArray(changedKeys) ||
+      !changedKeys.every((key) => typeof key === "string") ||
+      itemId <= 0 ||
+      itemViewId <= 0 ||
+      !version
+    ) {
+      scheduleRuntimeRefresh()
+      return
+    }
+
+    const payload = {
+      values,
+      changedKeys,
+      terminated: Boolean(data?.terminated),
+      reason: String(data?.reason || "commit").substring(0, 64),
+      itemId,
+      itemViewId,
+      version,
+    }
+
+    if (payload.reason === "pagehide") {
+      lpService.commitScormRuntimeBeacon(lpId.value, itemId, contextParams.value, payload)
+      return
+    }
+
+    try {
+      await queueToolboxScormCommit(itemId, payload)
+    } catch (_) {
+      // The commit failure is already logged by queueToolboxScormCommit().
+    }
+
+    scheduleRuntimeRefresh()
+    return
+  }
+
+  if (!runtime.value?.isToolboxContent) {
+    scheduleRuntimeRefresh()
+  }
 }
 
 function handleVisibilityChange() {
@@ -1739,6 +1879,7 @@ function handleVisibilityChange() {
 
 function handlePageHide() {
   const now = Date.now()
+  flushPendingToolboxCommitBeacon("pagehide")
   scormRuntimeContext?.flushBeacon("pagehide")
   if (isSyncingRuntime.value || now - lastBeaconAt < 1000 || !runtime.value || !runtime.value.currentItemId) {
     return
@@ -1751,6 +1892,9 @@ function handlePageHide() {
 }
 
 onBeforeRouteLeave(async (to) => {
+  await waitForToolboxScormCommits()
+  await flushScormRuntime("route-leave")
+
   if ("LpRuntime" !== to.name) {
     await restoreTeacherViewAfterRuntime()
   }
@@ -1783,6 +1927,7 @@ onBeforeUnmount(() => {
   window.clearInterval(clockTimer)
   window.clearInterval(trackingTimer)
   window.clearTimeout(refreshTimer)
+  flushPendingToolboxCommitBeacon("unmount")
   scormRuntimeContext?.flushBeacon("unmount")
   stopCurrentVideoPlayback()
   clearEmbeddedVideoWatchers()

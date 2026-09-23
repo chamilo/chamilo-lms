@@ -6499,7 +6499,10 @@ class CourseRestorer
                     &$fallbackOrder,
                     $lp,
                     $lpItemRepo,
-                    $resolvePath
+                    $resolvePath,
+                    $courseEnt,
+                    $sessionEnt,
+                    $em
                 ): void {
                     $kids = $children[$parentLegacyId] ?? [];
                     foreach ($kids as $legacyChildId) {

@@ -15,32 +15,36 @@
           <UserRelUserRequestsList
             v-if="isCurrentUser"
             ref="requestList"
-            @accept-friend="reloadHandler"
-            @reject-friend="reloadHandler"
+            @relations-changed="reloadHandler"
           />
         </div>
       </BaseCard>
     </div>
     <div class="md:basis-3/4 lg:basis-5/6 2xl:basis-7/8">
-      <router-view
-        ref="friendsListView"
-        @friend-request-sent="reloadRequestsList"
-      />
+      <router-view v-slot="{ Component }">
+        <component
+          :is="Component"
+          ref="friendsListView"
+          @friend-request-sent="reloadHandler"
+          @refresh-requests="reloadHandler"
+          @relations-changed="reloadHandler"
+        />
+      </router-view>
     </div>
   </div>
 </template>
 
 <script setup>
 import UserProfileCard from "../social/UserProfileCard.vue"
-import { nextTick, onMounted, provide, ref, watch } from "vue"
+import { nextTick, onBeforeUnmount, onMounted, provide, ref, watch } from "vue"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 import UserRelUserRequestsList from "./UserRelUserRequestsList.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
-import { useNotification } from "../../composables/notification"
-import userRelUserService from "../../services/userreluser"
 import { useI18n } from "vue-i18n"
+import { useRoute } from "vue-router"
 
 const { t } = useI18n()
+const route = useRoute()
 const { user, isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo()
 
 provide("social-user", user)
@@ -50,60 +54,76 @@ provide("is-group", isGroup)
 
 const requestList = ref(null)
 const friendsListView = ref(null)
-const items = ref([])
-const loadingFriends = ref(true)
-const notification = useNotification()
+const RELATION_SYNC_INTERVAL_MS = 10000
+let relationSyncTimer = null
+let refreshingRelations = false
+let refreshQueued = false
 
-const friendFilter = {
-  user: user.id,
-  relationType: 3,
-}
+const reloadHandler = async (options = {}) => {
+  if (refreshingRelations) {
+    refreshQueued = true
+    return
+  }
 
-const friendBackFilter = {
-  friend: user.id,
-  relationType: 3,
-}
-
-const reloadHandler = async () => {
-  loadingFriends.value = true
-  items.value = []
+  refreshingRelations = true
+  let silent = options?.silent === true
 
   try {
-    const [resp1, resp2] = await Promise.all([
-      userRelUserService.findAll({ params: friendFilter }),
-      userRelUserService.findAll({ params: friendBackFilter }),
-    ])
-
-    const [json1, json2] = await Promise.all([resp1.json(), resp2.json()])
-    const seen = new Set()
-    items.value = [...json1["hydra:member"], ...json2["hydra:member"]].filter((item) => {
-      const otherId = item.user["@id"] === user["@id"] ? item.friend["@id"] : item.user["@id"]
-      if (seen.has(otherId)) return false
-      seen.add(otherId)
-      return true
-    })
-  } catch (e) {
-    notification.showErrorNotification(e)
+    do {
+      refreshQueued = false
+      const requestsRefresh = requestList.value?.loadRequests?.({ silent })
+      await nextTick()
+      const friendsRefresh = friendsListView.value?.reloadHandler?.({ silent })
+      await Promise.allSettled([requestsRefresh, friendsRefresh].filter(Boolean))
+      silent = true
+    } while (refreshQueued)
   } finally {
-    loadingFriends.value = false
-    requestList.value?.loadRequests()
-    await nextTick()
-    friendsListView.value?.reloadHandler?.()
+    refreshingRelations = false
   }
 }
 
-const reloadRequestsList = () => {
-  requestList.value?.loadRequests()
+const refreshWhenVisible = () => {
+  if (document.visibilityState === "visible") {
+    reloadHandler({ silent: true })
+  }
+}
+
+const refreshOnFocus = () => {
+  reloadHandler({ silent: true })
 }
 
 onMounted(async () => {
   await loadUser()
   await reloadHandler()
+  window.addEventListener("focus", refreshOnFocus)
+  document.addEventListener("visibilitychange", refreshWhenVisible)
+  relationSyncTimer = window.setInterval(() => {
+    if (document.visibilityState === "visible") {
+      reloadHandler({ silent: true })
+    }
+  }, RELATION_SYNC_INTERVAL_MS)
 })
+
+onBeforeUnmount(() => {
+  window.removeEventListener("focus", refreshOnFocus)
+  document.removeEventListener("visibilitychange", refreshWhenVisible)
+  if (relationSyncTimer) {
+    window.clearInterval(relationSyncTimer)
+    relationSyncTimer = null
+  }
+})
+
+watch(
+  () => route.fullPath,
+  async () => {
+    await nextTick()
+    reloadHandler({ silent: true })
+  },
+)
 
 watch(user, (newVal) => {
   if (newVal && newVal.id) {
-    reloadHandler()
+    reloadHandler({ silent: true })
   }
 })
 </script>

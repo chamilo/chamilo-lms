@@ -25,8 +25,6 @@
         <component
           :is="Component"
           ref="friendsListView"
-          @friend-request-sent="reloadHandler"
-          @refresh-requests="reloadHandler"
           @relations-changed="reloadHandler"
         />
       </router-view>

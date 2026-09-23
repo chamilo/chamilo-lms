@@ -30,8 +30,7 @@
         :select-label="t('Press enter to select')"
         :selected-label="t('Selected')"
         label="username"
-        limit="3"
-        limit-text="3"
+        :limit="3"
         track-by="id"
         @select="addFriend"
         @search-change="asyncFind"
@@ -61,7 +60,7 @@ import userRelUserService from "../../services/userRelUserService"
 import baseService from "../../services/baseService"
 import { useSecurityStore } from "../../store/securityStore"
 
-const emit = defineEmits(["friend-request-sent"])
+const emit = defineEmits(["relations-changed"])
 
 const securityStore = useSecurityStore()
 const router = useRouter()
@@ -113,7 +112,7 @@ const addFriend = (friend) => {
     .then(() => {
       users.value = users.value.filter((item) => item.id !== friend.id)
       showSuccessNotification(t("Friend request sent successfully"))
-      emit("friend-request-sent")
+      emit("relations-changed")
       sendNotificationMessage(friend)
     })
     .catch((error) => {

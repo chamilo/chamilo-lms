@@ -95,7 +95,7 @@ import relUserService from "../../services/userRelUserService"
 import { useNotification } from "../../composables/notification"
 import { useI18n } from "vue-i18n"
 
-const emit = defineEmits(["accept-friend", "reject-friend", "relations-changed"])
+const emit = defineEmits(["relations-changed"])
 
 const { t } = useI18n()
 
@@ -104,20 +104,19 @@ const notification = useNotification()
 
 const friendRequests = ref([])
 const waitingRequests = ref([])
-
-const friendRequestFilter = {
-  friend: securityStore.user.id,
-  relationType: 10,
-}
-const waitingFilter = {
-  user: securityStore.user.id,
-  relationType: 10,
-}
-
 const loading = ref(true)
 
 const loadRequests = async (options = {}) => {
   const silent = options?.silent === true
+  const userId = Number(securityStore.user?.id || 0)
+
+  if (!userId) {
+    friendRequests.value = []
+    waitingRequests.value = []
+    loading.value = false
+    return
+  }
+
   if (!silent) {
     loading.value = true
     friendRequests.value = []
@@ -126,8 +125,8 @@ const loadRequests = async (options = {}) => {
 
   try {
     const [sentRequestsResponse, waitingRequestsResponse] = await Promise.all([
-      userRelUserService.findAll({ params: friendRequestFilter }),
-      userRelUserService.findAll({ params: waitingFilter }),
+      userRelUserService.findAll({ params: { friend: userId, relationType: 10 } }),
+      userRelUserService.findAll({ params: { user: userId, relationType: 10 } }),
     ])
     const [sentRequestsJson, waitingRequestsJson] = await Promise.all([
       sentRequestsResponse.json(),
@@ -139,16 +138,14 @@ const loadRequests = async (options = {}) => {
   } catch (e) {
     notification.showErrorNotification(e)
   } finally {
-    if (!silent) {
-      loading.value = false
-    }
+    // The first refresh can be silent, but the initial skeleton must still finish.
+    loading.value = false
   }
 }
 
 async function acceptFriendRequest(request) {
   try {
     await relUserService.update(request["@id"], { relationType: 3 })
-    emit("accept-friend", request)
     emit("relations-changed")
     notification.showSuccessNotification(t("Friend added successfully"))
   } catch (e) {
@@ -159,7 +156,6 @@ async function acceptFriendRequest(request) {
 async function rejectFriendRequest(request) {
   try {
     await relUserService.remove(request["@id"])
-    emit("reject-friend", request)
     emit("relations-changed")
     notification.showSuccessNotification(t("Friend request rejected"))
   } catch (e) {

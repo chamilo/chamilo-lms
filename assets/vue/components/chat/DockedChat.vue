@@ -126,32 +126,32 @@
                     aria-hidden="true"
                     class="mdi mdi-account chd-avatar chd-avatar--fallback"
                   />
-                  <div class="chd-peer__meta">
+                  <div class="chd-peer__meta chd-peer__meta--conversation">
                     <strong class="chd-truncate">{{ activePeer.name }}</strong>
                     <span
+                      :aria-label="activePeer.online ? t('Connected') : t('Not connected')"
                       :class="activePeer.online ? 'on' : 'off'"
+                      :title="activePeer.online ? t('Connected') : t('Not connected')"
                       class="chd-presence"
                     />
+                    <button
+                      v-if="canStartVideoCall"
+                      :aria-label="t('Start video call')"
+                      :title="t('Start video call')"
+                      class="chd-btn chd-btn--ghost chd-btn--icon chd-video-start"
+                      type="button"
+                      @click="startVideoCall"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="mdi mdi-video"
+                      />
+                    </button>
                   </div>
                 </template>
                 <template v-else>
                   <strong>{{ t("Select a contact") }}</strong>
                 </template>
-              </div>
-              <div class="chd-chat__head-actions">
-                <button
-                  v-if="canStartVideoCall"
-                  :aria-label="t('Start video call')"
-                  :title="t('Start video call')"
-                  class="chd-btn chd-btn--ghost chd-btn--icon"
-                  type="button"
-                  @click="startVideoCall"
-                >
-                  <i
-                    aria-hidden="true"
-                    class="mdi mdi-video-outline"
-                  />
-                </button>
               </div>
             </div>
 
@@ -168,7 +168,7 @@
                   :class="bubbleClass(msg)"
                 >
                   <div
-                    :class="{ 'is-pending': msg.pending }"
+                    :class="{ 'is-pending': msg.pending, 'chd-bubble--system': msg.system }"
                     class="chd-bubble"
                   >
                     <div
@@ -736,6 +736,7 @@ let contactsTimer = null
 
 const VIDEO_SIGNAL_POLL_MS = 1000
 const VIDEO_CALL_TIMEOUT_MS = 30000
+const PRESENCE_OFFLINE_GRACE_MS = 10000
 const VIDEO_ICE_SERVERS = [
   { urls: "stun:stun.l.google.com:19302" },
 ]
@@ -757,6 +758,10 @@ let peerConnection = null
 let videoSignalTimer = null
 let videoSignalPollRunning = false
 let videoCallTimeout = null
+let videoSystemMessageSequence = 0
+
+const lastOnlineAtByPeer = new Map()
+const resolvedPresenceByPeer = new Map()
 
 const videoChatSupported = computed(() => {
   return (
@@ -886,6 +891,8 @@ function formatTs(ts) {
   }
 }
 function bubbleClass(msg) {
+  if (msg?.system) return "chd-row chd-row--system"
+
   const mine = Number(msg.from_user_info?.id) === me.id || Number(msg?.f) === me.id
   return mine ? "chd-row chd-row--me" : "chd-row chd-row--peer"
 }
@@ -1155,6 +1162,57 @@ async function post(url, params, expectJson = true) {
   return r.data
 }
 
+function addVideoSystemMessage(peerId, text) {
+  const pid = Number(peerId || 0)
+  const message = String(text || "").trim()
+  if (pid <= 0 || !message) return
+
+  const now = Math.floor(Date.now() / 1000)
+  const current = messagesByPeer.get(pid) || []
+  const last = current[current.length - 1]
+
+  if (last?.system && last.message === message && Math.abs(Number(last.date || 0) - now) <= 2) {
+    return
+  }
+
+  videoSystemMessageSequence += 1
+  const event = {
+    id: -(Date.now() * 1000 + videoSystemMessageSequence),
+    message,
+    date: now,
+    recd: 2,
+    system: true,
+  }
+
+  messagesByPeer.set(pid, [...current, event].sort(byChronoId))
+
+  if (Number(activePeer.value?.id || 0) === pid) {
+    requestAnimationFrame(() => {
+      const el = scrollBox.value
+      if (el) el.scrollTop = el.scrollHeight
+    })
+  }
+}
+
+function remoteVideoEndMessage(type, reason) {
+  if (type === "reject") {
+    if (reason === "busy") return t("Your contact is busy.")
+    if (reason === "timeout") return t("Your contact did not answer the call.")
+    if (reason === "media_error") return t("Your contact could not access the camera or microphone.")
+    return t("Your contact refused the call.")
+  }
+
+  if (type === "cancel") {
+    return reason === "timeout" ? t("The call timed out.") : t("Your contact cancelled the call.")
+  }
+
+  if (type === "hangup") {
+    return reason === "signal_lost" ? t("The video connection was lost.") : t("Your contact hung up.")
+  }
+
+  return ""
+}
+
 function createVideoCallId() {
   if (window.crypto?.randomUUID) {
     return window.crypto.randomUUID()
@@ -1233,6 +1291,28 @@ function failVideoCall(message) {
   stopLocalVideoStream()
   videoCallError.value = message || t("Video call could not be started")
   videoCallState.value = "error"
+}
+
+function videoMediaErrorMessage(error) {
+  const name = String(error?.name || "")
+
+  if (["NotAllowedError", "SecurityError", "PermissionDeniedError"].includes(name)) {
+    return t("Camera or microphone permission was denied.")
+  }
+
+  if (["NotFoundError", "DevicesNotFoundError"].includes(name)) {
+    return t("No camera or microphone was found.")
+  }
+
+  if (["NotReadableError", "TrackStartError", "AbortError"].includes(name)) {
+    return t("Camera or microphone is already in use or unavailable.")
+  }
+
+  if (["OverconstrainedError", "ConstraintNotSatisfiedError"].includes(name)) {
+    return t("The camera or microphone does not support the required settings.")
+  }
+
+  return t("Camera or microphone access could not be obtained")
 }
 
 async function requestLocalVideoStream() {
@@ -1323,6 +1403,8 @@ function createVideoPeerConnection(peerId, callId) {
     }
 
     if (pc.connectionState === "failed") {
+      sendVideoSignal(peerId, "hangup", callId, { reason: "signal_lost" }).catch(() => {})
+      addVideoSystemMessage(peerId, t("The video connection was lost."))
       failVideoCall(t("The video connection failed"))
     }
   }
@@ -1356,11 +1438,14 @@ async function startVideoCall() {
     videoCallTimeout = window.setTimeout(() => {
       if (videoCallState.value !== "outgoing") return
       sendVideoSignal(peerId, "cancel", callId, { reason: "timeout" }).catch(() => {})
+      addVideoSystemMessage(peerId, t("No answer was received."))
       resetVideoCall()
     }, VIDEO_CALL_TIMEOUT_MS)
   } catch (error) {
     console.error("[VideoChat] Could not start call", error)
-    failVideoCall(t("Camera or microphone access could not be obtained"))
+    const mediaErrorMessage = videoMediaErrorMessage(error)
+    addVideoSystemMessage(peerId, mediaErrorMessage)
+    failVideoCall(mediaErrorMessage)
   }
 }
 
@@ -1385,8 +1470,10 @@ async function acceptVideoCall() {
     if (sent?.ok !== true) throw new Error("video_signal_not_sent")
   } catch (error) {
     console.error("[VideoChat] Could not accept call", error)
+    const mediaErrorMessage = videoMediaErrorMessage(error)
     await sendVideoSignal(peerId, "reject", callId, { reason: "media_error" }).catch(() => {})
-    failVideoCall(t("Camera or microphone access could not be obtained"))
+    addVideoSystemMessage(peerId, mediaErrorMessage)
+    failVideoCall(mediaErrorMessage)
   }
 }
 
@@ -1395,6 +1482,7 @@ async function rejectVideoCall() {
   const callId = videoCallId.value
   if (peerId > 0 && callId) {
     await sendVideoSignal(peerId, "reject", callId, { reason: "declined" }).catch(() => {})
+    addVideoSystemMessage(peerId, t("You refused the call."))
   }
   resetVideoCall()
 }
@@ -1406,6 +1494,10 @@ async function hangUpVideoCall() {
 
   if (peerId > 0 && callId) {
     await sendVideoSignal(peerId, signalType, callId).catch(() => {})
+    addVideoSystemMessage(
+      peerId,
+      signalType === "cancel" ? t("You cancelled the call.") : t("You hung up."),
+    )
   }
   resetVideoCall()
 }
@@ -1458,6 +1550,7 @@ async function handleVideoSignal(signal) {
     videoCallTimeout = window.setTimeout(() => {
       if (videoCallState.value !== "incoming" || videoCallId.value !== callId) return
       sendVideoSignal(from, "reject", callId, { reason: "timeout" }).catch(() => {})
+      addVideoSystemMessage(from, t("You missed the call."))
       resetVideoCall()
     }, VIDEO_CALL_TIMEOUT_MS)
     return
@@ -1505,6 +1598,8 @@ async function handleVideoSignal(signal) {
   }
 
   if (["reject", "cancel", "hangup"].includes(type)) {
+    const reason = String(signal?.payload?.reason || "")
+    addVideoSystemMessage(from, remoteVideoEndMessage(type, reason))
     resetVideoCall()
   }
 }
@@ -1808,11 +1903,12 @@ function collectVisibleContactIds() {
   return Array.from(ids)
 }
 
-function paintPresenceOnContacts(map) {
+function applyPresenceToPeer(pid, online) {
   const root = document.querySelector(".chd .chd-contacts .chd-contacts-html")
-  if (!root) return
-  Object.entries(map || {}).forEach(([sid, online]) => {
-    const pid = Number(sid)
+  const connected = !!online
+  const statusLabel = connected ? t("Connected") : t("Not connected")
+
+  if (root) {
     const rows = findContactNodesByPeerId(root, pid)
     rows.forEach((row) => {
       const icon =
@@ -1820,13 +1916,41 @@ function paintPresenceOnContacts(map) {
         row.querySelector("i.mdi-account-outline") ||
         row.querySelector('i[class*="mdi-account"]')
       if (icon) {
-        icon.classList.toggle("mdi-account-check", !!online)
-        icon.classList.toggle("mdi-account-outline", !online)
-        icon.classList.toggle("is-online", !!online)
-        icon.classList.toggle("is-offline", !online)
+        icon.classList.toggle("mdi-account-check", connected)
+        icon.classList.toggle("mdi-account-outline", !connected)
+        icon.classList.toggle("is-online", connected)
+        icon.classList.toggle("is-offline", !connected)
+        icon.setAttribute("title", statusLabel)
+        icon.setAttribute("aria-label", statusLabel)
       }
     })
+  }
+
+  if (Number(activePeer.value?.id || 0) === pid) {
+    activePeer.value = { ...activePeer.value, online: connected }
+  }
+}
+
+function paintPresenceOnContacts(map) {
+  const now = Date.now()
+
+  Object.entries(map || {}).forEach(([sid, rawOnline]) => {
+    const pid = Number(sid)
+    if (!Number.isFinite(pid) || pid === 0) return
+
+    const reportedOnline = !!rawOnline
+    if (reportedOnline) lastOnlineAtByPeer.set(pid, now)
+
+    const lastOnlineAt = Number(lastOnlineAtByPeer.get(pid) || 0)
+    const online = reportedOnline || (lastOnlineAt > 0 && now - lastOnlineAt <= PRESENCE_OFFLINE_GRACE_MS)
+
+    resolvedPresenceByPeer.set(pid, online)
+    applyPresenceToPeer(pid, online)
   })
+}
+
+function repaintKnownPresence() {
+  resolvedPresenceByPeer.forEach((online, pid) => applyPresenceToPeer(Number(pid), online))
 }
 
 /** Current Chamilo URL without scheme or domain, for AI contextual help. */
@@ -1891,7 +2015,10 @@ async function loadContacts() {
   try {
     const html = await post(API.contacts, { to: "user_id" }, false)
     contactsHtml.value = normalizeContactsHtmlForAiTutor(String(html || ""))
-    requestAnimationFrame(() => repaintAllContactBadges())
+    requestAnimationFrame(() => {
+      repaintAllContactBadges()
+      repaintKnownPresence()
+    })
   } finally {
     loadingContacts.value = false
   }
@@ -1953,8 +2080,8 @@ function onContactsClick(e) {
   }
 }
 
-function pickOnline() {
-  return undefined
+function pickOnline(pid) {
+  return resolvedPresenceByPeer.get(Number(pid)) ?? false
 }
 
 function aiQueryParamsIfNeeded(pid) {
@@ -2929,7 +3056,10 @@ async function toggleDock(v) {
 
       if (typeof r?.contacts_html === "string") {
         contactsHtml.value = normalizeContactsHtmlForAiTutor(String(r.contacts_html || ""))
-        requestAnimationFrame(() => repaintAllContactBadges())
+        requestAnimationFrame(() => {
+          repaintAllContactBadges()
+          repaintKnownPresence()
+        })
       }
       if (r?.presence) paintPresenceOnContacts(r.presence)
 
@@ -3169,10 +3299,40 @@ onBeforeUnmount(() => {
   opacity: 1;
 }
 
-.chd-chat__head-actions {
+.chd-row--system {
+  display: flex;
+  justify-content: center;
+}
+
+.chd-bubble--system {
+  max-width: 90%;
+  text-align: center;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.chd-chat__head {
   display: flex;
   align-items: center;
-  margin-inline-start: auto;
+  gap: 12px;
+}
+
+.chd-chat__head > .chd-peer {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  min-width: 0;
+}
+
+.chd-peer__meta--conversation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.chd-peer__meta--conversation > .chd-truncate {
+  min-width: 0;
 }
 
 .chd-btn--icon {
@@ -3182,6 +3342,24 @@ onBeforeUnmount(() => {
   width: 34px;
   height: 34px;
   padding: 0;
+}
+
+.chd-video-start {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  margin-inline-start: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.chd-video-start:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.chd-video-start .mdi {
+  font-size: 21px;
 }
 
 .chd-video-overlay {

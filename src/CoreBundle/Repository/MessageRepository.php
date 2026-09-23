@@ -227,8 +227,10 @@ class MessageRepository extends ServiceEntityRepository
 
     public function sendInvitationToFriend(User $userSender, User $userReceiver, string $messageTitle, string $messageContent): bool
     {
-        if ($this->existingInvitations($userSender, $userReceiver)) {
-            // Invitation already exists
+        if ($this->existingInvitations($userSender, $userReceiver)
+            || $this->friendshipOrRequestExists($userSender, $userReceiver)
+        ) {
+            // Invitation or friendship already exists in either direction.
             return false;
         }
 
@@ -254,13 +256,20 @@ class MessageRepository extends ServiceEntityRepository
 
     public function existingInvitations(User $userSender, User $userReceiver): bool
     {
-        $existingInvitations = $this->findSentInvitationsByUserAndStatus($userSender, $userReceiver, [
+        $statuses = [
             Message::MESSAGE_STATUS_INVITATION_PENDING,
             Message::MESSAGE_STATUS_INVITATION_ACCEPTED,
             Message::MESSAGE_STATUS_INVITATION_DENIED,
-        ]);
+        ];
 
-        return \count($existingInvitations) > 0;
+        $forward = $this->findSentInvitationsByUserAndStatus($userSender, $userReceiver, $statuses);
+        if (\count($forward) > 0) {
+            return true;
+        }
+
+        $reverse = $this->findSentInvitationsByUserAndStatus($userReceiver, $userSender, $statuses);
+
+        return \count($reverse) > 0;
     }
 
     public function findSentInvitationsByUserAndStatus(User $userSender, User $userReceiver, array $statuses): array
@@ -278,6 +287,30 @@ class MessageRepository extends ServiceEntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    private function friendshipOrRequestExists(User $user, User $friend): bool
+    {
+        $repository = $this->getEntityManager()->getRepository(UserRelUser::class);
+        $relationTypes = [
+            UserRelUser::USER_RELATION_TYPE_FRIEND,
+            UserRelUser::USER_RELATION_TYPE_GOODFRIEND,
+            UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST,
+        ];
+
+        foreach ([[$user, $friend], [$friend, $user]] as [$source, $target]) {
+            foreach ($relationTypes as $relationType) {
+                if (null !== $repository->findOneBy([
+                    'user' => $source,
+                    'friend' => $target,
+                    'relationType' => $relationType,
+                ])) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public function invitationAccepted(User $sender, User $receiver): bool
@@ -304,18 +337,8 @@ class MessageRepository extends ServiceEntityRepository
                 $invitation = $messageRelUser->getMessage();
                 $invitation->setStatus(Message::MESSAGE_STATUS_INVITATION_ACCEPTED);
 
-                $this->getEntityManager()->flush();
-
-                $friendship = $this->getEntityManager()->getRepository(UserRelUser::class)->findOneBy([
-                    'user' => $sender,
-                    'friend' => $receiver,
-                ]) ?: new UserRelUser();
-
-                $friendship->setUser($sender);
-                $friendship->setFriend($receiver);
-                $friendship->setRelationType(UserRelUser::USER_RELATION_TYPE_FRIEND);
-
-                $this->getEntityManager()->persist($friendship);
+                $this->ensureFriendship($sender, $receiver);
+                $this->ensureFriendship($receiver, $sender);
                 $this->getEntityManager()->flush();
 
                 return true;
@@ -323,6 +346,47 @@ class MessageRepository extends ServiceEntityRepository
         }
 
         return false;
+    }
+
+    private function ensureFriendship(User $user, User $friend): void
+    {
+        $repository = $this->getEntityManager()->getRepository(UserRelUser::class);
+
+        $existingFriendship = $repository->findOneBy([
+            'user' => $user,
+            'friend' => $friend,
+            'relationType' => UserRelUser::USER_RELATION_TYPE_FRIEND,
+        ]);
+        if ($existingFriendship instanceof UserRelUser) {
+            return;
+        }
+
+        $goodFriendship = $repository->findOneBy([
+            'user' => $user,
+            'friend' => $friend,
+            'relationType' => UserRelUser::USER_RELATION_TYPE_GOODFRIEND,
+        ]);
+        if ($goodFriendship instanceof UserRelUser) {
+            return;
+        }
+
+        $pendingRequest = $repository->findOneBy([
+            'user' => $user,
+            'friend' => $friend,
+            'relationType' => UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST,
+        ]);
+        if ($pendingRequest instanceof UserRelUser) {
+            $pendingRequest->setRelationType(UserRelUser::USER_RELATION_TYPE_FRIEND);
+
+            return;
+        }
+
+        $friendship = (new UserRelUser())
+            ->setUser($user)
+            ->setFriend($friend)
+            ->setRelationType(UserRelUser::USER_RELATION_TYPE_FRIEND)
+        ;
+        $this->getEntityManager()->persist($friendship);
     }
 
     public function invitationDenied(User $sender, User $receiver): bool

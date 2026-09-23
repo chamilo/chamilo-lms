@@ -95,7 +95,7 @@ import relUserService from "../../services/userRelUserService"
 import { useNotification } from "../../composables/notification"
 import { useI18n } from "vue-i18n"
 
-const emit = defineEmits(["accept-friend"])
+const emit = defineEmits(["accept-friend", "reject-friend", "relations-changed"])
 
 const { t } = useI18n()
 
@@ -107,7 +107,7 @@ const waitingRequests = ref([])
 
 const friendRequestFilter = {
   friend: securityStore.user.id,
-  relationType: 10, // friend request
+  relationType: 10,
 }
 const waitingFilter = {
   user: securityStore.user.id,
@@ -116,46 +116,55 @@ const waitingFilter = {
 
 const loading = ref(true)
 
-const loadRequests = () => {
-  loading.value = true
+const loadRequests = async (options = {}) => {
+  const silent = options?.silent === true
+  if (!silent) {
+    loading.value = true
+    friendRequests.value = []
+    waitingRequests.value = []
+  }
 
-  friendRequests.value = []
-  waitingRequests.value = []
+  try {
+    const [sentRequestsResponse, waitingRequestsResponse] = await Promise.all([
+      userRelUserService.findAll({ params: friendRequestFilter }),
+      userRelUserService.findAll({ params: waitingFilter }),
+    ])
+    const [sentRequestsJson, waitingRequestsJson] = await Promise.all([
+      sentRequestsResponse.json(),
+      waitingRequestsResponse.json(),
+    ])
 
-  Promise.all([
-    userRelUserService.findAll({ params: friendRequestFilter }),
-    userRelUserService.findAll({ params: waitingFilter }),
-  ])
-    .then(([sentRequestsResponse, waitingRequestsRespose]) =>
-      Promise.all([sentRequestsResponse.json(), waitingRequestsRespose.json()]),
-    )
-    .then(([sentRequestsJson, waitingRequestsJson]) => {
-      friendRequests.value = sentRequestsJson["hydra:member"]
-      waitingRequests.value = waitingRequestsJson["hydra:member"]
-    })
-    .catch((e) => notification.showErrorNotification(e))
-    .finally(() => (loading.value = false))
+    friendRequests.value = sentRequestsJson["hydra:member"]
+    waitingRequests.value = waitingRequestsJson["hydra:member"]
+  } catch (e) {
+    notification.showErrorNotification(e)
+  } finally {
+    if (!silent) {
+      loading.value = false
+    }
+  }
 }
 
-function acceptFriendRequest(request) {
-  relUserService
-    .update(request["@id"], { relationType: 3 })
-    .then(() => {
-      emit("accept-friend", request)
-      notification.showSuccessNotification(t("Friend added successfully"))
-      loadRequests()
-    })
-    .catch((e) => notification.showErrorNotification(e))
+async function acceptFriendRequest(request) {
+  try {
+    await relUserService.update(request["@id"], { relationType: 3 })
+    emit("accept-friend", request)
+    emit("relations-changed")
+    notification.showSuccessNotification(t("Friend added successfully"))
+  } catch (e) {
+    notification.showErrorNotification(e)
+  }
 }
 
-function rejectFriendRequest(request) {
-  relUserService
-    .remove(request["@id"])
-    .then(() => {
-      notification.showSuccessNotification(t("Friend request rejected"))
-      loadRequests()
-    })
-    .catch((e) => notification.showErrorNotification(e))
+async function rejectFriendRequest(request) {
+  try {
+    await relUserService.remove(request["@id"])
+    emit("reject-friend", request)
+    emit("relations-changed")
+    notification.showSuccessNotification(t("Friend request rejected"))
+  } catch (e) {
+    notification.showErrorNotification(e)
+  }
 }
 
 defineExpose({ loadRequests })

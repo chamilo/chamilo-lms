@@ -126,32 +126,32 @@
                     aria-hidden="true"
                     class="mdi mdi-account chd-avatar chd-avatar--fallback"
                   />
-                  <div class="chd-peer__meta">
+                  <div class="chd-peer__meta chd-peer__meta--conversation">
                     <strong class="chd-truncate">{{ activePeer.name }}</strong>
                     <span
+                      :aria-label="activePeer.online ? t('Connected') : t('Not connected')"
                       :class="activePeer.online ? 'on' : 'off'"
+                      :title="activePeer.online ? t('Connected') : t('Not connected')"
                       class="chd-presence"
                     />
+                    <button
+                      v-if="canStartVideoCall"
+                      :aria-label="t('Start video call')"
+                      :title="t('Start video call')"
+                      class="chd-btn chd-btn--ghost chd-btn--icon chd-video-start"
+                      type="button"
+                      @click="startVideoCall"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="mdi mdi-video"
+                      />
+                    </button>
                   </div>
                 </template>
                 <template v-else>
                   <strong>{{ t("Select a contact") }}</strong>
                 </template>
-              </div>
-              <div class="chd-chat__head-actions">
-                <button
-                  v-if="canStartVideoCall"
-                  :aria-label="t('Start video call')"
-                  :title="t('Start video call')"
-                  class="chd-btn chd-btn--ghost chd-btn--icon"
-                  type="button"
-                  @click="startVideoCall"
-                >
-                  <i
-                    aria-hidden="true"
-                    class="mdi mdi-video-outline"
-                  />
-                </button>
               </div>
             </div>
 
@@ -168,7 +168,7 @@
                   :class="bubbleClass(msg)"
                 >
                   <div
-                    :class="{ 'is-pending': msg.pending }"
+                    :class="{ 'is-pending': msg.pending, 'chd-bubble--system': msg.system }"
                     class="chd-bubble"
                   >
                     <div
@@ -336,7 +336,7 @@
               aria-hidden="true"
               class="mdi mdi-alert-circle-outline chd-video-incoming__icon"
             />
-            <strong>{{ t("Video call could not be started") }}</strong>
+            <strong>{{ t("Connection failed") }}</strong>
             <span class="chd-text--muted">{{ videoCallError }}</span>
           </div>
 
@@ -736,6 +736,8 @@ let contactsTimer = null
 
 const VIDEO_SIGNAL_POLL_MS = 1000
 const VIDEO_CALL_TIMEOUT_MS = 30000
+const VIDEO_CONNECTION_TIMEOUT_MS = 20000
+const PRESENCE_OFFLINE_GRACE_MS = 10000
 const VIDEO_ICE_SERVERS = [
   { urls: "stun:stun.l.google.com:19302" },
 ]
@@ -757,6 +759,12 @@ let peerConnection = null
 let videoSignalTimer = null
 let videoSignalPollRunning = false
 let videoCallTimeout = null
+let videoSystemMessageSequence = 0
+let videoWasConnected = false
+let videoSignalPollErrorShown = false
+
+const lastOnlineAtByPeer = new Map()
+const resolvedPresenceByPeer = new Map()
 
 const videoChatSupported = computed(() => {
   return (
@@ -886,6 +894,8 @@ function formatTs(ts) {
   }
 }
 function bubbleClass(msg) {
+  if (msg?.system) return "chd-row chd-row--system"
+
   const mine = Number(msg.from_user_info?.id) === me.id || Number(msg?.f) === me.id
   return mine ? "chd-row chd-row--me" : "chd-row chd-row--peer"
 }
@@ -1155,6 +1165,63 @@ async function post(url, params, expectJson = true) {
   return r.data
 }
 
+function addVideoSystemMessage(peerId, text) {
+  const pid = Number(peerId || 0)
+  const message = String(text || "").trim()
+  if (pid <= 0 || !message) return
+
+  const now = Math.floor(Date.now() / 1000)
+  const current = messagesByPeer.get(pid) || []
+  const last = current[current.length - 1]
+
+  if (last?.system && last.message === message && Math.abs(Number(last.date || 0) - now) <= 2) {
+    return
+  }
+
+  videoSystemMessageSequence += 1
+  const event = {
+    id: -(Date.now() * 1000 + videoSystemMessageSequence),
+    message,
+    date: now,
+    recd: 2,
+    system: true,
+  }
+
+  messagesByPeer.set(pid, [...current, event].sort(byChronoId))
+
+  if (Number(activePeer.value?.id || 0) === pid) {
+    requestAnimationFrame(() => {
+      const el = scrollBox.value
+      if (el) el.scrollTop = el.scrollHeight
+    })
+  }
+}
+
+function remoteVideoEndMessage(type, reason) {
+  if (type === "reject") {
+    if (reason === "busy") return t("Your contact is busy.")
+    if (reason === "timeout") return t("Your contact did not answer the call.")
+    if (reason === "media_error") return t("Your contact could not access the camera or microphone.")
+    if (reason === "negotiation_error") return t("Your contact could not prepare the video call.")
+    return t("Your contact refused the call.")
+  }
+
+  if (type === "cancel") {
+    return reason === "timeout" ? t("The call timed out.") : t("Your contact cancelled the call.")
+  }
+
+  if (type === "hangup") {
+    if (reason === "signal_lost") return t("The video connection was lost.")
+    if (reason === "connection_failed" || reason === "connection_timeout") {
+      return t("Your contact could not establish the video connection.")
+    }
+    if (reason === "negotiation_error") return t("Your contact could not complete the video call setup.")
+    return t("Your contact hung up.")
+  }
+
+  return ""
+}
+
 function createVideoCallId() {
   if (window.crypto?.randomUUID) {
     return window.crypto.randomUUID()
@@ -1178,12 +1245,25 @@ watch([remoteVideoElement, remoteStream], ([element, stream]) => setVideoElement
 async function sendVideoSignal(to, type, callId, payload = {}) {
   if (!videoChatEnabled.value || Number(to) <= 0 || !callId) return null
 
-  return post(API.video_signal, {
+  const response = await post(API.video_signal, {
     to: Number(to),
     type,
     call_id: callId,
     payload: JSON.stringify(payload || {}),
   })
+
+  if (response?.ok !== true) {
+    const error = new Error(String(response?.error || "video_signal_not_sent"))
+    error.name = "VideoSignalError"
+    error.signalType = type
+    throw error
+  }
+
+  if (type !== "ice") {
+    console.info("[VideoChat] Signal sent", { type, callId, peerId: Number(to) })
+  }
+
+  return response
 }
 
 function clearVideoCallTimeout() {
@@ -1205,6 +1285,9 @@ function stopLocalVideoStream() {
 function closePeerConnection() {
   if (peerConnection) {
     peerConnection.onicecandidate = null
+    peerConnection.oniceconnectionstatechange = null
+    peerConnection.onicegatheringstatechange = null
+    peerConnection.onsignalingstatechange = null
     peerConnection.ontrack = null
     peerConnection.onconnectionstatechange = null
     peerConnection.close()
@@ -1220,6 +1303,7 @@ function resetVideoCall() {
   closePeerConnection()
   stopLocalVideoStream()
   if (previousCallId) earlyIceByCall.delete(previousCallId)
+  videoWasConnected = false
   videoCallState.value = "idle"
   videoCallPeer.value = null
   videoCallId.value = ""
@@ -1231,8 +1315,126 @@ function failVideoCall(message) {
   clearVideoCallTimeout()
   closePeerConnection()
   stopLocalVideoStream()
+  videoWasConnected = false
   videoCallError.value = message || t("Video call could not be started")
   videoCallState.value = "error"
+}
+
+function videoMediaErrorMessage(error) {
+  const name = String(error?.name || "")
+
+  if (["NotAllowedError", "SecurityError", "PermissionDeniedError"].includes(name)) {
+    return t("Camera or microphone permission was denied.")
+  }
+
+  if (["NotFoundError", "DevicesNotFoundError"].includes(name)) {
+    return t("No camera or microphone was found.")
+  }
+
+  if (["NotReadableError", "TrackStartError", "AbortError"].includes(name)) {
+    return t("Camera or microphone is already in use or unavailable.")
+  }
+
+  if (["OverconstrainedError", "ConstraintNotSatisfiedError"].includes(name)) {
+    return t("The camera or microphone does not support the required settings.")
+  }
+
+  return t("Camera or microphone access could not be obtained.")
+}
+
+function videoFailureMessage(stage, error) {
+  if (stage === "local-media") return videoMediaErrorMessage(error)
+  if (["peer-connection", "create-offer", "set-local-offer"].includes(stage)) {
+    return t("The video call could not be prepared.")
+  }
+  if (stage === "send-offer") return t("The video call request could not be sent.")
+  if (stage === "set-remote-offer") return t("The incoming video call could not be processed.")
+  if (["create-answer", "set-local-answer"].includes(stage)) {
+    return t("The video call answer could not be prepared.")
+  }
+  if (stage === "send-answer") return t("The video call answer could not be sent.")
+  if (stage === "set-remote-answer") return t("The video call answer could not be processed.")
+
+  return t("The video connection failed")
+}
+
+function videoTechnicalError(error) {
+  return {
+    name: String(error?.name || "Error"),
+    message: String(error?.message || error || "Unknown error"),
+    code: error?.code ?? null,
+    httpStatus: error?.response?.status ?? null,
+    serverError: error?.response?.data?.error ?? null,
+  }
+}
+
+function videoPeerSnapshot(pc = peerConnection) {
+  if (!pc) return {}
+
+  return {
+    signalingState: pc.signalingState,
+    iceGatheringState: pc.iceGatheringState,
+    iceConnectionState: pc.iceConnectionState,
+    connectionState: pc.connectionState,
+  }
+}
+
+function logVideoFailure(stage, error, details = {}) {
+  console.error(`[VideoChat] ${stage} failed`, {
+    callId: videoCallId.value,
+    peerId: Number(videoCallPeer.value?.id || 0),
+    ...videoPeerSnapshot(),
+    ...videoTechnicalError(error),
+    ...details,
+  })
+}
+
+function videoCandidateType(candidate) {
+  const value = String(candidate?.candidate || "")
+  const match = value.match(/\btyp\s+(host|srflx|prflx|relay)\b/i)
+
+  return match?.[1]?.toLowerCase() || "unknown"
+}
+
+function startVideoConnectionTimeout(peerId, callId) {
+  clearVideoCallTimeout()
+  videoCallTimeout = window.setTimeout(() => {
+    const activePeerId = Number(videoCallPeer.value?.id || 0)
+    if (videoCallId.value !== callId || activePeerId !== peerId || videoCallState.value !== "connecting") return
+
+    const message = t("The video connection could not be established.")
+    console.error("[VideoChat] Connection timed out", {
+      callId,
+      peerId,
+      ...videoPeerSnapshot(),
+    })
+    sendVideoSignal(peerId, "hangup", callId, { reason: "connection_timeout" }).catch((error) => {
+      logVideoFailure("send-connection-timeout", error)
+    })
+    addVideoSystemMessage(peerId, message)
+    failVideoCall(message)
+  }, VIDEO_CONNECTION_TIMEOUT_MS)
+}
+
+function failActivePeerConnection(pc, peerId, callId) {
+  if (pc !== peerConnection || videoCallId.value !== callId || videoCallState.value === "error") return
+
+  const reason = videoWasConnected ? "signal_lost" : "connection_failed"
+  const message = videoWasConnected
+    ? t("The video connection was lost.")
+    : t("The video connection could not be established.")
+
+  console.error("[VideoChat] Peer connection failed", {
+    callId,
+    peerId,
+    reason,
+    ...videoPeerSnapshot(pc),
+  })
+  sendVideoSignal(peerId, "hangup", callId, { reason }).catch((error) => {
+    logVideoFailure("send-peer-failure", error)
+  })
+  addVideoSystemMessage(peerId, message)
+  failVideoCall(message)
 }
 
 async function requestLocalVideoStream() {
@@ -1245,6 +1447,10 @@ async function requestLocalVideoStream() {
   localStream.value = stream
   microphoneEnabled.value = stream.getAudioTracks().some((track) => track.enabled)
   cameraEnabled.value = stream.getVideoTracks().some((track) => track.enabled)
+  console.info("[VideoChat] Local media ready", {
+    audioTracks: stream.getAudioTracks().length,
+    videoTracks: stream.getVideoTracks().length,
+  })
 
   return stream
 }
@@ -1256,8 +1462,11 @@ async function flushPendingRemoteIce() {
     const candidate = pendingRemoteIce.shift()
     try {
       await peerConnection.addIceCandidate(candidate)
-    } catch {
-      // A stale ICE candidate must not terminate the whole call.
+      console.info("[VideoChat] Remote ICE candidate added", { type: videoCandidateType(candidate) })
+    } catch (error) {
+      // A stale ICE candidate must not terminate the whole call, but keep the
+      // technical reason visible so failed calls can be diagnosed.
+      logVideoFailure("add-remote-ice", error, { candidateType: videoCandidateType(candidate) })
     }
   }
 }
@@ -1290,6 +1499,7 @@ function createVideoPeerConnection(peerId, callId) {
 
   const pc = new RTCPeerConnection({ iceServers: VIDEO_ICE_SERVERS })
   peerConnection = pc
+  console.info("[VideoChat] Peer connection created", { callId, peerId })
 
   localStream.value?.getTracks().forEach((track) => {
     pc.addTrack(track, localStream.value)
@@ -1297,6 +1507,11 @@ function createVideoPeerConnection(peerId, callId) {
 
   pc.ontrack = (event) => {
     const [stream] = event.streams || []
+    console.info("[VideoChat] Remote media track received", {
+      callId,
+      peerId,
+      kind: event.track?.kind || "unknown",
+    })
     if (stream) {
       remoteStream.value = stream
       return
@@ -1308,22 +1523,50 @@ function createVideoPeerConnection(peerId, callId) {
   }
 
   pc.onicecandidate = (event) => {
-    if (!event.candidate) return
+    if (!event.candidate) {
+      console.info("[VideoChat] ICE gathering completed", { callId, peerId, ...videoPeerSnapshot(pc) })
+      return
+    }
+
     const candidate = event.candidate.toJSON ? event.candidate.toJSON() : event.candidate
-    sendVideoSignal(peerId, "ice", callId, candidate).catch(() => {})
+    const candidateType = videoCandidateType(candidate)
+    console.info("[VideoChat] Local ICE candidate", { callId, peerId, type: candidateType })
+    sendVideoSignal(peerId, "ice", callId, candidate).catch((error) => {
+      logVideoFailure("send-local-ice", error, { candidateType })
+    })
+  }
+
+  pc.onicegatheringstatechange = () => {
+    if (pc !== peerConnection) return
+    console.info("[VideoChat] ICE gathering state", { callId, peerId, ...videoPeerSnapshot(pc) })
+  }
+
+  pc.onsignalingstatechange = () => {
+    if (pc !== peerConnection) return
+    console.info("[VideoChat] Signaling state", { callId, peerId, ...videoPeerSnapshot(pc) })
+  }
+
+  pc.oniceconnectionstatechange = () => {
+    if (pc !== peerConnection) return
+    console.info("[VideoChat] ICE connection state", { callId, peerId, ...videoPeerSnapshot(pc) })
+    if (pc.iceConnectionState === "failed") {
+      failActivePeerConnection(pc, peerId, callId)
+    }
   }
 
   pc.onconnectionstatechange = () => {
     if (pc !== peerConnection) return
+    console.info("[VideoChat] Connection state", { callId, peerId, ...videoPeerSnapshot(pc) })
 
     if (pc.connectionState === "connected") {
       clearVideoCallTimeout()
+      videoWasConnected = true
       videoCallState.value = "connected"
       return
     }
 
     if (pc.connectionState === "failed") {
-      failVideoCall(t("The video connection failed"))
+      failActivePeerConnection(pc, peerId, callId)
     }
   }
 
@@ -1342,25 +1585,39 @@ async function startVideoCall() {
   }
   videoCallId.value = createVideoCallId()
   videoCallError.value = ""
+  videoWasConnected = false
   videoCallState.value = "outgoing"
 
+  let stage = "local-media"
   try {
     await requestLocalVideoStream()
     const callId = videoCallId.value
+
+    stage = "peer-connection"
     const pc = createVideoPeerConnection(peerId, callId)
+
+    stage = "create-offer"
     const offer = await pc.createOffer()
+
+    stage = "set-local-offer"
     await pc.setLocalDescription(offer)
-    const sent = await sendVideoSignal(peerId, "offer", callId, { sdp: offer.sdp || "" })
-    if (sent?.ok !== true) throw new Error("video_signal_not_sent")
+
+    stage = "send-offer"
+    await sendVideoSignal(peerId, "offer", callId, { sdp: pc.localDescription?.sdp || offer.sdp || "" })
 
     videoCallTimeout = window.setTimeout(() => {
       if (videoCallState.value !== "outgoing") return
-      sendVideoSignal(peerId, "cancel", callId, { reason: "timeout" }).catch(() => {})
+      sendVideoSignal(peerId, "cancel", callId, { reason: "timeout" }).catch((error) => {
+        logVideoFailure("send-call-timeout", error)
+      })
+      addVideoSystemMessage(peerId, t("No answer was received."))
       resetVideoCall()
     }, VIDEO_CALL_TIMEOUT_MS)
   } catch (error) {
-    console.error("[VideoChat] Could not start call", error)
-    failVideoCall(t("Camera or microphone access could not be obtained"))
+    const message = videoFailureMessage(stage, error)
+    logVideoFailure(stage, error)
+    addVideoSystemMessage(peerId, message)
+    failVideoCall(message)
   }
 }
 
@@ -1371,22 +1628,39 @@ async function acceptVideoCall() {
   if (videoCallState.value !== "incoming" || peerId <= 0 || !callId || !offerSdp) return
 
   clearVideoCallTimeout()
+  videoWasConnected = false
   videoCallState.value = "connecting"
 
+  let stage = "local-media"
   try {
     await requestLocalVideoStream()
+
+    stage = "peer-connection"
     const pc = createVideoPeerConnection(peerId, callId)
     takeEarlyIce(callId)
+
+    stage = "set-remote-offer"
     await pc.setRemoteDescription({ type: "offer", sdp: offerSdp })
     await flushPendingRemoteIce()
+
+    stage = "create-answer"
     const answer = await pc.createAnswer()
+
+    stage = "set-local-answer"
     await pc.setLocalDescription(answer)
-    const sent = await sendVideoSignal(peerId, "answer", callId, { sdp: answer.sdp || "" })
-    if (sent?.ok !== true) throw new Error("video_signal_not_sent")
+
+    stage = "send-answer"
+    await sendVideoSignal(peerId, "answer", callId, { sdp: pc.localDescription?.sdp || answer.sdp || "" })
+    startVideoConnectionTimeout(peerId, callId)
   } catch (error) {
-    console.error("[VideoChat] Could not accept call", error)
-    await sendVideoSignal(peerId, "reject", callId, { reason: "media_error" }).catch(() => {})
-    failVideoCall(t("Camera or microphone access could not be obtained"))
+    const message = videoFailureMessage(stage, error)
+    const reason = stage === "local-media" ? "media_error" : "negotiation_error"
+    logVideoFailure(stage, error)
+    await sendVideoSignal(peerId, "reject", callId, { reason }).catch((signalError) => {
+      logVideoFailure("send-reject-after-accept-failure", signalError)
+    })
+    addVideoSystemMessage(peerId, message)
+    failVideoCall(message)
   }
 }
 
@@ -1395,6 +1669,7 @@ async function rejectVideoCall() {
   const callId = videoCallId.value
   if (peerId > 0 && callId) {
     await sendVideoSignal(peerId, "reject", callId, { reason: "declined" }).catch(() => {})
+    addVideoSystemMessage(peerId, t("You refused the call."))
   }
   resetVideoCall()
 }
@@ -1406,6 +1681,10 @@ async function hangUpVideoCall() {
 
   if (peerId > 0 && callId) {
     await sendVideoSignal(peerId, signalType, callId).catch(() => {})
+    addVideoSystemMessage(
+      peerId,
+      signalType === "cancel" ? t("You cancelled the call.") : t("You hung up."),
+    )
   }
   resetVideoCall()
 }
@@ -1434,16 +1713,25 @@ async function handleVideoSignal(signal) {
   const callId = String(signal?.call_id || "")
   if (from <= 0 || !callId) return
 
+  if (type !== "ice") {
+    console.info("[VideoChat] Signal received", { type, callId, peerId: from })
+  }
+
   if (type === "offer") {
     if (videoCallState.value !== "idle") {
       if (videoCallId.value !== callId || Number(videoCallPeer.value?.id || 0) !== from) {
-        await sendVideoSignal(from, "reject", callId, { reason: "busy" }).catch(() => {})
+        await sendVideoSignal(from, "reject", callId, { reason: "busy" }).catch((error) => {
+          logVideoFailure("send-busy-reject", error)
+        })
       }
       return
     }
 
     const sdp = String(signal?.payload?.sdp || "")
-    if (!sdp) return
+    if (!sdp) {
+      console.error("[VideoChat] Incoming offer has no SDP", { callId, peerId: from })
+      return
+    }
 
     videoCallId.value = callId
     videoCallPeer.value = {
@@ -1453,11 +1741,15 @@ async function handleVideoSignal(signal) {
     }
     incomingVideoOffer.value = sdp
     videoCallError.value = ""
+    videoWasConnected = false
     videoCallState.value = "incoming"
     clearVideoCallTimeout()
     videoCallTimeout = window.setTimeout(() => {
       if (videoCallState.value !== "incoming" || videoCallId.value !== callId) return
-      sendVideoSignal(from, "reject", callId, { reason: "timeout" }).catch(() => {})
+      sendVideoSignal(from, "reject", callId, { reason: "timeout" }).catch((error) => {
+        logVideoFailure("send-incoming-timeout", error)
+      })
+      addVideoSystemMessage(from, t("You missed the call."))
       resetVideoCall()
     }, VIDEO_CALL_TIMEOUT_MS)
     return
@@ -1469,6 +1761,9 @@ async function handleVideoSignal(signal) {
   if (type === "ice") {
     const candidate = signal?.payload || {}
     if (!candidate?.candidate) return
+    const candidateType = videoCandidateType(candidate)
+    console.info("[VideoChat] ICE signal received", { callId, peerId: from, type: candidateType })
+
     if (!isCurrentCall) {
       bufferEarlyIce(signal)
       return
@@ -1477,8 +1772,9 @@ async function handleVideoSignal(signal) {
     if (peerConnection?.remoteDescription) {
       try {
         await peerConnection.addIceCandidate(candidate)
-      } catch {
-        // Ignore a single invalid/stale candidate.
+        console.info("[VideoChat] Remote ICE candidate added", { callId, peerId: from, type: candidateType })
+      } catch (error) {
+        logVideoFailure("add-remote-ice", error, { candidateType })
       }
     } else {
       pendingRemoteIce.push(candidate)
@@ -1486,25 +1782,50 @@ async function handleVideoSignal(signal) {
     return
   }
 
-  if (!isCurrentCall) return
+  if (!isCurrentCall) {
+    console.warn("[VideoChat] Ignoring signal for a different call", {
+      type,
+      callId,
+      peerId: from,
+      activeCallId: videoCallId.value,
+      activePeerId: currentPeerId,
+    })
+    return
+  }
 
   if (type === "answer" && videoCallState.value === "outgoing" && peerConnection) {
     const sdp = String(signal?.payload?.sdp || "")
-    if (!sdp) return
+    if (!sdp) {
+      const message = t("The video call answer could not be processed.")
+      console.error("[VideoChat] Incoming answer has no SDP", { callId, peerId: from })
+      sendVideoSignal(from, "hangup", callId, { reason: "negotiation_error" }).catch(() => {})
+      addVideoSystemMessage(from, message)
+      failVideoCall(message)
+      return
+    }
+
     clearVideoCallTimeout()
     videoCallState.value = "connecting"
     try {
       await peerConnection.setRemoteDescription({ type: "answer", sdp })
       takeEarlyIce(callId)
       await flushPendingRemoteIce()
+      startVideoConnectionTimeout(from, callId)
     } catch (error) {
-      console.error("[VideoChat] Could not apply remote answer", error)
-      failVideoCall(t("The video connection failed"))
+      const message = videoFailureMessage("set-remote-answer", error)
+      logVideoFailure("set-remote-answer", error)
+      await sendVideoSignal(from, "hangup", callId, { reason: "negotiation_error" }).catch((signalError) => {
+        logVideoFailure("send-hangup-after-answer-failure", signalError)
+      })
+      addVideoSystemMessage(from, message)
+      failVideoCall(message)
     }
     return
   }
 
   if (["reject", "cancel", "hangup"].includes(type)) {
+    const reason = String(signal?.payload?.reason || "")
+    addVideoSystemMessage(from, remoteVideoEndMessage(type, reason))
     resetVideoCall()
   }
 }
@@ -1514,12 +1835,26 @@ async function pollVideoSignals() {
   videoSignalPollRunning = true
   try {
     const response = await getJSON(API.video_signals)
+    if (response?.error) {
+      if (!videoSignalPollErrorShown) {
+        console.error("[VideoChat] Signaling transport returned an error", { error: response.error })
+      }
+      videoSignalPollErrorShown = true
+      return
+    }
+
+    videoSignalPollErrorShown = false
     const signals = Array.isArray(response?.signals) ? response.signals : []
     for (const signal of signals) {
       await handleVideoSignal(signal)
     }
-  } catch {
-    // Video signaling is optional: keep normal text chat working if polling fails.
+  } catch (error) {
+    // Video signaling is optional: keep normal text chat working if polling fails,
+    // but expose the first transport error so a failed call can be diagnosed.
+    if (!videoSignalPollErrorShown) {
+      console.error("[VideoChat] Could not poll video signals", videoTechnicalError(error))
+    }
+    videoSignalPollErrorShown = true
   } finally {
     videoSignalPollRunning = false
   }
@@ -1808,11 +2143,12 @@ function collectVisibleContactIds() {
   return Array.from(ids)
 }
 
-function paintPresenceOnContacts(map) {
+function applyPresenceToPeer(pid, online) {
   const root = document.querySelector(".chd .chd-contacts .chd-contacts-html")
-  if (!root) return
-  Object.entries(map || {}).forEach(([sid, online]) => {
-    const pid = Number(sid)
+  const connected = !!online
+  const statusLabel = connected ? t("Connected") : t("Not connected")
+
+  if (root) {
     const rows = findContactNodesByPeerId(root, pid)
     rows.forEach((row) => {
       const icon =
@@ -1820,13 +2156,41 @@ function paintPresenceOnContacts(map) {
         row.querySelector("i.mdi-account-outline") ||
         row.querySelector('i[class*="mdi-account"]')
       if (icon) {
-        icon.classList.toggle("mdi-account-check", !!online)
-        icon.classList.toggle("mdi-account-outline", !online)
-        icon.classList.toggle("is-online", !!online)
-        icon.classList.toggle("is-offline", !online)
+        icon.classList.toggle("mdi-account-check", connected)
+        icon.classList.toggle("mdi-account-outline", !connected)
+        icon.classList.toggle("is-online", connected)
+        icon.classList.toggle("is-offline", !connected)
+        icon.setAttribute("title", statusLabel)
+        icon.setAttribute("aria-label", statusLabel)
       }
     })
+  }
+
+  if (Number(activePeer.value?.id || 0) === pid) {
+    activePeer.value = { ...activePeer.value, online: connected }
+  }
+}
+
+function paintPresenceOnContacts(map) {
+  const now = Date.now()
+
+  Object.entries(map || {}).forEach(([sid, rawOnline]) => {
+    const pid = Number(sid)
+    if (!Number.isFinite(pid) || pid === 0) return
+
+    const reportedOnline = !!rawOnline
+    if (reportedOnline) lastOnlineAtByPeer.set(pid, now)
+
+    const lastOnlineAt = Number(lastOnlineAtByPeer.get(pid) || 0)
+    const online = reportedOnline || (lastOnlineAt > 0 && now - lastOnlineAt <= PRESENCE_OFFLINE_GRACE_MS)
+
+    resolvedPresenceByPeer.set(pid, online)
+    applyPresenceToPeer(pid, online)
   })
+}
+
+function repaintKnownPresence() {
+  resolvedPresenceByPeer.forEach((online, pid) => applyPresenceToPeer(Number(pid), online))
 }
 
 /** Current Chamilo URL without scheme or domain, for AI contextual help. */
@@ -1891,7 +2255,10 @@ async function loadContacts() {
   try {
     const html = await post(API.contacts, { to: "user_id" }, false)
     contactsHtml.value = normalizeContactsHtmlForAiTutor(String(html || ""))
-    requestAnimationFrame(() => repaintAllContactBadges())
+    requestAnimationFrame(() => {
+      repaintAllContactBadges()
+      repaintKnownPresence()
+    })
   } finally {
     loadingContacts.value = false
   }
@@ -1953,8 +2320,8 @@ function onContactsClick(e) {
   }
 }
 
-function pickOnline() {
-  return undefined
+function pickOnline(pid) {
+  return resolvedPresenceByPeer.get(Number(pid)) ?? false
 }
 
 function aiQueryParamsIfNeeded(pid) {
@@ -2929,7 +3296,10 @@ async function toggleDock(v) {
 
       if (typeof r?.contacts_html === "string") {
         contactsHtml.value = normalizeContactsHtmlForAiTutor(String(r.contacts_html || ""))
-        requestAnimationFrame(() => repaintAllContactBadges())
+        requestAnimationFrame(() => {
+          repaintAllContactBadges()
+          repaintKnownPresence()
+        })
       }
       if (r?.presence) paintPresenceOnContacts(r.presence)
 
@@ -3169,10 +3539,40 @@ onBeforeUnmount(() => {
   opacity: 1;
 }
 
-.chd-chat__head-actions {
+.chd-row--system {
+  display: flex;
+  justify-content: center;
+}
+
+.chd-bubble--system {
+  max-width: 90%;
+  text-align: center;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.chd-chat__head {
   display: flex;
   align-items: center;
-  margin-inline-start: auto;
+  gap: 12px;
+}
+
+.chd-chat__head > .chd-peer {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  min-width: 0;
+}
+
+.chd-peer__meta--conversation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.chd-peer__meta--conversation > .chd-truncate {
+  min-width: 0;
 }
 
 .chd-btn--icon {
@@ -3182,6 +3582,24 @@ onBeforeUnmount(() => {
   width: 34px;
   height: 34px;
   padding: 0;
+}
+
+.chd-video-start {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  margin-inline-start: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.chd-video-start:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.chd-video-start .mdi {
+  font-size: 21px;
 }
 
 .chd-video-overlay {

@@ -1206,14 +1206,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 $qb->expr()->like('u.firstname', ':likeTag'),
                 $qb->expr()->like('u.lastname', ':likeTag'),
                 $qb->expr()->like('u.username', ':likeTag'),
-                $qb->expr()->like(
-                    $qb->expr()->concat('u.firstname', $qb->expr()->literal(' '), 'u.lastname'),
-                    ':likeTag'
-                ),
-                $qb->expr()->like(
-                    $qb->expr()->concat('u.lastname', $qb->expr()->literal(' '), 'u.firstname'),
-                    ':likeTag'
-                )
+                "CONCAT(u.firstname, ' ', u.lastname) LIKE :likeTag",
+                "CONCAT(u.lastname, ' ', u.firstname) LIKE :likeTag"
             )
         )
             ->setParameter('tag', $tag.'%')

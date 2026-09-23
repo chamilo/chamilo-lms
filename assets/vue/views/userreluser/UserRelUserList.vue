@@ -18,7 +18,7 @@
       :label="t('Refresh')"
       icon="refresh"
       type="black"
-      @click="reloadHandler"
+      @click="refreshHandler"
     />
   </BaseToolbar>
 
@@ -124,6 +124,8 @@ import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 
+const emit = defineEmits(["refresh-requests", "relations-changed"])
+
 const { user, isCurrentUser } = useSocialInfo()
 const { t } = useI18n()
 const items = ref([])
@@ -132,8 +134,6 @@ const notification = useNotification()
 const { relativeDatetime } = useFormatDate()
 const router = useRouter()
 const { requireConfirmation } = useConfirmation()
-
-const requestList = ref()
 
 function buildUserIri() {
   if (user.value?.["@id"]) {
@@ -185,7 +185,7 @@ function normalizeFriendRelation(rel, meIri) {
   return null
 }
 
-function reloadHandler() {
+async function reloadHandler(options = {}) {
   if (!user.value) {
     console.log("User not defined yet")
     return
@@ -197,10 +197,13 @@ function reloadHandler() {
     return
   }
 
-  loadingFriends.value = true
-  items.value = []
+  const silent = options?.silent === true
+  if (!silent) {
+    loadingFriends.value = true
+    items.value = []
+  }
 
-  Promise.all([
+  return Promise.all([
     userRelUserService.findAll({ params: { user: meIri, relationType: 3 } }),
     userRelUserService.findAll({ params: { friend: meIri, relationType: 3 } }),
   ])
@@ -232,11 +235,14 @@ function reloadHandler() {
       notification.showErrorNotification(e)
     })
     .finally(() => {
-      loadingFriends.value = false
-      if (requestList.value) {
-        requestList.value.loadRequests()
+      if (!silent) {
+        loadingFriends.value = false
       }
     })
+}
+
+function refreshHandler() {
+  emit("relations-changed")
 }
 
 watch(user, (newValue) => {
@@ -260,7 +266,7 @@ function onClickDeleteFriend(friendship) {
     message: t("Are you sure to delete the friendship?"),
     accept: async () => {
       await userRelUserService.del(friendship)
-      reloadHandler()
+      emit("relations-changed")
     },
   })
 }

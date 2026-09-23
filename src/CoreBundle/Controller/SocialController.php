@@ -888,7 +888,8 @@ class SocialController extends AbstractController
         UserRepository $userRepository,
         UsergroupRepository $usergroupRepository,
         TrackEOnlineRepository $trackOnlineRepository,
-        MessageRepository $messageRepository
+        MessageRepository $messageRepository,
+        SettingsManager $settingsManager
     ): JsonResponse {
         $query = $request->query->get('query', '');
         $type = $request->query->get('type', 'user');
@@ -901,18 +902,41 @@ class SocialController extends AbstractController
             $results = $userRepository->searchUsersByTags($query, $user->getId(), 0, $from, $numberOfItems);
             foreach ($results as $item) {
                 $isUserOnline = $trackOnlineRepository->isUserOnline($item['id']);
-                $relation = $userRepository->getUserRelationWithType($user->getId(), $item['id']);
+                $relation = $userRepository->getUserRelationWithType($user->getId(), $item['id'])
+                    ?? $userRepository->getUserRelationWithType($item['id'], $user->getId());
                 $userReceiver = $userRepository->find($item['id']);
+                if (!$userReceiver instanceof User) {
+                    continue;
+                }
+
                 $existingInvitations = $messageRepository->existingInvitations($user, $userReceiver);
+                $relationType = isset($relation['relationType']) ? (int) $relation['relationType'] : null;
+                $alreadyRelated = \in_array(
+                    $relationType,
+                    [
+                        UserRelUser::USER_RELATION_TYPE_FRIEND,
+                        UserRelUser::USER_RELATION_TYPE_GOODFRIEND,
+                        UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST,
+                    ],
+                    true
+                );
+                $canInvite = !$alreadyRelated
+                    && !$existingInvitations
+                    && $this->canSendFriendInvitation($user, $userReceiver, $settingsManager);
+
                 $formattedResults[] = [
                     'id' => $item['id'],
+                    'username' => (string) ($item['username'] ?? ''),
                     'name' => $item['firstname'].' '.$item['lastname'],
                     'avatar' => $userRepository->getUserPicture($item['id']),
-                    'role' => 5 === $item['status'] ? 'student' : 'teacher',
+                    'role' => $userReceiver->isAdmin() || $userReceiver->isSuperAdmin()
+                        ? 'admin'
+                        : ($userReceiver->isStudent() ? 'student' : 'teacher'),
                     'status' => $isUserOnline ? 'online' : 'offline',
                     'url' => '/social?uid='.$item['id'],
-                    'relationType' => $relation['relationType'] ?? null,
+                    'relationType' => $relationType,
                     'existingInvitations' => $existingInvitations,
+                    'canInvite' => $canInvite,
                 ];
             }
         } elseif ('group' === $type) {
@@ -1117,13 +1141,13 @@ class SocialController extends AbstractController
         UserRepository $userRepository,
         MessageRepository $messageRepository,
         EntityManagerInterface $em,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        SettingsManager $settingsManager
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
         $targetUserId = $data['targetUserId'] ?? null;
         $action = $data['action'] ?? null;
-        $isMyFriend = $data['is_my_friend'] ?? false;
         $subject = $data['subject'] ?? '';
         $content = $data['content'] ?? '';
 
@@ -1174,6 +1198,13 @@ class SocialController extends AbstractController
                     break;
 
                 case 'send_invitation':
+                    if (!$this->canSendFriendInvitation($currentUser, $friendUser, $settingsManager)) {
+                        return $this->json(
+                            ['error' => 'Friend invitations from teachers or administrators to learners are disabled.'],
+                            Response::HTTP_FORBIDDEN
+                        );
+                    }
+
                     $result = $messageRepository->sendInvitationToFriend($currentUser, $friendUser, $subject, $content);
                     if (!$result) {
                         return $this->json(['error' => 'Invitation already exists or could not be sent']);
@@ -1222,12 +1253,9 @@ class SocialController extends AbstractController
                     break;
 
                 case 'add_friend':
-                    $relationType = $isMyFriend ? UserRelUser::USER_RELATION_TYPE_FRIEND : UserRelUser::USER_UNKNOWN;
-
-                    $userRepository->relateUsers($currentUser, $friendUser, $relationType);
-                    $userRepository->relateUsers($friendUser, $currentUser, $relationType);
-
-                    $messageRepository->invitationAccepted($friendUser, $currentUser);
+                    if (!$messageRepository->invitationAccepted($friendUser, $currentUser)) {
+                        return $this->json(['error' => 'Pending invitation was not found'], Response::HTTP_BAD_REQUEST);
+                    }
 
                     break;
 
@@ -1246,6 +1274,27 @@ class SocialController extends AbstractController
         } catch (Exception $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private function canSendFriendInvitation(
+        User $sender,
+        User $receiver,
+        SettingsManager $settingsManager
+    ): bool {
+        $senderIsTeacherOrAdmin = $sender->isTeacher()
+            || $sender->isAdmin()
+            || $sender->isSuperAdmin()
+            || 'ROLE_TEACHER' === User::getRoleFromStatus($sender->getStatus());
+        $receiverIsStudent = $receiver->isStudent()
+            || 'ROLE_STUDENT' === User::getRoleFromStatus($receiver->getStatus());
+
+        if (!$senderIsTeacherOrAdmin || !$receiverIsStudent) {
+            return true;
+        }
+
+        $setting = strtolower(trim((string) $settingsManager->getSetting('social.social_make_teachers_friend_all')));
+
+        return \in_array($setting, ['1', 'true', 'yes', 'on'], true);
     }
 
     #[Route('/user-relation/{currentUserId}/{profileUserId}', name: 'chamilo_core_social_get_user_relation')]

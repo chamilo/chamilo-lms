@@ -30,8 +30,7 @@
         :select-label="t('Press enter to select')"
         :selected-label="t('Selected')"
         label="username"
-        limit="3"
-        limit-text="3"
+        :limit="3"
         track-by="id"
         @select="addFriend"
         @search-change="asyncFind"
@@ -57,12 +56,11 @@ import { useNotification } from "../../composables/notification"
 import VueMultiselect from "vue-multiselect"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import userService from "../../services/userService"
 import userRelUserService from "../../services/userRelUserService"
 import baseService from "../../services/baseService"
 import { useSecurityStore } from "../../store/securityStore"
 
-const emit = defineEmits(["friend-request-sent"])
+const emit = defineEmits(["relations-changed"])
 
 const securityStore = useSecurityStore()
 const router = useRouter()
@@ -73,19 +71,32 @@ const users = ref([])
 const isLoadingSelect = ref(false)
 const searchQuery = ref("")
 
-const asyncFind = (query) => {
-  if (query.toString().length < 3) return
+const asyncFind = async (query) => {
+  const normalizedQuery = String(query || "").trim()
+
+  if (normalizedQuery.length < 3) {
+    users.value = []
+    return
+  }
+
   isLoadingSelect.value = true
 
-  userService
-    .findBySearchTerm(query)
-    .then(({ items }) => (users.value = items))
-    .catch((error) => {
-      console.error("Error fetching users:", error)
+  try {
+    const data = await baseService.get("/social-network/search", {
+      query: normalizedQuery,
+      type: "user",
+      number_of_items: 20,
     })
-    .finally(() => {
-      isLoadingSelect.value = false
-    })
+
+    users.value = (data?.results || [])
+      .filter((item) => item.canInvite === true)
+      .map((item) => ({ ...item, fullName: item.name }))
+  } catch (error) {
+    users.value = []
+    console.error("Error fetching users:", error)
+  } finally {
+    isLoadingSelect.value = false
+  }
 }
 
 const extractIdFromPath = (path) => {
@@ -97,10 +108,11 @@ const addFriend = (friend) => {
   isLoadingSelect.value = true
 
   userRelUserService
-    .sendFriendRequest(securityStore.user["@id"], friend["@id"])
+    .sendFriendRequest(securityStore.user["@id"], `/api/users/${friend.id}`)
     .then(() => {
+      users.value = users.value.filter((item) => item.id !== friend.id)
       showSuccessNotification(t("Friend request sent successfully"))
-      emit("friend-request-sent")
+      emit("relations-changed")
       sendNotificationMessage(friend)
     })
     .catch((error) => {
@@ -114,7 +126,7 @@ const addFriend = (friend) => {
 
 const sendNotificationMessage = async (friend) => {
   const userId = extractIdFromPath(securityStore.user["@id"])
-  const targetUserId = extractIdFromPath(friend["@id"])
+  const targetUserId = Number(friend.id)
 
   const messageData = {
     userId,

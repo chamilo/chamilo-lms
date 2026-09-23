@@ -279,8 +279,7 @@ const performSearch = async () => {
     if (searchType.value === "user") {
       users.value = data.results.map((item) => ({
         ...item,
-        showInvitationButton:
-          (![3, 4, 10].includes(item.relationType) || item.id !== user.value.id) && !item.existingInvitations,
+        showInvitationButton: item.canInvite === true && item.id !== user.value.id,
       }))
       groups.value = []
     } else if (searchType.value === "group") {

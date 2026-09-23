@@ -3039,6 +3039,7 @@ $CurrentCourse = "Curso actual";
 $Back = "Volver";
 $Info = "Información";
 $Search = "Buscar";
+$Clear = "Limpiar";
 $AdvancedSearch = "Búsqueda avanzada";
 $Open = "Abierto";
 $Import = "Importar";

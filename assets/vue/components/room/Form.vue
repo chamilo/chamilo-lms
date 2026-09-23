@@ -27,6 +27,7 @@
       :options="branchOptions"
       option-label="name"
       option-value="id"
+      show-required-marker
     />
 
     <BaseInputNumber

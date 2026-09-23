@@ -100,6 +100,11 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
             ->getResult()
         ;
 
+        $learningPaths = array_values(array_filter(
+            $learningPaths,
+            static fn (CLp $learningPath): bool => 'toolbox' !== strtolower(trim((string) $learningPath->getContentMaker())),
+        ));
+
         if ([] === $learningPaths) {
             return [];
         }

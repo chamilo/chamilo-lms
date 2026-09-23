@@ -53,6 +53,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
 use const PATHINFO_EXTENSION;
 
 /** @implements ProviderInterface<LearningPathRuntime> */
@@ -239,6 +241,8 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $runtime->lpType = $lp->getLpType();
         $runtime->isCStudioContent = CLp::SCORM_TYPE === $lp->getLpType()
             && str_starts_with(strtolower($lp->getPath()), 'teachcs-');
+        $runtime->isToolboxContent = CLp::SCORM_TYPE === $lp->getLpType()
+            && 'toolbox' === strtolower(trim((string) $lp->getContentMaker()));
         $displaySettings = $this->getDisplaySettings();
         $runtime->runtimeSupported = \in_array($lp->getLpType(), [CLp::LP_TYPE, CLp::SCORM_TYPE], true);
         $runtime->canManage = $canManage;
@@ -247,22 +251,24 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             ? $this->lpRepository->getResourceFileUrl($lp)
             : '/main/img/icons/128/unknown.png';
         $runtime->author = $this->plainTitle((string) $lp->getAuthor());
-        $runtime->hideToc = $lp->getHideTocFrame();
+        $runtime->hideToc = $runtime->isToolboxContent || $lp->getHideTocFrame();
         $runtime->displayMode = $lp->getDefaultViewMod();
         $runtime->returnLink = (int) $this->settingsCourseManager->getCourseSettingValue('lp_return_link');
-        $runtime->homeUrl = $runtime->isCStudioContent
-            ? $this->buildListUrl($course, $session, $group, $request)
-            : $this->buildReturnUrl(
-                $runtime->returnLink,
-                $course,
-                $session,
-                $group,
-                $request,
-            );
-        if ($runtime->isCStudioContent) {
+        $runtime->homeUrl = $runtime->isToolboxContent
+            ? $this->buildToolboxListUrl($course, $session, $group, $request)
+            : ($runtime->isCStudioContent
+                ? $this->buildListUrl($course, $session, $group, $request)
+                : $this->buildReturnUrl(
+                    $runtime->returnLink,
+                    $course,
+                    $session,
+                    $group,
+                    $request,
+                ));
+        if ($runtime->isCStudioContent || $runtime->isToolboxContent) {
             $runtime->returnLink = 1;
         }
-        $runtime->showHome = $this->isTruthySetting(
+        $runtime->showHome = $runtime->isToolboxContent || $this->isTruthySetting(
             $this->settingsManager->getSetting('lp.allow_lp_return_link', true),
         );
         $runtime->reportingUrl = $this->buildReportingUrl($lp, $course, $session, $group, $request, $user);
@@ -276,7 +282,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             $displaySettings,
             'navigation_in_the_middle',
         );
-        $runtime->hideArrowNavigation = $runtime->isCStudioContent || $this->displaySettingEnabled(
+        $runtime->hideArrowNavigation = $runtime->isCStudioContent || $runtime->isToolboxContent || $this->displaySettingEnabled(
             $displaySettings,
             'hide_lp_arrow_navigation',
         );
@@ -345,6 +351,13 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             : [];
         if (isset($runtime->scorm['debug'])) {
             $runtime->scorm['debug'] = true === $runtime->scorm['debug'] && $canEdit;
+        }
+        if ($runtime->isToolboxContent && '' !== $runtime->contentUrl && true === ($runtime->scorm['enabled'] ?? false)) {
+            $encodedState = base64_encode((string) json_encode(
+                $runtime->scorm['values'] ?? [],
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
+            ));
+            $runtime->contentUrl .= '#chamilo_scorm_state='.rawurlencode($encodedState);
         }
         $runtime->listUrl = $this->buildListUrl($course, $session, $group, $request);
         [$runtime->nextLearningPathUrl, $runtime->nextLearningPathTitle] = $this->buildNextLearningPathInfo(
@@ -1185,6 +1198,16 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         return $this->getContextResourceLink($resource, $course, $session, $group) instanceof ResourceLink
             ? $resource
             : null;
+    }
+
+    private function buildToolboxListUrl(Course $course, ?Session $session, ?CGroup $group, Request $request): string
+    {
+        $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+
+        return $this->appendQuery(
+            '/resources/toolbox/'.$courseNodeId,
+            $this->buildContextParams($course, $session, $group, $request),
+        );
     }
 
     private function buildListUrl(Course $course, ?Session $session, ?CGroup $group, Request $request): string

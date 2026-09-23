@@ -95,6 +95,9 @@ final class LearningPathRuntime
     public bool $isCStudioContent = false;
 
     #[Groups(['learning_path_runtime:read'])]
+    public bool $isToolboxContent = false;
+
+    #[Groups(['learning_path_runtime:read'])]
     public string $menuLocation = 'left';
 
     #[Groups(['learning_path_runtime:read'])]

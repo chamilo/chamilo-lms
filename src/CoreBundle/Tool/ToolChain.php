@@ -147,6 +147,7 @@ class ToolChain
             'course_description',
             'document',
             'learnpath',
+            'toolbox',
             'link',
             'quiz',
             'announcement',
@@ -192,6 +193,17 @@ class ToolChain
             }
 
             $visibility = isset($activeToolsOnCreate[$courseToolName]);
+            if ('toolbox' === $courseToolName) {
+                $aiHelpersEnabled = strtolower(trim(
+                    (string) $this->settingsManager->getSetting('ai_helpers.enable_ai_helpers', true)
+                ));
+                $toolboxEnabled = strtolower(trim(
+                    (string) $this->settingsManager->getSetting('ai_helpers.toolbox', true)
+                ));
+                $visibility = $visibility
+                    && \in_array($aiHelpersEnabled, ['1', 'true', 'yes', 'on'], true)
+                    && \in_array($toolboxEnabled, ['1', 'true', 'yes', 'on'], true);
+            }
             $linkVisibility = $visibility ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT;
 
             if (\in_array($courseToolName, ['course_setting', 'course_maintenance'], true)) {

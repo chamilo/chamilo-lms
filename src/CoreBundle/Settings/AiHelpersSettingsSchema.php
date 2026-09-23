@@ -31,6 +31,7 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
                 'glossary_terms_generator' => 'false',
                 'video_generator' => 'false',
                 'course_analyser' => 'false',
+                'toolbox' => 'false',
                 'disclose_ai_assistance' => 'true',
             ])
         ;
@@ -48,6 +49,7 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
                 ],
             ])
             ->add('wysiwyg_translation_all_languages', YesNoType::class)
+            ->add('toolbox', YesNoType::class)
         ;
 
         $featureChoices = [

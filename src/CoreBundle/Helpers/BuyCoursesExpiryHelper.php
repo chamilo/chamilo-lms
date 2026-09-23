@@ -212,15 +212,25 @@ final class BuyCoursesExpiryHelper
      * Only acts on courses tracked in plugin_buycourses_subscription_course; a managed
      * course that was never linked to a BuyCourses subscription is left untouched, same
      * as before this method existed.
+     *
+     * When $serviceSaleId/$serviceId are given (the sale that just completed and
+     * triggered this call), a reactivated row belonging to that same service also gets
+     * its service_sale_id repointed to that sale. Without this, the row stays linked
+     * forever to the original (now permanently expired) sale it was created under: the
+     * recurring subscriptions processor's own expiry sweep (process_recurring_subscriptions.php)
+     * re-matches that stale, long-expired sale on every run and re-closes the course, even
+     * though the buyer has since paid again and holds a currently active sale for it.
+     * Scoped to matching service_id so a renewal of one service never reassigns a course
+     * tracked under a different service the same buyer also happens to hold.
      */
-    public function reactivateClosedCoursesForUser(int $userId): int
+    public function reactivateClosedCoursesForUser(int $userId, int $serviceSaleId = 0, int $serviceId = 0): int
     {
         if ($userId <= 0 || !$this->isBuyCoursesAvailable()) {
             return 0;
         }
 
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT id, course_id, context_json
+            'SELECT id, course_id, service_id, context_json
              FROM '.self::TABLE_SUBSCRIPTION_COURSE.'
              WHERE user_id = :userId
                AND status IN (:closed, :hidden)',
@@ -261,16 +271,22 @@ final class BuyCoursesExpiryHelper
                 ['id' => $courseId]
             );
 
+            $updateData = [
+                'status' => self::SUBSCRIPTION_COURSE_STATUS_ACTIVE,
+                'context_json' => json_encode($context, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                'closed_at' => null,
+                'hidden_at' => null,
+                'updated_at' => $now,
+                'last_action' => 'reactivated',
+            ];
+
+            if ($serviceSaleId > 0 && $serviceId > 0 && $serviceId === (int) ($row['service_id'] ?? 0)) {
+                $updateData['service_sale_id'] = $serviceSaleId;
+            }
+
             $this->connection->update(
                 self::TABLE_SUBSCRIPTION_COURSE,
-                [
-                    'status' => self::SUBSCRIPTION_COURSE_STATUS_ACTIVE,
-                    'context_json' => json_encode($context, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-                    'closed_at' => null,
-                    'hidden_at' => null,
-                    'updated_at' => $now,
-                    'last_action' => 'reactivated',
-                ],
+                $updateData,
                 ['id' => (int) $row['id']]
             );
 

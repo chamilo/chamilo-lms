@@ -1655,8 +1655,12 @@ class BuyCoursesPlugin extends Plugin
         // Reopen any course this buyer had closed for exceeding their course-creation
         // limit while unsubscribed. This must run regardless of whether the service
         // below has benefit extra-field configurations, so it happens before that check.
+        // Passing this sale's own id/service repoints the reactivated course's stale
+        // service_sale_id to it, so the recurring subscriptions processor stops matching
+        // the old, permanently-expired sale it was originally linked under.
         (new BuyCoursesExpiryHelper(Database::getManager()->getConnection()))
-            ->reactivateClosedCoursesForUser($buyerId);
+            ->reactivateClosedCoursesForUser($buyerId, $serviceSaleId, (int) $serviceSale['service_id'])
+        ;
 
         $configurations = $this->getServiceBenefitConfigurations((int) $serviceSale['service_id']);
         if (empty($configurations)) {

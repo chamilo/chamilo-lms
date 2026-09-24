@@ -16,13 +16,16 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
+use ApiPlatform\State\SerializerContextBuilderInterface;
 use Chamilo\CoreBundle\ApiResource\SessionPlanItem;
 use Chamilo\CoreBundle\Controller\Api\CalendarMyStudentsScheduleAction;
 use Chamilo\CoreBundle\Controller\Api\CreateSessionWithUsersAndCoursesAction;
 use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;
+use Chamilo\CoreBundle\Dto\SessionDuplicateInput;
 use Chamilo\CoreBundle\Entity\Listener\SessionListener;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\State\Session\SessionDeleteProcessor;
+use Chamilo\CoreBundle\State\Session\SessionDuplicateProcessor;
 use Chamilo\CoreBundle\State\SessionPlanStateProvider;
 use Chamilo\CoreBundle\State\UserSessionSubscriptionsStateProvider;
 use DateTime;
@@ -163,6 +166,19 @@ use Symfony\Component\Validator\Constraints as Assert;
             output: Session::class,
             deserialize: true,
             name: 'create_session_with_courses_and_assign_users'
+        ),
+        new Post(
+            uriTemplate: '/sessions/{id}/duplicate',
+            openapi: new Operation(summary: 'Duplicate a model session (port of create_session_from_model)'),
+            denormalizationContext: [
+                'groups' => ['session:duplicate'],
+                SerializerContextBuilderInterface::ASSIGN_OBJECT_TO_POPULATE => false,
+            ],
+            security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_SESSION_MANAGER') and is_granted('EDIT', object))",
+            input: SessionDuplicateInput::class,
+            read: true,
+            name: 'duplicate_session',
+            processor: SessionDuplicateProcessor::class,
         ),
         new Delete(security: "is_granted('DELETE', object)", processor: SessionDeleteProcessor::class),
     ],
@@ -354,6 +370,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\Column(name: 'visibility', type: 'integer')]
     protected int $visibility;
 
+    #[Groups(['session:basic', 'session:read', 'session:write'])]
     #[ORM\ManyToOne(targetEntity: Promotion::class, cascade: ['persist'], inversedBy: 'sessions')]
     #[ORM\JoinColumn(name: 'promotion_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Promotion $promotion = null;

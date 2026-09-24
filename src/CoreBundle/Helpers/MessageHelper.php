@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Service\Message\MessageEmailOpenTrackingService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -40,7 +41,8 @@ class MessageHelper
         private readonly RequestStack $requestStack,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SettingsManager $settingsManager,
-        private readonly MailerInterface $mailer
+        private readonly MailerInterface $mailer,
+        private readonly MessageEmailOpenTrackingService $emailOpenTrackingService,
     ) {
         if (PHP_SAPI !== 'cli') {
             $this->session = $this->requestStack->getSession();
@@ -178,7 +180,7 @@ class MessageHelper
         $this->addSenderAsReceiver($message, $sender);
 
         if ($forceTitleWhenSendingEmail) {
-            $this->sendEmailNotification($receiver, $sender, $subject, $content, $attachmentList);
+            $this->sendEmailNotification($message, $receiver, $sender, $subject, $content, $attachmentList);
         }
 
         return $message->getId();
@@ -305,8 +307,14 @@ class MessageHelper
      * - Uses buildFromAddress() to construct a proper FROM (name + address).
      * - Attaches only OK-uploaded files.
      */
-    private function sendEmailNotification(User $receiver, User $sender, string $subject, string $content, array $attachmentList): void
-    {
+    private function sendEmailNotification(
+        Message $message,
+        User $receiver,
+        User $sender,
+        string $subject,
+        string $content,
+        array $attachmentList
+    ): void {
         // Validate recipient email early
         $toAddress = $receiver->getEmail();
         if (!filter_var($toAddress, FILTER_VALIDATE_EMAIL)) {
@@ -315,12 +323,18 @@ class MessageHelper
         }
 
         try {
+            $htmlContent = $this->emailOpenTrackingService->appendTrackingPixelForMessageRecipient(
+                (int) $message->getId(),
+                (int) $receiver->getId(),
+                $content
+            );
+
             $email = (new Email())
                 ->from($this->buildFromAddress())
                 ->to(new Address($toAddress, $receiver->getFullName() ?: $receiver->getUsername()))
                 ->subject($subject)
                 ->text($content)
-                ->html($content)
+                ->html($htmlContent)
             ;
 
             // Attach files if provided in the expected structure

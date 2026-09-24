@@ -130,6 +130,93 @@ class MessageRepositoryTest extends AbstractApiTest
         );
     }
 
+    public function testCreateMessageCreatesDistinctEmailTrackingTokens(): void
+    {
+        $this->setPlatformSenderAddress();
+
+        /** @var SettingsManager $settingsManager */
+        $settingsManager = self::getContainer()->get(SettingsManager::class);
+        $settingsManager->updateSetting('mail.enable_email_open_tracking', 'true');
+
+        try {
+            $this->createUser('tracked_from');
+            $senderUserIri = $this->findIriBy(User::class, ['username' => 'tracked_from']);
+            $senderToken = $this->getUserToken([
+                'username' => 'tracked_from',
+                'password' => 'tracked_from',
+            ], true);
+
+            $this->createUser('tracked_to');
+            $receiverUserIri = $this->findIriBy(User::class, ['username' => 'tracked_to']);
+
+            $this->createUser('tracked_cc');
+            $receiverCopyUserIri = $this->findIriBy(User::class, ['username' => 'tracked_cc']);
+
+            $response = $this
+                ->createClientWithCredentials($senderToken)
+                ->request(
+                    'POST',
+                    '/api/messages',
+                    [
+                        'json' => [
+                            'title' => 'tracked hello',
+                            'content' => 'tracked content',
+                            'msgType' => Message::MESSAGE_TYPE_INBOX,
+                            'sender' => $senderUserIri,
+                            'receivers' => [
+                                [
+                                    'receiver' => $receiverUserIri,
+                                    'receiverType' => MessageRelUser::TYPE_TO,
+                                ],
+                                [
+                                    'receiver' => $receiverCopyUserIri,
+                                    'receiverType' => MessageRelUser::TYPE_CC,
+                                ],
+                            ],
+                        ],
+                    ]
+                )
+            ;
+
+            $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+            $this->assertEmailCount(2);
+
+            $responseData = $response->toArray();
+            $messageId = isset($responseData['id'])
+                ? (int) $responseData['id']
+                : (int) basename((string) ($responseData['@id'] ?? '0'));
+            $this->assertGreaterThan(0, $messageId);
+
+            $entityManager = $this->getEntityManager();
+            $entityManager->clear();
+
+            /** @var Message|null $message */
+            $message = self::getContainer()->get(MessageRepository::class)->find($messageId);
+            $this->assertInstanceOf(Message::class, $message);
+
+            $tokens = [];
+            foreach ($message->getReceivers() as $relation) {
+                if (!\in_array(
+                    $relation->getReceiverType(),
+                    [MessageRelUser::TYPE_TO, MessageRelUser::TYPE_CC],
+                    true
+                )) {
+                    continue;
+                }
+
+                $token = $relation->getMailTrackingToken();
+                $this->assertNotNull($token);
+                $this->assertMatchesRegularExpression('/^[a-f0-9]{64}$/', $token);
+                $tokens[] = $token;
+            }
+
+            $this->assertCount(2, $tokens);
+            $this->assertCount(2, array_unique($tokens));
+        } finally {
+            $settingsManager->updateSetting('mail.enable_email_open_tracking', 'false');
+        }
+    }
+
     public function testCreateMessageWithTags(): Message
     {
         $em = $this->getEntityManager();

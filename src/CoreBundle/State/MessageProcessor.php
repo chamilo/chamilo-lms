@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\Message\MessageEmailOpenTrackingService;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
 use Notification;
@@ -32,6 +33,7 @@ final readonly class MessageProcessor implements ProcessorInterface
         private ResourceNodeRepository $resourceNodeRepository,
         private Security $security,
         private ResourceFileHelper $resourceFileHelper,
+        private MessageEmailOpenTrackingService $emailOpenTrackingService,
     ) {}
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?Message
@@ -90,12 +92,6 @@ final readonly class MessageProcessor implements ProcessorInterface
             $message->getSender()->getId()
         );
 
-        $userIdList = $message
-            ->getReceivers()
-            ->map(fn (MessageRelUser $messageRelUser): int => $messageRelUser->getReceiver()->getId())
-            ->getValues()
-        ;
-
         $attachmentList = [];
 
         /** @var MessageAttachment $messageAttachment */
@@ -115,16 +111,34 @@ final readonly class MessageProcessor implements ProcessorInterface
             ];
         }
 
-        (new Notification())
-            ->saveNotification(
-                $message->getId(),
-                Notification::NOTIFICATION_TYPE_MESSAGE,
-                $userIdList,
-                $message->getTitle(),
-                $message->getContent(),
-                $sender_info,
-                $attachmentList,
-            )
-        ;
+        foreach ($message->getReceivers() as $messageRelUser) {
+            if (!\in_array(
+                $messageRelUser->getReceiverType(),
+                [MessageRelUser::TYPE_TO, MessageRelUser::TYPE_CC],
+                true
+            )) {
+                continue;
+            }
+
+            $receiverId = (int) $messageRelUser->getReceiver()->getId();
+            $this->emailOpenTrackingService->prepareForMessageRecipient(
+                (int) $message->getId(),
+                $receiverId
+            );
+
+            try {
+                (new Notification())->saveNotification(
+                    $message->getId(),
+                    Notification::NOTIFICATION_TYPE_MESSAGE,
+                    [$receiverId],
+                    $message->getTitle(),
+                    $message->getContent(),
+                    $sender_info,
+                    $attachmentList,
+                );
+            } finally {
+                $this->emailOpenTrackingService->clearPreparedPixel();
+            }
+        }
     }
 }

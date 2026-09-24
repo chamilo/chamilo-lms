@@ -1356,7 +1356,9 @@ class CourseRestorer
             $resolveItemVisibility,
             &$docResources
         ): void {
-            if (DOCUMENT !== $item->file_type) {
+            // Documents created from the learning path editor are stored with the 'html'
+            // filetype, not DOCUMENT ('file'); skipping them left the copied LP items empty.
+            if (!\in_array($item->file_type, [DOCUMENT, 'html'], true)) {
                 return;
             }
 
@@ -1484,7 +1486,7 @@ class CourseRestorer
             $entity = DocumentManager::addDocument(
                 ['real_id' => $courseInfo['real_id'], 'code' => $courseInfo['code']],
                 $rel,
-                'file',
+                $item->file_type,
                 (int) ($item->size ?? 0),
                 $finalTitle,
                 $item->comment ?? '',

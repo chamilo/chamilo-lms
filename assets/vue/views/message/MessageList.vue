@@ -197,6 +197,22 @@
           </template>
         </Column>
 
+        <Column
+          v-if="!showingInbox && hasEmailOpenTracking"
+          :header="t('E-mail notifications')"
+          class="truncate w-32 md:w-auto"
+        >
+          <template #body="slotProps">
+            <span
+              v-if="slotProps.data.emailOpenedAt"
+              :title="t('Last access')"
+            >
+              {{ abbreviatedDatetime(slotProps.data.emailOpenedAt) }}
+            </span>
+            <span v-else aria-hidden="true">—</span>
+          </template>
+        </Column>
+
         <Column :header="t('Actions')">
           <template #body="slotProps">
             <BaseButton
@@ -320,6 +336,7 @@ const tags = ref([])
 const items = computed(() => store.getters["message/getRecents"])
 const isLoading = computed(() => store.getters["message/isLoading"])
 const totalItems = computed(() => store.getters["message/getTotalItems"])
+const hasEmailOpenTracking = computed(() => items.value?.some?.((message) => message.emailOpenTrackingActive) ?? false)
 
 const title = ref(null)
 

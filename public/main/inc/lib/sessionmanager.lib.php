@@ -3396,7 +3396,7 @@ class SessionManager
         $params = [
             'item_id' => $sessionId,
             'variable' => $variable,
-            'value' => $value,
+            'field_value' => $value,
         ];
 
         return $extraFieldValue->save($params);

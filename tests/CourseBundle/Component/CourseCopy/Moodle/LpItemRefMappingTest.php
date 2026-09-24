@@ -334,7 +334,7 @@ XML
         rmdir($directory);
     }
 
-    public function testLearnpathSidecarKeepsLevelForOmittedRootCompatibility(): void
+    public function testLearnpathSidecarKeepsLevelAndNormalizesFinalItemOrderForOmittedRootCompatibility(): void
     {
         $tmp = sys_get_temp_dir().'/chamilo-lp-sidecar-'.bin2hex(random_bytes(6));
         $lpDir = $tmp.'/chamilo/learnpath/lp_299';
@@ -422,6 +422,10 @@ XML
             $lp = reset($resources['learnpath']);
             self::assertIsObject($lp);
             self::assertCount(2, $lp->items);
+            self::assertSame('quiz', $lp->items[0]['item_type']);
+            self::assertSame(2, $lp->items[0]['display_order']);
+            self::assertSame('final_item', $lp->items[1]['item_type']);
+            self::assertSame(3, $lp->items[1]['display_order']);
             self::assertSame(1, $lp->items[0]['level']);
             self::assertSame(1, $lp->items[1]['level']);
             self::assertSame(637, $lp->items[0]['parent_item_id']);

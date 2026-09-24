@@ -85,8 +85,28 @@ switch ($action) {
 
         try {
             $json = getLatestNews();
-            $data = json_decode($json, true);
-            $latestNews = Security::remove_XSS($data['text'] ?? '', COURSEMANAGER);
+            $items = json_decode($json, true);
+
+            if (!is_array($items)) {
+                throw new Exception('Unexpected news payload');
+            }
+
+            usort($items, fn (array $a, array $b) => strcmp($b['date'] ?? '', $a['date'] ?? ''));
+
+            $latestNews = '';
+            foreach (array_slice($items, 0, 3) as $item) {
+                $date = htmlspecialchars(
+                    api_format_date((string) ($item['date'] ?? ''), DATE_FORMAT_SHORT),
+                    ENT_QUOTES,
+                    'UTF-8'
+                );
+                $text = Security::remove_XSS((string) ($item['text'] ?? ''), COURSEMANAGER);
+
+                $latestNews .= '<div class="news-item">'
+                    .'<h5 class="news-item__date">'.$date.'</h5>'
+                    .'<div class="news-item__text">'.$text.'</div>'
+                    .'</div>';
+            }
 
             echo appendSystemUpdateNotice($latestNews);
         } catch (\Throwable $e) {
@@ -322,7 +342,7 @@ function getLatestNews(): string
     }
 
     $response = $client->request('GET', $url, [
-        'query' => ['language' => $lang],
+        'query' => ['language' => $lang, 'n' => 3],
     ]);
 
     if (200 !== $response->getStatusCode()) {

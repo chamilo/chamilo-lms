@@ -982,7 +982,7 @@ class MoodleExport
                         $title = get_lang('Glossary');
                     }
                     self::flagActivityUserinfo('glossary', 1, true);
-                } elseif ('document' === $itemType) {
+                } elseif (\in_array($itemType, ['document', 'video'], true)) {
                     $documentId = is_numeric($path) ? (int) $path : 0;
                     if ($documentId > 0) {
                         $document = DocumentManager::get_document_data_by_id(
@@ -993,14 +993,15 @@ class MoodleExport
                         if (!empty($document)) {
                             $documentPath = (string) ($document['path'] ?? '');
                             $extension = strtolower((string) pathinfo($documentPath, PATHINFO_EXTENSION));
+                            $fileType = strtolower((string) ($document['filetype'] ?? ''));
 
-                            if (in_array($extension, ['html', 'htm'], true)) {
+                            if ('document' === $itemType && in_array($extension, ['html', 'htm'], true)) {
                                 $moduleName = 'page';
                                 $instanceId = $documentId;
                                 if ('' === $title) {
                                     $title = (string) ($document['title'] ?? '');
                                 }
-                            } elseif (($document['filetype'] ?? '') === 'file') {
+                            } elseif (\in_array($fileType, ['file', 'video'], true)) {
                                 $moduleName = 'resource';
                                 $instanceId = $documentId;
                                 if ('' === $title) {

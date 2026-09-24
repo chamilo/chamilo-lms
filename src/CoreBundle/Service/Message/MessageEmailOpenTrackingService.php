@@ -13,6 +13,9 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+
 final class MessageEmailOpenTrackingService
 {
     private const int TOKEN_BYTES = 32;

@@ -79,6 +79,7 @@ final class MessageEmailOpenTrackingServiceTest extends AbstractApiTest
             $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
             $entityManager->clear();
+
             /** @var MessageRelUser|null $reloadedAgain */
             $reloadedAgain = $entityManager->getRepository(MessageRelUser::class)->find($relationId);
             $this->assertInstanceOf(MessageRelUser::class, $reloadedAgain);

@@ -47,6 +47,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'message_rel_user')]
 #[ORM\UniqueConstraint(name: 'message_receiver', columns: ['message_id', 'user_id', 'receiver_type'])]
 #[ORM\UniqueConstraint(name: 'uniq_message_rel_user_mail_tracking_token', columns: ['mail_tracking_token'])]
+#[ORM\UniqueConstraint(name: 'uniq_message_rel_user_mail_reply_token', columns: ['mail_reply_token'])]
 #[ORM\Entity]
 #[Gedmo\SoftDeleteable(timeAware: true)]
 #[ApiFilter(
@@ -118,6 +119,9 @@ class MessageRelUser
 
     #[ORM\Column(name: 'mail_opened_at', type: 'datetime', nullable: true)]
     protected ?DateTime $mailOpenedAt = null;
+
+    #[ORM\Column(name: 'mail_reply_token', type: 'string', length: 64, nullable: true)]
+    protected ?string $mailReplyToken = null;
 
     /**
      * @var Collection<int, MessageTag>
@@ -211,6 +215,18 @@ class MessageRelUser
     public function setMailOpenedAt(?DateTime $mailOpenedAt): self
     {
         $this->mailOpenedAt = $mailOpenedAt;
+
+        return $this;
+    }
+
+    public function getMailReplyToken(): ?string
+    {
+        return $this->mailReplyToken;
+    }
+
+    public function setMailReplyToken(?string $mailReplyToken): self
+    {
+        $this->mailReplyToken = $mailReplyToken;
 
         return $this;
     }

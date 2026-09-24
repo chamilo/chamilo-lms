@@ -34,6 +34,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'message')]
+#[ORM\UniqueConstraint(name: 'uniq_message_mail_inbound_id', columns: ['mail_inbound_id'])]
 #[ORM\Index(columns: ['user_sender_id'], name: 'idx_message_user_sender')]
 #[ORM\Index(columns: ['group_id'], name: 'idx_message_group')]
 #[ORM\Index(columns: ['msg_type'], name: 'idx_message_type')]
@@ -152,6 +153,12 @@ class Message
     #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'content', type: 'text', nullable: false)]
     protected string $content;
+
+    #[ORM\Column(name: 'mail_answer', type: 'boolean', options: ['default' => false])]
+    protected bool $mailAnswer = false;
+
+    #[ORM\Column(name: 'mail_inbound_id', type: 'string', length: 64, nullable: true)]
+    protected ?string $mailInboundId = null;
 
     #[Groups(['message:read', 'message:write'])]
     #[ORM\ManyToOne(targetEntity: Usergroup::class)]
@@ -412,6 +419,30 @@ class Message
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function isMailAnswer(): bool
+    {
+        return $this->mailAnswer;
+    }
+
+    public function setMailAnswer(bool $mailAnswer): self
+    {
+        $this->mailAnswer = $mailAnswer;
+
+        return $this;
+    }
+
+    public function getMailInboundId(): ?string
+    {
+        return $this->mailInboundId;
+    }
+
+    public function setMailInboundId(?string $mailInboundId): self
+    {
+        $this->mailInboundId = $mailInboundId;
 
         return $this;
     }

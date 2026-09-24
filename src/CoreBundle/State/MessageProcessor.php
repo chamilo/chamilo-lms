@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\Message\MessageEmailOpenTrackingService;
+use Chamilo\CoreBundle\Service\Message\MessageInboundMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
 use Notification;
@@ -34,6 +35,7 @@ final readonly class MessageProcessor implements ProcessorInterface
         private Security $security,
         private ResourceFileHelper $resourceFileHelper,
         private MessageEmailOpenTrackingService $emailOpenTrackingService,
+        private MessageInboundMailService $inboundMailService,
     ) {}
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?Message
@@ -125,6 +127,10 @@ final readonly class MessageProcessor implements ProcessorInterface
                 (int) $message->getId(),
                 $receiverId
             );
+            $inboundHeaders = $this->inboundMailService->prepareForMessageRecipient(
+                (int) $message->getId(),
+                $receiverId
+            );
 
             try {
                 (new Notification())->saveNotification(
@@ -135,8 +141,12 @@ final readonly class MessageProcessor implements ProcessorInterface
                     $message->getContent(),
                     $sender_info,
                     $attachmentList,
+                    false,
+                    null,
+                    $inboundHeaders,
                 );
             } finally {
+                $this->inboundMailService->clearPreparedReply();
                 $this->emailOpenTrackingService->clearPreparedPixel();
             }
         }

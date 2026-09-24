@@ -61,6 +61,12 @@ final readonly class LearningPathCopyService
             throw new RuntimeException('Learning path cannot be copied before it is persisted.');
         }
 
+        // Native LP items already point to resources in this course. Duplicate only
+        // the LP structure; SCORM keeps the backup/restore path because its package files must be copied.
+        if (CLp::LP_TYPE === $learningPath->getLpType()) {
+            return $this->duplicateNativeLearningPath($learningPath, $course, $session);
+        }
+
         $courseCode = trim($course->getCode());
         if ('' === $courseCode) {
             throw new RuntimeException('Source course code is missing.');
@@ -129,6 +135,94 @@ final readonly class LearningPathCopyService
         }
 
         return $createdId;
+    }
+
+    private function duplicateNativeLearningPath(CLp $source, Course $course, ?Session $session): int
+    {
+        $copy = (new CLp())
+            ->setLpType(CLp::LP_TYPE)
+            ->setParent($course)
+        ;
+
+        $this->synchronizeLearningPath($source, $copy);
+        $copy->addCourseLink($course, $session);
+        $this->learningPathRepository->createLp($copy);
+
+        $copyId = (int) ($copy->getIid() ?? 0);
+        if ($copyId <= 0) {
+            throw new RuntimeException('Learning path copy did not create a valid destination.');
+        }
+
+        $copyRoot = $this->learningPathItemRepository->getRootItem($copyId);
+        if (!$copyRoot instanceof CLpItem) {
+            throw new RuntimeException('Copied learning path root item is missing.');
+        }
+
+        $sourceItems = $this->getItemIndex($source);
+        $copiedItems = [];
+        $itemIdMap = [];
+
+        foreach ($sourceItems as $path => $sourceItem) {
+            $parentPath = $this->getParentItemPath($path);
+            $parent = '' === $parentPath ? $copyRoot : ($copiedItems[$parentPath] ?? null);
+
+            if (!$parent instanceof CLpItem) {
+                throw new RuntimeException('Learning path item parent could not be copied.');
+            }
+
+            $item = (new CLpItem())
+                ->setLp($copy)
+                ->setParent($parent)
+            ;
+
+            $this->synchronizeItemFields($sourceItem, $item);
+            $this->learningPathItemRepository->create($item);
+
+            $sourceItemId = (int) ($sourceItem->getIid() ?? 0);
+            $copiedItemId = (int) ($item->getIid() ?? 0);
+            if ($sourceItemId <= 0 || $copiedItemId <= 0) {
+                throw new RuntimeException('Learning path item identifiers are invalid.');
+            }
+
+            $copiedItems[$path] = $item;
+            $itemIdMap[$sourceItemId] = $copiedItemId;
+        }
+
+        foreach ($sourceItems as $path => $sourceItem) {
+            $copiedItem = $copiedItems[$path] ?? null;
+            if (!$copiedItem instanceof CLpItem) {
+                throw new RuntimeException('Copied learning path item could not be matched.');
+            }
+
+            $prerequisite = trim((string) $sourceItem->getPrerequisite());
+            if ('' === $prerequisite || !ctype_digit($prerequisite) || (int) $prerequisite <= 0) {
+                $copiedItem->setPrerequisite($prerequisite);
+
+                continue;
+            }
+
+            $mappedPrerequisite = $itemIdMap[(int) $prerequisite] ?? 0;
+            if ($mappedPrerequisite <= 0) {
+                throw new RuntimeException('Learning path item prerequisite could not be remapped.');
+            }
+
+            $copiedItem->setPrerequisite((string) $mappedPrerequisite);
+        }
+
+        $this->entityManager->persist($copy);
+        $this->entityManager->flush();
+
+        return $copyId;
+    }
+
+    private function getParentItemPath(string $path): string
+    {
+        $lastSeparator = strrpos($path, '/');
+        if (false === $lastSeparator || 0 === $lastSeparator) {
+            return '';
+        }
+
+        return substr($path, 0, $lastSeparator);
     }
 
     private function synchronizeLearningPath(CLp $source, CLp $copy): void

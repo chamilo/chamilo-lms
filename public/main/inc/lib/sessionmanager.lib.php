@@ -10282,7 +10282,7 @@ class SessionManager
 
         return Database::getManager()
             ->createQuery("
-                SELECT COUNT(scu)
+                SELECT COUNT(DISTINCT IDENTITY(scu.user))
                 FROM ".SessionRelCourseRelUser::class." scu
                 INNER JOIN ".SessionRelUser::class." su
                     WITH scu.user = su.user

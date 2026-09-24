@@ -24,12 +24,16 @@ use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\CoreBundle\Repository\PluginRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Plugin;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
@@ -54,16 +58,49 @@ class IndexBlocksController extends BaseController
         private readonly AccessUrlRepository $accessUrlRepository,
         AuthenticationConfigHelper $authConfigHelper,
         private readonly MigrationHistoryRecorder $migrationHistoryRecorder,
+        #[Autowire(service: 'chamilo.admin_index_blocks')]
+        private readonly CacheInterface $adminIndexBlocksCache,
     ) {
         $this->isLdapActive = $authConfigHelper->getLdapConfig()['enabled'];
     }
 
-    public function __invoke(): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $this->isAdmin = $this->isGranted('ROLE_ADMIN');
         $this->isGlobalAdmin = $this->isGranted('ROLE_GLOBAL_ADMIN');
         $this->isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER');
 
+        // The assembled block list is identical for every viewer sharing the same
+        // access URL, admin/session-admin role, AND UI locale (every label below goes
+        // through $this->translator->trans(), which renders in the request's resolved
+        // locale — LocaleSubscriber sets it per-request from the viewer's own saved
+        // language preference). Omitting locale from the key would leak one admin's
+        // language into another admin's cached response. Not keyed by user ID: no
+        // ADMIN_BLOCK_DISPLAYED listener exists anywhere in this codebase today, so
+        // nothing user-scoped enters the payload — re-check this if one is ever added.
+        // TTL-only expiry (no active invalidation): a settings/plugin change made
+        // elsewhere can take up to 120 s to appear here.
+        $accessUrlId = $this->accessUrlHelper->getCurrent()?->getId() ?? 0;
+        $cacheKey = \sprintf(
+            'admin_index_blocks_%d_%d_%d_%d_%s',
+            $accessUrlId,
+            (int) $this->isAdmin,
+            (int) $this->isGlobalAdmin,
+            (int) $this->isSessionAdmin,
+            $request->getLocale()
+        );
+
+        $json = $this->adminIndexBlocksCache->get($cacheKey, function (ItemInterface $item): array {
+            $item->expiresAfter(120);
+
+            return $this->buildBlocks();
+        });
+
+        return $this->json($json);
+    }
+
+    private function buildBlocks(): array
+    {
         $json = [];
 
         $adminBlockEvent = new AdminBlockDisplayedEvent($json, AbstractEvent::TYPE_PRE);
@@ -189,9 +226,7 @@ class IndexBlocksController extends BaseController
 
         $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK_DISPLAYED);
 
-        $json = $adminBlockEvent->getData();
-
-        return $this->json($json);
+        return $adminBlockEvent->getData();
     }
 
     private function getItemsSecurity(): array

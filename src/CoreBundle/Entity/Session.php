@@ -370,6 +370,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\Column(name: 'visibility', type: 'integer')]
     protected int $visibility;
 
+    #[Groups(['session:basic', 'session:read', 'session:write'])]
     #[ORM\ManyToOne(targetEntity: Promotion::class, cascade: ['persist'], inversedBy: 'sessions')]
     #[ORM\JoinColumn(name: 'promotion_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Promotion $promotion = null;

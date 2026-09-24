@@ -239,7 +239,8 @@ class Notification extends Model
         $senderInfo = [],
         $attachments = [],
         $forceTitleWhenSendingEmail = false,
-        $baseUrl = null
+        $baseUrl = null,
+        $extraHeaders = []
     ) {
         $this->type = (int) $type;
         $messageId = (int) $messageId;
@@ -309,13 +310,16 @@ class Notification extends Model
                     case self::NOTIFY_MESSAGE_AT_ONCE:
                     case self::NOTIFY_INVITATION_AT_ONCE:
                     case self::NOTIFY_GROUP_AT_ONCE:
-                        $extraHeaders = [];
-                        $extraHeaders = [
-                            'reply_to' => [
+                        if (!\is_array($extraHeaders)) {
+                            $extraHeaders = [];
+                        }
+
+                        if (empty($extraHeaders['reply_to'])) {
+                            $extraHeaders['reply_to'] = [
                                 'name' => $this->adminName,
                                 'mail' => $this->adminEmail,
-                            ],
-                        ];
+                            ];
+                        }
 
                         if (!empty($userInfo['email'])) {
                             api_mail_html(

@@ -35,7 +35,7 @@ class CourseListController extends AbstractController
     ];
 
     private const array VISIBILITY_LABELS = [
-        Course::CLOSED => 'Closed - the account is not active',
+        Course::CLOSED => 'Closed',
         Course::REGISTERED => 'Private access (access authorized to group members only)',
         Course::OPEN_PLATFORM => 'Open - access allowed for users registered on the platform',
         Course::OPEN_WORLD => 'Public - access allowed for the whole world',

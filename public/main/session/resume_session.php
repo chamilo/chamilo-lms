@@ -277,7 +277,7 @@ if (0 === $session->getNbrCourses()) {
             ['class' => 'inline-flex items-center']
         );
         $courseActions .= Display::url(
-            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, 22, get_lang('Edit')),
+            Display::getMdiIcon('account-tie-outline', 'ch-tool-icon', null, 22, get_lang('Course tutor')),
             $codePath."session/session_course_edit.php?id_session=$sessionId&page=resume_session.php&course_code=$courseCode$orig_param",
             ['class' => 'inline-flex items-center']
         );

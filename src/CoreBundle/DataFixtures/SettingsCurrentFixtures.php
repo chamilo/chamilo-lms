@@ -3013,6 +3013,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Prefer short e-mail versions with a link to the messaging space on the platform to increase platform-based engagement.',
                 ],
                 [
+                    'name' => 'enable_email_open_tracking',
+                    'title' => 'Track e-mail openings',
+                    'comment' => 'Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read.',
+                ],
+                [
                     'name' => 'notifications_extended_footer_message',
                     'title' => 'Extended notifications footer',
                     'comment' => 'Add a custom extra footer for notifications emails for a specific language, for example for privacy policy notices. Multiple languages and paragraphs can be added.',

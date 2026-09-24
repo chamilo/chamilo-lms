@@ -252,6 +252,41 @@ class Message
     }
 
     #[Groups(['message:read'])]
+    public function isEmailOpenTrackingActive(): bool
+    {
+        foreach ($this->receivers as $messageRelUser) {
+            if (MessageRelUser::TYPE_SENDER === $messageRelUser->getReceiverType()) {
+                continue;
+            }
+
+            if (null !== $messageRelUser->getMailTrackingToken()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    #[Groups(['message:read'])]
+    public function getEmailOpenedAt(): ?DateTime
+    {
+        $openedAt = null;
+
+        foreach ($this->receivers as $messageRelUser) {
+            if (MessageRelUser::TYPE_SENDER === $messageRelUser->getReceiverType()) {
+                continue;
+            }
+
+            $candidate = $messageRelUser->getMailOpenedAt();
+            if (null !== $candidate && (null === $openedAt || $candidate < $openedAt)) {
+                $openedAt = $candidate;
+            }
+        }
+
+        return $openedAt;
+    }
+
+    #[Groups(['message:read'])]
     public function getFirstReceiver(): ?MessageRelUser
     {
         if ($this->receivers->count() > 0) {

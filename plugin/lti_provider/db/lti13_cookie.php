@@ -7,10 +7,6 @@ class Lti13Cookie implements Lti1p3Cookie
 {
     public function getCookie($name)
     {
-        if (isset($_REQUEST['state']) && $name === 'lti1p3_'.$_REQUEST['state']) {
-            return $_REQUEST['state'];
-        }
-
         if (isset($_COOKIE[$name])) {
             return $_COOKIE[$name];
         }
@@ -37,8 +33,11 @@ class Lti13Cookie implements Lti1p3Cookie
 
         setcookie($name, $value, array_merge($cookieOptions, $sameSiteOptions, $options));
 
-        // Set a second fallback cookie in the event that "SameSite" is not supported
-        setcookie("LEGACY_".$name, $value, array_merge($cookieOptions, $options));
+        // Set a second fallback cookie in the event that "SameSite" is not supported.
+        // No "samesite" attribute here (that's the point of the fallback), but it
+        // still needs to be Secure/HttpOnly like the primary cookie.
+        $legacyOptions = array_merge($cookieOptions, ['secure' => true, 'httponly' => true], $options);
+        setcookie("LEGACY_".$name, $value, $legacyOptions);
 
         return $this;
     }

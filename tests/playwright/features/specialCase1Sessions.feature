@@ -467,6 +467,10 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     When I follow "Parcours d'apprentissage"
     And I wait for the page to be loaded
+    # The tool link is a client-side route change, so the wait above returns
+    # at once; without this, "span.mdi-plus" hit the course home's own
+    # introduction "+" 43 ms later (CI trace) and the LP form never opened.
+    Then the URL should contain "/resources/lp/"
     And I click the "span.mdi-plus" element
     And I wait for the page to be loaded
     # "lp-title" (the real id), NOT the visible label "Learning path name":

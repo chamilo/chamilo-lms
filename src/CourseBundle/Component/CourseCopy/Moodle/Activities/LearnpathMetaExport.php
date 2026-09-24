@@ -9,8 +9,9 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities;
 use function is_array;
 
 /**
- * Dumps raw Learnpath (lessons) metadata as JSON sidecars under chamilo/learnpath/.
- * No mapping: we persist exactly the payload produced by build_learnpaths() and build_learnpath_category().
+ * Dumps Learnpath (lessons) metadata as JSON sidecars under chamilo/learnpath/.
+ * The builder payload is kept intact except for terminal final_item ordering, which is
+ * normalized so portable restores do not interpret its legacy display_order=0 as first.
  */
 class LearnpathMetaExport extends ActivityExport
 {
@@ -101,18 +102,19 @@ class LearnpathMetaExport extends ActivityExport
                 'category_name' => $catTitle[$cid] ?? null,
             ];
 
-            // Persist learnpath.json (complete raw payload + _context)
-            $this->writeJson($lpDir.'/learnpath.json', ['learnpath' => $lpArr]);
-
-            // Persist items.json as a separate, ordered list (if provided)
+            // Normalize the special terminal item before writing either sidecar. Legacy
+            // courses can store final_item with display_order=0 even though it belongs at the end.
             $items = [];
             if (isset($lpArr['items']) && is_array($lpArr['items'])) {
-                $items = $lpArr['items'];
-                // Stable sort by display_order if present, otherwise keep builder order
+                $items = $this->normalizeFinalItemDisplayOrder($lpArr['items']);
                 usort($items, static function (array $a, array $b): int {
                     return (int) ($a['display_order'] ?? 0) <=> (int) ($b['display_order'] ?? 0);
                 });
+                $lpArr['items'] = $items;
             }
+
+            // Persist learnpath.json (complete payload + _context) and a separate ordered items list.
+            $this->writeJson($lpDir.'/learnpath.json', ['learnpath' => $lpArr]);
             $this->writeJson($lpDir.'/items.json', ['items' => $items]);
 
             // Add to index
@@ -365,6 +367,45 @@ class LearnpathMetaExport extends ActivityExport
         }
 
         return '';
+    }
+
+    /**
+     * Legacy final items can keep display_order=0 although they are terminal LP items.
+     * Normalize only those invalid terminal positions and leave every other item untouched.
+     *
+     * @param array<int, array<string, mixed>> $items
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function normalizeFinalItemDisplayOrder(array $items): array
+    {
+        $maxNonFinalOrder = 0;
+
+        foreach ($items as $item) {
+            if ('final_item' === strtolower((string) ($item['item_type'] ?? ''))) {
+                continue;
+            }
+
+            $maxNonFinalOrder = max($maxNonFinalOrder, (int) ($item['display_order'] ?? 0));
+        }
+
+        $nextFinalOrder = $maxNonFinalOrder + 1;
+        foreach ($items as $index => $item) {
+            if ('final_item' !== strtolower((string) ($item['item_type'] ?? ''))) {
+                continue;
+            }
+
+            $currentOrder = (int) ($item['display_order'] ?? 0);
+            if ($currentOrder <= $maxNonFinalOrder) {
+                $items[$index]['display_order'] = $nextFinalOrder++;
+
+                continue;
+            }
+
+            $nextFinalOrder = max($nextFinalOrder, $currentOrder + 1);
+        }
+
+        return $items;
     }
 
     /** Ensure directory exists (recursive). */

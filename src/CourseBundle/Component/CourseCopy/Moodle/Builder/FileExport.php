@@ -365,7 +365,8 @@ class FileExport
      */
     private function processDocument(array $filesData, object $document): array
     {
-        if (($document->file_type ?? null) !== 'file') {
+        $fileType = strtolower((string) ($document->file_type ?? $document->filetype ?? ''));
+        if (!\in_array($fileType, ['file', 'video'], true)) {
             return $filesData;
         }
 

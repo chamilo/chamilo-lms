@@ -440,12 +440,17 @@ class MoodleImport
                     $lid       = $this->nextId($resources['link']);
                     $linkTitle = ($u['name'] ?? '') !== '' ? (string) $u['name'] : $urlVal;
 
+                    $sourceLinkId = (int) ($u['source_id'] ?? 0);
+
                     $resources['link'][$lid] = $this->mkLegacyItem('link', $lid, [
-                        'id'          => $lid,
-                        'title'       => $linkTitle,
+                        'id' => $lid,
+                        'source_id' => $sourceLinkId > 0 ? $sourceLinkId : $lid,
+                        'source_activity_id' => (int) ($u['source_activity_id'] ?? 0),
+                        'source_moduleid' => (int) ($u['source_moduleid'] ?? 0),
+                        'title' => $linkTitle,
                         'description' => '',
-                        'url'         => $urlVal,
-                        'target'      => '',
+                        'url' => $urlVal,
+                        'target' => '',
                         'category_id' => $catId,
                         'on_homepage' => false,
                     ]);
@@ -1115,6 +1120,7 @@ class MoodleImport
     {
         $doc = $this->loadXml($xmlPath);
         $xp = new DOMXPath($doc);
+        $meta = $this->extractActivitySourceMeta($xmlPath);
         $name = trim($xp->query('//url/name')->item(0)?->nodeValue ?? '');
         $url = trim($xp->query('//url/externalurl')->item(0)?->nodeValue ?? '');
         $intro = (string) ($xp->query('//url/intro')->item(0)?->nodeValue ?? '');
@@ -1128,7 +1134,15 @@ class MoodleImport
             $catTitle = trim($m[1]);
         }
 
-        return ['name' => $name, 'url' => $url, 'category_id' => $catId, 'category_title' => $catTitle];
+        return [
+            'name' => $name,
+            'url' => $url,
+            'category_id' => $catId,
+            'category_title' => $catTitle,
+            'source_id' => (int) ($meta['source_id'] ?? 0),
+            'source_activity_id' => (int) ($meta['activity_id'] ?? 0),
+            'source_moduleid' => (int) ($meta['module_id'] ?? 0),
+        ];
     }
 
     private function readScormModule(string $xmlPath): array
@@ -1145,6 +1159,7 @@ class MoodleImport
     {
         $map = [
             'document' => 'document',
+            'video' => 'document',
             'forum' => 'forum',
             'url' => 'link',
             'link' => 'link',
@@ -1160,7 +1175,7 @@ class MoodleImport
         $out = [];
         foreach ($items as $i) {
             $t = (string) ($i['item_type'] ?? '');
-            $r = $i['ref'] ?? null;
+            $r = $i['path'] ?? ($i['identifierref'] ?? ($i['ref'] ?? null));
             if ('' === $t || null === $r) {
                 continue;
             }
@@ -3705,7 +3720,7 @@ class MoodleImport
                     if (\in_array(
                         $itype,
                         [
-                            'document', 'quiz', 'quizzes', 'exercise',
+                            'document', 'video', 'quiz', 'quizzes', 'exercise',
                             'survey', 'feedback', 'link', 'weblink', 'url',
                             'work', 'works', 'student_publication', 'forum',
                         ],
@@ -3732,6 +3747,9 @@ class MoodleImport
                     'previous_item_id' => isset($it['previous_item_id']) ? (int) $it['previous_item_id'] : null,
                     'next_item_id' => isset($it['next_item_id']) ? (int) $it['next_item_id'] : null,
                     'display_order' => (int) ($it['display_order'] ?? 0),
+                    'level' => isset($it['level'])
+                        ? (int) $it['level']
+                        : (isset($it['lvl']) ? (int) $it['lvl'] : null),
                     'prerequisite' => (string) ($it['prerequisite'] ?? ''),
                     'prerequisite_min_score' => isset($it['prerequisite_min_score'])
                         ? (float) $it['prerequisite_min_score']
@@ -4055,7 +4073,11 @@ class MoodleImport
         $title = mb_strtolower((string) ($item['title'] ?? ''));
 
         $numericCandidates = [];
-        foreach ([$srcRef, $path, $idRef] as $cand) {
+        // In native Chamilo LPs, path/identifierref identify the referenced
+        // resource. ref can be only the LP-local item reference (for example 5, 6,
+        // 7) and may collide with sequential import bag keys. Resolve the resource
+        // identifiers first and keep ref only as a compatibility fallback.
+        foreach ([$path, $idRef, $srcRef] as $cand) {
             if (null === $cand || '' === $cand) {
                 continue;
             }
@@ -4077,6 +4099,7 @@ class MoodleImport
 
         switch ($type) {
             case 'document':
+            case 'video':
                 $hit = $firstFrom($idx['documentBySourceId'] ?? [], $numericCandidates);
                 if (null !== $hit) {
                     return $hit;

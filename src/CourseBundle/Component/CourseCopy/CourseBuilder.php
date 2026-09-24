@@ -585,21 +585,21 @@ class CourseBuilder
                         $ids
                     );
 
-                    if ($discardOrphanQuestions) {
-                        $this->build_quiz_questions(
-                            $legacyCourse,
-                            $courseEntity,
-                            $sessionEntity,
-                            $neededQuestionIds
-                        );
-                    } else {
-                        $this->build_quiz_questions(
-                            $legacyCourse,
-                            $courseEntity,
-                            $sessionEntity,
+                    $questionIds = $neededQuestionIds;
+
+                    if (!$discardOrphanQuestions) {
+                        $questionIds = array_values(array_unique(array_merge(
+                            $questionIds,
                             $this->getAllQuizQuestionIds($courseEntity, $sessionEntity)
-                        );
+                        )));
                     }
+
+                    $this->build_quiz_questions(
+                        $legacyCourse,
+                        $courseEntity,
+                        $sessionEntity,
+                        $questionIds
+                    );
                 }
 
                 if ('quiz_questions' === $toolKey) {
@@ -789,6 +789,8 @@ class CourseBuilder
             }
         }
 
+        $lpDocumentIds = [];
+
         foreach ($lps as $lp) {
             $iid = (int) ($lp->getIid() ?? 0);
             if ($iid <= 0) {
@@ -821,6 +823,16 @@ class CourseBuilder
 
                 $ref = (string) $it->getRef();
                 $path = (string) $it->getPath();
+
+                // Native LP document and video items both reference CDocument.iid in path.
+                // Keep those dependencies even when an old/migrated document is missing
+                // the ResourceLink used by the regular course-document query.
+                if (\in_array($itemTypeLower, ['document', 'video'], true) && ctype_digit($path)) {
+                    $documentId = (int) $path;
+                    if ($documentId > 0) {
+                        $lpDocumentIds[$documentId] = true;
+                    }
+                }
 
                 $rawItemsById[$itemId] = [
                     'id' => $itemId,
@@ -908,6 +920,7 @@ class CourseBuilder
                 $raw = $row['path'] ?? ($row['ref'] ?? ($row['identifierref'] ?? ''));
                 switch ($t) {
                     case 'document':
+                    case 'video':
                         $addLinked($linked, 'document', $raw);
                         break;
                     case 'quiz':
@@ -997,6 +1010,16 @@ class CourseBuilder
 
             $legacyCourse->resources[RESOURCE_LEARNPATH][$iid] =
                 $this->mkLegacyItem(RESOURCE_LEARNPATH, $iid, $payload, ['items', 'linked_resources']);
+        }
+
+        if (!empty($lpDocumentIds)) {
+            $this->build_documents_with_repo(
+                $courseEntity,
+                $sessionEntity,
+                $this->withBaseContent,
+                array_keys($lpDocumentIds),
+                true
+            );
         }
 
         // Optional: pack “scorm” folder (legacy parity)
@@ -3173,7 +3196,8 @@ class CourseBuilder
         ?CourseEntity $course,
         ?SessionEntity $session,
         bool $withBaseContent,
-        array $idList = []
+        array $idList = [],
+        bool $allowRelationFallback = false
     ): void {
         if (!$course instanceof CourseEntity) {
             return;
@@ -3188,6 +3212,45 @@ class CourseBuilder
 
         /** @var CDocument[] $docs */
         $docs = $qb->getQuery()->getResult();
+
+        // LP items are an authoritative relation owned by an already-authorized LP.
+        // Some migrated/legacy media documents can still be referenced by the LP while
+        // lacking the ResourceLink required by the normal context query. Only callers
+        // that obtained ids from such an internal relation may enable this fallback.
+        if ($allowRelationFallback && !empty($idList)) {
+            $wantedIds = array_values(array_unique(array_filter(
+                array_map('intval', $idList),
+                static fn (int $id): bool => $id > 0
+            )));
+
+            $foundIds = [];
+            foreach ($docs as $doc) {
+                $foundIds[(int) $doc->getIid()] = true;
+            }
+
+            $missingIds = array_values(array_filter(
+                $wantedIds,
+                static fn (int $id): bool => !isset($foundIds[$id])
+            ));
+
+            if (!empty($missingIds)) {
+                /** @var CDocument[] $fallbackDocs */
+                $fallbackDocs = $this->em->createQueryBuilder()
+                    ->select('doc')
+                    ->from(CDocument::class, 'doc')
+                    ->andWhere('doc.iid IN (:ids)')
+                    ->setParameter('ids', $missingIds)
+                    ->getQuery()
+                    ->getResult()
+                ;
+
+                foreach ($fallbackDocs as $doc) {
+                    if ($doc instanceof CDocument) {
+                        $docs[] = $doc;
+                    }
+                }
+            }
+        }
 
         $documentsRoot = $this->docRepo->getCourseDocumentsRootNode($course);
         $courseRoot = $course->getResourceNode();

@@ -5760,6 +5760,7 @@ class CourseRestorer
         // Map normalized resource types to bags (no extra validations)
         $type2bags = [
             'document' => ['document', RESOURCE_DOCUMENT],
+            'video' => ['document', RESOURCE_DOCUMENT],
             'quiz' => ['quiz', RESOURCE_QUIZ],
             'exercise' => ['quiz', RESOURCE_QUIZ],
             'link' => ['link', RESOURCE_LINK],
@@ -6194,17 +6195,21 @@ class CourseRestorer
 
             switch ($itype) {
                 case 'document':
-                    $refId = ctype_digit((string) ($it['ref'] ?? '')) ? (int) $it['ref'] : 0;
-                    if ($refId > 0) {
-                        $nid = $getDst(RESOURCE_DOCUMENT, $refId);
+                case 'video':
+                    // path/identifierref is the resource iid in native Chamilo LPs.
+                    // ref may be an LP-local reference and can collide with an import
+                    // bag key, so resolve the resource path before falling back to ref.
+                    $rawId = ctype_digit((string) $raw) ? (int) $raw : 0;
+                    if ($rawId > 0) {
+                        $nid = $getDst(RESOURCE_DOCUMENT, $rawId);
                         if ($nid) {
                             return (string) $nid;
                         }
                     }
 
-                    $rawId = ctype_digit((string) $raw) ? (int) $raw : 0;
-                    if ($rawId > 0) {
-                        $nid = $getDst(RESOURCE_DOCUMENT, $rawId);
+                    $refId = ctype_digit((string) ($it['ref'] ?? '')) ? (int) $it['ref'] : 0;
+                    if ($refId > 0) {
+                        $nid = $getDst(RESOURCE_DOCUMENT, $refId);
                         if ($nid) {
                             return (string) $nid;
                         }

@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Put;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -45,6 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ORM\Table(name: 'message_rel_user')]
 #[ORM\UniqueConstraint(name: 'message_receiver', columns: ['message_id', 'user_id', 'receiver_type'])]
+#[ORM\UniqueConstraint(name: 'uniq_message_rel_user_mail_tracking_token', columns: ['mail_tracking_token'])]
 #[ORM\Entity]
 #[Gedmo\SoftDeleteable(timeAware: true)]
 #[ApiFilter(
@@ -110,6 +112,12 @@ class MessageRelUser
     #[Groups(['message:read', 'message:write', 'message_rel_user:read', 'message_rel_user:write'])]
     #[ORM\Column(name: 'starred', type: 'boolean', nullable: false)]
     protected bool $starred;
+
+    #[ORM\Column(name: 'mail_tracking_token', type: 'string', length: 64, nullable: true)]
+    protected ?string $mailTrackingToken = null;
+
+    #[ORM\Column(name: 'mail_opened_at', type: 'datetime', nullable: true)]
+    protected ?DateTime $mailOpenedAt = null;
 
     /**
      * @var Collection<int, MessageTag>
@@ -179,6 +187,30 @@ class MessageRelUser
     public function setStarred(bool $starred): self
     {
         $this->starred = $starred;
+
+        return $this;
+    }
+
+    public function getMailTrackingToken(): ?string
+    {
+        return $this->mailTrackingToken;
+    }
+
+    public function setMailTrackingToken(?string $mailTrackingToken): self
+    {
+        $this->mailTrackingToken = $mailTrackingToken;
+
+        return $this;
+    }
+
+    public function getMailOpenedAt(): ?DateTime
+    {
+        return $this->mailOpenedAt;
+    }
+
+    public function setMailOpenedAt(?DateTime $mailOpenedAt): self
+    {
+        $this->mailOpenedAt = $mailOpenedAt;
 
         return $this;
     }

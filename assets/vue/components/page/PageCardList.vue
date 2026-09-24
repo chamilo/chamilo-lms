@@ -24,7 +24,7 @@ const props = defineProps({
   pages: {
     type: Array,
     required: false,
-    default: () => [],
+    default: null,
   },
 })
 
@@ -40,8 +40,18 @@ async function fetchPages(params) {
   return json["hydra:member"] ?? []
 }
 
-watchEffect(async () => {
-  if (props.pages.length) {
+watchEffect(async (onCleanup) => {
+  let cancelled = false
+
+  onCleanup(() => {
+    cancelled = true
+  })
+
+  // When the parent provides the pages prop, it owns the list even while it is
+  // temporarily empty during an API request. Falling back to the home pages in
+  // that state starts a second request that can finish later and overwrite the
+  // parent-provided Index/FAQ/Demo pages.
+  if (Array.isArray(props.pages)) {
     pageList.value = props.pages
     return
   }
@@ -56,12 +66,20 @@ watchEffect(async () => {
     locale: locale.value,
   })
 
+  if (cancelled) {
+    return
+  }
+
   if (localizedPages.length) {
     pageList.value = localizedPages
     return
   }
 
   const fallbackPages = await fetchPages(baseParams)
+
+  if (cancelled) {
+    return
+  }
 
   pageList.value = fallbackPages.length ? [fallbackPages[0]] : []
 })

@@ -43,10 +43,79 @@ $form = new FormValidator(
 );
 $form->addMultiSelect(
     'courses_to_avoid',
-    $tool_name,
+    [
+        '',
+        get_lang('Courses in this session'),
+        get_lang('Unaccessible courses'),
+    ],
     getSessionCourseList($session)
 );
+
+$courseSelector = $form->getElement('courses_to_avoid');
+$courseSelector->setElementTemplate(
+    '
+    {javascript}
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_5rem_minmax(0,1fr)] lg:items-stretch">
+        <section class="min-w-0 rounded-2xl border border-gray-20 bg-white p-4 shadow-sm">
+            <label for="courses_to_avoid" class="mb-3 block text-body-2 font-semibold text-gray-90">
+                {label_2}
+            </label>
+            <div class="min-w-0">
+                {unselected}
+            </div>
+        </section>
+
+        <section class="min-w-0 rounded-2xl border border-gray-20 bg-support-2 p-4 shadow-sm">
+            <div class="flex h-full min-h-24 items-center justify-center gap-3 lg:flex-col">
+                {add}
+                {remove}
+            </div>
+        </section>
+
+        <section class="min-w-0 rounded-2xl border border-gray-20 bg-white p-4 shadow-sm">
+            <label for="courses_to_avoid_to" class="mb-3 block text-body-2 font-semibold text-gray-90">
+                {label_3}
+            </label>
+            <div class="min-w-0">
+                {selected}
+            </div>
+        </section>
+    </div>'
+);
+
+$transferButtonClasses = 'inline-flex h-12 w-12 min-h-12 min-w-12 items-center justify-center rounded-xl border-0 bg-secondary p-0 text-center text-secondary-button-text hover:bg-secondary-hover focus:outline-none focus:ring-2 focus:ring-secondary';
+$courseSelector->setButtonAttributes('add', [
+    'class' => $transferButtonClasses,
+    'title' => get_lang('Add'),
+    'aria-label' => get_lang('Add'),
+    'data-bs-toggle' => 'tooltip',
+    'data-bs-placement' => 'right',
+]);
+$courseSelector->setButtonAttributes('remove', [
+    'class' => $transferButtonClasses,
+    'title' => get_lang('Remove'),
+    'aria-label' => get_lang('Remove'),
+    'data-bs-toggle' => 'tooltip',
+    'data-bs-placement' => 'right',
+]);
+
+$renderer = $form->defaultRenderer();
+$renderer->setElementTemplate(
+    '
+    <div class="{error_class}">
+        {element}
+        <!-- BEGIN error -->
+            <p class="mt-2 text-sm text-danger">{error}</p>
+        <!-- END error -->
+    </div>',
+    'courses_to_avoid'
+);
+
 $form->addButtonSave(get_lang('Save'));
+$renderer->setElementTemplate(
+    '<div class="mt-5 flex justify-end border-t border-gray-20 pt-4">{element}</div>',
+    'submit'
+);
 
 if ($form->validate()) {
     $values = $form->exportValues();
@@ -100,21 +169,9 @@ $interbreadcrumb[] = [
 
 Display::display_header($tool_name);
 echo Display::page_header($session->getTitle().' - '.UserManager::formatUserFullName($user));
-?>
-<div class="row">
-    <div class="col-sm-8 col-sm-offset-2">
-        <div class="row">
-            <div class="col-sm-5">
-                <label for="courses_to_avoid-f"><?php echo get_lang('Courses in this session'); ?></label>
-            </div>
-            <div class="col-sm-5 col-sm-offset-2">
-                <label for="courses_to_avoid-t"><?php echo get_lang('Unaccessible courses'); ?></label>
-            </div>
-        </div>
-    </div>
-</div>
-<?php
+echo '<div class="mx-auto w-full max-w-6xl py-2">';
 echo $form->returnForm();
+echo '</div>';
 
 Display::display_footer();
 

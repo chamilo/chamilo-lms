@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
 
 /**
@@ -45,7 +46,7 @@ class Course
                     if ($resource->links_to($resource_to_check)) {
                         return true;
                     }
-                    if ($type == RESOURCE_LEARNPATH && get_class($resource) == 'CourseCopyLearnpath') {
+                    if ($type == RESOURCE_LEARNPATH && $resource instanceof CourseCopyLearnpath) {
                         if ($resource->has_item($resource_to_check)) {
                             return true;
                         }

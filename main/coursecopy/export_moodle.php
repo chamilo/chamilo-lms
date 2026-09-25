@@ -82,6 +82,22 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
         MoodleExport::restoreMainDatabaseConnection();
         MoodleExport::debugStaticLog('Partial course from selected resources built');
 
+        // Resolve resources referenced by the selected items (e.g. a learning path's
+        // document/quiz/work sub-items) and the documents (images, files) embedded in
+        // their rich text content (work/quiz descriptions, etc.), so the export does not
+        // fail when only the container item was selected. Mirrors create_backup.php.
+        MoodleExport::debugStaticLog('Resolving resources referenced by the selected items', [
+            'item_list_to_add' => array_map('array_values', $cb->itemListToAdd),
+        ]);
+        $cb->exportToCourseBuildFormat();
+        $cb->restoreDocumentsFromList();
+        MoodleExport::restoreMainDatabaseConnection();
+        MoodleExport::debugStaticLog('Referenced resources resolved', [
+            'work_ids_in_course' => array_keys($course->resources[RESOURCE_WORK] ?? []),
+            'document_ids_in_course' => array_keys($course->resources[RESOURCE_DOCUMENT] ?? []),
+            'documents_added_in_text' => $cb->documentsAddedInText,
+        ]);
+
         MoodleExport::debugStaticLog('Normalizing posted course selection');
         $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
         MoodleExport::restoreMainDatabaseConnection();
@@ -205,6 +221,14 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
             $course = $cb->build();
             MoodleExport::restoreMainDatabaseConnection();
             MoodleExport::debugStaticLog('Complete course built for full export');
+
+            // Resolve resources referenced by rich text content (e.g. images embedded in
+            // work/quiz descriptions) so they are included as documents in the export.
+            MoodleExport::debugStaticLog('Resolving resources referenced by the course content');
+            $cb->exportToCourseBuildFormat();
+            $cb->restoreDocumentsFromList();
+            MoodleExport::restoreMainDatabaseConnection();
+            MoodleExport::debugStaticLog('Referenced resources resolved');
 
             MoodleExport::debugStaticLog('Creating MoodleExport instance for full export');
             $exporter = new MoodleExport($course);

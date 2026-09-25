@@ -44,6 +44,10 @@ class Lti13Database implements Interfaces\Database
         $em = Database::getManager();
         $platforms = $em->getRepository('ChamiloPluginBundle:LtiProvider\Platform')->findAll();
 
+        // Use PlatformKey's kid so the JWT header matches the kid published in jwks.php
+        $platformKey = $em->getRepository('ChamiloPluginBundle:LtiProvider\PlatformKey')->findOneBy([]);
+        $kid = $platformKey ? $platformKey->getKid() : '';
+
         $ltiCustomers = [];
         foreach ($platforms as $platform) {
             $clientId = $platform->getClientId();
@@ -53,7 +57,7 @@ class Lti13Database implements Interfaces\Database
                 'auth_login_url' => $platform->getAuthLoginUrl(),
                 'auth_token_url' => $platform->getAuthTokenUrl(),
                 'key_set_url' => $platform->getKeySetUrl(),
-                'kid' => $platform->getKid(),
+                'kid' => $kid,
                 'deployment' => [$platform->getDeploymentId()],
             ];
         }

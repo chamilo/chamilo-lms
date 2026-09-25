@@ -63,7 +63,7 @@ class LogoutListener
             $userId = $user->getId();
 
             $trackELoginRepository = $this->em->getRepository(TrackELogin::class);
-            $loginAs = $this->checker->isGranted('ROLE_PREVIOUS_ADMIN');
+            $loginAs = $this->checker->isGranted('IS_IMPERSONATOR');
             if (!$loginAs) {
                 $currentDate = new DateTime('now', new DateTimeZone('UTC'));
                 $trackELoginRepository->updateLastLoginLogoutDate($userId, $currentDate);

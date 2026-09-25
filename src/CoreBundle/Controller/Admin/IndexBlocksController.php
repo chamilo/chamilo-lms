@@ -77,8 +77,8 @@ class IndexBlocksController extends BaseController
         // the goal here — the same admin reloading/navigating back to this page
         // repeatedly. Locale stays in the key too, since a viewer switching their own
         // UI language mid-session would otherwise see their own stale-language cache
-        // for up to 120 s. TTL-only expiry (no active invalidation): a settings/plugin
-        // change made elsewhere can take up to 120 s to appear here.
+        // for up to 120 s. Saving settings clears this cache (SettingsController); other
+        // changes made elsewhere (e.g. plugins) can take up to 120 s to appear here.
         $accessUrlId = $this->accessUrlHelper->getCurrent()?->getId() ?? 0;
         $userId = $this->userHelper->getCurrent()?->getId() ?? 0;
         $cacheKey = \sprintf(

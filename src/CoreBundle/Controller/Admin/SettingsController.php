@@ -17,6 +17,8 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Collator;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
@@ -40,7 +42,9 @@ class SettingsController extends BaseController
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly TranslatorInterface $translator,
-        private readonly SearchIndexPathResolver $searchIndexPathResolver
+        private readonly SearchIndexPathResolver $searchIndexPathResolver,
+        #[Autowire(service: 'chamilo.admin_index_blocks')]
+        private readonly CacheItemPoolInterface $adminIndexBlocksCache,
     ) {}
 
     #[Route('/settings', name: 'admin_settings')]
@@ -420,6 +424,8 @@ class SettingsController extends BaseController
 
             try {
                 $manager->save($form->getData());
+                // Many /admin blocks depend on settings; don't serve them stale for up to 120 s.
+                $this->adminIndexBlocksCache->clear();
                 $message = $this->trans('The settings have been stored');
             } catch (ValidatorException $validatorException) {
                 $message = $this->trans($validatorException->getMessage());

@@ -3,6 +3,8 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -42,7 +44,21 @@ class QuizzesLoader implements LoaderInterface
 
         $quizId = $exercise->save();
 
-        \Database::query("UPDATE c_quiz SET active = 0 WHERE iid = $quizId");
+        $quizRepository = Container::getQuizRepository();
+        $quiz = $quizRepository->find($quizId);
+        $course = api_get_course_entity((int) $incomingData['c_id']);
+        $session = api_get_session_entity();
+
+        if (null !== $quiz && null !== $course) {
+            $link = $quiz->getFirstResourceLinkFromCourseSession($course, $session);
+            if (null !== $link) {
+                $entityManager = \Database::getManager();
+                $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
+                $entityManager->persist($link);
+                $entityManager->flush();
+            }
+        }
+
         \Database::query("UPDATE c_lp_item SET path = '$quizId' WHERE iid = {$incomingData['item_id']}");
 
         return $quizId;

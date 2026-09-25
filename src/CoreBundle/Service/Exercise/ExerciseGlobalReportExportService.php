@@ -264,9 +264,7 @@ final readonly class ExerciseGlobalReportExportService
      */
     private function getExercises(int $courseId): array
     {
-        $activeFilter = $this->tableHasColumn('c_quiz', 'active') ? 'AND q.active <> -1' : '';
-
-        $sql = <<<SQL
+        $sql = <<<'SQL'
 SELECT DISTINCT q.iid, q.title
 FROM c_quiz q
 INNER JOIN resource_node rn
@@ -275,7 +273,6 @@ INNER JOIN resource_link rl
     ON rl.resource_node_id = rn.id
 WHERE rl.c_id = :courseId
     AND rl.deleted_at IS NULL
-    {$activeFilter}
 ORDER BY q.iid ASC
 SQL;
 
@@ -365,16 +362,6 @@ SQL;
                 require_once $file;
             }
         }
-    }
-
-    private function tableHasColumn(string $table, string $column): bool
-    {
-        $rows = $this->connection
-            ->executeQuery(\sprintf('SHOW COLUMNS FROM %s LIKE :column', $table), ['column' => $column])
-            ->fetchAllAssociative()
-        ;
-
-        return [] !== $rows;
     }
 
     private function trans(string $key): string

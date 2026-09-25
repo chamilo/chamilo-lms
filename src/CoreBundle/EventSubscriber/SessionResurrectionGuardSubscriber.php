@@ -54,10 +54,7 @@ class SessionResurrectionGuardSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-        if (!$request->hasSession()
-            || !$request->hasPreviousSession()
-            || $request->attributes->get(self::LOGGED_IN_ATTRIBUTE)
-        ) {
+        if (!$request->hasPreviousSession() || $request->attributes->get(self::LOGGED_IN_ATTRIBUTE)) {
             return;
         }
 

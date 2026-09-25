@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
@@ -80,6 +81,55 @@ final class SessionResurrectionGuardSubscriberTest extends TestCase
         self::assertNotNull($tokenStorage->getToken(), 'A login rotates the session id on purpose.');
     }
 
+    public function testGuardRunsBeforeTheFirewallWritesTheToken(): void
+    {
+        $events = SessionResurrectionGuardSubscriber::getSubscribedEvents();
+
+        self::assertSame('onLoginSuccess', $events[LoginSuccessEvent::class]);
+        // ContextListener stores the token on the response at priority 0; running after it,
+        // dropping the token would come too late to keep it out of the new session.
+        [[$method, $priority]] = $events[KernelEvents::RESPONSE];
+        self::assertSame('onKernelResponse', $method);
+        self::assertGreaterThan(0, $priority);
+    }
+
+    public function testSubRequestKeepsTheToken(): void
+    {
+        $tokenStorage = $this->authenticatedTokenStorage();
+        $request = $this->requestWithSession('id-destroyed-by-logout', $this->startedSession('id-issued-by-php'));
+
+        (new SessionResurrectionGuardSubscriber($tokenStorage))
+            ->onKernelResponse($this->responseEvent($request, HttpKernelInterface::SUB_REQUEST))
+        ;
+
+        self::assertNotNull(
+            $tokenStorage->getToken(),
+            'Only the main request writes the session cookie; a fragment must not log the page\'s user out.',
+        );
+    }
+
+    public function testRequestWithoutSessionCookieKeepsTheToken(): void
+    {
+        $tokenStorage = $this->authenticatedTokenStorage();
+        // No session cookie sent: a first visit, or a stateless (e.g. JWT) API call. Its
+        // session id is new by definition, which is no sign of a concurrent logout.
+        $request = new Request();
+        $request->setSession($this->startedSession('id-issued-by-php'));
+
+        (new SessionResurrectionGuardSubscriber($tokenStorage))->onKernelResponse($this->responseEvent($request));
+
+        self::assertNotNull($tokenStorage->getToken(), 'A request with no previous session has nothing to resurrect.');
+    }
+
+    public function testRequestWithoutSessionKeepsTheToken(): void
+    {
+        $tokenStorage = $this->authenticatedTokenStorage();
+
+        (new SessionResurrectionGuardSubscriber($tokenStorage))->onKernelResponse($this->responseEvent(new Request()));
+
+        self::assertNotNull($tokenStorage->getToken());
+    }
+
     private function respond(TokenStorage $tokenStorage, string $cookieSessionId, Session $session): void
     {
         (new SessionResurrectionGuardSubscriber($tokenStorage))
@@ -113,12 +163,12 @@ final class SessionResurrectionGuardSubscriberTest extends TestCase
         return $request;
     }
 
-    private function responseEvent(Request $request): ResponseEvent
+    private function responseEvent(Request $request, int $requestType = HttpKernelInterface::MAIN_REQUEST): ResponseEvent
     {
         return new ResponseEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
-            HttpKernelInterface::MAIN_REQUEST,
+            $requestType,
             new Response(),
         );
     }

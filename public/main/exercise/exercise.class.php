@@ -1835,8 +1835,8 @@ class Exercise
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
         }
 
-        // Register resource deletion manually because this is a soft delete (active = -1)
-        // and Doctrine does not trigger postRemove in this case.
+        // Register resource deletion manually because removing the contextual resource link
+        // does not remove the CQuiz entity, so Doctrine does not trigger postRemove.
         $resourceNode = $exercise->getResourceNode();
         if ($resourceNode) {
             Container::getResourceHelper()->createAndSaveResourceEvent(

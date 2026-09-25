@@ -62,6 +62,31 @@ Given("I am on the homepage", async ({ page }) => {
 // legacy redirect entry point (cidReq resolves the course by its code, not
 // its numeric id) and asserts no visible error, matching the original's own
 // assertElementNotOnPage('.alert-danger') right after navigating.
+// New — not ported. toolLp.feature's own scenarios navigate straight to
+// `/main/lp/lp_controller.php?cid=3&action=...`, hardcoding the numeric
+// course id. That id is only ever "3" by coincidence of a near-empty,
+// freshly-seeded database (courses assigned sequentially from near-zero) —
+// confirmed live on a long-lived shared dev box where "TEMP" had instead
+// landed on id 36 (cid=3 there resolved to a real, unrelated, pre-existing
+// French-language course, "Français pour débutants" — every subsequent tool
+// label would have rendered in French, and a create/delete scenario would
+// have mutated a real course's data instead of the disposable fixture).
+// Resolves the course by CODE first (like "I am on course ... homepage"
+// above), extracts the numeric id from the resulting `/course/<id>/home`
+// URL, then reuses it for the legacy LP shim URL — portable across any
+// database instead of assuming a specific numeric id.
+Given(
+  "I am on the learning path {string} page of course {string}",
+  async ({ page }, action: string, courseCode: string) => {
+    await gotoReliably(page, `/main/course_home/redirect.php?cidReq=${encodeURIComponent(courseCode)}`)
+    const match = page.url().match(/\/course\/(\d+)\/home/)
+    if (!match) {
+      throw new Error(`Could not resolve the numeric course id for "${courseCode}" from ${page.url()}`)
+    }
+    await gotoReliably(page, `/main/lp/lp_controller.php?cid=${match[1]}&action=${encodeURIComponent(action)}`)
+  },
+)
+
 Given("I am on course {string} homepage", async ({ page }, courseCode: string) => {
   // gotoReliably, not a bare page.goto(): a real CI failure in
   // translateHtmlFallback.feature showed this step racing the previous
@@ -305,7 +330,13 @@ async function loginAs(page: Page, username: string) {
   }
   await page.goto("/login")
   await page.waitForLoadState("domcontentloaded")
-  const loginField = page.locator("#login")
+  // ":visible", not a bare "#login": some installs (confirmed live on
+  // testparkur.beeznest.com) render a portal-style /login homepage with a
+  // second, hidden login form sharing the same id (a sidebar "Login" nav
+  // widget) alongside the real one. A bare "#login" then resolves to 2
+  // elements and every strict-mode locator call below (toBeVisible/fill)
+  // throws "strict mode violation" before ever reaching the real form.
+  const loginField = page.locator("#login:visible")
 
   // Self-heal the one failure this step cannot otherwise recover from: the login
   // form is absent because we are still logged in, so /login bounced to /home.
@@ -332,12 +363,14 @@ async function loginAs(page: Page, username: string) {
 
   await expect(loginField).toBeVisible({ timeout: 15_000 })
   await loginField.fill(username, { timeout: 10_000 })
-  await page.locator("#password").fill(username, { timeout: 10_000 })
+  await page.locator("#password:visible").fill(username, { timeout: 10_000 })
   // Scope to the login form. A broader `button:has-text('Sign in')` can race
   // a SPA redirect after fill: the form is already gone, click() then waits
   // the rest of the test timeout for a Sign in button that will never return
   // (webserverLoad's non-admin scenario: snapshot already showed Sign out).
-  const signIn = page.locator("form.login-section__form button[type='submit']")
+  // ":visible" for the same duplicate-form reason as loginField above — the
+  // hidden form has its own submit button too.
+  const signIn = page.locator("form.login-section__form button[type='submit']:visible")
   if (await signIn.isVisible().catch(() => false)) {
     await signIn.click({ timeout: 15_000 }).catch(() => {})
   }
@@ -478,8 +511,8 @@ async function loginAs(page: Page, username: string) {
     await page.waitForLoadState("domcontentloaded")
     await expect(loginField).toBeVisible({ timeout: 15_000 })
     await loginField.fill(username, { timeout: 10_000 })
-    await page.locator("#password").fill(username, { timeout: 10_000 })
-    await page.locator("form.login-section__form button[type='submit']").click({ timeout: 15_000 })
+    await page.locator("#password:visible").fill(username, { timeout: 10_000 })
+    await page.locator("form.login-section__form button[type='submit']:visible").click({ timeout: 15_000 })
     // Same two-outcome race + interstitial accept as the primary path above.
     // This retry branch is a near-duplicate of that flow and originally omitted
     // the T&C handling, which is where the failure moved to once the primary
@@ -1365,7 +1398,23 @@ When("I select {string} from the ajax select {string}", async ({ page }, optionT
 // starting from a clean selection is exactly right.
 Then("I select {string} from {string}", async ({ page }, optionLabel: string, field: string) => {
   await failIfLoginPage(page, `select "${optionLabel}" from "${field}"`)
-  await (await resolveField(page, field)).selectOption({ label: optionLabel })
+  const locator = await resolveField(page, field)
+  // Prefer the visible LABEL (the normal case) — but fall back to the
+  // option's VALUE when no option's text equals the given string. Real CI
+  // failure on testparkur.beeznest.com: a "Multiple selection drop-down"
+  // extra field option stored as value "vie-quotidienne" renders with a
+  // humanized visible label "Vie quotidienne" — a caller passing the value
+  // (the semantic identifier used when the option was created) would
+  // otherwise hang the full test budget waiting for a label match that can
+  // never exist.
+  const hasLabel = await locator
+    .locator("option", { hasText: new RegExp(`^\\s*${escapeRegExp(optionLabel)}\\s*$`) })
+    .count()
+  if (hasLabel > 0) {
+    await locator.selectOption({ label: optionLabel })
+  } else {
+    await locator.selectOption({ value: optionLabel })
+  }
 })
 
 // Not ported — new, for translateHtmlFallback.feature's YesNoType toggle
@@ -1593,9 +1642,12 @@ registerSettingsGuard("@settings-sessionManagement", [
 
 // toolLp.feature's two "Check the PDF export..." scenarios toggle this
 // between No and Yes to exercise the LP list's PDF-export icon under both
-// states.
+// states. The prerequisite scenarios below do the same for
+// form_show_prerequisite_as_blocked (both fields live on the same
+// /admin/settings/lp page, so one guard entry per field is enough).
 registerSettingsGuard("@settings-toolLp", [
   { path: "/admin/settings/lp", field: "form_hide_scorm_pdf_link" },
+  { path: "/admin/settings/lp", field: "form_show_prerequisite_as_blocked" },
 ])
 
 // toolGlossary.feature's "Enable glossary display in extra tools" scenario
@@ -1812,9 +1864,11 @@ async function gotoReliably(page: Page, path: string, maxAttempts = 5) {
 async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Browser, baseURL?: string) {
   const page = await (await browser.newContext({ baseURL })).newPage()
   await page.goto("/login")
-  await page.locator("#login").fill("admin", { timeout: 10_000 })
-  await page.locator("#password").fill("admin", { timeout: 10_000 })
-  const signIn = page.locator("form.login-section__form button[type='submit']")
+  // ":visible" — see loginAs()'s own comment: some installs render a hidden
+  // duplicate login form (portal-style homepage) sharing the same ids.
+  await page.locator("#login:visible").fill("admin", { timeout: 10_000 })
+  await page.locator("#password:visible").fill("admin", { timeout: 10_000 })
+  const signIn = page.locator("form.login-section__form button[type='submit']:visible")
   if (await signIn.isVisible().catch(() => false)) {
     await signIn.click({ timeout: 15_000 }).catch(() => {})
   } else {
@@ -1884,6 +1938,26 @@ async function dismissBlockingUi(page: Page): Promise<void> {
   const cookieAccept = page.getByRole("button", { name: /^(Accept|Accepter)$/i })
   if (await cookieAccept.isVisible().catch(() => false)) {
     await cookieAccept.click({ timeout: 2_000 }).catch(() => {})
+  }
+  // Same "hide, don't rely on the click" treatment as the debug toolbar below,
+  // for the same reason: real CI failure on testparkur.beeznest.com (platform
+  // setting `cookie_warning` = Yes) showed the Accept click above is not
+  // reliable enough on its own — `#chamilo-cookie-banner` is `fixed
+  // inset-x-0 bottom-0`, and a settings-page "Save settings" click retried
+  // for the full 15-minute @long-scenario budget with the call log repeating
+  // "... subtree intercepts pointer events" the whole time, even though this
+  // same function had already attempted the Accept click first. Hiding the
+  // banner outright removes the intercepting element instead of depending on
+  // a single click landing before the next action needs the space it covers.
+  const cookieBanner = page.locator("#chamilo-cookie-banner")
+  if ((await cookieBanner.count()) > 0) {
+    await cookieBanner
+      .evaluateAll((elements) => {
+        elements.forEach((element) => {
+          ;(element as HTMLElement).style.display = "none"
+        })
+      })
+      .catch(() => {})
   }
   // The Symfony Web Debug Toolbar is dev-env chrome, not part of the app, but it
   // is position:fixed at the bottom of the viewport and intercepts the pointer
@@ -2232,6 +2306,11 @@ When("I press {string}", async ({ page }, label: string) => {
 // already visible the moment they're queried, so this changes nothing there.
 Then("I click the {string} element", async ({ page }, selector: string) => {
   page.once("dialog", (dialog) => dialog.accept())
+  // Same cookie-banner/debug-toolbar guard as pressButton()/"I follow ..." —
+  // this step is a raw CSS-selector click with no dialog-scoped fallback of
+  // its own, so it has no other chance to recover from either overlay
+  // intercepting the pointer event.
+  await dismissBlockingUi(page)
   await page.locator(`${selector}:visible`).first().click()
 })
 
@@ -3400,11 +3479,46 @@ Then(
 When("I press the multiselect option {string} in {string}", async ({ page }, optionText: string, fieldId: string) => {
   const field = page.locator(`#${fieldId}`)
   await field.scrollIntoViewIfNeeded()
-  await field.click({ force: true })
+  // Click the PrimeVue MultiSelect's own wrapper (`.p-multiselect`), not the inner hidden/
+  // filter `#<fieldId>` input directly. Real CI-reproducible failure while bootstrapping an
+  // admin test account: on a "chip display" MultiSelect (`/admin/user-add`'s "roles" field,
+  // `p-multiselect-display-chip`), the input renders as a narrow child that does not reliably
+  // bubble a click into PrimeVue's open-panel handler — `field.click({force:true})` on the
+  // input alone left `.p-multiselect-overlay` never appearing (90s timeout), confirmed via a
+  // bounding-box dump showing the input occupies only ~1/5 of the wrapper's clickable width.
+  // Clicking the wrapper instead is safe for the plain "comma display" variant too (its click
+  // still reaches the same PrimeVue handler either way) — it is a strict generalization, not a
+  // field-specific special case.
+  const trigger = field.locator(
+    "xpath=ancestor-or-self::*[contains(concat(' ', normalize-space(@class), ' '), ' p-multiselect ')][1]",
+  )
+  await trigger.click({ force: true })
   const overlay = page.locator(".p-multiselect-overlay")
   await overlay.waitFor({ state: "visible" })
   await overlay.getByText(optionText, { exact: true }).click()
   await page.keyboard.press("Escape")
+})
+
+// Not ported — new, for toolLp.feature's "Prerequisites" field on a learning
+// path's Settings page (LpForm.vue, `BaseSelect id="lp-prerequisite"`).
+// NOT the same widget as the "I select ... from ..." step above: that step's
+// own header comment documents PrimeVue's <Select> as a progressive
+// enhancement over a real, CSS-hidden native <select> (true for the legacy
+// /admin/settings/* pages, where selectOption() works directly) — but a
+// BaseSelect rendered entirely by the Vue SPA has no such backing element at
+// all. Confirmed live via the real failure: `#lp-prerequisite` resolved to
+// `<span role="combobox" id="lp-prerequisite">`, and
+// `locator.selectOption()` threw "Element is not a <select> element" outright
+// rather than timing out. Same open-overlay-then-click-the-option shape as
+// the multiselect step above, single-select PrimeVue `Select` instead of
+// `MultiSelect` (`.p-select-overlay`/`[role="option"]`, confirmed live).
+When("I select the dropdown option {string} in {string}", async ({ page }, optionText: string, fieldId: string) => {
+  const field = page.locator(`#${fieldId}`)
+  await field.scrollIntoViewIfNeeded()
+  await field.click({ force: true })
+  const overlay = page.locator(".p-select-overlay")
+  await overlay.waitFor({ state: "visible" })
+  await overlay.getByText(optionText, { exact: true }).click()
 })
 
 // Not ported — new, for toolExerciseAdmin.feature. ExerciseQuestionSelectorView.vue's

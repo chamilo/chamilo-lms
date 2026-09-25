@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\SocialPostFeedback;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Service\Message\MessageEmailOpenTrackingService;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -377,17 +378,34 @@ class MessageManager
                     if ($directMessage) {
                         $type = Notification::NOTIFICATION_TYPE_DIRECT_MESSAGE;
                     }
-                    $notification->saveNotification(
-                        $messageId,
-                        $type,
-                        [$receiverUserId],
-                        $subject,
-                        $contentForEmail,
-                        $sender_info,
-                        $attachmentAddedByMail,
-                        $forceTitleWhenSendingEmail,
-                        $baseUrl
-                    );
+                    $trackingService = null;
+                    if (null !== Container::$container && Container::$container->has(MessageEmailOpenTrackingService::class)) {
+                        $trackingService = Container::$container->get(MessageEmailOpenTrackingService::class);
+                    }
+
+                    if ($trackingService instanceof MessageEmailOpenTrackingService) {
+                        $trackingService->prepareForMessageRecipient(
+                            (int) $messageId,
+                            (int) $receiverUserId,
+                            (string) $baseUrl
+                        );
+                    }
+
+                    try {
+                        $notification->saveNotification(
+                            $messageId,
+                            $type,
+                            [$receiverUserId],
+                            $subject,
+                            $contentForEmail,
+                            $sender_info,
+                            $attachmentAddedByMail,
+                            $forceTitleWhenSendingEmail,
+                            $baseUrl
+                        );
+                    } finally {
+                        $trackingService?->clearPreparedPixel();
+                    }
                 } else {
                     $usergroup = new UserGroupModel();
                     $group_info = $usergroup->get($group_id);

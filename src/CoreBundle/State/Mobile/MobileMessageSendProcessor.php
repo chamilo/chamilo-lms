@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Service\Message\MessageEmailOpenTrackingService;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
 use Notification;
@@ -39,6 +40,7 @@ final readonly class MobileMessageSendProcessor implements ProcessorInterface
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager,
         private UserHelper $userHelper,
+        private MessageEmailOpenTrackingService $emailOpenTrackingService,
     ) {}
 
     public function process(
@@ -171,14 +173,23 @@ final readonly class MobileMessageSendProcessor implements ProcessorInterface
 
         $senderInfo = api_get_user_info((int) $message->getSender()->getId());
 
-        (new Notification())->saveNotification(
-            $message->getId(),
-            Notification::NOTIFICATION_TYPE_MESSAGE,
-            [(int) $recipient->getId()],
-            $message->getTitle(),
-            $message->getContent(),
-            $senderInfo,
-            [],
+        $this->emailOpenTrackingService->prepareForMessageRecipient(
+            (int) $message->getId(),
+            (int) $recipient->getId()
         );
+
+        try {
+            (new Notification())->saveNotification(
+                $message->getId(),
+                Notification::NOTIFICATION_TYPE_MESSAGE,
+                [(int) $recipient->getId()],
+                $message->getTitle(),
+                $message->getContent(),
+                $senderInfo,
+                [],
+            );
+        } finally {
+            $this->emailOpenTrackingService->clearPreparedPixel();
+        }
     }
 }

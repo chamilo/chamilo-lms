@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Installer\InstallerGate;
 use Chamilo\CoreBundle\Installer\MigrationHistoryRecorder;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
@@ -24,12 +25,16 @@ use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\CoreBundle\Repository\PluginRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Plugin;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
@@ -54,16 +59,46 @@ class IndexBlocksController extends BaseController
         private readonly AccessUrlRepository $accessUrlRepository,
         AuthenticationConfigHelper $authConfigHelper,
         private readonly MigrationHistoryRecorder $migrationHistoryRecorder,
+        #[Autowire(service: 'chamilo.admin_index_blocks')]
+        private readonly CacheInterface $adminIndexBlocksCache,
+        private readonly UserHelper $userHelper,
     ) {
         $this->isLdapActive = $authConfigHelper->getLdapConfig()['enabled'];
     }
 
-    public function __invoke(): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $this->isAdmin = $this->isGranted('ROLE_ADMIN');
         $this->isGlobalAdmin = $this->isGranted('ROLE_GLOBAL_ADMIN');
         $this->isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER');
 
+        // Cached per user (not per role bucket): simplest way to guarantee one admin
+        // can never see another admin's cached response, and it's what actually serves
+        // the goal here — the same admin reloading/navigating back to this page
+        // repeatedly. Locale stays in the key too, since a viewer switching their own
+        // UI language mid-session would otherwise see their own stale-language cache
+        // for up to 120 s. TTL-only expiry (no active invalidation): a settings/plugin
+        // change made elsewhere can take up to 120 s to appear here.
+        $accessUrlId = $this->accessUrlHelper->getCurrent()?->getId() ?? 0;
+        $userId = $this->userHelper->getCurrent()?->getId() ?? 0;
+        $cacheKey = \sprintf(
+            'admin_index_blocks_%d_%d_%s',
+            $accessUrlId,
+            $userId,
+            $request->getLocale()
+        );
+
+        $json = $this->adminIndexBlocksCache->get($cacheKey, function (ItemInterface $item): array {
+            $item->expiresAfter(120);
+
+            return $this->buildBlocks();
+        });
+
+        return $this->json($json);
+    }
+
+    private function buildBlocks(): array
+    {
         $json = [];
 
         $adminBlockEvent = new AdminBlockDisplayedEvent($json, AbstractEvent::TYPE_PRE);
@@ -189,9 +224,7 @@ class IndexBlocksController extends BaseController
 
         $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK_DISPLAYED);
 
-        $json = $adminBlockEvent->getData();
-
-        return $this->json($json);
+        return $adminBlockEvent->getData();
     }
 
     private function getItemsSecurity(): array

@@ -3580,6 +3580,45 @@ class MoodleImport
     }
 
     /**
+     * Archives produced from legacy data can contain a final_item with display_order=0.
+     * It is a terminal LP item, so move only invalid final-item positions after all regular items.
+     *
+     * @param array<int, array<string, mixed>> $items
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function normalizeFinalItemDisplayOrder(array $items): array
+    {
+        $maxNonFinalOrder = 0;
+
+        foreach ($items as $item) {
+            if ('final_item' === strtolower((string) ($item['item_type'] ?? ''))) {
+                continue;
+            }
+
+            $maxNonFinalOrder = max($maxNonFinalOrder, (int) ($item['display_order'] ?? 0));
+        }
+
+        $nextFinalOrder = $maxNonFinalOrder + 1;
+        foreach ($items as $index => $item) {
+            if ('final_item' !== strtolower((string) ($item['item_type'] ?? ''))) {
+                continue;
+            }
+
+            $currentOrder = (int) ($item['display_order'] ?? 0);
+            if ($currentOrder <= $maxNonFinalOrder) {
+                $items[$index]['display_order'] = $nextFinalOrder++;
+
+                continue;
+            }
+
+            $nextFinalOrder = max($nextFinalOrder, $currentOrder + 1);
+        }
+
+        return $items;
+    }
+
+    /**
      * Preferred Learnpath importer using Chamilo sidecar JSON under chamilo/learnpath.
      * Returns true if LPs (and categories) were imported from meta.
      */
@@ -3697,7 +3736,7 @@ class MoodleImport
 
             $resources['learnpath'][$lid] = $this->mkLegacyItem('learnpath', $lid, $payload, ['items', 'linked_resources']);
 
-            $rawItems = (array) ($itemsJson['items'] ?? []);
+            $rawItems = $this->normalizeFinalItemDisplayOrder((array) ($itemsJson['items'] ?? []));
             usort(
                 $rawItems,
                 static fn (array $a, array $b): int => (int) ($a['display_order'] ?? 0) <=> (int) ($b['display_order'] ?? 0)

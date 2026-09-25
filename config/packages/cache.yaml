@@ -13,6 +13,15 @@ framework:
             chamilo.document_list:
                 adapter: cache.app
                 default_lifetime: 120
+
+            # Admin panel blocks cache: caches the assembled /admin/index block list (items,
+            # plugin links, health-check results, ...) for up to 120 s, since an admin typically
+            # reloads or navigates back to this page many times in a short session.
+            # The cache key includes the access_url ID, the viewer's own user ID, and their
+            # locale, so caching is strictly per-user (no sharing across admins).
+            chamilo.admin_index_blocks:
+                adapter: cache.app
+                default_lifetime: 120
         # Unique name of your app: used to compute stable namespaces for cache keys.
         #prefix_seed: your_vendor_name/app_name
 

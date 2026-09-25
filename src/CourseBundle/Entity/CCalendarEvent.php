@@ -192,7 +192,9 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Reso
     #[ORM\JoinColumn(name: 'career_id', referencedColumnName: 'id', nullable: true)]
     protected ?Career $career = null;
 
-    #[Groups(['calendar_event:write', 'calendar_event:read'])]
+    // Not in calendar_event:write: Promotion is an API resource, so API Platform would reject the
+    // plain id the calendar form sends. CCalendarEventStateProcessor sets it from the raw payload.
+    #[Groups(['calendar_event:read'])]
     #[ORM\ManyToOne(targetEntity: Promotion::class)]
     #[ORM\JoinColumn(name: 'promotion_id', referencedColumnName: 'id', nullable: true)]
     protected ?Promotion $promotion = null;

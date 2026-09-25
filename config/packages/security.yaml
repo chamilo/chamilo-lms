@@ -165,6 +165,7 @@ security:
         - { path: '^/oauth/authorize$', roles: PUBLIC_ACCESS, methods: [GET] }
         - { path: '^/oauth/authorize$', roles: ROLE_USER, methods: [POST] }
         - { path: ^/scim/v2, roles: PUBLIC_ACCESS }
+        - { path: '^/mail/open/[a-f0-9]{64}\.gif$', roles: PUBLIC_ACCESS, methods: [GET] }
         - { path: ^/login/token/check, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/authentication_token, roles: PUBLIC_ACCESS }

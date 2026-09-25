@@ -3013,6 +3013,26 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Prefer short e-mail versions with a link to the messaging space on the platform to increase platform-based engagement.',
                 ],
                 [
+                    'name' => 'enable_email_open_tracking',
+                    'title' => 'Track e-mail openings',
+                    'comment' => 'Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read.',
+                ],
+                [
+                    'name' => 'enable_inbound_mail',
+                    'title' => 'Allow e-mail replies to messages',
+                    'comment' => 'Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure.',
+                ],
+                [
+                    'name' => 'inbound_mail_address',
+                    'title' => 'Inbound e-mail address',
+                    'comment' => 'Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing.',
+                ],
+                [
+                    'name' => 'inbound_mail_dsn',
+                    'title' => 'Inbound mailbox DSN',
+                    'comment' => 'Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials.',
+                ],
+                [
                     'name' => 'notifications_extended_footer_message',
                     'title' => 'Extended notifications footer',
                     'comment' => 'Add a custom extra footer for notifications emails for a specific language, for example for privacy policy notices. Multiple languages and paragraphs can be added.',

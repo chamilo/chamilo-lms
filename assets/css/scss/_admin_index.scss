@@ -42,6 +42,20 @@
       @apply text-body-2;
     }
   }
+
+  .block-admin-news__status {
+    .news-item {
+      @apply mb-3;
+
+      &:last-child {
+        @apply mb-0;
+      }
+    }
+
+    .news-item__date {
+      @apply text-body-2 font-semibold mb-1;
+    }
+  }
 }
 
 .admin-colors {

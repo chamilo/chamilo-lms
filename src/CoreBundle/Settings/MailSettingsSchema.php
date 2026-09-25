@@ -23,6 +23,10 @@ class MailSettingsSchema extends AbstractSettingsSchema
             'mail_content_style' => '',
             'allow_email_editor_for_anonymous' => 'true',
             'messages_hide_mail_content' => 'false',
+            'enable_email_open_tracking' => 'false',
+            'enable_inbound_mail' => 'false',
+            'inbound_mail_address' => '',
+            'inbound_mail_dsn' => '',
             'send_two_inscription_confirmation_mail' => 'false',
             'show_user_email_in_notification' => 'false',
             'send_notification_score_in_percentage' => 'false',
@@ -48,6 +52,10 @@ class MailSettingsSchema extends AbstractSettingsSchema
             ->add('mail_content_style', TextType::class)
             ->add('allow_email_editor_for_anonymous', YesNoType::class)
             ->add('messages_hide_mail_content', YesNoType::class)
+            ->add('enable_email_open_tracking', YesNoType::class)
+            ->add('enable_inbound_mail', YesNoType::class)
+            ->add('inbound_mail_address', EmailType::class, ['required' => false])
+            ->add('inbound_mail_dsn', TextType::class, ['required' => false])
             ->add('send_two_inscription_confirmation_mail', YesNoType::class)
             ->add('show_user_email_in_notification', YesNoType::class)
             ->add('send_notification_score_in_percentage', YesNoType::class)

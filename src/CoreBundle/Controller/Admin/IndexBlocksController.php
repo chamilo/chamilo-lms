@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Installer\InstallerGate;
 use Chamilo\CoreBundle\Installer\MigrationHistoryRecorder;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
@@ -60,6 +61,7 @@ class IndexBlocksController extends BaseController
         private readonly MigrationHistoryRecorder $migrationHistoryRecorder,
         #[Autowire(service: 'chamilo.admin_index_blocks')]
         private readonly CacheInterface $adminIndexBlocksCache,
+        private readonly UserHelper $userHelper,
     ) {
         $this->isLdapActive = $authConfigHelper->getLdapConfig()['enabled'];
     }
@@ -70,23 +72,19 @@ class IndexBlocksController extends BaseController
         $this->isGlobalAdmin = $this->isGranted('ROLE_GLOBAL_ADMIN');
         $this->isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER');
 
-        // The assembled block list is identical for every viewer sharing the same
-        // access URL, admin/session-admin role, AND UI locale (every label below goes
-        // through $this->translator->trans(), which renders in the request's resolved
-        // locale — LocaleSubscriber sets it per-request from the viewer's own saved
-        // language preference). Omitting locale from the key would leak one admin's
-        // language into another admin's cached response. Not keyed by user ID: no
-        // ADMIN_BLOCK_DISPLAYED listener exists anywhere in this codebase today, so
-        // nothing user-scoped enters the payload — re-check this if one is ever added.
-        // TTL-only expiry (no active invalidation): a settings/plugin change made
-        // elsewhere can take up to 120 s to appear here.
+        // Cached per user (not per role bucket): simplest way to guarantee one admin
+        // can never see another admin's cached response, and it's what actually serves
+        // the goal here — the same admin reloading/navigating back to this page
+        // repeatedly. Locale stays in the key too, since a viewer switching their own
+        // UI language mid-session would otherwise see their own stale-language cache
+        // for up to 120 s. TTL-only expiry (no active invalidation): a settings/plugin
+        // change made elsewhere can take up to 120 s to appear here.
         $accessUrlId = $this->accessUrlHelper->getCurrent()?->getId() ?? 0;
+        $userId = $this->userHelper->getCurrent()?->getId() ?? 0;
         $cacheKey = \sprintf(
-            'admin_index_blocks_%d_%d_%d_%d_%s',
+            'admin_index_blocks_%d_%d_%s',
             $accessUrlId,
-            (int) $this->isAdmin,
-            (int) $this->isGlobalAdmin,
-            (int) $this->isSessionAdmin,
+            $userId,
             $request->getLocale()
         );
 

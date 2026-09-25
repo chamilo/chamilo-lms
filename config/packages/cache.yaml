@@ -17,9 +17,8 @@ framework:
             # Admin panel blocks cache: caches the assembled /admin/index block list (items,
             # plugin links, health-check results, ...) for up to 120 s, since an admin typically
             # reloads or navigates back to this page many times in a short session.
-            # The cache key includes the access_url ID and the viewer's admin/session-admin role
-            # bucket, never the user ID, since the assembled output is identical for every viewer
-            # sharing the same role on the same portal.
+            # The cache key includes the access_url ID, the viewer's own user ID, and their
+            # locale, so caching is strictly per-user (no sharing across admins).
             chamilo.admin_index_blocks:
                 adapter: cache.app
                 default_lifetime: 120

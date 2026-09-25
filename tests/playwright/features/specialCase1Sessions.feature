@@ -310,6 +310,15 @@ Feature: Special case 1 — course/session creation
     And I select "English" from "course_language"
     And I press "submit"
     And I wait for the page to be loaded
+    # Keyword-scoped list, not the bare post-create redirect: course_add.php
+    # lands on the unfiltered admin course list, and this platform (confirmed
+    # live on testparkur.beeznest.com) already has 130+ real courses — a new
+    # course does not necessarily land on page 1 of that list, so asserting
+    # against the raw redirect page is a false negative on a busy install
+    # even though creation succeeded. Same keyword-list pattern this file's
+    # own Teardown scenario already uses to find a row reliably.
+    Given I am on "/admin/course-list?keyword=Testing+course+en"
+    And I wait for the page to be loaded
     Then I should see "Testing course en"
 
     When I am on "/main/admin/course_add.php"
@@ -319,6 +328,9 @@ Feature: Special case 1 — course/session creation
     And I click the "input[name='sticky']" element
     And I press "submit"
     And I wait for the page to be loaded
+    # See the comment on the previous course's same pattern above.
+    Given I am on "/admin/course-list?keyword=Special"
+    And I wait for the page to be loaded
     Then I should see "Special"
 
     When I am on "/main/admin/course_add.php"
@@ -327,6 +339,9 @@ Feature: Special case 1 — course/session creation
     And I select "Language skills" from the ajax select "update_course_course_categories"
     And I select "Français" from "course_language"
     And I press "submit"
+    And I wait for the page to be loaded
+    # See the comment on the first course's same pattern above.
+    Given I am on "/admin/course-list?keyword=Testing+course+fr"
     And I wait for the page to be loaded
     Then I should see "Testing course fr"
 

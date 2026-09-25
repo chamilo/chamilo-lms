@@ -26,6 +26,7 @@ class MailSettingsSchema extends AbstractSettingsSchema
             'enable_email_open_tracking' => 'false',
             'enable_inbound_mail' => 'false',
             'inbound_mail_address' => '',
+            'inbound_mail_dsn' => '',
             'send_two_inscription_confirmation_mail' => 'false',
             'show_user_email_in_notification' => 'false',
             'send_notification_score_in_percentage' => 'false',
@@ -54,6 +55,7 @@ class MailSettingsSchema extends AbstractSettingsSchema
             ->add('enable_email_open_tracking', YesNoType::class)
             ->add('enable_inbound_mail', YesNoType::class)
             ->add('inbound_mail_address', EmailType::class, ['required' => false])
+            ->add('inbound_mail_dsn', TextType::class, ['required' => false])
             ->add('send_two_inscription_confirmation_mail', YesNoType::class)
             ->add('show_user_email_in_notification', YesNoType::class)
             ->add('send_notification_score_in_percentage', YesNoType::class)

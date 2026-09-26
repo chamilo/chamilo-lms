@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
 use DateTime;
+use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,6 +26,9 @@ class TrackELoginRepository extends ServiceEntityRepository
         $loginRecord = new TrackELogin();
         $loginRecord->setUser($user);
         $loginRecord->setLoginDate($loginDate);
+        // As in 1.11.x, a connection starts with a zero duration and is extended by
+        // touchLastConnection(), so it never stays open-ended (NULL) and uncounted.
+        $loginRecord->setLogoutDate(clone $loginDate);
         $loginRecord->setUserIp($userIp);
 
         $this->getEntityManager()->persist($loginRecord);
@@ -35,15 +39,35 @@ class TrackELoginRepository extends ServiceEntityRepository
 
     public function updateLastLoginLogoutDate(int $userId, DateTime $logoutDate): void
     {
-        $lastLoginRecord = $this->findOneBy(
-            ['user' => $userId, 'logoutDate' => null],
-            ['loginDate' => 'DESC']
-        );
+        // Connections no longer stay with a NULL logout date (see createLoginRecord()),
+        // so close the latest one, as the 1.11.x online_logout() did.
+        $lastLoginRecord = $this->findOneBy(['user' => $userId], ['loginDate' => 'DESC']);
 
         if (null !== $lastLoginRecord) {
             $lastLoginRecord->setLogoutDate($logoutDate);
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * Port of 1.11.x Tracking::updateUserLastLogin(): extends the user's latest connection up to
+     * now, or opens a new one when the user has been inactive for longer than $inactivityLimit
+     * seconds (e.g. back the next day through "remember me", which is not a new login).
+     */
+    public function touchLastConnection(User $user, string $userIp, int $inactivityLimit): void
+    {
+        $now = new DateTime('now', new DateTimeZone('UTC'));
+        $lastLoginRecord = $this->findOneBy(['user' => $user->getId()], ['loginDate' => 'DESC']);
+
+        $lastActivity = $lastLoginRecord?->getLogoutDate() ?? $lastLoginRecord?->getLoginDate();
+        if (null === $lastActivity || $lastActivity->getTimestamp() < $now->getTimestamp() - $inactivityLimit) {
+            $this->createLoginRecord($user, $now, $userIp);
+
+            return;
+        }
+
+        $lastLoginRecord->setLogoutDate($now);
+        $this->getEntityManager()->flush();
     }
 
     /**

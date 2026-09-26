@@ -735,6 +735,8 @@ let hbTimer = null
 let contactsTimer = null
 
 const VIDEO_SIGNAL_POLL_MS = 1000
+const VIDEO_SIGNAL_CONNECTED_POLL_MS = 5000
+const VIDEO_SIGNAL_IDLE_MAX_POLL_MS = 10000
 const VIDEO_CALL_TIMEOUT_MS = 30000
 const VIDEO_CONNECTION_TIMEOUT_MS = 20000
 const PRESENCE_OFFLINE_GRACE_MS = 10000
@@ -756,7 +758,7 @@ const cameraEnabled = ref(true)
 const pendingRemoteIce = []
 const earlyIceByCall = new Map()
 let peerConnection = null
-let videoSignalTimer = null
+let videoSignalScheduler = null
 let videoSignalPollRunning = false
 let videoCallTimeout = null
 let videoSystemMessageSequence = 0
@@ -1305,6 +1307,7 @@ function resetVideoCall() {
   if (previousCallId) earlyIceByCall.delete(previousCallId)
   videoWasConnected = false
   videoCallState.value = "idle"
+  resetVideoSignalPollingBackoff()
   videoCallPeer.value = null
   videoCallId.value = ""
   videoCallError.value = ""
@@ -1587,6 +1590,7 @@ async function startVideoCall() {
   videoCallError.value = ""
   videoWasConnected = false
   videoCallState.value = "outgoing"
+  resetVideoSignalPollingBackoff()
 
   let stage = "local-media"
   try {
@@ -1861,19 +1865,37 @@ async function pollVideoSignals() {
 }
 
 function startVideoSignalPolling() {
-  if (!videoChatEnabled.value || !canRenderDock.value || userStatus.value !== 1 || videoSignalTimer) return
+  if (!videoChatEnabled.value || !canRenderDock.value || userStatus.value !== 1 || videoSignalScheduler) return
+
   pollVideoSignals().catch(() => {})
-  videoSignalTimer = window.setInterval(() => {
-    pollVideoSignals().catch(() => {})
-  }, VIDEO_SIGNAL_POLL_MS)
+
+  videoSignalScheduler = createBackoffScheduler({
+    onTick: pollVideoSignals,
+    getOverrideDelayMs: (baseMs) => {
+      const state = videoCallState.value
+
+      if (["outgoing", "incoming", "connecting"].includes(state)) {
+        return VIDEO_SIGNAL_POLL_MS
+      }
+
+      if (state === "connected") {
+        return VIDEO_SIGNAL_CONNECTED_POLL_MS
+      }
+
+      return Math.min(baseMs, VIDEO_SIGNAL_IDLE_MAX_POLL_MS)
+    },
+  })
+  videoSignalScheduler.start()
 }
 
 function stopVideoSignalPolling() {
-  if (videoSignalTimer) {
-    window.clearInterval(videoSignalTimer)
-    videoSignalTimer = null
-  }
+  videoSignalScheduler?.stop()
+  videoSignalScheduler = null
   videoSignalPollRunning = false
+}
+
+function resetVideoSignalPollingBackoff() {
+  videoSignalScheduler?.reset()
 }
 
 watch([videoChatEnabled, canRenderDock], ([enabled, renderDock]) => {

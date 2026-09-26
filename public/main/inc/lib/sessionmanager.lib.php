@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
@@ -21,6 +22,7 @@ use Chamilo\CoreBundle\Event\CourseUserSubscriptionCheckEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\SessionDeletedEvent;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use ExtraField as ExtraFieldModel;
@@ -5050,12 +5052,7 @@ class SessionManager
                                         );*/
                                     }
                                 }
-                                $quiz_table = Database::get_course_table(TABLE_QUIZ_TEST);
-                                $course_id = $course_info['real_id'];
-                                //@todo check this query
-                                $sql = "UPDATE $quiz_table SET active = 0
-                                        WHERE c_id = $course_id AND session_id = $sid";
-                                Database::query($sql);
+                                self::setSessionExercisesInvisible((int) $course_info['real_id'], (int) $sid);
                             }
                             $new_short_courses[] = $course_info['real_id'];
                         }
@@ -5129,6 +5126,46 @@ class SessionManager
         }
 
         return $sid;
+    }
+
+    private static function setSessionExercisesInvisible(int $courseId, int $sessionId): void
+    {
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+
+        if (null === $course || null === $session) {
+            return;
+        }
+
+        /** @var ResourceLinkRepository $resourceLinkRepository */
+        $resourceLinkRepository = Container::$container->get(ResourceLinkRepository::class);
+        $links = $resourceLinkRepository->createQueryBuilder('link')
+            ->innerJoin('link.resourceNode', 'node')
+            ->innerJoin('node.resourceType', 'type')
+            ->where('link.course = :course')
+            ->andWhere('link.session = :session')
+            ->andWhere('link.deletedAt IS NULL')
+            ->andWhere('type.title = :resourceType')
+            ->setParameter('course', $course)
+            ->setParameter('session', $session)
+            ->setParameter('resourceType', 'exercises')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        if ([] === $links) {
+            return;
+        }
+
+        $entityManager = Database::getManager();
+
+        /** @var ResourceLink $link */
+        foreach ($links as $link) {
+            $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
+            $entityManager->persist($link);
+        }
+
+        $entityManager->flush();
     }
 
     /**

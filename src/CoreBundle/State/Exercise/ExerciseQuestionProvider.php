@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State\Exercise;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use CalculatedAnswer;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestion;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -165,6 +166,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
                 'draggable' => $this->getDraggablePreview($question),
                 'annotation' => $this->getAnnotationPreview($operation, $question, $course, $session),
                 'hotspot' => $this->getHotspotPreview($operation, $question, $course, $session),
+                'calculated' => $this->getCalculatedPreview($question),
             ];
         }
 
@@ -291,7 +293,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         ;
 
         $type = (int) $question->getType();
-        if ($this->usesFillBlanks($type) || $this->usesMatching($type) || $this->usesHotspot($type) || 18 === $type) {
+        if ($this->usesFillBlanks($type) || $this->usesMatching($type) || $this->usesHotspot($type) || $this->usesCalculated($type) || 18 === $type) {
             return [];
         }
 
@@ -519,6 +521,33 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         ];
     }
 
+    private function getCalculatedPreview(CQuizQuestion $question): ?array
+    {
+        $type = (int) $question->getType();
+        if (!$this->usesCalculated($type)) {
+            return null;
+        }
+
+        $answer = $this->entityManager->createQueryBuilder()
+            ->select('answer')
+            ->from(CQuizAnswer::class, 'answer')
+            ->andWhere('IDENTITY(answer.question) = :questionId')
+            ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
+            ->orderBy('answer.position', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        if (!$answer instanceof CQuizAnswer) {
+            return null;
+        }
+
+        return [
+            'wordingHtml' => CalculatedAnswer::getQuestionWordingForTeacherPreview($answer->getAnswer()),
+        ];
+    }
+
     /**
      * @return array{text: string, weights: array<int, float>, sizes: array<int, int>, separator: int, switchable: bool}
      */
@@ -644,6 +673,11 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
     private function usesFillBlanks(int $type): bool
     {
         return \in_array($type, [3, 27], true);
+    }
+
+    private function usesCalculated(int $type): bool
+    {
+        return 16 === $type;
     }
 
     /**

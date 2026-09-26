@@ -423,10 +423,16 @@ final readonly class ExerciseRuntimeAttemptPdfService
         if ('' !== $this->text($answer['text'] ?? '')) {
             $html .= '<div>'.$this->escape($answer['text']).'</div>';
         }
-        $html .= '<div><strong>Your answer:</strong> '.$this->escape($answer['studentAnswer'] ?? 'No answer').'</div>';
-        if ('' !== $this->text($answer['expectedAnswer'] ?? '')) {
-            $html .= '<div><strong>Expected answer:</strong> '.$this->escape($answer['expectedAnswer']).'</div>';
+
+        foreach (\is_array($answer['formulas'] ?? null) ? $answer['formulas'] : [] as $formula) {
+            $html .= '<div><strong>'.$this->escape($formula['name'] ?? '').':</strong> ';
+            $html .= 'Your answer: '.$this->escape($formula['studentAnswer'] ?? 'No answer');
+            if ('' !== $this->text($formula['expectedAnswer'] ?? '')) {
+                $html .= ' — Expected answer: '.$this->escape($formula['expectedAnswer']);
+            }
+            $html .= '</div>';
         }
+
         $html .= '</div>';
 
         return $html;

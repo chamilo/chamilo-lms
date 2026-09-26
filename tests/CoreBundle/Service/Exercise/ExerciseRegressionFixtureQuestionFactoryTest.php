@@ -65,8 +65,9 @@ final class ExerciseRegressionFixtureQuestionFactoryTest extends TestCase
         self::assertSame(10.0, $reading->answers[0]['score']);
 
         $calculated = $factory->create(16);
-        self::assertSame('[x] + [y]', $calculated->calculatedFormula);
-        self::assertCount(2, $calculated->calculatedRanges);
+        self::assertCount(2, $calculated->calculatedVariables);
+        self::assertCount(1, $calculated->calculatedFormulas);
+        self::assertSame('x + y', $calculated->calculatedFormulas[0]['formula']);
 
         $onlyoffice = $factory->create(30);
         self::assertSame('chamilo-regression-answer.docx', $onlyoffice->onlyofficeTemplateName);

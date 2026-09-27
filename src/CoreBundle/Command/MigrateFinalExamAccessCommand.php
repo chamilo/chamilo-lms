@@ -527,7 +527,7 @@ final class MigrateFinalExamAccessCommand extends Command
             ? '(SELECT COUNT(*)
                  FROM gradebook_link gradebook
                  WHERE gradebook.c_id = :gradebookCourseId
-                   AND gradebook.ref_id = q.iid)'
+                   AND gradebook.ref_id = q.resource_node_id)'
             : '0';
         $parameters = [
             'courseId' => $courseId,

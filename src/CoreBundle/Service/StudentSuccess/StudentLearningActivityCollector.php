@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\State\Gradebook\GradebookScoreCalculator;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
@@ -47,6 +48,7 @@ final readonly class StudentLearningActivityCollector
         private Connection $connection,
         private EntityManagerInterface $entityManager,
         private GradebookScoreCalculator $gradebookScoreCalculator,
+        private GradebookLinkResourceResolver $gradebookLinkResourceResolver,
         private LoggerInterface $logger,
     ) {}
 
@@ -782,7 +784,10 @@ final readonly class StudentLearningActivityCollector
             $links[] = [
                 'id' => (int) $link->getId(),
                 'type' => (int) $link->getType(),
-                'resourceId' => (int) $link->getRefId(),
+                'resourceId' => $this->gradebookLinkResourceResolver->getLegacyResourceIdByNodeId(
+                    (int) $link->getType(),
+                    (int) $link->getRefId(),
+                ),
                 'score' => $result['score'],
                 'maxScore' => $result['maxScore'],
                 'percentage' => $result['percentage'],

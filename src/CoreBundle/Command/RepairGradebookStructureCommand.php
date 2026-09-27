@@ -293,24 +293,30 @@ SQL;
                     continue;
                 }
 
-                $linkType = match ($type) {
-                    'exercise' => self::LINK_EXERCISE,
-                    'work' => self::LINK_STUDENT_PUBLICATION,
-                    'forum' => self::LINK_FORUM_THREAD,
-                    default => null,
+                [$linkType, $resourceTable] = match ($type) {
+                    'exercise' => [self::LINK_EXERCISE, 'c_quiz'],
+                    'work' => [self::LINK_STUDENT_PUBLICATION, 'c_student_publication'],
+                    'forum' => [self::LINK_FORUM_THREAD, 'c_forum_thread'],
+                    default => [null, null],
                 };
-                if (null === $linkType) {
+                if (null === $linkType || null === $resourceTable) {
                     continue;
                 }
 
-                $ids = array_values(array_unique(array_filter([$resourceId, $sourceId])));
-                if ([] === $ids) {
+                $resourceNodeIds = [];
+                foreach (array_values(array_unique(array_filter([$resourceId, $sourceId]))) as $legacyResourceId) {
+                    $resourceNodeId = $this->getResourceNodeId($resourceTable, (int) $legacyResourceId);
+                    if (null !== $resourceNodeId) {
+                        $resourceNodeIds[] = $resourceNodeId;
+                    }
+                }
+                if ([] === $resourceNodeIds) {
                     continue;
                 }
 
                 $scores[$categoryId] += (int) $this->connection->fetchOne(
                     'SELECT COUNT(*) FROM gradebook_link WHERE category_id = :categoryId AND type = :type AND ref_id IN (:ids)',
-                    ['categoryId' => $categoryId, 'type' => $linkType, 'ids' => $ids],
+                    ['categoryId' => $categoryId, 'type' => $linkType, 'ids' => $resourceNodeIds],
                     ['ids' => ArrayParameterType::INTEGER]
                 );
             }
@@ -382,17 +388,26 @@ SQL;
             return;
         }
 
-        $ids = array_values(array_unique(array_filter([$resourceId, $sourceId])));
+        $resourceNodeId = $this->getResourceNodeId('c_quiz', $resourceId);
+        if (null === $resourceNodeId) {
+            ++$summary['conflicts'];
+            $io->warning(\sprintf('Exercise %d has no resource node.', $resourceId));
+
+            return;
+        }
+
+        $sourceResourceNodeId = null !== $sourceId ? $this->getResourceNodeId('c_quiz', $sourceId) : null;
+        $ids = array_values(array_unique(array_filter([$resourceNodeId, $sourceResourceNodeId])));
         $links = $this->connection->executeQuery(
             'SELECT id, ref_id, weight FROM gradebook_link WHERE category_id = :categoryId AND type = :type AND ref_id IN (:ids) ORDER BY id',
             ['categoryId' => $categoryId, 'type' => self::LINK_EXERCISE, 'ids' => $ids],
             ['ids' => ArrayParameterType::INTEGER]
         )->fetchAllAssociative();
 
-        $targetLinks = array_values(array_filter($links, static fn (array $link): bool => (int) $link['ref_id'] === $resourceId));
-        $sourceLinks = null === $sourceId || $sourceId === $resourceId
+        $targetLinks = array_values(array_filter($links, static fn (array $link): bool => (int) $link['ref_id'] === $resourceNodeId));
+        $sourceLinks = null === $sourceResourceNodeId || $sourceResourceNodeId === $resourceNodeId
             ? []
-            : array_values(array_filter($links, static fn (array $link): bool => (int) $link['ref_id'] === $sourceId));
+            : array_values(array_filter($links, static fn (array $link): bool => (int) $link['ref_id'] === $sourceResourceNodeId));
 
         if (\count($targetLinks) > 1 || \count($sourceLinks) > 1 || ([] !== $targetLinks && [] !== $sourceLinks)) {
             ++$summary['conflicts'];
@@ -409,13 +424,13 @@ SQL;
         }
 
         if (1 === \count($sourceLinks)) {
-            $this->connection->update('gradebook_link', ['ref_id' => $resourceId, 'weight' => $weight], ['id' => (int) $sourceLinks[0]['id']]);
+            $this->connection->update('gradebook_link', ['ref_id' => $resourceNodeId, 'weight' => $weight], ['id' => (int) $sourceLinks[0]['id']]);
             ++$summary['repaired_exercise_links'];
 
             return;
         }
 
-        $this->createLink(self::LINK_EXERCISE, $resourceId, $categoryId, $courseId, $weight);
+        $this->createLink(self::LINK_EXERCISE, $resourceNodeId, $categoryId, $courseId, $weight);
         ++$summary['created_exercise_links'];
     }
 
@@ -437,9 +452,17 @@ SQL;
             return;
         }
 
+        $resourceNodeId = $this->getResourceNodeId($resourceTable, $resourceId);
+        if (null === $resourceNodeId) {
+            ++$summary['conflicts'];
+            $io->warning(\sprintf('%s %d has no resource node.', ucfirst($label), $resourceId));
+
+            return;
+        }
+
         $links = $this->connection->fetchAllAssociative(
             'SELECT id, weight FROM gradebook_link WHERE category_id = :categoryId AND type = :type AND ref_id = :refId ORDER BY id',
-            ['categoryId' => $categoryId, 'type' => $linkType, 'refId' => $resourceId]
+            ['categoryId' => $categoryId, 'type' => $linkType, 'refId' => $resourceNodeId]
         );
         if (\count($links) > 1) {
             ++$summary['conflicts'];
@@ -454,7 +477,7 @@ SQL;
             return;
         }
 
-        $this->createLink($linkType, $resourceId, $categoryId, $courseId, $weight);
+        $this->createLink($linkType, $resourceNodeId, $categoryId, $courseId, $weight);
         if ('work' === $label) {
             ++$summary['created_work_links'];
         } else {
@@ -498,11 +521,25 @@ SQL;
         return 1 === $count;
     }
 
-    private function createLink(int $type, int $refId, int $categoryId, int $courseId, float $weight): void
+    private function getResourceNodeId(string $table, int $resourceId): ?int
+    {
+        $resourceNodeId = $this->connection->fetchOne(
+            \sprintf('SELECT resource_node_id FROM %s WHERE iid = :resourceId', $table),
+            ['resourceId' => $resourceId]
+        );
+
+        if (false === $resourceNodeId || null === $resourceNodeId || (int) $resourceNodeId <= 0) {
+            return null;
+        }
+
+        return (int) $resourceNodeId;
+    }
+
+    private function createLink(int $type, int $resourceNodeId, int $categoryId, int $courseId, float $weight): void
     {
         $this->connection->insert('gradebook_link', [
             'type' => $type,
-            'ref_id' => $refId,
+            'ref_id' => $resourceNodeId,
             'category_id' => $categoryId,
             'created_at' => date('Y-m-d H:i:s'),
             'weight' => $weight,

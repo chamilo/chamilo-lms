@@ -454,11 +454,16 @@ class GradebookUtils
             return [];
         }
 
+        $resourceNodeId = AbstractLink::getResourceNodeIdForLegacyRef($resource_type, $resource_id);
+        if ($resourceNodeId <= 0) {
+            return [];
+        }
+
         $sql = "SELECT * FROM $table l
                 WHERE
                     c_id = $courseId AND
                     type = $resource_type AND
-                    ref_id = $resource_id";
+                    ref_id = $resourceNodeId";
         $res = Database::query($sql);
 
         if (Database::num_rows($res) < 1) {
@@ -1237,44 +1242,41 @@ class GradebookUtils
 
         Database::query($sql);
 
-        // Update weight for attendance
-        $sql = 'SELECT ref_id FROM '.$table_link.'
-                WHERE id = '.$linkId.' AND type='.LINK_ATTENDANCE;
+        $links = LinkFactory::load($linkId);
+        $legacyLink = $links[0] ?? null;
+        if (!$legacyLink instanceof AbstractLink) {
+            return;
+        }
 
-        $rs_attendance = Database::query($sql);
-        if (Database::num_rows($rs_attendance) > 0) {
-            $row_attendance = Database::fetch_array($rs_attendance);
+        $resourceId = $legacyLink->get_ref_id();
+        $linkType = (int) $legacyLink->get_type();
+
+        if (LINK_ATTENDANCE === $linkType) {
             $sql = 'UPDATE '.$tbl_attendance.' SET
                     attendance_weight ='.api_float_val($weight).'
-                    WHERE id = '.intval($row_attendance['ref_id']);
+                    WHERE iid = '.(int) $resourceId;
             Database::query($sql);
         }
-        // Update weight into forum thread
-        $sql = 'UPDATE '.$tbl_forum_thread.' SET
-                thread_weight = '.api_float_val($weight).'
-                WHERE
-                    iid = (
-                        SELECT ref_id FROM '.$table_link.'
-                        WHERE id='.$linkId.' AND type='.LINK_FORUM_THREAD.'
-                    )
-                ';
-        Database::query($sql);
-        //Update weight into student publication(work)
-        $em
-            ->createQuery('
-                UPDATE Chamilo\CourseBundle\Entity\CStudentPublication w
-                SET w.weight = :final_weight
-                WHERE
-                    w.iid = (
-                        SELECT l.refId FROM Chamilo\CoreBundle\Entity\GradebookLink l
-                        WHERE l.id = :link AND l.type = :type
-                    )
-            ')
-            ->execute([
-                'final_weight' => $weight,
-                'link' => $linkId,
-                'type' => LINK_STUDENTPUBLICATION,
-            ]);
+
+        if (LINK_FORUM_THREAD === $linkType) {
+            $sql = 'UPDATE '.$tbl_forum_thread.' SET
+                    thread_weight = '.api_float_val($weight).'
+                    WHERE iid = '.(int) $resourceId;
+            Database::query($sql);
+        }
+
+        if (LINK_STUDENTPUBLICATION === $linkType) {
+            $em
+                ->createQuery('
+                    UPDATE Chamilo\CourseBundle\Entity\CStudentPublication w
+                    SET w.weight = :final_weight
+                    WHERE w.iid = :resource_id
+                ')
+                ->execute([
+                    'final_weight' => $weight,
+                    'resource_id' => $resourceId,
+                ]);
+        }
     }
 
     /**

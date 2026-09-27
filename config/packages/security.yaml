@@ -115,6 +115,30 @@ security:
 #                authenticators:
 #                    - lexik_jwt_authentication.jwt_token_authenticator
 
+        # Same reasoning as `api`: honor the external API key (e.g. the WordPress
+        # storefront plugin's service account) for this one resource-file download
+        # route, without widening it to the whole non-API surface `main` covers.
+        # Confirmed live 2026-09-27: a course illustration download failed with 401
+        # "Invalid JWT Token" because /r/.../view falls outside /api, so it's served
+        # by `main`, which only has the stock JWT authenticator — the same "any
+        # bearer token gets matched and rejected" issue `api` already had to work
+        # around, just on a different firewall. Deliberately NOT fixed by adding the
+        # authenticator to `main` itself: a leaked external key would then
+        # authenticate as ROLE_ADMIN against the entire non-API application (legacy
+        # admin pages, arbitrary AJAX endpoints), not just this one read-only route.
+        # `context: main` is required, not optional, here: it keeps a normal
+        # logged-in browser session (authenticated on `main`) working exactly as
+        # before on this same route — this firewall only *adds* JWT/external-key as
+        # alternatives, it must not take session-based access away from anyone.
+        resource_view:
+            pattern: ^/r/[^/]+/[^/]+/[^/]+/view$
+            jwt:
+                authenticator: chamilo.security.strict_jwt_authenticator
+            custom_authenticators:
+                - Chamilo\CoreBundle\Security\Authenticator\ExternalApiKeyAuthenticator
+            context: main
+            provider: app_user_provider
+
         # Default login via json
         main:
             pattern: ^/

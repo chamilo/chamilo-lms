@@ -430,14 +430,14 @@ final class AchievementCertificateBatchService
                     continue;
                 }
 
-                $linkType = match ($type) {
-                    'exercise' => self::LINK_EXERCISE,
-                    'work' => self::LINK_STUDENT_PUBLICATION,
-                    'forum' => self::LINK_FORUM_THREAD,
-                    default => null,
+                [$linkType, $resourceTable] = match ($type) {
+                    'exercise' => [self::LINK_EXERCISE, 'c_quiz'],
+                    'work' => [self::LINK_STUDENT_PUBLICATION, 'c_student_publication'],
+                    'forum' => [self::LINK_FORUM_THREAD, 'c_forum_thread'],
+                    default => [null, null],
                 };
 
-                if (null === $linkType) {
+                if (null === $linkType || null === $resourceTable) {
                     continue;
                 }
 
@@ -451,11 +451,15 @@ final class AchievementCertificateBatchService
                 }
 
                 $scores[$categoryId] += (int) $this->connection->fetchOne(
-                    'SELECT COUNT(*)
-                     FROM gradebook_link
-                     WHERE category_id = :categoryId
-                       AND type = :type
-                       AND ref_id IN (:resourceIds)',
+                    \sprintf(
+                        'SELECT COUNT(*)
+                         FROM gradebook_link gradebook
+                         INNER JOIN %s resource ON resource.resource_node_id = gradebook.ref_id
+                         WHERE gradebook.category_id = :categoryId
+                           AND gradebook.type = :type
+                           AND resource.iid IN (:resourceIds)',
+                        $resourceTable,
+                    ),
                     [
                         'categoryId' => $categoryId,
                         'type' => $linkType,

@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'gradebook_link')]
 #[ORM\Index(name: 'idx_gl_cat', columns: ['category_id'])]
+#[ORM\Index(name: 'idx_gl_ref', columns: ['ref_id'])]
 #[ORM\Entity]
 #[ApiResource(
     operations: [
@@ -59,10 +60,11 @@ class GradebookLink
     #[ORM\Column(name: 'type', type: 'integer', nullable: false)]
     protected int $type;
 
-    #[Assert\NotBlank]
-    #[Groups(['gradebookLink:read', 'gradebookLink:write'])]
-    #[ORM\Column(name: 'ref_id', type: 'integer', nullable: false)]
-    protected int $refId;
+    #[Assert\NotNull]
+    #[Groups(['gradebookLink:write'])]
+    #[ORM\ManyToOne(targetEntity: ResourceNode::class)]
+    #[ORM\JoinColumn(name: 'ref_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    protected ResourceNode $resourceNode;
 
     #[Groups(['gradebookLink:read', 'gradebookLink:write'])]
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'gradebookLinks')]
@@ -142,24 +144,20 @@ class GradebookLink
         return $this;
     }
 
-    /**
-     * Get refId.
-     *
-     * @return int
-     */
-    public function getRefId()
+    #[Groups(['gradebookLink:read'])]
+    public function getRefId(): int
     {
-        return $this->refId;
+        return (int) $this->resourceNode->getId();
     }
 
-    /**
-     * Set refId.
-     *
-     * @return GradebookLink
-     */
-    public function setRefId(int $refId)
+    public function getResourceNode(): ResourceNode
     {
-        $this->refId = $refId;
+        return $this->resourceNode;
+    }
+
+    public function setResourceNode(ResourceNode $resourceNode): self
+    {
+        $this->resourceNode = $resourceNode;
 
         return $this;
     }

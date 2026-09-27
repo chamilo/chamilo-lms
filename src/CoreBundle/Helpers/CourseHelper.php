@@ -51,6 +51,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use DateTime;
 use DateTimeZone;
@@ -869,9 +870,14 @@ class CourseHelper
             $manager->persist($childGradebookCategory);
             $manager->flush();
 
+            $quiz = $manager->getRepository(CQuiz::class)->find($exerciseId);
+            if (!$quiz instanceof CQuiz || null === $quiz->getResourceNode()) {
+                throw new RuntimeException('The example exercise has no resource node.');
+            }
+
             $gradebookLink = new GradebookLink();
             $gradebookLink->setType(1);
-            $gradebookLink->setRefId($exerciseId);
+            $gradebookLink->setResourceNode($quiz->getResourceNode());
             $gradebookLink->setUserScoreList([]);
             $gradebookLink->setCourse($course);
             $gradebookLink->setCategory($childGradebookCategory);
@@ -963,10 +969,15 @@ class CourseHelper
         $manager->persist($childGradebookCategory);
         $manager->flush();
 
+        $quiz = $manager->getRepository(CQuiz::class)->find($refId);
+        if (!$quiz instanceof CQuiz || null === $quiz->getResourceNode()) {
+            throw new RuntimeException('The example exercise has no resource node.');
+        }
+
         $gradebookLink = new GradebookLink();
 
         $gradebookLink->setType(1);
-        $gradebookLink->setRefId($refId);
+        $gradebookLink->setResourceNode($quiz->getResourceNode());
         $gradebookLink->setUserScoreList([]);
         $gradebookLink->setCourse($course);
         $gradebookLink->setCategory($childGradebookCategory);

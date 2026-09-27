@@ -6103,12 +6103,38 @@ function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code 
         if (empty($course_code)) {
             $course_code = api_get_course_id();
         }
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+
+        $resourceTable = match ((int) $link_type) {
+            LINK_EXERCISE, LINK_HOTPOTATOES => Database::get_course_table(TABLE_QUIZ_TEST),
+            LINK_STUDENTPUBLICATION => Database::get_course_table(TABLE_STUDENT_PUBLICATION),
+            LINK_LEARNPATH => Database::get_course_table(TABLE_LP_MAIN),
+            LINK_FORUM_THREAD, LINK_FORUM_PARTICIPATION => Database::get_course_table(TABLE_FORUM_THREAD),
+            LINK_ATTENDANCE => Database::get_course_table(TABLE_ATTENDANCE),
+            LINK_SURVEY => Database::get_course_table(TABLE_SURVEY),
+            default => null,
+        };
+        if (null === $resourceTable) {
+            return false;
+        }
+
         $item_id = (int) $item_id;
         $link_type = (int) $link_type;
-        $course_code = Database::escape_string($course_code);
+        $resourceSql = "SELECT resource_node_id FROM $resourceTable WHERE iid = $item_id";
+        $resourceResult = Database::query($resourceSql);
+        $resourceNodeId = (int) (Database::fetch_row($resourceResult)[0] ?? 0);
+        if ($resourceNodeId <= 0) {
+            return false;
+        }
+
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = (int) ($courseInfo['real_id'] ?? 0);
+        if ($courseId <= 0) {
+            return false;
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $sql = "SELECT locked FROM $table
-                WHERE locked = 1 AND ref_id = $item_id AND type = $link_type AND course_code = '$course_code' ";
+                WHERE locked = 1 AND ref_id = $resourceNodeId AND type = $link_type AND c_id = $courseId";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return true;

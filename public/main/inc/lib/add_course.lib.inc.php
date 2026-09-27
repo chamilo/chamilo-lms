@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 
 /**
@@ -624,10 +625,15 @@ class AddCourse
         $manager->persist($childGradebookCategory);
         $manager->flush();
 
+        $quiz = $manager->getRepository(CQuiz::class)->find($refId);
+        if (!$quiz instanceof CQuiz || null === $quiz->getResourceNode()) {
+            return;
+        }
+
         $gradebookLink = new GradebookLink();
 
         $gradebookLink->setType(1);
-        $gradebookLink->setRefId($refId);
+        $gradebookLink->setResourceNode($quiz->getResourceNode());
         $gradebookLink->setCourse($course);
         $gradebookLink->setCategory($childGradebookCategory);
         $gradebookLink->setCreatedAt(new \DateTime());

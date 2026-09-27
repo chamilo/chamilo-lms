@@ -1142,7 +1142,7 @@ class CourseBuilder
         foreach ($linkRepo->findBy(['category' => $cat]) as $l) {
             $links[] = [
                 'type' => method_exists($l, 'getType') ? (int) $l->getType() : 0,
-                'ref_id' => method_exists($l, 'getRefId') ? (int) $l->getRefId() : 0,
+                'ref_id' => $this->getGradebookLegacyRefId($l),
                 'weight' => method_exists($l, 'getWeight') ? (float) $l->getWeight() : 0.0,
                 'visible' => method_exists($l, 'getVisible') ? (int) $l->getVisible() : 1,
                 'locked' => method_exists($l, 'getLocked') ? (int) $l->getLocked() : 0,
@@ -1160,6 +1160,31 @@ class CourseBuilder
             'evaluations' => $evaluations,
             'links' => $links,
         ];
+    }
+
+    private function getGradebookLegacyRefId(GradebookLink $link): int
+    {
+        $resourceClass = match ((int) $link->getType()) {
+            LINK_EXERCISE, LINK_HOTPOTATOES => CQuiz::class,
+            LINK_STUDENTPUBLICATION => CStudentPublication::class,
+            LINK_LEARNPATH => CLp::class,
+            LINK_FORUM_THREAD, LINK_FORUM_PARTICIPATION => CForumThread::class,
+            LINK_ATTENDANCE => CAttendance::class,
+            LINK_SURVEY => CSurvey::class,
+            default => null,
+        };
+
+        if (null === $resourceClass) {
+            return 0;
+        }
+
+        $resource = Database::getManager()->getRepository($resourceClass)->findOneBy([
+            'resourceNode' => $link->getResourceNode(),
+        ]);
+
+        return \is_object($resource) && method_exists($resource, 'getIid')
+            ? (int) ($resource->getIid() ?? 0)
+            : 0;
     }
 
     /**

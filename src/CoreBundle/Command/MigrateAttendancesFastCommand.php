@@ -123,17 +123,12 @@ final class MigrateAttendancesFastCommand extends Command
         if ($skipAttendances) {
             $io->note('SKIP_ATTENDANCES flag detected: only gradebook-linked attendances will be migrated.');
 
-            // gradebook_link.type=7 (attendance). Some datasets may link to attendance.iid or attendance.id.
-            $join = 'a.iid = gl.ref_id';
-            if ($hasAttendanceLegacyId) {
-                $join = '(a.iid = gl.ref_id OR a.id = gl.ref_id)';
-            }
-
+            // gradebook_link.ref_id stores resource_node.id.
             $ids = $this->connection->fetchFirstColumn(
-                "SELECT DISTINCT a.iid
+                'SELECT DISTINCT a.iid
                  FROM gradebook_link gl
-                 INNER JOIN c_attendance a ON {$join}
-                 WHERE gl.type = 7"
+                 INNER JOIN c_attendance a ON a.resource_node_id = gl.ref_id
+                 WHERE gl.type = 7'
             );
 
             $ids = array_map('intval', $ids);

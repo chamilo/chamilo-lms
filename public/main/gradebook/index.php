@@ -412,25 +412,25 @@ if (isset($_GET['deletelink'])) {
     if (!empty($get_delete_link)) {
         $link = LinkFactory::load($get_delete_link);
         if (null != $link[0]) {
-            // Clean forum qualify
-            $sql = 'UPDATE '.$tbl_forum_thread.' SET
-                        thread_qualify_max = 0,
-                        thread_weight = 0,
-                        thread_title_qualify = ""
-					WHERE iid = (
-					    SELECT ref_id FROM '.$tbl_grade_links.'
-					    WHERE id = '.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.'
-                    )';
-            Database::query($sql);
-            // clean attendance
-            $sql = 'UPDATE '.$tbl_attendance.' SET
-                        attendance_weight = 0,
-                        attendance_qualify_title = ""
-				 	WHERE iid = (
-				 	    SELECT ref_id FROM '.$tbl_grade_links.'
-				 	    WHERE id = '.$get_delete_link.' AND type = '.LINK_ATTENDANCE.'
-                    )';
-            Database::query($sql);
+            $resourceId = $link[0]->get_ref_id();
+
+            if (LINK_FORUM_THREAD == $link[0]->get_type()) {
+                $sql = 'UPDATE '.$tbl_forum_thread.' SET
+                            thread_qualify_max = 0,
+                            thread_weight = 0,
+                            thread_title_qualify = ""
+                        WHERE iid = '.$resourceId;
+                Database::query($sql);
+            }
+
+            if (LINK_ATTENDANCE == $link[0]->get_type()) {
+                $sql = 'UPDATE '.$tbl_attendance.' SET
+                            attendance_weight = 0,
+                            attendance_qualify_title = ""
+                        WHERE iid = '.$resourceId;
+                Database::query($sql);
+            }
+
             $link[0]->delete();
         }
         unset($link);

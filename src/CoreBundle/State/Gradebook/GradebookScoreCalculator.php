@@ -222,7 +222,12 @@ final class GradebookScoreCalculator
                 GradebookLinkResourceResolver::LINK_EXERCISE => 'exercise',
                 default => null,
             };
-            $resourceId = (int) $item->getRefId();
+            $resourceId = null !== $componentType
+                ? $this->linkResourceResolver->getLegacyResourceIdByNodeId(
+                    (int) $item->getType(),
+                    (int) $item->getRefId(),
+                )
+                : 0;
             $weight = $this->getLinkWeight($item);
         }
 
@@ -388,7 +393,7 @@ final class GradebookScoreCalculator
         }
 
         try {
-            $resource = $this->linkResourceResolver->requireResource(
+            $resource = $this->linkResourceResolver->requireResourceByNodeId(
                 (int) $link->getType(),
                 (int) $link->getRefId(),
                 $course,

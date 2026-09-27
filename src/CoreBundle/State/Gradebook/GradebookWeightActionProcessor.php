@@ -201,7 +201,7 @@ final readonly class GradebookWeightActionProcessor implements ProcessorInterfac
         $link->setWeight($weight);
 
         try {
-            $resource = $this->linkResourceResolver->requireResource(
+            $resource = $this->linkResourceResolver->requireResourceByNodeId(
                 (int) $link->getType(),
                 (int) $link->getRefId(),
                 $course,

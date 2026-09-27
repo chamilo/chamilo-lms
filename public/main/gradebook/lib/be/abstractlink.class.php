@@ -3,6 +3,13 @@
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CourseBundle\Entity\CAttendance;
+use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CSurvey;
 
 /**
  * Class AbstractLink
@@ -355,6 +362,14 @@ abstract class AbstractLink implements GradebookItem
             $paramcount++;
         }
         if (isset($ref_id)) {
+            if (isset($type)) {
+                $resourceNode = self::getResourceNodeFromLegacyRef((int) $type, (int) $ref_id);
+                if (!$resourceNode instanceof ResourceNode) {
+                    return [];
+                }
+                $ref_id = (int) $resourceNode->getId();
+            }
+
             if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
@@ -425,10 +440,16 @@ abstract class AbstractLink implements GradebookItem
             !empty($this->course_id) &&
             !empty($this->category)
         ) {
+            $resourceNode = self::getResourceNodeFromLegacyRef((int) $this->type, $this->get_ref_id());
+            if (!$resourceNode instanceof ResourceNode || null === $resourceNode->getId()) {
+                return 0;
+            }
+
+            $resourceNodeId = (int) $resourceNode->getId();
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
             $sql = "SELECT count(*) count FROM $table
                     WHERE
-                        ref_id = ".$this->get_ref_id()." AND
+                        ref_id = ".$resourceNodeId." AND
                         category_id =  ".$this->category->get_id()." AND
                         c_id = '".$this->course_id."' AND
                         type =  ".$this->type." ";
@@ -448,7 +469,7 @@ abstract class AbstractLink implements GradebookItem
                     ->setType($this->get_type())
                     ->setVisible($this->is_visible())
                     ->setWeight(api_float_val($this->get_weight()))
-                    ->setRefId($this->get_ref_id())
+                    ->setResourceNode($resourceNode)
                     ->setCategory($category)
                     ->setCourse(api_get_course_entity($this->course_id))
                     ->setMinScore($this->get_min_score())
@@ -497,9 +518,14 @@ abstract class AbstractLink implements GradebookItem
             $category = $em->getRepository(GradebookCategory::class)->find($this->get_category_id());
         }
 
+        $resourceNode = self::getResourceNodeFromLegacyRef((int) $this->get_type(), $this->get_ref_id());
+        if (!$resourceNode instanceof ResourceNode) {
+            return;
+        }
+
         $link
             ->setType($this->get_type())
-            ->setRefId($this->get_ref_id())
+            ->setResourceNode($resourceNode)
             ->setCourse($course)
             ->setCategory($category)
             ->setWeight($this->get_weight())
@@ -791,6 +817,12 @@ abstract class AbstractLink implements GradebookItem
         if (empty($courseId) || empty($itemId) || empty($linkType)) {
             return [];
         }
+        $resourceNode = self::getResourceNodeFromLegacyRef($linkType, $itemId);
+        if (!$resourceNode instanceof ResourceNode || null === $resourceNode->getId()) {
+            return [];
+        }
+        $resourceNodeId = (int) $resourceNode->getId();
+
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $tableCategory = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sessionId = (int) $sessionId;
@@ -801,7 +833,7 @@ abstract class AbstractLink implements GradebookItem
                 FROM $table l INNER JOIN $tableCategory c
                 ON (c.c_id = l.c_id AND c.id = l.category_id)
                 WHERE
-                    ref_id = $itemId AND
+                    ref_id = $resourceNodeId AND
                     type = $linkType AND
                     l.c_id = $courseId
                     $sessionCondition ";
@@ -812,6 +844,66 @@ abstract class AbstractLink implements GradebookItem
         }
 
         return [];
+    }
+
+    public static function getResourceNodeIdForLegacyRef(int $type, int $refId): int
+    {
+        $resourceNode = self::getResourceNodeFromLegacyRef($type, $refId);
+
+        return $resourceNode instanceof ResourceNode ? (int) ($resourceNode->getId() ?? 0) : 0;
+    }
+
+    public static function getLegacyRefIdForResourceNode(int $type, int $resourceNodeId): int
+    {
+        return self::getLegacyRefIdFromResourceNode($type, $resourceNodeId);
+    }
+
+    private static function getResourceClassForType(int $type): ?string
+    {
+        return match ($type) {
+            LINK_EXERCISE, LINK_HOTPOTATOES => CQuiz::class,
+            LINK_STUDENTPUBLICATION => CStudentPublication::class,
+            LINK_LEARNPATH => CLp::class,
+            LINK_FORUM_THREAD, LINK_FORUM_PARTICIPATION => CForumThread::class,
+            LINK_ATTENDANCE => CAttendance::class,
+            LINK_SURVEY => CSurvey::class,
+            default => null,
+        };
+    }
+
+    private static function getResourceNodeFromLegacyRef(int $type, int $refId): ?ResourceNode
+    {
+        $resourceClass = self::getResourceClassForType($type);
+        if (null === $resourceClass || $refId <= 0) {
+            return null;
+        }
+
+        $resource = Database::getManager()->getRepository($resourceClass)->find($refId);
+        if (!is_object($resource) || !method_exists($resource, 'getResourceNode')) {
+            return null;
+        }
+
+        $resourceNode = $resource->getResourceNode();
+
+        return $resourceNode instanceof ResourceNode ? $resourceNode : null;
+    }
+
+    private static function getLegacyRefIdFromResourceNode(int $type, int $resourceNodeId): int
+    {
+        $resourceClass = self::getResourceClassForType($type);
+        if (null === $resourceClass || $resourceNodeId <= 0) {
+            return 0;
+        }
+
+        $em = Database::getManager();
+        $resourceNode = $em->getReference(ResourceNode::class, $resourceNodeId);
+        $resource = $em->getRepository($resourceClass)->findOneBy([
+            'resourceNode' => $resourceNode,
+        ]);
+
+        return is_object($resource) && method_exists($resource, 'getIid')
+            ? (int) ($resource->getIid() ?? 0)
+            : 0;
     }
 
     private static function create_objects_from_sql_result(\Doctrine\DBAL\Result $result): array
@@ -827,7 +919,8 @@ abstract class AbstractLink implements GradebookItem
             $link = LinkFactory::create($data['type']);
             $link->set_id($data['id']);
             $link->set_type($data['type']);
-            $link->set_ref_id($data['ref_id']);
+            $legacyRefId = self::getLegacyRefIdFromResourceNode((int) $data['type'], (int) $data['ref_id']);
+            $link->set_ref_id($legacyRefId);
             $link->setCourseId($data['c_id']);
             $link->set_category_id($data['category_id']);
             $link->set_date($data['created_at']);

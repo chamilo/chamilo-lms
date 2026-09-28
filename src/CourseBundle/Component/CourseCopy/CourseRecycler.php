@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CGlossary;
+use Chamilo\CourseBundle\Entity\CGlossaryCategory;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -78,6 +79,9 @@ final class CourseRecycler
             $this->recycleGeneric($isFull, CCourseDescription::class, $selected['course_description'] ?? []);
             $this->recycleGeneric($isFull, CWiki::class, $selected['wiki'] ?? [], cascadeHeavy: true);
             $this->recycleGeneric($isFull, CGlossary::class, $selected['glossary'] ?? []);
+            if ($isFull) {
+                $this->recycleGeneric(true, CGlossaryCategory::class, []);
+            }
             $this->recycleGeneric($isFull, CThematic::class, $selected['thematic'] ?? [], cascadeHeavy: true);
             $this->recycleGeneric($isFull, CAttendance::class, $selected['attendance'] ?? [], cascadeHeavy: true);
             $this->recycleGeneric($isFull, CStudentPublication::class, $selected['work'] ?? [], cascadeHeavy: true);

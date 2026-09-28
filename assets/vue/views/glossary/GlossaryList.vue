@@ -7,49 +7,71 @@
         <BaseButton
           :label="t('Add new glossary term')"
           icon="plus"
+          only-icon
           type="success"
           @click="addNewTerm"
+        />
+        <BaseButton
+          :label="t('Manage categories')"
+          icon="file-tree-outline"
+          only-icon
+          type="black"
+          @click="manageCategories"
         />
         <BaseButton
           v-if="canUseAiGlossaryGenerator"
           :label="t('Generate glossary terms')"
           icon="robot"
+          only-icon
           type="black"
           @click="generateGlossaryTerms"
         />
         <BaseButton
           :label="t('Import glossary')"
           icon="import"
+          only-icon
           type="black"
           @click="importGlossary"
         />
         <BaseButton
           :label="t('Export glossary')"
           icon="file-export"
+          only-icon
           type="black"
           @click="exportGlossary"
         />
         <BaseButton
           :icon="view === 'table' ? 'list' : 'table'"
           :label="view === 'table' ? t('List view') : t('Table view')"
+          only-icon
           type="black"
           @click="changeView(view)"
         />
         <BaseButton
           :label="t('Export to documents')"
           icon="export"
+          only-icon
           type="black"
           @click="exportToDocuments"
         />
       </template>
     </BaseToolbar>
 
-    <BaseInputText
-      v-model="searchTerm"
-      :label="t('Search term')"
-      class="mb-4"
-      @update:model-value="debouncedSearch"
-    />
+    <div class="mb-4 grid gap-4 md:grid-cols-2">
+      <BaseInputText
+        v-model="searchTerm"
+        :label="t('Search term')"
+        @update:model-value="debouncedSearch"
+      />
+      <BaseSelect
+        id="glossary-category-filter"
+        v-model="selectedCategoryId"
+        :label="t('Category')"
+        :options="categoryFilterOptions"
+        name="categoryId"
+        @change="fetchGlossaries"
+      />
+    </div>
 
     <div v-if="isLoading">
       <BaseCard
@@ -67,27 +89,25 @@
       </BaseCard>
     </div>
 
-    <div v-if="glossaries.length === 0 && !searchBoxTouched && !isLoading">
-      <EmptyState
-        icon="glossary"
-        summary="Add your first term glossary to this course"
-      >
-        <BaseButton
-          v-if="canEditGlossary"
-          :label="t('Add new glossary term')"
-          class="mt-4"
-          icon="plus"
-          type="success"
-          @click="addNewTerm"
-        />
-      </EmptyState>
-    </div>
+    <EmptyState
+      v-else-if="glossaries.length === 0"
+      icon="glossary"
+      :summary="emptyStateSummary"
+    >
+      <BaseButton
+        v-if="canEditGlossary && !hasActiveFilters"
+        :label="t('Add new glossary term')"
+        class="mt-4"
+        icon="plus"
+        type="success"
+        @click="addNewTerm"
+      />
+    </EmptyState>
 
-    <div>
+    <div v-else>
       <GlossaryTermList
         v-if="view === 'list'"
         :glossaries="glossaries"
-        :is-loading="isLoading"
         :search-term="searchTerm"
         :can-edit-glossary="canEditGlossary"
         @delete="confirmDeleteTerm($event)"
@@ -121,6 +141,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
+import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import GlossaryTermList from "../../components/glossary/GlossaryTermList.vue"
 import GlossaryTermTable from "../../components/glossary/GlossaryTermTable.vue"
 import { getCourseContext } from "../../utils/courseContext"
@@ -152,9 +173,9 @@ const cidReqStore = useCidReqStore()
 const { course, session } = storeToRefs(cidReqStore)
 
 const isLoading = ref(true)
-const isSearchLoading = ref(false)
 const searchTerm = ref("")
-const searchBoxTouched = ref(false)
+const categories = ref([])
+const selectedCategoryId = ref(Number(route.query.categoryId || 0))
 const parentResourceNodeId = ref(Number(route.params.node))
 
 // Course context derived server-side from the gated session course.
@@ -179,15 +200,34 @@ const canEditGlossary = computed(() => {
   return basePermission && !platform.isStudentViewActive
 })
 
+const categoryFilterOptions = computed(() => [
+  { label: t("All categories"), value: 0 },
+  ...categories.value.map((category) => ({
+    label: category.title,
+    value: Number(category.iid || category.id || 0),
+  })),
+])
+
+const hasActiveFilters = computed(() => {
+  return searchTerm.value.trim() !== "" || selectedCategoryId.value > 0
+})
+
+const emptyStateSummary = computed(() => {
+  return hasActiveFilters.value ? t("No results found") : t("Add your first term glossary to this course")
+})
+
 onMounted(async () => {
   isLoading.value = true
 
+  await fetchCategories()
   await fetchGlossaries()
 })
 
 watch(
   () => [course.value?.id, session.value?.id],
   async () => {
+    selectedCategoryId.value = 0
+    await fetchCategories()
     await fetchGlossaries()
   },
 )
@@ -195,8 +235,6 @@ watch(
 useStudentViewRefresh(fetchGlossaries)
 
 const debouncedSearch = debounce(() => {
-  searchBoxTouched.value = true
-  isSearchLoading.value = true
   fetchGlossaries()
 }, 500)
 
@@ -221,6 +259,14 @@ function generateGlossaryTerms() {
   if (!canEditGlossary.value) return
   router.push({
     name: "GenerateGlossaryTerms",
+    query: route.query,
+  })
+}
+
+function manageCategories() {
+  if (!canEditGlossary.value) return
+  router.push({
+    name: "GlossaryCategories",
     query: route.query,
   })
 }
@@ -274,7 +320,10 @@ function exportGlossary() {
   if (!canEditGlossary.value) return
   router.push({
     name: "ExportGlossary",
-    query: route.query,
+    query: {
+      ...route.query,
+      ...(selectedCategoryId.value > 0 ? { categoryId: selectedCategoryId.value } : {}),
+    },
   })
 }
 
@@ -289,6 +338,7 @@ async function exportToDocuments() {
     resourceLinkList: resourceLinkList.value,
     sid: route.query.sid,
     cid: route.query.cid,
+    categoryId: Number(selectedCategoryId.value || 0),
   }
 
   try {
@@ -302,12 +352,27 @@ async function exportToDocuments() {
 
 const { cid, sid } = getCourseContext()
 
+async function fetchCategories() {
+  try {
+    categories.value = await glossaryService.getCategories({
+      cid: cid || null,
+      sid: sid || null,
+    })
+  } catch (error) {
+    console.error("[Glossary] Error fetching glossary categories:", error)
+    categories.value = []
+  }
+}
+
 async function fetchGlossaries() {
+  isLoading.value = true
+
   const params = {
     "resourceNode.parent": route.query.parent || null,
     cid: cid || null,
     sid: sid || null,
     q: searchTerm.value,
+    categoryId: Number(selectedCategoryId.value || 0) || null,
   }
 
   try {
@@ -317,7 +382,6 @@ async function fetchGlossaries() {
     notifications.showErrorNotification(t("Could not fetch glossary terms"))
   } finally {
     isLoading.value = false
-    isSearchLoading.value = false
   }
 }
 </script>

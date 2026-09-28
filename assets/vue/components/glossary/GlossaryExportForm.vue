@@ -7,6 +7,14 @@
       :options="formats"
     />
 
+    <BaseSelect
+      id="glossary-export-category"
+      v-model="selectedCategoryId"
+      :label="t('Category')"
+      :options="categoryOptions"
+      name="categoryId"
+    />
+
     <LayoutFormButtons>
       <BaseButton
         :label="t('Back')"
@@ -26,15 +34,17 @@
 
 <script setup>
 import { useI18n } from "vue-i18n"
-import { ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import { getCourseContext } from "../../utils/courseContext"
+import { useRoute } from "vue-router"
 import { useNotification } from "../../composables/notification"
 import glossaryService from "../../services/glossaryService"
 
 const { t } = useI18n()
+const route = useRoute()
 const { sid, cid } = getCourseContext()
 const notification = useNotification()
 
@@ -53,7 +63,29 @@ const mimeTypes = {
 }
 
 const selectedFormat = ref("csv")
+const selectedCategoryId = ref(Number(route.query.categoryId || 0))
+const categories = ref([])
 const isExporting = ref(false)
+
+const categoryOptions = computed(() => [
+  { label: t("All categories"), value: 0 },
+  ...categories.value.map((category) => ({
+    label: category.title,
+    value: Number(category.iid || category.id || 0),
+  })),
+])
+
+onMounted(async () => {
+  try {
+    categories.value = await glossaryService.getCategories({
+      cid: normalizeContextValue(cid),
+      sid: normalizeContextValue(sid) || null,
+    })
+  } catch (error) {
+    console.error("[Glossary] Error fetching export categories:", error)
+    categories.value = []
+  }
+})
 
 const submitForm = async () => {
   if (isExporting.value) {
@@ -67,6 +99,7 @@ const submitForm = async () => {
     formData.append("cid", normalizeContextValue(cid))
     formData.append("sid", normalizeContextValue(sid))
     formData.append("format", selectedFormat.value)
+    formData.append("categoryId", String(Number(selectedCategoryId.value || 0)))
 
     const response = await glossaryService.export(formData)
     downloadExport(response, selectedFormat.value)

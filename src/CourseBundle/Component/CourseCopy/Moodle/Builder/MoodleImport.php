@@ -622,6 +622,7 @@ class MoodleImport
                             'id'          => $gid,
                             'title'       => $title,
                             'description' => $descHtml,
+                            'category'    => (string) ($term['category'] ?? ''),
                             'approved'    => (int) ($term['approved'] ?? 1),
                             'aliases'     => (array) ($term['aliases'] ?? []),
                             'userid'      => (int) ($term['userid'] ?? 0),
@@ -3279,6 +3280,29 @@ class MoodleImport
         $name  = (string) ($xp->query('//glossary/name')->item(0)?->nodeValue ?? 'Glossary');
         $intro = (string) ($xp->query('//glossary/intro')->item(0)?->nodeValue ?? '');
 
+        $categoriesByEntryId = [];
+        foreach ($xp->query('//glossary/categories/category') as $categoryNode) {
+            if (!$categoryNode instanceof DOMElement) {
+                continue;
+            }
+
+            $categoryName = trim((string) ($xp->evaluate('string(name)', $categoryNode) ?? ''));
+            if ('' === $categoryName) {
+                continue;
+            }
+
+            foreach ($xp->query('category_entries/category_entry', $categoryNode) as $categoryEntryNode) {
+                if (!$categoryEntryNode instanceof DOMElement) {
+                    continue;
+                }
+
+                $entryId = (int) $xp->evaluate('number(entryid)', $categoryEntryNode);
+                if ($entryId > 0 && !isset($categoriesByEntryId[$entryId])) {
+                    $categoriesByEntryId[$entryId] = $categoryName;
+                }
+            }
+        }
+
         $entries = [];
         foreach ($xp->query('//glossary/entries/entry') as $eNode) {
             /** @var DOMElement $eNode */
@@ -3300,6 +3324,7 @@ class MoodleImport
                 'id'          => $entryId,
                 'concept'     => $concept,
                 'definition'  => $definition, // keep HTML; resolver for @@PLUGINFILE@@ can run later
+                'category'    => $categoriesByEntryId[$entryId] ?? '',
                 'approved'    => $approved ?: 1,
                 'userid'      => $userId,
                 'timecreated' => $created,

@@ -42,6 +42,7 @@ use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGlossary;
+use Chamilo\CourseBundle\Entity\CGlossaryCategory;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
@@ -69,6 +70,7 @@ use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiCategory;
 use Chamilo\CourseBundle\Entity\CWikiConf;
 use Chamilo\CourseBundle\Entity\CWikiDiscuss;
+use Chamilo\CourseBundle\Repository\CGlossaryCategoryRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
@@ -6838,6 +6840,31 @@ class CourseRestorer
             return null;
         };
 
+        $findOrCreateCategory = function (string $title) use ($em, $course, $session): ?CGlossaryCategory {
+            $title = trim($title);
+            if ('' === $title) {
+                return null;
+            }
+
+            $repository = $em->getRepository(CGlossaryCategory::class);
+            if ($repository instanceof CGlossaryCategoryRepository) {
+                $existing = $repository->findOneByTitleInExactContext($title, $course, $session);
+                if ($existing instanceof CGlossaryCategory) {
+                    return $existing;
+                }
+            }
+
+            $category = (new CGlossaryCategory())
+                ->setTitle($title)
+                ->setParent($course)
+                ->addCourseLink($course, $session)
+            ;
+            $em->persist($category);
+            $em->flush();
+
+            return $category;
+        };
+
         $setMapped = function (int $legacyId, int $destIid) use (&$items): void {
             if (isset($items[$legacyId]) && \is_object($items[$legacyId])) {
                 $items[$legacyId]->destination_id = $destIid;
@@ -6880,6 +6907,7 @@ class CourseRestorer
                 }
 
                 $desc = (string) ($gls->description ?? ($gls->extra['description'] ?? ''));
+                $categoryTitle = (string) ($gls->category ?? '');
 
                 // Rewrite HTML always
                 $desc = $this->rewriteHtmlForCourse($desc, $sessionId, '[glossary.term]');
@@ -6902,6 +6930,7 @@ class CourseRestorer
 
                     if (3 === $policy) { // OVERWRITE => update existing (do NOT delete)
                         $existing->setDescription($desc);
+                        $existing->setCategory($findOrCreateCategory($categoryTitle));
 
                         // Ensure linkage for this scope
                         if (method_exists($existing, 'setParent')) {
@@ -6957,6 +6986,7 @@ class CourseRestorer
                 $entity = (new CGlossary())
                     ->setTitle($title)
                     ->setDescription($desc)
+                    ->setCategory($findOrCreateCategory($categoryTitle))
                 ;
 
                 // Required order: setParent() before addCourseLink()

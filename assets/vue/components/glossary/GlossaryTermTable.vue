@@ -26,6 +26,15 @@
       </template>
     </Column>
 
+    <Column
+      :header="t('Category')"
+      field="category.title"
+    >
+      <template #body="{ data }">
+        {{ data.category?.title || t("No category") }}
+      </template>
+    </Column>
+
     <Column :header="t('Definition')">
       <template #body="{ data }">
         <div
@@ -45,6 +54,7 @@
           :label="t('Edit')"
           class="me-2"
           icon="edit"
+          only-icon
           size="small"
           type="tertiary-text"
           @click="emit('edit', data)"
@@ -53,6 +63,7 @@
           :label="t('Delete')"
           class="me-2"
           icon="delete"
+          only-icon
           size="small"
           type="danger-text"
           @click="emit('delete', data)"

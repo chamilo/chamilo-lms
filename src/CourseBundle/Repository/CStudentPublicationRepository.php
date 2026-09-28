@@ -13,7 +13,9 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CGroupCategory;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationRelUser;
@@ -183,11 +185,26 @@ final class CStudentPublicationRepository extends ResourceRepository
         }
 
         // Group context filtering:
-        // - groupId > 0: only resources linked to that group
-        // - groupId = 0: exclude any resource that has at least one group link (avoid leaks into course context)
+        // - groupId > 0: direct group resources plus one shared assignment
+        //   whose group_category_work_id matches the current group's category.
+        // - groupId = 0: keep group-only resources and shared group assignments
+        //   out of the normal learner list.
         if ($groupId > 0) {
-            $qb->andWhere('IDENTITY(rl.group) = :gid')
+            $groupCategoryId = $this->findGroupCategoryIdInContext($course, $session, $groupId);
+            $groupConditions = $qb->expr()->orX(
+                'IDENTITY(rl.group) = :gid',
+                'resource.groupCategoryWorkId = :allGroupsWorkId',
+            );
+
+            if ($groupCategoryId > 0) {
+                $groupConditions->add('resource.groupCategoryWorkId = :groupCategoryWorkId');
+                $qb->setParameter('groupCategoryWorkId', $groupCategoryId);
+            }
+
+            $qb
+                ->andWhere($groupConditions)
                 ->setParameter('gid', $groupId)
+                ->setParameter('allGroupsWorkId', AssignmentGroupCategoryResolver::ALL_GROUPS)
             ;
         } else {
             $with = 'rl_group.course = :course AND rl_group.group IS NOT NULL';
@@ -199,6 +216,7 @@ final class CStudentPublicationRepository extends ResourceRepository
 
             $qb->leftJoin('rn.resourceLinks', 'rl_group', 'WITH', $with)
                 ->andWhere('rl_group.id IS NULL')
+                ->andWhere('resource.groupCategoryWorkId = 0')
             ;
         }
 
@@ -211,6 +229,43 @@ final class CStudentPublicationRepository extends ResourceRepository
     ');
 
         return $qb->getQuery()->getResult();
+    }
+
+    private function findGroupCategoryIdInContext(Course $course, ?Session $session, int $groupId): int
+    {
+        /** @var CGroupRepository $groupRepository */
+        $groupRepository = $this->getEntityManager()->getRepository(CGroup::class);
+        $qb = $groupRepository->getResourcesByCourse($course, $session);
+        $qb
+            ->andWhere('resource.iid = :groupId')
+            ->setParameter('groupId', $groupId)
+        ;
+
+        $group = $qb->getQuery()->getOneOrNullResult();
+        if (!$group instanceof CGroup) {
+            return 0;
+        }
+
+        $categoryId = (int) ($group->getCategory()?->getIid() ?? 0);
+        if ($categoryId > 0) {
+            return $categoryId;
+        }
+
+        /** @var CGroupCategoryRepository $categoryRepository */
+        $categoryRepository = $this->getEntityManager()->getRepository(CGroupCategory::class);
+        $categories = $categoryRepository
+            ->getResourcesByCourse(
+                course: $course,
+                session: $session,
+                displayOnlyPublished: false,
+                displayOrder: true,
+            )
+            ->getQuery()
+            ->getResult()
+        ;
+        $defaultCategory = $categories[0] ?? null;
+
+        return $defaultCategory instanceof CGroupCategory ? (int) $defaultCategory->getIid() : 0;
     }
 
     public function findStudentProgressByCourse(Course $course, ?Session $session): array

@@ -71,8 +71,9 @@ final readonly class MobileAssignmentSubmissionAccess
         int $assignmentId,
         Course $course,
         ?Session $session,
+        int $groupId = 0,
     ): CStudentPublication {
-        $assignment = $this->findVisibleAssignment($assignmentId, $course, $session);
+        $assignment = $this->findVisibleAssignment($assignmentId, $course, $session, $groupId);
         if ($assignment instanceof CStudentPublication) {
             return $assignment;
         }
@@ -84,7 +85,7 @@ final readonly class MobileAssignmentSubmissionAccess
                 : null;
 
             if (null === $sessionLink) {
-                $assignment = $this->findVisibleAssignment($assignmentId, $course, null);
+                $assignment = $this->findVisibleAssignment($assignmentId, $course, null, $groupId);
                 if ($assignment instanceof CStudentPublication) {
                     return $assignment;
                 }
@@ -202,8 +203,9 @@ final readonly class MobileAssignmentSubmissionAccess
         int $assignmentId,
         Course $course,
         ?Session $session,
+        int $groupId = 0,
     ): ?CStudentPublication {
-        foreach ($this->studentPublicationRepository->findVisibleAssignmentsForStudent($course, $session) as $row) {
+        foreach ($this->studentPublicationRepository->findVisibleAssignmentsForStudent($course, $session, $groupId) as $row) {
             $assignment = \is_array($row) ? ($row[0] ?? null) : $row;
 
             if ($assignment instanceof CStudentPublication && $assignment->getIid() === $assignmentId) {

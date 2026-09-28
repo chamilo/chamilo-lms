@@ -19,8 +19,10 @@ use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
 use Chamilo\CoreBundle\Service\Assignment\MobileAssignmentSubmissionAccess;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
@@ -61,7 +63,8 @@ class StudentPublicationController extends AbstractController
 {
     public function __construct(
         private readonly CStudentPublicationRepository $studentPublicationRepo,
-        private readonly CidReqHelper $cidReqHelper
+        private readonly CidReqHelper $cidReqHelper,
+        private readonly AssignmentGroupCategoryResolver $assignmentGroupCategoryResolver,
     ) {}
 
     #[Route('/student', name: 'chamilo_core_assignment_student_list', methods: ['GET'])]
@@ -132,6 +135,7 @@ class StudentPublicationController extends AbstractController
                 $assignmentId,
                 $managementContext['course'],
                 $managementContext['session'],
+                (int) ($this->cidReqHelper->getGroupId() ?? 0),
             );
         } catch (AccessDeniedHttpException $exception) {
             $assignment = $repo->find($assignmentId);
@@ -177,6 +181,9 @@ class StudentPublicationController extends AbstractController
         $session = $this->cidReqHelper->getSessionEntity();
         $groupId = (int) ($this->cidReqHelper->getGroupId() ?? 0);
         $group = $this->cidReqHelper->getGroupEntity();
+        if (!$group instanceof CGroup || $groupId <= 0 || (int) $group->getIid() !== $groupId) {
+            $group = null;
+        }
         $assignment = $repo->find($assignmentId);
 
         if (!$assignment instanceof CStudentPublication) {
@@ -185,6 +192,24 @@ class StudentPublicationController extends AbstractController
 
         $resourceNode = $assignment->getResourceNode();
         $contextLink = $resourceNode?->getResourceLinkByContext($course, $session, $group);
+
+        if (
+            null === $contextLink
+            && $group instanceof CGroup
+            && 0 !== $assignment->getGroupCategoryWorkId()
+            && $this->assignmentGroupCategoryResolver->assignmentAppliesToGroup(
+                $assignment->getGroupCategoryWorkId(),
+                $group,
+                $course,
+                $session,
+            )
+        ) {
+            // Shared group assignments intentionally keep one course/session link.
+            // The selected category, together with the validated gid context,
+            // grants the group access without duplicating the assignment row.
+            $contextLink = $resourceNode?->getResourceLinkByContext($course, $session);
+        }
+
         if (null === $contextLink && null !== $session && null === $group) {
             $contextLink = $resourceNode?->getResourceLinkByContext($course);
         }
@@ -204,6 +229,7 @@ class StudentPublicationController extends AbstractController
                 $assignmentId,
                 $managementContext['course'],
                 $managementContext['session'],
+                $groupId,
             );
         } catch (AccessDeniedHttpException|NotFoundHttpException) {
             if (!$security->isGranted('EDIT', $resourceNode)) {

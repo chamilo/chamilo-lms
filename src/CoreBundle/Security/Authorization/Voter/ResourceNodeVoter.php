@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -68,6 +69,7 @@ class ResourceNodeVoter extends Voter
         private readonly ResourceAclHelper $resourceAclHelper,
         private readonly CourseFromRequestHelper $courseFromRequest,
         private readonly CLpItemRepository $lpItemRepository,
+        private readonly AssignmentGroupCategoryResolver $assignmentGroupCategoryResolver,
     ) {}
 
     public static function getReaderMask(): int
@@ -195,6 +197,27 @@ class ResourceNodeVoter extends Voter
         }
 
         $resourceTypeTitle = $resourceNode->getResourceType()->getTitle();
+
+        // A shared group assignment keeps one course/session ResourceLink and is
+        // exposed to a learner only while they are inside one of the groups that
+        // belongs to the assignment's selected group category. Without this guard,
+        // the generic student-publication rule below would allow any subscribed
+        // course learner to open the assignment directly by its resource id.
+        if (self::VIEW === $attribute && 'student_publications' === $resourceTypeTitle && $user instanceof User) {
+            $publication = $this->entityManager
+                ->getRepository(CStudentPublication::class)
+                ->findOneBy(['resourceNode' => $resourceNode])
+            ;
+
+            if (
+                $publication instanceof CStudentPublication
+                && null === $publication->getPublicationParent()
+                && 0 !== $publication->getGroupCategoryWorkId()
+            ) {
+                return $this->canViewSharedGroupAssignment($publication, $user);
+            }
+        }
+
         if (
             \in_array($resourceTypeTitle, [
                 'student_publications',
@@ -757,6 +780,76 @@ class ResourceNodeVoter extends Voter
      * Whether the user takes part in one of the courses the resource is linked to,
      * as a real subscription rather than as a visitor of an open course.
      */
+    private function canViewSharedGroupAssignment(CStudentPublication $publication, User $user): bool
+    {
+        $resourceNode = $publication->getResourceNode();
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        // Course/session teachers keep managing the single shared assignment from
+        // the normal Assignment tool (gid=0).
+        if ($this->teachesResourceCourse($resourceNode, $user)) {
+            return true;
+        }
+
+        if (!$this->belongsToResourceCourse($resourceNode, $user)) {
+            return false;
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request || !$request->hasSession()) {
+            return false;
+        }
+
+        $requestSession = $request->getSession();
+        $groupId = (int) $requestSession->get('gid', 0);
+        $group = $requestSession->get('group');
+        if (!$group instanceof CGroup || $groupId <= 0 || (int) $group->getIid() !== $groupId) {
+            return false;
+        }
+
+        $course = $requestSession->get('course');
+        if (!$course instanceof Course) {
+            return false;
+        }
+
+        $session = $requestSession->get('session');
+        $session = $session instanceof Session ? $session : null;
+        if (!$this->assignmentGroupCategoryResolver->assignmentAppliesToGroup(
+            $publication->getGroupCategoryWorkId(),
+            $group,
+            $course,
+            $session,
+        )) {
+            return false;
+        }
+
+        if (!$group->hasMember($user) && !$group->hasTutor($user)) {
+            return false;
+        }
+
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            if ($link->getCourse()?->getId() !== $course->getId()) {
+                continue;
+            }
+
+            if ($session instanceof Session) {
+                if ($link->getSession()?->getId() === $session->getId()) {
+                    return true;
+                }
+
+                continue;
+            }
+
+            if (null === $link->getSession()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function belongsToResourceCourse(ResourceNode $resourceNode, User $user): bool
     {
         foreach ($resourceNode->getResourceLinks() as $link) {

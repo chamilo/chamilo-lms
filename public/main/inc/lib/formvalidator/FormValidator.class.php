@@ -1981,7 +1981,8 @@ EOT;
         $this->addRule(
             $element,
             get_lang('The email address is not complete or contains some invalid characters'),
-            'email'
+            'regex',
+            '/^[\p{L}\p{N}!#$%&\'*+\-\/=?^_{|}~.]+@[\p{L}\p{N}\-]+(?:\.[\p{L}\p{N}\-]+)+$/u'
         );
     }
 }

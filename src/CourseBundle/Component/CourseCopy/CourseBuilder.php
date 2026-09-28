@@ -1836,10 +1836,11 @@ class CourseBuilder
             $iid = (int) $term->getIid();
             $title = (string) $term->getTitle();
             $desc = (string) ($term->getDescription() ?? '');
+            $categoryTitle = $term->getCategory()?->getTitle() ?? '';
 
             $this->findAndSetDocumentsInText($desc);
 
-            $legacy = new Glossary($iid, $title, $desc, 0);
+            $legacy = new Glossary($iid, $title, $desc, 0, $categoryTitle);
             $this->course->add_resource($legacy);
         }
     }

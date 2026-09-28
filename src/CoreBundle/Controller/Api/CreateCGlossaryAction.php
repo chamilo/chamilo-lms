@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CourseBundle\Entity\CGlossary;
+use Chamilo\CourseBundle\Entity\CGlossaryCategory;
+use Chamilo\CourseBundle\Repository\CGlossaryCategoryRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,8 +23,12 @@ final class CreateCGlossaryAction extends BaseResourceFileAction
         private readonly AiDisclosureHelper $aiDisclosureHelper,
     ) {}
 
-    public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em): CGlossary
-    {
+    public function __invoke(
+        Request $request,
+        CGlossaryRepository $repo,
+        CGlossaryCategoryRepository $categoryRepository,
+        EntityManager $em,
+    ): CGlossary {
         $data = json_decode($request->getContent(), true);
         $title = (string) ($data['title'] ?? '');
         $description = (string) ($data['description'] ?? '');
@@ -31,6 +37,7 @@ final class CreateCGlossaryAction extends BaseResourceFileAction
 
         $sid = isset($data['sid']) ? (int) $data['sid'] : 0;
         $cid = (int) ($data['cid'] ?? 0);
+        $categoryId = (int) ($data['categoryId'] ?? 0);
 
         $course = $cid ? $em->getRepository(Course::class)->find($cid) : null;
         $session = $sid ? $em->getRepository(Session::class)->find($sid) : null;
@@ -46,9 +53,20 @@ final class CreateCGlossaryAction extends BaseResourceFileAction
             throw new BadRequestHttpException('The glossary term already exists.');
         }
 
+        $category = null;
+        if ($categoryId > 0) {
+            $category = $course instanceof Course
+                ? $categoryRepository->findInCourseContext($categoryId, $course, $session)
+                : null;
+            if (!$category instanceof CGlossaryCategory) {
+                throw new BadRequestHttpException('Glossary category not found in the current course/session context.');
+            }
+        }
+
         $glossary = (new CGlossary())
             ->setTitle($title)
             ->setDescription($description)
+            ->setCategory($category)
         ;
 
         if (!empty($parentResourceNodeId)) {

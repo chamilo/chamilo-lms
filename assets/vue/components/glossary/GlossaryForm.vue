@@ -13,6 +13,14 @@
       :vuelidate-property="v$.description"
     />
 
+    <BaseSelect
+      id="term-category"
+      v-model="formData.categoryId"
+      :label="t('Category')"
+      :options="categoryOptions"
+      name="categoryId"
+    />
+
     <BaseAdvancedSettingsButton
       v-if="resourceLanguageEnabled || canShowAiToggle"
       v-model="showAdvancedSettings"
@@ -71,6 +79,7 @@ import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVueli
 import { required } from "@vuelidate/validators"
 import useVuelidate from "@vuelidate/core"
 import BaseTextAreaWithVuelidate from "../basecomponents/BaseTextAreaWithVuelidate.vue"
+import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
@@ -97,6 +106,7 @@ const emit = defineEmits(["backPressed"])
 
 const parentResourceNodeId = ref(Number(route.params.node))
 const showAdvancedSettings = ref(false)
+const categories = ref([])
 
 // Course context derived server-side from the gated session course.
 const resourceLinkList = ref(JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]))
@@ -114,15 +124,26 @@ const formData = reactive({
   description: "",
   ai_assisted_raw: false,
   language: "",
+  categoryId: 0,
 })
 const rules = {
   title: { required },
   description: { required },
   language: {},
+  categoryId: {},
 }
 const v$ = useVuelidate(rules, formData)
 
+const categoryOptions = computed(() => [
+  { label: t("No category"), value: 0 },
+  ...categories.value.map((category) => ({
+    label: category.title,
+    value: Number(category.iid || category.id || 0),
+  })),
+])
+
 onMounted(async () => {
+  await fetchCategories()
   await fetchTerm()
 })
 
@@ -147,6 +168,7 @@ const fetchTerm = async () => {
     formData.title = glossary.title ?? ""
     formData.description = glossary.description ?? ""
     formData.language = extractResourceLanguage(glossary)
+    formData.categoryId = Number(glossary.category?.iid || glossary.category?.id || 0)
 
     // Prefer stored raw value
     if (typeof glossary.ai_assisted_raw !== "undefined") {
@@ -159,6 +181,18 @@ const fetchTerm = async () => {
   } catch (error) {
     console.error("[GlossaryForm] Failed to fetch glossary term:", error)
     notification.showErrorNotification(t("Could not fetch glossary term"))
+  }
+}
+
+const fetchCategories = async () => {
+  try {
+    categories.value = await glossaryService.getCategories({
+      cid: route.query.cid,
+      sid: route.query.sid || null,
+    })
+  } catch (error) {
+    console.error("[GlossaryForm] Failed to fetch glossary categories:", error)
+    categories.value = []
   }
 }
 
@@ -177,6 +211,7 @@ const submitGlossaryForm = async () => {
     cid: route.query.cid,
     ai_assisted_raw: formData.ai_assisted_raw ? 1 : 0,
     language: formData.language || "",
+    categoryId: Number(formData.categoryId || 0),
   }
 
   try {

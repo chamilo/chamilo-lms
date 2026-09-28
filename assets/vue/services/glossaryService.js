@@ -41,6 +41,22 @@ export default {
     return await baseService.delete(`/api/glossaries/${termId}`)
   },
 
+  getCategories: async (params) => {
+    return await baseService.get("/api/glossary_categories", params)
+  },
+
+  createCategory: async (data, params = {}) => {
+    return await baseService.post("/api/glossary_categories", data, {}, { params })
+  },
+
+  updateCategory: async (categoryId, data, params = {}) => {
+    return await baseService.put(`/api/glossary_categories/${categoryId}`, data, { params })
+  },
+
+  deleteCategory: async (categoryId, params = {}) => {
+    return await baseService.delete(`/api/glossary_categories/${categoryId}`, { params })
+  },
+
   // ---------------------------
   // AI helpers (non-API entrypoint)
   // ---------------------------

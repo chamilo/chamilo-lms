@@ -17,6 +17,12 @@ export default {
       component: () => import("../views/glossary/GlossaryList.vue"),
     },
     {
+      name: "GlossaryCategories",
+      path: "categories",
+      meta: { breadcrumb: "Categories" },
+      component: () => import("../views/glossary/GlossaryCategories.vue"),
+    },
+    {
       name: "CreateTerm",
       path: "create",
       meta: { breadcrumb: "Create" },

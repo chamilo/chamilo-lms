@@ -286,6 +286,7 @@ class Course
                     case RESOURCE_GLOSSARY:
                         $this->encodeIfSet($resource, 'name');
                         $this->encodeIfSet($resource, 'description');
+                        $this->encodeIfSet($resource, 'category');
                         break;
 
                     case RESOURCE_LEARNPATH:

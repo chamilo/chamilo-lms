@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Tool;
 
 use Chamilo\CourseBundle\Entity\CGlossary;
+use Chamilo\CourseBundle\Entity\CGlossaryCategory;
 
 class Glossary extends AbstractTool implements ToolInterface
 {
@@ -34,6 +35,7 @@ class Glossary extends AbstractTool implements ToolInterface
     {
         return [
             'glossaries' => CGlossary::class,
+            'glossary_categories' => CGlossaryCategory::class,
         ];
     }
 }

@@ -4297,132 +4297,33 @@ class Exercise
 
                     break;
                 case CALCULATED_ANSWER:
-                    $calculatedAnswerList = Session::read('calculatedAnswerId');
-                    if (!empty($calculatedAnswerList)) {
-                        $answer = $objAnswerTmp->selectAnswer($calculatedAnswerList[$questionId]);
-                        $preArray = explode('@@', $answer);
-                        $last = count($preArray) - 1;
-                        $answer = '';
-                        for ($k = 0; $k < $last; $k++) {
-                            $answer .= $preArray[$k];
-                        }
-                        $answerWeighting = [$answerWeighting];
-                        // we save the answer because it will be modified
-                        $temp = $answer;
-                        $answer = '';
-                        $j = 0;
-                        // initialise answer tags
-                        $userTags = $correctTags = $realText = [];
-                        // the loop will stop at the end of the text
-                        while (1) {
-                            // quits the loop if there are no more blanks (detect '[')
-                            if (false == $temp || false === ($pos = api_strpos($temp, '['))) {
-                                // adds the end of the text
-                                $answer = $temp;
-                                $realText[] = $answer;
+                    $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
+                            WHERE
+                                exe_id = $exeId AND
+                                question_id = $questionId ";
+                    $result = Database::query($sql);
+                    $str = Database::result($result, 0, 'answer');
 
-                                break; //no more "blanks", quit the loop
-                            }
-                            // adds the piece of text that is before the blank
-                            // and ends with '[' into a general storage array
-                            $realText[] = api_substr($temp, 0, $pos + 1);
-                            $answer .= api_substr($temp, 0, $pos + 1);
-                            // take the string remaining (after the last "[" we found)
-                            $temp = api_substr($temp, $pos + 1);
-                            // quit the loop if there are no more blanks, and update $pos to the position of next ']'
-                            if (false === ($pos = api_strpos($temp, ']'))) {
-                                // adds the end of the text
-                                $answer .= $temp;
-
-                                break;
-                            }
-
-                            if ($from_database) {
-                                $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                        WHERE
-                                            exe_id = $exeId AND
-                                            question_id = $questionId ";
-                                $result = Database::query($sql);
-                                $str = Database::result($result, 0, 'answer');
-                                api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
-                                $str = str_replace('\r\n', '', $str);
-                                $choice = $arr[1];
-                                if (isset($choice[$j])) {
-                                    $tmp = api_strrpos($choice[$j], ' / ');
-                                    if ($tmp) {
-                                        $choice[$j] = api_substr($choice[$j], 0, $tmp);
-                                    } else {
-                                        $tmp = ltrim($tmp, '[');
-                                        $tmp = rtrim($tmp, ']');
-                                    }
-                                    $choice[$j] = trim($choice[$j]);
-                                    // Needed to let characters ' and " to work as part of an answer
-                                    $choice[$j] = stripslashes($choice[$j]);
-                                } else {
-                                    $choice[$j] = null;
-                                }
-                            } else {
-                                // This value is the user input not escaped while correct answer is escaped by ckeditor
-                                $choice[$j] = api_htmlentities(trim($choice[$j]));
-                            }
-                            $userTags[] = $choice[$j];
-                            // put the contents of the [] answer tag into correct_tags[]
-                            $correctTags[] = api_substr($temp, 0, $pos);
-                            $j++;
-                            $temp = api_substr($temp, $pos + 1);
-                        }
-                        $answer = '';
-                        $realCorrectTags = $correctTags;
-                        $calculatedStatus = Display::label(get_lang('Incorrect'), 'danger');
-                        $expectedAnswer = '';
-                        $calculatedChoice = '';
-
-                        for ($i = 0; $i < count($realCorrectTags); $i++) {
-                            if (0 == $i) {
-                                $answer .= $realText[0];
-                            }
-                            // Needed to parse ' and " characters
-                            $userTags[$i] = stripslashes($userTags[$i]);
-                            if ($correctTags[$i] == $userTags[$i]) {
-                                // gives the related weighting to the student
-                                $questionScore += $answerWeighting[$i];
-                                // increments total score
-                                $totalScore += $answerWeighting[$i];
-                                // adds the word in green at the end of the string
-                                $answer .= $correctTags[$i];
-                                $calculatedChoice = $correctTags[$i];
-                            } elseif (!empty($userTags[$i])) {
-                                // else if the word entered by the student IS NOT the same as
-                                // the one defined by the professor
-                                // adds the word in red at the end of the string, and strikes it
-                                $answer .= '<font color="red"><s>'.$userTags[$i].'</s></font>';
-                                $calculatedChoice = $userTags[$i];
-                            } else {
-                                // adds a tabulation if no word has been typed by the student
-                                $answer .= ''; // remove &nbsp; that causes issue
-                            }
-                            // adds the correct word, followed by ] to close the blank
-                            if (EXERCISE_FEEDBACK_TYPE_EXAM != $this->results_disabled) {
-                                $answer .= ' / <font color="green"><b>'.$realCorrectTags[$i].'</b></font>';
-                                $calculatedStatus = Display::label(get_lang('Correct'), 'success');
-                                $expectedAnswer = $realCorrectTags[$i];
-                            }
-                            $answer .= ']';
-                            if (isset($realText[$i + 1])) {
-                                $answer .= $realText[$i + 1];
-                            }
-                        }
+                    if ($from_database) {
+                        // Redisplaying an existing attempt: recover the previous choices.
+                        $oldChoice = CalculatedAnswer::getStudentChoices($str);
+                        $studentInstanceData = CalculatedAnswer::replaceFormuleAfterModification($questionId, $str);
+                        $answer = CalculatedAnswer::getStudentAnswerFromChoice($studentInstanceData, $oldChoice);
                     } else {
-                        if ($from_database) {
-                            $sql = "SELECT *
-                                    FROM $TBL_TRACK_ATTEMPT
-                                    WHERE
-                                        exe_id = $exeId AND
-                                        question_id = $questionId ";
-                            $result = Database::query($sql);
-                            $resultData = Database::fetch_assoc($result);
-                            $answer = $resultData['answer'];
-                            $questionScore = $resultData['marks'];
+                        $answer = CalculatedAnswer::getStudentAnswerFromChoice($str, $choice);
+                    }
+
+                    // Compute the score from the student's per-formula answers.
+                    [, $encodedAnswer] = CalculatedAnswer::getEditorPart($answer);
+                    [, $formulaStudents] = CalculatedAnswer::parseStudentAnswerData($encodedAnswer);
+
+                    $questionScore = 0;
+                    $answerText = $objAnswerTmp->selectAnswer(1);
+                    [, , $formulaList] = CalculatedAnswer::parseCalculatedAnswer($answerText);
+
+                    foreach ($formulaStudents as $name => $formulaInfo) {
+                        if (1 == $formulaInfo['correct'] && isset($formulaList[$name])) {
+                            $questionScore += $formulaList[$name]['score'];
                         }
                     }
 
@@ -5248,18 +5149,15 @@ class Exercise
                                 $answerComment
                             );
                         } elseif (CALCULATED_ANSWER == $answerType) {
+                            $objAnswer = new Answer($questionId);
                             ExerciseShowFunctions::display_calculated_answer(
-                                $this,
                                 $feedback_type,
                                 $answer,
                                 0,
-                                0,
+                                $questionId,
                                 $results_disabled,
                                 $showTotalScoreAndUserChoicesInLastAttempt,
-                                $expectedAnswer,
-                                $calculatedChoice,
-                                $calculatedStatus,
-                                $answerComment
+                                $objAnswer
                             );
                         } elseif (FREE_ANSWER == $answerType) {
                             ExerciseShowFunctions::display_free_answer(
@@ -5661,18 +5559,15 @@ class Exercise
                             );
                             break;
                         case CALCULATED_ANSWER:
+                            $objAnswer = new Answer($questionId);
                             ExerciseShowFunctions::display_calculated_answer(
-                                $this,
                                 $feedback_type,
                                 $answer,
                                 $exeId,
                                 $questionId,
                                 $results_disabled,
-                                '',
                                 $showTotalScoreAndUserChoicesInLastAttempt,
-                                '',
-                                '',
-                                $answerComment
+                                $objAnswer
                             );
 
                             break;
@@ -6520,6 +6415,18 @@ class Exercise
                     0,
                     $this->id,
                     false,
+                    $questionDuration
+                );
+            } elseif (CALCULATED_ANSWER == $answerType) {
+                Event::saveQuestionAttempt(
+                    $this,
+                    $questionScore,
+                    $answer,
+                    $quesId,
+                    $exeId,
+                    0,
+                    $this->id,
+                    true,
                     $questionDuration
                 );
             } else {
@@ -10345,6 +10252,7 @@ class Exercise
         $attemptList = Event::getAllExerciseEventByExeId($attemptId);
 
         foreach ($attemptList as $questionId => $options) {
+            $hasAnswer = true;
             foreach ($options as $option) {
                 $question = Question::read($option['question_id']);
 
@@ -10357,10 +10265,16 @@ class Exercise
                                 $option['answer'] = "there is 0 as answer so we do not want to consider it empty";
                             }
                             break;
+                        case CALCULATED_ANSWER:
+                            $studentAnswer = CalculatedAnswer::getStudentChoices($option['answer']);
+                            if (($studentAnswer[0] ?? '') === '' || ($studentAnswer[0] ?? '') === '?') {
+                                $hasAnswer = false;
+                            }
+                            break;
                     }
                 }
 
-                if (!empty($option['answer'])) {
+                if (!empty($option['answer']) && $hasAnswer) {
                     $exerciseResult[] = $questionId;
 
                     break;

@@ -753,20 +753,25 @@
                   dir="auto"
                   v-html="displayTranslatedHtml(question.answer.text)"
                 />
-                <div class="grid gap-2 md:grid-cols-2">
+                <div
+                  v-for="formula in question.answer.formulas"
+                  :key="formula.name"
+                  class="grid gap-2 md:grid-cols-2"
+                >
                   <div
                     v-if="visibility.showStudentAnswers !== false"
-                    class="rounded bg-info/10 p-2 text-info"
+                    class="rounded p-2"
+                    :class="false === formula.correct ? 'bg-danger/10 text-danger' : 'bg-info/10 text-info'"
                   >
-                    <span class="font-semibold">{{ t("Your answer") }}:</span>
-                    {{ question.answer.studentAnswer || t("No answer") }}
+                    <span class="font-semibold">[={{ formula.name }}] {{ t("Your answer") }}:</span>
+                    {{ formula.studentAnswer || t("No answer") }}
                   </div>
                   <div
-                    v-if="question.answer.expectedAnswer"
+                    v-if="formula.expectedAnswer"
                     class="rounded bg-success/10 p-2 text-success"
                   >
                     <span class="font-semibold">{{ t("Correct answer") }}:</span>
-                    {{ question.answer.expectedAnswer }}
+                    {{ formula.expectedAnswer }}
                   </div>
                 </div>
                 <div

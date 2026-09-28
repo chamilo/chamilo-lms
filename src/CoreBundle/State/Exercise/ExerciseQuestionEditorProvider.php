@@ -161,8 +161,8 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->fillBlankItems = [];
         $response->fillBlanksComment = '';
         $response->calculatedText = '';
-        $response->calculatedFormula = '';
-        $response->calculatedRanges = [];
+        $response->calculatedVariables = [];
+        $response->calculatedFormulas = [];
         $response->calculatedComment = '';
         $response->matchingOptions = [];
         $response->matchingPairs = [];
@@ -184,9 +184,8 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             $response->score = 10.0;
             $response->globalScore = 0.0;
             $response->calculatedText = $this->getDefaultCalculatedText();
-            $response->calculatedFormula = '';
-            $response->calculatedRanges = $this->buildCalculatedRanges($response->calculatedText, []);
-            $response->calculatedVariations = 1;
+            $response->calculatedVariables = [];
+            $response->calculatedFormulas = [];
             $response->calculatedComment = '';
             $response->answers = [];
         }
@@ -1585,9 +1584,8 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $firstAnswer = $answers[0] ?? null;
         if (!$firstAnswer instanceof CQuizAnswer) {
             $response->calculatedText = $this->getDefaultCalculatedText();
-            $response->calculatedFormula = '';
-            $response->calculatedRanges = $this->buildCalculatedRanges($response->calculatedText, []);
-            $response->calculatedVariations = 1;
+            $response->calculatedVariables = [];
+            $response->calculatedFormulas = [];
             $response->calculatedComment = '';
             $response->answers = [];
 
@@ -1596,107 +1594,67 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         $parsed = $this->parseCalculatedAnswer((string) $firstAnswer->getAnswer());
         $response->calculatedText = $parsed['text'];
-        $response->calculatedFormula = $parsed['formula'];
-        $response->calculatedRanges = $this->buildCalculatedRanges($parsed['text'], []);
-        $response->calculatedVariations = max(1, \count($answers));
+        $response->calculatedVariables = array_values($parsed['variables']);
+        $response->calculatedFormulas = array_values($parsed['formulas']);
         $response->calculatedComment = (string) $firstAnswer->getComment();
         $response->score = (float) $question->getPonderation();
         $response->answers = [];
     }
 
     /**
-     * @return array{text: string, formula: string}
+     * Parses the stored "wording@@@#name:intervals::decimals;=name:formula:tolerance:type:decimals:score;..."
+     * encoding shared with the legacy exercise tool (public/main/exercise/calculated_answer.class.php).
+     *
+     * @return array{
+     *     text: string,
+     *     variables: array<string, array{name: string, intervals: string, decimals: int}>,
+     *     formulas: array<string, array{name: string, formula: string, tolerance: float, toleranceType: string, decimals: int, score: float}>
+     * }
      */
     private function parseCalculatedAnswer(string $encodedAnswer): array
     {
-        $parts = explode('@@', $encodedAnswer);
-        $formula = \count($parts) > 1 ? (string) array_pop($parts) : '';
-        $text = (string) array_shift($parts);
-        $text = preg_replace('/\[[^\]]*\]/', '[]', $text) ?? $text;
+        $parts = explode('@@@', $encodedAnswer, 2);
+        $text = (string) ($parts[0] ?? '');
+        $encodedData = (string) ($parts[1] ?? '');
 
-        return [
-            'text' => $text,
-            'formula' => $formula,
-        ];
-    }
+        $variables = [];
+        $formulas = [];
 
-    /**
-     * @param array<int, array<string, mixed>> $submittedRanges
-     *
-     * @return array<int, array{token: string, low: string, high: string, random: string, position: int}>
-     */
-    private function buildCalculatedRanges(string $text, array $submittedRanges): array
-    {
-        $previousByToken = [];
-        foreach ($submittedRanges as $range) {
-            if (!\is_array($range)) {
+        foreach (explode(';', trim($encodedData, ';')) as $item) {
+            if ('' === $item) {
                 continue;
             }
 
-            $token = (string) ($range['token'] ?? '');
-            if ('' === $token) {
-                continue;
-            }
-
-            $previousByToken[$token] = $range;
-        }
-
-        $ranges = [];
-        foreach ($this->extractCalculatedTokens($text) as $index => $token) {
-            $previous = $previousByToken[$token] ?? [];
-            $low = (string) ($previous['low'] ?? '1');
-            $high = (string) ($previous['high'] ?? '20');
-
-            $ranges[] = [
-                'token' => $token,
-                'low' => $low,
-                'high' => $high,
-                'random' => $this->buildCalculatedRandomPreview($low, $high),
-                'position' => $index + 1,
-            ];
-        }
-
-        return $ranges;
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    private function extractCalculatedTokens(string $text): array
-    {
-        preg_match_all('/\[[^\]]+\]/', $text, $matches);
-        $tokens = [];
-        foreach ($matches[0] ?? [] as $token) {
-            $token = trim((string) $token);
-            if ('' !== $token && !\in_array($token, $tokens, true)) {
-                $tokens[] = $token;
+            $bits = explode(':', $item);
+            if (str_starts_with($item, '#') && \count($bits) >= 4) {
+                $name = ltrim($bits[0], '#');
+                // Backward compatibility with the old "name:min:max:decimals" encoding (bits[2] holds max);
+                // the current format leaves bits[2] empty and encodes the whole range in bits[1].
+                $intervals = '' !== $bits[2] ? $bits[1].'-'.$bits[2] : $bits[1];
+                $variables[$name] = [
+                    'name' => $name,
+                    'intervals' => str_replace('*', '; ', $intervals),
+                    'decimals' => (int) $bits[3],
+                ];
+            } elseif (str_starts_with($item, '=') && \count($bits) >= 6) {
+                $name = ltrim($bits[0], '=');
+                $formulas[$name] = [
+                    'name' => $name,
+                    'formula' => $bits[1],
+                    'tolerance' => (float) $bits[2],
+                    'toleranceType' => $bits[3],
+                    'decimals' => (int) $bits[4],
+                    'score' => (float) $bits[5],
+                ];
             }
         }
 
-        return $tokens;
-    }
-
-    private function buildCalculatedRandomPreview(string $low, string $high): string
-    {
-        $minimum = (float) $low;
-        $maximum = (float) $high;
-        if ($maximum < $minimum) {
-            [$minimum, $maximum] = [$maximum, $minimum];
-        }
-
-        $hasDecimal = str_contains($low, '.') || str_contains($high, '.');
-        $value = random_int((int) round($minimum * 100), (int) round($maximum * 100)) / 100;
-
-        if (!$hasDecimal) {
-            return (string) random_int((int) $minimum, (int) $maximum);
-        }
-
-        return number_format($value, 2, '.', '');
+        return ['text' => $text, 'variables' => $variables, 'formulas' => $formulas];
     }
 
     private function getDefaultCalculatedText(): string
     {
-        return '<p>Calculate the Body Mass Index for a person with weight [95] Kg and height [1.81] m.</p><p>Body Mass Index: []</p>';
+        return '<p>[#a] + [#b] = [=result]</p>';
     }
 
     private function addFillBlanksData(ExerciseQuestionEditor $response, CQuizQuestion $question): void

@@ -593,6 +593,12 @@
                       </div>
 
                       <div
+                        v-else-if="isCalculatedQuestionType(question.type) && question.calculated"
+                        class="prose prose-sm max-w-none rounded bg-white p-3 text-gray-80"
+                        v-html="displayTranslatedHtml(question.calculated.wordingHtml)"
+                      />
+
+                      <div
                         v-else-if="Array.isArray(question.answers) && question.answers.length"
                         class="overflow-x-auto"
                       >
@@ -923,6 +929,10 @@ function isTrueFalseQuestionType(type) {
 
 function isFillBlanksQuestionType(type) {
   return [3, 27].includes(Number(type))
+}
+
+function isCalculatedQuestionType(type) {
+  return 16 === Number(type)
 }
 
 function isAnnotationQuestionType(type) {

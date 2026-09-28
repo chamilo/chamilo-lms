@@ -63,75 +63,34 @@ class ExerciseShowFunctions
     /**
      * Shows the answer to a calculated question, as HTML.
      *
-     *  @param Exercise $exercise
-     * @param string    Answer text
-     * @param int       Exercise ID
-     * @param int       Question ID
+     * @param string $feedback_type
+     * @param string $studentAnswer   Answer text
+     * @param int    $id              Exercise ID
+     * @param int    $questionId      Question ID
+     * @param int    $resultsDisabled
+     * @param bool   $showTotalScoreAndUserChoices
+     * @param Answer $objAnswer
      */
     public static function display_calculated_answer(
-        $exercise,
         $feedback_type,
-        $answer,
+        $studentAnswer,
         $id,
         $questionId,
         $resultsDisabled,
-        $showTotalScoreAndUserChoices,
-        $expectedChoice = '',
-        $choice = '',
-        $status = '',
-        $answerComment = ''
+        $showTotalScoreAndUserChoices = false,
+        $objAnswer = null
     ) {
-        $showCommentColumn = false === $exercise->hideComment && EXERCISE_FEEDBACK_TYPE_EXAM !== $feedback_type;
+        // Génère le HTML complet de correction
+        $answerHtml = CalculatedAnswer::getHtmlCorrectionForStudentAttempt(
+            $studentAnswer,
+            $objAnswer,
+            $questionId,
+            $resultsDisabled,
+            false,
+            $showTotalScoreAndUserChoices
+        );
 
-        if ($exercise->showExpectedChoice()) {
-            if (empty($id)) {
-                echo '<tr><td>'.Security::remove_XSS($answer).'</td>';
-                echo '<td>'.Security::remove_XSS($choice).'</td>';
-                if ($exercise->showExpectedChoiceColumn()) {
-                    echo '<td>'.Security::remove_XSS($expectedChoice).'</td>';
-                }
-
-                echo '<td>'.Security::remove_XSS($status).'</td>';
-                if ($showCommentColumn) {
-                    echo '<td>'.Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY).'</td>';
-                }
-                echo '</tr>';
-            } else {
-                echo '<tr><td>';
-                echo Security::remove_XSS($answer);
-                echo '</td><td>';
-                echo Security::remove_XSS($choice);
-                echo '</td>';
-                if ($exercise->showExpectedChoiceColumn()) {
-                    echo '<td>';
-                    echo Security::remove_XSS($expectedChoice);
-                    echo '</td>';
-                }
-                echo '<td>';
-                echo Security::remove_XSS($status);
-                echo '</td>';
-                if ($showCommentColumn) {
-                    echo '<td>'.Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY).'</td>';
-                }
-                echo '</tr>';
-            }
-        } else {
-            if (empty($id)) {
-                echo '<tr><td>'.Security::remove_XSS($answer).'</td>';
-                if ($showCommentColumn) {
-                    echo '<td>'.Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY).'</td>';
-                }
-                echo '</tr>';
-            } else {
-                echo '<tr><td>';
-                echo Security::remove_XSS($answer);
-                echo '</td>';
-                if ($showCommentColumn) {
-                    echo '<td>'.Security::remove_XSS((string) $answerComment, COURSEMANAGERLOWSECURITY).'</td>';
-                }
-                echo '</tr>';
-            }
-        }
+        echo '<tr><td>'.Security::remove_XSS($answerHtml).'</td></tr>';
     }
 
     /**

@@ -57,6 +57,7 @@ class ExerciseLib
         $user_choice = [],
         $show_comment = false,
         $show_answers = false,
+        $correctAnswersSaved = false,
         $show_icon = false
     ) {
         $course_id = $exercise->course_id;
@@ -1080,156 +1081,93 @@ class ExerciseLib
                         $s .= $answer;
                         break;
                     case CALCULATED_ANSWER:
-                        /*
-                         * In the CALCULATED_ANSWER test
-                         * you mustn't have [ and ] in the textarea
-                         * you mustn't have @@ in the textarea
-                         * the text to find mustn't be empty or contains only spaces
-                         * the text to find mustn't contains HTML tags
-                         * the text to find mustn't contains char "
-                         */
-                        if (null !== $origin) {
+                        if ($debug_mark_answer) {
+                            // Teacher preview: show the wording with variables/formulas
+                            // replaced by informational tooltips instead of input fields.
+                            $answerFromDb = $objAnswerTmp->selectAnswer(1);
+                            $s .= CalculatedAnswer::getQuestionWordingForTeacherPreview($answerFromDb);
+                            break;
+                        }
+
+                        $studentAnswer = $user_choice[0]['answer'] ?? '';
+
+                        if ('' != $studentAnswer && !$correctAnswersSaved) {
+                            // Student is revisiting an already-answered question: just
+                            // redisplay it, pre-filled with their previous choices.
+                            $s .= CalculatedAnswer::getStudentExamView(
+                                $studentAnswer,
+                                $objAnswerTmp,
+                                $questionId
+                            );
+                        } elseif ($correctAnswersSaved) {
+                            // Redisplay the existing attempt, regenerating the same random
+                            // values and re-saving them (e.g. after the question definition
+                            // was modified by the teacher).
+                            $wordingInstance = CalculatedAnswer::getStudentExamView(
+                                $studentAnswer,
+                                $objAnswerTmp,
+                                $questionId
+                            );
+
+                            [, $encodedAnswer] = CalculatedAnswer::getEditorPart($studentAnswer);
+                            [$blankStudents, $formulaStudents] = CalculatedAnswer::parseStudentAnswerData($encodedAnswer);
+
+                            $choices = [];
+                            foreach ($formulaStudents as $blankDatas) {
+                                $choices[$blankDatas['name']] = $blankDatas['studentAnswer'];
+                            }
+
+                            [, $studentInstanceData] = CalculatedAnswer::getFirstStudentExamView(
+                                $objAnswerTmp,
+                                $questionId,
+                                $choices,
+                                $blankStudents
+                            );
+
                             global $exe_id;
                             $exe_id = (int) $exe_id;
-                            $trackAttempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-                            $sql = "SELECT answer FROM $trackAttempts
-                                    WHERE exe_id = $exe_id AND question_id= $questionId";
-                            $rsLastAttempt = Database::query($sql);
-                            $rowLastAttempt = Database::fetch_array($rsLastAttempt);
+                            $objExercise = $_SESSION['objExercise'] ?? $exercise;
 
-                            $answer = null;
-                            if (isset($rowLastAttempt['answer'])) {
-                                $answer = $rowLastAttempt['answer'];
-                            }
-
-                            if (empty($answer)) {
-                                $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
-                                    1,
-                                    $nbrAnswers
-                                );
-                                $answer = $objAnswerTmp->selectAnswer(
-                                    $_SESSION['calculatedAnswerId'][$questionId]
-                                );
-                            }
-                        }
-
-                        [$answer] = explode('@@', $answer);
-                        // $correctAnswerList array of array with correct anwsers 0=> [0=>[\p] 1=>[plop]]
-                        api_preg_match_all(
-                            '/\[[^]]+\]/',
-                            $answer,
-                            $correctAnswerList
-                        );
-
-                        // get student answer to display it if student go back
-                        // to previous calculated answer question in a test
-                        if (isset($user_choice[0]['answer'])) {
-                            api_preg_match_all(
-                                '/\[[^]]+\]/',
-                                $answer,
-                                $studentAnswerList
+                            Event::saveQuestionAttempt(
+                                $objExercise,
+                                0,
+                                $studentInstanceData,
+                                $questionId,
+                                $exe_id,
+                                0,
+                                $objExercise->iId,
+                                false
                             );
-                            $studentAnswerListToClean = $studentAnswerList[0];
-                            $studentAnswerList = [];
 
-                            $maxStudents = count($studentAnswerListToClean);
-                            for ($i = 0; $i < $maxStudents; $i++) {
-                                $answerCorrected = $studentAnswerListToClean[$i];
-                                $answerCorrected = api_preg_replace(
-                                    '| / <font color="green"><b>.*$|',
-                                    '',
-                                    $answerCorrected
-                                );
-                                $answerCorrected = api_preg_replace(
-                                    '/^\[/',
-                                    '',
-                                    $answerCorrected
-                                );
-                                $answerCorrected = api_preg_replace(
-                                    '|^<font color="red"><s>|',
-                                    '',
-                                    $answerCorrected
-                                );
-                                $answerCorrected = api_preg_replace(
-                                    '|</s></font>$|',
-                                    '',
-                                    $answerCorrected
-                                );
-                                $answerCorrected = '['.$answerCorrected.']';
-                                $studentAnswerList[] = $answerCorrected;
-                            }
-                        }
-
-                        // If display preview of answer in test view for exemple,
-                        // set the student answer to the correct answers
-                        if ($debug_mark_answer) {
-                            // contain the rights answers surronded with brackets
-                            $studentAnswerList = $correctAnswerList[0];
-                        }
-
-                        /*
-                        Split the response by bracket
-                        tabComments is an array with text surrounding the text to find
-                        we add a space before and after the answerQuestion to be sure to
-                        have a block of text before and after [xxx] patterns
-                        so we have n text to find ([xxx]) and n+1 block of texts before,
-                        between and after the text to find
-                        */
-                        $tabComments = api_preg_split(
-                            '/\[[^]]+\]/',
-                            ' '.$answer.' '
-                        );
-                        if (!empty($correctAnswerList) && !empty($studentAnswerList)) {
-                            $answer = '';
-                            $i = 0;
-                            foreach ($studentAnswerList as $studentItem) {
-                                // Remove surronding brackets
-                                $studentResponse = api_substr(
-                                    $studentItem,
-                                    1,
-                                    api_strlen($studentItem) - 2
-                                );
-                                $size = strlen($studentItem);
-                                $attributes['class'] = self::detectInputAppropriateClass($size);
-                                $answer .= $tabComments[$i].
-                                    Display::input(
-                                        'text',
-                                        "choice[$questionId][]",
-                                        $studentResponse,
-                                        $attributes
-                                    );
-                                $i++;
-                            }
-                            $answer .= $tabComments[$i];
+                            $s .= $wordingInstance;
                         } else {
-                            // display exercise with empty input fields
-                            // every [xxx] are replaced with an empty input field
-                            foreach ($correctAnswerList[0] as $item) {
-                                $size = strlen($item);
-                                $attributes['class'] = self::detectInputAppropriateClass($size);
-                                if (EXERCISE_FEEDBACK_TYPE_POPUP == $exercise->getFeedbackType()) {
-                                    $attributes['id'] = "question_$questionId";
-                                    $attributes['class'] .= ' checkCalculatedQuestionOnEnter ';
-                                }
+                            // First time this question is shown: generate the random
+                            // values/formulas and save the initial attempt.
+                            [$wordingInstance, $studentInstanceData] = CalculatedAnswer::getFirstStudentExamView(
+                                $objAnswerTmp,
+                                $questionId
+                            );
 
-                                $answer = str_replace(
-                                    $item,
-                                    Display::input(
-                                        'text',
-                                        "choice[$questionId][]",
-                                        '',
-                                        $attributes
-                                    ),
-                                    $answer
+                            if (null !== $origin) {
+                                global $exe_id;
+                                $exe_id = (int) $exe_id;
+                                $objExercise = $_SESSION['objExercise'] ?? $exercise;
+
+                                Event::saveQuestionAttempt(
+                                    $objExercise,
+                                    0,
+                                    $studentInstanceData,
+                                    $questionId,
+                                    $exe_id,
+                                    0,
+                                    $objExercise->iId,
+                                    false
                                 );
                             }
+
+                            $s .= $wordingInstance;
                         }
-                        if (null !== $origin) {
-                            $s = $answer;
-                            break;
-                        } else {
-                            $s .= $answer;
-                        }
+
                         break;
                     case MATCHING:
                     case MATCHING_COMBINATION:

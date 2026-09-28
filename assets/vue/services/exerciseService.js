@@ -50,10 +50,10 @@ function getLegacyBasePath() {
   return ""
 }
 
-function buildLegacyExerciseAjaxUrl(params = {}) {
+function buildLegacyExerciseAjaxUrl(params = {}, action = "browser_test") {
   const query = new URLSearchParams()
 
-  query.set("a", "browser_test")
+  query.set("a", action)
 
   for (const [key, value] of Object.entries(cleanParams(params))) {
     if (["cid", "sid", "gid"].includes(key)) {
@@ -118,6 +118,55 @@ export default {
     }
 
     return (await response.text()).trim() === "ok"
+  },
+
+  async getCalculatedSample(params = {}, intervals, decimals, count = 100) {
+    const body = new URLSearchParams()
+
+    body.set("intervals", String(intervals ?? ""))
+    body.set("decimals", String(decimals ?? 0))
+    body.set("count", String(count))
+
+    const response = await fetch(buildLegacyExerciseAjaxUrl(params, "calculated_question_sample"), {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      body,
+    })
+
+    if (!response.ok) {
+      return []
+    }
+
+    return await response.json()
+  },
+
+  async getCalculatedFormulaResult(params = {}, formula, toleranceValue, toleranceType, digitNumber) {
+    const body = new URLSearchParams()
+
+    body.set("formula", String(formula ?? ""))
+    body.set("toleranceValue", String(toleranceValue ?? 0))
+    body.set("toleranceType", String(toleranceType ?? "digit"))
+    body.set("digitNumber", String(digitNumber ?? 0))
+
+    const response = await fetch(buildLegacyExerciseAjaxUrl(params, "calculated_question_result"), {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      body,
+    })
+
+    if (!response.ok) {
+      return ["error", "error", "error"]
+    }
+
+    return await response.json()
   },
 
   async getExerciseCategories(categoryType, params = {}) {

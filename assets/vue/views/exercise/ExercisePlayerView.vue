@@ -893,20 +893,38 @@
 
             <div
               v-else-if="isCalculatedQuestion(question)"
-              class="space-y-3"
+              class="exercise-runtime-html rounded-lg border border-gray-20 p-3 text-sm text-gray-800"
             >
-              <div
-                v-if="currentCalculatedVariation(question).text"
-                class="exercise-runtime-html rounded-lg border border-gray-20 p-3 text-sm text-gray-800"
-                dir="auto"
-                v-html="displayTranslatedHtml(currentCalculatedVariation(question).text)"
-              />
-              <input
-                v-model="answers[question.id].calculated"
-                class="w-full rounded border border-gray-30 px-3 py-2 text-sm md:w-80"
-                :name="`question_${question.id}_calculated`"
-                type="text"
-              />
+              <template
+                v-for="(segment, index) in calculatedTextSegments(question)"
+                :key="`calculated-segment-${question.id}-${index}`"
+              >
+                <span
+                  v-if="'html' === segment.type"
+                  v-html="displayTranslatedHtml(segment.content)"
+                />
+                <template v-else>
+                  <input
+                    v-model="answers[question.id].calculatedFormulas[segment.name]"
+                    class="mx-1 w-32 rounded border border-gray-30 px-2 py-1 text-sm"
+                    :name="`question_${question.id}_calculated_${segment.name}`"
+                    type="text"
+                    @input="onCalculatedAnswerInput(question, segment, $event)"
+                  />
+                  <BaseIcon
+                    class="tooltip_calculated_answer text-[175%]"
+                    icon="information-variant-circle"
+                    size="custom"
+                    :tooltip="calculatedFormulaTooltip(question, segment.name)"
+                  />
+                  <span
+                    v-if="calculatedTruncationHints[calculatedAnswerHintKey(question, segment)]"
+                    class="text-xs text-orange-600"
+                  >
+                    {{ t("Truncated to {0} decimals", [calculatedFormulaDecimals(question, segment.name)]) }}
+                  </span>
+                </template>
+              </template>
             </div>
 
             <div
@@ -1870,6 +1888,7 @@ import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import AudioRecorder from "../../components/AudioRecorder.vue"
 import ExerciseFillBlanksRuntime from "./components/ExerciseFillBlanksRuntime.vue"
 import exerciseService from "../../services/exerciseService"
@@ -2974,25 +2993,14 @@ async function startAttempt() {
   try {
     const response = await exerciseService.startExerciseAttempt({ exerciseId }, getContextParams(), exerciseId)
     if (response.success) {
-      activeAttempt.value = response
-      canSubmit.value = true === response.canFinish && true !== response.usesLegacyRuntime
-      usesLegacySubmit.value = true === response.usesLegacyRuntime
       attemptMessage.value = response.message || t("Attempt started")
-      confirmedSavedAnswers.value = false
-      applyAttemptState(response)
-      reorderQuestionsFromAttempt(response.questionIds || [])
-      initializeAnswerState()
-      applySavedAnswers(response.savedAnswers || {})
-      syncReviewQuestionIdsFromAttempt(response)
-      isReviewReminderVisible.value = false
-      reviewQueue.value = []
-      reviewQueueIndex.value = 0
-      syncCountdownFromAttempt(response)
-      syncRuntimeSettingsEffects()
-      syncQuestionCountdown()
-      await nextTick()
-      syncVisibleReadingQuestions()
-      prepareVisibleOnlyofficeDocuments()
+      // Runtime data (calculated-answer variables, answer shuffle order) was generated before this
+      // attempt existed, seeded without a real attempt id. Carry the new attemptId into the route so
+      // the existing route watcher reloads it seeded correctly — the same mechanism ExerciseOverviewView's
+      // start flow and a mid-attempt page reload already rely on.
+      if (response.attemptId) {
+        await router.replace({ query: { ...route.query, attemptId: response.attemptId } })
+      }
       return
     }
 
@@ -3668,14 +3676,7 @@ function buildAnswerPayload(question) {
   }
 
   if (isCalculatedQuestion(question)) {
-    return {
-      calculated: questionAnswer.calculated || "",
-      answerId:
-        questionAnswer.calculatedAnswerId ||
-        currentCalculatedVariation(question).id ||
-        question.calculated?.answerId ||
-        null,
-    }
+    return { calculatedFormulas: questionAnswer.calculatedFormulas || {} }
   }
 
   if (isAnnotationQuestion(question)) {
@@ -3820,10 +3821,10 @@ function applySavedAnswer(question, rows) {
   }
 
   if (isCalculatedQuestion(question)) {
-    const [answerId, value] = parseSavedCalculatedAnswer(rows[0]?.answer || "")
-    questionAnswer.calculatedAnswerId =
-      answerId || question.calculated?.answerId || currentCalculatedVariation(question).id || null
-    questionAnswer.calculated = value
+    questionAnswer.calculatedFormulas = {
+      ...initialCalculatedFormulas(question),
+      ...parseSavedCalculatedAnswer(rows[0]?.answer || ""),
+    }
     return
   }
 
@@ -3944,8 +3945,7 @@ function initializeAnswerState() {
       matching: {},
       draggableOrder: draggableInitialOrder(question),
       dropdown: [],
-      calculated: "",
-      calculatedAnswerId: currentCalculatedVariation(question).id || question.calculated?.answerId || null,
+      calculatedFormulas: initialCalculatedFormulas(question),
       text: "",
       uploadFile: null,
       uploadFileName: "",
@@ -4704,29 +4704,167 @@ function dropdownOptions(question) {
     .filter((option) => option.value > 0)
 }
 
-function currentCalculatedVariation(question) {
-  const variations = Array.isArray(question?.calculated?.variations) ? question.calculated.variations : []
-  const questionAnswer = answers.value?.[question?.id] || {}
-  const selectedAnswerId = Number(questionAnswer.calculatedAnswerId || question?.calculated?.answerId || 0)
+function calculatedTextSegments(question) {
+  const text = String(question?.calculated?.text || "")
+  return text
+    .split(/(\[=[a-zA-Z0-9_]+\])/g)
+    .map((part) => {
+      const match = part.match(/^\[=([a-zA-Z0-9_]+)\]$/)
+      return match ? { type: "input", name: match[1] } : { type: "html", content: part }
+    })
+    .filter((segment) => "input" === segment.type || "" !== segment.content)
+}
 
-  if (selectedAnswerId > 0) {
-    const selectedVariation = variations.find((variation) => Number(variation.id) === selectedAnswerId)
-    if (selectedVariation) {
-      return selectedVariation
+function initialCalculatedFormulas(question) {
+  const formulas = Array.isArray(question?.calculated?.formulas) ? question.calculated.formulas : []
+  const values = {}
+  for (const formula of formulas) {
+    values[formula.name] = ""
+  }
+
+  return values
+}
+
+function calculatedFormulaByName(question, name) {
+  const formulas = Array.isArray(question?.calculated?.formulas) ? question.calculated.formulas : []
+
+  return formulas.find((formula) => formula.name === name)
+}
+
+function calculatedFormulaDecimals(question, name) {
+  return Number(calculatedFormulaByName(question, name)?.decimals) || 0
+}
+
+// Mirrors CalculatedAnswer::getToleranceLabel() (public/main/exercise/calculated_answer.class.php).
+function calculatedFormulaToleranceLabel(tolerance, toleranceType) {
+  const value = Number(tolerance) || 0
+  if (0 === value) {
+    return t("None")
+  }
+
+  return "percent" === toleranceType ? `± ${value}%` : `± ${value}`
+}
+
+// Mirrors the "[?]" tooltip CalculatedAnswer::getHtmlFormula() renders next to the legacy
+// exam page's answer input.
+function calculatedFormulaTooltip(question, name) {
+  const formula = calculatedFormulaByName(question, name)
+  if (!formula) {
+    return ""
+  }
+
+  return [
+    t("Tolerance: {0}", [calculatedFormulaToleranceLabel(formula.tolerance, formula.toleranceType)]),
+    t("Decimals: {0}", [formula.decimals]),
+    t("Score: {0}", [formula.score]),
+  ].join(" | ")
+}
+
+// Ported from sanitizeAnswer() in
+// public/main/inc/lib/javascript/calculated_answer/calculated_answer_exam.js — strips whatever
+// isn't a digit, a single leading minus sign, or a single decimal point (accepting ',' as a
+// decimal separator too, e.g. pasted from a calculator).
+function sanitizeCalculatedAnswer(rawValue) {
+  let result = String(rawValue ?? "")
+    .replace(/,/g, ".")
+    .replace(/[^0-9\-.]/g, "")
+
+  if ("" === result) {
+    return ""
+  }
+
+  let negative = ""
+  if ("-" === result.charAt(0)) {
+    negative = "-"
+    result = result.substring(1).replace(/-/g, "")
+  } else {
+    result = result.replace(/-/g, "")
+  }
+
+  const dotIndex = result.indexOf(".")
+  if (-1 !== dotIndex) {
+    result = result.slice(0, dotIndex + 1) + result.slice(dotIndex + 1).replace(/\./g, "")
+  }
+
+  return negative + result
+}
+
+// Ported from the truncation branch of checkStudentInput() in the same legacy file — truncates
+// to the formula's configured number of decimals as the student types, same as the legacy
+// onkeyup="checkStudentInput($(this), decimals)" handler on the exam page.
+function truncateCalculatedAnswerDecimals(value, decimalCount) {
+  if (decimalCount > 0) {
+    const match = value.match(/^(-?[0-9]*)\.([0-9]+)/)
+    if (!match) {
+      return { value, truncated: false }
+    }
+
+    const [, integerPart, decimalPart] = match
+
+    return {
+      value: `${integerPart}.${decimalPart.slice(0, decimalCount)}`,
+      truncated: decimalPart.length > decimalCount,
     }
   }
 
-  return variations[0] || { id: question?.calculated?.answerId || null, text: question?.calculated?.text || "" }
+  const match = value.match(/([0-9-]*)(\.[0-9]*)/)
+  if (!match) {
+    return { value, truncated: false }
+  }
+
+  const [, integerPart, decimalPart] = match
+
+  return { value: integerPart, truncated: decimalPart.length > 0 }
+}
+
+function calculatedAnswerHintKey(question, segment) {
+  return `${question.id}:${segment.name}`
+}
+
+const calculatedTruncationHints = ref({})
+const calculatedTruncationTimers = new Map()
+
+function stopCalculatedTruncationTimers() {
+  for (const timer of calculatedTruncationTimers.values()) {
+    clearTimeout(timer)
+  }
+  calculatedTruncationTimers.clear()
+}
+
+function onCalculatedAnswerInput(question, segment, event) {
+  const decimals = calculatedFormulaDecimals(question, segment.name)
+  const sanitized = sanitizeCalculatedAnswer(event.target.value)
+  const { value, truncated } = truncateCalculatedAnswerDecimals(sanitized, decimals)
+
+  answers.value[question.id].calculatedFormulas[segment.name] = value
+
+  const key = calculatedAnswerHintKey(question, segment)
+  if (!truncated) {
+    return
+  }
+
+  calculatedTruncationHints.value[key] = true
+  clearTimeout(calculatedTruncationTimers.get(key))
+  calculatedTruncationTimers.set(
+    key,
+    setTimeout(() => {
+      calculatedTruncationHints.value[key] = false
+    }, 2000),
+  )
 }
 
 function parseSavedCalculatedAnswer(value) {
-  const parts = String(value || "").split(":")
-  if (parts.length >= 2) {
-    const answerId = Number(parts.shift() || 0)
-    return [answerId, parts.join(":")]
+  const values = {}
+  for (const pair of String(value || "").split(";")) {
+    const separatorIndex = pair.indexOf(":")
+    if (separatorIndex <= 0) {
+      continue
+    }
+
+    values[pair.slice(0, separatorIndex)] = pair.slice(separatorIndex + 1)
   }
 
-  return [0, String(value || "")]
+  return values
 }
 
 function isCalculatedQuestion(question) {
@@ -5336,6 +5474,7 @@ onBeforeUnmount(() => {
   stopQuestionCountdownTimer()
   stopAllReadingTimers()
   stopRuntimeSettingsEffects()
+  stopCalculatedTruncationTimers()
 })
 
 onMounted(loadRuntime)

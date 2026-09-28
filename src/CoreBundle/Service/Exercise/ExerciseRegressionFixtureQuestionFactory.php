@@ -226,13 +226,14 @@ final class ExerciseRegressionFixtureQuestionFactory
                 break;
 
             case self::CALCULATED_ANSWER:
-                $data->calculatedText = '<p>Calculate [x] + [y]. Result: []</p>';
-                $data->calculatedFormula = '[x] + [y]';
-                $data->calculatedRanges = [
-                    ['token' => '[x]', 'low' => '1', 'high' => '5', 'position' => 1],
-                    ['token' => '[y]', 'low' => '6', 'high' => '10', 'position' => 2],
+                $data->calculatedText = '<p>Calculate [#x] + [#y]. Result: [=result]</p>';
+                $data->calculatedVariables = [
+                    ['name' => 'x', 'intervals' => '1-5', 'decimals' => 0],
+                    ['name' => 'y', 'intervals' => '6-10', 'decimals' => 0],
                 ];
-                $data->calculatedVariations = 2;
+                $data->calculatedFormulas = [
+                    ['name' => 'result', 'formula' => 'x + y', 'tolerance' => 0.0, 'toleranceType' => 'digit', 'decimals' => 0, 'score' => 10.0],
+                ];
                 $data->calculatedComment = 'The result is x + y.';
 
                 break;

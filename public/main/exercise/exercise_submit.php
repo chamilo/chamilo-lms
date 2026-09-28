@@ -102,6 +102,7 @@ if ('true' === api_get_setting('exercise.quiz_prevent_copy_paste')) {
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
 $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
+$htmlHeadXtra[] = api_get_js('calculated_answer/calculated_answer_exam.js');
 
 $zoomOptions = api_get_setting('exercise.quiz_image_zoom', true);
 if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'mobileapp'])) {

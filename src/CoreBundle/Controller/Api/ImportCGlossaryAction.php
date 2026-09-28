@@ -7,140 +7,236 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGlossary;
+use Chamilo\CourseBundle\Entity\CGlossaryCategory;
+use Chamilo\CourseBundle\Repository\CGlossaryCategoryRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Exception\NotSupported;
-use Doctrine\ORM\NonUniqueResultException;
-use Exception;
+use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class ImportCGlossaryAction
+final class ImportCGlossaryAction
 {
-    /**
-     * @throws NonUniqueResultException
-     * @throws NotSupported
-     * @throws Exception
-     */
-    public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em): Response
-    {
+    public function __invoke(
+        Request $request,
+        CGlossaryRepository $repository,
+        CGlossaryCategoryRepository $categoryRepository,
+        EntityManagerInterface $entityManager,
+    ): JsonResponse {
         $file = $request->files->get('file');
-        $fileType = $request->request->get('file_type');
-        $replace = $request->request->get('replace');
-        $update = $request->request->get('update');
-        $cid = $request->request->get('cid');
-        $sid = $request->request->get('sid');
+        $fileType = (string) $request->request->get('file_type', '');
+        $replace = 'true' === (string) $request->request->get('replace', 'false');
+        $update = 'true' === (string) $request->request->get('update', 'false');
+        $courseId = (int) $request->request->get('cid', '0');
+        $sessionId = (int) $request->request->get('sid', '0');
 
-        $course = null;
-        $session = null;
-        if (0 !== $cid) {
-            $course = $em->getRepository(Course::class)->find($cid);
-        }
-        if (0 !== $sid) {
-            $session = $em->getRepository(Session::class)->find($sid);
-        }
+        $course = $courseId > 0 ? $entityManager->find(Course::class, $courseId) : null;
+        $session = $sessionId > 0 ? $entityManager->find(Session::class, $sessionId) : null;
 
+        if (!$course instanceof Course) {
+            throw new BadRequestHttpException('Course not found.');
+        }
+        if ($sessionId > 0 && !$session instanceof Session) {
+            throw new BadRequestHttpException('Session not found.');
+        }
         if (!$file instanceof UploadedFile || !$file->isValid()) {
-            throw new BadRequestHttpException('Invalid file');
+            throw new BadRequestHttpException('Invalid file.');
         }
 
-        $data = [];
-        // include the first row (except if obviously column titles)
-        if ('csv' === $fileType) {
-            if (($handle = fopen($file->getPathname(), 'r')) !== false) {
-                while (($row = fgetcsv($handle, 0, ',')) !== false) {
-                    $term = isset($row[0]) ? trim($row[0]) : '';
-                    $definition = isset($row[1]) ? trim($row[1]) : '';
-                    if (('term' === $term || 'term' === substr($term, 3)) && 'definition' === $definition) {
-                        // Ignore the first row if it is the standard first row from glossary's CSV export.
-                        // Include the case where the 3-characters UTF-8 BOM precedes 'term'
-                        continue;
-                    }
-                    $data[$term] = $definition;
-                }
-                fclose($handle);
-            }
-        } elseif ('xls' === $fileType) {
-            // include first row
-            $spreadsheet = IOFactory::load($file->getPathname());
-            $sheet = $spreadsheet->getActiveSheet();
-            foreach ($sheet->getRowIterator() as $row) {
-                $cellIterator = $row->getCellIterator();
-                $cellIterator->setIterateOnlyExistingCells(false);
-                $rowData = [];
-                foreach ($cellIterator as $cell) {
-                    $rowData[] = $cell->getValue();
-                }
-                $term = isset($rowData[0]) ? utf8_decode(trim($rowData[0])) : '';
-                $definition = isset($rowData[1]) ? utf8_decode(trim($rowData[1])) : '';
-                if ('term' === $term && 'definition' === $definition) {
-                    // Ignore the first row if it is the standard first row from glossary's XLS export
-                    continue;
-                }
-                $data[$term] = $definition;
-            }
-        } else {
-            throw new BadRequestHttpException('Invalid file type');
+        $rows = match ($fileType) {
+            'csv' => $this->readCsv($file),
+            'xls' => $this->readSpreadsheet($file),
+            default => throw new BadRequestHttpException('Invalid file type.'),
+        };
+
+        if ([] === $rows) {
+            throw new BadRequestHttpException('Invalid data.');
         }
 
-        if (empty($data)) {
-            throw new BadRequestHttpException('Invalid data');
-        }
-
-        if ('true' === $replace) {
-            $qb = $repo->getResourcesByCourse($course, $session);
-            $allGlossaries = $qb->getQuery()->getResult();
-            if ($allGlossaries) {
-                /** @var CGlossary $item */
-                foreach ($allGlossaries as $item) {
-                    $termToDelete = $repo->find($item->getIid());
-                    if (null !== $termToDelete) {
-                        $repo->delete($termToDelete);
-                    }
+        if ($replace) {
+            $existingTerms = $repository->getResourcesByCourse($course, $session)->getQuery()->getResult();
+            foreach ($existingTerms as $term) {
+                if ($term instanceof CGlossary) {
+                    $repository->delete($term);
                 }
             }
         }
 
-        if ('true' === $update) {
-            foreach ($data as $termToUpdate => $descriptionToUpdate) {
-                // Check if the term already exists
-                $qb = $repo->getResourcesByCourse($course, $session)
-                    ->andWhere('resource.title = :title')
-                    ->setParameter('title', $termToUpdate)
-                ;
+        $categoryCache = [];
+        $imported = 0;
+        $updated = 0;
+        $skipped = 0;
 
-                /** @var CGlossary $existingGlossaryTerm */
-                $existingGlossaryTerm = $qb->getQuery()->getOneOrNullResult();
-                if (null !== $existingGlossaryTerm) {
-                    $existingGlossaryTerm->setDescription($descriptionToUpdate);
-                    $repo->update($existingGlossaryTerm);
-                    unset($data[$termToUpdate]);
-                }
+        foreach ($rows as $row) {
+            $title = trim($row['term']);
+            if ('' === $title) {
+                ++$skipped;
+
+                continue;
             }
-        }
 
-        foreach ($data as $term => $description) {
-            $qb = $repo->getResourcesByCourse($course, $session)
+            $category = $this->resolveCategory(
+                trim($row['category']),
+                $course,
+                $session,
+                $categoryRepository,
+                $entityManager,
+                $categoryCache,
+            );
+
+            $existing = $repository->getResourcesByCourse($course, $session)
                 ->andWhere('resource.title = :title')
-                ->setParameter('title', $term)
+                ->setParameter('title', $title)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult()
             ;
 
-            /** @var CGlossary $existingNewGlossaryTerm */
-            $existingNewGlossaryTerm = $qb->getQuery()->getOneOrNullResult();
-            if (!$existingNewGlossaryTerm) {
-                $newGlossary = (new CGlossary())
-                    ->setTitle($term)
-                    ->setDescription($description)
-                    ->setParent($course)
-                    ->addCourseLink($course, $session)
+            if ($existing instanceof CGlossary) {
+                if (!$update) {
+                    ++$skipped;
+
+                    continue;
+                }
+
+                $existing
+                    ->setDescription($row['definition'])
+                    ->setCategory($category)
                 ;
-                $repo->create($newGlossary);
+                $entityManager->persist($existing);
+                ++$updated;
+
+                continue;
             }
+
+            $term = (new CGlossary())
+                ->setTitle($title)
+                ->setDescription($row['definition'])
+                ->setCategory($category)
+                ->setParent($course)
+                ->addCourseLink($course, $session)
+            ;
+            $entityManager->persist($term);
+            ++$imported;
         }
 
-        return new Response(json_encode($data), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'imported' => $imported,
+            'updated' => $updated,
+            'skipped' => $skipped,
+        ]);
+    }
+
+    /**
+     * @return array<int, array{term:string, definition:string, category:string}>
+     */
+    private function readCsv(UploadedFile $file): array
+    {
+        $rows = [];
+        $handle = fopen($file->getPathname(), 'r');
+        if (false === $handle) {
+            return [];
+        }
+
+        while (($row = fgetcsv($handle, 0, ',')) !== false) {
+            $term = isset($row[0]) ? trim((string) $row[0]) : '';
+            $definition = isset($row[1]) ? trim((string) $row[1]) : '';
+            $category = isset($row[2]) ? trim((string) $row[2]) : '';
+            $normalizedTerm = preg_replace('/^\xEF\xBB\xBF/', '', $term) ?? $term;
+
+            if ('term' === strtolower($normalizedTerm) && 'definition' === strtolower($definition)) {
+                continue;
+            }
+
+            $rows[] = [
+                'term' => $normalizedTerm,
+                'definition' => $definition,
+                'category' => $category,
+            ];
+        }
+
+        fclose($handle);
+
+        return $rows;
+    }
+
+    /**
+     * @return array<int, array{term:string, definition:string, category:string}>
+     */
+    private function readSpreadsheet(UploadedFile $file): array
+    {
+        $spreadsheet = IOFactory::load($file->getPathname());
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = [];
+
+        foreach ($sheet->getRowIterator() as $row) {
+            $values = [];
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+            foreach ($cellIterator as $cell) {
+                $values[] = trim((string) $cell->getValue());
+            }
+
+            $term = $values[0] ?? '';
+            $definition = $values[1] ?? '';
+            $category = $values[2] ?? '';
+            if ('term' === strtolower($term) && 'definition' === strtolower($definition)) {
+                continue;
+            }
+
+            $rows[] = [
+                'term' => $term,
+                'definition' => $definition,
+                'category' => $category,
+            ];
+        }
+
+        return $rows;
+    }
+
+    /**
+     * @param array<string, CGlossaryCategory> $cache
+     */
+    private function resolveCategory(
+        string $title,
+        Course $course,
+        ?Session $session,
+        CGlossaryCategoryRepository $repository,
+        EntityManagerInterface $entityManager,
+        array &$cache,
+    ): ?CGlossaryCategory {
+        if ('' === $title) {
+            return null;
+        }
+
+        $key = mb_strtolower($title);
+        if (isset($cache[$key])) {
+            return $cache[$key];
+        }
+
+        $category = $repository->getResourcesByCourse($course, $session)
+            ->andWhere('resource.title = :title')
+            ->setParameter('title', $title)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        if (!$category instanceof CGlossaryCategory) {
+            $category = (new CGlossaryCategory())
+                ->setTitle($title)
+                ->setParent($course)
+                ->addCourseLink($course, $session)
+            ;
+            $entityManager->persist($category);
+        }
+
+        $cache[$key] = $category;
+
+        return $category;
     }
 }

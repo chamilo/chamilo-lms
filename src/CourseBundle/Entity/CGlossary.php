@@ -73,6 +73,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 'properties' => [
                                     'name' => ['type' => 'string'],
                                     'description' => ['type' => 'string'],
+                                    'categoryId' => ['type' => 'integer', 'nullable' => true],
                                     'parentResourceNodeId' => ['type' => 'integer'],
                                     'resourceLinkList' => [
                                         'type' => 'array',
@@ -133,6 +134,15 @@ use Symfony\Component\Validator\Constraints as Assert;
                         required: false,
                         schema: [
                             'type' => 'string',
+                        ],
+                    ),
+                    new Parameter(
+                        name: 'categoryId',
+                        in: 'query',
+                        description: 'Glossary category id',
+                        required: false,
+                        schema: [
+                            'type' => 'integer',
                         ],
                     ),
                 ],
@@ -213,6 +223,11 @@ class CGlossary extends AbstractResource implements ResourceInterface, ResourceS
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected ?string $description = null;
 
+    #[Groups(['glossary:read', 'glossary:write'])]
+    #[ORM\ManyToOne(targetEntity: CGlossaryCategory::class, inversedBy: 'terms')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
+    protected ?CGlossaryCategory $category = null;
+
     public function __toString(): string
     {
         return $this->getTitle();
@@ -243,6 +258,18 @@ class CGlossary extends AbstractResource implements ResourceInterface, ResourceS
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function getCategory(): ?CGlossaryCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?CGlossaryCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 
     public function getIid(): ?int

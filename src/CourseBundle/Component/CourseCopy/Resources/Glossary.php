@@ -17,6 +17,7 @@ class Glossary extends Resource
     public $name;
     public $description;
     public $display_order;
+    public $category;
 
     /**
      * Create a new Glossary.
@@ -25,14 +26,16 @@ class Glossary extends Resource
      * @param string $name
      * @param string $description
      * @param int    $display_order
+     * @param string $category
      */
-    public function __construct($id, $name, $description, $display_order)
+    public function __construct($id, $name, $description, $display_order, $category = '')
     {
         parent::__construct($id, RESOURCE_GLOSSARY);
         $this->glossary_id = $id;
         $this->name = $name;
         $this->description = $description;
         $this->display_order = $display_order;
+        $this->category = $category;
     }
 
     /**

@@ -27,6 +27,7 @@ final class GetGlossaryCollectionController extends BaseResourceFileAction
         $cid = $request->query->getInt('cid');
         $sid = $request->query->getInt('sid');
         $q = $request->query->get('q');
+        $categoryId = $request->query->getInt('categoryId');
         $course = null;
         $session = null;
         if ($cid) {
@@ -41,6 +42,11 @@ final class GetGlossaryCollectionController extends BaseResourceFileAction
         if ($q) {
             $qb->andWhere($qb->expr()->like('resource.title', ':title'))
                 ->setParameter('title', '%'.$q.'%')
+            ;
+        }
+        if ($categoryId > 0) {
+            $qb->andWhere('IDENTITY(resource.category) = :categoryId')
+                ->setParameter('categoryId', $categoryId)
             ;
         }
         $glossaries = $qb->getQuery()->getResult();
@@ -58,6 +64,10 @@ final class GetGlossaryCollectionController extends BaseResourceFileAction
                 'id' => $iid,
                 'title' => $item->getTitle(),
                 'description' => $item->getDescription(),
+                'category' => $item->getCategory() ? [
+                    'iid' => (int) ($item->getCategory()?->getIid() ?? 0),
+                    'title' => $item->getCategory()?->getTitle(),
+                ] : null,
                 'sessionId' => $item->getFirstResourceLink()->getSession()
                     ? $item->getFirstResourceLink()->getSession()->getId()
                     : null,

@@ -2062,12 +2062,12 @@ if (empty($details)) {
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
         $repo = Container::getQuizRepository();
-        $exerciseInSession = $repo->findAllByCourse($course, $session, null, null, false)
+        $exerciseInSession = $repo->findAllByCourse($course, $session, null, false, false)
             ->getQuery()->getResult();
 
         $exerciseGlobal = [];
         if ((int) $sessionId > 0) {
-            $exerciseGlobal = $repo->findAllByCourse($course, null, null, null, false)
+            $exerciseGlobal = $repo->findAllByCourse($course, null, null, false, false)
                 ->getQuery()->getResult();
         }
         $seen = [];

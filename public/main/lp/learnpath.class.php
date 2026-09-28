@@ -7158,16 +7158,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $setting = $showInvisibleExerciseInLpToc || $showInvisibleExerciseInLpList;
 
-        $active = 2;
-        if ($setting) {
-            $active = null;
-        }
+        $onlyVisibles = !$setting;
         $keyword = $_REQUEST['keyword'] ?? null;
         $categoryId = $_REQUEST['category_id'] ?? null;
         $course = api_get_course_entity($course_id);
         $session = api_get_session_entity($session_id);
 
-        $qb = Container::getQuizRepository()->findAllByCourse($course, $session, $keyword, $active, false, $categoryId);
+        $qb = Container::getQuizRepository()->findAllByCourse($course, $session, $keyword, $onlyVisibles, false, $categoryId);
         /** @var CQuiz[] $exercises */
         $exercises = $qb->getQuery()->getResult();
 

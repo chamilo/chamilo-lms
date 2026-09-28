@@ -26,6 +26,28 @@
         :step="0.01"
       />
 
+      <template v-if="canConfigureGroupAssignment">
+        <BaseCheckbox
+          id="assignment-by-groups"
+          v-model="chkAssignmentByGroups"
+          :label="t('This is an assignment by groups')"
+          name="assignment_by_groups"
+        />
+
+        <BaseSelect
+          v-if="chkAssignmentByGroups && groupCategories.length > 1"
+          id="assignment-group-category"
+          v-model="assignment.groupCategoryWorkId"
+          :error-text="v$.groupCategoryWorkId.$errors.map((e) => e.$message).join('<br>')"
+          :is-invalid="v$.groupCategoryWorkId.$error"
+          :label="t('Group category')"
+          :options="groupCategories"
+          name="group_category_work_id"
+          option-label="name"
+          option-value="id"
+        />
+      </template>
+
       <BaseCheckbox
         id="make_calification_id"
         v-model="chkAddToGradebook"
@@ -164,6 +186,7 @@ import { useRoute } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { getCourseContext } from "../../utils/courseContext"
 import gradebookService from "../../services/gradebookService"
+import courseGroupService from "../../services/courseGroupService"
 
 const props = defineProps({
   defaultAssignment: {
@@ -186,8 +209,12 @@ const showAdvancedSettings = ref(false)
 const chkAddToGradebook = ref(false)
 const chkExpiresOn = ref(false)
 const chkEndsOn = ref(false)
+const chkAssignmentByGroups = ref(false)
+const ALL_GROUPS_CATEGORY_ID = -1
 
 const gradebookCategories = ref([])
+const groupCategories = ref([])
+const canConfigureGroupAssignment = computed(() => Number(gid || 0) === 0 && groupCategories.value.length > 0)
 const documentTypes = ref([
   { label: t("Allow files or online text"), value: 0 },
   { label: t("Allow only text"), value: 1 },
@@ -218,6 +245,7 @@ const assignment = reactive({
   allowedExtensions: [],
   customExtensions: "",
   language: "",
+  groupCategoryWorkId: null,
 })
 
 function extractResourceLanguage(resource) {
@@ -245,6 +273,11 @@ watchEffect(() => {
 
   assignment.allowTextAssignment = def.allowTextAssignment
   assignment.language = extractResourceLanguage(def)
+
+  const groupCategoryWorkId = Number(def.groupCategoryWorkId || 0)
+  const isGroupAssignment = groupCategoryWorkId !== 0
+  chkAssignmentByGroups.value = isGroupAssignment
+  assignment.groupCategoryWorkId = isGroupAssignment ? groupCategoryWorkId : null
 
   if (def.extensions) {
     const extensionsArray = def.extensions
@@ -276,7 +309,8 @@ watchEffect(() => {
     def.assignment.expiresOn ||
     def.assignment.endsOn ||
     def.allowTextAssignment !== undefined ||
-    def.allowedExtensions
+    def.allowedExtensions ||
+    isGroupAssignment
   ) {
     showAdvancedSettings.value = true
   }
@@ -291,6 +325,65 @@ function extractNumericId(raw) {
   const value = Number(last)
 
   return Number.isFinite(value) && value > 0 ? value : 0
+}
+
+async function loadGroupAssignmentOptions() {
+  if (Number(gid || 0) > 0) {
+    groupCategories.value = []
+    return
+  }
+
+  try {
+    const response = await courseGroupService.getList({
+      cid,
+      ...(sid ? { sid } : {}),
+    })
+    const categories = Array.isArray(response?.categories) ? response.categories : []
+    const defaultCategoryId = Number(response?.defaultCategoryId || 0)
+    const totalGroups = Number(response?.totalGroups || 0)
+    const allowCategories = Boolean(response?.allowCategories)
+    let options = []
+
+    if (!allowCategories && totalGroups > 0) {
+      // With group categories disabled the API intentionally exposes all groups
+      // through the synthetic category #0 and there may be no real category row
+      // at all. Keep 0 reserved for "not a group assignment" and use a dedicated
+      // marker for one Assignment shared by every group in the current context.
+      options = [{ id: ALL_GROUPS_CATEGORY_ID, name: t("Groups") }]
+    } else {
+      options = categories
+        .filter((category) => Number(category?.id || 0) > 0 && Array.isArray(category?.groups) && category.groups.length > 0)
+        .map((category) => ({
+          id: Number(category.id),
+          name: String(category?.title || `${t("Group category")} #${Number(category.id)}`),
+        }))
+
+      const uncategorizedGroups = categories.find(
+        (category) => Number(category?.id || 0) === 0 && Array.isArray(category?.groups) && category.groups.length > 0,
+      )
+      if (uncategorizedGroups && defaultCategoryId > 0 && !options.some((option) => option.id === defaultCategoryId)) {
+        const defaultCategory = categories.find((category) => Number(category?.id || 0) === defaultCategoryId)
+        options.unshift({
+          id: defaultCategoryId,
+          name: String(defaultCategory?.title || uncategorizedGroups?.title || t("Groups")),
+        })
+      }
+    }
+
+    groupCategories.value = options
+
+    const existingCategoryId = Number(props.defaultAssignment?.groupCategoryWorkId || 0)
+    if (existingCategoryId !== 0) {
+      chkAssignmentByGroups.value = true
+      assignment.groupCategoryWorkId = existingCategoryId
+      showAdvancedSettings.value = true
+    } else if (options.length === 1) {
+      assignment.groupCategoryWorkId = options[0].id
+    }
+  } catch (error) {
+    console.error("Error loading Assignment group categories:", error)
+    groupCategories.value = []
+  }
 }
 
 async function loadGradebookConfiguration() {
@@ -328,7 +421,9 @@ async function loadGradebookConfiguration() {
   }
 }
 
-onMounted(loadGradebookConfiguration)
+onMounted(async () => {
+  await Promise.all([loadGradebookConfiguration(), loadGroupAssignmentOptions()])
+})
 
 function truncateToMinute(date) {
   const d = new Date(date)
@@ -356,6 +451,9 @@ const rules = computed(() => {
     if (chkAddToGradebook.value) {
       r.gradebookId = { required }
       r.weight = { required }
+    }
+    if (canConfigureGroupAssignment.value && chkAssignmentByGroups.value) {
+      r.groupCategoryWorkId = { required }
     }
     if (chkExpiresOn.value) {
       r.expiresOn = { required, $autoDirty: true }
@@ -391,6 +489,12 @@ async function onSubmit() {
   payload.addToGradebook = chkAddToGradebook.value
   payload.gradebookCategoryId = chkAddToGradebook.value ? Number(assignment.gradebookId) : 0
   payload.weight = chkAddToGradebook.value ? Number(assignment.weight) : 0
+
+  // A shared group assignment is only configured from the normal course tool.
+  // In an existing gid context, omit the field so edits preserve its current value.
+  if (Number(gid || 0) === 0) {
+    payload.groupCategoryWorkId = chkAssignmentByGroups.value ? Number(assignment.groupCategoryWorkId) : 0
+  }
   if (chkExpiresOn.value) {
     payload.expiresOn = assignment.expiresOn.toISOString()
   }

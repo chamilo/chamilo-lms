@@ -44,8 +44,19 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(
             uriTemplate: '/sessions/{id}',
+            // Confirmed live 2026-09-29: without 'session:read' here, this
+            // endpoint silently omits displayStartDate/displayEndDate/duration
+            // (all tagged 'session:read' only, not 'session:basic') even though
+            // the raw DB values exist — the API just never serialized them.
+            // Widened here rather than on the bare GetCollection (deliberately
+            // kept lean — a caller needing these fields does one extra per-item
+            // GET after the collection call, not a heavier list response for
+            // everyone). Not a security concern: display dates/duration aren't
+            // sensitive, and this operation's own security already allows a
+            // non-admin with VIEW on their own session, who would reasonably
+            // want to see when it starts/ends anyway.
             normalizationContext: [
-                'groups' => ['session:basic'],
+                'groups' => ['session:basic', 'session:read'],
             ],
             security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)"
         ),

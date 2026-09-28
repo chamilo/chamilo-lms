@@ -1017,48 +1017,12 @@ class CourseRestorer
             return $parentId;
         };
 
-        // Robust HTML detection
-        $isHtmlFile = function (string $filePath, string $nameGuess): bool {
-            $ext1 = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-            $ext2 = strtolower(pathinfo($nameGuess, PATHINFO_EXTENSION));
-            if (\in_array($ext1, ['html', 'htm'], true) || \in_array($ext2, ['html', 'htm'], true)) {
-                return true;
-            }
-
-            // Inspect enough of the actual payload to classify extensionless Chamilo
-            // documents. Some HTML pages contain a large preamble, so a 2 KiB sample
-            // is not sufficient and finfo can legitimately report text/plain.
-            $peek = (string) @file_get_contents($filePath, false, null, 0, 65536);
-            if ('' === $peek) {
-                return false;
-            }
-
-            $normalized = ltrim($peek, "\xEF\xBB\xBF \t\r\n");
-            $lower = strtolower($normalized);
-            if (str_contains($lower, '<html') || str_contains($lower, '<!doctype html')) {
-                return true;
-            }
-
-            // Chamilo HTML documents can be stored as fragments without an extension,
-            // <html> or <!doctype>. Detect normal structural/content tags before
-            // falling back to finfo.
-            if (preg_match('/<\s*\/?\s*(?:body|div|p|span|section|article|header|footer|main|nav|h[1-6]|ul|ol|li|table|thead|tbody|tfoot|tr|td|th|a|img|strong|em|b|i|br|hr)\b/i', $normalized)) {
-                return true;
-            }
-
-            if (\function_exists('finfo_open')) {
-                $fi = finfo_open(FILEINFO_MIME_TYPE);
-                if ($fi) {
-                    $mt = @finfo_buffer($fi, $normalized) ?: '';
-                    finfo_close($fi);
-                    if (str_starts_with($mt, 'text/html')) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        };
+        // Robust HTML detection. Keep it as a local callback because the document
+        // restore pipeline runs in two passes (binary first, HTML second).
+        $isHtmlFile = fn (string $filePath, string $nameGuess): bool => $this->isHtmlDocumentFile(
+            $filePath,
+            $nameGuess
+        );
 
         // Create folders first
         $folders = [];
@@ -1554,6 +1518,58 @@ class CourseRestorer
         ]);
 
         $this->documentsRestored = true;
+    }
+
+    private function isHtmlDocumentFile(string $filePath, string $nameGuess): bool
+    {
+        $pathExtension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+        $nameExtension = strtolower(pathinfo($nameGuess, PATHINFO_EXTENSION));
+
+        if (\in_array($pathExtension, ['html', 'htm'], true) || \in_array($nameExtension, ['html', 'htm'], true)) {
+            return true;
+        }
+
+        // Check the real payload before searching for HTML tags. Compressed binary
+        // formats can contain byte sequences such as "<p" by chance; scanning those
+        // bytes as text can incorrectly classify images as HTML.
+        if (\function_exists('finfo_open')) {
+            $fi = finfo_open(FILEINFO_MIME_TYPE);
+            if ($fi) {
+                $mimeType = (string) (@finfo_file($fi, $filePath) ?: '');
+                finfo_close($fi);
+
+                if (str_starts_with($mimeType, 'text/html')) {
+                    return true;
+                }
+
+                if (
+                    '' !== $mimeType
+                    && !str_starts_with($mimeType, 'text/')
+                    && !\in_array($mimeType, ['application/xhtml+xml', 'application/xml'], true)
+                ) {
+                    return false;
+                }
+            }
+        }
+
+        // Inspect enough of text-like payloads to classify extensionless Chamilo
+        // documents. Some HTML pages contain a large preamble, so a 2 KiB sample
+        // is not sufficient and finfo can legitimately report text/plain.
+        $peek = (string) @file_get_contents($filePath, false, null, 0, 65536);
+        if ('' === $peek) {
+            return false;
+        }
+
+        $normalized = ltrim($peek, "\xEF\xBB\xBF \t\r\n");
+        $lower = strtolower($normalized);
+        if (str_contains($lower, '<html') || str_contains($lower, '<!doctype html')) {
+            return true;
+        }
+
+        return 1 === preg_match(
+            '/<\s*\/?\s*(?:body|div|p|span|section|article|header|footer|main|nav|h[1-6]|ul|ol|li|table|thead|tbody|tfoot|tr|td|th|a|img|strong|em|b|i|br|hr)\b/i',
+            $normalized
+        );
     }
 
     /**
@@ -6397,8 +6413,14 @@ class CourseRestorer
                 // ---- Old logic (level-based), kept for backward compatibility ----
                 $parents = [0 => $root];
                 $order = 0;
+                $createdMap = [];
+                $sourceItemsById = [];
 
                 foreach ($items as $it) {
+                    $legacyItemId = (int) ($it['id'] ?? 0);
+                    if ($legacyItemId > 0) {
+                        $sourceItemsById[$legacyItemId] = $it;
+                    }
                     $lvl = (int) ($it['level'] ?? $it['lvl'] ?? 0);
                     $pItem = $parents[$lvl] ?? $root;
 
@@ -6461,9 +6483,14 @@ class CourseRestorer
 
                     $lpItemRepo->create($item);
                     $parents[$lvl + 1] = $item;
+                    if ($legacyItemId > 0) {
+                        $createdMap[$legacyItemId] = $item;
+                    }
                     $createdCount++;
                 }
 
+                $em->flush();
+                $this->remapLearningPathPrerequisites($sourceItemsById, $createdMap);
                 $em->flush();
             } else {
                 // Index items by legacy "id" and group children by legacy "parent_item_id"
@@ -6612,26 +6639,7 @@ class CourseRestorer
 
                 $em->flush();
 
-                // LP prerequisites reference source item IDs. After all destination
-                // items have their IIDs, remap numeric prerequisites to those new IIDs.
-                foreach ($createdMap as $legacyItemId => $createdItem) {
-                    $rawPrerequisite = trim((string) ($byId[$legacyItemId]['prerequisite'] ?? ''));
-                    if ('' === $rawPrerequisite || !ctype_digit($rawPrerequisite)) {
-                        continue;
-                    }
-
-                    $legacyPrerequisiteId = (int) $rawPrerequisite;
-                    $destinationPrerequisite = $createdMap[$legacyPrerequisiteId] ?? null;
-                    if (!$destinationPrerequisite instanceof CLpItem) {
-                        continue;
-                    }
-
-                    $destinationPrerequisiteId = (int) ($destinationPrerequisite->getIid() ?? 0);
-                    if ($destinationPrerequisiteId > 0) {
-                        $createdItem->setPrerequisite((string) $destinationPrerequisiteId);
-                    }
-                }
-
+                $this->remapLearningPathPrerequisites($byId, $createdMap);
                 $em->flush();
             }
 
@@ -6640,6 +6648,38 @@ class CourseRestorer
                 'items' => (int) $createdCount,
                 'title' => $title,
             ]);
+        }
+    }
+
+    /**
+     * Remap numeric learning-path prerequisites from source item IDs to the
+     * destination CLpItem IIDs created during restore.
+     *
+     * Both the level-based compatibility branch and the parent-id branch receive
+     * Chamilo sidecars containing source item IDs. Keeping the remap in one helper
+     * prevents one restore path from persisting stale prerequisite references.
+     *
+     * @param array<int, array<string, mixed>> $sourceItemsById
+     * @param array<int, CLpItem>               $createdMap
+     */
+    private function remapLearningPathPrerequisites(array $sourceItemsById, array $createdMap): void
+    {
+        foreach ($createdMap as $legacyItemId => $createdItem) {
+            $rawPrerequisite = trim((string) ($sourceItemsById[$legacyItemId]['prerequisite'] ?? ''));
+            if ('' === $rawPrerequisite || !ctype_digit($rawPrerequisite)) {
+                continue;
+            }
+
+            $legacyPrerequisiteId = (int) $rawPrerequisite;
+            $destinationPrerequisite = $createdMap[$legacyPrerequisiteId] ?? null;
+            if (!$destinationPrerequisite instanceof CLpItem) {
+                continue;
+            }
+
+            $destinationPrerequisiteId = (int) ($destinationPrerequisite->getIid() ?? 0);
+            if ($destinationPrerequisiteId > 0) {
+                $createdItem->setPrerequisite((string) $destinationPrerequisiteId);
+            }
         }
     }
 

@@ -141,10 +141,15 @@ if (isset($typeSelected) && '0' != $typeSelected) {
                 api_not_allowed(true);
             }
 
+            $resourceNodeId = (int) ($thread->getResourceNode()?->getId() ?? 0);
+            if ($resourceNodeId <= 0) {
+                api_not_allowed(true);
+            }
+
             $course_id = api_get_course_int_id();
             $sql_l = 'SELECT count(*) FROM '.$tbl_link.'
                       WHERE
-                            ref_id='.$selectLinkId.' AND
+                            ref_id='.$resourceNodeId.' AND
                             c_id='.$course_id.' AND
                             type = 5;';
             $res_l = Database::query($sql_l);

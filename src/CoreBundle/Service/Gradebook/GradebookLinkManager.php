@@ -35,6 +35,7 @@ final readonly class GradebookLinkManager
         private GradeBookCategoryRepository $categoryRepository,
         private SettingsManager $settingsManager,
         private Security $security,
+        private GradebookLinkResourceResolver $resourceResolver,
     ) {}
 
     public function assertSessionBelongsToCourse(Course $course, ?Session $session): void
@@ -162,16 +163,19 @@ final readonly class GradebookLinkManager
             return [];
         }
 
+        $resourceNode = $this->resourceResolver->getResourceNodeForLegacyId($type, $refId);
+        $resourceNodeId = (int) $resourceNode->getId();
+
         $qb = $this->entityManager->createQueryBuilder()
             ->select('link', 'category')
             ->from(GradebookLink::class, 'link')
             ->innerJoin('link.category', 'category')
             ->andWhere('IDENTITY(link.course) = :courseId')
             ->andWhere('link.type = :type')
-            ->andWhere('link.refId = :refId')
+            ->andWhere('IDENTITY(link.resourceNode) = :resourceNodeId')
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->setParameter('type', $type, Types::INTEGER)
-            ->setParameter('refId', $refId, Types::INTEGER)
+            ->setParameter('resourceNodeId', $resourceNodeId, Types::INTEGER)
             ->orderBy('link.id', 'ASC')
         ;
 
@@ -237,6 +241,7 @@ final readonly class GradebookLinkManager
         ?float $pointsMany = null,
     ): GradebookLink {
         $this->validateLinkValues($type, $refId, $weight, $minScore, $pointsOne, $pointsMany);
+        $resourceNode = $this->resourceResolver->getResourceNodeForLegacyId($type, $refId);
         $category = $this->requireCategory($course, $session, $categoryId, true);
         $links = $this->findLinks($course, $session, $type, $refId);
 
@@ -249,7 +254,7 @@ final readonly class GradebookLinkManager
             $link = new GradebookLink();
             $link
                 ->setType($type)
-                ->setRefId($refId)
+                ->setResourceNode($resourceNode)
                 ->setCourse($course)
                 ->setCreatedAt(new DateTime())
                 ->setLocked(0)
@@ -308,15 +313,18 @@ final readonly class GradebookLinkManager
             return 0;
         }
 
+        $resourceNode = $this->resourceResolver->getResourceNodeForLegacyId($type, $refId);
+        $resourceNodeId = (int) $resourceNode->getId();
+
         $links = $this->entityManager->createQueryBuilder()
             ->select('link')
             ->from(GradebookLink::class, 'link')
             ->andWhere('IDENTITY(link.course) = :courseId')
             ->andWhere('link.type = :type')
-            ->andWhere('link.refId = :refId')
+            ->andWhere('IDENTITY(link.resourceNode) = :resourceNodeId')
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->setParameter('type', $type, Types::INTEGER)
-            ->setParameter('refId', $refId, Types::INTEGER)
+            ->setParameter('resourceNodeId', $resourceNodeId, Types::INTEGER)
             ->getQuery()
             ->getResult()
         ;

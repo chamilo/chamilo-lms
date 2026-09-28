@@ -83,44 +83,35 @@ if ($form->validate()) {
     $link->set_weight($final_weight);
     $link->save();
 
-    //Update weight for attendance
-    $sql = 'SELECT ref_id FROM '.$tbl_grade_links.'
-            WHERE id = '.$linkId.' AND type='.LINK_ATTENDANCE;
-    $rs_attendance = Database::query($sql);
-    if (Database::num_rows($rs_attendance) > 0) {
-        $row_attendance = Database::fetch_array($rs_attendance);
-        $attendance_id = (int) $row_attendance['ref_id'];
+    $resourceId = $link->get_ref_id();
+
+    // Update the linked resource using the legacy iid exposed by AbstractLink.
+    if (LINK_ATTENDANCE == $link->get_type()) {
         $sql = 'UPDATE '.$tbl_attendance.' SET
                     attendance_weight ='.api_float_val($final_weight).'
-                WHERE iid = '.$attendance_id;
+                WHERE iid = '.$resourceId;
         Database::query($sql);
     }
 
-    //Update weight into forum thread
-    $sql = 'UPDATE '.$tbl_forum_thread.' SET
-                thread_weight = '.api_float_val($final_weight).'
-            WHERE
-			    iid = (
-                    SELECT ref_id FROM '.$tbl_grade_links.'
-			        WHERE id='.$linkId.' AND type = 5
-            )';
-    Database::query($sql);
+    if (LINK_FORUM_THREAD == $link->get_type()) {
+        $sql = 'UPDATE '.$tbl_forum_thread.' SET
+                    thread_weight = '.api_float_val($final_weight).'
+                WHERE iid = '.$resourceId;
+        Database::query($sql);
+    }
 
-    //Update weight into student publication(work)
-    $em
-        ->createQuery('
-            UPDATE Chamilo\CourseBundle\Entity\CStudentPublication w
-            SET w.weight = :final_weight
-            WHERE w.iid = (
-                    SELECT l.refId FROM Chamilo\CoreBundle\Entity\GradebookLink l
-                    WHERE l.id = :link AND l.type = :type
-                )
-        ')
-        ->execute([
-            'final_weight' => $final_weight,
-            'link' => $linkId,
-            'type' => LINK_STUDENTPUBLICATION,
-        ]);
+    if (LINK_STUDENTPUBLICATION == $link->get_type()) {
+        $em
+            ->createQuery('
+                UPDATE Chamilo\CourseBundle\Entity\CStudentPublication w
+                SET w.weight = :final_weight
+                WHERE w.iid = :resourceId
+            ')
+            ->execute([
+                'final_weight' => $final_weight,
+                'resourceId' => $resourceId,
+            ]);
+    }
 
     $logInfo = [
         'tool' => TOOL_GRADEBOOK,

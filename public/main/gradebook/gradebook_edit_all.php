@@ -112,8 +112,9 @@ $links = Database::store_result($result, 'ASSOC');
 
 foreach ($links as &$row) {
     $item_weight = $row['weight'];
+    $legacyRefId = AbstractLink::getLegacyRefIdForResourceNode((int) $row['type'], (int) $row['ref_id']);
     $sql = 'SELECT * FROM '.GradebookUtils::get_table_type_course($row['type']).'
-            WHERE '.$table_evaluated[$row['type']][2].' = '.$row['ref_id'];
+            WHERE '.$table_evaluated[$row['type']][2].' = '.$legacyRefId;
 
     $result = Database::query($sql);
     $resource_name = Database::fetch_array($result);

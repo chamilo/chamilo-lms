@@ -23,6 +23,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
+use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
+
+use const ENT_QUOTES;
 
 #[AsController]
 readonly class CreateUserOnAccessUrlAction
@@ -38,6 +42,7 @@ readonly class CreateUserOnAccessUrlAction
         private RequestStack $requestStack,
         private SettingsManager $settingsManager,
         private UserRepository $userRepository,
+        private ResetPasswordHelperInterface $resetPasswordHelper,
     ) {}
 
     public function __invoke(AccessUrl $url, CreateUserOnAccessUrlInput $data): User
@@ -107,35 +112,83 @@ readonly class CreateUserOnAccessUrlAction
         if ($data->getSendEmail()) {
             $request = $this->requestStack->getCurrentRequest();
             $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
-            $sessionUrl = rtrim($baseUrl, '/').'/sessions';
             $platformName = $this->settingsManager->getSetting('platform.site_name', true);
             $password = $data->getPassword();
+            // $body below is sent both as a stored Chamilo message (rendered as HTML
+            // in the recipient's/staff's Messages UI) and as an HTML email — firstname/
+            // lastname/username ultimately come from the API caller (for the WordPress
+            // storefront integration, straight from a buyer's own WooCommerce billing
+            // fields, so anyone placing an order controls them) and must be escaped
+            // before interpolation, unlike the server-built links/platform name below.
+            $safeFullName = htmlspecialchars($user->getFullName(), ENT_QUOTES, 'UTF-8');
+            $safeUsername = htmlspecialchars($user->getUsername(), ENT_QUOTES, 'UTF-8');
+            $safePassword = null !== $password ? htmlspecialchars($password, ENT_QUOTES, 'UTF-8') : $password;
 
             $subject = \sprintf(
                 $this->translator->trans('You are registered on %s'),
                 $platformName
             );
 
-            $body = $this->translator->trans(
-                'Hello %s,<br><br>'.
-                'You are registered on %s.<br>'.
-                'You can access your account from <a href="%s">here</a>.<br><br>'.
-                'Your login credentials are:<br>'.
-                'Username: <strong>%s</strong><br>'.
-                'Password: <strong>%s</strong><br><br>'.
-                'Best regards,<br>'.
-                '%s'
-            );
+            if (null === $password || '' === $password) {
+                // No password was supplied by the caller — the account has none set
+                // yet, so a message showing a blank "Password:" field would leave the
+                // user unable to log in with no way to recover. Generate a real
+                // password-reset token (the same mechanism "Forgot your password?"
+                // uses, see ResetPasswordController) and send a working
+                // set-your-password link instead of an empty credential.
+                $resetLink = rtrim($baseUrl, '/').'/login';
 
-            $body = \sprintf(
-                $body,
-                $user->getFullName(),
-                $platformName,
-                $sessionUrl,
-                $user->getUsername(),
-                $password,
-                $platformName
-            );
+                try {
+                    $resetToken = $this->resetPasswordHelper->generateResetToken($user);
+                    $resetLink = rtrim($baseUrl, '/').'/reset-password/reset/'.$resetToken->getToken();
+                } catch (ResetPasswordExceptionInterface) {
+                    // Fall back to a bare login link rather than let this break
+                    // account creation, which already succeeded and was flushed
+                    // above — the user can still request a reset manually from there.
+                }
+
+                $body = $this->translator->trans(
+                    'Hello %s,<br><br>'.
+                    'You are registered on %s.<br>'.
+                    'Username: <strong>%s</strong><br><br>'.
+                    'Please click the link below to set your password and access your account:<br>'.
+                    '<a href="%s">Set your password</a><br><br>'.
+                    'Best regards,<br>'.
+                    '%s'
+                );
+
+                $body = \sprintf(
+                    $body,
+                    $safeFullName,
+                    $platformName,
+                    $safeUsername,
+                    $resetLink,
+                    $platformName
+                );
+            } else {
+                $sessionUrl = rtrim($baseUrl, '/').'/sessions';
+
+                $body = $this->translator->trans(
+                    'Hello %s,<br><br>'.
+                    'You are registered on %s.<br>'.
+                    'You can access your account from <a href="%s">here</a>.<br><br>'.
+                    'Your login credentials are:<br>'.
+                    'Username: <strong>%s</strong><br>'.
+                    'Password: <strong>%s</strong><br><br>'.
+                    'Best regards,<br>'.
+                    '%s'
+                );
+
+                $body = \sprintf(
+                    $body,
+                    $safeFullName,
+                    $platformName,
+                    $sessionUrl,
+                    $safeUsername,
+                    $safePassword,
+                    $platformName
+                );
+            }
 
             $currentUser = $this->userHelper->getCurrent();
             $senderId = $currentUser?->getId() ?? 1;

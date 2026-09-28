@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State\Gradebook;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAttendance;
@@ -25,6 +26,7 @@ use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -63,6 +65,7 @@ final readonly class GradebookLinkResourceResolver
         private CAttendanceRepository $attendanceRepository,
         private CSurveyRepository $surveyRepository,
         private SettingsManager $settingsManager,
+        private EntityManagerInterface $entityManager,
     ) {}
 
     /**
@@ -130,6 +133,76 @@ final readonly class GradebookLinkResourceResolver
         throw new AccessDeniedHttpException('The requested resource is not available in the current course and session context.');
     }
 
+    public function requireResourceByNodeId(int $type, int $resourceNodeId, Course $course, ?Session $session): object
+    {
+        if (!\in_array($type, self::SUPPORTED_TYPES, true)) {
+            throw new BadRequestHttpException('Unsupported Gradebook online activity type.');
+        }
+        if ($resourceNodeId <= 0) {
+            throw new BadRequestHttpException('A valid resource node id is required.');
+        }
+
+        foreach ($this->getResources($type, $course, $session) as $resource) {
+            if ($this->getResourceNodeId($resource) === $resourceNodeId) {
+                return $resource;
+            }
+        }
+
+        throw new AccessDeniedHttpException('The requested resource is not available in the current course and session context.');
+    }
+
+    public function getResourceNodeForLegacyId(int $type, int $refId): ResourceNode
+    {
+        if ($refId <= 0) {
+            throw new BadRequestHttpException('A valid linked resource id is required.');
+        }
+
+        $resource = match ($type) {
+            self::LINK_EXERCISE, self::LINK_HOTPOTATOES => $this->quizRepository->find($refId),
+            self::LINK_STUDENT_PUBLICATION => $this->studentPublicationRepository->find($refId),
+            self::LINK_LEARNING_PATH => $this->lpRepository->find($refId),
+            self::LINK_FORUM_THREAD, self::LINK_FORUM_PARTICIPATION => $this->forumThreadRepository->find($refId),
+            self::LINK_ATTENDANCE => $this->attendanceRepository->find($refId),
+            self::LINK_SURVEY => $this->surveyRepository->find($refId),
+            default => null,
+        };
+
+        if (!\is_object($resource)) {
+            throw new NotFoundHttpException('The linked Gradebook resource was not found.');
+        }
+
+        $resourceNode = $this->getResourceNode($resource);
+        if (!$resourceNode instanceof ResourceNode || null === $resourceNode->getId()) {
+            throw new NotFoundHttpException('The linked Gradebook resource has no resource node.');
+        }
+
+        return $resourceNode;
+    }
+
+    public function getLegacyResourceIdByNodeId(int $type, int $resourceNodeId): int
+    {
+        if ($resourceNodeId <= 0) {
+            throw new BadRequestHttpException('A valid resource node id is required.');
+        }
+
+        $resourceNode = $this->entityManager->getReference(ResourceNode::class, $resourceNodeId);
+        $resource = match ($type) {
+            self::LINK_EXERCISE, self::LINK_HOTPOTATOES => $this->quizRepository->findOneBy(['resourceNode' => $resourceNode]),
+            self::LINK_STUDENT_PUBLICATION => $this->studentPublicationRepository->findOneBy(['resourceNode' => $resourceNode]),
+            self::LINK_LEARNING_PATH => $this->lpRepository->findOneBy(['resourceNode' => $resourceNode]),
+            self::LINK_FORUM_THREAD, self::LINK_FORUM_PARTICIPATION => $this->forumThreadRepository->findOneBy(['resourceNode' => $resourceNode]),
+            self::LINK_ATTENDANCE => $this->attendanceRepository->findOneBy(['resourceNode' => $resourceNode]),
+            self::LINK_SURVEY => $this->surveyRepository->findOneBy(['resourceNode' => $resourceNode]),
+            default => null,
+        };
+
+        if (!\is_object($resource)) {
+            throw new NotFoundHttpException('The linked Gradebook resource was not found.');
+        }
+
+        return $this->getResourceId($resource);
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -141,17 +214,17 @@ final readonly class GradebookLinkResourceResolver
         bool $canManage,
     ): array {
         $type = (int) $link->getType();
-        $refId = (int) $link->getRefId();
+        $resourceNodeId = (int) $link->getRefId();
 
         try {
-            $resource = $this->requireResource($type, $refId, $course, $session);
+            $resource = $this->requireResourceByNodeId($type, $resourceNodeId, $course, $session);
             $resourceSummary = $this->normalizeResource($type, $resource);
             $url = $this->buildResourceUrl($type, $resource, $course, $session, $groupId, $canManage);
             $valid = true;
         } catch (AccessDeniedHttpException|BadRequestHttpException|NotFoundHttpException) {
             $resourceSummary = [
-                'id' => $refId,
-                'title' => $this->getTypeLabel($type).' #'.$refId,
+                'id' => $resourceNodeId,
+                'title' => $this->getTypeLabel($type).' #'.$resourceNodeId,
                 'description' => '',
             ];
             $url = null;
@@ -181,7 +254,7 @@ final readonly class GradebookLinkResourceResolver
             'maxScore' => null,
             'minScore' => $link->getMinScore(),
             'score' => null,
-            'refId' => $refId,
+            'refId' => (int) $resourceSummary['id'],
             'linkType' => $type,
             'linkTypeLabel' => $this->getTypeLabel($type),
             'icon' => $this->getTypeIcon($type),
@@ -386,6 +459,28 @@ final readonly class GradebookLinkResourceResolver
         }
 
         return 0;
+    }
+
+    private function getResourceNodeId(object $resource): int
+    {
+        $resourceNode = $this->getResourceNode($resource);
+
+        return $resourceNode instanceof ResourceNode ? (int) ($resourceNode->getId() ?? 0) : 0;
+    }
+
+    private function getResourceNode(object $resource): ?ResourceNode
+    {
+        if ($resource instanceof CQuiz
+            || $resource instanceof CStudentPublication
+            || $resource instanceof CLp
+            || $resource instanceof CForumThread
+            || $resource instanceof CAttendance
+            || $resource instanceof CSurvey
+        ) {
+            return $resource->getResourceNode();
+        }
+
+        return null;
     }
 
     private function buildResourceUrl(

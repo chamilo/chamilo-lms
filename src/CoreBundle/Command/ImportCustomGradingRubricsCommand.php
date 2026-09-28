@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
@@ -219,16 +220,17 @@ class ImportCustomGradingRubricsCommand extends Command
         array &$skipped,
         bool $dryRun
     ): int {
-        if ($refId <= 0 || null === $this->em->getRepository($resourceClass)->find($refId)) {
+        $resource = $refId > 0 ? $this->em->getRepository($resourceClass)->find($refId) : null;
+        if (!$resource instanceof AbstractResource || null === $resource->getResourceNode()) {
             return $this->skip(
                 $skipped,
-                \sprintf('Course "%s": %s #%d not found, link skipped.', $courseCode, $resourceClass, $refId)
+                \sprintf('Course "%s": %s #%d not found or has no resource node, link skipped.', $courseCode, $resourceClass, $refId)
             );
         }
 
         $link = new GradebookLink();
         $link->setType($type);
-        $link->setRefId($refId);
+        $link->setResourceNode($resource->getResourceNode());
         $link->setCourse($course);
         $link->setCategory($category);
         $link->setWeight($weight);
@@ -266,15 +268,16 @@ class ImportCustomGradingRubricsCommand extends Command
 
         foreach (($component['threads'] ?? []) as $threadId) {
             $threadId = (int) $threadId;
-            if ($threadId <= 0 || null === $this->em->getRepository(CForumThread::class)->find($threadId)) {
-                $this->skip($skipped, \sprintf('Course "%s": forum thread #%d not found, skipped.', $courseCode, $threadId));
+            $thread = $threadId > 0 ? $this->em->getRepository(CForumThread::class)->find($threadId) : null;
+            if (!$thread instanceof CForumThread || null === $thread->getResourceNode()) {
+                $this->skip($skipped, \sprintf('Course "%s": forum thread #%d not found or has no resource node, skipped.', $courseCode, $threadId));
 
                 continue;
             }
 
             $link = new GradebookLink();
             $link->setType(self::LINK_FORUM_PARTICIPATION);
-            $link->setRefId($threadId);
+            $link->setResourceNode($thread->getResourceNode());
             $link->setCourse($course);
             $link->setCategory($category);
             // The highest award is the item's weight, so in POINTS_SUM the contribution

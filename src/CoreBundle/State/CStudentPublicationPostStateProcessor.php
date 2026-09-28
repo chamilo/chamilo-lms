@@ -13,8 +13,10 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\State\CourseGroup\CourseGroupManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -43,6 +45,8 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
         private readonly GradebookLinkManager $gradebookLinkManager,
+        private readonly CourseGroupManager $courseGroupManager,
+        private readonly AssignmentGroupCategoryResolver $assignmentGroupCategoryResolver,
         private readonly RequestStack $requestStack,
     ) {}
 
@@ -109,6 +113,22 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
                 }
             }
 
+            $requestGroup = $group;
+            $request = $this->requestStack->getCurrentRequest();
+            if (null !== $request && $request->hasSession()) {
+                $requestSession = $request->getSession();
+                $sessionGroupId = (int) $requestSession->get('gid', 0);
+                $sessionGroup = $requestSession->get('group');
+                if (
+                    $sessionGroupId > 0
+                    && $sessionGroup instanceof CGroup
+                    && (int) $sessionGroup->getIid() === $sessionGroupId
+                ) {
+                    $requestGroup = $sessionGroup;
+                }
+            }
+
+            $this->applyGroupAssignmentConfig($publication, $course, $session, $requestGroup, $payload);
             $this->applyResourceLanguage($publication, $payload);
 
             if (\array_key_exists('qualification', $payload)) {
@@ -160,6 +180,57 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function applyGroupAssignmentConfig(
+        CStudentPublication $publication,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        array $payload
+    ): void {
+        if (!\array_key_exists('groupCategoryWorkId', $payload)) {
+            return;
+        }
+
+        $groupCategoryWorkId = (int) $payload['groupCategoryWorkId'];
+        if (0 === $groupCategoryWorkId) {
+            $publication->setGroupCategoryWorkId(0);
+
+            return;
+        }
+
+        // The shared assignment must be created from the normal Assignment tool.
+        // A gid context already represents one concrete group assignment.
+        if ($group instanceof CGroup) {
+            throw new BadRequestHttpException('A group assignment for all groups must be created from the course Assignment tool.');
+        }
+
+        if (AssignmentGroupCategoryResolver::ALL_GROUPS === $groupCategoryWorkId) {
+            if (!$this->assignmentGroupCategoryResolver->courseHasGroups($course, $session)) {
+                throw new BadRequestHttpException('The current course context does not contain any groups.');
+            }
+
+            $publication->setGroupCategoryWorkId(AssignmentGroupCategoryResolver::ALL_GROUPS);
+
+            return;
+        }
+
+        if ($groupCategoryWorkId < 0) {
+            throw new BadRequestHttpException('Invalid group assignment scope.');
+        }
+
+        $category = $this->courseGroupManager->findCategory($groupCategoryWorkId, $course, $session);
+        $categoryId = (int) $category->getIid();
+
+        if (!$this->assignmentGroupCategoryResolver->categoryHasGroups($categoryId, $course, $session)) {
+            throw new BadRequestHttpException('The selected group category does not contain any groups.');
+        }
+
+        $publication->setGroupCategoryWorkId($categoryId);
     }
 
     private function applyResourceLanguage(CStudentPublication $publication, array $payload): void

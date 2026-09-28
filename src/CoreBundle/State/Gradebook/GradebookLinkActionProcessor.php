@@ -138,11 +138,12 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
         $type = (int) ($data->type ?? 0);
         $refId = (int) ($data->refId ?? 0);
         $resource = $this->resourceResolver->requireResource($type, $refId, $course, $session);
+        $resourceNode = $this->resourceResolver->getResourceNodeForLegacyId($type, $refId);
         [$weight, $minScore, $pointsOne, $pointsMany] = $this->validateLinkForm($data, $type);
 
         $duplicate = $this->entityManager->getRepository(GradebookLink::class)->findOneBy([
             'type' => $type,
-            'refId' => $refId,
+            'resourceNode' => $resourceNode,
             'course' => $course,
             'category' => $category,
         ]);
@@ -153,7 +154,7 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
         $link = new GradebookLink();
         $link
             ->setType($type)
-            ->setRefId($refId)
+            ->setResourceNode($resourceNode)
             ->setCourse($course)
             ->setCategory($category)
             ->setWeight($weight)
@@ -201,8 +202,8 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
         $this->assertCategoryEditable($category);
 
         $type = (int) $link->getType();
-        $refId = (int) $link->getRefId();
-        $resource = $this->resourceResolver->requireResource($type, $refId, $course, $session);
+        $resourceNodeId = (int) $link->getRefId();
+        $resource = $this->resourceResolver->requireResourceByNodeId($type, $resourceNodeId, $course, $session);
         [$weight, $minScore, $pointsOne, $pointsMany] = $this->validateLinkForm($data, $type);
 
         $this->logLink($link, $course, $session, $user);
@@ -230,7 +231,7 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
         $this->assertLinkEditable($link);
 
         try {
-            $resource = $this->resourceResolver->requireResource(
+            $resource = $this->resourceResolver->requireResourceByNodeId(
                 (int) $link->getType(),
                 (int) $link->getRefId(),
                 $course,
@@ -356,7 +357,7 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
     private function synchronizeExistingLinkedResource(GradebookLink $link, Course $course, ?Session $session): void
     {
         try {
-            $resource = $this->resourceResolver->requireResource(
+            $resource = $this->resourceResolver->requireResourceByNodeId(
                 (int) $link->getType(),
                 (int) $link->getRefId(),
                 $course,

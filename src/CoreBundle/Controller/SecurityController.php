@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
+use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
 use Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator;
@@ -299,6 +300,7 @@ class SecurityController extends AbstractController
     public function updateOnlinePresence(
         Request $request,
         TrackEOnlineRepository $trackEOnlineRepository,
+        TrackELoginRepository $trackELoginRepository,
     ): JsonResponse {
         $user = $this->userHelper->getCurrent();
 
@@ -313,6 +315,16 @@ class SecurityController extends AbstractController
             $user,
             (string) $request->getClientIp()
         );
+
+        // Extends the connection time (track_e_login), as every page view did in 1.11.x.
+        // An admin logged in as this user is not the user spending time on the platform.
+        if (!$this->isGranted('IS_IMPERSONATOR')) {
+            $trackELoginRepository->touchLastConnection(
+                $user,
+                (string) $request->getClientIp(),
+                $this->getSessionLifetime($request)
+            );
+        }
 
         $response = new JsonResponse(['updated' => true]);
         $response->headers->set('Cache-Control', 'no-store, private');
@@ -367,14 +379,7 @@ class SecurityController extends AbstractController
         $now = time();
         $session->set(self::SESSION_KEEP_ALIVE_KEY, $now);
 
-        $lifetime = max(0, (int) $session->getMetadataBag()->getLifetime());
-
-        // A cookie lifetime of 0 means "until the browser closes" and does not
-        // describe the server-side inactivity limit. In that standard Symfony
-        // configuration, use PHP's session retention lifetime instead.
-        if ($lifetime <= 1) {
-            $lifetime = max(0, (int) \ini_get('session.gc_maxlifetime'));
-        }
+        $lifetime = $this->getSessionLifetime($request);
 
         $configuredWarningSeconds = (int) $this->settingsManager->getSetting(
             'security.session_expiration_warning_seconds',
@@ -707,5 +712,19 @@ class SecurityController extends AbstractController
         }
 
         return '/'.$value;
+    }
+
+    private function getSessionLifetime(Request $request): int
+    {
+        $lifetime = max(0, (int) $request->getSession()->getMetadataBag()->getLifetime());
+
+        // A cookie lifetime of 0 means "until the browser closes" and does not
+        // describe the server-side inactivity limit. In that standard Symfony
+        // configuration, use PHP's session retention lifetime instead.
+        if ($lifetime <= 1) {
+            $lifetime = max(0, (int) \ini_get('session.gc_maxlifetime'));
+        }
+
+        return $lifetime;
     }
 }

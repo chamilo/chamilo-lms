@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\GradeModel;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
@@ -9672,6 +9673,32 @@ class CourseRestorer
         };
     }
 
+    private function gb_getDestinationResourceNode(int $linkType, int $legacyRef): ?ResourceNode
+    {
+        $resourceClass = match ($linkType) {
+            LINK_EXERCISE, LINK_HOTPOTATOES => CQuiz::class,
+            LINK_STUDENTPUBLICATION => CStudentPublication::class,
+            LINK_LEARNPATH => CLp::class,
+            LINK_FORUM_THREAD, LINK_FORUM_PARTICIPATION => CForumThread::class,
+            LINK_ATTENDANCE => CAttendance::class,
+            LINK_SURVEY => CSurvey::class,
+            default => null,
+        };
+
+        if (null === $resourceClass || $legacyRef <= 0) {
+            return null;
+        }
+
+        $resource = Database::getManager()->getRepository($resourceClass)->find($legacyRef);
+        if (!\is_object($resource) || !method_exists($resource, 'getResourceNode')) {
+            return null;
+        }
+
+        $resourceNode = $resource->getResourceNode();
+
+        return $resourceNode instanceof ResourceNode ? $resourceNode : null;
+    }
+
     public function restore_gradebook(int $sessionId = 0): void
     {
         // Always restore it in destination to avoid an empty gradebook.
@@ -9925,11 +9952,22 @@ class CourseRestorer
                         continue;
                     }
 
+                    $resourceNode = $this->gb_getDestinationResourceNode($linkType, $newRefId);
+                    if (!$resourceNode instanceof ResourceNode) {
+                        $this->dlog('restore_gradebook: skipping link (destination resource has no resource node)', [
+                            'type' => $linkType,
+                            'legacyRef' => $legacyRef,
+                            'destinationId' => $newRefId,
+                        ]);
+
+                        continue;
+                    }
+
                     $link = (new GradebookLink())
                         ->setCourse($courseEntity)
                         ->setCategory($dstCat)
                         ->setType($linkType)
-                        ->setRefId($newRefId)
+                        ->setResourceNode($resourceNode)
                         ->setWeight((float) ($l['weight'] ?? 0.0))
                         ->setVisible((int) ($l['visible'] ?? 1))
                         ->setLocked((int) ($l['locked'] ?? 0))

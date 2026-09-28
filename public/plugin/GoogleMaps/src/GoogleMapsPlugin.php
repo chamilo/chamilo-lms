@@ -11,6 +11,14 @@ class GoogleMapsPlugin extends Plugin
     public const PROVIDER_GOOGLE_MAPS = 'google_maps';
     public const PROVIDER_OPENSTREETMAP = 'openstreetmap';
 
+    // Guards FormValidator::addGeoLocationMapField() against including the
+    // Google Maps <script> more than once per request. Must be declared:
+    // reading it before it's ever been dynamically set (the very first
+    // geolocation field on a page) throws "Undefined property" on PHP 8.2+,
+    // which this app's error handler escalates to a fatal — confirmed live
+    // on testparkur.beeznest.com, HTTP 500 on /main/auth/registration.php.
+    public bool $javascriptIncluded = false;
+
     protected function __construct()
     {
         $this->isAdminPlugin = true;

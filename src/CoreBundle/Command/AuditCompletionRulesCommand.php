@@ -1208,7 +1208,7 @@ SQL,
                     SELECT COUNT(*)
                     FROM gradebook_link gradebook
                     WHERE gradebook.c_id = :gradebookCourseId
-                      AND gradebook.ref_id = quiz.iid
+                      AND gradebook.ref_id = quiz.resource_node_id
                 ) AS gradebook_links,
                 (
                     SELECT COUNT(*)
